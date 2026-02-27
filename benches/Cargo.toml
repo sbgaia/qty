@@ -1,0 +1,32 @@
+[package]
+name = "unitsnet-benches"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# All dependencies are dev-only — this crate exists solely to run benchmarks.
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+# The library under test.
+unitsnet-rs = { path = ".." }
+
+# Competitor libraries.
+# uom — units of measure with compile-time dimensional analysis via type parameters.
+uom = { version = "0.37", features = ["si", "f64"] }
+
+# simple-si-units — lightweight SI units with template numeric type.
+simple-si-units = "1.1"
+
+# measurements — simple struct-based physical measurement types.
+measurements = "0.11"
+
+# ferrunitas — zero-sized unit markers with compile-time dimensional analysis.
+ferrunitas = "0.4"
+
+# measures-rs — macro-generated unit system (lib name is "measures").
+measures = { package = "measures-rs", version = "0.1" }
+
+[[bench]]
+name = "compare"
+harness = false

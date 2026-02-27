@@ -1,5 +1,5 @@
 [workspace]
-members = [".", "codegen"]
+members = [".", "codegen", "benches"]
 resolver = "2"
 
 [package]
