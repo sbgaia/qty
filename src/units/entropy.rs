@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `JoulePerKelvin` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Entropy(f64);
+pub struct Entropy(Num);
 
 /// Unit variants for [`Entropy`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -71,7 +72,7 @@ impl EntropyUnit {
 
 impl Entropy {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: EntropyUnit) -> Self {
+    pub fn new(value: Num, unit: EntropyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -89,7 +90,7 @@ impl Entropy {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -97,12 +98,12 @@ impl Entropy {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: EntropyUnit) -> f64 {
+    pub fn convert_to(self, unit: EntropyUnit) -> Num {
         let x = self.0;
         match unit {
             EntropyUnit::JoulePerKelvin => x,
@@ -117,127 +118,127 @@ impl Entropy {
 
     /// Creates a [`Entropy`] from a value in JoulesPerKelvin (`J/K`).
     #[inline]
-    pub fn from_joules_per_kelvin(value: f64) -> Self {
+    pub fn from_joules_per_kelvin(value: Num) -> Self {
         Self::new(value, EntropyUnit::JoulePerKelvin)
     }
 
     /// Returns the value expressed in JoulesPerKelvin (`J/K`).
     #[inline]
-    pub fn as_joules_per_kelvin(self) -> f64 {
+    pub fn as_joules_per_kelvin(self) -> Num {
         self.convert_to(EntropyUnit::JoulePerKelvin)
     }
 
     /// Alias for [`Self::as_joules_per_kelvin`].
     #[inline]
-    pub fn as_joule_per_kelvin(self) -> f64 {
+    pub fn as_joule_per_kelvin(self) -> Num {
         self.as_joules_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in KilojoulesPerKelvin (`kJ/K`).
     #[inline]
-    pub fn from_kilojoules_per_kelvin(value: f64) -> Self {
+    pub fn from_kilojoules_per_kelvin(value: Num) -> Self {
         Self::new(value, EntropyUnit::KilojoulePerKelvin)
     }
 
     /// Returns the value expressed in KilojoulesPerKelvin (`kJ/K`).
     #[inline]
-    pub fn as_kilojoules_per_kelvin(self) -> f64 {
+    pub fn as_kilojoules_per_kelvin(self) -> Num {
         self.convert_to(EntropyUnit::KilojoulePerKelvin)
     }
 
     /// Alias for [`Self::as_kilojoules_per_kelvin`].
     #[inline]
-    pub fn as_kilojoule_per_kelvin(self) -> f64 {
+    pub fn as_kilojoule_per_kelvin(self) -> Num {
         self.as_kilojoules_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in MegajoulesPerKelvin (`MJ/K`).
     #[inline]
-    pub fn from_megajoules_per_kelvin(value: f64) -> Self {
+    pub fn from_megajoules_per_kelvin(value: Num) -> Self {
         Self::new(value, EntropyUnit::MegajoulePerKelvin)
     }
 
     /// Returns the value expressed in MegajoulesPerKelvin (`MJ/K`).
     #[inline]
-    pub fn as_megajoules_per_kelvin(self) -> f64 {
+    pub fn as_megajoules_per_kelvin(self) -> Num {
         self.convert_to(EntropyUnit::MegajoulePerKelvin)
     }
 
     /// Alias for [`Self::as_megajoules_per_kelvin`].
     #[inline]
-    pub fn as_megajoule_per_kelvin(self) -> f64 {
+    pub fn as_megajoule_per_kelvin(self) -> Num {
         self.as_megajoules_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in CaloriesPerKelvin (`cal/K`).
     #[inline]
-    pub fn from_calories_per_kelvin(value: f64) -> Self {
+    pub fn from_calories_per_kelvin(value: Num) -> Self {
         Self::new(value, EntropyUnit::CaloriePerKelvin)
     }
 
     /// Returns the value expressed in CaloriesPerKelvin (`cal/K`).
     #[inline]
-    pub fn as_calories_per_kelvin(self) -> f64 {
+    pub fn as_calories_per_kelvin(self) -> Num {
         self.convert_to(EntropyUnit::CaloriePerKelvin)
     }
 
     /// Alias for [`Self::as_calories_per_kelvin`].
     #[inline]
-    pub fn as_calorie_per_kelvin(self) -> f64 {
+    pub fn as_calorie_per_kelvin(self) -> Num {
         self.as_calories_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in KilocaloriesPerKelvin (`kcal/K`).
     #[inline]
-    pub fn from_kilocalories_per_kelvin(value: f64) -> Self {
+    pub fn from_kilocalories_per_kelvin(value: Num) -> Self {
         Self::new(value, EntropyUnit::KilocaloriePerKelvin)
     }
 
     /// Returns the value expressed in KilocaloriesPerKelvin (`kcal/K`).
     #[inline]
-    pub fn as_kilocalories_per_kelvin(self) -> f64 {
+    pub fn as_kilocalories_per_kelvin(self) -> Num {
         self.convert_to(EntropyUnit::KilocaloriePerKelvin)
     }
 
     /// Alias for [`Self::as_kilocalories_per_kelvin`].
     #[inline]
-    pub fn as_kilocalorie_per_kelvin(self) -> f64 {
+    pub fn as_kilocalorie_per_kelvin(self) -> Num {
         self.as_kilocalories_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in JoulesPerDegreeCelsius (`J/°C`).
     #[inline]
-    pub fn from_joules_per_degree_celsius(value: f64) -> Self {
+    pub fn from_joules_per_degree_celsius(value: Num) -> Self {
         Self::new(value, EntropyUnit::JoulePerDegreeCelsius)
     }
 
     /// Returns the value expressed in JoulesPerDegreeCelsius (`J/°C`).
     #[inline]
-    pub fn as_joules_per_degree_celsius(self) -> f64 {
+    pub fn as_joules_per_degree_celsius(self) -> Num {
         self.convert_to(EntropyUnit::JoulePerDegreeCelsius)
     }
 
     /// Alias for [`Self::as_joules_per_degree_celsius`].
     #[inline]
-    pub fn as_joule_per_degree_celsius(self) -> f64 {
+    pub fn as_joule_per_degree_celsius(self) -> Num {
         self.as_joules_per_degree_celsius()
     }
 
     /// Creates a [`Entropy`] from a value in KilojoulesPerDegreeCelsius (`kJ/°C`).
     #[inline]
-    pub fn from_kilojoules_per_degree_celsius(value: f64) -> Self {
+    pub fn from_kilojoules_per_degree_celsius(value: Num) -> Self {
         Self::new(value, EntropyUnit::KilojoulePerDegreeCelsius)
     }
 
     /// Returns the value expressed in KilojoulesPerDegreeCelsius (`kJ/°C`).
     #[inline]
-    pub fn as_kilojoules_per_degree_celsius(self) -> f64 {
+    pub fn as_kilojoules_per_degree_celsius(self) -> Num {
         self.convert_to(EntropyUnit::KilojoulePerDegreeCelsius)
     }
 
     /// Alias for [`Self::as_kilojoules_per_degree_celsius`].
     #[inline]
-    pub fn as_kilojoule_per_degree_celsius(self) -> f64 {
+    pub fn as_kilojoule_per_degree_celsius(self) -> Num {
         self.as_kilojoules_per_degree_celsius()
     }
 }
@@ -260,27 +261,27 @@ impl Neg for Entropy {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Entropy {
+impl Mul<Num> for Entropy {
     type Output = Entropy;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Entropy> for f64 {
+impl Mul<Entropy> for Num {
     type Output = Entropy;
     fn mul(self, rhs: Entropy) -> Entropy {
         Entropy(self * rhs.0)
     }
 }
-impl Div<f64> for Entropy {
+impl Div<Num> for Entropy {
     type Output = Entropy;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Entropy {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -319,7 +320,7 @@ impl FromStr for Entropy {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseEntropyError(s.to_owned()))?;

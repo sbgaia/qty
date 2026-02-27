@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CoulombPerCubicMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricChargeDensity(f64);
+pub struct ElectricChargeDensity(Num);
 
 /// Unit variants for [`ElectricChargeDensity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl ElectricChargeDensityUnit {
 
 impl ElectricChargeDensity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricChargeDensityUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricChargeDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl ElectricChargeDensity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl ElectricChargeDensity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricChargeDensityUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricChargeDensityUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricChargeDensityUnit::CoulombPerCubicMeter => x,
@@ -79,19 +80,19 @@ impl ElectricChargeDensity {
 
     /// Creates a [`ElectricChargeDensity`] from a value in CoulombsPerCubicMeter (`C/m³`).
     #[inline]
-    pub fn from_coulombs_per_cubic_meter(value: f64) -> Self {
+    pub fn from_coulombs_per_cubic_meter(value: Num) -> Self {
         Self::new(value, ElectricChargeDensityUnit::CoulombPerCubicMeter)
     }
 
     /// Returns the value expressed in CoulombsPerCubicMeter (`C/m³`).
     #[inline]
-    pub fn as_coulombs_per_cubic_meter(self) -> f64 {
+    pub fn as_coulombs_per_cubic_meter(self) -> Num {
         self.convert_to(ElectricChargeDensityUnit::CoulombPerCubicMeter)
     }
 
     /// Alias for [`Self::as_coulombs_per_cubic_meter`].
     #[inline]
-    pub fn as_coulomb_per_cubic_meter(self) -> f64 {
+    pub fn as_coulomb_per_cubic_meter(self) -> Num {
         self.as_coulombs_per_cubic_meter()
     }
 }
@@ -114,27 +115,27 @@ impl Neg for ElectricChargeDensity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricChargeDensity {
+impl Mul<Num> for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricChargeDensity> for f64 {
+impl Mul<ElectricChargeDensity> for Num {
     type Output = ElectricChargeDensity;
     fn mul(self, rhs: ElectricChargeDensity) -> ElectricChargeDensity {
         ElectricChargeDensity(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricChargeDensity {
+impl Div<Num> for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricChargeDensity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -173,7 +174,7 @@ impl FromStr for ElectricChargeDensity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricChargeDensityError(s.to_owned()))?;

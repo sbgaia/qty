@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Coulomb` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricCharge(f64);
+pub struct ElectricCharge(Num);
 
 /// Unit variants for [`ElectricCharge`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -87,7 +88,7 @@ impl ElectricChargeUnit {
 
 impl ElectricCharge {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricChargeUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricChargeUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -109,7 +110,7 @@ impl ElectricCharge {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -117,12 +118,12 @@ impl ElectricCharge {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricChargeUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricChargeUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricChargeUnit::Coulomb => x,
@@ -141,199 +142,199 @@ impl ElectricCharge {
 
     /// Creates a [`ElectricCharge`] from a value in Coulombs (`C`).
     #[inline]
-    pub fn from_coulombs(value: f64) -> Self {
+    pub fn from_coulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Coulomb)
     }
 
     /// Returns the value expressed in Coulombs (`C`).
     #[inline]
-    pub fn as_coulombs(self) -> f64 {
+    pub fn as_coulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Coulomb)
     }
 
     /// Alias for [`Self::as_coulombs`].
     #[inline]
-    pub fn as_coulomb(self) -> f64 {
+    pub fn as_coulomb(self) -> Num {
         self.as_coulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Picocoulombs (`pC`).
     #[inline]
-    pub fn from_picocoulombs(value: f64) -> Self {
+    pub fn from_picocoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Picocoulomb)
     }
 
     /// Returns the value expressed in Picocoulombs (`pC`).
     #[inline]
-    pub fn as_picocoulombs(self) -> f64 {
+    pub fn as_picocoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Picocoulomb)
     }
 
     /// Alias for [`Self::as_picocoulombs`].
     #[inline]
-    pub fn as_picocoulomb(self) -> f64 {
+    pub fn as_picocoulomb(self) -> Num {
         self.as_picocoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Nanocoulombs (`nC`).
     #[inline]
-    pub fn from_nanocoulombs(value: f64) -> Self {
+    pub fn from_nanocoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Nanocoulomb)
     }
 
     /// Returns the value expressed in Nanocoulombs (`nC`).
     #[inline]
-    pub fn as_nanocoulombs(self) -> f64 {
+    pub fn as_nanocoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Nanocoulomb)
     }
 
     /// Alias for [`Self::as_nanocoulombs`].
     #[inline]
-    pub fn as_nanocoulomb(self) -> f64 {
+    pub fn as_nanocoulomb(self) -> Num {
         self.as_nanocoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Microcoulombs (`µC`).
     #[inline]
-    pub fn from_microcoulombs(value: f64) -> Self {
+    pub fn from_microcoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Microcoulomb)
     }
 
     /// Returns the value expressed in Microcoulombs (`µC`).
     #[inline]
-    pub fn as_microcoulombs(self) -> f64 {
+    pub fn as_microcoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Microcoulomb)
     }
 
     /// Alias for [`Self::as_microcoulombs`].
     #[inline]
-    pub fn as_microcoulomb(self) -> f64 {
+    pub fn as_microcoulomb(self) -> Num {
         self.as_microcoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Millicoulombs (`mC`).
     #[inline]
-    pub fn from_millicoulombs(value: f64) -> Self {
+    pub fn from_millicoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Millicoulomb)
     }
 
     /// Returns the value expressed in Millicoulombs (`mC`).
     #[inline]
-    pub fn as_millicoulombs(self) -> f64 {
+    pub fn as_millicoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Millicoulomb)
     }
 
     /// Alias for [`Self::as_millicoulombs`].
     #[inline]
-    pub fn as_millicoulomb(self) -> f64 {
+    pub fn as_millicoulomb(self) -> Num {
         self.as_millicoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Kilocoulombs (`kC`).
     #[inline]
-    pub fn from_kilocoulombs(value: f64) -> Self {
+    pub fn from_kilocoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Kilocoulomb)
     }
 
     /// Returns the value expressed in Kilocoulombs (`kC`).
     #[inline]
-    pub fn as_kilocoulombs(self) -> f64 {
+    pub fn as_kilocoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Kilocoulomb)
     }
 
     /// Alias for [`Self::as_kilocoulombs`].
     #[inline]
-    pub fn as_kilocoulomb(self) -> f64 {
+    pub fn as_kilocoulomb(self) -> Num {
         self.as_kilocoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Megacoulombs (`MC`).
     #[inline]
-    pub fn from_megacoulombs(value: f64) -> Self {
+    pub fn from_megacoulombs(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::Megacoulomb)
     }
 
     /// Returns the value expressed in Megacoulombs (`MC`).
     #[inline]
-    pub fn as_megacoulombs(self) -> f64 {
+    pub fn as_megacoulombs(self) -> Num {
         self.convert_to(ElectricChargeUnit::Megacoulomb)
     }
 
     /// Alias for [`Self::as_megacoulombs`].
     #[inline]
-    pub fn as_megacoulomb(self) -> f64 {
+    pub fn as_megacoulomb(self) -> Num {
         self.as_megacoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in AmpereHours (`A-h`).
     #[inline]
-    pub fn from_ampere_hours(value: f64) -> Self {
+    pub fn from_ampere_hours(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::AmpereHour)
     }
 
     /// Returns the value expressed in AmpereHours (`A-h`).
     #[inline]
-    pub fn as_ampere_hours(self) -> f64 {
+    pub fn as_ampere_hours(self) -> Num {
         self.convert_to(ElectricChargeUnit::AmpereHour)
     }
 
     /// Alias for [`Self::as_ampere_hours`].
     #[inline]
-    pub fn as_ampere_hour(self) -> f64 {
+    pub fn as_ampere_hour(self) -> Num {
         self.as_ampere_hours()
     }
 
     /// Creates a [`ElectricCharge`] from a value in MilliampereHours (`mA-h`).
     #[inline]
-    pub fn from_milliampere_hours(value: f64) -> Self {
+    pub fn from_milliampere_hours(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::MilliampereHour)
     }
 
     /// Returns the value expressed in MilliampereHours (`mA-h`).
     #[inline]
-    pub fn as_milliampere_hours(self) -> f64 {
+    pub fn as_milliampere_hours(self) -> Num {
         self.convert_to(ElectricChargeUnit::MilliampereHour)
     }
 
     /// Alias for [`Self::as_milliampere_hours`].
     #[inline]
-    pub fn as_milliampere_hour(self) -> f64 {
+    pub fn as_milliampere_hour(self) -> Num {
         self.as_milliampere_hours()
     }
 
     /// Creates a [`ElectricCharge`] from a value in KiloampereHours (`kA-h`).
     #[inline]
-    pub fn from_kiloampere_hours(value: f64) -> Self {
+    pub fn from_kiloampere_hours(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::KiloampereHour)
     }
 
     /// Returns the value expressed in KiloampereHours (`kA-h`).
     #[inline]
-    pub fn as_kiloampere_hours(self) -> f64 {
+    pub fn as_kiloampere_hours(self) -> Num {
         self.convert_to(ElectricChargeUnit::KiloampereHour)
     }
 
     /// Alias for [`Self::as_kiloampere_hours`].
     #[inline]
-    pub fn as_kiloampere_hour(self) -> f64 {
+    pub fn as_kiloampere_hour(self) -> Num {
         self.as_kiloampere_hours()
     }
 
     /// Creates a [`ElectricCharge`] from a value in MegaampereHours (`MA-h`).
     #[inline]
-    pub fn from_megaampere_hours(value: f64) -> Self {
+    pub fn from_megaampere_hours(value: Num) -> Self {
         Self::new(value, ElectricChargeUnit::MegaampereHour)
     }
 
     /// Returns the value expressed in MegaampereHours (`MA-h`).
     #[inline]
-    pub fn as_megaampere_hours(self) -> f64 {
+    pub fn as_megaampere_hours(self) -> Num {
         self.convert_to(ElectricChargeUnit::MegaampereHour)
     }
 
     /// Alias for [`Self::as_megaampere_hours`].
     #[inline]
-    pub fn as_megaampere_hour(self) -> f64 {
+    pub fn as_megaampere_hour(self) -> Num {
         self.as_megaampere_hours()
     }
 }
@@ -356,27 +357,27 @@ impl Neg for ElectricCharge {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricCharge {
+impl Mul<Num> for ElectricCharge {
     type Output = ElectricCharge;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricCharge> for f64 {
+impl Mul<ElectricCharge> for Num {
     type Output = ElectricCharge;
     fn mul(self, rhs: ElectricCharge) -> ElectricCharge {
         ElectricCharge(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricCharge {
+impl Div<Num> for ElectricCharge {
     type Output = ElectricCharge;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCharge {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -415,7 +416,7 @@ impl FromStr for ElectricCharge {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricChargeError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Voltampere` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricApparentPower(f64);
+pub struct ElectricApparentPower(Num);
 
 /// Unit variants for [`ElectricApparentPower`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl ElectricApparentPowerUnit {
 
 impl ElectricApparentPower {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricApparentPowerUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricApparentPowerUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl ElectricApparentPower {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl ElectricApparentPower {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricApparentPowerUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricApparentPowerUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricApparentPowerUnit::Voltampere => x,
@@ -111,109 +112,109 @@ impl ElectricApparentPower {
 
     /// Creates a [`ElectricApparentPower`] from a value in Voltamperes (`VA`).
     #[inline]
-    pub fn from_voltamperes(value: f64) -> Self {
+    pub fn from_voltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Voltampere)
     }
 
     /// Returns the value expressed in Voltamperes (`VA`).
     #[inline]
-    pub fn as_voltamperes(self) -> f64 {
+    pub fn as_voltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Voltampere)
     }
 
     /// Alias for [`Self::as_voltamperes`].
     #[inline]
-    pub fn as_voltampere(self) -> f64 {
+    pub fn as_voltampere(self) -> Num {
         self.as_voltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Microvoltamperes (`µVA`).
     #[inline]
-    pub fn from_microvoltamperes(value: f64) -> Self {
+    pub fn from_microvoltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Microvoltampere)
     }
 
     /// Returns the value expressed in Microvoltamperes (`µVA`).
     #[inline]
-    pub fn as_microvoltamperes(self) -> f64 {
+    pub fn as_microvoltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Microvoltampere)
     }
 
     /// Alias for [`Self::as_microvoltamperes`].
     #[inline]
-    pub fn as_microvoltampere(self) -> f64 {
+    pub fn as_microvoltampere(self) -> Num {
         self.as_microvoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Millivoltamperes (`mVA`).
     #[inline]
-    pub fn from_millivoltamperes(value: f64) -> Self {
+    pub fn from_millivoltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Millivoltampere)
     }
 
     /// Returns the value expressed in Millivoltamperes (`mVA`).
     #[inline]
-    pub fn as_millivoltamperes(self) -> f64 {
+    pub fn as_millivoltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Millivoltampere)
     }
 
     /// Alias for [`Self::as_millivoltamperes`].
     #[inline]
-    pub fn as_millivoltampere(self) -> f64 {
+    pub fn as_millivoltampere(self) -> Num {
         self.as_millivoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Kilovoltamperes (`kVA`).
     #[inline]
-    pub fn from_kilovoltamperes(value: f64) -> Self {
+    pub fn from_kilovoltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Kilovoltampere)
     }
 
     /// Returns the value expressed in Kilovoltamperes (`kVA`).
     #[inline]
-    pub fn as_kilovoltamperes(self) -> f64 {
+    pub fn as_kilovoltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Kilovoltampere)
     }
 
     /// Alias for [`Self::as_kilovoltamperes`].
     #[inline]
-    pub fn as_kilovoltampere(self) -> f64 {
+    pub fn as_kilovoltampere(self) -> Num {
         self.as_kilovoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Megavoltamperes (`MVA`).
     #[inline]
-    pub fn from_megavoltamperes(value: f64) -> Self {
+    pub fn from_megavoltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Megavoltampere)
     }
 
     /// Returns the value expressed in Megavoltamperes (`MVA`).
     #[inline]
-    pub fn as_megavoltamperes(self) -> f64 {
+    pub fn as_megavoltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Megavoltampere)
     }
 
     /// Alias for [`Self::as_megavoltamperes`].
     #[inline]
-    pub fn as_megavoltampere(self) -> f64 {
+    pub fn as_megavoltampere(self) -> Num {
         self.as_megavoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Gigavoltamperes (`GVA`).
     #[inline]
-    pub fn from_gigavoltamperes(value: f64) -> Self {
+    pub fn from_gigavoltamperes(value: Num) -> Self {
         Self::new(value, ElectricApparentPowerUnit::Gigavoltampere)
     }
 
     /// Returns the value expressed in Gigavoltamperes (`GVA`).
     #[inline]
-    pub fn as_gigavoltamperes(self) -> f64 {
+    pub fn as_gigavoltamperes(self) -> Num {
         self.convert_to(ElectricApparentPowerUnit::Gigavoltampere)
     }
 
     /// Alias for [`Self::as_gigavoltamperes`].
     #[inline]
-    pub fn as_gigavoltampere(self) -> f64 {
+    pub fn as_gigavoltampere(self) -> Num {
         self.as_gigavoltamperes()
     }
 }
@@ -236,27 +237,27 @@ impl Neg for ElectricApparentPower {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricApparentPower {
+impl Mul<Num> for ElectricApparentPower {
     type Output = ElectricApparentPower;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricApparentPower> for f64 {
+impl Mul<ElectricApparentPower> for Num {
     type Output = ElectricApparentPower;
     fn mul(self, rhs: ElectricApparentPower) -> ElectricApparentPower {
         ElectricApparentPower(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricApparentPower {
+impl Div<Num> for ElectricApparentPower {
     type Output = ElectricApparentPower;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricApparentPower {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -295,7 +296,7 @@ impl FromStr for ElectricApparentPower {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricApparentPowerError(s.to_owned()))?;

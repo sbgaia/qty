@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Volt` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricPotential(f64);
+pub struct ElectricPotential(Num);
 
 /// Unit variants for [`ElectricPotential`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl ElectricPotentialUnit {
 
 impl ElectricPotential {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricPotentialUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricPotentialUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl ElectricPotential {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl ElectricPotential {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricPotentialUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricPotentialUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricPotentialUnit::Volt => x,
@@ -111,109 +112,109 @@ impl ElectricPotential {
 
     /// Creates a [`ElectricPotential`] from a value in Volts (`V`).
     #[inline]
-    pub fn from_volts(value: f64) -> Self {
+    pub fn from_volts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Volt)
     }
 
     /// Returns the value expressed in Volts (`V`).
     #[inline]
-    pub fn as_volts(self) -> f64 {
+    pub fn as_volts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Volt)
     }
 
     /// Alias for [`Self::as_volts`].
     #[inline]
-    pub fn as_volt(self) -> f64 {
+    pub fn as_volt(self) -> Num {
         self.as_volts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Nanovolts (`nV`).
     #[inline]
-    pub fn from_nanovolts(value: f64) -> Self {
+    pub fn from_nanovolts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Nanovolt)
     }
 
     /// Returns the value expressed in Nanovolts (`nV`).
     #[inline]
-    pub fn as_nanovolts(self) -> f64 {
+    pub fn as_nanovolts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Nanovolt)
     }
 
     /// Alias for [`Self::as_nanovolts`].
     #[inline]
-    pub fn as_nanovolt(self) -> f64 {
+    pub fn as_nanovolt(self) -> Num {
         self.as_nanovolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Microvolts (`µV`).
     #[inline]
-    pub fn from_microvolts(value: f64) -> Self {
+    pub fn from_microvolts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Microvolt)
     }
 
     /// Returns the value expressed in Microvolts (`µV`).
     #[inline]
-    pub fn as_microvolts(self) -> f64 {
+    pub fn as_microvolts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Microvolt)
     }
 
     /// Alias for [`Self::as_microvolts`].
     #[inline]
-    pub fn as_microvolt(self) -> f64 {
+    pub fn as_microvolt(self) -> Num {
         self.as_microvolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Millivolts (`mV`).
     #[inline]
-    pub fn from_millivolts(value: f64) -> Self {
+    pub fn from_millivolts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Millivolt)
     }
 
     /// Returns the value expressed in Millivolts (`mV`).
     #[inline]
-    pub fn as_millivolts(self) -> f64 {
+    pub fn as_millivolts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Millivolt)
     }
 
     /// Alias for [`Self::as_millivolts`].
     #[inline]
-    pub fn as_millivolt(self) -> f64 {
+    pub fn as_millivolt(self) -> Num {
         self.as_millivolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Kilovolts (`kV`).
     #[inline]
-    pub fn from_kilovolts(value: f64) -> Self {
+    pub fn from_kilovolts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Kilovolt)
     }
 
     /// Returns the value expressed in Kilovolts (`kV`).
     #[inline]
-    pub fn as_kilovolts(self) -> f64 {
+    pub fn as_kilovolts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Kilovolt)
     }
 
     /// Alias for [`Self::as_kilovolts`].
     #[inline]
-    pub fn as_kilovolt(self) -> f64 {
+    pub fn as_kilovolt(self) -> Num {
         self.as_kilovolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Megavolts (`MV`).
     #[inline]
-    pub fn from_megavolts(value: f64) -> Self {
+    pub fn from_megavolts(value: Num) -> Self {
         Self::new(value, ElectricPotentialUnit::Megavolt)
     }
 
     /// Returns the value expressed in Megavolts (`MV`).
     #[inline]
-    pub fn as_megavolts(self) -> f64 {
+    pub fn as_megavolts(self) -> Num {
         self.convert_to(ElectricPotentialUnit::Megavolt)
     }
 
     /// Alias for [`Self::as_megavolts`].
     #[inline]
-    pub fn as_megavolt(self) -> f64 {
+    pub fn as_megavolt(self) -> Num {
         self.as_megavolts()
     }
 }
@@ -236,27 +237,27 @@ impl Neg for ElectricPotential {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricPotential {
+impl Mul<Num> for ElectricPotential {
     type Output = ElectricPotential;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricPotential> for f64 {
+impl Mul<ElectricPotential> for Num {
     type Output = ElectricPotential;
     fn mul(self, rhs: ElectricPotential) -> ElectricPotential {
         ElectricPotential(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricPotential {
+impl Div<Num> for ElectricPotential {
     type Output = ElectricPotential;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricPotential {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -295,7 +296,7 @@ impl FromStr for ElectricPotential {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricPotentialError(s.to_owned()))?;

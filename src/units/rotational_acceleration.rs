@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `RadianPerSecondSquared` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RotationalAcceleration(f64);
+pub struct RotationalAcceleration(Num);
 
 /// Unit variants for [`RotationalAcceleration`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -59,19 +60,19 @@ impl RotationalAccelerationUnit {
 
 impl RotationalAcceleration {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: RotationalAccelerationUnit) -> Self {
+    pub fn new(value: Num, unit: RotationalAccelerationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
             RotationalAccelerationUnit::RadianPerSecondSquared => x,
             RotationalAccelerationUnit::DegreePerSecondSquared => {
-                (std::f64::consts::PI / 180.0) * x
+                ((std::f64::consts::PI as Num) / 180.0) * x
             }
             RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
-                ((2.0 * std::f64::consts::PI) / 60.0) * x
+                ((2.0 * (std::f64::consts::PI as Num)) / 60.0) * x
             }
             RotationalAccelerationUnit::RevolutionPerSecondSquared => {
-                (2.0 * std::f64::consts::PI) * x
+                (2.0 * (std::f64::consts::PI as Num)) * x
             }
         })
     }
@@ -80,7 +81,7 @@ impl RotationalAcceleration {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -88,66 +89,66 @@ impl RotationalAcceleration {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: RotationalAccelerationUnit) -> f64 {
+    pub fn convert_to(self, unit: RotationalAccelerationUnit) -> Num {
         let x = self.0;
         match unit {
             RotationalAccelerationUnit::RadianPerSecondSquared => x,
             RotationalAccelerationUnit::DegreePerSecondSquared => {
-                (180.0 / std::f64::consts::PI) * x
+                (180.0 / (std::f64::consts::PI as Num)) * x
             }
             RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
-                (60.0 / (2.0 * std::f64::consts::PI)) * x
+                (60.0 / (2.0 * (std::f64::consts::PI as Num))) * x
             }
             RotationalAccelerationUnit::RevolutionPerSecondSquared => {
-                (1.0 / (2.0 * std::f64::consts::PI)) * x
+                (1.0 / (2.0 * (std::f64::consts::PI as Num))) * x
             }
         }
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RadiansPerSecondSquared (`rad/s²`).
     #[inline]
-    pub fn from_radians_per_second_squared(value: f64) -> Self {
+    pub fn from_radians_per_second_squared(value: Num) -> Self {
         Self::new(value, RotationalAccelerationUnit::RadianPerSecondSquared)
     }
 
     /// Returns the value expressed in RadiansPerSecondSquared (`rad/s²`).
     #[inline]
-    pub fn as_radians_per_second_squared(self) -> f64 {
+    pub fn as_radians_per_second_squared(self) -> Num {
         self.convert_to(RotationalAccelerationUnit::RadianPerSecondSquared)
     }
 
     /// Alias for [`Self::as_radians_per_second_squared`].
     #[inline]
-    pub fn as_radian_per_second_squared(self) -> f64 {
+    pub fn as_radian_per_second_squared(self) -> Num {
         self.as_radians_per_second_squared()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in DegreesPerSecondSquared (`°/s²`).
     #[inline]
-    pub fn from_degrees_per_second_squared(value: f64) -> Self {
+    pub fn from_degrees_per_second_squared(value: Num) -> Self {
         Self::new(value, RotationalAccelerationUnit::DegreePerSecondSquared)
     }
 
     /// Returns the value expressed in DegreesPerSecondSquared (`°/s²`).
     #[inline]
-    pub fn as_degrees_per_second_squared(self) -> f64 {
+    pub fn as_degrees_per_second_squared(self) -> Num {
         self.convert_to(RotationalAccelerationUnit::DegreePerSecondSquared)
     }
 
     /// Alias for [`Self::as_degrees_per_second_squared`].
     #[inline]
-    pub fn as_degree_per_second_squared(self) -> f64 {
+    pub fn as_degree_per_second_squared(self) -> Num {
         self.as_degrees_per_second_squared()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerMinutePerSecond (`rpm/s`).
     #[inline]
-    pub fn from_revolutions_per_minute_per_second(value: f64) -> Self {
+    pub fn from_revolutions_per_minute_per_second(value: Num) -> Self {
         Self::new(
             value,
             RotationalAccelerationUnit::RevolutionPerMinutePerSecond,
@@ -156,19 +157,19 @@ impl RotationalAcceleration {
 
     /// Returns the value expressed in RevolutionsPerMinutePerSecond (`rpm/s`).
     #[inline]
-    pub fn as_revolutions_per_minute_per_second(self) -> f64 {
+    pub fn as_revolutions_per_minute_per_second(self) -> Num {
         self.convert_to(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
     }
 
     /// Alias for [`Self::as_revolutions_per_minute_per_second`].
     #[inline]
-    pub fn as_revolution_per_minute_per_second(self) -> f64 {
+    pub fn as_revolution_per_minute_per_second(self) -> Num {
         self.as_revolutions_per_minute_per_second()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerSecondSquared (`r/s²`).
     #[inline]
-    pub fn from_revolutions_per_second_squared(value: f64) -> Self {
+    pub fn from_revolutions_per_second_squared(value: Num) -> Self {
         Self::new(
             value,
             RotationalAccelerationUnit::RevolutionPerSecondSquared,
@@ -177,13 +178,13 @@ impl RotationalAcceleration {
 
     /// Returns the value expressed in RevolutionsPerSecondSquared (`r/s²`).
     #[inline]
-    pub fn as_revolutions_per_second_squared(self) -> f64 {
+    pub fn as_revolutions_per_second_squared(self) -> Num {
         self.convert_to(RotationalAccelerationUnit::RevolutionPerSecondSquared)
     }
 
     /// Alias for [`Self::as_revolutions_per_second_squared`].
     #[inline]
-    pub fn as_revolution_per_second_squared(self) -> f64 {
+    pub fn as_revolution_per_second_squared(self) -> Num {
         self.as_revolutions_per_second_squared()
     }
 }
@@ -206,27 +207,27 @@ impl Neg for RotationalAcceleration {
         Self(-self.0)
     }
 }
-impl Mul<f64> for RotationalAcceleration {
+impl Mul<Num> for RotationalAcceleration {
     type Output = RotationalAcceleration;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<RotationalAcceleration> for f64 {
+impl Mul<RotationalAcceleration> for Num {
     type Output = RotationalAcceleration;
     fn mul(self, rhs: RotationalAcceleration) -> RotationalAcceleration {
         RotationalAcceleration(self * rhs.0)
     }
 }
-impl Div<f64> for RotationalAcceleration {
+impl Div<Num> for RotationalAcceleration {
     type Output = RotationalAcceleration;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RotationalAcceleration {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -265,7 +266,7 @@ impl FromStr for RotationalAcceleration {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseRotationalAccelerationError(s.to_owned()))?;

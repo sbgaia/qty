@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Henry` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricInductance(f64);
+pub struct ElectricInductance(Num);
 
 /// Unit variants for [`ElectricInductance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -63,7 +64,7 @@ impl ElectricInductanceUnit {
 
 impl ElectricInductance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricInductanceUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricInductanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -79,7 +80,7 @@ impl ElectricInductance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -87,12 +88,12 @@ impl ElectricInductance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricInductanceUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricInductanceUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricInductanceUnit::Henry => x,
@@ -105,91 +106,91 @@ impl ElectricInductance {
 
     /// Creates a [`ElectricInductance`] from a value in Henries (`H`).
     #[inline]
-    pub fn from_henries(value: f64) -> Self {
+    pub fn from_henries(value: Num) -> Self {
         Self::new(value, ElectricInductanceUnit::Henry)
     }
 
     /// Returns the value expressed in Henries (`H`).
     #[inline]
-    pub fn as_henries(self) -> f64 {
+    pub fn as_henries(self) -> Num {
         self.convert_to(ElectricInductanceUnit::Henry)
     }
 
     /// Alias for [`Self::as_henries`].
     #[inline]
-    pub fn as_henry(self) -> f64 {
+    pub fn as_henry(self) -> Num {
         self.as_henries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Picohenries (`pH`).
     #[inline]
-    pub fn from_picohenries(value: f64) -> Self {
+    pub fn from_picohenries(value: Num) -> Self {
         Self::new(value, ElectricInductanceUnit::Picohenry)
     }
 
     /// Returns the value expressed in Picohenries (`pH`).
     #[inline]
-    pub fn as_picohenries(self) -> f64 {
+    pub fn as_picohenries(self) -> Num {
         self.convert_to(ElectricInductanceUnit::Picohenry)
     }
 
     /// Alias for [`Self::as_picohenries`].
     #[inline]
-    pub fn as_picohenry(self) -> f64 {
+    pub fn as_picohenry(self) -> Num {
         self.as_picohenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Nanohenries (`nH`).
     #[inline]
-    pub fn from_nanohenries(value: f64) -> Self {
+    pub fn from_nanohenries(value: Num) -> Self {
         Self::new(value, ElectricInductanceUnit::Nanohenry)
     }
 
     /// Returns the value expressed in Nanohenries (`nH`).
     #[inline]
-    pub fn as_nanohenries(self) -> f64 {
+    pub fn as_nanohenries(self) -> Num {
         self.convert_to(ElectricInductanceUnit::Nanohenry)
     }
 
     /// Alias for [`Self::as_nanohenries`].
     #[inline]
-    pub fn as_nanohenry(self) -> f64 {
+    pub fn as_nanohenry(self) -> Num {
         self.as_nanohenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Microhenries (`µH`).
     #[inline]
-    pub fn from_microhenries(value: f64) -> Self {
+    pub fn from_microhenries(value: Num) -> Self {
         Self::new(value, ElectricInductanceUnit::Microhenry)
     }
 
     /// Returns the value expressed in Microhenries (`µH`).
     #[inline]
-    pub fn as_microhenries(self) -> f64 {
+    pub fn as_microhenries(self) -> Num {
         self.convert_to(ElectricInductanceUnit::Microhenry)
     }
 
     /// Alias for [`Self::as_microhenries`].
     #[inline]
-    pub fn as_microhenry(self) -> f64 {
+    pub fn as_microhenry(self) -> Num {
         self.as_microhenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Millihenries (`mH`).
     #[inline]
-    pub fn from_millihenries(value: f64) -> Self {
+    pub fn from_millihenries(value: Num) -> Self {
         Self::new(value, ElectricInductanceUnit::Millihenry)
     }
 
     /// Returns the value expressed in Millihenries (`mH`).
     #[inline]
-    pub fn as_millihenries(self) -> f64 {
+    pub fn as_millihenries(self) -> Num {
         self.convert_to(ElectricInductanceUnit::Millihenry)
     }
 
     /// Alias for [`Self::as_millihenries`].
     #[inline]
-    pub fn as_millihenry(self) -> f64 {
+    pub fn as_millihenry(self) -> Num {
         self.as_millihenries()
     }
 }
@@ -212,27 +213,27 @@ impl Neg for ElectricInductance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricInductance {
+impl Mul<Num> for ElectricInductance {
     type Output = ElectricInductance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricInductance> for f64 {
+impl Mul<ElectricInductance> for Num {
     type Output = ElectricInductance;
     fn mul(self, rhs: ElectricInductance) -> ElectricInductance {
         ElectricInductance(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricInductance {
+impl Div<Num> for ElectricInductance {
     type Output = ElectricInductance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricInductance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -271,7 +272,7 @@ impl FromStr for ElectricInductance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricInductanceError(s.to_owned()))?;

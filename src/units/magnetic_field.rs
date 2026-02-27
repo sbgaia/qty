@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Tesla` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MagneticField(f64);
+pub struct MagneticField(Num);
 
 /// Unit variants for [`MagneticField`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl MagneticFieldUnit {
 
 impl MagneticField {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MagneticFieldUnit) -> Self {
+    pub fn new(value: Num, unit: MagneticFieldUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl MagneticField {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl MagneticField {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MagneticFieldUnit) -> f64 {
+    pub fn convert_to(self, unit: MagneticFieldUnit) -> Num {
         let x = self.0;
         match unit {
             MagneticFieldUnit::Tesla => x,
@@ -111,109 +112,109 @@ impl MagneticField {
 
     /// Creates a [`MagneticField`] from a value in Teslas (`T`).
     #[inline]
-    pub fn from_teslas(value: f64) -> Self {
+    pub fn from_teslas(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Tesla)
     }
 
     /// Returns the value expressed in Teslas (`T`).
     #[inline]
-    pub fn as_teslas(self) -> f64 {
+    pub fn as_teslas(self) -> Num {
         self.convert_to(MagneticFieldUnit::Tesla)
     }
 
     /// Alias for [`Self::as_teslas`].
     #[inline]
-    pub fn as_tesla(self) -> f64 {
+    pub fn as_tesla(self) -> Num {
         self.as_teslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Nanoteslas (`nT`).
     #[inline]
-    pub fn from_nanoteslas(value: f64) -> Self {
+    pub fn from_nanoteslas(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Nanotesla)
     }
 
     /// Returns the value expressed in Nanoteslas (`nT`).
     #[inline]
-    pub fn as_nanoteslas(self) -> f64 {
+    pub fn as_nanoteslas(self) -> Num {
         self.convert_to(MagneticFieldUnit::Nanotesla)
     }
 
     /// Alias for [`Self::as_nanoteslas`].
     #[inline]
-    pub fn as_nanotesla(self) -> f64 {
+    pub fn as_nanotesla(self) -> Num {
         self.as_nanoteslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Microteslas (`µT`).
     #[inline]
-    pub fn from_microteslas(value: f64) -> Self {
+    pub fn from_microteslas(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Microtesla)
     }
 
     /// Returns the value expressed in Microteslas (`µT`).
     #[inline]
-    pub fn as_microteslas(self) -> f64 {
+    pub fn as_microteslas(self) -> Num {
         self.convert_to(MagneticFieldUnit::Microtesla)
     }
 
     /// Alias for [`Self::as_microteslas`].
     #[inline]
-    pub fn as_microtesla(self) -> f64 {
+    pub fn as_microtesla(self) -> Num {
         self.as_microteslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Milliteslas (`mT`).
     #[inline]
-    pub fn from_milliteslas(value: f64) -> Self {
+    pub fn from_milliteslas(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Millitesla)
     }
 
     /// Returns the value expressed in Milliteslas (`mT`).
     #[inline]
-    pub fn as_milliteslas(self) -> f64 {
+    pub fn as_milliteslas(self) -> Num {
         self.convert_to(MagneticFieldUnit::Millitesla)
     }
 
     /// Alias for [`Self::as_milliteslas`].
     #[inline]
-    pub fn as_millitesla(self) -> f64 {
+    pub fn as_millitesla(self) -> Num {
         self.as_milliteslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Gausses (`G`).
     #[inline]
-    pub fn from_gausses(value: f64) -> Self {
+    pub fn from_gausses(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Gauss)
     }
 
     /// Returns the value expressed in Gausses (`G`).
     #[inline]
-    pub fn as_gausses(self) -> f64 {
+    pub fn as_gausses(self) -> Num {
         self.convert_to(MagneticFieldUnit::Gauss)
     }
 
     /// Alias for [`Self::as_gausses`].
     #[inline]
-    pub fn as_gauss(self) -> f64 {
+    pub fn as_gauss(self) -> Num {
         self.as_gausses()
     }
 
     /// Creates a [`MagneticField`] from a value in Milligausses (`mG`).
     #[inline]
-    pub fn from_milligausses(value: f64) -> Self {
+    pub fn from_milligausses(value: Num) -> Self {
         Self::new(value, MagneticFieldUnit::Milligauss)
     }
 
     /// Returns the value expressed in Milligausses (`mG`).
     #[inline]
-    pub fn as_milligausses(self) -> f64 {
+    pub fn as_milligausses(self) -> Num {
         self.convert_to(MagneticFieldUnit::Milligauss)
     }
 
     /// Alias for [`Self::as_milligausses`].
     #[inline]
-    pub fn as_milligauss(self) -> f64 {
+    pub fn as_milligauss(self) -> Num {
         self.as_milligausses()
     }
 }
@@ -236,27 +237,27 @@ impl Neg for MagneticField {
         Self(-self.0)
     }
 }
-impl Mul<f64> for MagneticField {
+impl Mul<Num> for MagneticField {
     type Output = MagneticField;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<MagneticField> for f64 {
+impl Mul<MagneticField> for Num {
     type Output = MagneticField;
     fn mul(self, rhs: MagneticField) -> MagneticField {
         MagneticField(self * rhs.0)
     }
 }
-impl Div<f64> for MagneticField {
+impl Div<Num> for MagneticField {
     type Output = MagneticField;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MagneticField {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -290,7 +291,7 @@ impl FromStr for MagneticField {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMagneticFieldError(s.to_owned()))?;

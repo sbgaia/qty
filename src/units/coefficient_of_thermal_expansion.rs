@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `PerKelvin` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct CoefficientOfThermalExpansion(f64);
+pub struct CoefficientOfThermalExpansion(Num);
 
 /// Unit variants for [`CoefficientOfThermalExpansion`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl CoefficientOfThermalExpansionUnit {
 
 impl CoefficientOfThermalExpansion {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: CoefficientOfThermalExpansionUnit) -> Self {
+    pub fn new(value: Num, unit: CoefficientOfThermalExpansionUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl CoefficientOfThermalExpansion {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl CoefficientOfThermalExpansion {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: CoefficientOfThermalExpansionUnit) -> f64 {
+    pub fn convert_to(self, unit: CoefficientOfThermalExpansionUnit) -> Num {
         let x = self.0;
         match unit {
             CoefficientOfThermalExpansionUnit::PerKelvin => x,
@@ -111,31 +112,31 @@ impl CoefficientOfThermalExpansion {
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerKelvin (`K⁻¹`).
     #[inline]
-    pub fn from_per_kelvin(value: f64) -> Self {
+    pub fn from_per_kelvin(value: Num) -> Self {
         Self::new(value, CoefficientOfThermalExpansionUnit::PerKelvin)
     }
 
     /// Returns the value expressed in PerKelvin (`K⁻¹`).
     #[inline]
-    pub fn as_per_kelvin(self) -> f64 {
+    pub fn as_per_kelvin(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PerKelvin)
     }
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerDegreeCelsius (`°C⁻¹`).
     #[inline]
-    pub fn from_per_degree_celsius(value: f64) -> Self {
+    pub fn from_per_degree_celsius(value: Num) -> Self {
         Self::new(value, CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
     }
 
     /// Returns the value expressed in PerDegreeCelsius (`°C⁻¹`).
     #[inline]
-    pub fn as_per_degree_celsius(self) -> f64 {
+    pub fn as_per_degree_celsius(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
     }
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerDegreeFahrenheit (`°F⁻¹`).
     #[inline]
-    pub fn from_per_degree_fahrenheit(value: f64) -> Self {
+    pub fn from_per_degree_fahrenheit(value: Num) -> Self {
         Self::new(
             value,
             CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit,
@@ -144,25 +145,25 @@ impl CoefficientOfThermalExpansion {
 
     /// Returns the value expressed in PerDegreeFahrenheit (`°F⁻¹`).
     #[inline]
-    pub fn as_per_degree_fahrenheit(self) -> f64 {
+    pub fn as_per_degree_fahrenheit(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
     }
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerKelvin (`ppm/K`).
     #[inline]
-    pub fn from_ppm_per_kelvin(value: f64) -> Self {
+    pub fn from_ppm_per_kelvin(value: Num) -> Self {
         Self::new(value, CoefficientOfThermalExpansionUnit::PpmPerKelvin)
     }
 
     /// Returns the value expressed in PpmPerKelvin (`ppm/K`).
     #[inline]
-    pub fn as_ppm_per_kelvin(self) -> f64 {
+    pub fn as_ppm_per_kelvin(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
     }
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerDegreeCelsius (`ppm/°C`).
     #[inline]
-    pub fn from_ppm_per_degree_celsius(value: f64) -> Self {
+    pub fn from_ppm_per_degree_celsius(value: Num) -> Self {
         Self::new(
             value,
             CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius,
@@ -171,13 +172,13 @@ impl CoefficientOfThermalExpansion {
 
     /// Returns the value expressed in PpmPerDegreeCelsius (`ppm/°C`).
     #[inline]
-    pub fn as_ppm_per_degree_celsius(self) -> f64 {
+    pub fn as_ppm_per_degree_celsius(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
     }
 
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerDegreeFahrenheit (`ppm/°F`).
     #[inline]
-    pub fn from_ppm_per_degree_fahrenheit(value: f64) -> Self {
+    pub fn from_ppm_per_degree_fahrenheit(value: Num) -> Self {
         Self::new(
             value,
             CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit,
@@ -186,7 +187,7 @@ impl CoefficientOfThermalExpansion {
 
     /// Returns the value expressed in PpmPerDegreeFahrenheit (`ppm/°F`).
     #[inline]
-    pub fn as_ppm_per_degree_fahrenheit(self) -> f64 {
+    pub fn as_ppm_per_degree_fahrenheit(self) -> Num {
         self.convert_to(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
     }
 }
@@ -209,27 +210,27 @@ impl Neg for CoefficientOfThermalExpansion {
         Self(-self.0)
     }
 }
-impl Mul<f64> for CoefficientOfThermalExpansion {
+impl Mul<Num> for CoefficientOfThermalExpansion {
     type Output = CoefficientOfThermalExpansion;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<CoefficientOfThermalExpansion> for f64 {
+impl Mul<CoefficientOfThermalExpansion> for Num {
     type Output = CoefficientOfThermalExpansion;
     fn mul(self, rhs: CoefficientOfThermalExpansion) -> CoefficientOfThermalExpansion {
         CoefficientOfThermalExpansion(self * rhs.0)
     }
 }
-impl Div<f64> for CoefficientOfThermalExpansion {
+impl Div<Num> for CoefficientOfThermalExpansion {
     type Output = CoefficientOfThermalExpansion;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for CoefficientOfThermalExpansion {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -272,7 +273,7 @@ impl FromStr for CoefficientOfThermalExpansion {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseCoefficientOfThermalExpansionError(s.to_owned()))?;

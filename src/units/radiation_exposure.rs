@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CoulombPerKilogram` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RadiationExposure(f64);
+pub struct RadiationExposure(Num);
 
 /// Unit variants for [`RadiationExposure`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -75,7 +76,7 @@ impl RadiationExposureUnit {
 
 impl RadiationExposure {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: RadiationExposureUnit) -> Self {
+    pub fn new(value: Num, unit: RadiationExposureUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -94,7 +95,7 @@ impl RadiationExposure {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -102,12 +103,12 @@ impl RadiationExposure {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: RadiationExposureUnit) -> f64 {
+    pub fn convert_to(self, unit: RadiationExposureUnit) -> Num {
         let x = self.0;
         match unit {
             RadiationExposureUnit::CoulombPerKilogram => x,
@@ -123,145 +124,145 @@ impl RadiationExposure {
 
     /// Creates a [`RadiationExposure`] from a value in CoulombsPerKilogram (`C/kg`).
     #[inline]
-    pub fn from_coulombs_per_kilogram(value: f64) -> Self {
+    pub fn from_coulombs_per_kilogram(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::CoulombPerKilogram)
     }
 
     /// Returns the value expressed in CoulombsPerKilogram (`C/kg`).
     #[inline]
-    pub fn as_coulombs_per_kilogram(self) -> f64 {
+    pub fn as_coulombs_per_kilogram(self) -> Num {
         self.convert_to(RadiationExposureUnit::CoulombPerKilogram)
     }
 
     /// Alias for [`Self::as_coulombs_per_kilogram`].
     #[inline]
-    pub fn as_coulomb_per_kilogram(self) -> f64 {
+    pub fn as_coulomb_per_kilogram(self) -> Num {
         self.as_coulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
-    pub fn from_picocoulombs_per_kilogram(value: f64) -> Self {
+    pub fn from_picocoulombs_per_kilogram(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::PicocoulombPerKilogram)
     }
 
     /// Returns the value expressed in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
-    pub fn as_picocoulombs_per_kilogram(self) -> f64 {
+    pub fn as_picocoulombs_per_kilogram(self) -> Num {
         self.convert_to(RadiationExposureUnit::PicocoulombPerKilogram)
     }
 
     /// Alias for [`Self::as_picocoulombs_per_kilogram`].
     #[inline]
-    pub fn as_picocoulomb_per_kilogram(self) -> f64 {
+    pub fn as_picocoulomb_per_kilogram(self) -> Num {
         self.as_picocoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
-    pub fn from_nanocoulombs_per_kilogram(value: f64) -> Self {
+    pub fn from_nanocoulombs_per_kilogram(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::NanocoulombPerKilogram)
     }
 
     /// Returns the value expressed in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
-    pub fn as_nanocoulombs_per_kilogram(self) -> f64 {
+    pub fn as_nanocoulombs_per_kilogram(self) -> Num {
         self.convert_to(RadiationExposureUnit::NanocoulombPerKilogram)
     }
 
     /// Alias for [`Self::as_nanocoulombs_per_kilogram`].
     #[inline]
-    pub fn as_nanocoulomb_per_kilogram(self) -> f64 {
+    pub fn as_nanocoulomb_per_kilogram(self) -> Num {
         self.as_nanocoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
-    pub fn from_microcoulombs_per_kilogram(value: f64) -> Self {
+    pub fn from_microcoulombs_per_kilogram(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::MicrocoulombPerKilogram)
     }
 
     /// Returns the value expressed in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
-    pub fn as_microcoulombs_per_kilogram(self) -> f64 {
+    pub fn as_microcoulombs_per_kilogram(self) -> Num {
         self.convert_to(RadiationExposureUnit::MicrocoulombPerKilogram)
     }
 
     /// Alias for [`Self::as_microcoulombs_per_kilogram`].
     #[inline]
-    pub fn as_microcoulomb_per_kilogram(self) -> f64 {
+    pub fn as_microcoulomb_per_kilogram(self) -> Num {
         self.as_microcoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
-    pub fn from_millicoulombs_per_kilogram(value: f64) -> Self {
+    pub fn from_millicoulombs_per_kilogram(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::MillicoulombPerKilogram)
     }
 
     /// Returns the value expressed in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
-    pub fn as_millicoulombs_per_kilogram(self) -> f64 {
+    pub fn as_millicoulombs_per_kilogram(self) -> Num {
         self.convert_to(RadiationExposureUnit::MillicoulombPerKilogram)
     }
 
     /// Alias for [`Self::as_millicoulombs_per_kilogram`].
     #[inline]
-    pub fn as_millicoulomb_per_kilogram(self) -> f64 {
+    pub fn as_millicoulomb_per_kilogram(self) -> Num {
         self.as_millicoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Roentgens (`R`).
     #[inline]
-    pub fn from_roentgens(value: f64) -> Self {
+    pub fn from_roentgens(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::Roentgen)
     }
 
     /// Returns the value expressed in Roentgens (`R`).
     #[inline]
-    pub fn as_roentgens(self) -> f64 {
+    pub fn as_roentgens(self) -> Num {
         self.convert_to(RadiationExposureUnit::Roentgen)
     }
 
     /// Alias for [`Self::as_roentgens`].
     #[inline]
-    pub fn as_roentgen(self) -> f64 {
+    pub fn as_roentgen(self) -> Num {
         self.as_roentgens()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Microroentgens (`µR`).
     #[inline]
-    pub fn from_microroentgens(value: f64) -> Self {
+    pub fn from_microroentgens(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::Microroentgen)
     }
 
     /// Returns the value expressed in Microroentgens (`µR`).
     #[inline]
-    pub fn as_microroentgens(self) -> f64 {
+    pub fn as_microroentgens(self) -> Num {
         self.convert_to(RadiationExposureUnit::Microroentgen)
     }
 
     /// Alias for [`Self::as_microroentgens`].
     #[inline]
-    pub fn as_microroentgen(self) -> f64 {
+    pub fn as_microroentgen(self) -> Num {
         self.as_microroentgens()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Milliroentgens (`mR`).
     #[inline]
-    pub fn from_milliroentgens(value: f64) -> Self {
+    pub fn from_milliroentgens(value: Num) -> Self {
         Self::new(value, RadiationExposureUnit::Milliroentgen)
     }
 
     /// Returns the value expressed in Milliroentgens (`mR`).
     #[inline]
-    pub fn as_milliroentgens(self) -> f64 {
+    pub fn as_milliroentgens(self) -> Num {
         self.convert_to(RadiationExposureUnit::Milliroentgen)
     }
 
     /// Alias for [`Self::as_milliroentgens`].
     #[inline]
-    pub fn as_milliroentgen(self) -> f64 {
+    pub fn as_milliroentgen(self) -> Num {
         self.as_milliroentgens()
     }
 }
@@ -284,27 +285,27 @@ impl Neg for RadiationExposure {
         Self(-self.0)
     }
 }
-impl Mul<f64> for RadiationExposure {
+impl Mul<Num> for RadiationExposure {
     type Output = RadiationExposure;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<RadiationExposure> for f64 {
+impl Mul<RadiationExposure> for Num {
     type Output = RadiationExposure;
     fn mul(self, rhs: RadiationExposure) -> RadiationExposure {
         RadiationExposure(self * rhs.0)
     }
 }
-impl Div<f64> for RadiationExposure {
+impl Div<Num> for RadiationExposure {
     type Output = RadiationExposure;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RadiationExposure {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -343,7 +344,7 @@ impl FromStr for RadiationExposure {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseRadiationExposureError(s.to_owned()))?;

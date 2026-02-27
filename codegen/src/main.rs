@@ -16,7 +16,7 @@ use std::path::Path;
 
 use heck::ToSnakeCase;
 
-use generator::CrossOp;
+use generator::{generate_cross_type_tests, generate_quantity_tests, CrossOp};
 use parser::QuantityDef;
 
 fn main() {
@@ -84,16 +84,27 @@ fn main() {
         cross_ops.len()
     );
 
-    // Write tests/generated.rs — integration tests for all quantities and cross-type ops.
-    let tests_source = generator::generate_tests(&quantities, &cross_ops);
-    let tests_path = Path::new("tests/generated.rs");
-    std::fs::write(tests_path, &tests_source)
-        .unwrap_or_else(|e| panic!("write {}: {e}", tests_path.display()));
-    rustfmt(tests_path);
+    // Write one test file per quantity into tests/ and one for cross-type ops.
+    let tests_dir = Path::new("tests");
+    std::fs::create_dir_all(tests_dir).expect("create tests/");
+
+    for qty in &quantities {
+        let module_name = qty.name.to_snake_case();
+        let path = tests_dir.join(format!("{module_name}.rs"));
+        let source = generate_quantity_tests(qty);
+        std::fs::write(&path, &source).unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
+        rustfmt(&path);
+    }
+
+    let cross_path = tests_dir.join("cross_type.rs");
+    let cross_test_source = generate_cross_type_tests(&cross_ops);
+    std::fs::write(&cross_path, &cross_test_source)
+        .unwrap_or_else(|e| panic!("write {}: {e}", cross_path.display()));
+    rustfmt(&cross_path);
+
     println!(
-        "codegen: wrote tests/generated.rs ({} quantities, {} cross-type ops)",
-        quantities.len(),
-        cross_ops.len()
+        "codegen: wrote tests/ ({} quantity files + cross_type.rs)",
+        quantities.len()
     );
 }
 

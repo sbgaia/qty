@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `NTU` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Turbidity(f64);
+pub struct Turbidity(Num);
 
 /// Unit variants for [`Turbidity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl TurbidityUnit {
 
 impl Turbidity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: TurbidityUnit) -> Self {
+    pub fn new(value: Num, unit: TurbidityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl Turbidity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl Turbidity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: TurbidityUnit) -> f64 {
+    pub fn convert_to(self, unit: TurbidityUnit) -> Num {
         let x = self.0;
         match unit {
             TurbidityUnit::NTU => x,
@@ -79,13 +80,13 @@ impl Turbidity {
 
     /// Creates a [`Turbidity`] from a value in NTU (`NTU`).
     #[inline]
-    pub fn from_ntu(value: f64) -> Self {
+    pub fn from_ntu(value: Num) -> Self {
         Self::new(value, TurbidityUnit::NTU)
     }
 
     /// Returns the value expressed in NTU (`NTU`).
     #[inline]
-    pub fn as_ntu(self) -> f64 {
+    pub fn as_ntu(self) -> Num {
         self.convert_to(TurbidityUnit::NTU)
     }
 }
@@ -108,27 +109,27 @@ impl Neg for Turbidity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Turbidity {
+impl Mul<Num> for Turbidity {
     type Output = Turbidity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Turbidity> for f64 {
+impl Mul<Turbidity> for Num {
     type Output = Turbidity;
     fn mul(self, rhs: Turbidity) -> Turbidity {
         Turbidity(self * rhs.0)
     }
 }
-impl Div<f64> for Turbidity {
+impl Div<Num> for Turbidity {
     type Output = Turbidity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Turbidity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -162,7 +163,7 @@ impl FromStr for Turbidity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseTurbidityError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `SquareMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Area(f64);
+pub struct Area(Num);
 
 /// Unit variants for [`Area`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -103,7 +104,7 @@ impl AreaUnit {
 
 impl Area {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: AreaUnit) -> Self {
+    pub fn new(value: Num, unit: AreaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -128,7 +129,7 @@ impl Area {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -136,12 +137,12 @@ impl Area {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: AreaUnit) -> f64 {
+    pub fn convert_to(self, unit: AreaUnit) -> Num {
         let x = self.0;
         match unit {
             AreaUnit::SquareKilometer => x / 1e6,
@@ -163,253 +164,253 @@ impl Area {
 
     /// Creates a [`Area`] from a value in SquareKilometers (`km²`).
     #[inline]
-    pub fn from_square_kilometers(value: f64) -> Self {
+    pub fn from_square_kilometers(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareKilometer)
     }
 
     /// Returns the value expressed in SquareKilometers (`km²`).
     #[inline]
-    pub fn as_square_kilometers(self) -> f64 {
+    pub fn as_square_kilometers(self) -> Num {
         self.convert_to(AreaUnit::SquareKilometer)
     }
 
     /// Alias for [`Self::as_square_kilometers`].
     #[inline]
-    pub fn as_square_kilometer(self) -> f64 {
+    pub fn as_square_kilometer(self) -> Num {
         self.as_square_kilometers()
     }
 
     /// Creates a [`Area`] from a value in SquareMeters (`m²`).
     #[inline]
-    pub fn from_square_meters(value: f64) -> Self {
+    pub fn from_square_meters(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareMeter)
     }
 
     /// Returns the value expressed in SquareMeters (`m²`).
     #[inline]
-    pub fn as_square_meters(self) -> f64 {
+    pub fn as_square_meters(self) -> Num {
         self.convert_to(AreaUnit::SquareMeter)
     }
 
     /// Alias for [`Self::as_square_meters`].
     #[inline]
-    pub fn as_square_meter(self) -> f64 {
+    pub fn as_square_meter(self) -> Num {
         self.as_square_meters()
     }
 
     /// Creates a [`Area`] from a value in SquareDecimeters (`dm²`).
     #[inline]
-    pub fn from_square_decimeters(value: f64) -> Self {
+    pub fn from_square_decimeters(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareDecimeter)
     }
 
     /// Returns the value expressed in SquareDecimeters (`dm²`).
     #[inline]
-    pub fn as_square_decimeters(self) -> f64 {
+    pub fn as_square_decimeters(self) -> Num {
         self.convert_to(AreaUnit::SquareDecimeter)
     }
 
     /// Alias for [`Self::as_square_decimeters`].
     #[inline]
-    pub fn as_square_decimeter(self) -> f64 {
+    pub fn as_square_decimeter(self) -> Num {
         self.as_square_decimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn from_square_centimeters(value: f64) -> Self {
+    pub fn from_square_centimeters(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareCentimeter)
     }
 
     /// Returns the value expressed in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn as_square_centimeters(self) -> f64 {
+    pub fn as_square_centimeters(self) -> Num {
         self.convert_to(AreaUnit::SquareCentimeter)
     }
 
     /// Alias for [`Self::as_square_centimeters`].
     #[inline]
-    pub fn as_square_centimeter(self) -> f64 {
+    pub fn as_square_centimeter(self) -> Num {
         self.as_square_centimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareMillimeters (`mm²`).
     #[inline]
-    pub fn from_square_millimeters(value: f64) -> Self {
+    pub fn from_square_millimeters(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareMillimeter)
     }
 
     /// Returns the value expressed in SquareMillimeters (`mm²`).
     #[inline]
-    pub fn as_square_millimeters(self) -> f64 {
+    pub fn as_square_millimeters(self) -> Num {
         self.convert_to(AreaUnit::SquareMillimeter)
     }
 
     /// Alias for [`Self::as_square_millimeters`].
     #[inline]
-    pub fn as_square_millimeter(self) -> f64 {
+    pub fn as_square_millimeter(self) -> Num {
         self.as_square_millimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareMicrometers (`µm²`).
     #[inline]
-    pub fn from_square_micrometers(value: f64) -> Self {
+    pub fn from_square_micrometers(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareMicrometer)
     }
 
     /// Returns the value expressed in SquareMicrometers (`µm²`).
     #[inline]
-    pub fn as_square_micrometers(self) -> f64 {
+    pub fn as_square_micrometers(self) -> Num {
         self.convert_to(AreaUnit::SquareMicrometer)
     }
 
     /// Alias for [`Self::as_square_micrometers`].
     #[inline]
-    pub fn as_square_micrometer(self) -> f64 {
+    pub fn as_square_micrometer(self) -> Num {
         self.as_square_micrometers()
     }
 
     /// Creates a [`Area`] from a value in SquareMiles (`mi²`).
     #[inline]
-    pub fn from_square_miles(value: f64) -> Self {
+    pub fn from_square_miles(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareMile)
     }
 
     /// Returns the value expressed in SquareMiles (`mi²`).
     #[inline]
-    pub fn as_square_miles(self) -> f64 {
+    pub fn as_square_miles(self) -> Num {
         self.convert_to(AreaUnit::SquareMile)
     }
 
     /// Alias for [`Self::as_square_miles`].
     #[inline]
-    pub fn as_square_mile(self) -> f64 {
+    pub fn as_square_mile(self) -> Num {
         self.as_square_miles()
     }
 
     /// Creates a [`Area`] from a value in SquareYards (`yd²`).
     #[inline]
-    pub fn from_square_yards(value: f64) -> Self {
+    pub fn from_square_yards(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareYard)
     }
 
     /// Returns the value expressed in SquareYards (`yd²`).
     #[inline]
-    pub fn as_square_yards(self) -> f64 {
+    pub fn as_square_yards(self) -> Num {
         self.convert_to(AreaUnit::SquareYard)
     }
 
     /// Alias for [`Self::as_square_yards`].
     #[inline]
-    pub fn as_square_yard(self) -> f64 {
+    pub fn as_square_yard(self) -> Num {
         self.as_square_yards()
     }
 
     /// Creates a [`Area`] from a value in SquareFeet (`ft²`).
     #[inline]
-    pub fn from_square_feet(value: f64) -> Self {
+    pub fn from_square_feet(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareFoot)
     }
 
     /// Returns the value expressed in SquareFeet (`ft²`).
     #[inline]
-    pub fn as_square_feet(self) -> f64 {
+    pub fn as_square_feet(self) -> Num {
         self.convert_to(AreaUnit::SquareFoot)
     }
 
     /// Alias for [`Self::as_square_feet`].
     #[inline]
-    pub fn as_square_foot(self) -> f64 {
+    pub fn as_square_foot(self) -> Num {
         self.as_square_feet()
     }
 
     /// Creates a [`Area`] from a value in UsSurveySquareFeet (`ft² (US)`).
     #[inline]
-    pub fn from_us_survey_square_feet(value: f64) -> Self {
+    pub fn from_us_survey_square_feet(value: Num) -> Self {
         Self::new(value, AreaUnit::UsSurveySquareFoot)
     }
 
     /// Returns the value expressed in UsSurveySquareFeet (`ft² (US)`).
     #[inline]
-    pub fn as_us_survey_square_feet(self) -> f64 {
+    pub fn as_us_survey_square_feet(self) -> Num {
         self.convert_to(AreaUnit::UsSurveySquareFoot)
     }
 
     /// Alias for [`Self::as_us_survey_square_feet`].
     #[inline]
-    pub fn as_us_survey_square_foot(self) -> f64 {
+    pub fn as_us_survey_square_foot(self) -> Num {
         self.as_us_survey_square_feet()
     }
 
     /// Creates a [`Area`] from a value in SquareInches (`in²`).
     #[inline]
-    pub fn from_square_inches(value: f64) -> Self {
+    pub fn from_square_inches(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareInch)
     }
 
     /// Returns the value expressed in SquareInches (`in²`).
     #[inline]
-    pub fn as_square_inches(self) -> f64 {
+    pub fn as_square_inches(self) -> Num {
         self.convert_to(AreaUnit::SquareInch)
     }
 
     /// Alias for [`Self::as_square_inches`].
     #[inline]
-    pub fn as_square_inch(self) -> f64 {
+    pub fn as_square_inch(self) -> Num {
         self.as_square_inches()
     }
 
     /// Creates a [`Area`] from a value in Acres (`ac`).
     #[inline]
-    pub fn from_acres(value: f64) -> Self {
+    pub fn from_acres(value: Num) -> Self {
         Self::new(value, AreaUnit::Acre)
     }
 
     /// Returns the value expressed in Acres (`ac`).
     #[inline]
-    pub fn as_acres(self) -> f64 {
+    pub fn as_acres(self) -> Num {
         self.convert_to(AreaUnit::Acre)
     }
 
     /// Alias for [`Self::as_acres`].
     #[inline]
-    pub fn as_acre(self) -> f64 {
+    pub fn as_acre(self) -> Num {
         self.as_acres()
     }
 
     /// Creates a [`Area`] from a value in Hectares (`ha`).
     #[inline]
-    pub fn from_hectares(value: f64) -> Self {
+    pub fn from_hectares(value: Num) -> Self {
         Self::new(value, AreaUnit::Hectare)
     }
 
     /// Returns the value expressed in Hectares (`ha`).
     #[inline]
-    pub fn as_hectares(self) -> f64 {
+    pub fn as_hectares(self) -> Num {
         self.convert_to(AreaUnit::Hectare)
     }
 
     /// Alias for [`Self::as_hectares`].
     #[inline]
-    pub fn as_hectare(self) -> f64 {
+    pub fn as_hectare(self) -> Num {
         self.as_hectares()
     }
 
     /// Creates a [`Area`] from a value in SquareNauticalMiles (`nmi²`).
     #[inline]
-    pub fn from_square_nautical_miles(value: f64) -> Self {
+    pub fn from_square_nautical_miles(value: Num) -> Self {
         Self::new(value, AreaUnit::SquareNauticalMile)
     }
 
     /// Returns the value expressed in SquareNauticalMiles (`nmi²`).
     #[inline]
-    pub fn as_square_nautical_miles(self) -> f64 {
+    pub fn as_square_nautical_miles(self) -> Num {
         self.convert_to(AreaUnit::SquareNauticalMile)
     }
 
     /// Alias for [`Self::as_square_nautical_miles`].
     #[inline]
-    pub fn as_square_nautical_mile(self) -> f64 {
+    pub fn as_square_nautical_mile(self) -> Num {
         self.as_square_nautical_miles()
     }
 }
@@ -432,27 +433,27 @@ impl Neg for Area {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Area {
+impl Mul<Num> for Area {
     type Output = Area;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Area> for f64 {
+impl Mul<Area> for Num {
     type Output = Area;
     fn mul(self, rhs: Area) -> Area {
         Area(self * rhs.0)
     }
 }
-impl Div<f64> for Area {
+impl Div<Num> for Area {
     type Output = Area;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Area {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -486,7 +487,7 @@ impl FromStr for Area {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseAreaError(s.to_owned()))?;

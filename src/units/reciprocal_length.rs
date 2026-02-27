@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `InverseMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ReciprocalLength(f64);
+pub struct ReciprocalLength(Num);
 
 /// Unit variants for [`ReciprocalLength`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -83,7 +84,7 @@ impl ReciprocalLengthUnit {
 
 impl ReciprocalLength {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ReciprocalLengthUnit) -> Self {
+    pub fn new(value: Num, unit: ReciprocalLengthUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -104,7 +105,7 @@ impl ReciprocalLength {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -112,12 +113,12 @@ impl ReciprocalLength {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ReciprocalLengthUnit) -> f64 {
+    pub fn convert_to(self, unit: ReciprocalLengthUnit) -> Num {
         let x = self.0;
         match unit {
             ReciprocalLengthUnit::InverseMeter => x,
@@ -135,181 +136,181 @@ impl ReciprocalLength {
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMeters (`m⁻¹`).
     #[inline]
-    pub fn from_inverse_meters(value: f64) -> Self {
+    pub fn from_inverse_meters(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseMeter)
     }
 
     /// Returns the value expressed in InverseMeters (`m⁻¹`).
     #[inline]
-    pub fn as_inverse_meters(self) -> f64 {
+    pub fn as_inverse_meters(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseMeter)
     }
 
     /// Alias for [`Self::as_inverse_meters`].
     #[inline]
-    pub fn as_inverse_meter(self) -> f64 {
+    pub fn as_inverse_meter(self) -> Num {
         self.as_inverse_meters()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseCentimeters (`cm⁻¹`).
     #[inline]
-    pub fn from_inverse_centimeters(value: f64) -> Self {
+    pub fn from_inverse_centimeters(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseCentimeter)
     }
 
     /// Returns the value expressed in InverseCentimeters (`cm⁻¹`).
     #[inline]
-    pub fn as_inverse_centimeters(self) -> f64 {
+    pub fn as_inverse_centimeters(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseCentimeter)
     }
 
     /// Alias for [`Self::as_inverse_centimeters`].
     #[inline]
-    pub fn as_inverse_centimeter(self) -> f64 {
+    pub fn as_inverse_centimeter(self) -> Num {
         self.as_inverse_centimeters()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMillimeters (`mm⁻¹`).
     #[inline]
-    pub fn from_inverse_millimeters(value: f64) -> Self {
+    pub fn from_inverse_millimeters(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseMillimeter)
     }
 
     /// Returns the value expressed in InverseMillimeters (`mm⁻¹`).
     #[inline]
-    pub fn as_inverse_millimeters(self) -> f64 {
+    pub fn as_inverse_millimeters(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseMillimeter)
     }
 
     /// Alias for [`Self::as_inverse_millimeters`].
     #[inline]
-    pub fn as_inverse_millimeter(self) -> f64 {
+    pub fn as_inverse_millimeter(self) -> Num {
         self.as_inverse_millimeters()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMiles (`mi⁻¹`).
     #[inline]
-    pub fn from_inverse_miles(value: f64) -> Self {
+    pub fn from_inverse_miles(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseMile)
     }
 
     /// Returns the value expressed in InverseMiles (`mi⁻¹`).
     #[inline]
-    pub fn as_inverse_miles(self) -> f64 {
+    pub fn as_inverse_miles(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseMile)
     }
 
     /// Alias for [`Self::as_inverse_miles`].
     #[inline]
-    pub fn as_inverse_mile(self) -> f64 {
+    pub fn as_inverse_mile(self) -> Num {
         self.as_inverse_miles()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseYards (`yd⁻¹`).
     #[inline]
-    pub fn from_inverse_yards(value: f64) -> Self {
+    pub fn from_inverse_yards(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseYard)
     }
 
     /// Returns the value expressed in InverseYards (`yd⁻¹`).
     #[inline]
-    pub fn as_inverse_yards(self) -> f64 {
+    pub fn as_inverse_yards(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseYard)
     }
 
     /// Alias for [`Self::as_inverse_yards`].
     #[inline]
-    pub fn as_inverse_yard(self) -> f64 {
+    pub fn as_inverse_yard(self) -> Num {
         self.as_inverse_yards()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseFeet (`ft⁻¹`).
     #[inline]
-    pub fn from_inverse_feet(value: f64) -> Self {
+    pub fn from_inverse_feet(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseFoot)
     }
 
     /// Returns the value expressed in InverseFeet (`ft⁻¹`).
     #[inline]
-    pub fn as_inverse_feet(self) -> f64 {
+    pub fn as_inverse_feet(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseFoot)
     }
 
     /// Alias for [`Self::as_inverse_feet`].
     #[inline]
-    pub fn as_inverse_foot(self) -> f64 {
+    pub fn as_inverse_foot(self) -> Num {
         self.as_inverse_feet()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseUsSurveyFeet (`ftUS⁻¹`).
     #[inline]
-    pub fn from_inverse_us_survey_feet(value: f64) -> Self {
+    pub fn from_inverse_us_survey_feet(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseUsSurveyFoot)
     }
 
     /// Returns the value expressed in InverseUsSurveyFeet (`ftUS⁻¹`).
     #[inline]
-    pub fn as_inverse_us_survey_feet(self) -> f64 {
+    pub fn as_inverse_us_survey_feet(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseUsSurveyFoot)
     }
 
     /// Alias for [`Self::as_inverse_us_survey_feet`].
     #[inline]
-    pub fn as_inverse_us_survey_foot(self) -> f64 {
+    pub fn as_inverse_us_survey_foot(self) -> Num {
         self.as_inverse_us_survey_feet()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseInches (`in⁻¹`).
     #[inline]
-    pub fn from_inverse_inches(value: f64) -> Self {
+    pub fn from_inverse_inches(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseInch)
     }
 
     /// Returns the value expressed in InverseInches (`in⁻¹`).
     #[inline]
-    pub fn as_inverse_inches(self) -> f64 {
+    pub fn as_inverse_inches(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseInch)
     }
 
     /// Alias for [`Self::as_inverse_inches`].
     #[inline]
-    pub fn as_inverse_inch(self) -> f64 {
+    pub fn as_inverse_inch(self) -> Num {
         self.as_inverse_inches()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMils (`mil⁻¹`).
     #[inline]
-    pub fn from_inverse_mils(value: f64) -> Self {
+    pub fn from_inverse_mils(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseMil)
     }
 
     /// Returns the value expressed in InverseMils (`mil⁻¹`).
     #[inline]
-    pub fn as_inverse_mils(self) -> f64 {
+    pub fn as_inverse_mils(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseMil)
     }
 
     /// Alias for [`Self::as_inverse_mils`].
     #[inline]
-    pub fn as_inverse_mil(self) -> f64 {
+    pub fn as_inverse_mil(self) -> Num {
         self.as_inverse_mils()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMicroinches (`µin⁻¹`).
     #[inline]
-    pub fn from_inverse_microinches(value: f64) -> Self {
+    pub fn from_inverse_microinches(value: Num) -> Self {
         Self::new(value, ReciprocalLengthUnit::InverseMicroinch)
     }
 
     /// Returns the value expressed in InverseMicroinches (`µin⁻¹`).
     #[inline]
-    pub fn as_inverse_microinches(self) -> f64 {
+    pub fn as_inverse_microinches(self) -> Num {
         self.convert_to(ReciprocalLengthUnit::InverseMicroinch)
     }
 
     /// Alias for [`Self::as_inverse_microinches`].
     #[inline]
-    pub fn as_inverse_microinch(self) -> f64 {
+    pub fn as_inverse_microinch(self) -> Num {
         self.as_inverse_microinches()
     }
 }
@@ -332,27 +333,27 @@ impl Neg for ReciprocalLength {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ReciprocalLength {
+impl Mul<Num> for ReciprocalLength {
     type Output = ReciprocalLength;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ReciprocalLength> for f64 {
+impl Mul<ReciprocalLength> for Num {
     type Output = ReciprocalLength;
     fn mul(self, rhs: ReciprocalLength) -> ReciprocalLength {
         ReciprocalLength(self * rhs.0)
     }
 }
-impl Div<f64> for ReciprocalLength {
+impl Div<Num> for ReciprocalLength {
     type Output = ReciprocalLength;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ReciprocalLength {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -391,7 +392,7 @@ impl FromStr for ReciprocalLength {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseReciprocalLengthError(s.to_owned()))?;

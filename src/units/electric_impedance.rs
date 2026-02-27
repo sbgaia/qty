@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Ohm` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricImpedance(f64);
+pub struct ElectricImpedance(Num);
 
 /// Unit variants for [`ElectricImpedance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -75,7 +76,7 @@ impl ElectricImpedanceUnit {
 
 impl ElectricImpedance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricImpedanceUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricImpedanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -94,7 +95,7 @@ impl ElectricImpedance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -102,12 +103,12 @@ impl ElectricImpedance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricImpedanceUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricImpedanceUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricImpedanceUnit::Ohm => x,
@@ -123,145 +124,145 @@ impl ElectricImpedance {
 
     /// Creates a [`ElectricImpedance`] from a value in Ohms (`Ω`).
     #[inline]
-    pub fn from_ohms(value: f64) -> Self {
+    pub fn from_ohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Ohm)
     }
 
     /// Returns the value expressed in Ohms (`Ω`).
     #[inline]
-    pub fn as_ohms(self) -> f64 {
+    pub fn as_ohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Ohm)
     }
 
     /// Alias for [`Self::as_ohms`].
     #[inline]
-    pub fn as_ohm(self) -> f64 {
+    pub fn as_ohm(self) -> Num {
         self.as_ohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Nanoohms (`nΩ`).
     #[inline]
-    pub fn from_nanoohms(value: f64) -> Self {
+    pub fn from_nanoohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Nanoohm)
     }
 
     /// Returns the value expressed in Nanoohms (`nΩ`).
     #[inline]
-    pub fn as_nanoohms(self) -> f64 {
+    pub fn as_nanoohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Nanoohm)
     }
 
     /// Alias for [`Self::as_nanoohms`].
     #[inline]
-    pub fn as_nanoohm(self) -> f64 {
+    pub fn as_nanoohm(self) -> Num {
         self.as_nanoohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Microohms (`µΩ`).
     #[inline]
-    pub fn from_microohms(value: f64) -> Self {
+    pub fn from_microohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Microohm)
     }
 
     /// Returns the value expressed in Microohms (`µΩ`).
     #[inline]
-    pub fn as_microohms(self) -> f64 {
+    pub fn as_microohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Microohm)
     }
 
     /// Alias for [`Self::as_microohms`].
     #[inline]
-    pub fn as_microohm(self) -> f64 {
+    pub fn as_microohm(self) -> Num {
         self.as_microohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Milliohms (`mΩ`).
     #[inline]
-    pub fn from_milliohms(value: f64) -> Self {
+    pub fn from_milliohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Milliohm)
     }
 
     /// Returns the value expressed in Milliohms (`mΩ`).
     #[inline]
-    pub fn as_milliohms(self) -> f64 {
+    pub fn as_milliohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Milliohm)
     }
 
     /// Alias for [`Self::as_milliohms`].
     #[inline]
-    pub fn as_milliohm(self) -> f64 {
+    pub fn as_milliohm(self) -> Num {
         self.as_milliohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Kiloohms (`kΩ`).
     #[inline]
-    pub fn from_kiloohms(value: f64) -> Self {
+    pub fn from_kiloohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Kiloohm)
     }
 
     /// Returns the value expressed in Kiloohms (`kΩ`).
     #[inline]
-    pub fn as_kiloohms(self) -> f64 {
+    pub fn as_kiloohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Kiloohm)
     }
 
     /// Alias for [`Self::as_kiloohms`].
     #[inline]
-    pub fn as_kiloohm(self) -> f64 {
+    pub fn as_kiloohm(self) -> Num {
         self.as_kiloohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Megaohms (`MΩ`).
     #[inline]
-    pub fn from_megaohms(value: f64) -> Self {
+    pub fn from_megaohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Megaohm)
     }
 
     /// Returns the value expressed in Megaohms (`MΩ`).
     #[inline]
-    pub fn as_megaohms(self) -> f64 {
+    pub fn as_megaohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Megaohm)
     }
 
     /// Alias for [`Self::as_megaohms`].
     #[inline]
-    pub fn as_megaohm(self) -> f64 {
+    pub fn as_megaohm(self) -> Num {
         self.as_megaohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Gigaohms (`GΩ`).
     #[inline]
-    pub fn from_gigaohms(value: f64) -> Self {
+    pub fn from_gigaohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Gigaohm)
     }
 
     /// Returns the value expressed in Gigaohms (`GΩ`).
     #[inline]
-    pub fn as_gigaohms(self) -> f64 {
+    pub fn as_gigaohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Gigaohm)
     }
 
     /// Alias for [`Self::as_gigaohms`].
     #[inline]
-    pub fn as_gigaohm(self) -> f64 {
+    pub fn as_gigaohm(self) -> Num {
         self.as_gigaohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Teraohms (`TΩ`).
     #[inline]
-    pub fn from_teraohms(value: f64) -> Self {
+    pub fn from_teraohms(value: Num) -> Self {
         Self::new(value, ElectricImpedanceUnit::Teraohm)
     }
 
     /// Returns the value expressed in Teraohms (`TΩ`).
     #[inline]
-    pub fn as_teraohms(self) -> f64 {
+    pub fn as_teraohms(self) -> Num {
         self.convert_to(ElectricImpedanceUnit::Teraohm)
     }
 
     /// Alias for [`Self::as_teraohms`].
     #[inline]
-    pub fn as_teraohm(self) -> f64 {
+    pub fn as_teraohm(self) -> Num {
         self.as_teraohms()
     }
 }
@@ -284,27 +285,27 @@ impl Neg for ElectricImpedance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricImpedance {
+impl Mul<Num> for ElectricImpedance {
     type Output = ElectricImpedance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricImpedance> for f64 {
+impl Mul<ElectricImpedance> for Num {
     type Output = ElectricImpedance;
     fn mul(self, rhs: ElectricImpedance) -> ElectricImpedance {
         ElectricImpedance(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricImpedance {
+impl Div<Num> for ElectricImpedance {
     type Output = ElectricImpedance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricImpedance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -343,7 +344,7 @@ impl FromStr for ElectricImpedance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricImpedanceError(s.to_owned()))?;

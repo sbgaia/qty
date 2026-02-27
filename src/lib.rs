@@ -18,6 +18,15 @@
 //! assert!((temp.as_degrees_fahrenheit() - 212.0).abs() < 1e-9);
 //! ```
 
+/// The underlying numeric type used by every quantity struct.
+///
+/// Defaults to `f64` (~15 significant digits). Enable the `f32` Cargo feature
+/// to switch to `f32` (~7 significant digits) for lower memory usage.
+#[cfg(feature = "f32")]
+pub type Num = f32;
+#[cfg(not(feature = "f32"))]
+pub type Num = f64;
+
 // Generated quantity modules — re-exports every public item from each module.
 pub mod units;
 pub use units::*;

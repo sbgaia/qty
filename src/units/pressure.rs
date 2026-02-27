@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Pascal` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Pressure(f64);
+pub struct Pressure(Num);
 
 /// Unit variants for [`Pressure`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -244,7 +245,7 @@ impl PressureUnit {
 
 impl Pressure {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: PressureUnit) -> Self {
+    pub fn new(value: Num, unit: PressureUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -307,7 +308,7 @@ impl Pressure {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -315,12 +316,12 @@ impl Pressure {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: PressureUnit) -> f64 {
+    pub fn convert_to(self, unit: PressureUnit) -> Num {
         let x = self.0;
         match unit {
             PressureUnit::Pascal => x,
@@ -380,865 +381,865 @@ impl Pressure {
 
     /// Creates a [`Pressure`] from a value in Pascals (`Pa`).
     #[inline]
-    pub fn from_pascals(value: f64) -> Self {
+    pub fn from_pascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Pascal)
     }
 
     /// Returns the value expressed in Pascals (`Pa`).
     #[inline]
-    pub fn as_pascals(self) -> f64 {
+    pub fn as_pascals(self) -> Num {
         self.convert_to(PressureUnit::Pascal)
     }
 
     /// Alias for [`Self::as_pascals`].
     #[inline]
-    pub fn as_pascal(self) -> f64 {
+    pub fn as_pascal(self) -> Num {
         self.as_pascals()
     }
 
     /// Creates a [`Pressure`] from a value in Micropascals (`µPa`).
     #[inline]
-    pub fn from_micropascals(value: f64) -> Self {
+    pub fn from_micropascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Micropascal)
     }
 
     /// Returns the value expressed in Micropascals (`µPa`).
     #[inline]
-    pub fn as_micropascals(self) -> f64 {
+    pub fn as_micropascals(self) -> Num {
         self.convert_to(PressureUnit::Micropascal)
     }
 
     /// Alias for [`Self::as_micropascals`].
     #[inline]
-    pub fn as_micropascal(self) -> f64 {
+    pub fn as_micropascal(self) -> Num {
         self.as_micropascals()
     }
 
     /// Creates a [`Pressure`] from a value in Millipascals (`mPa`).
     #[inline]
-    pub fn from_millipascals(value: f64) -> Self {
+    pub fn from_millipascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Millipascal)
     }
 
     /// Returns the value expressed in Millipascals (`mPa`).
     #[inline]
-    pub fn as_millipascals(self) -> f64 {
+    pub fn as_millipascals(self) -> Num {
         self.convert_to(PressureUnit::Millipascal)
     }
 
     /// Alias for [`Self::as_millipascals`].
     #[inline]
-    pub fn as_millipascal(self) -> f64 {
+    pub fn as_millipascal(self) -> Num {
         self.as_millipascals()
     }
 
     /// Creates a [`Pressure`] from a value in Decapascals (`daPa`).
     #[inline]
-    pub fn from_decapascals(value: f64) -> Self {
+    pub fn from_decapascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Decapascal)
     }
 
     /// Returns the value expressed in Decapascals (`daPa`).
     #[inline]
-    pub fn as_decapascals(self) -> f64 {
+    pub fn as_decapascals(self) -> Num {
         self.convert_to(PressureUnit::Decapascal)
     }
 
     /// Alias for [`Self::as_decapascals`].
     #[inline]
-    pub fn as_decapascal(self) -> f64 {
+    pub fn as_decapascal(self) -> Num {
         self.as_decapascals()
     }
 
     /// Creates a [`Pressure`] from a value in Hectopascals (`hPa`).
     #[inline]
-    pub fn from_hectopascals(value: f64) -> Self {
+    pub fn from_hectopascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Hectopascal)
     }
 
     /// Returns the value expressed in Hectopascals (`hPa`).
     #[inline]
-    pub fn as_hectopascals(self) -> f64 {
+    pub fn as_hectopascals(self) -> Num {
         self.convert_to(PressureUnit::Hectopascal)
     }
 
     /// Alias for [`Self::as_hectopascals`].
     #[inline]
-    pub fn as_hectopascal(self) -> f64 {
+    pub fn as_hectopascal(self) -> Num {
         self.as_hectopascals()
     }
 
     /// Creates a [`Pressure`] from a value in Kilopascals (`kPa`).
     #[inline]
-    pub fn from_kilopascals(value: f64) -> Self {
+    pub fn from_kilopascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Kilopascal)
     }
 
     /// Returns the value expressed in Kilopascals (`kPa`).
     #[inline]
-    pub fn as_kilopascals(self) -> f64 {
+    pub fn as_kilopascals(self) -> Num {
         self.convert_to(PressureUnit::Kilopascal)
     }
 
     /// Alias for [`Self::as_kilopascals`].
     #[inline]
-    pub fn as_kilopascal(self) -> f64 {
+    pub fn as_kilopascal(self) -> Num {
         self.as_kilopascals()
     }
 
     /// Creates a [`Pressure`] from a value in Megapascals (`MPa`).
     #[inline]
-    pub fn from_megapascals(value: f64) -> Self {
+    pub fn from_megapascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Megapascal)
     }
 
     /// Returns the value expressed in Megapascals (`MPa`).
     #[inline]
-    pub fn as_megapascals(self) -> f64 {
+    pub fn as_megapascals(self) -> Num {
         self.convert_to(PressureUnit::Megapascal)
     }
 
     /// Alias for [`Self::as_megapascals`].
     #[inline]
-    pub fn as_megapascal(self) -> f64 {
+    pub fn as_megapascal(self) -> Num {
         self.as_megapascals()
     }
 
     /// Creates a [`Pressure`] from a value in Gigapascals (`GPa`).
     #[inline]
-    pub fn from_gigapascals(value: f64) -> Self {
+    pub fn from_gigapascals(value: Num) -> Self {
         Self::new(value, PressureUnit::Gigapascal)
     }
 
     /// Returns the value expressed in Gigapascals (`GPa`).
     #[inline]
-    pub fn as_gigapascals(self) -> f64 {
+    pub fn as_gigapascals(self) -> Num {
         self.convert_to(PressureUnit::Gigapascal)
     }
 
     /// Alias for [`Self::as_gigapascals`].
     #[inline]
-    pub fn as_gigapascal(self) -> f64 {
+    pub fn as_gigapascal(self) -> Num {
         self.as_gigapascals()
     }
 
     /// Creates a [`Pressure`] from a value in Atmospheres (`atm`).
     #[inline]
-    pub fn from_atmospheres(value: f64) -> Self {
+    pub fn from_atmospheres(value: Num) -> Self {
         Self::new(value, PressureUnit::Atmosphere)
     }
 
     /// Returns the value expressed in Atmospheres (`atm`).
     #[inline]
-    pub fn as_atmospheres(self) -> f64 {
+    pub fn as_atmospheres(self) -> Num {
         self.convert_to(PressureUnit::Atmosphere)
     }
 
     /// Alias for [`Self::as_atmospheres`].
     #[inline]
-    pub fn as_atmosphere(self) -> f64 {
+    pub fn as_atmosphere(self) -> Num {
         self.as_atmospheres()
     }
 
     /// Creates a [`Pressure`] from a value in Bars (`bar`).
     #[inline]
-    pub fn from_bars(value: f64) -> Self {
+    pub fn from_bars(value: Num) -> Self {
         Self::new(value, PressureUnit::Bar)
     }
 
     /// Returns the value expressed in Bars (`bar`).
     #[inline]
-    pub fn as_bars(self) -> f64 {
+    pub fn as_bars(self) -> Num {
         self.convert_to(PressureUnit::Bar)
     }
 
     /// Alias for [`Self::as_bars`].
     #[inline]
-    pub fn as_bar(self) -> f64 {
+    pub fn as_bar(self) -> Num {
         self.as_bars()
     }
 
     /// Creates a [`Pressure`] from a value in Microbars (`µbar`).
     #[inline]
-    pub fn from_microbars(value: f64) -> Self {
+    pub fn from_microbars(value: Num) -> Self {
         Self::new(value, PressureUnit::Microbar)
     }
 
     /// Returns the value expressed in Microbars (`µbar`).
     #[inline]
-    pub fn as_microbars(self) -> f64 {
+    pub fn as_microbars(self) -> Num {
         self.convert_to(PressureUnit::Microbar)
     }
 
     /// Alias for [`Self::as_microbars`].
     #[inline]
-    pub fn as_microbar(self) -> f64 {
+    pub fn as_microbar(self) -> Num {
         self.as_microbars()
     }
 
     /// Creates a [`Pressure`] from a value in Millibars (`mbar`).
     #[inline]
-    pub fn from_millibars(value: f64) -> Self {
+    pub fn from_millibars(value: Num) -> Self {
         Self::new(value, PressureUnit::Millibar)
     }
 
     /// Returns the value expressed in Millibars (`mbar`).
     #[inline]
-    pub fn as_millibars(self) -> f64 {
+    pub fn as_millibars(self) -> Num {
         self.convert_to(PressureUnit::Millibar)
     }
 
     /// Alias for [`Self::as_millibars`].
     #[inline]
-    pub fn as_millibar(self) -> f64 {
+    pub fn as_millibar(self) -> Num {
         self.as_millibars()
     }
 
     /// Creates a [`Pressure`] from a value in Centibars (`cbar`).
     #[inline]
-    pub fn from_centibars(value: f64) -> Self {
+    pub fn from_centibars(value: Num) -> Self {
         Self::new(value, PressureUnit::Centibar)
     }
 
     /// Returns the value expressed in Centibars (`cbar`).
     #[inline]
-    pub fn as_centibars(self) -> f64 {
+    pub fn as_centibars(self) -> Num {
         self.convert_to(PressureUnit::Centibar)
     }
 
     /// Alias for [`Self::as_centibars`].
     #[inline]
-    pub fn as_centibar(self) -> f64 {
+    pub fn as_centibar(self) -> Num {
         self.as_centibars()
     }
 
     /// Creates a [`Pressure`] from a value in Decibars (`dbar`).
     #[inline]
-    pub fn from_decibars(value: f64) -> Self {
+    pub fn from_decibars(value: Num) -> Self {
         Self::new(value, PressureUnit::Decibar)
     }
 
     /// Returns the value expressed in Decibars (`dbar`).
     #[inline]
-    pub fn as_decibars(self) -> f64 {
+    pub fn as_decibars(self) -> Num {
         self.convert_to(PressureUnit::Decibar)
     }
 
     /// Alias for [`Self::as_decibars`].
     #[inline]
-    pub fn as_decibar(self) -> f64 {
+    pub fn as_decibar(self) -> Num {
         self.as_decibars()
     }
 
     /// Creates a [`Pressure`] from a value in Kilobars (`kbar`).
     #[inline]
-    pub fn from_kilobars(value: f64) -> Self {
+    pub fn from_kilobars(value: Num) -> Self {
         Self::new(value, PressureUnit::Kilobar)
     }
 
     /// Returns the value expressed in Kilobars (`kbar`).
     #[inline]
-    pub fn as_kilobars(self) -> f64 {
+    pub fn as_kilobars(self) -> Num {
         self.convert_to(PressureUnit::Kilobar)
     }
 
     /// Alias for [`Self::as_kilobars`].
     #[inline]
-    pub fn as_kilobar(self) -> f64 {
+    pub fn as_kilobar(self) -> Num {
         self.as_kilobars()
     }
 
     /// Creates a [`Pressure`] from a value in Megabars (`Mbar`).
     #[inline]
-    pub fn from_megabars(value: f64) -> Self {
+    pub fn from_megabars(value: Num) -> Self {
         Self::new(value, PressureUnit::Megabar)
     }
 
     /// Returns the value expressed in Megabars (`Mbar`).
     #[inline]
-    pub fn as_megabars(self) -> f64 {
+    pub fn as_megabars(self) -> Num {
         self.convert_to(PressureUnit::Megabar)
     }
 
     /// Alias for [`Self::as_megabars`].
     #[inline]
-    pub fn as_megabar(self) -> f64 {
+    pub fn as_megabar(self) -> Num {
         self.as_megabars()
     }
 
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareMeter (`kgf/m²`).
     #[inline]
-    pub fn from_kilograms_force_per_square_meter(value: f64) -> Self {
+    pub fn from_kilograms_force_per_square_meter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilogramForcePerSquareMeter)
     }
 
     /// Returns the value expressed in KilogramsForcePerSquareMeter (`kgf/m²`).
     #[inline]
-    pub fn as_kilograms_force_per_square_meter(self) -> f64 {
+    pub fn as_kilograms_force_per_square_meter(self) -> Num {
         self.convert_to(PressureUnit::KilogramForcePerSquareMeter)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_square_meter`].
     #[inline]
-    pub fn as_kilogram_force_per_square_meter(self) -> f64 {
+    pub fn as_kilogram_force_per_square_meter(self) -> Num {
         self.as_kilograms_force_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareCentimeter (`kgf/cm²`).
     #[inline]
-    pub fn from_kilograms_force_per_square_centimeter(value: f64) -> Self {
+    pub fn from_kilograms_force_per_square_centimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilogramForcePerSquareCentimeter)
     }
 
     /// Returns the value expressed in KilogramsForcePerSquareCentimeter (`kgf/cm²`).
     #[inline]
-    pub fn as_kilograms_force_per_square_centimeter(self) -> f64 {
+    pub fn as_kilograms_force_per_square_centimeter(self) -> Num {
         self.convert_to(PressureUnit::KilogramForcePerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_square_centimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_square_centimeter(self) -> f64 {
+    pub fn as_kilogram_force_per_square_centimeter(self) -> Num {
         self.as_kilograms_force_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareMillimeter (`kgf/mm²`).
     #[inline]
-    pub fn from_kilograms_force_per_square_millimeter(value: f64) -> Self {
+    pub fn from_kilograms_force_per_square_millimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilogramForcePerSquareMillimeter)
     }
 
     /// Returns the value expressed in KilogramsForcePerSquareMillimeter (`kgf/mm²`).
     #[inline]
-    pub fn as_kilograms_force_per_square_millimeter(self) -> f64 {
+    pub fn as_kilograms_force_per_square_millimeter(self) -> Num {
         self.convert_to(PressureUnit::KilogramForcePerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_square_millimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_square_millimeter(self) -> f64 {
+    pub fn as_kilogram_force_per_square_millimeter(self) -> Num {
         self.as_kilograms_force_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareMeter (`N/m²`).
     #[inline]
-    pub fn from_newtons_per_square_meter(value: f64) -> Self {
+    pub fn from_newtons_per_square_meter(value: Num) -> Self {
         Self::new(value, PressureUnit::NewtonPerSquareMeter)
     }
 
     /// Returns the value expressed in NewtonsPerSquareMeter (`N/m²`).
     #[inline]
-    pub fn as_newtons_per_square_meter(self) -> f64 {
+    pub fn as_newtons_per_square_meter(self) -> Num {
         self.convert_to(PressureUnit::NewtonPerSquareMeter)
     }
 
     /// Alias for [`Self::as_newtons_per_square_meter`].
     #[inline]
-    pub fn as_newton_per_square_meter(self) -> f64 {
+    pub fn as_newton_per_square_meter(self) -> Num {
         self.as_newtons_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareMeter (`kN/m²`).
     #[inline]
-    pub fn from_kilonewtons_per_square_meter(value: f64) -> Self {
+    pub fn from_kilonewtons_per_square_meter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilonewtonPerSquareMeter)
     }
 
     /// Returns the value expressed in KilonewtonsPerSquareMeter (`kN/m²`).
     #[inline]
-    pub fn as_kilonewtons_per_square_meter(self) -> f64 {
+    pub fn as_kilonewtons_per_square_meter(self) -> Num {
         self.convert_to(PressureUnit::KilonewtonPerSquareMeter)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_square_meter`].
     #[inline]
-    pub fn as_kilonewton_per_square_meter(self) -> f64 {
+    pub fn as_kilonewton_per_square_meter(self) -> Num {
         self.as_kilonewtons_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in MeganewtonsPerSquareMeter (`MN/m²`).
     #[inline]
-    pub fn from_meganewtons_per_square_meter(value: f64) -> Self {
+    pub fn from_meganewtons_per_square_meter(value: Num) -> Self {
         Self::new(value, PressureUnit::MeganewtonPerSquareMeter)
     }
 
     /// Returns the value expressed in MeganewtonsPerSquareMeter (`MN/m²`).
     #[inline]
-    pub fn as_meganewtons_per_square_meter(self) -> f64 {
+    pub fn as_meganewtons_per_square_meter(self) -> Num {
         self.convert_to(PressureUnit::MeganewtonPerSquareMeter)
     }
 
     /// Alias for [`Self::as_meganewtons_per_square_meter`].
     #[inline]
-    pub fn as_meganewton_per_square_meter(self) -> f64 {
+    pub fn as_meganewton_per_square_meter(self) -> Num {
         self.as_meganewtons_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareCentimeter (`N/cm²`).
     #[inline]
-    pub fn from_newtons_per_square_centimeter(value: f64) -> Self {
+    pub fn from_newtons_per_square_centimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::NewtonPerSquareCentimeter)
     }
 
     /// Returns the value expressed in NewtonsPerSquareCentimeter (`N/cm²`).
     #[inline]
-    pub fn as_newtons_per_square_centimeter(self) -> f64 {
+    pub fn as_newtons_per_square_centimeter(self) -> Num {
         self.convert_to(PressureUnit::NewtonPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_newtons_per_square_centimeter`].
     #[inline]
-    pub fn as_newton_per_square_centimeter(self) -> f64 {
+    pub fn as_newton_per_square_centimeter(self) -> Num {
         self.as_newtons_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareCentimeter (`kN/cm²`).
     #[inline]
-    pub fn from_kilonewtons_per_square_centimeter(value: f64) -> Self {
+    pub fn from_kilonewtons_per_square_centimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilonewtonPerSquareCentimeter)
     }
 
     /// Returns the value expressed in KilonewtonsPerSquareCentimeter (`kN/cm²`).
     #[inline]
-    pub fn as_kilonewtons_per_square_centimeter(self) -> f64 {
+    pub fn as_kilonewtons_per_square_centimeter(self) -> Num {
         self.convert_to(PressureUnit::KilonewtonPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_square_centimeter`].
     #[inline]
-    pub fn as_kilonewton_per_square_centimeter(self) -> f64 {
+    pub fn as_kilonewton_per_square_centimeter(self) -> Num {
         self.as_kilonewtons_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareMillimeter (`N/mm²`).
     #[inline]
-    pub fn from_newtons_per_square_millimeter(value: f64) -> Self {
+    pub fn from_newtons_per_square_millimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::NewtonPerSquareMillimeter)
     }
 
     /// Returns the value expressed in NewtonsPerSquareMillimeter (`N/mm²`).
     #[inline]
-    pub fn as_newtons_per_square_millimeter(self) -> f64 {
+    pub fn as_newtons_per_square_millimeter(self) -> Num {
         self.convert_to(PressureUnit::NewtonPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_newtons_per_square_millimeter`].
     #[inline]
-    pub fn as_newton_per_square_millimeter(self) -> f64 {
+    pub fn as_newton_per_square_millimeter(self) -> Num {
         self.as_newtons_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareMillimeter (`kN/mm²`).
     #[inline]
-    pub fn from_kilonewtons_per_square_millimeter(value: f64) -> Self {
+    pub fn from_kilonewtons_per_square_millimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::KilonewtonPerSquareMillimeter)
     }
 
     /// Returns the value expressed in KilonewtonsPerSquareMillimeter (`kN/mm²`).
     #[inline]
-    pub fn as_kilonewtons_per_square_millimeter(self) -> f64 {
+    pub fn as_kilonewtons_per_square_millimeter(self) -> Num {
         self.convert_to(PressureUnit::KilonewtonPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_square_millimeter`].
     #[inline]
-    pub fn as_kilonewton_per_square_millimeter(self) -> f64 {
+    pub fn as_kilonewton_per_square_millimeter(self) -> Num {
         self.as_kilonewtons_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in TechnicalAtmospheres (`at`).
     #[inline]
-    pub fn from_technical_atmospheres(value: f64) -> Self {
+    pub fn from_technical_atmospheres(value: Num) -> Self {
         Self::new(value, PressureUnit::TechnicalAtmosphere)
     }
 
     /// Returns the value expressed in TechnicalAtmospheres (`at`).
     #[inline]
-    pub fn as_technical_atmospheres(self) -> f64 {
+    pub fn as_technical_atmospheres(self) -> Num {
         self.convert_to(PressureUnit::TechnicalAtmosphere)
     }
 
     /// Alias for [`Self::as_technical_atmospheres`].
     #[inline]
-    pub fn as_technical_atmosphere(self) -> f64 {
+    pub fn as_technical_atmosphere(self) -> Num {
         self.as_technical_atmospheres()
     }
 
     /// Creates a [`Pressure`] from a value in Torrs (`torr`).
     #[inline]
-    pub fn from_torrs(value: f64) -> Self {
+    pub fn from_torrs(value: Num) -> Self {
         Self::new(value, PressureUnit::Torr)
     }
 
     /// Returns the value expressed in Torrs (`torr`).
     #[inline]
-    pub fn as_torrs(self) -> f64 {
+    pub fn as_torrs(self) -> Num {
         self.convert_to(PressureUnit::Torr)
     }
 
     /// Alias for [`Self::as_torrs`].
     #[inline]
-    pub fn as_torr(self) -> f64 {
+    pub fn as_torr(self) -> Num {
         self.as_torrs()
     }
 
     /// Creates a [`Pressure`] from a value in Millitorrs (`mtorr`).
     #[inline]
-    pub fn from_millitorrs(value: f64) -> Self {
+    pub fn from_millitorrs(value: Num) -> Self {
         Self::new(value, PressureUnit::Millitorr)
     }
 
     /// Returns the value expressed in Millitorrs (`mtorr`).
     #[inline]
-    pub fn as_millitorrs(self) -> f64 {
+    pub fn as_millitorrs(self) -> Num {
         self.convert_to(PressureUnit::Millitorr)
     }
 
     /// Alias for [`Self::as_millitorrs`].
     #[inline]
-    pub fn as_millitorr(self) -> f64 {
+    pub fn as_millitorr(self) -> Num {
         self.as_millitorrs()
     }
 
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareInch (`psi`).
     #[inline]
-    pub fn from_pounds_force_per_square_inch(value: f64) -> Self {
+    pub fn from_pounds_force_per_square_inch(value: Num) -> Self {
         Self::new(value, PressureUnit::PoundForcePerSquareInch)
     }
 
     /// Returns the value expressed in PoundsForcePerSquareInch (`psi`).
     #[inline]
-    pub fn as_pounds_force_per_square_inch(self) -> f64 {
+    pub fn as_pounds_force_per_square_inch(self) -> Num {
         self.convert_to(PressureUnit::PoundForcePerSquareInch)
     }
 
     /// Alias for [`Self::as_pounds_force_per_square_inch`].
     #[inline]
-    pub fn as_pound_force_per_square_inch(self) -> f64 {
+    pub fn as_pound_force_per_square_inch(self) -> Num {
         self.as_pounds_force_per_square_inch()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareInch (`kpsi`).
     #[inline]
-    pub fn from_kilopounds_force_per_square_inch(value: f64) -> Self {
+    pub fn from_kilopounds_force_per_square_inch(value: Num) -> Self {
         Self::new(value, PressureUnit::KilopoundForcePerSquareInch)
     }
 
     /// Returns the value expressed in KilopoundsForcePerSquareInch (`kpsi`).
     #[inline]
-    pub fn as_kilopounds_force_per_square_inch(self) -> f64 {
+    pub fn as_kilopounds_force_per_square_inch(self) -> Num {
         self.convert_to(PressureUnit::KilopoundForcePerSquareInch)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_square_inch`].
     #[inline]
-    pub fn as_kilopound_force_per_square_inch(self) -> f64 {
+    pub fn as_kilopound_force_per_square_inch(self) -> Num {
         self.as_kilopounds_force_per_square_inch()
     }
 
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareMil (`lb/mil²`).
     #[inline]
-    pub fn from_pounds_force_per_square_mil(value: f64) -> Self {
+    pub fn from_pounds_force_per_square_mil(value: Num) -> Self {
         Self::new(value, PressureUnit::PoundForcePerSquareMil)
     }
 
     /// Returns the value expressed in PoundsForcePerSquareMil (`lb/mil²`).
     #[inline]
-    pub fn as_pounds_force_per_square_mil(self) -> f64 {
+    pub fn as_pounds_force_per_square_mil(self) -> Num {
         self.convert_to(PressureUnit::PoundForcePerSquareMil)
     }
 
     /// Alias for [`Self::as_pounds_force_per_square_mil`].
     #[inline]
-    pub fn as_pound_force_per_square_mil(self) -> f64 {
+    pub fn as_pound_force_per_square_mil(self) -> Num {
         self.as_pounds_force_per_square_mil()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareMil (`klb/mil²`).
     #[inline]
-    pub fn from_kilopounds_force_per_square_mil(value: f64) -> Self {
+    pub fn from_kilopounds_force_per_square_mil(value: Num) -> Self {
         Self::new(value, PressureUnit::KilopoundForcePerSquareMil)
     }
 
     /// Returns the value expressed in KilopoundsForcePerSquareMil (`klb/mil²`).
     #[inline]
-    pub fn as_kilopounds_force_per_square_mil(self) -> f64 {
+    pub fn as_kilopounds_force_per_square_mil(self) -> Num {
         self.convert_to(PressureUnit::KilopoundForcePerSquareMil)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_square_mil`].
     #[inline]
-    pub fn as_kilopound_force_per_square_mil(self) -> f64 {
+    pub fn as_kilopound_force_per_square_mil(self) -> Num {
         self.as_kilopounds_force_per_square_mil()
     }
 
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareFoot (`lb/ft²`).
     #[inline]
-    pub fn from_pounds_force_per_square_foot(value: f64) -> Self {
+    pub fn from_pounds_force_per_square_foot(value: Num) -> Self {
         Self::new(value, PressureUnit::PoundForcePerSquareFoot)
     }
 
     /// Returns the value expressed in PoundsForcePerSquareFoot (`lb/ft²`).
     #[inline]
-    pub fn as_pounds_force_per_square_foot(self) -> f64 {
+    pub fn as_pounds_force_per_square_foot(self) -> Num {
         self.convert_to(PressureUnit::PoundForcePerSquareFoot)
     }
 
     /// Alias for [`Self::as_pounds_force_per_square_foot`].
     #[inline]
-    pub fn as_pound_force_per_square_foot(self) -> f64 {
+    pub fn as_pound_force_per_square_foot(self) -> Num {
         self.as_pounds_force_per_square_foot()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareFoot (`klb/ft²`).
     #[inline]
-    pub fn from_kilopounds_force_per_square_foot(value: f64) -> Self {
+    pub fn from_kilopounds_force_per_square_foot(value: Num) -> Self {
         Self::new(value, PressureUnit::KilopoundForcePerSquareFoot)
     }
 
     /// Returns the value expressed in KilopoundsForcePerSquareFoot (`klb/ft²`).
     #[inline]
-    pub fn as_kilopounds_force_per_square_foot(self) -> f64 {
+    pub fn as_kilopounds_force_per_square_foot(self) -> Num {
         self.convert_to(PressureUnit::KilopoundForcePerSquareFoot)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_square_foot`].
     #[inline]
-    pub fn as_kilopound_force_per_square_foot(self) -> f64 {
+    pub fn as_kilopound_force_per_square_foot(self) -> Num {
         self.as_kilopounds_force_per_square_foot()
     }
 
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareMillimeter (`tf/mm²`).
     #[inline]
-    pub fn from_tonnes_force_per_square_millimeter(value: f64) -> Self {
+    pub fn from_tonnes_force_per_square_millimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::TonneForcePerSquareMillimeter)
     }
 
     /// Returns the value expressed in TonnesForcePerSquareMillimeter (`tf/mm²`).
     #[inline]
-    pub fn as_tonnes_force_per_square_millimeter(self) -> f64 {
+    pub fn as_tonnes_force_per_square_millimeter(self) -> Num {
         self.convert_to(PressureUnit::TonneForcePerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_square_millimeter`].
     #[inline]
-    pub fn as_tonne_force_per_square_millimeter(self) -> f64 {
+    pub fn as_tonne_force_per_square_millimeter(self) -> Num {
         self.as_tonnes_force_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareMeter (`tf/m²`).
     #[inline]
-    pub fn from_tonnes_force_per_square_meter(value: f64) -> Self {
+    pub fn from_tonnes_force_per_square_meter(value: Num) -> Self {
         Self::new(value, PressureUnit::TonneForcePerSquareMeter)
     }
 
     /// Returns the value expressed in TonnesForcePerSquareMeter (`tf/m²`).
     #[inline]
-    pub fn as_tonnes_force_per_square_meter(self) -> f64 {
+    pub fn as_tonnes_force_per_square_meter(self) -> Num {
         self.convert_to(PressureUnit::TonneForcePerSquareMeter)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_square_meter`].
     #[inline]
-    pub fn as_tonne_force_per_square_meter(self) -> f64 {
+    pub fn as_tonne_force_per_square_meter(self) -> Num {
         self.as_tonnes_force_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in MetersOfHead (`m of head`).
     #[inline]
-    pub fn from_meters_of_head(value: f64) -> Self {
+    pub fn from_meters_of_head(value: Num) -> Self {
         Self::new(value, PressureUnit::MeterOfHead)
     }
 
     /// Returns the value expressed in MetersOfHead (`m of head`).
     #[inline]
-    pub fn as_meters_of_head(self) -> f64 {
+    pub fn as_meters_of_head(self) -> Num {
         self.convert_to(PressureUnit::MeterOfHead)
     }
 
     /// Alias for [`Self::as_meters_of_head`].
     #[inline]
-    pub fn as_meter_of_head(self) -> f64 {
+    pub fn as_meter_of_head(self) -> Num {
         self.as_meters_of_head()
     }
 
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareCentimeter (`tf/cm²`).
     #[inline]
-    pub fn from_tonnes_force_per_square_centimeter(value: f64) -> Self {
+    pub fn from_tonnes_force_per_square_centimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::TonneForcePerSquareCentimeter)
     }
 
     /// Returns the value expressed in TonnesForcePerSquareCentimeter (`tf/cm²`).
     #[inline]
-    pub fn as_tonnes_force_per_square_centimeter(self) -> f64 {
+    pub fn as_tonnes_force_per_square_centimeter(self) -> Num {
         self.convert_to(PressureUnit::TonneForcePerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_square_centimeter`].
     #[inline]
-    pub fn as_tonne_force_per_square_centimeter(self) -> f64 {
+    pub fn as_tonne_force_per_square_centimeter(self) -> Num {
         self.as_tonnes_force_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in FeetOfHead (`ft of head`).
     #[inline]
-    pub fn from_feet_of_head(value: f64) -> Self {
+    pub fn from_feet_of_head(value: Num) -> Self {
         Self::new(value, PressureUnit::FootOfHead)
     }
 
     /// Returns the value expressed in FeetOfHead (`ft of head`).
     #[inline]
-    pub fn as_feet_of_head(self) -> f64 {
+    pub fn as_feet_of_head(self) -> Num {
         self.convert_to(PressureUnit::FootOfHead)
     }
 
     /// Alias for [`Self::as_feet_of_head`].
     #[inline]
-    pub fn as_foot_of_head(self) -> f64 {
+    pub fn as_foot_of_head(self) -> Num {
         self.as_feet_of_head()
     }
 
     /// Creates a [`Pressure`] from a value in MillimetersOfMercury (`mmHg`).
     #[inline]
-    pub fn from_millimeters_of_mercury(value: f64) -> Self {
+    pub fn from_millimeters_of_mercury(value: Num) -> Self {
         Self::new(value, PressureUnit::MillimeterOfMercury)
     }
 
     /// Returns the value expressed in MillimetersOfMercury (`mmHg`).
     #[inline]
-    pub fn as_millimeters_of_mercury(self) -> f64 {
+    pub fn as_millimeters_of_mercury(self) -> Num {
         self.convert_to(PressureUnit::MillimeterOfMercury)
     }
 
     /// Alias for [`Self::as_millimeters_of_mercury`].
     #[inline]
-    pub fn as_millimeter_of_mercury(self) -> f64 {
+    pub fn as_millimeter_of_mercury(self) -> Num {
         self.as_millimeters_of_mercury()
     }
 
     /// Creates a [`Pressure`] from a value in InchesOfMercury (`inHg`).
     #[inline]
-    pub fn from_inches_of_mercury(value: f64) -> Self {
+    pub fn from_inches_of_mercury(value: Num) -> Self {
         Self::new(value, PressureUnit::InchOfMercury)
     }
 
     /// Returns the value expressed in InchesOfMercury (`inHg`).
     #[inline]
-    pub fn as_inches_of_mercury(self) -> f64 {
+    pub fn as_inches_of_mercury(self) -> Num {
         self.convert_to(PressureUnit::InchOfMercury)
     }
 
     /// Alias for [`Self::as_inches_of_mercury`].
     #[inline]
-    pub fn as_inch_of_mercury(self) -> f64 {
+    pub fn as_inch_of_mercury(self) -> Num {
         self.as_inches_of_mercury()
     }
 
     /// Creates a [`Pressure`] from a value in DynesPerSquareCentimeter (`dyn/cm²`).
     #[inline]
-    pub fn from_dynes_per_square_centimeter(value: f64) -> Self {
+    pub fn from_dynes_per_square_centimeter(value: Num) -> Self {
         Self::new(value, PressureUnit::DynePerSquareCentimeter)
     }
 
     /// Returns the value expressed in DynesPerSquareCentimeter (`dyn/cm²`).
     #[inline]
-    pub fn as_dynes_per_square_centimeter(self) -> f64 {
+    pub fn as_dynes_per_square_centimeter(self) -> Num {
         self.convert_to(PressureUnit::DynePerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_dynes_per_square_centimeter`].
     #[inline]
-    pub fn as_dyne_per_square_centimeter(self) -> f64 {
+    pub fn as_dyne_per_square_centimeter(self) -> Num {
         self.as_dynes_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in PoundsPerInchSecondSquared (`lbm/(in·s²)`).
     #[inline]
-    pub fn from_pounds_per_inch_second_squared(value: f64) -> Self {
+    pub fn from_pounds_per_inch_second_squared(value: Num) -> Self {
         Self::new(value, PressureUnit::PoundPerInchSecondSquared)
     }
 
     /// Returns the value expressed in PoundsPerInchSecondSquared (`lbm/(in·s²)`).
     #[inline]
-    pub fn as_pounds_per_inch_second_squared(self) -> f64 {
+    pub fn as_pounds_per_inch_second_squared(self) -> Num {
         self.convert_to(PressureUnit::PoundPerInchSecondSquared)
     }
 
     /// Alias for [`Self::as_pounds_per_inch_second_squared`].
     #[inline]
-    pub fn as_pound_per_inch_second_squared(self) -> f64 {
+    pub fn as_pound_per_inch_second_squared(self) -> Num {
         self.as_pounds_per_inch_second_squared()
     }
 
     /// Creates a [`Pressure`] from a value in MetersOfWaterColumn (`mH₂O`).
     #[inline]
-    pub fn from_meters_of_water_column(value: f64) -> Self {
+    pub fn from_meters_of_water_column(value: Num) -> Self {
         Self::new(value, PressureUnit::MeterOfWaterColumn)
     }
 
     /// Returns the value expressed in MetersOfWaterColumn (`mH₂O`).
     #[inline]
-    pub fn as_meters_of_water_column(self) -> f64 {
+    pub fn as_meters_of_water_column(self) -> Num {
         self.convert_to(PressureUnit::MeterOfWaterColumn)
     }
 
     /// Alias for [`Self::as_meters_of_water_column`].
     #[inline]
-    pub fn as_meter_of_water_column(self) -> f64 {
+    pub fn as_meter_of_water_column(self) -> Num {
         self.as_meters_of_water_column()
     }
 
     /// Creates a [`Pressure`] from a value in MillimetersOfWaterColumn (`mmH₂O`).
     #[inline]
-    pub fn from_millimeters_of_water_column(value: f64) -> Self {
+    pub fn from_millimeters_of_water_column(value: Num) -> Self {
         Self::new(value, PressureUnit::MillimeterOfWaterColumn)
     }
 
     /// Returns the value expressed in MillimetersOfWaterColumn (`mmH₂O`).
     #[inline]
-    pub fn as_millimeters_of_water_column(self) -> f64 {
+    pub fn as_millimeters_of_water_column(self) -> Num {
         self.convert_to(PressureUnit::MillimeterOfWaterColumn)
     }
 
     /// Alias for [`Self::as_millimeters_of_water_column`].
     #[inline]
-    pub fn as_millimeter_of_water_column(self) -> f64 {
+    pub fn as_millimeter_of_water_column(self) -> Num {
         self.as_millimeters_of_water_column()
     }
 
     /// Creates a [`Pressure`] from a value in CentimetersOfWaterColumn (`cmH₂O`).
     #[inline]
-    pub fn from_centimeters_of_water_column(value: f64) -> Self {
+    pub fn from_centimeters_of_water_column(value: Num) -> Self {
         Self::new(value, PressureUnit::CentimeterOfWaterColumn)
     }
 
     /// Returns the value expressed in CentimetersOfWaterColumn (`cmH₂O`).
     #[inline]
-    pub fn as_centimeters_of_water_column(self) -> f64 {
+    pub fn as_centimeters_of_water_column(self) -> Num {
         self.convert_to(PressureUnit::CentimeterOfWaterColumn)
     }
 
     /// Alias for [`Self::as_centimeters_of_water_column`].
     #[inline]
-    pub fn as_centimeter_of_water_column(self) -> f64 {
+    pub fn as_centimeter_of_water_column(self) -> Num {
         self.as_centimeters_of_water_column()
     }
 
     /// Creates a [`Pressure`] from a value in InchesOfWaterColumn (`inH2O`).
     #[inline]
-    pub fn from_inches_of_water_column(value: f64) -> Self {
+    pub fn from_inches_of_water_column(value: Num) -> Self {
         Self::new(value, PressureUnit::InchOfWaterColumn)
     }
 
     /// Returns the value expressed in InchesOfWaterColumn (`inH2O`).
     #[inline]
-    pub fn as_inches_of_water_column(self) -> f64 {
+    pub fn as_inches_of_water_column(self) -> Num {
         self.convert_to(PressureUnit::InchOfWaterColumn)
     }
 
     /// Alias for [`Self::as_inches_of_water_column`].
     #[inline]
-    pub fn as_inch_of_water_column(self) -> f64 {
+    pub fn as_inch_of_water_column(self) -> Num {
         self.as_inches_of_water_column()
     }
 }
@@ -1261,27 +1262,27 @@ impl Neg for Pressure {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Pressure {
+impl Mul<Num> for Pressure {
     type Output = Pressure;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Pressure> for f64 {
+impl Mul<Pressure> for Num {
     type Output = Pressure;
     fn mul(self, rhs: Pressure) -> Pressure {
         Pressure(self * rhs.0)
     }
 }
-impl Div<f64> for Pressure {
+impl Div<Num> for Pressure {
     type Output = Pressure;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Pressure {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1315,7 +1316,7 @@ impl FromStr for Pressure {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParsePressureError(s.to_owned()))?;

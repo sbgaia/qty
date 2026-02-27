@@ -11,4 +11,9 @@ license = "MIT OR Apache-2.0"
 keywords = ["units", "measurement", "physics", "conversion"]
 categories = ["science"]
 
+[features]
+## Store all quantity values as `f32` instead of the default `f64`.
+## Halves memory usage at the cost of ~7 significant digits (vs ~15).
+f32 = []
+
 [dependencies]

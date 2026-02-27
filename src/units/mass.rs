@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Kilogram` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Mass(f64);
+pub struct Mass(Num);
 
 /// Unit variants for [`Mass`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -180,7 +181,7 @@ impl MassUnit {
 
 impl Mass {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MassUnit) -> Self {
+    pub fn new(value: Num, unit: MassUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -222,7 +223,7 @@ impl Mass {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -230,12 +231,12 @@ impl Mass {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MassUnit) -> f64 {
+    pub fn convert_to(self, unit: MassUnit) -> Num {
         let x = self.0;
         match unit {
             MassUnit::Gram => x * 1e3,
@@ -274,541 +275,541 @@ impl Mass {
 
     /// Creates a [`Mass`] from a value in Grams (`g`).
     #[inline]
-    pub fn from_grams(value: f64) -> Self {
+    pub fn from_grams(value: Num) -> Self {
         Self::new(value, MassUnit::Gram)
     }
 
     /// Returns the value expressed in Grams (`g`).
     #[inline]
-    pub fn as_grams(self) -> f64 {
+    pub fn as_grams(self) -> Num {
         self.convert_to(MassUnit::Gram)
     }
 
     /// Alias for [`Self::as_grams`].
     #[inline]
-    pub fn as_gram(self) -> f64 {
+    pub fn as_gram(self) -> Num {
         self.as_grams()
     }
 
     /// Creates a [`Mass`] from a value in Femtograms (`fg`).
     #[inline]
-    pub fn from_femtograms(value: f64) -> Self {
+    pub fn from_femtograms(value: Num) -> Self {
         Self::new(value, MassUnit::Femtogram)
     }
 
     /// Returns the value expressed in Femtograms (`fg`).
     #[inline]
-    pub fn as_femtograms(self) -> f64 {
+    pub fn as_femtograms(self) -> Num {
         self.convert_to(MassUnit::Femtogram)
     }
 
     /// Alias for [`Self::as_femtograms`].
     #[inline]
-    pub fn as_femtogram(self) -> f64 {
+    pub fn as_femtogram(self) -> Num {
         self.as_femtograms()
     }
 
     /// Creates a [`Mass`] from a value in Picograms (`pg`).
     #[inline]
-    pub fn from_picograms(value: f64) -> Self {
+    pub fn from_picograms(value: Num) -> Self {
         Self::new(value, MassUnit::Picogram)
     }
 
     /// Returns the value expressed in Picograms (`pg`).
     #[inline]
-    pub fn as_picograms(self) -> f64 {
+    pub fn as_picograms(self) -> Num {
         self.convert_to(MassUnit::Picogram)
     }
 
     /// Alias for [`Self::as_picograms`].
     #[inline]
-    pub fn as_picogram(self) -> f64 {
+    pub fn as_picogram(self) -> Num {
         self.as_picograms()
     }
 
     /// Creates a [`Mass`] from a value in Nanograms (`ng`).
     #[inline]
-    pub fn from_nanograms(value: f64) -> Self {
+    pub fn from_nanograms(value: Num) -> Self {
         Self::new(value, MassUnit::Nanogram)
     }
 
     /// Returns the value expressed in Nanograms (`ng`).
     #[inline]
-    pub fn as_nanograms(self) -> f64 {
+    pub fn as_nanograms(self) -> Num {
         self.convert_to(MassUnit::Nanogram)
     }
 
     /// Alias for [`Self::as_nanograms`].
     #[inline]
-    pub fn as_nanogram(self) -> f64 {
+    pub fn as_nanogram(self) -> Num {
         self.as_nanograms()
     }
 
     /// Creates a [`Mass`] from a value in Micrograms (`µg`).
     #[inline]
-    pub fn from_micrograms(value: f64) -> Self {
+    pub fn from_micrograms(value: Num) -> Self {
         Self::new(value, MassUnit::Microgram)
     }
 
     /// Returns the value expressed in Micrograms (`µg`).
     #[inline]
-    pub fn as_micrograms(self) -> f64 {
+    pub fn as_micrograms(self) -> Num {
         self.convert_to(MassUnit::Microgram)
     }
 
     /// Alias for [`Self::as_micrograms`].
     #[inline]
-    pub fn as_microgram(self) -> f64 {
+    pub fn as_microgram(self) -> Num {
         self.as_micrograms()
     }
 
     /// Creates a [`Mass`] from a value in Milligrams (`mg`).
     #[inline]
-    pub fn from_milligrams(value: f64) -> Self {
+    pub fn from_milligrams(value: Num) -> Self {
         Self::new(value, MassUnit::Milligram)
     }
 
     /// Returns the value expressed in Milligrams (`mg`).
     #[inline]
-    pub fn as_milligrams(self) -> f64 {
+    pub fn as_milligrams(self) -> Num {
         self.convert_to(MassUnit::Milligram)
     }
 
     /// Alias for [`Self::as_milligrams`].
     #[inline]
-    pub fn as_milligram(self) -> f64 {
+    pub fn as_milligram(self) -> Num {
         self.as_milligrams()
     }
 
     /// Creates a [`Mass`] from a value in Centigrams (`cg`).
     #[inline]
-    pub fn from_centigrams(value: f64) -> Self {
+    pub fn from_centigrams(value: Num) -> Self {
         Self::new(value, MassUnit::Centigram)
     }
 
     /// Returns the value expressed in Centigrams (`cg`).
     #[inline]
-    pub fn as_centigrams(self) -> f64 {
+    pub fn as_centigrams(self) -> Num {
         self.convert_to(MassUnit::Centigram)
     }
 
     /// Alias for [`Self::as_centigrams`].
     #[inline]
-    pub fn as_centigram(self) -> f64 {
+    pub fn as_centigram(self) -> Num {
         self.as_centigrams()
     }
 
     /// Creates a [`Mass`] from a value in Decigrams (`dg`).
     #[inline]
-    pub fn from_decigrams(value: f64) -> Self {
+    pub fn from_decigrams(value: Num) -> Self {
         Self::new(value, MassUnit::Decigram)
     }
 
     /// Returns the value expressed in Decigrams (`dg`).
     #[inline]
-    pub fn as_decigrams(self) -> f64 {
+    pub fn as_decigrams(self) -> Num {
         self.convert_to(MassUnit::Decigram)
     }
 
     /// Alias for [`Self::as_decigrams`].
     #[inline]
-    pub fn as_decigram(self) -> f64 {
+    pub fn as_decigram(self) -> Num {
         self.as_decigrams()
     }
 
     /// Creates a [`Mass`] from a value in Decagrams (`dag`).
     #[inline]
-    pub fn from_decagrams(value: f64) -> Self {
+    pub fn from_decagrams(value: Num) -> Self {
         Self::new(value, MassUnit::Decagram)
     }
 
     /// Returns the value expressed in Decagrams (`dag`).
     #[inline]
-    pub fn as_decagrams(self) -> f64 {
+    pub fn as_decagrams(self) -> Num {
         self.convert_to(MassUnit::Decagram)
     }
 
     /// Alias for [`Self::as_decagrams`].
     #[inline]
-    pub fn as_decagram(self) -> f64 {
+    pub fn as_decagram(self) -> Num {
         self.as_decagrams()
     }
 
     /// Creates a [`Mass`] from a value in Hectograms (`hg`).
     #[inline]
-    pub fn from_hectograms(value: f64) -> Self {
+    pub fn from_hectograms(value: Num) -> Self {
         Self::new(value, MassUnit::Hectogram)
     }
 
     /// Returns the value expressed in Hectograms (`hg`).
     #[inline]
-    pub fn as_hectograms(self) -> f64 {
+    pub fn as_hectograms(self) -> Num {
         self.convert_to(MassUnit::Hectogram)
     }
 
     /// Alias for [`Self::as_hectograms`].
     #[inline]
-    pub fn as_hectogram(self) -> f64 {
+    pub fn as_hectogram(self) -> Num {
         self.as_hectograms()
     }
 
     /// Creates a [`Mass`] from a value in Kilograms (`kg`).
     #[inline]
-    pub fn from_kilograms(value: f64) -> Self {
+    pub fn from_kilograms(value: Num) -> Self {
         Self::new(value, MassUnit::Kilogram)
     }
 
     /// Returns the value expressed in Kilograms (`kg`).
     #[inline]
-    pub fn as_kilograms(self) -> f64 {
+    pub fn as_kilograms(self) -> Num {
         self.convert_to(MassUnit::Kilogram)
     }
 
     /// Alias for [`Self::as_kilograms`].
     #[inline]
-    pub fn as_kilogram(self) -> f64 {
+    pub fn as_kilogram(self) -> Num {
         self.as_kilograms()
     }
 
     /// Creates a [`Mass`] from a value in Tonnes (`t`).
     #[inline]
-    pub fn from_tonnes(value: f64) -> Self {
+    pub fn from_tonnes(value: Num) -> Self {
         Self::new(value, MassUnit::Tonne)
     }
 
     /// Returns the value expressed in Tonnes (`t`).
     #[inline]
-    pub fn as_tonnes(self) -> f64 {
+    pub fn as_tonnes(self) -> Num {
         self.convert_to(MassUnit::Tonne)
     }
 
     /// Alias for [`Self::as_tonnes`].
     #[inline]
-    pub fn as_tonne(self) -> f64 {
+    pub fn as_tonne(self) -> Num {
         self.as_tonnes()
     }
 
     /// Creates a [`Mass`] from a value in Kilotonnes (`kt`).
     #[inline]
-    pub fn from_kilotonnes(value: f64) -> Self {
+    pub fn from_kilotonnes(value: Num) -> Self {
         Self::new(value, MassUnit::Kilotonne)
     }
 
     /// Returns the value expressed in Kilotonnes (`kt`).
     #[inline]
-    pub fn as_kilotonnes(self) -> f64 {
+    pub fn as_kilotonnes(self) -> Num {
         self.convert_to(MassUnit::Kilotonne)
     }
 
     /// Alias for [`Self::as_kilotonnes`].
     #[inline]
-    pub fn as_kilotonne(self) -> f64 {
+    pub fn as_kilotonne(self) -> Num {
         self.as_kilotonnes()
     }
 
     /// Creates a [`Mass`] from a value in Megatonnes (`Mt`).
     #[inline]
-    pub fn from_megatonnes(value: f64) -> Self {
+    pub fn from_megatonnes(value: Num) -> Self {
         Self::new(value, MassUnit::Megatonne)
     }
 
     /// Returns the value expressed in Megatonnes (`Mt`).
     #[inline]
-    pub fn as_megatonnes(self) -> f64 {
+    pub fn as_megatonnes(self) -> Num {
         self.convert_to(MassUnit::Megatonne)
     }
 
     /// Alias for [`Self::as_megatonnes`].
     #[inline]
-    pub fn as_megatonne(self) -> f64 {
+    pub fn as_megatonne(self) -> Num {
         self.as_megatonnes()
     }
 
     /// Creates a [`Mass`] from a value in ShortTons (`t (short)`).
     #[inline]
-    pub fn from_short_tons(value: f64) -> Self {
+    pub fn from_short_tons(value: Num) -> Self {
         Self::new(value, MassUnit::ShortTon)
     }
 
     /// Returns the value expressed in ShortTons (`t (short)`).
     #[inline]
-    pub fn as_short_tons(self) -> f64 {
+    pub fn as_short_tons(self) -> Num {
         self.convert_to(MassUnit::ShortTon)
     }
 
     /// Alias for [`Self::as_short_tons`].
     #[inline]
-    pub fn as_short_ton(self) -> f64 {
+    pub fn as_short_ton(self) -> Num {
         self.as_short_tons()
     }
 
     /// Creates a [`Mass`] from a value in LongTons (`long tn`).
     #[inline]
-    pub fn from_long_tons(value: f64) -> Self {
+    pub fn from_long_tons(value: Num) -> Self {
         Self::new(value, MassUnit::LongTon)
     }
 
     /// Returns the value expressed in LongTons (`long tn`).
     #[inline]
-    pub fn as_long_tons(self) -> f64 {
+    pub fn as_long_tons(self) -> Num {
         self.convert_to(MassUnit::LongTon)
     }
 
     /// Alias for [`Self::as_long_tons`].
     #[inline]
-    pub fn as_long_ton(self) -> f64 {
+    pub fn as_long_ton(self) -> Num {
         self.as_long_tons()
     }
 
     /// Creates a [`Mass`] from a value in Pounds (`lb`).
     #[inline]
-    pub fn from_pounds(value: f64) -> Self {
+    pub fn from_pounds(value: Num) -> Self {
         Self::new(value, MassUnit::Pound)
     }
 
     /// Returns the value expressed in Pounds (`lb`).
     #[inline]
-    pub fn as_pounds(self) -> f64 {
+    pub fn as_pounds(self) -> Num {
         self.convert_to(MassUnit::Pound)
     }
 
     /// Alias for [`Self::as_pounds`].
     #[inline]
-    pub fn as_pound(self) -> f64 {
+    pub fn as_pound(self) -> Num {
         self.as_pounds()
     }
 
     /// Creates a [`Mass`] from a value in Kilopounds (`klb`).
     #[inline]
-    pub fn from_kilopounds(value: f64) -> Self {
+    pub fn from_kilopounds(value: Num) -> Self {
         Self::new(value, MassUnit::Kilopound)
     }
 
     /// Returns the value expressed in Kilopounds (`klb`).
     #[inline]
-    pub fn as_kilopounds(self) -> f64 {
+    pub fn as_kilopounds(self) -> Num {
         self.convert_to(MassUnit::Kilopound)
     }
 
     /// Alias for [`Self::as_kilopounds`].
     #[inline]
-    pub fn as_kilopound(self) -> f64 {
+    pub fn as_kilopound(self) -> Num {
         self.as_kilopounds()
     }
 
     /// Creates a [`Mass`] from a value in Megapounds (`Mlb`).
     #[inline]
-    pub fn from_megapounds(value: f64) -> Self {
+    pub fn from_megapounds(value: Num) -> Self {
         Self::new(value, MassUnit::Megapound)
     }
 
     /// Returns the value expressed in Megapounds (`Mlb`).
     #[inline]
-    pub fn as_megapounds(self) -> f64 {
+    pub fn as_megapounds(self) -> Num {
         self.convert_to(MassUnit::Megapound)
     }
 
     /// Alias for [`Self::as_megapounds`].
     #[inline]
-    pub fn as_megapound(self) -> f64 {
+    pub fn as_megapound(self) -> Num {
         self.as_megapounds()
     }
 
     /// Creates a [`Mass`] from a value in Ounces (`oz`).
     #[inline]
-    pub fn from_ounces(value: f64) -> Self {
+    pub fn from_ounces(value: Num) -> Self {
         Self::new(value, MassUnit::Ounce)
     }
 
     /// Returns the value expressed in Ounces (`oz`).
     #[inline]
-    pub fn as_ounces(self) -> f64 {
+    pub fn as_ounces(self) -> Num {
         self.convert_to(MassUnit::Ounce)
     }
 
     /// Alias for [`Self::as_ounces`].
     #[inline]
-    pub fn as_ounce(self) -> f64 {
+    pub fn as_ounce(self) -> Num {
         self.as_ounces()
     }
 
     /// Creates a [`Mass`] from a value in Slugs (`slug`).
     #[inline]
-    pub fn from_slugs(value: f64) -> Self {
+    pub fn from_slugs(value: Num) -> Self {
         Self::new(value, MassUnit::Slug)
     }
 
     /// Returns the value expressed in Slugs (`slug`).
     #[inline]
-    pub fn as_slugs(self) -> f64 {
+    pub fn as_slugs(self) -> Num {
         self.convert_to(MassUnit::Slug)
     }
 
     /// Alias for [`Self::as_slugs`].
     #[inline]
-    pub fn as_slug(self) -> f64 {
+    pub fn as_slug(self) -> Num {
         self.as_slugs()
     }
 
     /// Creates a [`Mass`] from a value in Stone (`st`).
     #[inline]
-    pub fn from_stone(value: f64) -> Self {
+    pub fn from_stone(value: Num) -> Self {
         Self::new(value, MassUnit::Stone)
     }
 
     /// Returns the value expressed in Stone (`st`).
     #[inline]
-    pub fn as_stone(self) -> f64 {
+    pub fn as_stone(self) -> Num {
         self.convert_to(MassUnit::Stone)
     }
 
     /// Creates a [`Mass`] from a value in ShortHundredweight (`cwt`).
     #[inline]
-    pub fn from_short_hundredweight(value: f64) -> Self {
+    pub fn from_short_hundredweight(value: Num) -> Self {
         Self::new(value, MassUnit::ShortHundredweight)
     }
 
     /// Returns the value expressed in ShortHundredweight (`cwt`).
     #[inline]
-    pub fn as_short_hundredweight(self) -> f64 {
+    pub fn as_short_hundredweight(self) -> Num {
         self.convert_to(MassUnit::ShortHundredweight)
     }
 
     /// Creates a [`Mass`] from a value in LongHundredweight (`cwt`).
     #[inline]
-    pub fn from_long_hundredweight(value: f64) -> Self {
+    pub fn from_long_hundredweight(value: Num) -> Self {
         Self::new(value, MassUnit::LongHundredweight)
     }
 
     /// Returns the value expressed in LongHundredweight (`cwt`).
     #[inline]
-    pub fn as_long_hundredweight(self) -> f64 {
+    pub fn as_long_hundredweight(self) -> Num {
         self.convert_to(MassUnit::LongHundredweight)
     }
 
     /// Creates a [`Mass`] from a value in Grains (`gr`).
     #[inline]
-    pub fn from_grains(value: f64) -> Self {
+    pub fn from_grains(value: Num) -> Self {
         Self::new(value, MassUnit::Grain)
     }
 
     /// Returns the value expressed in Grains (`gr`).
     #[inline]
-    pub fn as_grains(self) -> f64 {
+    pub fn as_grains(self) -> Num {
         self.convert_to(MassUnit::Grain)
     }
 
     /// Alias for [`Self::as_grains`].
     #[inline]
-    pub fn as_grain(self) -> f64 {
+    pub fn as_grain(self) -> Num {
         self.as_grains()
     }
 
     /// Creates a [`Mass`] from a value in SolarMasses (`M☉`).
     #[inline]
-    pub fn from_solar_masses(value: f64) -> Self {
+    pub fn from_solar_masses(value: Num) -> Self {
         Self::new(value, MassUnit::SolarMass)
     }
 
     /// Returns the value expressed in SolarMasses (`M☉`).
     #[inline]
-    pub fn as_solar_masses(self) -> f64 {
+    pub fn as_solar_masses(self) -> Num {
         self.convert_to(MassUnit::SolarMass)
     }
 
     /// Alias for [`Self::as_solar_masses`].
     #[inline]
-    pub fn as_solar_mass(self) -> f64 {
+    pub fn as_solar_mass(self) -> Num {
         self.as_solar_masses()
     }
 
     /// Creates a [`Mass`] from a value in EarthMasses (`em`).
     #[inline]
-    pub fn from_earth_masses(value: f64) -> Self {
+    pub fn from_earth_masses(value: Num) -> Self {
         Self::new(value, MassUnit::EarthMass)
     }
 
     /// Returns the value expressed in EarthMasses (`em`).
     #[inline]
-    pub fn as_earth_masses(self) -> f64 {
+    pub fn as_earth_masses(self) -> Num {
         self.convert_to(MassUnit::EarthMass)
     }
 
     /// Alias for [`Self::as_earth_masses`].
     #[inline]
-    pub fn as_earth_mass(self) -> f64 {
+    pub fn as_earth_mass(self) -> Num {
         self.as_earth_masses()
     }
 
     /// Creates a [`Mass`] from a value in Daltons (`Da`).
     #[inline]
-    pub fn from_daltons(value: f64) -> Self {
+    pub fn from_daltons(value: Num) -> Self {
         Self::new(value, MassUnit::Dalton)
     }
 
     /// Returns the value expressed in Daltons (`Da`).
     #[inline]
-    pub fn as_daltons(self) -> f64 {
+    pub fn as_daltons(self) -> Num {
         self.convert_to(MassUnit::Dalton)
     }
 
     /// Alias for [`Self::as_daltons`].
     #[inline]
-    pub fn as_dalton(self) -> f64 {
+    pub fn as_dalton(self) -> Num {
         self.as_daltons()
     }
 
     /// Creates a [`Mass`] from a value in Kilodaltons (`kDa`).
     #[inline]
-    pub fn from_kilodaltons(value: f64) -> Self {
+    pub fn from_kilodaltons(value: Num) -> Self {
         Self::new(value, MassUnit::Kilodalton)
     }
 
     /// Returns the value expressed in Kilodaltons (`kDa`).
     #[inline]
-    pub fn as_kilodaltons(self) -> f64 {
+    pub fn as_kilodaltons(self) -> Num {
         self.convert_to(MassUnit::Kilodalton)
     }
 
     /// Alias for [`Self::as_kilodaltons`].
     #[inline]
-    pub fn as_kilodalton(self) -> f64 {
+    pub fn as_kilodalton(self) -> Num {
         self.as_kilodaltons()
     }
 
     /// Creates a [`Mass`] from a value in Megadaltons (`MDa`).
     #[inline]
-    pub fn from_megadaltons(value: f64) -> Self {
+    pub fn from_megadaltons(value: Num) -> Self {
         Self::new(value, MassUnit::Megadalton)
     }
 
     /// Returns the value expressed in Megadaltons (`MDa`).
     #[inline]
-    pub fn as_megadaltons(self) -> f64 {
+    pub fn as_megadaltons(self) -> Num {
         self.convert_to(MassUnit::Megadalton)
     }
 
     /// Alias for [`Self::as_megadaltons`].
     #[inline]
-    pub fn as_megadalton(self) -> f64 {
+    pub fn as_megadalton(self) -> Num {
         self.as_megadaltons()
     }
 
     /// Creates a [`Mass`] from a value in Gigadaltons (`GDa`).
     #[inline]
-    pub fn from_gigadaltons(value: f64) -> Self {
+    pub fn from_gigadaltons(value: Num) -> Self {
         Self::new(value, MassUnit::Gigadalton)
     }
 
     /// Returns the value expressed in Gigadaltons (`GDa`).
     #[inline]
-    pub fn as_gigadaltons(self) -> f64 {
+    pub fn as_gigadaltons(self) -> Num {
         self.convert_to(MassUnit::Gigadalton)
     }
 
     /// Alias for [`Self::as_gigadaltons`].
     #[inline]
-    pub fn as_gigadalton(self) -> f64 {
+    pub fn as_gigadalton(self) -> Num {
         self.as_gigadaltons()
     }
 }
@@ -831,27 +832,27 @@ impl Neg for Mass {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Mass {
+impl Mul<Num> for Mass {
     type Output = Mass;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Mass> for f64 {
+impl Mul<Mass> for Num {
     type Output = Mass;
     fn mul(self, rhs: Mass) -> Mass {
         Mass(self * rhs.0)
     }
 }
-impl Div<f64> for Mass {
+impl Div<Num> for Mass {
     type Output = Mass;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Mass {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -885,7 +886,7 @@ impl FromStr for Mass {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMassError(s.to_owned()))?;

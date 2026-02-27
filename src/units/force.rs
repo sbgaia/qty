@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Newton` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Force(f64);
+pub struct Force(Num);
 
 /// Unit variants for [`Force`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -112,7 +113,7 @@ impl ForceUnit {
 
 impl Force {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ForceUnit) -> Self {
+    pub fn new(value: Num, unit: ForceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -138,7 +139,7 @@ impl Force {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -146,12 +147,12 @@ impl Force {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ForceUnit) -> f64 {
+    pub fn convert_to(self, unit: ForceUnit) -> Num {
         let x = self.0;
         match unit {
             ForceUnit::Dyn => x * 1e5,
@@ -174,265 +175,265 @@ impl Force {
 
     /// Creates a [`Force`] from a value in Dyne (`dyn`).
     #[inline]
-    pub fn from_dyne(value: f64) -> Self {
+    pub fn from_dyne(value: Num) -> Self {
         Self::new(value, ForceUnit::Dyn)
     }
 
     /// Returns the value expressed in Dyne (`dyn`).
     #[inline]
-    pub fn as_dyne(self) -> f64 {
+    pub fn as_dyne(self) -> Num {
         self.convert_to(ForceUnit::Dyn)
     }
 
     /// Alias for [`Self::as_dyne`].
     #[inline]
-    pub fn as_dyn(self) -> f64 {
+    pub fn as_dyn(self) -> Num {
         self.as_dyne()
     }
 
     /// Creates a [`Force`] from a value in KilogramsForce (`kgf`).
     #[inline]
-    pub fn from_kilograms_force(value: f64) -> Self {
+    pub fn from_kilograms_force(value: Num) -> Self {
         Self::new(value, ForceUnit::KilogramForce)
     }
 
     /// Returns the value expressed in KilogramsForce (`kgf`).
     #[inline]
-    pub fn as_kilograms_force(self) -> f64 {
+    pub fn as_kilograms_force(self) -> Num {
         self.convert_to(ForceUnit::KilogramForce)
     }
 
     /// Alias for [`Self::as_kilograms_force`].
     #[inline]
-    pub fn as_kilogram_force(self) -> f64 {
+    pub fn as_kilogram_force(self) -> Num {
         self.as_kilograms_force()
     }
 
     /// Creates a [`Force`] from a value in TonnesForce (`tf`).
     #[inline]
-    pub fn from_tonnes_force(value: f64) -> Self {
+    pub fn from_tonnes_force(value: Num) -> Self {
         Self::new(value, ForceUnit::TonneForce)
     }
 
     /// Returns the value expressed in TonnesForce (`tf`).
     #[inline]
-    pub fn as_tonnes_force(self) -> f64 {
+    pub fn as_tonnes_force(self) -> Num {
         self.convert_to(ForceUnit::TonneForce)
     }
 
     /// Alias for [`Self::as_tonnes_force`].
     #[inline]
-    pub fn as_tonne_force(self) -> f64 {
+    pub fn as_tonne_force(self) -> Num {
         self.as_tonnes_force()
     }
 
     /// Creates a [`Force`] from a value in Newtons (`N`).
     #[inline]
-    pub fn from_newtons(value: f64) -> Self {
+    pub fn from_newtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Newton)
     }
 
     /// Returns the value expressed in Newtons (`N`).
     #[inline]
-    pub fn as_newtons(self) -> f64 {
+    pub fn as_newtons(self) -> Num {
         self.convert_to(ForceUnit::Newton)
     }
 
     /// Alias for [`Self::as_newtons`].
     #[inline]
-    pub fn as_newton(self) -> f64 {
+    pub fn as_newton(self) -> Num {
         self.as_newtons()
     }
 
     /// Creates a [`Force`] from a value in Micronewtons (`µN`).
     #[inline]
-    pub fn from_micronewtons(value: f64) -> Self {
+    pub fn from_micronewtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Micronewton)
     }
 
     /// Returns the value expressed in Micronewtons (`µN`).
     #[inline]
-    pub fn as_micronewtons(self) -> f64 {
+    pub fn as_micronewtons(self) -> Num {
         self.convert_to(ForceUnit::Micronewton)
     }
 
     /// Alias for [`Self::as_micronewtons`].
     #[inline]
-    pub fn as_micronewton(self) -> f64 {
+    pub fn as_micronewton(self) -> Num {
         self.as_micronewtons()
     }
 
     /// Creates a [`Force`] from a value in Millinewtons (`mN`).
     #[inline]
-    pub fn from_millinewtons(value: f64) -> Self {
+    pub fn from_millinewtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Millinewton)
     }
 
     /// Returns the value expressed in Millinewtons (`mN`).
     #[inline]
-    pub fn as_millinewtons(self) -> f64 {
+    pub fn as_millinewtons(self) -> Num {
         self.convert_to(ForceUnit::Millinewton)
     }
 
     /// Alias for [`Self::as_millinewtons`].
     #[inline]
-    pub fn as_millinewton(self) -> f64 {
+    pub fn as_millinewton(self) -> Num {
         self.as_millinewtons()
     }
 
     /// Creates a [`Force`] from a value in Decanewtons (`daN`).
     #[inline]
-    pub fn from_decanewtons(value: f64) -> Self {
+    pub fn from_decanewtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Decanewton)
     }
 
     /// Returns the value expressed in Decanewtons (`daN`).
     #[inline]
-    pub fn as_decanewtons(self) -> f64 {
+    pub fn as_decanewtons(self) -> Num {
         self.convert_to(ForceUnit::Decanewton)
     }
 
     /// Alias for [`Self::as_decanewtons`].
     #[inline]
-    pub fn as_decanewton(self) -> f64 {
+    pub fn as_decanewton(self) -> Num {
         self.as_decanewtons()
     }
 
     /// Creates a [`Force`] from a value in Kilonewtons (`kN`).
     #[inline]
-    pub fn from_kilonewtons(value: f64) -> Self {
+    pub fn from_kilonewtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Kilonewton)
     }
 
     /// Returns the value expressed in Kilonewtons (`kN`).
     #[inline]
-    pub fn as_kilonewtons(self) -> f64 {
+    pub fn as_kilonewtons(self) -> Num {
         self.convert_to(ForceUnit::Kilonewton)
     }
 
     /// Alias for [`Self::as_kilonewtons`].
     #[inline]
-    pub fn as_kilonewton(self) -> f64 {
+    pub fn as_kilonewton(self) -> Num {
         self.as_kilonewtons()
     }
 
     /// Creates a [`Force`] from a value in Meganewtons (`MN`).
     #[inline]
-    pub fn from_meganewtons(value: f64) -> Self {
+    pub fn from_meganewtons(value: Num) -> Self {
         Self::new(value, ForceUnit::Meganewton)
     }
 
     /// Returns the value expressed in Meganewtons (`MN`).
     #[inline]
-    pub fn as_meganewtons(self) -> f64 {
+    pub fn as_meganewtons(self) -> Num {
         self.convert_to(ForceUnit::Meganewton)
     }
 
     /// Alias for [`Self::as_meganewtons`].
     #[inline]
-    pub fn as_meganewton(self) -> f64 {
+    pub fn as_meganewton(self) -> Num {
         self.as_meganewtons()
     }
 
     /// Creates a [`Force`] from a value in Kiloponds (`kp`).
     #[inline]
-    pub fn from_kiloponds(value: f64) -> Self {
+    pub fn from_kiloponds(value: Num) -> Self {
         Self::new(value, ForceUnit::Kilopond)
     }
 
     /// Returns the value expressed in Kiloponds (`kp`).
     #[inline]
-    pub fn as_kiloponds(self) -> f64 {
+    pub fn as_kiloponds(self) -> Num {
         self.convert_to(ForceUnit::Kilopond)
     }
 
     /// Alias for [`Self::as_kiloponds`].
     #[inline]
-    pub fn as_kilopond(self) -> f64 {
+    pub fn as_kilopond(self) -> Num {
         self.as_kiloponds()
     }
 
     /// Creates a [`Force`] from a value in Poundals (`pdl`).
     #[inline]
-    pub fn from_poundals(value: f64) -> Self {
+    pub fn from_poundals(value: Num) -> Self {
         Self::new(value, ForceUnit::Poundal)
     }
 
     /// Returns the value expressed in Poundals (`pdl`).
     #[inline]
-    pub fn as_poundals(self) -> f64 {
+    pub fn as_poundals(self) -> Num {
         self.convert_to(ForceUnit::Poundal)
     }
 
     /// Alias for [`Self::as_poundals`].
     #[inline]
-    pub fn as_poundal(self) -> f64 {
+    pub fn as_poundal(self) -> Num {
         self.as_poundals()
     }
 
     /// Creates a [`Force`] from a value in PoundsForce (`lbf`).
     #[inline]
-    pub fn from_pounds_force(value: f64) -> Self {
+    pub fn from_pounds_force(value: Num) -> Self {
         Self::new(value, ForceUnit::PoundForce)
     }
 
     /// Returns the value expressed in PoundsForce (`lbf`).
     #[inline]
-    pub fn as_pounds_force(self) -> f64 {
+    pub fn as_pounds_force(self) -> Num {
         self.convert_to(ForceUnit::PoundForce)
     }
 
     /// Alias for [`Self::as_pounds_force`].
     #[inline]
-    pub fn as_pound_force(self) -> f64 {
+    pub fn as_pound_force(self) -> Num {
         self.as_pounds_force()
     }
 
     /// Creates a [`Force`] from a value in KilopoundsForce (`klbf`).
     #[inline]
-    pub fn from_kilopounds_force(value: f64) -> Self {
+    pub fn from_kilopounds_force(value: Num) -> Self {
         Self::new(value, ForceUnit::KilopoundForce)
     }
 
     /// Returns the value expressed in KilopoundsForce (`klbf`).
     #[inline]
-    pub fn as_kilopounds_force(self) -> f64 {
+    pub fn as_kilopounds_force(self) -> Num {
         self.convert_to(ForceUnit::KilopoundForce)
     }
 
     /// Alias for [`Self::as_kilopounds_force`].
     #[inline]
-    pub fn as_kilopound_force(self) -> f64 {
+    pub fn as_kilopound_force(self) -> Num {
         self.as_kilopounds_force()
     }
 
     /// Creates a [`Force`] from a value in OunceForce (`ozf`).
     #[inline]
-    pub fn from_ounce_force(value: f64) -> Self {
+    pub fn from_ounce_force(value: Num) -> Self {
         Self::new(value, ForceUnit::OunceForce)
     }
 
     /// Returns the value expressed in OunceForce (`ozf`).
     #[inline]
-    pub fn as_ounce_force(self) -> f64 {
+    pub fn as_ounce_force(self) -> Num {
         self.convert_to(ForceUnit::OunceForce)
     }
 
     /// Creates a [`Force`] from a value in ShortTonsForce (`tf (short)`).
     #[inline]
-    pub fn from_short_tons_force(value: f64) -> Self {
+    pub fn from_short_tons_force(value: Num) -> Self {
         Self::new(value, ForceUnit::ShortTonForce)
     }
 
     /// Returns the value expressed in ShortTonsForce (`tf (short)`).
     #[inline]
-    pub fn as_short_tons_force(self) -> f64 {
+    pub fn as_short_tons_force(self) -> Num {
         self.convert_to(ForceUnit::ShortTonForce)
     }
 
     /// Alias for [`Self::as_short_tons_force`].
     #[inline]
-    pub fn as_short_ton_force(self) -> f64 {
+    pub fn as_short_ton_force(self) -> Num {
         self.as_short_tons_force()
     }
 }
@@ -455,27 +456,27 @@ impl Neg for Force {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Force {
+impl Mul<Num> for Force {
     type Output = Force;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Force> for f64 {
+impl Mul<Force> for Num {
     type Output = Force;
     fn mul(self, rhs: Force) -> Force {
         Force(self * rhs.0)
     }
 }
-impl Div<f64> for Force {
+impl Div<Num> for Force {
     type Output = Force;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Force {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -509,7 +510,7 @@ impl FromStr for Force {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseForceError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Steradian` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SolidAngle(f64);
+pub struct SolidAngle(Num);
 
 /// Unit variants for [`SolidAngle`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl SolidAngleUnit {
 
 impl SolidAngle {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: SolidAngleUnit) -> Self {
+    pub fn new(value: Num, unit: SolidAngleUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl SolidAngle {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl SolidAngle {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: SolidAngleUnit) -> f64 {
+    pub fn convert_to(self, unit: SolidAngleUnit) -> Num {
         let x = self.0;
         match unit {
             SolidAngleUnit::Steradian => x,
@@ -79,19 +80,19 @@ impl SolidAngle {
 
     /// Creates a [`SolidAngle`] from a value in Steradians (`sr`).
     #[inline]
-    pub fn from_steradians(value: f64) -> Self {
+    pub fn from_steradians(value: Num) -> Self {
         Self::new(value, SolidAngleUnit::Steradian)
     }
 
     /// Returns the value expressed in Steradians (`sr`).
     #[inline]
-    pub fn as_steradians(self) -> f64 {
+    pub fn as_steradians(self) -> Num {
         self.convert_to(SolidAngleUnit::Steradian)
     }
 
     /// Alias for [`Self::as_steradians`].
     #[inline]
-    pub fn as_steradian(self) -> f64 {
+    pub fn as_steradian(self) -> Num {
         self.as_steradians()
     }
 }
@@ -114,27 +115,27 @@ impl Neg for SolidAngle {
         Self(-self.0)
     }
 }
-impl Mul<f64> for SolidAngle {
+impl Mul<Num> for SolidAngle {
     type Output = SolidAngle;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<SolidAngle> for f64 {
+impl Mul<SolidAngle> for Num {
     type Output = SolidAngle;
     fn mul(self, rhs: SolidAngle) -> SolidAngle {
         SolidAngle(self * rhs.0)
     }
 }
-impl Div<f64> for SolidAngle {
+impl Div<Num> for SolidAngle {
     type Output = SolidAngle;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SolidAngle {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -168,7 +169,7 @@ impl FromStr for SolidAngle {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseSolidAngleError(s.to_owned()))?;

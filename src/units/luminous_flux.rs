@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Lumen` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct LuminousFlux(f64);
+pub struct LuminousFlux(Num);
 
 /// Unit variants for [`LuminousFlux`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl LuminousFluxUnit {
 
 impl LuminousFlux {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LuminousFluxUnit) -> Self {
+    pub fn new(value: Num, unit: LuminousFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl LuminousFlux {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl LuminousFlux {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LuminousFluxUnit) -> f64 {
+    pub fn convert_to(self, unit: LuminousFluxUnit) -> Num {
         let x = self.0;
         match unit {
             LuminousFluxUnit::Lumen => x,
@@ -79,19 +80,19 @@ impl LuminousFlux {
 
     /// Creates a [`LuminousFlux`] from a value in Lumens (`lm`).
     #[inline]
-    pub fn from_lumens(value: f64) -> Self {
+    pub fn from_lumens(value: Num) -> Self {
         Self::new(value, LuminousFluxUnit::Lumen)
     }
 
     /// Returns the value expressed in Lumens (`lm`).
     #[inline]
-    pub fn as_lumens(self) -> f64 {
+    pub fn as_lumens(self) -> Num {
         self.convert_to(LuminousFluxUnit::Lumen)
     }
 
     /// Alias for [`Self::as_lumens`].
     #[inline]
-    pub fn as_lumen(self) -> f64 {
+    pub fn as_lumen(self) -> Num {
         self.as_lumens()
     }
 }
@@ -114,27 +115,27 @@ impl Neg for LuminousFlux {
         Self(-self.0)
     }
 }
-impl Mul<f64> for LuminousFlux {
+impl Mul<Num> for LuminousFlux {
     type Output = LuminousFlux;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<LuminousFlux> for f64 {
+impl Mul<LuminousFlux> for Num {
     type Output = LuminousFlux;
     fn mul(self, rhs: LuminousFlux) -> LuminousFlux {
         LuminousFlux(self * rhs.0)
     }
 }
-impl Div<f64> for LuminousFlux {
+impl Div<Num> for LuminousFlux {
     type Output = LuminousFlux;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LuminousFlux {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -168,7 +169,7 @@ impl FromStr for LuminousFlux {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLuminousFluxError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `DecimalFraction` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Ratio(f64);
+pub struct Ratio(Num);
 
 /// Unit variants for [`Ratio`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl RatioUnit {
 
 impl Ratio {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: RatioUnit) -> Self {
+    pub fn new(value: Num, unit: RatioUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl Ratio {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl Ratio {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: RatioUnit) -> f64 {
+    pub fn convert_to(self, unit: RatioUnit) -> Num {
         let x = self.0;
         match unit {
             RatioUnit::DecimalFraction => x,
@@ -111,103 +112,103 @@ impl Ratio {
 
     /// Creates a [`Ratio`] from a value in DecimalFractions (``).
     #[inline]
-    pub fn from_decimal_fractions(value: f64) -> Self {
+    pub fn from_decimal_fractions(value: Num) -> Self {
         Self::new(value, RatioUnit::DecimalFraction)
     }
 
     /// Returns the value expressed in DecimalFractions (``).
     #[inline]
-    pub fn as_decimal_fractions(self) -> f64 {
+    pub fn as_decimal_fractions(self) -> Num {
         self.convert_to(RatioUnit::DecimalFraction)
     }
 
     /// Alias for [`Self::as_decimal_fractions`].
     #[inline]
-    pub fn as_decimal_fraction(self) -> f64 {
+    pub fn as_decimal_fraction(self) -> Num {
         self.as_decimal_fractions()
     }
 
     /// Creates a [`Ratio`] from a value in Percent (`%`).
     #[inline]
-    pub fn from_percent(value: f64) -> Self {
+    pub fn from_percent(value: Num) -> Self {
         Self::new(value, RatioUnit::Percent)
     }
 
     /// Returns the value expressed in Percent (`%`).
     #[inline]
-    pub fn as_percent(self) -> f64 {
+    pub fn as_percent(self) -> Num {
         self.convert_to(RatioUnit::Percent)
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerThousand (`‰`).
     #[inline]
-    pub fn from_parts_per_thousand(value: f64) -> Self {
+    pub fn from_parts_per_thousand(value: Num) -> Self {
         Self::new(value, RatioUnit::PartPerThousand)
     }
 
     /// Returns the value expressed in PartsPerThousand (`‰`).
     #[inline]
-    pub fn as_parts_per_thousand(self) -> f64 {
+    pub fn as_parts_per_thousand(self) -> Num {
         self.convert_to(RatioUnit::PartPerThousand)
     }
 
     /// Alias for [`Self::as_parts_per_thousand`].
     #[inline]
-    pub fn as_part_per_thousand(self) -> f64 {
+    pub fn as_part_per_thousand(self) -> Num {
         self.as_parts_per_thousand()
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerMillion (`ppm`).
     #[inline]
-    pub fn from_parts_per_million(value: f64) -> Self {
+    pub fn from_parts_per_million(value: Num) -> Self {
         Self::new(value, RatioUnit::PartPerMillion)
     }
 
     /// Returns the value expressed in PartsPerMillion (`ppm`).
     #[inline]
-    pub fn as_parts_per_million(self) -> f64 {
+    pub fn as_parts_per_million(self) -> Num {
         self.convert_to(RatioUnit::PartPerMillion)
     }
 
     /// Alias for [`Self::as_parts_per_million`].
     #[inline]
-    pub fn as_part_per_million(self) -> f64 {
+    pub fn as_part_per_million(self) -> Num {
         self.as_parts_per_million()
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerBillion (`ppb`).
     #[inline]
-    pub fn from_parts_per_billion(value: f64) -> Self {
+    pub fn from_parts_per_billion(value: Num) -> Self {
         Self::new(value, RatioUnit::PartPerBillion)
     }
 
     /// Returns the value expressed in PartsPerBillion (`ppb`).
     #[inline]
-    pub fn as_parts_per_billion(self) -> f64 {
+    pub fn as_parts_per_billion(self) -> Num {
         self.convert_to(RatioUnit::PartPerBillion)
     }
 
     /// Alias for [`Self::as_parts_per_billion`].
     #[inline]
-    pub fn as_part_per_billion(self) -> f64 {
+    pub fn as_part_per_billion(self) -> Num {
         self.as_parts_per_billion()
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
-    pub fn from_parts_per_trillion(value: f64) -> Self {
+    pub fn from_parts_per_trillion(value: Num) -> Self {
         Self::new(value, RatioUnit::PartPerTrillion)
     }
 
     /// Returns the value expressed in PartsPerTrillion (`ppt`).
     #[inline]
-    pub fn as_parts_per_trillion(self) -> f64 {
+    pub fn as_parts_per_trillion(self) -> Num {
         self.convert_to(RatioUnit::PartPerTrillion)
     }
 
     /// Alias for [`Self::as_parts_per_trillion`].
     #[inline]
-    pub fn as_part_per_trillion(self) -> f64 {
+    pub fn as_part_per_trillion(self) -> Num {
         self.as_parts_per_trillion()
     }
 }
@@ -230,27 +231,27 @@ impl Neg for Ratio {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Ratio {
+impl Mul<Num> for Ratio {
     type Output = Ratio;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Ratio> for f64 {
+impl Mul<Ratio> for Num {
     type Output = Ratio;
     fn mul(self, rhs: Ratio) -> Ratio {
         Ratio(self * rhs.0)
     }
 }
-impl Div<f64> for Ratio {
+impl Div<Num> for Ratio {
     type Output = Ratio;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Ratio {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -289,7 +290,7 @@ impl FromStr for Ratio {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseRatioError(s.to_owned()))?;

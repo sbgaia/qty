@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Second` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Duration(f64);
+pub struct Duration(Num);
 
 /// Unit variants for [`Duration`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -95,7 +96,7 @@ impl DurationUnit {
 
 impl Duration {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: DurationUnit) -> Self {
+    pub fn new(value: Num, unit: DurationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -119,7 +120,7 @@ impl Duration {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -127,12 +128,12 @@ impl Duration {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: DurationUnit) -> f64 {
+    pub fn convert_to(self, unit: DurationUnit) -> Num {
         let x = self.0;
         match unit {
             DurationUnit::Year365 => x / (365.0 * 24.0 * 3600.0),
@@ -153,235 +154,235 @@ impl Duration {
 
     /// Creates a [`Duration`] from a value in Years365 (`yr`).
     #[inline]
-    pub fn from_years365(value: f64) -> Self {
+    pub fn from_years365(value: Num) -> Self {
         Self::new(value, DurationUnit::Year365)
     }
 
     /// Returns the value expressed in Years365 (`yr`).
     #[inline]
-    pub fn as_years365(self) -> f64 {
+    pub fn as_years365(self) -> Num {
         self.convert_to(DurationUnit::Year365)
     }
 
     /// Alias for [`Self::as_years365`].
     #[inline]
-    pub fn as_year365(self) -> f64 {
+    pub fn as_year365(self) -> Num {
         self.as_years365()
     }
 
     /// Creates a [`Duration`] from a value in Months30 (`mo`).
     #[inline]
-    pub fn from_months30(value: f64) -> Self {
+    pub fn from_months30(value: Num) -> Self {
         Self::new(value, DurationUnit::Month30)
     }
 
     /// Returns the value expressed in Months30 (`mo`).
     #[inline]
-    pub fn as_months30(self) -> f64 {
+    pub fn as_months30(self) -> Num {
         self.convert_to(DurationUnit::Month30)
     }
 
     /// Alias for [`Self::as_months30`].
     #[inline]
-    pub fn as_month30(self) -> f64 {
+    pub fn as_month30(self) -> Num {
         self.as_months30()
     }
 
     /// Creates a [`Duration`] from a value in Weeks (`wk`).
     #[inline]
-    pub fn from_weeks(value: f64) -> Self {
+    pub fn from_weeks(value: Num) -> Self {
         Self::new(value, DurationUnit::Week)
     }
 
     /// Returns the value expressed in Weeks (`wk`).
     #[inline]
-    pub fn as_weeks(self) -> f64 {
+    pub fn as_weeks(self) -> Num {
         self.convert_to(DurationUnit::Week)
     }
 
     /// Alias for [`Self::as_weeks`].
     #[inline]
-    pub fn as_week(self) -> f64 {
+    pub fn as_week(self) -> Num {
         self.as_weeks()
     }
 
     /// Creates a [`Duration`] from a value in Days (`d`).
     #[inline]
-    pub fn from_days(value: f64) -> Self {
+    pub fn from_days(value: Num) -> Self {
         Self::new(value, DurationUnit::Day)
     }
 
     /// Returns the value expressed in Days (`d`).
     #[inline]
-    pub fn as_days(self) -> f64 {
+    pub fn as_days(self) -> Num {
         self.convert_to(DurationUnit::Day)
     }
 
     /// Alias for [`Self::as_days`].
     #[inline]
-    pub fn as_day(self) -> f64 {
+    pub fn as_day(self) -> Num {
         self.as_days()
     }
 
     /// Creates a [`Duration`] from a value in Hours (`h`).
     #[inline]
-    pub fn from_hours(value: f64) -> Self {
+    pub fn from_hours(value: Num) -> Self {
         Self::new(value, DurationUnit::Hour)
     }
 
     /// Returns the value expressed in Hours (`h`).
     #[inline]
-    pub fn as_hours(self) -> f64 {
+    pub fn as_hours(self) -> Num {
         self.convert_to(DurationUnit::Hour)
     }
 
     /// Alias for [`Self::as_hours`].
     #[inline]
-    pub fn as_hour(self) -> f64 {
+    pub fn as_hour(self) -> Num {
         self.as_hours()
     }
 
     /// Creates a [`Duration`] from a value in Minutes (`m`).
     #[inline]
-    pub fn from_minutes(value: f64) -> Self {
+    pub fn from_minutes(value: Num) -> Self {
         Self::new(value, DurationUnit::Minute)
     }
 
     /// Returns the value expressed in Minutes (`m`).
     #[inline]
-    pub fn as_minutes(self) -> f64 {
+    pub fn as_minutes(self) -> Num {
         self.convert_to(DurationUnit::Minute)
     }
 
     /// Alias for [`Self::as_minutes`].
     #[inline]
-    pub fn as_minute(self) -> f64 {
+    pub fn as_minute(self) -> Num {
         self.as_minutes()
     }
 
     /// Creates a [`Duration`] from a value in Seconds (`s`).
     #[inline]
-    pub fn from_seconds(value: f64) -> Self {
+    pub fn from_seconds(value: Num) -> Self {
         Self::new(value, DurationUnit::Second)
     }
 
     /// Returns the value expressed in Seconds (`s`).
     #[inline]
-    pub fn as_seconds(self) -> f64 {
+    pub fn as_seconds(self) -> Num {
         self.convert_to(DurationUnit::Second)
     }
 
     /// Alias for [`Self::as_seconds`].
     #[inline]
-    pub fn as_second(self) -> f64 {
+    pub fn as_second(self) -> Num {
         self.as_seconds()
     }
 
     /// Creates a [`Duration`] from a value in Picoseconds (`ps`).
     #[inline]
-    pub fn from_picoseconds(value: f64) -> Self {
+    pub fn from_picoseconds(value: Num) -> Self {
         Self::new(value, DurationUnit::Picosecond)
     }
 
     /// Returns the value expressed in Picoseconds (`ps`).
     #[inline]
-    pub fn as_picoseconds(self) -> f64 {
+    pub fn as_picoseconds(self) -> Num {
         self.convert_to(DurationUnit::Picosecond)
     }
 
     /// Alias for [`Self::as_picoseconds`].
     #[inline]
-    pub fn as_picosecond(self) -> f64 {
+    pub fn as_picosecond(self) -> Num {
         self.as_picoseconds()
     }
 
     /// Creates a [`Duration`] from a value in Nanoseconds (`ns`).
     #[inline]
-    pub fn from_nanoseconds(value: f64) -> Self {
+    pub fn from_nanoseconds(value: Num) -> Self {
         Self::new(value, DurationUnit::Nanosecond)
     }
 
     /// Returns the value expressed in Nanoseconds (`ns`).
     #[inline]
-    pub fn as_nanoseconds(self) -> f64 {
+    pub fn as_nanoseconds(self) -> Num {
         self.convert_to(DurationUnit::Nanosecond)
     }
 
     /// Alias for [`Self::as_nanoseconds`].
     #[inline]
-    pub fn as_nanosecond(self) -> f64 {
+    pub fn as_nanosecond(self) -> Num {
         self.as_nanoseconds()
     }
 
     /// Creates a [`Duration`] from a value in Microseconds (`µs`).
     #[inline]
-    pub fn from_microseconds(value: f64) -> Self {
+    pub fn from_microseconds(value: Num) -> Self {
         Self::new(value, DurationUnit::Microsecond)
     }
 
     /// Returns the value expressed in Microseconds (`µs`).
     #[inline]
-    pub fn as_microseconds(self) -> f64 {
+    pub fn as_microseconds(self) -> Num {
         self.convert_to(DurationUnit::Microsecond)
     }
 
     /// Alias for [`Self::as_microseconds`].
     #[inline]
-    pub fn as_microsecond(self) -> f64 {
+    pub fn as_microsecond(self) -> Num {
         self.as_microseconds()
     }
 
     /// Creates a [`Duration`] from a value in Milliseconds (`ms`).
     #[inline]
-    pub fn from_milliseconds(value: f64) -> Self {
+    pub fn from_milliseconds(value: Num) -> Self {
         Self::new(value, DurationUnit::Millisecond)
     }
 
     /// Returns the value expressed in Milliseconds (`ms`).
     #[inline]
-    pub fn as_milliseconds(self) -> f64 {
+    pub fn as_milliseconds(self) -> Num {
         self.convert_to(DurationUnit::Millisecond)
     }
 
     /// Alias for [`Self::as_milliseconds`].
     #[inline]
-    pub fn as_millisecond(self) -> f64 {
+    pub fn as_millisecond(self) -> Num {
         self.as_milliseconds()
     }
 
     /// Creates a [`Duration`] from a value in JulianYears (`jyr`).
     #[inline]
-    pub fn from_julian_years(value: f64) -> Self {
+    pub fn from_julian_years(value: Num) -> Self {
         Self::new(value, DurationUnit::JulianYear)
     }
 
     /// Returns the value expressed in JulianYears (`jyr`).
     #[inline]
-    pub fn as_julian_years(self) -> f64 {
+    pub fn as_julian_years(self) -> Num {
         self.convert_to(DurationUnit::JulianYear)
     }
 
     /// Alias for [`Self::as_julian_years`].
     #[inline]
-    pub fn as_julian_year(self) -> f64 {
+    pub fn as_julian_year(self) -> Num {
         self.as_julian_years()
     }
 
     /// Creates a [`Duration`] from a value in Sols (`sol`).
     #[inline]
-    pub fn from_sols(value: f64) -> Self {
+    pub fn from_sols(value: Num) -> Self {
         Self::new(value, DurationUnit::Sol)
     }
 
     /// Returns the value expressed in Sols (`sol`).
     #[inline]
-    pub fn as_sols(self) -> f64 {
+    pub fn as_sols(self) -> Num {
         self.convert_to(DurationUnit::Sol)
     }
 
     /// Alias for [`Self::as_sols`].
     #[inline]
-    pub fn as_sol(self) -> f64 {
+    pub fn as_sol(self) -> Num {
         self.as_sols()
     }
 }
@@ -404,27 +405,27 @@ impl Neg for Duration {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Duration {
+impl Mul<Num> for Duration {
     type Output = Duration;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Duration> for f64 {
+impl Mul<Duration> for Num {
     type Output = Duration;
     fn mul(self, rhs: Duration) -> Duration {
         Duration(self * rhs.0)
     }
 }
-impl Div<f64> for Duration {
+impl Div<Num> for Duration {
     type Output = Duration;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Duration {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -458,7 +459,7 @@ impl FromStr for Duration {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseDurationError(s.to_owned()))?;

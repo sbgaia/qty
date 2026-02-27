@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `KilogramPerMole` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MolarMass(f64);
+pub struct MolarMass(Num);
 
 /// Unit variants for [`MolarMass`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -95,7 +96,7 @@ impl MolarMassUnit {
 
 impl MolarMass {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MolarMassUnit) -> Self {
+    pub fn new(value: Num, unit: MolarMassUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -119,7 +120,7 @@ impl MolarMass {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -127,12 +128,12 @@ impl MolarMass {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MolarMassUnit) -> f64 {
+    pub fn convert_to(self, unit: MolarMassUnit) -> Num {
         let x = self.0;
         match unit {
             MolarMassUnit::GramPerMole => x * 1e3,
@@ -153,235 +154,235 @@ impl MolarMass {
 
     /// Creates a [`MolarMass`] from a value in GramsPerMole (`g/mol`).
     #[inline]
-    pub fn from_grams_per_mole(value: f64) -> Self {
+    pub fn from_grams_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::GramPerMole)
     }
 
     /// Returns the value expressed in GramsPerMole (`g/mol`).
     #[inline]
-    pub fn as_grams_per_mole(self) -> f64 {
+    pub fn as_grams_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::GramPerMole)
     }
 
     /// Alias for [`Self::as_grams_per_mole`].
     #[inline]
-    pub fn as_gram_per_mole(self) -> f64 {
+    pub fn as_gram_per_mole(self) -> Num {
         self.as_grams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in NanogramsPerMole (`ng/mol`).
     #[inline]
-    pub fn from_nanograms_per_mole(value: f64) -> Self {
+    pub fn from_nanograms_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::NanogramPerMole)
     }
 
     /// Returns the value expressed in NanogramsPerMole (`ng/mol`).
     #[inline]
-    pub fn as_nanograms_per_mole(self) -> f64 {
+    pub fn as_nanograms_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::NanogramPerMole)
     }
 
     /// Alias for [`Self::as_nanograms_per_mole`].
     #[inline]
-    pub fn as_nanogram_per_mole(self) -> f64 {
+    pub fn as_nanogram_per_mole(self) -> Num {
         self.as_nanograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in MicrogramsPerMole (`µg/mol`).
     #[inline]
-    pub fn from_micrograms_per_mole(value: f64) -> Self {
+    pub fn from_micrograms_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::MicrogramPerMole)
     }
 
     /// Returns the value expressed in MicrogramsPerMole (`µg/mol`).
     #[inline]
-    pub fn as_micrograms_per_mole(self) -> f64 {
+    pub fn as_micrograms_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::MicrogramPerMole)
     }
 
     /// Alias for [`Self::as_micrograms_per_mole`].
     #[inline]
-    pub fn as_microgram_per_mole(self) -> f64 {
+    pub fn as_microgram_per_mole(self) -> Num {
         self.as_micrograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in MilligramsPerMole (`mg/mol`).
     #[inline]
-    pub fn from_milligrams_per_mole(value: f64) -> Self {
+    pub fn from_milligrams_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::MilligramPerMole)
     }
 
     /// Returns the value expressed in MilligramsPerMole (`mg/mol`).
     #[inline]
-    pub fn as_milligrams_per_mole(self) -> f64 {
+    pub fn as_milligrams_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::MilligramPerMole)
     }
 
     /// Alias for [`Self::as_milligrams_per_mole`].
     #[inline]
-    pub fn as_milligram_per_mole(self) -> f64 {
+    pub fn as_milligram_per_mole(self) -> Num {
         self.as_milligrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in CentigramsPerMole (`cg/mol`).
     #[inline]
-    pub fn from_centigrams_per_mole(value: f64) -> Self {
+    pub fn from_centigrams_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::CentigramPerMole)
     }
 
     /// Returns the value expressed in CentigramsPerMole (`cg/mol`).
     #[inline]
-    pub fn as_centigrams_per_mole(self) -> f64 {
+    pub fn as_centigrams_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::CentigramPerMole)
     }
 
     /// Alias for [`Self::as_centigrams_per_mole`].
     #[inline]
-    pub fn as_centigram_per_mole(self) -> f64 {
+    pub fn as_centigram_per_mole(self) -> Num {
         self.as_centigrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in DecigramsPerMole (`dg/mol`).
     #[inline]
-    pub fn from_decigrams_per_mole(value: f64) -> Self {
+    pub fn from_decigrams_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::DecigramPerMole)
     }
 
     /// Returns the value expressed in DecigramsPerMole (`dg/mol`).
     #[inline]
-    pub fn as_decigrams_per_mole(self) -> f64 {
+    pub fn as_decigrams_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::DecigramPerMole)
     }
 
     /// Alias for [`Self::as_decigrams_per_mole`].
     #[inline]
-    pub fn as_decigram_per_mole(self) -> f64 {
+    pub fn as_decigram_per_mole(self) -> Num {
         self.as_decigrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in DecagramsPerMole (`dag/mol`).
     #[inline]
-    pub fn from_decagrams_per_mole(value: f64) -> Self {
+    pub fn from_decagrams_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::DecagramPerMole)
     }
 
     /// Returns the value expressed in DecagramsPerMole (`dag/mol`).
     #[inline]
-    pub fn as_decagrams_per_mole(self) -> f64 {
+    pub fn as_decagrams_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::DecagramPerMole)
     }
 
     /// Alias for [`Self::as_decagrams_per_mole`].
     #[inline]
-    pub fn as_decagram_per_mole(self) -> f64 {
+    pub fn as_decagram_per_mole(self) -> Num {
         self.as_decagrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in HectogramsPerMole (`hg/mol`).
     #[inline]
-    pub fn from_hectograms_per_mole(value: f64) -> Self {
+    pub fn from_hectograms_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::HectogramPerMole)
     }
 
     /// Returns the value expressed in HectogramsPerMole (`hg/mol`).
     #[inline]
-    pub fn as_hectograms_per_mole(self) -> f64 {
+    pub fn as_hectograms_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::HectogramPerMole)
     }
 
     /// Alias for [`Self::as_hectograms_per_mole`].
     #[inline]
-    pub fn as_hectogram_per_mole(self) -> f64 {
+    pub fn as_hectogram_per_mole(self) -> Num {
         self.as_hectograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in KilogramsPerMole (`kg/mol`).
     #[inline]
-    pub fn from_kilograms_per_mole(value: f64) -> Self {
+    pub fn from_kilograms_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::KilogramPerMole)
     }
 
     /// Returns the value expressed in KilogramsPerMole (`kg/mol`).
     #[inline]
-    pub fn as_kilograms_per_mole(self) -> f64 {
+    pub fn as_kilograms_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::KilogramPerMole)
     }
 
     /// Alias for [`Self::as_kilograms_per_mole`].
     #[inline]
-    pub fn as_kilogram_per_mole(self) -> f64 {
+    pub fn as_kilogram_per_mole(self) -> Num {
         self.as_kilograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in KilogramsPerKilomole (`kg/kmol`).
     #[inline]
-    pub fn from_kilograms_per_kilomole(value: f64) -> Self {
+    pub fn from_kilograms_per_kilomole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::KilogramPerKilomole)
     }
 
     /// Returns the value expressed in KilogramsPerKilomole (`kg/kmol`).
     #[inline]
-    pub fn as_kilograms_per_kilomole(self) -> f64 {
+    pub fn as_kilograms_per_kilomole(self) -> Num {
         self.convert_to(MolarMassUnit::KilogramPerKilomole)
     }
 
     /// Alias for [`Self::as_kilograms_per_kilomole`].
     #[inline]
-    pub fn as_kilogram_per_kilomole(self) -> f64 {
+    pub fn as_kilogram_per_kilomole(self) -> Num {
         self.as_kilograms_per_kilomole()
     }
 
     /// Creates a [`MolarMass`] from a value in PoundsPerMole (`lb/mol`).
     #[inline]
-    pub fn from_pounds_per_mole(value: f64) -> Self {
+    pub fn from_pounds_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::PoundPerMole)
     }
 
     /// Returns the value expressed in PoundsPerMole (`lb/mol`).
     #[inline]
-    pub fn as_pounds_per_mole(self) -> f64 {
+    pub fn as_pounds_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::PoundPerMole)
     }
 
     /// Alias for [`Self::as_pounds_per_mole`].
     #[inline]
-    pub fn as_pound_per_mole(self) -> f64 {
+    pub fn as_pound_per_mole(self) -> Num {
         self.as_pounds_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in KilopoundsPerMole (`klb/mol`).
     #[inline]
-    pub fn from_kilopounds_per_mole(value: f64) -> Self {
+    pub fn from_kilopounds_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::KilopoundPerMole)
     }
 
     /// Returns the value expressed in KilopoundsPerMole (`klb/mol`).
     #[inline]
-    pub fn as_kilopounds_per_mole(self) -> f64 {
+    pub fn as_kilopounds_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::KilopoundPerMole)
     }
 
     /// Alias for [`Self::as_kilopounds_per_mole`].
     #[inline]
-    pub fn as_kilopound_per_mole(self) -> f64 {
+    pub fn as_kilopound_per_mole(self) -> Num {
         self.as_kilopounds_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in MegapoundsPerMole (`Mlb/mol`).
     #[inline]
-    pub fn from_megapounds_per_mole(value: f64) -> Self {
+    pub fn from_megapounds_per_mole(value: Num) -> Self {
         Self::new(value, MolarMassUnit::MegapoundPerMole)
     }
 
     /// Returns the value expressed in MegapoundsPerMole (`Mlb/mol`).
     #[inline]
-    pub fn as_megapounds_per_mole(self) -> f64 {
+    pub fn as_megapounds_per_mole(self) -> Num {
         self.convert_to(MolarMassUnit::MegapoundPerMole)
     }
 
     /// Alias for [`Self::as_megapounds_per_mole`].
     #[inline]
-    pub fn as_megapound_per_mole(self) -> f64 {
+    pub fn as_megapound_per_mole(self) -> Num {
         self.as_megapounds_per_mole()
     }
 }
@@ -404,27 +405,27 @@ impl Neg for MolarMass {
         Self(-self.0)
     }
 }
-impl Mul<f64> for MolarMass {
+impl Mul<Num> for MolarMass {
     type Output = MolarMass;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<MolarMass> for f64 {
+impl Mul<MolarMass> for Num {
     type Output = MolarMass;
     fn mul(self, rhs: MolarMass) -> MolarMass {
         MolarMass(self * rhs.0)
     }
 }
-impl Div<f64> for MolarMass {
+impl Div<Num> for MolarMass {
     type Output = MolarMass;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MolarMass {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -463,7 +464,7 @@ impl FromStr for MolarMass {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMolarMassError(s.to_owned()))?;

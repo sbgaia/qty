@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Hertz` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Frequency(f64);
+pub struct Frequency(Num);
 
 /// Unit variants for [`Frequency`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -92,7 +93,7 @@ impl FrequencyUnit {
 
 impl Frequency {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: FrequencyUnit) -> Self {
+    pub fn new(value: Num, unit: FrequencyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -103,7 +104,7 @@ impl Frequency {
             FrequencyUnit::Megahertz => (x * 1e6),
             FrequencyUnit::Gigahertz => (x * 1e9),
             FrequencyUnit::Terahertz => (x * 1e12),
-            FrequencyUnit::RadianPerSecond => x / (2.0 * std::f64::consts::PI),
+            FrequencyUnit::RadianPerSecond => x / (2.0 * (std::f64::consts::PI as Num)),
             FrequencyUnit::CyclePerMinute => x / 60.0,
             FrequencyUnit::CyclePerHour => x / 3600.0,
             FrequencyUnit::BeatPerMinute => x / 60.0,
@@ -115,7 +116,7 @@ impl Frequency {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -123,12 +124,12 @@ impl Frequency {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: FrequencyUnit) -> f64 {
+    pub fn convert_to(self, unit: FrequencyUnit) -> Num {
         let x = self.0;
         match unit {
             FrequencyUnit::Hertz => x,
@@ -138,7 +139,7 @@ impl Frequency {
             FrequencyUnit::Megahertz => (x / 1e6),
             FrequencyUnit::Gigahertz => (x / 1e9),
             FrequencyUnit::Terahertz => (x / 1e12),
-            FrequencyUnit::RadianPerSecond => x * (2.0 * std::f64::consts::PI),
+            FrequencyUnit::RadianPerSecond => x * (2.0 * (std::f64::consts::PI as Num)),
             FrequencyUnit::CyclePerMinute => x * 60.0,
             FrequencyUnit::CyclePerHour => x * 3600.0,
             FrequencyUnit::BeatPerMinute => x * 60.0,
@@ -148,169 +149,169 @@ impl Frequency {
 
     /// Creates a [`Frequency`] from a value in Hertz (`Hz`).
     #[inline]
-    pub fn from_hertz(value: f64) -> Self {
+    pub fn from_hertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Hertz)
     }
 
     /// Returns the value expressed in Hertz (`Hz`).
     #[inline]
-    pub fn as_hertz(self) -> f64 {
+    pub fn as_hertz(self) -> Num {
         self.convert_to(FrequencyUnit::Hertz)
     }
 
     /// Creates a [`Frequency`] from a value in Microhertz (`µHz`).
     #[inline]
-    pub fn from_microhertz(value: f64) -> Self {
+    pub fn from_microhertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Microhertz)
     }
 
     /// Returns the value expressed in Microhertz (`µHz`).
     #[inline]
-    pub fn as_microhertz(self) -> f64 {
+    pub fn as_microhertz(self) -> Num {
         self.convert_to(FrequencyUnit::Microhertz)
     }
 
     /// Creates a [`Frequency`] from a value in Millihertz (`mHz`).
     #[inline]
-    pub fn from_millihertz(value: f64) -> Self {
+    pub fn from_millihertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Millihertz)
     }
 
     /// Returns the value expressed in Millihertz (`mHz`).
     #[inline]
-    pub fn as_millihertz(self) -> f64 {
+    pub fn as_millihertz(self) -> Num {
         self.convert_to(FrequencyUnit::Millihertz)
     }
 
     /// Creates a [`Frequency`] from a value in Kilohertz (`kHz`).
     #[inline]
-    pub fn from_kilohertz(value: f64) -> Self {
+    pub fn from_kilohertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Kilohertz)
     }
 
     /// Returns the value expressed in Kilohertz (`kHz`).
     #[inline]
-    pub fn as_kilohertz(self) -> f64 {
+    pub fn as_kilohertz(self) -> Num {
         self.convert_to(FrequencyUnit::Kilohertz)
     }
 
     /// Creates a [`Frequency`] from a value in Megahertz (`MHz`).
     #[inline]
-    pub fn from_megahertz(value: f64) -> Self {
+    pub fn from_megahertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Megahertz)
     }
 
     /// Returns the value expressed in Megahertz (`MHz`).
     #[inline]
-    pub fn as_megahertz(self) -> f64 {
+    pub fn as_megahertz(self) -> Num {
         self.convert_to(FrequencyUnit::Megahertz)
     }
 
     /// Creates a [`Frequency`] from a value in Gigahertz (`GHz`).
     #[inline]
-    pub fn from_gigahertz(value: f64) -> Self {
+    pub fn from_gigahertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Gigahertz)
     }
 
     /// Returns the value expressed in Gigahertz (`GHz`).
     #[inline]
-    pub fn as_gigahertz(self) -> f64 {
+    pub fn as_gigahertz(self) -> Num {
         self.convert_to(FrequencyUnit::Gigahertz)
     }
 
     /// Creates a [`Frequency`] from a value in Terahertz (`THz`).
     #[inline]
-    pub fn from_terahertz(value: f64) -> Self {
+    pub fn from_terahertz(value: Num) -> Self {
         Self::new(value, FrequencyUnit::Terahertz)
     }
 
     /// Returns the value expressed in Terahertz (`THz`).
     #[inline]
-    pub fn as_terahertz(self) -> f64 {
+    pub fn as_terahertz(self) -> Num {
         self.convert_to(FrequencyUnit::Terahertz)
     }
 
     /// Creates a [`Frequency`] from a value in RadiansPerSecond (`rad/s`).
     #[inline]
-    pub fn from_radians_per_second(value: f64) -> Self {
+    pub fn from_radians_per_second(value: Num) -> Self {
         Self::new(value, FrequencyUnit::RadianPerSecond)
     }
 
     /// Returns the value expressed in RadiansPerSecond (`rad/s`).
     #[inline]
-    pub fn as_radians_per_second(self) -> f64 {
+    pub fn as_radians_per_second(self) -> Num {
         self.convert_to(FrequencyUnit::RadianPerSecond)
     }
 
     /// Alias for [`Self::as_radians_per_second`].
     #[inline]
-    pub fn as_radian_per_second(self) -> f64 {
+    pub fn as_radian_per_second(self) -> Num {
         self.as_radians_per_second()
     }
 
     /// Creates a [`Frequency`] from a value in CyclesPerMinute (`cpm`).
     #[inline]
-    pub fn from_cycles_per_minute(value: f64) -> Self {
+    pub fn from_cycles_per_minute(value: Num) -> Self {
         Self::new(value, FrequencyUnit::CyclePerMinute)
     }
 
     /// Returns the value expressed in CyclesPerMinute (`cpm`).
     #[inline]
-    pub fn as_cycles_per_minute(self) -> f64 {
+    pub fn as_cycles_per_minute(self) -> Num {
         self.convert_to(FrequencyUnit::CyclePerMinute)
     }
 
     /// Alias for [`Self::as_cycles_per_minute`].
     #[inline]
-    pub fn as_cycle_per_minute(self) -> f64 {
+    pub fn as_cycle_per_minute(self) -> Num {
         self.as_cycles_per_minute()
     }
 
     /// Creates a [`Frequency`] from a value in CyclesPerHour (`cph`).
     #[inline]
-    pub fn from_cycles_per_hour(value: f64) -> Self {
+    pub fn from_cycles_per_hour(value: Num) -> Self {
         Self::new(value, FrequencyUnit::CyclePerHour)
     }
 
     /// Returns the value expressed in CyclesPerHour (`cph`).
     #[inline]
-    pub fn as_cycles_per_hour(self) -> f64 {
+    pub fn as_cycles_per_hour(self) -> Num {
         self.convert_to(FrequencyUnit::CyclePerHour)
     }
 
     /// Alias for [`Self::as_cycles_per_hour`].
     #[inline]
-    pub fn as_cycle_per_hour(self) -> f64 {
+    pub fn as_cycle_per_hour(self) -> Num {
         self.as_cycles_per_hour()
     }
 
     /// Creates a [`Frequency`] from a value in BeatsPerMinute (`bpm`).
     #[inline]
-    pub fn from_beats_per_minute(value: f64) -> Self {
+    pub fn from_beats_per_minute(value: Num) -> Self {
         Self::new(value, FrequencyUnit::BeatPerMinute)
     }
 
     /// Returns the value expressed in BeatsPerMinute (`bpm`).
     #[inline]
-    pub fn as_beats_per_minute(self) -> f64 {
+    pub fn as_beats_per_minute(self) -> Num {
         self.convert_to(FrequencyUnit::BeatPerMinute)
     }
 
     /// Alias for [`Self::as_beats_per_minute`].
     #[inline]
-    pub fn as_beat_per_minute(self) -> f64 {
+    pub fn as_beat_per_minute(self) -> Num {
         self.as_beats_per_minute()
     }
 
     /// Creates a [`Frequency`] from a value in PerSecond (`s⁻¹`).
     #[inline]
-    pub fn from_per_second(value: f64) -> Self {
+    pub fn from_per_second(value: Num) -> Self {
         Self::new(value, FrequencyUnit::PerSecond)
     }
 
     /// Returns the value expressed in PerSecond (`s⁻¹`).
     #[inline]
-    pub fn as_per_second(self) -> f64 {
+    pub fn as_per_second(self) -> Num {
         self.convert_to(FrequencyUnit::PerSecond)
     }
 }
@@ -333,27 +334,27 @@ impl Neg for Frequency {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Frequency {
+impl Mul<Num> for Frequency {
     type Output = Frequency;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Frequency> for f64 {
+impl Mul<Frequency> for Num {
     type Output = Frequency;
     fn mul(self, rhs: Frequency) -> Frequency {
         Frequency(self * rhs.0)
     }
 }
-impl Div<f64> for Frequency {
+impl Div<Num> for Frequency {
     type Output = Frequency;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Frequency {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -387,7 +388,7 @@ impl FromStr for Frequency {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseFrequencyError(s.to_owned()))?;

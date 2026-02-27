@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Meter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Length(f64);
+pub struct Length(Num);
 
 /// Unit variants for [`Length`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -229,7 +230,7 @@ impl LengthUnit {
 
 impl Length {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LengthUnit) -> Self {
+    pub fn new(value: Num, unit: LengthUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -282,7 +283,7 @@ impl Length {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -290,12 +291,12 @@ impl Length {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LengthUnit) -> f64 {
+    pub fn convert_to(self, unit: LengthUnit) -> Num {
         let x = self.0;
         match unit {
             LengthUnit::Meter => x,
@@ -345,757 +346,757 @@ impl Length {
 
     /// Creates a [`Length`] from a value in Meters (`m`).
     #[inline]
-    pub fn from_meters(value: f64) -> Self {
+    pub fn from_meters(value: Num) -> Self {
         Self::new(value, LengthUnit::Meter)
     }
 
     /// Returns the value expressed in Meters (`m`).
     #[inline]
-    pub fn as_meters(self) -> f64 {
+    pub fn as_meters(self) -> Num {
         self.convert_to(LengthUnit::Meter)
     }
 
     /// Alias for [`Self::as_meters`].
     #[inline]
-    pub fn as_meter(self) -> f64 {
+    pub fn as_meter(self) -> Num {
         self.as_meters()
     }
 
     /// Creates a [`Length`] from a value in Femtometers (`fm`).
     #[inline]
-    pub fn from_femtometers(value: f64) -> Self {
+    pub fn from_femtometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Femtometer)
     }
 
     /// Returns the value expressed in Femtometers (`fm`).
     #[inline]
-    pub fn as_femtometers(self) -> f64 {
+    pub fn as_femtometers(self) -> Num {
         self.convert_to(LengthUnit::Femtometer)
     }
 
     /// Alias for [`Self::as_femtometers`].
     #[inline]
-    pub fn as_femtometer(self) -> f64 {
+    pub fn as_femtometer(self) -> Num {
         self.as_femtometers()
     }
 
     /// Creates a [`Length`] from a value in Picometers (`pm`).
     #[inline]
-    pub fn from_picometers(value: f64) -> Self {
+    pub fn from_picometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Picometer)
     }
 
     /// Returns the value expressed in Picometers (`pm`).
     #[inline]
-    pub fn as_picometers(self) -> f64 {
+    pub fn as_picometers(self) -> Num {
         self.convert_to(LengthUnit::Picometer)
     }
 
     /// Alias for [`Self::as_picometers`].
     #[inline]
-    pub fn as_picometer(self) -> f64 {
+    pub fn as_picometer(self) -> Num {
         self.as_picometers()
     }
 
     /// Creates a [`Length`] from a value in Nanometers (`nm`).
     #[inline]
-    pub fn from_nanometers(value: f64) -> Self {
+    pub fn from_nanometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Nanometer)
     }
 
     /// Returns the value expressed in Nanometers (`nm`).
     #[inline]
-    pub fn as_nanometers(self) -> f64 {
+    pub fn as_nanometers(self) -> Num {
         self.convert_to(LengthUnit::Nanometer)
     }
 
     /// Alias for [`Self::as_nanometers`].
     #[inline]
-    pub fn as_nanometer(self) -> f64 {
+    pub fn as_nanometer(self) -> Num {
         self.as_nanometers()
     }
 
     /// Creates a [`Length`] from a value in Micrometers (`µm`).
     #[inline]
-    pub fn from_micrometers(value: f64) -> Self {
+    pub fn from_micrometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Micrometer)
     }
 
     /// Returns the value expressed in Micrometers (`µm`).
     #[inline]
-    pub fn as_micrometers(self) -> f64 {
+    pub fn as_micrometers(self) -> Num {
         self.convert_to(LengthUnit::Micrometer)
     }
 
     /// Alias for [`Self::as_micrometers`].
     #[inline]
-    pub fn as_micrometer(self) -> f64 {
+    pub fn as_micrometer(self) -> Num {
         self.as_micrometers()
     }
 
     /// Creates a [`Length`] from a value in Millimeters (`mm`).
     #[inline]
-    pub fn from_millimeters(value: f64) -> Self {
+    pub fn from_millimeters(value: Num) -> Self {
         Self::new(value, LengthUnit::Millimeter)
     }
 
     /// Returns the value expressed in Millimeters (`mm`).
     #[inline]
-    pub fn as_millimeters(self) -> f64 {
+    pub fn as_millimeters(self) -> Num {
         self.convert_to(LengthUnit::Millimeter)
     }
 
     /// Alias for [`Self::as_millimeters`].
     #[inline]
-    pub fn as_millimeter(self) -> f64 {
+    pub fn as_millimeter(self) -> Num {
         self.as_millimeters()
     }
 
     /// Creates a [`Length`] from a value in Centimeters (`cm`).
     #[inline]
-    pub fn from_centimeters(value: f64) -> Self {
+    pub fn from_centimeters(value: Num) -> Self {
         Self::new(value, LengthUnit::Centimeter)
     }
 
     /// Returns the value expressed in Centimeters (`cm`).
     #[inline]
-    pub fn as_centimeters(self) -> f64 {
+    pub fn as_centimeters(self) -> Num {
         self.convert_to(LengthUnit::Centimeter)
     }
 
     /// Alias for [`Self::as_centimeters`].
     #[inline]
-    pub fn as_centimeter(self) -> f64 {
+    pub fn as_centimeter(self) -> Num {
         self.as_centimeters()
     }
 
     /// Creates a [`Length`] from a value in Decimeters (`dm`).
     #[inline]
-    pub fn from_decimeters(value: f64) -> Self {
+    pub fn from_decimeters(value: Num) -> Self {
         Self::new(value, LengthUnit::Decimeter)
     }
 
     /// Returns the value expressed in Decimeters (`dm`).
     #[inline]
-    pub fn as_decimeters(self) -> f64 {
+    pub fn as_decimeters(self) -> Num {
         self.convert_to(LengthUnit::Decimeter)
     }
 
     /// Alias for [`Self::as_decimeters`].
     #[inline]
-    pub fn as_decimeter(self) -> f64 {
+    pub fn as_decimeter(self) -> Num {
         self.as_decimeters()
     }
 
     /// Creates a [`Length`] from a value in Decameters (`dam`).
     #[inline]
-    pub fn from_decameters(value: f64) -> Self {
+    pub fn from_decameters(value: Num) -> Self {
         Self::new(value, LengthUnit::Decameter)
     }
 
     /// Returns the value expressed in Decameters (`dam`).
     #[inline]
-    pub fn as_decameters(self) -> f64 {
+    pub fn as_decameters(self) -> Num {
         self.convert_to(LengthUnit::Decameter)
     }
 
     /// Alias for [`Self::as_decameters`].
     #[inline]
-    pub fn as_decameter(self) -> f64 {
+    pub fn as_decameter(self) -> Num {
         self.as_decameters()
     }
 
     /// Creates a [`Length`] from a value in Hectometers (`hm`).
     #[inline]
-    pub fn from_hectometers(value: f64) -> Self {
+    pub fn from_hectometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Hectometer)
     }
 
     /// Returns the value expressed in Hectometers (`hm`).
     #[inline]
-    pub fn as_hectometers(self) -> f64 {
+    pub fn as_hectometers(self) -> Num {
         self.convert_to(LengthUnit::Hectometer)
     }
 
     /// Alias for [`Self::as_hectometers`].
     #[inline]
-    pub fn as_hectometer(self) -> f64 {
+    pub fn as_hectometer(self) -> Num {
         self.as_hectometers()
     }
 
     /// Creates a [`Length`] from a value in Kilometers (`km`).
     #[inline]
-    pub fn from_kilometers(value: f64) -> Self {
+    pub fn from_kilometers(value: Num) -> Self {
         Self::new(value, LengthUnit::Kilometer)
     }
 
     /// Returns the value expressed in Kilometers (`km`).
     #[inline]
-    pub fn as_kilometers(self) -> f64 {
+    pub fn as_kilometers(self) -> Num {
         self.convert_to(LengthUnit::Kilometer)
     }
 
     /// Alias for [`Self::as_kilometers`].
     #[inline]
-    pub fn as_kilometer(self) -> f64 {
+    pub fn as_kilometer(self) -> Num {
         self.as_kilometers()
     }
 
     /// Creates a [`Length`] from a value in Megameters (`Mm`).
     #[inline]
-    pub fn from_megameters(value: f64) -> Self {
+    pub fn from_megameters(value: Num) -> Self {
         Self::new(value, LengthUnit::Megameter)
     }
 
     /// Returns the value expressed in Megameters (`Mm`).
     #[inline]
-    pub fn as_megameters(self) -> f64 {
+    pub fn as_megameters(self) -> Num {
         self.convert_to(LengthUnit::Megameter)
     }
 
     /// Alias for [`Self::as_megameters`].
     #[inline]
-    pub fn as_megameter(self) -> f64 {
+    pub fn as_megameter(self) -> Num {
         self.as_megameters()
     }
 
     /// Creates a [`Length`] from a value in Gigameters (`Gm`).
     #[inline]
-    pub fn from_gigameters(value: f64) -> Self {
+    pub fn from_gigameters(value: Num) -> Self {
         Self::new(value, LengthUnit::Gigameter)
     }
 
     /// Returns the value expressed in Gigameters (`Gm`).
     #[inline]
-    pub fn as_gigameters(self) -> f64 {
+    pub fn as_gigameters(self) -> Num {
         self.convert_to(LengthUnit::Gigameter)
     }
 
     /// Alias for [`Self::as_gigameters`].
     #[inline]
-    pub fn as_gigameter(self) -> f64 {
+    pub fn as_gigameter(self) -> Num {
         self.as_gigameters()
     }
 
     /// Creates a [`Length`] from a value in Miles (`mi`).
     #[inline]
-    pub fn from_miles(value: f64) -> Self {
+    pub fn from_miles(value: Num) -> Self {
         Self::new(value, LengthUnit::Mile)
     }
 
     /// Returns the value expressed in Miles (`mi`).
     #[inline]
-    pub fn as_miles(self) -> f64 {
+    pub fn as_miles(self) -> Num {
         self.convert_to(LengthUnit::Mile)
     }
 
     /// Alias for [`Self::as_miles`].
     #[inline]
-    pub fn as_mile(self) -> f64 {
+    pub fn as_mile(self) -> Num {
         self.as_miles()
     }
 
     /// Creates a [`Length`] from a value in Yards (`yd`).
     #[inline]
-    pub fn from_yards(value: f64) -> Self {
+    pub fn from_yards(value: Num) -> Self {
         Self::new(value, LengthUnit::Yard)
     }
 
     /// Returns the value expressed in Yards (`yd`).
     #[inline]
-    pub fn as_yards(self) -> f64 {
+    pub fn as_yards(self) -> Num {
         self.convert_to(LengthUnit::Yard)
     }
 
     /// Alias for [`Self::as_yards`].
     #[inline]
-    pub fn as_yard(self) -> f64 {
+    pub fn as_yard(self) -> Num {
         self.as_yards()
     }
 
     /// Creates a [`Length`] from a value in Kiloyards (`kyd`).
     #[inline]
-    pub fn from_kiloyards(value: f64) -> Self {
+    pub fn from_kiloyards(value: Num) -> Self {
         Self::new(value, LengthUnit::Kiloyard)
     }
 
     /// Returns the value expressed in Kiloyards (`kyd`).
     #[inline]
-    pub fn as_kiloyards(self) -> f64 {
+    pub fn as_kiloyards(self) -> Num {
         self.convert_to(LengthUnit::Kiloyard)
     }
 
     /// Alias for [`Self::as_kiloyards`].
     #[inline]
-    pub fn as_kiloyard(self) -> f64 {
+    pub fn as_kiloyard(self) -> Num {
         self.as_kiloyards()
     }
 
     /// Creates a [`Length`] from a value in Feet (`ft`).
     #[inline]
-    pub fn from_feet(value: f64) -> Self {
+    pub fn from_feet(value: Num) -> Self {
         Self::new(value, LengthUnit::Foot)
     }
 
     /// Returns the value expressed in Feet (`ft`).
     #[inline]
-    pub fn as_feet(self) -> f64 {
+    pub fn as_feet(self) -> Num {
         self.convert_to(LengthUnit::Foot)
     }
 
     /// Alias for [`Self::as_feet`].
     #[inline]
-    pub fn as_foot(self) -> f64 {
+    pub fn as_foot(self) -> Num {
         self.as_feet()
     }
 
     /// Creates a [`Length`] from a value in Kilofeet (`kft`).
     #[inline]
-    pub fn from_kilofeet(value: f64) -> Self {
+    pub fn from_kilofeet(value: Num) -> Self {
         Self::new(value, LengthUnit::Kilofoot)
     }
 
     /// Returns the value expressed in Kilofeet (`kft`).
     #[inline]
-    pub fn as_kilofeet(self) -> f64 {
+    pub fn as_kilofeet(self) -> Num {
         self.convert_to(LengthUnit::Kilofoot)
     }
 
     /// Alias for [`Self::as_kilofeet`].
     #[inline]
-    pub fn as_kilofoot(self) -> f64 {
+    pub fn as_kilofoot(self) -> Num {
         self.as_kilofeet()
     }
 
     /// Creates a [`Length`] from a value in UsSurveyFeet (`ftUS`).
     #[inline]
-    pub fn from_us_survey_feet(value: f64) -> Self {
+    pub fn from_us_survey_feet(value: Num) -> Self {
         Self::new(value, LengthUnit::UsSurveyFoot)
     }
 
     /// Returns the value expressed in UsSurveyFeet (`ftUS`).
     #[inline]
-    pub fn as_us_survey_feet(self) -> f64 {
+    pub fn as_us_survey_feet(self) -> Num {
         self.convert_to(LengthUnit::UsSurveyFoot)
     }
 
     /// Alias for [`Self::as_us_survey_feet`].
     #[inline]
-    pub fn as_us_survey_foot(self) -> f64 {
+    pub fn as_us_survey_foot(self) -> Num {
         self.as_us_survey_feet()
     }
 
     /// Creates a [`Length`] from a value in Inches (`in`).
     #[inline]
-    pub fn from_inches(value: f64) -> Self {
+    pub fn from_inches(value: Num) -> Self {
         Self::new(value, LengthUnit::Inch)
     }
 
     /// Returns the value expressed in Inches (`in`).
     #[inline]
-    pub fn as_inches(self) -> f64 {
+    pub fn as_inches(self) -> Num {
         self.convert_to(LengthUnit::Inch)
     }
 
     /// Alias for [`Self::as_inches`].
     #[inline]
-    pub fn as_inch(self) -> f64 {
+    pub fn as_inch(self) -> Num {
         self.as_inches()
     }
 
     /// Creates a [`Length`] from a value in Mils (`mil`).
     #[inline]
-    pub fn from_mils(value: f64) -> Self {
+    pub fn from_mils(value: Num) -> Self {
         Self::new(value, LengthUnit::Mil)
     }
 
     /// Returns the value expressed in Mils (`mil`).
     #[inline]
-    pub fn as_mils(self) -> f64 {
+    pub fn as_mils(self) -> Num {
         self.convert_to(LengthUnit::Mil)
     }
 
     /// Alias for [`Self::as_mils`].
     #[inline]
-    pub fn as_mil(self) -> f64 {
+    pub fn as_mil(self) -> Num {
         self.as_mils()
     }
 
     /// Creates a [`Length`] from a value in NauticalMiles (`NM`).
     #[inline]
-    pub fn from_nautical_miles(value: f64) -> Self {
+    pub fn from_nautical_miles(value: Num) -> Self {
         Self::new(value, LengthUnit::NauticalMile)
     }
 
     /// Returns the value expressed in NauticalMiles (`NM`).
     #[inline]
-    pub fn as_nautical_miles(self) -> f64 {
+    pub fn as_nautical_miles(self) -> Num {
         self.convert_to(LengthUnit::NauticalMile)
     }
 
     /// Alias for [`Self::as_nautical_miles`].
     #[inline]
-    pub fn as_nautical_mile(self) -> f64 {
+    pub fn as_nautical_mile(self) -> Num {
         self.as_nautical_miles()
     }
 
     /// Creates a [`Length`] from a value in Fathoms (`fathom`).
     #[inline]
-    pub fn from_fathoms(value: f64) -> Self {
+    pub fn from_fathoms(value: Num) -> Self {
         Self::new(value, LengthUnit::Fathom)
     }
 
     /// Returns the value expressed in Fathoms (`fathom`).
     #[inline]
-    pub fn as_fathoms(self) -> f64 {
+    pub fn as_fathoms(self) -> Num {
         self.convert_to(LengthUnit::Fathom)
     }
 
     /// Alias for [`Self::as_fathoms`].
     #[inline]
-    pub fn as_fathom(self) -> f64 {
+    pub fn as_fathom(self) -> Num {
         self.as_fathoms()
     }
 
     /// Creates a [`Length`] from a value in Shackles (`shackle`).
     #[inline]
-    pub fn from_shackles(value: f64) -> Self {
+    pub fn from_shackles(value: Num) -> Self {
         Self::new(value, LengthUnit::Shackle)
     }
 
     /// Returns the value expressed in Shackles (`shackle`).
     #[inline]
-    pub fn as_shackles(self) -> f64 {
+    pub fn as_shackles(self) -> Num {
         self.convert_to(LengthUnit::Shackle)
     }
 
     /// Alias for [`Self::as_shackles`].
     #[inline]
-    pub fn as_shackle(self) -> f64 {
+    pub fn as_shackle(self) -> Num {
         self.as_shackles()
     }
 
     /// Creates a [`Length`] from a value in Microinches (`µin`).
     #[inline]
-    pub fn from_microinches(value: f64) -> Self {
+    pub fn from_microinches(value: Num) -> Self {
         Self::new(value, LengthUnit::Microinch)
     }
 
     /// Returns the value expressed in Microinches (`µin`).
     #[inline]
-    pub fn as_microinches(self) -> f64 {
+    pub fn as_microinches(self) -> Num {
         self.convert_to(LengthUnit::Microinch)
     }
 
     /// Alias for [`Self::as_microinches`].
     #[inline]
-    pub fn as_microinch(self) -> f64 {
+    pub fn as_microinch(self) -> Num {
         self.as_microinches()
     }
 
     /// Creates a [`Length`] from a value in PrinterPoints (`pt`).
     #[inline]
-    pub fn from_printer_points(value: f64) -> Self {
+    pub fn from_printer_points(value: Num) -> Self {
         Self::new(value, LengthUnit::PrinterPoint)
     }
 
     /// Returns the value expressed in PrinterPoints (`pt`).
     #[inline]
-    pub fn as_printer_points(self) -> f64 {
+    pub fn as_printer_points(self) -> Num {
         self.convert_to(LengthUnit::PrinterPoint)
     }
 
     /// Alias for [`Self::as_printer_points`].
     #[inline]
-    pub fn as_printer_point(self) -> f64 {
+    pub fn as_printer_point(self) -> Num {
         self.as_printer_points()
     }
 
     /// Creates a [`Length`] from a value in DtpPoints (`pt`).
     #[inline]
-    pub fn from_dtp_points(value: f64) -> Self {
+    pub fn from_dtp_points(value: Num) -> Self {
         Self::new(value, LengthUnit::DtpPoint)
     }
 
     /// Returns the value expressed in DtpPoints (`pt`).
     #[inline]
-    pub fn as_dtp_points(self) -> f64 {
+    pub fn as_dtp_points(self) -> Num {
         self.convert_to(LengthUnit::DtpPoint)
     }
 
     /// Alias for [`Self::as_dtp_points`].
     #[inline]
-    pub fn as_dtp_point(self) -> f64 {
+    pub fn as_dtp_point(self) -> Num {
         self.as_dtp_points()
     }
 
     /// Creates a [`Length`] from a value in PrinterPicas (`pica`).
     #[inline]
-    pub fn from_printer_picas(value: f64) -> Self {
+    pub fn from_printer_picas(value: Num) -> Self {
         Self::new(value, LengthUnit::PrinterPica)
     }
 
     /// Returns the value expressed in PrinterPicas (`pica`).
     #[inline]
-    pub fn as_printer_picas(self) -> f64 {
+    pub fn as_printer_picas(self) -> Num {
         self.convert_to(LengthUnit::PrinterPica)
     }
 
     /// Alias for [`Self::as_printer_picas`].
     #[inline]
-    pub fn as_printer_pica(self) -> f64 {
+    pub fn as_printer_pica(self) -> Num {
         self.as_printer_picas()
     }
 
     /// Creates a [`Length`] from a value in DtpPicas (`pica`).
     #[inline]
-    pub fn from_dtp_picas(value: f64) -> Self {
+    pub fn from_dtp_picas(value: Num) -> Self {
         Self::new(value, LengthUnit::DtpPica)
     }
 
     /// Returns the value expressed in DtpPicas (`pica`).
     #[inline]
-    pub fn as_dtp_picas(self) -> f64 {
+    pub fn as_dtp_picas(self) -> Num {
         self.convert_to(LengthUnit::DtpPica)
     }
 
     /// Alias for [`Self::as_dtp_picas`].
     #[inline]
-    pub fn as_dtp_pica(self) -> f64 {
+    pub fn as_dtp_pica(self) -> Num {
         self.as_dtp_picas()
     }
 
     /// Creates a [`Length`] from a value in Twips (`twip`).
     #[inline]
-    pub fn from_twips(value: f64) -> Self {
+    pub fn from_twips(value: Num) -> Self {
         Self::new(value, LengthUnit::Twip)
     }
 
     /// Returns the value expressed in Twips (`twip`).
     #[inline]
-    pub fn as_twips(self) -> f64 {
+    pub fn as_twips(self) -> Num {
         self.convert_to(LengthUnit::Twip)
     }
 
     /// Alias for [`Self::as_twips`].
     #[inline]
-    pub fn as_twip(self) -> f64 {
+    pub fn as_twip(self) -> Num {
         self.as_twips()
     }
 
     /// Creates a [`Length`] from a value in Hands (`h`).
     #[inline]
-    pub fn from_hands(value: f64) -> Self {
+    pub fn from_hands(value: Num) -> Self {
         Self::new(value, LengthUnit::Hand)
     }
 
     /// Returns the value expressed in Hands (`h`).
     #[inline]
-    pub fn as_hands(self) -> f64 {
+    pub fn as_hands(self) -> Num {
         self.convert_to(LengthUnit::Hand)
     }
 
     /// Alias for [`Self::as_hands`].
     #[inline]
-    pub fn as_hand(self) -> f64 {
+    pub fn as_hand(self) -> Num {
         self.as_hands()
     }
 
     /// Creates a [`Length`] from a value in AstronomicalUnits (`au`).
     #[inline]
-    pub fn from_astronomical_units(value: f64) -> Self {
+    pub fn from_astronomical_units(value: Num) -> Self {
         Self::new(value, LengthUnit::AstronomicalUnit)
     }
 
     /// Returns the value expressed in AstronomicalUnits (`au`).
     #[inline]
-    pub fn as_astronomical_units(self) -> f64 {
+    pub fn as_astronomical_units(self) -> Num {
         self.convert_to(LengthUnit::AstronomicalUnit)
     }
 
     /// Alias for [`Self::as_astronomical_units`].
     #[inline]
-    pub fn as_astronomical_unit(self) -> f64 {
+    pub fn as_astronomical_unit(self) -> Num {
         self.as_astronomical_units()
     }
 
     /// Creates a [`Length`] from a value in Parsecs (`pc`).
     #[inline]
-    pub fn from_parsecs(value: f64) -> Self {
+    pub fn from_parsecs(value: Num) -> Self {
         Self::new(value, LengthUnit::Parsec)
     }
 
     /// Returns the value expressed in Parsecs (`pc`).
     #[inline]
-    pub fn as_parsecs(self) -> f64 {
+    pub fn as_parsecs(self) -> Num {
         self.convert_to(LengthUnit::Parsec)
     }
 
     /// Alias for [`Self::as_parsecs`].
     #[inline]
-    pub fn as_parsec(self) -> f64 {
+    pub fn as_parsec(self) -> Num {
         self.as_parsecs()
     }
 
     /// Creates a [`Length`] from a value in Kiloparsecs (`kpc`).
     #[inline]
-    pub fn from_kiloparsecs(value: f64) -> Self {
+    pub fn from_kiloparsecs(value: Num) -> Self {
         Self::new(value, LengthUnit::Kiloparsec)
     }
 
     /// Returns the value expressed in Kiloparsecs (`kpc`).
     #[inline]
-    pub fn as_kiloparsecs(self) -> f64 {
+    pub fn as_kiloparsecs(self) -> Num {
         self.convert_to(LengthUnit::Kiloparsec)
     }
 
     /// Alias for [`Self::as_kiloparsecs`].
     #[inline]
-    pub fn as_kiloparsec(self) -> f64 {
+    pub fn as_kiloparsec(self) -> Num {
         self.as_kiloparsecs()
     }
 
     /// Creates a [`Length`] from a value in Megaparsecs (`Mpc`).
     #[inline]
-    pub fn from_megaparsecs(value: f64) -> Self {
+    pub fn from_megaparsecs(value: Num) -> Self {
         Self::new(value, LengthUnit::Megaparsec)
     }
 
     /// Returns the value expressed in Megaparsecs (`Mpc`).
     #[inline]
-    pub fn as_megaparsecs(self) -> f64 {
+    pub fn as_megaparsecs(self) -> Num {
         self.convert_to(LengthUnit::Megaparsec)
     }
 
     /// Alias for [`Self::as_megaparsecs`].
     #[inline]
-    pub fn as_megaparsec(self) -> f64 {
+    pub fn as_megaparsec(self) -> Num {
         self.as_megaparsecs()
     }
 
     /// Creates a [`Length`] from a value in LightYears (`ly`).
     #[inline]
-    pub fn from_light_years(value: f64) -> Self {
+    pub fn from_light_years(value: Num) -> Self {
         Self::new(value, LengthUnit::LightYear)
     }
 
     /// Returns the value expressed in LightYears (`ly`).
     #[inline]
-    pub fn as_light_years(self) -> f64 {
+    pub fn as_light_years(self) -> Num {
         self.convert_to(LengthUnit::LightYear)
     }
 
     /// Alias for [`Self::as_light_years`].
     #[inline]
-    pub fn as_light_year(self) -> f64 {
+    pub fn as_light_year(self) -> Num {
         self.as_light_years()
     }
 
     /// Creates a [`Length`] from a value in KilolightYears (`kly`).
     #[inline]
-    pub fn from_kilolight_years(value: f64) -> Self {
+    pub fn from_kilolight_years(value: Num) -> Self {
         Self::new(value, LengthUnit::KilolightYear)
     }
 
     /// Returns the value expressed in KilolightYears (`kly`).
     #[inline]
-    pub fn as_kilolight_years(self) -> f64 {
+    pub fn as_kilolight_years(self) -> Num {
         self.convert_to(LengthUnit::KilolightYear)
     }
 
     /// Alias for [`Self::as_kilolight_years`].
     #[inline]
-    pub fn as_kilolight_year(self) -> f64 {
+    pub fn as_kilolight_year(self) -> Num {
         self.as_kilolight_years()
     }
 
     /// Creates a [`Length`] from a value in MegalightYears (`Mly`).
     #[inline]
-    pub fn from_megalight_years(value: f64) -> Self {
+    pub fn from_megalight_years(value: Num) -> Self {
         Self::new(value, LengthUnit::MegalightYear)
     }
 
     /// Returns the value expressed in MegalightYears (`Mly`).
     #[inline]
-    pub fn as_megalight_years(self) -> f64 {
+    pub fn as_megalight_years(self) -> Num {
         self.convert_to(LengthUnit::MegalightYear)
     }
 
     /// Alias for [`Self::as_megalight_years`].
     #[inline]
-    pub fn as_megalight_year(self) -> f64 {
+    pub fn as_megalight_year(self) -> Num {
         self.as_megalight_years()
     }
 
     /// Creates a [`Length`] from a value in SolarRadiuses (`R⊙`).
     #[inline]
-    pub fn from_solar_radiuses(value: f64) -> Self {
+    pub fn from_solar_radiuses(value: Num) -> Self {
         Self::new(value, LengthUnit::SolarRadius)
     }
 
     /// Returns the value expressed in SolarRadiuses (`R⊙`).
     #[inline]
-    pub fn as_solar_radiuses(self) -> f64 {
+    pub fn as_solar_radiuses(self) -> Num {
         self.convert_to(LengthUnit::SolarRadius)
     }
 
     /// Alias for [`Self::as_solar_radiuses`].
     #[inline]
-    pub fn as_solar_radius(self) -> f64 {
+    pub fn as_solar_radius(self) -> Num {
         self.as_solar_radiuses()
     }
 
     /// Creates a [`Length`] from a value in Chains (`ch`).
     #[inline]
-    pub fn from_chains(value: f64) -> Self {
+    pub fn from_chains(value: Num) -> Self {
         Self::new(value, LengthUnit::Chain)
     }
 
     /// Returns the value expressed in Chains (`ch`).
     #[inline]
-    pub fn as_chains(self) -> f64 {
+    pub fn as_chains(self) -> Num {
         self.convert_to(LengthUnit::Chain)
     }
 
     /// Alias for [`Self::as_chains`].
     #[inline]
-    pub fn as_chain(self) -> f64 {
+    pub fn as_chain(self) -> Num {
         self.as_chains()
     }
 
     /// Creates a [`Length`] from a value in Angstroms (`Å`).
     #[inline]
-    pub fn from_angstroms(value: f64) -> Self {
+    pub fn from_angstroms(value: Num) -> Self {
         Self::new(value, LengthUnit::Angstrom)
     }
 
     /// Returns the value expressed in Angstroms (`Å`).
     #[inline]
-    pub fn as_angstroms(self) -> f64 {
+    pub fn as_angstroms(self) -> Num {
         self.convert_to(LengthUnit::Angstrom)
     }
 
     /// Alias for [`Self::as_angstroms`].
     #[inline]
-    pub fn as_angstrom(self) -> f64 {
+    pub fn as_angstrom(self) -> Num {
         self.as_angstroms()
     }
 
     /// Creates a [`Length`] from a value in DataMiles (`DM`).
     #[inline]
-    pub fn from_data_miles(value: f64) -> Self {
+    pub fn from_data_miles(value: Num) -> Self {
         Self::new(value, LengthUnit::DataMile)
     }
 
     /// Returns the value expressed in DataMiles (`DM`).
     #[inline]
-    pub fn as_data_miles(self) -> f64 {
+    pub fn as_data_miles(self) -> Num {
         self.convert_to(LengthUnit::DataMile)
     }
 
     /// Alias for [`Self::as_data_miles`].
     #[inline]
-    pub fn as_data_mile(self) -> f64 {
+    pub fn as_data_mile(self) -> Num {
         self.as_data_miles()
     }
 }
@@ -1118,27 +1119,27 @@ impl Neg for Length {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Length {
+impl Mul<Num> for Length {
     type Output = Length;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Length> for f64 {
+impl Mul<Length> for Num {
     type Output = Length;
     fn mul(self, rhs: Length) -> Length {
         Length(self * rhs.0)
     }
 }
-impl Div<f64> for Length {
+impl Div<Num> for Length {
     type Output = Length;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Length {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1172,7 +1173,7 @@ impl FromStr for Length {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLengthError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Decibel` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Level(f64);
+pub struct Level(Num);
 
 /// Unit variants for [`Level`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -48,7 +49,7 @@ impl LevelUnit {
 
 impl Level {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LevelUnit) -> Self {
+    pub fn new(value: Num, unit: LevelUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -61,7 +62,7 @@ impl Level {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -69,12 +70,12 @@ impl Level {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LevelUnit) -> f64 {
+    pub fn convert_to(self, unit: LevelUnit) -> Num {
         let x = self.0;
         match unit {
             LevelUnit::Decibel => x,
@@ -84,37 +85,37 @@ impl Level {
 
     /// Creates a [`Level`] from a value in Decibels (`dB`).
     #[inline]
-    pub fn from_decibels(value: f64) -> Self {
+    pub fn from_decibels(value: Num) -> Self {
         Self::new(value, LevelUnit::Decibel)
     }
 
     /// Returns the value expressed in Decibels (`dB`).
     #[inline]
-    pub fn as_decibels(self) -> f64 {
+    pub fn as_decibels(self) -> Num {
         self.convert_to(LevelUnit::Decibel)
     }
 
     /// Alias for [`Self::as_decibels`].
     #[inline]
-    pub fn as_decibel(self) -> f64 {
+    pub fn as_decibel(self) -> Num {
         self.as_decibels()
     }
 
     /// Creates a [`Level`] from a value in Nepers (`Np`).
     #[inline]
-    pub fn from_nepers(value: f64) -> Self {
+    pub fn from_nepers(value: Num) -> Self {
         Self::new(value, LevelUnit::Neper)
     }
 
     /// Returns the value expressed in Nepers (`Np`).
     #[inline]
-    pub fn as_nepers(self) -> f64 {
+    pub fn as_nepers(self) -> Num {
         self.convert_to(LevelUnit::Neper)
     }
 
     /// Alias for [`Self::as_nepers`].
     #[inline]
-    pub fn as_neper(self) -> f64 {
+    pub fn as_neper(self) -> Num {
         self.as_nepers()
     }
 }
@@ -137,27 +138,27 @@ impl Neg for Level {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Level {
+impl Mul<Num> for Level {
     type Output = Level;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Level> for f64 {
+impl Mul<Level> for Num {
     type Output = Level;
     fn mul(self, rhs: Level) -> Level {
         Level(self * rhs.0)
     }
 }
-impl Div<f64> for Level {
+impl Div<Num> for Level {
     type Output = Level;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Level {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -191,7 +192,7 @@ impl FromStr for Level {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLevelError(s.to_owned()))?;

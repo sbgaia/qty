@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `KilogramPerCubicMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Density(f64);
+pub struct Density(Num);
 
 /// Unit variants for [`Density`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -268,7 +269,7 @@ impl DensityUnit {
 
 impl Density {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: DensityUnit) -> Self {
+    pub fn new(value: Num, unit: DensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -335,7 +336,7 @@ impl Density {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -343,12 +344,12 @@ impl Density {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: DensityUnit) -> f64 {
+    pub fn convert_to(self, unit: DensityUnit) -> Num {
         let x = self.0;
         match unit {
             DensityUnit::GramPerCubicMillimeter => x * 1e-6,
@@ -412,1009 +413,1009 @@ impl Density {
 
     /// Creates a [`Density`] from a value in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn from_grams_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerCubicMillimeter)
     }
 
     /// Returns the value expressed in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn as_grams_per_cubic_millimeter(self) -> f64 {
+    pub fn as_grams_per_cubic_millimeter(self) -> Num {
         self.convert_to(DensityUnit::GramPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_millimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_millimeter(self) -> f64 {
+    pub fn as_gram_per_cubic_millimeter(self) -> Num {
         self.as_grams_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::KilogramPerCubicMillimeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_millimeter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_millimeter(self) -> Num {
         self.convert_to(DensityUnit::KilogramPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_millimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_millimeter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_millimeter(self) -> Num {
         self.as_kilograms_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn from_grams_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerCubicCentimeter)
     }
 
     /// Returns the value expressed in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn as_grams_per_cubic_centimeter(self) -> f64 {
+    pub fn as_grams_per_cubic_centimeter(self) -> Num {
         self.convert_to(DensityUnit::GramPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_centimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_centimeter(self) -> f64 {
+    pub fn as_gram_per_cubic_centimeter(self) -> Num {
         self.as_grams_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::KilogramPerCubicCentimeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_centimeter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_centimeter(self) -> Num {
         self.convert_to(DensityUnit::KilogramPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_centimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_centimeter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_centimeter(self) -> Num {
         self.as_kilograms_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn from_grams_per_cubic_meter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerCubicMeter)
     }
 
     /// Returns the value expressed in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn as_grams_per_cubic_meter(self) -> f64 {
+    pub fn as_grams_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::GramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_meter`].
     #[inline]
-    pub fn as_gram_per_cubic_meter(self) -> f64 {
+    pub fn as_gram_per_cubic_meter(self) -> Num {
         self.as_grams_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_meter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::KilogramPerCubicMeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_meter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::KilogramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_meter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_meter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_meter(self) -> Num {
         self.as_kilograms_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn from_milligrams_per_cubic_meter(value: f64) -> Self {
+    pub fn from_milligrams_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::MilligramPerCubicMeter)
     }
 
     /// Returns the value expressed in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn as_milligrams_per_cubic_meter(self) -> f64 {
+    pub fn as_milligrams_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::MilligramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_milligrams_per_cubic_meter`].
     #[inline]
-    pub fn as_milligram_per_cubic_meter(self) -> f64 {
+    pub fn as_milligram_per_cubic_meter(self) -> Num {
         self.as_milligrams_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn from_micrograms_per_cubic_meter(value: f64) -> Self {
+    pub fn from_micrograms_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::MicrogramPerCubicMeter)
     }
 
     /// Returns the value expressed in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn as_micrograms_per_cubic_meter(self) -> f64 {
+    pub fn as_micrograms_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::MicrogramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_micrograms_per_cubic_meter`].
     #[inline]
-    pub fn as_microgram_per_cubic_meter(self) -> f64 {
+    pub fn as_microgram_per_cubic_meter(self) -> Num {
         self.as_micrograms_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn from_pounds_per_cubic_inch(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_inch(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicInch)
     }
 
     /// Returns the value expressed in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn as_pounds_per_cubic_inch(self) -> f64 {
+    pub fn as_pounds_per_cubic_inch(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicInch)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_inch`].
     #[inline]
-    pub fn as_pound_per_cubic_inch(self) -> f64 {
+    pub fn as_pound_per_cubic_inch(self) -> Num {
         self.as_pounds_per_cubic_inch()
     }
 
     /// Creates a [`Density`] from a value in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_inch(value: f64) -> Self {
+    pub fn from_kilopounds_per_cubic_inch(value: Num) -> Self {
         Self::new(value, DensityUnit::KilopoundPerCubicInch)
     }
 
     /// Returns the value expressed in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_inch(self) -> f64 {
+    pub fn as_kilopounds_per_cubic_inch(self) -> Num {
         self.convert_to(DensityUnit::KilopoundPerCubicInch)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_inch`].
     #[inline]
-    pub fn as_kilopound_per_cubic_inch(self) -> f64 {
+    pub fn as_kilopound_per_cubic_inch(self) -> Num {
         self.as_kilopounds_per_cubic_inch()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn from_pounds_per_cubic_foot(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_foot(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicFoot)
     }
 
     /// Returns the value expressed in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn as_pounds_per_cubic_foot(self) -> f64 {
+    pub fn as_pounds_per_cubic_foot(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicFoot)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_foot`].
     #[inline]
-    pub fn as_pound_per_cubic_foot(self) -> f64 {
+    pub fn as_pound_per_cubic_foot(self) -> Num {
         self.as_pounds_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_foot(value: f64) -> Self {
+    pub fn from_kilopounds_per_cubic_foot(value: Num) -> Self {
         Self::new(value, DensityUnit::KilopoundPerCubicFoot)
     }
 
     /// Returns the value expressed in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_foot(self) -> f64 {
+    pub fn as_kilopounds_per_cubic_foot(self) -> Num {
         self.convert_to(DensityUnit::KilopoundPerCubicFoot)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_foot`].
     #[inline]
-    pub fn as_kilopound_per_cubic_foot(self) -> f64 {
+    pub fn as_kilopound_per_cubic_foot(self) -> Num {
         self.as_kilopounds_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicYard (`lb/yd³`).
     #[inline]
-    pub fn from_pounds_per_cubic_yard(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_yard(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicYard)
     }
 
     /// Returns the value expressed in PoundsPerCubicYard (`lb/yd³`).
     #[inline]
-    pub fn as_pounds_per_cubic_yard(self) -> f64 {
+    pub fn as_pounds_per_cubic_yard(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicYard)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_yard`].
     #[inline]
-    pub fn as_pound_per_cubic_yard(self) -> f64 {
+    pub fn as_pound_per_cubic_yard(self) -> Num {
         self.as_pounds_per_cubic_yard()
     }
 
     /// Creates a [`Density`] from a value in KilopoundsPerCubicYard (`klb/yd³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_yard(value: f64) -> Self {
+    pub fn from_kilopounds_per_cubic_yard(value: Num) -> Self {
         Self::new(value, DensityUnit::KilopoundPerCubicYard)
     }
 
     /// Returns the value expressed in KilopoundsPerCubicYard (`klb/yd³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_yard(self) -> f64 {
+    pub fn as_kilopounds_per_cubic_yard(self) -> Num {
         self.convert_to(DensityUnit::KilopoundPerCubicYard)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_yard`].
     #[inline]
-    pub fn as_kilopound_per_cubic_yard(self) -> f64 {
+    pub fn as_kilopound_per_cubic_yard(self) -> Num {
         self.as_kilopounds_per_cubic_yard()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::TonnePerCubicMillimeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_millimeter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_millimeter(self) -> Num {
         self.convert_to(DensityUnit::TonnePerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_millimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_millimeter(self) -> f64 {
+    pub fn as_tonne_per_cubic_millimeter(self) -> Num {
         self.as_tonnes_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::TonnePerCubicCentimeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_centimeter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_centimeter(self) -> Num {
         self.convert_to(DensityUnit::TonnePerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_centimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_centimeter(self) -> f64 {
+    pub fn as_tonne_per_cubic_centimeter(self) -> Num {
         self.as_tonnes_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_meter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::TonnePerCubicMeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_meter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::TonnePerCubicMeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_meter`].
     #[inline]
-    pub fn as_tonne_per_cubic_meter(self) -> f64 {
+    pub fn as_tonne_per_cubic_meter(self) -> Num {
         self.as_tonnes_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn from_slugs_per_cubic_foot(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_foot(value: Num) -> Self {
         Self::new(value, DensityUnit::SlugPerCubicFoot)
     }
 
     /// Returns the value expressed in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn as_slugs_per_cubic_foot(self) -> f64 {
+    pub fn as_slugs_per_cubic_foot(self) -> Num {
         self.convert_to(DensityUnit::SlugPerCubicFoot)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_foot`].
     #[inline]
-    pub fn as_slug_per_cubic_foot(self) -> f64 {
+    pub fn as_slug_per_cubic_foot(self) -> Num {
         self.as_slugs_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn from_grams_per_liter(value: f64) -> Self {
+    pub fn from_grams_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerLiter)
     }
 
     /// Returns the value expressed in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn as_grams_per_liter(self) -> f64 {
+    pub fn as_grams_per_liter(self) -> Num {
         self.convert_to(DensityUnit::GramPerLiter)
     }
 
     /// Alias for [`Self::as_grams_per_liter`].
     #[inline]
-    pub fn as_gram_per_liter(self) -> f64 {
+    pub fn as_gram_per_liter(self) -> Num {
         self.as_grams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in FemtogramsPerLiter (`fg/l`).
     #[inline]
-    pub fn from_femtograms_per_liter(value: f64) -> Self {
+    pub fn from_femtograms_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::FemtogramPerLiter)
     }
 
     /// Returns the value expressed in FemtogramsPerLiter (`fg/l`).
     #[inline]
-    pub fn as_femtograms_per_liter(self) -> f64 {
+    pub fn as_femtograms_per_liter(self) -> Num {
         self.convert_to(DensityUnit::FemtogramPerLiter)
     }
 
     /// Alias for [`Self::as_femtograms_per_liter`].
     #[inline]
-    pub fn as_femtogram_per_liter(self) -> f64 {
+    pub fn as_femtogram_per_liter(self) -> Num {
         self.as_femtograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn from_picograms_per_liter(value: f64) -> Self {
+    pub fn from_picograms_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::PicogramPerLiter)
     }
 
     /// Returns the value expressed in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn as_picograms_per_liter(self) -> f64 {
+    pub fn as_picograms_per_liter(self) -> Num {
         self.convert_to(DensityUnit::PicogramPerLiter)
     }
 
     /// Alias for [`Self::as_picograms_per_liter`].
     #[inline]
-    pub fn as_picogram_per_liter(self) -> f64 {
+    pub fn as_picogram_per_liter(self) -> Num {
         self.as_picograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn from_nanograms_per_liter(value: f64) -> Self {
+    pub fn from_nanograms_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::NanogramPerLiter)
     }
 
     /// Returns the value expressed in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn as_nanograms_per_liter(self) -> f64 {
+    pub fn as_nanograms_per_liter(self) -> Num {
         self.convert_to(DensityUnit::NanogramPerLiter)
     }
 
     /// Alias for [`Self::as_nanograms_per_liter`].
     #[inline]
-    pub fn as_nanogram_per_liter(self) -> f64 {
+    pub fn as_nanogram_per_liter(self) -> Num {
         self.as_nanograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn from_micrograms_per_liter(value: f64) -> Self {
+    pub fn from_micrograms_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::MicrogramPerLiter)
     }
 
     /// Returns the value expressed in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn as_micrograms_per_liter(self) -> f64 {
+    pub fn as_micrograms_per_liter(self) -> Num {
         self.convert_to(DensityUnit::MicrogramPerLiter)
     }
 
     /// Alias for [`Self::as_micrograms_per_liter`].
     #[inline]
-    pub fn as_microgram_per_liter(self) -> f64 {
+    pub fn as_microgram_per_liter(self) -> Num {
         self.as_micrograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn from_milligrams_per_liter(value: f64) -> Self {
+    pub fn from_milligrams_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::MilligramPerLiter)
     }
 
     /// Returns the value expressed in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn as_milligrams_per_liter(self) -> f64 {
+    pub fn as_milligrams_per_liter(self) -> Num {
         self.convert_to(DensityUnit::MilligramPerLiter)
     }
 
     /// Alias for [`Self::as_milligrams_per_liter`].
     #[inline]
-    pub fn as_milligram_per_liter(self) -> f64 {
+    pub fn as_milligram_per_liter(self) -> Num {
         self.as_milligrams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn from_centigrams_per_liter(value: f64) -> Self {
+    pub fn from_centigrams_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::CentigramPerLiter)
     }
 
     /// Returns the value expressed in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn as_centigrams_per_liter(self) -> f64 {
+    pub fn as_centigrams_per_liter(self) -> Num {
         self.convert_to(DensityUnit::CentigramPerLiter)
     }
 
     /// Alias for [`Self::as_centigrams_per_liter`].
     #[inline]
-    pub fn as_centigram_per_liter(self) -> f64 {
+    pub fn as_centigram_per_liter(self) -> Num {
         self.as_centigrams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn from_decigrams_per_liter(value: f64) -> Self {
+    pub fn from_decigrams_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::DecigramPerLiter)
     }
 
     /// Returns the value expressed in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn as_decigrams_per_liter(self) -> f64 {
+    pub fn as_decigrams_per_liter(self) -> Num {
         self.convert_to(DensityUnit::DecigramPerLiter)
     }
 
     /// Alias for [`Self::as_decigrams_per_liter`].
     #[inline]
-    pub fn as_decigram_per_liter(self) -> f64 {
+    pub fn as_decigram_per_liter(self) -> Num {
         self.as_decigrams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn from_grams_per_deciliter(value: f64) -> Self {
+    pub fn from_grams_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerDeciliter)
     }
 
     /// Returns the value expressed in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn as_grams_per_deciliter(self) -> f64 {
+    pub fn as_grams_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::GramPerDeciliter)
     }
 
     /// Alias for [`Self::as_grams_per_deciliter`].
     #[inline]
-    pub fn as_gram_per_deciliter(self) -> f64 {
+    pub fn as_gram_per_deciliter(self) -> Num {
         self.as_grams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in FemtogramsPerDeciliter (`fg/dl`).
     #[inline]
-    pub fn from_femtograms_per_deciliter(value: f64) -> Self {
+    pub fn from_femtograms_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::FemtogramPerDeciliter)
     }
 
     /// Returns the value expressed in FemtogramsPerDeciliter (`fg/dl`).
     #[inline]
-    pub fn as_femtograms_per_deciliter(self) -> f64 {
+    pub fn as_femtograms_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::FemtogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_femtograms_per_deciliter`].
     #[inline]
-    pub fn as_femtogram_per_deciliter(self) -> f64 {
+    pub fn as_femtogram_per_deciliter(self) -> Num {
         self.as_femtograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn from_picograms_per_deciliter(value: f64) -> Self {
+    pub fn from_picograms_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::PicogramPerDeciliter)
     }
 
     /// Returns the value expressed in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn as_picograms_per_deciliter(self) -> f64 {
+    pub fn as_picograms_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::PicogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_picograms_per_deciliter`].
     #[inline]
-    pub fn as_picogram_per_deciliter(self) -> f64 {
+    pub fn as_picogram_per_deciliter(self) -> Num {
         self.as_picograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn from_nanograms_per_deciliter(value: f64) -> Self {
+    pub fn from_nanograms_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::NanogramPerDeciliter)
     }
 
     /// Returns the value expressed in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn as_nanograms_per_deciliter(self) -> f64 {
+    pub fn as_nanograms_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::NanogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_nanograms_per_deciliter`].
     #[inline]
-    pub fn as_nanogram_per_deciliter(self) -> f64 {
+    pub fn as_nanogram_per_deciliter(self) -> Num {
         self.as_nanograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn from_micrograms_per_deciliter(value: f64) -> Self {
+    pub fn from_micrograms_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::MicrogramPerDeciliter)
     }
 
     /// Returns the value expressed in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn as_micrograms_per_deciliter(self) -> f64 {
+    pub fn as_micrograms_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::MicrogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_micrograms_per_deciliter`].
     #[inline]
-    pub fn as_microgram_per_deciliter(self) -> f64 {
+    pub fn as_microgram_per_deciliter(self) -> Num {
         self.as_micrograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn from_milligrams_per_deciliter(value: f64) -> Self {
+    pub fn from_milligrams_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::MilligramPerDeciliter)
     }
 
     /// Returns the value expressed in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn as_milligrams_per_deciliter(self) -> f64 {
+    pub fn as_milligrams_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::MilligramPerDeciliter)
     }
 
     /// Alias for [`Self::as_milligrams_per_deciliter`].
     #[inline]
-    pub fn as_milligram_per_deciliter(self) -> f64 {
+    pub fn as_milligram_per_deciliter(self) -> Num {
         self.as_milligrams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn from_centigrams_per_deciliter(value: f64) -> Self {
+    pub fn from_centigrams_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::CentigramPerDeciliter)
     }
 
     /// Returns the value expressed in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn as_centigrams_per_deciliter(self) -> f64 {
+    pub fn as_centigrams_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::CentigramPerDeciliter)
     }
 
     /// Alias for [`Self::as_centigrams_per_deciliter`].
     #[inline]
-    pub fn as_centigram_per_deciliter(self) -> f64 {
+    pub fn as_centigram_per_deciliter(self) -> Num {
         self.as_centigrams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn from_decigrams_per_deciliter(value: f64) -> Self {
+    pub fn from_decigrams_per_deciliter(value: Num) -> Self {
         Self::new(value, DensityUnit::DecigramPerDeciliter)
     }
 
     /// Returns the value expressed in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn as_decigrams_per_deciliter(self) -> f64 {
+    pub fn as_decigrams_per_deciliter(self) -> Num {
         self.convert_to(DensityUnit::DecigramPerDeciliter)
     }
 
     /// Alias for [`Self::as_decigrams_per_deciliter`].
     #[inline]
-    pub fn as_decigram_per_deciliter(self) -> f64 {
+    pub fn as_decigram_per_deciliter(self) -> Num {
         self.as_decigrams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn from_grams_per_milliliter(value: f64) -> Self {
+    pub fn from_grams_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerMilliliter)
     }
 
     /// Returns the value expressed in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn as_grams_per_milliliter(self) -> f64 {
+    pub fn as_grams_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::GramPerMilliliter)
     }
 
     /// Alias for [`Self::as_grams_per_milliliter`].
     #[inline]
-    pub fn as_gram_per_milliliter(self) -> f64 {
+    pub fn as_gram_per_milliliter(self) -> Num {
         self.as_grams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in FemtogramsPerMilliliter (`fg/ml`).
     #[inline]
-    pub fn from_femtograms_per_milliliter(value: f64) -> Self {
+    pub fn from_femtograms_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::FemtogramPerMilliliter)
     }
 
     /// Returns the value expressed in FemtogramsPerMilliliter (`fg/ml`).
     #[inline]
-    pub fn as_femtograms_per_milliliter(self) -> f64 {
+    pub fn as_femtograms_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::FemtogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_femtograms_per_milliliter`].
     #[inline]
-    pub fn as_femtogram_per_milliliter(self) -> f64 {
+    pub fn as_femtogram_per_milliliter(self) -> Num {
         self.as_femtograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn from_picograms_per_milliliter(value: f64) -> Self {
+    pub fn from_picograms_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::PicogramPerMilliliter)
     }
 
     /// Returns the value expressed in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn as_picograms_per_milliliter(self) -> f64 {
+    pub fn as_picograms_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::PicogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_picograms_per_milliliter`].
     #[inline]
-    pub fn as_picogram_per_milliliter(self) -> f64 {
+    pub fn as_picogram_per_milliliter(self) -> Num {
         self.as_picograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn from_nanograms_per_milliliter(value: f64) -> Self {
+    pub fn from_nanograms_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::NanogramPerMilliliter)
     }
 
     /// Returns the value expressed in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn as_nanograms_per_milliliter(self) -> f64 {
+    pub fn as_nanograms_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::NanogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_nanograms_per_milliliter`].
     #[inline]
-    pub fn as_nanogram_per_milliliter(self) -> f64 {
+    pub fn as_nanogram_per_milliliter(self) -> Num {
         self.as_nanograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn from_micrograms_per_milliliter(value: f64) -> Self {
+    pub fn from_micrograms_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::MicrogramPerMilliliter)
     }
 
     /// Returns the value expressed in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn as_micrograms_per_milliliter(self) -> f64 {
+    pub fn as_micrograms_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::MicrogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_micrograms_per_milliliter`].
     #[inline]
-    pub fn as_microgram_per_milliliter(self) -> f64 {
+    pub fn as_microgram_per_milliliter(self) -> Num {
         self.as_micrograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn from_milligrams_per_milliliter(value: f64) -> Self {
+    pub fn from_milligrams_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::MilligramPerMilliliter)
     }
 
     /// Returns the value expressed in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn as_milligrams_per_milliliter(self) -> f64 {
+    pub fn as_milligrams_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::MilligramPerMilliliter)
     }
 
     /// Alias for [`Self::as_milligrams_per_milliliter`].
     #[inline]
-    pub fn as_milligram_per_milliliter(self) -> f64 {
+    pub fn as_milligram_per_milliliter(self) -> Num {
         self.as_milligrams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn from_centigrams_per_milliliter(value: f64) -> Self {
+    pub fn from_centigrams_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::CentigramPerMilliliter)
     }
 
     /// Returns the value expressed in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn as_centigrams_per_milliliter(self) -> f64 {
+    pub fn as_centigrams_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::CentigramPerMilliliter)
     }
 
     /// Alias for [`Self::as_centigrams_per_milliliter`].
     #[inline]
-    pub fn as_centigram_per_milliliter(self) -> f64 {
+    pub fn as_centigram_per_milliliter(self) -> Num {
         self.as_centigrams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn from_decigrams_per_milliliter(value: f64) -> Self {
+    pub fn from_decigrams_per_milliliter(value: Num) -> Self {
         Self::new(value, DensityUnit::DecigramPerMilliliter)
     }
 
     /// Returns the value expressed in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn as_decigrams_per_milliliter(self) -> f64 {
+    pub fn as_decigrams_per_milliliter(self) -> Num {
         self.convert_to(DensityUnit::DecigramPerMilliliter)
     }
 
     /// Alias for [`Self::as_decigrams_per_milliliter`].
     #[inline]
-    pub fn as_decigram_per_milliliter(self) -> f64 {
+    pub fn as_decigram_per_milliliter(self) -> Num {
         self.as_decigrams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn from_pounds_per_us_gallon(value: f64) -> Self {
+    pub fn from_pounds_per_us_gallon(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerUSGallon)
     }
 
     /// Returns the value expressed in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn as_pounds_per_us_gallon(self) -> f64 {
+    pub fn as_pounds_per_us_gallon(self) -> Num {
         self.convert_to(DensityUnit::PoundPerUSGallon)
     }
 
     /// Alias for [`Self::as_pounds_per_us_gallon`].
     #[inline]
-    pub fn as_pound_per_us_gallon(self) -> f64 {
+    pub fn as_pound_per_us_gallon(self) -> Num {
         self.as_pounds_per_us_gallon()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn from_pounds_per_imperial_gallon(value: f64) -> Self {
+    pub fn from_pounds_per_imperial_gallon(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerImperialGallon)
     }
 
     /// Returns the value expressed in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn as_pounds_per_imperial_gallon(self) -> f64 {
+    pub fn as_pounds_per_imperial_gallon(self) -> Num {
         self.convert_to(DensityUnit::PoundPerImperialGallon)
     }
 
     /// Alias for [`Self::as_pounds_per_imperial_gallon`].
     #[inline]
-    pub fn as_pound_per_imperial_gallon(self) -> f64 {
+    pub fn as_pound_per_imperial_gallon(self) -> Num {
         self.as_pounds_per_imperial_gallon()
     }
 
     /// Creates a [`Density`] from a value in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn from_kilograms_per_liter(value: f64) -> Self {
+    pub fn from_kilograms_per_liter(value: Num) -> Self {
         Self::new(value, DensityUnit::KilogramPerLiter)
     }
 
     /// Returns the value expressed in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn as_kilograms_per_liter(self) -> f64 {
+    pub fn as_kilograms_per_liter(self) -> Num {
         self.convert_to(DensityUnit::KilogramPerLiter)
     }
 
     /// Alias for [`Self::as_kilograms_per_liter`].
     #[inline]
-    pub fn as_kilogram_per_liter(self) -> f64 {
+    pub fn as_kilogram_per_liter(self) -> Num {
         self.as_kilograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicFoot (`t/ft³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_foot(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_foot(value: Num) -> Self {
         Self::new(value, DensityUnit::TonnePerCubicFoot)
     }
 
     /// Returns the value expressed in TonnesPerCubicFoot (`t/ft³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_foot(self) -> f64 {
+    pub fn as_tonnes_per_cubic_foot(self) -> Num {
         self.convert_to(DensityUnit::TonnePerCubicFoot)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_foot`].
     #[inline]
-    pub fn as_tonne_per_cubic_foot(self) -> f64 {
+    pub fn as_tonne_per_cubic_foot(self) -> Num {
         self.as_tonnes_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicInch (`t/in³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_inch(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_inch(value: Num) -> Self {
         Self::new(value, DensityUnit::TonnePerCubicInch)
     }
 
     /// Returns the value expressed in TonnesPerCubicInch (`t/in³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_inch(self) -> f64 {
+    pub fn as_tonnes_per_cubic_inch(self) -> Num {
         self.convert_to(DensityUnit::TonnePerCubicInch)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_inch`].
     #[inline]
-    pub fn as_tonne_per_cubic_inch(self) -> f64 {
+    pub fn as_tonne_per_cubic_inch(self) -> Num {
         self.as_tonnes_per_cubic_inch()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicFoot (`g/ft³`).
     #[inline]
-    pub fn from_grams_per_cubic_foot(value: f64) -> Self {
+    pub fn from_grams_per_cubic_foot(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerCubicFoot)
     }
 
     /// Returns the value expressed in GramsPerCubicFoot (`g/ft³`).
     #[inline]
-    pub fn as_grams_per_cubic_foot(self) -> f64 {
+    pub fn as_grams_per_cubic_foot(self) -> Num {
         self.convert_to(DensityUnit::GramPerCubicFoot)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_foot`].
     #[inline]
-    pub fn as_gram_per_cubic_foot(self) -> f64 {
+    pub fn as_gram_per_cubic_foot(self) -> Num {
         self.as_grams_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicInch (`g/in³`).
     #[inline]
-    pub fn from_grams_per_cubic_inch(value: f64) -> Self {
+    pub fn from_grams_per_cubic_inch(value: Num) -> Self {
         Self::new(value, DensityUnit::GramPerCubicInch)
     }
 
     /// Returns the value expressed in GramsPerCubicInch (`g/in³`).
     #[inline]
-    pub fn as_grams_per_cubic_inch(self) -> f64 {
+    pub fn as_grams_per_cubic_inch(self) -> Num {
         self.convert_to(DensityUnit::GramPerCubicInch)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_inch`].
     #[inline]
-    pub fn as_gram_per_cubic_inch(self) -> f64 {
+    pub fn as_gram_per_cubic_inch(self) -> Num {
         self.as_grams_per_cubic_inch()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicMeter (`lb/m³`).
     #[inline]
-    pub fn from_pounds_per_cubic_meter(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicMeter)
     }
 
     /// Returns the value expressed in PoundsPerCubicMeter (`lb/m³`).
     #[inline]
-    pub fn as_pounds_per_cubic_meter(self) -> f64 {
+    pub fn as_pounds_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicMeter)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_meter`].
     #[inline]
-    pub fn as_pound_per_cubic_meter(self) -> f64 {
+    pub fn as_pound_per_cubic_meter(self) -> Num {
         self.as_pounds_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicCentimeter (`lb/cm³`).
     #[inline]
-    pub fn from_pounds_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicCentimeter)
     }
 
     /// Returns the value expressed in PoundsPerCubicCentimeter (`lb/cm³`).
     #[inline]
-    pub fn as_pounds_per_cubic_centimeter(self) -> f64 {
+    pub fn as_pounds_per_cubic_centimeter(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_centimeter`].
     #[inline]
-    pub fn as_pound_per_cubic_centimeter(self) -> f64 {
+    pub fn as_pound_per_cubic_centimeter(self) -> Num {
         self.as_pounds_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicMillimeter (`lb/mm³`).
     #[inline]
-    pub fn from_pounds_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::PoundPerCubicMillimeter)
     }
 
     /// Returns the value expressed in PoundsPerCubicMillimeter (`lb/mm³`).
     #[inline]
-    pub fn as_pounds_per_cubic_millimeter(self) -> f64 {
+    pub fn as_pounds_per_cubic_millimeter(self) -> Num {
         self.convert_to(DensityUnit::PoundPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_millimeter`].
     #[inline]
-    pub fn as_pound_per_cubic_millimeter(self) -> f64 {
+    pub fn as_pound_per_cubic_millimeter(self) -> Num {
         self.as_pounds_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicMeter (`slug/m³`).
     #[inline]
-    pub fn from_slugs_per_cubic_meter(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_meter(value: Num) -> Self {
         Self::new(value, DensityUnit::SlugPerCubicMeter)
     }
 
     /// Returns the value expressed in SlugsPerCubicMeter (`slug/m³`).
     #[inline]
-    pub fn as_slugs_per_cubic_meter(self) -> f64 {
+    pub fn as_slugs_per_cubic_meter(self) -> Num {
         self.convert_to(DensityUnit::SlugPerCubicMeter)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_meter`].
     #[inline]
-    pub fn as_slug_per_cubic_meter(self) -> f64 {
+    pub fn as_slug_per_cubic_meter(self) -> Num {
         self.as_slugs_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicCentimeter (`slug/cm³`).
     #[inline]
-    pub fn from_slugs_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::SlugPerCubicCentimeter)
     }
 
     /// Returns the value expressed in SlugsPerCubicCentimeter (`slug/cm³`).
     #[inline]
-    pub fn as_slugs_per_cubic_centimeter(self) -> f64 {
+    pub fn as_slugs_per_cubic_centimeter(self) -> Num {
         self.convert_to(DensityUnit::SlugPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_centimeter`].
     #[inline]
-    pub fn as_slug_per_cubic_centimeter(self) -> f64 {
+    pub fn as_slug_per_cubic_centimeter(self) -> Num {
         self.as_slugs_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicMillimeter (`slug/mm³`).
     #[inline]
-    pub fn from_slugs_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, DensityUnit::SlugPerCubicMillimeter)
     }
 
     /// Returns the value expressed in SlugsPerCubicMillimeter (`slug/mm³`).
     #[inline]
-    pub fn as_slugs_per_cubic_millimeter(self) -> f64 {
+    pub fn as_slugs_per_cubic_millimeter(self) -> Num {
         self.convert_to(DensityUnit::SlugPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_millimeter`].
     #[inline]
-    pub fn as_slug_per_cubic_millimeter(self) -> f64 {
+    pub fn as_slug_per_cubic_millimeter(self) -> Num {
         self.as_slugs_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicInch (`slug/in³`).
     #[inline]
-    pub fn from_slugs_per_cubic_inch(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_inch(value: Num) -> Self {
         Self::new(value, DensityUnit::SlugPerCubicInch)
     }
 
     /// Returns the value expressed in SlugsPerCubicInch (`slug/in³`).
     #[inline]
-    pub fn as_slugs_per_cubic_inch(self) -> f64 {
+    pub fn as_slugs_per_cubic_inch(self) -> Num {
         self.convert_to(DensityUnit::SlugPerCubicInch)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_inch`].
     #[inline]
-    pub fn as_slug_per_cubic_inch(self) -> f64 {
+    pub fn as_slug_per_cubic_inch(self) -> Num {
         self.as_slugs_per_cubic_inch()
     }
 }
@@ -1437,27 +1438,27 @@ impl Neg for Density {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Density {
+impl Mul<Num> for Density {
     type Output = Density;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Density> for f64 {
+impl Mul<Density> for Num {
     type Output = Density;
     fn mul(self, rhs: Density) -> Density {
         Density(self * rhs.0)
     }
 }
-impl Div<f64> for Density {
+impl Div<Num> for Density {
     type Output = Density;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Density {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1496,7 +1497,7 @@ impl FromStr for Density {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseDensityError(s.to_owned()))?;

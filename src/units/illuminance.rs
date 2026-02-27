@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Lux` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Illuminance(f64);
+pub struct Illuminance(Num);
 
 /// Unit variants for [`Illuminance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -54,7 +55,7 @@ impl IlluminanceUnit {
 
 impl Illuminance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: IlluminanceUnit) -> Self {
+    pub fn new(value: Num, unit: IlluminanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -69,7 +70,7 @@ impl Illuminance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -77,12 +78,12 @@ impl Illuminance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: IlluminanceUnit) -> f64 {
+    pub fn convert_to(self, unit: IlluminanceUnit) -> Num {
         let x = self.0;
         match unit {
             IlluminanceUnit::Lux => x,
@@ -94,49 +95,49 @@ impl Illuminance {
 
     /// Creates a [`Illuminance`] from a value in Lux (`lx`).
     #[inline]
-    pub fn from_lux(value: f64) -> Self {
+    pub fn from_lux(value: Num) -> Self {
         Self::new(value, IlluminanceUnit::Lux)
     }
 
     /// Returns the value expressed in Lux (`lx`).
     #[inline]
-    pub fn as_lux(self) -> f64 {
+    pub fn as_lux(self) -> Num {
         self.convert_to(IlluminanceUnit::Lux)
     }
 
     /// Creates a [`Illuminance`] from a value in Millilux (`mlx`).
     #[inline]
-    pub fn from_millilux(value: f64) -> Self {
+    pub fn from_millilux(value: Num) -> Self {
         Self::new(value, IlluminanceUnit::Millilux)
     }
 
     /// Returns the value expressed in Millilux (`mlx`).
     #[inline]
-    pub fn as_millilux(self) -> f64 {
+    pub fn as_millilux(self) -> Num {
         self.convert_to(IlluminanceUnit::Millilux)
     }
 
     /// Creates a [`Illuminance`] from a value in Kilolux (`klx`).
     #[inline]
-    pub fn from_kilolux(value: f64) -> Self {
+    pub fn from_kilolux(value: Num) -> Self {
         Self::new(value, IlluminanceUnit::Kilolux)
     }
 
     /// Returns the value expressed in Kilolux (`klx`).
     #[inline]
-    pub fn as_kilolux(self) -> f64 {
+    pub fn as_kilolux(self) -> Num {
         self.convert_to(IlluminanceUnit::Kilolux)
     }
 
     /// Creates a [`Illuminance`] from a value in Megalux (`Mlx`).
     #[inline]
-    pub fn from_megalux(value: f64) -> Self {
+    pub fn from_megalux(value: Num) -> Self {
         Self::new(value, IlluminanceUnit::Megalux)
     }
 
     /// Returns the value expressed in Megalux (`Mlx`).
     #[inline]
-    pub fn as_megalux(self) -> f64 {
+    pub fn as_megalux(self) -> Num {
         self.convert_to(IlluminanceUnit::Megalux)
     }
 }
@@ -159,27 +160,27 @@ impl Neg for Illuminance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Illuminance {
+impl Mul<Num> for Illuminance {
     type Output = Illuminance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Illuminance> for f64 {
+impl Mul<Illuminance> for Num {
     type Output = Illuminance;
     fn mul(self, rhs: Illuminance) -> Illuminance {
         Illuminance(self * rhs.0)
     }
 }
-impl Div<f64> for Illuminance {
+impl Div<Num> for Illuminance {
     type Output = Illuminance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Illuminance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -213,7 +214,7 @@ impl FromStr for Illuminance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseIlluminanceError(s.to_owned()))?;

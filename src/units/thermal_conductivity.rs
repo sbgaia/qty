@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `WattPerMeterKelvin` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ThermalConductivity(f64);
+pub struct ThermalConductivity(Num);
 
 /// Unit variants for [`ThermalConductivity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -48,7 +49,7 @@ impl ThermalConductivityUnit {
 
 impl ThermalConductivity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ThermalConductivityUnit) -> Self {
+    pub fn new(value: Num, unit: ThermalConductivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -63,7 +64,7 @@ impl ThermalConductivity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -71,12 +72,12 @@ impl ThermalConductivity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ThermalConductivityUnit) -> f64 {
+    pub fn convert_to(self, unit: ThermalConductivityUnit) -> Num {
         let x = self.0;
         match unit {
             ThermalConductivityUnit::WattPerMeterKelvin => x,
@@ -88,37 +89,37 @@ impl ThermalConductivity {
 
     /// Creates a [`ThermalConductivity`] from a value in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
-    pub fn from_watts_per_meter_kelvin(value: f64) -> Self {
+    pub fn from_watts_per_meter_kelvin(value: Num) -> Self {
         Self::new(value, ThermalConductivityUnit::WattPerMeterKelvin)
     }
 
     /// Returns the value expressed in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
-    pub fn as_watts_per_meter_kelvin(self) -> f64 {
+    pub fn as_watts_per_meter_kelvin(self) -> Num {
         self.convert_to(ThermalConductivityUnit::WattPerMeterKelvin)
     }
 
     /// Alias for [`Self::as_watts_per_meter_kelvin`].
     #[inline]
-    pub fn as_watt_per_meter_kelvin(self) -> f64 {
+    pub fn as_watt_per_meter_kelvin(self) -> Num {
         self.as_watts_per_meter_kelvin()
     }
 
     /// Creates a [`ThermalConductivity`] from a value in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
-    pub fn from_btus_per_hour_foot_fahrenheit(value: f64) -> Self {
+    pub fn from_btus_per_hour_foot_fahrenheit(value: Num) -> Self {
         Self::new(value, ThermalConductivityUnit::BtuPerHourFootFahrenheit)
     }
 
     /// Returns the value expressed in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
-    pub fn as_btus_per_hour_foot_fahrenheit(self) -> f64 {
+    pub fn as_btus_per_hour_foot_fahrenheit(self) -> Num {
         self.convert_to(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
     }
 
     /// Alias for [`Self::as_btus_per_hour_foot_fahrenheit`].
     #[inline]
-    pub fn as_btu_per_hour_foot_fahrenheit(self) -> f64 {
+    pub fn as_btu_per_hour_foot_fahrenheit(self) -> Num {
         self.as_btus_per_hour_foot_fahrenheit()
     }
 }
@@ -141,27 +142,27 @@ impl Neg for ThermalConductivity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ThermalConductivity {
+impl Mul<Num> for ThermalConductivity {
     type Output = ThermalConductivity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ThermalConductivity> for f64 {
+impl Mul<ThermalConductivity> for Num {
     type Output = ThermalConductivity;
     fn mul(self, rhs: ThermalConductivity) -> ThermalConductivity {
         ThermalConductivity(self * rhs.0)
     }
 }
-impl Div<f64> for ThermalConductivity {
+impl Div<Num> for ThermalConductivity {
     type Output = ThermalConductivity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ThermalConductivity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -200,7 +201,7 @@ impl FromStr for ThermalConductivity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseThermalConductivityError(s.to_owned()))?;

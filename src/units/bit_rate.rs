@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `BitPerSecond` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct BitRate(f64);
+pub struct BitRate(Num);
 
 /// Unit variants for [`BitRate`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -199,7 +200,7 @@ impl BitRateUnit {
 
 impl BitRate {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: BitRateUnit) -> Self {
+    pub fn new(value: Num, unit: BitRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -249,7 +250,7 @@ impl BitRate {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -257,12 +258,12 @@ impl BitRate {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: BitRateUnit) -> f64 {
+    pub fn convert_to(self, unit: BitRateUnit) -> Num {
         let x = self.0;
         match unit {
             BitRateUnit::BitPerSecond => x,
@@ -309,703 +310,703 @@ impl BitRate {
 
     /// Creates a [`BitRate`] from a value in BitsPerSecond (`bit/s`).
     #[inline]
-    pub fn from_bits_per_second(value: f64) -> Self {
+    pub fn from_bits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::BitPerSecond)
     }
 
     /// Returns the value expressed in BitsPerSecond (`bit/s`).
     #[inline]
-    pub fn as_bits_per_second(self) -> f64 {
+    pub fn as_bits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::BitPerSecond)
     }
 
     /// Alias for [`Self::as_bits_per_second`].
     #[inline]
-    pub fn as_bit_per_second(self) -> f64 {
+    pub fn as_bit_per_second(self) -> Num {
         self.as_bits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KilobitsPerSecond (`kbit/s`).
     #[inline]
-    pub fn from_kilobits_per_second(value: f64) -> Self {
+    pub fn from_kilobits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KilobitPerSecond)
     }
 
     /// Returns the value expressed in KilobitsPerSecond (`kbit/s`).
     #[inline]
-    pub fn as_kilobits_per_second(self) -> f64 {
+    pub fn as_kilobits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KilobitPerSecond)
     }
 
     /// Alias for [`Self::as_kilobits_per_second`].
     #[inline]
-    pub fn as_kilobit_per_second(self) -> f64 {
+    pub fn as_kilobit_per_second(self) -> Num {
         self.as_kilobits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MegabitsPerSecond (`Mbit/s`).
     #[inline]
-    pub fn from_megabits_per_second(value: f64) -> Self {
+    pub fn from_megabits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MegabitPerSecond)
     }
 
     /// Returns the value expressed in MegabitsPerSecond (`Mbit/s`).
     #[inline]
-    pub fn as_megabits_per_second(self) -> f64 {
+    pub fn as_megabits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MegabitPerSecond)
     }
 
     /// Alias for [`Self::as_megabits_per_second`].
     #[inline]
-    pub fn as_megabit_per_second(self) -> f64 {
+    pub fn as_megabit_per_second(self) -> Num {
         self.as_megabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GigabitsPerSecond (`Gbit/s`).
     #[inline]
-    pub fn from_gigabits_per_second(value: f64) -> Self {
+    pub fn from_gigabits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GigabitPerSecond)
     }
 
     /// Returns the value expressed in GigabitsPerSecond (`Gbit/s`).
     #[inline]
-    pub fn as_gigabits_per_second(self) -> f64 {
+    pub fn as_gigabits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GigabitPerSecond)
     }
 
     /// Alias for [`Self::as_gigabits_per_second`].
     #[inline]
-    pub fn as_gigabit_per_second(self) -> f64 {
+    pub fn as_gigabit_per_second(self) -> Num {
         self.as_gigabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TerabitsPerSecond (`Tbit/s`).
     #[inline]
-    pub fn from_terabits_per_second(value: f64) -> Self {
+    pub fn from_terabits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TerabitPerSecond)
     }
 
     /// Returns the value expressed in TerabitsPerSecond (`Tbit/s`).
     #[inline]
-    pub fn as_terabits_per_second(self) -> f64 {
+    pub fn as_terabits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TerabitPerSecond)
     }
 
     /// Alias for [`Self::as_terabits_per_second`].
     #[inline]
-    pub fn as_terabit_per_second(self) -> f64 {
+    pub fn as_terabit_per_second(self) -> Num {
         self.as_terabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PetabitsPerSecond (`Pbit/s`).
     #[inline]
-    pub fn from_petabits_per_second(value: f64) -> Self {
+    pub fn from_petabits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PetabitPerSecond)
     }
 
     /// Returns the value expressed in PetabitsPerSecond (`Pbit/s`).
     #[inline]
-    pub fn as_petabits_per_second(self) -> f64 {
+    pub fn as_petabits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PetabitPerSecond)
     }
 
     /// Alias for [`Self::as_petabits_per_second`].
     #[inline]
-    pub fn as_petabit_per_second(self) -> f64 {
+    pub fn as_petabit_per_second(self) -> Num {
         self.as_petabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExabitsPerSecond (`Ebit/s`).
     #[inline]
-    pub fn from_exabits_per_second(value: f64) -> Self {
+    pub fn from_exabits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExabitPerSecond)
     }
 
     /// Returns the value expressed in ExabitsPerSecond (`Ebit/s`).
     #[inline]
-    pub fn as_exabits_per_second(self) -> f64 {
+    pub fn as_exabits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExabitPerSecond)
     }
 
     /// Alias for [`Self::as_exabits_per_second`].
     #[inline]
-    pub fn as_exabit_per_second(self) -> f64 {
+    pub fn as_exabit_per_second(self) -> Num {
         self.as_exabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KibibitsPerSecond (`Kibit/s`).
     #[inline]
-    pub fn from_kibibits_per_second(value: f64) -> Self {
+    pub fn from_kibibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KibibitPerSecond)
     }
 
     /// Returns the value expressed in KibibitsPerSecond (`Kibit/s`).
     #[inline]
-    pub fn as_kibibits_per_second(self) -> f64 {
+    pub fn as_kibibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KibibitPerSecond)
     }
 
     /// Alias for [`Self::as_kibibits_per_second`].
     #[inline]
-    pub fn as_kibibit_per_second(self) -> f64 {
+    pub fn as_kibibit_per_second(self) -> Num {
         self.as_kibibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MebibitsPerSecond (`Mibit/s`).
     #[inline]
-    pub fn from_mebibits_per_second(value: f64) -> Self {
+    pub fn from_mebibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MebibitPerSecond)
     }
 
     /// Returns the value expressed in MebibitsPerSecond (`Mibit/s`).
     #[inline]
-    pub fn as_mebibits_per_second(self) -> f64 {
+    pub fn as_mebibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MebibitPerSecond)
     }
 
     /// Alias for [`Self::as_mebibits_per_second`].
     #[inline]
-    pub fn as_mebibit_per_second(self) -> f64 {
+    pub fn as_mebibit_per_second(self) -> Num {
         self.as_mebibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GibibitsPerSecond (`Gibit/s`).
     #[inline]
-    pub fn from_gibibits_per_second(value: f64) -> Self {
+    pub fn from_gibibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GibibitPerSecond)
     }
 
     /// Returns the value expressed in GibibitsPerSecond (`Gibit/s`).
     #[inline]
-    pub fn as_gibibits_per_second(self) -> f64 {
+    pub fn as_gibibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GibibitPerSecond)
     }
 
     /// Alias for [`Self::as_gibibits_per_second`].
     #[inline]
-    pub fn as_gibibit_per_second(self) -> f64 {
+    pub fn as_gibibit_per_second(self) -> Num {
         self.as_gibibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TebibitsPerSecond (`Tibit/s`).
     #[inline]
-    pub fn from_tebibits_per_second(value: f64) -> Self {
+    pub fn from_tebibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TebibitPerSecond)
     }
 
     /// Returns the value expressed in TebibitsPerSecond (`Tibit/s`).
     #[inline]
-    pub fn as_tebibits_per_second(self) -> f64 {
+    pub fn as_tebibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TebibitPerSecond)
     }
 
     /// Alias for [`Self::as_tebibits_per_second`].
     #[inline]
-    pub fn as_tebibit_per_second(self) -> f64 {
+    pub fn as_tebibit_per_second(self) -> Num {
         self.as_tebibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PebibitsPerSecond (`Pibit/s`).
     #[inline]
-    pub fn from_pebibits_per_second(value: f64) -> Self {
+    pub fn from_pebibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PebibitPerSecond)
     }
 
     /// Returns the value expressed in PebibitsPerSecond (`Pibit/s`).
     #[inline]
-    pub fn as_pebibits_per_second(self) -> f64 {
+    pub fn as_pebibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PebibitPerSecond)
     }
 
     /// Alias for [`Self::as_pebibits_per_second`].
     #[inline]
-    pub fn as_pebibit_per_second(self) -> f64 {
+    pub fn as_pebibit_per_second(self) -> Num {
         self.as_pebibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExbibitsPerSecond (`Eibit/s`).
     #[inline]
-    pub fn from_exbibits_per_second(value: f64) -> Self {
+    pub fn from_exbibits_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExbibitPerSecond)
     }
 
     /// Returns the value expressed in ExbibitsPerSecond (`Eibit/s`).
     #[inline]
-    pub fn as_exbibits_per_second(self) -> f64 {
+    pub fn as_exbibits_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExbibitPerSecond)
     }
 
     /// Alias for [`Self::as_exbibits_per_second`].
     #[inline]
-    pub fn as_exbibit_per_second(self) -> f64 {
+    pub fn as_exbibit_per_second(self) -> Num {
         self.as_exbibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in BytesPerSecond (`B/s`).
     #[inline]
-    pub fn from_bytes_per_second(value: f64) -> Self {
+    pub fn from_bytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::BytePerSecond)
     }
 
     /// Returns the value expressed in BytesPerSecond (`B/s`).
     #[inline]
-    pub fn as_bytes_per_second(self) -> f64 {
+    pub fn as_bytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::BytePerSecond)
     }
 
     /// Alias for [`Self::as_bytes_per_second`].
     #[inline]
-    pub fn as_byte_per_second(self) -> f64 {
+    pub fn as_byte_per_second(self) -> Num {
         self.as_bytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KilobytesPerSecond (`kB/s`).
     #[inline]
-    pub fn from_kilobytes_per_second(value: f64) -> Self {
+    pub fn from_kilobytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KilobytePerSecond)
     }
 
     /// Returns the value expressed in KilobytesPerSecond (`kB/s`).
     #[inline]
-    pub fn as_kilobytes_per_second(self) -> f64 {
+    pub fn as_kilobytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KilobytePerSecond)
     }
 
     /// Alias for [`Self::as_kilobytes_per_second`].
     #[inline]
-    pub fn as_kilobyte_per_second(self) -> f64 {
+    pub fn as_kilobyte_per_second(self) -> Num {
         self.as_kilobytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MegabytesPerSecond (`MB/s`).
     #[inline]
-    pub fn from_megabytes_per_second(value: f64) -> Self {
+    pub fn from_megabytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MegabytePerSecond)
     }
 
     /// Returns the value expressed in MegabytesPerSecond (`MB/s`).
     #[inline]
-    pub fn as_megabytes_per_second(self) -> f64 {
+    pub fn as_megabytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MegabytePerSecond)
     }
 
     /// Alias for [`Self::as_megabytes_per_second`].
     #[inline]
-    pub fn as_megabyte_per_second(self) -> f64 {
+    pub fn as_megabyte_per_second(self) -> Num {
         self.as_megabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GigabytesPerSecond (`GB/s`).
     #[inline]
-    pub fn from_gigabytes_per_second(value: f64) -> Self {
+    pub fn from_gigabytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GigabytePerSecond)
     }
 
     /// Returns the value expressed in GigabytesPerSecond (`GB/s`).
     #[inline]
-    pub fn as_gigabytes_per_second(self) -> f64 {
+    pub fn as_gigabytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GigabytePerSecond)
     }
 
     /// Alias for [`Self::as_gigabytes_per_second`].
     #[inline]
-    pub fn as_gigabyte_per_second(self) -> f64 {
+    pub fn as_gigabyte_per_second(self) -> Num {
         self.as_gigabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TerabytesPerSecond (`TB/s`).
     #[inline]
-    pub fn from_terabytes_per_second(value: f64) -> Self {
+    pub fn from_terabytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TerabytePerSecond)
     }
 
     /// Returns the value expressed in TerabytesPerSecond (`TB/s`).
     #[inline]
-    pub fn as_terabytes_per_second(self) -> f64 {
+    pub fn as_terabytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TerabytePerSecond)
     }
 
     /// Alias for [`Self::as_terabytes_per_second`].
     #[inline]
-    pub fn as_terabyte_per_second(self) -> f64 {
+    pub fn as_terabyte_per_second(self) -> Num {
         self.as_terabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PetabytesPerSecond (`PB/s`).
     #[inline]
-    pub fn from_petabytes_per_second(value: f64) -> Self {
+    pub fn from_petabytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PetabytePerSecond)
     }
 
     /// Returns the value expressed in PetabytesPerSecond (`PB/s`).
     #[inline]
-    pub fn as_petabytes_per_second(self) -> f64 {
+    pub fn as_petabytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PetabytePerSecond)
     }
 
     /// Alias for [`Self::as_petabytes_per_second`].
     #[inline]
-    pub fn as_petabyte_per_second(self) -> f64 {
+    pub fn as_petabyte_per_second(self) -> Num {
         self.as_petabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExabytesPerSecond (`EB/s`).
     #[inline]
-    pub fn from_exabytes_per_second(value: f64) -> Self {
+    pub fn from_exabytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExabytePerSecond)
     }
 
     /// Returns the value expressed in ExabytesPerSecond (`EB/s`).
     #[inline]
-    pub fn as_exabytes_per_second(self) -> f64 {
+    pub fn as_exabytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExabytePerSecond)
     }
 
     /// Alias for [`Self::as_exabytes_per_second`].
     #[inline]
-    pub fn as_exabyte_per_second(self) -> f64 {
+    pub fn as_exabyte_per_second(self) -> Num {
         self.as_exabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KibibytesPerSecond (`KiB/s`).
     #[inline]
-    pub fn from_kibibytes_per_second(value: f64) -> Self {
+    pub fn from_kibibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KibibytePerSecond)
     }
 
     /// Returns the value expressed in KibibytesPerSecond (`KiB/s`).
     #[inline]
-    pub fn as_kibibytes_per_second(self) -> f64 {
+    pub fn as_kibibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KibibytePerSecond)
     }
 
     /// Alias for [`Self::as_kibibytes_per_second`].
     #[inline]
-    pub fn as_kibibyte_per_second(self) -> f64 {
+    pub fn as_kibibyte_per_second(self) -> Num {
         self.as_kibibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MebibytesPerSecond (`MiB/s`).
     #[inline]
-    pub fn from_mebibytes_per_second(value: f64) -> Self {
+    pub fn from_mebibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MebibytePerSecond)
     }
 
     /// Returns the value expressed in MebibytesPerSecond (`MiB/s`).
     #[inline]
-    pub fn as_mebibytes_per_second(self) -> f64 {
+    pub fn as_mebibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MebibytePerSecond)
     }
 
     /// Alias for [`Self::as_mebibytes_per_second`].
     #[inline]
-    pub fn as_mebibyte_per_second(self) -> f64 {
+    pub fn as_mebibyte_per_second(self) -> Num {
         self.as_mebibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GibibytesPerSecond (`GiB/s`).
     #[inline]
-    pub fn from_gibibytes_per_second(value: f64) -> Self {
+    pub fn from_gibibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GibibytePerSecond)
     }
 
     /// Returns the value expressed in GibibytesPerSecond (`GiB/s`).
     #[inline]
-    pub fn as_gibibytes_per_second(self) -> f64 {
+    pub fn as_gibibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GibibytePerSecond)
     }
 
     /// Alias for [`Self::as_gibibytes_per_second`].
     #[inline]
-    pub fn as_gibibyte_per_second(self) -> f64 {
+    pub fn as_gibibyte_per_second(self) -> Num {
         self.as_gibibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TebibytesPerSecond (`TiB/s`).
     #[inline]
-    pub fn from_tebibytes_per_second(value: f64) -> Self {
+    pub fn from_tebibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TebibytePerSecond)
     }
 
     /// Returns the value expressed in TebibytesPerSecond (`TiB/s`).
     #[inline]
-    pub fn as_tebibytes_per_second(self) -> f64 {
+    pub fn as_tebibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TebibytePerSecond)
     }
 
     /// Alias for [`Self::as_tebibytes_per_second`].
     #[inline]
-    pub fn as_tebibyte_per_second(self) -> f64 {
+    pub fn as_tebibyte_per_second(self) -> Num {
         self.as_tebibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PebibytesPerSecond (`PiB/s`).
     #[inline]
-    pub fn from_pebibytes_per_second(value: f64) -> Self {
+    pub fn from_pebibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PebibytePerSecond)
     }
 
     /// Returns the value expressed in PebibytesPerSecond (`PiB/s`).
     #[inline]
-    pub fn as_pebibytes_per_second(self) -> f64 {
+    pub fn as_pebibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PebibytePerSecond)
     }
 
     /// Alias for [`Self::as_pebibytes_per_second`].
     #[inline]
-    pub fn as_pebibyte_per_second(self) -> f64 {
+    pub fn as_pebibyte_per_second(self) -> Num {
         self.as_pebibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExbibytesPerSecond (`EiB/s`).
     #[inline]
-    pub fn from_exbibytes_per_second(value: f64) -> Self {
+    pub fn from_exbibytes_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExbibytePerSecond)
     }
 
     /// Returns the value expressed in ExbibytesPerSecond (`EiB/s`).
     #[inline]
-    pub fn as_exbibytes_per_second(self) -> f64 {
+    pub fn as_exbibytes_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExbibytePerSecond)
     }
 
     /// Alias for [`Self::as_exbibytes_per_second`].
     #[inline]
-    pub fn as_exbibyte_per_second(self) -> f64 {
+    pub fn as_exbibyte_per_second(self) -> Num {
         self.as_exbibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in OctetsPerSecond (`o/s`).
     #[inline]
-    pub fn from_octets_per_second(value: f64) -> Self {
+    pub fn from_octets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::OctetPerSecond)
     }
 
     /// Returns the value expressed in OctetsPerSecond (`o/s`).
     #[inline]
-    pub fn as_octets_per_second(self) -> f64 {
+    pub fn as_octets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::OctetPerSecond)
     }
 
     /// Alias for [`Self::as_octets_per_second`].
     #[inline]
-    pub fn as_octet_per_second(self) -> f64 {
+    pub fn as_octet_per_second(self) -> Num {
         self.as_octets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KilooctetsPerSecond (`ko/s`).
     #[inline]
-    pub fn from_kilooctets_per_second(value: f64) -> Self {
+    pub fn from_kilooctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KilooctetPerSecond)
     }
 
     /// Returns the value expressed in KilooctetsPerSecond (`ko/s`).
     #[inline]
-    pub fn as_kilooctets_per_second(self) -> f64 {
+    pub fn as_kilooctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KilooctetPerSecond)
     }
 
     /// Alias for [`Self::as_kilooctets_per_second`].
     #[inline]
-    pub fn as_kilooctet_per_second(self) -> f64 {
+    pub fn as_kilooctet_per_second(self) -> Num {
         self.as_kilooctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MegaoctetsPerSecond (`Mo/s`).
     #[inline]
-    pub fn from_megaoctets_per_second(value: f64) -> Self {
+    pub fn from_megaoctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MegaoctetPerSecond)
     }
 
     /// Returns the value expressed in MegaoctetsPerSecond (`Mo/s`).
     #[inline]
-    pub fn as_megaoctets_per_second(self) -> f64 {
+    pub fn as_megaoctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MegaoctetPerSecond)
     }
 
     /// Alias for [`Self::as_megaoctets_per_second`].
     #[inline]
-    pub fn as_megaoctet_per_second(self) -> f64 {
+    pub fn as_megaoctet_per_second(self) -> Num {
         self.as_megaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GigaoctetsPerSecond (`Go/s`).
     #[inline]
-    pub fn from_gigaoctets_per_second(value: f64) -> Self {
+    pub fn from_gigaoctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GigaoctetPerSecond)
     }
 
     /// Returns the value expressed in GigaoctetsPerSecond (`Go/s`).
     #[inline]
-    pub fn as_gigaoctets_per_second(self) -> f64 {
+    pub fn as_gigaoctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GigaoctetPerSecond)
     }
 
     /// Alias for [`Self::as_gigaoctets_per_second`].
     #[inline]
-    pub fn as_gigaoctet_per_second(self) -> f64 {
+    pub fn as_gigaoctet_per_second(self) -> Num {
         self.as_gigaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TeraoctetsPerSecond (`To/s`).
     #[inline]
-    pub fn from_teraoctets_per_second(value: f64) -> Self {
+    pub fn from_teraoctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TeraoctetPerSecond)
     }
 
     /// Returns the value expressed in TeraoctetsPerSecond (`To/s`).
     #[inline]
-    pub fn as_teraoctets_per_second(self) -> f64 {
+    pub fn as_teraoctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TeraoctetPerSecond)
     }
 
     /// Alias for [`Self::as_teraoctets_per_second`].
     #[inline]
-    pub fn as_teraoctet_per_second(self) -> f64 {
+    pub fn as_teraoctet_per_second(self) -> Num {
         self.as_teraoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PetaoctetsPerSecond (`Po/s`).
     #[inline]
-    pub fn from_petaoctets_per_second(value: f64) -> Self {
+    pub fn from_petaoctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PetaoctetPerSecond)
     }
 
     /// Returns the value expressed in PetaoctetsPerSecond (`Po/s`).
     #[inline]
-    pub fn as_petaoctets_per_second(self) -> f64 {
+    pub fn as_petaoctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PetaoctetPerSecond)
     }
 
     /// Alias for [`Self::as_petaoctets_per_second`].
     #[inline]
-    pub fn as_petaoctet_per_second(self) -> f64 {
+    pub fn as_petaoctet_per_second(self) -> Num {
         self.as_petaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExaoctetsPerSecond (`Eo/s`).
     #[inline]
-    pub fn from_exaoctets_per_second(value: f64) -> Self {
+    pub fn from_exaoctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExaoctetPerSecond)
     }
 
     /// Returns the value expressed in ExaoctetsPerSecond (`Eo/s`).
     #[inline]
-    pub fn as_exaoctets_per_second(self) -> f64 {
+    pub fn as_exaoctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExaoctetPerSecond)
     }
 
     /// Alias for [`Self::as_exaoctets_per_second`].
     #[inline]
-    pub fn as_exaoctet_per_second(self) -> f64 {
+    pub fn as_exaoctet_per_second(self) -> Num {
         self.as_exaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KibioctetsPerSecond (`Kio/s`).
     #[inline]
-    pub fn from_kibioctets_per_second(value: f64) -> Self {
+    pub fn from_kibioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::KibioctetPerSecond)
     }
 
     /// Returns the value expressed in KibioctetsPerSecond (`Kio/s`).
     #[inline]
-    pub fn as_kibioctets_per_second(self) -> f64 {
+    pub fn as_kibioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::KibioctetPerSecond)
     }
 
     /// Alias for [`Self::as_kibioctets_per_second`].
     #[inline]
-    pub fn as_kibioctet_per_second(self) -> f64 {
+    pub fn as_kibioctet_per_second(self) -> Num {
         self.as_kibioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MebioctetsPerSecond (`Mio/s`).
     #[inline]
-    pub fn from_mebioctets_per_second(value: f64) -> Self {
+    pub fn from_mebioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::MebioctetPerSecond)
     }
 
     /// Returns the value expressed in MebioctetsPerSecond (`Mio/s`).
     #[inline]
-    pub fn as_mebioctets_per_second(self) -> f64 {
+    pub fn as_mebioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::MebioctetPerSecond)
     }
 
     /// Alias for [`Self::as_mebioctets_per_second`].
     #[inline]
-    pub fn as_mebioctet_per_second(self) -> f64 {
+    pub fn as_mebioctet_per_second(self) -> Num {
         self.as_mebioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GibioctetsPerSecond (`Gio/s`).
     #[inline]
-    pub fn from_gibioctets_per_second(value: f64) -> Self {
+    pub fn from_gibioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::GibioctetPerSecond)
     }
 
     /// Returns the value expressed in GibioctetsPerSecond (`Gio/s`).
     #[inline]
-    pub fn as_gibioctets_per_second(self) -> f64 {
+    pub fn as_gibioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::GibioctetPerSecond)
     }
 
     /// Alias for [`Self::as_gibioctets_per_second`].
     #[inline]
-    pub fn as_gibioctet_per_second(self) -> f64 {
+    pub fn as_gibioctet_per_second(self) -> Num {
         self.as_gibioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TebioctetsPerSecond (`Tio/s`).
     #[inline]
-    pub fn from_tebioctets_per_second(value: f64) -> Self {
+    pub fn from_tebioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::TebioctetPerSecond)
     }
 
     /// Returns the value expressed in TebioctetsPerSecond (`Tio/s`).
     #[inline]
-    pub fn as_tebioctets_per_second(self) -> f64 {
+    pub fn as_tebioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::TebioctetPerSecond)
     }
 
     /// Alias for [`Self::as_tebioctets_per_second`].
     #[inline]
-    pub fn as_tebioctet_per_second(self) -> f64 {
+    pub fn as_tebioctet_per_second(self) -> Num {
         self.as_tebioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PebioctetsPerSecond (`Pio/s`).
     #[inline]
-    pub fn from_pebioctets_per_second(value: f64) -> Self {
+    pub fn from_pebioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::PebioctetPerSecond)
     }
 
     /// Returns the value expressed in PebioctetsPerSecond (`Pio/s`).
     #[inline]
-    pub fn as_pebioctets_per_second(self) -> f64 {
+    pub fn as_pebioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::PebioctetPerSecond)
     }
 
     /// Alias for [`Self::as_pebioctets_per_second`].
     #[inline]
-    pub fn as_pebioctet_per_second(self) -> f64 {
+    pub fn as_pebioctet_per_second(self) -> Num {
         self.as_pebioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExbioctetsPerSecond (`Eio/s`).
     #[inline]
-    pub fn from_exbioctets_per_second(value: f64) -> Self {
+    pub fn from_exbioctets_per_second(value: Num) -> Self {
         Self::new(value, BitRateUnit::ExbioctetPerSecond)
     }
 
     /// Returns the value expressed in ExbioctetsPerSecond (`Eio/s`).
     #[inline]
-    pub fn as_exbioctets_per_second(self) -> f64 {
+    pub fn as_exbioctets_per_second(self) -> Num {
         self.convert_to(BitRateUnit::ExbioctetPerSecond)
     }
 
     /// Alias for [`Self::as_exbioctets_per_second`].
     #[inline]
-    pub fn as_exbioctet_per_second(self) -> f64 {
+    pub fn as_exbioctet_per_second(self) -> Num {
         self.as_exbioctets_per_second()
     }
 }
@@ -1028,27 +1029,27 @@ impl Neg for BitRate {
         Self(-self.0)
     }
 }
-impl Mul<f64> for BitRate {
+impl Mul<Num> for BitRate {
     type Output = BitRate;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<BitRate> for f64 {
+impl Mul<BitRate> for Num {
     type Output = BitRate;
     fn mul(self, rhs: BitRate) -> BitRate {
         BitRate(self * rhs.0)
     }
 }
-impl Div<f64> for BitRate {
+impl Div<Num> for BitRate {
     type Output = BitRate;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for BitRate {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1082,7 +1083,7 @@ impl FromStr for BitRate {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseBitRateError(s.to_owned()))?;

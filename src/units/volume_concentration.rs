@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `DecimalFraction` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct VolumeConcentration(f64);
+pub struct VolumeConcentration(Num);
 
 /// Unit variants for [`VolumeConcentration`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -123,7 +124,7 @@ impl VolumeConcentrationUnit {
 
 impl VolumeConcentration {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: VolumeConcentrationUnit) -> Self {
+    pub fn new(value: Num, unit: VolumeConcentrationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -154,7 +155,7 @@ impl VolumeConcentration {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -162,12 +163,12 @@ impl VolumeConcentration {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: VolumeConcentrationUnit) -> f64 {
+    pub fn convert_to(self, unit: VolumeConcentrationUnit) -> Num {
         let x = self.0;
         match unit {
             VolumeConcentrationUnit::DecimalFraction => x,
@@ -195,355 +196,355 @@ impl VolumeConcentration {
 
     /// Creates a [`VolumeConcentration`] from a value in DecimalFractions (``).
     #[inline]
-    pub fn from_decimal_fractions(value: f64) -> Self {
+    pub fn from_decimal_fractions(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::DecimalFraction)
     }
 
     /// Returns the value expressed in DecimalFractions (``).
     #[inline]
-    pub fn as_decimal_fractions(self) -> f64 {
+    pub fn as_decimal_fractions(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::DecimalFraction)
     }
 
     /// Alias for [`Self::as_decimal_fractions`].
     #[inline]
-    pub fn as_decimal_fraction(self) -> f64 {
+    pub fn as_decimal_fraction(self) -> Num {
         self.as_decimal_fractions()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in LitersPerLiter (`l/l`).
     #[inline]
-    pub fn from_liters_per_liter(value: f64) -> Self {
+    pub fn from_liters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::LiterPerLiter)
     }
 
     /// Returns the value expressed in LitersPerLiter (`l/l`).
     #[inline]
-    pub fn as_liters_per_liter(self) -> f64 {
+    pub fn as_liters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::LiterPerLiter)
     }
 
     /// Alias for [`Self::as_liters_per_liter`].
     #[inline]
-    pub fn as_liter_per_liter(self) -> f64 {
+    pub fn as_liter_per_liter(self) -> Num {
         self.as_liters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PicolitersPerLiter (`pl/l`).
     #[inline]
-    pub fn from_picoliters_per_liter(value: f64) -> Self {
+    pub fn from_picoliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PicoliterPerLiter)
     }
 
     /// Returns the value expressed in PicolitersPerLiter (`pl/l`).
     #[inline]
-    pub fn as_picoliters_per_liter(self) -> f64 {
+    pub fn as_picoliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PicoliterPerLiter)
     }
 
     /// Alias for [`Self::as_picoliters_per_liter`].
     #[inline]
-    pub fn as_picoliter_per_liter(self) -> f64 {
+    pub fn as_picoliter_per_liter(self) -> Num {
         self.as_picoliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in NanolitersPerLiter (`nl/l`).
     #[inline]
-    pub fn from_nanoliters_per_liter(value: f64) -> Self {
+    pub fn from_nanoliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::NanoliterPerLiter)
     }
 
     /// Returns the value expressed in NanolitersPerLiter (`nl/l`).
     #[inline]
-    pub fn as_nanoliters_per_liter(self) -> f64 {
+    pub fn as_nanoliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::NanoliterPerLiter)
     }
 
     /// Alias for [`Self::as_nanoliters_per_liter`].
     #[inline]
-    pub fn as_nanoliter_per_liter(self) -> f64 {
+    pub fn as_nanoliter_per_liter(self) -> Num {
         self.as_nanoliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerLiter (`µl/l`).
     #[inline]
-    pub fn from_microliters_per_liter(value: f64) -> Self {
+    pub fn from_microliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::MicroliterPerLiter)
     }
 
     /// Returns the value expressed in MicrolitersPerLiter (`µl/l`).
     #[inline]
-    pub fn as_microliters_per_liter(self) -> f64 {
+    pub fn as_microliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::MicroliterPerLiter)
     }
 
     /// Alias for [`Self::as_microliters_per_liter`].
     #[inline]
-    pub fn as_microliter_per_liter(self) -> f64 {
+    pub fn as_microliter_per_liter(self) -> Num {
         self.as_microliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MillilitersPerLiter (`ml/l`).
     #[inline]
-    pub fn from_milliliters_per_liter(value: f64) -> Self {
+    pub fn from_milliliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::MilliliterPerLiter)
     }
 
     /// Returns the value expressed in MillilitersPerLiter (`ml/l`).
     #[inline]
-    pub fn as_milliliters_per_liter(self) -> f64 {
+    pub fn as_milliliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::MilliliterPerLiter)
     }
 
     /// Alias for [`Self::as_milliliters_per_liter`].
     #[inline]
-    pub fn as_milliliter_per_liter(self) -> f64 {
+    pub fn as_milliliter_per_liter(self) -> Num {
         self.as_milliliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in CentilitersPerLiter (`cl/l`).
     #[inline]
-    pub fn from_centiliters_per_liter(value: f64) -> Self {
+    pub fn from_centiliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::CentiliterPerLiter)
     }
 
     /// Returns the value expressed in CentilitersPerLiter (`cl/l`).
     #[inline]
-    pub fn as_centiliters_per_liter(self) -> f64 {
+    pub fn as_centiliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::CentiliterPerLiter)
     }
 
     /// Alias for [`Self::as_centiliters_per_liter`].
     #[inline]
-    pub fn as_centiliter_per_liter(self) -> f64 {
+    pub fn as_centiliter_per_liter(self) -> Num {
         self.as_centiliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in DecilitersPerLiter (`dl/l`).
     #[inline]
-    pub fn from_deciliters_per_liter(value: f64) -> Self {
+    pub fn from_deciliters_per_liter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::DeciliterPerLiter)
     }
 
     /// Returns the value expressed in DecilitersPerLiter (`dl/l`).
     #[inline]
-    pub fn as_deciliters_per_liter(self) -> f64 {
+    pub fn as_deciliters_per_liter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::DeciliterPerLiter)
     }
 
     /// Alias for [`Self::as_deciliters_per_liter`].
     #[inline]
-    pub fn as_deciliter_per_liter(self) -> f64 {
+    pub fn as_deciliter_per_liter(self) -> Num {
         self.as_deciliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in LitersPerMilliliter (`l/ml`).
     #[inline]
-    pub fn from_liters_per_milliliter(value: f64) -> Self {
+    pub fn from_liters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::LiterPerMilliliter)
     }
 
     /// Returns the value expressed in LitersPerMilliliter (`l/ml`).
     #[inline]
-    pub fn as_liters_per_milliliter(self) -> f64 {
+    pub fn as_liters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::LiterPerMilliliter)
     }
 
     /// Alias for [`Self::as_liters_per_milliliter`].
     #[inline]
-    pub fn as_liter_per_milliliter(self) -> f64 {
+    pub fn as_liter_per_milliliter(self) -> Num {
         self.as_liters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PicolitersPerMilliliter (`pl/ml`).
     #[inline]
-    pub fn from_picoliters_per_milliliter(value: f64) -> Self {
+    pub fn from_picoliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PicoliterPerMilliliter)
     }
 
     /// Returns the value expressed in PicolitersPerMilliliter (`pl/ml`).
     #[inline]
-    pub fn as_picoliters_per_milliliter(self) -> f64 {
+    pub fn as_picoliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PicoliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_picoliters_per_milliliter`].
     #[inline]
-    pub fn as_picoliter_per_milliliter(self) -> f64 {
+    pub fn as_picoliter_per_milliliter(self) -> Num {
         self.as_picoliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in NanolitersPerMilliliter (`nl/ml`).
     #[inline]
-    pub fn from_nanoliters_per_milliliter(value: f64) -> Self {
+    pub fn from_nanoliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::NanoliterPerMilliliter)
     }
 
     /// Returns the value expressed in NanolitersPerMilliliter (`nl/ml`).
     #[inline]
-    pub fn as_nanoliters_per_milliliter(self) -> f64 {
+    pub fn as_nanoliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::NanoliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_nanoliters_per_milliliter`].
     #[inline]
-    pub fn as_nanoliter_per_milliliter(self) -> f64 {
+    pub fn as_nanoliter_per_milliliter(self) -> Num {
         self.as_nanoliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerMilliliter (`µl/ml`).
     #[inline]
-    pub fn from_microliters_per_milliliter(value: f64) -> Self {
+    pub fn from_microliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::MicroliterPerMilliliter)
     }
 
     /// Returns the value expressed in MicrolitersPerMilliliter (`µl/ml`).
     #[inline]
-    pub fn as_microliters_per_milliliter(self) -> f64 {
+    pub fn as_microliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::MicroliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_microliters_per_milliliter`].
     #[inline]
-    pub fn as_microliter_per_milliliter(self) -> f64 {
+    pub fn as_microliter_per_milliliter(self) -> Num {
         self.as_microliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MillilitersPerMilliliter (`ml/ml`).
     #[inline]
-    pub fn from_milliliters_per_milliliter(value: f64) -> Self {
+    pub fn from_milliliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::MilliliterPerMilliliter)
     }
 
     /// Returns the value expressed in MillilitersPerMilliliter (`ml/ml`).
     #[inline]
-    pub fn as_milliliters_per_milliliter(self) -> f64 {
+    pub fn as_milliliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::MilliliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_milliliters_per_milliliter`].
     #[inline]
-    pub fn as_milliliter_per_milliliter(self) -> f64 {
+    pub fn as_milliliter_per_milliliter(self) -> Num {
         self.as_milliliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in CentilitersPerMilliliter (`cl/ml`).
     #[inline]
-    pub fn from_centiliters_per_milliliter(value: f64) -> Self {
+    pub fn from_centiliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::CentiliterPerMilliliter)
     }
 
     /// Returns the value expressed in CentilitersPerMilliliter (`cl/ml`).
     #[inline]
-    pub fn as_centiliters_per_milliliter(self) -> f64 {
+    pub fn as_centiliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::CentiliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_centiliters_per_milliliter`].
     #[inline]
-    pub fn as_centiliter_per_milliliter(self) -> f64 {
+    pub fn as_centiliter_per_milliliter(self) -> Num {
         self.as_centiliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in DecilitersPerMilliliter (`dl/ml`).
     #[inline]
-    pub fn from_deciliters_per_milliliter(value: f64) -> Self {
+    pub fn from_deciliters_per_milliliter(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::DeciliterPerMilliliter)
     }
 
     /// Returns the value expressed in DecilitersPerMilliliter (`dl/ml`).
     #[inline]
-    pub fn as_deciliters_per_milliliter(self) -> f64 {
+    pub fn as_deciliters_per_milliliter(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::DeciliterPerMilliliter)
     }
 
     /// Alias for [`Self::as_deciliters_per_milliliter`].
     #[inline]
-    pub fn as_deciliter_per_milliliter(self) -> f64 {
+    pub fn as_deciliter_per_milliliter(self) -> Num {
         self.as_deciliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in Percent (`%`).
     #[inline]
-    pub fn from_percent(value: f64) -> Self {
+    pub fn from_percent(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::Percent)
     }
 
     /// Returns the value expressed in Percent (`%`).
     #[inline]
-    pub fn as_percent(self) -> f64 {
+    pub fn as_percent(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::Percent)
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PartsPerThousand (`‰`).
     #[inline]
-    pub fn from_parts_per_thousand(value: f64) -> Self {
+    pub fn from_parts_per_thousand(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PartPerThousand)
     }
 
     /// Returns the value expressed in PartsPerThousand (`‰`).
     #[inline]
-    pub fn as_parts_per_thousand(self) -> f64 {
+    pub fn as_parts_per_thousand(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PartPerThousand)
     }
 
     /// Alias for [`Self::as_parts_per_thousand`].
     #[inline]
-    pub fn as_part_per_thousand(self) -> f64 {
+    pub fn as_part_per_thousand(self) -> Num {
         self.as_parts_per_thousand()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PartsPerMillion (`ppm`).
     #[inline]
-    pub fn from_parts_per_million(value: f64) -> Self {
+    pub fn from_parts_per_million(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PartPerMillion)
     }
 
     /// Returns the value expressed in PartsPerMillion (`ppm`).
     #[inline]
-    pub fn as_parts_per_million(self) -> f64 {
+    pub fn as_parts_per_million(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PartPerMillion)
     }
 
     /// Alias for [`Self::as_parts_per_million`].
     #[inline]
-    pub fn as_part_per_million(self) -> f64 {
+    pub fn as_part_per_million(self) -> Num {
         self.as_parts_per_million()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PartsPerBillion (`ppb`).
     #[inline]
-    pub fn from_parts_per_billion(value: f64) -> Self {
+    pub fn from_parts_per_billion(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PartPerBillion)
     }
 
     /// Returns the value expressed in PartsPerBillion (`ppb`).
     #[inline]
-    pub fn as_parts_per_billion(self) -> f64 {
+    pub fn as_parts_per_billion(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PartPerBillion)
     }
 
     /// Alias for [`Self::as_parts_per_billion`].
     #[inline]
-    pub fn as_part_per_billion(self) -> f64 {
+    pub fn as_part_per_billion(self) -> Num {
         self.as_parts_per_billion()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
-    pub fn from_parts_per_trillion(value: f64) -> Self {
+    pub fn from_parts_per_trillion(value: Num) -> Self {
         Self::new(value, VolumeConcentrationUnit::PartPerTrillion)
     }
 
     /// Returns the value expressed in PartsPerTrillion (`ppt`).
     #[inline]
-    pub fn as_parts_per_trillion(self) -> f64 {
+    pub fn as_parts_per_trillion(self) -> Num {
         self.convert_to(VolumeConcentrationUnit::PartPerTrillion)
     }
 
     /// Alias for [`Self::as_parts_per_trillion`].
     #[inline]
-    pub fn as_part_per_trillion(self) -> f64 {
+    pub fn as_part_per_trillion(self) -> Num {
         self.as_parts_per_trillion()
     }
 }
@@ -566,27 +567,27 @@ impl Neg for VolumeConcentration {
         Self(-self.0)
     }
 }
-impl Mul<f64> for VolumeConcentration {
+impl Mul<Num> for VolumeConcentration {
     type Output = VolumeConcentration;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<VolumeConcentration> for f64 {
+impl Mul<VolumeConcentration> for Num {
     type Output = VolumeConcentration;
     fn mul(self, rhs: VolumeConcentration) -> VolumeConcentration {
         VolumeConcentration(self * rhs.0)
     }
 }
-impl Div<f64> for VolumeConcentration {
+impl Div<Num> for VolumeConcentration {
     type Output = VolumeConcentration;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for VolumeConcentration {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -625,7 +626,7 @@ impl FromStr for VolumeConcentration {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseVolumeConcentrationError(s.to_owned()))?;

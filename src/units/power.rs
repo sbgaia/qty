@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Watt` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Power(f64);
+pub struct Power(Num);
 
 /// Unit variants for [`Power`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -156,7 +157,7 @@ impl PowerUnit {
 
 impl Power {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: PowerUnit) -> Self {
+    pub fn new(value: Num, unit: PowerUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -194,7 +195,7 @@ impl Power {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -202,12 +203,12 @@ impl Power {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: PowerUnit) -> f64 {
+    pub fn convert_to(self, unit: PowerUnit) -> Num {
         let x = self.0;
         match unit {
             PowerUnit::Watt => x,
@@ -242,457 +243,457 @@ impl Power {
 
     /// Creates a [`Power`] from a value in Watts (`W`).
     #[inline]
-    pub fn from_watts(value: f64) -> Self {
+    pub fn from_watts(value: Num) -> Self {
         Self::new(value, PowerUnit::Watt)
     }
 
     /// Returns the value expressed in Watts (`W`).
     #[inline]
-    pub fn as_watts(self) -> f64 {
+    pub fn as_watts(self) -> Num {
         self.convert_to(PowerUnit::Watt)
     }
 
     /// Alias for [`Self::as_watts`].
     #[inline]
-    pub fn as_watt(self) -> f64 {
+    pub fn as_watt(self) -> Num {
         self.as_watts()
     }
 
     /// Creates a [`Power`] from a value in Femtowatts (`fW`).
     #[inline]
-    pub fn from_femtowatts(value: f64) -> Self {
+    pub fn from_femtowatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Femtowatt)
     }
 
     /// Returns the value expressed in Femtowatts (`fW`).
     #[inline]
-    pub fn as_femtowatts(self) -> f64 {
+    pub fn as_femtowatts(self) -> Num {
         self.convert_to(PowerUnit::Femtowatt)
     }
 
     /// Alias for [`Self::as_femtowatts`].
     #[inline]
-    pub fn as_femtowatt(self) -> f64 {
+    pub fn as_femtowatt(self) -> Num {
         self.as_femtowatts()
     }
 
     /// Creates a [`Power`] from a value in Picowatts (`pW`).
     #[inline]
-    pub fn from_picowatts(value: f64) -> Self {
+    pub fn from_picowatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Picowatt)
     }
 
     /// Returns the value expressed in Picowatts (`pW`).
     #[inline]
-    pub fn as_picowatts(self) -> f64 {
+    pub fn as_picowatts(self) -> Num {
         self.convert_to(PowerUnit::Picowatt)
     }
 
     /// Alias for [`Self::as_picowatts`].
     #[inline]
-    pub fn as_picowatt(self) -> f64 {
+    pub fn as_picowatt(self) -> Num {
         self.as_picowatts()
     }
 
     /// Creates a [`Power`] from a value in Nanowatts (`nW`).
     #[inline]
-    pub fn from_nanowatts(value: f64) -> Self {
+    pub fn from_nanowatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Nanowatt)
     }
 
     /// Returns the value expressed in Nanowatts (`nW`).
     #[inline]
-    pub fn as_nanowatts(self) -> f64 {
+    pub fn as_nanowatts(self) -> Num {
         self.convert_to(PowerUnit::Nanowatt)
     }
 
     /// Alias for [`Self::as_nanowatts`].
     #[inline]
-    pub fn as_nanowatt(self) -> f64 {
+    pub fn as_nanowatt(self) -> Num {
         self.as_nanowatts()
     }
 
     /// Creates a [`Power`] from a value in Microwatts (`µW`).
     #[inline]
-    pub fn from_microwatts(value: f64) -> Self {
+    pub fn from_microwatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Microwatt)
     }
 
     /// Returns the value expressed in Microwatts (`µW`).
     #[inline]
-    pub fn as_microwatts(self) -> f64 {
+    pub fn as_microwatts(self) -> Num {
         self.convert_to(PowerUnit::Microwatt)
     }
 
     /// Alias for [`Self::as_microwatts`].
     #[inline]
-    pub fn as_microwatt(self) -> f64 {
+    pub fn as_microwatt(self) -> Num {
         self.as_microwatts()
     }
 
     /// Creates a [`Power`] from a value in Milliwatts (`mW`).
     #[inline]
-    pub fn from_milliwatts(value: f64) -> Self {
+    pub fn from_milliwatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Milliwatt)
     }
 
     /// Returns the value expressed in Milliwatts (`mW`).
     #[inline]
-    pub fn as_milliwatts(self) -> f64 {
+    pub fn as_milliwatts(self) -> Num {
         self.convert_to(PowerUnit::Milliwatt)
     }
 
     /// Alias for [`Self::as_milliwatts`].
     #[inline]
-    pub fn as_milliwatt(self) -> f64 {
+    pub fn as_milliwatt(self) -> Num {
         self.as_milliwatts()
     }
 
     /// Creates a [`Power`] from a value in Deciwatts (`dW`).
     #[inline]
-    pub fn from_deciwatts(value: f64) -> Self {
+    pub fn from_deciwatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Deciwatt)
     }
 
     /// Returns the value expressed in Deciwatts (`dW`).
     #[inline]
-    pub fn as_deciwatts(self) -> f64 {
+    pub fn as_deciwatts(self) -> Num {
         self.convert_to(PowerUnit::Deciwatt)
     }
 
     /// Alias for [`Self::as_deciwatts`].
     #[inline]
-    pub fn as_deciwatt(self) -> f64 {
+    pub fn as_deciwatt(self) -> Num {
         self.as_deciwatts()
     }
 
     /// Creates a [`Power`] from a value in Decawatts (`daW`).
     #[inline]
-    pub fn from_decawatts(value: f64) -> Self {
+    pub fn from_decawatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Decawatt)
     }
 
     /// Returns the value expressed in Decawatts (`daW`).
     #[inline]
-    pub fn as_decawatts(self) -> f64 {
+    pub fn as_decawatts(self) -> Num {
         self.convert_to(PowerUnit::Decawatt)
     }
 
     /// Alias for [`Self::as_decawatts`].
     #[inline]
-    pub fn as_decawatt(self) -> f64 {
+    pub fn as_decawatt(self) -> Num {
         self.as_decawatts()
     }
 
     /// Creates a [`Power`] from a value in Kilowatts (`kW`).
     #[inline]
-    pub fn from_kilowatts(value: f64) -> Self {
+    pub fn from_kilowatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Kilowatt)
     }
 
     /// Returns the value expressed in Kilowatts (`kW`).
     #[inline]
-    pub fn as_kilowatts(self) -> f64 {
+    pub fn as_kilowatts(self) -> Num {
         self.convert_to(PowerUnit::Kilowatt)
     }
 
     /// Alias for [`Self::as_kilowatts`].
     #[inline]
-    pub fn as_kilowatt(self) -> f64 {
+    pub fn as_kilowatt(self) -> Num {
         self.as_kilowatts()
     }
 
     /// Creates a [`Power`] from a value in Megawatts (`MW`).
     #[inline]
-    pub fn from_megawatts(value: f64) -> Self {
+    pub fn from_megawatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Megawatt)
     }
 
     /// Returns the value expressed in Megawatts (`MW`).
     #[inline]
-    pub fn as_megawatts(self) -> f64 {
+    pub fn as_megawatts(self) -> Num {
         self.convert_to(PowerUnit::Megawatt)
     }
 
     /// Alias for [`Self::as_megawatts`].
     #[inline]
-    pub fn as_megawatt(self) -> f64 {
+    pub fn as_megawatt(self) -> Num {
         self.as_megawatts()
     }
 
     /// Creates a [`Power`] from a value in Gigawatts (`GW`).
     #[inline]
-    pub fn from_gigawatts(value: f64) -> Self {
+    pub fn from_gigawatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Gigawatt)
     }
 
     /// Returns the value expressed in Gigawatts (`GW`).
     #[inline]
-    pub fn as_gigawatts(self) -> f64 {
+    pub fn as_gigawatts(self) -> Num {
         self.convert_to(PowerUnit::Gigawatt)
     }
 
     /// Alias for [`Self::as_gigawatts`].
     #[inline]
-    pub fn as_gigawatt(self) -> f64 {
+    pub fn as_gigawatt(self) -> Num {
         self.as_gigawatts()
     }
 
     /// Creates a [`Power`] from a value in Terawatts (`TW`).
     #[inline]
-    pub fn from_terawatts(value: f64) -> Self {
+    pub fn from_terawatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Terawatt)
     }
 
     /// Returns the value expressed in Terawatts (`TW`).
     #[inline]
-    pub fn as_terawatts(self) -> f64 {
+    pub fn as_terawatts(self) -> Num {
         self.convert_to(PowerUnit::Terawatt)
     }
 
     /// Alias for [`Self::as_terawatts`].
     #[inline]
-    pub fn as_terawatt(self) -> f64 {
+    pub fn as_terawatt(self) -> Num {
         self.as_terawatts()
     }
 
     /// Creates a [`Power`] from a value in Petawatts (`PW`).
     #[inline]
-    pub fn from_petawatts(value: f64) -> Self {
+    pub fn from_petawatts(value: Num) -> Self {
         Self::new(value, PowerUnit::Petawatt)
     }
 
     /// Returns the value expressed in Petawatts (`PW`).
     #[inline]
-    pub fn as_petawatts(self) -> f64 {
+    pub fn as_petawatts(self) -> Num {
         self.convert_to(PowerUnit::Petawatt)
     }
 
     /// Alias for [`Self::as_petawatts`].
     #[inline]
-    pub fn as_petawatt(self) -> f64 {
+    pub fn as_petawatt(self) -> Num {
         self.as_petawatts()
     }
 
     /// Creates a [`Power`] from a value in MechanicalHorsepower (`hp(I)`).
     #[inline]
-    pub fn from_mechanical_horsepower(value: f64) -> Self {
+    pub fn from_mechanical_horsepower(value: Num) -> Self {
         Self::new(value, PowerUnit::MechanicalHorsepower)
     }
 
     /// Returns the value expressed in MechanicalHorsepower (`hp(I)`).
     #[inline]
-    pub fn as_mechanical_horsepower(self) -> f64 {
+    pub fn as_mechanical_horsepower(self) -> Num {
         self.convert_to(PowerUnit::MechanicalHorsepower)
     }
 
     /// Creates a [`Power`] from a value in MetricHorsepower (`hp(M)`).
     #[inline]
-    pub fn from_metric_horsepower(value: f64) -> Self {
+    pub fn from_metric_horsepower(value: Num) -> Self {
         Self::new(value, PowerUnit::MetricHorsepower)
     }
 
     /// Returns the value expressed in MetricHorsepower (`hp(M)`).
     #[inline]
-    pub fn as_metric_horsepower(self) -> f64 {
+    pub fn as_metric_horsepower(self) -> Num {
         self.convert_to(PowerUnit::MetricHorsepower)
     }
 
     /// Creates a [`Power`] from a value in ElectricalHorsepower (`hp(E)`).
     #[inline]
-    pub fn from_electrical_horsepower(value: f64) -> Self {
+    pub fn from_electrical_horsepower(value: Num) -> Self {
         Self::new(value, PowerUnit::ElectricalHorsepower)
     }
 
     /// Returns the value expressed in ElectricalHorsepower (`hp(E)`).
     #[inline]
-    pub fn as_electrical_horsepower(self) -> f64 {
+    pub fn as_electrical_horsepower(self) -> Num {
         self.convert_to(PowerUnit::ElectricalHorsepower)
     }
 
     /// Creates a [`Power`] from a value in BoilerHorsepower (`hp(S)`).
     #[inline]
-    pub fn from_boiler_horsepower(value: f64) -> Self {
+    pub fn from_boiler_horsepower(value: Num) -> Self {
         Self::new(value, PowerUnit::BoilerHorsepower)
     }
 
     /// Returns the value expressed in BoilerHorsepower (`hp(S)`).
     #[inline]
-    pub fn as_boiler_horsepower(self) -> f64 {
+    pub fn as_boiler_horsepower(self) -> Num {
         self.convert_to(PowerUnit::BoilerHorsepower)
     }
 
     /// Creates a [`Power`] from a value in HydraulicHorsepower (`hp(H)`).
     #[inline]
-    pub fn from_hydraulic_horsepower(value: f64) -> Self {
+    pub fn from_hydraulic_horsepower(value: Num) -> Self {
         Self::new(value, PowerUnit::HydraulicHorsepower)
     }
 
     /// Returns the value expressed in HydraulicHorsepower (`hp(H)`).
     #[inline]
-    pub fn as_hydraulic_horsepower(self) -> f64 {
+    pub fn as_hydraulic_horsepower(self) -> Num {
         self.convert_to(PowerUnit::HydraulicHorsepower)
     }
 
     /// Creates a [`Power`] from a value in BritishThermalUnitsPerHour (`Btu/h`).
     #[inline]
-    pub fn from_british_thermal_units_per_hour(value: f64) -> Self {
+    pub fn from_british_thermal_units_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::BritishThermalUnitPerHour)
     }
 
     /// Returns the value expressed in BritishThermalUnitsPerHour (`Btu/h`).
     #[inline]
-    pub fn as_british_thermal_units_per_hour(self) -> f64 {
+    pub fn as_british_thermal_units_per_hour(self) -> Num {
         self.convert_to(PowerUnit::BritishThermalUnitPerHour)
     }
 
     /// Alias for [`Self::as_british_thermal_units_per_hour`].
     #[inline]
-    pub fn as_british_thermal_unit_per_hour(self) -> f64 {
+    pub fn as_british_thermal_unit_per_hour(self) -> Num {
         self.as_british_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in KilobritishThermalUnitsPerHour (`kBtu/h`).
     #[inline]
-    pub fn from_kilobritish_thermal_units_per_hour(value: f64) -> Self {
+    pub fn from_kilobritish_thermal_units_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::KilobritishThermalUnitPerHour)
     }
 
     /// Returns the value expressed in KilobritishThermalUnitsPerHour (`kBtu/h`).
     #[inline]
-    pub fn as_kilobritish_thermal_units_per_hour(self) -> f64 {
+    pub fn as_kilobritish_thermal_units_per_hour(self) -> Num {
         self.convert_to(PowerUnit::KilobritishThermalUnitPerHour)
     }
 
     /// Alias for [`Self::as_kilobritish_thermal_units_per_hour`].
     #[inline]
-    pub fn as_kilobritish_thermal_unit_per_hour(self) -> f64 {
+    pub fn as_kilobritish_thermal_unit_per_hour(self) -> Num {
         self.as_kilobritish_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MegabritishThermalUnitsPerHour (`MBtu/h`).
     #[inline]
-    pub fn from_megabritish_thermal_units_per_hour(value: f64) -> Self {
+    pub fn from_megabritish_thermal_units_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::MegabritishThermalUnitPerHour)
     }
 
     /// Returns the value expressed in MegabritishThermalUnitsPerHour (`MBtu/h`).
     #[inline]
-    pub fn as_megabritish_thermal_units_per_hour(self) -> f64 {
+    pub fn as_megabritish_thermal_units_per_hour(self) -> Num {
         self.convert_to(PowerUnit::MegabritishThermalUnitPerHour)
     }
 
     /// Alias for [`Self::as_megabritish_thermal_units_per_hour`].
     #[inline]
-    pub fn as_megabritish_thermal_unit_per_hour(self) -> f64 {
+    pub fn as_megabritish_thermal_unit_per_hour(self) -> Num {
         self.as_megabritish_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in JoulesPerHour (`J/h`).
     #[inline]
-    pub fn from_joules_per_hour(value: f64) -> Self {
+    pub fn from_joules_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::JoulePerHour)
     }
 
     /// Returns the value expressed in JoulesPerHour (`J/h`).
     #[inline]
-    pub fn as_joules_per_hour(self) -> f64 {
+    pub fn as_joules_per_hour(self) -> Num {
         self.convert_to(PowerUnit::JoulePerHour)
     }
 
     /// Alias for [`Self::as_joules_per_hour`].
     #[inline]
-    pub fn as_joule_per_hour(self) -> f64 {
+    pub fn as_joule_per_hour(self) -> Num {
         self.as_joules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MillijoulesPerHour (`mJ/h`).
     #[inline]
-    pub fn from_millijoules_per_hour(value: f64) -> Self {
+    pub fn from_millijoules_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::MillijoulePerHour)
     }
 
     /// Returns the value expressed in MillijoulesPerHour (`mJ/h`).
     #[inline]
-    pub fn as_millijoules_per_hour(self) -> f64 {
+    pub fn as_millijoules_per_hour(self) -> Num {
         self.convert_to(PowerUnit::MillijoulePerHour)
     }
 
     /// Alias for [`Self::as_millijoules_per_hour`].
     #[inline]
-    pub fn as_millijoule_per_hour(self) -> f64 {
+    pub fn as_millijoule_per_hour(self) -> Num {
         self.as_millijoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in KilojoulesPerHour (`kJ/h`).
     #[inline]
-    pub fn from_kilojoules_per_hour(value: f64) -> Self {
+    pub fn from_kilojoules_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::KilojoulePerHour)
     }
 
     /// Returns the value expressed in KilojoulesPerHour (`kJ/h`).
     #[inline]
-    pub fn as_kilojoules_per_hour(self) -> f64 {
+    pub fn as_kilojoules_per_hour(self) -> Num {
         self.convert_to(PowerUnit::KilojoulePerHour)
     }
 
     /// Alias for [`Self::as_kilojoules_per_hour`].
     #[inline]
-    pub fn as_kilojoule_per_hour(self) -> f64 {
+    pub fn as_kilojoule_per_hour(self) -> Num {
         self.as_kilojoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MegajoulesPerHour (`MJ/h`).
     #[inline]
-    pub fn from_megajoules_per_hour(value: f64) -> Self {
+    pub fn from_megajoules_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::MegajoulePerHour)
     }
 
     /// Returns the value expressed in MegajoulesPerHour (`MJ/h`).
     #[inline]
-    pub fn as_megajoules_per_hour(self) -> f64 {
+    pub fn as_megajoules_per_hour(self) -> Num {
         self.convert_to(PowerUnit::MegajoulePerHour)
     }
 
     /// Alias for [`Self::as_megajoules_per_hour`].
     #[inline]
-    pub fn as_megajoule_per_hour(self) -> f64 {
+    pub fn as_megajoule_per_hour(self) -> Num {
         self.as_megajoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in GigajoulesPerHour (`GJ/h`).
     #[inline]
-    pub fn from_gigajoules_per_hour(value: f64) -> Self {
+    pub fn from_gigajoules_per_hour(value: Num) -> Self {
         Self::new(value, PowerUnit::GigajoulePerHour)
     }
 
     /// Returns the value expressed in GigajoulesPerHour (`GJ/h`).
     #[inline]
-    pub fn as_gigajoules_per_hour(self) -> f64 {
+    pub fn as_gigajoules_per_hour(self) -> Num {
         self.convert_to(PowerUnit::GigajoulePerHour)
     }
 
     /// Alias for [`Self::as_gigajoules_per_hour`].
     #[inline]
-    pub fn as_gigajoule_per_hour(self) -> f64 {
+    pub fn as_gigajoule_per_hour(self) -> Num {
         self.as_gigajoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in TonsOfRefrigeration (`TR`).
     #[inline]
-    pub fn from_tons_of_refrigeration(value: f64) -> Self {
+    pub fn from_tons_of_refrigeration(value: Num) -> Self {
         Self::new(value, PowerUnit::TonOfRefrigeration)
     }
 
     /// Returns the value expressed in TonsOfRefrigeration (`TR`).
     #[inline]
-    pub fn as_tons_of_refrigeration(self) -> f64 {
+    pub fn as_tons_of_refrigeration(self) -> Num {
         self.convert_to(PowerUnit::TonOfRefrigeration)
     }
 
     /// Alias for [`Self::as_tons_of_refrigeration`].
     #[inline]
-    pub fn as_ton_of_refrigeration(self) -> f64 {
+    pub fn as_ton_of_refrigeration(self) -> Num {
         self.as_tons_of_refrigeration()
     }
 }
@@ -715,27 +716,27 @@ impl Neg for Power {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Power {
+impl Mul<Num> for Power {
     type Output = Power;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Power> for f64 {
+impl Mul<Power> for Num {
     type Output = Power;
     fn mul(self, rhs: Power) -> Power {
         Power(self * rhs.0)
     }
 }
-impl Div<f64> for Power {
+impl Div<Num> for Power {
     type Output = Power;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Power {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -769,7 +770,7 @@ impl FromStr for Power {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParsePowerError(s.to_owned()))?;

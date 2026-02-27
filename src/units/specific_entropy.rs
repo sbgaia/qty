@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `JoulePerKilogramKelvin` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SpecificEntropy(f64);
+pub struct SpecificEntropy(Num);
 
 /// Unit variants for [`SpecificEntropy`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -79,7 +80,7 @@ impl SpecificEntropyUnit {
 
 impl SpecificEntropy {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: SpecificEntropyUnit) -> Self {
+    pub fn new(value: Num, unit: SpecificEntropyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -99,7 +100,7 @@ impl SpecificEntropy {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -107,12 +108,12 @@ impl SpecificEntropy {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: SpecificEntropyUnit) -> f64 {
+    pub fn convert_to(self, unit: SpecificEntropyUnit) -> Num {
         let x = self.0;
         match unit {
             SpecificEntropyUnit::JoulePerKilogramKelvin => x,
@@ -129,79 +130,79 @@ impl SpecificEntropy {
 
     /// Creates a [`SpecificEntropy`] from a value in JoulesPerKilogramKelvin (`J/kg·K`).
     #[inline]
-    pub fn from_joules_per_kilogram_kelvin(value: f64) -> Self {
+    pub fn from_joules_per_kilogram_kelvin(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::JoulePerKilogramKelvin)
     }
 
     /// Returns the value expressed in JoulesPerKilogramKelvin (`J/kg·K`).
     #[inline]
-    pub fn as_joules_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_joules_per_kilogram_kelvin(self) -> Num {
         self.convert_to(SpecificEntropyUnit::JoulePerKilogramKelvin)
     }
 
     /// Alias for [`Self::as_joules_per_kilogram_kelvin`].
     #[inline]
-    pub fn as_joule_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_joule_per_kilogram_kelvin(self) -> Num {
         self.as_joules_per_kilogram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in KilojoulesPerKilogramKelvin (`kJ/kg·K`).
     #[inline]
-    pub fn from_kilojoules_per_kilogram_kelvin(value: f64) -> Self {
+    pub fn from_kilojoules_per_kilogram_kelvin(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::KilojoulePerKilogramKelvin)
     }
 
     /// Returns the value expressed in KilojoulesPerKilogramKelvin (`kJ/kg·K`).
     #[inline]
-    pub fn as_kilojoules_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_kilojoules_per_kilogram_kelvin(self) -> Num {
         self.convert_to(SpecificEntropyUnit::KilojoulePerKilogramKelvin)
     }
 
     /// Alias for [`Self::as_kilojoules_per_kilogram_kelvin`].
     #[inline]
-    pub fn as_kilojoule_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_kilojoule_per_kilogram_kelvin(self) -> Num {
         self.as_kilojoules_per_kilogram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in MegajoulesPerKilogramKelvin (`MJ/kg·K`).
     #[inline]
-    pub fn from_megajoules_per_kilogram_kelvin(value: f64) -> Self {
+    pub fn from_megajoules_per_kilogram_kelvin(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::MegajoulePerKilogramKelvin)
     }
 
     /// Returns the value expressed in MegajoulesPerKilogramKelvin (`MJ/kg·K`).
     #[inline]
-    pub fn as_megajoules_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_megajoules_per_kilogram_kelvin(self) -> Num {
         self.convert_to(SpecificEntropyUnit::MegajoulePerKilogramKelvin)
     }
 
     /// Alias for [`Self::as_megajoules_per_kilogram_kelvin`].
     #[inline]
-    pub fn as_megajoule_per_kilogram_kelvin(self) -> f64 {
+    pub fn as_megajoule_per_kilogram_kelvin(self) -> Num {
         self.as_megajoules_per_kilogram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in JoulesPerKilogramDegreeCelsius (`J/kg·°C`).
     #[inline]
-    pub fn from_joules_per_kilogram_degree_celsius(value: f64) -> Self {
+    pub fn from_joules_per_kilogram_degree_celsius(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::JoulePerKilogramDegreeCelsius)
     }
 
     /// Returns the value expressed in JoulesPerKilogramDegreeCelsius (`J/kg·°C`).
     #[inline]
-    pub fn as_joules_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_joules_per_kilogram_degree_celsius(self) -> Num {
         self.convert_to(SpecificEntropyUnit::JoulePerKilogramDegreeCelsius)
     }
 
     /// Alias for [`Self::as_joules_per_kilogram_degree_celsius`].
     #[inline]
-    pub fn as_joule_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_joule_per_kilogram_degree_celsius(self) -> Num {
         self.as_joules_per_kilogram_degree_celsius()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in KilojoulesPerKilogramDegreeCelsius (`kJ/kg·°C`).
     #[inline]
-    pub fn from_kilojoules_per_kilogram_degree_celsius(value: f64) -> Self {
+    pub fn from_kilojoules_per_kilogram_degree_celsius(value: Num) -> Self {
         Self::new(
             value,
             SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius,
@@ -210,19 +211,19 @@ impl SpecificEntropy {
 
     /// Returns the value expressed in KilojoulesPerKilogramDegreeCelsius (`kJ/kg·°C`).
     #[inline]
-    pub fn as_kilojoules_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_kilojoules_per_kilogram_degree_celsius(self) -> Num {
         self.convert_to(SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius)
     }
 
     /// Alias for [`Self::as_kilojoules_per_kilogram_degree_celsius`].
     #[inline]
-    pub fn as_kilojoule_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_kilojoule_per_kilogram_degree_celsius(self) -> Num {
         self.as_kilojoules_per_kilogram_degree_celsius()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in MegajoulesPerKilogramDegreeCelsius (`MJ/kg·°C`).
     #[inline]
-    pub fn from_megajoules_per_kilogram_degree_celsius(value: f64) -> Self {
+    pub fn from_megajoules_per_kilogram_degree_celsius(value: Num) -> Self {
         Self::new(
             value,
             SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius,
@@ -231,67 +232,67 @@ impl SpecificEntropy {
 
     /// Returns the value expressed in MegajoulesPerKilogramDegreeCelsius (`MJ/kg·°C`).
     #[inline]
-    pub fn as_megajoules_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_megajoules_per_kilogram_degree_celsius(self) -> Num {
         self.convert_to(SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius)
     }
 
     /// Alias for [`Self::as_megajoules_per_kilogram_degree_celsius`].
     #[inline]
-    pub fn as_megajoule_per_kilogram_degree_celsius(self) -> f64 {
+    pub fn as_megajoule_per_kilogram_degree_celsius(self) -> Num {
         self.as_megajoules_per_kilogram_degree_celsius()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in CaloriesPerGramKelvin (`cal/g·K`).
     #[inline]
-    pub fn from_calories_per_gram_kelvin(value: f64) -> Self {
+    pub fn from_calories_per_gram_kelvin(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::CaloriePerGramKelvin)
     }
 
     /// Returns the value expressed in CaloriesPerGramKelvin (`cal/g·K`).
     #[inline]
-    pub fn as_calories_per_gram_kelvin(self) -> f64 {
+    pub fn as_calories_per_gram_kelvin(self) -> Num {
         self.convert_to(SpecificEntropyUnit::CaloriePerGramKelvin)
     }
 
     /// Alias for [`Self::as_calories_per_gram_kelvin`].
     #[inline]
-    pub fn as_calorie_per_gram_kelvin(self) -> f64 {
+    pub fn as_calorie_per_gram_kelvin(self) -> Num {
         self.as_calories_per_gram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in KilocaloriesPerGramKelvin (`kcal/g·K`).
     #[inline]
-    pub fn from_kilocalories_per_gram_kelvin(value: f64) -> Self {
+    pub fn from_kilocalories_per_gram_kelvin(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::KilocaloriePerGramKelvin)
     }
 
     /// Returns the value expressed in KilocaloriesPerGramKelvin (`kcal/g·K`).
     #[inline]
-    pub fn as_kilocalories_per_gram_kelvin(self) -> f64 {
+    pub fn as_kilocalories_per_gram_kelvin(self) -> Num {
         self.convert_to(SpecificEntropyUnit::KilocaloriePerGramKelvin)
     }
 
     /// Alias for [`Self::as_kilocalories_per_gram_kelvin`].
     #[inline]
-    pub fn as_kilocalorie_per_gram_kelvin(self) -> f64 {
+    pub fn as_kilocalorie_per_gram_kelvin(self) -> Num {
         self.as_kilocalories_per_gram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in BtusPerPoundFahrenheit (`BTU/(lb·°F)`).
     #[inline]
-    pub fn from_btus_per_pound_fahrenheit(value: f64) -> Self {
+    pub fn from_btus_per_pound_fahrenheit(value: Num) -> Self {
         Self::new(value, SpecificEntropyUnit::BtuPerPoundFahrenheit)
     }
 
     /// Returns the value expressed in BtusPerPoundFahrenheit (`BTU/(lb·°F)`).
     #[inline]
-    pub fn as_btus_per_pound_fahrenheit(self) -> f64 {
+    pub fn as_btus_per_pound_fahrenheit(self) -> Num {
         self.convert_to(SpecificEntropyUnit::BtuPerPoundFahrenheit)
     }
 
     /// Alias for [`Self::as_btus_per_pound_fahrenheit`].
     #[inline]
-    pub fn as_btu_per_pound_fahrenheit(self) -> f64 {
+    pub fn as_btu_per_pound_fahrenheit(self) -> Num {
         self.as_btus_per_pound_fahrenheit()
     }
 }
@@ -314,27 +315,27 @@ impl Neg for SpecificEntropy {
         Self(-self.0)
     }
 }
-impl Mul<f64> for SpecificEntropy {
+impl Mul<Num> for SpecificEntropy {
     type Output = SpecificEntropy;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<SpecificEntropy> for f64 {
+impl Mul<SpecificEntropy> for Num {
     type Output = SpecificEntropy;
     fn mul(self, rhs: SpecificEntropy) -> SpecificEntropy {
         SpecificEntropy(self * rhs.0)
     }
 }
-impl Div<f64> for SpecificEntropy {
+impl Div<Num> for SpecificEntropy {
     type Output = SpecificEntropy;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SpecificEntropy {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -373,7 +374,7 @@ impl FromStr for SpecificEntropy {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseSpecificEntropyError(s.to_owned()))?;

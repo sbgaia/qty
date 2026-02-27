@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `DecimalFractionPerSecond` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RatioChangeRate(f64);
+pub struct RatioChangeRate(Num);
 
 /// Unit variants for [`RatioChangeRate`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -48,7 +49,7 @@ impl RatioChangeRateUnit {
 
 impl RatioChangeRate {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: RatioChangeRateUnit) -> Self {
+    pub fn new(value: Num, unit: RatioChangeRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -61,7 +62,7 @@ impl RatioChangeRate {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -69,12 +70,12 @@ impl RatioChangeRate {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: RatioChangeRateUnit) -> f64 {
+    pub fn convert_to(self, unit: RatioChangeRateUnit) -> Num {
         let x = self.0;
         match unit {
             RatioChangeRateUnit::PercentPerSecond => x * 1e2,
@@ -84,37 +85,37 @@ impl RatioChangeRate {
 
     /// Creates a [`RatioChangeRate`] from a value in PercentsPerSecond (`%/s`).
     #[inline]
-    pub fn from_percents_per_second(value: f64) -> Self {
+    pub fn from_percents_per_second(value: Num) -> Self {
         Self::new(value, RatioChangeRateUnit::PercentPerSecond)
     }
 
     /// Returns the value expressed in PercentsPerSecond (`%/s`).
     #[inline]
-    pub fn as_percents_per_second(self) -> f64 {
+    pub fn as_percents_per_second(self) -> Num {
         self.convert_to(RatioChangeRateUnit::PercentPerSecond)
     }
 
     /// Alias for [`Self::as_percents_per_second`].
     #[inline]
-    pub fn as_percent_per_second(self) -> f64 {
+    pub fn as_percent_per_second(self) -> Num {
         self.as_percents_per_second()
     }
 
     /// Creates a [`RatioChangeRate`] from a value in DecimalFractionsPerSecond (`/s`).
     #[inline]
-    pub fn from_decimal_fractions_per_second(value: f64) -> Self {
+    pub fn from_decimal_fractions_per_second(value: Num) -> Self {
         Self::new(value, RatioChangeRateUnit::DecimalFractionPerSecond)
     }
 
     /// Returns the value expressed in DecimalFractionsPerSecond (`/s`).
     #[inline]
-    pub fn as_decimal_fractions_per_second(self) -> f64 {
+    pub fn as_decimal_fractions_per_second(self) -> Num {
         self.convert_to(RatioChangeRateUnit::DecimalFractionPerSecond)
     }
 
     /// Alias for [`Self::as_decimal_fractions_per_second`].
     #[inline]
-    pub fn as_decimal_fraction_per_second(self) -> f64 {
+    pub fn as_decimal_fraction_per_second(self) -> Num {
         self.as_decimal_fractions_per_second()
     }
 }
@@ -137,27 +138,27 @@ impl Neg for RatioChangeRate {
         Self(-self.0)
     }
 }
-impl Mul<f64> for RatioChangeRate {
+impl Mul<Num> for RatioChangeRate {
     type Output = RatioChangeRate;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<RatioChangeRate> for f64 {
+impl Mul<RatioChangeRate> for Num {
     type Output = RatioChangeRate;
     fn mul(self, rhs: RatioChangeRate) -> RatioChangeRate {
         RatioChangeRate(self * rhs.0)
     }
 }
-impl Div<f64> for RatioChangeRate {
+impl Div<Num> for RatioChangeRate {
     type Output = RatioChangeRate;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RatioChangeRate {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -196,7 +197,7 @@ impl FromStr for RatioChangeRate {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseRatioChangeRateError(s.to_owned()))?;

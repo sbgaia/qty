@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `VoltampereReactiveHour` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricReactiveEnergy(f64);
+pub struct ElectricReactiveEnergy(Num);
 
 /// Unit variants for [`ElectricReactiveEnergy`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -55,7 +56,7 @@ impl ElectricReactiveEnergyUnit {
 
 impl ElectricReactiveEnergy {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricReactiveEnergyUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricReactiveEnergyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -69,7 +70,7 @@ impl ElectricReactiveEnergy {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -77,12 +78,12 @@ impl ElectricReactiveEnergy {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricReactiveEnergyUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricReactiveEnergyUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricReactiveEnergyUnit::VoltampereReactiveHour => x,
@@ -93,25 +94,25 @@ impl ElectricReactiveEnergy {
 
     /// Creates a [`ElectricReactiveEnergy`] from a value in VoltampereReactiveHours (`varh`).
     #[inline]
-    pub fn from_voltampere_reactive_hours(value: f64) -> Self {
+    pub fn from_voltampere_reactive_hours(value: Num) -> Self {
         Self::new(value, ElectricReactiveEnergyUnit::VoltampereReactiveHour)
     }
 
     /// Returns the value expressed in VoltampereReactiveHours (`varh`).
     #[inline]
-    pub fn as_voltampere_reactive_hours(self) -> f64 {
+    pub fn as_voltampere_reactive_hours(self) -> Num {
         self.convert_to(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
     }
 
     /// Alias for [`Self::as_voltampere_reactive_hours`].
     #[inline]
-    pub fn as_voltampere_reactive_hour(self) -> f64 {
+    pub fn as_voltampere_reactive_hour(self) -> Num {
         self.as_voltampere_reactive_hours()
     }
 
     /// Creates a [`ElectricReactiveEnergy`] from a value in KilovoltampereReactiveHours (`kvarh`).
     #[inline]
-    pub fn from_kilovoltampere_reactive_hours(value: f64) -> Self {
+    pub fn from_kilovoltampere_reactive_hours(value: Num) -> Self {
         Self::new(
             value,
             ElectricReactiveEnergyUnit::KilovoltampereReactiveHour,
@@ -120,19 +121,19 @@ impl ElectricReactiveEnergy {
 
     /// Returns the value expressed in KilovoltampereReactiveHours (`kvarh`).
     #[inline]
-    pub fn as_kilovoltampere_reactive_hours(self) -> f64 {
+    pub fn as_kilovoltampere_reactive_hours(self) -> Num {
         self.convert_to(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
     }
 
     /// Alias for [`Self::as_kilovoltampere_reactive_hours`].
     #[inline]
-    pub fn as_kilovoltampere_reactive_hour(self) -> f64 {
+    pub fn as_kilovoltampere_reactive_hour(self) -> Num {
         self.as_kilovoltampere_reactive_hours()
     }
 
     /// Creates a [`ElectricReactiveEnergy`] from a value in MegavoltampereReactiveHours (`Mvarh`).
     #[inline]
-    pub fn from_megavoltampere_reactive_hours(value: f64) -> Self {
+    pub fn from_megavoltampere_reactive_hours(value: Num) -> Self {
         Self::new(
             value,
             ElectricReactiveEnergyUnit::MegavoltampereReactiveHour,
@@ -141,13 +142,13 @@ impl ElectricReactiveEnergy {
 
     /// Returns the value expressed in MegavoltampereReactiveHours (`Mvarh`).
     #[inline]
-    pub fn as_megavoltampere_reactive_hours(self) -> f64 {
+    pub fn as_megavoltampere_reactive_hours(self) -> Num {
         self.convert_to(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
     }
 
     /// Alias for [`Self::as_megavoltampere_reactive_hours`].
     #[inline]
-    pub fn as_megavoltampere_reactive_hour(self) -> f64 {
+    pub fn as_megavoltampere_reactive_hour(self) -> Num {
         self.as_megavoltampere_reactive_hours()
     }
 }
@@ -170,27 +171,27 @@ impl Neg for ElectricReactiveEnergy {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricReactiveEnergy {
+impl Mul<Num> for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricReactiveEnergy> for f64 {
+impl Mul<ElectricReactiveEnergy> for Num {
     type Output = ElectricReactiveEnergy;
     fn mul(self, rhs: ElectricReactiveEnergy) -> ElectricReactiveEnergy {
         ElectricReactiveEnergy(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricReactiveEnergy {
+impl Div<Num> for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricReactiveEnergy {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -229,7 +230,7 @@ impl FromStr for ElectricReactiveEnergy {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricReactiveEnergyError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `MeterToTheFourth` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AreaMomentOfInertia(f64);
+pub struct AreaMomentOfInertia(Num);
 
 /// Unit variants for [`AreaMomentOfInertia`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl AreaMomentOfInertiaUnit {
 
 impl AreaMomentOfInertia {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: AreaMomentOfInertiaUnit) -> Self {
+    pub fn new(value: Num, unit: AreaMomentOfInertiaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl AreaMomentOfInertia {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl AreaMomentOfInertia {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> f64 {
+    pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> Num {
         let x = self.0;
         match unit {
             AreaMomentOfInertiaUnit::MeterToTheFourth => x,
@@ -111,109 +112,109 @@ impl AreaMomentOfInertia {
 
     /// Creates a [`AreaMomentOfInertia`] from a value in MetersToTheFourth (`m⁴`).
     #[inline]
-    pub fn from_meters_to_the_fourth(value: f64) -> Self {
+    pub fn from_meters_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::MeterToTheFourth)
     }
 
     /// Returns the value expressed in MetersToTheFourth (`m⁴`).
     #[inline]
-    pub fn as_meters_to_the_fourth(self) -> f64 {
+    pub fn as_meters_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::MeterToTheFourth)
     }
 
     /// Alias for [`Self::as_meters_to_the_fourth`].
     #[inline]
-    pub fn as_meter_to_the_fourth(self) -> f64 {
+    pub fn as_meter_to_the_fourth(self) -> Num {
         self.as_meters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in DecimetersToTheFourth (`dm⁴`).
     #[inline]
-    pub fn from_decimeters_to_the_fourth(value: f64) -> Self {
+    pub fn from_decimeters_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::DecimeterToTheFourth)
     }
 
     /// Returns the value expressed in DecimetersToTheFourth (`dm⁴`).
     #[inline]
-    pub fn as_decimeters_to_the_fourth(self) -> f64 {
+    pub fn as_decimeters_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
     }
 
     /// Alias for [`Self::as_decimeters_to_the_fourth`].
     #[inline]
-    pub fn as_decimeter_to_the_fourth(self) -> f64 {
+    pub fn as_decimeter_to_the_fourth(self) -> Num {
         self.as_decimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in CentimetersToTheFourth (`cm⁴`).
     #[inline]
-    pub fn from_centimeters_to_the_fourth(value: f64) -> Self {
+    pub fn from_centimeters_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::CentimeterToTheFourth)
     }
 
     /// Returns the value expressed in CentimetersToTheFourth (`cm⁴`).
     #[inline]
-    pub fn as_centimeters_to_the_fourth(self) -> f64 {
+    pub fn as_centimeters_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
     }
 
     /// Alias for [`Self::as_centimeters_to_the_fourth`].
     #[inline]
-    pub fn as_centimeter_to_the_fourth(self) -> f64 {
+    pub fn as_centimeter_to_the_fourth(self) -> Num {
         self.as_centimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in MillimetersToTheFourth (`mm⁴`).
     #[inline]
-    pub fn from_millimeters_to_the_fourth(value: f64) -> Self {
+    pub fn from_millimeters_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::MillimeterToTheFourth)
     }
 
     /// Returns the value expressed in MillimetersToTheFourth (`mm⁴`).
     #[inline]
-    pub fn as_millimeters_to_the_fourth(self) -> f64 {
+    pub fn as_millimeters_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
     }
 
     /// Alias for [`Self::as_millimeters_to_the_fourth`].
     #[inline]
-    pub fn as_millimeter_to_the_fourth(self) -> f64 {
+    pub fn as_millimeter_to_the_fourth(self) -> Num {
         self.as_millimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in FeetToTheFourth (`ft⁴`).
     #[inline]
-    pub fn from_feet_to_the_fourth(value: f64) -> Self {
+    pub fn from_feet_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::FootToTheFourth)
     }
 
     /// Returns the value expressed in FeetToTheFourth (`ft⁴`).
     #[inline]
-    pub fn as_feet_to_the_fourth(self) -> f64 {
+    pub fn as_feet_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::FootToTheFourth)
     }
 
     /// Alias for [`Self::as_feet_to_the_fourth`].
     #[inline]
-    pub fn as_foot_to_the_fourth(self) -> f64 {
+    pub fn as_foot_to_the_fourth(self) -> Num {
         self.as_feet_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in InchesToTheFourth (`in⁴`).
     #[inline]
-    pub fn from_inches_to_the_fourth(value: f64) -> Self {
+    pub fn from_inches_to_the_fourth(value: Num) -> Self {
         Self::new(value, AreaMomentOfInertiaUnit::InchToTheFourth)
     }
 
     /// Returns the value expressed in InchesToTheFourth (`in⁴`).
     #[inline]
-    pub fn as_inches_to_the_fourth(self) -> f64 {
+    pub fn as_inches_to_the_fourth(self) -> Num {
         self.convert_to(AreaMomentOfInertiaUnit::InchToTheFourth)
     }
 
     /// Alias for [`Self::as_inches_to_the_fourth`].
     #[inline]
-    pub fn as_inch_to_the_fourth(self) -> f64 {
+    pub fn as_inch_to_the_fourth(self) -> Num {
         self.as_inches_to_the_fourth()
     }
 }
@@ -236,27 +237,27 @@ impl Neg for AreaMomentOfInertia {
         Self(-self.0)
     }
 }
-impl Mul<f64> for AreaMomentOfInertia {
+impl Mul<Num> for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<AreaMomentOfInertia> for f64 {
+impl Mul<AreaMomentOfInertia> for Num {
     type Output = AreaMomentOfInertia;
     fn mul(self, rhs: AreaMomentOfInertia) -> AreaMomentOfInertia {
         AreaMomentOfInertia(self * rhs.0)
     }
 }
-impl Div<f64> for AreaMomentOfInertia {
+impl Div<Num> for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AreaMomentOfInertia {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -295,7 +296,7 @@ impl FromStr for AreaMomentOfInertia {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseAreaMomentOfInertiaError(s.to_owned()))?;

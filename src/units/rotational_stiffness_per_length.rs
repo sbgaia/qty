@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `NewtonMeterPerRadianPerMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RotationalStiffnessPerLength(f64);
+pub struct RotationalStiffnessPerLength(Num);
 
 /// Unit variants for [`RotationalStiffnessPerLength`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -70,7 +71,7 @@ impl RotationalStiffnessPerLengthUnit {
 
 impl RotationalStiffnessPerLength {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: RotationalStiffnessPerLengthUnit) -> Self {
+    pub fn new(value: Num, unit: RotationalStiffnessPerLengthUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -78,10 +79,10 @@ impl RotationalStiffnessPerLength {
             RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => (x * 1e3),
             RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter => (x * 1e6),
             RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot => {
-                x * (4.4482216152605 * 180.0 / std::f64::consts::PI)
+                x * (4.4482216152605 * 180.0 / (std::f64::consts::PI as Num))
             }
             RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot => {
-                x * (4.4482216152605e3 * 180.0 / std::f64::consts::PI)
+                x * (4.4482216152605e3 * 180.0 / (std::f64::consts::PI as Num))
             }
         })
     }
@@ -90,7 +91,7 @@ impl RotationalStiffnessPerLength {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -98,29 +99,29 @@ impl RotationalStiffnessPerLength {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: RotationalStiffnessPerLengthUnit) -> f64 {
+    pub fn convert_to(self, unit: RotationalStiffnessPerLengthUnit) -> Num {
         let x = self.0;
         match unit {
             RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter => x,
             RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => (x / 1e3),
             RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter => (x / 1e6),
             RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot => {
-                x / (4.4482216152605 * 180.0 / std::f64::consts::PI)
+                x / (4.4482216152605 * 180.0 / (std::f64::consts::PI as Num))
             }
             RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot => {
-                x / (4.4482216152605e3 * 180.0 / std::f64::consts::PI)
+                x / (4.4482216152605e3 * 180.0 / (std::f64::consts::PI as Num))
             }
         }
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in NewtonMetersPerRadianPerMeter (`N·m/rad/m`).
     #[inline]
-    pub fn from_newton_meters_per_radian_per_meter(value: f64) -> Self {
+    pub fn from_newton_meters_per_radian_per_meter(value: Num) -> Self {
         Self::new(
             value,
             RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter,
@@ -129,19 +130,19 @@ impl RotationalStiffnessPerLength {
 
     /// Returns the value expressed in NewtonMetersPerRadianPerMeter (`N·m/rad/m`).
     #[inline]
-    pub fn as_newton_meters_per_radian_per_meter(self) -> f64 {
+    pub fn as_newton_meters_per_radian_per_meter(self) -> Num {
         self.convert_to(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
     }
 
     /// Alias for [`Self::as_newton_meters_per_radian_per_meter`].
     #[inline]
-    pub fn as_newton_meter_per_radian_per_meter(self) -> f64 {
+    pub fn as_newton_meter_per_radian_per_meter(self) -> Num {
         self.as_newton_meters_per_radian_per_meter()
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in KilonewtonMetersPerRadianPerMeter (`kN·m/rad/m`).
     #[inline]
-    pub fn from_kilonewton_meters_per_radian_per_meter(value: f64) -> Self {
+    pub fn from_kilonewton_meters_per_radian_per_meter(value: Num) -> Self {
         Self::new(
             value,
             RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter,
@@ -150,19 +151,19 @@ impl RotationalStiffnessPerLength {
 
     /// Returns the value expressed in KilonewtonMetersPerRadianPerMeter (`kN·m/rad/m`).
     #[inline]
-    pub fn as_kilonewton_meters_per_radian_per_meter(self) -> f64 {
+    pub fn as_kilonewton_meters_per_radian_per_meter(self) -> Num {
         self.convert_to(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
     }
 
     /// Alias for [`Self::as_kilonewton_meters_per_radian_per_meter`].
     #[inline]
-    pub fn as_kilonewton_meter_per_radian_per_meter(self) -> f64 {
+    pub fn as_kilonewton_meter_per_radian_per_meter(self) -> Num {
         self.as_kilonewton_meters_per_radian_per_meter()
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in MeganewtonMetersPerRadianPerMeter (`MN·m/rad/m`).
     #[inline]
-    pub fn from_meganewton_meters_per_radian_per_meter(value: f64) -> Self {
+    pub fn from_meganewton_meters_per_radian_per_meter(value: Num) -> Self {
         Self::new(
             value,
             RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter,
@@ -171,19 +172,19 @@ impl RotationalStiffnessPerLength {
 
     /// Returns the value expressed in MeganewtonMetersPerRadianPerMeter (`MN·m/rad/m`).
     #[inline]
-    pub fn as_meganewton_meters_per_radian_per_meter(self) -> f64 {
+    pub fn as_meganewton_meters_per_radian_per_meter(self) -> Num {
         self.convert_to(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
     }
 
     /// Alias for [`Self::as_meganewton_meters_per_radian_per_meter`].
     #[inline]
-    pub fn as_meganewton_meter_per_radian_per_meter(self) -> f64 {
+    pub fn as_meganewton_meter_per_radian_per_meter(self) -> Num {
         self.as_meganewton_meters_per_radian_per_meter()
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in PoundForceFeetPerDegreesPerFeet (`lbf·ft/deg/ft`).
     #[inline]
-    pub fn from_pound_force_feet_per_degrees_per_feet(value: f64) -> Self {
+    pub fn from_pound_force_feet_per_degrees_per_feet(value: Num) -> Self {
         Self::new(
             value,
             RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot,
@@ -192,19 +193,19 @@ impl RotationalStiffnessPerLength {
 
     /// Returns the value expressed in PoundForceFeetPerDegreesPerFeet (`lbf·ft/deg/ft`).
     #[inline]
-    pub fn as_pound_force_feet_per_degrees_per_feet(self) -> f64 {
+    pub fn as_pound_force_feet_per_degrees_per_feet(self) -> Num {
         self.convert_to(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
     }
 
     /// Alias for [`Self::as_pound_force_feet_per_degrees_per_feet`].
     #[inline]
-    pub fn as_pound_force_foot_per_degrees_per_foot(self) -> f64 {
+    pub fn as_pound_force_foot_per_degrees_per_foot(self) -> Num {
         self.as_pound_force_feet_per_degrees_per_feet()
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in KilopoundForceFeetPerDegreesPerFeet (`kipf·ft/°/ft`).
     #[inline]
-    pub fn from_kilopound_force_feet_per_degrees_per_feet(value: f64) -> Self {
+    pub fn from_kilopound_force_feet_per_degrees_per_feet(value: Num) -> Self {
         Self::new(
             value,
             RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot,
@@ -213,13 +214,13 @@ impl RotationalStiffnessPerLength {
 
     /// Returns the value expressed in KilopoundForceFeetPerDegreesPerFeet (`kipf·ft/°/ft`).
     #[inline]
-    pub fn as_kilopound_force_feet_per_degrees_per_feet(self) -> f64 {
+    pub fn as_kilopound_force_feet_per_degrees_per_feet(self) -> Num {
         self.convert_to(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
     }
 
     /// Alias for [`Self::as_kilopound_force_feet_per_degrees_per_feet`].
     #[inline]
-    pub fn as_kilopound_force_foot_per_degrees_per_foot(self) -> f64 {
+    pub fn as_kilopound_force_foot_per_degrees_per_foot(self) -> Num {
         self.as_kilopound_force_feet_per_degrees_per_feet()
     }
 }
@@ -242,27 +243,27 @@ impl Neg for RotationalStiffnessPerLength {
         Self(-self.0)
     }
 }
-impl Mul<f64> for RotationalStiffnessPerLength {
+impl Mul<Num> for RotationalStiffnessPerLength {
     type Output = RotationalStiffnessPerLength;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<RotationalStiffnessPerLength> for f64 {
+impl Mul<RotationalStiffnessPerLength> for Num {
     type Output = RotationalStiffnessPerLength;
     fn mul(self, rhs: RotationalStiffnessPerLength) -> RotationalStiffnessPerLength {
         RotationalStiffnessPerLength(self * rhs.0)
     }
 }
-impl Div<f64> for RotationalStiffnessPerLength {
+impl Div<Num> for RotationalStiffnessPerLength {
     type Output = RotationalStiffnessPerLength;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RotationalStiffnessPerLength {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -305,7 +306,7 @@ impl FromStr for RotationalStiffnessPerLength {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseRotationalStiffnessPerLengthError(s.to_owned()))?;

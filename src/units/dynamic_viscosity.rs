@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `NewtonSecondPerMeterSquared` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct DynamicViscosity(f64);
+pub struct DynamicViscosity(Num);
 
 /// Unit variants for [`DynamicViscosity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -83,7 +84,7 @@ impl DynamicViscosityUnit {
 
 impl DynamicViscosity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: DynamicViscosityUnit) -> Self {
+    pub fn new(value: Num, unit: DynamicViscosityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -106,7 +107,7 @@ impl DynamicViscosity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -114,12 +115,12 @@ impl DynamicViscosity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: DynamicViscosityUnit) -> f64 {
+    pub fn convert_to(self, unit: DynamicViscosityUnit) -> Num {
         let x = self.0;
         match unit {
             DynamicViscosityUnit::NewtonSecondPerMeterSquared => x,
@@ -139,169 +140,169 @@ impl DynamicViscosity {
 
     /// Creates a [`DynamicViscosity`] from a value in NewtonSecondsPerMeterSquared (`Ns/m²`).
     #[inline]
-    pub fn from_newton_seconds_per_meter_squared(value: f64) -> Self {
+    pub fn from_newton_seconds_per_meter_squared(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::NewtonSecondPerMeterSquared)
     }
 
     /// Returns the value expressed in NewtonSecondsPerMeterSquared (`Ns/m²`).
     #[inline]
-    pub fn as_newton_seconds_per_meter_squared(self) -> f64 {
+    pub fn as_newton_seconds_per_meter_squared(self) -> Num {
         self.convert_to(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
     }
 
     /// Alias for [`Self::as_newton_seconds_per_meter_squared`].
     #[inline]
-    pub fn as_newton_second_per_meter_squared(self) -> f64 {
+    pub fn as_newton_second_per_meter_squared(self) -> Num {
         self.as_newton_seconds_per_meter_squared()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in PascalSeconds (`Pa·s`).
     #[inline]
-    pub fn from_pascal_seconds(value: f64) -> Self {
+    pub fn from_pascal_seconds(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::PascalSecond)
     }
 
     /// Returns the value expressed in PascalSeconds (`Pa·s`).
     #[inline]
-    pub fn as_pascal_seconds(self) -> f64 {
+    pub fn as_pascal_seconds(self) -> Num {
         self.convert_to(DynamicViscosityUnit::PascalSecond)
     }
 
     /// Alias for [`Self::as_pascal_seconds`].
     #[inline]
-    pub fn as_pascal_second(self) -> f64 {
+    pub fn as_pascal_second(self) -> Num {
         self.as_pascal_seconds()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in MillipascalSeconds (`mPa·s`).
     #[inline]
-    pub fn from_millipascal_seconds(value: f64) -> Self {
+    pub fn from_millipascal_seconds(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::MillipascalSecond)
     }
 
     /// Returns the value expressed in MillipascalSeconds (`mPa·s`).
     #[inline]
-    pub fn as_millipascal_seconds(self) -> f64 {
+    pub fn as_millipascal_seconds(self) -> Num {
         self.convert_to(DynamicViscosityUnit::MillipascalSecond)
     }
 
     /// Alias for [`Self::as_millipascal_seconds`].
     #[inline]
-    pub fn as_millipascal_second(self) -> f64 {
+    pub fn as_millipascal_second(self) -> Num {
         self.as_millipascal_seconds()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in MicropascalSeconds (`µPa·s`).
     #[inline]
-    pub fn from_micropascal_seconds(value: f64) -> Self {
+    pub fn from_micropascal_seconds(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::MicropascalSecond)
     }
 
     /// Returns the value expressed in MicropascalSeconds (`µPa·s`).
     #[inline]
-    pub fn as_micropascal_seconds(self) -> f64 {
+    pub fn as_micropascal_seconds(self) -> Num {
         self.convert_to(DynamicViscosityUnit::MicropascalSecond)
     }
 
     /// Alias for [`Self::as_micropascal_seconds`].
     #[inline]
-    pub fn as_micropascal_second(self) -> f64 {
+    pub fn as_micropascal_second(self) -> Num {
         self.as_micropascal_seconds()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in Poise (`P`).
     #[inline]
-    pub fn from_poise(value: f64) -> Self {
+    pub fn from_poise(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::Poise)
     }
 
     /// Returns the value expressed in Poise (`P`).
     #[inline]
-    pub fn as_poise(self) -> f64 {
+    pub fn as_poise(self) -> Num {
         self.convert_to(DynamicViscosityUnit::Poise)
     }
 
     /// Creates a [`DynamicViscosity`] from a value in Centipoise (`cP`).
     #[inline]
-    pub fn from_centipoise(value: f64) -> Self {
+    pub fn from_centipoise(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::Centipoise)
     }
 
     /// Returns the value expressed in Centipoise (`cP`).
     #[inline]
-    pub fn as_centipoise(self) -> f64 {
+    pub fn as_centipoise(self) -> Num {
         self.convert_to(DynamicViscosityUnit::Centipoise)
     }
 
     /// Creates a [`DynamicViscosity`] from a value in Reyns (`reyn`).
     #[inline]
-    pub fn from_reyns(value: f64) -> Self {
+    pub fn from_reyns(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::Reyn)
     }
 
     /// Returns the value expressed in Reyns (`reyn`).
     #[inline]
-    pub fn as_reyns(self) -> f64 {
+    pub fn as_reyns(self) -> Num {
         self.convert_to(DynamicViscosityUnit::Reyn)
     }
 
     /// Alias for [`Self::as_reyns`].
     #[inline]
-    pub fn as_reyn(self) -> f64 {
+    pub fn as_reyn(self) -> Num {
         self.as_reyns()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareInch (`lbf·s/in²`).
     #[inline]
-    pub fn from_pounds_force_second_per_square_inch(value: f64) -> Self {
+    pub fn from_pounds_force_second_per_square_inch(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::PoundForceSecondPerSquareInch)
     }
 
     /// Returns the value expressed in PoundsForceSecondPerSquareInch (`lbf·s/in²`).
     #[inline]
-    pub fn as_pounds_force_second_per_square_inch(self) -> f64 {
+    pub fn as_pounds_force_second_per_square_inch(self) -> Num {
         self.convert_to(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
     }
 
     /// Alias for [`Self::as_pounds_force_second_per_square_inch`].
     #[inline]
-    pub fn as_pound_force_second_per_square_inch(self) -> f64 {
+    pub fn as_pound_force_second_per_square_inch(self) -> Num {
         self.as_pounds_force_second_per_square_inch()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareFoot (`lbf·s/ft²`).
     #[inline]
-    pub fn from_pounds_force_second_per_square_foot(value: f64) -> Self {
+    pub fn from_pounds_force_second_per_square_foot(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
     }
 
     /// Returns the value expressed in PoundsForceSecondPerSquareFoot (`lbf·s/ft²`).
     #[inline]
-    pub fn as_pounds_force_second_per_square_foot(self) -> f64 {
+    pub fn as_pounds_force_second_per_square_foot(self) -> Num {
         self.convert_to(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
     }
 
     /// Alias for [`Self::as_pounds_force_second_per_square_foot`].
     #[inline]
-    pub fn as_pound_force_second_per_square_foot(self) -> f64 {
+    pub fn as_pound_force_second_per_square_foot(self) -> Num {
         self.as_pounds_force_second_per_square_foot()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in PoundsPerFootSecond (`lb/(ft·s)`).
     #[inline]
-    pub fn from_pounds_per_foot_second(value: f64) -> Self {
+    pub fn from_pounds_per_foot_second(value: Num) -> Self {
         Self::new(value, DynamicViscosityUnit::PoundPerFootSecond)
     }
 
     /// Returns the value expressed in PoundsPerFootSecond (`lb/(ft·s)`).
     #[inline]
-    pub fn as_pounds_per_foot_second(self) -> f64 {
+    pub fn as_pounds_per_foot_second(self) -> Num {
         self.convert_to(DynamicViscosityUnit::PoundPerFootSecond)
     }
 
     /// Alias for [`Self::as_pounds_per_foot_second`].
     #[inline]
-    pub fn as_pound_per_foot_second(self) -> f64 {
+    pub fn as_pound_per_foot_second(self) -> Num {
         self.as_pounds_per_foot_second()
     }
 }
@@ -324,27 +325,27 @@ impl Neg for DynamicViscosity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for DynamicViscosity {
+impl Mul<Num> for DynamicViscosity {
     type Output = DynamicViscosity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<DynamicViscosity> for f64 {
+impl Mul<DynamicViscosity> for Num {
     type Output = DynamicViscosity;
     fn mul(self, rhs: DynamicViscosity) -> DynamicViscosity {
         DynamicViscosity(self * rhs.0)
     }
 }
-impl Div<f64> for DynamicViscosity {
+impl Div<Num> for DynamicViscosity {
     type Output = DynamicViscosity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for DynamicViscosity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -383,7 +384,7 @@ impl FromStr for DynamicViscosity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseDynamicViscosityError(s.to_owned()))?;

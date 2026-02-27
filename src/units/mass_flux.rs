@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `KilogramPerSecondPerSquareMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MassFlux(f64);
+pub struct MassFlux(Num);
 
 /// Unit variants for [`MassFlux`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -91,7 +92,7 @@ impl MassFluxUnit {
 
 impl MassFlux {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MassFluxUnit) -> Self {
+    pub fn new(value: Num, unit: MassFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -114,7 +115,7 @@ impl MassFlux {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -122,12 +123,12 @@ impl MassFlux {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MassFluxUnit) -> f64 {
+    pub fn convert_to(self, unit: MassFluxUnit) -> Num {
         let x = self.0;
         match unit {
             MassFluxUnit::GramPerSecondPerSquareMeter => x * 1e3,
@@ -147,217 +148,217 @@ impl MassFlux {
 
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
     #[inline]
-    pub fn from_grams_per_second_per_square_meter(value: f64) -> Self {
+    pub fn from_grams_per_second_per_square_meter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerSecondPerSquareMeter)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
     #[inline]
-    pub fn as_grams_per_second_per_square_meter(self) -> f64 {
+    pub fn as_grams_per_second_per_square_meter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerSecondPerSquareMeter)
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_meter`].
     #[inline]
-    pub fn as_gram_per_second_per_square_meter(self) -> f64 {
+    pub fn as_gram_per_second_per_square_meter(self) -> Num {
         self.as_grams_per_second_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
     #[inline]
-    pub fn from_kilograms_per_second_per_square_meter(value: f64) -> Self {
+    pub fn from_kilograms_per_second_per_square_meter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareMeter)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
     #[inline]
-    pub fn as_kilograms_per_second_per_square_meter(self) -> f64 {
+    pub fn as_kilograms_per_second_per_square_meter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareMeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_meter`].
     #[inline]
-    pub fn as_kilogram_per_second_per_square_meter(self) -> f64 {
+    pub fn as_kilogram_per_second_per_square_meter(self) -> Num {
         self.as_kilograms_per_second_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
     #[inline]
-    pub fn from_grams_per_second_per_square_centimeter(value: f64) -> Self {
+    pub fn from_grams_per_second_per_square_centimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerSecondPerSquareCentimeter)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
     #[inline]
-    pub fn as_grams_per_second_per_square_centimeter(self) -> f64 {
+    pub fn as_grams_per_second_per_square_centimeter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerSecondPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_centimeter`].
     #[inline]
-    pub fn as_gram_per_second_per_square_centimeter(self) -> f64 {
+    pub fn as_gram_per_second_per_square_centimeter(self) -> Num {
         self.as_grams_per_second_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
     #[inline]
-    pub fn from_kilograms_per_second_per_square_centimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_second_per_square_centimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
     #[inline]
-    pub fn as_kilograms_per_second_per_square_centimeter(self) -> f64 {
+    pub fn as_kilograms_per_second_per_square_centimeter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_centimeter`].
     #[inline]
-    pub fn as_kilogram_per_second_per_square_centimeter(self) -> f64 {
+    pub fn as_kilogram_per_second_per_square_centimeter(self) -> Num {
         self.as_kilograms_per_second_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
     #[inline]
-    pub fn from_grams_per_second_per_square_millimeter(value: f64) -> Self {
+    pub fn from_grams_per_second_per_square_millimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerSecondPerSquareMillimeter)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
     #[inline]
-    pub fn as_grams_per_second_per_square_millimeter(self) -> f64 {
+    pub fn as_grams_per_second_per_square_millimeter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerSecondPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_millimeter`].
     #[inline]
-    pub fn as_gram_per_second_per_square_millimeter(self) -> f64 {
+    pub fn as_gram_per_second_per_square_millimeter(self) -> Num {
         self.as_grams_per_second_per_square_millimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
     #[inline]
-    pub fn from_kilograms_per_second_per_square_millimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_second_per_square_millimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
     #[inline]
-    pub fn as_kilograms_per_second_per_square_millimeter(self) -> f64 {
+    pub fn as_kilograms_per_second_per_square_millimeter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_millimeter`].
     #[inline]
-    pub fn as_kilogram_per_second_per_square_millimeter(self) -> f64 {
+    pub fn as_kilogram_per_second_per_square_millimeter(self) -> Num {
         self.as_kilograms_per_second_per_square_millimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
     #[inline]
-    pub fn from_grams_per_hour_per_square_meter(value: f64) -> Self {
+    pub fn from_grams_per_hour_per_square_meter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerHourPerSquareMeter)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
     #[inline]
-    pub fn as_grams_per_hour_per_square_meter(self) -> f64 {
+    pub fn as_grams_per_hour_per_square_meter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerHourPerSquareMeter)
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_meter`].
     #[inline]
-    pub fn as_gram_per_hour_per_square_meter(self) -> f64 {
+    pub fn as_gram_per_hour_per_square_meter(self) -> Num {
         self.as_grams_per_hour_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
     #[inline]
-    pub fn from_kilograms_per_hour_per_square_meter(value: f64) -> Self {
+    pub fn from_kilograms_per_hour_per_square_meter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerHourPerSquareMeter)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
     #[inline]
-    pub fn as_kilograms_per_hour_per_square_meter(self) -> f64 {
+    pub fn as_kilograms_per_hour_per_square_meter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerHourPerSquareMeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_meter`].
     #[inline]
-    pub fn as_kilogram_per_hour_per_square_meter(self) -> f64 {
+    pub fn as_kilogram_per_hour_per_square_meter(self) -> Num {
         self.as_kilograms_per_hour_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
     #[inline]
-    pub fn from_grams_per_hour_per_square_centimeter(value: f64) -> Self {
+    pub fn from_grams_per_hour_per_square_centimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerHourPerSquareCentimeter)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
     #[inline]
-    pub fn as_grams_per_hour_per_square_centimeter(self) -> f64 {
+    pub fn as_grams_per_hour_per_square_centimeter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerHourPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_centimeter`].
     #[inline]
-    pub fn as_gram_per_hour_per_square_centimeter(self) -> f64 {
+    pub fn as_gram_per_hour_per_square_centimeter(self) -> Num {
         self.as_grams_per_hour_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
     #[inline]
-    pub fn from_kilograms_per_hour_per_square_centimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_hour_per_square_centimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerHourPerSquareCentimeter)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
     #[inline]
-    pub fn as_kilograms_per_hour_per_square_centimeter(self) -> f64 {
+    pub fn as_kilograms_per_hour_per_square_centimeter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_centimeter`].
     #[inline]
-    pub fn as_kilogram_per_hour_per_square_centimeter(self) -> f64 {
+    pub fn as_kilogram_per_hour_per_square_centimeter(self) -> Num {
         self.as_kilograms_per_hour_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
     #[inline]
-    pub fn from_grams_per_hour_per_square_millimeter(value: f64) -> Self {
+    pub fn from_grams_per_hour_per_square_millimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::GramPerHourPerSquareMillimeter)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
     #[inline]
-    pub fn as_grams_per_hour_per_square_millimeter(self) -> f64 {
+    pub fn as_grams_per_hour_per_square_millimeter(self) -> Num {
         self.convert_to(MassFluxUnit::GramPerHourPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_millimeter`].
     #[inline]
-    pub fn as_gram_per_hour_per_square_millimeter(self) -> f64 {
+    pub fn as_gram_per_hour_per_square_millimeter(self) -> Num {
         self.as_grams_per_hour_per_square_millimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
     #[inline]
-    pub fn from_kilograms_per_hour_per_square_millimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_hour_per_square_millimeter(value: Num) -> Self {
         Self::new(value, MassFluxUnit::KilogramPerHourPerSquareMillimeter)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
     #[inline]
-    pub fn as_kilograms_per_hour_per_square_millimeter(self) -> f64 {
+    pub fn as_kilograms_per_hour_per_square_millimeter(self) -> Num {
         self.convert_to(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_millimeter`].
     #[inline]
-    pub fn as_kilogram_per_hour_per_square_millimeter(self) -> f64 {
+    pub fn as_kilogram_per_hour_per_square_millimeter(self) -> Num {
         self.as_kilograms_per_hour_per_square_millimeter()
     }
 }
@@ -380,27 +381,27 @@ impl Neg for MassFlux {
         Self(-self.0)
     }
 }
-impl Mul<f64> for MassFlux {
+impl Mul<Num> for MassFlux {
     type Output = MassFlux;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<MassFlux> for f64 {
+impl Mul<MassFlux> for Num {
     type Output = MassFlux;
     fn mul(self, rhs: MassFlux) -> MassFlux {
         MassFlux(self * rhs.0)
     }
 }
-impl Div<f64> for MassFlux {
+impl Div<Num> for MassFlux {
     type Output = MassFlux;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassFlux {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -439,7 +440,7 @@ impl FromStr for MassFlux {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMassFluxError(s.to_owned()))?;

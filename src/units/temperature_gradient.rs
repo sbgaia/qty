@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `KelvinPerMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct TemperatureGradient(f64);
+pub struct TemperatureGradient(Num);
 
 /// Unit variants for [`TemperatureGradient`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -59,7 +60,7 @@ impl TemperatureGradientUnit {
 
 impl TemperatureGradient {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: TemperatureGradientUnit) -> Self {
+    pub fn new(value: Num, unit: TemperatureGradientUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -74,7 +75,7 @@ impl TemperatureGradient {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -82,12 +83,12 @@ impl TemperatureGradient {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: TemperatureGradientUnit) -> f64 {
+    pub fn convert_to(self, unit: TemperatureGradientUnit) -> Num {
         let x = self.0;
         match unit {
             TemperatureGradientUnit::KelvinPerMeter => x,
@@ -99,73 +100,73 @@ impl TemperatureGradient {
 
     /// Creates a [`TemperatureGradient`] from a value in KelvinsPerMeter (`∆°K/m`).
     #[inline]
-    pub fn from_kelvins_per_meter(value: f64) -> Self {
+    pub fn from_kelvins_per_meter(value: Num) -> Self {
         Self::new(value, TemperatureGradientUnit::KelvinPerMeter)
     }
 
     /// Returns the value expressed in KelvinsPerMeter (`∆°K/m`).
     #[inline]
-    pub fn as_kelvins_per_meter(self) -> f64 {
+    pub fn as_kelvins_per_meter(self) -> Num {
         self.convert_to(TemperatureGradientUnit::KelvinPerMeter)
     }
 
     /// Alias for [`Self::as_kelvins_per_meter`].
     #[inline]
-    pub fn as_kelvin_per_meter(self) -> f64 {
+    pub fn as_kelvin_per_meter(self) -> Num {
         self.as_kelvins_per_meter()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
-    pub fn from_degrees_celsius_per_meter(value: f64) -> Self {
+    pub fn from_degrees_celsius_per_meter(value: Num) -> Self {
         Self::new(value, TemperatureGradientUnit::DegreeCelsiusPerMeter)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
-    pub fn as_degrees_celsius_per_meter(self) -> f64 {
+    pub fn as_degrees_celsius_per_meter(self) -> Num {
         self.convert_to(TemperatureGradientUnit::DegreeCelsiusPerMeter)
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_meter`].
     #[inline]
-    pub fn as_degree_celsius_per_meter(self) -> f64 {
+    pub fn as_degree_celsius_per_meter(self) -> Num {
         self.as_degrees_celsius_per_meter()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
-    pub fn from_degrees_fahrenheit_per_foot(value: f64) -> Self {
+    pub fn from_degrees_fahrenheit_per_foot(value: Num) -> Self {
         Self::new(value, TemperatureGradientUnit::DegreeFahrenheitPerFoot)
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
-    pub fn as_degrees_fahrenheit_per_foot(self) -> f64 {
+    pub fn as_degrees_fahrenheit_per_foot(self) -> Num {
         self.convert_to(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_foot`].
     #[inline]
-    pub fn as_degree_fahrenheit_per_foot(self) -> f64 {
+    pub fn as_degree_fahrenheit_per_foot(self) -> Num {
         self.as_degrees_fahrenheit_per_foot()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
-    pub fn from_degrees_celsius_per_kilometer(value: f64) -> Self {
+    pub fn from_degrees_celsius_per_kilometer(value: Num) -> Self {
         Self::new(value, TemperatureGradientUnit::DegreeCelsiusPerKilometer)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
-    pub fn as_degrees_celsius_per_kilometer(self) -> f64 {
+    pub fn as_degrees_celsius_per_kilometer(self) -> Num {
         self.convert_to(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_kilometer`].
     #[inline]
-    pub fn as_degree_celsius_per_kilometer(self) -> f64 {
+    pub fn as_degree_celsius_per_kilometer(self) -> Num {
         self.as_degrees_celsius_per_kilometer()
     }
 }
@@ -188,27 +189,27 @@ impl Neg for TemperatureGradient {
         Self(-self.0)
     }
 }
-impl Mul<f64> for TemperatureGradient {
+impl Mul<Num> for TemperatureGradient {
     type Output = TemperatureGradient;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<TemperatureGradient> for f64 {
+impl Mul<TemperatureGradient> for Num {
     type Output = TemperatureGradient;
     fn mul(self, rhs: TemperatureGradient) -> TemperatureGradient {
         TemperatureGradient(self * rhs.0)
     }
 }
-impl Div<f64> for TemperatureGradient {
+impl Div<Num> for TemperatureGradient {
     type Output = TemperatureGradient;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for TemperatureGradient {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -247,7 +248,7 @@ impl FromStr for TemperatureGradient {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseTemperatureGradientError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `SquareMeterPerSecond` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct KinematicViscosity(f64);
+pub struct KinematicViscosity(Num);
 
 /// Unit variants for [`KinematicViscosity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -79,7 +80,7 @@ impl KinematicViscosityUnit {
 
 impl KinematicViscosity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: KinematicViscosityUnit) -> Self {
+    pub fn new(value: Num, unit: KinematicViscosityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -99,7 +100,7 @@ impl KinematicViscosity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -107,12 +108,12 @@ impl KinematicViscosity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: KinematicViscosityUnit) -> f64 {
+    pub fn convert_to(self, unit: KinematicViscosityUnit) -> Num {
         let x = self.0;
         match unit {
             KinematicViscosityUnit::SquareMeterPerSecond => x,
@@ -129,121 +130,121 @@ impl KinematicViscosity {
 
     /// Creates a [`KinematicViscosity`] from a value in SquareMetersPerSecond (`m²/s`).
     #[inline]
-    pub fn from_square_meters_per_second(value: f64) -> Self {
+    pub fn from_square_meters_per_second(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::SquareMeterPerSecond)
     }
 
     /// Returns the value expressed in SquareMetersPerSecond (`m²/s`).
     #[inline]
-    pub fn as_square_meters_per_second(self) -> f64 {
+    pub fn as_square_meters_per_second(self) -> Num {
         self.convert_to(KinematicViscosityUnit::SquareMeterPerSecond)
     }
 
     /// Alias for [`Self::as_square_meters_per_second`].
     #[inline]
-    pub fn as_square_meter_per_second(self) -> f64 {
+    pub fn as_square_meter_per_second(self) -> Num {
         self.as_square_meters_per_second()
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Stokes (`St`).
     #[inline]
-    pub fn from_stokes(value: f64) -> Self {
+    pub fn from_stokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Stokes)
     }
 
     /// Returns the value expressed in Stokes (`St`).
     #[inline]
-    pub fn as_stokes(self) -> f64 {
+    pub fn as_stokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Stokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Nanostokes (`nSt`).
     #[inline]
-    pub fn from_nanostokes(value: f64) -> Self {
+    pub fn from_nanostokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Nanostokes)
     }
 
     /// Returns the value expressed in Nanostokes (`nSt`).
     #[inline]
-    pub fn as_nanostokes(self) -> f64 {
+    pub fn as_nanostokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Nanostokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Microstokes (`µSt`).
     #[inline]
-    pub fn from_microstokes(value: f64) -> Self {
+    pub fn from_microstokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Microstokes)
     }
 
     /// Returns the value expressed in Microstokes (`µSt`).
     #[inline]
-    pub fn as_microstokes(self) -> f64 {
+    pub fn as_microstokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Microstokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Millistokes (`mSt`).
     #[inline]
-    pub fn from_millistokes(value: f64) -> Self {
+    pub fn from_millistokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Millistokes)
     }
 
     /// Returns the value expressed in Millistokes (`mSt`).
     #[inline]
-    pub fn as_millistokes(self) -> f64 {
+    pub fn as_millistokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Millistokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Centistokes (`cSt`).
     #[inline]
-    pub fn from_centistokes(value: f64) -> Self {
+    pub fn from_centistokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Centistokes)
     }
 
     /// Returns the value expressed in Centistokes (`cSt`).
     #[inline]
-    pub fn as_centistokes(self) -> f64 {
+    pub fn as_centistokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Centistokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Decistokes (`dSt`).
     #[inline]
-    pub fn from_decistokes(value: f64) -> Self {
+    pub fn from_decistokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Decistokes)
     }
 
     /// Returns the value expressed in Decistokes (`dSt`).
     #[inline]
-    pub fn as_decistokes(self) -> f64 {
+    pub fn as_decistokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Decistokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in Kilostokes (`kSt`).
     #[inline]
-    pub fn from_kilostokes(value: f64) -> Self {
+    pub fn from_kilostokes(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::Kilostokes)
     }
 
     /// Returns the value expressed in Kilostokes (`kSt`).
     #[inline]
-    pub fn as_kilostokes(self) -> f64 {
+    pub fn as_kilostokes(self) -> Num {
         self.convert_to(KinematicViscosityUnit::Kilostokes)
     }
 
     /// Creates a [`KinematicViscosity`] from a value in SquareFeetPerSecond (`ft²/s`).
     #[inline]
-    pub fn from_square_feet_per_second(value: f64) -> Self {
+    pub fn from_square_feet_per_second(value: Num) -> Self {
         Self::new(value, KinematicViscosityUnit::SquareFootPerSecond)
     }
 
     /// Returns the value expressed in SquareFeetPerSecond (`ft²/s`).
     #[inline]
-    pub fn as_square_feet_per_second(self) -> f64 {
+    pub fn as_square_feet_per_second(self) -> Num {
         self.convert_to(KinematicViscosityUnit::SquareFootPerSecond)
     }
 
     /// Alias for [`Self::as_square_feet_per_second`].
     #[inline]
-    pub fn as_square_foot_per_second(self) -> f64 {
+    pub fn as_square_foot_per_second(self) -> Num {
         self.as_square_feet_per_second()
     }
 }
@@ -266,27 +267,27 @@ impl Neg for KinematicViscosity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for KinematicViscosity {
+impl Mul<Num> for KinematicViscosity {
     type Output = KinematicViscosity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<KinematicViscosity> for f64 {
+impl Mul<KinematicViscosity> for Num {
     type Output = KinematicViscosity;
     fn mul(self, rhs: KinematicViscosity) -> KinematicViscosity {
         KinematicViscosity(self * rhs.0)
     }
 }
-impl Div<f64> for KinematicViscosity {
+impl Div<Num> for KinematicViscosity {
     type Output = KinematicViscosity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for KinematicViscosity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -325,7 +326,7 @@ impl FromStr for KinematicViscosity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseKinematicViscosityError(s.to_owned()))?;

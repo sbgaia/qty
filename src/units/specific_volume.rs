@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CubicMeterPerKilogram` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SpecificVolume(f64);
+pub struct SpecificVolume(Num);
 
 /// Unit variants for [`SpecificVolume`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -55,7 +56,7 @@ impl SpecificVolumeUnit {
 
 impl SpecificVolume {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: SpecificVolumeUnit) -> Self {
+    pub fn new(value: Num, unit: SpecificVolumeUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -69,7 +70,7 @@ impl SpecificVolume {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -77,12 +78,12 @@ impl SpecificVolume {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: SpecificVolumeUnit) -> f64 {
+    pub fn convert_to(self, unit: SpecificVolumeUnit) -> Num {
         let x = self.0;
         match unit {
             SpecificVolumeUnit::CubicMeterPerKilogram => x,
@@ -93,55 +94,55 @@ impl SpecificVolume {
 
     /// Creates a [`SpecificVolume`] from a value in CubicMetersPerKilogram (`m³/kg`).
     #[inline]
-    pub fn from_cubic_meters_per_kilogram(value: f64) -> Self {
+    pub fn from_cubic_meters_per_kilogram(value: Num) -> Self {
         Self::new(value, SpecificVolumeUnit::CubicMeterPerKilogram)
     }
 
     /// Returns the value expressed in CubicMetersPerKilogram (`m³/kg`).
     #[inline]
-    pub fn as_cubic_meters_per_kilogram(self) -> f64 {
+    pub fn as_cubic_meters_per_kilogram(self) -> Num {
         self.convert_to(SpecificVolumeUnit::CubicMeterPerKilogram)
     }
 
     /// Alias for [`Self::as_cubic_meters_per_kilogram`].
     #[inline]
-    pub fn as_cubic_meter_per_kilogram(self) -> f64 {
+    pub fn as_cubic_meter_per_kilogram(self) -> Num {
         self.as_cubic_meters_per_kilogram()
     }
 
     /// Creates a [`SpecificVolume`] from a value in MillicubicMetersPerKilogram (`mm³/kg`).
     #[inline]
-    pub fn from_millicubic_meters_per_kilogram(value: f64) -> Self {
+    pub fn from_millicubic_meters_per_kilogram(value: Num) -> Self {
         Self::new(value, SpecificVolumeUnit::MillicubicMeterPerKilogram)
     }
 
     /// Returns the value expressed in MillicubicMetersPerKilogram (`mm³/kg`).
     #[inline]
-    pub fn as_millicubic_meters_per_kilogram(self) -> f64 {
+    pub fn as_millicubic_meters_per_kilogram(self) -> Num {
         self.convert_to(SpecificVolumeUnit::MillicubicMeterPerKilogram)
     }
 
     /// Alias for [`Self::as_millicubic_meters_per_kilogram`].
     #[inline]
-    pub fn as_millicubic_meter_per_kilogram(self) -> f64 {
+    pub fn as_millicubic_meter_per_kilogram(self) -> Num {
         self.as_millicubic_meters_per_kilogram()
     }
 
     /// Creates a [`SpecificVolume`] from a value in CubicFeetPerPound (`ft³/lb`).
     #[inline]
-    pub fn from_cubic_feet_per_pound(value: f64) -> Self {
+    pub fn from_cubic_feet_per_pound(value: Num) -> Self {
         Self::new(value, SpecificVolumeUnit::CubicFootPerPound)
     }
 
     /// Returns the value expressed in CubicFeetPerPound (`ft³/lb`).
     #[inline]
-    pub fn as_cubic_feet_per_pound(self) -> f64 {
+    pub fn as_cubic_feet_per_pound(self) -> Num {
         self.convert_to(SpecificVolumeUnit::CubicFootPerPound)
     }
 
     /// Alias for [`Self::as_cubic_feet_per_pound`].
     #[inline]
-    pub fn as_cubic_foot_per_pound(self) -> f64 {
+    pub fn as_cubic_foot_per_pound(self) -> Num {
         self.as_cubic_feet_per_pound()
     }
 }
@@ -164,27 +165,27 @@ impl Neg for SpecificVolume {
         Self(-self.0)
     }
 }
-impl Mul<f64> for SpecificVolume {
+impl Mul<Num> for SpecificVolume {
     type Output = SpecificVolume;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<SpecificVolume> for f64 {
+impl Mul<SpecificVolume> for Num {
     type Output = SpecificVolume;
     fn mul(self, rhs: SpecificVolume) -> SpecificVolume {
         SpecificVolume(self * rhs.0)
     }
 }
-impl Div<f64> for SpecificVolume {
+impl Div<Num> for SpecificVolume {
     type Output = SpecificVolume;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SpecificVolume {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -223,7 +224,7 @@ impl FromStr for SpecificVolume {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseSpecificVolumeError(s.to_owned()))?;

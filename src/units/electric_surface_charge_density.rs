@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CoulombPerSquareMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricSurfaceChargeDensity(f64);
+pub struct ElectricSurfaceChargeDensity(Num);
 
 /// Unit variants for [`ElectricSurfaceChargeDensity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -55,7 +56,7 @@ impl ElectricSurfaceChargeDensityUnit {
 
 impl ElectricSurfaceChargeDensity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricSurfaceChargeDensityUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricSurfaceChargeDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -69,7 +70,7 @@ impl ElectricSurfaceChargeDensity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -77,12 +78,12 @@ impl ElectricSurfaceChargeDensity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricSurfaceChargeDensityUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricSurfaceChargeDensityUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => x,
@@ -93,7 +94,7 @@ impl ElectricSurfaceChargeDensity {
 
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareMeter (`C/m²`).
     #[inline]
-    pub fn from_coulombs_per_square_meter(value: f64) -> Self {
+    pub fn from_coulombs_per_square_meter(value: Num) -> Self {
         Self::new(
             value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter,
@@ -102,19 +103,19 @@ impl ElectricSurfaceChargeDensity {
 
     /// Returns the value expressed in CoulombsPerSquareMeter (`C/m²`).
     #[inline]
-    pub fn as_coulombs_per_square_meter(self) -> f64 {
+    pub fn as_coulombs_per_square_meter(self) -> Num {
         self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
     }
 
     /// Alias for [`Self::as_coulombs_per_square_meter`].
     #[inline]
-    pub fn as_coulomb_per_square_meter(self) -> f64 {
+    pub fn as_coulomb_per_square_meter(self) -> Num {
         self.as_coulombs_per_square_meter()
     }
 
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareCentimeter (`C/cm²`).
     #[inline]
-    pub fn from_coulombs_per_square_centimeter(value: f64) -> Self {
+    pub fn from_coulombs_per_square_centimeter(value: Num) -> Self {
         Self::new(
             value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter,
@@ -123,19 +124,19 @@ impl ElectricSurfaceChargeDensity {
 
     /// Returns the value expressed in CoulombsPerSquareCentimeter (`C/cm²`).
     #[inline]
-    pub fn as_coulombs_per_square_centimeter(self) -> f64 {
+    pub fn as_coulombs_per_square_centimeter(self) -> Num {
         self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
     }
 
     /// Alias for [`Self::as_coulombs_per_square_centimeter`].
     #[inline]
-    pub fn as_coulomb_per_square_centimeter(self) -> f64 {
+    pub fn as_coulomb_per_square_centimeter(self) -> Num {
         self.as_coulombs_per_square_centimeter()
     }
 
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareInch (`C/in²`).
     #[inline]
-    pub fn from_coulombs_per_square_inch(value: f64) -> Self {
+    pub fn from_coulombs_per_square_inch(value: Num) -> Self {
         Self::new(
             value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch,
@@ -144,13 +145,13 @@ impl ElectricSurfaceChargeDensity {
 
     /// Returns the value expressed in CoulombsPerSquareInch (`C/in²`).
     #[inline]
-    pub fn as_coulombs_per_square_inch(self) -> f64 {
+    pub fn as_coulombs_per_square_inch(self) -> Num {
         self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
     }
 
     /// Alias for [`Self::as_coulombs_per_square_inch`].
     #[inline]
-    pub fn as_coulomb_per_square_inch(self) -> f64 {
+    pub fn as_coulomb_per_square_inch(self) -> Num {
         self.as_coulombs_per_square_inch()
     }
 }
@@ -173,27 +174,27 @@ impl Neg for ElectricSurfaceChargeDensity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricSurfaceChargeDensity {
+impl Mul<Num> for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricSurfaceChargeDensity> for f64 {
+impl Mul<ElectricSurfaceChargeDensity> for Num {
     type Output = ElectricSurfaceChargeDensity;
     fn mul(self, rhs: ElectricSurfaceChargeDensity) -> ElectricSurfaceChargeDensity {
         ElectricSurfaceChargeDensity(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricSurfaceChargeDensity {
+impl Div<Num> for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricSurfaceChargeDensity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -236,7 +237,7 @@ impl FromStr for ElectricSurfaceChargeDensity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricSurfaceChargeDensityError(s.to_owned()))?;

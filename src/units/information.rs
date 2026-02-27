@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Bit` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Information(f64);
+pub struct Information(Num);
 
 /// Unit variants for [`Information`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -199,7 +200,7 @@ impl InformationUnit {
 
 impl Information {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: InformationUnit) -> Self {
+    pub fn new(value: Num, unit: InformationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -249,7 +250,7 @@ impl Information {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -257,12 +258,12 @@ impl Information {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: InformationUnit) -> f64 {
+    pub fn convert_to(self, unit: InformationUnit) -> Num {
         let x = self.0;
         match unit {
             InformationUnit::Byte => x / 8.0,
@@ -309,703 +310,703 @@ impl Information {
 
     /// Creates a [`Information`] from a value in Bytes (`B`).
     #[inline]
-    pub fn from_bytes(value: f64) -> Self {
+    pub fn from_bytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Byte)
     }
 
     /// Returns the value expressed in Bytes (`B`).
     #[inline]
-    pub fn as_bytes(self) -> f64 {
+    pub fn as_bytes(self) -> Num {
         self.convert_to(InformationUnit::Byte)
     }
 
     /// Alias for [`Self::as_bytes`].
     #[inline]
-    pub fn as_byte(self) -> f64 {
+    pub fn as_byte(self) -> Num {
         self.as_bytes()
     }
 
     /// Creates a [`Information`] from a value in Kilobytes (`kB`).
     #[inline]
-    pub fn from_kilobytes(value: f64) -> Self {
+    pub fn from_kilobytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Kilobyte)
     }
 
     /// Returns the value expressed in Kilobytes (`kB`).
     #[inline]
-    pub fn as_kilobytes(self) -> f64 {
+    pub fn as_kilobytes(self) -> Num {
         self.convert_to(InformationUnit::Kilobyte)
     }
 
     /// Alias for [`Self::as_kilobytes`].
     #[inline]
-    pub fn as_kilobyte(self) -> f64 {
+    pub fn as_kilobyte(self) -> Num {
         self.as_kilobytes()
     }
 
     /// Creates a [`Information`] from a value in Megabytes (`MB`).
     #[inline]
-    pub fn from_megabytes(value: f64) -> Self {
+    pub fn from_megabytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Megabyte)
     }
 
     /// Returns the value expressed in Megabytes (`MB`).
     #[inline]
-    pub fn as_megabytes(self) -> f64 {
+    pub fn as_megabytes(self) -> Num {
         self.convert_to(InformationUnit::Megabyte)
     }
 
     /// Alias for [`Self::as_megabytes`].
     #[inline]
-    pub fn as_megabyte(self) -> f64 {
+    pub fn as_megabyte(self) -> Num {
         self.as_megabytes()
     }
 
     /// Creates a [`Information`] from a value in Gigabytes (`GB`).
     #[inline]
-    pub fn from_gigabytes(value: f64) -> Self {
+    pub fn from_gigabytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Gigabyte)
     }
 
     /// Returns the value expressed in Gigabytes (`GB`).
     #[inline]
-    pub fn as_gigabytes(self) -> f64 {
+    pub fn as_gigabytes(self) -> Num {
         self.convert_to(InformationUnit::Gigabyte)
     }
 
     /// Alias for [`Self::as_gigabytes`].
     #[inline]
-    pub fn as_gigabyte(self) -> f64 {
+    pub fn as_gigabyte(self) -> Num {
         self.as_gigabytes()
     }
 
     /// Creates a [`Information`] from a value in Terabytes (`TB`).
     #[inline]
-    pub fn from_terabytes(value: f64) -> Self {
+    pub fn from_terabytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Terabyte)
     }
 
     /// Returns the value expressed in Terabytes (`TB`).
     #[inline]
-    pub fn as_terabytes(self) -> f64 {
+    pub fn as_terabytes(self) -> Num {
         self.convert_to(InformationUnit::Terabyte)
     }
 
     /// Alias for [`Self::as_terabytes`].
     #[inline]
-    pub fn as_terabyte(self) -> f64 {
+    pub fn as_terabyte(self) -> Num {
         self.as_terabytes()
     }
 
     /// Creates a [`Information`] from a value in Petabytes (`PB`).
     #[inline]
-    pub fn from_petabytes(value: f64) -> Self {
+    pub fn from_petabytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Petabyte)
     }
 
     /// Returns the value expressed in Petabytes (`PB`).
     #[inline]
-    pub fn as_petabytes(self) -> f64 {
+    pub fn as_petabytes(self) -> Num {
         self.convert_to(InformationUnit::Petabyte)
     }
 
     /// Alias for [`Self::as_petabytes`].
     #[inline]
-    pub fn as_petabyte(self) -> f64 {
+    pub fn as_petabyte(self) -> Num {
         self.as_petabytes()
     }
 
     /// Creates a [`Information`] from a value in Exabytes (`EB`).
     #[inline]
-    pub fn from_exabytes(value: f64) -> Self {
+    pub fn from_exabytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Exabyte)
     }
 
     /// Returns the value expressed in Exabytes (`EB`).
     #[inline]
-    pub fn as_exabytes(self) -> f64 {
+    pub fn as_exabytes(self) -> Num {
         self.convert_to(InformationUnit::Exabyte)
     }
 
     /// Alias for [`Self::as_exabytes`].
     #[inline]
-    pub fn as_exabyte(self) -> f64 {
+    pub fn as_exabyte(self) -> Num {
         self.as_exabytes()
     }
 
     /// Creates a [`Information`] from a value in Kibibytes (`KiB`).
     #[inline]
-    pub fn from_kibibytes(value: f64) -> Self {
+    pub fn from_kibibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Kibibyte)
     }
 
     /// Returns the value expressed in Kibibytes (`KiB`).
     #[inline]
-    pub fn as_kibibytes(self) -> f64 {
+    pub fn as_kibibytes(self) -> Num {
         self.convert_to(InformationUnit::Kibibyte)
     }
 
     /// Alias for [`Self::as_kibibytes`].
     #[inline]
-    pub fn as_kibibyte(self) -> f64 {
+    pub fn as_kibibyte(self) -> Num {
         self.as_kibibytes()
     }
 
     /// Creates a [`Information`] from a value in Mebibytes (`MiB`).
     #[inline]
-    pub fn from_mebibytes(value: f64) -> Self {
+    pub fn from_mebibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Mebibyte)
     }
 
     /// Returns the value expressed in Mebibytes (`MiB`).
     #[inline]
-    pub fn as_mebibytes(self) -> f64 {
+    pub fn as_mebibytes(self) -> Num {
         self.convert_to(InformationUnit::Mebibyte)
     }
 
     /// Alias for [`Self::as_mebibytes`].
     #[inline]
-    pub fn as_mebibyte(self) -> f64 {
+    pub fn as_mebibyte(self) -> Num {
         self.as_mebibytes()
     }
 
     /// Creates a [`Information`] from a value in Gibibytes (`GiB`).
     #[inline]
-    pub fn from_gibibytes(value: f64) -> Self {
+    pub fn from_gibibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Gibibyte)
     }
 
     /// Returns the value expressed in Gibibytes (`GiB`).
     #[inline]
-    pub fn as_gibibytes(self) -> f64 {
+    pub fn as_gibibytes(self) -> Num {
         self.convert_to(InformationUnit::Gibibyte)
     }
 
     /// Alias for [`Self::as_gibibytes`].
     #[inline]
-    pub fn as_gibibyte(self) -> f64 {
+    pub fn as_gibibyte(self) -> Num {
         self.as_gibibytes()
     }
 
     /// Creates a [`Information`] from a value in Tebibytes (`TiB`).
     #[inline]
-    pub fn from_tebibytes(value: f64) -> Self {
+    pub fn from_tebibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Tebibyte)
     }
 
     /// Returns the value expressed in Tebibytes (`TiB`).
     #[inline]
-    pub fn as_tebibytes(self) -> f64 {
+    pub fn as_tebibytes(self) -> Num {
         self.convert_to(InformationUnit::Tebibyte)
     }
 
     /// Alias for [`Self::as_tebibytes`].
     #[inline]
-    pub fn as_tebibyte(self) -> f64 {
+    pub fn as_tebibyte(self) -> Num {
         self.as_tebibytes()
     }
 
     /// Creates a [`Information`] from a value in Pebibytes (`PiB`).
     #[inline]
-    pub fn from_pebibytes(value: f64) -> Self {
+    pub fn from_pebibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Pebibyte)
     }
 
     /// Returns the value expressed in Pebibytes (`PiB`).
     #[inline]
-    pub fn as_pebibytes(self) -> f64 {
+    pub fn as_pebibytes(self) -> Num {
         self.convert_to(InformationUnit::Pebibyte)
     }
 
     /// Alias for [`Self::as_pebibytes`].
     #[inline]
-    pub fn as_pebibyte(self) -> f64 {
+    pub fn as_pebibyte(self) -> Num {
         self.as_pebibytes()
     }
 
     /// Creates a [`Information`] from a value in Exbibytes (`EiB`).
     #[inline]
-    pub fn from_exbibytes(value: f64) -> Self {
+    pub fn from_exbibytes(value: Num) -> Self {
         Self::new(value, InformationUnit::Exbibyte)
     }
 
     /// Returns the value expressed in Exbibytes (`EiB`).
     #[inline]
-    pub fn as_exbibytes(self) -> f64 {
+    pub fn as_exbibytes(self) -> Num {
         self.convert_to(InformationUnit::Exbibyte)
     }
 
     /// Alias for [`Self::as_exbibytes`].
     #[inline]
-    pub fn as_exbibyte(self) -> f64 {
+    pub fn as_exbibyte(self) -> Num {
         self.as_exbibytes()
     }
 
     /// Creates a [`Information`] from a value in Octets (`o`).
     #[inline]
-    pub fn from_octets(value: f64) -> Self {
+    pub fn from_octets(value: Num) -> Self {
         Self::new(value, InformationUnit::Octet)
     }
 
     /// Returns the value expressed in Octets (`o`).
     #[inline]
-    pub fn as_octets(self) -> f64 {
+    pub fn as_octets(self) -> Num {
         self.convert_to(InformationUnit::Octet)
     }
 
     /// Alias for [`Self::as_octets`].
     #[inline]
-    pub fn as_octet(self) -> f64 {
+    pub fn as_octet(self) -> Num {
         self.as_octets()
     }
 
     /// Creates a [`Information`] from a value in Kilooctets (`ko`).
     #[inline]
-    pub fn from_kilooctets(value: f64) -> Self {
+    pub fn from_kilooctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Kilooctet)
     }
 
     /// Returns the value expressed in Kilooctets (`ko`).
     #[inline]
-    pub fn as_kilooctets(self) -> f64 {
+    pub fn as_kilooctets(self) -> Num {
         self.convert_to(InformationUnit::Kilooctet)
     }
 
     /// Alias for [`Self::as_kilooctets`].
     #[inline]
-    pub fn as_kilooctet(self) -> f64 {
+    pub fn as_kilooctet(self) -> Num {
         self.as_kilooctets()
     }
 
     /// Creates a [`Information`] from a value in Megaoctets (`Mo`).
     #[inline]
-    pub fn from_megaoctets(value: f64) -> Self {
+    pub fn from_megaoctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Megaoctet)
     }
 
     /// Returns the value expressed in Megaoctets (`Mo`).
     #[inline]
-    pub fn as_megaoctets(self) -> f64 {
+    pub fn as_megaoctets(self) -> Num {
         self.convert_to(InformationUnit::Megaoctet)
     }
 
     /// Alias for [`Self::as_megaoctets`].
     #[inline]
-    pub fn as_megaoctet(self) -> f64 {
+    pub fn as_megaoctet(self) -> Num {
         self.as_megaoctets()
     }
 
     /// Creates a [`Information`] from a value in Gigaoctets (`Go`).
     #[inline]
-    pub fn from_gigaoctets(value: f64) -> Self {
+    pub fn from_gigaoctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Gigaoctet)
     }
 
     /// Returns the value expressed in Gigaoctets (`Go`).
     #[inline]
-    pub fn as_gigaoctets(self) -> f64 {
+    pub fn as_gigaoctets(self) -> Num {
         self.convert_to(InformationUnit::Gigaoctet)
     }
 
     /// Alias for [`Self::as_gigaoctets`].
     #[inline]
-    pub fn as_gigaoctet(self) -> f64 {
+    pub fn as_gigaoctet(self) -> Num {
         self.as_gigaoctets()
     }
 
     /// Creates a [`Information`] from a value in Teraoctets (`To`).
     #[inline]
-    pub fn from_teraoctets(value: f64) -> Self {
+    pub fn from_teraoctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Teraoctet)
     }
 
     /// Returns the value expressed in Teraoctets (`To`).
     #[inline]
-    pub fn as_teraoctets(self) -> f64 {
+    pub fn as_teraoctets(self) -> Num {
         self.convert_to(InformationUnit::Teraoctet)
     }
 
     /// Alias for [`Self::as_teraoctets`].
     #[inline]
-    pub fn as_teraoctet(self) -> f64 {
+    pub fn as_teraoctet(self) -> Num {
         self.as_teraoctets()
     }
 
     /// Creates a [`Information`] from a value in Petaoctets (`Po`).
     #[inline]
-    pub fn from_petaoctets(value: f64) -> Self {
+    pub fn from_petaoctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Petaoctet)
     }
 
     /// Returns the value expressed in Petaoctets (`Po`).
     #[inline]
-    pub fn as_petaoctets(self) -> f64 {
+    pub fn as_petaoctets(self) -> Num {
         self.convert_to(InformationUnit::Petaoctet)
     }
 
     /// Alias for [`Self::as_petaoctets`].
     #[inline]
-    pub fn as_petaoctet(self) -> f64 {
+    pub fn as_petaoctet(self) -> Num {
         self.as_petaoctets()
     }
 
     /// Creates a [`Information`] from a value in Exaoctets (`Eo`).
     #[inline]
-    pub fn from_exaoctets(value: f64) -> Self {
+    pub fn from_exaoctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Exaoctet)
     }
 
     /// Returns the value expressed in Exaoctets (`Eo`).
     #[inline]
-    pub fn as_exaoctets(self) -> f64 {
+    pub fn as_exaoctets(self) -> Num {
         self.convert_to(InformationUnit::Exaoctet)
     }
 
     /// Alias for [`Self::as_exaoctets`].
     #[inline]
-    pub fn as_exaoctet(self) -> f64 {
+    pub fn as_exaoctet(self) -> Num {
         self.as_exaoctets()
     }
 
     /// Creates a [`Information`] from a value in Kibioctets (`Kio`).
     #[inline]
-    pub fn from_kibioctets(value: f64) -> Self {
+    pub fn from_kibioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Kibioctet)
     }
 
     /// Returns the value expressed in Kibioctets (`Kio`).
     #[inline]
-    pub fn as_kibioctets(self) -> f64 {
+    pub fn as_kibioctets(self) -> Num {
         self.convert_to(InformationUnit::Kibioctet)
     }
 
     /// Alias for [`Self::as_kibioctets`].
     #[inline]
-    pub fn as_kibioctet(self) -> f64 {
+    pub fn as_kibioctet(self) -> Num {
         self.as_kibioctets()
     }
 
     /// Creates a [`Information`] from a value in Mebioctets (`Mio`).
     #[inline]
-    pub fn from_mebioctets(value: f64) -> Self {
+    pub fn from_mebioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Mebioctet)
     }
 
     /// Returns the value expressed in Mebioctets (`Mio`).
     #[inline]
-    pub fn as_mebioctets(self) -> f64 {
+    pub fn as_mebioctets(self) -> Num {
         self.convert_to(InformationUnit::Mebioctet)
     }
 
     /// Alias for [`Self::as_mebioctets`].
     #[inline]
-    pub fn as_mebioctet(self) -> f64 {
+    pub fn as_mebioctet(self) -> Num {
         self.as_mebioctets()
     }
 
     /// Creates a [`Information`] from a value in Gibioctets (`Gio`).
     #[inline]
-    pub fn from_gibioctets(value: f64) -> Self {
+    pub fn from_gibioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Gibioctet)
     }
 
     /// Returns the value expressed in Gibioctets (`Gio`).
     #[inline]
-    pub fn as_gibioctets(self) -> f64 {
+    pub fn as_gibioctets(self) -> Num {
         self.convert_to(InformationUnit::Gibioctet)
     }
 
     /// Alias for [`Self::as_gibioctets`].
     #[inline]
-    pub fn as_gibioctet(self) -> f64 {
+    pub fn as_gibioctet(self) -> Num {
         self.as_gibioctets()
     }
 
     /// Creates a [`Information`] from a value in Tebioctets (`Tio`).
     #[inline]
-    pub fn from_tebioctets(value: f64) -> Self {
+    pub fn from_tebioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Tebioctet)
     }
 
     /// Returns the value expressed in Tebioctets (`Tio`).
     #[inline]
-    pub fn as_tebioctets(self) -> f64 {
+    pub fn as_tebioctets(self) -> Num {
         self.convert_to(InformationUnit::Tebioctet)
     }
 
     /// Alias for [`Self::as_tebioctets`].
     #[inline]
-    pub fn as_tebioctet(self) -> f64 {
+    pub fn as_tebioctet(self) -> Num {
         self.as_tebioctets()
     }
 
     /// Creates a [`Information`] from a value in Pebioctets (`Pio`).
     #[inline]
-    pub fn from_pebioctets(value: f64) -> Self {
+    pub fn from_pebioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Pebioctet)
     }
 
     /// Returns the value expressed in Pebioctets (`Pio`).
     #[inline]
-    pub fn as_pebioctets(self) -> f64 {
+    pub fn as_pebioctets(self) -> Num {
         self.convert_to(InformationUnit::Pebioctet)
     }
 
     /// Alias for [`Self::as_pebioctets`].
     #[inline]
-    pub fn as_pebioctet(self) -> f64 {
+    pub fn as_pebioctet(self) -> Num {
         self.as_pebioctets()
     }
 
     /// Creates a [`Information`] from a value in Exbioctets (`Eio`).
     #[inline]
-    pub fn from_exbioctets(value: f64) -> Self {
+    pub fn from_exbioctets(value: Num) -> Self {
         Self::new(value, InformationUnit::Exbioctet)
     }
 
     /// Returns the value expressed in Exbioctets (`Eio`).
     #[inline]
-    pub fn as_exbioctets(self) -> f64 {
+    pub fn as_exbioctets(self) -> Num {
         self.convert_to(InformationUnit::Exbioctet)
     }
 
     /// Alias for [`Self::as_exbioctets`].
     #[inline]
-    pub fn as_exbioctet(self) -> f64 {
+    pub fn as_exbioctet(self) -> Num {
         self.as_exbioctets()
     }
 
     /// Creates a [`Information`] from a value in Bits (`b`).
     #[inline]
-    pub fn from_bits(value: f64) -> Self {
+    pub fn from_bits(value: Num) -> Self {
         Self::new(value, InformationUnit::Bit)
     }
 
     /// Returns the value expressed in Bits (`b`).
     #[inline]
-    pub fn as_bits(self) -> f64 {
+    pub fn as_bits(self) -> Num {
         self.convert_to(InformationUnit::Bit)
     }
 
     /// Alias for [`Self::as_bits`].
     #[inline]
-    pub fn as_bit(self) -> f64 {
+    pub fn as_bit(self) -> Num {
         self.as_bits()
     }
 
     /// Creates a [`Information`] from a value in Kilobits (`kb`).
     #[inline]
-    pub fn from_kilobits(value: f64) -> Self {
+    pub fn from_kilobits(value: Num) -> Self {
         Self::new(value, InformationUnit::Kilobit)
     }
 
     /// Returns the value expressed in Kilobits (`kb`).
     #[inline]
-    pub fn as_kilobits(self) -> f64 {
+    pub fn as_kilobits(self) -> Num {
         self.convert_to(InformationUnit::Kilobit)
     }
 
     /// Alias for [`Self::as_kilobits`].
     #[inline]
-    pub fn as_kilobit(self) -> f64 {
+    pub fn as_kilobit(self) -> Num {
         self.as_kilobits()
     }
 
     /// Creates a [`Information`] from a value in Megabits (`Mb`).
     #[inline]
-    pub fn from_megabits(value: f64) -> Self {
+    pub fn from_megabits(value: Num) -> Self {
         Self::new(value, InformationUnit::Megabit)
     }
 
     /// Returns the value expressed in Megabits (`Mb`).
     #[inline]
-    pub fn as_megabits(self) -> f64 {
+    pub fn as_megabits(self) -> Num {
         self.convert_to(InformationUnit::Megabit)
     }
 
     /// Alias for [`Self::as_megabits`].
     #[inline]
-    pub fn as_megabit(self) -> f64 {
+    pub fn as_megabit(self) -> Num {
         self.as_megabits()
     }
 
     /// Creates a [`Information`] from a value in Gigabits (`Gb`).
     #[inline]
-    pub fn from_gigabits(value: f64) -> Self {
+    pub fn from_gigabits(value: Num) -> Self {
         Self::new(value, InformationUnit::Gigabit)
     }
 
     /// Returns the value expressed in Gigabits (`Gb`).
     #[inline]
-    pub fn as_gigabits(self) -> f64 {
+    pub fn as_gigabits(self) -> Num {
         self.convert_to(InformationUnit::Gigabit)
     }
 
     /// Alias for [`Self::as_gigabits`].
     #[inline]
-    pub fn as_gigabit(self) -> f64 {
+    pub fn as_gigabit(self) -> Num {
         self.as_gigabits()
     }
 
     /// Creates a [`Information`] from a value in Terabits (`Tb`).
     #[inline]
-    pub fn from_terabits(value: f64) -> Self {
+    pub fn from_terabits(value: Num) -> Self {
         Self::new(value, InformationUnit::Terabit)
     }
 
     /// Returns the value expressed in Terabits (`Tb`).
     #[inline]
-    pub fn as_terabits(self) -> f64 {
+    pub fn as_terabits(self) -> Num {
         self.convert_to(InformationUnit::Terabit)
     }
 
     /// Alias for [`Self::as_terabits`].
     #[inline]
-    pub fn as_terabit(self) -> f64 {
+    pub fn as_terabit(self) -> Num {
         self.as_terabits()
     }
 
     /// Creates a [`Information`] from a value in Petabits (`Pb`).
     #[inline]
-    pub fn from_petabits(value: f64) -> Self {
+    pub fn from_petabits(value: Num) -> Self {
         Self::new(value, InformationUnit::Petabit)
     }
 
     /// Returns the value expressed in Petabits (`Pb`).
     #[inline]
-    pub fn as_petabits(self) -> f64 {
+    pub fn as_petabits(self) -> Num {
         self.convert_to(InformationUnit::Petabit)
     }
 
     /// Alias for [`Self::as_petabits`].
     #[inline]
-    pub fn as_petabit(self) -> f64 {
+    pub fn as_petabit(self) -> Num {
         self.as_petabits()
     }
 
     /// Creates a [`Information`] from a value in Exabits (`Eb`).
     #[inline]
-    pub fn from_exabits(value: f64) -> Self {
+    pub fn from_exabits(value: Num) -> Self {
         Self::new(value, InformationUnit::Exabit)
     }
 
     /// Returns the value expressed in Exabits (`Eb`).
     #[inline]
-    pub fn as_exabits(self) -> f64 {
+    pub fn as_exabits(self) -> Num {
         self.convert_to(InformationUnit::Exabit)
     }
 
     /// Alias for [`Self::as_exabits`].
     #[inline]
-    pub fn as_exabit(self) -> f64 {
+    pub fn as_exabit(self) -> Num {
         self.as_exabits()
     }
 
     /// Creates a [`Information`] from a value in Kibibits (`Kib`).
     #[inline]
-    pub fn from_kibibits(value: f64) -> Self {
+    pub fn from_kibibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Kibibit)
     }
 
     /// Returns the value expressed in Kibibits (`Kib`).
     #[inline]
-    pub fn as_kibibits(self) -> f64 {
+    pub fn as_kibibits(self) -> Num {
         self.convert_to(InformationUnit::Kibibit)
     }
 
     /// Alias for [`Self::as_kibibits`].
     #[inline]
-    pub fn as_kibibit(self) -> f64 {
+    pub fn as_kibibit(self) -> Num {
         self.as_kibibits()
     }
 
     /// Creates a [`Information`] from a value in Mebibits (`Mib`).
     #[inline]
-    pub fn from_mebibits(value: f64) -> Self {
+    pub fn from_mebibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Mebibit)
     }
 
     /// Returns the value expressed in Mebibits (`Mib`).
     #[inline]
-    pub fn as_mebibits(self) -> f64 {
+    pub fn as_mebibits(self) -> Num {
         self.convert_to(InformationUnit::Mebibit)
     }
 
     /// Alias for [`Self::as_mebibits`].
     #[inline]
-    pub fn as_mebibit(self) -> f64 {
+    pub fn as_mebibit(self) -> Num {
         self.as_mebibits()
     }
 
     /// Creates a [`Information`] from a value in Gibibits (`Gib`).
     #[inline]
-    pub fn from_gibibits(value: f64) -> Self {
+    pub fn from_gibibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Gibibit)
     }
 
     /// Returns the value expressed in Gibibits (`Gib`).
     #[inline]
-    pub fn as_gibibits(self) -> f64 {
+    pub fn as_gibibits(self) -> Num {
         self.convert_to(InformationUnit::Gibibit)
     }
 
     /// Alias for [`Self::as_gibibits`].
     #[inline]
-    pub fn as_gibibit(self) -> f64 {
+    pub fn as_gibibit(self) -> Num {
         self.as_gibibits()
     }
 
     /// Creates a [`Information`] from a value in Tebibits (`Tib`).
     #[inline]
-    pub fn from_tebibits(value: f64) -> Self {
+    pub fn from_tebibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Tebibit)
     }
 
     /// Returns the value expressed in Tebibits (`Tib`).
     #[inline]
-    pub fn as_tebibits(self) -> f64 {
+    pub fn as_tebibits(self) -> Num {
         self.convert_to(InformationUnit::Tebibit)
     }
 
     /// Alias for [`Self::as_tebibits`].
     #[inline]
-    pub fn as_tebibit(self) -> f64 {
+    pub fn as_tebibit(self) -> Num {
         self.as_tebibits()
     }
 
     /// Creates a [`Information`] from a value in Pebibits (`Pib`).
     #[inline]
-    pub fn from_pebibits(value: f64) -> Self {
+    pub fn from_pebibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Pebibit)
     }
 
     /// Returns the value expressed in Pebibits (`Pib`).
     #[inline]
-    pub fn as_pebibits(self) -> f64 {
+    pub fn as_pebibits(self) -> Num {
         self.convert_to(InformationUnit::Pebibit)
     }
 
     /// Alias for [`Self::as_pebibits`].
     #[inline]
-    pub fn as_pebibit(self) -> f64 {
+    pub fn as_pebibit(self) -> Num {
         self.as_pebibits()
     }
 
     /// Creates a [`Information`] from a value in Exbibits (`Eib`).
     #[inline]
-    pub fn from_exbibits(value: f64) -> Self {
+    pub fn from_exbibits(value: Num) -> Self {
         Self::new(value, InformationUnit::Exbibit)
     }
 
     /// Returns the value expressed in Exbibits (`Eib`).
     #[inline]
-    pub fn as_exbibits(self) -> f64 {
+    pub fn as_exbibits(self) -> Num {
         self.convert_to(InformationUnit::Exbibit)
     }
 
     /// Alias for [`Self::as_exbibits`].
     #[inline]
-    pub fn as_exbibit(self) -> f64 {
+    pub fn as_exbibit(self) -> Num {
         self.as_exbibits()
     }
 }
@@ -1028,27 +1029,27 @@ impl Neg for Information {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Information {
+impl Mul<Num> for Information {
     type Output = Information;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Information> for f64 {
+impl Mul<Information> for Num {
     type Output = Information;
     fn mul(self, rhs: Information) -> Information {
         Information(self * rhs.0)
     }
 }
-impl Div<f64> for Information {
+impl Div<Num> for Information {
     type Output = Information;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Information {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1082,7 +1083,7 @@ impl FromStr for Information {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseInformationError(s.to_owned()))?;

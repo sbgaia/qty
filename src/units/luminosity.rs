@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Watt` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Luminosity(f64);
+pub struct Luminosity(Num);
 
 /// Unit variants for [`Luminosity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -100,7 +101,7 @@ impl LuminosityUnit {
 
 impl Luminosity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LuminosityUnit) -> Self {
+    pub fn new(value: Num, unit: LuminosityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -125,7 +126,7 @@ impl Luminosity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -133,12 +134,12 @@ impl Luminosity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LuminosityUnit) -> f64 {
+    pub fn convert_to(self, unit: LuminosityUnit) -> Num {
         let x = self.0;
         match unit {
             LuminosityUnit::Watt => x,
@@ -160,253 +161,253 @@ impl Luminosity {
 
     /// Creates a [`Luminosity`] from a value in Watts (`W`).
     #[inline]
-    pub fn from_watts(value: f64) -> Self {
+    pub fn from_watts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Watt)
     }
 
     /// Returns the value expressed in Watts (`W`).
     #[inline]
-    pub fn as_watts(self) -> f64 {
+    pub fn as_watts(self) -> Num {
         self.convert_to(LuminosityUnit::Watt)
     }
 
     /// Alias for [`Self::as_watts`].
     #[inline]
-    pub fn as_watt(self) -> f64 {
+    pub fn as_watt(self) -> Num {
         self.as_watts()
     }
 
     /// Creates a [`Luminosity`] from a value in Femtowatts (`fW`).
     #[inline]
-    pub fn from_femtowatts(value: f64) -> Self {
+    pub fn from_femtowatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Femtowatt)
     }
 
     /// Returns the value expressed in Femtowatts (`fW`).
     #[inline]
-    pub fn as_femtowatts(self) -> f64 {
+    pub fn as_femtowatts(self) -> Num {
         self.convert_to(LuminosityUnit::Femtowatt)
     }
 
     /// Alias for [`Self::as_femtowatts`].
     #[inline]
-    pub fn as_femtowatt(self) -> f64 {
+    pub fn as_femtowatt(self) -> Num {
         self.as_femtowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Picowatts (`pW`).
     #[inline]
-    pub fn from_picowatts(value: f64) -> Self {
+    pub fn from_picowatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Picowatt)
     }
 
     /// Returns the value expressed in Picowatts (`pW`).
     #[inline]
-    pub fn as_picowatts(self) -> f64 {
+    pub fn as_picowatts(self) -> Num {
         self.convert_to(LuminosityUnit::Picowatt)
     }
 
     /// Alias for [`Self::as_picowatts`].
     #[inline]
-    pub fn as_picowatt(self) -> f64 {
+    pub fn as_picowatt(self) -> Num {
         self.as_picowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Nanowatts (`nW`).
     #[inline]
-    pub fn from_nanowatts(value: f64) -> Self {
+    pub fn from_nanowatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Nanowatt)
     }
 
     /// Returns the value expressed in Nanowatts (`nW`).
     #[inline]
-    pub fn as_nanowatts(self) -> f64 {
+    pub fn as_nanowatts(self) -> Num {
         self.convert_to(LuminosityUnit::Nanowatt)
     }
 
     /// Alias for [`Self::as_nanowatts`].
     #[inline]
-    pub fn as_nanowatt(self) -> f64 {
+    pub fn as_nanowatt(self) -> Num {
         self.as_nanowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Microwatts (`µW`).
     #[inline]
-    pub fn from_microwatts(value: f64) -> Self {
+    pub fn from_microwatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Microwatt)
     }
 
     /// Returns the value expressed in Microwatts (`µW`).
     #[inline]
-    pub fn as_microwatts(self) -> f64 {
+    pub fn as_microwatts(self) -> Num {
         self.convert_to(LuminosityUnit::Microwatt)
     }
 
     /// Alias for [`Self::as_microwatts`].
     #[inline]
-    pub fn as_microwatt(self) -> f64 {
+    pub fn as_microwatt(self) -> Num {
         self.as_microwatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Milliwatts (`mW`).
     #[inline]
-    pub fn from_milliwatts(value: f64) -> Self {
+    pub fn from_milliwatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Milliwatt)
     }
 
     /// Returns the value expressed in Milliwatts (`mW`).
     #[inline]
-    pub fn as_milliwatts(self) -> f64 {
+    pub fn as_milliwatts(self) -> Num {
         self.convert_to(LuminosityUnit::Milliwatt)
     }
 
     /// Alias for [`Self::as_milliwatts`].
     #[inline]
-    pub fn as_milliwatt(self) -> f64 {
+    pub fn as_milliwatt(self) -> Num {
         self.as_milliwatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Deciwatts (`dW`).
     #[inline]
-    pub fn from_deciwatts(value: f64) -> Self {
+    pub fn from_deciwatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Deciwatt)
     }
 
     /// Returns the value expressed in Deciwatts (`dW`).
     #[inline]
-    pub fn as_deciwatts(self) -> f64 {
+    pub fn as_deciwatts(self) -> Num {
         self.convert_to(LuminosityUnit::Deciwatt)
     }
 
     /// Alias for [`Self::as_deciwatts`].
     #[inline]
-    pub fn as_deciwatt(self) -> f64 {
+    pub fn as_deciwatt(self) -> Num {
         self.as_deciwatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Decawatts (`daW`).
     #[inline]
-    pub fn from_decawatts(value: f64) -> Self {
+    pub fn from_decawatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Decawatt)
     }
 
     /// Returns the value expressed in Decawatts (`daW`).
     #[inline]
-    pub fn as_decawatts(self) -> f64 {
+    pub fn as_decawatts(self) -> Num {
         self.convert_to(LuminosityUnit::Decawatt)
     }
 
     /// Alias for [`Self::as_decawatts`].
     #[inline]
-    pub fn as_decawatt(self) -> f64 {
+    pub fn as_decawatt(self) -> Num {
         self.as_decawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Kilowatts (`kW`).
     #[inline]
-    pub fn from_kilowatts(value: f64) -> Self {
+    pub fn from_kilowatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Kilowatt)
     }
 
     /// Returns the value expressed in Kilowatts (`kW`).
     #[inline]
-    pub fn as_kilowatts(self) -> f64 {
+    pub fn as_kilowatts(self) -> Num {
         self.convert_to(LuminosityUnit::Kilowatt)
     }
 
     /// Alias for [`Self::as_kilowatts`].
     #[inline]
-    pub fn as_kilowatt(self) -> f64 {
+    pub fn as_kilowatt(self) -> Num {
         self.as_kilowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Megawatts (`MW`).
     #[inline]
-    pub fn from_megawatts(value: f64) -> Self {
+    pub fn from_megawatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Megawatt)
     }
 
     /// Returns the value expressed in Megawatts (`MW`).
     #[inline]
-    pub fn as_megawatts(self) -> f64 {
+    pub fn as_megawatts(self) -> Num {
         self.convert_to(LuminosityUnit::Megawatt)
     }
 
     /// Alias for [`Self::as_megawatts`].
     #[inline]
-    pub fn as_megawatt(self) -> f64 {
+    pub fn as_megawatt(self) -> Num {
         self.as_megawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Gigawatts (`GW`).
     #[inline]
-    pub fn from_gigawatts(value: f64) -> Self {
+    pub fn from_gigawatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Gigawatt)
     }
 
     /// Returns the value expressed in Gigawatts (`GW`).
     #[inline]
-    pub fn as_gigawatts(self) -> f64 {
+    pub fn as_gigawatts(self) -> Num {
         self.convert_to(LuminosityUnit::Gigawatt)
     }
 
     /// Alias for [`Self::as_gigawatts`].
     #[inline]
-    pub fn as_gigawatt(self) -> f64 {
+    pub fn as_gigawatt(self) -> Num {
         self.as_gigawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Terawatts (`TW`).
     #[inline]
-    pub fn from_terawatts(value: f64) -> Self {
+    pub fn from_terawatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Terawatt)
     }
 
     /// Returns the value expressed in Terawatts (`TW`).
     #[inline]
-    pub fn as_terawatts(self) -> f64 {
+    pub fn as_terawatts(self) -> Num {
         self.convert_to(LuminosityUnit::Terawatt)
     }
 
     /// Alias for [`Self::as_terawatts`].
     #[inline]
-    pub fn as_terawatt(self) -> f64 {
+    pub fn as_terawatt(self) -> Num {
         self.as_terawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Petawatts (`PW`).
     #[inline]
-    pub fn from_petawatts(value: f64) -> Self {
+    pub fn from_petawatts(value: Num) -> Self {
         Self::new(value, LuminosityUnit::Petawatt)
     }
 
     /// Returns the value expressed in Petawatts (`PW`).
     #[inline]
-    pub fn as_petawatts(self) -> f64 {
+    pub fn as_petawatts(self) -> Num {
         self.convert_to(LuminosityUnit::Petawatt)
     }
 
     /// Alias for [`Self::as_petawatts`].
     #[inline]
-    pub fn as_petawatt(self) -> f64 {
+    pub fn as_petawatt(self) -> Num {
         self.as_petawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in SolarLuminosities (`L⊙`).
     #[inline]
-    pub fn from_solar_luminosities(value: f64) -> Self {
+    pub fn from_solar_luminosities(value: Num) -> Self {
         Self::new(value, LuminosityUnit::SolarLuminosity)
     }
 
     /// Returns the value expressed in SolarLuminosities (`L⊙`).
     #[inline]
-    pub fn as_solar_luminosities(self) -> f64 {
+    pub fn as_solar_luminosities(self) -> Num {
         self.convert_to(LuminosityUnit::SolarLuminosity)
     }
 
     /// Alias for [`Self::as_solar_luminosities`].
     #[inline]
-    pub fn as_solar_luminosity(self) -> f64 {
+    pub fn as_solar_luminosity(self) -> Num {
         self.as_solar_luminosities()
     }
 }
@@ -429,27 +430,27 @@ impl Neg for Luminosity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Luminosity {
+impl Mul<Num> for Luminosity {
     type Output = Luminosity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Luminosity> for f64 {
+impl Mul<Luminosity> for Num {
     type Output = Luminosity;
     fn mul(self, rhs: Luminosity) -> Luminosity {
         Luminosity(self * rhs.0)
     }
 }
-impl Div<f64> for Luminosity {
+impl Div<Num> for Luminosity {
     type Output = Luminosity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Luminosity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -483,7 +484,7 @@ impl FromStr for Luminosity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLuminosityError(s.to_owned()))?;

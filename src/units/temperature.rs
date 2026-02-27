@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Kelvin` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Temperature(f64);
+pub struct Temperature(Num);
 
 /// Unit variants for [`Temperature`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -83,7 +84,7 @@ impl TemperatureUnit {
 
 impl Temperature {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: TemperatureUnit) -> Self {
+    pub fn new(value: Num, unit: TemperatureUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -104,7 +105,7 @@ impl Temperature {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -112,12 +113,12 @@ impl Temperature {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: TemperatureUnit) -> f64 {
+    pub fn convert_to(self, unit: TemperatureUnit) -> Num {
         let x = self.0;
         match unit {
             TemperatureUnit::Kelvin => x,
@@ -135,181 +136,181 @@ impl Temperature {
 
     /// Creates a [`Temperature`] from a value in Kelvins (`K`).
     #[inline]
-    pub fn from_kelvins(value: f64) -> Self {
+    pub fn from_kelvins(value: Num) -> Self {
         Self::new(value, TemperatureUnit::Kelvin)
     }
 
     /// Returns the value expressed in Kelvins (`K`).
     #[inline]
-    pub fn as_kelvins(self) -> f64 {
+    pub fn as_kelvins(self) -> Num {
         self.convert_to(TemperatureUnit::Kelvin)
     }
 
     /// Alias for [`Self::as_kelvins`].
     #[inline]
-    pub fn as_kelvin(self) -> f64 {
+    pub fn as_kelvin(self) -> Num {
         self.as_kelvins()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesCelsius (`°C`).
     #[inline]
-    pub fn from_degrees_celsius(value: f64) -> Self {
+    pub fn from_degrees_celsius(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeCelsius)
     }
 
     /// Returns the value expressed in DegreesCelsius (`°C`).
     #[inline]
-    pub fn as_degrees_celsius(self) -> f64 {
+    pub fn as_degrees_celsius(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeCelsius)
     }
 
     /// Alias for [`Self::as_degrees_celsius`].
     #[inline]
-    pub fn as_degree_celsius(self) -> f64 {
+    pub fn as_degree_celsius(self) -> Num {
         self.as_degrees_celsius()
     }
 
     /// Creates a [`Temperature`] from a value in MillidegreesCelsius (`m°C`).
     #[inline]
-    pub fn from_millidegrees_celsius(value: f64) -> Self {
+    pub fn from_millidegrees_celsius(value: Num) -> Self {
         Self::new(value, TemperatureUnit::MillidegreeCelsius)
     }
 
     /// Returns the value expressed in MillidegreesCelsius (`m°C`).
     #[inline]
-    pub fn as_millidegrees_celsius(self) -> f64 {
+    pub fn as_millidegrees_celsius(self) -> Num {
         self.convert_to(TemperatureUnit::MillidegreeCelsius)
     }
 
     /// Alias for [`Self::as_millidegrees_celsius`].
     #[inline]
-    pub fn as_millidegree_celsius(self) -> f64 {
+    pub fn as_millidegree_celsius(self) -> Num {
         self.as_millidegrees_celsius()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesDelisle (`°De`).
     #[inline]
-    pub fn from_degrees_delisle(value: f64) -> Self {
+    pub fn from_degrees_delisle(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeDelisle)
     }
 
     /// Returns the value expressed in DegreesDelisle (`°De`).
     #[inline]
-    pub fn as_degrees_delisle(self) -> f64 {
+    pub fn as_degrees_delisle(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeDelisle)
     }
 
     /// Alias for [`Self::as_degrees_delisle`].
     #[inline]
-    pub fn as_degree_delisle(self) -> f64 {
+    pub fn as_degree_delisle(self) -> Num {
         self.as_degrees_delisle()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesFahrenheit (`°F`).
     #[inline]
-    pub fn from_degrees_fahrenheit(value: f64) -> Self {
+    pub fn from_degrees_fahrenheit(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeFahrenheit)
     }
 
     /// Returns the value expressed in DegreesFahrenheit (`°F`).
     #[inline]
-    pub fn as_degrees_fahrenheit(self) -> f64 {
+    pub fn as_degrees_fahrenheit(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeFahrenheit)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit`].
     #[inline]
-    pub fn as_degree_fahrenheit(self) -> f64 {
+    pub fn as_degree_fahrenheit(self) -> Num {
         self.as_degrees_fahrenheit()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesNewton (`°N`).
     #[inline]
-    pub fn from_degrees_newton(value: f64) -> Self {
+    pub fn from_degrees_newton(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeNewton)
     }
 
     /// Returns the value expressed in DegreesNewton (`°N`).
     #[inline]
-    pub fn as_degrees_newton(self) -> f64 {
+    pub fn as_degrees_newton(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeNewton)
     }
 
     /// Alias for [`Self::as_degrees_newton`].
     #[inline]
-    pub fn as_degree_newton(self) -> f64 {
+    pub fn as_degree_newton(self) -> Num {
         self.as_degrees_newton()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesRankine (`°R`).
     #[inline]
-    pub fn from_degrees_rankine(value: f64) -> Self {
+    pub fn from_degrees_rankine(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeRankine)
     }
 
     /// Returns the value expressed in DegreesRankine (`°R`).
     #[inline]
-    pub fn as_degrees_rankine(self) -> f64 {
+    pub fn as_degrees_rankine(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeRankine)
     }
 
     /// Alias for [`Self::as_degrees_rankine`].
     #[inline]
-    pub fn as_degree_rankine(self) -> f64 {
+    pub fn as_degree_rankine(self) -> Num {
         self.as_degrees_rankine()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesReaumur (`°Ré`).
     #[inline]
-    pub fn from_degrees_reaumur(value: f64) -> Self {
+    pub fn from_degrees_reaumur(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeReaumur)
     }
 
     /// Returns the value expressed in DegreesReaumur (`°Ré`).
     #[inline]
-    pub fn as_degrees_reaumur(self) -> f64 {
+    pub fn as_degrees_reaumur(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeReaumur)
     }
 
     /// Alias for [`Self::as_degrees_reaumur`].
     #[inline]
-    pub fn as_degree_reaumur(self) -> f64 {
+    pub fn as_degree_reaumur(self) -> Num {
         self.as_degrees_reaumur()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesRoemer (`°Rø`).
     #[inline]
-    pub fn from_degrees_roemer(value: f64) -> Self {
+    pub fn from_degrees_roemer(value: Num) -> Self {
         Self::new(value, TemperatureUnit::DegreeRoemer)
     }
 
     /// Returns the value expressed in DegreesRoemer (`°Rø`).
     #[inline]
-    pub fn as_degrees_roemer(self) -> f64 {
+    pub fn as_degrees_roemer(self) -> Num {
         self.convert_to(TemperatureUnit::DegreeRoemer)
     }
 
     /// Alias for [`Self::as_degrees_roemer`].
     #[inline]
-    pub fn as_degree_roemer(self) -> f64 {
+    pub fn as_degree_roemer(self) -> Num {
         self.as_degrees_roemer()
     }
 
     /// Creates a [`Temperature`] from a value in SolarTemperatures (`T⊙`).
     #[inline]
-    pub fn from_solar_temperatures(value: f64) -> Self {
+    pub fn from_solar_temperatures(value: Num) -> Self {
         Self::new(value, TemperatureUnit::SolarTemperature)
     }
 
     /// Returns the value expressed in SolarTemperatures (`T⊙`).
     #[inline]
-    pub fn as_solar_temperatures(self) -> f64 {
+    pub fn as_solar_temperatures(self) -> Num {
         self.convert_to(TemperatureUnit::SolarTemperature)
     }
 
     /// Alias for [`Self::as_solar_temperatures`].
     #[inline]
-    pub fn as_solar_temperature(self) -> f64 {
+    pub fn as_solar_temperature(self) -> Num {
         self.as_solar_temperatures()
     }
 }
@@ -332,27 +333,27 @@ impl Neg for Temperature {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Temperature {
+impl Mul<Num> for Temperature {
     type Output = Temperature;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Temperature> for f64 {
+impl Mul<Temperature> for Num {
     type Output = Temperature;
     fn mul(self, rhs: Temperature) -> Temperature {
         Temperature(self * rhs.0)
     }
 }
-impl Div<f64> for Temperature {
+impl Div<Num> for Temperature {
     type Output = Temperature;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Temperature {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -386,7 +387,7 @@ impl FromStr for Temperature {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseTemperatureError(s.to_owned()))?;

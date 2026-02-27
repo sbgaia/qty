@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CubicMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Volume(f64);
+pub struct Volume(Num);
 
 /// Unit variants for [`Volume`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -291,7 +292,7 @@ impl VolumeUnit {
 
 impl Volume {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: VolumeUnit) -> Self {
+    pub fn new(value: Num, unit: VolumeUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -357,7 +358,7 @@ impl Volume {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -365,12 +366,12 @@ impl Volume {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: VolumeUnit) -> f64 {
+    pub fn convert_to(self, unit: VolumeUnit) -> Num {
         let x = self.0;
         match unit {
             VolumeUnit::Liter => x * 1e3,
@@ -433,991 +434,991 @@ impl Volume {
 
     /// Creates a [`Volume`] from a value in Liters (`l`).
     #[inline]
-    pub fn from_liters(value: f64) -> Self {
+    pub fn from_liters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Liter)
     }
 
     /// Returns the value expressed in Liters (`l`).
     #[inline]
-    pub fn as_liters(self) -> f64 {
+    pub fn as_liters(self) -> Num {
         self.convert_to(VolumeUnit::Liter)
     }
 
     /// Alias for [`Self::as_liters`].
     #[inline]
-    pub fn as_liter(self) -> f64 {
+    pub fn as_liter(self) -> Num {
         self.as_liters()
     }
 
     /// Creates a [`Volume`] from a value in Nanoliters (`nl`).
     #[inline]
-    pub fn from_nanoliters(value: f64) -> Self {
+    pub fn from_nanoliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Nanoliter)
     }
 
     /// Returns the value expressed in Nanoliters (`nl`).
     #[inline]
-    pub fn as_nanoliters(self) -> f64 {
+    pub fn as_nanoliters(self) -> Num {
         self.convert_to(VolumeUnit::Nanoliter)
     }
 
     /// Alias for [`Self::as_nanoliters`].
     #[inline]
-    pub fn as_nanoliter(self) -> f64 {
+    pub fn as_nanoliter(self) -> Num {
         self.as_nanoliters()
     }
 
     /// Creates a [`Volume`] from a value in Microliters (`µl`).
     #[inline]
-    pub fn from_microliters(value: f64) -> Self {
+    pub fn from_microliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Microliter)
     }
 
     /// Returns the value expressed in Microliters (`µl`).
     #[inline]
-    pub fn as_microliters(self) -> f64 {
+    pub fn as_microliters(self) -> Num {
         self.convert_to(VolumeUnit::Microliter)
     }
 
     /// Alias for [`Self::as_microliters`].
     #[inline]
-    pub fn as_microliter(self) -> f64 {
+    pub fn as_microliter(self) -> Num {
         self.as_microliters()
     }
 
     /// Creates a [`Volume`] from a value in Milliliters (`ml`).
     #[inline]
-    pub fn from_milliliters(value: f64) -> Self {
+    pub fn from_milliliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Milliliter)
     }
 
     /// Returns the value expressed in Milliliters (`ml`).
     #[inline]
-    pub fn as_milliliters(self) -> f64 {
+    pub fn as_milliliters(self) -> Num {
         self.convert_to(VolumeUnit::Milliliter)
     }
 
     /// Alias for [`Self::as_milliliters`].
     #[inline]
-    pub fn as_milliliter(self) -> f64 {
+    pub fn as_milliliter(self) -> Num {
         self.as_milliliters()
     }
 
     /// Creates a [`Volume`] from a value in Centiliters (`cl`).
     #[inline]
-    pub fn from_centiliters(value: f64) -> Self {
+    pub fn from_centiliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Centiliter)
     }
 
     /// Returns the value expressed in Centiliters (`cl`).
     #[inline]
-    pub fn as_centiliters(self) -> f64 {
+    pub fn as_centiliters(self) -> Num {
         self.convert_to(VolumeUnit::Centiliter)
     }
 
     /// Alias for [`Self::as_centiliters`].
     #[inline]
-    pub fn as_centiliter(self) -> f64 {
+    pub fn as_centiliter(self) -> Num {
         self.as_centiliters()
     }
 
     /// Creates a [`Volume`] from a value in Deciliters (`dl`).
     #[inline]
-    pub fn from_deciliters(value: f64) -> Self {
+    pub fn from_deciliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Deciliter)
     }
 
     /// Returns the value expressed in Deciliters (`dl`).
     #[inline]
-    pub fn as_deciliters(self) -> f64 {
+    pub fn as_deciliters(self) -> Num {
         self.convert_to(VolumeUnit::Deciliter)
     }
 
     /// Alias for [`Self::as_deciliters`].
     #[inline]
-    pub fn as_deciliter(self) -> f64 {
+    pub fn as_deciliter(self) -> Num {
         self.as_deciliters()
     }
 
     /// Creates a [`Volume`] from a value in Decaliters (`dal`).
     #[inline]
-    pub fn from_decaliters(value: f64) -> Self {
+    pub fn from_decaliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Decaliter)
     }
 
     /// Returns the value expressed in Decaliters (`dal`).
     #[inline]
-    pub fn as_decaliters(self) -> f64 {
+    pub fn as_decaliters(self) -> Num {
         self.convert_to(VolumeUnit::Decaliter)
     }
 
     /// Alias for [`Self::as_decaliters`].
     #[inline]
-    pub fn as_decaliter(self) -> f64 {
+    pub fn as_decaliter(self) -> Num {
         self.as_decaliters()
     }
 
     /// Creates a [`Volume`] from a value in Hectoliters (`hl`).
     #[inline]
-    pub fn from_hectoliters(value: f64) -> Self {
+    pub fn from_hectoliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Hectoliter)
     }
 
     /// Returns the value expressed in Hectoliters (`hl`).
     #[inline]
-    pub fn as_hectoliters(self) -> f64 {
+    pub fn as_hectoliters(self) -> Num {
         self.convert_to(VolumeUnit::Hectoliter)
     }
 
     /// Alias for [`Self::as_hectoliters`].
     #[inline]
-    pub fn as_hectoliter(self) -> f64 {
+    pub fn as_hectoliter(self) -> Num {
         self.as_hectoliters()
     }
 
     /// Creates a [`Volume`] from a value in Kiloliters (`kl`).
     #[inline]
-    pub fn from_kiloliters(value: f64) -> Self {
+    pub fn from_kiloliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Kiloliter)
     }
 
     /// Returns the value expressed in Kiloliters (`kl`).
     #[inline]
-    pub fn as_kiloliters(self) -> f64 {
+    pub fn as_kiloliters(self) -> Num {
         self.convert_to(VolumeUnit::Kiloliter)
     }
 
     /// Alias for [`Self::as_kiloliters`].
     #[inline]
-    pub fn as_kiloliter(self) -> f64 {
+    pub fn as_kiloliter(self) -> Num {
         self.as_kiloliters()
     }
 
     /// Creates a [`Volume`] from a value in Megaliters (`Ml`).
     #[inline]
-    pub fn from_megaliters(value: f64) -> Self {
+    pub fn from_megaliters(value: Num) -> Self {
         Self::new(value, VolumeUnit::Megaliter)
     }
 
     /// Returns the value expressed in Megaliters (`Ml`).
     #[inline]
-    pub fn as_megaliters(self) -> f64 {
+    pub fn as_megaliters(self) -> Num {
         self.convert_to(VolumeUnit::Megaliter)
     }
 
     /// Alias for [`Self::as_megaliters`].
     #[inline]
-    pub fn as_megaliter(self) -> f64 {
+    pub fn as_megaliter(self) -> Num {
         self.as_megaliters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMeters (`m³`).
     #[inline]
-    pub fn from_cubic_meters(value: f64) -> Self {
+    pub fn from_cubic_meters(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicMeter)
     }
 
     /// Returns the value expressed in CubicMeters (`m³`).
     #[inline]
-    pub fn as_cubic_meters(self) -> f64 {
+    pub fn as_cubic_meters(self) -> Num {
         self.convert_to(VolumeUnit::CubicMeter)
     }
 
     /// Alias for [`Self::as_cubic_meters`].
     #[inline]
-    pub fn as_cubic_meter(self) -> f64 {
+    pub fn as_cubic_meter(self) -> Num {
         self.as_cubic_meters()
     }
 
     /// Creates a [`Volume`] from a value in HectocubicMeters (`hm³`).
     #[inline]
-    pub fn from_hectocubic_meters(value: f64) -> Self {
+    pub fn from_hectocubic_meters(value: Num) -> Self {
         Self::new(value, VolumeUnit::HectocubicMeter)
     }
 
     /// Returns the value expressed in HectocubicMeters (`hm³`).
     #[inline]
-    pub fn as_hectocubic_meters(self) -> f64 {
+    pub fn as_hectocubic_meters(self) -> Num {
         self.convert_to(VolumeUnit::HectocubicMeter)
     }
 
     /// Alias for [`Self::as_hectocubic_meters`].
     #[inline]
-    pub fn as_hectocubic_meter(self) -> f64 {
+    pub fn as_hectocubic_meter(self) -> Num {
         self.as_hectocubic_meters()
     }
 
     /// Creates a [`Volume`] from a value in KilocubicMeters (`km³`).
     #[inline]
-    pub fn from_kilocubic_meters(value: f64) -> Self {
+    pub fn from_kilocubic_meters(value: Num) -> Self {
         Self::new(value, VolumeUnit::KilocubicMeter)
     }
 
     /// Returns the value expressed in KilocubicMeters (`km³`).
     #[inline]
-    pub fn as_kilocubic_meters(self) -> f64 {
+    pub fn as_kilocubic_meters(self) -> Num {
         self.convert_to(VolumeUnit::KilocubicMeter)
     }
 
     /// Alias for [`Self::as_kilocubic_meters`].
     #[inline]
-    pub fn as_kilocubic_meter(self) -> f64 {
+    pub fn as_kilocubic_meter(self) -> Num {
         self.as_kilocubic_meters()
     }
 
     /// Creates a [`Volume`] from a value in CubicKilometers (`km³`).
     #[inline]
-    pub fn from_cubic_kilometers(value: f64) -> Self {
+    pub fn from_cubic_kilometers(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicKilometer)
     }
 
     /// Returns the value expressed in CubicKilometers (`km³`).
     #[inline]
-    pub fn as_cubic_kilometers(self) -> f64 {
+    pub fn as_cubic_kilometers(self) -> Num {
         self.convert_to(VolumeUnit::CubicKilometer)
     }
 
     /// Alias for [`Self::as_cubic_kilometers`].
     #[inline]
-    pub fn as_cubic_kilometer(self) -> f64 {
+    pub fn as_cubic_kilometer(self) -> Num {
         self.as_cubic_kilometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicHectometers (`hm³`).
     #[inline]
-    pub fn from_cubic_hectometers(value: f64) -> Self {
+    pub fn from_cubic_hectometers(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicHectometer)
     }
 
     /// Returns the value expressed in CubicHectometers (`hm³`).
     #[inline]
-    pub fn as_cubic_hectometers(self) -> f64 {
+    pub fn as_cubic_hectometers(self) -> Num {
         self.convert_to(VolumeUnit::CubicHectometer)
     }
 
     /// Alias for [`Self::as_cubic_hectometers`].
     #[inline]
-    pub fn as_cubic_hectometer(self) -> f64 {
+    pub fn as_cubic_hectometer(self) -> Num {
         self.as_cubic_hectometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicDecimeters (`dm³`).
     #[inline]
-    pub fn from_cubic_decimeters(value: f64) -> Self {
+    pub fn from_cubic_decimeters(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicDecimeter)
     }
 
     /// Returns the value expressed in CubicDecimeters (`dm³`).
     #[inline]
-    pub fn as_cubic_decimeters(self) -> f64 {
+    pub fn as_cubic_decimeters(self) -> Num {
         self.convert_to(VolumeUnit::CubicDecimeter)
     }
 
     /// Alias for [`Self::as_cubic_decimeters`].
     #[inline]
-    pub fn as_cubic_decimeter(self) -> f64 {
+    pub fn as_cubic_decimeter(self) -> Num {
         self.as_cubic_decimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicCentimeters (`cm³`).
     #[inline]
-    pub fn from_cubic_centimeters(value: f64) -> Self {
+    pub fn from_cubic_centimeters(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicCentimeter)
     }
 
     /// Returns the value expressed in CubicCentimeters (`cm³`).
     #[inline]
-    pub fn as_cubic_centimeters(self) -> f64 {
+    pub fn as_cubic_centimeters(self) -> Num {
         self.convert_to(VolumeUnit::CubicCentimeter)
     }
 
     /// Alias for [`Self::as_cubic_centimeters`].
     #[inline]
-    pub fn as_cubic_centimeter(self) -> f64 {
+    pub fn as_cubic_centimeter(self) -> Num {
         self.as_cubic_centimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMillimeters (`mm³`).
     #[inline]
-    pub fn from_cubic_millimeters(value: f64) -> Self {
+    pub fn from_cubic_millimeters(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicMillimeter)
     }
 
     /// Returns the value expressed in CubicMillimeters (`mm³`).
     #[inline]
-    pub fn as_cubic_millimeters(self) -> f64 {
+    pub fn as_cubic_millimeters(self) -> Num {
         self.convert_to(VolumeUnit::CubicMillimeter)
     }
 
     /// Alias for [`Self::as_cubic_millimeters`].
     #[inline]
-    pub fn as_cubic_millimeter(self) -> f64 {
+    pub fn as_cubic_millimeter(self) -> Num {
         self.as_cubic_millimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMicrometers (`µm³`).
     #[inline]
-    pub fn from_cubic_micrometers(value: f64) -> Self {
+    pub fn from_cubic_micrometers(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicMicrometer)
     }
 
     /// Returns the value expressed in CubicMicrometers (`µm³`).
     #[inline]
-    pub fn as_cubic_micrometers(self) -> f64 {
+    pub fn as_cubic_micrometers(self) -> Num {
         self.convert_to(VolumeUnit::CubicMicrometer)
     }
 
     /// Alias for [`Self::as_cubic_micrometers`].
     #[inline]
-    pub fn as_cubic_micrometer(self) -> f64 {
+    pub fn as_cubic_micrometer(self) -> Num {
         self.as_cubic_micrometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicMiles (`mi³`).
     #[inline]
-    pub fn from_cubic_miles(value: f64) -> Self {
+    pub fn from_cubic_miles(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicMile)
     }
 
     /// Returns the value expressed in CubicMiles (`mi³`).
     #[inline]
-    pub fn as_cubic_miles(self) -> f64 {
+    pub fn as_cubic_miles(self) -> Num {
         self.convert_to(VolumeUnit::CubicMile)
     }
 
     /// Alias for [`Self::as_cubic_miles`].
     #[inline]
-    pub fn as_cubic_mile(self) -> f64 {
+    pub fn as_cubic_mile(self) -> Num {
         self.as_cubic_miles()
     }
 
     /// Creates a [`Volume`] from a value in CubicYards (`yd³`).
     #[inline]
-    pub fn from_cubic_yards(value: f64) -> Self {
+    pub fn from_cubic_yards(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicYard)
     }
 
     /// Returns the value expressed in CubicYards (`yd³`).
     #[inline]
-    pub fn as_cubic_yards(self) -> f64 {
+    pub fn as_cubic_yards(self) -> Num {
         self.convert_to(VolumeUnit::CubicYard)
     }
 
     /// Alias for [`Self::as_cubic_yards`].
     #[inline]
-    pub fn as_cubic_yard(self) -> f64 {
+    pub fn as_cubic_yard(self) -> Num {
         self.as_cubic_yards()
     }
 
     /// Creates a [`Volume`] from a value in CubicFeet (`ft³`).
     #[inline]
-    pub fn from_cubic_feet(value: f64) -> Self {
+    pub fn from_cubic_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicFoot)
     }
 
     /// Returns the value expressed in CubicFeet (`ft³`).
     #[inline]
-    pub fn as_cubic_feet(self) -> f64 {
+    pub fn as_cubic_feet(self) -> Num {
         self.convert_to(VolumeUnit::CubicFoot)
     }
 
     /// Alias for [`Self::as_cubic_feet`].
     #[inline]
-    pub fn as_cubic_foot(self) -> f64 {
+    pub fn as_cubic_foot(self) -> Num {
         self.as_cubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in HectocubicFeet (`hft³`).
     #[inline]
-    pub fn from_hectocubic_feet(value: f64) -> Self {
+    pub fn from_hectocubic_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::HectocubicFoot)
     }
 
     /// Returns the value expressed in HectocubicFeet (`hft³`).
     #[inline]
-    pub fn as_hectocubic_feet(self) -> f64 {
+    pub fn as_hectocubic_feet(self) -> Num {
         self.convert_to(VolumeUnit::HectocubicFoot)
     }
 
     /// Alias for [`Self::as_hectocubic_feet`].
     #[inline]
-    pub fn as_hectocubic_foot(self) -> f64 {
+    pub fn as_hectocubic_foot(self) -> Num {
         self.as_hectocubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in KilocubicFeet (`kft³`).
     #[inline]
-    pub fn from_kilocubic_feet(value: f64) -> Self {
+    pub fn from_kilocubic_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::KilocubicFoot)
     }
 
     /// Returns the value expressed in KilocubicFeet (`kft³`).
     #[inline]
-    pub fn as_kilocubic_feet(self) -> f64 {
+    pub fn as_kilocubic_feet(self) -> Num {
         self.convert_to(VolumeUnit::KilocubicFoot)
     }
 
     /// Alias for [`Self::as_kilocubic_feet`].
     #[inline]
-    pub fn as_kilocubic_foot(self) -> f64 {
+    pub fn as_kilocubic_foot(self) -> Num {
         self.as_kilocubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in MegacubicFeet (`Mft³`).
     #[inline]
-    pub fn from_megacubic_feet(value: f64) -> Self {
+    pub fn from_megacubic_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::MegacubicFoot)
     }
 
     /// Returns the value expressed in MegacubicFeet (`Mft³`).
     #[inline]
-    pub fn as_megacubic_feet(self) -> f64 {
+    pub fn as_megacubic_feet(self) -> Num {
         self.convert_to(VolumeUnit::MegacubicFoot)
     }
 
     /// Alias for [`Self::as_megacubic_feet`].
     #[inline]
-    pub fn as_megacubic_foot(self) -> f64 {
+    pub fn as_megacubic_foot(self) -> Num {
         self.as_megacubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in CubicInches (`in³`).
     #[inline]
-    pub fn from_cubic_inches(value: f64) -> Self {
+    pub fn from_cubic_inches(value: Num) -> Self {
         Self::new(value, VolumeUnit::CubicInch)
     }
 
     /// Returns the value expressed in CubicInches (`in³`).
     #[inline]
-    pub fn as_cubic_inches(self) -> f64 {
+    pub fn as_cubic_inches(self) -> Num {
         self.convert_to(VolumeUnit::CubicInch)
     }
 
     /// Alias for [`Self::as_cubic_inches`].
     #[inline]
-    pub fn as_cubic_inch(self) -> f64 {
+    pub fn as_cubic_inch(self) -> Num {
         self.as_cubic_inches()
     }
 
     /// Creates a [`Volume`] from a value in ImperialGallons (`gal (imp.)`).
     #[inline]
-    pub fn from_imperial_gallons(value: f64) -> Self {
+    pub fn from_imperial_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::ImperialGallon)
     }
 
     /// Returns the value expressed in ImperialGallons (`gal (imp.)`).
     #[inline]
-    pub fn as_imperial_gallons(self) -> f64 {
+    pub fn as_imperial_gallons(self) -> Num {
         self.convert_to(VolumeUnit::ImperialGallon)
     }
 
     /// Alias for [`Self::as_imperial_gallons`].
     #[inline]
-    pub fn as_imperial_gallon(self) -> f64 {
+    pub fn as_imperial_gallon(self) -> Num {
         self.as_imperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in KiloimperialGallons (`kgal (imp.)`).
     #[inline]
-    pub fn from_kiloimperial_gallons(value: f64) -> Self {
+    pub fn from_kiloimperial_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::KiloimperialGallon)
     }
 
     /// Returns the value expressed in KiloimperialGallons (`kgal (imp.)`).
     #[inline]
-    pub fn as_kiloimperial_gallons(self) -> f64 {
+    pub fn as_kiloimperial_gallons(self) -> Num {
         self.convert_to(VolumeUnit::KiloimperialGallon)
     }
 
     /// Alias for [`Self::as_kiloimperial_gallons`].
     #[inline]
-    pub fn as_kiloimperial_gallon(self) -> f64 {
+    pub fn as_kiloimperial_gallon(self) -> Num {
         self.as_kiloimperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in MegaimperialGallons (`Mgal (imp.)`).
     #[inline]
-    pub fn from_megaimperial_gallons(value: f64) -> Self {
+    pub fn from_megaimperial_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::MegaimperialGallon)
     }
 
     /// Returns the value expressed in MegaimperialGallons (`Mgal (imp.)`).
     #[inline]
-    pub fn as_megaimperial_gallons(self) -> f64 {
+    pub fn as_megaimperial_gallons(self) -> Num {
         self.convert_to(VolumeUnit::MegaimperialGallon)
     }
 
     /// Alias for [`Self::as_megaimperial_gallons`].
     #[inline]
-    pub fn as_megaimperial_gallon(self) -> f64 {
+    pub fn as_megaimperial_gallon(self) -> Num {
         self.as_megaimperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in ImperialOunces (`oz (imp.)`).
     #[inline]
-    pub fn from_imperial_ounces(value: f64) -> Self {
+    pub fn from_imperial_ounces(value: Num) -> Self {
         Self::new(value, VolumeUnit::ImperialOunce)
     }
 
     /// Returns the value expressed in ImperialOunces (`oz (imp.)`).
     #[inline]
-    pub fn as_imperial_ounces(self) -> f64 {
+    pub fn as_imperial_ounces(self) -> Num {
         self.convert_to(VolumeUnit::ImperialOunce)
     }
 
     /// Alias for [`Self::as_imperial_ounces`].
     #[inline]
-    pub fn as_imperial_ounce(self) -> f64 {
+    pub fn as_imperial_ounce(self) -> Num {
         self.as_imperial_ounces()
     }
 
     /// Creates a [`Volume`] from a value in UsGallons (`gal (U.S.)`).
     #[inline]
-    pub fn from_us_gallons(value: f64) -> Self {
+    pub fn from_us_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsGallon)
     }
 
     /// Returns the value expressed in UsGallons (`gal (U.S.)`).
     #[inline]
-    pub fn as_us_gallons(self) -> f64 {
+    pub fn as_us_gallons(self) -> Num {
         self.convert_to(VolumeUnit::UsGallon)
     }
 
     /// Alias for [`Self::as_us_gallons`].
     #[inline]
-    pub fn as_us_gallon(self) -> f64 {
+    pub fn as_us_gallon(self) -> Num {
         self.as_us_gallons()
     }
 
     /// Creates a [`Volume`] from a value in DecausGallons (`dagal (U.S.)`).
     #[inline]
-    pub fn from_decaus_gallons(value: f64) -> Self {
+    pub fn from_decaus_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::DecausGallon)
     }
 
     /// Returns the value expressed in DecausGallons (`dagal (U.S.)`).
     #[inline]
-    pub fn as_decaus_gallons(self) -> f64 {
+    pub fn as_decaus_gallons(self) -> Num {
         self.convert_to(VolumeUnit::DecausGallon)
     }
 
     /// Alias for [`Self::as_decaus_gallons`].
     #[inline]
-    pub fn as_decaus_gallon(self) -> f64 {
+    pub fn as_decaus_gallon(self) -> Num {
         self.as_decaus_gallons()
     }
 
     /// Creates a [`Volume`] from a value in DeciusGallons (`dgal (U.S.)`).
     #[inline]
-    pub fn from_decius_gallons(value: f64) -> Self {
+    pub fn from_decius_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::DeciusGallon)
     }
 
     /// Returns the value expressed in DeciusGallons (`dgal (U.S.)`).
     #[inline]
-    pub fn as_decius_gallons(self) -> f64 {
+    pub fn as_decius_gallons(self) -> Num {
         self.convert_to(VolumeUnit::DeciusGallon)
     }
 
     /// Alias for [`Self::as_decius_gallons`].
     #[inline]
-    pub fn as_decius_gallon(self) -> f64 {
+    pub fn as_decius_gallon(self) -> Num {
         self.as_decius_gallons()
     }
 
     /// Creates a [`Volume`] from a value in HectousGallons (`hgal (U.S.)`).
     #[inline]
-    pub fn from_hectous_gallons(value: f64) -> Self {
+    pub fn from_hectous_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::HectousGallon)
     }
 
     /// Returns the value expressed in HectousGallons (`hgal (U.S.)`).
     #[inline]
-    pub fn as_hectous_gallons(self) -> f64 {
+    pub fn as_hectous_gallons(self) -> Num {
         self.convert_to(VolumeUnit::HectousGallon)
     }
 
     /// Alias for [`Self::as_hectous_gallons`].
     #[inline]
-    pub fn as_hectous_gallon(self) -> f64 {
+    pub fn as_hectous_gallon(self) -> Num {
         self.as_hectous_gallons()
     }
 
     /// Creates a [`Volume`] from a value in KilousGallons (`kgal (U.S.)`).
     #[inline]
-    pub fn from_kilous_gallons(value: f64) -> Self {
+    pub fn from_kilous_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::KilousGallon)
     }
 
     /// Returns the value expressed in KilousGallons (`kgal (U.S.)`).
     #[inline]
-    pub fn as_kilous_gallons(self) -> f64 {
+    pub fn as_kilous_gallons(self) -> Num {
         self.convert_to(VolumeUnit::KilousGallon)
     }
 
     /// Alias for [`Self::as_kilous_gallons`].
     #[inline]
-    pub fn as_kilous_gallon(self) -> f64 {
+    pub fn as_kilous_gallon(self) -> Num {
         self.as_kilous_gallons()
     }
 
     /// Creates a [`Volume`] from a value in MegausGallons (`Mgal (U.S.)`).
     #[inline]
-    pub fn from_megaus_gallons(value: f64) -> Self {
+    pub fn from_megaus_gallons(value: Num) -> Self {
         Self::new(value, VolumeUnit::MegausGallon)
     }
 
     /// Returns the value expressed in MegausGallons (`Mgal (U.S.)`).
     #[inline]
-    pub fn as_megaus_gallons(self) -> f64 {
+    pub fn as_megaus_gallons(self) -> Num {
         self.convert_to(VolumeUnit::MegausGallon)
     }
 
     /// Alias for [`Self::as_megaus_gallons`].
     #[inline]
-    pub fn as_megaus_gallon(self) -> f64 {
+    pub fn as_megaus_gallon(self) -> Num {
         self.as_megaus_gallons()
     }
 
     /// Creates a [`Volume`] from a value in UsOunces (`oz (U.S.)`).
     #[inline]
-    pub fn from_us_ounces(value: f64) -> Self {
+    pub fn from_us_ounces(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsOunce)
     }
 
     /// Returns the value expressed in UsOunces (`oz (U.S.)`).
     #[inline]
-    pub fn as_us_ounces(self) -> f64 {
+    pub fn as_us_ounces(self) -> Num {
         self.convert_to(VolumeUnit::UsOunce)
     }
 
     /// Alias for [`Self::as_us_ounces`].
     #[inline]
-    pub fn as_us_ounce(self) -> f64 {
+    pub fn as_us_ounce(self) -> Num {
         self.as_us_ounces()
     }
 
     /// Creates a [`Volume`] from a value in UsTablespoons (`tablespoon (U.S.)`).
     #[inline]
-    pub fn from_us_tablespoons(value: f64) -> Self {
+    pub fn from_us_tablespoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsTablespoon)
     }
 
     /// Returns the value expressed in UsTablespoons (`tablespoon (U.S.)`).
     #[inline]
-    pub fn as_us_tablespoons(self) -> f64 {
+    pub fn as_us_tablespoons(self) -> Num {
         self.convert_to(VolumeUnit::UsTablespoon)
     }
 
     /// Alias for [`Self::as_us_tablespoons`].
     #[inline]
-    pub fn as_us_tablespoon(self) -> f64 {
+    pub fn as_us_tablespoon(self) -> Num {
         self.as_us_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in AuTablespoons (`tablespoon (A.U.)`).
     #[inline]
-    pub fn from_au_tablespoons(value: f64) -> Self {
+    pub fn from_au_tablespoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::AuTablespoon)
     }
 
     /// Returns the value expressed in AuTablespoons (`tablespoon (A.U.)`).
     #[inline]
-    pub fn as_au_tablespoons(self) -> f64 {
+    pub fn as_au_tablespoons(self) -> Num {
         self.convert_to(VolumeUnit::AuTablespoon)
     }
 
     /// Alias for [`Self::as_au_tablespoons`].
     #[inline]
-    pub fn as_au_tablespoon(self) -> f64 {
+    pub fn as_au_tablespoon(self) -> Num {
         self.as_au_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTablespoons (`tablespoon`).
     #[inline]
-    pub fn from_metric_tablespoons(value: f64) -> Self {
+    pub fn from_metric_tablespoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::MetricTablespoon)
     }
 
     /// Returns the value expressed in MetricTablespoons (`tablespoon`).
     #[inline]
-    pub fn as_metric_tablespoons(self) -> f64 {
+    pub fn as_metric_tablespoons(self) -> Num {
         self.convert_to(VolumeUnit::MetricTablespoon)
     }
 
     /// Alias for [`Self::as_metric_tablespoons`].
     #[inline]
-    pub fn as_metric_tablespoon(self) -> f64 {
+    pub fn as_metric_tablespoon(self) -> Num {
         self.as_metric_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in UkTablespoons (`tablespoon (U.K.)`).
     #[inline]
-    pub fn from_uk_tablespoons(value: f64) -> Self {
+    pub fn from_uk_tablespoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::UkTablespoon)
     }
 
     /// Returns the value expressed in UkTablespoons (`tablespoon (U.K.)`).
     #[inline]
-    pub fn as_uk_tablespoons(self) -> f64 {
+    pub fn as_uk_tablespoons(self) -> Num {
         self.convert_to(VolumeUnit::UkTablespoon)
     }
 
     /// Alias for [`Self::as_uk_tablespoons`].
     #[inline]
-    pub fn as_uk_tablespoon(self) -> f64 {
+    pub fn as_uk_tablespoon(self) -> Num {
         self.as_uk_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTeaspoons (`tsp`).
     #[inline]
-    pub fn from_metric_teaspoons(value: f64) -> Self {
+    pub fn from_metric_teaspoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::MetricTeaspoon)
     }
 
     /// Returns the value expressed in MetricTeaspoons (`tsp`).
     #[inline]
-    pub fn as_metric_teaspoons(self) -> f64 {
+    pub fn as_metric_teaspoons(self) -> Num {
         self.convert_to(VolumeUnit::MetricTeaspoon)
     }
 
     /// Alias for [`Self::as_metric_teaspoons`].
     #[inline]
-    pub fn as_metric_teaspoon(self) -> f64 {
+    pub fn as_metric_teaspoon(self) -> Num {
         self.as_metric_teaspoons()
     }
 
     /// Creates a [`Volume`] from a value in UsTeaspoons (`teaspoon (U.S.)`).
     #[inline]
-    pub fn from_us_teaspoons(value: f64) -> Self {
+    pub fn from_us_teaspoons(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsTeaspoon)
     }
 
     /// Returns the value expressed in UsTeaspoons (`teaspoon (U.S.)`).
     #[inline]
-    pub fn as_us_teaspoons(self) -> f64 {
+    pub fn as_us_teaspoons(self) -> Num {
         self.convert_to(VolumeUnit::UsTeaspoon)
     }
 
     /// Alias for [`Self::as_us_teaspoons`].
     #[inline]
-    pub fn as_us_teaspoon(self) -> f64 {
+    pub fn as_us_teaspoon(self) -> Num {
         self.as_us_teaspoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricCups (`metric cup`).
     #[inline]
-    pub fn from_metric_cups(value: f64) -> Self {
+    pub fn from_metric_cups(value: Num) -> Self {
         Self::new(value, VolumeUnit::MetricCup)
     }
 
     /// Returns the value expressed in MetricCups (`metric cup`).
     #[inline]
-    pub fn as_metric_cups(self) -> f64 {
+    pub fn as_metric_cups(self) -> Num {
         self.convert_to(VolumeUnit::MetricCup)
     }
 
     /// Alias for [`Self::as_metric_cups`].
     #[inline]
-    pub fn as_metric_cup(self) -> f64 {
+    pub fn as_metric_cup(self) -> Num {
         self.as_metric_cups()
     }
 
     /// Creates a [`Volume`] from a value in UsCustomaryCups (`cup (U.S. customary)`).
     #[inline]
-    pub fn from_us_customary_cups(value: f64) -> Self {
+    pub fn from_us_customary_cups(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsCustomaryCup)
     }
 
     /// Returns the value expressed in UsCustomaryCups (`cup (U.S. customary)`).
     #[inline]
-    pub fn as_us_customary_cups(self) -> f64 {
+    pub fn as_us_customary_cups(self) -> Num {
         self.convert_to(VolumeUnit::UsCustomaryCup)
     }
 
     /// Alias for [`Self::as_us_customary_cups`].
     #[inline]
-    pub fn as_us_customary_cup(self) -> f64 {
+    pub fn as_us_customary_cup(self) -> Num {
         self.as_us_customary_cups()
     }
 
     /// Creates a [`Volume`] from a value in UsLegalCups (`cup (U.S.)`).
     #[inline]
-    pub fn from_us_legal_cups(value: f64) -> Self {
+    pub fn from_us_legal_cups(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsLegalCup)
     }
 
     /// Returns the value expressed in UsLegalCups (`cup (U.S.)`).
     #[inline]
-    pub fn as_us_legal_cups(self) -> f64 {
+    pub fn as_us_legal_cups(self) -> Num {
         self.convert_to(VolumeUnit::UsLegalCup)
     }
 
     /// Alias for [`Self::as_us_legal_cups`].
     #[inline]
-    pub fn as_us_legal_cup(self) -> f64 {
+    pub fn as_us_legal_cup(self) -> Num {
         self.as_us_legal_cups()
     }
 
     /// Creates a [`Volume`] from a value in OilBarrels (`bbl`).
     #[inline]
-    pub fn from_oil_barrels(value: f64) -> Self {
+    pub fn from_oil_barrels(value: Num) -> Self {
         Self::new(value, VolumeUnit::OilBarrel)
     }
 
     /// Returns the value expressed in OilBarrels (`bbl`).
     #[inline]
-    pub fn as_oil_barrels(self) -> f64 {
+    pub fn as_oil_barrels(self) -> Num {
         self.convert_to(VolumeUnit::OilBarrel)
     }
 
     /// Alias for [`Self::as_oil_barrels`].
     #[inline]
-    pub fn as_oil_barrel(self) -> f64 {
+    pub fn as_oil_barrel(self) -> Num {
         self.as_oil_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsBeerBarrels (`bl (U.S.)`).
     #[inline]
-    pub fn from_us_beer_barrels(value: f64) -> Self {
+    pub fn from_us_beer_barrels(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsBeerBarrel)
     }
 
     /// Returns the value expressed in UsBeerBarrels (`bl (U.S.)`).
     #[inline]
-    pub fn as_us_beer_barrels(self) -> f64 {
+    pub fn as_us_beer_barrels(self) -> Num {
         self.convert_to(VolumeUnit::UsBeerBarrel)
     }
 
     /// Alias for [`Self::as_us_beer_barrels`].
     #[inline]
-    pub fn as_us_beer_barrel(self) -> f64 {
+    pub fn as_us_beer_barrel(self) -> Num {
         self.as_us_beer_barrels()
     }
 
     /// Creates a [`Volume`] from a value in ImperialBeerBarrels (`bl (imp.)`).
     #[inline]
-    pub fn from_imperial_beer_barrels(value: f64) -> Self {
+    pub fn from_imperial_beer_barrels(value: Num) -> Self {
         Self::new(value, VolumeUnit::ImperialBeerBarrel)
     }
 
     /// Returns the value expressed in ImperialBeerBarrels (`bl (imp.)`).
     #[inline]
-    pub fn as_imperial_beer_barrels(self) -> f64 {
+    pub fn as_imperial_beer_barrels(self) -> Num {
         self.convert_to(VolumeUnit::ImperialBeerBarrel)
     }
 
     /// Alias for [`Self::as_imperial_beer_barrels`].
     #[inline]
-    pub fn as_imperial_beer_barrel(self) -> f64 {
+    pub fn as_imperial_beer_barrel(self) -> Num {
         self.as_imperial_beer_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsQuarts (`qt (U.S.)`).
     #[inline]
-    pub fn from_us_quarts(value: f64) -> Self {
+    pub fn from_us_quarts(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsQuart)
     }
 
     /// Returns the value expressed in UsQuarts (`qt (U.S.)`).
     #[inline]
-    pub fn as_us_quarts(self) -> f64 {
+    pub fn as_us_quarts(self) -> Num {
         self.convert_to(VolumeUnit::UsQuart)
     }
 
     /// Alias for [`Self::as_us_quarts`].
     #[inline]
-    pub fn as_us_quart(self) -> f64 {
+    pub fn as_us_quart(self) -> Num {
         self.as_us_quarts()
     }
 
     /// Creates a [`Volume`] from a value in ImperialQuarts (`qt (imp.)`).
     #[inline]
-    pub fn from_imperial_quarts(value: f64) -> Self {
+    pub fn from_imperial_quarts(value: Num) -> Self {
         Self::new(value, VolumeUnit::ImperialQuart)
     }
 
     /// Returns the value expressed in ImperialQuarts (`qt (imp.)`).
     #[inline]
-    pub fn as_imperial_quarts(self) -> f64 {
+    pub fn as_imperial_quarts(self) -> Num {
         self.convert_to(VolumeUnit::ImperialQuart)
     }
 
     /// Alias for [`Self::as_imperial_quarts`].
     #[inline]
-    pub fn as_imperial_quart(self) -> f64 {
+    pub fn as_imperial_quart(self) -> Num {
         self.as_imperial_quarts()
     }
 
     /// Creates a [`Volume`] from a value in UsPints (`pt (U.S.)`).
     #[inline]
-    pub fn from_us_pints(value: f64) -> Self {
+    pub fn from_us_pints(value: Num) -> Self {
         Self::new(value, VolumeUnit::UsPint)
     }
 
     /// Returns the value expressed in UsPints (`pt (U.S.)`).
     #[inline]
-    pub fn as_us_pints(self) -> f64 {
+    pub fn as_us_pints(self) -> Num {
         self.convert_to(VolumeUnit::UsPint)
     }
 
     /// Alias for [`Self::as_us_pints`].
     #[inline]
-    pub fn as_us_pint(self) -> f64 {
+    pub fn as_us_pint(self) -> Num {
         self.as_us_pints()
     }
 
     /// Creates a [`Volume`] from a value in AcreFeet (`ac-ft`).
     #[inline]
-    pub fn from_acre_feet(value: f64) -> Self {
+    pub fn from_acre_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::AcreFoot)
     }
 
     /// Returns the value expressed in AcreFeet (`ac-ft`).
     #[inline]
-    pub fn as_acre_feet(self) -> f64 {
+    pub fn as_acre_feet(self) -> Num {
         self.convert_to(VolumeUnit::AcreFoot)
     }
 
     /// Alias for [`Self::as_acre_feet`].
     #[inline]
-    pub fn as_acre_foot(self) -> f64 {
+    pub fn as_acre_foot(self) -> Num {
         self.as_acre_feet()
     }
 
     /// Creates a [`Volume`] from a value in ImperialPints (`pt (imp.)`).
     #[inline]
-    pub fn from_imperial_pints(value: f64) -> Self {
+    pub fn from_imperial_pints(value: Num) -> Self {
         Self::new(value, VolumeUnit::ImperialPint)
     }
 
     /// Returns the value expressed in ImperialPints (`pt (imp.)`).
     #[inline]
-    pub fn as_imperial_pints(self) -> f64 {
+    pub fn as_imperial_pints(self) -> Num {
         self.convert_to(VolumeUnit::ImperialPint)
     }
 
     /// Alias for [`Self::as_imperial_pints`].
     #[inline]
-    pub fn as_imperial_pint(self) -> f64 {
+    pub fn as_imperial_pint(self) -> Num {
         self.as_imperial_pints()
     }
 
     /// Creates a [`Volume`] from a value in BoardFeet (`bf`).
     #[inline]
-    pub fn from_board_feet(value: f64) -> Self {
+    pub fn from_board_feet(value: Num) -> Self {
         Self::new(value, VolumeUnit::BoardFoot)
     }
 
     /// Returns the value expressed in BoardFeet (`bf`).
     #[inline]
-    pub fn as_board_feet(self) -> f64 {
+    pub fn as_board_feet(self) -> Num {
         self.convert_to(VolumeUnit::BoardFoot)
     }
 
     /// Alias for [`Self::as_board_feet`].
     #[inline]
-    pub fn as_board_foot(self) -> f64 {
+    pub fn as_board_foot(self) -> Num {
         self.as_board_feet()
     }
 }
@@ -1440,27 +1441,27 @@ impl Neg for Volume {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Volume {
+impl Mul<Num> for Volume {
     type Output = Volume;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Volume> for f64 {
+impl Mul<Volume> for Num {
     type Output = Volume;
     fn mul(self, rhs: Volume) -> Volume {
         Volume(self * rhs.0)
     }
 }
-impl Div<f64> for Volume {
+impl Div<Num> for Volume {
     type Output = Volume;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Volume {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1494,7 +1495,7 @@ impl FromStr for Volume {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseVolumeError(s.to_owned()))?;

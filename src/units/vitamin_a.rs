@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `InternationalUnit` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct VitaminA(f64);
+pub struct VitaminA(Num);
 
 /// Unit variants for [`VitaminA`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl VitaminAUnit {
 
 impl VitaminA {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: VitaminAUnit) -> Self {
+    pub fn new(value: Num, unit: VitaminAUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl VitaminA {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl VitaminA {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: VitaminAUnit) -> f64 {
+    pub fn convert_to(self, unit: VitaminAUnit) -> Num {
         let x = self.0;
         match unit {
             VitaminAUnit::InternationalUnit => x,
@@ -79,19 +80,19 @@ impl VitaminA {
 
     /// Creates a [`VitaminA`] from a value in InternationalUnits (`IU`).
     #[inline]
-    pub fn from_international_units(value: f64) -> Self {
+    pub fn from_international_units(value: Num) -> Self {
         Self::new(value, VitaminAUnit::InternationalUnit)
     }
 
     /// Returns the value expressed in InternationalUnits (`IU`).
     #[inline]
-    pub fn as_international_units(self) -> f64 {
+    pub fn as_international_units(self) -> Num {
         self.convert_to(VitaminAUnit::InternationalUnit)
     }
 
     /// Alias for [`Self::as_international_units`].
     #[inline]
-    pub fn as_international_unit(self) -> f64 {
+    pub fn as_international_unit(self) -> Num {
         self.as_international_units()
     }
 }
@@ -114,27 +115,27 @@ impl Neg for VitaminA {
         Self(-self.0)
     }
 }
-impl Mul<f64> for VitaminA {
+impl Mul<Num> for VitaminA {
     type Output = VitaminA;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<VitaminA> for f64 {
+impl Mul<VitaminA> for Num {
     type Output = VitaminA;
     fn mul(self, rhs: VitaminA) -> VitaminA {
         VitaminA(self * rhs.0)
     }
 }
-impl Div<f64> for VitaminA {
+impl Div<Num> for VitaminA {
     type Output = VitaminA;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for VitaminA {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -173,7 +174,7 @@ impl FromStr for VitaminA {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseVitaminAError(s.to_owned()))?;

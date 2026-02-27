@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Weber` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MagneticFlux(f64);
+pub struct MagneticFlux(Num);
 
 /// Unit variants for [`MagneticFlux`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl MagneticFluxUnit {
 
 impl MagneticFlux {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MagneticFluxUnit) -> Self {
+    pub fn new(value: Num, unit: MagneticFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl MagneticFlux {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl MagneticFlux {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MagneticFluxUnit) -> f64 {
+    pub fn convert_to(self, unit: MagneticFluxUnit) -> Num {
         let x = self.0;
         match unit {
             MagneticFluxUnit::Weber => x,
@@ -79,19 +80,19 @@ impl MagneticFlux {
 
     /// Creates a [`MagneticFlux`] from a value in Webers (`Wb`).
     #[inline]
-    pub fn from_webers(value: f64) -> Self {
+    pub fn from_webers(value: Num) -> Self {
         Self::new(value, MagneticFluxUnit::Weber)
     }
 
     /// Returns the value expressed in Webers (`Wb`).
     #[inline]
-    pub fn as_webers(self) -> f64 {
+    pub fn as_webers(self) -> Num {
         self.convert_to(MagneticFluxUnit::Weber)
     }
 
     /// Alias for [`Self::as_webers`].
     #[inline]
-    pub fn as_weber(self) -> f64 {
+    pub fn as_weber(self) -> Num {
         self.as_webers()
     }
 }
@@ -114,27 +115,27 @@ impl Neg for MagneticFlux {
         Self(-self.0)
     }
 }
-impl Mul<f64> for MagneticFlux {
+impl Mul<Num> for MagneticFlux {
     type Output = MagneticFlux;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<MagneticFlux> for f64 {
+impl Mul<MagneticFlux> for Num {
     type Output = MagneticFlux;
     fn mul(self, rhs: MagneticFlux) -> MagneticFlux {
         MagneticFlux(self * rhs.0)
     }
 }
-impl Div<f64> for MagneticFlux {
+impl Div<Num> for MagneticFlux {
     type Output = MagneticFlux;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MagneticFlux {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -168,7 +169,7 @@ impl FromStr for MagneticFlux {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMagneticFluxError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `KilogramPerCubicMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MassConcentration(f64);
+pub struct MassConcentration(Num);
 
 /// Unit variants for [`MassConcentration`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -239,7 +240,7 @@ impl MassConcentrationUnit {
 
 impl MassConcentration {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MassConcentrationUnit) -> Self {
+    pub fn new(value: Num, unit: MassConcentrationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -301,7 +302,7 @@ impl MassConcentration {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -309,12 +310,12 @@ impl MassConcentration {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MassConcentrationUnit) -> f64 {
+    pub fn convert_to(self, unit: MassConcentrationUnit) -> Num {
         let x = self.0;
         match unit {
             MassConcentrationUnit::GramPerCubicMillimeter => x * 1e-6,
@@ -373,883 +374,883 @@ impl MassConcentration {
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn from_grams_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerCubicMillimeter)
     }
 
     /// Returns the value expressed in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn as_grams_per_cubic_millimeter(self) -> f64 {
+    pub fn as_grams_per_cubic_millimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_millimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_millimeter(self) -> f64 {
+    pub fn as_gram_per_cubic_millimeter(self) -> Num {
         self.as_grams_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilogramPerCubicMillimeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_millimeter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_millimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilogramPerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_millimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_millimeter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_millimeter(self) -> Num {
         self.as_kilograms_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn from_grams_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerCubicCentimeter)
     }
 
     /// Returns the value expressed in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn as_grams_per_cubic_centimeter(self) -> f64 {
+    pub fn as_grams_per_cubic_centimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_centimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_centimeter(self) -> f64 {
+    pub fn as_gram_per_cubic_centimeter(self) -> Num {
         self.as_grams_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilogramPerCubicCentimeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_centimeter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_centimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilogramPerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_centimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_centimeter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_centimeter(self) -> Num {
         self.as_kilograms_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn from_grams_per_cubic_meter(value: f64) -> Self {
+    pub fn from_grams_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerCubicMeter)
     }
 
     /// Returns the value expressed in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn as_grams_per_cubic_meter(self) -> f64 {
+    pub fn as_grams_per_cubic_meter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_meter`].
     #[inline]
-    pub fn as_gram_per_cubic_meter(self) -> f64 {
+    pub fn as_gram_per_cubic_meter(self) -> Num {
         self.as_grams_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_meter(value: f64) -> Self {
+    pub fn from_kilograms_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilogramPerCubicMeter)
     }
 
     /// Returns the value expressed in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_meter(self) -> f64 {
+    pub fn as_kilograms_per_cubic_meter(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilogramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_meter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_meter(self) -> f64 {
+    pub fn as_kilogram_per_cubic_meter(self) -> Num {
         self.as_kilograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn from_milligrams_per_cubic_meter(value: f64) -> Self {
+    pub fn from_milligrams_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MilligramPerCubicMeter)
     }
 
     /// Returns the value expressed in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn as_milligrams_per_cubic_meter(self) -> f64 {
+    pub fn as_milligrams_per_cubic_meter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MilligramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_milligrams_per_cubic_meter`].
     #[inline]
-    pub fn as_milligram_per_cubic_meter(self) -> f64 {
+    pub fn as_milligram_per_cubic_meter(self) -> Num {
         self.as_milligrams_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn from_micrograms_per_cubic_meter(value: f64) -> Self {
+    pub fn from_micrograms_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MicrogramPerCubicMeter)
     }
 
     /// Returns the value expressed in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn as_micrograms_per_cubic_meter(self) -> f64 {
+    pub fn as_micrograms_per_cubic_meter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MicrogramPerCubicMeter)
     }
 
     /// Alias for [`Self::as_micrograms_per_cubic_meter`].
     #[inline]
-    pub fn as_microgram_per_cubic_meter(self) -> f64 {
+    pub fn as_microgram_per_cubic_meter(self) -> Num {
         self.as_micrograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerMicroliter (`g/μl`).
     #[inline]
-    pub fn from_grams_per_microliter(value: f64) -> Self {
+    pub fn from_grams_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerMicroliter)
     }
 
     /// Returns the value expressed in GramsPerMicroliter (`g/μl`).
     #[inline]
-    pub fn as_grams_per_microliter(self) -> f64 {
+    pub fn as_grams_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerMicroliter)
     }
 
     /// Alias for [`Self::as_grams_per_microliter`].
     #[inline]
-    pub fn as_gram_per_microliter(self) -> f64 {
+    pub fn as_gram_per_microliter(self) -> Num {
         self.as_grams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMicroliter (`pg/μl`).
     #[inline]
-    pub fn from_picograms_per_microliter(value: f64) -> Self {
+    pub fn from_picograms_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PicogramPerMicroliter)
     }
 
     /// Returns the value expressed in PicogramsPerMicroliter (`pg/μl`).
     #[inline]
-    pub fn as_picograms_per_microliter(self) -> f64 {
+    pub fn as_picograms_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::PicogramPerMicroliter)
     }
 
     /// Alias for [`Self::as_picograms_per_microliter`].
     #[inline]
-    pub fn as_picogram_per_microliter(self) -> f64 {
+    pub fn as_picogram_per_microliter(self) -> Num {
         self.as_picograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMicroliter (`ng/μl`).
     #[inline]
-    pub fn from_nanograms_per_microliter(value: f64) -> Self {
+    pub fn from_nanograms_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::NanogramPerMicroliter)
     }
 
     /// Returns the value expressed in NanogramsPerMicroliter (`ng/μl`).
     #[inline]
-    pub fn as_nanograms_per_microliter(self) -> f64 {
+    pub fn as_nanograms_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::NanogramPerMicroliter)
     }
 
     /// Alias for [`Self::as_nanograms_per_microliter`].
     #[inline]
-    pub fn as_nanogram_per_microliter(self) -> f64 {
+    pub fn as_nanogram_per_microliter(self) -> Num {
         self.as_nanograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMicroliter (`µg/μl`).
     #[inline]
-    pub fn from_micrograms_per_microliter(value: f64) -> Self {
+    pub fn from_micrograms_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MicrogramPerMicroliter)
     }
 
     /// Returns the value expressed in MicrogramsPerMicroliter (`µg/μl`).
     #[inline]
-    pub fn as_micrograms_per_microliter(self) -> f64 {
+    pub fn as_micrograms_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MicrogramPerMicroliter)
     }
 
     /// Alias for [`Self::as_micrograms_per_microliter`].
     #[inline]
-    pub fn as_microgram_per_microliter(self) -> f64 {
+    pub fn as_microgram_per_microliter(self) -> Num {
         self.as_micrograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMicroliter (`mg/μl`).
     #[inline]
-    pub fn from_milligrams_per_microliter(value: f64) -> Self {
+    pub fn from_milligrams_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MilligramPerMicroliter)
     }
 
     /// Returns the value expressed in MilligramsPerMicroliter (`mg/μl`).
     #[inline]
-    pub fn as_milligrams_per_microliter(self) -> f64 {
+    pub fn as_milligrams_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MilligramPerMicroliter)
     }
 
     /// Alias for [`Self::as_milligrams_per_microliter`].
     #[inline]
-    pub fn as_milligram_per_microliter(self) -> f64 {
+    pub fn as_milligram_per_microliter(self) -> Num {
         self.as_milligrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMicroliter (`cg/μl`).
     #[inline]
-    pub fn from_centigrams_per_microliter(value: f64) -> Self {
+    pub fn from_centigrams_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::CentigramPerMicroliter)
     }
 
     /// Returns the value expressed in CentigramsPerMicroliter (`cg/μl`).
     #[inline]
-    pub fn as_centigrams_per_microliter(self) -> f64 {
+    pub fn as_centigrams_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::CentigramPerMicroliter)
     }
 
     /// Alias for [`Self::as_centigrams_per_microliter`].
     #[inline]
-    pub fn as_centigram_per_microliter(self) -> f64 {
+    pub fn as_centigram_per_microliter(self) -> Num {
         self.as_centigrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMicroliter (`dg/μl`).
     #[inline]
-    pub fn from_decigrams_per_microliter(value: f64) -> Self {
+    pub fn from_decigrams_per_microliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::DecigramPerMicroliter)
     }
 
     /// Returns the value expressed in DecigramsPerMicroliter (`dg/μl`).
     #[inline]
-    pub fn as_decigrams_per_microliter(self) -> f64 {
+    pub fn as_decigrams_per_microliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::DecigramPerMicroliter)
     }
 
     /// Alias for [`Self::as_decigrams_per_microliter`].
     #[inline]
-    pub fn as_decigram_per_microliter(self) -> f64 {
+    pub fn as_decigram_per_microliter(self) -> Num {
         self.as_decigrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn from_grams_per_milliliter(value: f64) -> Self {
+    pub fn from_grams_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerMilliliter)
     }
 
     /// Returns the value expressed in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn as_grams_per_milliliter(self) -> f64 {
+    pub fn as_grams_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerMilliliter)
     }
 
     /// Alias for [`Self::as_grams_per_milliliter`].
     #[inline]
-    pub fn as_gram_per_milliliter(self) -> f64 {
+    pub fn as_gram_per_milliliter(self) -> Num {
         self.as_grams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn from_picograms_per_milliliter(value: f64) -> Self {
+    pub fn from_picograms_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PicogramPerMilliliter)
     }
 
     /// Returns the value expressed in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn as_picograms_per_milliliter(self) -> f64 {
+    pub fn as_picograms_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::PicogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_picograms_per_milliliter`].
     #[inline]
-    pub fn as_picogram_per_milliliter(self) -> f64 {
+    pub fn as_picogram_per_milliliter(self) -> Num {
         self.as_picograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn from_nanograms_per_milliliter(value: f64) -> Self {
+    pub fn from_nanograms_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::NanogramPerMilliliter)
     }
 
     /// Returns the value expressed in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn as_nanograms_per_milliliter(self) -> f64 {
+    pub fn as_nanograms_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::NanogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_nanograms_per_milliliter`].
     #[inline]
-    pub fn as_nanogram_per_milliliter(self) -> f64 {
+    pub fn as_nanogram_per_milliliter(self) -> Num {
         self.as_nanograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn from_micrograms_per_milliliter(value: f64) -> Self {
+    pub fn from_micrograms_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MicrogramPerMilliliter)
     }
 
     /// Returns the value expressed in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn as_micrograms_per_milliliter(self) -> f64 {
+    pub fn as_micrograms_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MicrogramPerMilliliter)
     }
 
     /// Alias for [`Self::as_micrograms_per_milliliter`].
     #[inline]
-    pub fn as_microgram_per_milliliter(self) -> f64 {
+    pub fn as_microgram_per_milliliter(self) -> Num {
         self.as_micrograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn from_milligrams_per_milliliter(value: f64) -> Self {
+    pub fn from_milligrams_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MilligramPerMilliliter)
     }
 
     /// Returns the value expressed in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn as_milligrams_per_milliliter(self) -> f64 {
+    pub fn as_milligrams_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MilligramPerMilliliter)
     }
 
     /// Alias for [`Self::as_milligrams_per_milliliter`].
     #[inline]
-    pub fn as_milligram_per_milliliter(self) -> f64 {
+    pub fn as_milligram_per_milliliter(self) -> Num {
         self.as_milligrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn from_centigrams_per_milliliter(value: f64) -> Self {
+    pub fn from_centigrams_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::CentigramPerMilliliter)
     }
 
     /// Returns the value expressed in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn as_centigrams_per_milliliter(self) -> f64 {
+    pub fn as_centigrams_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::CentigramPerMilliliter)
     }
 
     /// Alias for [`Self::as_centigrams_per_milliliter`].
     #[inline]
-    pub fn as_centigram_per_milliliter(self) -> f64 {
+    pub fn as_centigram_per_milliliter(self) -> Num {
         self.as_centigrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn from_decigrams_per_milliliter(value: f64) -> Self {
+    pub fn from_decigrams_per_milliliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::DecigramPerMilliliter)
     }
 
     /// Returns the value expressed in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn as_decigrams_per_milliliter(self) -> f64 {
+    pub fn as_decigrams_per_milliliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::DecigramPerMilliliter)
     }
 
     /// Alias for [`Self::as_decigrams_per_milliliter`].
     #[inline]
-    pub fn as_decigram_per_milliliter(self) -> f64 {
+    pub fn as_decigram_per_milliliter(self) -> Num {
         self.as_decigrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn from_grams_per_deciliter(value: f64) -> Self {
+    pub fn from_grams_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerDeciliter)
     }
 
     /// Returns the value expressed in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn as_grams_per_deciliter(self) -> f64 {
+    pub fn as_grams_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerDeciliter)
     }
 
     /// Alias for [`Self::as_grams_per_deciliter`].
     #[inline]
-    pub fn as_gram_per_deciliter(self) -> f64 {
+    pub fn as_gram_per_deciliter(self) -> Num {
         self.as_grams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn from_picograms_per_deciliter(value: f64) -> Self {
+    pub fn from_picograms_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PicogramPerDeciliter)
     }
 
     /// Returns the value expressed in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn as_picograms_per_deciliter(self) -> f64 {
+    pub fn as_picograms_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::PicogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_picograms_per_deciliter`].
     #[inline]
-    pub fn as_picogram_per_deciliter(self) -> f64 {
+    pub fn as_picogram_per_deciliter(self) -> Num {
         self.as_picograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn from_nanograms_per_deciliter(value: f64) -> Self {
+    pub fn from_nanograms_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::NanogramPerDeciliter)
     }
 
     /// Returns the value expressed in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn as_nanograms_per_deciliter(self) -> f64 {
+    pub fn as_nanograms_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::NanogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_nanograms_per_deciliter`].
     #[inline]
-    pub fn as_nanogram_per_deciliter(self) -> f64 {
+    pub fn as_nanogram_per_deciliter(self) -> Num {
         self.as_nanograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn from_micrograms_per_deciliter(value: f64) -> Self {
+    pub fn from_micrograms_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MicrogramPerDeciliter)
     }
 
     /// Returns the value expressed in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn as_micrograms_per_deciliter(self) -> f64 {
+    pub fn as_micrograms_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MicrogramPerDeciliter)
     }
 
     /// Alias for [`Self::as_micrograms_per_deciliter`].
     #[inline]
-    pub fn as_microgram_per_deciliter(self) -> f64 {
+    pub fn as_microgram_per_deciliter(self) -> Num {
         self.as_micrograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn from_milligrams_per_deciliter(value: f64) -> Self {
+    pub fn from_milligrams_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MilligramPerDeciliter)
     }
 
     /// Returns the value expressed in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn as_milligrams_per_deciliter(self) -> f64 {
+    pub fn as_milligrams_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MilligramPerDeciliter)
     }
 
     /// Alias for [`Self::as_milligrams_per_deciliter`].
     #[inline]
-    pub fn as_milligram_per_deciliter(self) -> f64 {
+    pub fn as_milligram_per_deciliter(self) -> Num {
         self.as_milligrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn from_centigrams_per_deciliter(value: f64) -> Self {
+    pub fn from_centigrams_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::CentigramPerDeciliter)
     }
 
     /// Returns the value expressed in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn as_centigrams_per_deciliter(self) -> f64 {
+    pub fn as_centigrams_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::CentigramPerDeciliter)
     }
 
     /// Alias for [`Self::as_centigrams_per_deciliter`].
     #[inline]
-    pub fn as_centigram_per_deciliter(self) -> f64 {
+    pub fn as_centigram_per_deciliter(self) -> Num {
         self.as_centigrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn from_decigrams_per_deciliter(value: f64) -> Self {
+    pub fn from_decigrams_per_deciliter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::DecigramPerDeciliter)
     }
 
     /// Returns the value expressed in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn as_decigrams_per_deciliter(self) -> f64 {
+    pub fn as_decigrams_per_deciliter(self) -> Num {
         self.convert_to(MassConcentrationUnit::DecigramPerDeciliter)
     }
 
     /// Alias for [`Self::as_decigrams_per_deciliter`].
     #[inline]
-    pub fn as_decigram_per_deciliter(self) -> f64 {
+    pub fn as_decigram_per_deciliter(self) -> Num {
         self.as_decigrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn from_grams_per_liter(value: f64) -> Self {
+    pub fn from_grams_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::GramPerLiter)
     }
 
     /// Returns the value expressed in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn as_grams_per_liter(self) -> f64 {
+    pub fn as_grams_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::GramPerLiter)
     }
 
     /// Alias for [`Self::as_grams_per_liter`].
     #[inline]
-    pub fn as_gram_per_liter(self) -> f64 {
+    pub fn as_gram_per_liter(self) -> Num {
         self.as_grams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn from_picograms_per_liter(value: f64) -> Self {
+    pub fn from_picograms_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PicogramPerLiter)
     }
 
     /// Returns the value expressed in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn as_picograms_per_liter(self) -> f64 {
+    pub fn as_picograms_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::PicogramPerLiter)
     }
 
     /// Alias for [`Self::as_picograms_per_liter`].
     #[inline]
-    pub fn as_picogram_per_liter(self) -> f64 {
+    pub fn as_picogram_per_liter(self) -> Num {
         self.as_picograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn from_nanograms_per_liter(value: f64) -> Self {
+    pub fn from_nanograms_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::NanogramPerLiter)
     }
 
     /// Returns the value expressed in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn as_nanograms_per_liter(self) -> f64 {
+    pub fn as_nanograms_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::NanogramPerLiter)
     }
 
     /// Alias for [`Self::as_nanograms_per_liter`].
     #[inline]
-    pub fn as_nanogram_per_liter(self) -> f64 {
+    pub fn as_nanogram_per_liter(self) -> Num {
         self.as_nanograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn from_micrograms_per_liter(value: f64) -> Self {
+    pub fn from_micrograms_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MicrogramPerLiter)
     }
 
     /// Returns the value expressed in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn as_micrograms_per_liter(self) -> f64 {
+    pub fn as_micrograms_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MicrogramPerLiter)
     }
 
     /// Alias for [`Self::as_micrograms_per_liter`].
     #[inline]
-    pub fn as_microgram_per_liter(self) -> f64 {
+    pub fn as_microgram_per_liter(self) -> Num {
         self.as_micrograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn from_milligrams_per_liter(value: f64) -> Self {
+    pub fn from_milligrams_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::MilligramPerLiter)
     }
 
     /// Returns the value expressed in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn as_milligrams_per_liter(self) -> f64 {
+    pub fn as_milligrams_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::MilligramPerLiter)
     }
 
     /// Alias for [`Self::as_milligrams_per_liter`].
     #[inline]
-    pub fn as_milligram_per_liter(self) -> f64 {
+    pub fn as_milligram_per_liter(self) -> Num {
         self.as_milligrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn from_centigrams_per_liter(value: f64) -> Self {
+    pub fn from_centigrams_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::CentigramPerLiter)
     }
 
     /// Returns the value expressed in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn as_centigrams_per_liter(self) -> f64 {
+    pub fn as_centigrams_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::CentigramPerLiter)
     }
 
     /// Alias for [`Self::as_centigrams_per_liter`].
     #[inline]
-    pub fn as_centigram_per_liter(self) -> f64 {
+    pub fn as_centigram_per_liter(self) -> Num {
         self.as_centigrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn from_decigrams_per_liter(value: f64) -> Self {
+    pub fn from_decigrams_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::DecigramPerLiter)
     }
 
     /// Returns the value expressed in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn as_decigrams_per_liter(self) -> f64 {
+    pub fn as_decigrams_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::DecigramPerLiter)
     }
 
     /// Alias for [`Self::as_decigrams_per_liter`].
     #[inline]
-    pub fn as_decigram_per_liter(self) -> f64 {
+    pub fn as_decigram_per_liter(self) -> Num {
         self.as_decigrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn from_kilograms_per_liter(value: f64) -> Self {
+    pub fn from_kilograms_per_liter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilogramPerLiter)
     }
 
     /// Returns the value expressed in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn as_kilograms_per_liter(self) -> f64 {
+    pub fn as_kilograms_per_liter(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilogramPerLiter)
     }
 
     /// Alias for [`Self::as_kilograms_per_liter`].
     #[inline]
-    pub fn as_kilogram_per_liter(self) -> f64 {
+    pub fn as_kilogram_per_liter(self) -> Num {
         self.as_kilograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_millimeter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_millimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::TonnePerCubicMillimeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_millimeter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_millimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::TonnePerCubicMillimeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_millimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_millimeter(self) -> f64 {
+    pub fn as_tonne_per_cubic_millimeter(self) -> Num {
         self.as_tonnes_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_centimeter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_centimeter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::TonnePerCubicCentimeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_centimeter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_centimeter(self) -> Num {
         self.convert_to(MassConcentrationUnit::TonnePerCubicCentimeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_centimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_centimeter(self) -> f64 {
+    pub fn as_tonne_per_cubic_centimeter(self) -> Num {
         self.as_tonnes_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_meter(value: f64) -> Self {
+    pub fn from_tonnes_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::TonnePerCubicMeter)
     }
 
     /// Returns the value expressed in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_meter(self) -> f64 {
+    pub fn as_tonnes_per_cubic_meter(self) -> Num {
         self.convert_to(MassConcentrationUnit::TonnePerCubicMeter)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_meter`].
     #[inline]
-    pub fn as_tonne_per_cubic_meter(self) -> f64 {
+    pub fn as_tonne_per_cubic_meter(self) -> Num {
         self.as_tonnes_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn from_pounds_per_cubic_inch(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_inch(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PoundPerCubicInch)
     }
 
     /// Returns the value expressed in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn as_pounds_per_cubic_inch(self) -> f64 {
+    pub fn as_pounds_per_cubic_inch(self) -> Num {
         self.convert_to(MassConcentrationUnit::PoundPerCubicInch)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_inch`].
     #[inline]
-    pub fn as_pound_per_cubic_inch(self) -> f64 {
+    pub fn as_pound_per_cubic_inch(self) -> Num {
         self.as_pounds_per_cubic_inch()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_inch(value: f64) -> Self {
+    pub fn from_kilopounds_per_cubic_inch(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilopoundPerCubicInch)
     }
 
     /// Returns the value expressed in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_inch(self) -> f64 {
+    pub fn as_kilopounds_per_cubic_inch(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilopoundPerCubicInch)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_inch`].
     #[inline]
-    pub fn as_kilopound_per_cubic_inch(self) -> f64 {
+    pub fn as_kilopound_per_cubic_inch(self) -> Num {
         self.as_kilopounds_per_cubic_inch()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn from_pounds_per_cubic_foot(value: f64) -> Self {
+    pub fn from_pounds_per_cubic_foot(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PoundPerCubicFoot)
     }
 
     /// Returns the value expressed in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn as_pounds_per_cubic_foot(self) -> f64 {
+    pub fn as_pounds_per_cubic_foot(self) -> Num {
         self.convert_to(MassConcentrationUnit::PoundPerCubicFoot)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_foot`].
     #[inline]
-    pub fn as_pound_per_cubic_foot(self) -> f64 {
+    pub fn as_pound_per_cubic_foot(self) -> Num {
         self.as_pounds_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_foot(value: f64) -> Self {
+    pub fn from_kilopounds_per_cubic_foot(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::KilopoundPerCubicFoot)
     }
 
     /// Returns the value expressed in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_foot(self) -> f64 {
+    pub fn as_kilopounds_per_cubic_foot(self) -> Num {
         self.convert_to(MassConcentrationUnit::KilopoundPerCubicFoot)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_foot`].
     #[inline]
-    pub fn as_kilopound_per_cubic_foot(self) -> f64 {
+    pub fn as_kilopound_per_cubic_foot(self) -> Num {
         self.as_kilopounds_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn from_slugs_per_cubic_foot(value: f64) -> Self {
+    pub fn from_slugs_per_cubic_foot(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::SlugPerCubicFoot)
     }
 
     /// Returns the value expressed in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn as_slugs_per_cubic_foot(self) -> f64 {
+    pub fn as_slugs_per_cubic_foot(self) -> Num {
         self.convert_to(MassConcentrationUnit::SlugPerCubicFoot)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_foot`].
     #[inline]
-    pub fn as_slug_per_cubic_foot(self) -> f64 {
+    pub fn as_slug_per_cubic_foot(self) -> Num {
         self.as_slugs_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn from_pounds_per_us_gallon(value: f64) -> Self {
+    pub fn from_pounds_per_us_gallon(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PoundPerUSGallon)
     }
 
     /// Returns the value expressed in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn as_pounds_per_us_gallon(self) -> f64 {
+    pub fn as_pounds_per_us_gallon(self) -> Num {
         self.convert_to(MassConcentrationUnit::PoundPerUSGallon)
     }
 
     /// Alias for [`Self::as_pounds_per_us_gallon`].
     #[inline]
-    pub fn as_pound_per_us_gallon(self) -> f64 {
+    pub fn as_pound_per_us_gallon(self) -> Num {
         self.as_pounds_per_us_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in OuncesPerUSGallon (`oz/gal (U.S.)`).
     #[inline]
-    pub fn from_ounces_per_us_gallon(value: f64) -> Self {
+    pub fn from_ounces_per_us_gallon(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::OuncePerUSGallon)
     }
 
     /// Returns the value expressed in OuncesPerUSGallon (`oz/gal (U.S.)`).
     #[inline]
-    pub fn as_ounces_per_us_gallon(self) -> f64 {
+    pub fn as_ounces_per_us_gallon(self) -> Num {
         self.convert_to(MassConcentrationUnit::OuncePerUSGallon)
     }
 
     /// Alias for [`Self::as_ounces_per_us_gallon`].
     #[inline]
-    pub fn as_ounce_per_us_gallon(self) -> f64 {
+    pub fn as_ounce_per_us_gallon(self) -> Num {
         self.as_ounces_per_us_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in OuncesPerImperialGallon (`oz/gal (imp.)`).
     #[inline]
-    pub fn from_ounces_per_imperial_gallon(value: f64) -> Self {
+    pub fn from_ounces_per_imperial_gallon(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::OuncePerImperialGallon)
     }
 
     /// Returns the value expressed in OuncesPerImperialGallon (`oz/gal (imp.)`).
     #[inline]
-    pub fn as_ounces_per_imperial_gallon(self) -> f64 {
+    pub fn as_ounces_per_imperial_gallon(self) -> Num {
         self.convert_to(MassConcentrationUnit::OuncePerImperialGallon)
     }
 
     /// Alias for [`Self::as_ounces_per_imperial_gallon`].
     #[inline]
-    pub fn as_ounce_per_imperial_gallon(self) -> f64 {
+    pub fn as_ounce_per_imperial_gallon(self) -> Num {
         self.as_ounces_per_imperial_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn from_pounds_per_imperial_gallon(value: f64) -> Self {
+    pub fn from_pounds_per_imperial_gallon(value: Num) -> Self {
         Self::new(value, MassConcentrationUnit::PoundPerImperialGallon)
     }
 
     /// Returns the value expressed in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn as_pounds_per_imperial_gallon(self) -> f64 {
+    pub fn as_pounds_per_imperial_gallon(self) -> Num {
         self.convert_to(MassConcentrationUnit::PoundPerImperialGallon)
     }
 
     /// Alias for [`Self::as_pounds_per_imperial_gallon`].
     #[inline]
-    pub fn as_pound_per_imperial_gallon(self) -> f64 {
+    pub fn as_pound_per_imperial_gallon(self) -> Num {
         self.as_pounds_per_imperial_gallon()
     }
 }
@@ -1272,27 +1273,27 @@ impl Neg for MassConcentration {
         Self(-self.0)
     }
 }
-impl Mul<f64> for MassConcentration {
+impl Mul<Num> for MassConcentration {
     type Output = MassConcentration;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<MassConcentration> for f64 {
+impl Mul<MassConcentration> for Num {
     type Output = MassConcentration;
     fn mul(self, rhs: MassConcentration) -> MassConcentration {
         MassConcentration(self * rhs.0)
     }
 }
-impl Div<f64> for MassConcentration {
+impl Div<Num> for MassConcentration {
     type Output = MassConcentration;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassConcentration {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -1331,7 +1332,7 @@ impl FromStr for MassConcentration {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMassConcentrationError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Siemens` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricSusceptance(f64);
+pub struct ElectricSusceptance(Num);
 
 /// Unit variants for [`ElectricSusceptance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -107,7 +108,7 @@ impl ElectricSusceptanceUnit {
 
 impl ElectricSusceptance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricSusceptanceUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricSusceptanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -134,7 +135,7 @@ impl ElectricSusceptance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -142,12 +143,12 @@ impl ElectricSusceptance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricSusceptanceUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricSusceptanceUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricSusceptanceUnit::Siemens => x,
@@ -171,241 +172,241 @@ impl ElectricSusceptance {
 
     /// Creates a [`ElectricSusceptance`] from a value in Siemens (`S`).
     #[inline]
-    pub fn from_siemens(value: f64) -> Self {
+    pub fn from_siemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Siemens)
     }
 
     /// Returns the value expressed in Siemens (`S`).
     #[inline]
-    pub fn as_siemens(self) -> f64 {
+    pub fn as_siemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Siemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Nanosiemens (`nS`).
     #[inline]
-    pub fn from_nanosiemens(value: f64) -> Self {
+    pub fn from_nanosiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Nanosiemens)
     }
 
     /// Returns the value expressed in Nanosiemens (`nS`).
     #[inline]
-    pub fn as_nanosiemens(self) -> f64 {
+    pub fn as_nanosiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Nanosiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Microsiemens (`µS`).
     #[inline]
-    pub fn from_microsiemens(value: f64) -> Self {
+    pub fn from_microsiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Microsiemens)
     }
 
     /// Returns the value expressed in Microsiemens (`µS`).
     #[inline]
-    pub fn as_microsiemens(self) -> f64 {
+    pub fn as_microsiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Microsiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Millisiemens (`mS`).
     #[inline]
-    pub fn from_millisiemens(value: f64) -> Self {
+    pub fn from_millisiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Millisiemens)
     }
 
     /// Returns the value expressed in Millisiemens (`mS`).
     #[inline]
-    pub fn as_millisiemens(self) -> f64 {
+    pub fn as_millisiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Millisiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Kilosiemens (`kS`).
     #[inline]
-    pub fn from_kilosiemens(value: f64) -> Self {
+    pub fn from_kilosiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Kilosiemens)
     }
 
     /// Returns the value expressed in Kilosiemens (`kS`).
     #[inline]
-    pub fn as_kilosiemens(self) -> f64 {
+    pub fn as_kilosiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Kilosiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Megasiemens (`MS`).
     #[inline]
-    pub fn from_megasiemens(value: f64) -> Self {
+    pub fn from_megasiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Megasiemens)
     }
 
     /// Returns the value expressed in Megasiemens (`MS`).
     #[inline]
-    pub fn as_megasiemens(self) -> f64 {
+    pub fn as_megasiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Megasiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Gigasiemens (`GS`).
     #[inline]
-    pub fn from_gigasiemens(value: f64) -> Self {
+    pub fn from_gigasiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Gigasiemens)
     }
 
     /// Returns the value expressed in Gigasiemens (`GS`).
     #[inline]
-    pub fn as_gigasiemens(self) -> f64 {
+    pub fn as_gigasiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Gigasiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Terasiemens (`TS`).
     #[inline]
-    pub fn from_terasiemens(value: f64) -> Self {
+    pub fn from_terasiemens(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Terasiemens)
     }
 
     /// Returns the value expressed in Terasiemens (`TS`).
     #[inline]
-    pub fn as_terasiemens(self) -> f64 {
+    pub fn as_terasiemens(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Terasiemens)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Mhos (`℧`).
     #[inline]
-    pub fn from_mhos(value: f64) -> Self {
+    pub fn from_mhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Mho)
     }
 
     /// Returns the value expressed in Mhos (`℧`).
     #[inline]
-    pub fn as_mhos(self) -> f64 {
+    pub fn as_mhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Mho)
     }
 
     /// Alias for [`Self::as_mhos`].
     #[inline]
-    pub fn as_mho(self) -> f64 {
+    pub fn as_mho(self) -> Num {
         self.as_mhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Nanomhos (`n℧`).
     #[inline]
-    pub fn from_nanomhos(value: f64) -> Self {
+    pub fn from_nanomhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Nanomho)
     }
 
     /// Returns the value expressed in Nanomhos (`n℧`).
     #[inline]
-    pub fn as_nanomhos(self) -> f64 {
+    pub fn as_nanomhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Nanomho)
     }
 
     /// Alias for [`Self::as_nanomhos`].
     #[inline]
-    pub fn as_nanomho(self) -> f64 {
+    pub fn as_nanomho(self) -> Num {
         self.as_nanomhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Micromhos (`µ℧`).
     #[inline]
-    pub fn from_micromhos(value: f64) -> Self {
+    pub fn from_micromhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Micromho)
     }
 
     /// Returns the value expressed in Micromhos (`µ℧`).
     #[inline]
-    pub fn as_micromhos(self) -> f64 {
+    pub fn as_micromhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Micromho)
     }
 
     /// Alias for [`Self::as_micromhos`].
     #[inline]
-    pub fn as_micromho(self) -> f64 {
+    pub fn as_micromho(self) -> Num {
         self.as_micromhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Millimhos (`m℧`).
     #[inline]
-    pub fn from_millimhos(value: f64) -> Self {
+    pub fn from_millimhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Millimho)
     }
 
     /// Returns the value expressed in Millimhos (`m℧`).
     #[inline]
-    pub fn as_millimhos(self) -> f64 {
+    pub fn as_millimhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Millimho)
     }
 
     /// Alias for [`Self::as_millimhos`].
     #[inline]
-    pub fn as_millimho(self) -> f64 {
+    pub fn as_millimho(self) -> Num {
         self.as_millimhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Kilomhos (`k℧`).
     #[inline]
-    pub fn from_kilomhos(value: f64) -> Self {
+    pub fn from_kilomhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Kilomho)
     }
 
     /// Returns the value expressed in Kilomhos (`k℧`).
     #[inline]
-    pub fn as_kilomhos(self) -> f64 {
+    pub fn as_kilomhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Kilomho)
     }
 
     /// Alias for [`Self::as_kilomhos`].
     #[inline]
-    pub fn as_kilomho(self) -> f64 {
+    pub fn as_kilomho(self) -> Num {
         self.as_kilomhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Megamhos (`M℧`).
     #[inline]
-    pub fn from_megamhos(value: f64) -> Self {
+    pub fn from_megamhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Megamho)
     }
 
     /// Returns the value expressed in Megamhos (`M℧`).
     #[inline]
-    pub fn as_megamhos(self) -> f64 {
+    pub fn as_megamhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Megamho)
     }
 
     /// Alias for [`Self::as_megamhos`].
     #[inline]
-    pub fn as_megamho(self) -> f64 {
+    pub fn as_megamho(self) -> Num {
         self.as_megamhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Gigamhos (`G℧`).
     #[inline]
-    pub fn from_gigamhos(value: f64) -> Self {
+    pub fn from_gigamhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Gigamho)
     }
 
     /// Returns the value expressed in Gigamhos (`G℧`).
     #[inline]
-    pub fn as_gigamhos(self) -> f64 {
+    pub fn as_gigamhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Gigamho)
     }
 
     /// Alias for [`Self::as_gigamhos`].
     #[inline]
-    pub fn as_gigamho(self) -> f64 {
+    pub fn as_gigamho(self) -> Num {
         self.as_gigamhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Teramhos (`T℧`).
     #[inline]
-    pub fn from_teramhos(value: f64) -> Self {
+    pub fn from_teramhos(value: Num) -> Self {
         Self::new(value, ElectricSusceptanceUnit::Teramho)
     }
 
     /// Returns the value expressed in Teramhos (`T℧`).
     #[inline]
-    pub fn as_teramhos(self) -> f64 {
+    pub fn as_teramhos(self) -> Num {
         self.convert_to(ElectricSusceptanceUnit::Teramho)
     }
 
     /// Alias for [`Self::as_teramhos`].
     #[inline]
-    pub fn as_teramho(self) -> f64 {
+    pub fn as_teramho(self) -> Num {
         self.as_teramhos()
     }
 }
@@ -428,27 +429,27 @@ impl Neg for ElectricSusceptance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricSusceptance {
+impl Mul<Num> for ElectricSusceptance {
     type Output = ElectricSusceptance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricSusceptance> for f64 {
+impl Mul<ElectricSusceptance> for Num {
     type Output = ElectricSusceptance;
     fn mul(self, rhs: ElectricSusceptance) -> ElectricSusceptance {
         ElectricSusceptance(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricSusceptance {
+impl Div<Num> for ElectricSusceptance {
     type Output = ElectricSusceptance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricSusceptance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -487,7 +488,7 @@ impl FromStr for ElectricSusceptance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricSusceptanceError(s.to_owned()))?;

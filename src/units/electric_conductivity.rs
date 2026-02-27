@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `SiemensPerMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricConductivity(f64);
+pub struct ElectricConductivity(Num);
 
 /// Unit variants for [`ElectricConductivity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -67,7 +68,7 @@ impl ElectricConductivityUnit {
 
 impl ElectricConductivity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ElectricConductivityUnit) -> Self {
+    pub fn new(value: Num, unit: ElectricConductivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -84,7 +85,7 @@ impl ElectricConductivity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -92,12 +93,12 @@ impl ElectricConductivity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ElectricConductivityUnit) -> f64 {
+    pub fn convert_to(self, unit: ElectricConductivityUnit) -> Num {
         let x = self.0;
         match unit {
             ElectricConductivityUnit::SiemensPerMeter => x,
@@ -111,73 +112,73 @@ impl ElectricConductivity {
 
     /// Creates a [`ElectricConductivity`] from a value in SiemensPerMeter (`S/m`).
     #[inline]
-    pub fn from_siemens_per_meter(value: f64) -> Self {
+    pub fn from_siemens_per_meter(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::SiemensPerMeter)
     }
 
     /// Returns the value expressed in SiemensPerMeter (`S/m`).
     #[inline]
-    pub fn as_siemens_per_meter(self) -> f64 {
+    pub fn as_siemens_per_meter(self) -> Num {
         self.convert_to(ElectricConductivityUnit::SiemensPerMeter)
     }
 
     /// Creates a [`ElectricConductivity`] from a value in SiemensPerInch (`S/in`).
     #[inline]
-    pub fn from_siemens_per_inch(value: f64) -> Self {
+    pub fn from_siemens_per_inch(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::SiemensPerInch)
     }
 
     /// Returns the value expressed in SiemensPerInch (`S/in`).
     #[inline]
-    pub fn as_siemens_per_inch(self) -> f64 {
+    pub fn as_siemens_per_inch(self) -> Num {
         self.convert_to(ElectricConductivityUnit::SiemensPerInch)
     }
 
     /// Creates a [`ElectricConductivity`] from a value in SiemensPerFoot (`S/ft`).
     #[inline]
-    pub fn from_siemens_per_foot(value: f64) -> Self {
+    pub fn from_siemens_per_foot(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::SiemensPerFoot)
     }
 
     /// Returns the value expressed in SiemensPerFoot (`S/ft`).
     #[inline]
-    pub fn as_siemens_per_foot(self) -> f64 {
+    pub fn as_siemens_per_foot(self) -> Num {
         self.convert_to(ElectricConductivityUnit::SiemensPerFoot)
     }
 
     /// Creates a [`ElectricConductivity`] from a value in SiemensPerCentimeter (`S/cm`).
     #[inline]
-    pub fn from_siemens_per_centimeter(value: f64) -> Self {
+    pub fn from_siemens_per_centimeter(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::SiemensPerCentimeter)
     }
 
     /// Returns the value expressed in SiemensPerCentimeter (`S/cm`).
     #[inline]
-    pub fn as_siemens_per_centimeter(self) -> f64 {
+    pub fn as_siemens_per_centimeter(self) -> Num {
         self.convert_to(ElectricConductivityUnit::SiemensPerCentimeter)
     }
 
     /// Creates a [`ElectricConductivity`] from a value in MicrosiemensPerCentimeter (`µS/cm`).
     #[inline]
-    pub fn from_microsiemens_per_centimeter(value: f64) -> Self {
+    pub fn from_microsiemens_per_centimeter(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::MicrosiemensPerCentimeter)
     }
 
     /// Returns the value expressed in MicrosiemensPerCentimeter (`µS/cm`).
     #[inline]
-    pub fn as_microsiemens_per_centimeter(self) -> f64 {
+    pub fn as_microsiemens_per_centimeter(self) -> Num {
         self.convert_to(ElectricConductivityUnit::MicrosiemensPerCentimeter)
     }
 
     /// Creates a [`ElectricConductivity`] from a value in MillisiemensPerCentimeter (`mS/cm`).
     #[inline]
-    pub fn from_millisiemens_per_centimeter(value: f64) -> Self {
+    pub fn from_millisiemens_per_centimeter(value: Num) -> Self {
         Self::new(value, ElectricConductivityUnit::MillisiemensPerCentimeter)
     }
 
     /// Returns the value expressed in MillisiemensPerCentimeter (`mS/cm`).
     #[inline]
-    pub fn as_millisiemens_per_centimeter(self) -> f64 {
+    pub fn as_millisiemens_per_centimeter(self) -> Num {
         self.convert_to(ElectricConductivityUnit::MillisiemensPerCentimeter)
     }
 }
@@ -200,27 +201,27 @@ impl Neg for ElectricConductivity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for ElectricConductivity {
+impl Mul<Num> for ElectricConductivity {
     type Output = ElectricConductivity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<ElectricConductivity> for f64 {
+impl Mul<ElectricConductivity> for Num {
     type Output = ElectricConductivity;
     fn mul(self, rhs: ElectricConductivity) -> ElectricConductivity {
         ElectricConductivity(self * rhs.0)
     }
 }
-impl Div<f64> for ElectricConductivity {
+impl Div<Num> for ElectricConductivity {
     type Output = ElectricConductivity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricConductivity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -259,7 +260,7 @@ impl FromStr for ElectricConductivity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseElectricConductivityError(s.to_owned()))?;

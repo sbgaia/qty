@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `PascalCubicMeterPerSecond` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct LeakRate(f64);
+pub struct LeakRate(Num);
 
 /// Unit variants for [`LeakRate`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -59,7 +60,7 @@ impl LeakRateUnit {
 
 impl LeakRate {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LeakRateUnit) -> Self {
+    pub fn new(value: Num, unit: LeakRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -74,7 +75,7 @@ impl LeakRate {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -82,12 +83,12 @@ impl LeakRate {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LeakRateUnit) -> f64 {
+    pub fn convert_to(self, unit: LeakRateUnit) -> Num {
         let x = self.0;
         match unit {
             LeakRateUnit::PascalCubicMeterPerSecond => x,
@@ -99,73 +100,73 @@ impl LeakRate {
 
     /// Creates a [`LeakRate`] from a value in PascalCubicMetersPerSecond (`Pa·m³/s`).
     #[inline]
-    pub fn from_pascal_cubic_meters_per_second(value: f64) -> Self {
+    pub fn from_pascal_cubic_meters_per_second(value: Num) -> Self {
         Self::new(value, LeakRateUnit::PascalCubicMeterPerSecond)
     }
 
     /// Returns the value expressed in PascalCubicMetersPerSecond (`Pa·m³/s`).
     #[inline]
-    pub fn as_pascal_cubic_meters_per_second(self) -> f64 {
+    pub fn as_pascal_cubic_meters_per_second(self) -> Num {
         self.convert_to(LeakRateUnit::PascalCubicMeterPerSecond)
     }
 
     /// Alias for [`Self::as_pascal_cubic_meters_per_second`].
     #[inline]
-    pub fn as_pascal_cubic_meter_per_second(self) -> f64 {
+    pub fn as_pascal_cubic_meter_per_second(self) -> Num {
         self.as_pascal_cubic_meters_per_second()
     }
 
     /// Creates a [`LeakRate`] from a value in MillibarLitersPerSecond (`mbar·l/s`).
     #[inline]
-    pub fn from_millibar_liters_per_second(value: f64) -> Self {
+    pub fn from_millibar_liters_per_second(value: Num) -> Self {
         Self::new(value, LeakRateUnit::MillibarLiterPerSecond)
     }
 
     /// Returns the value expressed in MillibarLitersPerSecond (`mbar·l/s`).
     #[inline]
-    pub fn as_millibar_liters_per_second(self) -> f64 {
+    pub fn as_millibar_liters_per_second(self) -> Num {
         self.convert_to(LeakRateUnit::MillibarLiterPerSecond)
     }
 
     /// Alias for [`Self::as_millibar_liters_per_second`].
     #[inline]
-    pub fn as_millibar_liter_per_second(self) -> f64 {
+    pub fn as_millibar_liter_per_second(self) -> Num {
         self.as_millibar_liters_per_second()
     }
 
     /// Creates a [`LeakRate`] from a value in TorrLitersPerSecond (`Torr·l/s`).
     #[inline]
-    pub fn from_torr_liters_per_second(value: f64) -> Self {
+    pub fn from_torr_liters_per_second(value: Num) -> Self {
         Self::new(value, LeakRateUnit::TorrLiterPerSecond)
     }
 
     /// Returns the value expressed in TorrLitersPerSecond (`Torr·l/s`).
     #[inline]
-    pub fn as_torr_liters_per_second(self) -> f64 {
+    pub fn as_torr_liters_per_second(self) -> Num {
         self.convert_to(LeakRateUnit::TorrLiterPerSecond)
     }
 
     /// Alias for [`Self::as_torr_liters_per_second`].
     #[inline]
-    pub fn as_torr_liter_per_second(self) -> f64 {
+    pub fn as_torr_liter_per_second(self) -> Num {
         self.as_torr_liters_per_second()
     }
 
     /// Creates a [`LeakRate`] from a value in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
     #[inline]
-    pub fn from_atm_cubic_centimeters_per_second(value: f64) -> Self {
+    pub fn from_atm_cubic_centimeters_per_second(value: Num) -> Self {
         Self::new(value, LeakRateUnit::AtmCubicCentimeterPerSecond)
     }
 
     /// Returns the value expressed in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
     #[inline]
-    pub fn as_atm_cubic_centimeters_per_second(self) -> f64 {
+    pub fn as_atm_cubic_centimeters_per_second(self) -> Num {
         self.convert_to(LeakRateUnit::AtmCubicCentimeterPerSecond)
     }
 
     /// Alias for [`Self::as_atm_cubic_centimeters_per_second`].
     #[inline]
-    pub fn as_atm_cubic_centimeter_per_second(self) -> f64 {
+    pub fn as_atm_cubic_centimeter_per_second(self) -> Num {
         self.as_atm_cubic_centimeters_per_second()
     }
 }
@@ -188,27 +189,27 @@ impl Neg for LeakRate {
         Self(-self.0)
     }
 }
-impl Mul<f64> for LeakRate {
+impl Mul<Num> for LeakRate {
     type Output = LeakRate;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<LeakRate> for f64 {
+impl Mul<LeakRate> for Num {
     type Output = LeakRate;
     fn mul(self, rhs: LeakRate) -> LeakRate {
         LeakRate(self * rhs.0)
     }
 }
-impl Div<f64> for LeakRate {
+impl Div<Num> for LeakRate {
     type Output = LeakRate;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LeakRate {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -247,7 +248,7 @@ impl FromStr for LeakRate {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLeakRateError(s.to_owned()))?;

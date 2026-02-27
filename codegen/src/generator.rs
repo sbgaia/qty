@@ -50,6 +50,7 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     w!(out, "use std::fmt;");
     w!(out, "use std::str::FromStr;");
     w!(out, "use std::ops::{{Add, Sub, Mul, Div, Neg}};");
+    w!(out, "use crate::Num;");
     w!(out);
 
     let doc = escape_doc(&qty.doc);
@@ -64,7 +65,7 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
         out,
         "#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]"
     );
-    w!(out, "pub struct {}(f64);", qty.name);
+    w!(out, "pub struct {}(Num);", qty.name);
     w!(out);
 }
 
@@ -157,7 +158,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     );
     w!(
         out,
-        "    pub fn new(value: f64, unit: {}) -> Self {{",
+        "    pub fn new(value: Num, unit: {}) -> Self {{",
         enum_name
     );
     w!(
@@ -190,7 +191,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         "    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`)."
     );
     w!(out, "    #[inline]");
-    w!(out, "    pub fn as_base(self) -> f64 {{ self.0 }}");
+    w!(out, "    pub fn as_base(self) -> Num {{ self.0 }}");
     w!(out);
     w!(out, "    /// Wraps a raw base-unit value into this type.");
     w!(out, "    ///");
@@ -198,7 +199,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    #[inline]");
     w!(
         out,
-        "    pub fn from_base(value: f64) -> Self {{ Self(value) }}"
+        "    pub fn from_base(value: Num) -> Self {{ Self(value) }}"
     );
     w!(out);
 
@@ -206,7 +207,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    /// Returns the quantity expressed in `unit`.");
     w!(
         out,
-        "    pub fn convert_to(self, unit: {}) -> f64 {{",
+        "    pub fn convert_to(self, unit: {}) -> Num {{",
         enum_name
     );
     w!(out, "        let x = self.0;");
@@ -240,7 +241,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         w!(out, "    #[inline]");
         w!(
             out,
-            "    pub fn from_{}(value: f64) -> Self {{",
+            "    pub fn from_{}(value: Num) -> Self {{",
             snake_plural
         );
         w!(
@@ -259,7 +260,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             abbr
         );
         w!(out, "    #[inline]");
-        w!(out, "    pub fn as_{}(self) -> f64 {{", snake_plural);
+        w!(out, "    pub fn as_{}(self) -> Num {{", snake_plural);
         w!(
             out,
             "        self.convert_to({}::{})",
@@ -273,7 +274,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             w!(out);
             w!(out, "    /// Alias for [`Self::as_{}`].", snake_plural);
             w!(out, "    #[inline]");
-            w!(out, "    pub fn as_{}(self) -> f64 {{", snake_singular);
+            w!(out, "    pub fn as_{}(self) -> Num {{", snake_singular);
             w!(out, "        self.as_{}()", snake_plural);
             w!(out, "    }}");
         }
@@ -296,10 +297,10 @@ fn emit_arithmetic(qty: &QuantityDef, out: &mut String) {
         n,
         n
     );
-    w!(out, "impl Mul<f64> for {} {{ type Output = {}; fn mul(self, rhs: f64) -> Self {{ Self(self.0 * rhs) }} }}", n, n);
-    w!(out, "impl Mul<{}> for f64 {{ type Output = {}; fn mul(self, rhs: {}) -> {} {{ {}(self * rhs.0) }} }}", n, n, n, n, n);
-    w!(out, "impl Div<f64> for {} {{ type Output = {}; fn div(self, rhs: f64) -> Self {{ Self(self.0 / rhs) }} }}", n, n);
-    w!(out, "impl Div for {} {{ type Output = f64; fn div(self, rhs: Self) -> f64 {{ self.0 / rhs.0 }} }}", n);
+    w!(out, "impl Mul<Num> for {} {{ type Output = {}; fn mul(self, rhs: Num) -> Self {{ Self(self.0 * rhs) }} }}", n, n);
+    w!(out, "impl Mul<{}> for Num {{ type Output = {}; fn mul(self, rhs: {}) -> {} {{ {}(self * rhs.0) }} }}", n, n, n, n, n);
+    w!(out, "impl Div<Num> for {} {{ type Output = {}; fn div(self, rhs: Num) -> Self {{ Self(self.0 / rhs) }} }}", n, n);
+    w!(out, "impl Div for {} {{ type Output = Num; fn div(self, rhs: Self) -> Num {{ self.0 / rhs.0 }} }}", n);
     w!(out);
 }
 
@@ -390,7 +391,7 @@ fn emit_from_str(qty: &QuantityDef, out: &mut String) {
     w!(out, "            .map(|i| i + c_len_at(s, i))");
     w!(out, "            .unwrap_or(0);");
     w!(out, "        let (num_str, unit_str) = s.split_at(split);");
-    w!(out, "        let value: f64 = num_str");
+    w!(out, "        let value: Num = num_str");
     w!(out, "            .trim()");
     w!(out, "            .parse()");
     w!(
@@ -534,13 +535,159 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
 
 // ── Integration test file ─────────────────────────────────────────────────────
 
-/// Generates `tests/generated.rs` containing all auto-generated integration tests.
+/// Generates the content of `tests/<quantity_snake>.rs` for a single quantity.
 ///
-/// Each quantity gets its own `mod` to prevent name collisions (every quantity
-/// has `test_add`, `test_sub`, etc.). The cross-type ops get their own `mod` too.
-/// All tests use the public API via `use unitsnet_rs::*`.
-pub fn generate_tests(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
-    let mut out = String::with_capacity(512 * 1024);
+/// Each file is a self-contained Cargo integration test binary, so there is no
+/// wrapping `mod` — test functions sit at the file root and use the public API
+/// via `use unitsnet_rs::*`.
+pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
+    let mut out = String::with_capacity(16 * 1024);
+    let name = &qty.name;
+    let enum_name = format!("{}Unit", name);
+
+    w!(
+        out,
+        "// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT"
+    );
+    w!(out, "// Quantity: {}", name);
+    w!(out);
+    w!(out, "use unitsnet_rs::*;");
+    w!(out);
+    // Round-trip tolerance: f32 has ~7 significant digits so 1e-5 is safe;
+    // f64 has ~15 digits so 1e-9 is safe. Arithmetic tests (exact integer
+    // base-unit ops) stay at 1e-12 for both because IEEE 754 guarantees them.
+    w!(out, "#[cfg(feature = \"f32\")]");
+    w!(out, "const RT_EPS: Num = 1e-5;");
+    w!(out, "#[cfg(not(feature = \"f32\"))]");
+    w!(out, "const RT_EPS: Num = 1e-9;");
+    w!(out);
+
+    // Round-trip: from_X(v).as_X() ≈ v validates both conversion formulas.
+    //
+    // We use v = 1_000_000 (exactly representable in both f32 and f64) and a
+    // *relative* tolerance so that units with large additive offsets (e.g.
+    // MillidegreesCelsius: x/1000 + 273.15) don't fail due to catastrophic
+    // cancellation.  With v >> offset, the relative error stays within RT_EPS
+    // for both f32 (~1e-7) and f64 (~1e-16).
+    for unit in &qty.units {
+        let snake = unit.plural.to_snake_case();
+        w!(out, "#[test]");
+        w!(out, "fn round_trip_{}() {{", snake);
+        // 1_000_000 is exactly representable in f32 (< 2^23 = 8_388_608).
+        w!(out, "    let v: Num = 1_000_000.0;");
+        w!(
+            out,
+            "    assert!(({}::from_{}(v).as_{}() - v).abs() / v < RT_EPS);",
+            name,
+            snake,
+            snake
+        );
+        w!(out, "}}");
+        w!(out);
+    }
+
+    // Arithmetic smoke tests on exact base-unit values.
+    w!(out, "#[test]");
+    w!(out, "fn test_add() {{");
+    w!(out, "    let a = {}::from_base(2.0);", name);
+    w!(out, "    let b = {}::from_base(3.0);", name);
+    w!(out, "    assert!(((a + b).as_base() - 5.0).abs() < 1e-12);");
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "#[test]");
+    w!(out, "fn test_sub() {{");
+    w!(out, "    let a = {}::from_base(5.0);", name);
+    w!(out, "    let b = {}::from_base(3.0);", name);
+    w!(out, "    assert!(((a - b).as_base() - 2.0).abs() < 1e-12);");
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "#[test]");
+    w!(out, "fn test_neg() {{");
+    w!(
+        out,
+        "    assert!(((-{}::from_base(4.0)).as_base() + 4.0).abs() < 1e-12);",
+        name
+    );
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "#[test]");
+    w!(out, "fn test_mul_num() {{");
+    w!(
+        out,
+        "    assert!((({}::from_base(4.0) * 2.0).as_base() - 8.0).abs() < 1e-12);",
+        name
+    );
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "#[test]");
+    w!(out, "fn test_div_num() {{");
+    w!(
+        out,
+        "    assert!((({}::from_base(6.0) / 2.0).as_base() - 3.0).abs() < 1e-12);",
+        name
+    );
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "#[test]");
+    w!(out, "fn test_div_same_type() {{");
+    w!(
+        out,
+        "    assert!(({}::from_base(6.0) / {}::from_base(2.0) - 3.0).abs() < 1e-12);",
+        name,
+        name
+    );
+    w!(out, "}}");
+    w!(out);
+
+    // FromStr: parse "1 <abbr>" and compare to the direct constructor.
+    // Skipped when the base unit has no abbreviation.
+    if let Some(base) = qty.units.iter().find(|u| u.singular == qty.base_unit) {
+        if !base.abbreviation.is_empty() {
+            let snake_base = base.plural.to_snake_case();
+            w!(out, "#[test]");
+            w!(out, "fn from_str_base_unit() {{");
+            w!(
+                out,
+                "    let abbr = {}::{}.abbreviation();",
+                enum_name,
+                base.singular
+            );
+            w!(out, "    let s = format!(\"1 {{}}\", abbr);");
+            w!(
+                out,
+                "    let parsed: {} = s.parse().expect(\"parse failed\");",
+                name
+            );
+            // Use relative tolerance: same reasoning as the round-trip tests above.
+            w!(
+                out,
+                "    let expected = {}::from_{}(1.0).as_base();",
+                name,
+                snake_base
+            );
+            w!(
+                out,
+                "    assert!((parsed.as_base() - expected).abs() / expected.abs().max(1.0) < RT_EPS);"
+            );
+            w!(out, "}}");
+            w!(out);
+        }
+    }
+
+    out
+}
+
+/// Generates `tests/cross_type.rs` — one test per cross-type arithmetic op.
+///
+/// These tests only exercise exact base-unit arithmetic (`6 * 2 = 12`),
+/// which is representable without rounding in both f32 and f64.
+pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
+    let mut out = String::with_capacity(32 * 1024);
 
     w!(
         out,
@@ -550,165 +697,32 @@ pub fn generate_tests(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
     w!(out, "use unitsnet_rs::*;");
     w!(out);
 
-    // ── Per-quantity modules ──────────────────────────────────────────────────
-    for qty in quantities {
-        let name = &qty.name;
-        let enum_name = format!("{}Unit", name);
-        let mod_name = name.to_snake_case();
-
-        w!(out, "mod {} {{", mod_name);
-        w!(out, "    use super::*;");
-        w!(out);
-
-        // Round-trip: from_X(1.0).as_X() == 1.0 validates both conversion formulas.
-        for unit in &qty.units {
-            let snake = unit.plural.to_snake_case();
-            w!(out, "    #[test]");
-            w!(out, "    fn round_trip_{}() {{", snake);
-            w!(out, "        let v = 1.0_f64;");
-            w!(
-                out,
-                "        assert!(({}::from_{}(v).as_{}() - v).abs() < 1e-9);",
-                name,
-                snake,
-                snake
-            );
-            w!(out, "    }}");
-            w!(out);
-        }
-
-        // Arithmetic smoke tests (exact base-unit math, tight epsilon).
-        w!(out, "    #[test]");
-        w!(out, "    fn test_add() {{");
-        w!(out, "        let a = {}::from_base(2.0);", name);
-        w!(out, "        let b = {}::from_base(3.0);", name);
+    for op in ops {
+        let op_sym = if op.trait_name == "Mul" { "*" } else { "/" };
+        let (lhs_v, rhs_v, expected) = if op.trait_name == "Mul" {
+            ("6.0", "2.0", "12.0")
+        } else {
+            ("6.0", "2.0", "3.0")
+        };
+        let test_name = format!(
+            "{}_{}_{}_gives_{}",
+            op.trait_name.to_lowercase(),
+            op.lhs.to_snake_case(),
+            op.rhs.to_snake_case(),
+            op.output.to_snake_case(),
+        );
+        w!(out, "#[test]");
+        w!(out, "fn {}() {{", test_name);
+        w!(out, "    let a = {}::from_base({});", op.lhs, lhs_v);
+        w!(out, "    let b = {}::from_base({});", op.rhs, rhs_v);
+        w!(out, "    let c: {} = a {} b;", op.output, op_sym);
         w!(
             out,
-            "        assert!(((a + b).as_base() - 5.0).abs() < 1e-12);"
+            "    assert!((c.as_base() - {}).abs() < 1e-12);",
+            expected
         );
-        w!(out, "    }}");
-        w!(out);
-
-        w!(out, "    #[test]");
-        w!(out, "    fn test_sub() {{");
-        w!(out, "        let a = {}::from_base(5.0);", name);
-        w!(out, "        let b = {}::from_base(3.0);", name);
-        w!(
-            out,
-            "        assert!(((a - b).as_base() - 2.0).abs() < 1e-12);"
-        );
-        w!(out, "    }}");
-        w!(out);
-
-        w!(out, "    #[test]");
-        w!(out, "    fn test_neg() {{");
-        w!(
-            out,
-            "        assert!(((-{}::from_base(4.0)).as_base() + 4.0).abs() < 1e-12);",
-            name
-        );
-        w!(out, "    }}");
-        w!(out);
-
-        w!(out, "    #[test]");
-        w!(out, "    fn test_mul_scalar() {{");
-        w!(
-            out,
-            "        assert!((({}::from_base(4.0) * 2.0).as_base() - 8.0).abs() < 1e-12);",
-            name
-        );
-        w!(out, "    }}");
-        w!(out);
-
-        w!(out, "    #[test]");
-        w!(out, "    fn test_div_scalar() {{");
-        w!(
-            out,
-            "        assert!((({}::from_base(6.0) / 2.0).as_base() - 3.0).abs() < 1e-12);",
-            name
-        );
-        w!(out, "    }}");
-        w!(out);
-
-        w!(out, "    #[test]");
-        w!(out, "    fn test_div_same_type() {{");
-        w!(
-            out,
-            "        assert!(({}::from_base(6.0) / {}::from_base(2.0) - 3.0).abs() < 1e-12);",
-            name,
-            name
-        );
-        w!(out, "    }}");
-        w!(out);
-
-        // FromStr test for the base unit (skipped when the abbreviation is empty).
-        if let Some(base) = qty.units.iter().find(|u| u.singular == qty.base_unit) {
-            if !base.abbreviation.is_empty() {
-                let snake_base = base.plural.to_snake_case();
-                w!(out, "    #[test]");
-                w!(out, "    fn from_str_base_unit() {{");
-                w!(
-                    out,
-                    "        let abbr = {}::{}.abbreviation();",
-                    enum_name,
-                    base.singular
-                );
-                w!(out, "        let s = format!(\"1 {{}}\", abbr);");
-                w!(
-                    out,
-                    "        let parsed: {} = s.parse().expect(\"parse failed\");",
-                    name
-                );
-                w!(
-                    out,
-                    "        assert!((parsed.as_base() - {}::from_{}(1.0).as_base()).abs() < 1e-9);",
-                    name,
-                    snake_base
-                );
-                w!(out, "    }}");
-                w!(out);
-            }
-        }
-
         w!(out, "}}");
         w!(out);
-    }
-
-    // ── Cross-type ops module ─────────────────────────────────────────────────
-    if !ops.is_empty() {
-        w!(out, "mod cross_type {{");
-        w!(out, "    use super::*;");
-        w!(out);
-
-        for op in ops {
-            let op_sym = if op.trait_name == "Mul" { "*" } else { "/" };
-            let (lhs_v, rhs_v, expected) = if op.trait_name == "Mul" {
-                ("6.0", "2.0", "12.0")
-            } else {
-                ("6.0", "2.0", "3.0")
-            };
-            let test_name = format!(
-                "{}_{}_{}_gives_{}",
-                op.trait_name.to_lowercase(),
-                op.lhs.to_snake_case(),
-                op.rhs.to_snake_case(),
-                op.output.to_snake_case(),
-            );
-            w!(out, "    #[test]");
-            w!(out, "    fn {}() {{", test_name);
-            w!(out, "        let a = {}::from_base({});", op.lhs, lhs_v);
-            w!(out, "        let b = {}::from_base({});", op.rhs, rhs_v);
-            w!(out, "        let c: {} = a {} b;", op.output, op_sym);
-            w!(
-                out,
-                "        assert!((c.as_base() - {}).abs() < 1e-12);",
-                expected
-            );
-            w!(out, "    }}");
-            w!(out);
-        }
-
-        w!(out, "}}");
     }
 
     out

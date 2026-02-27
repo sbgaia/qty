@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Candela` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct LuminousIntensity(f64);
+pub struct LuminousIntensity(Num);
 
 /// Unit variants for [`LuminousIntensity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -45,7 +46,7 @@ impl LuminousIntensityUnit {
 
 impl LuminousIntensity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LuminousIntensityUnit) -> Self {
+    pub fn new(value: Num, unit: LuminousIntensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -57,7 +58,7 @@ impl LuminousIntensity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -65,12 +66,12 @@ impl LuminousIntensity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LuminousIntensityUnit) -> f64 {
+    pub fn convert_to(self, unit: LuminousIntensityUnit) -> Num {
         let x = self.0;
         match unit {
             LuminousIntensityUnit::Candela => x,
@@ -79,13 +80,13 @@ impl LuminousIntensity {
 
     /// Creates a [`LuminousIntensity`] from a value in Candela (`cd`).
     #[inline]
-    pub fn from_candela(value: f64) -> Self {
+    pub fn from_candela(value: Num) -> Self {
         Self::new(value, LuminousIntensityUnit::Candela)
     }
 
     /// Returns the value expressed in Candela (`cd`).
     #[inline]
-    pub fn as_candela(self) -> f64 {
+    pub fn as_candela(self) -> Num {
         self.convert_to(LuminousIntensityUnit::Candela)
     }
 }
@@ -108,27 +109,27 @@ impl Neg for LuminousIntensity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for LuminousIntensity {
+impl Mul<Num> for LuminousIntensity {
     type Output = LuminousIntensity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<LuminousIntensity> for f64 {
+impl Mul<LuminousIntensity> for Num {
     type Output = LuminousIntensity;
     fn mul(self, rhs: LuminousIntensity) -> LuminousIntensity {
         LuminousIntensity(self * rhs.0)
     }
 }
-impl Div<f64> for LuminousIntensity {
+impl Div<Num> for LuminousIntensity {
     type Output = LuminousIntensity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LuminousIntensity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -167,7 +168,7 @@ impl FromStr for LuminousIntensity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLuminousIntensityError(s.to_owned()))?;

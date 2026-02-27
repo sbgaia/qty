@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `MolePerCubicMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Molarity(f64);
+pub struct Molarity(Num);
 
 /// Unit variants for [`Molarity`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -87,7 +88,7 @@ impl MolarityUnit {
 
 impl Molarity {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: MolarityUnit) -> Self {
+    pub fn new(value: Num, unit: MolarityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -109,7 +110,7 @@ impl Molarity {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -117,12 +118,12 @@ impl Molarity {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: MolarityUnit) -> f64 {
+    pub fn convert_to(self, unit: MolarityUnit) -> Num {
         let x = self.0;
         match unit {
             MolarityUnit::MolePerCubicMeter => x,
@@ -141,199 +142,199 @@ impl Molarity {
 
     /// Creates a [`Molarity`] from a value in MolesPerCubicMeter (`mol/m³`).
     #[inline]
-    pub fn from_moles_per_cubic_meter(value: f64) -> Self {
+    pub fn from_moles_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MolarityUnit::MolePerCubicMeter)
     }
 
     /// Returns the value expressed in MolesPerCubicMeter (`mol/m³`).
     #[inline]
-    pub fn as_moles_per_cubic_meter(self) -> f64 {
+    pub fn as_moles_per_cubic_meter(self) -> Num {
         self.convert_to(MolarityUnit::MolePerCubicMeter)
     }
 
     /// Alias for [`Self::as_moles_per_cubic_meter`].
     #[inline]
-    pub fn as_mole_per_cubic_meter(self) -> f64 {
+    pub fn as_mole_per_cubic_meter(self) -> Num {
         self.as_moles_per_cubic_meter()
     }
 
     /// Creates a [`Molarity`] from a value in KilomolesPerCubicMeter (`kmol/m³`).
     #[inline]
-    pub fn from_kilomoles_per_cubic_meter(value: f64) -> Self {
+    pub fn from_kilomoles_per_cubic_meter(value: Num) -> Self {
         Self::new(value, MolarityUnit::KilomolePerCubicMeter)
     }
 
     /// Returns the value expressed in KilomolesPerCubicMeter (`kmol/m³`).
     #[inline]
-    pub fn as_kilomoles_per_cubic_meter(self) -> f64 {
+    pub fn as_kilomoles_per_cubic_meter(self) -> Num {
         self.convert_to(MolarityUnit::KilomolePerCubicMeter)
     }
 
     /// Alias for [`Self::as_kilomoles_per_cubic_meter`].
     #[inline]
-    pub fn as_kilomole_per_cubic_meter(self) -> f64 {
+    pub fn as_kilomole_per_cubic_meter(self) -> Num {
         self.as_kilomoles_per_cubic_meter()
     }
 
     /// Creates a [`Molarity`] from a value in MolesPerLiter (`mol/l`).
     #[inline]
-    pub fn from_moles_per_liter(value: f64) -> Self {
+    pub fn from_moles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::MolePerLiter)
     }
 
     /// Returns the value expressed in MolesPerLiter (`mol/l`).
     #[inline]
-    pub fn as_moles_per_liter(self) -> f64 {
+    pub fn as_moles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::MolePerLiter)
     }
 
     /// Alias for [`Self::as_moles_per_liter`].
     #[inline]
-    pub fn as_mole_per_liter(self) -> f64 {
+    pub fn as_mole_per_liter(self) -> Num {
         self.as_moles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in FemtomolesPerLiter (`fmol/l`).
     #[inline]
-    pub fn from_femtomoles_per_liter(value: f64) -> Self {
+    pub fn from_femtomoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::FemtomolePerLiter)
     }
 
     /// Returns the value expressed in FemtomolesPerLiter (`fmol/l`).
     #[inline]
-    pub fn as_femtomoles_per_liter(self) -> f64 {
+    pub fn as_femtomoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::FemtomolePerLiter)
     }
 
     /// Alias for [`Self::as_femtomoles_per_liter`].
     #[inline]
-    pub fn as_femtomole_per_liter(self) -> f64 {
+    pub fn as_femtomole_per_liter(self) -> Num {
         self.as_femtomoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in PicomolesPerLiter (`pmol/l`).
     #[inline]
-    pub fn from_picomoles_per_liter(value: f64) -> Self {
+    pub fn from_picomoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::PicomolePerLiter)
     }
 
     /// Returns the value expressed in PicomolesPerLiter (`pmol/l`).
     #[inline]
-    pub fn as_picomoles_per_liter(self) -> f64 {
+    pub fn as_picomoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::PicomolePerLiter)
     }
 
     /// Alias for [`Self::as_picomoles_per_liter`].
     #[inline]
-    pub fn as_picomole_per_liter(self) -> f64 {
+    pub fn as_picomole_per_liter(self) -> Num {
         self.as_picomoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in NanomolesPerLiter (`nmol/l`).
     #[inline]
-    pub fn from_nanomoles_per_liter(value: f64) -> Self {
+    pub fn from_nanomoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::NanomolePerLiter)
     }
 
     /// Returns the value expressed in NanomolesPerLiter (`nmol/l`).
     #[inline]
-    pub fn as_nanomoles_per_liter(self) -> f64 {
+    pub fn as_nanomoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::NanomolePerLiter)
     }
 
     /// Alias for [`Self::as_nanomoles_per_liter`].
     #[inline]
-    pub fn as_nanomole_per_liter(self) -> f64 {
+    pub fn as_nanomole_per_liter(self) -> Num {
         self.as_nanomoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in MicromolesPerLiter (`µmol/l`).
     #[inline]
-    pub fn from_micromoles_per_liter(value: f64) -> Self {
+    pub fn from_micromoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::MicromolePerLiter)
     }
 
     /// Returns the value expressed in MicromolesPerLiter (`µmol/l`).
     #[inline]
-    pub fn as_micromoles_per_liter(self) -> f64 {
+    pub fn as_micromoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::MicromolePerLiter)
     }
 
     /// Alias for [`Self::as_micromoles_per_liter`].
     #[inline]
-    pub fn as_micromole_per_liter(self) -> f64 {
+    pub fn as_micromole_per_liter(self) -> Num {
         self.as_micromoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in MillimolesPerLiter (`mmol/l`).
     #[inline]
-    pub fn from_millimoles_per_liter(value: f64) -> Self {
+    pub fn from_millimoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::MillimolePerLiter)
     }
 
     /// Returns the value expressed in MillimolesPerLiter (`mmol/l`).
     #[inline]
-    pub fn as_millimoles_per_liter(self) -> f64 {
+    pub fn as_millimoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::MillimolePerLiter)
     }
 
     /// Alias for [`Self::as_millimoles_per_liter`].
     #[inline]
-    pub fn as_millimole_per_liter(self) -> f64 {
+    pub fn as_millimole_per_liter(self) -> Num {
         self.as_millimoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in CentimolesPerLiter (`cmol/l`).
     #[inline]
-    pub fn from_centimoles_per_liter(value: f64) -> Self {
+    pub fn from_centimoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::CentimolePerLiter)
     }
 
     /// Returns the value expressed in CentimolesPerLiter (`cmol/l`).
     #[inline]
-    pub fn as_centimoles_per_liter(self) -> f64 {
+    pub fn as_centimoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::CentimolePerLiter)
     }
 
     /// Alias for [`Self::as_centimoles_per_liter`].
     #[inline]
-    pub fn as_centimole_per_liter(self) -> f64 {
+    pub fn as_centimole_per_liter(self) -> Num {
         self.as_centimoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in DecimolesPerLiter (`dmol/l`).
     #[inline]
-    pub fn from_decimoles_per_liter(value: f64) -> Self {
+    pub fn from_decimoles_per_liter(value: Num) -> Self {
         Self::new(value, MolarityUnit::DecimolePerLiter)
     }
 
     /// Returns the value expressed in DecimolesPerLiter (`dmol/l`).
     #[inline]
-    pub fn as_decimoles_per_liter(self) -> f64 {
+    pub fn as_decimoles_per_liter(self) -> Num {
         self.convert_to(MolarityUnit::DecimolePerLiter)
     }
 
     /// Alias for [`Self::as_decimoles_per_liter`].
     #[inline]
-    pub fn as_decimole_per_liter(self) -> f64 {
+    pub fn as_decimole_per_liter(self) -> Num {
         self.as_decimoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in PoundMolesPerCubicFoot (`lbmol/ft³`).
     #[inline]
-    pub fn from_pound_moles_per_cubic_foot(value: f64) -> Self {
+    pub fn from_pound_moles_per_cubic_foot(value: Num) -> Self {
         Self::new(value, MolarityUnit::PoundMolePerCubicFoot)
     }
 
     /// Returns the value expressed in PoundMolesPerCubicFoot (`lbmol/ft³`).
     #[inline]
-    pub fn as_pound_moles_per_cubic_foot(self) -> f64 {
+    pub fn as_pound_moles_per_cubic_foot(self) -> Num {
         self.convert_to(MolarityUnit::PoundMolePerCubicFoot)
     }
 
     /// Alias for [`Self::as_pound_moles_per_cubic_foot`].
     #[inline]
-    pub fn as_pound_mole_per_cubic_foot(self) -> f64 {
+    pub fn as_pound_mole_per_cubic_foot(self) -> Num {
         self.as_pound_moles_per_cubic_foot()
     }
 }
@@ -356,27 +357,27 @@ impl Neg for Molarity {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Molarity {
+impl Mul<Num> for Molarity {
     type Output = Molarity;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Molarity> for f64 {
+impl Mul<Molarity> for Num {
     type Output = Molarity;
     fn mul(self, rhs: Molarity) -> Molarity {
         Molarity(self * rhs.0)
     }
 }
-impl Div<f64> for Molarity {
+impl Div<Num> for Molarity {
     type Output = Molarity;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Molarity {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -415,7 +416,7 @@ impl FromStr for Molarity {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseMolarityError(s.to_owned()))?;

@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `InversePascal` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Compressibility(f64);
+pub struct Compressibility(Num);
 
 /// Unit variants for [`Compressibility`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -71,7 +72,7 @@ impl CompressibilityUnit {
 
 impl Compressibility {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: CompressibilityUnit) -> Self {
+    pub fn new(value: Num, unit: CompressibilityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -89,7 +90,7 @@ impl Compressibility {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -97,12 +98,12 @@ impl Compressibility {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: CompressibilityUnit) -> f64 {
+    pub fn convert_to(self, unit: CompressibilityUnit) -> Num {
         let x = self.0;
         match unit {
             CompressibilityUnit::InversePascal => x,
@@ -117,127 +118,127 @@ impl Compressibility {
 
     /// Creates a [`Compressibility`] from a value in InversePascals (`Pa⁻¹`).
     #[inline]
-    pub fn from_inverse_pascals(value: f64) -> Self {
+    pub fn from_inverse_pascals(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InversePascal)
     }
 
     /// Returns the value expressed in InversePascals (`Pa⁻¹`).
     #[inline]
-    pub fn as_inverse_pascals(self) -> f64 {
+    pub fn as_inverse_pascals(self) -> Num {
         self.convert_to(CompressibilityUnit::InversePascal)
     }
 
     /// Alias for [`Self::as_inverse_pascals`].
     #[inline]
-    pub fn as_inverse_pascal(self) -> f64 {
+    pub fn as_inverse_pascal(self) -> Num {
         self.as_inverse_pascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseKilopascals (`kPa⁻¹`).
     #[inline]
-    pub fn from_inverse_kilopascals(value: f64) -> Self {
+    pub fn from_inverse_kilopascals(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InverseKilopascal)
     }
 
     /// Returns the value expressed in InverseKilopascals (`kPa⁻¹`).
     #[inline]
-    pub fn as_inverse_kilopascals(self) -> f64 {
+    pub fn as_inverse_kilopascals(self) -> Num {
         self.convert_to(CompressibilityUnit::InverseKilopascal)
     }
 
     /// Alias for [`Self::as_inverse_kilopascals`].
     #[inline]
-    pub fn as_inverse_kilopascal(self) -> f64 {
+    pub fn as_inverse_kilopascal(self) -> Num {
         self.as_inverse_kilopascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMegapascals (`MPa⁻¹`).
     #[inline]
-    pub fn from_inverse_megapascals(value: f64) -> Self {
+    pub fn from_inverse_megapascals(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InverseMegapascal)
     }
 
     /// Returns the value expressed in InverseMegapascals (`MPa⁻¹`).
     #[inline]
-    pub fn as_inverse_megapascals(self) -> f64 {
+    pub fn as_inverse_megapascals(self) -> Num {
         self.convert_to(CompressibilityUnit::InverseMegapascal)
     }
 
     /// Alias for [`Self::as_inverse_megapascals`].
     #[inline]
-    pub fn as_inverse_megapascal(self) -> f64 {
+    pub fn as_inverse_megapascal(self) -> Num {
         self.as_inverse_megapascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseAtmospheres (`atm⁻¹`).
     #[inline]
-    pub fn from_inverse_atmospheres(value: f64) -> Self {
+    pub fn from_inverse_atmospheres(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InverseAtmosphere)
     }
 
     /// Returns the value expressed in InverseAtmospheres (`atm⁻¹`).
     #[inline]
-    pub fn as_inverse_atmospheres(self) -> f64 {
+    pub fn as_inverse_atmospheres(self) -> Num {
         self.convert_to(CompressibilityUnit::InverseAtmosphere)
     }
 
     /// Alias for [`Self::as_inverse_atmospheres`].
     #[inline]
-    pub fn as_inverse_atmosphere(self) -> f64 {
+    pub fn as_inverse_atmosphere(self) -> Num {
         self.as_inverse_atmospheres()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMillibars (`mbar⁻¹`).
     #[inline]
-    pub fn from_inverse_millibars(value: f64) -> Self {
+    pub fn from_inverse_millibars(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InverseMillibar)
     }
 
     /// Returns the value expressed in InverseMillibars (`mbar⁻¹`).
     #[inline]
-    pub fn as_inverse_millibars(self) -> f64 {
+    pub fn as_inverse_millibars(self) -> Num {
         self.convert_to(CompressibilityUnit::InverseMillibar)
     }
 
     /// Alias for [`Self::as_inverse_millibars`].
     #[inline]
-    pub fn as_inverse_millibar(self) -> f64 {
+    pub fn as_inverse_millibar(self) -> Num {
         self.as_inverse_millibars()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseBars (`bar⁻¹`).
     #[inline]
-    pub fn from_inverse_bars(value: f64) -> Self {
+    pub fn from_inverse_bars(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InverseBar)
     }
 
     /// Returns the value expressed in InverseBars (`bar⁻¹`).
     #[inline]
-    pub fn as_inverse_bars(self) -> f64 {
+    pub fn as_inverse_bars(self) -> Num {
         self.convert_to(CompressibilityUnit::InverseBar)
     }
 
     /// Alias for [`Self::as_inverse_bars`].
     #[inline]
-    pub fn as_inverse_bar(self) -> f64 {
+    pub fn as_inverse_bar(self) -> Num {
         self.as_inverse_bars()
     }
 
     /// Creates a [`Compressibility`] from a value in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
-    pub fn from_inverse_pounds_force_per_square_inch(value: f64) -> Self {
+    pub fn from_inverse_pounds_force_per_square_inch(value: Num) -> Self {
         Self::new(value, CompressibilityUnit::InversePoundForcePerSquareInch)
     }
 
     /// Returns the value expressed in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
-    pub fn as_inverse_pounds_force_per_square_inch(self) -> f64 {
+    pub fn as_inverse_pounds_force_per_square_inch(self) -> Num {
         self.convert_to(CompressibilityUnit::InversePoundForcePerSquareInch)
     }
 
     /// Alias for [`Self::as_inverse_pounds_force_per_square_inch`].
     #[inline]
-    pub fn as_inverse_pound_force_per_square_inch(self) -> f64 {
+    pub fn as_inverse_pound_force_per_square_inch(self) -> Num {
         self.as_inverse_pounds_force_per_square_inch()
     }
 }
@@ -260,27 +261,27 @@ impl Neg for Compressibility {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Compressibility {
+impl Mul<Num> for Compressibility {
     type Output = Compressibility;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Compressibility> for f64 {
+impl Mul<Compressibility> for Num {
     type Output = Compressibility;
     fn mul(self, rhs: Compressibility) -> Compressibility {
         Compressibility(self * rhs.0)
     }
 }
-impl Div<f64> for Compressibility {
+impl Div<Num> for Compressibility {
     type Output = Compressibility;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Compressibility {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -319,7 +320,7 @@ impl FromStr for Compressibility {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseCompressibilityError(s.to_owned()))?;

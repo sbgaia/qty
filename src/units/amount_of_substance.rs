@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `Mole` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AmountOfSubstance(f64);
+pub struct AmountOfSubstance(Num);
 
 /// Unit variants for [`AmountOfSubstance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -111,7 +112,7 @@ impl AmountOfSubstanceUnit {
 
 impl AmountOfSubstance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: AmountOfSubstanceUnit) -> Self {
+    pub fn new(value: Num, unit: AmountOfSubstanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -139,7 +140,7 @@ impl AmountOfSubstance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -147,12 +148,12 @@ impl AmountOfSubstance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: AmountOfSubstanceUnit) -> f64 {
+    pub fn convert_to(self, unit: AmountOfSubstanceUnit) -> Num {
         let x = self.0;
         match unit {
             AmountOfSubstanceUnit::Mole => x,
@@ -177,307 +178,307 @@ impl AmountOfSubstance {
 
     /// Creates a [`AmountOfSubstance`] from a value in Moles (`mol`).
     #[inline]
-    pub fn from_moles(value: f64) -> Self {
+    pub fn from_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Mole)
     }
 
     /// Returns the value expressed in Moles (`mol`).
     #[inline]
-    pub fn as_moles(self) -> f64 {
+    pub fn as_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Mole)
     }
 
     /// Alias for [`Self::as_moles`].
     #[inline]
-    pub fn as_mole(self) -> f64 {
+    pub fn as_mole(self) -> Num {
         self.as_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Femtomoles (`fmol`).
     #[inline]
-    pub fn from_femtomoles(value: f64) -> Self {
+    pub fn from_femtomoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Femtomole)
     }
 
     /// Returns the value expressed in Femtomoles (`fmol`).
     #[inline]
-    pub fn as_femtomoles(self) -> f64 {
+    pub fn as_femtomoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Femtomole)
     }
 
     /// Alias for [`Self::as_femtomoles`].
     #[inline]
-    pub fn as_femtomole(self) -> f64 {
+    pub fn as_femtomole(self) -> Num {
         self.as_femtomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Picomoles (`pmol`).
     #[inline]
-    pub fn from_picomoles(value: f64) -> Self {
+    pub fn from_picomoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Picomole)
     }
 
     /// Returns the value expressed in Picomoles (`pmol`).
     #[inline]
-    pub fn as_picomoles(self) -> f64 {
+    pub fn as_picomoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Picomole)
     }
 
     /// Alias for [`Self::as_picomoles`].
     #[inline]
-    pub fn as_picomole(self) -> f64 {
+    pub fn as_picomole(self) -> Num {
         self.as_picomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Nanomoles (`nmol`).
     #[inline]
-    pub fn from_nanomoles(value: f64) -> Self {
+    pub fn from_nanomoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Nanomole)
     }
 
     /// Returns the value expressed in Nanomoles (`nmol`).
     #[inline]
-    pub fn as_nanomoles(self) -> f64 {
+    pub fn as_nanomoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Nanomole)
     }
 
     /// Alias for [`Self::as_nanomoles`].
     #[inline]
-    pub fn as_nanomole(self) -> f64 {
+    pub fn as_nanomole(self) -> Num {
         self.as_nanomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Micromoles (`µmol`).
     #[inline]
-    pub fn from_micromoles(value: f64) -> Self {
+    pub fn from_micromoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Micromole)
     }
 
     /// Returns the value expressed in Micromoles (`µmol`).
     #[inline]
-    pub fn as_micromoles(self) -> f64 {
+    pub fn as_micromoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Micromole)
     }
 
     /// Alias for [`Self::as_micromoles`].
     #[inline]
-    pub fn as_micromole(self) -> f64 {
+    pub fn as_micromole(self) -> Num {
         self.as_micromoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Millimoles (`mmol`).
     #[inline]
-    pub fn from_millimoles(value: f64) -> Self {
+    pub fn from_millimoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Millimole)
     }
 
     /// Returns the value expressed in Millimoles (`mmol`).
     #[inline]
-    pub fn as_millimoles(self) -> f64 {
+    pub fn as_millimoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Millimole)
     }
 
     /// Alias for [`Self::as_millimoles`].
     #[inline]
-    pub fn as_millimole(self) -> f64 {
+    pub fn as_millimole(self) -> Num {
         self.as_millimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Centimoles (`cmol`).
     #[inline]
-    pub fn from_centimoles(value: f64) -> Self {
+    pub fn from_centimoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Centimole)
     }
 
     /// Returns the value expressed in Centimoles (`cmol`).
     #[inline]
-    pub fn as_centimoles(self) -> f64 {
+    pub fn as_centimoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Centimole)
     }
 
     /// Alias for [`Self::as_centimoles`].
     #[inline]
-    pub fn as_centimole(self) -> f64 {
+    pub fn as_centimole(self) -> Num {
         self.as_centimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Decimoles (`dmol`).
     #[inline]
-    pub fn from_decimoles(value: f64) -> Self {
+    pub fn from_decimoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Decimole)
     }
 
     /// Returns the value expressed in Decimoles (`dmol`).
     #[inline]
-    pub fn as_decimoles(self) -> f64 {
+    pub fn as_decimoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Decimole)
     }
 
     /// Alias for [`Self::as_decimoles`].
     #[inline]
-    pub fn as_decimole(self) -> f64 {
+    pub fn as_decimole(self) -> Num {
         self.as_decimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Kilomoles (`kmol`).
     #[inline]
-    pub fn from_kilomoles(value: f64) -> Self {
+    pub fn from_kilomoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Kilomole)
     }
 
     /// Returns the value expressed in Kilomoles (`kmol`).
     #[inline]
-    pub fn as_kilomoles(self) -> f64 {
+    pub fn as_kilomoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Kilomole)
     }
 
     /// Alias for [`Self::as_kilomoles`].
     #[inline]
-    pub fn as_kilomole(self) -> f64 {
+    pub fn as_kilomole(self) -> Num {
         self.as_kilomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Megamoles (`Mmol`).
     #[inline]
-    pub fn from_megamoles(value: f64) -> Self {
+    pub fn from_megamoles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::Megamole)
     }
 
     /// Returns the value expressed in Megamoles (`Mmol`).
     #[inline]
-    pub fn as_megamoles(self) -> f64 {
+    pub fn as_megamoles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::Megamole)
     }
 
     /// Alias for [`Self::as_megamoles`].
     #[inline]
-    pub fn as_megamole(self) -> f64 {
+    pub fn as_megamole(self) -> Num {
         self.as_megamoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in PoundMoles (`lbmol`).
     #[inline]
-    pub fn from_pound_moles(value: f64) -> Self {
+    pub fn from_pound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::PoundMole)
     }
 
     /// Returns the value expressed in PoundMoles (`lbmol`).
     #[inline]
-    pub fn as_pound_moles(self) -> f64 {
+    pub fn as_pound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::PoundMole)
     }
 
     /// Alias for [`Self::as_pound_moles`].
     #[inline]
-    pub fn as_pound_mole(self) -> f64 {
+    pub fn as_pound_mole(self) -> Num {
         self.as_pound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in NanopoundMoles (`nlbmol`).
     #[inline]
-    pub fn from_nanopound_moles(value: f64) -> Self {
+    pub fn from_nanopound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::NanopoundMole)
     }
 
     /// Returns the value expressed in NanopoundMoles (`nlbmol`).
     #[inline]
-    pub fn as_nanopound_moles(self) -> f64 {
+    pub fn as_nanopound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::NanopoundMole)
     }
 
     /// Alias for [`Self::as_nanopound_moles`].
     #[inline]
-    pub fn as_nanopound_mole(self) -> f64 {
+    pub fn as_nanopound_mole(self) -> Num {
         self.as_nanopound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in MicropoundMoles (`µlbmol`).
     #[inline]
-    pub fn from_micropound_moles(value: f64) -> Self {
+    pub fn from_micropound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::MicropoundMole)
     }
 
     /// Returns the value expressed in MicropoundMoles (`µlbmol`).
     #[inline]
-    pub fn as_micropound_moles(self) -> f64 {
+    pub fn as_micropound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::MicropoundMole)
     }
 
     /// Alias for [`Self::as_micropound_moles`].
     #[inline]
-    pub fn as_micropound_mole(self) -> f64 {
+    pub fn as_micropound_mole(self) -> Num {
         self.as_micropound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in MillipoundMoles (`mlbmol`).
     #[inline]
-    pub fn from_millipound_moles(value: f64) -> Self {
+    pub fn from_millipound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::MillipoundMole)
     }
 
     /// Returns the value expressed in MillipoundMoles (`mlbmol`).
     #[inline]
-    pub fn as_millipound_moles(self) -> f64 {
+    pub fn as_millipound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::MillipoundMole)
     }
 
     /// Alias for [`Self::as_millipound_moles`].
     #[inline]
-    pub fn as_millipound_mole(self) -> f64 {
+    pub fn as_millipound_mole(self) -> Num {
         self.as_millipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in CentipoundMoles (`clbmol`).
     #[inline]
-    pub fn from_centipound_moles(value: f64) -> Self {
+    pub fn from_centipound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::CentipoundMole)
     }
 
     /// Returns the value expressed in CentipoundMoles (`clbmol`).
     #[inline]
-    pub fn as_centipound_moles(self) -> f64 {
+    pub fn as_centipound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::CentipoundMole)
     }
 
     /// Alias for [`Self::as_centipound_moles`].
     #[inline]
-    pub fn as_centipound_mole(self) -> f64 {
+    pub fn as_centipound_mole(self) -> Num {
         self.as_centipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in DecipoundMoles (`dlbmol`).
     #[inline]
-    pub fn from_decipound_moles(value: f64) -> Self {
+    pub fn from_decipound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::DecipoundMole)
     }
 
     /// Returns the value expressed in DecipoundMoles (`dlbmol`).
     #[inline]
-    pub fn as_decipound_moles(self) -> f64 {
+    pub fn as_decipound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::DecipoundMole)
     }
 
     /// Alias for [`Self::as_decipound_moles`].
     #[inline]
-    pub fn as_decipound_mole(self) -> f64 {
+    pub fn as_decipound_mole(self) -> Num {
         self.as_decipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in KilopoundMoles (`klbmol`).
     #[inline]
-    pub fn from_kilopound_moles(value: f64) -> Self {
+    pub fn from_kilopound_moles(value: Num) -> Self {
         Self::new(value, AmountOfSubstanceUnit::KilopoundMole)
     }
 
     /// Returns the value expressed in KilopoundMoles (`klbmol`).
     #[inline]
-    pub fn as_kilopound_moles(self) -> f64 {
+    pub fn as_kilopound_moles(self) -> Num {
         self.convert_to(AmountOfSubstanceUnit::KilopoundMole)
     }
 
     /// Alias for [`Self::as_kilopound_moles`].
     #[inline]
-    pub fn as_kilopound_mole(self) -> f64 {
+    pub fn as_kilopound_mole(self) -> Num {
         self.as_kilopound_moles()
     }
 }
@@ -500,27 +501,27 @@ impl Neg for AmountOfSubstance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for AmountOfSubstance {
+impl Mul<Num> for AmountOfSubstance {
     type Output = AmountOfSubstance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<AmountOfSubstance> for f64 {
+impl Mul<AmountOfSubstance> for Num {
     type Output = AmountOfSubstance;
     fn mul(self, rhs: AmountOfSubstance) -> AmountOfSubstance {
         AmountOfSubstance(self * rhs.0)
     }
 }
-impl Div<f64> for AmountOfSubstance {
+impl Div<Num> for AmountOfSubstance {
     type Output = AmountOfSubstance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AmountOfSubstance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -559,7 +560,7 @@ impl FromStr for AmountOfSubstance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseAmountOfSubstanceError(s.to_owned()))?;

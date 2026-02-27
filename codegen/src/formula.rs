@@ -39,7 +39,7 @@ fn promote_integers(s: &str) -> String {
 /// 4. Bare integer literals promoted to `f64`: `365` → `365.0`
 pub fn translate(raw: &str, var: &str) -> String {
     let s = raw.replace("{x}", var);
-    let s = s.replace("Math.PI", "std::f64::consts::PI");
+    let s = s.replace("Math.PI", "(std::f64::consts::PI as Num)");
     let s = double_suffix_re().replace_all(&s, "${1}.0");
     promote_integers(&s)
 }
@@ -59,7 +59,7 @@ pub fn translate_with_factor(raw: &str, factor: f64, to_base: bool) -> String {
     } else {
         raw.replace("{x}", &format!("(x / {factor_str})"))
     };
-    let substituted = substituted.replace("Math.PI", "std::f64::consts::PI");
+    let substituted = substituted.replace("Math.PI", "(std::f64::consts::PI as Num)");
     let s = double_suffix_re().replace_all(&substituted, "${1}.0");
     promote_integers(&s)
 }

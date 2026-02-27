@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `CandelaPerSquareMeter` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Luminance(f64);
+pub struct Luminance(Num);
 
 /// Unit variants for [`Luminance`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -83,7 +84,7 @@ impl LuminanceUnit {
 
 impl Luminance {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: LuminanceUnit) -> Self {
+    pub fn new(value: Num, unit: LuminanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -104,7 +105,7 @@ impl Luminance {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -112,12 +113,12 @@ impl Luminance {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: LuminanceUnit) -> f64 {
+    pub fn convert_to(self, unit: LuminanceUnit) -> Num {
         let x = self.0;
         match unit {
             LuminanceUnit::CandelaPerSquareMeter => x,
@@ -135,181 +136,181 @@ impl Luminance {
 
     /// Creates a [`Luminance`] from a value in CandelasPerSquareMeter (`Cd/m²`).
     #[inline]
-    pub fn from_candelas_per_square_meter(value: f64) -> Self {
+    pub fn from_candelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::CandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in CandelasPerSquareMeter (`Cd/m²`).
     #[inline]
-    pub fn as_candelas_per_square_meter(self) -> f64 {
+    pub fn as_candelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::CandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_candelas_per_square_meter`].
     #[inline]
-    pub fn as_candela_per_square_meter(self) -> f64 {
+    pub fn as_candela_per_square_meter(self) -> Num {
         self.as_candelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in NanocandelasPerSquareMeter (`nCd/m²`).
     #[inline]
-    pub fn from_nanocandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_nanocandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::NanocandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in NanocandelasPerSquareMeter (`nCd/m²`).
     #[inline]
-    pub fn as_nanocandelas_per_square_meter(self) -> f64 {
+    pub fn as_nanocandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::NanocandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_nanocandelas_per_square_meter`].
     #[inline]
-    pub fn as_nanocandela_per_square_meter(self) -> f64 {
+    pub fn as_nanocandela_per_square_meter(self) -> Num {
         self.as_nanocandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in MicrocandelasPerSquareMeter (`µCd/m²`).
     #[inline]
-    pub fn from_microcandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_microcandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::MicrocandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in MicrocandelasPerSquareMeter (`µCd/m²`).
     #[inline]
-    pub fn as_microcandelas_per_square_meter(self) -> f64 {
+    pub fn as_microcandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::MicrocandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_microcandelas_per_square_meter`].
     #[inline]
-    pub fn as_microcandela_per_square_meter(self) -> f64 {
+    pub fn as_microcandela_per_square_meter(self) -> Num {
         self.as_microcandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in MillicandelasPerSquareMeter (`mCd/m²`).
     #[inline]
-    pub fn from_millicandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_millicandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::MillicandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in MillicandelasPerSquareMeter (`mCd/m²`).
     #[inline]
-    pub fn as_millicandelas_per_square_meter(self) -> f64 {
+    pub fn as_millicandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::MillicandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_millicandelas_per_square_meter`].
     #[inline]
-    pub fn as_millicandela_per_square_meter(self) -> f64 {
+    pub fn as_millicandela_per_square_meter(self) -> Num {
         self.as_millicandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in CenticandelasPerSquareMeter (`cCd/m²`).
     #[inline]
-    pub fn from_centicandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_centicandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::CenticandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in CenticandelasPerSquareMeter (`cCd/m²`).
     #[inline]
-    pub fn as_centicandelas_per_square_meter(self) -> f64 {
+    pub fn as_centicandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::CenticandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_centicandelas_per_square_meter`].
     #[inline]
-    pub fn as_centicandela_per_square_meter(self) -> f64 {
+    pub fn as_centicandela_per_square_meter(self) -> Num {
         self.as_centicandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in DecicandelasPerSquareMeter (`dCd/m²`).
     #[inline]
-    pub fn from_decicandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_decicandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::DecicandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in DecicandelasPerSquareMeter (`dCd/m²`).
     #[inline]
-    pub fn as_decicandelas_per_square_meter(self) -> f64 {
+    pub fn as_decicandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::DecicandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_decicandelas_per_square_meter`].
     #[inline]
-    pub fn as_decicandela_per_square_meter(self) -> f64 {
+    pub fn as_decicandela_per_square_meter(self) -> Num {
         self.as_decicandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in KilocandelasPerSquareMeter (`kCd/m²`).
     #[inline]
-    pub fn from_kilocandelas_per_square_meter(value: f64) -> Self {
+    pub fn from_kilocandelas_per_square_meter(value: Num) -> Self {
         Self::new(value, LuminanceUnit::KilocandelaPerSquareMeter)
     }
 
     /// Returns the value expressed in KilocandelasPerSquareMeter (`kCd/m²`).
     #[inline]
-    pub fn as_kilocandelas_per_square_meter(self) -> f64 {
+    pub fn as_kilocandelas_per_square_meter(self) -> Num {
         self.convert_to(LuminanceUnit::KilocandelaPerSquareMeter)
     }
 
     /// Alias for [`Self::as_kilocandelas_per_square_meter`].
     #[inline]
-    pub fn as_kilocandela_per_square_meter(self) -> f64 {
+    pub fn as_kilocandela_per_square_meter(self) -> Num {
         self.as_kilocandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in CandelasPerSquareFoot (`Cd/ft²`).
     #[inline]
-    pub fn from_candelas_per_square_foot(value: f64) -> Self {
+    pub fn from_candelas_per_square_foot(value: Num) -> Self {
         Self::new(value, LuminanceUnit::CandelaPerSquareFoot)
     }
 
     /// Returns the value expressed in CandelasPerSquareFoot (`Cd/ft²`).
     #[inline]
-    pub fn as_candelas_per_square_foot(self) -> f64 {
+    pub fn as_candelas_per_square_foot(self) -> Num {
         self.convert_to(LuminanceUnit::CandelaPerSquareFoot)
     }
 
     /// Alias for [`Self::as_candelas_per_square_foot`].
     #[inline]
-    pub fn as_candela_per_square_foot(self) -> f64 {
+    pub fn as_candela_per_square_foot(self) -> Num {
         self.as_candelas_per_square_foot()
     }
 
     /// Creates a [`Luminance`] from a value in CandelasPerSquareInch (`Cd/in²`).
     #[inline]
-    pub fn from_candelas_per_square_inch(value: f64) -> Self {
+    pub fn from_candelas_per_square_inch(value: Num) -> Self {
         Self::new(value, LuminanceUnit::CandelaPerSquareInch)
     }
 
     /// Returns the value expressed in CandelasPerSquareInch (`Cd/in²`).
     #[inline]
-    pub fn as_candelas_per_square_inch(self) -> f64 {
+    pub fn as_candelas_per_square_inch(self) -> Num {
         self.convert_to(LuminanceUnit::CandelaPerSquareInch)
     }
 
     /// Alias for [`Self::as_candelas_per_square_inch`].
     #[inline]
-    pub fn as_candela_per_square_inch(self) -> f64 {
+    pub fn as_candela_per_square_inch(self) -> Num {
         self.as_candelas_per_square_inch()
     }
 
     /// Creates a [`Luminance`] from a value in Nits (`nt`).
     #[inline]
-    pub fn from_nits(value: f64) -> Self {
+    pub fn from_nits(value: Num) -> Self {
         Self::new(value, LuminanceUnit::Nit)
     }
 
     /// Returns the value expressed in Nits (`nt`).
     #[inline]
-    pub fn as_nits(self) -> f64 {
+    pub fn as_nits(self) -> Num {
         self.convert_to(LuminanceUnit::Nit)
     }
 
     /// Alias for [`Self::as_nits`].
     #[inline]
-    pub fn as_nit(self) -> f64 {
+    pub fn as_nit(self) -> Num {
         self.as_nits()
     }
 }
@@ -332,27 +333,27 @@ impl Neg for Luminance {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Luminance {
+impl Mul<Num> for Luminance {
     type Output = Luminance;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Luminance> for f64 {
+impl Mul<Luminance> for Num {
     type Output = Luminance;
     fn mul(self, rhs: Luminance) -> Luminance {
         Luminance(self * rhs.0)
     }
 }
-impl Div<f64> for Luminance {
+impl Div<Num> for Luminance {
     type Output = Luminance;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Luminance {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -391,7 +392,7 @@ impl FromStr for Luminance {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseLuminanceError(s.to_owned()))?;

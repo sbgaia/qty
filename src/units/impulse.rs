@@ -8,6 +8,7 @@
     clippy::too_many_lines
 )]
 
+use crate::Num;
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use std::str::FromStr;
@@ -16,7 +17,7 @@ use std::str::FromStr;
 ///
 /// The internal value is stored in `NewtonSecond` (SI base unit).
 #[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Impulse(f64);
+pub struct Impulse(Num);
 
 /// Unit variants for [`Impulse`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -95,7 +96,7 @@ impl ImpulseUnit {
 
 impl Impulse {
     /// Creates a new value from `value` expressed in `unit`.
-    pub fn new(value: f64, unit: ImpulseUnit) -> Self {
+    pub fn new(value: Num, unit: ImpulseUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
         Self(match unit {
@@ -119,7 +120,7 @@ impl Impulse {
     ///
     /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
     #[inline]
-    pub fn as_base(self) -> f64 {
+    pub fn as_base(self) -> Num {
         self.0
     }
 
@@ -127,12 +128,12 @@ impl Impulse {
     ///
     /// Used for cross-type arithmetic.
     #[inline]
-    pub fn from_base(value: f64) -> Self {
+    pub fn from_base(value: Num) -> Self {
         Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
-    pub fn convert_to(self, unit: ImpulseUnit) -> f64 {
+    pub fn convert_to(self, unit: ImpulseUnit) -> Num {
         let x = self.0;
         match unit {
             ImpulseUnit::KilogramMeterPerSecond => x,
@@ -153,235 +154,235 @@ impl Impulse {
 
     /// Creates a [`Impulse`] from a value in KilogramMetersPerSecond (`kg·m/s`).
     #[inline]
-    pub fn from_kilogram_meters_per_second(value: f64) -> Self {
+    pub fn from_kilogram_meters_per_second(value: Num) -> Self {
         Self::new(value, ImpulseUnit::KilogramMeterPerSecond)
     }
 
     /// Returns the value expressed in KilogramMetersPerSecond (`kg·m/s`).
     #[inline]
-    pub fn as_kilogram_meters_per_second(self) -> f64 {
+    pub fn as_kilogram_meters_per_second(self) -> Num {
         self.convert_to(ImpulseUnit::KilogramMeterPerSecond)
     }
 
     /// Alias for [`Self::as_kilogram_meters_per_second`].
     #[inline]
-    pub fn as_kilogram_meter_per_second(self) -> f64 {
+    pub fn as_kilogram_meter_per_second(self) -> Num {
         self.as_kilogram_meters_per_second()
     }
 
     /// Creates a [`Impulse`] from a value in NewtonSeconds (`N·s`).
     #[inline]
-    pub fn from_newton_seconds(value: f64) -> Self {
+    pub fn from_newton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::NewtonSecond)
     }
 
     /// Returns the value expressed in NewtonSeconds (`N·s`).
     #[inline]
-    pub fn as_newton_seconds(self) -> f64 {
+    pub fn as_newton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::NewtonSecond)
     }
 
     /// Alias for [`Self::as_newton_seconds`].
     #[inline]
-    pub fn as_newton_second(self) -> f64 {
+    pub fn as_newton_second(self) -> Num {
         self.as_newton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in NanonewtonSeconds (`nN·s`).
     #[inline]
-    pub fn from_nanonewton_seconds(value: f64) -> Self {
+    pub fn from_nanonewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::NanonewtonSecond)
     }
 
     /// Returns the value expressed in NanonewtonSeconds (`nN·s`).
     #[inline]
-    pub fn as_nanonewton_seconds(self) -> f64 {
+    pub fn as_nanonewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::NanonewtonSecond)
     }
 
     /// Alias for [`Self::as_nanonewton_seconds`].
     #[inline]
-    pub fn as_nanonewton_second(self) -> f64 {
+    pub fn as_nanonewton_second(self) -> Num {
         self.as_nanonewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in MicronewtonSeconds (`µN·s`).
     #[inline]
-    pub fn from_micronewton_seconds(value: f64) -> Self {
+    pub fn from_micronewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::MicronewtonSecond)
     }
 
     /// Returns the value expressed in MicronewtonSeconds (`µN·s`).
     #[inline]
-    pub fn as_micronewton_seconds(self) -> f64 {
+    pub fn as_micronewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::MicronewtonSecond)
     }
 
     /// Alias for [`Self::as_micronewton_seconds`].
     #[inline]
-    pub fn as_micronewton_second(self) -> f64 {
+    pub fn as_micronewton_second(self) -> Num {
         self.as_micronewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in MillinewtonSeconds (`mN·s`).
     #[inline]
-    pub fn from_millinewton_seconds(value: f64) -> Self {
+    pub fn from_millinewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::MillinewtonSecond)
     }
 
     /// Returns the value expressed in MillinewtonSeconds (`mN·s`).
     #[inline]
-    pub fn as_millinewton_seconds(self) -> f64 {
+    pub fn as_millinewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::MillinewtonSecond)
     }
 
     /// Alias for [`Self::as_millinewton_seconds`].
     #[inline]
-    pub fn as_millinewton_second(self) -> f64 {
+    pub fn as_millinewton_second(self) -> Num {
         self.as_millinewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in CentinewtonSeconds (`cN·s`).
     #[inline]
-    pub fn from_centinewton_seconds(value: f64) -> Self {
+    pub fn from_centinewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::CentinewtonSecond)
     }
 
     /// Returns the value expressed in CentinewtonSeconds (`cN·s`).
     #[inline]
-    pub fn as_centinewton_seconds(self) -> f64 {
+    pub fn as_centinewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::CentinewtonSecond)
     }
 
     /// Alias for [`Self::as_centinewton_seconds`].
     #[inline]
-    pub fn as_centinewton_second(self) -> f64 {
+    pub fn as_centinewton_second(self) -> Num {
         self.as_centinewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in DecinewtonSeconds (`dN·s`).
     #[inline]
-    pub fn from_decinewton_seconds(value: f64) -> Self {
+    pub fn from_decinewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::DecinewtonSecond)
     }
 
     /// Returns the value expressed in DecinewtonSeconds (`dN·s`).
     #[inline]
-    pub fn as_decinewton_seconds(self) -> f64 {
+    pub fn as_decinewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::DecinewtonSecond)
     }
 
     /// Alias for [`Self::as_decinewton_seconds`].
     #[inline]
-    pub fn as_decinewton_second(self) -> f64 {
+    pub fn as_decinewton_second(self) -> Num {
         self.as_decinewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in DecanewtonSeconds (`daN·s`).
     #[inline]
-    pub fn from_decanewton_seconds(value: f64) -> Self {
+    pub fn from_decanewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::DecanewtonSecond)
     }
 
     /// Returns the value expressed in DecanewtonSeconds (`daN·s`).
     #[inline]
-    pub fn as_decanewton_seconds(self) -> f64 {
+    pub fn as_decanewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::DecanewtonSecond)
     }
 
     /// Alias for [`Self::as_decanewton_seconds`].
     #[inline]
-    pub fn as_decanewton_second(self) -> f64 {
+    pub fn as_decanewton_second(self) -> Num {
         self.as_decanewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in KilonewtonSeconds (`kN·s`).
     #[inline]
-    pub fn from_kilonewton_seconds(value: f64) -> Self {
+    pub fn from_kilonewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::KilonewtonSecond)
     }
 
     /// Returns the value expressed in KilonewtonSeconds (`kN·s`).
     #[inline]
-    pub fn as_kilonewton_seconds(self) -> f64 {
+    pub fn as_kilonewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::KilonewtonSecond)
     }
 
     /// Alias for [`Self::as_kilonewton_seconds`].
     #[inline]
-    pub fn as_kilonewton_second(self) -> f64 {
+    pub fn as_kilonewton_second(self) -> Num {
         self.as_kilonewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in MeganewtonSeconds (`MN·s`).
     #[inline]
-    pub fn from_meganewton_seconds(value: f64) -> Self {
+    pub fn from_meganewton_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::MeganewtonSecond)
     }
 
     /// Returns the value expressed in MeganewtonSeconds (`MN·s`).
     #[inline]
-    pub fn as_meganewton_seconds(self) -> f64 {
+    pub fn as_meganewton_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::MeganewtonSecond)
     }
 
     /// Alias for [`Self::as_meganewton_seconds`].
     #[inline]
-    pub fn as_meganewton_second(self) -> f64 {
+    pub fn as_meganewton_second(self) -> Num {
         self.as_meganewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in PoundFeetPerSecond (`lb·ft/s`).
     #[inline]
-    pub fn from_pound_feet_per_second(value: f64) -> Self {
+    pub fn from_pound_feet_per_second(value: Num) -> Self {
         Self::new(value, ImpulseUnit::PoundFootPerSecond)
     }
 
     /// Returns the value expressed in PoundFeetPerSecond (`lb·ft/s`).
     #[inline]
-    pub fn as_pound_feet_per_second(self) -> f64 {
+    pub fn as_pound_feet_per_second(self) -> Num {
         self.convert_to(ImpulseUnit::PoundFootPerSecond)
     }
 
     /// Alias for [`Self::as_pound_feet_per_second`].
     #[inline]
-    pub fn as_pound_foot_per_second(self) -> f64 {
+    pub fn as_pound_foot_per_second(self) -> Num {
         self.as_pound_feet_per_second()
     }
 
     /// Creates a [`Impulse`] from a value in PoundForceSeconds (`lbf·s`).
     #[inline]
-    pub fn from_pound_force_seconds(value: f64) -> Self {
+    pub fn from_pound_force_seconds(value: Num) -> Self {
         Self::new(value, ImpulseUnit::PoundForceSecond)
     }
 
     /// Returns the value expressed in PoundForceSeconds (`lbf·s`).
     #[inline]
-    pub fn as_pound_force_seconds(self) -> f64 {
+    pub fn as_pound_force_seconds(self) -> Num {
         self.convert_to(ImpulseUnit::PoundForceSecond)
     }
 
     /// Alias for [`Self::as_pound_force_seconds`].
     #[inline]
-    pub fn as_pound_force_second(self) -> f64 {
+    pub fn as_pound_force_second(self) -> Num {
         self.as_pound_force_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in SlugFeetPerSecond (`slug·ft/s`).
     #[inline]
-    pub fn from_slug_feet_per_second(value: f64) -> Self {
+    pub fn from_slug_feet_per_second(value: Num) -> Self {
         Self::new(value, ImpulseUnit::SlugFootPerSecond)
     }
 
     /// Returns the value expressed in SlugFeetPerSecond (`slug·ft/s`).
     #[inline]
-    pub fn as_slug_feet_per_second(self) -> f64 {
+    pub fn as_slug_feet_per_second(self) -> Num {
         self.convert_to(ImpulseUnit::SlugFootPerSecond)
     }
 
     /// Alias for [`Self::as_slug_feet_per_second`].
     #[inline]
-    pub fn as_slug_foot_per_second(self) -> f64 {
+    pub fn as_slug_foot_per_second(self) -> Num {
         self.as_slug_feet_per_second()
     }
 }
@@ -404,27 +405,27 @@ impl Neg for Impulse {
         Self(-self.0)
     }
 }
-impl Mul<f64> for Impulse {
+impl Mul<Num> for Impulse {
     type Output = Impulse;
-    fn mul(self, rhs: f64) -> Self {
+    fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
-impl Mul<Impulse> for f64 {
+impl Mul<Impulse> for Num {
     type Output = Impulse;
     fn mul(self, rhs: Impulse) -> Impulse {
         Impulse(self * rhs.0)
     }
 }
-impl Div<f64> for Impulse {
+impl Div<Num> for Impulse {
     type Output = Impulse;
-    fn div(self, rhs: f64) -> Self {
+    fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Impulse {
-    type Output = f64;
-    fn div(self, rhs: Self) -> f64 {
+    type Output = Num;
+    fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
 }
@@ -458,7 +459,7 @@ impl FromStr for Impulse {
             .map(|i| i + c_len_at(s, i))
             .unwrap_or(0);
         let (num_str, unit_str) = s.split_at(split);
-        let value: f64 = num_str
+        let value: Num = num_str
             .trim()
             .parse()
             .map_err(|_| ParseImpulseError(s.to_owned()))?;
