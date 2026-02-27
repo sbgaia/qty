@@ -814,6 +814,17 @@ impl Mass {
     }
 }
 
+impl crate::Quantity for Mass {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Mass {
     type Output = Mass;
     fn add(self, rhs: Self) -> Self {

@@ -401,6 +401,17 @@ impl Acceleration {
     }
 }
 
+impl crate::Quantity for Acceleration {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Acceleration {
     type Output = Acceleration;
     fn add(self, rhs: Self) -> Self {

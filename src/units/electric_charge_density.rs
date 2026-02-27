@@ -97,6 +97,17 @@ impl ElectricChargeDensity {
     }
 }
 
+impl crate::Quantity for ElectricChargeDensity {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
     fn add(self, rhs: Self) -> Self {

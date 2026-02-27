@@ -25,6 +25,7 @@ pub fn generate(qty: &QuantityDef) -> String {
     emit_enum(qty, &mut out);
     emit_enum_impl(qty, &mut out);
     emit_struct_impl(qty, &mut out);
+    emit_quantity_trait_impl(qty, &mut out);
     emit_arithmetic(qty, &mut out);
     emit_display(qty, &mut out);
     emit_from_str(qty, &mut out);
@@ -281,6 +282,24 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         w!(out);
     }
 
+    w!(out, "}}");
+    w!(out);
+}
+
+// ── Quantity trait impl ───────────────────────────────────────────────────────
+
+/// Emits `impl crate::Quantity for Foo`, which grants `Foo` the blanket
+/// `ApproxEq` implementation defined in `src/lib.rs`.
+fn emit_quantity_trait_impl(qty: &QuantityDef, out: &mut String) {
+    let name = &qty.name;
+    w!(out, "impl crate::Quantity for {} {{", name);
+    w!(out, "    #[inline]");
+    w!(out, "    fn as_base(self) -> Num {{ self.0 }}");
+    w!(out, "    #[inline]");
+    w!(
+        out,
+        "    fn from_base(value: Num) -> Self {{ Self(value) }}"
+    );
     w!(out, "}}");
     w!(out);
 }

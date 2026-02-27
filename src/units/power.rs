@@ -698,6 +698,17 @@ impl Power {
     }
 }
 
+impl crate::Quantity for Power {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Power {
     type Output = Power;
     fn add(self, rhs: Self) -> Self {

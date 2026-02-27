@@ -1101,6 +1101,17 @@ impl Length {
     }
 }
 
+impl crate::Quantity for Length {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Length {
     type Output = Length;
     fn add(self, rhs: Self) -> Self {

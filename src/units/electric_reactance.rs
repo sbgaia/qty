@@ -267,6 +267,17 @@ impl ElectricReactance {
     }
 }
 
+impl crate::Quantity for ElectricReactance {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricReactance {
     type Output = ElectricReactance;
     fn add(self, rhs: Self) -> Self {

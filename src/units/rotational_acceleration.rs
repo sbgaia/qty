@@ -189,6 +189,17 @@ impl RotationalAcceleration {
     }
 }
 
+impl crate::Quantity for RotationalAcceleration {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for RotationalAcceleration {
     type Output = RotationalAcceleration;
     fn add(self, rhs: Self) -> Self {

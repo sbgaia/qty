@@ -339,6 +339,17 @@ impl ElectricCharge {
     }
 }
 
+impl crate::Quantity for ElectricCharge {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricCharge {
     type Output = ElectricCharge;
     fn add(self, rhs: Self) -> Self {

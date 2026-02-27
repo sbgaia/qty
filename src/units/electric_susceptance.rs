@@ -411,6 +411,17 @@ impl ElectricSusceptance {
     }
 }
 
+impl crate::Quantity for ElectricSusceptance {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricSusceptance {
     type Output = ElectricSusceptance;
     fn add(self, rhs: Self) -> Self {

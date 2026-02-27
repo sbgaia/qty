@@ -1255,6 +1255,17 @@ impl MassConcentration {
     }
 }
 
+impl crate::Quantity for MassConcentration {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for MassConcentration {
     type Output = MassConcentration;
     fn add(self, rhs: Self) -> Self {

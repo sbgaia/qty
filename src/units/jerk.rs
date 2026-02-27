@@ -327,6 +327,17 @@ impl Jerk {
     }
 }
 
+impl crate::Quantity for Jerk {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Jerk {
     type Output = Jerk;
     fn add(self, rhs: Self) -> Self {

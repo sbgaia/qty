@@ -97,6 +97,17 @@ impl LuminousFlux {
     }
 }
 
+impl crate::Quantity for LuminousFlux {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for LuminousFlux {
     type Output = LuminousFlux;
     fn add(self, rhs: Self) -> Self {

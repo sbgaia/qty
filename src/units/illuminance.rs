@@ -142,6 +142,17 @@ impl Illuminance {
     }
 }
 
+impl crate::Quantity for Illuminance {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Illuminance {
     type Output = Illuminance;
     fn add(self, rhs: Self) -> Self {

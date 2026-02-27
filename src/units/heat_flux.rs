@@ -507,6 +507,17 @@ impl HeatFlux {
     }
 }
 
+impl crate::Quantity for HeatFlux {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for HeatFlux {
     type Output = HeatFlux;
     fn add(self, rhs: Self) -> Self {

@@ -294,6 +294,17 @@ impl StandardVolumeFlow {
     }
 }
 
+impl crate::Quantity for StandardVolumeFlow {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for StandardVolumeFlow {
     type Output = StandardVolumeFlow;
     fn add(self, rhs: Self) -> Self {

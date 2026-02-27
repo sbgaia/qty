@@ -315,6 +315,17 @@ impl ReciprocalLength {
     }
 }
 
+impl crate::Quantity for ReciprocalLength {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ReciprocalLength {
     type Output = ReciprocalLength;
     fn add(self, rhs: Self) -> Self {

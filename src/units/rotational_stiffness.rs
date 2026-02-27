@@ -1022,6 +1022,17 @@ impl RotationalStiffness {
     }
 }
 
+impl crate::Quantity for RotationalStiffness {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for RotationalStiffness {
     type Output = RotationalStiffness;
     fn add(self, rhs: Self) -> Self {

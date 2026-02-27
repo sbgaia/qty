@@ -987,6 +987,17 @@ impl ForcePerLength {
     }
 }
 
+impl crate::Quantity for ForcePerLength {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ForcePerLength {
     type Output = ForcePerLength;
     fn add(self, rhs: Self) -> Self {

@@ -133,6 +133,17 @@ impl VolumeFlowPerArea {
     }
 }
 
+impl crate::Quantity for VolumeFlowPerArea {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
     fn add(self, rhs: Self) -> Self {

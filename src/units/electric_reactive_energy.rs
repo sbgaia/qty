@@ -153,6 +153,17 @@ impl ElectricReactiveEnergy {
     }
 }
 
+impl crate::Quantity for ElectricReactiveEnergy {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
     fn add(self, rhs: Self) -> Self {

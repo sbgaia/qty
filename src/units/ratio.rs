@@ -213,6 +213,17 @@ impl Ratio {
     }
 }
 
+impl crate::Quantity for Ratio {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Ratio {
     type Output = Ratio;
     fn add(self, rhs: Self) -> Self {

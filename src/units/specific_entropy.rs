@@ -297,6 +297,17 @@ impl SpecificEntropy {
     }
 }
 
+impl crate::Quantity for SpecificEntropy {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for SpecificEntropy {
     type Output = SpecificEntropy;
     fn add(self, rhs: Self) -> Self {

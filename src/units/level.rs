@@ -120,6 +120,17 @@ impl Level {
     }
 }
 
+impl crate::Quantity for Level {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Level {
     type Output = Level;
     fn add(self, rhs: Self) -> Self {

@@ -120,6 +120,17 @@ impl PowerRatio {
     }
 }
 
+impl crate::Quantity for PowerRatio {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for PowerRatio {
     type Output = PowerRatio;
     fn add(self, rhs: Self) -> Self {

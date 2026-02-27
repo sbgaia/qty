@@ -219,6 +219,17 @@ impl WarpingMomentOfInertia {
     }
 }
 
+impl crate::Quantity for WarpingMomentOfInertia {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
     fn add(self, rhs: Self) -> Self {

@@ -645,6 +645,17 @@ impl MassFraction {
     }
 }
 
+impl crate::Quantity for MassFraction {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for MassFraction {
     type Output = MassFraction;
     fn add(self, rhs: Self) -> Self {

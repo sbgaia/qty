@@ -387,6 +387,17 @@ impl Duration {
     }
 }
 
+impl crate::Quantity for Duration {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Duration {
     type Output = Duration;
     fn add(self, rhs: Self) -> Self {

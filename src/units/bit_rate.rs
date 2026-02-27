@@ -1011,6 +1011,17 @@ impl BitRate {
     }
 }
 
+impl crate::Quantity for BitRate {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for BitRate {
     type Output = BitRate;
     fn add(self, rhs: Self) -> Self {

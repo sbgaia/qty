@@ -675,6 +675,17 @@ impl DoseAreaProduct {
     }
 }
 
+impl crate::Quantity for DoseAreaProduct {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for DoseAreaProduct {
     type Output = DoseAreaProduct;
     fn add(self, rhs: Self) -> Self {

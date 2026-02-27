@@ -331,6 +331,17 @@ impl RadiationEquivalentDoseRate {
     }
 }
 
+impl crate::Quantity for RadiationEquivalentDoseRate {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
     fn add(self, rhs: Self) -> Self {

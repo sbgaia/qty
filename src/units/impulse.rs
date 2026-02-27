@@ -387,6 +387,17 @@ impl Impulse {
     }
 }
 
+impl crate::Quantity for Impulse {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Impulse {
     type Output = Impulse;
     fn add(self, rhs: Self) -> Self {

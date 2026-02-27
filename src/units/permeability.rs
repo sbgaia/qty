@@ -97,6 +97,17 @@ impl Permeability {
     }
 }
 
+impl crate::Quantity for Permeability {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Permeability {
     type Output = Permeability;
     fn add(self, rhs: Self) -> Self {

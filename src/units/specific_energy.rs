@@ -805,6 +805,17 @@ impl SpecificEnergy {
     }
 }
 
+impl crate::Quantity for SpecificEnergy {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for SpecificEnergy {
     type Output = SpecificEnergy;
     fn add(self, rhs: Self) -> Self {

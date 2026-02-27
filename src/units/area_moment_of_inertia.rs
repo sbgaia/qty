@@ -219,6 +219,17 @@ impl AreaMomentOfInertia {
     }
 }
 
+impl crate::Quantity for AreaMomentOfInertia {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
     fn add(self, rhs: Self) -> Self {

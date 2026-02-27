@@ -188,6 +188,17 @@ impl SpecificFuelConsumption {
     }
 }
 
+impl crate::Quantity for SpecificFuelConsumption {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
     fn add(self, rhs: Self) -> Self {

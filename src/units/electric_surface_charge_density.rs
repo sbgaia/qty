@@ -156,6 +156,17 @@ impl ElectricSurfaceChargeDensity {
     }
 }
 
+impl crate::Quantity for ElectricSurfaceChargeDensity {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
     fn add(self, rhs: Self) -> Self {

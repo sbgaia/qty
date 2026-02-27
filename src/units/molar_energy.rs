@@ -147,6 +147,17 @@ impl MolarEnergy {
     }
 }
 
+impl crate::Quantity for MolarEnergy {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for MolarEnergy {
     type Output = MolarEnergy;
     fn add(self, rhs: Self) -> Self {

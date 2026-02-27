@@ -411,6 +411,17 @@ impl Irradiance {
     }
 }
 
+impl crate::Quantity for Irradiance {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Irradiance {
     type Output = Irradiance;
     fn add(self, rhs: Self) -> Self {

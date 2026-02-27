@@ -549,6 +549,17 @@ impl VolumeConcentration {
     }
 }
 
+impl crate::Quantity for VolumeConcentration {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for VolumeConcentration {
     type Output = VolumeConcentration;
     fn add(self, rhs: Self) -> Self {

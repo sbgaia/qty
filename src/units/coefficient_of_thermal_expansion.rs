@@ -192,6 +192,17 @@ impl CoefficientOfThermalExpansion {
     }
 }
 
+impl crate::Quantity for CoefficientOfThermalExpansion {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for CoefficientOfThermalExpansion {
     type Output = CoefficientOfThermalExpansion;
     fn add(self, rhs: Self) -> Self {

@@ -1011,6 +1011,17 @@ impl Information {
     }
 }
 
+impl crate::Quantity for Information {
+    #[inline]
+    fn as_base(self) -> Num {
+        self.0
+    }
+    #[inline]
+    fn from_base(value: Num) -> Self {
+        Self(value)
+    }
+}
+
 impl Add for Information {
     type Output = Information;
     fn add(self, rhs: Self) -> Self {
