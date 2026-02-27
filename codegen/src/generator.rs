@@ -552,13 +552,13 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
     out
 }
 
-// ── Integration test file ─────────────────────────────────────────────────────
+// ── Test files ────────────────────────────────────────────────────────────────
 
-/// Generates the content of `tests/<quantity_snake>.rs` for a single quantity.
+/// Generates the content of `tests/units/<quantity_snake>.rs` for a single quantity.
 ///
-/// Each file is a self-contained Cargo integration test binary, so there is no
-/// wrapping `mod` — test functions sit at the file root and use the public API
-/// via `use unitsnet_rs::*`.
+/// Each file is a self-contained Cargo integration test binary that exercises
+/// the public API via `use unitsnet_rs::*;`, placed under `tests/units/` to
+/// mirror the `src/units/` source layout.
 pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     let mut out = String::with_capacity(16 * 1024);
     let name = &qty.name;
@@ -701,7 +701,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     out
 }
 
-/// Generates `tests/cross_type.rs` — one test per cross-type arithmetic op.
+/// Generates the content of `tests/cross_type.rs` — one test per cross-type op.
 ///
 /// These tests only exercise exact base-unit arithmetic (`6 * 2 = 12`),
 /// which is representable without rounding in both f32 and f64.
