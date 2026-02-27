@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl TurbidityUnit {
     pub const ALL: &'static [Self] = &[Self::NTU];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::NTU => "NTU",
@@ -37,6 +40,7 @@ impl TurbidityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::NTU => &["NTU"],
@@ -46,6 +50,7 @@ impl TurbidityUnit {
 
 impl Turbidity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: TurbidityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl Turbidity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: TurbidityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl Turbidity {
     /// Creates a [`Turbidity`] from a value in NTU (`NTU`).
     #[inline]
     pub fn from_ntu(value: Num) -> Self {
-        Self::new(value, TurbidityUnit::NTU)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in NTU (`NTU`).
     #[inline]
     pub fn as_ntu(self) -> Num {
-        self.convert_to(TurbidityUnit::NTU)
+        let x = self.0;
+        x
     }
 }
 
@@ -104,42 +112,49 @@ impl crate::Quantity for Turbidity {
 
 impl Add for Turbidity {
     type Output = Turbidity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Turbidity {
     type Output = Turbidity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Turbidity {
     type Output = Turbidity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Turbidity {
     type Output = Turbidity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Turbidity> for Num {
     type Output = Turbidity;
+    #[inline]
     fn mul(self, rhs: Turbidity) -> Turbidity {
         Turbidity(self * rhs.0)
     }
 }
 impl Div<Num> for Turbidity {
     type Output = Turbidity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Turbidity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

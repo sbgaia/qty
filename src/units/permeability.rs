@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl PermeabilityUnit {
     pub const ALL: &'static [Self] = &[Self::HenryPerMeter];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::HenryPerMeter => "H/m",
@@ -37,6 +40,7 @@ impl PermeabilityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::HenryPerMeter => &["H/m"],
@@ -46,6 +50,7 @@ impl PermeabilityUnit {
 
 impl Permeability {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: PermeabilityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl Permeability {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: PermeabilityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl Permeability {
     /// Creates a [`Permeability`] from a value in HenriesPerMeter (`H/m`).
     #[inline]
     pub fn from_henries_per_meter(value: Num) -> Self {
-        Self::new(value, PermeabilityUnit::HenryPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in HenriesPerMeter (`H/m`).
     #[inline]
     pub fn as_henries_per_meter(self) -> Num {
-        self.convert_to(PermeabilityUnit::HenryPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_henries_per_meter`].
@@ -110,42 +118,49 @@ impl crate::Quantity for Permeability {
 
 impl Add for Permeability {
     type Output = Permeability;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Permeability {
     type Output = Permeability;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Permeability {
     type Output = Permeability;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Permeability {
     type Output = Permeability;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Permeability> for Num {
     type Output = Permeability;
+    #[inline]
     fn mul(self, rhs: Permeability) -> Permeability {
         Permeability(self * rhs.0)
     }
 }
 impl Div<Num> for Permeability {
     type Output = Permeability;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Permeability {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -43,7 +43,9 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     w!(out);
     w!(out, "#![allow(");
     w!(out, "    unused_parens,");
+    w!(out, "    clippy::double_parens,");
     w!(out, "    clippy::excessive_precision,");
+    w!(out, "    clippy::let_and_return,");
     w!(out, "    clippy::unreadable_literal,");
     w!(out, "    clippy::too_many_lines");
     w!(out, ")]");
@@ -108,6 +110,7 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
         out,
         "    /// Returns the primary display abbreviation for this unit."
     );
+    w!(out, "    #[inline]");
     w!(out, "    pub fn abbreviation(self) -> &'static str {{");
     w!(out, "        match self {{");
     for unit in &qty.units {
@@ -123,6 +126,7 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
         out,
         "    /// Returns all abbreviations recognised during [`FromStr`] parsing."
     );
+    w!(out, "    #[inline]");
     w!(
         out,
         "    pub fn all_abbreviations(self) -> &'static [&'static str] {{"
@@ -157,6 +161,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         out,
         "    /// Creates a new value from `value` expressed in `unit`."
     );
+    w!(out, "    #[inline]");
     w!(
         out,
         "    pub fn new(value: Num, unit: {}) -> Self {{",
@@ -206,6 +211,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
 
     // convert_to()
     w!(out, "    /// Returns the quantity expressed in `unit`.");
+    w!(out, "    #[inline]");
     w!(
         out,
         "    pub fn convert_to(self, unit: {}) -> Num {{",
@@ -245,12 +251,8 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             "    pub fn from_{}(value: Num) -> Self {{",
             snake_plural
         );
-        w!(
-            out,
-            "        Self::new(value, {}::{})",
-            enum_name,
-            unit.singular
-        );
+        w!(out, "        let x = value;");
+        w!(out, "        Self({})", unit.to_base);
         w!(out, "    }}");
         w!(out);
 
@@ -262,12 +264,8 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         );
         w!(out, "    #[inline]");
         w!(out, "    pub fn as_{}(self) -> Num {{", snake_plural);
-        w!(
-            out,
-            "        self.convert_to({}::{})",
-            enum_name,
-            unit.singular
-        );
+        w!(out, "        let x = self.0;");
+        w!(out, "        {}", unit.from_base);
         w!(out, "    }}");
 
         // Emit singular alias only when it differs from the plural form.
@@ -308,18 +306,18 @@ fn emit_quantity_trait_impl(qty: &QuantityDef, out: &mut String) {
 
 fn emit_arithmetic(qty: &QuantityDef, out: &mut String) {
     let n = &qty.name;
-    w!(out, "impl Add for {} {{ type Output = {}; fn add(self, rhs: Self) -> Self {{ Self(self.0 + rhs.0) }} }}", n, n);
-    w!(out, "impl Sub for {} {{ type Output = {}; fn sub(self, rhs: Self) -> Self {{ Self(self.0 - rhs.0) }} }}", n, n);
+    w!(out, "impl Add for {} {{ type Output = {}; #[inline] fn add(self, rhs: Self) -> Self {{ Self(self.0 + rhs.0) }} }}", n, n);
+    w!(out, "impl Sub for {} {{ type Output = {}; #[inline] fn sub(self, rhs: Self) -> Self {{ Self(self.0 - rhs.0) }} }}", n, n);
     w!(
         out,
-        "impl Neg for {} {{ type Output = {}; fn neg(self) -> Self {{ Self(-self.0) }} }}",
+        "impl Neg for {} {{ type Output = {}; #[inline] fn neg(self) -> Self {{ Self(-self.0) }} }}",
         n,
         n
     );
-    w!(out, "impl Mul<Num> for {} {{ type Output = {}; fn mul(self, rhs: Num) -> Self {{ Self(self.0 * rhs) }} }}", n, n);
-    w!(out, "impl Mul<{}> for Num {{ type Output = {}; fn mul(self, rhs: {}) -> {} {{ {}(self * rhs.0) }} }}", n, n, n, n, n);
-    w!(out, "impl Div<Num> for {} {{ type Output = {}; fn div(self, rhs: Num) -> Self {{ Self(self.0 / rhs) }} }}", n, n);
-    w!(out, "impl Div for {} {{ type Output = Num; fn div(self, rhs: Self) -> Num {{ self.0 / rhs.0 }} }}", n);
+    w!(out, "impl Mul<Num> for {} {{ type Output = {}; #[inline] fn mul(self, rhs: Num) -> Self {{ Self(self.0 * rhs) }} }}", n, n);
+    w!(out, "impl Mul<{}> for Num {{ type Output = {}; #[inline] fn mul(self, rhs: {}) -> {} {{ {}(self * rhs.0) }} }}", n, n, n, n, n);
+    w!(out, "impl Div<Num> for {} {{ type Output = {}; #[inline] fn div(self, rhs: Num) -> Self {{ Self(self.0 / rhs) }} }}", n, n);
+    w!(out, "impl Div for {} {{ type Output = Num; #[inline] fn div(self, rhs: Self) -> Num {{ self.0 / rhs.0 }} }}", n);
     w!(out);
 }
 

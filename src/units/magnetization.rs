@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl MagnetizationUnit {
     pub const ALL: &'static [Self] = &[Self::AmperePerMeter];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::AmperePerMeter => "A/m",
@@ -37,6 +40,7 @@ impl MagnetizationUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::AmperePerMeter => &["A/m"],
@@ -46,6 +50,7 @@ impl MagnetizationUnit {
 
 impl Magnetization {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MagnetizationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl Magnetization {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MagnetizationUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl Magnetization {
     /// Creates a [`Magnetization`] from a value in AmperesPerMeter (`A/m`).
     #[inline]
     pub fn from_amperes_per_meter(value: Num) -> Self {
-        Self::new(value, MagnetizationUnit::AmperePerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in AmperesPerMeter (`A/m`).
     #[inline]
     pub fn as_amperes_per_meter(self) -> Num {
-        self.convert_to(MagnetizationUnit::AmperePerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_amperes_per_meter`].
@@ -110,42 +118,49 @@ impl crate::Quantity for Magnetization {
 
 impl Add for Magnetization {
     type Output = Magnetization;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Magnetization {
     type Output = Magnetization;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Magnetization {
     type Output = Magnetization;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Magnetization {
     type Output = Magnetization;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Magnetization> for Num {
     type Output = Magnetization;
+    #[inline]
     fn mul(self, rhs: Magnetization) -> Magnetization {
         Magnetization(self * rhs.0)
     }
 }
 impl Div<Num> for Magnetization {
     type Output = Magnetization;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Magnetization {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

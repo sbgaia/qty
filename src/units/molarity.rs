@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -52,6 +54,7 @@ impl MolarityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MolePerCubicMeter => "mol/m³",
@@ -69,6 +72,7 @@ impl MolarityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MolePerCubicMeter => &["mol/m³"],
@@ -88,6 +92,7 @@ impl MolarityUnit {
 
 impl Molarity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MolarityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -123,6 +128,7 @@ impl Molarity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MolarityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -143,13 +149,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in MolesPerCubicMeter (`mol/m³`).
     #[inline]
     pub fn from_moles_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::MolePerCubicMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MolesPerCubicMeter (`mol/m³`).
     #[inline]
     pub fn as_moles_per_cubic_meter(self) -> Num {
-        self.convert_to(MolarityUnit::MolePerCubicMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_moles_per_cubic_meter`].
@@ -161,13 +169,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in KilomolesPerCubicMeter (`kmol/m³`).
     #[inline]
     pub fn from_kilomoles_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::KilomolePerCubicMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilomolesPerCubicMeter (`kmol/m³`).
     #[inline]
     pub fn as_kilomoles_per_cubic_meter(self) -> Num {
-        self.convert_to(MolarityUnit::KilomolePerCubicMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilomoles_per_cubic_meter`].
@@ -179,13 +189,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in MolesPerLiter (`mol/l`).
     #[inline]
     pub fn from_moles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::MolePerLiter)
+        let x = value;
+        Self(x / 1e-3)
     }
 
     /// Returns the value expressed in MolesPerLiter (`mol/l`).
     #[inline]
     pub fn as_moles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::MolePerLiter)
+        let x = self.0;
+        x * 1e-3
     }
 
     /// Alias for [`Self::as_moles_per_liter`].
@@ -197,13 +209,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in FemtomolesPerLiter (`fmol/l`).
     #[inline]
     pub fn from_femtomoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::FemtomolePerLiter)
+        let x = value;
+        Self((x * 1e-15) / 1e-3)
     }
 
     /// Returns the value expressed in FemtomolesPerLiter (`fmol/l`).
     #[inline]
     pub fn as_femtomoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::FemtomolePerLiter)
+        let x = self.0;
+        (x / 1e-15) * 1e-3
     }
 
     /// Alias for [`Self::as_femtomoles_per_liter`].
@@ -215,13 +229,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in PicomolesPerLiter (`pmol/l`).
     #[inline]
     pub fn from_picomoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::PicomolePerLiter)
+        let x = value;
+        Self((x * 1e-12) / 1e-3)
     }
 
     /// Returns the value expressed in PicomolesPerLiter (`pmol/l`).
     #[inline]
     pub fn as_picomoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::PicomolePerLiter)
+        let x = self.0;
+        (x / 1e-12) * 1e-3
     }
 
     /// Alias for [`Self::as_picomoles_per_liter`].
@@ -233,13 +249,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in NanomolesPerLiter (`nmol/l`).
     #[inline]
     pub fn from_nanomoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::NanomolePerLiter)
+        let x = value;
+        Self((x * 1e-9) / 1e-3)
     }
 
     /// Returns the value expressed in NanomolesPerLiter (`nmol/l`).
     #[inline]
     pub fn as_nanomoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::NanomolePerLiter)
+        let x = self.0;
+        (x / 1e-9) * 1e-3
     }
 
     /// Alias for [`Self::as_nanomoles_per_liter`].
@@ -251,13 +269,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in MicromolesPerLiter (`µmol/l`).
     #[inline]
     pub fn from_micromoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::MicromolePerLiter)
+        let x = value;
+        Self((x * 1e-6) / 1e-3)
     }
 
     /// Returns the value expressed in MicromolesPerLiter (`µmol/l`).
     #[inline]
     pub fn as_micromoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::MicromolePerLiter)
+        let x = self.0;
+        (x / 1e-6) * 1e-3
     }
 
     /// Alias for [`Self::as_micromoles_per_liter`].
@@ -269,13 +289,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in MillimolesPerLiter (`mmol/l`).
     #[inline]
     pub fn from_millimoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::MillimolePerLiter)
+        let x = value;
+        Self((x * 1e-3) / 1e-3)
     }
 
     /// Returns the value expressed in MillimolesPerLiter (`mmol/l`).
     #[inline]
     pub fn as_millimoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::MillimolePerLiter)
+        let x = self.0;
+        (x / 1e-3) * 1e-3
     }
 
     /// Alias for [`Self::as_millimoles_per_liter`].
@@ -287,13 +309,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in CentimolesPerLiter (`cmol/l`).
     #[inline]
     pub fn from_centimoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::CentimolePerLiter)
+        let x = value;
+        Self((x * 1e-2) / 1e-3)
     }
 
     /// Returns the value expressed in CentimolesPerLiter (`cmol/l`).
     #[inline]
     pub fn as_centimoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::CentimolePerLiter)
+        let x = self.0;
+        (x / 1e-2) * 1e-3
     }
 
     /// Alias for [`Self::as_centimoles_per_liter`].
@@ -305,13 +329,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in DecimolesPerLiter (`dmol/l`).
     #[inline]
     pub fn from_decimoles_per_liter(value: Num) -> Self {
-        Self::new(value, MolarityUnit::DecimolePerLiter)
+        let x = value;
+        Self((x * 1e-1) / 1e-3)
     }
 
     /// Returns the value expressed in DecimolesPerLiter (`dmol/l`).
     #[inline]
     pub fn as_decimoles_per_liter(self) -> Num {
-        self.convert_to(MolarityUnit::DecimolePerLiter)
+        let x = self.0;
+        (x / 1e-1) * 1e-3
     }
 
     /// Alias for [`Self::as_decimoles_per_liter`].
@@ -323,13 +349,15 @@ impl Molarity {
     /// Creates a [`Molarity`] from a value in PoundMolesPerCubicFoot (`lbmol/ft³`).
     #[inline]
     pub fn from_pound_moles_per_cubic_foot(value: Num) -> Self {
-        Self::new(value, MolarityUnit::PoundMolePerCubicFoot)
+        let x = value;
+        Self(x * 1000.0 * 0.45359237 / 0.028316846592)
     }
 
     /// Returns the value expressed in PoundMolesPerCubicFoot (`lbmol/ft³`).
     #[inline]
     pub fn as_pound_moles_per_cubic_foot(self) -> Num {
-        self.convert_to(MolarityUnit::PoundMolePerCubicFoot)
+        let x = self.0;
+        x / (1000.0 * 0.45359237 / 0.028316846592)
     }
 
     /// Alias for [`Self::as_pound_moles_per_cubic_foot`].
@@ -352,42 +380,49 @@ impl crate::Quantity for Molarity {
 
 impl Add for Molarity {
     type Output = Molarity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Molarity {
     type Output = Molarity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Molarity {
     type Output = Molarity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Molarity {
     type Output = Molarity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Molarity> for Num {
     type Output = Molarity;
+    #[inline]
     fn mul(self, rhs: Molarity) -> Molarity {
         Molarity(self * rhs.0)
     }
 }
 impl Div<Num> for Molarity {
     type Output = Molarity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Molarity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

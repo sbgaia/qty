@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -80,6 +82,7 @@ impl LinearPowerDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerMeter => "W/m",
@@ -111,6 +114,7 @@ impl LinearPowerDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerMeter => &["W/m"],
@@ -144,6 +148,7 @@ impl LinearPowerDensityUnit {
 
 impl LinearPowerDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LinearPowerDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -193,6 +198,7 @@ impl LinearPowerDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LinearPowerDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -227,13 +233,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in WattsPerMeter (`W/m`).
     #[inline]
     pub fn from_watts_per_meter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::WattPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerMeter (`W/m`).
     #[inline]
     pub fn as_watts_per_meter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::WattPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_meter`].
@@ -245,13 +253,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerMeter (`mW/m`).
     #[inline]
     pub fn from_milliwatts_per_meter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MilliwattPerMeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilliwattsPerMeter (`mW/m`).
     #[inline]
     pub fn as_milliwatts_per_meter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MilliwattPerMeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliwatts_per_meter`].
@@ -263,13 +273,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerMeter (`kW/m`).
     #[inline]
     pub fn from_kilowatts_per_meter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::KilowattPerMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilowattsPerMeter (`kW/m`).
     #[inline]
     pub fn as_kilowatts_per_meter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::KilowattPerMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilowatts_per_meter`].
@@ -281,13 +293,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerMeter (`MW/m`).
     #[inline]
     pub fn from_megawatts_per_meter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MegawattPerMeter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegawattsPerMeter (`MW/m`).
     #[inline]
     pub fn as_megawatts_per_meter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MegawattPerMeter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megawatts_per_meter`].
@@ -299,13 +313,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerMeter (`GW/m`).
     #[inline]
     pub fn from_gigawatts_per_meter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::GigawattPerMeter)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in GigawattsPerMeter (`GW/m`).
     #[inline]
     pub fn as_gigawatts_per_meter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::GigawattPerMeter)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigawatts_per_meter`].
@@ -317,13 +333,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in WattsPerCentimeter (`W/cm`).
     #[inline]
     pub fn from_watts_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::WattPerCentimeter)
+        let x = value;
+        Self(x * 1e2)
     }
 
     /// Returns the value expressed in WattsPerCentimeter (`W/cm`).
     #[inline]
     pub fn as_watts_per_centimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::WattPerCentimeter)
+        let x = self.0;
+        x / 1e2
     }
 
     /// Alias for [`Self::as_watts_per_centimeter`].
@@ -335,13 +353,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerCentimeter (`mW/cm`).
     #[inline]
     pub fn from_milliwatts_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MilliwattPerCentimeter)
+        let x = value;
+        Self((x * 1e-3) * 1e2)
     }
 
     /// Returns the value expressed in MilliwattsPerCentimeter (`mW/cm`).
     #[inline]
     pub fn as_milliwatts_per_centimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MilliwattPerCentimeter)
+        let x = self.0;
+        (x / 1e-3) / 1e2
     }
 
     /// Alias for [`Self::as_milliwatts_per_centimeter`].
@@ -353,13 +373,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerCentimeter (`kW/cm`).
     #[inline]
     pub fn from_kilowatts_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::KilowattPerCentimeter)
+        let x = value;
+        Self((x * 1e3) * 1e2)
     }
 
     /// Returns the value expressed in KilowattsPerCentimeter (`kW/cm`).
     #[inline]
     pub fn as_kilowatts_per_centimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::KilowattPerCentimeter)
+        let x = self.0;
+        (x / 1e3) / 1e2
     }
 
     /// Alias for [`Self::as_kilowatts_per_centimeter`].
@@ -371,13 +393,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerCentimeter (`MW/cm`).
     #[inline]
     pub fn from_megawatts_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MegawattPerCentimeter)
+        let x = value;
+        Self((x * 1e6) * 1e2)
     }
 
     /// Returns the value expressed in MegawattsPerCentimeter (`MW/cm`).
     #[inline]
     pub fn as_megawatts_per_centimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MegawattPerCentimeter)
+        let x = self.0;
+        (x / 1e6) / 1e2
     }
 
     /// Alias for [`Self::as_megawatts_per_centimeter`].
@@ -389,13 +413,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerCentimeter (`GW/cm`).
     #[inline]
     pub fn from_gigawatts_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::GigawattPerCentimeter)
+        let x = value;
+        Self((x * 1e9) * 1e2)
     }
 
     /// Returns the value expressed in GigawattsPerCentimeter (`GW/cm`).
     #[inline]
     pub fn as_gigawatts_per_centimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::GigawattPerCentimeter)
+        let x = self.0;
+        (x / 1e9) / 1e2
     }
 
     /// Alias for [`Self::as_gigawatts_per_centimeter`].
@@ -407,13 +433,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in WattsPerMillimeter (`W/mm`).
     #[inline]
     pub fn from_watts_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::WattPerMillimeter)
+        let x = value;
+        Self(x * 1e3)
     }
 
     /// Returns the value expressed in WattsPerMillimeter (`W/mm`).
     #[inline]
     pub fn as_watts_per_millimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::WattPerMillimeter)
+        let x = self.0;
+        x / 1e3
     }
 
     /// Alias for [`Self::as_watts_per_millimeter`].
@@ -425,13 +453,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerMillimeter (`mW/mm`).
     #[inline]
     pub fn from_milliwatts_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MilliwattPerMillimeter)
+        let x = value;
+        Self((x * 1e-3) * 1e3)
     }
 
     /// Returns the value expressed in MilliwattsPerMillimeter (`mW/mm`).
     #[inline]
     pub fn as_milliwatts_per_millimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MilliwattPerMillimeter)
+        let x = self.0;
+        (x / 1e-3) / 1e3
     }
 
     /// Alias for [`Self::as_milliwatts_per_millimeter`].
@@ -443,13 +473,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerMillimeter (`kW/mm`).
     #[inline]
     pub fn from_kilowatts_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::KilowattPerMillimeter)
+        let x = value;
+        Self((x * 1e3) * 1e3)
     }
 
     /// Returns the value expressed in KilowattsPerMillimeter (`kW/mm`).
     #[inline]
     pub fn as_kilowatts_per_millimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::KilowattPerMillimeter)
+        let x = self.0;
+        (x / 1e3) / 1e3
     }
 
     /// Alias for [`Self::as_kilowatts_per_millimeter`].
@@ -461,13 +493,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerMillimeter (`MW/mm`).
     #[inline]
     pub fn from_megawatts_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MegawattPerMillimeter)
+        let x = value;
+        Self((x * 1e6) * 1e3)
     }
 
     /// Returns the value expressed in MegawattsPerMillimeter (`MW/mm`).
     #[inline]
     pub fn as_megawatts_per_millimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MegawattPerMillimeter)
+        let x = self.0;
+        (x / 1e6) / 1e3
     }
 
     /// Alias for [`Self::as_megawatts_per_millimeter`].
@@ -479,13 +513,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerMillimeter (`GW/mm`).
     #[inline]
     pub fn from_gigawatts_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::GigawattPerMillimeter)
+        let x = value;
+        Self((x * 1e9) * 1e3)
     }
 
     /// Returns the value expressed in GigawattsPerMillimeter (`GW/mm`).
     #[inline]
     pub fn as_gigawatts_per_millimeter(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::GigawattPerMillimeter)
+        let x = self.0;
+        (x / 1e9) / 1e3
     }
 
     /// Alias for [`Self::as_gigawatts_per_millimeter`].
@@ -497,13 +533,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in WattsPerInch (`W/in`).
     #[inline]
     pub fn from_watts_per_inch(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::WattPerInch)
+        let x = value;
+        Self(x / 2.54e-2)
     }
 
     /// Returns the value expressed in WattsPerInch (`W/in`).
     #[inline]
     pub fn as_watts_per_inch(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::WattPerInch)
+        let x = self.0;
+        x * 2.54e-2
     }
 
     /// Alias for [`Self::as_watts_per_inch`].
@@ -515,13 +553,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerInch (`mW/in`).
     #[inline]
     pub fn from_milliwatts_per_inch(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MilliwattPerInch)
+        let x = value;
+        Self((x * 1e-3) / 2.54e-2)
     }
 
     /// Returns the value expressed in MilliwattsPerInch (`mW/in`).
     #[inline]
     pub fn as_milliwatts_per_inch(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MilliwattPerInch)
+        let x = self.0;
+        (x / 1e-3) * 2.54e-2
     }
 
     /// Alias for [`Self::as_milliwatts_per_inch`].
@@ -533,13 +573,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerInch (`kW/in`).
     #[inline]
     pub fn from_kilowatts_per_inch(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::KilowattPerInch)
+        let x = value;
+        Self((x * 1e3) / 2.54e-2)
     }
 
     /// Returns the value expressed in KilowattsPerInch (`kW/in`).
     #[inline]
     pub fn as_kilowatts_per_inch(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::KilowattPerInch)
+        let x = self.0;
+        (x / 1e3) * 2.54e-2
     }
 
     /// Alias for [`Self::as_kilowatts_per_inch`].
@@ -551,13 +593,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerInch (`MW/in`).
     #[inline]
     pub fn from_megawatts_per_inch(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MegawattPerInch)
+        let x = value;
+        Self((x * 1e6) / 2.54e-2)
     }
 
     /// Returns the value expressed in MegawattsPerInch (`MW/in`).
     #[inline]
     pub fn as_megawatts_per_inch(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MegawattPerInch)
+        let x = self.0;
+        (x / 1e6) * 2.54e-2
     }
 
     /// Alias for [`Self::as_megawatts_per_inch`].
@@ -569,13 +613,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerInch (`GW/in`).
     #[inline]
     pub fn from_gigawatts_per_inch(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::GigawattPerInch)
+        let x = value;
+        Self((x * 1e9) / 2.54e-2)
     }
 
     /// Returns the value expressed in GigawattsPerInch (`GW/in`).
     #[inline]
     pub fn as_gigawatts_per_inch(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::GigawattPerInch)
+        let x = self.0;
+        (x / 1e9) * 2.54e-2
     }
 
     /// Alias for [`Self::as_gigawatts_per_inch`].
@@ -587,13 +633,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in WattsPerFoot (`W/ft`).
     #[inline]
     pub fn from_watts_per_foot(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::WattPerFoot)
+        let x = value;
+        Self(x / 0.3048)
     }
 
     /// Returns the value expressed in WattsPerFoot (`W/ft`).
     #[inline]
     pub fn as_watts_per_foot(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::WattPerFoot)
+        let x = self.0;
+        x * 0.3048
     }
 
     /// Alias for [`Self::as_watts_per_foot`].
@@ -605,13 +653,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerFoot (`mW/ft`).
     #[inline]
     pub fn from_milliwatts_per_foot(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MilliwattPerFoot)
+        let x = value;
+        Self((x * 1e-3) / 0.3048)
     }
 
     /// Returns the value expressed in MilliwattsPerFoot (`mW/ft`).
     #[inline]
     pub fn as_milliwatts_per_foot(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MilliwattPerFoot)
+        let x = self.0;
+        (x / 1e-3) * 0.3048
     }
 
     /// Alias for [`Self::as_milliwatts_per_foot`].
@@ -623,13 +673,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerFoot (`kW/ft`).
     #[inline]
     pub fn from_kilowatts_per_foot(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::KilowattPerFoot)
+        let x = value;
+        Self((x * 1e3) / 0.3048)
     }
 
     /// Returns the value expressed in KilowattsPerFoot (`kW/ft`).
     #[inline]
     pub fn as_kilowatts_per_foot(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::KilowattPerFoot)
+        let x = self.0;
+        (x / 1e3) * 0.3048
     }
 
     /// Alias for [`Self::as_kilowatts_per_foot`].
@@ -641,13 +693,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerFoot (`MW/ft`).
     #[inline]
     pub fn from_megawatts_per_foot(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::MegawattPerFoot)
+        let x = value;
+        Self((x * 1e6) / 0.3048)
     }
 
     /// Returns the value expressed in MegawattsPerFoot (`MW/ft`).
     #[inline]
     pub fn as_megawatts_per_foot(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::MegawattPerFoot)
+        let x = self.0;
+        (x / 1e6) * 0.3048
     }
 
     /// Alias for [`Self::as_megawatts_per_foot`].
@@ -659,13 +713,15 @@ impl LinearPowerDensity {
     /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerFoot (`GW/ft`).
     #[inline]
     pub fn from_gigawatts_per_foot(value: Num) -> Self {
-        Self::new(value, LinearPowerDensityUnit::GigawattPerFoot)
+        let x = value;
+        Self((x * 1e9) / 0.3048)
     }
 
     /// Returns the value expressed in GigawattsPerFoot (`GW/ft`).
     #[inline]
     pub fn as_gigawatts_per_foot(self) -> Num {
-        self.convert_to(LinearPowerDensityUnit::GigawattPerFoot)
+        let x = self.0;
+        (x / 1e9) * 0.3048
     }
 
     /// Alias for [`Self::as_gigawatts_per_foot`].
@@ -688,42 +744,49 @@ impl crate::Quantity for LinearPowerDensity {
 
 impl Add for LinearPowerDensity {
     type Output = LinearPowerDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for LinearPowerDensity {
     type Output = LinearPowerDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for LinearPowerDensity {
     type Output = LinearPowerDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for LinearPowerDensity {
     type Output = LinearPowerDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<LinearPowerDensity> for Num {
     type Output = LinearPowerDensity;
+    #[inline]
     fn mul(self, rhs: LinearPowerDensity) -> LinearPowerDensity {
         LinearPowerDensity(self * rhs.0)
     }
 }
 impl Div<Num> for LinearPowerDensity {
     type Output = LinearPowerDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LinearPowerDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

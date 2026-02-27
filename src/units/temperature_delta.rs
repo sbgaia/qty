@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -48,6 +50,7 @@ impl TemperatureDeltaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Kelvin => "∆K",
@@ -63,6 +66,7 @@ impl TemperatureDeltaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Kelvin => &["∆K"],
@@ -80,6 +84,7 @@ impl TemperatureDeltaUnit {
 
 impl TemperatureDelta {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: TemperatureDeltaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -113,6 +118,7 @@ impl TemperatureDelta {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: TemperatureDeltaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -131,13 +137,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in Kelvins (`∆K`).
     #[inline]
     pub fn from_kelvins(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::Kelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Kelvins (`∆K`).
     #[inline]
     pub fn as_kelvins(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::Kelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_kelvins`].
@@ -149,13 +157,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesCelsius (`∆°C`).
     #[inline]
     pub fn from_degrees_celsius(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeCelsius)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DegreesCelsius (`∆°C`).
     #[inline]
     pub fn as_degrees_celsius(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeCelsius)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_degrees_celsius`].
@@ -167,13 +177,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in MillidegreesCelsius (`m∆°C`).
     #[inline]
     pub fn from_millidegrees_celsius(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::MillidegreeCelsius)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillidegreesCelsius (`m∆°C`).
     #[inline]
     pub fn as_millidegrees_celsius(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::MillidegreeCelsius)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millidegrees_celsius`].
@@ -185,13 +197,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesDelisle (`∆°De`).
     #[inline]
     pub fn from_degrees_delisle(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeDelisle)
+        let x = value;
+        Self(x * -2.0 / 3.0)
     }
 
     /// Returns the value expressed in DegreesDelisle (`∆°De`).
     #[inline]
     pub fn as_degrees_delisle(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeDelisle)
+        let x = self.0;
+        x * -3.0 / 2.0
     }
 
     /// Alias for [`Self::as_degrees_delisle`].
@@ -203,13 +217,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesFahrenheit (`∆°F`).
     #[inline]
     pub fn from_degrees_fahrenheit(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeFahrenheit)
+        let x = value;
+        Self(x * 5.0 / 9.0)
     }
 
     /// Returns the value expressed in DegreesFahrenheit (`∆°F`).
     #[inline]
     pub fn as_degrees_fahrenheit(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeFahrenheit)
+        let x = self.0;
+        x * 9.0 / 5.0
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit`].
@@ -221,13 +237,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesNewton (`∆°N`).
     #[inline]
     pub fn from_degrees_newton(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeNewton)
+        let x = value;
+        Self(x * 100.0 / 33.0)
     }
 
     /// Returns the value expressed in DegreesNewton (`∆°N`).
     #[inline]
     pub fn as_degrees_newton(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeNewton)
+        let x = self.0;
+        x * 33.0 / 100.0
     }
 
     /// Alias for [`Self::as_degrees_newton`].
@@ -239,13 +257,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesRankine (`∆°R`).
     #[inline]
     pub fn from_degrees_rankine(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeRankine)
+        let x = value;
+        Self(x * 5.0 / 9.0)
     }
 
     /// Returns the value expressed in DegreesRankine (`∆°R`).
     #[inline]
     pub fn as_degrees_rankine(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeRankine)
+        let x = self.0;
+        x * 9.0 / 5.0
     }
 
     /// Alias for [`Self::as_degrees_rankine`].
@@ -257,13 +277,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesReaumur (`∆°Ré`).
     #[inline]
     pub fn from_degrees_reaumur(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeReaumur)
+        let x = value;
+        Self(x * 5.0 / 4.0)
     }
 
     /// Returns the value expressed in DegreesReaumur (`∆°Ré`).
     #[inline]
     pub fn as_degrees_reaumur(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeReaumur)
+        let x = self.0;
+        x * 4.0 / 5.0
     }
 
     /// Alias for [`Self::as_degrees_reaumur`].
@@ -275,13 +297,15 @@ impl TemperatureDelta {
     /// Creates a [`TemperatureDelta`] from a value in DegreesRoemer (`∆°Rø`).
     #[inline]
     pub fn from_degrees_roemer(value: Num) -> Self {
-        Self::new(value, TemperatureDeltaUnit::DegreeRoemer)
+        let x = value;
+        Self(x * 40.0 / 21.0)
     }
 
     /// Returns the value expressed in DegreesRoemer (`∆°Rø`).
     #[inline]
     pub fn as_degrees_roemer(self) -> Num {
-        self.convert_to(TemperatureDeltaUnit::DegreeRoemer)
+        let x = self.0;
+        x * 21.0 / 40.0
     }
 
     /// Alias for [`Self::as_degrees_roemer`].
@@ -304,42 +328,49 @@ impl crate::Quantity for TemperatureDelta {
 
 impl Add for TemperatureDelta {
     type Output = TemperatureDelta;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for TemperatureDelta {
     type Output = TemperatureDelta;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for TemperatureDelta {
     type Output = TemperatureDelta;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for TemperatureDelta {
     type Output = TemperatureDelta;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<TemperatureDelta> for Num {
     type Output = TemperatureDelta;
+    #[inline]
     fn mul(self, rhs: TemperatureDelta) -> TemperatureDelta {
         TemperatureDelta(self * rhs.0)
     }
 }
 impl Div<Num> for TemperatureDelta {
     type Output = TemperatureDelta;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for TemperatureDelta {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

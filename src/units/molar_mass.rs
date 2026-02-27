@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -56,6 +58,7 @@ impl MolarMassUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerMole => "g/mol",
@@ -75,6 +78,7 @@ impl MolarMassUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerMole => &["g/mol"],
@@ -96,6 +100,7 @@ impl MolarMassUnit {
 
 impl MolarMass {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MolarMassUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -133,6 +138,7 @@ impl MolarMass {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MolarMassUnit) -> Num {
         let x = self.0;
         match unit {
@@ -155,13 +161,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in GramsPerMole (`g/mol`).
     #[inline]
     pub fn from_grams_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::GramPerMole)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in GramsPerMole (`g/mol`).
     #[inline]
     pub fn as_grams_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::GramPerMole)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_grams_per_mole`].
@@ -173,13 +181,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in NanogramsPerMole (`ng/mol`).
     #[inline]
     pub fn from_nanograms_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::NanogramPerMole)
+        let x = value;
+        Self((x * 1e-9) / 1e3)
     }
 
     /// Returns the value expressed in NanogramsPerMole (`ng/mol`).
     #[inline]
     pub fn as_nanograms_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::NanogramPerMole)
+        let x = self.0;
+        (x / 1e-9) * 1e3
     }
 
     /// Alias for [`Self::as_nanograms_per_mole`].
@@ -191,13 +201,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in MicrogramsPerMole (`µg/mol`).
     #[inline]
     pub fn from_micrograms_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::MicrogramPerMole)
+        let x = value;
+        Self((x * 1e-6) / 1e3)
     }
 
     /// Returns the value expressed in MicrogramsPerMole (`µg/mol`).
     #[inline]
     pub fn as_micrograms_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::MicrogramPerMole)
+        let x = self.0;
+        (x / 1e-6) * 1e3
     }
 
     /// Alias for [`Self::as_micrograms_per_mole`].
@@ -209,13 +221,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in MilligramsPerMole (`mg/mol`).
     #[inline]
     pub fn from_milligrams_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::MilligramPerMole)
+        let x = value;
+        Self((x * 1e-3) / 1e3)
     }
 
     /// Returns the value expressed in MilligramsPerMole (`mg/mol`).
     #[inline]
     pub fn as_milligrams_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::MilligramPerMole)
+        let x = self.0;
+        (x / 1e-3) * 1e3
     }
 
     /// Alias for [`Self::as_milligrams_per_mole`].
@@ -227,13 +241,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in CentigramsPerMole (`cg/mol`).
     #[inline]
     pub fn from_centigrams_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::CentigramPerMole)
+        let x = value;
+        Self((x * 1e-2) / 1e3)
     }
 
     /// Returns the value expressed in CentigramsPerMole (`cg/mol`).
     #[inline]
     pub fn as_centigrams_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::CentigramPerMole)
+        let x = self.0;
+        (x / 1e-2) * 1e3
     }
 
     /// Alias for [`Self::as_centigrams_per_mole`].
@@ -245,13 +261,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in DecigramsPerMole (`dg/mol`).
     #[inline]
     pub fn from_decigrams_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::DecigramPerMole)
+        let x = value;
+        Self((x * 1e-1) / 1e3)
     }
 
     /// Returns the value expressed in DecigramsPerMole (`dg/mol`).
     #[inline]
     pub fn as_decigrams_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::DecigramPerMole)
+        let x = self.0;
+        (x / 1e-1) * 1e3
     }
 
     /// Alias for [`Self::as_decigrams_per_mole`].
@@ -263,13 +281,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in DecagramsPerMole (`dag/mol`).
     #[inline]
     pub fn from_decagrams_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::DecagramPerMole)
+        let x = value;
+        Self((x * 1e1) / 1e3)
     }
 
     /// Returns the value expressed in DecagramsPerMole (`dag/mol`).
     #[inline]
     pub fn as_decagrams_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::DecagramPerMole)
+        let x = self.0;
+        (x / 1e1) * 1e3
     }
 
     /// Alias for [`Self::as_decagrams_per_mole`].
@@ -281,13 +301,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in HectogramsPerMole (`hg/mol`).
     #[inline]
     pub fn from_hectograms_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::HectogramPerMole)
+        let x = value;
+        Self((x * 1e2) / 1e3)
     }
 
     /// Returns the value expressed in HectogramsPerMole (`hg/mol`).
     #[inline]
     pub fn as_hectograms_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::HectogramPerMole)
+        let x = self.0;
+        (x / 1e2) * 1e3
     }
 
     /// Alias for [`Self::as_hectograms_per_mole`].
@@ -299,13 +321,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in KilogramsPerMole (`kg/mol`).
     #[inline]
     pub fn from_kilograms_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::KilogramPerMole)
+        let x = value;
+        Self((x * 1e3) / 1e3)
     }
 
     /// Returns the value expressed in KilogramsPerMole (`kg/mol`).
     #[inline]
     pub fn as_kilograms_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::KilogramPerMole)
+        let x = self.0;
+        (x / 1e3) * 1e3
     }
 
     /// Alias for [`Self::as_kilograms_per_mole`].
@@ -317,13 +341,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in KilogramsPerKilomole (`kg/kmol`).
     #[inline]
     pub fn from_kilograms_per_kilomole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::KilogramPerKilomole)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in KilogramsPerKilomole (`kg/kmol`).
     #[inline]
     pub fn as_kilograms_per_kilomole(self) -> Num {
-        self.convert_to(MolarMassUnit::KilogramPerKilomole)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_kilograms_per_kilomole`].
@@ -335,13 +361,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in PoundsPerMole (`lb/mol`).
     #[inline]
     pub fn from_pounds_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::PoundPerMole)
+        let x = value;
+        Self(x * 0.45359237)
     }
 
     /// Returns the value expressed in PoundsPerMole (`lb/mol`).
     #[inline]
     pub fn as_pounds_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::PoundPerMole)
+        let x = self.0;
+        x / 0.45359237
     }
 
     /// Alias for [`Self::as_pounds_per_mole`].
@@ -353,13 +381,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in KilopoundsPerMole (`klb/mol`).
     #[inline]
     pub fn from_kilopounds_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::KilopoundPerMole)
+        let x = value;
+        Self((x * 1e3) * 0.45359237)
     }
 
     /// Returns the value expressed in KilopoundsPerMole (`klb/mol`).
     #[inline]
     pub fn as_kilopounds_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::KilopoundPerMole)
+        let x = self.0;
+        (x / 1e3) / 0.45359237
     }
 
     /// Alias for [`Self::as_kilopounds_per_mole`].
@@ -371,13 +401,15 @@ impl MolarMass {
     /// Creates a [`MolarMass`] from a value in MegapoundsPerMole (`Mlb/mol`).
     #[inline]
     pub fn from_megapounds_per_mole(value: Num) -> Self {
-        Self::new(value, MolarMassUnit::MegapoundPerMole)
+        let x = value;
+        Self((x * 1e6) * 0.45359237)
     }
 
     /// Returns the value expressed in MegapoundsPerMole (`Mlb/mol`).
     #[inline]
     pub fn as_megapounds_per_mole(self) -> Num {
-        self.convert_to(MolarMassUnit::MegapoundPerMole)
+        let x = self.0;
+        (x / 1e6) / 0.45359237
     }
 
     /// Alias for [`Self::as_megapounds_per_mole`].
@@ -400,42 +432,49 @@ impl crate::Quantity for MolarMass {
 
 impl Add for MolarMass {
     type Output = MolarMass;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MolarMass {
     type Output = MolarMass;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MolarMass {
     type Output = MolarMass;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MolarMass {
     type Output = MolarMass;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MolarMass> for Num {
     type Output = MolarMass;
+    #[inline]
     fn mul(self, rhs: MolarMass) -> MolarMass {
         MolarMass(self * rhs.0)
     }
 }
 impl Div<Num> for MolarMass {
     type Output = MolarMass;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MolarMass {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

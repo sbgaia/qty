@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -46,6 +48,7 @@ impl RadiationExposureUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CoulombPerKilogram => "C/kg",
@@ -60,6 +63,7 @@ impl RadiationExposureUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CoulombPerKilogram => &["C/kg"],
@@ -76,6 +80,7 @@ impl RadiationExposureUnit {
 
 impl RadiationExposure {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RadiationExposureUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -108,6 +113,7 @@ impl RadiationExposure {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RadiationExposureUnit) -> Num {
         let x = self.0;
         match unit {
@@ -125,13 +131,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in CoulombsPerKilogram (`C/kg`).
     #[inline]
     pub fn from_coulombs_per_kilogram(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::CoulombPerKilogram)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CoulombsPerKilogram (`C/kg`).
     #[inline]
     pub fn as_coulombs_per_kilogram(self) -> Num {
-        self.convert_to(RadiationExposureUnit::CoulombPerKilogram)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_coulombs_per_kilogram`].
@@ -143,13 +151,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
     pub fn from_picocoulombs_per_kilogram(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::PicocoulombPerKilogram)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
     pub fn as_picocoulombs_per_kilogram(self) -> Num {
-        self.convert_to(RadiationExposureUnit::PicocoulombPerKilogram)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picocoulombs_per_kilogram`].
@@ -161,13 +171,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
     pub fn from_nanocoulombs_per_kilogram(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::NanocoulombPerKilogram)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
     pub fn as_nanocoulombs_per_kilogram(self) -> Num {
-        self.convert_to(RadiationExposureUnit::NanocoulombPerKilogram)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanocoulombs_per_kilogram`].
@@ -179,13 +191,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
     pub fn from_microcoulombs_per_kilogram(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::MicrocoulombPerKilogram)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
     pub fn as_microcoulombs_per_kilogram(self) -> Num {
-        self.convert_to(RadiationExposureUnit::MicrocoulombPerKilogram)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microcoulombs_per_kilogram`].
@@ -197,13 +211,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
     pub fn from_millicoulombs_per_kilogram(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::MillicoulombPerKilogram)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
     pub fn as_millicoulombs_per_kilogram(self) -> Num {
-        self.convert_to(RadiationExposureUnit::MillicoulombPerKilogram)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millicoulombs_per_kilogram`].
@@ -215,13 +231,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in Roentgens (`R`).
     #[inline]
     pub fn from_roentgens(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::Roentgen)
+        let x = value;
+        Self(x * 2.58e-4)
     }
 
     /// Returns the value expressed in Roentgens (`R`).
     #[inline]
     pub fn as_roentgens(self) -> Num {
-        self.convert_to(RadiationExposureUnit::Roentgen)
+        let x = self.0;
+        x / 2.58e-4
     }
 
     /// Alias for [`Self::as_roentgens`].
@@ -233,13 +251,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in Microroentgens (`µR`).
     #[inline]
     pub fn from_microroentgens(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::Microroentgen)
+        let x = value;
+        Self((x * 1e-6) * 2.58e-4)
     }
 
     /// Returns the value expressed in Microroentgens (`µR`).
     #[inline]
     pub fn as_microroentgens(self) -> Num {
-        self.convert_to(RadiationExposureUnit::Microroentgen)
+        let x = self.0;
+        (x / 1e-6) / 2.58e-4
     }
 
     /// Alias for [`Self::as_microroentgens`].
@@ -251,13 +271,15 @@ impl RadiationExposure {
     /// Creates a [`RadiationExposure`] from a value in Milliroentgens (`mR`).
     #[inline]
     pub fn from_milliroentgens(value: Num) -> Self {
-        Self::new(value, RadiationExposureUnit::Milliroentgen)
+        let x = value;
+        Self((x * 1e-3) * 2.58e-4)
     }
 
     /// Returns the value expressed in Milliroentgens (`mR`).
     #[inline]
     pub fn as_milliroentgens(self) -> Num {
-        self.convert_to(RadiationExposureUnit::Milliroentgen)
+        let x = self.0;
+        (x / 1e-3) / 2.58e-4
     }
 
     /// Alias for [`Self::as_milliroentgens`].
@@ -280,42 +302,49 @@ impl crate::Quantity for RadiationExposure {
 
 impl Add for RadiationExposure {
     type Output = RadiationExposure;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for RadiationExposure {
     type Output = RadiationExposure;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for RadiationExposure {
     type Output = RadiationExposure;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for RadiationExposure {
     type Output = RadiationExposure;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<RadiationExposure> for Num {
     type Output = RadiationExposure;
+    #[inline]
     fn mul(self, rhs: RadiationExposure) -> RadiationExposure {
         RadiationExposure(self * rhs.0)
     }
 }
 impl Div<Num> for RadiationExposure {
     type Output = RadiationExposure;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RadiationExposure {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

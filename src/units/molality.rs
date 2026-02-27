@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl MolalityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MolePerKilogram => "mol/kg",
@@ -45,6 +48,7 @@ impl MolalityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MolePerKilogram => &["mol/kg"],
@@ -56,6 +60,7 @@ impl MolalityUnit {
 
 impl Molality {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MolalityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl Molality {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MolalityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl Molality {
     /// Creates a [`Molality`] from a value in MolesPerKilogram (`mol/kg`).
     #[inline]
     pub fn from_moles_per_kilogram(value: Num) -> Self {
-        Self::new(value, MolalityUnit::MolePerKilogram)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MolesPerKilogram (`mol/kg`).
     #[inline]
     pub fn as_moles_per_kilogram(self) -> Num {
-        self.convert_to(MolalityUnit::MolePerKilogram)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_moles_per_kilogram`].
@@ -113,13 +121,15 @@ impl Molality {
     /// Creates a [`Molality`] from a value in MillimolesPerKilogram (`mmol/kg`).
     #[inline]
     pub fn from_millimoles_per_kilogram(value: Num) -> Self {
-        Self::new(value, MolalityUnit::MillimolePerKilogram)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillimolesPerKilogram (`mmol/kg`).
     #[inline]
     pub fn as_millimoles_per_kilogram(self) -> Num {
-        self.convert_to(MolalityUnit::MillimolePerKilogram)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimoles_per_kilogram`].
@@ -131,13 +141,15 @@ impl Molality {
     /// Creates a [`Molality`] from a value in MolesPerGram (`mol/g`).
     #[inline]
     pub fn from_moles_per_gram(value: Num) -> Self {
-        Self::new(value, MolalityUnit::MolePerGram)
+        let x = value;
+        Self(x / 1e-3)
     }
 
     /// Returns the value expressed in MolesPerGram (`mol/g`).
     #[inline]
     pub fn as_moles_per_gram(self) -> Num {
-        self.convert_to(MolalityUnit::MolePerGram)
+        let x = self.0;
+        x * 1e-3
     }
 
     /// Alias for [`Self::as_moles_per_gram`].
@@ -160,42 +172,49 @@ impl crate::Quantity for Molality {
 
 impl Add for Molality {
     type Output = Molality;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Molality {
     type Output = Molality;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Molality {
     type Output = Molality;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Molality {
     type Output = Molality;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Molality> for Num {
     type Output = Molality;
+    #[inline]
     fn mul(self, rhs: Molality) -> Molality {
         Molality(self * rhs.0)
     }
 }
 impl Div<Num> for Molality {
     type Output = Molality;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Molality {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

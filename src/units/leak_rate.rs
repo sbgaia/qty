@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -38,6 +40,7 @@ impl LeakRateUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::PascalCubicMeterPerSecond => "Pa·m³/s",
@@ -48,6 +51,7 @@ impl LeakRateUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::PascalCubicMeterPerSecond => &["Pa·m³/s"],
@@ -60,6 +64,7 @@ impl LeakRateUnit {
 
 impl LeakRate {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LeakRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -88,6 +93,7 @@ impl LeakRate {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LeakRateUnit) -> Num {
         let x = self.0;
         match unit {
@@ -101,13 +107,15 @@ impl LeakRate {
     /// Creates a [`LeakRate`] from a value in PascalCubicMetersPerSecond (`Pa·m³/s`).
     #[inline]
     pub fn from_pascal_cubic_meters_per_second(value: Num) -> Self {
-        Self::new(value, LeakRateUnit::PascalCubicMeterPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in PascalCubicMetersPerSecond (`Pa·m³/s`).
     #[inline]
     pub fn as_pascal_cubic_meters_per_second(self) -> Num {
-        self.convert_to(LeakRateUnit::PascalCubicMeterPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_pascal_cubic_meters_per_second`].
@@ -119,13 +127,15 @@ impl LeakRate {
     /// Creates a [`LeakRate`] from a value in MillibarLitersPerSecond (`mbar·l/s`).
     #[inline]
     pub fn from_millibar_liters_per_second(value: Num) -> Self {
-        Self::new(value, LeakRateUnit::MillibarLiterPerSecond)
+        let x = value;
+        Self(x / 10.0)
     }
 
     /// Returns the value expressed in MillibarLitersPerSecond (`mbar·l/s`).
     #[inline]
     pub fn as_millibar_liters_per_second(self) -> Num {
-        self.convert_to(LeakRateUnit::MillibarLiterPerSecond)
+        let x = self.0;
+        x * 10.0
     }
 
     /// Alias for [`Self::as_millibar_liters_per_second`].
@@ -137,13 +147,15 @@ impl LeakRate {
     /// Creates a [`LeakRate`] from a value in TorrLitersPerSecond (`Torr·l/s`).
     #[inline]
     pub fn from_torr_liters_per_second(value: Num) -> Self {
-        Self::new(value, LeakRateUnit::TorrLiterPerSecond)
+        let x = value;
+        Self(x / 7.5)
     }
 
     /// Returns the value expressed in TorrLitersPerSecond (`Torr·l/s`).
     #[inline]
     pub fn as_torr_liters_per_second(self) -> Num {
-        self.convert_to(LeakRateUnit::TorrLiterPerSecond)
+        let x = self.0;
+        x * 7.5
     }
 
     /// Alias for [`Self::as_torr_liters_per_second`].
@@ -155,13 +167,15 @@ impl LeakRate {
     /// Creates a [`LeakRate`] from a value in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
     #[inline]
     pub fn from_atm_cubic_centimeters_per_second(value: Num) -> Self {
-        Self::new(value, LeakRateUnit::AtmCubicCentimeterPerSecond)
+        let x = value;
+        Self(x / (1e6 / 101325.0))
     }
 
     /// Returns the value expressed in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
     #[inline]
     pub fn as_atm_cubic_centimeters_per_second(self) -> Num {
-        self.convert_to(LeakRateUnit::AtmCubicCentimeterPerSecond)
+        let x = self.0;
+        x * (1e6 / 101325.0)
     }
 
     /// Alias for [`Self::as_atm_cubic_centimeters_per_second`].
@@ -184,42 +198,49 @@ impl crate::Quantity for LeakRate {
 
 impl Add for LeakRate {
     type Output = LeakRate;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for LeakRate {
     type Output = LeakRate;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for LeakRate {
     type Output = LeakRate;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for LeakRate {
     type Output = LeakRate;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<LeakRate> for Num {
     type Output = LeakRate;
+    #[inline]
     fn mul(self, rhs: LeakRate) -> LeakRate {
         LeakRate(self * rhs.0)
     }
 }
 impl Div<Num> for LeakRate {
     type Output = LeakRate;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LeakRate {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

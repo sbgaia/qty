@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -54,6 +56,7 @@ impl EnergyDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerCubicMeter => "J/m³",
@@ -72,6 +75,7 @@ impl EnergyDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerCubicMeter => &["J/m³"],
@@ -92,6 +96,7 @@ impl EnergyDensityUnit {
 
 impl EnergyDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: EnergyDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -128,6 +133,7 @@ impl EnergyDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: EnergyDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -149,13 +155,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in JoulesPerCubicMeter (`J/m³`).
     #[inline]
     pub fn from_joules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::JoulePerCubicMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerCubicMeter (`J/m³`).
     #[inline]
     pub fn as_joules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::JoulePerCubicMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_cubic_meter`].
@@ -167,13 +175,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in KilojoulesPerCubicMeter (`kJ/m³`).
     #[inline]
     pub fn from_kilojoules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::KilojoulePerCubicMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerCubicMeter (`kJ/m³`).
     #[inline]
     pub fn as_kilojoules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::KilojoulePerCubicMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_cubic_meter`].
@@ -185,13 +195,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in MegajoulesPerCubicMeter (`MJ/m³`).
     #[inline]
     pub fn from_megajoules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::MegajoulePerCubicMeter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerCubicMeter (`MJ/m³`).
     #[inline]
     pub fn as_megajoules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::MegajoulePerCubicMeter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_cubic_meter`].
@@ -203,13 +215,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in GigajoulesPerCubicMeter (`GJ/m³`).
     #[inline]
     pub fn from_gigajoules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::GigajoulePerCubicMeter)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in GigajoulesPerCubicMeter (`GJ/m³`).
     #[inline]
     pub fn as_gigajoules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::GigajoulePerCubicMeter)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigajoules_per_cubic_meter`].
@@ -221,13 +235,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in TerajoulesPerCubicMeter (`TJ/m³`).
     #[inline]
     pub fn from_terajoules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::TerajoulePerCubicMeter)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in TerajoulesPerCubicMeter (`TJ/m³`).
     #[inline]
     pub fn as_terajoules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::TerajoulePerCubicMeter)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_terajoules_per_cubic_meter`].
@@ -239,13 +255,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in PetajoulesPerCubicMeter (`PJ/m³`).
     #[inline]
     pub fn from_petajoules_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::PetajoulePerCubicMeter)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in PetajoulesPerCubicMeter (`PJ/m³`).
     #[inline]
     pub fn as_petajoules_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::PetajoulePerCubicMeter)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petajoules_per_cubic_meter`].
@@ -257,13 +275,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in WattHoursPerCubicMeter (`Wh/m³`).
     #[inline]
     pub fn from_watt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::WattHourPerCubicMeter)
+        let x = value;
+        Self(x * 3.6e+3)
     }
 
     /// Returns the value expressed in WattHoursPerCubicMeter (`Wh/m³`).
     #[inline]
     pub fn as_watt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::WattHourPerCubicMeter)
+        let x = self.0;
+        x / 3.6e+3
     }
 
     /// Alias for [`Self::as_watt_hours_per_cubic_meter`].
@@ -275,13 +295,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in KilowattHoursPerCubicMeter (`kWh/m³`).
     #[inline]
     pub fn from_kilowatt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::KilowattHourPerCubicMeter)
+        let x = value;
+        Self((x * 1e3) * 3.6e+3)
     }
 
     /// Returns the value expressed in KilowattHoursPerCubicMeter (`kWh/m³`).
     #[inline]
     pub fn as_kilowatt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::KilowattHourPerCubicMeter)
+        let x = self.0;
+        (x / 1e3) / 3.6e+3
     }
 
     /// Alias for [`Self::as_kilowatt_hours_per_cubic_meter`].
@@ -293,13 +315,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in MegawattHoursPerCubicMeter (`MWh/m³`).
     #[inline]
     pub fn from_megawatt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::MegawattHourPerCubicMeter)
+        let x = value;
+        Self((x * 1e6) * 3.6e+3)
     }
 
     /// Returns the value expressed in MegawattHoursPerCubicMeter (`MWh/m³`).
     #[inline]
     pub fn as_megawatt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::MegawattHourPerCubicMeter)
+        let x = self.0;
+        (x / 1e6) / 3.6e+3
     }
 
     /// Alias for [`Self::as_megawatt_hours_per_cubic_meter`].
@@ -311,13 +335,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in GigawattHoursPerCubicMeter (`GWh/m³`).
     #[inline]
     pub fn from_gigawatt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::GigawattHourPerCubicMeter)
+        let x = value;
+        Self((x * 1e9) * 3.6e+3)
     }
 
     /// Returns the value expressed in GigawattHoursPerCubicMeter (`GWh/m³`).
     #[inline]
     pub fn as_gigawatt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::GigawattHourPerCubicMeter)
+        let x = self.0;
+        (x / 1e9) / 3.6e+3
     }
 
     /// Alias for [`Self::as_gigawatt_hours_per_cubic_meter`].
@@ -329,13 +355,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in TerawattHoursPerCubicMeter (`TWh/m³`).
     #[inline]
     pub fn from_terawatt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::TerawattHourPerCubicMeter)
+        let x = value;
+        Self((x * 1e12) * 3.6e+3)
     }
 
     /// Returns the value expressed in TerawattHoursPerCubicMeter (`TWh/m³`).
     #[inline]
     pub fn as_terawatt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::TerawattHourPerCubicMeter)
+        let x = self.0;
+        (x / 1e12) / 3.6e+3
     }
 
     /// Alias for [`Self::as_terawatt_hours_per_cubic_meter`].
@@ -347,13 +375,15 @@ impl EnergyDensity {
     /// Creates a [`EnergyDensity`] from a value in PetawattHoursPerCubicMeter (`PWh/m³`).
     #[inline]
     pub fn from_petawatt_hours_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, EnergyDensityUnit::PetawattHourPerCubicMeter)
+        let x = value;
+        Self((x * 1e15) * 3.6e+3)
     }
 
     /// Returns the value expressed in PetawattHoursPerCubicMeter (`PWh/m³`).
     #[inline]
     pub fn as_petawatt_hours_per_cubic_meter(self) -> Num {
-        self.convert_to(EnergyDensityUnit::PetawattHourPerCubicMeter)
+        let x = self.0;
+        (x / 1e15) / 3.6e+3
     }
 
     /// Alias for [`Self::as_petawatt_hours_per_cubic_meter`].
@@ -376,42 +406,49 @@ impl crate::Quantity for EnergyDensity {
 
 impl Add for EnergyDensity {
     type Output = EnergyDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for EnergyDensity {
     type Output = EnergyDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for EnergyDensity {
     type Output = EnergyDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for EnergyDensity {
     type Output = EnergyDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<EnergyDensity> for Num {
     type Output = EnergyDensity;
+    #[inline]
     fn mul(self, rhs: EnergyDensity) -> EnergyDensity {
         EnergyDensity(self * rhs.0)
     }
 }
 impl Div<Num> for EnergyDensity {
     type Output = EnergyDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for EnergyDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

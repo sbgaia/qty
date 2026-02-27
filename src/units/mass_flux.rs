@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -54,6 +56,7 @@ impl MassFluxUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerSecondPerSquareMeter => "g·s⁻¹·m⁻²",
@@ -72,6 +75,7 @@ impl MassFluxUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerSecondPerSquareMeter => &["g·s⁻¹·m⁻²"],
@@ -92,6 +96,7 @@ impl MassFluxUnit {
 
 impl MassFlux {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MassFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -128,6 +133,7 @@ impl MassFlux {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MassFluxUnit) -> Num {
         let x = self.0;
         match unit {
@@ -149,13 +155,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
     #[inline]
     pub fn from_grams_per_second_per_square_meter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerSecondPerSquareMeter)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
     #[inline]
     pub fn as_grams_per_second_per_square_meter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerSecondPerSquareMeter)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_meter`].
@@ -167,13 +175,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_meter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareMeter)
+        let x = value;
+        Self((x * 1e3) / 1e3)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
     #[inline]
     pub fn as_kilograms_per_second_per_square_meter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+        let x = self.0;
+        (x / 1e3) * 1e3
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_meter`].
@@ -185,13 +195,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
     #[inline]
     pub fn from_grams_per_second_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerSecondPerSquareCentimeter)
+        let x = value;
+        Self(x / 1e-1)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
     #[inline]
     pub fn as_grams_per_second_per_square_centimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+        let x = self.0;
+        x * 1e-1
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_centimeter`].
@@ -203,13 +215,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) / 1e-1)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
     #[inline]
     pub fn as_kilograms_per_second_per_square_centimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) * 1e-1
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_centimeter`].
@@ -221,13 +235,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
     #[inline]
     pub fn from_grams_per_second_per_square_millimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerSecondPerSquareMillimeter)
+        let x = value;
+        Self(x / 1e-3)
     }
 
     /// Returns the value expressed in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
     #[inline]
     pub fn as_grams_per_second_per_square_millimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+        let x = self.0;
+        x * 1e-3
     }
 
     /// Alias for [`Self::as_grams_per_second_per_square_millimeter`].
@@ -239,13 +255,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_millimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+        let x = value;
+        Self((x * 1e3) / 1e-3)
     }
 
     /// Returns the value expressed in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
     #[inline]
     pub fn as_kilograms_per_second_per_square_millimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+        let x = self.0;
+        (x / 1e3) * 1e-3
     }
 
     /// Alias for [`Self::as_kilograms_per_second_per_square_millimeter`].
@@ -257,13 +275,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
     #[inline]
     pub fn from_grams_per_hour_per_square_meter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerHourPerSquareMeter)
+        let x = value;
+        Self(x / 3.6e6)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
     #[inline]
     pub fn as_grams_per_hour_per_square_meter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerHourPerSquareMeter)
+        let x = self.0;
+        x * 3.6e6
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_meter`].
@@ -275,13 +295,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_meter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerHourPerSquareMeter)
+        let x = value;
+        Self((x * 1e3) / 3.6e6)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
     #[inline]
     pub fn as_kilograms_per_hour_per_square_meter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerHourPerSquareMeter)
+        let x = self.0;
+        (x / 1e3) * 3.6e6
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_meter`].
@@ -293,13 +315,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
     #[inline]
     pub fn from_grams_per_hour_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerHourPerSquareCentimeter)
+        let x = value;
+        Self(x / 3.6e2)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
     #[inline]
     pub fn as_grams_per_hour_per_square_centimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerHourPerSquareCentimeter)
+        let x = self.0;
+        x * 3.6e2
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_centimeter`].
@@ -311,13 +335,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) / 3.6e2)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
     #[inline]
     pub fn as_kilograms_per_hour_per_square_centimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) * 3.6e2
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_centimeter`].
@@ -329,13 +355,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
     #[inline]
     pub fn from_grams_per_hour_per_square_millimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::GramPerHourPerSquareMillimeter)
+        let x = value;
+        Self(x / 3.6e0)
     }
 
     /// Returns the value expressed in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
     #[inline]
     pub fn as_grams_per_hour_per_square_millimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::GramPerHourPerSquareMillimeter)
+        let x = self.0;
+        x * 3.6e0
     }
 
     /// Alias for [`Self::as_grams_per_hour_per_square_millimeter`].
@@ -347,13 +375,15 @@ impl MassFlux {
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_millimeter(value: Num) -> Self {
-        Self::new(value, MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+        let x = value;
+        Self((x * 1e3) / 3.6e0)
     }
 
     /// Returns the value expressed in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
     #[inline]
     pub fn as_kilograms_per_hour_per_square_millimeter(self) -> Num {
-        self.convert_to(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+        let x = self.0;
+        (x / 1e3) * 3.6e0
     }
 
     /// Alias for [`Self::as_kilograms_per_hour_per_square_millimeter`].
@@ -376,42 +406,49 @@ impl crate::Quantity for MassFlux {
 
 impl Add for MassFlux {
     type Output = MassFlux;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MassFlux {
     type Output = MassFlux;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MassFlux {
     type Output = MassFlux;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MassFlux {
     type Output = MassFlux;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MassFlux> for Num {
     type Output = MassFlux;
+    #[inline]
     fn mul(self, rhs: MassFlux) -> MassFlux {
         MassFlux(self * rhs.0)
     }
 }
 impl Div<Num> for MassFlux {
     type Output = MassFlux;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassFlux {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

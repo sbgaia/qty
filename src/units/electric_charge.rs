@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -52,6 +54,7 @@ impl ElectricChargeUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Coulomb => "C",
@@ -69,6 +72,7 @@ impl ElectricChargeUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Coulomb => &["C"],
@@ -88,6 +92,7 @@ impl ElectricChargeUnit {
 
 impl ElectricCharge {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricChargeUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -123,6 +128,7 @@ impl ElectricCharge {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricChargeUnit) -> Num {
         let x = self.0;
         match unit {
@@ -143,13 +149,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Coulombs (`C`).
     #[inline]
     pub fn from_coulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Coulomb)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Coulombs (`C`).
     #[inline]
     pub fn as_coulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Coulomb)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_coulombs`].
@@ -161,13 +169,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Picocoulombs (`pC`).
     #[inline]
     pub fn from_picocoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Picocoulomb)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picocoulombs (`pC`).
     #[inline]
     pub fn as_picocoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Picocoulomb)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picocoulombs`].
@@ -179,13 +189,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Nanocoulombs (`nC`).
     #[inline]
     pub fn from_nanocoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Nanocoulomb)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanocoulombs (`nC`).
     #[inline]
     pub fn as_nanocoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Nanocoulomb)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanocoulombs`].
@@ -197,13 +209,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Microcoulombs (`µC`).
     #[inline]
     pub fn from_microcoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Microcoulomb)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microcoulombs (`µC`).
     #[inline]
     pub fn as_microcoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Microcoulomb)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microcoulombs`].
@@ -215,13 +229,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Millicoulombs (`mC`).
     #[inline]
     pub fn from_millicoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Millicoulomb)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millicoulombs (`mC`).
     #[inline]
     pub fn as_millicoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Millicoulomb)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millicoulombs`].
@@ -233,13 +249,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Kilocoulombs (`kC`).
     #[inline]
     pub fn from_kilocoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Kilocoulomb)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilocoulombs (`kC`).
     #[inline]
     pub fn as_kilocoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Kilocoulomb)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilocoulombs`].
@@ -251,13 +269,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in Megacoulombs (`MC`).
     #[inline]
     pub fn from_megacoulombs(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::Megacoulomb)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megacoulombs (`MC`).
     #[inline]
     pub fn as_megacoulombs(self) -> Num {
-        self.convert_to(ElectricChargeUnit::Megacoulomb)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megacoulombs`].
@@ -269,13 +289,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in AmpereHours (`A-h`).
     #[inline]
     pub fn from_ampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::AmpereHour)
+        let x = value;
+        Self(x * 3600.0)
     }
 
     /// Returns the value expressed in AmpereHours (`A-h`).
     #[inline]
     pub fn as_ampere_hours(self) -> Num {
-        self.convert_to(ElectricChargeUnit::AmpereHour)
+        let x = self.0;
+        x / 3600.0
     }
 
     /// Alias for [`Self::as_ampere_hours`].
@@ -287,13 +309,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in MilliampereHours (`mA-h`).
     #[inline]
     pub fn from_milliampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::MilliampereHour)
+        let x = value;
+        Self((x * 1e-3) * 3600.0)
     }
 
     /// Returns the value expressed in MilliampereHours (`mA-h`).
     #[inline]
     pub fn as_milliampere_hours(self) -> Num {
-        self.convert_to(ElectricChargeUnit::MilliampereHour)
+        let x = self.0;
+        (x / 1e-3) / 3600.0
     }
 
     /// Alias for [`Self::as_milliampere_hours`].
@@ -305,13 +329,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in KiloampereHours (`kA-h`).
     #[inline]
     pub fn from_kiloampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::KiloampereHour)
+        let x = value;
+        Self((x * 1e3) * 3600.0)
     }
 
     /// Returns the value expressed in KiloampereHours (`kA-h`).
     #[inline]
     pub fn as_kiloampere_hours(self) -> Num {
-        self.convert_to(ElectricChargeUnit::KiloampereHour)
+        let x = self.0;
+        (x / 1e3) / 3600.0
     }
 
     /// Alias for [`Self::as_kiloampere_hours`].
@@ -323,13 +349,15 @@ impl ElectricCharge {
     /// Creates a [`ElectricCharge`] from a value in MegaampereHours (`MA-h`).
     #[inline]
     pub fn from_megaampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricChargeUnit::MegaampereHour)
+        let x = value;
+        Self((x * 1e6) * 3600.0)
     }
 
     /// Returns the value expressed in MegaampereHours (`MA-h`).
     #[inline]
     pub fn as_megaampere_hours(self) -> Num {
-        self.convert_to(ElectricChargeUnit::MegaampereHour)
+        let x = self.0;
+        (x / 1e6) / 3600.0
     }
 
     /// Alias for [`Self::as_megaampere_hours`].
@@ -352,42 +380,49 @@ impl crate::Quantity for ElectricCharge {
 
 impl Add for ElectricCharge {
     type Output = ElectricCharge;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricCharge {
     type Output = ElectricCharge;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricCharge {
     type Output = ElectricCharge;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricCharge {
     type Output = ElectricCharge;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricCharge> for Num {
     type Output = ElectricCharge;
+    #[inline]
     fn mul(self, rhs: ElectricCharge) -> ElectricCharge {
         ElectricCharge(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricCharge {
     type Output = ElectricCharge;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCharge {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

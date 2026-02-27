@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -31,6 +33,7 @@ impl PowerRatioUnit {
     pub const ALL: &'static [Self] = &[Self::DecibelWatt, Self::DecibelMilliwatt];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::DecibelWatt => "dBW",
@@ -39,6 +42,7 @@ impl PowerRatioUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DecibelWatt => &["dBW"],
@@ -49,6 +53,7 @@ impl PowerRatioUnit {
 
 impl PowerRatio {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: PowerRatioUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -75,6 +80,7 @@ impl PowerRatio {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: PowerRatioUnit) -> Num {
         let x = self.0;
         match unit {
@@ -86,13 +92,15 @@ impl PowerRatio {
     /// Creates a [`PowerRatio`] from a value in DecibelWatts (`dBW`).
     #[inline]
     pub fn from_decibel_watts(value: Num) -> Self {
-        Self::new(value, PowerRatioUnit::DecibelWatt)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DecibelWatts (`dBW`).
     #[inline]
     pub fn as_decibel_watts(self) -> Num {
-        self.convert_to(PowerRatioUnit::DecibelWatt)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_decibel_watts`].
@@ -104,13 +112,15 @@ impl PowerRatio {
     /// Creates a [`PowerRatio`] from a value in DecibelMilliwatts (`dBmW`).
     #[inline]
     pub fn from_decibel_milliwatts(value: Num) -> Self {
-        Self::new(value, PowerRatioUnit::DecibelMilliwatt)
+        let x = value;
+        Self(x - 30.0)
     }
 
     /// Returns the value expressed in DecibelMilliwatts (`dBmW`).
     #[inline]
     pub fn as_decibel_milliwatts(self) -> Num {
-        self.convert_to(PowerRatioUnit::DecibelMilliwatt)
+        let x = self.0;
+        x + 30.0
     }
 
     /// Alias for [`Self::as_decibel_milliwatts`].
@@ -133,42 +143,49 @@ impl crate::Quantity for PowerRatio {
 
 impl Add for PowerRatio {
     type Output = PowerRatio;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for PowerRatio {
     type Output = PowerRatio;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for PowerRatio {
     type Output = PowerRatio;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for PowerRatio {
     type Output = PowerRatio;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<PowerRatio> for Num {
     type Output = PowerRatio;
+    #[inline]
     fn mul(self, rhs: PowerRatio) -> PowerRatio {
         PowerRatio(self * rhs.0)
     }
 }
 impl Div<Num> for PowerRatio {
     type Output = PowerRatio;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for PowerRatio {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

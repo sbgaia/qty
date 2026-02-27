@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -78,6 +80,7 @@ impl MassFractionUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::DecimalFraction => "",
@@ -108,6 +111,7 @@ impl MassFractionUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DecimalFraction => &[""],
@@ -140,6 +144,7 @@ impl MassFractionUnit {
 
 impl MassFraction {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MassFractionUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -188,6 +193,7 @@ impl MassFraction {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MassFractionUnit) -> Num {
         let x = self.0;
         match unit {
@@ -221,13 +227,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in DecimalFractions (``).
     #[inline]
     pub fn from_decimal_fractions(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::DecimalFraction)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DecimalFractions (``).
     #[inline]
     pub fn as_decimal_fractions(self) -> Num {
-        self.convert_to(MassFractionUnit::DecimalFraction)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_decimal_fractions`].
@@ -239,13 +247,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in GramsPerGram (`g/g`).
     #[inline]
     pub fn from_grams_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::GramPerGram)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in GramsPerGram (`g/g`).
     #[inline]
     pub fn as_grams_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::GramPerGram)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_grams_per_gram`].
@@ -257,13 +267,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in NanogramsPerGram (`ng/g`).
     #[inline]
     pub fn from_nanograms_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::NanogramPerGram)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanogramsPerGram (`ng/g`).
     #[inline]
     pub fn as_nanograms_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::NanogramPerGram)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanograms_per_gram`].
@@ -275,13 +287,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in MicrogramsPerGram (`µg/g`).
     #[inline]
     pub fn from_micrograms_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::MicrogramPerGram)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrogramsPerGram (`µg/g`).
     #[inline]
     pub fn as_micrograms_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::MicrogramPerGram)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrograms_per_gram`].
@@ -293,13 +307,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in MilligramsPerGram (`mg/g`).
     #[inline]
     pub fn from_milligrams_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::MilligramPerGram)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilligramsPerGram (`mg/g`).
     #[inline]
     pub fn as_milligrams_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::MilligramPerGram)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milligrams_per_gram`].
@@ -311,13 +327,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in CentigramsPerGram (`cg/g`).
     #[inline]
     pub fn from_centigrams_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::CentigramPerGram)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentigramsPerGram (`cg/g`).
     #[inline]
     pub fn as_centigrams_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::CentigramPerGram)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centigrams_per_gram`].
@@ -329,13 +347,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in DecigramsPerGram (`dg/g`).
     #[inline]
     pub fn from_decigrams_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::DecigramPerGram)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecigramsPerGram (`dg/g`).
     #[inline]
     pub fn as_decigrams_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::DecigramPerGram)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decigrams_per_gram`].
@@ -347,13 +367,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in DecagramsPerGram (`dag/g`).
     #[inline]
     pub fn from_decagrams_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::DecagramPerGram)
+        let x = value;
+        Self((x * 1e1))
     }
 
     /// Returns the value expressed in DecagramsPerGram (`dag/g`).
     #[inline]
     pub fn as_decagrams_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::DecagramPerGram)
+        let x = self.0;
+        (x / 1e1)
     }
 
     /// Alias for [`Self::as_decagrams_per_gram`].
@@ -365,13 +387,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in HectogramsPerGram (`hg/g`).
     #[inline]
     pub fn from_hectograms_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::HectogramPerGram)
+        let x = value;
+        Self((x * 1e2))
     }
 
     /// Returns the value expressed in HectogramsPerGram (`hg/g`).
     #[inline]
     pub fn as_hectograms_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::HectogramPerGram)
+        let x = self.0;
+        (x / 1e2)
     }
 
     /// Alias for [`Self::as_hectograms_per_gram`].
@@ -383,13 +407,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in KilogramsPerGram (`kg/g`).
     #[inline]
     pub fn from_kilograms_per_gram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::KilogramPerGram)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilogramsPerGram (`kg/g`).
     #[inline]
     pub fn as_kilograms_per_gram(self) -> Num {
-        self.convert_to(MassFractionUnit::KilogramPerGram)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilograms_per_gram`].
@@ -401,13 +427,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in GramsPerKilogram (`g/kg`).
     #[inline]
     pub fn from_grams_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::GramPerKilogram)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in GramsPerKilogram (`g/kg`).
     #[inline]
     pub fn as_grams_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::GramPerKilogram)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_grams_per_kilogram`].
@@ -419,13 +447,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in NanogramsPerKilogram (`ng/kg`).
     #[inline]
     pub fn from_nanograms_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::NanogramPerKilogram)
+        let x = value;
+        Self((x * 1e-9) / 1e3)
     }
 
     /// Returns the value expressed in NanogramsPerKilogram (`ng/kg`).
     #[inline]
     pub fn as_nanograms_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::NanogramPerKilogram)
+        let x = self.0;
+        (x / 1e-9) * 1e3
     }
 
     /// Alias for [`Self::as_nanograms_per_kilogram`].
@@ -437,13 +467,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in MicrogramsPerKilogram (`µg/kg`).
     #[inline]
     pub fn from_micrograms_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::MicrogramPerKilogram)
+        let x = value;
+        Self((x * 1e-6) / 1e3)
     }
 
     /// Returns the value expressed in MicrogramsPerKilogram (`µg/kg`).
     #[inline]
     pub fn as_micrograms_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::MicrogramPerKilogram)
+        let x = self.0;
+        (x / 1e-6) * 1e3
     }
 
     /// Alias for [`Self::as_micrograms_per_kilogram`].
@@ -455,13 +487,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in MilligramsPerKilogram (`mg/kg`).
     #[inline]
     pub fn from_milligrams_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::MilligramPerKilogram)
+        let x = value;
+        Self((x * 1e-3) / 1e3)
     }
 
     /// Returns the value expressed in MilligramsPerKilogram (`mg/kg`).
     #[inline]
     pub fn as_milligrams_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::MilligramPerKilogram)
+        let x = self.0;
+        (x / 1e-3) * 1e3
     }
 
     /// Alias for [`Self::as_milligrams_per_kilogram`].
@@ -473,13 +507,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in CentigramsPerKilogram (`cg/kg`).
     #[inline]
     pub fn from_centigrams_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::CentigramPerKilogram)
+        let x = value;
+        Self((x * 1e-2) / 1e3)
     }
 
     /// Returns the value expressed in CentigramsPerKilogram (`cg/kg`).
     #[inline]
     pub fn as_centigrams_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::CentigramPerKilogram)
+        let x = self.0;
+        (x / 1e-2) * 1e3
     }
 
     /// Alias for [`Self::as_centigrams_per_kilogram`].
@@ -491,13 +527,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in DecigramsPerKilogram (`dg/kg`).
     #[inline]
     pub fn from_decigrams_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::DecigramPerKilogram)
+        let x = value;
+        Self((x * 1e-1) / 1e3)
     }
 
     /// Returns the value expressed in DecigramsPerKilogram (`dg/kg`).
     #[inline]
     pub fn as_decigrams_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::DecigramPerKilogram)
+        let x = self.0;
+        (x / 1e-1) * 1e3
     }
 
     /// Alias for [`Self::as_decigrams_per_kilogram`].
@@ -509,13 +547,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in DecagramsPerKilogram (`dag/kg`).
     #[inline]
     pub fn from_decagrams_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::DecagramPerKilogram)
+        let x = value;
+        Self((x * 1e1) / 1e3)
     }
 
     /// Returns the value expressed in DecagramsPerKilogram (`dag/kg`).
     #[inline]
     pub fn as_decagrams_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::DecagramPerKilogram)
+        let x = self.0;
+        (x / 1e1) * 1e3
     }
 
     /// Alias for [`Self::as_decagrams_per_kilogram`].
@@ -527,13 +567,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in HectogramsPerKilogram (`hg/kg`).
     #[inline]
     pub fn from_hectograms_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::HectogramPerKilogram)
+        let x = value;
+        Self((x * 1e2) / 1e3)
     }
 
     /// Returns the value expressed in HectogramsPerKilogram (`hg/kg`).
     #[inline]
     pub fn as_hectograms_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::HectogramPerKilogram)
+        let x = self.0;
+        (x / 1e2) * 1e3
     }
 
     /// Alias for [`Self::as_hectograms_per_kilogram`].
@@ -545,13 +587,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in KilogramsPerKilogram (`kg/kg`).
     #[inline]
     pub fn from_kilograms_per_kilogram(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::KilogramPerKilogram)
+        let x = value;
+        Self((x * 1e3) / 1e3)
     }
 
     /// Returns the value expressed in KilogramsPerKilogram (`kg/kg`).
     #[inline]
     pub fn as_kilograms_per_kilogram(self) -> Num {
-        self.convert_to(MassFractionUnit::KilogramPerKilogram)
+        let x = self.0;
+        (x / 1e3) * 1e3
     }
 
     /// Alias for [`Self::as_kilograms_per_kilogram`].
@@ -563,25 +607,29 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in Percent (`%`).
     #[inline]
     pub fn from_percent(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::Percent)
+        let x = value;
+        Self(x / 1e2)
     }
 
     /// Returns the value expressed in Percent (`%`).
     #[inline]
     pub fn as_percent(self) -> Num {
-        self.convert_to(MassFractionUnit::Percent)
+        let x = self.0;
+        x * 1e2
     }
 
     /// Creates a [`MassFraction`] from a value in PartsPerThousand (`‰`).
     #[inline]
     pub fn from_parts_per_thousand(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::PartPerThousand)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in PartsPerThousand (`‰`).
     #[inline]
     pub fn as_parts_per_thousand(self) -> Num {
-        self.convert_to(MassFractionUnit::PartPerThousand)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_parts_per_thousand`].
@@ -593,13 +641,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in PartsPerMillion (`ppm`).
     #[inline]
     pub fn from_parts_per_million(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::PartPerMillion)
+        let x = value;
+        Self(x / 1e6)
     }
 
     /// Returns the value expressed in PartsPerMillion (`ppm`).
     #[inline]
     pub fn as_parts_per_million(self) -> Num {
-        self.convert_to(MassFractionUnit::PartPerMillion)
+        let x = self.0;
+        x * 1e6
     }
 
     /// Alias for [`Self::as_parts_per_million`].
@@ -611,13 +661,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in PartsPerBillion (`ppb`).
     #[inline]
     pub fn from_parts_per_billion(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::PartPerBillion)
+        let x = value;
+        Self(x / 1e9)
     }
 
     /// Returns the value expressed in PartsPerBillion (`ppb`).
     #[inline]
     pub fn as_parts_per_billion(self) -> Num {
-        self.convert_to(MassFractionUnit::PartPerBillion)
+        let x = self.0;
+        x * 1e9
     }
 
     /// Alias for [`Self::as_parts_per_billion`].
@@ -629,13 +681,15 @@ impl MassFraction {
     /// Creates a [`MassFraction`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn from_parts_per_trillion(value: Num) -> Self {
-        Self::new(value, MassFractionUnit::PartPerTrillion)
+        let x = value;
+        Self(x / 1e12)
     }
 
     /// Returns the value expressed in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn as_parts_per_trillion(self) -> Num {
-        self.convert_to(MassFractionUnit::PartPerTrillion)
+        let x = self.0;
+        x * 1e12
     }
 
     /// Alias for [`Self::as_parts_per_trillion`].
@@ -658,42 +712,49 @@ impl crate::Quantity for MassFraction {
 
 impl Add for MassFraction {
     type Output = MassFraction;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MassFraction {
     type Output = MassFraction;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MassFraction {
     type Output = MassFraction;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MassFraction {
     type Output = MassFraction;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MassFraction> for Num {
     type Output = MassFraction;
+    #[inline]
     fn mul(self, rhs: MassFraction) -> MassFraction {
         MassFraction(self * rhs.0)
     }
 }
 impl Div<Num> for MassFraction {
     type Output = MassFraction;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassFraction {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

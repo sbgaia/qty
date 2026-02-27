@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -97,6 +99,7 @@ impl SpeedUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterPerSecond => "m/s",
@@ -136,6 +139,7 @@ impl SpeedUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterPerSecond => &["m/s"],
@@ -177,6 +181,7 @@ impl SpeedUnit {
 
 impl Speed {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: SpeedUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -234,6 +239,7 @@ impl Speed {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: SpeedUnit) -> Num {
         let x = self.0;
         match unit {
@@ -276,13 +282,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MetersPerSecond (`m/s`).
     #[inline]
     pub fn from_meters_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MeterPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MetersPerSecond (`m/s`).
     #[inline]
     pub fn as_meters_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::MeterPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters_per_second`].
@@ -294,13 +302,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in NanometersPerSecond (`nm/s`).
     #[inline]
     pub fn from_nanometers_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::NanometerPerSecond)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanometersPerSecond (`nm/s`).
     #[inline]
     pub fn as_nanometers_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::NanometerPerSecond)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanometers_per_second`].
@@ -312,13 +322,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MicrometersPerSecond (`µm/s`).
     #[inline]
     pub fn from_micrometers_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MicrometerPerSecond)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrometersPerSecond (`µm/s`).
     #[inline]
     pub fn as_micrometers_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::MicrometerPerSecond)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrometers_per_second`].
@@ -330,13 +342,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MillimetersPerSecond (`mm/s`).
     #[inline]
     pub fn from_millimeters_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MillimeterPerSecond)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillimetersPerSecond (`mm/s`).
     #[inline]
     pub fn as_millimeters_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::MillimeterPerSecond)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimeters_per_second`].
@@ -348,13 +362,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in CentimetersPerSecond (`cm/s`).
     #[inline]
     pub fn from_centimeters_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::CentimeterPerSecond)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentimetersPerSecond (`cm/s`).
     #[inline]
     pub fn as_centimeters_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::CentimeterPerSecond)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centimeters_per_second`].
@@ -366,13 +382,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in DecimetersPerSecond (`dm/s`).
     #[inline]
     pub fn from_decimeters_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::DecimeterPerSecond)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecimetersPerSecond (`dm/s`).
     #[inline]
     pub fn as_decimeters_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::DecimeterPerSecond)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decimeters_per_second`].
@@ -384,13 +402,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in KilometersPerSecond (`km/s`).
     #[inline]
     pub fn from_kilometers_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::KilometerPerSecond)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilometersPerSecond (`km/s`).
     #[inline]
     pub fn as_kilometers_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::KilometerPerSecond)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilometers_per_second`].
@@ -402,13 +422,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MetersPerMinute (`m/min`).
     #[inline]
     pub fn from_meters_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MeterPerMinute)
+        let x = value;
+        Self(x / 60.0)
     }
 
     /// Returns the value expressed in MetersPerMinute (`m/min`).
     #[inline]
     pub fn as_meters_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::MeterPerMinute)
+        let x = self.0;
+        x * 60.0
     }
 
     /// Alias for [`Self::as_meters_per_minute`].
@@ -420,13 +442,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in NanometersPerMinute (`nm/min`).
     #[inline]
     pub fn from_nanometers_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::NanometerPerMinute)
+        let x = value;
+        Self((x * 1e-9) / 60.0)
     }
 
     /// Returns the value expressed in NanometersPerMinute (`nm/min`).
     #[inline]
     pub fn as_nanometers_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::NanometerPerMinute)
+        let x = self.0;
+        (x / 1e-9) * 60.0
     }
 
     /// Alias for [`Self::as_nanometers_per_minute`].
@@ -438,13 +462,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MicrometersPerMinute (`µm/min`).
     #[inline]
     pub fn from_micrometers_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MicrometerPerMinute)
+        let x = value;
+        Self((x * 1e-6) / 60.0)
     }
 
     /// Returns the value expressed in MicrometersPerMinute (`µm/min`).
     #[inline]
     pub fn as_micrometers_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::MicrometerPerMinute)
+        let x = self.0;
+        (x / 1e-6) * 60.0
     }
 
     /// Alias for [`Self::as_micrometers_per_minute`].
@@ -456,13 +482,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MillimetersPerMinute (`mm/min`).
     #[inline]
     pub fn from_millimeters_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MillimeterPerMinute)
+        let x = value;
+        Self((x * 1e-3) / 60.0)
     }
 
     /// Returns the value expressed in MillimetersPerMinute (`mm/min`).
     #[inline]
     pub fn as_millimeters_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::MillimeterPerMinute)
+        let x = self.0;
+        (x / 1e-3) * 60.0
     }
 
     /// Alias for [`Self::as_millimeters_per_minute`].
@@ -474,13 +502,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in CentimetersPerMinute (`cm/min`).
     #[inline]
     pub fn from_centimeters_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::CentimeterPerMinute)
+        let x = value;
+        Self((x * 1e-2) / 60.0)
     }
 
     /// Returns the value expressed in CentimetersPerMinute (`cm/min`).
     #[inline]
     pub fn as_centimeters_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::CentimeterPerMinute)
+        let x = self.0;
+        (x / 1e-2) * 60.0
     }
 
     /// Alias for [`Self::as_centimeters_per_minute`].
@@ -492,13 +522,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in DecimetersPerMinute (`dm/min`).
     #[inline]
     pub fn from_decimeters_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::DecimeterPerMinute)
+        let x = value;
+        Self((x * 1e-1) / 60.0)
     }
 
     /// Returns the value expressed in DecimetersPerMinute (`dm/min`).
     #[inline]
     pub fn as_decimeters_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::DecimeterPerMinute)
+        let x = self.0;
+        (x / 1e-1) * 60.0
     }
 
     /// Alias for [`Self::as_decimeters_per_minute`].
@@ -510,13 +542,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in KilometersPerMinute (`km/min`).
     #[inline]
     pub fn from_kilometers_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::KilometerPerMinute)
+        let x = value;
+        Self((x * 1e3) / 60.0)
     }
 
     /// Returns the value expressed in KilometersPerMinute (`km/min`).
     #[inline]
     pub fn as_kilometers_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::KilometerPerMinute)
+        let x = self.0;
+        (x / 1e3) * 60.0
     }
 
     /// Alias for [`Self::as_kilometers_per_minute`].
@@ -528,13 +562,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MetersPerHour (`m/h`).
     #[inline]
     pub fn from_meters_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MeterPerHour)
+        let x = value;
+        Self(x / 3600.0)
     }
 
     /// Returns the value expressed in MetersPerHour (`m/h`).
     #[inline]
     pub fn as_meters_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::MeterPerHour)
+        let x = self.0;
+        x * 3600.0
     }
 
     /// Alias for [`Self::as_meters_per_hour`].
@@ -546,13 +582,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MillimetersPerHour (`mm/h`).
     #[inline]
     pub fn from_millimeters_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MillimeterPerHour)
+        let x = value;
+        Self((x * 1e-3) / 3600.0)
     }
 
     /// Returns the value expressed in MillimetersPerHour (`mm/h`).
     #[inline]
     pub fn as_millimeters_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::MillimeterPerHour)
+        let x = self.0;
+        (x / 1e-3) * 3600.0
     }
 
     /// Alias for [`Self::as_millimeters_per_hour`].
@@ -564,13 +602,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in CentimetersPerHour (`cm/h`).
     #[inline]
     pub fn from_centimeters_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::CentimeterPerHour)
+        let x = value;
+        Self((x * 1e-2) / 3600.0)
     }
 
     /// Returns the value expressed in CentimetersPerHour (`cm/h`).
     #[inline]
     pub fn as_centimeters_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::CentimeterPerHour)
+        let x = self.0;
+        (x / 1e-2) * 3600.0
     }
 
     /// Alias for [`Self::as_centimeters_per_hour`].
@@ -582,13 +622,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in KilometersPerHour (`km/h`).
     #[inline]
     pub fn from_kilometers_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::KilometerPerHour)
+        let x = value;
+        Self((x * 1e3) / 3600.0)
     }
 
     /// Returns the value expressed in KilometersPerHour (`km/h`).
     #[inline]
     pub fn as_kilometers_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::KilometerPerHour)
+        let x = self.0;
+        (x / 1e3) * 3600.0
     }
 
     /// Alias for [`Self::as_kilometers_per_hour`].
@@ -600,13 +642,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in FeetPerSecond (`ft/s`).
     #[inline]
     pub fn from_feet_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::FootPerSecond)
+        let x = value;
+        Self(x * 0.3048)
     }
 
     /// Returns the value expressed in FeetPerSecond (`ft/s`).
     #[inline]
     pub fn as_feet_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::FootPerSecond)
+        let x = self.0;
+        x / 0.3048
     }
 
     /// Alias for [`Self::as_feet_per_second`].
@@ -618,13 +662,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in FeetPerMinute (`ft/min`).
     #[inline]
     pub fn from_feet_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::FootPerMinute)
+        let x = value;
+        Self(x * 0.3048 / 60.0)
     }
 
     /// Returns the value expressed in FeetPerMinute (`ft/min`).
     #[inline]
     pub fn as_feet_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::FootPerMinute)
+        let x = self.0;
+        x / 0.3048 * 60.0
     }
 
     /// Alias for [`Self::as_feet_per_minute`].
@@ -636,13 +682,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in FeetPerHour (`ft/h`).
     #[inline]
     pub fn from_feet_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::FootPerHour)
+        let x = value;
+        Self(x * 0.3048 / 3600.0)
     }
 
     /// Returns the value expressed in FeetPerHour (`ft/h`).
     #[inline]
     pub fn as_feet_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::FootPerHour)
+        let x = self.0;
+        x / 0.3048 * 3600.0
     }
 
     /// Alias for [`Self::as_feet_per_hour`].
@@ -654,13 +702,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerSecond (`ftUS/s`).
     #[inline]
     pub fn from_us_survey_feet_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::UsSurveyFootPerSecond)
+        let x = value;
+        Self(x * 1200.0 / 3937.0)
     }
 
     /// Returns the value expressed in UsSurveyFeetPerSecond (`ftUS/s`).
     #[inline]
     pub fn as_us_survey_feet_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::UsSurveyFootPerSecond)
+        let x = self.0;
+        x * 3937.0 / 1200.0
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_second`].
@@ -672,13 +722,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerMinute (`ftUS/min`).
     #[inline]
     pub fn from_us_survey_feet_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::UsSurveyFootPerMinute)
+        let x = value;
+        Self((x * 1200.0 / 3937.0) / 60.0)
     }
 
     /// Returns the value expressed in UsSurveyFeetPerMinute (`ftUS/min`).
     #[inline]
     pub fn as_us_survey_feet_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::UsSurveyFootPerMinute)
+        let x = self.0;
+        (x * 3937.0 / 1200.0) * 60.0
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_minute`].
@@ -690,13 +742,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerHour (`ftUS/h`).
     #[inline]
     pub fn from_us_survey_feet_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::UsSurveyFootPerHour)
+        let x = value;
+        Self((x * 1200.0 / 3937.0) / 3600.0)
     }
 
     /// Returns the value expressed in UsSurveyFeetPerHour (`ftUS/h`).
     #[inline]
     pub fn as_us_survey_feet_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::UsSurveyFootPerHour)
+        let x = self.0;
+        (x * 3937.0 / 1200.0) * 3600.0
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_hour`].
@@ -708,13 +762,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in InchesPerSecond (`in/s`).
     #[inline]
     pub fn from_inches_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::InchPerSecond)
+        let x = value;
+        Self(x * 2.54e-2)
     }
 
     /// Returns the value expressed in InchesPerSecond (`in/s`).
     #[inline]
     pub fn as_inches_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::InchPerSecond)
+        let x = self.0;
+        x / 2.54e-2
     }
 
     /// Alias for [`Self::as_inches_per_second`].
@@ -726,13 +782,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in InchesPerMinute (`in/min`).
     #[inline]
     pub fn from_inches_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::InchPerMinute)
+        let x = value;
+        Self((x / 60.0) * 2.54e-2)
     }
 
     /// Returns the value expressed in InchesPerMinute (`in/min`).
     #[inline]
     pub fn as_inches_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::InchPerMinute)
+        let x = self.0;
+        (x / 2.54e-2) * 60.0
     }
 
     /// Alias for [`Self::as_inches_per_minute`].
@@ -744,13 +802,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in InchesPerHour (`in/h`).
     #[inline]
     pub fn from_inches_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::InchPerHour)
+        let x = value;
+        Self((x / 3600.0) * 2.54e-2)
     }
 
     /// Returns the value expressed in InchesPerHour (`in/h`).
     #[inline]
     pub fn as_inches_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::InchPerHour)
+        let x = self.0;
+        (x / 2.54e-2) * 3600.0
     }
 
     /// Alias for [`Self::as_inches_per_hour`].
@@ -762,13 +822,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in YardsPerSecond (`yd/s`).
     #[inline]
     pub fn from_yards_per_second(value: Num) -> Self {
-        Self::new(value, SpeedUnit::YardPerSecond)
+        let x = value;
+        Self(x * 0.9144)
     }
 
     /// Returns the value expressed in YardsPerSecond (`yd/s`).
     #[inline]
     pub fn as_yards_per_second(self) -> Num {
-        self.convert_to(SpeedUnit::YardPerSecond)
+        let x = self.0;
+        x / 0.9144
     }
 
     /// Alias for [`Self::as_yards_per_second`].
@@ -780,13 +842,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in YardsPerMinute (`yd/min`).
     #[inline]
     pub fn from_yards_per_minute(value: Num) -> Self {
-        Self::new(value, SpeedUnit::YardPerMinute)
+        let x = value;
+        Self(x * 0.9144 / 60.0)
     }
 
     /// Returns the value expressed in YardsPerMinute (`yd/min`).
     #[inline]
     pub fn as_yards_per_minute(self) -> Num {
-        self.convert_to(SpeedUnit::YardPerMinute)
+        let x = self.0;
+        x / 0.9144 * 60.0
     }
 
     /// Alias for [`Self::as_yards_per_minute`].
@@ -798,13 +862,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in YardsPerHour (`yd/h`).
     #[inline]
     pub fn from_yards_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::YardPerHour)
+        let x = value;
+        Self(x * 0.9144 / 3600.0)
     }
 
     /// Returns the value expressed in YardsPerHour (`yd/h`).
     #[inline]
     pub fn as_yards_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::YardPerHour)
+        let x = self.0;
+        x / 0.9144 * 3600.0
     }
 
     /// Alias for [`Self::as_yards_per_hour`].
@@ -816,13 +882,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in Knots (`kn`).
     #[inline]
     pub fn from_knots(value: Num) -> Self {
-        Self::new(value, SpeedUnit::Knot)
+        let x = value;
+        Self(x * (1852.0 / 3600.0))
     }
 
     /// Returns the value expressed in Knots (`kn`).
     #[inline]
     pub fn as_knots(self) -> Num {
-        self.convert_to(SpeedUnit::Knot)
+        let x = self.0;
+        x / (1852.0 / 3600.0)
     }
 
     /// Alias for [`Self::as_knots`].
@@ -834,13 +902,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in MilesPerHour (`mph`).
     #[inline]
     pub fn from_miles_per_hour(value: Num) -> Self {
-        Self::new(value, SpeedUnit::MilePerHour)
+        let x = value;
+        Self(x * 0.44704)
     }
 
     /// Returns the value expressed in MilesPerHour (`mph`).
     #[inline]
     pub fn as_miles_per_hour(self) -> Num {
-        self.convert_to(SpeedUnit::MilePerHour)
+        let x = self.0;
+        x / 0.44704
     }
 
     /// Alias for [`Self::as_miles_per_hour`].
@@ -852,13 +922,15 @@ impl Speed {
     /// Creates a [`Speed`] from a value in Mach (`M`).
     #[inline]
     pub fn from_mach(value: Num) -> Self {
-        Self::new(value, SpeedUnit::Mach)
+        let x = value;
+        Self(x * 340.29)
     }
 
     /// Returns the value expressed in Mach (`M`).
     #[inline]
     pub fn as_mach(self) -> Num {
-        self.convert_to(SpeedUnit::Mach)
+        let x = self.0;
+        x / 340.29
     }
 }
 
@@ -875,42 +947,49 @@ impl crate::Quantity for Speed {
 
 impl Add for Speed {
     type Output = Speed;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Speed {
     type Output = Speed;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Speed {
     type Output = Speed;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Speed {
     type Output = Speed;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Speed> for Num {
     type Output = Speed;
+    #[inline]
     fn mul(self, rhs: Speed) -> Speed {
         Speed(self * rhs.0)
     }
 }
 impl Div<Num> for Speed {
     type Output = Speed;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Speed {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

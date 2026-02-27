@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl ElectricChargeDensityUnit {
     pub const ALL: &'static [Self] = &[Self::CoulombPerCubicMeter];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CoulombPerCubicMeter => "C/m³",
@@ -37,6 +40,7 @@ impl ElectricChargeDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CoulombPerCubicMeter => &["C/m³"],
@@ -46,6 +50,7 @@ impl ElectricChargeDensityUnit {
 
 impl ElectricChargeDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricChargeDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl ElectricChargeDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricChargeDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl ElectricChargeDensity {
     /// Creates a [`ElectricChargeDensity`] from a value in CoulombsPerCubicMeter (`C/m³`).
     #[inline]
     pub fn from_coulombs_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, ElectricChargeDensityUnit::CoulombPerCubicMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CoulombsPerCubicMeter (`C/m³`).
     #[inline]
     pub fn as_coulombs_per_cubic_meter(self) -> Num {
-        self.convert_to(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_coulombs_per_cubic_meter`].
@@ -110,42 +118,49 @@ impl crate::Quantity for ElectricChargeDensity {
 
 impl Add for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricChargeDensity> for Num {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn mul(self, rhs: ElectricChargeDensity) -> ElectricChargeDensity {
         ElectricChargeDensity(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricChargeDensity {
     type Output = ElectricChargeDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricChargeDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

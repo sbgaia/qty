@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -50,6 +52,7 @@ impl RadiationEquivalentDoseRateUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::SievertPerHour => "Sv/h",
@@ -66,6 +69,7 @@ impl RadiationEquivalentDoseRateUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::SievertPerHour => &["Sv/h"],
@@ -84,6 +88,7 @@ impl RadiationEquivalentDoseRateUnit {
 
 impl RadiationEquivalentDoseRate {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RadiationEquivalentDoseRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -120,6 +125,7 @@ impl RadiationEquivalentDoseRate {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RadiationEquivalentDoseRateUnit) -> Num {
         let x = self.0;
         match unit {
@@ -141,13 +147,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in SievertsPerHour (`Sv/h`).
     #[inline]
     pub fn from_sieverts_per_hour(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::SievertPerHour)
+        let x = value;
+        Self(x / 3600.0)
     }
 
     /// Returns the value expressed in SievertsPerHour (`Sv/h`).
     #[inline]
     pub fn as_sieverts_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::SievertPerHour)
+        let x = self.0;
+        x * 3600.0
     }
 
     /// Alias for [`Self::as_sieverts_per_hour`].
@@ -159,13 +167,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerHour (`nSv/h`).
     #[inline]
     pub fn from_nanosieverts_per_hour(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+        let x = value;
+        Self((x * 1e-9) / 3600.0)
     }
 
     /// Returns the value expressed in NanosievertsPerHour (`nSv/h`).
     #[inline]
     pub fn as_nanosieverts_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+        let x = self.0;
+        (x / 1e-9) * 3600.0
     }
 
     /// Alias for [`Self::as_nanosieverts_per_hour`].
@@ -177,13 +187,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerHour (`µSv/h`).
     #[inline]
     pub fn from_microsieverts_per_hour(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+        let x = value;
+        Self((x * 1e-6) / 3600.0)
     }
 
     /// Returns the value expressed in MicrosievertsPerHour (`µSv/h`).
     #[inline]
     pub fn as_microsieverts_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+        let x = self.0;
+        (x / 1e-6) * 3600.0
     }
 
     /// Alias for [`Self::as_microsieverts_per_hour`].
@@ -195,13 +207,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerHour (`mSv/h`).
     #[inline]
     pub fn from_millisieverts_per_hour(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+        let x = value;
+        Self((x * 1e-3) / 3600.0)
     }
 
     /// Returns the value expressed in MillisievertsPerHour (`mSv/h`).
     #[inline]
     pub fn as_millisieverts_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+        let x = self.0;
+        (x / 1e-3) * 3600.0
     }
 
     /// Alias for [`Self::as_millisieverts_per_hour`].
@@ -213,13 +227,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in SievertsPerSecond (`Sv/s`).
     #[inline]
     pub fn from_sieverts_per_second(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::SievertPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in SievertsPerSecond (`Sv/s`).
     #[inline]
     pub fn as_sieverts_per_second(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_sieverts_per_second`].
@@ -231,13 +247,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerSecond (`nSv/s`).
     #[inline]
     pub fn from_nanosieverts_per_second(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanosievertsPerSecond (`nSv/s`).
     #[inline]
     pub fn as_nanosieverts_per_second(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanosieverts_per_second`].
@@ -249,16 +267,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerSecond (`µSv/s`).
     #[inline]
     pub fn from_microsieverts_per_second(value: Num) -> Self {
-        Self::new(
-            value,
-            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond,
-        )
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrosievertsPerSecond (`µSv/s`).
     #[inline]
     pub fn as_microsieverts_per_second(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microsieverts_per_second`].
@@ -270,16 +287,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerSecond (`mSv/s`).
     #[inline]
     pub fn from_millisieverts_per_second(value: Num) -> Self {
-        Self::new(
-            value,
-            RadiationEquivalentDoseRateUnit::MillisievertPerSecond,
-        )
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillisievertsPerSecond (`mSv/s`).
     #[inline]
     pub fn as_millisieverts_per_second(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millisieverts_per_second`].
@@ -291,16 +307,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in RoentgensEquivalentManPerHour (`rem/h`).
     #[inline]
     pub fn from_roentgens_equivalent_man_per_hour(value: Num) -> Self {
-        Self::new(
-            value,
-            RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour,
-        )
+        let x = value;
+        Self(x / 100.0 / 3600.0)
     }
 
     /// Returns the value expressed in RoentgensEquivalentManPerHour (`rem/h`).
     #[inline]
     pub fn as_roentgens_equivalent_man_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+        let x = self.0;
+        x * 100.0 * 3600.0
     }
 
     /// Alias for [`Self::as_roentgens_equivalent_man_per_hour`].
@@ -312,16 +327,15 @@ impl RadiationEquivalentDoseRate {
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MilliroentgensEquivalentManPerHour (`mrem/h`).
     #[inline]
     pub fn from_milliroentgens_equivalent_man_per_hour(value: Num) -> Self {
-        Self::new(
-            value,
-            RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour,
-        )
+        let x = value;
+        Self((x * 1e-3) / 100.0 / 3600.0)
     }
 
     /// Returns the value expressed in MilliroentgensEquivalentManPerHour (`mrem/h`).
     #[inline]
     pub fn as_milliroentgens_equivalent_man_per_hour(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+        let x = self.0;
+        (x / 1e-3) * 100.0 * 3600.0
     }
 
     /// Alias for [`Self::as_milliroentgens_equivalent_man_per_hour`].
@@ -344,42 +358,49 @@ impl crate::Quantity for RadiationEquivalentDoseRate {
 
 impl Add for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<RadiationEquivalentDoseRate> for Num {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn mul(self, rhs: RadiationEquivalentDoseRate) -> RadiationEquivalentDoseRate {
         RadiationEquivalentDoseRate(self * rhs.0)
     }
 }
 impl Div<Num> for RadiationEquivalentDoseRate {
     type Output = RadiationEquivalentDoseRate;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RadiationEquivalentDoseRate {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

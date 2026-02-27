@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl ElectricApparentEnergyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltampereHour => "VAh",
@@ -45,6 +48,7 @@ impl ElectricApparentEnergyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltampereHour => &["VAh"],
@@ -56,6 +60,7 @@ impl ElectricApparentEnergyUnit {
 
 impl ElectricApparentEnergy {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricApparentEnergyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl ElectricApparentEnergy {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricApparentEnergyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl ElectricApparentEnergy {
     /// Creates a [`ElectricApparentEnergy`] from a value in VoltampereHours (`VAh`).
     #[inline]
     pub fn from_voltampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricApparentEnergyUnit::VoltampereHour)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in VoltampereHours (`VAh`).
     #[inline]
     pub fn as_voltampere_hours(self) -> Num {
-        self.convert_to(ElectricApparentEnergyUnit::VoltampereHour)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_voltampere_hours`].
@@ -113,13 +121,15 @@ impl ElectricApparentEnergy {
     /// Creates a [`ElectricApparentEnergy`] from a value in KilovoltampereHours (`kVAh`).
     #[inline]
     pub fn from_kilovoltampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricApparentEnergyUnit::KilovoltampereHour)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilovoltampereHours (`kVAh`).
     #[inline]
     pub fn as_kilovoltampere_hours(self) -> Num {
-        self.convert_to(ElectricApparentEnergyUnit::KilovoltampereHour)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilovoltampere_hours`].
@@ -131,13 +141,15 @@ impl ElectricApparentEnergy {
     /// Creates a [`ElectricApparentEnergy`] from a value in MegavoltampereHours (`MVAh`).
     #[inline]
     pub fn from_megavoltampere_hours(value: Num) -> Self {
-        Self::new(value, ElectricApparentEnergyUnit::MegavoltampereHour)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegavoltampereHours (`MVAh`).
     #[inline]
     pub fn as_megavoltampere_hours(self) -> Num {
-        self.convert_to(ElectricApparentEnergyUnit::MegavoltampereHour)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megavoltampere_hours`].
@@ -160,42 +172,49 @@ impl crate::Quantity for ElectricApparentEnergy {
 
 impl Add for ElectricApparentEnergy {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricApparentEnergy {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricApparentEnergy {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricApparentEnergy {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricApparentEnergy> for Num {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn mul(self, rhs: ElectricApparentEnergy) -> ElectricApparentEnergy {
         ElectricApparentEnergy(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricApparentEnergy {
     type Output = ElectricApparentEnergy;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricApparentEnergy {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

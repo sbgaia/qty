@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -37,6 +39,7 @@ impl BrakeSpecificFuelConsumptionUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerKiloWattHour => "g/kWh",
@@ -46,6 +49,7 @@ impl BrakeSpecificFuelConsumptionUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerKiloWattHour => &["g/kWh"],
@@ -57,6 +61,7 @@ impl BrakeSpecificFuelConsumptionUnit {
 
 impl BrakeSpecificFuelConsumption {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: BrakeSpecificFuelConsumptionUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -86,6 +91,7 @@ impl BrakeSpecificFuelConsumption {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: BrakeSpecificFuelConsumptionUnit) -> Num {
         let x = self.0;
         match unit {
@@ -100,13 +106,15 @@ impl BrakeSpecificFuelConsumption {
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in GramsPerKiloWattHour (`g/kWh`).
     #[inline]
     pub fn from_grams_per_kilo_watt_hour(value: Num) -> Self {
-        Self::new(value, BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+        let x = value;
+        Self(x / 3.6e9)
     }
 
     /// Returns the value expressed in GramsPerKiloWattHour (`g/kWh`).
     #[inline]
     pub fn as_grams_per_kilo_watt_hour(self) -> Num {
-        self.convert_to(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+        let x = self.0;
+        x * 3.6e9
     }
 
     /// Alias for [`Self::as_grams_per_kilo_watt_hour`].
@@ -118,13 +126,15 @@ impl BrakeSpecificFuelConsumption {
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in KilogramsPerJoule (`kg/J`).
     #[inline]
     pub fn from_kilograms_per_joule(value: Num) -> Self {
-        Self::new(value, BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in KilogramsPerJoule (`kg/J`).
     #[inline]
     pub fn as_kilograms_per_joule(self) -> Num {
-        self.convert_to(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_kilograms_per_joule`].
@@ -136,16 +146,15 @@ impl BrakeSpecificFuelConsumption {
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in PoundsPerMechanicalHorsepowerHour (`lb/hph`).
     #[inline]
     pub fn from_pounds_per_mechanical_horsepower_hour(value: Num) -> Self {
-        Self::new(
-            value,
-            BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour,
-        )
+        let x = value;
+        Self(x * (0.45359237 / (76.0402249 * 9.80665)) / 3600.0)
     }
 
     /// Returns the value expressed in PoundsPerMechanicalHorsepowerHour (`lb/hph`).
     #[inline]
     pub fn as_pounds_per_mechanical_horsepower_hour(self) -> Num {
-        self.convert_to(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+        let x = self.0;
+        x * 3600.0 / (0.45359237 / (76.0402249 * 9.80665))
     }
 
     /// Alias for [`Self::as_pounds_per_mechanical_horsepower_hour`].
@@ -168,42 +177,49 @@ impl crate::Quantity for BrakeSpecificFuelConsumption {
 
 impl Add for BrakeSpecificFuelConsumption {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for BrakeSpecificFuelConsumption {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for BrakeSpecificFuelConsumption {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for BrakeSpecificFuelConsumption {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<BrakeSpecificFuelConsumption> for Num {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn mul(self, rhs: BrakeSpecificFuelConsumption) -> BrakeSpecificFuelConsumption {
         BrakeSpecificFuelConsumption(self * rhs.0)
     }
 }
 impl Div<Num> for BrakeSpecificFuelConsumption {
     type Output = BrakeSpecificFuelConsumption;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for BrakeSpecificFuelConsumption {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

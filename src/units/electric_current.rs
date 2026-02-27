@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -48,6 +50,7 @@ impl ElectricCurrentUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Ampere => "A",
@@ -63,6 +66,7 @@ impl ElectricCurrentUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Ampere => &["A"],
@@ -80,6 +84,7 @@ impl ElectricCurrentUnit {
 
 impl ElectricCurrent {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricCurrentUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -113,6 +118,7 @@ impl ElectricCurrent {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricCurrentUnit) -> Num {
         let x = self.0;
         match unit {
@@ -131,13 +137,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Amperes (`A`).
     #[inline]
     pub fn from_amperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Ampere)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Amperes (`A`).
     #[inline]
     pub fn as_amperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Ampere)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_amperes`].
@@ -149,13 +157,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Femtoamperes (`fA`).
     #[inline]
     pub fn from_femtoamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Femtoampere)
+        let x = value;
+        Self((x * 1e-15))
     }
 
     /// Returns the value expressed in Femtoamperes (`fA`).
     #[inline]
     pub fn as_femtoamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Femtoampere)
+        let x = self.0;
+        (x / 1e-15)
     }
 
     /// Alias for [`Self::as_femtoamperes`].
@@ -167,13 +177,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Picoamperes (`pA`).
     #[inline]
     pub fn from_picoamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Picoampere)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picoamperes (`pA`).
     #[inline]
     pub fn as_picoamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Picoampere)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picoamperes`].
@@ -185,13 +197,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Nanoamperes (`nA`).
     #[inline]
     pub fn from_nanoamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Nanoampere)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanoamperes (`nA`).
     #[inline]
     pub fn as_nanoamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Nanoampere)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanoamperes`].
@@ -203,13 +217,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Microamperes (`µA`).
     #[inline]
     pub fn from_microamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Microampere)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microamperes (`µA`).
     #[inline]
     pub fn as_microamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Microampere)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microamperes`].
@@ -221,13 +237,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Milliamperes (`mA`).
     #[inline]
     pub fn from_milliamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Milliampere)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Milliamperes (`mA`).
     #[inline]
     pub fn as_milliamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Milliampere)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliamperes`].
@@ -239,13 +257,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Centiamperes (`cA`).
     #[inline]
     pub fn from_centiamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Centiampere)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in Centiamperes (`cA`).
     #[inline]
     pub fn as_centiamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Centiampere)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centiamperes`].
@@ -257,13 +277,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Kiloamperes (`kA`).
     #[inline]
     pub fn from_kiloamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Kiloampere)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kiloamperes (`kA`).
     #[inline]
     pub fn as_kiloamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Kiloampere)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kiloamperes`].
@@ -275,13 +297,15 @@ impl ElectricCurrent {
     /// Creates a [`ElectricCurrent`] from a value in Megaamperes (`MA`).
     #[inline]
     pub fn from_megaamperes(value: Num) -> Self {
-        Self::new(value, ElectricCurrentUnit::Megaampere)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megaamperes (`MA`).
     #[inline]
     pub fn as_megaamperes(self) -> Num {
-        self.convert_to(ElectricCurrentUnit::Megaampere)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megaamperes`].
@@ -304,42 +328,49 @@ impl crate::Quantity for ElectricCurrent {
 
 impl Add for ElectricCurrent {
     type Output = ElectricCurrent;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricCurrent {
     type Output = ElectricCurrent;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricCurrent {
     type Output = ElectricCurrent;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricCurrent {
     type Output = ElectricCurrent;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricCurrent> for Num {
     type Output = ElectricCurrent;
+    #[inline]
     fn mul(self, rhs: ElectricCurrent) -> ElectricCurrent {
         ElectricCurrent(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricCurrent {
     type Output = ElectricCurrent;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCurrent {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

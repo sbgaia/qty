@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -38,6 +40,7 @@ impl SpecificFuelConsumptionUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::PoundMassPerPoundForceHour => "lb/(lbf·h)",
@@ -48,6 +51,7 @@ impl SpecificFuelConsumptionUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::PoundMassPerPoundForceHour => &["lb/(lbf·h)"],
@@ -60,6 +64,7 @@ impl SpecificFuelConsumptionUnit {
 
 impl SpecificFuelConsumption {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: SpecificFuelConsumptionUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -92,6 +97,7 @@ impl SpecificFuelConsumption {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: SpecificFuelConsumptionUnit) -> Num {
         let x = self.0;
         match unit {
@@ -109,16 +115,15 @@ impl SpecificFuelConsumption {
     /// Creates a [`SpecificFuelConsumption`] from a value in PoundsMassPerPoundForceHour (`lb/(lbf·h)`).
     #[inline]
     pub fn from_pounds_mass_per_pound_force_hour(value: Num) -> Self {
-        Self::new(
-            value,
-            SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour,
-        )
+        let x = value;
+        Self(x * 1000.0 / (9.80665e-3 * 3600.0))
     }
 
     /// Returns the value expressed in PoundsMassPerPoundForceHour (`lb/(lbf·h)`).
     #[inline]
     pub fn as_pounds_mass_per_pound_force_hour(self) -> Num {
-        self.convert_to(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+        let x = self.0;
+        x * 9.80665e-3 * 3600.0 / 1000.0
     }
 
     /// Alias for [`Self::as_pounds_mass_per_pound_force_hour`].
@@ -130,16 +135,15 @@ impl SpecificFuelConsumption {
     /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilogramForceHour (`kg/(kgf·h)`).
     #[inline]
     pub fn from_kilograms_per_kilogram_force_hour(value: Num) -> Self {
-        Self::new(
-            value,
-            SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour,
-        )
+        let x = value;
+        Self(x * 1000.0 / (9.80665e-3 * 3600.0))
     }
 
     /// Returns the value expressed in KilogramsPerKilogramForceHour (`kg/(kgf·h)`).
     #[inline]
     pub fn as_kilograms_per_kilogram_force_hour(self) -> Num {
-        self.convert_to(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+        let x = self.0;
+        x * 9.80665e-3 * 3600.0 / 1000.0
     }
 
     /// Alias for [`Self::as_kilograms_per_kilogram_force_hour`].
@@ -151,13 +155,15 @@ impl SpecificFuelConsumption {
     /// Creates a [`SpecificFuelConsumption`] from a value in GramsPerKilonewtonSecond (`g/(kN·s)`).
     #[inline]
     pub fn from_grams_per_kilonewton_second(value: Num) -> Self {
-        Self::new(value, SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in GramsPerKilonewtonSecond (`g/(kN·s)`).
     #[inline]
     pub fn as_grams_per_kilonewton_second(self) -> Num {
-        self.convert_to(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_grams_per_kilonewton_second`].
@@ -169,16 +175,15 @@ impl SpecificFuelConsumption {
     /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilonewtonSecond (`kg/(kN·s)`).
     #[inline]
     pub fn from_kilograms_per_kilonewton_second(value: Num) -> Self {
-        Self::new(
-            value,
-            SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond,
-        )
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilogramsPerKilonewtonSecond (`kg/(kN·s)`).
     #[inline]
     pub fn as_kilograms_per_kilonewton_second(self) -> Num {
-        self.convert_to(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilograms_per_kilonewton_second`].
@@ -201,42 +206,49 @@ impl crate::Quantity for SpecificFuelConsumption {
 
 impl Add for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<SpecificFuelConsumption> for Num {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn mul(self, rhs: SpecificFuelConsumption) -> SpecificFuelConsumption {
         SpecificFuelConsumption(self * rhs.0)
     }
 }
 impl Div<Num> for SpecificFuelConsumption {
     type Output = SpecificFuelConsumption;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SpecificFuelConsumption {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

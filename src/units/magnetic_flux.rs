@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl MagneticFluxUnit {
     pub const ALL: &'static [Self] = &[Self::Weber];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Weber => "Wb",
@@ -37,6 +40,7 @@ impl MagneticFluxUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Weber => &["Wb"],
@@ -46,6 +50,7 @@ impl MagneticFluxUnit {
 
 impl MagneticFlux {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MagneticFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl MagneticFlux {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MagneticFluxUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl MagneticFlux {
     /// Creates a [`MagneticFlux`] from a value in Webers (`Wb`).
     #[inline]
     pub fn from_webers(value: Num) -> Self {
-        Self::new(value, MagneticFluxUnit::Weber)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Webers (`Wb`).
     #[inline]
     pub fn as_webers(self) -> Num {
-        self.convert_to(MagneticFluxUnit::Weber)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_webers`].
@@ -110,42 +118,49 @@ impl crate::Quantity for MagneticFlux {
 
 impl Add for MagneticFlux {
     type Output = MagneticFlux;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MagneticFlux {
     type Output = MagneticFlux;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MagneticFlux {
     type Output = MagneticFlux;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MagneticFlux {
     type Output = MagneticFlux;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MagneticFlux> for Num {
     type Output = MagneticFlux;
+    #[inline]
     fn mul(self, rhs: MagneticFlux) -> MagneticFlux {
         MagneticFlux(self * rhs.0)
     }
 }
 impl Div<Num> for MagneticFlux {
     type Output = MagneticFlux;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MagneticFlux {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

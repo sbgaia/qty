@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -58,6 +60,7 @@ impl ElectricResistivityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::OhmMeter => "Ω·m",
@@ -78,6 +81,7 @@ impl ElectricResistivityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::OhmMeter => &["Ω·m"],
@@ -100,6 +104,7 @@ impl ElectricResistivityUnit {
 
 impl ElectricResistivity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricResistivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -138,6 +143,7 @@ impl ElectricResistivity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricResistivityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -161,13 +167,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in OhmMeters (`Ω·m`).
     #[inline]
     pub fn from_ohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::OhmMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in OhmMeters (`Ω·m`).
     #[inline]
     pub fn as_ohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::OhmMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_ohm_meters`].
@@ -179,13 +187,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in PicoohmMeters (`pΩ·m`).
     #[inline]
     pub fn from_picoohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::PicoohmMeter)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in PicoohmMeters (`pΩ·m`).
     #[inline]
     pub fn as_picoohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::PicoohmMeter)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picoohm_meters`].
@@ -197,13 +207,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in NanoohmMeters (`nΩ·m`).
     #[inline]
     pub fn from_nanoohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::NanoohmMeter)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanoohmMeters (`nΩ·m`).
     #[inline]
     pub fn as_nanoohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::NanoohmMeter)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanoohm_meters`].
@@ -215,13 +227,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MicroohmMeters (`µΩ·m`).
     #[inline]
     pub fn from_microohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MicroohmMeter)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicroohmMeters (`µΩ·m`).
     #[inline]
     pub fn as_microohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MicroohmMeter)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microohm_meters`].
@@ -233,13 +247,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MilliohmMeters (`mΩ·m`).
     #[inline]
     pub fn from_milliohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MilliohmMeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilliohmMeters (`mΩ·m`).
     #[inline]
     pub fn as_milliohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MilliohmMeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliohm_meters`].
@@ -251,13 +267,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in KiloohmMeters (`kΩ·m`).
     #[inline]
     pub fn from_kiloohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::KiloohmMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KiloohmMeters (`kΩ·m`).
     #[inline]
     pub fn as_kiloohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::KiloohmMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kiloohm_meters`].
@@ -269,13 +287,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MegaohmMeters (`MΩ·m`).
     #[inline]
     pub fn from_megaohm_meters(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MegaohmMeter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegaohmMeters (`MΩ·m`).
     #[inline]
     pub fn as_megaohm_meters(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MegaohmMeter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megaohm_meters`].
@@ -287,13 +307,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in OhmsCentimeter (`Ω·cm`).
     #[inline]
     pub fn from_ohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::OhmCentimeter)
+        let x = value;
+        Self(x / 100.0)
     }
 
     /// Returns the value expressed in OhmsCentimeter (`Ω·cm`).
     #[inline]
     pub fn as_ohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::OhmCentimeter)
+        let x = self.0;
+        x * 100.0
     }
 
     /// Alias for [`Self::as_ohms_centimeter`].
@@ -305,13 +327,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in PicoohmsCentimeter (`pΩ·cm`).
     #[inline]
     pub fn from_picoohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::PicoohmCentimeter)
+        let x = value;
+        Self((x * 1e-12) / 100.0)
     }
 
     /// Returns the value expressed in PicoohmsCentimeter (`pΩ·cm`).
     #[inline]
     pub fn as_picoohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::PicoohmCentimeter)
+        let x = self.0;
+        (x / 1e-12) * 100.0
     }
 
     /// Alias for [`Self::as_picoohms_centimeter`].
@@ -323,13 +347,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in NanoohmsCentimeter (`nΩ·cm`).
     #[inline]
     pub fn from_nanoohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::NanoohmCentimeter)
+        let x = value;
+        Self((x * 1e-9) / 100.0)
     }
 
     /// Returns the value expressed in NanoohmsCentimeter (`nΩ·cm`).
     #[inline]
     pub fn as_nanoohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::NanoohmCentimeter)
+        let x = self.0;
+        (x / 1e-9) * 100.0
     }
 
     /// Alias for [`Self::as_nanoohms_centimeter`].
@@ -341,13 +367,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MicroohmsCentimeter (`µΩ·cm`).
     #[inline]
     pub fn from_microohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MicroohmCentimeter)
+        let x = value;
+        Self((x * 1e-6) / 100.0)
     }
 
     /// Returns the value expressed in MicroohmsCentimeter (`µΩ·cm`).
     #[inline]
     pub fn as_microohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MicroohmCentimeter)
+        let x = self.0;
+        (x / 1e-6) * 100.0
     }
 
     /// Alias for [`Self::as_microohms_centimeter`].
@@ -359,13 +387,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MilliohmsCentimeter (`mΩ·cm`).
     #[inline]
     pub fn from_milliohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MilliohmCentimeter)
+        let x = value;
+        Self((x * 1e-3) / 100.0)
     }
 
     /// Returns the value expressed in MilliohmsCentimeter (`mΩ·cm`).
     #[inline]
     pub fn as_milliohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MilliohmCentimeter)
+        let x = self.0;
+        (x / 1e-3) * 100.0
     }
 
     /// Alias for [`Self::as_milliohms_centimeter`].
@@ -377,13 +407,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in KiloohmsCentimeter (`kΩ·cm`).
     #[inline]
     pub fn from_kiloohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::KiloohmCentimeter)
+        let x = value;
+        Self((x * 1e3) / 100.0)
     }
 
     /// Returns the value expressed in KiloohmsCentimeter (`kΩ·cm`).
     #[inline]
     pub fn as_kiloohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::KiloohmCentimeter)
+        let x = self.0;
+        (x / 1e3) * 100.0
     }
 
     /// Alias for [`Self::as_kiloohms_centimeter`].
@@ -395,13 +427,15 @@ impl ElectricResistivity {
     /// Creates a [`ElectricResistivity`] from a value in MegaohmsCentimeter (`MΩ·cm`).
     #[inline]
     pub fn from_megaohms_centimeter(value: Num) -> Self {
-        Self::new(value, ElectricResistivityUnit::MegaohmCentimeter)
+        let x = value;
+        Self((x * 1e6) / 100.0)
     }
 
     /// Returns the value expressed in MegaohmsCentimeter (`MΩ·cm`).
     #[inline]
     pub fn as_megaohms_centimeter(self) -> Num {
-        self.convert_to(ElectricResistivityUnit::MegaohmCentimeter)
+        let x = self.0;
+        (x / 1e6) * 100.0
     }
 
     /// Alias for [`Self::as_megaohms_centimeter`].
@@ -424,42 +458,49 @@ impl crate::Quantity for ElectricResistivity {
 
 impl Add for ElectricResistivity {
     type Output = ElectricResistivity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricResistivity {
     type Output = ElectricResistivity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricResistivity {
     type Output = ElectricResistivity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricResistivity {
     type Output = ElectricResistivity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricResistivity> for Num {
     type Output = ElectricResistivity;
+    #[inline]
     fn mul(self, rhs: ElectricResistivity) -> ElectricResistivity {
         ElectricResistivity(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricResistivity {
     type Output = ElectricResistivity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricResistivity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

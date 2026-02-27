@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl ElectricReactiveEnergyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltampereReactiveHour => "varh",
@@ -45,6 +48,7 @@ impl ElectricReactiveEnergyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltampereReactiveHour => &["varh"],
@@ -56,6 +60,7 @@ impl ElectricReactiveEnergyUnit {
 
 impl ElectricReactiveEnergy {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricReactiveEnergyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl ElectricReactiveEnergy {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricReactiveEnergyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl ElectricReactiveEnergy {
     /// Creates a [`ElectricReactiveEnergy`] from a value in VoltampereReactiveHours (`varh`).
     #[inline]
     pub fn from_voltampere_reactive_hours(value: Num) -> Self {
-        Self::new(value, ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in VoltampereReactiveHours (`varh`).
     #[inline]
     pub fn as_voltampere_reactive_hours(self) -> Num {
-        self.convert_to(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_voltampere_reactive_hours`].
@@ -113,16 +121,15 @@ impl ElectricReactiveEnergy {
     /// Creates a [`ElectricReactiveEnergy`] from a value in KilovoltampereReactiveHours (`kvarh`).
     #[inline]
     pub fn from_kilovoltampere_reactive_hours(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricReactiveEnergyUnit::KilovoltampereReactiveHour,
-        )
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilovoltampereReactiveHours (`kvarh`).
     #[inline]
     pub fn as_kilovoltampere_reactive_hours(self) -> Num {
-        self.convert_to(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilovoltampere_reactive_hours`].
@@ -134,16 +141,15 @@ impl ElectricReactiveEnergy {
     /// Creates a [`ElectricReactiveEnergy`] from a value in MegavoltampereReactiveHours (`Mvarh`).
     #[inline]
     pub fn from_megavoltampere_reactive_hours(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricReactiveEnergyUnit::MegavoltampereReactiveHour,
-        )
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegavoltampereReactiveHours (`Mvarh`).
     #[inline]
     pub fn as_megavoltampere_reactive_hours(self) -> Num {
-        self.convert_to(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megavoltampere_reactive_hours`].
@@ -166,42 +172,49 @@ impl crate::Quantity for ElectricReactiveEnergy {
 
 impl Add for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricReactiveEnergy> for Num {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn mul(self, rhs: ElectricReactiveEnergy) -> ElectricReactiveEnergy {
         ElectricReactiveEnergy(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricReactiveEnergy {
     type Output = ElectricReactiveEnergy;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricReactiveEnergy {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl ElectricFieldUnit {
     pub const ALL: &'static [Self] = &[Self::VoltPerMeter];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltPerMeter => "V/m",
@@ -37,6 +40,7 @@ impl ElectricFieldUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltPerMeter => &["V/m"],
@@ -46,6 +50,7 @@ impl ElectricFieldUnit {
 
 impl ElectricField {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricFieldUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl ElectricField {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricFieldUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl ElectricField {
     /// Creates a [`ElectricField`] from a value in VoltsPerMeter (`V/m`).
     #[inline]
     pub fn from_volts_per_meter(value: Num) -> Self {
-        Self::new(value, ElectricFieldUnit::VoltPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in VoltsPerMeter (`V/m`).
     #[inline]
     pub fn as_volts_per_meter(self) -> Num {
-        self.convert_to(ElectricFieldUnit::VoltPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_volts_per_meter`].
@@ -110,42 +118,49 @@ impl crate::Quantity for ElectricField {
 
 impl Add for ElectricField {
     type Output = ElectricField;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricField {
     type Output = ElectricField;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricField {
     type Output = ElectricField;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricField {
     type Output = ElectricField;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricField> for Num {
     type Output = ElectricField;
+    #[inline]
     fn mul(self, rhs: ElectricField) -> ElectricField {
         ElectricField(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricField {
     type Output = ElectricField;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricField {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

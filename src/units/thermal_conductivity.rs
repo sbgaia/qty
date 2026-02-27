@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -31,6 +33,7 @@ impl ThermalConductivityUnit {
     pub const ALL: &'static [Self] = &[Self::WattPerMeterKelvin, Self::BtuPerHourFootFahrenheit];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerMeterKelvin => "W/(m·K)",
@@ -39,6 +42,7 @@ impl ThermalConductivityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerMeterKelvin => &["W/(m·K)"],
@@ -49,6 +53,7 @@ impl ThermalConductivityUnit {
 
 impl ThermalConductivity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ThermalConductivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -77,6 +82,7 @@ impl ThermalConductivity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ThermalConductivityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -90,13 +96,15 @@ impl ThermalConductivity {
     /// Creates a [`ThermalConductivity`] from a value in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
     pub fn from_watts_per_meter_kelvin(value: Num) -> Self {
-        Self::new(value, ThermalConductivityUnit::WattPerMeterKelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
     pub fn as_watts_per_meter_kelvin(self) -> Num {
-        self.convert_to(ThermalConductivityUnit::WattPerMeterKelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_meter_kelvin`].
@@ -108,13 +116,15 @@ impl ThermalConductivity {
     /// Creates a [`ThermalConductivity`] from a value in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
     pub fn from_btus_per_hour_foot_fahrenheit(value: Num) -> Self {
-        Self::new(value, ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+        let x = value;
+        Self(x * ((1055.05585262 / (0.3048 * 3600.0)) * 1.8))
     }
 
     /// Returns the value expressed in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
     pub fn as_btus_per_hour_foot_fahrenheit(self) -> Num {
-        self.convert_to(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+        let x = self.0;
+        x / ((1055.05585262 / (0.3048 * 3600.0)) * 1.8)
     }
 
     /// Alias for [`Self::as_btus_per_hour_foot_fahrenheit`].
@@ -137,42 +147,49 @@ impl crate::Quantity for ThermalConductivity {
 
 impl Add for ThermalConductivity {
     type Output = ThermalConductivity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ThermalConductivity {
     type Output = ThermalConductivity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ThermalConductivity {
     type Output = ThermalConductivity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ThermalConductivity {
     type Output = ThermalConductivity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ThermalConductivity> for Num {
     type Output = ThermalConductivity;
+    #[inline]
     fn mul(self, rhs: ThermalConductivity) -> ThermalConductivity {
         ThermalConductivity(self * rhs.0)
     }
 }
 impl Div<Num> for ThermalConductivity {
     type Output = ThermalConductivity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ThermalConductivity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

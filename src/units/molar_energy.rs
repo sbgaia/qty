@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl MolarEnergyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerMole => "J/mol",
@@ -45,6 +48,7 @@ impl MolarEnergyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerMole => &["J/mol"],
@@ -56,6 +60,7 @@ impl MolarEnergyUnit {
 
 impl MolarEnergy {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MolarEnergyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl MolarEnergy {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MolarEnergyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl MolarEnergy {
     /// Creates a [`MolarEnergy`] from a value in JoulesPerMole (`J/mol`).
     #[inline]
     pub fn from_joules_per_mole(value: Num) -> Self {
-        Self::new(value, MolarEnergyUnit::JoulePerMole)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerMole (`J/mol`).
     #[inline]
     pub fn as_joules_per_mole(self) -> Num {
-        self.convert_to(MolarEnergyUnit::JoulePerMole)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_mole`].
@@ -113,13 +121,15 @@ impl MolarEnergy {
     /// Creates a [`MolarEnergy`] from a value in KilojoulesPerMole (`kJ/mol`).
     #[inline]
     pub fn from_kilojoules_per_mole(value: Num) -> Self {
-        Self::new(value, MolarEnergyUnit::KilojoulePerMole)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerMole (`kJ/mol`).
     #[inline]
     pub fn as_kilojoules_per_mole(self) -> Num {
-        self.convert_to(MolarEnergyUnit::KilojoulePerMole)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_mole`].
@@ -131,13 +141,15 @@ impl MolarEnergy {
     /// Creates a [`MolarEnergy`] from a value in MegajoulesPerMole (`MJ/mol`).
     #[inline]
     pub fn from_megajoules_per_mole(value: Num) -> Self {
-        Self::new(value, MolarEnergyUnit::MegajoulePerMole)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerMole (`MJ/mol`).
     #[inline]
     pub fn as_megajoules_per_mole(self) -> Num {
-        self.convert_to(MolarEnergyUnit::MegajoulePerMole)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_mole`].
@@ -160,42 +172,49 @@ impl crate::Quantity for MolarEnergy {
 
 impl Add for MolarEnergy {
     type Output = MolarEnergy;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MolarEnergy {
     type Output = MolarEnergy;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MolarEnergy {
     type Output = MolarEnergy;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MolarEnergy {
     type Output = MolarEnergy;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MolarEnergy> for Num {
     type Output = MolarEnergy;
+    #[inline]
     fn mul(self, rhs: MolarEnergy) -> MolarEnergy {
         MolarEnergy(self * rhs.0)
     }
 }
 impl Div<Num> for MolarEnergy {
     type Output = MolarEnergy;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MolarEnergy {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -44,6 +46,7 @@ impl ThermalInsulanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::SquareMeterKelvinPerKilowatt => "m²K/kW",
@@ -57,6 +60,7 @@ impl ThermalInsulanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::SquareMeterKelvinPerKilowatt => &["m²K/kW"],
@@ -72,6 +76,7 @@ impl ThermalInsulanceUnit {
 
 impl ThermalInsulance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ThermalInsulanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -107,6 +112,7 @@ impl ThermalInsulance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ThermalInsulanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -127,13 +133,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerKilowatt (`m²K/kW`).
     #[inline]
     pub fn from_square_meter_kelvins_per_kilowatt(value: Num) -> Self {
-        Self::new(value, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in SquareMeterKelvinsPerKilowatt (`m²K/kW`).
     #[inline]
     pub fn as_square_meter_kelvins_per_kilowatt(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_square_meter_kelvins_per_kilowatt`].
@@ -145,13 +153,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerWatt (`m²K/W`).
     #[inline]
     pub fn from_square_meter_kelvins_per_watt(value: Num) -> Self {
-        Self::new(value, ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+        let x = value;
+        Self(x * 1000.0)
     }
 
     /// Returns the value expressed in SquareMeterKelvinsPerWatt (`m²K/W`).
     #[inline]
     pub fn as_square_meter_kelvins_per_watt(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+        let x = self.0;
+        x / 1000.0
     }
 
     /// Alias for [`Self::as_square_meter_kelvins_per_watt`].
@@ -163,13 +173,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterDegreesCelsiusPerWatt (`m²°C/W`).
     #[inline]
     pub fn from_square_meter_degrees_celsius_per_watt(value: Num) -> Self {
-        Self::new(value, ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+        let x = value;
+        Self(x * 1000.0)
     }
 
     /// Returns the value expressed in SquareMeterDegreesCelsiusPerWatt (`m²°C/W`).
     #[inline]
     pub fn as_square_meter_degrees_celsius_per_watt(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+        let x = self.0;
+        x / 1000.0
     }
 
     /// Alias for [`Self::as_square_meter_degrees_celsius_per_watt`].
@@ -181,13 +193,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterKelvinsPerWatt (`cm²K/W`).
     #[inline]
     pub fn from_square_centimeter_kelvins_per_watt(value: Num) -> Self {
-        Self::new(value, ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+        let x = value;
+        Self(x * 0.1)
     }
 
     /// Returns the value expressed in SquareCentimeterKelvinsPerWatt (`cm²K/W`).
     #[inline]
     pub fn as_square_centimeter_kelvins_per_watt(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+        let x = self.0;
+        x / 0.1
     }
 
     /// Alias for [`Self::as_square_centimeter_kelvins_per_watt`].
@@ -199,13 +213,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareMillimeterKelvinsPerWatt (`mm²K/W`).
     #[inline]
     pub fn from_square_millimeter_kelvins_per_watt(value: Num) -> Self {
-        Self::new(value, ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+        let x = value;
+        Self(x * 0.001)
     }
 
     /// Returns the value expressed in SquareMillimeterKelvinsPerWatt (`mm²K/W`).
     #[inline]
     pub fn as_square_millimeter_kelvins_per_watt(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+        let x = self.0;
+        x / 0.001
     }
 
     /// Alias for [`Self::as_square_millimeter_kelvins_per_watt`].
@@ -217,16 +233,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterHourDegreesCelsiusPerKilocalorie (`cm²Hr°C/kcal`).
     #[inline]
     pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: Num) -> Self {
-        Self::new(
-            value,
-            ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie,
-        )
+        let x = value;
+        Self(x * (0.0001 * 3600.0) / 4.184)
     }
 
     /// Returns the value expressed in SquareCentimeterHourDegreesCelsiusPerKilocalorie (`cm²Hr°C/kcal`).
     #[inline]
     pub fn as_square_centimeter_hour_degrees_celsius_per_kilocalorie(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+        let x = self.0;
+        x * 4.184 / (0.0001 * 3600.0)
     }
 
     /// Alias for [`Self::as_square_centimeter_hour_degrees_celsius_per_kilocalorie`].
@@ -238,16 +253,15 @@ impl ThermalInsulance {
     /// Creates a [`ThermalInsulance`] from a value in HourSquareFeetDegreesFahrenheitPerBtu (`Hrft²°F/Btu`).
     #[inline]
     pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: Num) -> Self {
-        Self::new(
-            value,
-            ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu,
-        )
+        let x = value;
+        Self(x * (1000.0 * 0.3048 * 0.3048 * 3600.0) / (1055.05585262 * 1.8))
     }
 
     /// Returns the value expressed in HourSquareFeetDegreesFahrenheitPerBtu (`Hrft²°F/Btu`).
     #[inline]
     pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> Num {
-        self.convert_to(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+        let x = self.0;
+        x * (1055.05585262 * 1.8) / (1000.0 * 0.3048 * 0.3048 * 3600.0)
     }
 
     /// Alias for [`Self::as_hour_square_feet_degrees_fahrenheit_per_btu`].
@@ -270,42 +284,49 @@ impl crate::Quantity for ThermalInsulance {
 
 impl Add for ThermalInsulance {
     type Output = ThermalInsulance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ThermalInsulance {
     type Output = ThermalInsulance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ThermalInsulance {
     type Output = ThermalInsulance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ThermalInsulance {
     type Output = ThermalInsulance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ThermalInsulance> for Num {
     type Output = ThermalInsulance;
+    #[inline]
     fn mul(self, rhs: ThermalInsulance) -> ThermalInsulance {
         ThermalInsulance(self * rhs.0)
     }
 }
 impl Div<Num> for ThermalInsulance {
     type Output = ThermalInsulance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ThermalInsulance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

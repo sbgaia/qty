@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -40,6 +42,7 @@ impl ElectricInductanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Henry => "H",
@@ -51,6 +54,7 @@ impl ElectricInductanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Henry => &["H"],
@@ -64,6 +68,7 @@ impl ElectricInductanceUnit {
 
 impl ElectricInductance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricInductanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -93,6 +98,7 @@ impl ElectricInductance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricInductanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -107,13 +113,15 @@ impl ElectricInductance {
     /// Creates a [`ElectricInductance`] from a value in Henries (`H`).
     #[inline]
     pub fn from_henries(value: Num) -> Self {
-        Self::new(value, ElectricInductanceUnit::Henry)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Henries (`H`).
     #[inline]
     pub fn as_henries(self) -> Num {
-        self.convert_to(ElectricInductanceUnit::Henry)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_henries`].
@@ -125,13 +133,15 @@ impl ElectricInductance {
     /// Creates a [`ElectricInductance`] from a value in Picohenries (`pH`).
     #[inline]
     pub fn from_picohenries(value: Num) -> Self {
-        Self::new(value, ElectricInductanceUnit::Picohenry)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picohenries (`pH`).
     #[inline]
     pub fn as_picohenries(self) -> Num {
-        self.convert_to(ElectricInductanceUnit::Picohenry)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picohenries`].
@@ -143,13 +153,15 @@ impl ElectricInductance {
     /// Creates a [`ElectricInductance`] from a value in Nanohenries (`nH`).
     #[inline]
     pub fn from_nanohenries(value: Num) -> Self {
-        Self::new(value, ElectricInductanceUnit::Nanohenry)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanohenries (`nH`).
     #[inline]
     pub fn as_nanohenries(self) -> Num {
-        self.convert_to(ElectricInductanceUnit::Nanohenry)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanohenries`].
@@ -161,13 +173,15 @@ impl ElectricInductance {
     /// Creates a [`ElectricInductance`] from a value in Microhenries (`µH`).
     #[inline]
     pub fn from_microhenries(value: Num) -> Self {
-        Self::new(value, ElectricInductanceUnit::Microhenry)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microhenries (`µH`).
     #[inline]
     pub fn as_microhenries(self) -> Num {
-        self.convert_to(ElectricInductanceUnit::Microhenry)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microhenries`].
@@ -179,13 +193,15 @@ impl ElectricInductance {
     /// Creates a [`ElectricInductance`] from a value in Millihenries (`mH`).
     #[inline]
     pub fn from_millihenries(value: Num) -> Self {
-        Self::new(value, ElectricInductanceUnit::Millihenry)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millihenries (`mH`).
     #[inline]
     pub fn as_millihenries(self) -> Num {
-        self.convert_to(ElectricInductanceUnit::Millihenry)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millihenries`].
@@ -208,42 +224,49 @@ impl crate::Quantity for ElectricInductance {
 
 impl Add for ElectricInductance {
     type Output = ElectricInductance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricInductance {
     type Output = ElectricInductance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricInductance {
     type Output = ElectricInductance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricInductance {
     type Output = ElectricInductance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricInductance> for Num {
     type Output = ElectricInductance;
+    #[inline]
     fn mul(self, rhs: ElectricInductance) -> ElectricInductance {
         ElectricInductance(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricInductance {
     type Output = ElectricInductance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricInductance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -98,6 +100,7 @@ impl RotationalStiffnessUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::NewtonMeterPerRadian => "N·m/rad",
@@ -138,6 +141,7 @@ impl RotationalStiffnessUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::NewtonMeterPerRadian => &["N·m/rad", "Nm/rad"],
@@ -187,6 +191,7 @@ impl RotationalStiffnessUnit {
 
 impl RotationalStiffness {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RotationalStiffnessUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -285,6 +290,7 @@ impl RotationalStiffness {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RotationalStiffnessUnit) -> Num {
         let x = self.0;
         match unit {
@@ -370,13 +376,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NewtonMetersPerRadian (`N·m/rad`).
     #[inline]
     pub fn from_newton_meters_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::NewtonMeterPerRadian)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in NewtonMetersPerRadian (`N·m/rad`).
     #[inline]
     pub fn as_newton_meters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NewtonMeterPerRadian)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_newton_meters_per_radian`].
@@ -388,13 +396,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMetersPerRadian (`kN·m/rad`).
     #[inline]
     pub fn from_kilonewton_meters_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilonewtonMetersPerRadian (`kN·m/rad`).
     #[inline]
     pub fn as_kilonewton_meters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilonewton_meters_per_radian`].
@@ -406,13 +416,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMetersPerRadian (`MN·m/rad`).
     #[inline]
     pub fn from_meganewton_meters_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MeganewtonMetersPerRadian (`MN·m/rad`).
     #[inline]
     pub fn as_meganewton_meters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_meganewton_meters_per_radian`].
@@ -424,13 +436,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in PoundForceFeetPerDegrees (`lbf·ft/deg`).
     #[inline]
     pub fn from_pound_force_feet_per_degrees(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::PoundForceFootPerDegrees)
+        let x = value;
+        Self(x * (4.4482216152605 * 0.3048 * 180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in PoundForceFeetPerDegrees (`lbf·ft/deg`).
     #[inline]
     pub fn as_pound_force_feet_per_degrees(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+        let x = self.0;
+        x / (4.4482216152605 * 0.3048 * 180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_pound_force_feet_per_degrees`].
@@ -442,13 +456,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in KilopoundForceFeetPerDegrees (`kipf·ft/°`).
     #[inline]
     pub fn from_kilopound_force_feet_per_degrees(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+        let x = value;
+        Self(x * (4.4482216152605e3 * 0.3048 * 180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in KilopoundForceFeetPerDegrees (`kipf·ft/°`).
     #[inline]
     pub fn as_kilopound_force_feet_per_degrees(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+        let x = self.0;
+        x / (4.4482216152605e3 * 0.3048 * 180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_kilopound_force_feet_per_degrees`].
@@ -460,13 +476,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NewtonMillimetersPerDegree (`N·mm/deg`).
     #[inline]
     pub fn from_newton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+        let x = value;
+        Self(x * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in NewtonMillimetersPerDegree (`N·mm/deg`).
     #[inline]
     pub fn as_newton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+        let x = self.0;
+        x / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_newton_millimeters_per_degree`].
@@ -478,16 +496,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMillimetersPerDegree (`nN·mm/deg`).
     #[inline]
     pub fn from_nanonewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::NanonewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e-9) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in NanonewtonMillimetersPerDegree (`nN·mm/deg`).
     #[inline]
     pub fn as_nanonewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e-9) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_nanonewton_millimeters_per_degree`].
@@ -499,16 +516,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMillimetersPerDegree (`µN·mm/deg`).
     #[inline]
     pub fn from_micronewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MicronewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e-6) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in MicronewtonMillimetersPerDegree (`µN·mm/deg`).
     #[inline]
     pub fn as_micronewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e-6) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_micronewton_millimeters_per_degree`].
@@ -520,16 +536,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMillimetersPerDegree (`mN·mm/deg`).
     #[inline]
     pub fn from_millinewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MillinewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e-3) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in MillinewtonMillimetersPerDegree (`mN·mm/deg`).
     #[inline]
     pub fn as_millinewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e-3) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_millinewton_millimeters_per_degree`].
@@ -541,16 +556,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMillimetersPerDegree (`cN·mm/deg`).
     #[inline]
     pub fn from_centinewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::CentinewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e-2) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in CentinewtonMillimetersPerDegree (`cN·mm/deg`).
     #[inline]
     pub fn as_centinewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e-2) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_centinewton_millimeters_per_degree`].
@@ -562,16 +576,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMillimetersPerDegree (`dN·mm/deg`).
     #[inline]
     pub fn from_decinewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::DecinewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e-1) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in DecinewtonMillimetersPerDegree (`dN·mm/deg`).
     #[inline]
     pub fn as_decinewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e-1) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_decinewton_millimeters_per_degree`].
@@ -583,16 +596,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMillimetersPerDegree (`daN·mm/deg`).
     #[inline]
     pub fn from_decanewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::DecanewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e1) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in DecanewtonMillimetersPerDegree (`daN·mm/deg`).
     #[inline]
     pub fn as_decanewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e1) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_decanewton_millimeters_per_degree`].
@@ -604,16 +616,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMillimetersPerDegree (`kN·mm/deg`).
     #[inline]
     pub fn from_kilonewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::KilonewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e3) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in KilonewtonMillimetersPerDegree (`kN·mm/deg`).
     #[inline]
     pub fn as_kilonewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e3) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_kilonewton_millimeters_per_degree`].
@@ -625,16 +636,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMillimetersPerDegree (`MN·mm/deg`).
     #[inline]
     pub fn from_meganewton_millimeters_per_degree(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MeganewtonMillimeterPerDegree,
-        )
+        let x = value;
+        Self((x * 1e6) * 180.0 / (std::f64::consts::PI as Num) * 0.001)
     }
 
     /// Returns the value expressed in MeganewtonMillimetersPerDegree (`MN·mm/deg`).
     #[inline]
     pub fn as_meganewton_millimeters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+        let x = self.0;
+        (x / 1e6) / 180.0 * (std::f64::consts::PI as Num) * 1000.0
     }
 
     /// Alias for [`Self::as_meganewton_millimeters_per_degree`].
@@ -646,13 +656,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NewtonMetersPerDegree (`N·m/deg`).
     #[inline]
     pub fn from_newton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::NewtonMeterPerDegree)
+        let x = value;
+        Self(x * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in NewtonMetersPerDegree (`N·m/deg`).
     #[inline]
     pub fn as_newton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NewtonMeterPerDegree)
+        let x = self.0;
+        x / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_newton_meters_per_degree`].
@@ -664,13 +676,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMetersPerDegree (`nN·m/deg`).
     #[inline]
     pub fn from_nanonewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e-9) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in NanonewtonMetersPerDegree (`nN·m/deg`).
     #[inline]
     pub fn as_nanonewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e-9) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_nanonewton_meters_per_degree`].
@@ -682,13 +696,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMetersPerDegree (`µN·m/deg`).
     #[inline]
     pub fn from_micronewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e-6) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in MicronewtonMetersPerDegree (`µN·m/deg`).
     #[inline]
     pub fn as_micronewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e-6) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_micronewton_meters_per_degree`].
@@ -700,13 +716,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMetersPerDegree (`mN·m/deg`).
     #[inline]
     pub fn from_millinewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e-3) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in MillinewtonMetersPerDegree (`mN·m/deg`).
     #[inline]
     pub fn as_millinewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e-3) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_millinewton_meters_per_degree`].
@@ -718,13 +736,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMetersPerDegree (`cN·m/deg`).
     #[inline]
     pub fn from_centinewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e-2) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in CentinewtonMetersPerDegree (`cN·m/deg`).
     #[inline]
     pub fn as_centinewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e-2) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_centinewton_meters_per_degree`].
@@ -736,13 +756,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMetersPerDegree (`dN·m/deg`).
     #[inline]
     pub fn from_decinewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e-1) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in DecinewtonMetersPerDegree (`dN·m/deg`).
     #[inline]
     pub fn as_decinewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e-1) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_decinewton_meters_per_degree`].
@@ -754,13 +776,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMetersPerDegree (`daN·m/deg`).
     #[inline]
     pub fn from_decanewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e1) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in DecanewtonMetersPerDegree (`daN·m/deg`).
     #[inline]
     pub fn as_decanewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e1) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_decanewton_meters_per_degree`].
@@ -772,13 +796,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMetersPerDegree (`kN·m/deg`).
     #[inline]
     pub fn from_kilonewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e3) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in KilonewtonMetersPerDegree (`kN·m/deg`).
     #[inline]
     pub fn as_kilonewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e3) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_kilonewton_meters_per_degree`].
@@ -790,13 +816,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMetersPerDegree (`MN·m/deg`).
     #[inline]
     pub fn from_meganewton_meters_per_degree(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+        let x = value;
+        Self((x * 1e6) * (180.0 / (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in MeganewtonMetersPerDegree (`MN·m/deg`).
     #[inline]
     pub fn as_meganewton_meters_per_degree(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+        let x = self.0;
+        (x / 1e6) / (180.0 / (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_meganewton_meters_per_degree`].
@@ -808,13 +836,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NewtonMillimetersPerRadian (`N·mm/rad`).
     #[inline]
     pub fn from_newton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+        let x = value;
+        Self(x * 0.001)
     }
 
     /// Returns the value expressed in NewtonMillimetersPerRadian (`N·mm/rad`).
     #[inline]
     pub fn as_newton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+        let x = self.0;
+        x * 1000.0
     }
 
     /// Alias for [`Self::as_newton_millimeters_per_radian`].
@@ -826,16 +856,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMillimetersPerRadian (`nN·mm/rad`).
     #[inline]
     pub fn from_nanonewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e-9) * 0.001)
     }
 
     /// Returns the value expressed in NanonewtonMillimetersPerRadian (`nN·mm/rad`).
     #[inline]
     pub fn as_nanonewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e-9) * 1000.0
     }
 
     /// Alias for [`Self::as_nanonewton_millimeters_per_radian`].
@@ -847,16 +876,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMillimetersPerRadian (`µN·mm/rad`).
     #[inline]
     pub fn from_micronewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e-6) * 0.001)
     }
 
     /// Returns the value expressed in MicronewtonMillimetersPerRadian (`µN·mm/rad`).
     #[inline]
     pub fn as_micronewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e-6) * 1000.0
     }
 
     /// Alias for [`Self::as_micronewton_millimeters_per_radian`].
@@ -868,16 +896,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMillimetersPerRadian (`mN·mm/rad`).
     #[inline]
     pub fn from_millinewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e-3) * 0.001)
     }
 
     /// Returns the value expressed in MillinewtonMillimetersPerRadian (`mN·mm/rad`).
     #[inline]
     pub fn as_millinewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e-3) * 1000.0
     }
 
     /// Alias for [`Self::as_millinewton_millimeters_per_radian`].
@@ -889,16 +916,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMillimetersPerRadian (`cN·mm/rad`).
     #[inline]
     pub fn from_centinewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e-2) * 0.001)
     }
 
     /// Returns the value expressed in CentinewtonMillimetersPerRadian (`cN·mm/rad`).
     #[inline]
     pub fn as_centinewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e-2) * 1000.0
     }
 
     /// Alias for [`Self::as_centinewton_millimeters_per_radian`].
@@ -910,16 +936,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMillimetersPerRadian (`dN·mm/rad`).
     #[inline]
     pub fn from_decinewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e-1) * 0.001)
     }
 
     /// Returns the value expressed in DecinewtonMillimetersPerRadian (`dN·mm/rad`).
     #[inline]
     pub fn as_decinewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e-1) * 1000.0
     }
 
     /// Alias for [`Self::as_decinewton_millimeters_per_radian`].
@@ -931,16 +956,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMillimetersPerRadian (`daN·mm/rad`).
     #[inline]
     pub fn from_decanewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e1) * 0.001)
     }
 
     /// Returns the value expressed in DecanewtonMillimetersPerRadian (`daN·mm/rad`).
     #[inline]
     pub fn as_decanewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e1) * 1000.0
     }
 
     /// Alias for [`Self::as_decanewton_millimeters_per_radian`].
@@ -952,16 +976,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMillimetersPerRadian (`kN·mm/rad`).
     #[inline]
     pub fn from_kilonewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::KilonewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e3) * 0.001)
     }
 
     /// Returns the value expressed in KilonewtonMillimetersPerRadian (`kN·mm/rad`).
     #[inline]
     pub fn as_kilonewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e3) * 1000.0
     }
 
     /// Alias for [`Self::as_kilonewton_millimeters_per_radian`].
@@ -973,16 +996,15 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMillimetersPerRadian (`MN·mm/rad`).
     #[inline]
     pub fn from_meganewton_millimeters_per_radian(value: Num) -> Self {
-        Self::new(
-            value,
-            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian,
-        )
+        let x = value;
+        Self((x * 1e6) * 0.001)
     }
 
     /// Returns the value expressed in MeganewtonMillimetersPerRadian (`MN·mm/rad`).
     #[inline]
     pub fn as_meganewton_millimeters_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+        let x = self.0;
+        (x / 1e6) * 1000.0
     }
 
     /// Alias for [`Self::as_meganewton_millimeters_per_radian`].
@@ -994,25 +1016,29 @@ impl RotationalStiffness {
     /// Creates a [`RotationalStiffness`] from a value in PoundForceFeetPerRadian (`lbf·ft/rad`).
     #[inline]
     pub fn from_pound_force_feet_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::PoundForceFeetPerRadian)
+        let x = value;
+        Self(x * 4.4482216152605 * 0.3048)
     }
 
     /// Returns the value expressed in PoundForceFeetPerRadian (`lbf·ft/rad`).
     #[inline]
     pub fn as_pound_force_feet_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+        let x = self.0;
+        x / (4.4482216152605 * 0.3048)
     }
 
     /// Creates a [`RotationalStiffness`] from a value in KilopoundForceFeetPerRadian (`kipf·ft/rad`).
     #[inline]
     pub fn from_kilopound_force_feet_per_radian(value: Num) -> Self {
-        Self::new(value, RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+        let x = value;
+        Self(x * 4.4482216152605e3 * 0.3048)
     }
 
     /// Returns the value expressed in KilopoundForceFeetPerRadian (`kipf·ft/rad`).
     #[inline]
     pub fn as_kilopound_force_feet_per_radian(self) -> Num {
-        self.convert_to(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+        let x = self.0;
+        x / (4.4482216152605e3 * 0.3048)
     }
 
     /// Alias for [`Self::as_kilopound_force_feet_per_radian`].
@@ -1035,42 +1061,49 @@ impl crate::Quantity for RotationalStiffness {
 
 impl Add for RotationalStiffness {
     type Output = RotationalStiffness;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for RotationalStiffness {
     type Output = RotationalStiffness;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for RotationalStiffness {
     type Output = RotationalStiffness;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for RotationalStiffness {
     type Output = RotationalStiffness;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<RotationalStiffness> for Num {
     type Output = RotationalStiffness;
+    #[inline]
     fn mul(self, rhs: RotationalStiffness) -> RotationalStiffness {
         RotationalStiffness(self * rhs.0)
     }
 }
 impl Div<Num> for RotationalStiffness {
     type Output = RotationalStiffness;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RotationalStiffness {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

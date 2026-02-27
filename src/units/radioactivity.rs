@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -90,6 +92,7 @@ impl RadioactivityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Becquerel => "Bq",
@@ -125,6 +128,7 @@ impl RadioactivityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Becquerel => &["Bq"],
@@ -162,6 +166,7 @@ impl RadioactivityUnit {
 
 impl Radioactivity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RadioactivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -215,6 +220,7 @@ impl Radioactivity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RadioactivityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -253,13 +259,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Becquerels (`Bq`).
     #[inline]
     pub fn from_becquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Becquerel)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Becquerels (`Bq`).
     #[inline]
     pub fn as_becquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Becquerel)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_becquerels`].
@@ -271,13 +279,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Picobecquerels (`pBq`).
     #[inline]
     pub fn from_picobecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Picobecquerel)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picobecquerels (`pBq`).
     #[inline]
     pub fn as_picobecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Picobecquerel)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picobecquerels`].
@@ -289,13 +299,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Nanobecquerels (`nBq`).
     #[inline]
     pub fn from_nanobecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Nanobecquerel)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanobecquerels (`nBq`).
     #[inline]
     pub fn as_nanobecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Nanobecquerel)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanobecquerels`].
@@ -307,13 +319,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Microbecquerels (`µBq`).
     #[inline]
     pub fn from_microbecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Microbecquerel)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microbecquerels (`µBq`).
     #[inline]
     pub fn as_microbecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Microbecquerel)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microbecquerels`].
@@ -325,13 +339,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Millibecquerels (`mBq`).
     #[inline]
     pub fn from_millibecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Millibecquerel)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millibecquerels (`mBq`).
     #[inline]
     pub fn as_millibecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Millibecquerel)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millibecquerels`].
@@ -343,13 +359,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Kilobecquerels (`kBq`).
     #[inline]
     pub fn from_kilobecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Kilobecquerel)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilobecquerels (`kBq`).
     #[inline]
     pub fn as_kilobecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Kilobecquerel)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilobecquerels`].
@@ -361,13 +379,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Megabecquerels (`MBq`).
     #[inline]
     pub fn from_megabecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Megabecquerel)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megabecquerels (`MBq`).
     #[inline]
     pub fn as_megabecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Megabecquerel)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megabecquerels`].
@@ -379,13 +399,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Gigabecquerels (`GBq`).
     #[inline]
     pub fn from_gigabecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Gigabecquerel)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigabecquerels (`GBq`).
     #[inline]
     pub fn as_gigabecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Gigabecquerel)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigabecquerels`].
@@ -397,13 +419,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Terabecquerels (`TBq`).
     #[inline]
     pub fn from_terabecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Terabecquerel)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Terabecquerels (`TBq`).
     #[inline]
     pub fn as_terabecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Terabecquerel)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_terabecquerels`].
@@ -415,13 +439,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Petabecquerels (`PBq`).
     #[inline]
     pub fn from_petabecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Petabecquerel)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in Petabecquerels (`PBq`).
     #[inline]
     pub fn as_petabecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Petabecquerel)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petabecquerels`].
@@ -433,13 +459,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Exabecquerels (`EBq`).
     #[inline]
     pub fn from_exabecquerels(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Exabecquerel)
+        let x = value;
+        Self((x * 1e18))
     }
 
     /// Returns the value expressed in Exabecquerels (`EBq`).
     #[inline]
     pub fn as_exabecquerels(self) -> Num {
-        self.convert_to(RadioactivityUnit::Exabecquerel)
+        let x = self.0;
+        (x / 1e18)
     }
 
     /// Alias for [`Self::as_exabecquerels`].
@@ -451,13 +479,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Curies (`Ci`).
     #[inline]
     pub fn from_curies(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Curie)
+        let x = value;
+        Self(x * 3.7e10)
     }
 
     /// Returns the value expressed in Curies (`Ci`).
     #[inline]
     pub fn as_curies(self) -> Num {
-        self.convert_to(RadioactivityUnit::Curie)
+        let x = self.0;
+        x / 3.7e10
     }
 
     /// Alias for [`Self::as_curies`].
@@ -469,13 +499,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Picocuries (`pCi`).
     #[inline]
     pub fn from_picocuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Picocurie)
+        let x = value;
+        Self((x * 1e-12) * 3.7e10)
     }
 
     /// Returns the value expressed in Picocuries (`pCi`).
     #[inline]
     pub fn as_picocuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Picocurie)
+        let x = self.0;
+        (x / 1e-12) / 3.7e10
     }
 
     /// Alias for [`Self::as_picocuries`].
@@ -487,13 +519,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Nanocuries (`nCi`).
     #[inline]
     pub fn from_nanocuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Nanocurie)
+        let x = value;
+        Self((x * 1e-9) * 3.7e10)
     }
 
     /// Returns the value expressed in Nanocuries (`nCi`).
     #[inline]
     pub fn as_nanocuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Nanocurie)
+        let x = self.0;
+        (x / 1e-9) / 3.7e10
     }
 
     /// Alias for [`Self::as_nanocuries`].
@@ -505,13 +539,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Microcuries (`µCi`).
     #[inline]
     pub fn from_microcuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Microcurie)
+        let x = value;
+        Self((x * 1e-6) * 3.7e10)
     }
 
     /// Returns the value expressed in Microcuries (`µCi`).
     #[inline]
     pub fn as_microcuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Microcurie)
+        let x = self.0;
+        (x / 1e-6) / 3.7e10
     }
 
     /// Alias for [`Self::as_microcuries`].
@@ -523,13 +559,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Millicuries (`mCi`).
     #[inline]
     pub fn from_millicuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Millicurie)
+        let x = value;
+        Self((x * 1e-3) * 3.7e10)
     }
 
     /// Returns the value expressed in Millicuries (`mCi`).
     #[inline]
     pub fn as_millicuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Millicurie)
+        let x = self.0;
+        (x / 1e-3) / 3.7e10
     }
 
     /// Alias for [`Self::as_millicuries`].
@@ -541,13 +579,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Kilocuries (`kCi`).
     #[inline]
     pub fn from_kilocuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Kilocurie)
+        let x = value;
+        Self((x * 1e3) * 3.7e10)
     }
 
     /// Returns the value expressed in Kilocuries (`kCi`).
     #[inline]
     pub fn as_kilocuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Kilocurie)
+        let x = self.0;
+        (x / 1e3) / 3.7e10
     }
 
     /// Alias for [`Self::as_kilocuries`].
@@ -559,13 +599,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Megacuries (`MCi`).
     #[inline]
     pub fn from_megacuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Megacurie)
+        let x = value;
+        Self((x * 1e6) * 3.7e10)
     }
 
     /// Returns the value expressed in Megacuries (`MCi`).
     #[inline]
     pub fn as_megacuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Megacurie)
+        let x = self.0;
+        (x / 1e6) / 3.7e10
     }
 
     /// Alias for [`Self::as_megacuries`].
@@ -577,13 +619,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Gigacuries (`GCi`).
     #[inline]
     pub fn from_gigacuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Gigacurie)
+        let x = value;
+        Self((x * 1e9) * 3.7e10)
     }
 
     /// Returns the value expressed in Gigacuries (`GCi`).
     #[inline]
     pub fn as_gigacuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Gigacurie)
+        let x = self.0;
+        (x / 1e9) / 3.7e10
     }
 
     /// Alias for [`Self::as_gigacuries`].
@@ -595,13 +639,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Teracuries (`TCi`).
     #[inline]
     pub fn from_teracuries(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Teracurie)
+        let x = value;
+        Self((x * 1e12) * 3.7e10)
     }
 
     /// Returns the value expressed in Teracuries (`TCi`).
     #[inline]
     pub fn as_teracuries(self) -> Num {
-        self.convert_to(RadioactivityUnit::Teracurie)
+        let x = self.0;
+        (x / 1e12) / 3.7e10
     }
 
     /// Alias for [`Self::as_teracuries`].
@@ -613,13 +659,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Rutherfords (`Rd`).
     #[inline]
     pub fn from_rutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Rutherford)
+        let x = value;
+        Self(x * 1e6)
     }
 
     /// Returns the value expressed in Rutherfords (`Rd`).
     #[inline]
     pub fn as_rutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Rutherford)
+        let x = self.0;
+        x / 1e6
     }
 
     /// Alias for [`Self::as_rutherfords`].
@@ -631,13 +679,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Picorutherfords (`pRd`).
     #[inline]
     pub fn from_picorutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Picorutherford)
+        let x = value;
+        Self((x * 1e-12) * 1e6)
     }
 
     /// Returns the value expressed in Picorutherfords (`pRd`).
     #[inline]
     pub fn as_picorutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Picorutherford)
+        let x = self.0;
+        (x / 1e-12) / 1e6
     }
 
     /// Alias for [`Self::as_picorutherfords`].
@@ -649,13 +699,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Nanorutherfords (`nRd`).
     #[inline]
     pub fn from_nanorutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Nanorutherford)
+        let x = value;
+        Self((x * 1e-9) * 1e6)
     }
 
     /// Returns the value expressed in Nanorutherfords (`nRd`).
     #[inline]
     pub fn as_nanorutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Nanorutherford)
+        let x = self.0;
+        (x / 1e-9) / 1e6
     }
 
     /// Alias for [`Self::as_nanorutherfords`].
@@ -667,13 +719,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Microrutherfords (`µRd`).
     #[inline]
     pub fn from_microrutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Microrutherford)
+        let x = value;
+        Self((x * 1e-6) * 1e6)
     }
 
     /// Returns the value expressed in Microrutherfords (`µRd`).
     #[inline]
     pub fn as_microrutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Microrutherford)
+        let x = self.0;
+        (x / 1e-6) / 1e6
     }
 
     /// Alias for [`Self::as_microrutherfords`].
@@ -685,13 +739,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Millirutherfords (`mRd`).
     #[inline]
     pub fn from_millirutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Millirutherford)
+        let x = value;
+        Self((x * 1e-3) * 1e6)
     }
 
     /// Returns the value expressed in Millirutherfords (`mRd`).
     #[inline]
     pub fn as_millirutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Millirutherford)
+        let x = self.0;
+        (x / 1e-3) / 1e6
     }
 
     /// Alias for [`Self::as_millirutherfords`].
@@ -703,13 +759,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Kilorutherfords (`kRd`).
     #[inline]
     pub fn from_kilorutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Kilorutherford)
+        let x = value;
+        Self((x * 1e3) * 1e6)
     }
 
     /// Returns the value expressed in Kilorutherfords (`kRd`).
     #[inline]
     pub fn as_kilorutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Kilorutherford)
+        let x = self.0;
+        (x / 1e3) / 1e6
     }
 
     /// Alias for [`Self::as_kilorutherfords`].
@@ -721,13 +779,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Megarutherfords (`MRd`).
     #[inline]
     pub fn from_megarutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Megarutherford)
+        let x = value;
+        Self((x * 1e6) * 1e6)
     }
 
     /// Returns the value expressed in Megarutherfords (`MRd`).
     #[inline]
     pub fn as_megarutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Megarutherford)
+        let x = self.0;
+        (x / 1e6) / 1e6
     }
 
     /// Alias for [`Self::as_megarutherfords`].
@@ -739,13 +799,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Gigarutherfords (`GRd`).
     #[inline]
     pub fn from_gigarutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Gigarutherford)
+        let x = value;
+        Self((x * 1e9) * 1e6)
     }
 
     /// Returns the value expressed in Gigarutherfords (`GRd`).
     #[inline]
     pub fn as_gigarutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Gigarutherford)
+        let x = self.0;
+        (x / 1e9) / 1e6
     }
 
     /// Alias for [`Self::as_gigarutherfords`].
@@ -757,13 +819,15 @@ impl Radioactivity {
     /// Creates a [`Radioactivity`] from a value in Terarutherfords (`TRd`).
     #[inline]
     pub fn from_terarutherfords(value: Num) -> Self {
-        Self::new(value, RadioactivityUnit::Terarutherford)
+        let x = value;
+        Self((x * 1e12) * 1e6)
     }
 
     /// Returns the value expressed in Terarutherfords (`TRd`).
     #[inline]
     pub fn as_terarutherfords(self) -> Num {
-        self.convert_to(RadioactivityUnit::Terarutherford)
+        let x = self.0;
+        (x / 1e12) / 1e6
     }
 
     /// Alias for [`Self::as_terarutherfords`].
@@ -786,42 +850,49 @@ impl crate::Quantity for Radioactivity {
 
 impl Add for Radioactivity {
     type Output = Radioactivity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Radioactivity {
     type Output = Radioactivity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Radioactivity {
     type Output = Radioactivity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Radioactivity {
     type Output = Radioactivity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Radioactivity> for Num {
     type Output = Radioactivity;
+    #[inline]
     fn mul(self, rhs: Radioactivity) -> Radioactivity {
         Radioactivity(self * rhs.0)
     }
 }
 impl Div<Num> for Radioactivity {
     type Output = Radioactivity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Radioactivity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

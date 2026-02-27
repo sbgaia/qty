@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -108,6 +110,7 @@ impl BitRateUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::BitPerSecond => "bit/s",
@@ -153,6 +156,7 @@ impl BitRateUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::BitPerSecond => &["bit/s", "bps"],
@@ -200,6 +204,7 @@ impl BitRateUnit {
 
 impl BitRate {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: BitRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -263,6 +268,7 @@ impl BitRate {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: BitRateUnit) -> Num {
         let x = self.0;
         match unit {
@@ -311,13 +317,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in BitsPerSecond (`bit/s`).
     #[inline]
     pub fn from_bits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::BitPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in BitsPerSecond (`bit/s`).
     #[inline]
     pub fn as_bits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::BitPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_bits_per_second`].
@@ -329,13 +337,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KilobitsPerSecond (`kbit/s`).
     #[inline]
     pub fn from_kilobits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KilobitPerSecond)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilobitsPerSecond (`kbit/s`).
     #[inline]
     pub fn as_kilobits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KilobitPerSecond)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilobits_per_second`].
@@ -347,13 +357,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MegabitsPerSecond (`Mbit/s`).
     #[inline]
     pub fn from_megabits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MegabitPerSecond)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegabitsPerSecond (`Mbit/s`).
     #[inline]
     pub fn as_megabits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MegabitPerSecond)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megabits_per_second`].
@@ -365,13 +377,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GigabitsPerSecond (`Gbit/s`).
     #[inline]
     pub fn from_gigabits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GigabitPerSecond)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in GigabitsPerSecond (`Gbit/s`).
     #[inline]
     pub fn as_gigabits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GigabitPerSecond)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigabits_per_second`].
@@ -383,13 +397,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TerabitsPerSecond (`Tbit/s`).
     #[inline]
     pub fn from_terabits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TerabitPerSecond)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in TerabitsPerSecond (`Tbit/s`).
     #[inline]
     pub fn as_terabits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TerabitPerSecond)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_terabits_per_second`].
@@ -401,13 +417,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PetabitsPerSecond (`Pbit/s`).
     #[inline]
     pub fn from_petabits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PetabitPerSecond)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in PetabitsPerSecond (`Pbit/s`).
     #[inline]
     pub fn as_petabits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PetabitPerSecond)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petabits_per_second`].
@@ -419,13 +437,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExabitsPerSecond (`Ebit/s`).
     #[inline]
     pub fn from_exabits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExabitPerSecond)
+        let x = value;
+        Self((x * 1e18))
     }
 
     /// Returns the value expressed in ExabitsPerSecond (`Ebit/s`).
     #[inline]
     pub fn as_exabits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExabitPerSecond)
+        let x = self.0;
+        (x / 1e18)
     }
 
     /// Alias for [`Self::as_exabits_per_second`].
@@ -437,13 +457,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KibibitsPerSecond (`Kibit/s`).
     #[inline]
     pub fn from_kibibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KibibitPerSecond)
+        let x = value;
+        Self((x * 1.024e3))
     }
 
     /// Returns the value expressed in KibibitsPerSecond (`Kibit/s`).
     #[inline]
     pub fn as_kibibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KibibitPerSecond)
+        let x = self.0;
+        (x / 1.024e3)
     }
 
     /// Alias for [`Self::as_kibibits_per_second`].
@@ -455,13 +477,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MebibitsPerSecond (`Mibit/s`).
     #[inline]
     pub fn from_mebibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MebibitPerSecond)
+        let x = value;
+        Self((x * 1.048576e6))
     }
 
     /// Returns the value expressed in MebibitsPerSecond (`Mibit/s`).
     #[inline]
     pub fn as_mebibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MebibitPerSecond)
+        let x = self.0;
+        (x / 1.048576e6)
     }
 
     /// Alias for [`Self::as_mebibits_per_second`].
@@ -473,13 +497,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GibibitsPerSecond (`Gibit/s`).
     #[inline]
     pub fn from_gibibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GibibitPerSecond)
+        let x = value;
+        Self((x * 1.073741824e9))
     }
 
     /// Returns the value expressed in GibibitsPerSecond (`Gibit/s`).
     #[inline]
     pub fn as_gibibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GibibitPerSecond)
+        let x = self.0;
+        (x / 1.073741824e9)
     }
 
     /// Alias for [`Self::as_gibibits_per_second`].
@@ -491,13 +517,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TebibitsPerSecond (`Tibit/s`).
     #[inline]
     pub fn from_tebibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TebibitPerSecond)
+        let x = value;
+        Self((x * 1.099511627776e12))
     }
 
     /// Returns the value expressed in TebibitsPerSecond (`Tibit/s`).
     #[inline]
     pub fn as_tebibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TebibitPerSecond)
+        let x = self.0;
+        (x / 1.099511627776e12)
     }
 
     /// Alias for [`Self::as_tebibits_per_second`].
@@ -509,13 +537,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PebibitsPerSecond (`Pibit/s`).
     #[inline]
     pub fn from_pebibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PebibitPerSecond)
+        let x = value;
+        Self((x * 1.125899906842624e15))
     }
 
     /// Returns the value expressed in PebibitsPerSecond (`Pibit/s`).
     #[inline]
     pub fn as_pebibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PebibitPerSecond)
+        let x = self.0;
+        (x / 1.125899906842624e15)
     }
 
     /// Alias for [`Self::as_pebibits_per_second`].
@@ -527,13 +557,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExbibitsPerSecond (`Eibit/s`).
     #[inline]
     pub fn from_exbibits_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExbibitPerSecond)
+        let x = value;
+        Self((x * 1.152921504606847e18))
     }
 
     /// Returns the value expressed in ExbibitsPerSecond (`Eibit/s`).
     #[inline]
     pub fn as_exbibits_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExbibitPerSecond)
+        let x = self.0;
+        (x / 1.152921504606847e18)
     }
 
     /// Alias for [`Self::as_exbibits_per_second`].
@@ -545,13 +577,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in BytesPerSecond (`B/s`).
     #[inline]
     pub fn from_bytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::BytePerSecond)
+        let x = value;
+        Self(x * 8.0)
     }
 
     /// Returns the value expressed in BytesPerSecond (`B/s`).
     #[inline]
     pub fn as_bytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::BytePerSecond)
+        let x = self.0;
+        x / 8.0
     }
 
     /// Alias for [`Self::as_bytes_per_second`].
@@ -563,13 +597,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KilobytesPerSecond (`kB/s`).
     #[inline]
     pub fn from_kilobytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KilobytePerSecond)
+        let x = value;
+        Self((x * 1e3) * 8.0)
     }
 
     /// Returns the value expressed in KilobytesPerSecond (`kB/s`).
     #[inline]
     pub fn as_kilobytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KilobytePerSecond)
+        let x = self.0;
+        (x / 1e3) / 8.0
     }
 
     /// Alias for [`Self::as_kilobytes_per_second`].
@@ -581,13 +617,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MegabytesPerSecond (`MB/s`).
     #[inline]
     pub fn from_megabytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MegabytePerSecond)
+        let x = value;
+        Self((x * 1e6) * 8.0)
     }
 
     /// Returns the value expressed in MegabytesPerSecond (`MB/s`).
     #[inline]
     pub fn as_megabytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MegabytePerSecond)
+        let x = self.0;
+        (x / 1e6) / 8.0
     }
 
     /// Alias for [`Self::as_megabytes_per_second`].
@@ -599,13 +637,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GigabytesPerSecond (`GB/s`).
     #[inline]
     pub fn from_gigabytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GigabytePerSecond)
+        let x = value;
+        Self((x * 1e9) * 8.0)
     }
 
     /// Returns the value expressed in GigabytesPerSecond (`GB/s`).
     #[inline]
     pub fn as_gigabytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GigabytePerSecond)
+        let x = self.0;
+        (x / 1e9) / 8.0
     }
 
     /// Alias for [`Self::as_gigabytes_per_second`].
@@ -617,13 +657,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TerabytesPerSecond (`TB/s`).
     #[inline]
     pub fn from_terabytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TerabytePerSecond)
+        let x = value;
+        Self((x * 1e12) * 8.0)
     }
 
     /// Returns the value expressed in TerabytesPerSecond (`TB/s`).
     #[inline]
     pub fn as_terabytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TerabytePerSecond)
+        let x = self.0;
+        (x / 1e12) / 8.0
     }
 
     /// Alias for [`Self::as_terabytes_per_second`].
@@ -635,13 +677,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PetabytesPerSecond (`PB/s`).
     #[inline]
     pub fn from_petabytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PetabytePerSecond)
+        let x = value;
+        Self((x * 1e15) * 8.0)
     }
 
     /// Returns the value expressed in PetabytesPerSecond (`PB/s`).
     #[inline]
     pub fn as_petabytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PetabytePerSecond)
+        let x = self.0;
+        (x / 1e15) / 8.0
     }
 
     /// Alias for [`Self::as_petabytes_per_second`].
@@ -653,13 +697,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExabytesPerSecond (`EB/s`).
     #[inline]
     pub fn from_exabytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExabytePerSecond)
+        let x = value;
+        Self((x * 1e18) * 8.0)
     }
 
     /// Returns the value expressed in ExabytesPerSecond (`EB/s`).
     #[inline]
     pub fn as_exabytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExabytePerSecond)
+        let x = self.0;
+        (x / 1e18) / 8.0
     }
 
     /// Alias for [`Self::as_exabytes_per_second`].
@@ -671,13 +717,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KibibytesPerSecond (`KiB/s`).
     #[inline]
     pub fn from_kibibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KibibytePerSecond)
+        let x = value;
+        Self((x * 1.024e3) * 8.0)
     }
 
     /// Returns the value expressed in KibibytesPerSecond (`KiB/s`).
     #[inline]
     pub fn as_kibibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KibibytePerSecond)
+        let x = self.0;
+        (x / 1.024e3) / 8.0
     }
 
     /// Alias for [`Self::as_kibibytes_per_second`].
@@ -689,13 +737,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MebibytesPerSecond (`MiB/s`).
     #[inline]
     pub fn from_mebibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MebibytePerSecond)
+        let x = value;
+        Self((x * 1.048576e6) * 8.0)
     }
 
     /// Returns the value expressed in MebibytesPerSecond (`MiB/s`).
     #[inline]
     pub fn as_mebibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MebibytePerSecond)
+        let x = self.0;
+        (x / 1.048576e6) / 8.0
     }
 
     /// Alias for [`Self::as_mebibytes_per_second`].
@@ -707,13 +757,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GibibytesPerSecond (`GiB/s`).
     #[inline]
     pub fn from_gibibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GibibytePerSecond)
+        let x = value;
+        Self((x * 1.073741824e9) * 8.0)
     }
 
     /// Returns the value expressed in GibibytesPerSecond (`GiB/s`).
     #[inline]
     pub fn as_gibibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GibibytePerSecond)
+        let x = self.0;
+        (x / 1.073741824e9) / 8.0
     }
 
     /// Alias for [`Self::as_gibibytes_per_second`].
@@ -725,13 +777,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TebibytesPerSecond (`TiB/s`).
     #[inline]
     pub fn from_tebibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TebibytePerSecond)
+        let x = value;
+        Self((x * 1.099511627776e12) * 8.0)
     }
 
     /// Returns the value expressed in TebibytesPerSecond (`TiB/s`).
     #[inline]
     pub fn as_tebibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TebibytePerSecond)
+        let x = self.0;
+        (x / 1.099511627776e12) / 8.0
     }
 
     /// Alias for [`Self::as_tebibytes_per_second`].
@@ -743,13 +797,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PebibytesPerSecond (`PiB/s`).
     #[inline]
     pub fn from_pebibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PebibytePerSecond)
+        let x = value;
+        Self((x * 1.125899906842624e15) * 8.0)
     }
 
     /// Returns the value expressed in PebibytesPerSecond (`PiB/s`).
     #[inline]
     pub fn as_pebibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PebibytePerSecond)
+        let x = self.0;
+        (x / 1.125899906842624e15) / 8.0
     }
 
     /// Alias for [`Self::as_pebibytes_per_second`].
@@ -761,13 +817,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExbibytesPerSecond (`EiB/s`).
     #[inline]
     pub fn from_exbibytes_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExbibytePerSecond)
+        let x = value;
+        Self((x * 1.152921504606847e18) * 8.0)
     }
 
     /// Returns the value expressed in ExbibytesPerSecond (`EiB/s`).
     #[inline]
     pub fn as_exbibytes_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExbibytePerSecond)
+        let x = self.0;
+        (x / 1.152921504606847e18) / 8.0
     }
 
     /// Alias for [`Self::as_exbibytes_per_second`].
@@ -779,13 +837,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in OctetsPerSecond (`o/s`).
     #[inline]
     pub fn from_octets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::OctetPerSecond)
+        let x = value;
+        Self(x * 8.0)
     }
 
     /// Returns the value expressed in OctetsPerSecond (`o/s`).
     #[inline]
     pub fn as_octets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::OctetPerSecond)
+        let x = self.0;
+        x / 8.0
     }
 
     /// Alias for [`Self::as_octets_per_second`].
@@ -797,13 +857,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KilooctetsPerSecond (`ko/s`).
     #[inline]
     pub fn from_kilooctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KilooctetPerSecond)
+        let x = value;
+        Self((x * 1e3) * 8.0)
     }
 
     /// Returns the value expressed in KilooctetsPerSecond (`ko/s`).
     #[inline]
     pub fn as_kilooctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KilooctetPerSecond)
+        let x = self.0;
+        (x / 1e3) / 8.0
     }
 
     /// Alias for [`Self::as_kilooctets_per_second`].
@@ -815,13 +877,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MegaoctetsPerSecond (`Mo/s`).
     #[inline]
     pub fn from_megaoctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MegaoctetPerSecond)
+        let x = value;
+        Self((x * 1e6) * 8.0)
     }
 
     /// Returns the value expressed in MegaoctetsPerSecond (`Mo/s`).
     #[inline]
     pub fn as_megaoctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MegaoctetPerSecond)
+        let x = self.0;
+        (x / 1e6) / 8.0
     }
 
     /// Alias for [`Self::as_megaoctets_per_second`].
@@ -833,13 +897,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GigaoctetsPerSecond (`Go/s`).
     #[inline]
     pub fn from_gigaoctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GigaoctetPerSecond)
+        let x = value;
+        Self((x * 1e9) * 8.0)
     }
 
     /// Returns the value expressed in GigaoctetsPerSecond (`Go/s`).
     #[inline]
     pub fn as_gigaoctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GigaoctetPerSecond)
+        let x = self.0;
+        (x / 1e9) / 8.0
     }
 
     /// Alias for [`Self::as_gigaoctets_per_second`].
@@ -851,13 +917,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TeraoctetsPerSecond (`To/s`).
     #[inline]
     pub fn from_teraoctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TeraoctetPerSecond)
+        let x = value;
+        Self((x * 1e12) * 8.0)
     }
 
     /// Returns the value expressed in TeraoctetsPerSecond (`To/s`).
     #[inline]
     pub fn as_teraoctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TeraoctetPerSecond)
+        let x = self.0;
+        (x / 1e12) / 8.0
     }
 
     /// Alias for [`Self::as_teraoctets_per_second`].
@@ -869,13 +937,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PetaoctetsPerSecond (`Po/s`).
     #[inline]
     pub fn from_petaoctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PetaoctetPerSecond)
+        let x = value;
+        Self((x * 1e15) * 8.0)
     }
 
     /// Returns the value expressed in PetaoctetsPerSecond (`Po/s`).
     #[inline]
     pub fn as_petaoctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PetaoctetPerSecond)
+        let x = self.0;
+        (x / 1e15) / 8.0
     }
 
     /// Alias for [`Self::as_petaoctets_per_second`].
@@ -887,13 +957,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExaoctetsPerSecond (`Eo/s`).
     #[inline]
     pub fn from_exaoctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExaoctetPerSecond)
+        let x = value;
+        Self((x * 1e18) * 8.0)
     }
 
     /// Returns the value expressed in ExaoctetsPerSecond (`Eo/s`).
     #[inline]
     pub fn as_exaoctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExaoctetPerSecond)
+        let x = self.0;
+        (x / 1e18) / 8.0
     }
 
     /// Alias for [`Self::as_exaoctets_per_second`].
@@ -905,13 +977,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in KibioctetsPerSecond (`Kio/s`).
     #[inline]
     pub fn from_kibioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::KibioctetPerSecond)
+        let x = value;
+        Self((x * 1.024e3) * 8.0)
     }
 
     /// Returns the value expressed in KibioctetsPerSecond (`Kio/s`).
     #[inline]
     pub fn as_kibioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::KibioctetPerSecond)
+        let x = self.0;
+        (x / 1.024e3) / 8.0
     }
 
     /// Alias for [`Self::as_kibioctets_per_second`].
@@ -923,13 +997,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in MebioctetsPerSecond (`Mio/s`).
     #[inline]
     pub fn from_mebioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::MebioctetPerSecond)
+        let x = value;
+        Self((x * 1.048576e6) * 8.0)
     }
 
     /// Returns the value expressed in MebioctetsPerSecond (`Mio/s`).
     #[inline]
     pub fn as_mebioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::MebioctetPerSecond)
+        let x = self.0;
+        (x / 1.048576e6) / 8.0
     }
 
     /// Alias for [`Self::as_mebioctets_per_second`].
@@ -941,13 +1017,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in GibioctetsPerSecond (`Gio/s`).
     #[inline]
     pub fn from_gibioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::GibioctetPerSecond)
+        let x = value;
+        Self((x * 1.073741824e9) * 8.0)
     }
 
     /// Returns the value expressed in GibioctetsPerSecond (`Gio/s`).
     #[inline]
     pub fn as_gibioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::GibioctetPerSecond)
+        let x = self.0;
+        (x / 1.073741824e9) / 8.0
     }
 
     /// Alias for [`Self::as_gibioctets_per_second`].
@@ -959,13 +1037,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in TebioctetsPerSecond (`Tio/s`).
     #[inline]
     pub fn from_tebioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::TebioctetPerSecond)
+        let x = value;
+        Self((x * 1.099511627776e12) * 8.0)
     }
 
     /// Returns the value expressed in TebioctetsPerSecond (`Tio/s`).
     #[inline]
     pub fn as_tebioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::TebioctetPerSecond)
+        let x = self.0;
+        (x / 1.099511627776e12) / 8.0
     }
 
     /// Alias for [`Self::as_tebioctets_per_second`].
@@ -977,13 +1057,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in PebioctetsPerSecond (`Pio/s`).
     #[inline]
     pub fn from_pebioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::PebioctetPerSecond)
+        let x = value;
+        Self((x * 1.125899906842624e15) * 8.0)
     }
 
     /// Returns the value expressed in PebioctetsPerSecond (`Pio/s`).
     #[inline]
     pub fn as_pebioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::PebioctetPerSecond)
+        let x = self.0;
+        (x / 1.125899906842624e15) / 8.0
     }
 
     /// Alias for [`Self::as_pebioctets_per_second`].
@@ -995,13 +1077,15 @@ impl BitRate {
     /// Creates a [`BitRate`] from a value in ExbioctetsPerSecond (`Eio/s`).
     #[inline]
     pub fn from_exbioctets_per_second(value: Num) -> Self {
-        Self::new(value, BitRateUnit::ExbioctetPerSecond)
+        let x = value;
+        Self((x * 1.152921504606847e18) * 8.0)
     }
 
     /// Returns the value expressed in ExbioctetsPerSecond (`Eio/s`).
     #[inline]
     pub fn as_exbioctets_per_second(self) -> Num {
-        self.convert_to(BitRateUnit::ExbioctetPerSecond)
+        let x = self.0;
+        (x / 1.152921504606847e18) / 8.0
     }
 
     /// Alias for [`Self::as_exbioctets_per_second`].
@@ -1024,42 +1108,49 @@ impl crate::Quantity for BitRate {
 
 impl Add for BitRate {
     type Output = BitRate;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for BitRate {
     type Output = BitRate;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for BitRate {
     type Output = BitRate;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for BitRate {
     type Output = BitRate;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<BitRate> for Num {
     type Output = BitRate;
+    #[inline]
     fn mul(self, rhs: BitRate) -> BitRate {
         BitRate(self * rhs.0)
     }
 }
 impl Div<Num> for BitRate {
     type Output = BitRate;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for BitRate {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

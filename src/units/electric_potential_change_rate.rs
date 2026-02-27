@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -70,6 +72,7 @@ impl ElectricPotentialChangeRateUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltPerSecond => "V/s",
@@ -96,6 +99,7 @@ impl ElectricPotentialChangeRateUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltPerSecond => &["V/s"],
@@ -124,6 +128,7 @@ impl ElectricPotentialChangeRateUnit {
 
 impl ElectricPotentialChangeRate {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricPotentialChangeRateUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -168,6 +173,7 @@ impl ElectricPotentialChangeRate {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricPotentialChangeRateUnit) -> Num {
         let x = self.0;
         match unit {
@@ -197,13 +203,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerSecond (`V/s`).
     #[inline]
     pub fn from_volts_per_second(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::VoltPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in VoltsPerSecond (`V/s`).
     #[inline]
     pub fn as_volts_per_second(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::VoltPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_volts_per_second`].
@@ -215,13 +223,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerSecond (`µV/s`).
     #[inline]
     pub fn from_microvolts_per_second(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrovoltsPerSecond (`µV/s`).
     #[inline]
     pub fn as_microvolts_per_second(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microvolts_per_second`].
@@ -233,13 +243,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerSecond (`mV/s`).
     #[inline]
     pub fn from_millivolts_per_second(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillivoltsPerSecond (`mV/s`).
     #[inline]
     pub fn as_millivolts_per_second(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millivolts_per_second`].
@@ -251,13 +263,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerSecond (`kV/s`).
     #[inline]
     pub fn from_kilovolts_per_second(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilovoltsPerSecond (`kV/s`).
     #[inline]
     pub fn as_kilovolts_per_second(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilovolts_per_second`].
@@ -269,13 +283,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerSecond (`MV/s`).
     #[inline]
     pub fn from_megavolts_per_second(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegavoltsPerSecond (`MV/s`).
     #[inline]
     pub fn as_megavolts_per_second(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megavolts_per_second`].
@@ -287,13 +303,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMicrosecond (`V/μs`).
     #[inline]
     pub fn from_volts_per_microsecond(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+        let x = value;
+        Self(x * 1E6)
     }
 
     /// Returns the value expressed in VoltsPerMicrosecond (`V/μs`).
     #[inline]
     pub fn as_volts_per_microsecond(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+        let x = self.0;
+        x / 1E6
     }
 
     /// Alias for [`Self::as_volts_per_microsecond`].
@@ -305,16 +323,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMicrosecond (`µV/μs`).
     #[inline]
     pub fn from_microvolts_per_microsecond(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond,
-        )
+        let x = value;
+        Self((x * 1e-6) * 1E6)
     }
 
     /// Returns the value expressed in MicrovoltsPerMicrosecond (`µV/μs`).
     #[inline]
     pub fn as_microvolts_per_microsecond(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+        let x = self.0;
+        (x / 1e-6) / 1E6
     }
 
     /// Alias for [`Self::as_microvolts_per_microsecond`].
@@ -326,16 +343,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMicrosecond (`mV/μs`).
     #[inline]
     pub fn from_millivolts_per_microsecond(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond,
-        )
+        let x = value;
+        Self((x * 1e-3) * 1E6)
     }
 
     /// Returns the value expressed in MillivoltsPerMicrosecond (`mV/μs`).
     #[inline]
     pub fn as_millivolts_per_microsecond(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+        let x = self.0;
+        (x / 1e-3) / 1E6
     }
 
     /// Alias for [`Self::as_millivolts_per_microsecond`].
@@ -347,16 +363,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMicrosecond (`kV/μs`).
     #[inline]
     pub fn from_kilovolts_per_microsecond(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond,
-        )
+        let x = value;
+        Self((x * 1e3) * 1E6)
     }
 
     /// Returns the value expressed in KilovoltsPerMicrosecond (`kV/μs`).
     #[inline]
     pub fn as_kilovolts_per_microsecond(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+        let x = self.0;
+        (x / 1e3) / 1E6
     }
 
     /// Alias for [`Self::as_kilovolts_per_microsecond`].
@@ -368,16 +383,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMicrosecond (`MV/μs`).
     #[inline]
     pub fn from_megavolts_per_microsecond(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond,
-        )
+        let x = value;
+        Self((x * 1e6) * 1E6)
     }
 
     /// Returns the value expressed in MegavoltsPerMicrosecond (`MV/μs`).
     #[inline]
     pub fn as_megavolts_per_microsecond(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+        let x = self.0;
+        (x / 1e6) / 1E6
     }
 
     /// Alias for [`Self::as_megavolts_per_microsecond`].
@@ -389,13 +403,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMinute (`V/min`).
     #[inline]
     pub fn from_volts_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::VoltPerMinute)
+        let x = value;
+        Self(x / 60.0)
     }
 
     /// Returns the value expressed in VoltsPerMinute (`V/min`).
     #[inline]
     pub fn as_volts_per_minute(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::VoltPerMinute)
+        let x = self.0;
+        x * 60.0
     }
 
     /// Alias for [`Self::as_volts_per_minute`].
@@ -407,13 +423,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMinute (`µV/min`).
     #[inline]
     pub fn from_microvolts_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+        let x = value;
+        Self((x * 1e-6) / 60.0)
     }
 
     /// Returns the value expressed in MicrovoltsPerMinute (`µV/min`).
     #[inline]
     pub fn as_microvolts_per_minute(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+        let x = self.0;
+        (x / 1e-6) * 60.0
     }
 
     /// Alias for [`Self::as_microvolts_per_minute`].
@@ -425,13 +443,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMinute (`mV/min`).
     #[inline]
     pub fn from_millivolts_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+        let x = value;
+        Self((x * 1e-3) / 60.0)
     }
 
     /// Returns the value expressed in MillivoltsPerMinute (`mV/min`).
     #[inline]
     pub fn as_millivolts_per_minute(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+        let x = self.0;
+        (x / 1e-3) * 60.0
     }
 
     /// Alias for [`Self::as_millivolts_per_minute`].
@@ -443,13 +463,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMinute (`kV/min`).
     #[inline]
     pub fn from_kilovolts_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+        let x = value;
+        Self((x * 1e3) / 60.0)
     }
 
     /// Returns the value expressed in KilovoltsPerMinute (`kV/min`).
     #[inline]
     pub fn as_kilovolts_per_minute(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+        let x = self.0;
+        (x / 1e3) * 60.0
     }
 
     /// Alias for [`Self::as_kilovolts_per_minute`].
@@ -461,13 +483,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMinute (`MV/min`).
     #[inline]
     pub fn from_megavolts_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+        let x = value;
+        Self((x * 1e6) / 60.0)
     }
 
     /// Returns the value expressed in MegavoltsPerMinute (`MV/min`).
     #[inline]
     pub fn as_megavolts_per_minute(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+        let x = self.0;
+        (x / 1e6) * 60.0
     }
 
     /// Alias for [`Self::as_megavolts_per_minute`].
@@ -479,13 +503,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerHour (`V/h`).
     #[inline]
     pub fn from_volts_per_hour(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::VoltPerHour)
+        let x = value;
+        Self(x / 3600.0)
     }
 
     /// Returns the value expressed in VoltsPerHour (`V/h`).
     #[inline]
     pub fn as_volts_per_hour(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::VoltPerHour)
+        let x = self.0;
+        x * 3600.0
     }
 
     /// Alias for [`Self::as_volts_per_hour`].
@@ -497,13 +523,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerHour (`µV/h`).
     #[inline]
     pub fn from_microvolts_per_hour(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+        let x = value;
+        Self((x * 1e-6) / 3600.0)
     }
 
     /// Returns the value expressed in MicrovoltsPerHour (`µV/h`).
     #[inline]
     pub fn as_microvolts_per_hour(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+        let x = self.0;
+        (x / 1e-6) * 3600.0
     }
 
     /// Alias for [`Self::as_microvolts_per_hour`].
@@ -515,13 +543,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerHour (`mV/h`).
     #[inline]
     pub fn from_millivolts_per_hour(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MillivoltPerHour)
+        let x = value;
+        Self((x * 1e-3) / 3600.0)
     }
 
     /// Returns the value expressed in MillivoltsPerHour (`mV/h`).
     #[inline]
     pub fn as_millivolts_per_hour(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+        let x = self.0;
+        (x / 1e-3) * 3600.0
     }
 
     /// Alias for [`Self::as_millivolts_per_hour`].
@@ -533,13 +563,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerHour (`kV/h`).
     #[inline]
     pub fn from_kilovolts_per_hour(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::KilovoltPerHour)
+        let x = value;
+        Self((x * 1e3) / 3600.0)
     }
 
     /// Returns the value expressed in KilovoltsPerHour (`kV/h`).
     #[inline]
     pub fn as_kilovolts_per_hour(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+        let x = self.0;
+        (x / 1e3) * 3600.0
     }
 
     /// Alias for [`Self::as_kilovolts_per_hour`].
@@ -551,13 +583,15 @@ impl ElectricPotentialChangeRate {
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerHour (`MV/h`).
     #[inline]
     pub fn from_megavolts_per_hour(value: Num) -> Self {
-        Self::new(value, ElectricPotentialChangeRateUnit::MegavoltPerHour)
+        let x = value;
+        Self((x * 1e6) / 3600.0)
     }
 
     /// Returns the value expressed in MegavoltsPerHour (`MV/h`).
     #[inline]
     pub fn as_megavolts_per_hour(self) -> Num {
-        self.convert_to(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+        let x = self.0;
+        (x / 1e6) * 3600.0
     }
 
     /// Alias for [`Self::as_megavolts_per_hour`].
@@ -580,42 +614,49 @@ impl crate::Quantity for ElectricPotentialChangeRate {
 
 impl Add for ElectricPotentialChangeRate {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricPotentialChangeRate {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricPotentialChangeRate {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricPotentialChangeRate {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricPotentialChangeRate> for Num {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn mul(self, rhs: ElectricPotentialChangeRate) -> ElectricPotentialChangeRate {
         ElectricPotentialChangeRate(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricPotentialChangeRate {
     type Output = ElectricPotentialChangeRate;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricPotentialChangeRate {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

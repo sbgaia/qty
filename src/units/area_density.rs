@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -37,6 +39,7 @@ impl AreaDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::KilogramPerSquareMeter => "kg/m²",
@@ -46,6 +49,7 @@ impl AreaDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::KilogramPerSquareMeter => &["kg/m²"],
@@ -57,6 +61,7 @@ impl AreaDensityUnit {
 
 impl AreaDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AreaDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -84,6 +89,7 @@ impl AreaDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AreaDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -96,13 +102,15 @@ impl AreaDensity {
     /// Creates a [`AreaDensity`] from a value in KilogramsPerSquareMeter (`kg/m²`).
     #[inline]
     pub fn from_kilograms_per_square_meter(value: Num) -> Self {
-        Self::new(value, AreaDensityUnit::KilogramPerSquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in KilogramsPerSquareMeter (`kg/m²`).
     #[inline]
     pub fn as_kilograms_per_square_meter(self) -> Num {
-        self.convert_to(AreaDensityUnit::KilogramPerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_kilograms_per_square_meter`].
@@ -114,13 +122,15 @@ impl AreaDensity {
     /// Creates a [`AreaDensity`] from a value in GramsPerSquareMeter (`g/m²`).
     #[inline]
     pub fn from_grams_per_square_meter(value: Num) -> Self {
-        Self::new(value, AreaDensityUnit::GramPerSquareMeter)
+        let x = value;
+        Self(x / 1000.0)
     }
 
     /// Returns the value expressed in GramsPerSquareMeter (`g/m²`).
     #[inline]
     pub fn as_grams_per_square_meter(self) -> Num {
-        self.convert_to(AreaDensityUnit::GramPerSquareMeter)
+        let x = self.0;
+        x * 1000.0
     }
 
     /// Alias for [`Self::as_grams_per_square_meter`].
@@ -132,13 +142,15 @@ impl AreaDensity {
     /// Creates a [`AreaDensity`] from a value in MilligramsPerSquareMeter (`mg/m²`).
     #[inline]
     pub fn from_milligrams_per_square_meter(value: Num) -> Self {
-        Self::new(value, AreaDensityUnit::MilligramPerSquareMeter)
+        let x = value;
+        Self(x / 1000000.0)
     }
 
     /// Returns the value expressed in MilligramsPerSquareMeter (`mg/m²`).
     #[inline]
     pub fn as_milligrams_per_square_meter(self) -> Num {
-        self.convert_to(AreaDensityUnit::MilligramPerSquareMeter)
+        let x = self.0;
+        x * 1000000.0
     }
 
     /// Alias for [`Self::as_milligrams_per_square_meter`].
@@ -161,42 +173,49 @@ impl crate::Quantity for AreaDensity {
 
 impl Add for AreaDensity {
     type Output = AreaDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for AreaDensity {
     type Output = AreaDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for AreaDensity {
     type Output = AreaDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for AreaDensity {
     type Output = AreaDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<AreaDensity> for Num {
     type Output = AreaDensity;
+    #[inline]
     fn mul(self, rhs: AreaDensity) -> AreaDensity {
         AreaDensity(self * rhs.0)
     }
 }
 impl Div<Num> for AreaDensity {
     type Output = AreaDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AreaDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

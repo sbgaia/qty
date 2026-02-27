@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -48,6 +50,7 @@ impl VolumetricHeatCapacityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerCubicMeterKelvin => "J/(m³·K)",
@@ -63,6 +66,7 @@ impl VolumetricHeatCapacityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerCubicMeterKelvin => &["J/(m³·K)"],
@@ -80,6 +84,7 @@ impl VolumetricHeatCapacityUnit {
 
 impl VolumetricHeatCapacity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: VolumetricHeatCapacityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -117,6 +122,7 @@ impl VolumetricHeatCapacity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: VolumetricHeatCapacityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -139,13 +145,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in JoulesPerCubicMeterKelvin (`J/(m³·K)`).
     #[inline]
     pub fn from_joules_per_cubic_meter_kelvin(value: Num) -> Self {
-        Self::new(value, VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerCubicMeterKelvin (`J/(m³·K)`).
     #[inline]
     pub fn as_joules_per_cubic_meter_kelvin(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_cubic_meter_kelvin`].
@@ -157,16 +165,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterKelvin (`kJ/(m³·K)`).
     #[inline]
     pub fn from_kilojoules_per_cubic_meter_kelvin(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin,
-        )
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerCubicMeterKelvin (`kJ/(m³·K)`).
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_kelvin(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_cubic_meter_kelvin`].
@@ -178,16 +185,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterKelvin (`MJ/(m³·K)`).
     #[inline]
     pub fn from_megajoules_per_cubic_meter_kelvin(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin,
-        )
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerCubicMeterKelvin (`MJ/(m³·K)`).
     #[inline]
     pub fn as_megajoules_per_cubic_meter_kelvin(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_cubic_meter_kelvin`].
@@ -199,16 +205,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in JoulesPerCubicMeterDegreeCelsius (`J/(m³·°C)`).
     #[inline]
     pub fn from_joules_per_cubic_meter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius,
-        )
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerCubicMeterDegreeCelsius (`J/(m³·°C)`).
     #[inline]
     pub fn as_joules_per_cubic_meter_degree_celsius(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_cubic_meter_degree_celsius`].
@@ -220,16 +225,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterDegreeCelsius (`kJ/(m³·°C)`).
     #[inline]
     pub fn from_kilojoules_per_cubic_meter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius,
-        )
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerCubicMeterDegreeCelsius (`kJ/(m³·°C)`).
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_degree_celsius(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_cubic_meter_degree_celsius`].
@@ -241,16 +245,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterDegreeCelsius (`MJ/(m³·°C)`).
     #[inline]
     pub fn from_megajoules_per_cubic_meter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius,
-        )
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerCubicMeterDegreeCelsius (`MJ/(m³·°C)`).
     #[inline]
     pub fn as_megajoules_per_cubic_meter_degree_celsius(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_cubic_meter_degree_celsius`].
@@ -262,16 +265,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in CaloriesPerCubicCentimeterDegreeCelsius (`cal/(cm³·°C)`).
     #[inline]
     pub fn from_calories_per_cubic_centimeter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius,
-        )
+        let x = value;
+        Self(x * 4.184e6)
     }
 
     /// Returns the value expressed in CaloriesPerCubicCentimeterDegreeCelsius (`cal/(cm³·°C)`).
     #[inline]
     pub fn as_calories_per_cubic_centimeter_degree_celsius(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+        let x = self.0;
+        x / 4.184e6
     }
 
     /// Alias for [`Self::as_calories_per_cubic_centimeter_degree_celsius`].
@@ -283,16 +285,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilocaloriesPerCubicCentimeterDegreeCelsius (`kcal/(cm³·°C)`).
     #[inline]
     pub fn from_kilocalories_per_cubic_centimeter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius,
-        )
+        let x = value;
+        Self((x * 1e3) * 4.184e6)
     }
 
     /// Returns the value expressed in KilocaloriesPerCubicCentimeterDegreeCelsius (`kcal/(cm³·°C)`).
     #[inline]
     pub fn as_kilocalories_per_cubic_centimeter_degree_celsius(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+        let x = self.0;
+        (x / 1e3) / 4.184e6
     }
 
     /// Alias for [`Self::as_kilocalories_per_cubic_centimeter_degree_celsius`].
@@ -304,16 +305,15 @@ impl VolumetricHeatCapacity {
     /// Creates a [`VolumetricHeatCapacity`] from a value in BtusPerCubicFootDegreeFahrenheit (`BTU/(ft³·°F)`).
     #[inline]
     pub fn from_btus_per_cubic_foot_degree_fahrenheit(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit,
-        )
+        let x = value;
+        Self(x * (1055.05585262 / 0.028316846592) * 1.8)
     }
 
     /// Returns the value expressed in BtusPerCubicFootDegreeFahrenheit (`BTU/(ft³·°F)`).
     #[inline]
     pub fn as_btus_per_cubic_foot_degree_fahrenheit(self) -> Num {
-        self.convert_to(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+        let x = self.0;
+        x / ((1055.05585262 / 0.028316846592) * 1.8)
     }
 
     /// Alias for [`Self::as_btus_per_cubic_foot_degree_fahrenheit`].
@@ -336,42 +336,49 @@ impl crate::Quantity for VolumetricHeatCapacity {
 
 impl Add for VolumetricHeatCapacity {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for VolumetricHeatCapacity {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for VolumetricHeatCapacity {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for VolumetricHeatCapacity {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<VolumetricHeatCapacity> for Num {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn mul(self, rhs: VolumetricHeatCapacity) -> VolumetricHeatCapacity {
         VolumetricHeatCapacity(self * rhs.0)
     }
 }
 impl Div<Num> for VolumetricHeatCapacity {
     type Output = VolumetricHeatCapacity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for VolumetricHeatCapacity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -132,6 +134,7 @@ impl LengthUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Meter => "m",
@@ -180,6 +183,7 @@ impl LengthUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Meter => &["m"],
@@ -230,6 +234,7 @@ impl LengthUnit {
 
 impl Length {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LengthUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -296,6 +301,7 @@ impl Length {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LengthUnit) -> Num {
         let x = self.0;
         match unit {
@@ -347,13 +353,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Meters (`m`).
     #[inline]
     pub fn from_meters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Meter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Meters (`m`).
     #[inline]
     pub fn as_meters(self) -> Num {
-        self.convert_to(LengthUnit::Meter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters`].
@@ -365,13 +373,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Femtometers (`fm`).
     #[inline]
     pub fn from_femtometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Femtometer)
+        let x = value;
+        Self((x * 1e-15))
     }
 
     /// Returns the value expressed in Femtometers (`fm`).
     #[inline]
     pub fn as_femtometers(self) -> Num {
-        self.convert_to(LengthUnit::Femtometer)
+        let x = self.0;
+        (x / 1e-15)
     }
 
     /// Alias for [`Self::as_femtometers`].
@@ -383,13 +393,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Picometers (`pm`).
     #[inline]
     pub fn from_picometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Picometer)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picometers (`pm`).
     #[inline]
     pub fn as_picometers(self) -> Num {
-        self.convert_to(LengthUnit::Picometer)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picometers`].
@@ -401,13 +413,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Nanometers (`nm`).
     #[inline]
     pub fn from_nanometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Nanometer)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanometers (`nm`).
     #[inline]
     pub fn as_nanometers(self) -> Num {
-        self.convert_to(LengthUnit::Nanometer)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanometers`].
@@ -419,13 +433,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Micrometers (`µm`).
     #[inline]
     pub fn from_micrometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Micrometer)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Micrometers (`µm`).
     #[inline]
     pub fn as_micrometers(self) -> Num {
-        self.convert_to(LengthUnit::Micrometer)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrometers`].
@@ -437,13 +453,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Millimeters (`mm`).
     #[inline]
     pub fn from_millimeters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Millimeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millimeters (`mm`).
     #[inline]
     pub fn as_millimeters(self) -> Num {
-        self.convert_to(LengthUnit::Millimeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimeters`].
@@ -455,13 +473,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Centimeters (`cm`).
     #[inline]
     pub fn from_centimeters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Centimeter)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in Centimeters (`cm`).
     #[inline]
     pub fn as_centimeters(self) -> Num {
-        self.convert_to(LengthUnit::Centimeter)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centimeters`].
@@ -473,13 +493,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Decimeters (`dm`).
     #[inline]
     pub fn from_decimeters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Decimeter)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in Decimeters (`dm`).
     #[inline]
     pub fn as_decimeters(self) -> Num {
-        self.convert_to(LengthUnit::Decimeter)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decimeters`].
@@ -491,13 +513,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Decameters (`dam`).
     #[inline]
     pub fn from_decameters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Decameter)
+        let x = value;
+        Self((x * 1e1))
     }
 
     /// Returns the value expressed in Decameters (`dam`).
     #[inline]
     pub fn as_decameters(self) -> Num {
-        self.convert_to(LengthUnit::Decameter)
+        let x = self.0;
+        (x / 1e1)
     }
 
     /// Alias for [`Self::as_decameters`].
@@ -509,13 +533,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Hectometers (`hm`).
     #[inline]
     pub fn from_hectometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Hectometer)
+        let x = value;
+        Self((x * 1e2))
     }
 
     /// Returns the value expressed in Hectometers (`hm`).
     #[inline]
     pub fn as_hectometers(self) -> Num {
-        self.convert_to(LengthUnit::Hectometer)
+        let x = self.0;
+        (x / 1e2)
     }
 
     /// Alias for [`Self::as_hectometers`].
@@ -527,13 +553,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Kilometers (`km`).
     #[inline]
     pub fn from_kilometers(value: Num) -> Self {
-        Self::new(value, LengthUnit::Kilometer)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilometers (`km`).
     #[inline]
     pub fn as_kilometers(self) -> Num {
-        self.convert_to(LengthUnit::Kilometer)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilometers`].
@@ -545,13 +573,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Megameters (`Mm`).
     #[inline]
     pub fn from_megameters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Megameter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megameters (`Mm`).
     #[inline]
     pub fn as_megameters(self) -> Num {
-        self.convert_to(LengthUnit::Megameter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megameters`].
@@ -563,13 +593,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Gigameters (`Gm`).
     #[inline]
     pub fn from_gigameters(value: Num) -> Self {
-        Self::new(value, LengthUnit::Gigameter)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigameters (`Gm`).
     #[inline]
     pub fn as_gigameters(self) -> Num {
-        self.convert_to(LengthUnit::Gigameter)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigameters`].
@@ -581,13 +613,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Miles (`mi`).
     #[inline]
     pub fn from_miles(value: Num) -> Self {
-        Self::new(value, LengthUnit::Mile)
+        let x = value;
+        Self(x * 1609.344)
     }
 
     /// Returns the value expressed in Miles (`mi`).
     #[inline]
     pub fn as_miles(self) -> Num {
-        self.convert_to(LengthUnit::Mile)
+        let x = self.0;
+        x / 1609.344
     }
 
     /// Alias for [`Self::as_miles`].
@@ -599,13 +633,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Yards (`yd`).
     #[inline]
     pub fn from_yards(value: Num) -> Self {
-        Self::new(value, LengthUnit::Yard)
+        let x = value;
+        Self(x * 0.9144)
     }
 
     /// Returns the value expressed in Yards (`yd`).
     #[inline]
     pub fn as_yards(self) -> Num {
-        self.convert_to(LengthUnit::Yard)
+        let x = self.0;
+        x / 0.9144
     }
 
     /// Alias for [`Self::as_yards`].
@@ -617,13 +653,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Kiloyards (`kyd`).
     #[inline]
     pub fn from_kiloyards(value: Num) -> Self {
-        Self::new(value, LengthUnit::Kiloyard)
+        let x = value;
+        Self((x * 1e3) * 0.9144)
     }
 
     /// Returns the value expressed in Kiloyards (`kyd`).
     #[inline]
     pub fn as_kiloyards(self) -> Num {
-        self.convert_to(LengthUnit::Kiloyard)
+        let x = self.0;
+        (x / 1e3) / 0.9144
     }
 
     /// Alias for [`Self::as_kiloyards`].
@@ -635,13 +673,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Feet (`ft`).
     #[inline]
     pub fn from_feet(value: Num) -> Self {
-        Self::new(value, LengthUnit::Foot)
+        let x = value;
+        Self(x * 0.3048)
     }
 
     /// Returns the value expressed in Feet (`ft`).
     #[inline]
     pub fn as_feet(self) -> Num {
-        self.convert_to(LengthUnit::Foot)
+        let x = self.0;
+        x / 0.3048
     }
 
     /// Alias for [`Self::as_feet`].
@@ -653,13 +693,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Kilofeet (`kft`).
     #[inline]
     pub fn from_kilofeet(value: Num) -> Self {
-        Self::new(value, LengthUnit::Kilofoot)
+        let x = value;
+        Self((x * 1e3) * 0.3048)
     }
 
     /// Returns the value expressed in Kilofeet (`kft`).
     #[inline]
     pub fn as_kilofeet(self) -> Num {
-        self.convert_to(LengthUnit::Kilofoot)
+        let x = self.0;
+        (x / 1e3) / 0.3048
     }
 
     /// Alias for [`Self::as_kilofeet`].
@@ -671,13 +713,15 @@ impl Length {
     /// Creates a [`Length`] from a value in UsSurveyFeet (`ftUS`).
     #[inline]
     pub fn from_us_survey_feet(value: Num) -> Self {
-        Self::new(value, LengthUnit::UsSurveyFoot)
+        let x = value;
+        Self(x * 1200.0 / 3937.0)
     }
 
     /// Returns the value expressed in UsSurveyFeet (`ftUS`).
     #[inline]
     pub fn as_us_survey_feet(self) -> Num {
-        self.convert_to(LengthUnit::UsSurveyFoot)
+        let x = self.0;
+        x * 3937.0 / 1200.0
     }
 
     /// Alias for [`Self::as_us_survey_feet`].
@@ -689,13 +733,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Inches (`in`).
     #[inline]
     pub fn from_inches(value: Num) -> Self {
-        Self::new(value, LengthUnit::Inch)
+        let x = value;
+        Self(x * 2.54e-2)
     }
 
     /// Returns the value expressed in Inches (`in`).
     #[inline]
     pub fn as_inches(self) -> Num {
-        self.convert_to(LengthUnit::Inch)
+        let x = self.0;
+        x / 2.54e-2
     }
 
     /// Alias for [`Self::as_inches`].
@@ -707,13 +753,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Mils (`mil`).
     #[inline]
     pub fn from_mils(value: Num) -> Self {
-        Self::new(value, LengthUnit::Mil)
+        let x = value;
+        Self(x * 2.54e-5)
     }
 
     /// Returns the value expressed in Mils (`mil`).
     #[inline]
     pub fn as_mils(self) -> Num {
-        self.convert_to(LengthUnit::Mil)
+        let x = self.0;
+        x / 2.54e-5
     }
 
     /// Alias for [`Self::as_mils`].
@@ -725,13 +773,15 @@ impl Length {
     /// Creates a [`Length`] from a value in NauticalMiles (`NM`).
     #[inline]
     pub fn from_nautical_miles(value: Num) -> Self {
-        Self::new(value, LengthUnit::NauticalMile)
+        let x = value;
+        Self(x * 1852.0)
     }
 
     /// Returns the value expressed in NauticalMiles (`NM`).
     #[inline]
     pub fn as_nautical_miles(self) -> Num {
-        self.convert_to(LengthUnit::NauticalMile)
+        let x = self.0;
+        x / 1852.0
     }
 
     /// Alias for [`Self::as_nautical_miles`].
@@ -743,13 +793,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Fathoms (`fathom`).
     #[inline]
     pub fn from_fathoms(value: Num) -> Self {
-        Self::new(value, LengthUnit::Fathom)
+        let x = value;
+        Self(x * 1.8288)
     }
 
     /// Returns the value expressed in Fathoms (`fathom`).
     #[inline]
     pub fn as_fathoms(self) -> Num {
-        self.convert_to(LengthUnit::Fathom)
+        let x = self.0;
+        x / 1.8288
     }
 
     /// Alias for [`Self::as_fathoms`].
@@ -761,13 +813,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Shackles (`shackle`).
     #[inline]
     pub fn from_shackles(value: Num) -> Self {
-        Self::new(value, LengthUnit::Shackle)
+        let x = value;
+        Self(x * 27.432)
     }
 
     /// Returns the value expressed in Shackles (`shackle`).
     #[inline]
     pub fn as_shackles(self) -> Num {
-        self.convert_to(LengthUnit::Shackle)
+        let x = self.0;
+        x / 27.432
     }
 
     /// Alias for [`Self::as_shackles`].
@@ -779,13 +833,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Microinches (`µin`).
     #[inline]
     pub fn from_microinches(value: Num) -> Self {
-        Self::new(value, LengthUnit::Microinch)
+        let x = value;
+        Self(x * 2.54e-8)
     }
 
     /// Returns the value expressed in Microinches (`µin`).
     #[inline]
     pub fn as_microinches(self) -> Num {
-        self.convert_to(LengthUnit::Microinch)
+        let x = self.0;
+        x / 2.54e-8
     }
 
     /// Alias for [`Self::as_microinches`].
@@ -797,13 +853,15 @@ impl Length {
     /// Creates a [`Length`] from a value in PrinterPoints (`pt`).
     #[inline]
     pub fn from_printer_points(value: Num) -> Self {
-        Self::new(value, LengthUnit::PrinterPoint)
+        let x = value;
+        Self(x * 2.54e-2 / 72.27)
     }
 
     /// Returns the value expressed in PrinterPoints (`pt`).
     #[inline]
     pub fn as_printer_points(self) -> Num {
-        self.convert_to(LengthUnit::PrinterPoint)
+        let x = self.0;
+        x * 72.27 / 2.54e-2
     }
 
     /// Alias for [`Self::as_printer_points`].
@@ -815,13 +873,15 @@ impl Length {
     /// Creates a [`Length`] from a value in DtpPoints (`pt`).
     #[inline]
     pub fn from_dtp_points(value: Num) -> Self {
-        Self::new(value, LengthUnit::DtpPoint)
+        let x = value;
+        Self(x * 2.54e-2 / 72.0)
     }
 
     /// Returns the value expressed in DtpPoints (`pt`).
     #[inline]
     pub fn as_dtp_points(self) -> Num {
-        self.convert_to(LengthUnit::DtpPoint)
+        let x = self.0;
+        x * 72.0 / 2.54e-2
     }
 
     /// Alias for [`Self::as_dtp_points`].
@@ -833,13 +893,15 @@ impl Length {
     /// Creates a [`Length`] from a value in PrinterPicas (`pica`).
     #[inline]
     pub fn from_printer_picas(value: Num) -> Self {
-        Self::new(value, LengthUnit::PrinterPica)
+        let x = value;
+        Self(x * 2.54e-2 * 400.0 / 2409.0)
     }
 
     /// Returns the value expressed in PrinterPicas (`pica`).
     #[inline]
     pub fn as_printer_picas(self) -> Num {
-        self.convert_to(LengthUnit::PrinterPica)
+        let x = self.0;
+        x / (2.54e-2 * 400.0 / 2409.0)
     }
 
     /// Alias for [`Self::as_printer_picas`].
@@ -851,13 +913,15 @@ impl Length {
     /// Creates a [`Length`] from a value in DtpPicas (`pica`).
     #[inline]
     pub fn from_dtp_picas(value: Num) -> Self {
-        Self::new(value, LengthUnit::DtpPica)
+        let x = value;
+        Self(x * 2.54e-2 / 6.0)
     }
 
     /// Returns the value expressed in DtpPicas (`pica`).
     #[inline]
     pub fn as_dtp_picas(self) -> Num {
-        self.convert_to(LengthUnit::DtpPica)
+        let x = self.0;
+        x * 6.0 / 2.54e-2
     }
 
     /// Alias for [`Self::as_dtp_picas`].
@@ -869,13 +933,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Twips (`twip`).
     #[inline]
     pub fn from_twips(value: Num) -> Self {
-        Self::new(value, LengthUnit::Twip)
+        let x = value;
+        Self(x * 2.54e-2 / 1440.0)
     }
 
     /// Returns the value expressed in Twips (`twip`).
     #[inline]
     pub fn as_twips(self) -> Num {
-        self.convert_to(LengthUnit::Twip)
+        let x = self.0;
+        x * 1440.0 / 2.54e-2
     }
 
     /// Alias for [`Self::as_twips`].
@@ -887,13 +953,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Hands (`h`).
     #[inline]
     pub fn from_hands(value: Num) -> Self {
-        Self::new(value, LengthUnit::Hand)
+        let x = value;
+        Self(x * 1.016e-1)
     }
 
     /// Returns the value expressed in Hands (`h`).
     #[inline]
     pub fn as_hands(self) -> Num {
-        self.convert_to(LengthUnit::Hand)
+        let x = self.0;
+        x / 1.016e-1
     }
 
     /// Alias for [`Self::as_hands`].
@@ -905,13 +973,15 @@ impl Length {
     /// Creates a [`Length`] from a value in AstronomicalUnits (`au`).
     #[inline]
     pub fn from_astronomical_units(value: Num) -> Self {
-        Self::new(value, LengthUnit::AstronomicalUnit)
+        let x = value;
+        Self(x * 1.4959787070e11)
     }
 
     /// Returns the value expressed in AstronomicalUnits (`au`).
     #[inline]
     pub fn as_astronomical_units(self) -> Num {
-        self.convert_to(LengthUnit::AstronomicalUnit)
+        let x = self.0;
+        x / 1.4959787070e11
     }
 
     /// Alias for [`Self::as_astronomical_units`].
@@ -923,13 +993,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Parsecs (`pc`).
     #[inline]
     pub fn from_parsecs(value: Num) -> Self {
-        Self::new(value, LengthUnit::Parsec)
+        let x = value;
+        Self(x * 3.08567758128e16)
     }
 
     /// Returns the value expressed in Parsecs (`pc`).
     #[inline]
     pub fn as_parsecs(self) -> Num {
-        self.convert_to(LengthUnit::Parsec)
+        let x = self.0;
+        x / 3.08567758128e16
     }
 
     /// Alias for [`Self::as_parsecs`].
@@ -941,13 +1013,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Kiloparsecs (`kpc`).
     #[inline]
     pub fn from_kiloparsecs(value: Num) -> Self {
-        Self::new(value, LengthUnit::Kiloparsec)
+        let x = value;
+        Self((x * 1e3) * 3.08567758128e16)
     }
 
     /// Returns the value expressed in Kiloparsecs (`kpc`).
     #[inline]
     pub fn as_kiloparsecs(self) -> Num {
-        self.convert_to(LengthUnit::Kiloparsec)
+        let x = self.0;
+        (x / 1e3) / 3.08567758128e16
     }
 
     /// Alias for [`Self::as_kiloparsecs`].
@@ -959,13 +1033,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Megaparsecs (`Mpc`).
     #[inline]
     pub fn from_megaparsecs(value: Num) -> Self {
-        Self::new(value, LengthUnit::Megaparsec)
+        let x = value;
+        Self((x * 1e6) * 3.08567758128e16)
     }
 
     /// Returns the value expressed in Megaparsecs (`Mpc`).
     #[inline]
     pub fn as_megaparsecs(self) -> Num {
-        self.convert_to(LengthUnit::Megaparsec)
+        let x = self.0;
+        (x / 1e6) / 3.08567758128e16
     }
 
     /// Alias for [`Self::as_megaparsecs`].
@@ -977,13 +1053,15 @@ impl Length {
     /// Creates a [`Length`] from a value in LightYears (`ly`).
     #[inline]
     pub fn from_light_years(value: Num) -> Self {
-        Self::new(value, LengthUnit::LightYear)
+        let x = value;
+        Self(x * 9.46073047258e15)
     }
 
     /// Returns the value expressed in LightYears (`ly`).
     #[inline]
     pub fn as_light_years(self) -> Num {
-        self.convert_to(LengthUnit::LightYear)
+        let x = self.0;
+        x / 9.46073047258e15
     }
 
     /// Alias for [`Self::as_light_years`].
@@ -995,13 +1073,15 @@ impl Length {
     /// Creates a [`Length`] from a value in KilolightYears (`kly`).
     #[inline]
     pub fn from_kilolight_years(value: Num) -> Self {
-        Self::new(value, LengthUnit::KilolightYear)
+        let x = value;
+        Self((x * 1e3) * 9.46073047258e15)
     }
 
     /// Returns the value expressed in KilolightYears (`kly`).
     #[inline]
     pub fn as_kilolight_years(self) -> Num {
-        self.convert_to(LengthUnit::KilolightYear)
+        let x = self.0;
+        (x / 1e3) / 9.46073047258e15
     }
 
     /// Alias for [`Self::as_kilolight_years`].
@@ -1013,13 +1093,15 @@ impl Length {
     /// Creates a [`Length`] from a value in MegalightYears (`Mly`).
     #[inline]
     pub fn from_megalight_years(value: Num) -> Self {
-        Self::new(value, LengthUnit::MegalightYear)
+        let x = value;
+        Self((x * 1e6) * 9.46073047258e15)
     }
 
     /// Returns the value expressed in MegalightYears (`Mly`).
     #[inline]
     pub fn as_megalight_years(self) -> Num {
-        self.convert_to(LengthUnit::MegalightYear)
+        let x = self.0;
+        (x / 1e6) / 9.46073047258e15
     }
 
     /// Alias for [`Self::as_megalight_years`].
@@ -1031,13 +1113,15 @@ impl Length {
     /// Creates a [`Length`] from a value in SolarRadiuses (`R⊙`).
     #[inline]
     pub fn from_solar_radiuses(value: Num) -> Self {
-        Self::new(value, LengthUnit::SolarRadius)
+        let x = value;
+        Self(x * 6.95700e8)
     }
 
     /// Returns the value expressed in SolarRadiuses (`R⊙`).
     #[inline]
     pub fn as_solar_radiuses(self) -> Num {
-        self.convert_to(LengthUnit::SolarRadius)
+        let x = self.0;
+        x / 6.95700e8
     }
 
     /// Alias for [`Self::as_solar_radiuses`].
@@ -1049,13 +1133,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Chains (`ch`).
     #[inline]
     pub fn from_chains(value: Num) -> Self {
-        Self::new(value, LengthUnit::Chain)
+        let x = value;
+        Self(x * 20.1168)
     }
 
     /// Returns the value expressed in Chains (`ch`).
     #[inline]
     pub fn as_chains(self) -> Num {
-        self.convert_to(LengthUnit::Chain)
+        let x = self.0;
+        x / 20.1168
     }
 
     /// Alias for [`Self::as_chains`].
@@ -1067,13 +1153,15 @@ impl Length {
     /// Creates a [`Length`] from a value in Angstroms (`Å`).
     #[inline]
     pub fn from_angstroms(value: Num) -> Self {
-        Self::new(value, LengthUnit::Angstrom)
+        let x = value;
+        Self(x * 1e-10)
     }
 
     /// Returns the value expressed in Angstroms (`Å`).
     #[inline]
     pub fn as_angstroms(self) -> Num {
-        self.convert_to(LengthUnit::Angstrom)
+        let x = self.0;
+        x / 1e-10
     }
 
     /// Alias for [`Self::as_angstroms`].
@@ -1085,13 +1173,15 @@ impl Length {
     /// Creates a [`Length`] from a value in DataMiles (`DM`).
     #[inline]
     pub fn from_data_miles(value: Num) -> Self {
-        Self::new(value, LengthUnit::DataMile)
+        let x = value;
+        Self(x * 1828.8)
     }
 
     /// Returns the value expressed in DataMiles (`DM`).
     #[inline]
     pub fn as_data_miles(self) -> Num {
-        self.convert_to(LengthUnit::DataMile)
+        let x = self.0;
+        x / 1828.8
     }
 
     /// Alias for [`Self::as_data_miles`].
@@ -1114,42 +1204,49 @@ impl crate::Quantity for Length {
 
 impl Add for Length {
     type Output = Length;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Length {
     type Output = Length;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Length {
     type Output = Length;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Length {
     type Output = Length;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Length> for Num {
     type Output = Length;
+    #[inline]
     fn mul(self, rhs: Length) -> Length {
         Length(self * rhs.0)
     }
 }
 impl Div<Num> for Length {
     type Output = Length;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Length {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

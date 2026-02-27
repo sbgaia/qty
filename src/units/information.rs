@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -108,6 +110,7 @@ impl InformationUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Byte => "B",
@@ -153,6 +156,7 @@ impl InformationUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Byte => &["B"],
@@ -200,6 +204,7 @@ impl InformationUnit {
 
 impl Information {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: InformationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -263,6 +268,7 @@ impl Information {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: InformationUnit) -> Num {
         let x = self.0;
         match unit {
@@ -311,13 +317,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Bytes (`B`).
     #[inline]
     pub fn from_bytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Byte)
+        let x = value;
+        Self(x * 8.0)
     }
 
     /// Returns the value expressed in Bytes (`B`).
     #[inline]
     pub fn as_bytes(self) -> Num {
-        self.convert_to(InformationUnit::Byte)
+        let x = self.0;
+        x / 8.0
     }
 
     /// Alias for [`Self::as_bytes`].
@@ -329,13 +337,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kilobytes (`kB`).
     #[inline]
     pub fn from_kilobytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kilobyte)
+        let x = value;
+        Self((x * 1e3) * 8.0)
     }
 
     /// Returns the value expressed in Kilobytes (`kB`).
     #[inline]
     pub fn as_kilobytes(self) -> Num {
-        self.convert_to(InformationUnit::Kilobyte)
+        let x = self.0;
+        (x / 1e3) / 8.0
     }
 
     /// Alias for [`Self::as_kilobytes`].
@@ -347,13 +357,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Megabytes (`MB`).
     #[inline]
     pub fn from_megabytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Megabyte)
+        let x = value;
+        Self((x * 1e6) * 8.0)
     }
 
     /// Returns the value expressed in Megabytes (`MB`).
     #[inline]
     pub fn as_megabytes(self) -> Num {
-        self.convert_to(InformationUnit::Megabyte)
+        let x = self.0;
+        (x / 1e6) / 8.0
     }
 
     /// Alias for [`Self::as_megabytes`].
@@ -365,13 +377,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gigabytes (`GB`).
     #[inline]
     pub fn from_gigabytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gigabyte)
+        let x = value;
+        Self((x * 1e9) * 8.0)
     }
 
     /// Returns the value expressed in Gigabytes (`GB`).
     #[inline]
     pub fn as_gigabytes(self) -> Num {
-        self.convert_to(InformationUnit::Gigabyte)
+        let x = self.0;
+        (x / 1e9) / 8.0
     }
 
     /// Alias for [`Self::as_gigabytes`].
@@ -383,13 +397,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Terabytes (`TB`).
     #[inline]
     pub fn from_terabytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Terabyte)
+        let x = value;
+        Self((x * 1e12) * 8.0)
     }
 
     /// Returns the value expressed in Terabytes (`TB`).
     #[inline]
     pub fn as_terabytes(self) -> Num {
-        self.convert_to(InformationUnit::Terabyte)
+        let x = self.0;
+        (x / 1e12) / 8.0
     }
 
     /// Alias for [`Self::as_terabytes`].
@@ -401,13 +417,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Petabytes (`PB`).
     #[inline]
     pub fn from_petabytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Petabyte)
+        let x = value;
+        Self((x * 1e15) * 8.0)
     }
 
     /// Returns the value expressed in Petabytes (`PB`).
     #[inline]
     pub fn as_petabytes(self) -> Num {
-        self.convert_to(InformationUnit::Petabyte)
+        let x = self.0;
+        (x / 1e15) / 8.0
     }
 
     /// Alias for [`Self::as_petabytes`].
@@ -419,13 +437,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exabytes (`EB`).
     #[inline]
     pub fn from_exabytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exabyte)
+        let x = value;
+        Self((x * 1e18) * 8.0)
     }
 
     /// Returns the value expressed in Exabytes (`EB`).
     #[inline]
     pub fn as_exabytes(self) -> Num {
-        self.convert_to(InformationUnit::Exabyte)
+        let x = self.0;
+        (x / 1e18) / 8.0
     }
 
     /// Alias for [`Self::as_exabytes`].
@@ -437,13 +457,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kibibytes (`KiB`).
     #[inline]
     pub fn from_kibibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kibibyte)
+        let x = value;
+        Self((x * 1.024e3) * 8.0)
     }
 
     /// Returns the value expressed in Kibibytes (`KiB`).
     #[inline]
     pub fn as_kibibytes(self) -> Num {
-        self.convert_to(InformationUnit::Kibibyte)
+        let x = self.0;
+        (x / 1.024e3) / 8.0
     }
 
     /// Alias for [`Self::as_kibibytes`].
@@ -455,13 +477,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Mebibytes (`MiB`).
     #[inline]
     pub fn from_mebibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Mebibyte)
+        let x = value;
+        Self((x * 1.048576e6) * 8.0)
     }
 
     /// Returns the value expressed in Mebibytes (`MiB`).
     #[inline]
     pub fn as_mebibytes(self) -> Num {
-        self.convert_to(InformationUnit::Mebibyte)
+        let x = self.0;
+        (x / 1.048576e6) / 8.0
     }
 
     /// Alias for [`Self::as_mebibytes`].
@@ -473,13 +497,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gibibytes (`GiB`).
     #[inline]
     pub fn from_gibibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gibibyte)
+        let x = value;
+        Self((x * 1.073741824e9) * 8.0)
     }
 
     /// Returns the value expressed in Gibibytes (`GiB`).
     #[inline]
     pub fn as_gibibytes(self) -> Num {
-        self.convert_to(InformationUnit::Gibibyte)
+        let x = self.0;
+        (x / 1.073741824e9) / 8.0
     }
 
     /// Alias for [`Self::as_gibibytes`].
@@ -491,13 +517,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Tebibytes (`TiB`).
     #[inline]
     pub fn from_tebibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Tebibyte)
+        let x = value;
+        Self((x * 1.099511627776e12) * 8.0)
     }
 
     /// Returns the value expressed in Tebibytes (`TiB`).
     #[inline]
     pub fn as_tebibytes(self) -> Num {
-        self.convert_to(InformationUnit::Tebibyte)
+        let x = self.0;
+        (x / 1.099511627776e12) / 8.0
     }
 
     /// Alias for [`Self::as_tebibytes`].
@@ -509,13 +537,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Pebibytes (`PiB`).
     #[inline]
     pub fn from_pebibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Pebibyte)
+        let x = value;
+        Self((x * 1.125899906842624e15) * 8.0)
     }
 
     /// Returns the value expressed in Pebibytes (`PiB`).
     #[inline]
     pub fn as_pebibytes(self) -> Num {
-        self.convert_to(InformationUnit::Pebibyte)
+        let x = self.0;
+        (x / 1.125899906842624e15) / 8.0
     }
 
     /// Alias for [`Self::as_pebibytes`].
@@ -527,13 +557,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exbibytes (`EiB`).
     #[inline]
     pub fn from_exbibytes(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exbibyte)
+        let x = value;
+        Self((x * 1.152921504606847e18) * 8.0)
     }
 
     /// Returns the value expressed in Exbibytes (`EiB`).
     #[inline]
     pub fn as_exbibytes(self) -> Num {
-        self.convert_to(InformationUnit::Exbibyte)
+        let x = self.0;
+        (x / 1.152921504606847e18) / 8.0
     }
 
     /// Alias for [`Self::as_exbibytes`].
@@ -545,13 +577,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Octets (`o`).
     #[inline]
     pub fn from_octets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Octet)
+        let x = value;
+        Self(x * 8.0)
     }
 
     /// Returns the value expressed in Octets (`o`).
     #[inline]
     pub fn as_octets(self) -> Num {
-        self.convert_to(InformationUnit::Octet)
+        let x = self.0;
+        x / 8.0
     }
 
     /// Alias for [`Self::as_octets`].
@@ -563,13 +597,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kilooctets (`ko`).
     #[inline]
     pub fn from_kilooctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kilooctet)
+        let x = value;
+        Self((x * 1e3) * 8.0)
     }
 
     /// Returns the value expressed in Kilooctets (`ko`).
     #[inline]
     pub fn as_kilooctets(self) -> Num {
-        self.convert_to(InformationUnit::Kilooctet)
+        let x = self.0;
+        (x / 1e3) / 8.0
     }
 
     /// Alias for [`Self::as_kilooctets`].
@@ -581,13 +617,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Megaoctets (`Mo`).
     #[inline]
     pub fn from_megaoctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Megaoctet)
+        let x = value;
+        Self((x * 1e6) * 8.0)
     }
 
     /// Returns the value expressed in Megaoctets (`Mo`).
     #[inline]
     pub fn as_megaoctets(self) -> Num {
-        self.convert_to(InformationUnit::Megaoctet)
+        let x = self.0;
+        (x / 1e6) / 8.0
     }
 
     /// Alias for [`Self::as_megaoctets`].
@@ -599,13 +637,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gigaoctets (`Go`).
     #[inline]
     pub fn from_gigaoctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gigaoctet)
+        let x = value;
+        Self((x * 1e9) * 8.0)
     }
 
     /// Returns the value expressed in Gigaoctets (`Go`).
     #[inline]
     pub fn as_gigaoctets(self) -> Num {
-        self.convert_to(InformationUnit::Gigaoctet)
+        let x = self.0;
+        (x / 1e9) / 8.0
     }
 
     /// Alias for [`Self::as_gigaoctets`].
@@ -617,13 +657,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Teraoctets (`To`).
     #[inline]
     pub fn from_teraoctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Teraoctet)
+        let x = value;
+        Self((x * 1e12) * 8.0)
     }
 
     /// Returns the value expressed in Teraoctets (`To`).
     #[inline]
     pub fn as_teraoctets(self) -> Num {
-        self.convert_to(InformationUnit::Teraoctet)
+        let x = self.0;
+        (x / 1e12) / 8.0
     }
 
     /// Alias for [`Self::as_teraoctets`].
@@ -635,13 +677,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Petaoctets (`Po`).
     #[inline]
     pub fn from_petaoctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Petaoctet)
+        let x = value;
+        Self((x * 1e15) * 8.0)
     }
 
     /// Returns the value expressed in Petaoctets (`Po`).
     #[inline]
     pub fn as_petaoctets(self) -> Num {
-        self.convert_to(InformationUnit::Petaoctet)
+        let x = self.0;
+        (x / 1e15) / 8.0
     }
 
     /// Alias for [`Self::as_petaoctets`].
@@ -653,13 +697,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exaoctets (`Eo`).
     #[inline]
     pub fn from_exaoctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exaoctet)
+        let x = value;
+        Self((x * 1e18) * 8.0)
     }
 
     /// Returns the value expressed in Exaoctets (`Eo`).
     #[inline]
     pub fn as_exaoctets(self) -> Num {
-        self.convert_to(InformationUnit::Exaoctet)
+        let x = self.0;
+        (x / 1e18) / 8.0
     }
 
     /// Alias for [`Self::as_exaoctets`].
@@ -671,13 +717,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kibioctets (`Kio`).
     #[inline]
     pub fn from_kibioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kibioctet)
+        let x = value;
+        Self((x * 1.024e3) * 8.0)
     }
 
     /// Returns the value expressed in Kibioctets (`Kio`).
     #[inline]
     pub fn as_kibioctets(self) -> Num {
-        self.convert_to(InformationUnit::Kibioctet)
+        let x = self.0;
+        (x / 1.024e3) / 8.0
     }
 
     /// Alias for [`Self::as_kibioctets`].
@@ -689,13 +737,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Mebioctets (`Mio`).
     #[inline]
     pub fn from_mebioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Mebioctet)
+        let x = value;
+        Self((x * 1.048576e6) * 8.0)
     }
 
     /// Returns the value expressed in Mebioctets (`Mio`).
     #[inline]
     pub fn as_mebioctets(self) -> Num {
-        self.convert_to(InformationUnit::Mebioctet)
+        let x = self.0;
+        (x / 1.048576e6) / 8.0
     }
 
     /// Alias for [`Self::as_mebioctets`].
@@ -707,13 +757,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gibioctets (`Gio`).
     #[inline]
     pub fn from_gibioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gibioctet)
+        let x = value;
+        Self((x * 1.073741824e9) * 8.0)
     }
 
     /// Returns the value expressed in Gibioctets (`Gio`).
     #[inline]
     pub fn as_gibioctets(self) -> Num {
-        self.convert_to(InformationUnit::Gibioctet)
+        let x = self.0;
+        (x / 1.073741824e9) / 8.0
     }
 
     /// Alias for [`Self::as_gibioctets`].
@@ -725,13 +777,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Tebioctets (`Tio`).
     #[inline]
     pub fn from_tebioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Tebioctet)
+        let x = value;
+        Self((x * 1.099511627776e12) * 8.0)
     }
 
     /// Returns the value expressed in Tebioctets (`Tio`).
     #[inline]
     pub fn as_tebioctets(self) -> Num {
-        self.convert_to(InformationUnit::Tebioctet)
+        let x = self.0;
+        (x / 1.099511627776e12) / 8.0
     }
 
     /// Alias for [`Self::as_tebioctets`].
@@ -743,13 +797,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Pebioctets (`Pio`).
     #[inline]
     pub fn from_pebioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Pebioctet)
+        let x = value;
+        Self((x * 1.125899906842624e15) * 8.0)
     }
 
     /// Returns the value expressed in Pebioctets (`Pio`).
     #[inline]
     pub fn as_pebioctets(self) -> Num {
-        self.convert_to(InformationUnit::Pebioctet)
+        let x = self.0;
+        (x / 1.125899906842624e15) / 8.0
     }
 
     /// Alias for [`Self::as_pebioctets`].
@@ -761,13 +817,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exbioctets (`Eio`).
     #[inline]
     pub fn from_exbioctets(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exbioctet)
+        let x = value;
+        Self((x * 1.152921504606847e18) * 8.0)
     }
 
     /// Returns the value expressed in Exbioctets (`Eio`).
     #[inline]
     pub fn as_exbioctets(self) -> Num {
-        self.convert_to(InformationUnit::Exbioctet)
+        let x = self.0;
+        (x / 1.152921504606847e18) / 8.0
     }
 
     /// Alias for [`Self::as_exbioctets`].
@@ -779,13 +837,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Bits (`b`).
     #[inline]
     pub fn from_bits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Bit)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Bits (`b`).
     #[inline]
     pub fn as_bits(self) -> Num {
-        self.convert_to(InformationUnit::Bit)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_bits`].
@@ -797,13 +857,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kilobits (`kb`).
     #[inline]
     pub fn from_kilobits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kilobit)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilobits (`kb`).
     #[inline]
     pub fn as_kilobits(self) -> Num {
-        self.convert_to(InformationUnit::Kilobit)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilobits`].
@@ -815,13 +877,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Megabits (`Mb`).
     #[inline]
     pub fn from_megabits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Megabit)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megabits (`Mb`).
     #[inline]
     pub fn as_megabits(self) -> Num {
-        self.convert_to(InformationUnit::Megabit)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megabits`].
@@ -833,13 +897,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gigabits (`Gb`).
     #[inline]
     pub fn from_gigabits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gigabit)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigabits (`Gb`).
     #[inline]
     pub fn as_gigabits(self) -> Num {
-        self.convert_to(InformationUnit::Gigabit)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigabits`].
@@ -851,13 +917,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Terabits (`Tb`).
     #[inline]
     pub fn from_terabits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Terabit)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Terabits (`Tb`).
     #[inline]
     pub fn as_terabits(self) -> Num {
-        self.convert_to(InformationUnit::Terabit)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_terabits`].
@@ -869,13 +937,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Petabits (`Pb`).
     #[inline]
     pub fn from_petabits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Petabit)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in Petabits (`Pb`).
     #[inline]
     pub fn as_petabits(self) -> Num {
-        self.convert_to(InformationUnit::Petabit)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petabits`].
@@ -887,13 +957,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exabits (`Eb`).
     #[inline]
     pub fn from_exabits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exabit)
+        let x = value;
+        Self((x * 1e18))
     }
 
     /// Returns the value expressed in Exabits (`Eb`).
     #[inline]
     pub fn as_exabits(self) -> Num {
-        self.convert_to(InformationUnit::Exabit)
+        let x = self.0;
+        (x / 1e18)
     }
 
     /// Alias for [`Self::as_exabits`].
@@ -905,13 +977,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Kibibits (`Kib`).
     #[inline]
     pub fn from_kibibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Kibibit)
+        let x = value;
+        Self((x * 1.024e3))
     }
 
     /// Returns the value expressed in Kibibits (`Kib`).
     #[inline]
     pub fn as_kibibits(self) -> Num {
-        self.convert_to(InformationUnit::Kibibit)
+        let x = self.0;
+        (x / 1.024e3)
     }
 
     /// Alias for [`Self::as_kibibits`].
@@ -923,13 +997,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Mebibits (`Mib`).
     #[inline]
     pub fn from_mebibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Mebibit)
+        let x = value;
+        Self((x * 1.048576e6))
     }
 
     /// Returns the value expressed in Mebibits (`Mib`).
     #[inline]
     pub fn as_mebibits(self) -> Num {
-        self.convert_to(InformationUnit::Mebibit)
+        let x = self.0;
+        (x / 1.048576e6)
     }
 
     /// Alias for [`Self::as_mebibits`].
@@ -941,13 +1017,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Gibibits (`Gib`).
     #[inline]
     pub fn from_gibibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Gibibit)
+        let x = value;
+        Self((x * 1.073741824e9))
     }
 
     /// Returns the value expressed in Gibibits (`Gib`).
     #[inline]
     pub fn as_gibibits(self) -> Num {
-        self.convert_to(InformationUnit::Gibibit)
+        let x = self.0;
+        (x / 1.073741824e9)
     }
 
     /// Alias for [`Self::as_gibibits`].
@@ -959,13 +1037,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Tebibits (`Tib`).
     #[inline]
     pub fn from_tebibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Tebibit)
+        let x = value;
+        Self((x * 1.099511627776e12))
     }
 
     /// Returns the value expressed in Tebibits (`Tib`).
     #[inline]
     pub fn as_tebibits(self) -> Num {
-        self.convert_to(InformationUnit::Tebibit)
+        let x = self.0;
+        (x / 1.099511627776e12)
     }
 
     /// Alias for [`Self::as_tebibits`].
@@ -977,13 +1057,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Pebibits (`Pib`).
     #[inline]
     pub fn from_pebibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Pebibit)
+        let x = value;
+        Self((x * 1.125899906842624e15))
     }
 
     /// Returns the value expressed in Pebibits (`Pib`).
     #[inline]
     pub fn as_pebibits(self) -> Num {
-        self.convert_to(InformationUnit::Pebibit)
+        let x = self.0;
+        (x / 1.125899906842624e15)
     }
 
     /// Alias for [`Self::as_pebibits`].
@@ -995,13 +1077,15 @@ impl Information {
     /// Creates a [`Information`] from a value in Exbibits (`Eib`).
     #[inline]
     pub fn from_exbibits(value: Num) -> Self {
-        Self::new(value, InformationUnit::Exbibit)
+        let x = value;
+        Self((x * 1.152921504606847e18))
     }
 
     /// Returns the value expressed in Exbibits (`Eib`).
     #[inline]
     pub fn as_exbibits(self) -> Num {
-        self.convert_to(InformationUnit::Exbibit)
+        let x = self.0;
+        (x / 1.152921504606847e18)
     }
 
     /// Alias for [`Self::as_exbibits`].
@@ -1024,42 +1108,49 @@ impl crate::Quantity for Information {
 
 impl Add for Information {
     type Output = Information;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Information {
     type Output = Information;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Information {
     type Output = Information;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Information {
     type Output = Information;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Information> for Num {
     type Output = Information;
+    #[inline]
     fn mul(self, rhs: Information) -> Information {
         Information(self * rhs.0)
     }
 }
 impl Div<Num> for Information {
     type Output = Information;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Information {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

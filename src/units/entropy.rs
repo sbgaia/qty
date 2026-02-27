@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -44,6 +46,7 @@ impl EntropyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerKelvin => "J/K",
@@ -57,6 +60,7 @@ impl EntropyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerKelvin => &["J/K"],
@@ -72,6 +76,7 @@ impl EntropyUnit {
 
 impl Entropy {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: EntropyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -103,6 +108,7 @@ impl Entropy {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: EntropyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -119,13 +125,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in JoulesPerKelvin (`J/K`).
     #[inline]
     pub fn from_joules_per_kelvin(value: Num) -> Self {
-        Self::new(value, EntropyUnit::JoulePerKelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerKelvin (`J/K`).
     #[inline]
     pub fn as_joules_per_kelvin(self) -> Num {
-        self.convert_to(EntropyUnit::JoulePerKelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_kelvin`].
@@ -137,13 +145,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in KilojoulesPerKelvin (`kJ/K`).
     #[inline]
     pub fn from_kilojoules_per_kelvin(value: Num) -> Self {
-        Self::new(value, EntropyUnit::KilojoulePerKelvin)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerKelvin (`kJ/K`).
     #[inline]
     pub fn as_kilojoules_per_kelvin(self) -> Num {
-        self.convert_to(EntropyUnit::KilojoulePerKelvin)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_kelvin`].
@@ -155,13 +165,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in MegajoulesPerKelvin (`MJ/K`).
     #[inline]
     pub fn from_megajoules_per_kelvin(value: Num) -> Self {
-        Self::new(value, EntropyUnit::MegajoulePerKelvin)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerKelvin (`MJ/K`).
     #[inline]
     pub fn as_megajoules_per_kelvin(self) -> Num {
-        self.convert_to(EntropyUnit::MegajoulePerKelvin)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_kelvin`].
@@ -173,13 +185,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in CaloriesPerKelvin (`cal/K`).
     #[inline]
     pub fn from_calories_per_kelvin(value: Num) -> Self {
-        Self::new(value, EntropyUnit::CaloriePerKelvin)
+        let x = value;
+        Self(x * 4.184)
     }
 
     /// Returns the value expressed in CaloriesPerKelvin (`cal/K`).
     #[inline]
     pub fn as_calories_per_kelvin(self) -> Num {
-        self.convert_to(EntropyUnit::CaloriePerKelvin)
+        let x = self.0;
+        x / 4.184
     }
 
     /// Alias for [`Self::as_calories_per_kelvin`].
@@ -191,13 +205,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in KilocaloriesPerKelvin (`kcal/K`).
     #[inline]
     pub fn from_kilocalories_per_kelvin(value: Num) -> Self {
-        Self::new(value, EntropyUnit::KilocaloriePerKelvin)
+        let x = value;
+        Self((x * 1e3) * 4.184)
     }
 
     /// Returns the value expressed in KilocaloriesPerKelvin (`kcal/K`).
     #[inline]
     pub fn as_kilocalories_per_kelvin(self) -> Num {
-        self.convert_to(EntropyUnit::KilocaloriePerKelvin)
+        let x = self.0;
+        (x / 1e3) / 4.184
     }
 
     /// Alias for [`Self::as_kilocalories_per_kelvin`].
@@ -209,13 +225,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in JoulesPerDegreeCelsius (`J/°C`).
     #[inline]
     pub fn from_joules_per_degree_celsius(value: Num) -> Self {
-        Self::new(value, EntropyUnit::JoulePerDegreeCelsius)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerDegreeCelsius (`J/°C`).
     #[inline]
     pub fn as_joules_per_degree_celsius(self) -> Num {
-        self.convert_to(EntropyUnit::JoulePerDegreeCelsius)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_degree_celsius`].
@@ -227,13 +245,15 @@ impl Entropy {
     /// Creates a [`Entropy`] from a value in KilojoulesPerDegreeCelsius (`kJ/°C`).
     #[inline]
     pub fn from_kilojoules_per_degree_celsius(value: Num) -> Self {
-        Self::new(value, EntropyUnit::KilojoulePerDegreeCelsius)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerDegreeCelsius (`kJ/°C`).
     #[inline]
     pub fn as_kilojoules_per_degree_celsius(self) -> Num {
-        self.convert_to(EntropyUnit::KilojoulePerDegreeCelsius)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_degree_celsius`].
@@ -256,42 +276,49 @@ impl crate::Quantity for Entropy {
 
 impl Add for Entropy {
     type Output = Entropy;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Entropy {
     type Output = Entropy;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Entropy {
     type Output = Entropy;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Entropy {
     type Output = Entropy;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Entropy> for Num {
     type Output = Entropy;
+    #[inline]
     fn mul(self, rhs: Entropy) -> Entropy {
         Entropy(self * rhs.0)
     }
 }
 impl Div<Num> for Entropy {
     type Output = Entropy;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Entropy {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl MolarEntropyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerMoleKelvin => "J/(mol·K)",
@@ -45,6 +48,7 @@ impl MolarEntropyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerMoleKelvin => &["J/(mol·K)"],
@@ -56,6 +60,7 @@ impl MolarEntropyUnit {
 
 impl MolarEntropy {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MolarEntropyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl MolarEntropy {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MolarEntropyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl MolarEntropy {
     /// Creates a [`MolarEntropy`] from a value in JoulesPerMoleKelvin (`J/(mol·K)`).
     #[inline]
     pub fn from_joules_per_mole_kelvin(value: Num) -> Self {
-        Self::new(value, MolarEntropyUnit::JoulePerMoleKelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in JoulesPerMoleKelvin (`J/(mol·K)`).
     #[inline]
     pub fn as_joules_per_mole_kelvin(self) -> Num {
-        self.convert_to(MolarEntropyUnit::JoulePerMoleKelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_joules_per_mole_kelvin`].
@@ -113,13 +121,15 @@ impl MolarEntropy {
     /// Creates a [`MolarEntropy`] from a value in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
     #[inline]
     pub fn from_kilojoules_per_mole_kelvin(value: Num) -> Self {
-        Self::new(value, MolarEntropyUnit::KilojoulePerMoleKelvin)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
     #[inline]
     pub fn as_kilojoules_per_mole_kelvin(self) -> Num {
-        self.convert_to(MolarEntropyUnit::KilojoulePerMoleKelvin)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilojoules_per_mole_kelvin`].
@@ -131,13 +141,15 @@ impl MolarEntropy {
     /// Creates a [`MolarEntropy`] from a value in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
     #[inline]
     pub fn from_megajoules_per_mole_kelvin(value: Num) -> Self {
-        Self::new(value, MolarEntropyUnit::MegajoulePerMoleKelvin)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
     #[inline]
     pub fn as_megajoules_per_mole_kelvin(self) -> Num {
-        self.convert_to(MolarEntropyUnit::MegajoulePerMoleKelvin)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megajoules_per_mole_kelvin`].
@@ -160,42 +172,49 @@ impl crate::Quantity for MolarEntropy {
 
 impl Add for MolarEntropy {
     type Output = MolarEntropy;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MolarEntropy {
     type Output = MolarEntropy;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MolarEntropy {
     type Output = MolarEntropy;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MolarEntropy {
     type Output = MolarEntropy;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MolarEntropy> for Num {
     type Output = MolarEntropy;
+    #[inline]
     fn mul(self, rhs: MolarEntropy) -> MolarEntropy {
         MolarEntropy(self * rhs.0)
     }
 }
 impl Div<Num> for MolarEntropy {
     type Output = MolarEntropy;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MolarEntropy {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

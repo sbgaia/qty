@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -68,6 +70,7 @@ impl FluidResistanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::PascalSecondPerLiter => "Pa·s/l",
@@ -93,6 +96,7 @@ impl FluidResistanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::PascalSecondPerLiter => &["Pa·s/l"],
@@ -120,6 +124,7 @@ impl FluidResistanceUnit {
 
 impl FluidResistance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: FluidResistanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -163,6 +168,7 @@ impl FluidResistance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: FluidResistanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -191,13 +197,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerLiter (`Pa·s/l`).
     #[inline]
     pub fn from_pascal_seconds_per_liter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalSecondPerLiter)
+        let x = value;
+        Self(x * 1e3)
     }
 
     /// Returns the value expressed in PascalSecondsPerLiter (`Pa·s/l`).
     #[inline]
     pub fn as_pascal_seconds_per_liter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalSecondPerLiter)
+        let x = self.0;
+        x / 1e3
     }
 
     /// Alias for [`Self::as_pascal_seconds_per_liter`].
@@ -209,13 +217,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerLiter (`Pa·min/l`).
     #[inline]
     pub fn from_pascal_minutes_per_liter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalMinutePerLiter)
+        let x = value;
+        Self(x * 6e4)
     }
 
     /// Returns the value expressed in PascalMinutesPerLiter (`Pa·min/l`).
     #[inline]
     pub fn as_pascal_minutes_per_liter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalMinutePerLiter)
+        let x = self.0;
+        x / 6e4
     }
 
     /// Alias for [`Self::as_pascal_minutes_per_liter`].
@@ -227,13 +237,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerMilliliter (`Pa·s/ml`).
     #[inline]
     pub fn from_pascal_seconds_per_milliliter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalSecondPerMilliliter)
+        let x = value;
+        Self(x * 1e6)
     }
 
     /// Returns the value expressed in PascalSecondsPerMilliliter (`Pa·s/ml`).
     #[inline]
     pub fn as_pascal_seconds_per_milliliter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalSecondPerMilliliter)
+        let x = self.0;
+        x / 1e6
     }
 
     /// Alias for [`Self::as_pascal_seconds_per_milliliter`].
@@ -245,13 +257,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerMilliliter (`Pa·min/ml`).
     #[inline]
     pub fn from_pascal_minutes_per_milliliter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalMinutePerMilliliter)
+        let x = value;
+        Self(x * 6e7)
     }
 
     /// Returns the value expressed in PascalMinutesPerMilliliter (`Pa·min/ml`).
     #[inline]
     pub fn as_pascal_minutes_per_milliliter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalMinutePerMilliliter)
+        let x = self.0;
+        x / 6e7
     }
 
     /// Alias for [`Self::as_pascal_minutes_per_milliliter`].
@@ -263,13 +277,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicMeter (`Pa·s/m³`).
     #[inline]
     pub fn from_pascal_seconds_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalSecondPerCubicMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in PascalSecondsPerCubicMeter (`Pa·s/m³`).
     #[inline]
     pub fn as_pascal_seconds_per_cubic_meter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalSecondPerCubicMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_pascal_seconds_per_cubic_meter`].
@@ -281,13 +297,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MegapascalSecondsPerCubicMeter (`MPa·s/m³`).
     #[inline]
     pub fn from_megapascal_seconds_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegapascalSecondsPerCubicMeter (`MPa·s/m³`).
     #[inline]
     pub fn as_megapascal_seconds_per_cubic_meter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megapascal_seconds_per_cubic_meter`].
@@ -299,13 +317,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicMeter (`Pa·min/m³`).
     #[inline]
     pub fn from_pascal_minutes_per_cubic_meter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalMinutePerCubicMeter)
+        let x = value;
+        Self(x * 60.0)
     }
 
     /// Returns the value expressed in PascalMinutesPerCubicMeter (`Pa·min/m³`).
     #[inline]
     pub fn as_pascal_minutes_per_cubic_meter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalMinutePerCubicMeter)
+        let x = self.0;
+        x / 60.0
     }
 
     /// Alias for [`Self::as_pascal_minutes_per_cubic_meter`].
@@ -317,13 +337,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicCentimeter (`Pa·s/cm³`).
     #[inline]
     pub fn from_pascal_seconds_per_cubic_centimeter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+        let x = value;
+        Self(x * 1e6)
     }
 
     /// Returns the value expressed in PascalSecondsPerCubicCentimeter (`Pa·s/cm³`).
     #[inline]
     pub fn as_pascal_seconds_per_cubic_centimeter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+        let x = self.0;
+        x / 1e6
     }
 
     /// Alias for [`Self::as_pascal_seconds_per_cubic_centimeter`].
@@ -335,13 +357,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicCentimeter (`Pa·min/cm³`).
     #[inline]
     pub fn from_pascal_minutes_per_cubic_centimeter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+        let x = value;
+        Self(x * 6e7)
     }
 
     /// Returns the value expressed in PascalMinutesPerCubicCentimeter (`Pa·min/cm³`).
     #[inline]
     pub fn as_pascal_minutes_per_cubic_centimeter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+        let x = self.0;
+        x / 6e7
     }
 
     /// Alias for [`Self::as_pascal_minutes_per_cubic_centimeter`].
@@ -353,16 +377,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in DyneSecondsPerCentimeterToTheFifth (`dyn·s/cm⁵`).
     #[inline]
     pub fn from_dyne_seconds_per_centimeter_to_the_fifth(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth,
-        )
+        let x = value;
+        Self(x * 1e5)
     }
 
     /// Returns the value expressed in DyneSecondsPerCentimeterToTheFifth (`dyn·s/cm⁵`).
     #[inline]
     pub fn as_dyne_seconds_per_centimeter_to_the_fifth(self) -> Num {
-        self.convert_to(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+        let x = self.0;
+        x / 1e5
     }
 
     /// Alias for [`Self::as_dyne_seconds_per_centimeter_to_the_fifth`].
@@ -374,13 +397,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerLiter (`mmHg·s/l`).
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_liter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+        let x = value;
+        Self(x * 1.33322368e5)
     }
 
     /// Returns the value expressed in MillimeterMercurySecondsPerLiter (`mmHg·s/l`).
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_liter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+        let x = self.0;
+        x / 1.33322368e5
     }
 
     /// Alias for [`Self::as_millimeter_mercury_seconds_per_liter`].
@@ -392,13 +417,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerLiter (`mmHg·min/l`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_liter(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+        let x = value;
+        Self(x * 7.99934208e6)
     }
 
     /// Returns the value expressed in MillimeterMercuryMinutesPerLiter (`mmHg·min/l`).
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_liter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+        let x = self.0;
+        x / 7.99934208e6
     }
 
     /// Alias for [`Self::as_millimeter_mercury_minutes_per_liter`].
@@ -410,16 +437,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerMilliliter (`mmHg·s/ml`).
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_milliliter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercurySecondPerMilliliter,
-        )
+        let x = value;
+        Self(x * 1.33322368e8)
     }
 
     /// Returns the value expressed in MillimeterMercurySecondsPerMilliliter (`mmHg·s/ml`).
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_milliliter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+        let x = self.0;
+        x / 1.33322368e8
     }
 
     /// Alias for [`Self::as_millimeter_mercury_seconds_per_milliliter`].
@@ -431,16 +457,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerMilliliter (`mmHg·min/ml`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_milliliter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter,
-        )
+        let x = value;
+        Self(x * 7.99934208e9)
     }
 
     /// Returns the value expressed in MillimeterMercuryMinutesPerMilliliter (`mmHg·min/ml`).
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_milliliter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+        let x = self.0;
+        x / 7.99934208e9
     }
 
     /// Alias for [`Self::as_millimeter_mercury_minutes_per_milliliter`].
@@ -452,16 +477,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicCentimeter (`mmHg·s/cm³`).
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_cubic_centimeter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter,
-        )
+        let x = value;
+        Self(x * 1.33322368e8)
     }
 
     /// Returns the value expressed in MillimeterMercurySecondsPerCubicCentimeter (`mmHg·s/cm³`).
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_centimeter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+        let x = self.0;
+        x / 1.33322368e8
     }
 
     /// Alias for [`Self::as_millimeter_mercury_seconds_per_cubic_centimeter`].
@@ -473,16 +497,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicCentimeter (`mmHg·min/cm³`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_centimeter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter,
-        )
+        let x = value;
+        Self(x * 7.99934208e9)
     }
 
     /// Returns the value expressed in MillimeterMercuryMinutesPerCubicCentimeter (`mmHg·min/cm³`).
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_centimeter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+        let x = self.0;
+        x / 7.99934208e9
     }
 
     /// Alias for [`Self::as_millimeter_mercury_minutes_per_cubic_centimeter`].
@@ -494,16 +517,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicMeter (`mmHg·s/m³`).
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_cubic_meter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter,
-        )
+        let x = value;
+        Self(x * 133.322368)
     }
 
     /// Returns the value expressed in MillimeterMercurySecondsPerCubicMeter (`mmHg·s/m³`).
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_meter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+        let x = self.0;
+        x / 133.322368
     }
 
     /// Alias for [`Self::as_millimeter_mercury_seconds_per_cubic_meter`].
@@ -515,16 +537,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicMeter (`mmHg·min/m³`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_meter(value: Num) -> Self {
-        Self::new(
-            value,
-            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter,
-        )
+        let x = value;
+        Self(x * 7.99934208e3)
     }
 
     /// Returns the value expressed in MillimeterMercuryMinutesPerCubicMeter (`mmHg·min/m³`).
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_meter(self) -> Num {
-        self.convert_to(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+        let x = self.0;
+        x / 7.99934208e3
     }
 
     /// Alias for [`Self::as_millimeter_mercury_minutes_per_cubic_meter`].
@@ -536,13 +557,15 @@ impl FluidResistance {
     /// Creates a [`FluidResistance`] from a value in WoodUnits (`WU`).
     #[inline]
     pub fn from_wood_units(value: Num) -> Self {
-        Self::new(value, FluidResistanceUnit::WoodUnit)
+        let x = value;
+        Self(x * 7.99934208e6)
     }
 
     /// Returns the value expressed in WoodUnits (`WU`).
     #[inline]
     pub fn as_wood_units(self) -> Num {
-        self.convert_to(FluidResistanceUnit::WoodUnit)
+        let x = self.0;
+        x / 7.99934208e6
     }
 
     /// Alias for [`Self::as_wood_units`].
@@ -565,42 +588,49 @@ impl crate::Quantity for FluidResistance {
 
 impl Add for FluidResistance {
     type Output = FluidResistance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for FluidResistance {
     type Output = FluidResistance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for FluidResistance {
     type Output = FluidResistance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for FluidResistance {
     type Output = FluidResistance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<FluidResistance> for Num {
     type Output = FluidResistance;
+    #[inline]
     fn mul(self, rhs: FluidResistance) -> FluidResistance {
         FluidResistance(self * rhs.0)
     }
 }
 impl Div<Num> for FluidResistance {
     type Output = FluidResistance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for FluidResistance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

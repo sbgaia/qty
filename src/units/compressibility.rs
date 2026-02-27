@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -44,6 +46,7 @@ impl CompressibilityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::InversePascal => "Pa⁻¹",
@@ -57,6 +60,7 @@ impl CompressibilityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::InversePascal => &["Pa⁻¹", "1/Pa"],
@@ -72,6 +76,7 @@ impl CompressibilityUnit {
 
 impl Compressibility {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: CompressibilityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -103,6 +108,7 @@ impl Compressibility {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: CompressibilityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -119,13 +125,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InversePascals (`Pa⁻¹`).
     #[inline]
     pub fn from_inverse_pascals(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InversePascal)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in InversePascals (`Pa⁻¹`).
     #[inline]
     pub fn as_inverse_pascals(self) -> Num {
-        self.convert_to(CompressibilityUnit::InversePascal)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_inverse_pascals`].
@@ -137,13 +145,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InverseKilopascals (`kPa⁻¹`).
     #[inline]
     pub fn from_inverse_kilopascals(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InverseKilopascal)
+        let x = value;
+        Self(x * 1e3)
     }
 
     /// Returns the value expressed in InverseKilopascals (`kPa⁻¹`).
     #[inline]
     pub fn as_inverse_kilopascals(self) -> Num {
-        self.convert_to(CompressibilityUnit::InverseKilopascal)
+        let x = self.0;
+        x / 1e3
     }
 
     /// Alias for [`Self::as_inverse_kilopascals`].
@@ -155,13 +165,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InverseMegapascals (`MPa⁻¹`).
     #[inline]
     pub fn from_inverse_megapascals(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InverseMegapascal)
+        let x = value;
+        Self(x * 1e6)
     }
 
     /// Returns the value expressed in InverseMegapascals (`MPa⁻¹`).
     #[inline]
     pub fn as_inverse_megapascals(self) -> Num {
-        self.convert_to(CompressibilityUnit::InverseMegapascal)
+        let x = self.0;
+        x / 1e6
     }
 
     /// Alias for [`Self::as_inverse_megapascals`].
@@ -173,13 +185,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InverseAtmospheres (`atm⁻¹`).
     #[inline]
     pub fn from_inverse_atmospheres(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InverseAtmosphere)
+        let x = value;
+        Self(x * 101325.0)
     }
 
     /// Returns the value expressed in InverseAtmospheres (`atm⁻¹`).
     #[inline]
     pub fn as_inverse_atmospheres(self) -> Num {
-        self.convert_to(CompressibilityUnit::InverseAtmosphere)
+        let x = self.0;
+        x / 101325.0
     }
 
     /// Alias for [`Self::as_inverse_atmospheres`].
@@ -191,13 +205,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InverseMillibars (`mbar⁻¹`).
     #[inline]
     pub fn from_inverse_millibars(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InverseMillibar)
+        let x = value;
+        Self(x * 100.0)
     }
 
     /// Returns the value expressed in InverseMillibars (`mbar⁻¹`).
     #[inline]
     pub fn as_inverse_millibars(self) -> Num {
-        self.convert_to(CompressibilityUnit::InverseMillibar)
+        let x = self.0;
+        x / 100.0
     }
 
     /// Alias for [`Self::as_inverse_millibars`].
@@ -209,13 +225,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InverseBars (`bar⁻¹`).
     #[inline]
     pub fn from_inverse_bars(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InverseBar)
+        let x = value;
+        Self(x * 1e5)
     }
 
     /// Returns the value expressed in InverseBars (`bar⁻¹`).
     #[inline]
     pub fn as_inverse_bars(self) -> Num {
-        self.convert_to(CompressibilityUnit::InverseBar)
+        let x = self.0;
+        x / 1e5
     }
 
     /// Alias for [`Self::as_inverse_bars`].
@@ -227,13 +245,15 @@ impl Compressibility {
     /// Creates a [`Compressibility`] from a value in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
     pub fn from_inverse_pounds_force_per_square_inch(value: Num) -> Self {
-        Self::new(value, CompressibilityUnit::InversePoundForcePerSquareInch)
+        let x = value;
+        Self(x * 6.894757293168361e3)
     }
 
     /// Returns the value expressed in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
     pub fn as_inverse_pounds_force_per_square_inch(self) -> Num {
-        self.convert_to(CompressibilityUnit::InversePoundForcePerSquareInch)
+        let x = self.0;
+        x / 6.894757293168361e3
     }
 
     /// Alias for [`Self::as_inverse_pounds_force_per_square_inch`].
@@ -256,42 +276,49 @@ impl crate::Quantity for Compressibility {
 
 impl Add for Compressibility {
     type Output = Compressibility;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Compressibility {
     type Output = Compressibility;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Compressibility {
     type Output = Compressibility;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Compressibility {
     type Output = Compressibility;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Compressibility> for Num {
     type Output = Compressibility;
+    #[inline]
     fn mul(self, rhs: Compressibility) -> Compressibility {
         Compressibility(self * rhs.0)
     }
 }
 impl Div<Num> for Compressibility {
     type Output = Compressibility;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Compressibility {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

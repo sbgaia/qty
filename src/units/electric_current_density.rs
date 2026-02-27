@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl ElectricCurrentDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::AmperePerSquareMeter => "A/m²",
@@ -45,6 +48,7 @@ impl ElectricCurrentDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::AmperePerSquareMeter => &["A/m²"],
@@ -56,6 +60,7 @@ impl ElectricCurrentDensityUnit {
 
 impl ElectricCurrentDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricCurrentDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl ElectricCurrentDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricCurrentDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl ElectricCurrentDensity {
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareMeter (`A/m²`).
     #[inline]
     pub fn from_amperes_per_square_meter(value: Num) -> Self {
-        Self::new(value, ElectricCurrentDensityUnit::AmperePerSquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in AmperesPerSquareMeter (`A/m²`).
     #[inline]
     pub fn as_amperes_per_square_meter(self) -> Num {
-        self.convert_to(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_amperes_per_square_meter`].
@@ -113,13 +121,15 @@ impl ElectricCurrentDensity {
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareInch (`A/in²`).
     #[inline]
     pub fn from_amperes_per_square_inch(value: Num) -> Self {
-        Self::new(value, ElectricCurrentDensityUnit::AmperePerSquareInch)
+        let x = value;
+        Self(x / 0.00064516)
     }
 
     /// Returns the value expressed in AmperesPerSquareInch (`A/in²`).
     #[inline]
     pub fn as_amperes_per_square_inch(self) -> Num {
-        self.convert_to(ElectricCurrentDensityUnit::AmperePerSquareInch)
+        let x = self.0;
+        x * 0.00064516
     }
 
     /// Alias for [`Self::as_amperes_per_square_inch`].
@@ -131,13 +141,15 @@ impl ElectricCurrentDensity {
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareFoot (`A/ft²`).
     #[inline]
     pub fn from_amperes_per_square_foot(value: Num) -> Self {
-        Self::new(value, ElectricCurrentDensityUnit::AmperePerSquareFoot)
+        let x = value;
+        Self(x / 9.290304e-2)
     }
 
     /// Returns the value expressed in AmperesPerSquareFoot (`A/ft²`).
     #[inline]
     pub fn as_amperes_per_square_foot(self) -> Num {
-        self.convert_to(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+        let x = self.0;
+        x * 9.290304e-2
     }
 
     /// Alias for [`Self::as_amperes_per_square_foot`].
@@ -160,42 +172,49 @@ impl crate::Quantity for ElectricCurrentDensity {
 
 impl Add for ElectricCurrentDensity {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricCurrentDensity {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricCurrentDensity {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricCurrentDensity {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricCurrentDensity> for Num {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn mul(self, rhs: ElectricCurrentDensity) -> ElectricCurrentDensity {
         ElectricCurrentDensity(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricCurrentDensity {
     type Output = ElectricCurrentDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCurrentDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

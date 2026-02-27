@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -42,6 +44,7 @@ impl ElectricPotentialUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Volt => "V",
@@ -54,6 +57,7 @@ impl ElectricPotentialUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Volt => &["V"],
@@ -68,6 +72,7 @@ impl ElectricPotentialUnit {
 
 impl ElectricPotential {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricPotentialUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -98,6 +103,7 @@ impl ElectricPotential {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricPotentialUnit) -> Num {
         let x = self.0;
         match unit {
@@ -113,13 +119,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Volts (`V`).
     #[inline]
     pub fn from_volts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Volt)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Volts (`V`).
     #[inline]
     pub fn as_volts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Volt)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_volts`].
@@ -131,13 +139,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Nanovolts (`nV`).
     #[inline]
     pub fn from_nanovolts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Nanovolt)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanovolts (`nV`).
     #[inline]
     pub fn as_nanovolts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Nanovolt)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanovolts`].
@@ -149,13 +159,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Microvolts (`µV`).
     #[inline]
     pub fn from_microvolts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Microvolt)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microvolts (`µV`).
     #[inline]
     pub fn as_microvolts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Microvolt)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microvolts`].
@@ -167,13 +179,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Millivolts (`mV`).
     #[inline]
     pub fn from_millivolts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Millivolt)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millivolts (`mV`).
     #[inline]
     pub fn as_millivolts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Millivolt)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millivolts`].
@@ -185,13 +199,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Kilovolts (`kV`).
     #[inline]
     pub fn from_kilovolts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Kilovolt)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilovolts (`kV`).
     #[inline]
     pub fn as_kilovolts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Kilovolt)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilovolts`].
@@ -203,13 +219,15 @@ impl ElectricPotential {
     /// Creates a [`ElectricPotential`] from a value in Megavolts (`MV`).
     #[inline]
     pub fn from_megavolts(value: Num) -> Self {
-        Self::new(value, ElectricPotentialUnit::Megavolt)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megavolts (`MV`).
     #[inline]
     pub fn as_megavolts(self) -> Num {
-        self.convert_to(ElectricPotentialUnit::Megavolt)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megavolts`].
@@ -232,42 +250,49 @@ impl crate::Quantity for ElectricPotential {
 
 impl Add for ElectricPotential {
     type Output = ElectricPotential;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricPotential {
     type Output = ElectricPotential;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricPotential {
     type Output = ElectricPotential;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricPotential {
     type Output = ElectricPotential;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricPotential> for Num {
     type Output = ElectricPotential;
+    #[inline]
     fn mul(self, rhs: ElectricPotential) -> ElectricPotential {
         ElectricPotential(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricPotential {
     type Output = ElectricPotential;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricPotential {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

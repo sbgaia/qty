@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -34,6 +36,7 @@ impl VolumeFlowPerAreaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CubicMeterPerSecondPerSquareMeter => "m³/(s·m²)",
@@ -42,6 +45,7 @@ impl VolumeFlowPerAreaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CubicMeterPerSecondPerSquareMeter => &["m³/(s·m²)"],
@@ -52,6 +56,7 @@ impl VolumeFlowPerAreaUnit {
 
 impl VolumeFlowPerArea {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: VolumeFlowPerAreaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -80,6 +85,7 @@ impl VolumeFlowPerArea {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: VolumeFlowPerAreaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -93,16 +99,15 @@ impl VolumeFlowPerArea {
     /// Creates a [`VolumeFlowPerArea`] from a value in CubicMetersPerSecondPerSquareMeter (`m³/(s·m²)`).
     #[inline]
     pub fn from_cubic_meters_per_second_per_square_meter(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter,
-        )
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CubicMetersPerSecondPerSquareMeter (`m³/(s·m²)`).
     #[inline]
     pub fn as_cubic_meters_per_second_per_square_meter(self) -> Num {
-        self.convert_to(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_cubic_meters_per_second_per_square_meter`].
@@ -114,16 +119,15 @@ impl VolumeFlowPerArea {
     /// Creates a [`VolumeFlowPerArea`] from a value in CubicFeetPerMinutePerSquareFoot (`CFM/ft²`).
     #[inline]
     pub fn from_cubic_feet_per_minute_per_square_foot(value: Num) -> Self {
-        Self::new(
-            value,
-            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot,
-        )
+        let x = value;
+        Self(x * (0.028316846592 / 60.0) / 9.290304e-2)
     }
 
     /// Returns the value expressed in CubicFeetPerMinutePerSquareFoot (`CFM/ft²`).
     #[inline]
     pub fn as_cubic_feet_per_minute_per_square_foot(self) -> Num {
-        self.convert_to(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+        let x = self.0;
+        x * 9.290304e-2 / (0.028316846592 / 60.0)
     }
 
     /// Alias for [`Self::as_cubic_feet_per_minute_per_square_foot`].
@@ -146,42 +150,49 @@ impl crate::Quantity for VolumeFlowPerArea {
 
 impl Add for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<VolumeFlowPerArea> for Num {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn mul(self, rhs: VolumeFlowPerArea) -> VolumeFlowPerArea {
         VolumeFlowPerArea(self * rhs.0)
     }
 }
 impl Div<Num> for VolumeFlowPerArea {
     type Output = VolumeFlowPerArea;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for VolumeFlowPerArea {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

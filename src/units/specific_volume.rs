@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl SpecificVolumeUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CubicMeterPerKilogram => "m³/kg",
@@ -45,6 +48,7 @@ impl SpecificVolumeUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CubicMeterPerKilogram => &["m³/kg"],
@@ -56,6 +60,7 @@ impl SpecificVolumeUnit {
 
 impl SpecificVolume {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: SpecificVolumeUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl SpecificVolume {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: SpecificVolumeUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,13 +101,15 @@ impl SpecificVolume {
     /// Creates a [`SpecificVolume`] from a value in CubicMetersPerKilogram (`m³/kg`).
     #[inline]
     pub fn from_cubic_meters_per_kilogram(value: Num) -> Self {
-        Self::new(value, SpecificVolumeUnit::CubicMeterPerKilogram)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CubicMetersPerKilogram (`m³/kg`).
     #[inline]
     pub fn as_cubic_meters_per_kilogram(self) -> Num {
-        self.convert_to(SpecificVolumeUnit::CubicMeterPerKilogram)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_cubic_meters_per_kilogram`].
@@ -113,13 +121,15 @@ impl SpecificVolume {
     /// Creates a [`SpecificVolume`] from a value in MillicubicMetersPerKilogram (`mm³/kg`).
     #[inline]
     pub fn from_millicubic_meters_per_kilogram(value: Num) -> Self {
-        Self::new(value, SpecificVolumeUnit::MillicubicMeterPerKilogram)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillicubicMetersPerKilogram (`mm³/kg`).
     #[inline]
     pub fn as_millicubic_meters_per_kilogram(self) -> Num {
-        self.convert_to(SpecificVolumeUnit::MillicubicMeterPerKilogram)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millicubic_meters_per_kilogram`].
@@ -131,13 +141,15 @@ impl SpecificVolume {
     /// Creates a [`SpecificVolume`] from a value in CubicFeetPerPound (`ft³/lb`).
     #[inline]
     pub fn from_cubic_feet_per_pound(value: Num) -> Self {
-        Self::new(value, SpecificVolumeUnit::CubicFootPerPound)
+        let x = value;
+        Self(x * 0.028316846592 / 0.45359237)
     }
 
     /// Returns the value expressed in CubicFeetPerPound (`ft³/lb`).
     #[inline]
     pub fn as_cubic_feet_per_pound(self) -> Num {
-        self.convert_to(SpecificVolumeUnit::CubicFootPerPound)
+        let x = self.0;
+        x * 0.45359237 / 0.028316846592
     }
 
     /// Alias for [`Self::as_cubic_feet_per_pound`].
@@ -160,42 +172,49 @@ impl crate::Quantity for SpecificVolume {
 
 impl Add for SpecificVolume {
     type Output = SpecificVolume;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for SpecificVolume {
     type Output = SpecificVolume;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for SpecificVolume {
     type Output = SpecificVolume;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for SpecificVolume {
     type Output = SpecificVolume;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<SpecificVolume> for Num {
     type Output = SpecificVolume;
+    #[inline]
     fn mul(self, rhs: SpecificVolume) -> SpecificVolume {
         SpecificVolume(self * rhs.0)
     }
 }
 impl Div<Num> for SpecificVolume {
     type Output = SpecificVolume;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SpecificVolume {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

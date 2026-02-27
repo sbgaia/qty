@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -52,6 +54,7 @@ impl JerkUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterPerSecondCubed => "m/s³",
@@ -69,6 +72,7 @@ impl JerkUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterPerSecondCubed => &["m/s³"],
@@ -88,6 +92,7 @@ impl JerkUnit {
 
 impl Jerk {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: JerkUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -123,6 +128,7 @@ impl Jerk {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: JerkUnit) -> Num {
         let x = self.0;
         match unit {
@@ -143,13 +149,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in MetersPerSecondCubed (`m/s³`).
     #[inline]
     pub fn from_meters_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::MeterPerSecondCubed)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MetersPerSecondCubed (`m/s³`).
     #[inline]
     pub fn as_meters_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::MeterPerSecondCubed)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters_per_second_cubed`].
@@ -161,13 +169,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in NanometersPerSecondCubed (`nm/s³`).
     #[inline]
     pub fn from_nanometers_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::NanometerPerSecondCubed)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanometersPerSecondCubed (`nm/s³`).
     #[inline]
     pub fn as_nanometers_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::NanometerPerSecondCubed)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanometers_per_second_cubed`].
@@ -179,13 +189,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in MicrometersPerSecondCubed (`µm/s³`).
     #[inline]
     pub fn from_micrometers_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::MicrometerPerSecondCubed)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrometersPerSecondCubed (`µm/s³`).
     #[inline]
     pub fn as_micrometers_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::MicrometerPerSecondCubed)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrometers_per_second_cubed`].
@@ -197,13 +209,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in MillimetersPerSecondCubed (`mm/s³`).
     #[inline]
     pub fn from_millimeters_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::MillimeterPerSecondCubed)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillimetersPerSecondCubed (`mm/s³`).
     #[inline]
     pub fn as_millimeters_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::MillimeterPerSecondCubed)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimeters_per_second_cubed`].
@@ -215,13 +229,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in CentimetersPerSecondCubed (`cm/s³`).
     #[inline]
     pub fn from_centimeters_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::CentimeterPerSecondCubed)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentimetersPerSecondCubed (`cm/s³`).
     #[inline]
     pub fn as_centimeters_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::CentimeterPerSecondCubed)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centimeters_per_second_cubed`].
@@ -233,13 +249,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in DecimetersPerSecondCubed (`dm/s³`).
     #[inline]
     pub fn from_decimeters_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::DecimeterPerSecondCubed)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecimetersPerSecondCubed (`dm/s³`).
     #[inline]
     pub fn as_decimeters_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::DecimeterPerSecondCubed)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decimeters_per_second_cubed`].
@@ -251,13 +269,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in KilometersPerSecondCubed (`km/s³`).
     #[inline]
     pub fn from_kilometers_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::KilometerPerSecondCubed)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilometersPerSecondCubed (`km/s³`).
     #[inline]
     pub fn as_kilometers_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::KilometerPerSecondCubed)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilometers_per_second_cubed`].
@@ -269,13 +289,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in InchesPerSecondCubed (`in/s³`).
     #[inline]
     pub fn from_inches_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::InchPerSecondCubed)
+        let x = value;
+        Self(x * 0.0254)
     }
 
     /// Returns the value expressed in InchesPerSecondCubed (`in/s³`).
     #[inline]
     pub fn as_inches_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::InchPerSecondCubed)
+        let x = self.0;
+        x / 0.0254
     }
 
     /// Alias for [`Self::as_inches_per_second_cubed`].
@@ -287,13 +309,15 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in FeetPerSecondCubed (`ft/s³`).
     #[inline]
     pub fn from_feet_per_second_cubed(value: Num) -> Self {
-        Self::new(value, JerkUnit::FootPerSecondCubed)
+        let x = value;
+        Self(x * 0.304800)
     }
 
     /// Returns the value expressed in FeetPerSecondCubed (`ft/s³`).
     #[inline]
     pub fn as_feet_per_second_cubed(self) -> Num {
-        self.convert_to(JerkUnit::FootPerSecondCubed)
+        let x = self.0;
+        x / 0.304800
     }
 
     /// Alias for [`Self::as_feet_per_second_cubed`].
@@ -305,25 +329,29 @@ impl Jerk {
     /// Creates a [`Jerk`] from a value in StandardGravitiesPerSecond (`g/s`).
     #[inline]
     pub fn from_standard_gravities_per_second(value: Num) -> Self {
-        Self::new(value, JerkUnit::StandardGravitiesPerSecond)
+        let x = value;
+        Self(x * 9.80665)
     }
 
     /// Returns the value expressed in StandardGravitiesPerSecond (`g/s`).
     #[inline]
     pub fn as_standard_gravities_per_second(self) -> Num {
-        self.convert_to(JerkUnit::StandardGravitiesPerSecond)
+        let x = self.0;
+        x / 9.80665
     }
 
     /// Creates a [`Jerk`] from a value in MillistandardGravitiesPerSecond (`mg/s`).
     #[inline]
     pub fn from_millistandard_gravities_per_second(value: Num) -> Self {
-        Self::new(value, JerkUnit::MillistandardGravitiesPerSecond)
+        let x = value;
+        Self((x * 1e-3) * 9.80665)
     }
 
     /// Returns the value expressed in MillistandardGravitiesPerSecond (`mg/s`).
     #[inline]
     pub fn as_millistandard_gravities_per_second(self) -> Num {
-        self.convert_to(JerkUnit::MillistandardGravitiesPerSecond)
+        let x = self.0;
+        (x / 1e-3) / 9.80665
     }
 }
 
@@ -340,42 +368,49 @@ impl crate::Quantity for Jerk {
 
 impl Add for Jerk {
     type Output = Jerk;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Jerk {
     type Output = Jerk;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Jerk {
     type Output = Jerk;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Jerk {
     type Output = Jerk;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Jerk> for Num {
     type Output = Jerk;
+    #[inline]
     fn mul(self, rhs: Jerk) -> Jerk {
         Jerk(self * rhs.0)
     }
 }
 impl Div<Num> for Jerk {
     type Output = Jerk;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Jerk {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

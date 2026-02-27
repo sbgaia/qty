@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -42,6 +44,7 @@ impl WarpingMomentOfInertiaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterToTheSixth => "m⁶",
@@ -54,6 +57,7 @@ impl WarpingMomentOfInertiaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterToTheSixth => &["m⁶"],
@@ -68,6 +72,7 @@ impl WarpingMomentOfInertiaUnit {
 
 impl WarpingMomentOfInertia {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: WarpingMomentOfInertiaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -98,6 +103,7 @@ impl WarpingMomentOfInertia {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: WarpingMomentOfInertiaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -113,13 +119,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in MetersToTheSixth (`m⁶`).
     #[inline]
     pub fn from_meters_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::MeterToTheSixth)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MetersToTheSixth (`m⁶`).
     #[inline]
     pub fn as_meters_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters_to_the_sixth`].
@@ -131,13 +139,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in DecimetersToTheSixth (`dm⁶`).
     #[inline]
     pub fn from_decimeters_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+        let x = value;
+        Self(x / 1e6)
     }
 
     /// Returns the value expressed in DecimetersToTheSixth (`dm⁶`).
     #[inline]
     pub fn as_decimeters_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+        let x = self.0;
+        x * 1e6
     }
 
     /// Alias for [`Self::as_decimeters_to_the_sixth`].
@@ -149,13 +159,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in CentimetersToTheSixth (`cm⁶`).
     #[inline]
     pub fn from_centimeters_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+        let x = value;
+        Self(x / 1e12)
     }
 
     /// Returns the value expressed in CentimetersToTheSixth (`cm⁶`).
     #[inline]
     pub fn as_centimeters_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+        let x = self.0;
+        x * 1e12
     }
 
     /// Alias for [`Self::as_centimeters_to_the_sixth`].
@@ -167,13 +179,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in MillimetersToTheSixth (`mm⁶`).
     #[inline]
     pub fn from_millimeters_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+        let x = value;
+        Self(x / 1e18)
     }
 
     /// Returns the value expressed in MillimetersToTheSixth (`mm⁶`).
     #[inline]
     pub fn as_millimeters_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+        let x = self.0;
+        x * 1e18
     }
 
     /// Alias for [`Self::as_millimeters_to_the_sixth`].
@@ -185,13 +199,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in FeetToTheSixth (`ft⁶`).
     #[inline]
     pub fn from_feet_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::FootToTheSixth)
+        let x = value;
+        Self(x * 0.000801843800914862014464)
     }
 
     /// Returns the value expressed in FeetToTheSixth (`ft⁶`).
     #[inline]
     pub fn as_feet_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::FootToTheSixth)
+        let x = self.0;
+        x / 0.000801843800914862014464
     }
 
     /// Alias for [`Self::as_feet_to_the_sixth`].
@@ -203,13 +219,15 @@ impl WarpingMomentOfInertia {
     /// Creates a [`WarpingMomentOfInertia`] from a value in InchesToTheSixth (`in⁶`).
     #[inline]
     pub fn from_inches_to_the_sixth(value: Num) -> Self {
-        Self::new(value, WarpingMomentOfInertiaUnit::InchToTheSixth)
+        let x = value;
+        Self(x * 0.000000000268535866540096)
     }
 
     /// Returns the value expressed in InchesToTheSixth (`in⁶`).
     #[inline]
     pub fn as_inches_to_the_sixth(self) -> Num {
-        self.convert_to(WarpingMomentOfInertiaUnit::InchToTheSixth)
+        let x = self.0;
+        x / 0.000000000268535866540096
     }
 
     /// Alias for [`Self::as_inches_to_the_sixth`].
@@ -232,42 +250,49 @@ impl crate::Quantity for WarpingMomentOfInertia {
 
 impl Add for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<WarpingMomentOfInertia> for Num {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: WarpingMomentOfInertia) -> WarpingMomentOfInertia {
         WarpingMomentOfInertia(self * rhs.0)
     }
 }
 impl Div<Num> for WarpingMomentOfInertia {
     type Output = WarpingMomentOfInertia;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for WarpingMomentOfInertia {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

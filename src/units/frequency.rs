@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -55,6 +57,7 @@ impl FrequencyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Hertz => "Hz",
@@ -73,6 +76,7 @@ impl FrequencyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Hertz => &["Hz"],
@@ -93,6 +97,7 @@ impl FrequencyUnit {
 
 impl Frequency {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: FrequencyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -129,6 +134,7 @@ impl Frequency {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: FrequencyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -150,97 +156,113 @@ impl Frequency {
     /// Creates a [`Frequency`] from a value in Hertz (`Hz`).
     #[inline]
     pub fn from_hertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Hertz)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Hertz (`Hz`).
     #[inline]
     pub fn as_hertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Hertz)
+        let x = self.0;
+        x
     }
 
     /// Creates a [`Frequency`] from a value in Microhertz (`µHz`).
     #[inline]
     pub fn from_microhertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Microhertz)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microhertz (`µHz`).
     #[inline]
     pub fn as_microhertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Microhertz)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Creates a [`Frequency`] from a value in Millihertz (`mHz`).
     #[inline]
     pub fn from_millihertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Millihertz)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millihertz (`mHz`).
     #[inline]
     pub fn as_millihertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Millihertz)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Creates a [`Frequency`] from a value in Kilohertz (`kHz`).
     #[inline]
     pub fn from_kilohertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Kilohertz)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilohertz (`kHz`).
     #[inline]
     pub fn as_kilohertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Kilohertz)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Creates a [`Frequency`] from a value in Megahertz (`MHz`).
     #[inline]
     pub fn from_megahertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Megahertz)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megahertz (`MHz`).
     #[inline]
     pub fn as_megahertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Megahertz)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Creates a [`Frequency`] from a value in Gigahertz (`GHz`).
     #[inline]
     pub fn from_gigahertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Gigahertz)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigahertz (`GHz`).
     #[inline]
     pub fn as_gigahertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Gigahertz)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Creates a [`Frequency`] from a value in Terahertz (`THz`).
     #[inline]
     pub fn from_terahertz(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::Terahertz)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Terahertz (`THz`).
     #[inline]
     pub fn as_terahertz(self) -> Num {
-        self.convert_to(FrequencyUnit::Terahertz)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Creates a [`Frequency`] from a value in RadiansPerSecond (`rad/s`).
     #[inline]
     pub fn from_radians_per_second(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::RadianPerSecond)
+        let x = value;
+        Self(x / (2.0 * (std::f64::consts::PI as Num)))
     }
 
     /// Returns the value expressed in RadiansPerSecond (`rad/s`).
     #[inline]
     pub fn as_radians_per_second(self) -> Num {
-        self.convert_to(FrequencyUnit::RadianPerSecond)
+        let x = self.0;
+        x * (2.0 * (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_radians_per_second`].
@@ -252,13 +274,15 @@ impl Frequency {
     /// Creates a [`Frequency`] from a value in CyclesPerMinute (`cpm`).
     #[inline]
     pub fn from_cycles_per_minute(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::CyclePerMinute)
+        let x = value;
+        Self(x / 60.0)
     }
 
     /// Returns the value expressed in CyclesPerMinute (`cpm`).
     #[inline]
     pub fn as_cycles_per_minute(self) -> Num {
-        self.convert_to(FrequencyUnit::CyclePerMinute)
+        let x = self.0;
+        x * 60.0
     }
 
     /// Alias for [`Self::as_cycles_per_minute`].
@@ -270,13 +294,15 @@ impl Frequency {
     /// Creates a [`Frequency`] from a value in CyclesPerHour (`cph`).
     #[inline]
     pub fn from_cycles_per_hour(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::CyclePerHour)
+        let x = value;
+        Self(x / 3600.0)
     }
 
     /// Returns the value expressed in CyclesPerHour (`cph`).
     #[inline]
     pub fn as_cycles_per_hour(self) -> Num {
-        self.convert_to(FrequencyUnit::CyclePerHour)
+        let x = self.0;
+        x * 3600.0
     }
 
     /// Alias for [`Self::as_cycles_per_hour`].
@@ -288,13 +314,15 @@ impl Frequency {
     /// Creates a [`Frequency`] from a value in BeatsPerMinute (`bpm`).
     #[inline]
     pub fn from_beats_per_minute(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::BeatPerMinute)
+        let x = value;
+        Self(x / 60.0)
     }
 
     /// Returns the value expressed in BeatsPerMinute (`bpm`).
     #[inline]
     pub fn as_beats_per_minute(self) -> Num {
-        self.convert_to(FrequencyUnit::BeatPerMinute)
+        let x = self.0;
+        x * 60.0
     }
 
     /// Alias for [`Self::as_beats_per_minute`].
@@ -306,13 +334,15 @@ impl Frequency {
     /// Creates a [`Frequency`] from a value in PerSecond (`s⁻¹`).
     #[inline]
     pub fn from_per_second(value: Num) -> Self {
-        Self::new(value, FrequencyUnit::PerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in PerSecond (`s⁻¹`).
     #[inline]
     pub fn as_per_second(self) -> Num {
-        self.convert_to(FrequencyUnit::PerSecond)
+        let x = self.0;
+        x
     }
 }
 
@@ -329,42 +359,49 @@ impl crate::Quantity for Frequency {
 
 impl Add for Frequency {
     type Output = Frequency;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Frequency {
     type Output = Frequency;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Frequency {
     type Output = Frequency;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Frequency {
     type Output = Frequency;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Frequency> for Num {
     type Output = Frequency;
+    #[inline]
     fn mul(self, rhs: Frequency) -> Frequency {
         Frequency(self * rhs.0)
     }
 }
 impl Div<Num> for Frequency {
     type Output = Frequency;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Frequency {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

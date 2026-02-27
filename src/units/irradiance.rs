@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -58,6 +60,7 @@ impl IrradianceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerSquareMeter => "W/m²",
@@ -78,6 +81,7 @@ impl IrradianceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerSquareMeter => &["W/m²"],
@@ -100,6 +104,7 @@ impl IrradianceUnit {
 
 impl Irradiance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: IrradianceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -138,6 +143,7 @@ impl Irradiance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: IrradianceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -161,13 +167,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn from_watts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::WattPerSquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn as_watts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::WattPerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_square_meter`].
@@ -179,13 +187,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareMeter (`pW/m²`).
     #[inline]
     pub fn from_picowatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::PicowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in PicowattsPerSquareMeter (`pW/m²`).
     #[inline]
     pub fn as_picowatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::PicowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picowatts_per_square_meter`].
@@ -197,13 +207,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
     pub fn from_nanowatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::NanowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
     pub fn as_nanowatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::NanowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanowatts_per_square_meter`].
@@ -215,13 +227,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
     pub fn from_microwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MicrowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
     pub fn as_microwatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::MicrowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microwatts_per_square_meter`].
@@ -233,13 +247,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
     pub fn from_milliwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MilliwattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
     pub fn as_milliwatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::MilliwattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliwatts_per_square_meter`].
@@ -251,13 +267,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
     pub fn from_kilowatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::KilowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::KilowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilowatts_per_square_meter`].
@@ -269,13 +287,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareMeter (`MW/m²`).
     #[inline]
     pub fn from_megawatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MegawattPerSquareMeter)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in MegawattsPerSquareMeter (`MW/m²`).
     #[inline]
     pub fn as_megawatts_per_square_meter(self) -> Num {
-        self.convert_to(IrradianceUnit::MegawattPerSquareMeter)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megawatts_per_square_meter`].
@@ -287,13 +307,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in WattsPerSquareCentimeter (`W/cm²`).
     #[inline]
     pub fn from_watts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::WattPerSquareCentimeter)
+        let x = value;
+        Self(x * 10000.0)
     }
 
     /// Returns the value expressed in WattsPerSquareCentimeter (`W/cm²`).
     #[inline]
     pub fn as_watts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::WattPerSquareCentimeter)
+        let x = self.0;
+        x * 0.0001
     }
 
     /// Alias for [`Self::as_watts_per_square_centimeter`].
@@ -305,13 +327,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareCentimeter (`pW/cm²`).
     #[inline]
     pub fn from_picowatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::PicowattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e-12) * 10000.0)
     }
 
     /// Returns the value expressed in PicowattsPerSquareCentimeter (`pW/cm²`).
     #[inline]
     pub fn as_picowatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::PicowattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e-12) * 0.0001
     }
 
     /// Alias for [`Self::as_picowatts_per_square_centimeter`].
@@ -323,13 +347,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareCentimeter (`nW/cm²`).
     #[inline]
     pub fn from_nanowatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::NanowattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e-9) * 10000.0)
     }
 
     /// Returns the value expressed in NanowattsPerSquareCentimeter (`nW/cm²`).
     #[inline]
     pub fn as_nanowatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::NanowattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e-9) * 0.0001
     }
 
     /// Alias for [`Self::as_nanowatts_per_square_centimeter`].
@@ -341,13 +367,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareCentimeter (`µW/cm²`).
     #[inline]
     pub fn from_microwatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MicrowattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e-6) * 10000.0)
     }
 
     /// Returns the value expressed in MicrowattsPerSquareCentimeter (`µW/cm²`).
     #[inline]
     pub fn as_microwatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::MicrowattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e-6) * 0.0001
     }
 
     /// Alias for [`Self::as_microwatts_per_square_centimeter`].
@@ -359,13 +387,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareCentimeter (`mW/cm²`).
     #[inline]
     pub fn from_milliwatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MilliwattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e-3) * 10000.0)
     }
 
     /// Returns the value expressed in MilliwattsPerSquareCentimeter (`mW/cm²`).
     #[inline]
     pub fn as_milliwatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::MilliwattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e-3) * 0.0001
     }
 
     /// Alias for [`Self::as_milliwatts_per_square_centimeter`].
@@ -377,13 +407,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareCentimeter (`kW/cm²`).
     #[inline]
     pub fn from_kilowatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::KilowattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) * 10000.0)
     }
 
     /// Returns the value expressed in KilowattsPerSquareCentimeter (`kW/cm²`).
     #[inline]
     pub fn as_kilowatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::KilowattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) * 0.0001
     }
 
     /// Alias for [`Self::as_kilowatts_per_square_centimeter`].
@@ -395,13 +427,15 @@ impl Irradiance {
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareCentimeter (`MW/cm²`).
     #[inline]
     pub fn from_megawatts_per_square_centimeter(value: Num) -> Self {
-        Self::new(value, IrradianceUnit::MegawattPerSquareCentimeter)
+        let x = value;
+        Self((x * 1e6) * 10000.0)
     }
 
     /// Returns the value expressed in MegawattsPerSquareCentimeter (`MW/cm²`).
     #[inline]
     pub fn as_megawatts_per_square_centimeter(self) -> Num {
-        self.convert_to(IrradianceUnit::MegawattPerSquareCentimeter)
+        let x = self.0;
+        (x / 1e6) * 0.0001
     }
 
     /// Alias for [`Self::as_megawatts_per_square_centimeter`].
@@ -424,42 +458,49 @@ impl crate::Quantity for Irradiance {
 
 impl Add for Irradiance {
     type Output = Irradiance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Irradiance {
     type Output = Irradiance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Irradiance {
     type Output = Irradiance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Irradiance {
     type Output = Irradiance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Irradiance> for Num {
     type Output = Irradiance;
+    #[inline]
     fn mul(self, rhs: Irradiance) -> Irradiance {
         Irradiance(self * rhs.0)
     }
 }
 impl Div<Num> for Irradiance {
     type Output = Irradiance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Irradiance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

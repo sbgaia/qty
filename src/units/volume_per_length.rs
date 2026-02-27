@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -48,6 +50,7 @@ impl VolumePerLengthUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CubicMeterPerMeter => "m³/m",
@@ -63,6 +66,7 @@ impl VolumePerLengthUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CubicMeterPerMeter => &["m³/m"],
@@ -80,6 +84,7 @@ impl VolumePerLengthUnit {
 
 impl VolumePerLength {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: VolumePerLengthUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -113,6 +118,7 @@ impl VolumePerLength {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: VolumePerLengthUnit) -> Num {
         let x = self.0;
         match unit {
@@ -131,13 +137,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in CubicMetersPerMeter (`m³/m`).
     #[inline]
     pub fn from_cubic_meters_per_meter(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::CubicMeterPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CubicMetersPerMeter (`m³/m`).
     #[inline]
     pub fn as_cubic_meters_per_meter(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::CubicMeterPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_cubic_meters_per_meter`].
@@ -149,13 +157,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in LitersPerMeter (`l/m`).
     #[inline]
     pub fn from_liters_per_meter(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::LiterPerMeter)
+        let x = value;
+        Self(x / 1000.0)
     }
 
     /// Returns the value expressed in LitersPerMeter (`l/m`).
     #[inline]
     pub fn as_liters_per_meter(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::LiterPerMeter)
+        let x = self.0;
+        x * 1000.0
     }
 
     /// Alias for [`Self::as_liters_per_meter`].
@@ -167,13 +177,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in LitersPerKilometer (`l/km`).
     #[inline]
     pub fn from_liters_per_kilometer(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::LiterPerKilometer)
+        let x = value;
+        Self(x / 1e6)
     }
 
     /// Returns the value expressed in LitersPerKilometer (`l/km`).
     #[inline]
     pub fn as_liters_per_kilometer(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::LiterPerKilometer)
+        let x = self.0;
+        x * 1e6
     }
 
     /// Alias for [`Self::as_liters_per_kilometer`].
@@ -185,13 +197,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in LitersPerMillimeter (`l/mm`).
     #[inline]
     pub fn from_liters_per_millimeter(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::LiterPerMillimeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in LitersPerMillimeter (`l/mm`).
     #[inline]
     pub fn as_liters_per_millimeter(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::LiterPerMillimeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_liters_per_millimeter`].
@@ -203,13 +217,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in OilBarrelsPerFoot (`bbl/ft`).
     #[inline]
     pub fn from_oil_barrels_per_foot(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::OilBarrelPerFoot)
+        let x = value;
+        Self(x * 0.158987294928 / 0.3048)
     }
 
     /// Returns the value expressed in OilBarrelsPerFoot (`bbl/ft`).
     #[inline]
     pub fn as_oil_barrels_per_foot(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::OilBarrelPerFoot)
+        let x = self.0;
+        x * 0.3048 / 0.158987294928
     }
 
     /// Alias for [`Self::as_oil_barrels_per_foot`].
@@ -221,13 +237,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in CubicYardsPerFoot (`yd³/ft`).
     #[inline]
     pub fn from_cubic_yards_per_foot(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::CubicYardPerFoot)
+        let x = value;
+        Self(x * 0.764554857984 / 0.3048)
     }
 
     /// Returns the value expressed in CubicYardsPerFoot (`yd³/ft`).
     #[inline]
     pub fn as_cubic_yards_per_foot(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::CubicYardPerFoot)
+        let x = self.0;
+        x * 0.3048 / 0.764554857984
     }
 
     /// Alias for [`Self::as_cubic_yards_per_foot`].
@@ -239,13 +257,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in CubicYardsPerUsSurveyFoot (`yd³/ftUS`).
     #[inline]
     pub fn from_cubic_yards_per_us_survey_foot(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+        let x = value;
+        Self(x * 0.764554857984 * 3937.0 / 1200.0)
     }
 
     /// Returns the value expressed in CubicYardsPerUsSurveyFoot (`yd³/ftUS`).
     #[inline]
     pub fn as_cubic_yards_per_us_survey_foot(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+        let x = self.0;
+        x * 1200.0 / (0.764554857984 * 3937.0)
     }
 
     /// Alias for [`Self::as_cubic_yards_per_us_survey_foot`].
@@ -257,13 +277,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in UsGallonsPerMile (`gal (U.S.)/mi`).
     #[inline]
     pub fn from_us_gallons_per_mile(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::UsGallonPerMile)
+        let x = value;
+        Self(x * 0.003785411784 / 1609.344)
     }
 
     /// Returns the value expressed in UsGallonsPerMile (`gal (U.S.)/mi`).
     #[inline]
     pub fn as_us_gallons_per_mile(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::UsGallonPerMile)
+        let x = self.0;
+        x * 1609.344 / 0.003785411784
     }
 
     /// Alias for [`Self::as_us_gallons_per_mile`].
@@ -275,13 +297,15 @@ impl VolumePerLength {
     /// Creates a [`VolumePerLength`] from a value in ImperialGallonsPerMile (`gal (imp.)/mi`).
     #[inline]
     pub fn from_imperial_gallons_per_mile(value: Num) -> Self {
-        Self::new(value, VolumePerLengthUnit::ImperialGallonPerMile)
+        let x = value;
+        Self(x * 0.00454609 / 1609.344)
     }
 
     /// Returns the value expressed in ImperialGallonsPerMile (`gal (imp.)/mi`).
     #[inline]
     pub fn as_imperial_gallons_per_mile(self) -> Num {
-        self.convert_to(VolumePerLengthUnit::ImperialGallonPerMile)
+        let x = self.0;
+        x * 1609.344 / 0.00454609
     }
 
     /// Alias for [`Self::as_imperial_gallons_per_mile`].
@@ -304,42 +328,49 @@ impl crate::Quantity for VolumePerLength {
 
 impl Add for VolumePerLength {
     type Output = VolumePerLength;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for VolumePerLength {
     type Output = VolumePerLength;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for VolumePerLength {
     type Output = VolumePerLength;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for VolumePerLength {
     type Output = VolumePerLength;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<VolumePerLength> for Num {
     type Output = VolumePerLength;
+    #[inline]
     fn mul(self, rhs: VolumePerLength) -> VolumePerLength {
         VolumePerLength(self * rhs.0)
     }
 }
 impl Div<Num> for VolumePerLength {
     type Output = VolumePerLength;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for VolumePerLength {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -46,6 +48,7 @@ impl ElectricReactanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Ohm => "Ω",
@@ -60,6 +63,7 @@ impl ElectricReactanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Ohm => &["Ω"],
@@ -76,6 +80,7 @@ impl ElectricReactanceUnit {
 
 impl ElectricReactance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricReactanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -108,6 +113,7 @@ impl ElectricReactance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricReactanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -125,13 +131,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Ohms (`Ω`).
     #[inline]
     pub fn from_ohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Ohm)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Ohms (`Ω`).
     #[inline]
     pub fn as_ohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Ohm)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_ohms`].
@@ -143,13 +151,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Nanoohms (`nΩ`).
     #[inline]
     pub fn from_nanoohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Nanoohm)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanoohms (`nΩ`).
     #[inline]
     pub fn as_nanoohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Nanoohm)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanoohms`].
@@ -161,13 +171,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Microohms (`µΩ`).
     #[inline]
     pub fn from_microohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Microohm)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microohms (`µΩ`).
     #[inline]
     pub fn as_microohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Microohm)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microohms`].
@@ -179,13 +191,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Milliohms (`mΩ`).
     #[inline]
     pub fn from_milliohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Milliohm)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Milliohms (`mΩ`).
     #[inline]
     pub fn as_milliohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Milliohm)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliohms`].
@@ -197,13 +211,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Kiloohms (`kΩ`).
     #[inline]
     pub fn from_kiloohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Kiloohm)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kiloohms (`kΩ`).
     #[inline]
     pub fn as_kiloohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Kiloohm)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kiloohms`].
@@ -215,13 +231,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Megaohms (`MΩ`).
     #[inline]
     pub fn from_megaohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Megaohm)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megaohms (`MΩ`).
     #[inline]
     pub fn as_megaohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Megaohm)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megaohms`].
@@ -233,13 +251,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Gigaohms (`GΩ`).
     #[inline]
     pub fn from_gigaohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Gigaohm)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigaohms (`GΩ`).
     #[inline]
     pub fn as_gigaohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Gigaohm)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigaohms`].
@@ -251,13 +271,15 @@ impl ElectricReactance {
     /// Creates a [`ElectricReactance`] from a value in Teraohms (`TΩ`).
     #[inline]
     pub fn from_teraohms(value: Num) -> Self {
-        Self::new(value, ElectricReactanceUnit::Teraohm)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Teraohms (`TΩ`).
     #[inline]
     pub fn as_teraohms(self) -> Num {
-        self.convert_to(ElectricReactanceUnit::Teraohm)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_teraohms`].
@@ -280,42 +302,49 @@ impl crate::Quantity for ElectricReactance {
 
 impl Add for ElectricReactance {
     type Output = ElectricReactance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricReactance {
     type Output = ElectricReactance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricReactance {
     type Output = ElectricReactance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricReactance {
     type Output = ElectricReactance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricReactance> for Num {
     type Output = ElectricReactance;
+    #[inline]
     fn mul(self, rhs: ElectricReactance) -> ElectricReactance {
         ElectricReactance(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricReactance {
     type Output = ElectricReactance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricReactance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

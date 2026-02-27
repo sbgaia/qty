@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -66,6 +68,7 @@ impl AbsorbedDoseOfIonizingRadiationUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Gray => "Gy",
@@ -89,6 +92,7 @@ impl AbsorbedDoseOfIonizingRadiationUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Gray => &["Gy"],
@@ -114,6 +118,7 @@ impl AbsorbedDoseOfIonizingRadiationUnit {
 
 impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AbsorbedDoseOfIonizingRadiationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -155,6 +160,7 @@ impl AbsorbedDoseOfIonizingRadiation {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AbsorbedDoseOfIonizingRadiationUnit) -> Num {
         let x = self.0;
         match unit {
@@ -181,13 +187,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Grays (`Gy`).
     #[inline]
     pub fn from_grays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Gray)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Grays (`Gy`).
     #[inline]
     pub fn as_grays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Gray)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_grays`].
@@ -199,13 +207,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Femtograys (`fGy`).
     #[inline]
     pub fn from_femtograys(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Femtogray)
+        let x = value;
+        Self((x * 1e-15))
     }
 
     /// Returns the value expressed in Femtograys (`fGy`).
     #[inline]
     pub fn as_femtograys(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Femtogray)
+        let x = self.0;
+        (x / 1e-15)
     }
 
     /// Alias for [`Self::as_femtograys`].
@@ -217,13 +227,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Picograys (`pGy`).
     #[inline]
     pub fn from_picograys(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Picogray)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picograys (`pGy`).
     #[inline]
     pub fn as_picograys(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Picogray)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picograys`].
@@ -235,13 +247,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Nanograys (`nGy`).
     #[inline]
     pub fn from_nanograys(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Nanogray)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanograys (`nGy`).
     #[inline]
     pub fn as_nanograys(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Nanogray)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanograys`].
@@ -253,13 +267,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Micrograys (`µGy`).
     #[inline]
     pub fn from_micrograys(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Microgray)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Micrograys (`µGy`).
     #[inline]
     pub fn as_micrograys(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Microgray)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrograys`].
@@ -271,13 +287,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Milligrays (`mGy`).
     #[inline]
     pub fn from_milligrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Milligray)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Milligrays (`mGy`).
     #[inline]
     pub fn as_milligrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Milligray)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milligrays`].
@@ -289,13 +307,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Centigrays (`cGy`).
     #[inline]
     pub fn from_centigrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Centigray)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in Centigrays (`cGy`).
     #[inline]
     pub fn as_centigrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Centigray)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centigrays`].
@@ -307,13 +327,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Decigrays (`dGy`).
     #[inline]
     pub fn from_decigrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Decigray)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in Decigrays (`dGy`).
     #[inline]
     pub fn as_decigrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Decigray)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decigrays`].
@@ -325,13 +347,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Kilograys (`kGy`).
     #[inline]
     pub fn from_kilograys(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Kilogray)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilograys (`kGy`).
     #[inline]
     pub fn as_kilograys(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Kilogray)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilograys`].
@@ -343,13 +367,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Megagrays (`MGy`).
     #[inline]
     pub fn from_megagrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Megagray)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megagrays (`MGy`).
     #[inline]
     pub fn as_megagrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Megagray)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megagrays`].
@@ -361,13 +387,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Gigagrays (`GGy`).
     #[inline]
     pub fn from_gigagrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Gigagray)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigagrays (`GGy`).
     #[inline]
     pub fn as_gigagrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Gigagray)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigagrays`].
@@ -379,13 +407,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Teragrays (`TGy`).
     #[inline]
     pub fn from_teragrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Teragray)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Teragrays (`TGy`).
     #[inline]
     pub fn as_teragrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Teragray)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_teragrays`].
@@ -397,13 +427,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Petagrays (`PGy`).
     #[inline]
     pub fn from_petagrays(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Petagray)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in Petagrays (`PGy`).
     #[inline]
     pub fn as_petagrays(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Petagray)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petagrays`].
@@ -415,13 +447,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Rads (`rad`).
     #[inline]
     pub fn from_rads(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Rad)
+        let x = value;
+        Self(x / 100.0)
     }
 
     /// Returns the value expressed in Rads (`rad`).
     #[inline]
     pub fn as_rads(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Rad)
+        let x = self.0;
+        x * 100.0
     }
 
     /// Alias for [`Self::as_rads`].
@@ -433,13 +467,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Millirads (`mrad`).
     #[inline]
     pub fn from_millirads(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Millirad)
+        let x = value;
+        Self((x * 1e-3) / 100.0)
     }
 
     /// Returns the value expressed in Millirads (`mrad`).
     #[inline]
     pub fn as_millirads(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Millirad)
+        let x = self.0;
+        (x / 1e-3) * 100.0
     }
 
     /// Alias for [`Self::as_millirads`].
@@ -451,13 +487,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Kilorads (`krad`).
     #[inline]
     pub fn from_kilorads(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Kilorad)
+        let x = value;
+        Self((x * 1e3) / 100.0)
     }
 
     /// Returns the value expressed in Kilorads (`krad`).
     #[inline]
     pub fn as_kilorads(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Kilorad)
+        let x = self.0;
+        (x / 1e3) * 100.0
     }
 
     /// Alias for [`Self::as_kilorads`].
@@ -469,13 +507,15 @@ impl AbsorbedDoseOfIonizingRadiation {
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Megarads (`Mrad`).
     #[inline]
     pub fn from_megarads(value: Num) -> Self {
-        Self::new(value, AbsorbedDoseOfIonizingRadiationUnit::Megarad)
+        let x = value;
+        Self((x * 1e6) / 100.0)
     }
 
     /// Returns the value expressed in Megarads (`Mrad`).
     #[inline]
     pub fn as_megarads(self) -> Num {
-        self.convert_to(AbsorbedDoseOfIonizingRadiationUnit::Megarad)
+        let x = self.0;
+        (x / 1e6) * 100.0
     }
 
     /// Alias for [`Self::as_megarads`].
@@ -498,42 +538,49 @@ impl crate::Quantity for AbsorbedDoseOfIonizingRadiation {
 
 impl Add for AbsorbedDoseOfIonizingRadiation {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for AbsorbedDoseOfIonizingRadiation {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for AbsorbedDoseOfIonizingRadiation {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for AbsorbedDoseOfIonizingRadiation {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<AbsorbedDoseOfIonizingRadiation> for Num {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn mul(self, rhs: AbsorbedDoseOfIonizingRadiation) -> AbsorbedDoseOfIonizingRadiation {
         AbsorbedDoseOfIonizingRadiation(self * rhs.0)
     }
 }
 impl Div<Num> for AbsorbedDoseOfIonizingRadiation {
     type Output = AbsorbedDoseOfIonizingRadiation;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AbsorbedDoseOfIonizingRadiation {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

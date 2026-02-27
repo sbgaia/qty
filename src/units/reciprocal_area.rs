@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -52,6 +54,7 @@ impl ReciprocalAreaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::InverseSquareMeter => "m⁻²",
@@ -69,6 +72,7 @@ impl ReciprocalAreaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::InverseSquareMeter => &["m⁻²"],
@@ -88,6 +92,7 @@ impl ReciprocalAreaUnit {
 
 impl ReciprocalArea {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ReciprocalAreaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -125,6 +130,7 @@ impl ReciprocalArea {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ReciprocalAreaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -147,13 +153,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMeters (`m⁻²`).
     #[inline]
     pub fn from_inverse_square_meters(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in InverseSquareMeters (`m⁻²`).
     #[inline]
     pub fn as_inverse_square_meters(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_inverse_square_meters`].
@@ -165,13 +173,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareKilometers (`km⁻²`).
     #[inline]
     pub fn from_inverse_square_kilometers(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareKilometer)
+        let x = value;
+        Self(x / 1e6)
     }
 
     /// Returns the value expressed in InverseSquareKilometers (`km⁻²`).
     #[inline]
     pub fn as_inverse_square_kilometers(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareKilometer)
+        let x = self.0;
+        x * 1e6
     }
 
     /// Alias for [`Self::as_inverse_square_kilometers`].
@@ -183,13 +193,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareDecimeters (`dm⁻²`).
     #[inline]
     pub fn from_inverse_square_decimeters(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareDecimeter)
+        let x = value;
+        Self(x / 1e-2)
     }
 
     /// Returns the value expressed in InverseSquareDecimeters (`dm⁻²`).
     #[inline]
     pub fn as_inverse_square_decimeters(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareDecimeter)
+        let x = self.0;
+        x * 1e-2
     }
 
     /// Alias for [`Self::as_inverse_square_decimeters`].
@@ -201,13 +213,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareCentimeters (`cm⁻²`).
     #[inline]
     pub fn from_inverse_square_centimeters(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareCentimeter)
+        let x = value;
+        Self(x / 1e-4)
     }
 
     /// Returns the value expressed in InverseSquareCentimeters (`cm⁻²`).
     #[inline]
     pub fn as_inverse_square_centimeters(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareCentimeter)
+        let x = self.0;
+        x * 1e-4
     }
 
     /// Alias for [`Self::as_inverse_square_centimeters`].
@@ -219,13 +233,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMillimeters (`mm⁻²`).
     #[inline]
     pub fn from_inverse_square_millimeters(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareMillimeter)
+        let x = value;
+        Self(x / 1e-6)
     }
 
     /// Returns the value expressed in InverseSquareMillimeters (`mm⁻²`).
     #[inline]
     pub fn as_inverse_square_millimeters(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareMillimeter)
+        let x = self.0;
+        x * 1e-6
     }
 
     /// Alias for [`Self::as_inverse_square_millimeters`].
@@ -237,13 +253,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMicrometers (`µm⁻²`).
     #[inline]
     pub fn from_inverse_square_micrometers(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareMicrometer)
+        let x = value;
+        Self(x / 1e-12)
     }
 
     /// Returns the value expressed in InverseSquareMicrometers (`µm⁻²`).
     #[inline]
     pub fn as_inverse_square_micrometers(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareMicrometer)
+        let x = self.0;
+        x * 1e-12
     }
 
     /// Alias for [`Self::as_inverse_square_micrometers`].
@@ -255,13 +273,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMiles (`mi⁻²`).
     #[inline]
     pub fn from_inverse_square_miles(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareMile)
+        let x = value;
+        Self(x / (1609.344 * 1609.344))
     }
 
     /// Returns the value expressed in InverseSquareMiles (`mi⁻²`).
     #[inline]
     pub fn as_inverse_square_miles(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareMile)
+        let x = self.0;
+        x * (1609.344 * 1609.344)
     }
 
     /// Alias for [`Self::as_inverse_square_miles`].
@@ -273,13 +293,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareYards (`yd⁻²`).
     #[inline]
     pub fn from_inverse_square_yards(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareYard)
+        let x = value;
+        Self(x / (0.9144 * 0.9144))
     }
 
     /// Returns the value expressed in InverseSquareYards (`yd⁻²`).
     #[inline]
     pub fn as_inverse_square_yards(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareYard)
+        let x = self.0;
+        x * (0.9144 * 0.9144)
     }
 
     /// Alias for [`Self::as_inverse_square_yards`].
@@ -291,13 +313,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareFeet (`ft⁻²`).
     #[inline]
     pub fn from_inverse_square_feet(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareFoot)
+        let x = value;
+        Self(x / 9.290304e-2)
     }
 
     /// Returns the value expressed in InverseSquareFeet (`ft⁻²`).
     #[inline]
     pub fn as_inverse_square_feet(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareFoot)
+        let x = self.0;
+        x * 9.290304e-2
     }
 
     /// Alias for [`Self::as_inverse_square_feet`].
@@ -309,13 +333,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseUsSurveySquareFeet (`ft⁻² (US)`).
     #[inline]
     pub fn from_inverse_us_survey_square_feet(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+        let x = value;
+        Self(x / (1200.0 / 3937.0) / (1200.0 / 3937.0))
     }
 
     /// Returns the value expressed in InverseUsSurveySquareFeet (`ft⁻² (US)`).
     #[inline]
     pub fn as_inverse_us_survey_square_feet(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+        let x = self.0;
+        x * (1200.0 / 3937.0) * (1200.0 / 3937.0)
     }
 
     /// Alias for [`Self::as_inverse_us_survey_square_feet`].
@@ -327,13 +353,15 @@ impl ReciprocalArea {
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareInches (`in⁻²`).
     #[inline]
     pub fn from_inverse_square_inches(value: Num) -> Self {
-        Self::new(value, ReciprocalAreaUnit::InverseSquareInch)
+        let x = value;
+        Self(x / 0.00064516)
     }
 
     /// Returns the value expressed in InverseSquareInches (`in⁻²`).
     #[inline]
     pub fn as_inverse_square_inches(self) -> Num {
-        self.convert_to(ReciprocalAreaUnit::InverseSquareInch)
+        let x = self.0;
+        x * 0.00064516
     }
 
     /// Alias for [`Self::as_inverse_square_inches`].
@@ -356,42 +384,49 @@ impl crate::Quantity for ReciprocalArea {
 
 impl Add for ReciprocalArea {
     type Output = ReciprocalArea;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ReciprocalArea {
     type Output = ReciprocalArea;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ReciprocalArea {
     type Output = ReciprocalArea;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ReciprocalArea {
     type Output = ReciprocalArea;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ReciprocalArea> for Num {
     type Output = ReciprocalArea;
+    #[inline]
     fn mul(self, rhs: ReciprocalArea) -> ReciprocalArea {
         ReciprocalArea(self * rhs.0)
     }
 }
 impl Div<Num> for ReciprocalArea {
     type Output = ReciprocalArea;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ReciprocalArea {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

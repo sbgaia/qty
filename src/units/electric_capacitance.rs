@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -44,6 +46,7 @@ impl ElectricCapacitanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Farad => "F",
@@ -57,6 +60,7 @@ impl ElectricCapacitanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Farad => &["F"],
@@ -72,6 +76,7 @@ impl ElectricCapacitanceUnit {
 
 impl ElectricCapacitance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricCapacitanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -103,6 +108,7 @@ impl ElectricCapacitance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricCapacitanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -119,13 +125,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Farads (`F`).
     #[inline]
     pub fn from_farads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Farad)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Farads (`F`).
     #[inline]
     pub fn as_farads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Farad)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_farads`].
@@ -137,13 +145,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Picofarads (`pF`).
     #[inline]
     pub fn from_picofarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Picofarad)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picofarads (`pF`).
     #[inline]
     pub fn as_picofarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Picofarad)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picofarads`].
@@ -155,13 +165,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Nanofarads (`nF`).
     #[inline]
     pub fn from_nanofarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Nanofarad)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanofarads (`nF`).
     #[inline]
     pub fn as_nanofarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Nanofarad)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanofarads`].
@@ -173,13 +185,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Microfarads (`µF`).
     #[inline]
     pub fn from_microfarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Microfarad)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microfarads (`µF`).
     #[inline]
     pub fn as_microfarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Microfarad)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microfarads`].
@@ -191,13 +205,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Millifarads (`mF`).
     #[inline]
     pub fn from_millifarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Millifarad)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millifarads (`mF`).
     #[inline]
     pub fn as_millifarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Millifarad)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millifarads`].
@@ -209,13 +225,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Kilofarads (`kF`).
     #[inline]
     pub fn from_kilofarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Kilofarad)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilofarads (`kF`).
     #[inline]
     pub fn as_kilofarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Kilofarad)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilofarads`].
@@ -227,13 +245,15 @@ impl ElectricCapacitance {
     /// Creates a [`ElectricCapacitance`] from a value in Megafarads (`MF`).
     #[inline]
     pub fn from_megafarads(value: Num) -> Self {
-        Self::new(value, ElectricCapacitanceUnit::Megafarad)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megafarads (`MF`).
     #[inline]
     pub fn as_megafarads(self) -> Num {
-        self.convert_to(ElectricCapacitanceUnit::Megafarad)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megafarads`].
@@ -256,42 +276,49 @@ impl crate::Quantity for ElectricCapacitance {
 
 impl Add for ElectricCapacitance {
     type Output = ElectricCapacitance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricCapacitance {
     type Output = ElectricCapacitance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricCapacitance {
     type Output = ElectricCapacitance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricCapacitance {
     type Output = ElectricCapacitance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricCapacitance> for Num {
     type Output = ElectricCapacitance;
+    #[inline]
     fn mul(self, rhs: ElectricCapacitance) -> ElectricCapacitance {
         ElectricCapacitance(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricCapacitance {
     type Output = ElectricCapacitance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCapacitance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

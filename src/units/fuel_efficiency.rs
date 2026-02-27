@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -38,6 +40,7 @@ impl FuelEfficiencyUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::LiterPer100Kilometers => "l/100km",
@@ -48,6 +51,7 @@ impl FuelEfficiencyUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::LiterPer100Kilometers => &["l/100km"],
@@ -60,6 +64,7 @@ impl FuelEfficiencyUnit {
 
 impl FuelEfficiency {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: FuelEfficiencyUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -88,6 +93,7 @@ impl FuelEfficiency {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: FuelEfficiencyUnit) -> Num {
         let x = self.0;
         match unit {
@@ -101,13 +107,15 @@ impl FuelEfficiency {
     /// Creates a [`FuelEfficiency`] from a value in LitersPer100Kilometers (`l/100km`).
     #[inline]
     pub fn from_liters_per100_kilometers(value: Num) -> Self {
-        Self::new(value, FuelEfficiencyUnit::LiterPer100Kilometers)
+        let x = value;
+        Self(100.0 / x)
     }
 
     /// Returns the value expressed in LitersPer100Kilometers (`l/100km`).
     #[inline]
     pub fn as_liters_per100_kilometers(self) -> Num {
-        self.convert_to(FuelEfficiencyUnit::LiterPer100Kilometers)
+        let x = self.0;
+        100.0 / x
     }
 
     /// Alias for [`Self::as_liters_per100_kilometers`].
@@ -119,13 +127,15 @@ impl FuelEfficiency {
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUsGallon (`mpg (U.S.)`).
     #[inline]
     pub fn from_miles_per_us_gallon(value: Num) -> Self {
-        Self::new(value, FuelEfficiencyUnit::MilePerUsGallon)
+        let x = value;
+        Self(x * 1.609344 / 3.785411784)
     }
 
     /// Returns the value expressed in MilesPerUsGallon (`mpg (U.S.)`).
     #[inline]
     pub fn as_miles_per_us_gallon(self) -> Num {
-        self.convert_to(FuelEfficiencyUnit::MilePerUsGallon)
+        let x = self.0;
+        x * 3.785411784 / 1.609344
     }
 
     /// Alias for [`Self::as_miles_per_us_gallon`].
@@ -137,13 +147,15 @@ impl FuelEfficiency {
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUkGallon (`mpg (imp.)`).
     #[inline]
     pub fn from_miles_per_uk_gallon(value: Num) -> Self {
-        Self::new(value, FuelEfficiencyUnit::MilePerUkGallon)
+        let x = value;
+        Self(x * 1.609344 / 4.54609)
     }
 
     /// Returns the value expressed in MilesPerUkGallon (`mpg (imp.)`).
     #[inline]
     pub fn as_miles_per_uk_gallon(self) -> Num {
-        self.convert_to(FuelEfficiencyUnit::MilePerUkGallon)
+        let x = self.0;
+        x * 4.54609 / 1.609344
     }
 
     /// Alias for [`Self::as_miles_per_uk_gallon`].
@@ -155,13 +167,15 @@ impl FuelEfficiency {
     /// Creates a [`FuelEfficiency`] from a value in KilometersPerLiter (`km/l`).
     #[inline]
     pub fn from_kilometers_per_liter(value: Num) -> Self {
-        Self::new(value, FuelEfficiencyUnit::KilometerPerLiter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in KilometersPerLiter (`km/l`).
     #[inline]
     pub fn as_kilometers_per_liter(self) -> Num {
-        self.convert_to(FuelEfficiencyUnit::KilometerPerLiter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_kilometers_per_liter`].
@@ -184,42 +198,49 @@ impl crate::Quantity for FuelEfficiency {
 
 impl Add for FuelEfficiency {
     type Output = FuelEfficiency;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for FuelEfficiency {
     type Output = FuelEfficiency;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for FuelEfficiency {
     type Output = FuelEfficiency;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for FuelEfficiency {
     type Output = FuelEfficiency;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<FuelEfficiency> for Num {
     type Output = FuelEfficiency;
+    #[inline]
     fn mul(self, rhs: FuelEfficiency) -> FuelEfficiency {
         FuelEfficiency(self * rhs.0)
     }
 }
 impl Div<Num> for FuelEfficiency {
     type Output = FuelEfficiency;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for FuelEfficiency {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

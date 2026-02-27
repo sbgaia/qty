@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl PermittivityUnit {
     pub const ALL: &'static [Self] = &[Self::FaradPerMeter];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::FaradPerMeter => "F/m",
@@ -37,6 +40,7 @@ impl PermittivityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::FaradPerMeter => &["F/m"],
@@ -46,6 +50,7 @@ impl PermittivityUnit {
 
 impl Permittivity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: PermittivityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl Permittivity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: PermittivityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl Permittivity {
     /// Creates a [`Permittivity`] from a value in FaradsPerMeter (`F/m`).
     #[inline]
     pub fn from_farads_per_meter(value: Num) -> Self {
-        Self::new(value, PermittivityUnit::FaradPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in FaradsPerMeter (`F/m`).
     #[inline]
     pub fn as_farads_per_meter(self) -> Num {
-        self.convert_to(PermittivityUnit::FaradPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_farads_per_meter`].
@@ -110,42 +118,49 @@ impl crate::Quantity for Permittivity {
 
 impl Add for Permittivity {
     type Output = Permittivity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Permittivity {
     type Output = Permittivity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Permittivity {
     type Output = Permittivity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Permittivity {
     type Output = Permittivity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Permittivity> for Num {
     type Output = Permittivity;
+    #[inline]
     fn mul(self, rhs: Permittivity) -> Permittivity {
         Permittivity(self * rhs.0)
     }
 }
 impl Div<Num> for Permittivity {
     type Output = Permittivity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Permittivity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

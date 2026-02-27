@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -44,6 +46,7 @@ impl ElectricCurrentGradientUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::AmperePerSecond => "A/s",
@@ -57,6 +60,7 @@ impl ElectricCurrentGradientUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::AmperePerSecond => &["A/s"],
@@ -72,6 +76,7 @@ impl ElectricCurrentGradientUnit {
 
 impl ElectricCurrentGradient {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricCurrentGradientUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -103,6 +108,7 @@ impl ElectricCurrentGradient {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricCurrentGradientUnit) -> Num {
         let x = self.0;
         match unit {
@@ -119,13 +125,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerSecond (`A/s`).
     #[inline]
     pub fn from_amperes_per_second(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::AmperePerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in AmperesPerSecond (`A/s`).
     #[inline]
     pub fn as_amperes_per_second(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::AmperePerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_amperes_per_second`].
@@ -137,13 +145,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerSecond (`mA/s`).
     #[inline]
     pub fn from_milliamperes_per_second(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::MilliamperePerSecond)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilliamperesPerSecond (`mA/s`).
     #[inline]
     pub fn as_milliamperes_per_second(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::MilliamperePerSecond)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliamperes_per_second`].
@@ -155,13 +165,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMinute (`A/min`).
     #[inline]
     pub fn from_amperes_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::AmperePerMinute)
+        let x = value;
+        Self(x / 60.0)
     }
 
     /// Returns the value expressed in AmperesPerMinute (`A/min`).
     #[inline]
     pub fn as_amperes_per_minute(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::AmperePerMinute)
+        let x = self.0;
+        x * 60.0
     }
 
     /// Alias for [`Self::as_amperes_per_minute`].
@@ -173,13 +185,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerMinute (`mA/min`).
     #[inline]
     pub fn from_milliamperes_per_minute(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::MilliamperePerMinute)
+        let x = value;
+        Self((x * 1e-3) / 60.0)
     }
 
     /// Returns the value expressed in MilliamperesPerMinute (`mA/min`).
     #[inline]
     pub fn as_milliamperes_per_minute(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::MilliamperePerMinute)
+        let x = self.0;
+        (x / 1e-3) * 60.0
     }
 
     /// Alias for [`Self::as_milliamperes_per_minute`].
@@ -191,13 +205,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMillisecond (`A/ms`).
     #[inline]
     pub fn from_amperes_per_millisecond(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::AmperePerMillisecond)
+        let x = value;
+        Self(x * 1E3)
     }
 
     /// Returns the value expressed in AmperesPerMillisecond (`A/ms`).
     #[inline]
     pub fn as_amperes_per_millisecond(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::AmperePerMillisecond)
+        let x = self.0;
+        x / 1E3
     }
 
     /// Alias for [`Self::as_amperes_per_millisecond`].
@@ -209,13 +225,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMicrosecond (`A/μs`).
     #[inline]
     pub fn from_amperes_per_microsecond(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::AmperePerMicrosecond)
+        let x = value;
+        Self(x * 1E6)
     }
 
     /// Returns the value expressed in AmperesPerMicrosecond (`A/μs`).
     #[inline]
     pub fn as_amperes_per_microsecond(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+        let x = self.0;
+        x / 1E6
     }
 
     /// Alias for [`Self::as_amperes_per_microsecond`].
@@ -227,13 +245,15 @@ impl ElectricCurrentGradient {
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerNanosecond (`A/ns`).
     #[inline]
     pub fn from_amperes_per_nanosecond(value: Num) -> Self {
-        Self::new(value, ElectricCurrentGradientUnit::AmperePerNanosecond)
+        let x = value;
+        Self(x * 1E9)
     }
 
     /// Returns the value expressed in AmperesPerNanosecond (`A/ns`).
     #[inline]
     pub fn as_amperes_per_nanosecond(self) -> Num {
-        self.convert_to(ElectricCurrentGradientUnit::AmperePerNanosecond)
+        let x = self.0;
+        x / 1E9
     }
 
     /// Alias for [`Self::as_amperes_per_nanosecond`].
@@ -256,42 +276,49 @@ impl crate::Quantity for ElectricCurrentGradient {
 
 impl Add for ElectricCurrentGradient {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricCurrentGradient {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricCurrentGradient {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricCurrentGradient {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricCurrentGradient> for Num {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn mul(self, rhs: ElectricCurrentGradient) -> ElectricCurrentGradient {
         ElectricCurrentGradient(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricCurrentGradient {
     type Output = ElectricCurrentGradient;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricCurrentGradient {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

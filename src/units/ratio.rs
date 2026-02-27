@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -42,6 +44,7 @@ impl RatioUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::DecimalFraction => "",
@@ -54,6 +57,7 @@ impl RatioUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DecimalFraction => &[""],
@@ -68,6 +72,7 @@ impl RatioUnit {
 
 impl Ratio {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RatioUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -98,6 +103,7 @@ impl Ratio {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RatioUnit) -> Num {
         let x = self.0;
         match unit {
@@ -113,13 +119,15 @@ impl Ratio {
     /// Creates a [`Ratio`] from a value in DecimalFractions (``).
     #[inline]
     pub fn from_decimal_fractions(value: Num) -> Self {
-        Self::new(value, RatioUnit::DecimalFraction)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DecimalFractions (``).
     #[inline]
     pub fn as_decimal_fractions(self) -> Num {
-        self.convert_to(RatioUnit::DecimalFraction)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_decimal_fractions`].
@@ -131,25 +139,29 @@ impl Ratio {
     /// Creates a [`Ratio`] from a value in Percent (`%`).
     #[inline]
     pub fn from_percent(value: Num) -> Self {
-        Self::new(value, RatioUnit::Percent)
+        let x = value;
+        Self(x / 1e2)
     }
 
     /// Returns the value expressed in Percent (`%`).
     #[inline]
     pub fn as_percent(self) -> Num {
-        self.convert_to(RatioUnit::Percent)
+        let x = self.0;
+        x * 1e2
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerThousand (`‰`).
     #[inline]
     pub fn from_parts_per_thousand(value: Num) -> Self {
-        Self::new(value, RatioUnit::PartPerThousand)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in PartsPerThousand (`‰`).
     #[inline]
     pub fn as_parts_per_thousand(self) -> Num {
-        self.convert_to(RatioUnit::PartPerThousand)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_parts_per_thousand`].
@@ -161,13 +173,15 @@ impl Ratio {
     /// Creates a [`Ratio`] from a value in PartsPerMillion (`ppm`).
     #[inline]
     pub fn from_parts_per_million(value: Num) -> Self {
-        Self::new(value, RatioUnit::PartPerMillion)
+        let x = value;
+        Self(x / 1e6)
     }
 
     /// Returns the value expressed in PartsPerMillion (`ppm`).
     #[inline]
     pub fn as_parts_per_million(self) -> Num {
-        self.convert_to(RatioUnit::PartPerMillion)
+        let x = self.0;
+        x * 1e6
     }
 
     /// Alias for [`Self::as_parts_per_million`].
@@ -179,13 +193,15 @@ impl Ratio {
     /// Creates a [`Ratio`] from a value in PartsPerBillion (`ppb`).
     #[inline]
     pub fn from_parts_per_billion(value: Num) -> Self {
-        Self::new(value, RatioUnit::PartPerBillion)
+        let x = value;
+        Self(x / 1e9)
     }
 
     /// Returns the value expressed in PartsPerBillion (`ppb`).
     #[inline]
     pub fn as_parts_per_billion(self) -> Num {
-        self.convert_to(RatioUnit::PartPerBillion)
+        let x = self.0;
+        x * 1e9
     }
 
     /// Alias for [`Self::as_parts_per_billion`].
@@ -197,13 +213,15 @@ impl Ratio {
     /// Creates a [`Ratio`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn from_parts_per_trillion(value: Num) -> Self {
-        Self::new(value, RatioUnit::PartPerTrillion)
+        let x = value;
+        Self(x / 1e12)
     }
 
     /// Returns the value expressed in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn as_parts_per_trillion(self) -> Num {
-        self.convert_to(RatioUnit::PartPerTrillion)
+        let x = self.0;
+        x * 1e12
     }
 
     /// Alias for [`Self::as_parts_per_trillion`].
@@ -226,42 +244,49 @@ impl crate::Quantity for Ratio {
 
 impl Add for Ratio {
     type Output = Ratio;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Ratio {
     type Output = Ratio;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Ratio {
     type Output = Ratio;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Ratio {
     type Output = Ratio;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Ratio> for Num {
     type Output = Ratio;
+    #[inline]
     fn mul(self, rhs: Ratio) -> Ratio {
         Ratio(self * rhs.0)
     }
 }
 impl Div<Num> for Ratio {
     type Output = Ratio;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Ratio {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

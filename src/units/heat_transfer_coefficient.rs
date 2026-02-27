@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -40,6 +42,7 @@ impl HeatTransferCoefficientUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerSquareMeterKelvin => "W/(m²·K)",
@@ -51,6 +54,7 @@ impl HeatTransferCoefficientUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerSquareMeterKelvin => &["W/(m²·K)"],
@@ -74,6 +78,7 @@ impl HeatTransferCoefficientUnit {
 
 impl HeatTransferCoefficient {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: HeatTransferCoefficientUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -109,6 +114,7 @@ impl HeatTransferCoefficient {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: HeatTransferCoefficientUnit) -> Num {
         let x = self.0;
         match unit {
@@ -129,13 +135,15 @@ impl HeatTransferCoefficient {
     /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterKelvin (`W/(m²·K)`).
     #[inline]
     pub fn from_watts_per_square_meter_kelvin(value: Num) -> Self {
-        Self::new(value, HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerSquareMeterKelvin (`W/(m²·K)`).
     #[inline]
     pub fn as_watts_per_square_meter_kelvin(self) -> Num {
-        self.convert_to(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_square_meter_kelvin`].
@@ -147,16 +155,15 @@ impl HeatTransferCoefficient {
     /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterCelsius (`W/(m²·°C)`).
     #[inline]
     pub fn from_watts_per_square_meter_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            HeatTransferCoefficientUnit::WattPerSquareMeterCelsius,
-        )
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerSquareMeterCelsius (`W/(m²·°C)`).
     #[inline]
     pub fn as_watts_per_square_meter_celsius(self) -> Num {
-        self.convert_to(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_square_meter_celsius`].
@@ -168,16 +175,15 @@ impl HeatTransferCoefficient {
     /// Creates a [`HeatTransferCoefficient`] from a value in BtusPerHourSquareFootDegreeFahrenheit (`Btu/(h·ft²·°F)`).
     #[inline]
     pub fn from_btus_per_hour_square_foot_degree_fahrenheit(value: Num) -> Self {
-        Self::new(
-            value,
-            HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit,
-        )
+        let x = value;
+        Self(x * ((1055.05585262 / (0.3048 * 0.3048 * 3600.0)) * 1.8))
     }
 
     /// Returns the value expressed in BtusPerHourSquareFootDegreeFahrenheit (`Btu/(h·ft²·°F)`).
     #[inline]
     pub fn as_btus_per_hour_square_foot_degree_fahrenheit(self) -> Num {
-        self.convert_to(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+        let x = self.0;
+        x / ((1055.05585262 / (0.3048 * 0.3048 * 3600.0)) * 1.8)
     }
 
     /// Alias for [`Self::as_btus_per_hour_square_foot_degree_fahrenheit`].
@@ -189,16 +195,15 @@ impl HeatTransferCoefficient {
     /// Creates a [`HeatTransferCoefficient`] from a value in CaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
     #[inline]
     pub fn from_calories_per_hour_square_meter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius,
-        )
+        let x = value;
+        Self((x * 4.184) / 3600.0)
     }
 
     /// Returns the value expressed in CaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
     #[inline]
     pub fn as_calories_per_hour_square_meter_degree_celsius(self) -> Num {
-        self.convert_to(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+        let x = self.0;
+        (x / 4.184) * 3600.0
     }
 
     /// Alias for [`Self::as_calories_per_hour_square_meter_degree_celsius`].
@@ -210,16 +215,15 @@ impl HeatTransferCoefficient {
     /// Creates a [`HeatTransferCoefficient`] from a value in KilocaloriesPerHourSquareMeterDegreeCelsius (`kkcal/(h·m²·°C)`).
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter_degree_celsius(value: Num) -> Self {
-        Self::new(
-            value,
-            HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius,
-        )
+        let x = value;
+        Self(((x * 1e3) * 4.184) / 3600.0)
     }
 
     /// Returns the value expressed in KilocaloriesPerHourSquareMeterDegreeCelsius (`kkcal/(h·m²·°C)`).
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter_degree_celsius(self) -> Num {
-        self.convert_to(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+        let x = self.0;
+        ((x / 1e3) / 4.184) * 3600.0
     }
 
     /// Alias for [`Self::as_kilocalories_per_hour_square_meter_degree_celsius`].
@@ -242,42 +246,49 @@ impl crate::Quantity for HeatTransferCoefficient {
 
 impl Add for HeatTransferCoefficient {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for HeatTransferCoefficient {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for HeatTransferCoefficient {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for HeatTransferCoefficient {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<HeatTransferCoefficient> for Num {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn mul(self, rhs: HeatTransferCoefficient) -> HeatTransferCoefficient {
         HeatTransferCoefficient(self * rhs.0)
     }
 }
 impl Div<Num> for HeatTransferCoefficient {
     type Output = HeatTransferCoefficient;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for HeatTransferCoefficient {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

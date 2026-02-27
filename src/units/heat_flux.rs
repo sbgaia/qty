@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -66,6 +68,7 @@ impl HeatFluxUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerSquareMeter => "W/m²",
@@ -90,6 +93,7 @@ impl HeatFluxUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerSquareMeter => &["W/m²"],
@@ -116,6 +120,7 @@ impl HeatFluxUnit {
 
 impl HeatFlux {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: HeatFluxUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -158,6 +163,7 @@ impl HeatFlux {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: HeatFluxUnit) -> Num {
         let x = self.0;
         match unit {
@@ -185,13 +191,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn from_watts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::WattPerSquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn as_watts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::WattPerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts_per_square_meter`].
@@ -203,13 +211,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
     pub fn from_nanowatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::NanowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
     pub fn as_nanowatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::NanowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanowatts_per_square_meter`].
@@ -221,13 +231,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
     pub fn from_microwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::MicrowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
     pub fn as_microwatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::MicrowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microwatts_per_square_meter`].
@@ -239,13 +251,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
     pub fn from_milliwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::MilliwattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
     pub fn as_milliwatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::MilliwattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliwatts_per_square_meter`].
@@ -257,13 +271,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in CentiwattsPerSquareMeter (`cW/m²`).
     #[inline]
     pub fn from_centiwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::CentiwattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentiwattsPerSquareMeter (`cW/m²`).
     #[inline]
     pub fn as_centiwatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::CentiwattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centiwatts_per_square_meter`].
@@ -275,13 +291,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in DeciwattsPerSquareMeter (`dW/m²`).
     #[inline]
     pub fn from_deciwatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::DeciwattPerSquareMeter)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DeciwattsPerSquareMeter (`dW/m²`).
     #[inline]
     pub fn as_deciwatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::DeciwattPerSquareMeter)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_deciwatts_per_square_meter`].
@@ -293,13 +311,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
     pub fn from_kilowatts_per_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::KilowattPerSquareMeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::KilowattPerSquareMeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilowatts_per_square_meter`].
@@ -311,13 +331,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in WattsPerSquareInch (`W/in²`).
     #[inline]
     pub fn from_watts_per_square_inch(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::WattPerSquareInch)
+        let x = value;
+        Self(x / (2.54e-2 * 2.54e-2))
     }
 
     /// Returns the value expressed in WattsPerSquareInch (`W/in²`).
     #[inline]
     pub fn as_watts_per_square_inch(self) -> Num {
-        self.convert_to(HeatFluxUnit::WattPerSquareInch)
+        let x = self.0;
+        x * (2.54e-2 * 2.54e-2)
     }
 
     /// Alias for [`Self::as_watts_per_square_inch`].
@@ -329,13 +351,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in WattsPerSquareFoot (`W/ft²`).
     #[inline]
     pub fn from_watts_per_square_foot(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::WattPerSquareFoot)
+        let x = value;
+        Self(x / (0.3048 * 0.3048))
     }
 
     /// Returns the value expressed in WattsPerSquareFoot (`W/ft²`).
     #[inline]
     pub fn as_watts_per_square_foot(self) -> Num {
-        self.convert_to(HeatFluxUnit::WattPerSquareFoot)
+        let x = self.0;
+        x * (0.3048 * 0.3048)
     }
 
     /// Alias for [`Self::as_watts_per_square_foot`].
@@ -347,13 +371,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in BtusPerSecondSquareInch (`BTU/(s·in²)`).
     #[inline]
     pub fn from_btus_per_second_square_inch(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::BtuPerSecondSquareInch)
+        let x = value;
+        Self(x * 1055.05585262 / (2.54e-2 * 2.54e-2))
     }
 
     /// Returns the value expressed in BtusPerSecondSquareInch (`BTU/(s·in²)`).
     #[inline]
     pub fn as_btus_per_second_square_inch(self) -> Num {
-        self.convert_to(HeatFluxUnit::BtuPerSecondSquareInch)
+        let x = self.0;
+        x * (2.54e-2 * 2.54e-2) / 1055.05585262
     }
 
     /// Alias for [`Self::as_btus_per_second_square_inch`].
@@ -365,13 +391,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in BtusPerSecondSquareFoot (`BTU/(s·ft²)`).
     #[inline]
     pub fn from_btus_per_second_square_foot(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::BtuPerSecondSquareFoot)
+        let x = value;
+        Self(x * 1055.05585262 / (0.3048 * 0.3048))
     }
 
     /// Returns the value expressed in BtusPerSecondSquareFoot (`BTU/(s·ft²)`).
     #[inline]
     pub fn as_btus_per_second_square_foot(self) -> Num {
-        self.convert_to(HeatFluxUnit::BtuPerSecondSquareFoot)
+        let x = self.0;
+        x * (0.3048 * 0.3048) / 1055.05585262
     }
 
     /// Alias for [`Self::as_btus_per_second_square_foot`].
@@ -383,13 +411,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in BtusPerMinuteSquareFoot (`BTU/(min·ft²)`).
     #[inline]
     pub fn from_btus_per_minute_square_foot(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::BtuPerMinuteSquareFoot)
+        let x = value;
+        Self(x * 1055.05585262 / (0.3048 * 0.3048 * 60.0))
     }
 
     /// Returns the value expressed in BtusPerMinuteSquareFoot (`BTU/(min·ft²)`).
     #[inline]
     pub fn as_btus_per_minute_square_foot(self) -> Num {
-        self.convert_to(HeatFluxUnit::BtuPerMinuteSquareFoot)
+        let x = self.0;
+        x * (0.3048 * 0.3048 * 60.0) / 1055.05585262
     }
 
     /// Alias for [`Self::as_btus_per_minute_square_foot`].
@@ -401,13 +431,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in BtusPerHourSquareFoot (`BTU/(h·ft²)`).
     #[inline]
     pub fn from_btus_per_hour_square_foot(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::BtuPerHourSquareFoot)
+        let x = value;
+        Self(x * 1055.05585262 / (0.3048 * 0.3048 * 3600.0))
     }
 
     /// Returns the value expressed in BtusPerHourSquareFoot (`BTU/(h·ft²)`).
     #[inline]
     pub fn as_btus_per_hour_square_foot(self) -> Num {
-        self.convert_to(HeatFluxUnit::BtuPerHourSquareFoot)
+        let x = self.0;
+        x * (0.3048 * 0.3048 * 3600.0) / 1055.05585262
     }
 
     /// Alias for [`Self::as_btus_per_hour_square_foot`].
@@ -419,13 +451,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in CaloriesPerSecondSquareCentimeter (`cal/(s·cm²)`).
     #[inline]
     pub fn from_calories_per_second_square_centimeter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+        let x = value;
+        Self(x * 4.184e4)
     }
 
     /// Returns the value expressed in CaloriesPerSecondSquareCentimeter (`cal/(s·cm²)`).
     #[inline]
     pub fn as_calories_per_second_square_centimeter(self) -> Num {
-        self.convert_to(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+        let x = self.0;
+        x / 4.184e4
     }
 
     /// Alias for [`Self::as_calories_per_second_square_centimeter`].
@@ -437,13 +471,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in KilocaloriesPerSecondSquareCentimeter (`kcal/(s·cm²)`).
     #[inline]
     pub fn from_kilocalories_per_second_square_centimeter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) * 4.184e4)
     }
 
     /// Returns the value expressed in KilocaloriesPerSecondSquareCentimeter (`kcal/(s·cm²)`).
     #[inline]
     pub fn as_kilocalories_per_second_square_centimeter(self) -> Num {
-        self.convert_to(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) / 4.184e4
     }
 
     /// Alias for [`Self::as_kilocalories_per_second_square_centimeter`].
@@ -455,13 +491,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in KilocaloriesPerHourSquareMeter (`kcal/(h·m²)`).
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::KilocaloriePerHourSquareMeter)
+        let x = value;
+        Self(x * 4.184e3 / 3600.0)
     }
 
     /// Returns the value expressed in KilocaloriesPerHourSquareMeter (`kcal/(h·m²)`).
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter(self) -> Num {
-        self.convert_to(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+        let x = self.0;
+        x * 3600.0 / 4.184e3
     }
 
     /// Alias for [`Self::as_kilocalories_per_hour_square_meter`].
@@ -473,13 +511,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in PoundsForcePerFootSecond (`lbf/(ft·s)`).
     #[inline]
     pub fn from_pounds_force_per_foot_second(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::PoundForcePerFootSecond)
+        let x = value;
+        Self(x * 1.3558179483314004 / 9.290304e-2)
     }
 
     /// Returns the value expressed in PoundsForcePerFootSecond (`lbf/(ft·s)`).
     #[inline]
     pub fn as_pounds_force_per_foot_second(self) -> Num {
-        self.convert_to(HeatFluxUnit::PoundForcePerFootSecond)
+        let x = self.0;
+        x * 9.290304e-2 / 1.3558179483314004
     }
 
     /// Alias for [`Self::as_pounds_force_per_foot_second`].
@@ -491,13 +531,15 @@ impl HeatFlux {
     /// Creates a [`HeatFlux`] from a value in PoundsPerSecondCubed (`lb/s³`).
     #[inline]
     pub fn from_pounds_per_second_cubed(value: Num) -> Self {
-        Self::new(value, HeatFluxUnit::PoundPerSecondCubed)
+        let x = value;
+        Self(x * 4.5359237e-1)
     }
 
     /// Returns the value expressed in PoundsPerSecondCubed (`lb/s³`).
     #[inline]
     pub fn as_pounds_per_second_cubed(self) -> Num {
-        self.convert_to(HeatFluxUnit::PoundPerSecondCubed)
+        let x = self.0;
+        x / 4.5359237e-1
     }
 
     /// Alias for [`Self::as_pounds_per_second_cubed`].
@@ -520,42 +562,49 @@ impl crate::Quantity for HeatFlux {
 
 impl Add for HeatFlux {
     type Output = HeatFlux;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for HeatFlux {
     type Output = HeatFlux;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for HeatFlux {
     type Output = HeatFlux;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for HeatFlux {
     type Output = HeatFlux;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<HeatFlux> for Num {
     type Output = HeatFlux;
+    #[inline]
     fn mul(self, rhs: HeatFlux) -> HeatFlux {
         HeatFlux(self * rhs.0)
     }
 }
 impl Div<Num> for HeatFlux {
     type Output = HeatFlux;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for HeatFlux {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

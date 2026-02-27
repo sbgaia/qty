@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -38,6 +40,7 @@ impl TemperatureGradientUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::KelvinPerMeter => "∆°K/m",
@@ -48,6 +51,7 @@ impl TemperatureGradientUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::KelvinPerMeter => &["∆°K/m"],
@@ -60,6 +64,7 @@ impl TemperatureGradientUnit {
 
 impl TemperatureGradient {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: TemperatureGradientUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -88,6 +93,7 @@ impl TemperatureGradient {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: TemperatureGradientUnit) -> Num {
         let x = self.0;
         match unit {
@@ -101,13 +107,15 @@ impl TemperatureGradient {
     /// Creates a [`TemperatureGradient`] from a value in KelvinsPerMeter (`∆°K/m`).
     #[inline]
     pub fn from_kelvins_per_meter(value: Num) -> Self {
-        Self::new(value, TemperatureGradientUnit::KelvinPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in KelvinsPerMeter (`∆°K/m`).
     #[inline]
     pub fn as_kelvins_per_meter(self) -> Num {
-        self.convert_to(TemperatureGradientUnit::KelvinPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_kelvins_per_meter`].
@@ -119,13 +127,15 @@ impl TemperatureGradient {
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
     pub fn from_degrees_celsius_per_meter(value: Num) -> Self {
-        Self::new(value, TemperatureGradientUnit::DegreeCelsiusPerMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
     pub fn as_degrees_celsius_per_meter(self) -> Num {
-        self.convert_to(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_meter`].
@@ -137,13 +147,15 @@ impl TemperatureGradient {
     /// Creates a [`TemperatureGradient`] from a value in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
     pub fn from_degrees_fahrenheit_per_foot(value: Num) -> Self {
-        Self::new(value, TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+        let x = value;
+        Self((x / 0.3048) * 5.0 / 9.0)
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
     pub fn as_degrees_fahrenheit_per_foot(self) -> Num {
-        self.convert_to(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+        let x = self.0;
+        (x * 0.3048) * 9.0 / 5.0
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_foot`].
@@ -155,13 +167,15 @@ impl TemperatureGradient {
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
     pub fn from_degrees_celsius_per_kilometer(value: Num) -> Self {
-        Self::new(value, TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
     pub fn as_degrees_celsius_per_kilometer(self) -> Num {
-        self.convert_to(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_kilometer`].
@@ -184,42 +198,49 @@ impl crate::Quantity for TemperatureGradient {
 
 impl Add for TemperatureGradient {
     type Output = TemperatureGradient;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for TemperatureGradient {
     type Output = TemperatureGradient;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for TemperatureGradient {
     type Output = TemperatureGradient;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for TemperatureGradient {
     type Output = TemperatureGradient;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<TemperatureGradient> for Num {
     type Output = TemperatureGradient;
+    #[inline]
     fn mul(self, rhs: TemperatureGradient) -> TemperatureGradient {
         TemperatureGradient(self * rhs.0)
     }
 }
 impl Div<Num> for TemperatureGradient {
     type Output = TemperatureGradient;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for TemperatureGradient {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

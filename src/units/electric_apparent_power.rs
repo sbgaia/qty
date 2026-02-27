@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -42,6 +44,7 @@ impl ElectricApparentPowerUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Voltampere => "VA",
@@ -54,6 +57,7 @@ impl ElectricApparentPowerUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Voltampere => &["VA"],
@@ -68,6 +72,7 @@ impl ElectricApparentPowerUnit {
 
 impl ElectricApparentPower {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricApparentPowerUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -98,6 +103,7 @@ impl ElectricApparentPower {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricApparentPowerUnit) -> Num {
         let x = self.0;
         match unit {
@@ -113,13 +119,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Voltamperes (`VA`).
     #[inline]
     pub fn from_voltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Voltampere)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Voltamperes (`VA`).
     #[inline]
     pub fn as_voltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Voltampere)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_voltamperes`].
@@ -131,13 +139,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Microvoltamperes (`µVA`).
     #[inline]
     pub fn from_microvoltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Microvoltampere)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microvoltamperes (`µVA`).
     #[inline]
     pub fn as_microvoltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Microvoltampere)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microvoltamperes`].
@@ -149,13 +159,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Millivoltamperes (`mVA`).
     #[inline]
     pub fn from_millivoltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Millivoltampere)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millivoltamperes (`mVA`).
     #[inline]
     pub fn as_millivoltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Millivoltampere)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millivoltamperes`].
@@ -167,13 +179,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Kilovoltamperes (`kVA`).
     #[inline]
     pub fn from_kilovoltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Kilovoltampere)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilovoltamperes (`kVA`).
     #[inline]
     pub fn as_kilovoltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Kilovoltampere)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilovoltamperes`].
@@ -185,13 +199,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Megavoltamperes (`MVA`).
     #[inline]
     pub fn from_megavoltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Megavoltampere)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megavoltamperes (`MVA`).
     #[inline]
     pub fn as_megavoltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Megavoltampere)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megavoltamperes`].
@@ -203,13 +219,15 @@ impl ElectricApparentPower {
     /// Creates a [`ElectricApparentPower`] from a value in Gigavoltamperes (`GVA`).
     #[inline]
     pub fn from_gigavoltamperes(value: Num) -> Self {
-        Self::new(value, ElectricApparentPowerUnit::Gigavoltampere)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigavoltamperes (`GVA`).
     #[inline]
     pub fn as_gigavoltamperes(self) -> Num {
-        self.convert_to(ElectricApparentPowerUnit::Gigavoltampere)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigavoltamperes`].
@@ -232,42 +250,49 @@ impl crate::Quantity for ElectricApparentPower {
 
 impl Add for ElectricApparentPower {
     type Output = ElectricApparentPower;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricApparentPower {
     type Output = ElectricApparentPower;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricApparentPower {
     type Output = ElectricApparentPower;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricApparentPower {
     type Output = ElectricApparentPower;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricApparentPower> for Num {
     type Output = ElectricApparentPower;
+    #[inline]
     fn mul(self, rhs: ElectricApparentPower) -> ElectricApparentPower {
         ElectricApparentPower(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricApparentPower {
     type Output = ElectricApparentPower;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricApparentPower {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

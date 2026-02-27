@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -36,6 +38,7 @@ impl ElectricSurfaceChargeDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::CoulombPerSquareMeter => "C/m²",
@@ -45,6 +48,7 @@ impl ElectricSurfaceChargeDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CoulombPerSquareMeter => &["C/m²"],
@@ -56,6 +60,7 @@ impl ElectricSurfaceChargeDensityUnit {
 
 impl ElectricSurfaceChargeDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricSurfaceChargeDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl ElectricSurfaceChargeDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricSurfaceChargeDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -95,16 +101,15 @@ impl ElectricSurfaceChargeDensity {
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareMeter (`C/m²`).
     #[inline]
     pub fn from_coulombs_per_square_meter(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter,
-        )
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in CoulombsPerSquareMeter (`C/m²`).
     #[inline]
     pub fn as_coulombs_per_square_meter(self) -> Num {
-        self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_coulombs_per_square_meter`].
@@ -116,16 +121,15 @@ impl ElectricSurfaceChargeDensity {
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareCentimeter (`C/cm²`).
     #[inline]
     pub fn from_coulombs_per_square_centimeter(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter,
-        )
+        let x = value;
+        Self(x * 1.0e4)
     }
 
     /// Returns the value expressed in CoulombsPerSquareCentimeter (`C/cm²`).
     #[inline]
     pub fn as_coulombs_per_square_centimeter(self) -> Num {
-        self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+        let x = self.0;
+        x / 1.0e4
     }
 
     /// Alias for [`Self::as_coulombs_per_square_centimeter`].
@@ -137,16 +141,15 @@ impl ElectricSurfaceChargeDensity {
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareInch (`C/in²`).
     #[inline]
     pub fn from_coulombs_per_square_inch(value: Num) -> Self {
-        Self::new(
-            value,
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch,
-        )
+        let x = value;
+        Self(x / 0.00064516)
     }
 
     /// Returns the value expressed in CoulombsPerSquareInch (`C/in²`).
     #[inline]
     pub fn as_coulombs_per_square_inch(self) -> Num {
-        self.convert_to(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+        let x = self.0;
+        x * 0.00064516
     }
 
     /// Alias for [`Self::as_coulombs_per_square_inch`].
@@ -169,42 +172,49 @@ impl crate::Quantity for ElectricSurfaceChargeDensity {
 
 impl Add for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricSurfaceChargeDensity> for Num {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn mul(self, rhs: ElectricSurfaceChargeDensity) -> ElectricSurfaceChargeDensity {
         ElectricSurfaceChargeDensity(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricSurfaceChargeDensity {
     type Output = ElectricSurfaceChargeDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricSurfaceChargeDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

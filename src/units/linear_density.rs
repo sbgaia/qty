@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -66,6 +68,7 @@ impl LinearDensityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerMillimeter => "g/mm",
@@ -90,6 +93,7 @@ impl LinearDensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerMillimeter => &["g/mm"],
@@ -116,6 +120,7 @@ impl LinearDensityUnit {
 
 impl LinearDensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LinearDensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -158,6 +163,7 @@ impl LinearDensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LinearDensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -185,13 +191,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in GramsPerMillimeter (`g/mm`).
     #[inline]
     pub fn from_grams_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::GramPerMillimeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in GramsPerMillimeter (`g/mm`).
     #[inline]
     pub fn as_grams_per_millimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::GramPerMillimeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_grams_per_millimeter`].
@@ -203,13 +211,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerMillimeter (`µg/mm`).
     #[inline]
     pub fn from_micrograms_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MicrogramPerMillimeter)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrogramsPerMillimeter (`µg/mm`).
     #[inline]
     pub fn as_micrograms_per_millimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MicrogramPerMillimeter)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrograms_per_millimeter`].
@@ -221,13 +231,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MilligramsPerMillimeter (`mg/mm`).
     #[inline]
     pub fn from_milligrams_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MilligramPerMillimeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilligramsPerMillimeter (`mg/mm`).
     #[inline]
     pub fn as_milligrams_per_millimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MilligramPerMillimeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milligrams_per_millimeter`].
@@ -239,13 +251,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in KilogramsPerMillimeter (`kg/mm`).
     #[inline]
     pub fn from_kilograms_per_millimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::KilogramPerMillimeter)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilogramsPerMillimeter (`kg/mm`).
     #[inline]
     pub fn as_kilograms_per_millimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::KilogramPerMillimeter)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilograms_per_millimeter`].
@@ -257,13 +271,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in GramsPerCentimeter (`g/cm`).
     #[inline]
     pub fn from_grams_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::GramPerCentimeter)
+        let x = value;
+        Self(x * 1e-1)
     }
 
     /// Returns the value expressed in GramsPerCentimeter (`g/cm`).
     #[inline]
     pub fn as_grams_per_centimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::GramPerCentimeter)
+        let x = self.0;
+        x / 1e-1
     }
 
     /// Alias for [`Self::as_grams_per_centimeter`].
@@ -275,13 +291,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerCentimeter (`µg/cm`).
     #[inline]
     pub fn from_micrograms_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MicrogramPerCentimeter)
+        let x = value;
+        Self((x * 1e-6) * 1e-1)
     }
 
     /// Returns the value expressed in MicrogramsPerCentimeter (`µg/cm`).
     #[inline]
     pub fn as_micrograms_per_centimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MicrogramPerCentimeter)
+        let x = self.0;
+        (x / 1e-6) / 1e-1
     }
 
     /// Alias for [`Self::as_micrograms_per_centimeter`].
@@ -293,13 +311,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MilligramsPerCentimeter (`mg/cm`).
     #[inline]
     pub fn from_milligrams_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MilligramPerCentimeter)
+        let x = value;
+        Self((x * 1e-3) * 1e-1)
     }
 
     /// Returns the value expressed in MilligramsPerCentimeter (`mg/cm`).
     #[inline]
     pub fn as_milligrams_per_centimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MilligramPerCentimeter)
+        let x = self.0;
+        (x / 1e-3) / 1e-1
     }
 
     /// Alias for [`Self::as_milligrams_per_centimeter`].
@@ -311,13 +331,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in KilogramsPerCentimeter (`kg/cm`).
     #[inline]
     pub fn from_kilograms_per_centimeter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::KilogramPerCentimeter)
+        let x = value;
+        Self((x * 1e3) * 1e-1)
     }
 
     /// Returns the value expressed in KilogramsPerCentimeter (`kg/cm`).
     #[inline]
     pub fn as_kilograms_per_centimeter(self) -> Num {
-        self.convert_to(LinearDensityUnit::KilogramPerCentimeter)
+        let x = self.0;
+        (x / 1e3) / 1e-1
     }
 
     /// Alias for [`Self::as_kilograms_per_centimeter`].
@@ -329,13 +351,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in GramsPerMeter (`g/m`).
     #[inline]
     pub fn from_grams_per_meter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::GramPerMeter)
+        let x = value;
+        Self(x * 1e-3)
     }
 
     /// Returns the value expressed in GramsPerMeter (`g/m`).
     #[inline]
     pub fn as_grams_per_meter(self) -> Num {
-        self.convert_to(LinearDensityUnit::GramPerMeter)
+        let x = self.0;
+        x / 1e-3
     }
 
     /// Alias for [`Self::as_grams_per_meter`].
@@ -347,13 +371,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerMeter (`µg/m`).
     #[inline]
     pub fn from_micrograms_per_meter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MicrogramPerMeter)
+        let x = value;
+        Self((x * 1e-6) * 1e-3)
     }
 
     /// Returns the value expressed in MicrogramsPerMeter (`µg/m`).
     #[inline]
     pub fn as_micrograms_per_meter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MicrogramPerMeter)
+        let x = self.0;
+        (x / 1e-6) / 1e-3
     }
 
     /// Alias for [`Self::as_micrograms_per_meter`].
@@ -365,13 +391,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MilligramsPerMeter (`mg/m`).
     #[inline]
     pub fn from_milligrams_per_meter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MilligramPerMeter)
+        let x = value;
+        Self((x * 1e-3) * 1e-3)
     }
 
     /// Returns the value expressed in MilligramsPerMeter (`mg/m`).
     #[inline]
     pub fn as_milligrams_per_meter(self) -> Num {
-        self.convert_to(LinearDensityUnit::MilligramPerMeter)
+        let x = self.0;
+        (x / 1e-3) / 1e-3
     }
 
     /// Alias for [`Self::as_milligrams_per_meter`].
@@ -383,13 +411,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in KilogramsPerMeter (`kg/m`).
     #[inline]
     pub fn from_kilograms_per_meter(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::KilogramPerMeter)
+        let x = value;
+        Self((x * 1e3) * 1e-3)
     }
 
     /// Returns the value expressed in KilogramsPerMeter (`kg/m`).
     #[inline]
     pub fn as_kilograms_per_meter(self) -> Num {
-        self.convert_to(LinearDensityUnit::KilogramPerMeter)
+        let x = self.0;
+        (x / 1e3) / 1e-3
     }
 
     /// Alias for [`Self::as_kilograms_per_meter`].
@@ -401,13 +431,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in PoundsPerInch (`lb/in`).
     #[inline]
     pub fn from_pounds_per_inch(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::PoundPerInch)
+        let x = value;
+        Self(x * 0.45359237 / 2.54e-2)
     }
 
     /// Returns the value expressed in PoundsPerInch (`lb/in`).
     #[inline]
     pub fn as_pounds_per_inch(self) -> Num {
-        self.convert_to(LinearDensityUnit::PoundPerInch)
+        let x = self.0;
+        x * 2.54e-2 / 0.45359237
     }
 
     /// Alias for [`Self::as_pounds_per_inch`].
@@ -419,13 +451,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in PoundsPerFoot (`lb/ft`).
     #[inline]
     pub fn from_pounds_per_foot(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::PoundPerFoot)
+        let x = value;
+        Self(x * 0.45359237 / 0.3048)
     }
 
     /// Returns the value expressed in PoundsPerFoot (`lb/ft`).
     #[inline]
     pub fn as_pounds_per_foot(self) -> Num {
-        self.convert_to(LinearDensityUnit::PoundPerFoot)
+        let x = self.0;
+        x * 0.3048 / 0.45359237
     }
 
     /// Alias for [`Self::as_pounds_per_foot`].
@@ -437,13 +471,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in GramsPerFoot (`g/ft`).
     #[inline]
     pub fn from_grams_per_foot(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::GramPerFoot)
+        let x = value;
+        Self(x * (1e-3 / 0.3048))
     }
 
     /// Returns the value expressed in GramsPerFoot (`g/ft`).
     #[inline]
     pub fn as_grams_per_foot(self) -> Num {
-        self.convert_to(LinearDensityUnit::GramPerFoot)
+        let x = self.0;
+        x / (1e-3 / 0.3048)
     }
 
     /// Alias for [`Self::as_grams_per_foot`].
@@ -455,13 +491,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerFoot (`µg/ft`).
     #[inline]
     pub fn from_micrograms_per_foot(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MicrogramPerFoot)
+        let x = value;
+        Self((x * 1e-6) * (1e-3 / 0.3048))
     }
 
     /// Returns the value expressed in MicrogramsPerFoot (`µg/ft`).
     #[inline]
     pub fn as_micrograms_per_foot(self) -> Num {
-        self.convert_to(LinearDensityUnit::MicrogramPerFoot)
+        let x = self.0;
+        (x / 1e-6) / (1e-3 / 0.3048)
     }
 
     /// Alias for [`Self::as_micrograms_per_foot`].
@@ -473,13 +511,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in MilligramsPerFoot (`mg/ft`).
     #[inline]
     pub fn from_milligrams_per_foot(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::MilligramPerFoot)
+        let x = value;
+        Self((x * 1e-3) * (1e-3 / 0.3048))
     }
 
     /// Returns the value expressed in MilligramsPerFoot (`mg/ft`).
     #[inline]
     pub fn as_milligrams_per_foot(self) -> Num {
-        self.convert_to(LinearDensityUnit::MilligramPerFoot)
+        let x = self.0;
+        (x / 1e-3) / (1e-3 / 0.3048)
     }
 
     /// Alias for [`Self::as_milligrams_per_foot`].
@@ -491,13 +531,15 @@ impl LinearDensity {
     /// Creates a [`LinearDensity`] from a value in KilogramsPerFoot (`kg/ft`).
     #[inline]
     pub fn from_kilograms_per_foot(value: Num) -> Self {
-        Self::new(value, LinearDensityUnit::KilogramPerFoot)
+        let x = value;
+        Self((x * 1e3) * (1e-3 / 0.3048))
     }
 
     /// Returns the value expressed in KilogramsPerFoot (`kg/ft`).
     #[inline]
     pub fn as_kilograms_per_foot(self) -> Num {
-        self.convert_to(LinearDensityUnit::KilogramPerFoot)
+        let x = self.0;
+        (x / 1e3) / (1e-3 / 0.3048)
     }
 
     /// Alias for [`Self::as_kilograms_per_foot`].
@@ -520,42 +562,49 @@ impl crate::Quantity for LinearDensity {
 
 impl Add for LinearDensity {
     type Output = LinearDensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for LinearDensity {
     type Output = LinearDensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for LinearDensity {
     type Output = LinearDensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for LinearDensity {
     type Output = LinearDensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<LinearDensity> for Num {
     type Output = LinearDensity;
+    #[inline]
     fn mul(self, rhs: LinearDensity) -> LinearDensity {
         LinearDensity(self * rhs.0)
     }
 }
 impl Div<Num> for LinearDensity {
     type Output = LinearDensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LinearDensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

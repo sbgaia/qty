@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -38,6 +40,7 @@ impl AmplitudeRatioUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::DecibelVolt => "dBV",
@@ -48,6 +51,7 @@ impl AmplitudeRatioUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DecibelVolt => &["dBV"],
@@ -60,6 +64,7 @@ impl AmplitudeRatioUnit {
 
 impl AmplitudeRatio {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AmplitudeRatioUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -88,6 +93,7 @@ impl AmplitudeRatio {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AmplitudeRatioUnit) -> Num {
         let x = self.0;
         match unit {
@@ -101,13 +107,15 @@ impl AmplitudeRatio {
     /// Creates a [`AmplitudeRatio`] from a value in DecibelVolts (`dBV`).
     #[inline]
     pub fn from_decibel_volts(value: Num) -> Self {
-        Self::new(value, AmplitudeRatioUnit::DecibelVolt)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in DecibelVolts (`dBV`).
     #[inline]
     pub fn as_decibel_volts(self) -> Num {
-        self.convert_to(AmplitudeRatioUnit::DecibelVolt)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_decibel_volts`].
@@ -119,13 +127,15 @@ impl AmplitudeRatio {
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMicrovolts (`dBµV`).
     #[inline]
     pub fn from_decibel_microvolts(value: Num) -> Self {
-        Self::new(value, AmplitudeRatioUnit::DecibelMicrovolt)
+        let x = value;
+        Self(x - 120.0)
     }
 
     /// Returns the value expressed in DecibelMicrovolts (`dBµV`).
     #[inline]
     pub fn as_decibel_microvolts(self) -> Num {
-        self.convert_to(AmplitudeRatioUnit::DecibelMicrovolt)
+        let x = self.0;
+        x + 120.0
     }
 
     /// Alias for [`Self::as_decibel_microvolts`].
@@ -137,13 +147,15 @@ impl AmplitudeRatio {
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMillivolts (`dBmV`).
     #[inline]
     pub fn from_decibel_millivolts(value: Num) -> Self {
-        Self::new(value, AmplitudeRatioUnit::DecibelMillivolt)
+        let x = value;
+        Self(x - 60.0)
     }
 
     /// Returns the value expressed in DecibelMillivolts (`dBmV`).
     #[inline]
     pub fn as_decibel_millivolts(self) -> Num {
-        self.convert_to(AmplitudeRatioUnit::DecibelMillivolt)
+        let x = self.0;
+        x + 60.0
     }
 
     /// Alias for [`Self::as_decibel_millivolts`].
@@ -155,13 +167,15 @@ impl AmplitudeRatio {
     /// Creates a [`AmplitudeRatio`] from a value in DecibelsUnloaded (`dBu`).
     #[inline]
     pub fn from_decibels_unloaded(value: Num) -> Self {
-        Self::new(value, AmplitudeRatioUnit::DecibelUnloaded)
+        let x = value;
+        Self(x - 2.218487499)
     }
 
     /// Returns the value expressed in DecibelsUnloaded (`dBu`).
     #[inline]
     pub fn as_decibels_unloaded(self) -> Num {
-        self.convert_to(AmplitudeRatioUnit::DecibelUnloaded)
+        let x = self.0;
+        x + 2.218487499
     }
 
     /// Alias for [`Self::as_decibels_unloaded`].
@@ -184,42 +198,49 @@ impl crate::Quantity for AmplitudeRatio {
 
 impl Add for AmplitudeRatio {
     type Output = AmplitudeRatio;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for AmplitudeRatio {
     type Output = AmplitudeRatio;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for AmplitudeRatio {
     type Output = AmplitudeRatio;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for AmplitudeRatio {
     type Output = AmplitudeRatio;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<AmplitudeRatio> for Num {
     type Output = AmplitudeRatio;
+    #[inline]
     fn mul(self, rhs: AmplitudeRatio) -> AmplitudeRatio {
         AmplitudeRatio(self * rhs.0)
     }
 }
 impl Div<Num> for AmplitudeRatio {
     type Output = AmplitudeRatio;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AmplitudeRatio {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

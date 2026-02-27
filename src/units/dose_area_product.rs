@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -80,6 +82,7 @@ impl DoseAreaProductUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GraySquareMeter => "Gy·m²",
@@ -111,6 +114,7 @@ impl DoseAreaProductUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GraySquareMeter => &["Gy·m²"],
@@ -144,6 +148,7 @@ impl DoseAreaProductUnit {
 
 impl DoseAreaProduct {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: DoseAreaProductUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -193,6 +198,7 @@ impl DoseAreaProduct {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: DoseAreaProductUnit) -> Num {
         let x = self.0;
         match unit {
@@ -227,13 +233,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in GraySquareMeters (`Gy·m²`).
     #[inline]
     pub fn from_gray_square_meters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::GraySquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in GraySquareMeters (`Gy·m²`).
     #[inline]
     pub fn as_gray_square_meters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::GraySquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_gray_square_meters`].
@@ -245,13 +253,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMeters (`µGy·m²`).
     #[inline]
     pub fn from_microgray_square_meters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MicrograySquareMeter)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrograySquareMeters (`µGy·m²`).
     #[inline]
     pub fn as_microgray_square_meters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MicrograySquareMeter)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microgray_square_meters`].
@@ -263,13 +273,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMeters (`mGy·m²`).
     #[inline]
     pub fn from_milligray_square_meters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MilligraySquareMeter)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilligraySquareMeters (`mGy·m²`).
     #[inline]
     pub fn as_milligray_square_meters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MilligraySquareMeter)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milligray_square_meters`].
@@ -281,13 +293,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMeters (`cGy·m²`).
     #[inline]
     pub fn from_centigray_square_meters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::CentigraySquareMeter)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentigraySquareMeters (`cGy·m²`).
     #[inline]
     pub fn as_centigray_square_meters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::CentigraySquareMeter)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centigray_square_meters`].
@@ -299,13 +313,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMeters (`dGy·m²`).
     #[inline]
     pub fn from_decigray_square_meters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::DecigraySquareMeter)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecigraySquareMeters (`dGy·m²`).
     #[inline]
     pub fn as_decigray_square_meters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::DecigraySquareMeter)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decigray_square_meters`].
@@ -317,13 +333,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in GraySquareDecimeters (`Gy·dm²`).
     #[inline]
     pub fn from_gray_square_decimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::GraySquareDecimeter)
+        let x = value;
+        Self(x / 100.0)
     }
 
     /// Returns the value expressed in GraySquareDecimeters (`Gy·dm²`).
     #[inline]
     pub fn as_gray_square_decimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::GraySquareDecimeter)
+        let x = self.0;
+        x * 100.0
     }
 
     /// Alias for [`Self::as_gray_square_decimeters`].
@@ -335,13 +353,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareDecimeters (`µGy·dm²`).
     #[inline]
     pub fn from_microgray_square_decimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MicrograySquareDecimeter)
+        let x = value;
+        Self((x * 1e-6) / 100.0)
     }
 
     /// Returns the value expressed in MicrograySquareDecimeters (`µGy·dm²`).
     #[inline]
     pub fn as_microgray_square_decimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MicrograySquareDecimeter)
+        let x = self.0;
+        (x / 1e-6) * 100.0
     }
 
     /// Alias for [`Self::as_microgray_square_decimeters`].
@@ -353,13 +373,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareDecimeters (`mGy·dm²`).
     #[inline]
     pub fn from_milligray_square_decimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MilligraySquareDecimeter)
+        let x = value;
+        Self((x * 1e-3) / 100.0)
     }
 
     /// Returns the value expressed in MilligraySquareDecimeters (`mGy·dm²`).
     #[inline]
     pub fn as_milligray_square_decimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MilligraySquareDecimeter)
+        let x = self.0;
+        (x / 1e-3) * 100.0
     }
 
     /// Alias for [`Self::as_milligray_square_decimeters`].
@@ -371,13 +393,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareDecimeters (`cGy·dm²`).
     #[inline]
     pub fn from_centigray_square_decimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::CentigraySquareDecimeter)
+        let x = value;
+        Self((x * 1e-2) / 100.0)
     }
 
     /// Returns the value expressed in CentigraySquareDecimeters (`cGy·dm²`).
     #[inline]
     pub fn as_centigray_square_decimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::CentigraySquareDecimeter)
+        let x = self.0;
+        (x / 1e-2) * 100.0
     }
 
     /// Alias for [`Self::as_centigray_square_decimeters`].
@@ -389,13 +413,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareDecimeters (`dGy·dm²`).
     #[inline]
     pub fn from_decigray_square_decimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::DecigraySquareDecimeter)
+        let x = value;
+        Self((x * 1e-1) / 100.0)
     }
 
     /// Returns the value expressed in DecigraySquareDecimeters (`dGy·dm²`).
     #[inline]
     pub fn as_decigray_square_decimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::DecigraySquareDecimeter)
+        let x = self.0;
+        (x / 1e-1) * 100.0
     }
 
     /// Alias for [`Self::as_decigray_square_decimeters`].
@@ -407,13 +433,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in GraySquareCentimeters (`Gy·cm²`).
     #[inline]
     pub fn from_gray_square_centimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::GraySquareCentimeter)
+        let x = value;
+        Self(x / 10000.0)
     }
 
     /// Returns the value expressed in GraySquareCentimeters (`Gy·cm²`).
     #[inline]
     pub fn as_gray_square_centimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::GraySquareCentimeter)
+        let x = self.0;
+        x * 10000.0
     }
 
     /// Alias for [`Self::as_gray_square_centimeters`].
@@ -425,13 +453,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareCentimeters (`µGy·cm²`).
     #[inline]
     pub fn from_microgray_square_centimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MicrograySquareCentimeter)
+        let x = value;
+        Self((x * 1e-6) / 10000.0)
     }
 
     /// Returns the value expressed in MicrograySquareCentimeters (`µGy·cm²`).
     #[inline]
     pub fn as_microgray_square_centimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MicrograySquareCentimeter)
+        let x = self.0;
+        (x / 1e-6) * 10000.0
     }
 
     /// Alias for [`Self::as_microgray_square_centimeters`].
@@ -443,13 +473,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareCentimeters (`mGy·cm²`).
     #[inline]
     pub fn from_milligray_square_centimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MilligraySquareCentimeter)
+        let x = value;
+        Self((x * 1e-3) / 10000.0)
     }
 
     /// Returns the value expressed in MilligraySquareCentimeters (`mGy·cm²`).
     #[inline]
     pub fn as_milligray_square_centimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MilligraySquareCentimeter)
+        let x = self.0;
+        (x / 1e-3) * 10000.0
     }
 
     /// Alias for [`Self::as_milligray_square_centimeters`].
@@ -461,13 +493,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareCentimeters (`cGy·cm²`).
     #[inline]
     pub fn from_centigray_square_centimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::CentigraySquareCentimeter)
+        let x = value;
+        Self((x * 1e-2) / 10000.0)
     }
 
     /// Returns the value expressed in CentigraySquareCentimeters (`cGy·cm²`).
     #[inline]
     pub fn as_centigray_square_centimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::CentigraySquareCentimeter)
+        let x = self.0;
+        (x / 1e-2) * 10000.0
     }
 
     /// Alias for [`Self::as_centigray_square_centimeters`].
@@ -479,13 +513,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareCentimeters (`dGy·cm²`).
     #[inline]
     pub fn from_decigray_square_centimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::DecigraySquareCentimeter)
+        let x = value;
+        Self((x * 1e-1) / 10000.0)
     }
 
     /// Returns the value expressed in DecigraySquareCentimeters (`dGy·cm²`).
     #[inline]
     pub fn as_decigray_square_centimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::DecigraySquareCentimeter)
+        let x = self.0;
+        (x / 1e-1) * 10000.0
     }
 
     /// Alias for [`Self::as_decigray_square_centimeters`].
@@ -497,13 +533,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in GraySquareMillimeters (`Gy·mm²`).
     #[inline]
     pub fn from_gray_square_millimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::GraySquareMillimeter)
+        let x = value;
+        Self(x / 1000000.0)
     }
 
     /// Returns the value expressed in GraySquareMillimeters (`Gy·mm²`).
     #[inline]
     pub fn as_gray_square_millimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::GraySquareMillimeter)
+        let x = self.0;
+        x * 1000000.0
     }
 
     /// Alias for [`Self::as_gray_square_millimeters`].
@@ -515,13 +553,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMillimeters (`µGy·mm²`).
     #[inline]
     pub fn from_microgray_square_millimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MicrograySquareMillimeter)
+        let x = value;
+        Self((x * 1e-6) / 1000000.0)
     }
 
     /// Returns the value expressed in MicrograySquareMillimeters (`µGy·mm²`).
     #[inline]
     pub fn as_microgray_square_millimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MicrograySquareMillimeter)
+        let x = self.0;
+        (x / 1e-6) * 1000000.0
     }
 
     /// Alias for [`Self::as_microgray_square_millimeters`].
@@ -533,13 +573,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMillimeters (`mGy·mm²`).
     #[inline]
     pub fn from_milligray_square_millimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MilligraySquareMillimeter)
+        let x = value;
+        Self((x * 1e-3) / 1000000.0)
     }
 
     /// Returns the value expressed in MilligraySquareMillimeters (`mGy·mm²`).
     #[inline]
     pub fn as_milligray_square_millimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MilligraySquareMillimeter)
+        let x = self.0;
+        (x / 1e-3) * 1000000.0
     }
 
     /// Alias for [`Self::as_milligray_square_millimeters`].
@@ -551,13 +593,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMillimeters (`cGy·mm²`).
     #[inline]
     pub fn from_centigray_square_millimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::CentigraySquareMillimeter)
+        let x = value;
+        Self((x * 1e-2) / 1000000.0)
     }
 
     /// Returns the value expressed in CentigraySquareMillimeters (`cGy·mm²`).
     #[inline]
     pub fn as_centigray_square_millimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::CentigraySquareMillimeter)
+        let x = self.0;
+        (x / 1e-2) * 1000000.0
     }
 
     /// Alias for [`Self::as_centigray_square_millimeters`].
@@ -569,13 +613,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMillimeters (`dGy·mm²`).
     #[inline]
     pub fn from_decigray_square_millimeters(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::DecigraySquareMillimeter)
+        let x = value;
+        Self((x * 1e-1) / 1000000.0)
     }
 
     /// Returns the value expressed in DecigraySquareMillimeters (`dGy·mm²`).
     #[inline]
     pub fn as_decigray_square_millimeters(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::DecigraySquareMillimeter)
+        let x = self.0;
+        (x / 1e-1) * 1000000.0
     }
 
     /// Alias for [`Self::as_decigray_square_millimeters`].
@@ -587,13 +633,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in GraySquareMicrometers (`Gy·μm²`).
     #[inline]
     pub fn from_gray_square_micrometers(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::GraySquareMicrometer)
+        let x = value;
+        Self(x / 1000000000000.0)
     }
 
     /// Returns the value expressed in GraySquareMicrometers (`Gy·μm²`).
     #[inline]
     pub fn as_gray_square_micrometers(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::GraySquareMicrometer)
+        let x = self.0;
+        x * 1000000000000.0
     }
 
     /// Alias for [`Self::as_gray_square_micrometers`].
@@ -605,13 +653,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMicrometers (`µGy·μm²`).
     #[inline]
     pub fn from_microgray_square_micrometers(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MicrograySquareMicrometer)
+        let x = value;
+        Self((x * 1e-6) / 1000000000000.0)
     }
 
     /// Returns the value expressed in MicrograySquareMicrometers (`µGy·μm²`).
     #[inline]
     pub fn as_microgray_square_micrometers(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MicrograySquareMicrometer)
+        let x = self.0;
+        (x / 1e-6) * 1000000000000.0
     }
 
     /// Alias for [`Self::as_microgray_square_micrometers`].
@@ -623,13 +673,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMicrometers (`mGy·μm²`).
     #[inline]
     pub fn from_milligray_square_micrometers(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::MilligraySquareMicrometer)
+        let x = value;
+        Self((x * 1e-3) / 1000000000000.0)
     }
 
     /// Returns the value expressed in MilligraySquareMicrometers (`mGy·μm²`).
     #[inline]
     pub fn as_milligray_square_micrometers(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::MilligraySquareMicrometer)
+        let x = self.0;
+        (x / 1e-3) * 1000000000000.0
     }
 
     /// Alias for [`Self::as_milligray_square_micrometers`].
@@ -641,13 +693,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMicrometers (`cGy·μm²`).
     #[inline]
     pub fn from_centigray_square_micrometers(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::CentigraySquareMicrometer)
+        let x = value;
+        Self((x * 1e-2) / 1000000000000.0)
     }
 
     /// Returns the value expressed in CentigraySquareMicrometers (`cGy·μm²`).
     #[inline]
     pub fn as_centigray_square_micrometers(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::CentigraySquareMicrometer)
+        let x = self.0;
+        (x / 1e-2) * 1000000000000.0
     }
 
     /// Alias for [`Self::as_centigray_square_micrometers`].
@@ -659,13 +713,15 @@ impl DoseAreaProduct {
     /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMicrometers (`dGy·μm²`).
     #[inline]
     pub fn from_decigray_square_micrometers(value: Num) -> Self {
-        Self::new(value, DoseAreaProductUnit::DecigraySquareMicrometer)
+        let x = value;
+        Self((x * 1e-1) / 1000000000000.0)
     }
 
     /// Returns the value expressed in DecigraySquareMicrometers (`dGy·μm²`).
     #[inline]
     pub fn as_decigray_square_micrometers(self) -> Num {
-        self.convert_to(DoseAreaProductUnit::DecigraySquareMicrometer)
+        let x = self.0;
+        (x / 1e-1) * 1000000000000.0
     }
 
     /// Alias for [`Self::as_decigray_square_micrometers`].
@@ -688,42 +744,49 @@ impl crate::Quantity for DoseAreaProduct {
 
 impl Add for DoseAreaProduct {
     type Output = DoseAreaProduct;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for DoseAreaProduct {
     type Output = DoseAreaProduct;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for DoseAreaProduct {
     type Output = DoseAreaProduct;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for DoseAreaProduct {
     type Output = DoseAreaProduct;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<DoseAreaProduct> for Num {
     type Output = DoseAreaProduct;
+    #[inline]
     fn mul(self, rhs: DoseAreaProduct) -> DoseAreaProduct {
         DoseAreaProduct(self * rhs.0)
     }
 }
 impl Div<Num> for DoseAreaProduct {
     type Output = DoseAreaProduct;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for DoseAreaProduct {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

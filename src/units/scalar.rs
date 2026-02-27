@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl ScalarUnit {
     pub const ALL: &'static [Self] = &[Self::Amount];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Amount => "",
@@ -37,6 +40,7 @@ impl ScalarUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Amount => &[""],
@@ -46,6 +50,7 @@ impl ScalarUnit {
 
 impl Scalar {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ScalarUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl Scalar {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ScalarUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl Scalar {
     /// Creates a [`Scalar`] from a value in Amount (``).
     #[inline]
     pub fn from_amount(value: Num) -> Self {
-        Self::new(value, ScalarUnit::Amount)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Amount (``).
     #[inline]
     pub fn as_amount(self) -> Num {
-        self.convert_to(ScalarUnit::Amount)
+        let x = self.0;
+        x
     }
 }
 
@@ -104,42 +112,49 @@ impl crate::Quantity for Scalar {
 
 impl Add for Scalar {
     type Output = Scalar;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Scalar {
     type Output = Scalar;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Scalar {
     type Output = Scalar;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Scalar {
     type Output = Scalar;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Scalar> for Num {
     type Output = Scalar;
+    #[inline]
     fn mul(self, rhs: Scalar) -> Scalar {
         Scalar(self * rhs.0)
     }
 }
 impl Div<Num> for Scalar {
     type Output = Scalar;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Scalar {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

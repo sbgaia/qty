@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -86,6 +88,7 @@ impl MassMomentOfInertiaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramSquareMeter => "g·m²",
@@ -120,6 +123,7 @@ impl MassMomentOfInertiaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramSquareMeter => &["g·m²"],
@@ -156,6 +160,7 @@ impl MassMomentOfInertiaUnit {
 
 impl MassMomentOfInertia {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MassMomentOfInertiaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -212,6 +217,7 @@ impl MassMomentOfInertia {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MassMomentOfInertiaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -253,13 +259,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareMeters (`g·m²`).
     #[inline]
     pub fn from_gram_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::GramSquareMeter)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in GramSquareMeters (`g·m²`).
     #[inline]
     pub fn as_gram_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::GramSquareMeter)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_gram_square_meters`].
@@ -271,13 +279,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareMeters (`mg·m²`).
     #[inline]
     pub fn from_milligram_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MilligramSquareMeter)
+        let x = value;
+        Self((x * 1e-3) / 1e3)
     }
 
     /// Returns the value expressed in MilligramSquareMeters (`mg·m²`).
     #[inline]
     pub fn as_milligram_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MilligramSquareMeter)
+        let x = self.0;
+        (x / 1e-3) * 1e3
     }
 
     /// Alias for [`Self::as_milligram_square_meters`].
@@ -289,13 +299,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareMeters (`kg·m²`).
     #[inline]
     pub fn from_kilogram_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilogramSquareMeter)
+        let x = value;
+        Self((x * 1e3) / 1e3)
     }
 
     /// Returns the value expressed in KilogramSquareMeters (`kg·m²`).
     #[inline]
     pub fn as_kilogram_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilogramSquareMeter)
+        let x = self.0;
+        (x / 1e3) * 1e3
     }
 
     /// Alias for [`Self::as_kilogram_square_meters`].
@@ -307,13 +319,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareDecimeters (`g·dm²`).
     #[inline]
     pub fn from_gram_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::GramSquareDecimeter)
+        let x = value;
+        Self(x / 1e5)
     }
 
     /// Returns the value expressed in GramSquareDecimeters (`g·dm²`).
     #[inline]
     pub fn as_gram_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::GramSquareDecimeter)
+        let x = self.0;
+        x * 1e5
     }
 
     /// Alias for [`Self::as_gram_square_decimeters`].
@@ -325,13 +339,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareDecimeters (`mg·dm²`).
     #[inline]
     pub fn from_milligram_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+        let x = value;
+        Self((x * 1e-3) / 1e5)
     }
 
     /// Returns the value expressed in MilligramSquareDecimeters (`mg·dm²`).
     #[inline]
     pub fn as_milligram_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+        let x = self.0;
+        (x / 1e-3) * 1e5
     }
 
     /// Alias for [`Self::as_milligram_square_decimeters`].
@@ -343,13 +359,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareDecimeters (`kg·dm²`).
     #[inline]
     pub fn from_kilogram_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+        let x = value;
+        Self((x * 1e3) / 1e5)
     }
 
     /// Returns the value expressed in KilogramSquareDecimeters (`kg·dm²`).
     #[inline]
     pub fn as_kilogram_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+        let x = self.0;
+        (x / 1e3) * 1e5
     }
 
     /// Alias for [`Self::as_kilogram_square_decimeters`].
@@ -361,13 +379,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareCentimeters (`g·cm²`).
     #[inline]
     pub fn from_gram_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::GramSquareCentimeter)
+        let x = value;
+        Self(x / 1e7)
     }
 
     /// Returns the value expressed in GramSquareCentimeters (`g·cm²`).
     #[inline]
     pub fn as_gram_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::GramSquareCentimeter)
+        let x = self.0;
+        x * 1e7
     }
 
     /// Alias for [`Self::as_gram_square_centimeters`].
@@ -379,13 +399,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareCentimeters (`mg·cm²`).
     #[inline]
     pub fn from_milligram_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+        let x = value;
+        Self((x * 1e-3) / 1e7)
     }
 
     /// Returns the value expressed in MilligramSquareCentimeters (`mg·cm²`).
     #[inline]
     pub fn as_milligram_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+        let x = self.0;
+        (x / 1e-3) * 1e7
     }
 
     /// Alias for [`Self::as_milligram_square_centimeters`].
@@ -397,13 +419,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareCentimeters (`kg·cm²`).
     #[inline]
     pub fn from_kilogram_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) / 1e7)
     }
 
     /// Returns the value expressed in KilogramSquareCentimeters (`kg·cm²`).
     #[inline]
     pub fn as_kilogram_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) * 1e7
     }
 
     /// Alias for [`Self::as_kilogram_square_centimeters`].
@@ -415,13 +439,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareMillimeters (`g·mm²`).
     #[inline]
     pub fn from_gram_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::GramSquareMillimeter)
+        let x = value;
+        Self(x / 1e9)
     }
 
     /// Returns the value expressed in GramSquareMillimeters (`g·mm²`).
     #[inline]
     pub fn as_gram_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::GramSquareMillimeter)
+        let x = self.0;
+        x * 1e9
     }
 
     /// Alias for [`Self::as_gram_square_millimeters`].
@@ -433,13 +459,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareMillimeters (`mg·mm²`).
     #[inline]
     pub fn from_milligram_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+        let x = value;
+        Self((x * 1e-3) / 1e9)
     }
 
     /// Returns the value expressed in MilligramSquareMillimeters (`mg·mm²`).
     #[inline]
     pub fn as_milligram_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+        let x = self.0;
+        (x / 1e-3) * 1e9
     }
 
     /// Alias for [`Self::as_milligram_square_millimeters`].
@@ -451,13 +479,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareMillimeters (`kg·mm²`).
     #[inline]
     pub fn from_kilogram_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+        let x = value;
+        Self((x * 1e3) / 1e9)
     }
 
     /// Returns the value expressed in KilogramSquareMillimeters (`kg·mm²`).
     #[inline]
     pub fn as_kilogram_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+        let x = self.0;
+        (x / 1e3) * 1e9
     }
 
     /// Alias for [`Self::as_kilogram_square_millimeters`].
@@ -469,13 +499,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareMeters (`t·m²`).
     #[inline]
     pub fn from_tonne_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::TonneSquareMeter)
+        let x = value;
+        Self(x / 1e-3)
     }
 
     /// Returns the value expressed in TonneSquareMeters (`t·m²`).
     #[inline]
     pub fn as_tonne_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::TonneSquareMeter)
+        let x = self.0;
+        x * 1e-3
     }
 
     /// Alias for [`Self::as_tonne_square_meters`].
@@ -487,13 +519,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareMeters (`kt·m²`).
     #[inline]
     pub fn from_kilotonne_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilotonneSquareMeter)
+        let x = value;
+        Self((x * 1e3) / 1e-3)
     }
 
     /// Returns the value expressed in KilotonneSquareMeters (`kt·m²`).
     #[inline]
     pub fn as_kilotonne_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+        let x = self.0;
+        (x / 1e3) * 1e-3
     }
 
     /// Alias for [`Self::as_kilotonne_square_meters`].
@@ -505,13 +539,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareMeters (`Mt·m²`).
     #[inline]
     pub fn from_megatonne_square_meters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MegatonneSquareMeter)
+        let x = value;
+        Self((x * 1e6) / 1e-3)
     }
 
     /// Returns the value expressed in MegatonneSquareMeters (`Mt·m²`).
     #[inline]
     pub fn as_megatonne_square_meters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+        let x = self.0;
+        (x / 1e6) * 1e-3
     }
 
     /// Alias for [`Self::as_megatonne_square_meters`].
@@ -523,13 +559,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareDecimeters (`t·dm²`).
     #[inline]
     pub fn from_tonne_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::TonneSquareDecimeter)
+        let x = value;
+        Self(x / 1e-1)
     }
 
     /// Returns the value expressed in TonneSquareDecimeters (`t·dm²`).
     #[inline]
     pub fn as_tonne_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+        let x = self.0;
+        x * 1e-1
     }
 
     /// Alias for [`Self::as_tonne_square_decimeters`].
@@ -541,13 +579,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareDecimeters (`kt·dm²`).
     #[inline]
     pub fn from_kilotonne_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+        let x = value;
+        Self((x * 1e3) / 1e-1)
     }
 
     /// Returns the value expressed in KilotonneSquareDecimeters (`kt·dm²`).
     #[inline]
     pub fn as_kilotonne_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+        let x = self.0;
+        (x / 1e3) * 1e-1
     }
 
     /// Alias for [`Self::as_kilotonne_square_decimeters`].
@@ -559,13 +599,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareDecimeters (`Mt·dm²`).
     #[inline]
     pub fn from_megatonne_square_decimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+        let x = value;
+        Self((x * 1e6) / 1e-1)
     }
 
     /// Returns the value expressed in MegatonneSquareDecimeters (`Mt·dm²`).
     #[inline]
     pub fn as_megatonne_square_decimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+        let x = self.0;
+        (x / 1e6) * 1e-1
     }
 
     /// Alias for [`Self::as_megatonne_square_decimeters`].
@@ -577,13 +619,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareCentimeters (`t·cm²`).
     #[inline]
     pub fn from_tonne_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::TonneSquareCentimeter)
+        let x = value;
+        Self(x / 1e1)
     }
 
     /// Returns the value expressed in TonneSquareCentimeters (`t·cm²`).
     #[inline]
     pub fn as_tonne_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+        let x = self.0;
+        x * 1e1
     }
 
     /// Alias for [`Self::as_tonne_square_centimeters`].
@@ -595,13 +639,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareCentimeters (`kt·cm²`).
     #[inline]
     pub fn from_kilotonne_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+        let x = value;
+        Self((x * 1e3) / 1e1)
     }
 
     /// Returns the value expressed in KilotonneSquareCentimeters (`kt·cm²`).
     #[inline]
     pub fn as_kilotonne_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+        let x = self.0;
+        (x / 1e3) * 1e1
     }
 
     /// Alias for [`Self::as_kilotonne_square_centimeters`].
@@ -613,13 +659,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareCentimeters (`Mt·cm²`).
     #[inline]
     pub fn from_megatonne_square_centimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+        let x = value;
+        Self((x * 1e6) / 1e1)
     }
 
     /// Returns the value expressed in MegatonneSquareCentimeters (`Mt·cm²`).
     #[inline]
     pub fn as_megatonne_square_centimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+        let x = self.0;
+        (x / 1e6) * 1e1
     }
 
     /// Alias for [`Self::as_megatonne_square_centimeters`].
@@ -631,13 +679,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareMillimeters (`t·mm²`).
     #[inline]
     pub fn from_tonne_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::TonneSquareMillimeter)
+        let x = value;
+        Self(x / 1e3)
     }
 
     /// Returns the value expressed in TonneSquareMillimeters (`t·mm²`).
     #[inline]
     pub fn as_tonne_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+        let x = self.0;
+        x * 1e3
     }
 
     /// Alias for [`Self::as_tonne_square_millimeters`].
@@ -649,13 +699,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareMillimeters (`kt·mm²`).
     #[inline]
     pub fn from_kilotonne_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+        let x = value;
+        Self((x * 1e3) / 1e3)
     }
 
     /// Returns the value expressed in KilotonneSquareMillimeters (`kt·mm²`).
     #[inline]
     pub fn as_kilotonne_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+        let x = self.0;
+        (x / 1e3) * 1e3
     }
 
     /// Alias for [`Self::as_kilotonne_square_millimeters`].
@@ -667,13 +719,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareMillimeters (`Mt·mm²`).
     #[inline]
     pub fn from_megatonne_square_millimeters(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+        let x = value;
+        Self((x * 1e6) / 1e3)
     }
 
     /// Returns the value expressed in MegatonneSquareMillimeters (`Mt·mm²`).
     #[inline]
     pub fn as_megatonne_square_millimeters(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+        let x = self.0;
+        (x / 1e6) * 1e3
     }
 
     /// Alias for [`Self::as_megatonne_square_millimeters`].
@@ -685,13 +739,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in PoundSquareFeet (`lb·ft²`).
     #[inline]
     pub fn from_pound_square_feet(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::PoundSquareFoot)
+        let x = value;
+        Self(x * (0.45359237 * 9.290304e-2))
     }
 
     /// Returns the value expressed in PoundSquareFeet (`lb·ft²`).
     #[inline]
     pub fn as_pound_square_feet(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::PoundSquareFoot)
+        let x = self.0;
+        x / (0.45359237 * 9.290304e-2)
     }
 
     /// Alias for [`Self::as_pound_square_feet`].
@@ -703,13 +759,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in PoundSquareInches (`lb·in²`).
     #[inline]
     pub fn from_pound_square_inches(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::PoundSquareInch)
+        let x = value;
+        Self(x * (0.45359237 * 0.00064516))
     }
 
     /// Returns the value expressed in PoundSquareInches (`lb·in²`).
     #[inline]
     pub fn as_pound_square_inches(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::PoundSquareInch)
+        let x = self.0;
+        x / (0.45359237 * 0.00064516)
     }
 
     /// Alias for [`Self::as_pound_square_inches`].
@@ -721,13 +779,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in SlugSquareFeet (`slug·ft²`).
     #[inline]
     pub fn from_slug_square_feet(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::SlugSquareFoot)
+        let x = value;
+        Self(x * 0.45359237 * 9.290304e-2 * 9.80665 / 0.3048)
     }
 
     /// Returns the value expressed in SlugSquareFeet (`slug·ft²`).
     #[inline]
     pub fn as_slug_square_feet(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::SlugSquareFoot)
+        let x = self.0;
+        x * 0.3048 / (0.45359237 * 9.290304e-2 * 9.80665)
     }
 
     /// Alias for [`Self::as_slug_square_feet`].
@@ -739,13 +799,15 @@ impl MassMomentOfInertia {
     /// Creates a [`MassMomentOfInertia`] from a value in SlugSquareInches (`slug·in²`).
     #[inline]
     pub fn from_slug_square_inches(value: Num) -> Self {
-        Self::new(value, MassMomentOfInertiaUnit::SlugSquareInch)
+        let x = value;
+        Self(x * 0.45359237 * 0.00064516 * 9.80665 / 0.3048)
     }
 
     /// Returns the value expressed in SlugSquareInches (`slug·in²`).
     #[inline]
     pub fn as_slug_square_inches(self) -> Num {
-        self.convert_to(MassMomentOfInertiaUnit::SlugSquareInch)
+        let x = self.0;
+        x * 0.3048 / (0.45359237 * 0.00064516 * 9.80665)
     }
 
     /// Alias for [`Self::as_slug_square_inches`].
@@ -768,42 +830,49 @@ impl crate::Quantity for MassMomentOfInertia {
 
 impl Add for MassMomentOfInertia {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MassMomentOfInertia {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MassMomentOfInertia {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MassMomentOfInertia {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MassMomentOfInertia> for Num {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: MassMomentOfInertia) -> MassMomentOfInertia {
         MassMomentOfInertia(self * rhs.0)
     }
 }
 impl Div<Num> for MassMomentOfInertia {
     type Output = MassMomentOfInertia;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassMomentOfInertia {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

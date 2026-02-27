@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -42,6 +44,7 @@ impl AreaMomentOfInertiaUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterToTheFourth => "m⁴",
@@ -54,6 +57,7 @@ impl AreaMomentOfInertiaUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterToTheFourth => &["m⁴"],
@@ -68,6 +72,7 @@ impl AreaMomentOfInertiaUnit {
 
 impl AreaMomentOfInertia {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AreaMomentOfInertiaUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -98,6 +103,7 @@ impl AreaMomentOfInertia {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> Num {
         let x = self.0;
         match unit {
@@ -113,13 +119,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in MetersToTheFourth (`m⁴`).
     #[inline]
     pub fn from_meters_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::MeterToTheFourth)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MetersToTheFourth (`m⁴`).
     #[inline]
     pub fn as_meters_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::MeterToTheFourth)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters_to_the_fourth`].
@@ -131,13 +139,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in DecimetersToTheFourth (`dm⁴`).
     #[inline]
     pub fn from_decimeters_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+        let x = value;
+        Self(x / 1e4)
     }
 
     /// Returns the value expressed in DecimetersToTheFourth (`dm⁴`).
     #[inline]
     pub fn as_decimeters_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+        let x = self.0;
+        x * 1e4
     }
 
     /// Alias for [`Self::as_decimeters_to_the_fourth`].
@@ -149,13 +159,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in CentimetersToTheFourth (`cm⁴`).
     #[inline]
     pub fn from_centimeters_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+        let x = value;
+        Self(x / 1e8)
     }
 
     /// Returns the value expressed in CentimetersToTheFourth (`cm⁴`).
     #[inline]
     pub fn as_centimeters_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+        let x = self.0;
+        x * 1e8
     }
 
     /// Alias for [`Self::as_centimeters_to_the_fourth`].
@@ -167,13 +179,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in MillimetersToTheFourth (`mm⁴`).
     #[inline]
     pub fn from_millimeters_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+        let x = value;
+        Self(x / 1e12)
     }
 
     /// Returns the value expressed in MillimetersToTheFourth (`mm⁴`).
     #[inline]
     pub fn as_millimeters_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+        let x = self.0;
+        x * 1e12
     }
 
     /// Alias for [`Self::as_millimeters_to_the_fourth`].
@@ -185,13 +199,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in FeetToTheFourth (`ft⁴`).
     #[inline]
     pub fn from_feet_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::FootToTheFourth)
+        let x = value;
+        Self(x * 0.0086309748412416)
     }
 
     /// Returns the value expressed in FeetToTheFourth (`ft⁴`).
     #[inline]
     pub fn as_feet_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::FootToTheFourth)
+        let x = self.0;
+        x / 0.0086309748412416
     }
 
     /// Alias for [`Self::as_feet_to_the_fourth`].
@@ -203,13 +219,15 @@ impl AreaMomentOfInertia {
     /// Creates a [`AreaMomentOfInertia`] from a value in InchesToTheFourth (`in⁴`).
     #[inline]
     pub fn from_inches_to_the_fourth(value: Num) -> Self {
-        Self::new(value, AreaMomentOfInertiaUnit::InchToTheFourth)
+        let x = value;
+        Self(x * 0.0000004162314256)
     }
 
     /// Returns the value expressed in InchesToTheFourth (`in⁴`).
     #[inline]
     pub fn as_inches_to_the_fourth(self) -> Num {
-        self.convert_to(AreaMomentOfInertiaUnit::InchToTheFourth)
+        let x = self.0;
+        x / 0.0000004162314256
     }
 
     /// Alias for [`Self::as_inches_to_the_fourth`].
@@ -232,42 +250,49 @@ impl crate::Quantity for AreaMomentOfInertia {
 
 impl Add for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<AreaMomentOfInertia> for Num {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn mul(self, rhs: AreaMomentOfInertia) -> AreaMomentOfInertia {
         AreaMomentOfInertia(self * rhs.0)
     }
 }
 impl Div<Num> for AreaMomentOfInertia {
     type Output = AreaMomentOfInertia;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for AreaMomentOfInertia {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

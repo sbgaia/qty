@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -41,6 +43,7 @@ impl PorousMediumPermeabilityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Darcy => "D",
@@ -52,6 +55,7 @@ impl PorousMediumPermeabilityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Darcy => &["D"],
@@ -65,6 +69,7 @@ impl PorousMediumPermeabilityUnit {
 
 impl PorousMediumPermeability {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: PorousMediumPermeabilityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -94,6 +99,7 @@ impl PorousMediumPermeability {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: PorousMediumPermeabilityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -108,13 +114,15 @@ impl PorousMediumPermeability {
     /// Creates a [`PorousMediumPermeability`] from a value in Darcys (`D`).
     #[inline]
     pub fn from_darcys(value: Num) -> Self {
-        Self::new(value, PorousMediumPermeabilityUnit::Darcy)
+        let x = value;
+        Self(x * 9.869233e-13)
     }
 
     /// Returns the value expressed in Darcys (`D`).
     #[inline]
     pub fn as_darcys(self) -> Num {
-        self.convert_to(PorousMediumPermeabilityUnit::Darcy)
+        let x = self.0;
+        x / 9.869233e-13
     }
 
     /// Alias for [`Self::as_darcys`].
@@ -126,13 +134,15 @@ impl PorousMediumPermeability {
     /// Creates a [`PorousMediumPermeability`] from a value in Microdarcys (`µD`).
     #[inline]
     pub fn from_microdarcys(value: Num) -> Self {
-        Self::new(value, PorousMediumPermeabilityUnit::Microdarcy)
+        let x = value;
+        Self((x * 1e-6) * 9.869233e-13)
     }
 
     /// Returns the value expressed in Microdarcys (`µD`).
     #[inline]
     pub fn as_microdarcys(self) -> Num {
-        self.convert_to(PorousMediumPermeabilityUnit::Microdarcy)
+        let x = self.0;
+        (x / 1e-6) / 9.869233e-13
     }
 
     /// Alias for [`Self::as_microdarcys`].
@@ -144,13 +154,15 @@ impl PorousMediumPermeability {
     /// Creates a [`PorousMediumPermeability`] from a value in Millidarcys (`mD`).
     #[inline]
     pub fn from_millidarcys(value: Num) -> Self {
-        Self::new(value, PorousMediumPermeabilityUnit::Millidarcy)
+        let x = value;
+        Self((x * 1e-3) * 9.869233e-13)
     }
 
     /// Returns the value expressed in Millidarcys (`mD`).
     #[inline]
     pub fn as_millidarcys(self) -> Num {
-        self.convert_to(PorousMediumPermeabilityUnit::Millidarcy)
+        let x = self.0;
+        (x / 1e-3) / 9.869233e-13
     }
 
     /// Alias for [`Self::as_millidarcys`].
@@ -162,13 +174,15 @@ impl PorousMediumPermeability {
     /// Creates a [`PorousMediumPermeability`] from a value in SquareMeters (`m²`).
     #[inline]
     pub fn from_square_meters(value: Num) -> Self {
-        Self::new(value, PorousMediumPermeabilityUnit::SquareMeter)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in SquareMeters (`m²`).
     #[inline]
     pub fn as_square_meters(self) -> Num {
-        self.convert_to(PorousMediumPermeabilityUnit::SquareMeter)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_square_meters`].
@@ -180,13 +194,15 @@ impl PorousMediumPermeability {
     /// Creates a [`PorousMediumPermeability`] from a value in SquareCentimeters (`cm²`).
     #[inline]
     pub fn from_square_centimeters(value: Num) -> Self {
-        Self::new(value, PorousMediumPermeabilityUnit::SquareCentimeter)
+        let x = value;
+        Self(x * 1e-4)
     }
 
     /// Returns the value expressed in SquareCentimeters (`cm²`).
     #[inline]
     pub fn as_square_centimeters(self) -> Num {
-        self.convert_to(PorousMediumPermeabilityUnit::SquareCentimeter)
+        let x = self.0;
+        x / 1e-4
     }
 
     /// Alias for [`Self::as_square_centimeters`].
@@ -209,42 +225,49 @@ impl crate::Quantity for PorousMediumPermeability {
 
 impl Add for PorousMediumPermeability {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for PorousMediumPermeability {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for PorousMediumPermeability {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for PorousMediumPermeability {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<PorousMediumPermeability> for Num {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn mul(self, rhs: PorousMediumPermeability) -> PorousMediumPermeability {
         PorousMediumPermeability(self * rhs.0)
     }
 }
 impl Div<Num> for PorousMediumPermeability {
     type Output = PorousMediumPermeability;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for PorousMediumPermeability {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

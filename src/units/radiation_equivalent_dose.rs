@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -43,6 +45,7 @@ impl RadiationEquivalentDoseUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Sievert => "Sv",
@@ -55,6 +58,7 @@ impl RadiationEquivalentDoseUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Sievert => &["Sv"],
@@ -69,6 +73,7 @@ impl RadiationEquivalentDoseUnit {
 
 impl RadiationEquivalentDose {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RadiationEquivalentDoseUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -99,6 +104,7 @@ impl RadiationEquivalentDose {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RadiationEquivalentDoseUnit) -> Num {
         let x = self.0;
         match unit {
@@ -114,13 +120,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in Sieverts (`Sv`).
     #[inline]
     pub fn from_sieverts(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseUnit::Sievert)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Sieverts (`Sv`).
     #[inline]
     pub fn as_sieverts(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::Sievert)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_sieverts`].
@@ -132,13 +140,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in Nanosieverts (`nSv`).
     #[inline]
     pub fn from_nanosieverts(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseUnit::Nanosievert)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanosieverts (`nSv`).
     #[inline]
     pub fn as_nanosieverts(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::Nanosievert)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanosieverts`].
@@ -150,13 +160,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in Microsieverts (`µSv`).
     #[inline]
     pub fn from_microsieverts(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseUnit::Microsievert)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microsieverts (`µSv`).
     #[inline]
     pub fn as_microsieverts(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::Microsievert)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microsieverts`].
@@ -168,13 +180,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in Millisieverts (`mSv`).
     #[inline]
     pub fn from_millisieverts(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseUnit::Millisievert)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millisieverts (`mSv`).
     #[inline]
     pub fn as_millisieverts(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::Millisievert)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millisieverts`].
@@ -186,13 +200,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in RoentgensEquivalentMan (`rem`).
     #[inline]
     pub fn from_roentgens_equivalent_man(value: Num) -> Self {
-        Self::new(value, RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+        let x = value;
+        Self(x / 100.0)
     }
 
     /// Returns the value expressed in RoentgensEquivalentMan (`rem`).
     #[inline]
     pub fn as_roentgens_equivalent_man(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+        let x = self.0;
+        x * 100.0
     }
 
     /// Alias for [`Self::as_roentgens_equivalent_man`].
@@ -204,16 +220,15 @@ impl RadiationEquivalentDose {
     /// Creates a [`RadiationEquivalentDose`] from a value in MilliroentgensEquivalentMan (`mrem`).
     #[inline]
     pub fn from_milliroentgens_equivalent_man(value: Num) -> Self {
-        Self::new(
-            value,
-            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan,
-        )
+        let x = value;
+        Self((x * 1e-3) / 100.0)
     }
 
     /// Returns the value expressed in MilliroentgensEquivalentMan (`mrem`).
     #[inline]
     pub fn as_milliroentgens_equivalent_man(self) -> Num {
-        self.convert_to(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+        let x = self.0;
+        (x / 1e-3) * 100.0
     }
 
     /// Alias for [`Self::as_milliroentgens_equivalent_man`].
@@ -236,42 +251,49 @@ impl crate::Quantity for RadiationEquivalentDose {
 
 impl Add for RadiationEquivalentDose {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for RadiationEquivalentDose {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for RadiationEquivalentDose {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for RadiationEquivalentDose {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<RadiationEquivalentDose> for Num {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn mul(self, rhs: RadiationEquivalentDose) -> RadiationEquivalentDose {
         RadiationEquivalentDose(self * rhs.0)
     }
 }
 impl Div<Num> for RadiationEquivalentDose {
     type Output = RadiationEquivalentDose;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RadiationEquivalentDose {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

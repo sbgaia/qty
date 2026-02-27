@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -62,6 +64,7 @@ impl ElectricAdmittanceUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Siemens => "S",
@@ -84,6 +87,7 @@ impl ElectricAdmittanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Siemens => &["S"],
@@ -108,6 +112,7 @@ impl ElectricAdmittanceUnit {
 
 impl ElectricAdmittance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: ElectricAdmittanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -148,6 +153,7 @@ impl ElectricAdmittance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: ElectricAdmittanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -173,109 +179,127 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Siemens (`S`).
     #[inline]
     pub fn from_siemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Siemens)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Siemens (`S`).
     #[inline]
     pub fn as_siemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Siemens)
+        let x = self.0;
+        x
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Nanosiemens (`nS`).
     #[inline]
     pub fn from_nanosiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Nanosiemens)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanosiemens (`nS`).
     #[inline]
     pub fn as_nanosiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Nanosiemens)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Microsiemens (`µS`).
     #[inline]
     pub fn from_microsiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Microsiemens)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microsiemens (`µS`).
     #[inline]
     pub fn as_microsiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Microsiemens)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Millisiemens (`mS`).
     #[inline]
     pub fn from_millisiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Millisiemens)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millisiemens (`mS`).
     #[inline]
     pub fn as_millisiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Millisiemens)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Kilosiemens (`kS`).
     #[inline]
     pub fn from_kilosiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Kilosiemens)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilosiemens (`kS`).
     #[inline]
     pub fn as_kilosiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Kilosiemens)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Megasiemens (`MS`).
     #[inline]
     pub fn from_megasiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Megasiemens)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megasiemens (`MS`).
     #[inline]
     pub fn as_megasiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Megasiemens)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Gigasiemens (`GS`).
     #[inline]
     pub fn from_gigasiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Gigasiemens)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigasiemens (`GS`).
     #[inline]
     pub fn as_gigasiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Gigasiemens)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Terasiemens (`TS`).
     #[inline]
     pub fn from_terasiemens(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Terasiemens)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Terasiemens (`TS`).
     #[inline]
     pub fn as_terasiemens(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Terasiemens)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Mhos (`℧`).
     #[inline]
     pub fn from_mhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Mho)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Mhos (`℧`).
     #[inline]
     pub fn as_mhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Mho)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_mhos`].
@@ -287,13 +311,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Nanomhos (`n℧`).
     #[inline]
     pub fn from_nanomhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Nanomho)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanomhos (`n℧`).
     #[inline]
     pub fn as_nanomhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Nanomho)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanomhos`].
@@ -305,13 +331,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Micromhos (`µ℧`).
     #[inline]
     pub fn from_micromhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Micromho)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Micromhos (`µ℧`).
     #[inline]
     pub fn as_micromhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Micromho)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micromhos`].
@@ -323,13 +351,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Millimhos (`m℧`).
     #[inline]
     pub fn from_millimhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Millimho)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millimhos (`m℧`).
     #[inline]
     pub fn as_millimhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Millimho)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimhos`].
@@ -341,13 +371,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Kilomhos (`k℧`).
     #[inline]
     pub fn from_kilomhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Kilomho)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilomhos (`k℧`).
     #[inline]
     pub fn as_kilomhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Kilomho)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilomhos`].
@@ -359,13 +391,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Megamhos (`M℧`).
     #[inline]
     pub fn from_megamhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Megamho)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megamhos (`M℧`).
     #[inline]
     pub fn as_megamhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Megamho)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megamhos`].
@@ -377,13 +411,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Gigamhos (`G℧`).
     #[inline]
     pub fn from_gigamhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Gigamho)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigamhos (`G℧`).
     #[inline]
     pub fn as_gigamhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Gigamho)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigamhos`].
@@ -395,13 +431,15 @@ impl ElectricAdmittance {
     /// Creates a [`ElectricAdmittance`] from a value in Teramhos (`T℧`).
     #[inline]
     pub fn from_teramhos(value: Num) -> Self {
-        Self::new(value, ElectricAdmittanceUnit::Teramho)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Teramhos (`T℧`).
     #[inline]
     pub fn as_teramhos(self) -> Num {
-        self.convert_to(ElectricAdmittanceUnit::Teramho)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_teramhos`].
@@ -424,42 +462,49 @@ impl crate::Quantity for ElectricAdmittance {
 
 impl Add for ElectricAdmittance {
     type Output = ElectricAdmittance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for ElectricAdmittance {
     type Output = ElectricAdmittance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for ElectricAdmittance {
     type Output = ElectricAdmittance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for ElectricAdmittance {
     type Output = ElectricAdmittance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<ElectricAdmittance> for Num {
     type Output = ElectricAdmittance;
+    #[inline]
     fn mul(self, rhs: ElectricAdmittance) -> ElectricAdmittance {
         ElectricAdmittance(self * rhs.0)
     }
 }
 impl Div<Num> for ElectricAdmittance {
     type Output = ElectricAdmittance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for ElectricAdmittance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

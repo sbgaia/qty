@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl LuminousIntensityUnit {
     pub const ALL: &'static [Self] = &[Self::Candela];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Candela => "cd",
@@ -37,6 +40,7 @@ impl LuminousIntensityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Candela => &["cd"],
@@ -46,6 +50,7 @@ impl LuminousIntensityUnit {
 
 impl LuminousIntensity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LuminousIntensityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl LuminousIntensity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LuminousIntensityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl LuminousIntensity {
     /// Creates a [`LuminousIntensity`] from a value in Candela (`cd`).
     #[inline]
     pub fn from_candela(value: Num) -> Self {
-        Self::new(value, LuminousIntensityUnit::Candela)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Candela (`cd`).
     #[inline]
     pub fn as_candela(self) -> Num {
-        self.convert_to(LuminousIntensityUnit::Candela)
+        let x = self.0;
+        x
     }
 }
 
@@ -104,42 +112,49 @@ impl crate::Quantity for LuminousIntensity {
 
 impl Add for LuminousIntensity {
     type Output = LuminousIntensity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for LuminousIntensity {
     type Output = LuminousIntensity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for LuminousIntensity {
     type Output = LuminousIntensity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for LuminousIntensity {
     type Output = LuminousIntensity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<LuminousIntensity> for Num {
     type Output = LuminousIntensity;
+    #[inline]
     fn mul(self, rhs: LuminousIntensity) -> LuminousIntensity {
         LuminousIntensity(self * rhs.0)
     }
 }
 impl Div<Num> for LuminousIntensity {
     type Output = LuminousIntensity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for LuminousIntensity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

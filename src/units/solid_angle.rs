@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl SolidAngleUnit {
     pub const ALL: &'static [Self] = &[Self::Steradian];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Steradian => "sr",
@@ -37,6 +40,7 @@ impl SolidAngleUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Steradian => &["sr"],
@@ -46,6 +50,7 @@ impl SolidAngleUnit {
 
 impl SolidAngle {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: SolidAngleUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl SolidAngle {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: SolidAngleUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl SolidAngle {
     /// Creates a [`SolidAngle`] from a value in Steradians (`sr`).
     #[inline]
     pub fn from_steradians(value: Num) -> Self {
-        Self::new(value, SolidAngleUnit::Steradian)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Steradians (`sr`).
     #[inline]
     pub fn as_steradians(self) -> Num {
-        self.convert_to(SolidAngleUnit::Steradian)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_steradians`].
@@ -110,42 +118,49 @@ impl crate::Quantity for SolidAngle {
 
 impl Add for SolidAngle {
     type Output = SolidAngle;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for SolidAngle {
     type Output = SolidAngle;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for SolidAngle {
     type Output = SolidAngle;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for SolidAngle {
     type Output = SolidAngle;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<SolidAngle> for Num {
     type Output = SolidAngle;
+    #[inline]
     fn mul(self, rhs: SolidAngle) -> SolidAngle {
         SolidAngle(self * rhs.0)
     }
 }
 impl Div<Num> for SolidAngle {
     type Output = SolidAngle;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for SolidAngle {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

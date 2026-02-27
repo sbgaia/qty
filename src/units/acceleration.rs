@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -60,6 +62,7 @@ impl AccelerationUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterPerSecondSquared => "m/s²",
@@ -80,6 +83,7 @@ impl AccelerationUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterPerSecondSquared => &["m/s²"],
@@ -102,6 +106,7 @@ impl AccelerationUnit {
 
 impl Acceleration {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AccelerationUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -140,6 +145,7 @@ impl Acceleration {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AccelerationUnit) -> Num {
         let x = self.0;
         match unit {
@@ -163,13 +169,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in MetersPerSecondSquared (`m/s²`).
     #[inline]
     pub fn from_meters_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::MeterPerSecondSquared)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in MetersPerSecondSquared (`m/s²`).
     #[inline]
     pub fn as_meters_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::MeterPerSecondSquared)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_meters_per_second_squared`].
@@ -181,13 +189,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in NanometersPerSecondSquared (`nm/s²`).
     #[inline]
     pub fn from_nanometers_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::NanometerPerSecondSquared)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanometersPerSecondSquared (`nm/s²`).
     #[inline]
     pub fn as_nanometers_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::NanometerPerSecondSquared)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanometers_per_second_squared`].
@@ -199,13 +209,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in MicrometersPerSecondSquared (`µm/s²`).
     #[inline]
     pub fn from_micrometers_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::MicrometerPerSecondSquared)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrometersPerSecondSquared (`µm/s²`).
     #[inline]
     pub fn as_micrometers_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::MicrometerPerSecondSquared)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrometers_per_second_squared`].
@@ -217,13 +229,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in MillimetersPerSecondSquared (`mm/s²`).
     #[inline]
     pub fn from_millimeters_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::MillimeterPerSecondSquared)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MillimetersPerSecondSquared (`mm/s²`).
     #[inline]
     pub fn as_millimeters_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::MillimeterPerSecondSquared)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_millimeters_per_second_squared`].
@@ -235,13 +249,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in CentimetersPerSecondSquared (`cm/s²`).
     #[inline]
     pub fn from_centimeters_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::CentimeterPerSecondSquared)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentimetersPerSecondSquared (`cm/s²`).
     #[inline]
     pub fn as_centimeters_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::CentimeterPerSecondSquared)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centimeters_per_second_squared`].
@@ -253,13 +269,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in DecimetersPerSecondSquared (`dm/s²`).
     #[inline]
     pub fn from_decimeters_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::DecimeterPerSecondSquared)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecimetersPerSecondSquared (`dm/s²`).
     #[inline]
     pub fn as_decimeters_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::DecimeterPerSecondSquared)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decimeters_per_second_squared`].
@@ -271,13 +289,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in KilometersPerSecondSquared (`km/s²`).
     #[inline]
     pub fn from_kilometers_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::KilometerPerSecondSquared)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilometersPerSecondSquared (`km/s²`).
     #[inline]
     pub fn as_kilometers_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::KilometerPerSecondSquared)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilometers_per_second_squared`].
@@ -289,13 +309,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in InchesPerSecondSquared (`in/s²`).
     #[inline]
     pub fn from_inches_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::InchPerSecondSquared)
+        let x = value;
+        Self(x * 0.0254)
     }
 
     /// Returns the value expressed in InchesPerSecondSquared (`in/s²`).
     #[inline]
     pub fn as_inches_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::InchPerSecondSquared)
+        let x = self.0;
+        x / 0.0254
     }
 
     /// Alias for [`Self::as_inches_per_second_squared`].
@@ -307,13 +329,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in FeetPerSecondSquared (`ft/s²`).
     #[inline]
     pub fn from_feet_per_second_squared(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::FootPerSecondSquared)
+        let x = value;
+        Self(x * 0.304800)
     }
 
     /// Returns the value expressed in FeetPerSecondSquared (`ft/s²`).
     #[inline]
     pub fn as_feet_per_second_squared(self) -> Num {
-        self.convert_to(AccelerationUnit::FootPerSecondSquared)
+        let x = self.0;
+        x / 0.304800
     }
 
     /// Alias for [`Self::as_feet_per_second_squared`].
@@ -325,13 +349,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in KnotsPerSecond (`kn/s`).
     #[inline]
     pub fn from_knots_per_second(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::KnotPerSecond)
+        let x = value;
+        Self(x * (1852.0 / 3600.0))
     }
 
     /// Returns the value expressed in KnotsPerSecond (`kn/s`).
     #[inline]
     pub fn as_knots_per_second(self) -> Num {
-        self.convert_to(AccelerationUnit::KnotPerSecond)
+        let x = self.0;
+        x / (1852.0 / 3600.0)
     }
 
     /// Alias for [`Self::as_knots_per_second`].
@@ -343,13 +369,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in KnotsPerMinute (`kn/min`).
     #[inline]
     pub fn from_knots_per_minute(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::KnotPerMinute)
+        let x = value;
+        Self(x * (1852.0 / 3600.0) / 60.0)
     }
 
     /// Returns the value expressed in KnotsPerMinute (`kn/min`).
     #[inline]
     pub fn as_knots_per_minute(self) -> Num {
-        self.convert_to(AccelerationUnit::KnotPerMinute)
+        let x = self.0;
+        x * 60.0 / (1852.0 / 3600.0)
     }
 
     /// Alias for [`Self::as_knots_per_minute`].
@@ -361,13 +389,15 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in KnotsPerHour (`kn/h`).
     #[inline]
     pub fn from_knots_per_hour(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::KnotPerHour)
+        let x = value;
+        Self(x * (1852.0 / 3600.0) / 3600.0)
     }
 
     /// Returns the value expressed in KnotsPerHour (`kn/h`).
     #[inline]
     pub fn as_knots_per_hour(self) -> Num {
-        self.convert_to(AccelerationUnit::KnotPerHour)
+        let x = self.0;
+        x * 3600.0 / (1852.0 / 3600.0)
     }
 
     /// Alias for [`Self::as_knots_per_hour`].
@@ -379,25 +409,29 @@ impl Acceleration {
     /// Creates a [`Acceleration`] from a value in StandardGravity (`g`).
     #[inline]
     pub fn from_standard_gravity(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::StandardGravity)
+        let x = value;
+        Self(x * 9.80665)
     }
 
     /// Returns the value expressed in StandardGravity (`g`).
     #[inline]
     pub fn as_standard_gravity(self) -> Num {
-        self.convert_to(AccelerationUnit::StandardGravity)
+        let x = self.0;
+        x / 9.80665
     }
 
     /// Creates a [`Acceleration`] from a value in MillistandardGravity (`mg`).
     #[inline]
     pub fn from_millistandard_gravity(value: Num) -> Self {
-        Self::new(value, AccelerationUnit::MillistandardGravity)
+        let x = value;
+        Self((x * 1e-3) * 9.80665)
     }
 
     /// Returns the value expressed in MillistandardGravity (`mg`).
     #[inline]
     pub fn as_millistandard_gravity(self) -> Num {
-        self.convert_to(AccelerationUnit::MillistandardGravity)
+        let x = self.0;
+        (x / 1e-3) / 9.80665
     }
 }
 
@@ -414,42 +448,49 @@ impl crate::Quantity for Acceleration {
 
 impl Add for Acceleration {
     type Output = Acceleration;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Acceleration {
     type Output = Acceleration;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Acceleration {
     type Output = Acceleration;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Acceleration {
     type Output = Acceleration;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Acceleration> for Num {
     type Output = Acceleration;
+    #[inline]
     fn mul(self, rhs: Acceleration) -> Acceleration {
         Acceleration(self * rhs.0)
     }
 }
 impl Div<Num> for Acceleration {
     type Output = Acceleration;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Acceleration {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

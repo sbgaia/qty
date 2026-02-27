@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -59,6 +61,7 @@ impl LuminosityUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Watt => "W",
@@ -79,6 +82,7 @@ impl LuminosityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Watt => &["W"],
@@ -101,6 +105,7 @@ impl LuminosityUnit {
 
 impl Luminosity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LuminosityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -139,6 +144,7 @@ impl Luminosity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LuminosityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -162,13 +168,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Watts (`W`).
     #[inline]
     pub fn from_watts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Watt)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Watts (`W`).
     #[inline]
     pub fn as_watts(self) -> Num {
-        self.convert_to(LuminosityUnit::Watt)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_watts`].
@@ -180,13 +188,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Femtowatts (`fW`).
     #[inline]
     pub fn from_femtowatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Femtowatt)
+        let x = value;
+        Self((x * 1e-15))
     }
 
     /// Returns the value expressed in Femtowatts (`fW`).
     #[inline]
     pub fn as_femtowatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Femtowatt)
+        let x = self.0;
+        (x / 1e-15)
     }
 
     /// Alias for [`Self::as_femtowatts`].
@@ -198,13 +208,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Picowatts (`pW`).
     #[inline]
     pub fn from_picowatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Picowatt)
+        let x = value;
+        Self((x * 1e-12))
     }
 
     /// Returns the value expressed in Picowatts (`pW`).
     #[inline]
     pub fn as_picowatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Picowatt)
+        let x = self.0;
+        (x / 1e-12)
     }
 
     /// Alias for [`Self::as_picowatts`].
@@ -216,13 +228,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Nanowatts (`nW`).
     #[inline]
     pub fn from_nanowatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Nanowatt)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanowatts (`nW`).
     #[inline]
     pub fn as_nanowatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Nanowatt)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanowatts`].
@@ -234,13 +248,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Microwatts (`µW`).
     #[inline]
     pub fn from_microwatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Microwatt)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microwatts (`µW`).
     #[inline]
     pub fn as_microwatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Microwatt)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microwatts`].
@@ -252,13 +268,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Milliwatts (`mW`).
     #[inline]
     pub fn from_milliwatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Milliwatt)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Milliwatts (`mW`).
     #[inline]
     pub fn as_milliwatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Milliwatt)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliwatts`].
@@ -270,13 +288,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Deciwatts (`dW`).
     #[inline]
     pub fn from_deciwatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Deciwatt)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in Deciwatts (`dW`).
     #[inline]
     pub fn as_deciwatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Deciwatt)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_deciwatts`].
@@ -288,13 +308,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Decawatts (`daW`).
     #[inline]
     pub fn from_decawatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Decawatt)
+        let x = value;
+        Self((x * 1e1))
     }
 
     /// Returns the value expressed in Decawatts (`daW`).
     #[inline]
     pub fn as_decawatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Decawatt)
+        let x = self.0;
+        (x / 1e1)
     }
 
     /// Alias for [`Self::as_decawatts`].
@@ -306,13 +328,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Kilowatts (`kW`).
     #[inline]
     pub fn from_kilowatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Kilowatt)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilowatts (`kW`).
     #[inline]
     pub fn as_kilowatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Kilowatt)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilowatts`].
@@ -324,13 +348,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Megawatts (`MW`).
     #[inline]
     pub fn from_megawatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Megawatt)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megawatts (`MW`).
     #[inline]
     pub fn as_megawatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Megawatt)
+        let x = self.0;
+        (x / 1e6)
     }
 
     /// Alias for [`Self::as_megawatts`].
@@ -342,13 +368,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Gigawatts (`GW`).
     #[inline]
     pub fn from_gigawatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Gigawatt)
+        let x = value;
+        Self((x * 1e9))
     }
 
     /// Returns the value expressed in Gigawatts (`GW`).
     #[inline]
     pub fn as_gigawatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Gigawatt)
+        let x = self.0;
+        (x / 1e9)
     }
 
     /// Alias for [`Self::as_gigawatts`].
@@ -360,13 +388,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Terawatts (`TW`).
     #[inline]
     pub fn from_terawatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Terawatt)
+        let x = value;
+        Self((x * 1e12))
     }
 
     /// Returns the value expressed in Terawatts (`TW`).
     #[inline]
     pub fn as_terawatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Terawatt)
+        let x = self.0;
+        (x / 1e12)
     }
 
     /// Alias for [`Self::as_terawatts`].
@@ -378,13 +408,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in Petawatts (`PW`).
     #[inline]
     pub fn from_petawatts(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::Petawatt)
+        let x = value;
+        Self((x * 1e15))
     }
 
     /// Returns the value expressed in Petawatts (`PW`).
     #[inline]
     pub fn as_petawatts(self) -> Num {
-        self.convert_to(LuminosityUnit::Petawatt)
+        let x = self.0;
+        (x / 1e15)
     }
 
     /// Alias for [`Self::as_petawatts`].
@@ -396,13 +428,15 @@ impl Luminosity {
     /// Creates a [`Luminosity`] from a value in SolarLuminosities (`L⊙`).
     #[inline]
     pub fn from_solar_luminosities(value: Num) -> Self {
-        Self::new(value, LuminosityUnit::SolarLuminosity)
+        let x = value;
+        Self(x * 3.828e26)
     }
 
     /// Returns the value expressed in SolarLuminosities (`L⊙`).
     #[inline]
     pub fn as_solar_luminosities(self) -> Num {
-        self.convert_to(LuminosityUnit::SolarLuminosity)
+        let x = self.0;
+        x / 3.828e26
     }
 
     /// Alias for [`Self::as_solar_luminosities`].
@@ -425,42 +459,49 @@ impl crate::Quantity for Luminosity {
 
 impl Add for Luminosity {
     type Output = Luminosity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Luminosity {
     type Output = Luminosity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Luminosity {
     type Output = Luminosity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Luminosity {
     type Output = Luminosity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Luminosity> for Num {
     type Output = Luminosity;
+    #[inline]
     fn mul(self, rhs: Luminosity) -> Luminosity {
         Luminosity(self * rhs.0)
     }
 }
 impl Div<Num> for Luminosity {
     type Output = Luminosity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Luminosity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

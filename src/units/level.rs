@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -31,6 +33,7 @@ impl LevelUnit {
     pub const ALL: &'static [Self] = &[Self::Decibel, Self::Neper];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Decibel => "dB",
@@ -39,6 +42,7 @@ impl LevelUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Decibel => &["dB"],
@@ -49,6 +53,7 @@ impl LevelUnit {
 
 impl Level {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: LevelUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -75,6 +80,7 @@ impl Level {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: LevelUnit) -> Num {
         let x = self.0;
         match unit {
@@ -86,13 +92,15 @@ impl Level {
     /// Creates a [`Level`] from a value in Decibels (`dB`).
     #[inline]
     pub fn from_decibels(value: Num) -> Self {
-        Self::new(value, LevelUnit::Decibel)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Decibels (`dB`).
     #[inline]
     pub fn as_decibels(self) -> Num {
-        self.convert_to(LevelUnit::Decibel)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_decibels`].
@@ -104,13 +112,15 @@ impl Level {
     /// Creates a [`Level`] from a value in Nepers (`Np`).
     #[inline]
     pub fn from_nepers(value: Num) -> Self {
-        Self::new(value, LevelUnit::Neper)
+        let x = value;
+        Self((1.0 / 0.115129254) * x)
     }
 
     /// Returns the value expressed in Nepers (`Np`).
     #[inline]
     pub fn as_nepers(self) -> Num {
-        self.convert_to(LevelUnit::Neper)
+        let x = self.0;
+        0.115129254 * x
     }
 
     /// Alias for [`Self::as_nepers`].
@@ -133,42 +143,49 @@ impl crate::Quantity for Level {
 
 impl Add for Level {
     type Output = Level;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Level {
     type Output = Level;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Level {
     type Output = Level;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Level {
     type Output = Level;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Level> for Num {
     type Output = Level;
+    #[inline]
     fn mul(self, rhs: Level) -> Level {
         Level(self * rhs.0)
     }
 }
 impl Div<Num> for Level {
     type Output = Level;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Level {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

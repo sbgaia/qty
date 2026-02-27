@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -60,6 +62,7 @@ impl AngleUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Radian => "rad",
@@ -81,6 +84,7 @@ impl AngleUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Radian => &["rad"],
@@ -104,6 +108,7 @@ impl AngleUnit {
 
 impl Angle {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: AngleUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -143,6 +148,7 @@ impl Angle {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: AngleUnit) -> Num {
         let x = self.0;
         match unit {
@@ -167,13 +173,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Radians (`rad`).
     #[inline]
     pub fn from_radians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Radian)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Radians (`rad`).
     #[inline]
     pub fn as_radians(self) -> Num {
-        self.convert_to(AngleUnit::Radian)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_radians`].
@@ -185,13 +193,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Nanoradians (`nrad`).
     #[inline]
     pub fn from_nanoradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Nanoradian)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in Nanoradians (`nrad`).
     #[inline]
     pub fn as_nanoradians(self) -> Num {
-        self.convert_to(AngleUnit::Nanoradian)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanoradians`].
@@ -203,13 +213,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Microradians (`µrad`).
     #[inline]
     pub fn from_microradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Microradian)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in Microradians (`µrad`).
     #[inline]
     pub fn as_microradians(self) -> Num {
-        self.convert_to(AngleUnit::Microradian)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_microradians`].
@@ -221,13 +233,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Milliradians (`mrad`).
     #[inline]
     pub fn from_milliradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Milliradian)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Milliradians (`mrad`).
     #[inline]
     pub fn as_milliradians(self) -> Num {
-        self.convert_to(AngleUnit::Milliradian)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milliradians`].
@@ -239,13 +253,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Centiradians (`crad`).
     #[inline]
     pub fn from_centiradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Centiradian)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in Centiradians (`crad`).
     #[inline]
     pub fn as_centiradians(self) -> Num {
-        self.convert_to(AngleUnit::Centiradian)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centiradians`].
@@ -257,13 +273,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Deciradians (`drad`).
     #[inline]
     pub fn from_deciradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Deciradian)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in Deciradians (`drad`).
     #[inline]
     pub fn as_deciradians(self) -> Num {
-        self.convert_to(AngleUnit::Deciradian)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_deciradians`].
@@ -275,13 +293,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Degrees (`°`).
     #[inline]
     pub fn from_degrees(value: Num) -> Self {
-        Self::new(value, AngleUnit::Degree)
+        let x = value;
+        Self(x * (std::f64::consts::PI as Num) / 180.0)
     }
 
     /// Returns the value expressed in Degrees (`°`).
     #[inline]
     pub fn as_degrees(self) -> Num {
-        self.convert_to(AngleUnit::Degree)
+        let x = self.0;
+        x * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_degrees`].
@@ -293,13 +313,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Nanodegrees (`n°`).
     #[inline]
     pub fn from_nanodegrees(value: Num) -> Self {
-        Self::new(value, AngleUnit::Nanodegree)
+        let x = value;
+        Self((x * 1e-9) * (std::f64::consts::PI as Num) / 180.0)
     }
 
     /// Returns the value expressed in Nanodegrees (`n°`).
     #[inline]
     pub fn as_nanodegrees(self) -> Num {
-        self.convert_to(AngleUnit::Nanodegree)
+        let x = self.0;
+        (x / 1e-9) * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_nanodegrees`].
@@ -311,13 +333,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Microdegrees (`µ°`).
     #[inline]
     pub fn from_microdegrees(value: Num) -> Self {
-        Self::new(value, AngleUnit::Microdegree)
+        let x = value;
+        Self((x * 1e-6) * (std::f64::consts::PI as Num) / 180.0)
     }
 
     /// Returns the value expressed in Microdegrees (`µ°`).
     #[inline]
     pub fn as_microdegrees(self) -> Num {
-        self.convert_to(AngleUnit::Microdegree)
+        let x = self.0;
+        (x / 1e-6) * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_microdegrees`].
@@ -329,13 +353,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Millidegrees (`m°`).
     #[inline]
     pub fn from_millidegrees(value: Num) -> Self {
-        Self::new(value, AngleUnit::Millidegree)
+        let x = value;
+        Self((x * 1e-3) * (std::f64::consts::PI as Num) / 180.0)
     }
 
     /// Returns the value expressed in Millidegrees (`m°`).
     #[inline]
     pub fn as_millidegrees(self) -> Num {
-        self.convert_to(AngleUnit::Millidegree)
+        let x = self.0;
+        (x / 1e-3) * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_millidegrees`].
@@ -347,13 +373,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Arcminutes (`'`).
     #[inline]
     pub fn from_arcminutes(value: Num) -> Self {
-        Self::new(value, AngleUnit::Arcminute)
+        let x = value;
+        Self(x * (std::f64::consts::PI as Num) / (60.0 * 180.0))
     }
 
     /// Returns the value expressed in Arcminutes (`'`).
     #[inline]
     pub fn as_arcminutes(self) -> Num {
-        self.convert_to(AngleUnit::Arcminute)
+        let x = self.0;
+        x * 60.0 * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_arcminutes`].
@@ -365,13 +393,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Arcseconds (`″`).
     #[inline]
     pub fn from_arcseconds(value: Num) -> Self {
-        Self::new(value, AngleUnit::Arcsecond)
+        let x = value;
+        Self(x * (std::f64::consts::PI as Num) / (3600.0 * 180.0))
     }
 
     /// Returns the value expressed in Arcseconds (`″`).
     #[inline]
     pub fn as_arcseconds(self) -> Num {
-        self.convert_to(AngleUnit::Arcsecond)
+        let x = self.0;
+        x * 3600.0 * 180.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_arcseconds`].
@@ -383,13 +413,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Gradians (`g`).
     #[inline]
     pub fn from_gradians(value: Num) -> Self {
-        Self::new(value, AngleUnit::Gradian)
+        let x = value;
+        Self(x * (std::f64::consts::PI as Num) / 200.0)
     }
 
     /// Returns the value expressed in Gradians (`g`).
     #[inline]
     pub fn as_gradians(self) -> Num {
-        self.convert_to(AngleUnit::Gradian)
+        let x = self.0;
+        x * 200.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_gradians`].
@@ -401,13 +433,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in NatoMils (`mil`).
     #[inline]
     pub fn from_nato_mils(value: Num) -> Self {
-        Self::new(value, AngleUnit::NatoMil)
+        let x = value;
+        Self(x * (std::f64::consts::PI as Num) / 3200.0)
     }
 
     /// Returns the value expressed in NatoMils (`mil`).
     #[inline]
     pub fn as_nato_mils(self) -> Num {
-        self.convert_to(AngleUnit::NatoMil)
+        let x = self.0;
+        x * 3200.0 / (std::f64::consts::PI as Num)
     }
 
     /// Alias for [`Self::as_nato_mils`].
@@ -419,13 +453,15 @@ impl Angle {
     /// Creates a [`Angle`] from a value in Revolutions (`r`).
     #[inline]
     pub fn from_revolutions(value: Num) -> Self {
-        Self::new(value, AngleUnit::Revolution)
+        let x = value;
+        Self(x * 2.0 * (std::f64::consts::PI as Num))
     }
 
     /// Returns the value expressed in Revolutions (`r`).
     #[inline]
     pub fn as_revolutions(self) -> Num {
-        self.convert_to(AngleUnit::Revolution)
+        let x = self.0;
+        x / (2.0 * (std::f64::consts::PI as Num))
     }
 
     /// Alias for [`Self::as_revolutions`].
@@ -448,42 +484,49 @@ impl crate::Quantity for Angle {
 
 impl Add for Angle {
     type Output = Angle;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Angle {
     type Output = Angle;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Angle {
     type Output = Angle;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Angle {
     type Output = Angle;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Angle> for Num {
     type Output = Angle;
+    #[inline]
     fn mul(self, rhs: Angle) -> Angle {
         Angle(self * rhs.0)
     }
 }
 impl Div<Num> for Angle {
     type Output = Angle;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Angle {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

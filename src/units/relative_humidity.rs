@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -30,6 +32,7 @@ impl RelativeHumidityUnit {
     pub const ALL: &'static [Self] = &[Self::Percent];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Percent => "%RH",
@@ -37,6 +40,7 @@ impl RelativeHumidityUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Percent => &["%RH"],
@@ -46,6 +50,7 @@ impl RelativeHumidityUnit {
 
 impl RelativeHumidity {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: RelativeHumidityUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -71,6 +76,7 @@ impl RelativeHumidity {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: RelativeHumidityUnit) -> Num {
         let x = self.0;
         match unit {
@@ -81,13 +87,15 @@ impl RelativeHumidity {
     /// Creates a [`RelativeHumidity`] from a value in Percent (`%RH`).
     #[inline]
     pub fn from_percent(value: Num) -> Self {
-        Self::new(value, RelativeHumidityUnit::Percent)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Percent (`%RH`).
     #[inline]
     pub fn as_percent(self) -> Num {
-        self.convert_to(RelativeHumidityUnit::Percent)
+        let x = self.0;
+        x
     }
 }
 
@@ -104,42 +112,49 @@ impl crate::Quantity for RelativeHumidity {
 
 impl Add for RelativeHumidity {
     type Output = RelativeHumidity;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for RelativeHumidity {
     type Output = RelativeHumidity;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for RelativeHumidity {
     type Output = RelativeHumidity;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for RelativeHumidity {
     type Output = RelativeHumidity;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<RelativeHumidity> for Num {
     type Output = RelativeHumidity;
+    #[inline]
     fn mul(self, rhs: RelativeHumidity) -> RelativeHumidity {
         RelativeHumidity(self * rhs.0)
     }
 }
 impl Div<Num> for RelativeHumidity {
     type Output = RelativeHumidity;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for RelativeHumidity {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

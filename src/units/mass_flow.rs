@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -96,6 +98,7 @@ impl MassFlowUnit {
     ];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerSecond => "g/s",
@@ -135,6 +138,7 @@ impl MassFlowUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerSecond => &["g/s", "g/S"],
@@ -176,6 +180,7 @@ impl MassFlowUnit {
 
 impl MassFlow {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: MassFlowUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -233,6 +238,7 @@ impl MassFlow {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: MassFlowUnit) -> Num {
         let x = self.0;
         match unit {
@@ -275,13 +281,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in GramsPerSecond (`g/s`).
     #[inline]
     pub fn from_grams_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::GramPerSecond)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in GramsPerSecond (`g/s`).
     #[inline]
     pub fn as_grams_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::GramPerSecond)
+        let x = self.0;
+        x
     }
 
     /// Alias for [`Self::as_grams_per_second`].
@@ -293,13 +301,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in NanogramsPerSecond (`ng/s`).
     #[inline]
     pub fn from_nanograms_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::NanogramPerSecond)
+        let x = value;
+        Self((x * 1e-9))
     }
 
     /// Returns the value expressed in NanogramsPerSecond (`ng/s`).
     #[inline]
     pub fn as_nanograms_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::NanogramPerSecond)
+        let x = self.0;
+        (x / 1e-9)
     }
 
     /// Alias for [`Self::as_nanograms_per_second`].
@@ -311,13 +321,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MicrogramsPerSecond (`µg/s`).
     #[inline]
     pub fn from_micrograms_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MicrogramPerSecond)
+        let x = value;
+        Self((x * 1e-6))
     }
 
     /// Returns the value expressed in MicrogramsPerSecond (`µg/s`).
     #[inline]
     pub fn as_micrograms_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::MicrogramPerSecond)
+        let x = self.0;
+        (x / 1e-6)
     }
 
     /// Alias for [`Self::as_micrograms_per_second`].
@@ -329,13 +341,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MilligramsPerSecond (`mg/s`).
     #[inline]
     pub fn from_milligrams_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MilligramPerSecond)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in MilligramsPerSecond (`mg/s`).
     #[inline]
     pub fn as_milligrams_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::MilligramPerSecond)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Alias for [`Self::as_milligrams_per_second`].
@@ -347,13 +361,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in CentigramsPerSecond (`cg/s`).
     #[inline]
     pub fn from_centigrams_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::CentigramPerSecond)
+        let x = value;
+        Self((x * 1e-2))
     }
 
     /// Returns the value expressed in CentigramsPerSecond (`cg/s`).
     #[inline]
     pub fn as_centigrams_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::CentigramPerSecond)
+        let x = self.0;
+        (x / 1e-2)
     }
 
     /// Alias for [`Self::as_centigrams_per_second`].
@@ -365,13 +381,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in DecigramsPerSecond (`dg/s`).
     #[inline]
     pub fn from_decigrams_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::DecigramPerSecond)
+        let x = value;
+        Self((x * 1e-1))
     }
 
     /// Returns the value expressed in DecigramsPerSecond (`dg/s`).
     #[inline]
     pub fn as_decigrams_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::DecigramPerSecond)
+        let x = self.0;
+        (x / 1e-1)
     }
 
     /// Alias for [`Self::as_decigrams_per_second`].
@@ -383,13 +401,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in DecagramsPerSecond (`dag/s`).
     #[inline]
     pub fn from_decagrams_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::DecagramPerSecond)
+        let x = value;
+        Self((x * 1e1))
     }
 
     /// Returns the value expressed in DecagramsPerSecond (`dag/s`).
     #[inline]
     pub fn as_decagrams_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::DecagramPerSecond)
+        let x = self.0;
+        (x / 1e1)
     }
 
     /// Alias for [`Self::as_decagrams_per_second`].
@@ -401,13 +421,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in HectogramsPerSecond (`hg/s`).
     #[inline]
     pub fn from_hectograms_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::HectogramPerSecond)
+        let x = value;
+        Self((x * 1e2))
     }
 
     /// Returns the value expressed in HectogramsPerSecond (`hg/s`).
     #[inline]
     pub fn as_hectograms_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::HectogramPerSecond)
+        let x = self.0;
+        (x / 1e2)
     }
 
     /// Alias for [`Self::as_hectograms_per_second`].
@@ -419,13 +441,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in KilogramsPerSecond (`kg/s`).
     #[inline]
     pub fn from_kilograms_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::KilogramPerSecond)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in KilogramsPerSecond (`kg/s`).
     #[inline]
     pub fn as_kilograms_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::KilogramPerSecond)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Alias for [`Self::as_kilograms_per_second`].
@@ -437,13 +461,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in GramsPerDay (`g/d`).
     #[inline]
     pub fn from_grams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::GramPerDay)
+        let x = value;
+        Self(x / 86400.0)
     }
 
     /// Returns the value expressed in GramsPerDay (`g/d`).
     #[inline]
     pub fn as_grams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::GramPerDay)
+        let x = self.0;
+        x * 86400.0
     }
 
     /// Alias for [`Self::as_grams_per_day`].
@@ -455,13 +481,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in NanogramsPerDay (`ng/d`).
     #[inline]
     pub fn from_nanograms_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::NanogramPerDay)
+        let x = value;
+        Self((x * 1e-9) / 86400.0)
     }
 
     /// Returns the value expressed in NanogramsPerDay (`ng/d`).
     #[inline]
     pub fn as_nanograms_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::NanogramPerDay)
+        let x = self.0;
+        (x / 1e-9) * 86400.0
     }
 
     /// Alias for [`Self::as_nanograms_per_day`].
@@ -473,13 +501,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MicrogramsPerDay (`µg/d`).
     #[inline]
     pub fn from_micrograms_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MicrogramPerDay)
+        let x = value;
+        Self((x * 1e-6) / 86400.0)
     }
 
     /// Returns the value expressed in MicrogramsPerDay (`µg/d`).
     #[inline]
     pub fn as_micrograms_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::MicrogramPerDay)
+        let x = self.0;
+        (x / 1e-6) * 86400.0
     }
 
     /// Alias for [`Self::as_micrograms_per_day`].
@@ -491,13 +521,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MilligramsPerDay (`mg/d`).
     #[inline]
     pub fn from_milligrams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MilligramPerDay)
+        let x = value;
+        Self((x * 1e-3) / 86400.0)
     }
 
     /// Returns the value expressed in MilligramsPerDay (`mg/d`).
     #[inline]
     pub fn as_milligrams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::MilligramPerDay)
+        let x = self.0;
+        (x / 1e-3) * 86400.0
     }
 
     /// Alias for [`Self::as_milligrams_per_day`].
@@ -509,13 +541,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in CentigramsPerDay (`cg/d`).
     #[inline]
     pub fn from_centigrams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::CentigramPerDay)
+        let x = value;
+        Self((x * 1e-2) / 86400.0)
     }
 
     /// Returns the value expressed in CentigramsPerDay (`cg/d`).
     #[inline]
     pub fn as_centigrams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::CentigramPerDay)
+        let x = self.0;
+        (x / 1e-2) * 86400.0
     }
 
     /// Alias for [`Self::as_centigrams_per_day`].
@@ -527,13 +561,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in DecigramsPerDay (`dg/d`).
     #[inline]
     pub fn from_decigrams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::DecigramPerDay)
+        let x = value;
+        Self((x * 1e-1) / 86400.0)
     }
 
     /// Returns the value expressed in DecigramsPerDay (`dg/d`).
     #[inline]
     pub fn as_decigrams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::DecigramPerDay)
+        let x = self.0;
+        (x / 1e-1) * 86400.0
     }
 
     /// Alias for [`Self::as_decigrams_per_day`].
@@ -545,13 +581,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in DecagramsPerDay (`dag/d`).
     #[inline]
     pub fn from_decagrams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::DecagramPerDay)
+        let x = value;
+        Self((x * 1e1) / 86400.0)
     }
 
     /// Returns the value expressed in DecagramsPerDay (`dag/d`).
     #[inline]
     pub fn as_decagrams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::DecagramPerDay)
+        let x = self.0;
+        (x / 1e1) * 86400.0
     }
 
     /// Alias for [`Self::as_decagrams_per_day`].
@@ -563,13 +601,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in HectogramsPerDay (`hg/d`).
     #[inline]
     pub fn from_hectograms_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::HectogramPerDay)
+        let x = value;
+        Self((x * 1e2) / 86400.0)
     }
 
     /// Returns the value expressed in HectogramsPerDay (`hg/d`).
     #[inline]
     pub fn as_hectograms_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::HectogramPerDay)
+        let x = self.0;
+        (x / 1e2) * 86400.0
     }
 
     /// Alias for [`Self::as_hectograms_per_day`].
@@ -581,13 +621,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in KilogramsPerDay (`kg/d`).
     #[inline]
     pub fn from_kilograms_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::KilogramPerDay)
+        let x = value;
+        Self((x * 1e3) / 86400.0)
     }
 
     /// Returns the value expressed in KilogramsPerDay (`kg/d`).
     #[inline]
     pub fn as_kilograms_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::KilogramPerDay)
+        let x = self.0;
+        (x / 1e3) * 86400.0
     }
 
     /// Alias for [`Self::as_kilograms_per_day`].
@@ -599,13 +641,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MegagramsPerDay (`Mg/d`).
     #[inline]
     pub fn from_megagrams_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MegagramPerDay)
+        let x = value;
+        Self((x * 1e6) / 86400.0)
     }
 
     /// Returns the value expressed in MegagramsPerDay (`Mg/d`).
     #[inline]
     pub fn as_megagrams_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::MegagramPerDay)
+        let x = self.0;
+        (x / 1e6) * 86400.0
     }
 
     /// Alias for [`Self::as_megagrams_per_day`].
@@ -617,13 +661,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in GramsPerHour (`g/h`).
     #[inline]
     pub fn from_grams_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::GramPerHour)
+        let x = value;
+        Self(x / 3600.0)
     }
 
     /// Returns the value expressed in GramsPerHour (`g/h`).
     #[inline]
     pub fn as_grams_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::GramPerHour)
+        let x = self.0;
+        x * 3600.0
     }
 
     /// Alias for [`Self::as_grams_per_hour`].
@@ -635,13 +681,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in KilogramsPerHour (`kg/h`).
     #[inline]
     pub fn from_kilograms_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::KilogramPerHour)
+        let x = value;
+        Self(x / 3.6)
     }
 
     /// Returns the value expressed in KilogramsPerHour (`kg/h`).
     #[inline]
     pub fn as_kilograms_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::KilogramPerHour)
+        let x = self.0;
+        x * 3.6
     }
 
     /// Alias for [`Self::as_kilograms_per_hour`].
@@ -653,13 +701,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in KilogramsPerMinute (`kg/min`).
     #[inline]
     pub fn from_kilograms_per_minute(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::KilogramPerMinute)
+        let x = value;
+        Self(x / 0.06)
     }
 
     /// Returns the value expressed in KilogramsPerMinute (`kg/min`).
     #[inline]
     pub fn as_kilograms_per_minute(self) -> Num {
-        self.convert_to(MassFlowUnit::KilogramPerMinute)
+        let x = self.0;
+        x * 0.06
     }
 
     /// Alias for [`Self::as_kilograms_per_minute`].
@@ -671,13 +721,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in TonnesPerHour (`t/h`).
     #[inline]
     pub fn from_tonnes_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::TonnePerHour)
+        let x = value;
+        Self(x * 1000.0 / 3.6)
     }
 
     /// Returns the value expressed in TonnesPerHour (`t/h`).
     #[inline]
     pub fn as_tonnes_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::TonnePerHour)
+        let x = self.0;
+        x * 3.6 / 1000.0
     }
 
     /// Alias for [`Self::as_tonnes_per_hour`].
@@ -689,13 +741,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in PoundsPerDay (`lb/d`).
     #[inline]
     pub fn from_pounds_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::PoundPerDay)
+        let x = value;
+        Self(x * 453.59237 / 86400.0)
     }
 
     /// Returns the value expressed in PoundsPerDay (`lb/d`).
     #[inline]
     pub fn as_pounds_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::PoundPerDay)
+        let x = self.0;
+        x * 86400.0 / 453.59237
     }
 
     /// Alias for [`Self::as_pounds_per_day`].
@@ -707,13 +761,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MegapoundsPerDay (`Mlb/d`).
     #[inline]
     pub fn from_megapounds_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MegapoundPerDay)
+        let x = value;
+        Self((x * 1e6) * 453.59237 / 86400.0)
     }
 
     /// Returns the value expressed in MegapoundsPerDay (`Mlb/d`).
     #[inline]
     pub fn as_megapounds_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::MegapoundPerDay)
+        let x = self.0;
+        (x / 1e6) * 86400.0 / 453.59237
     }
 
     /// Alias for [`Self::as_megapounds_per_day`].
@@ -725,13 +781,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in PoundsPerHour (`lb/h`).
     #[inline]
     pub fn from_pounds_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::PoundPerHour)
+        let x = value;
+        Self(x * 453.59237 / 3600.0)
     }
 
     /// Returns the value expressed in PoundsPerHour (`lb/h`).
     #[inline]
     pub fn as_pounds_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::PoundPerHour)
+        let x = self.0;
+        x * 3600.0 / 453.59237
     }
 
     /// Alias for [`Self::as_pounds_per_hour`].
@@ -743,13 +801,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MegapoundsPerHour (`Mlb/h`).
     #[inline]
     pub fn from_megapounds_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MegapoundPerHour)
+        let x = value;
+        Self((x * 1e6) * 453.59237 / 3600.0)
     }
 
     /// Returns the value expressed in MegapoundsPerHour (`Mlb/h`).
     #[inline]
     pub fn as_megapounds_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::MegapoundPerHour)
+        let x = self.0;
+        (x / 1e6) * 3600.0 / 453.59237
     }
 
     /// Alias for [`Self::as_megapounds_per_hour`].
@@ -761,13 +821,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in PoundsPerMinute (`lb/min`).
     #[inline]
     pub fn from_pounds_per_minute(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::PoundPerMinute)
+        let x = value;
+        Self(x * 453.59237 / 60.0)
     }
 
     /// Returns the value expressed in PoundsPerMinute (`lb/min`).
     #[inline]
     pub fn as_pounds_per_minute(self) -> Num {
-        self.convert_to(MassFlowUnit::PoundPerMinute)
+        let x = self.0;
+        x * 60.0 / 453.59237
     }
 
     /// Alias for [`Self::as_pounds_per_minute`].
@@ -779,13 +841,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MegapoundsPerMinute (`Mlb/min`).
     #[inline]
     pub fn from_megapounds_per_minute(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MegapoundPerMinute)
+        let x = value;
+        Self((x * 1e6) * 453.59237 / 60.0)
     }
 
     /// Returns the value expressed in MegapoundsPerMinute (`Mlb/min`).
     #[inline]
     pub fn as_megapounds_per_minute(self) -> Num {
-        self.convert_to(MassFlowUnit::MegapoundPerMinute)
+        let x = self.0;
+        (x / 1e6) * 60.0 / 453.59237
     }
 
     /// Alias for [`Self::as_megapounds_per_minute`].
@@ -797,13 +861,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in PoundsPerSecond (`lb/s`).
     #[inline]
     pub fn from_pounds_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::PoundPerSecond)
+        let x = value;
+        Self(x * 453.59237)
     }
 
     /// Returns the value expressed in PoundsPerSecond (`lb/s`).
     #[inline]
     pub fn as_pounds_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::PoundPerSecond)
+        let x = self.0;
+        x / 453.59237
     }
 
     /// Alias for [`Self::as_pounds_per_second`].
@@ -815,13 +881,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in MegapoundsPerSecond (`Mlb/s`).
     #[inline]
     pub fn from_megapounds_per_second(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::MegapoundPerSecond)
+        let x = value;
+        Self((x * 1e6) * 453.59237)
     }
 
     /// Returns the value expressed in MegapoundsPerSecond (`Mlb/s`).
     #[inline]
     pub fn as_megapounds_per_second(self) -> Num {
-        self.convert_to(MassFlowUnit::MegapoundPerSecond)
+        let x = self.0;
+        (x / 1e6) / 453.59237
     }
 
     /// Alias for [`Self::as_megapounds_per_second`].
@@ -833,13 +901,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in TonnesPerDay (`t/d`).
     #[inline]
     pub fn from_tonnes_per_day(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::TonnePerDay)
+        let x = value;
+        Self(x / 0.0864000)
     }
 
     /// Returns the value expressed in TonnesPerDay (`t/d`).
     #[inline]
     pub fn as_tonnes_per_day(self) -> Num {
-        self.convert_to(MassFlowUnit::TonnePerDay)
+        let x = self.0;
+        x * 0.0864000
     }
 
     /// Alias for [`Self::as_tonnes_per_day`].
@@ -851,13 +921,15 @@ impl MassFlow {
     /// Creates a [`MassFlow`] from a value in ShortTonsPerHour (`short tn/h`).
     #[inline]
     pub fn from_short_tons_per_hour(value: Num) -> Self {
-        Self::new(value, MassFlowUnit::ShortTonPerHour)
+        let x = value;
+        Self(x * 907.18474 / 3.6)
     }
 
     /// Returns the value expressed in ShortTonsPerHour (`short tn/h`).
     #[inline]
     pub fn as_short_tons_per_hour(self) -> Num {
-        self.convert_to(MassFlowUnit::ShortTonPerHour)
+        let x = self.0;
+        x * 3.6 / 907.18474
     }
 
     /// Alias for [`Self::as_short_tons_per_hour`].
@@ -880,42 +952,49 @@ impl crate::Quantity for MassFlow {
 
 impl Add for MassFlow {
     type Output = MassFlow;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for MassFlow {
     type Output = MassFlow;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for MassFlow {
     type Output = MassFlow;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for MassFlow {
     type Output = MassFlow;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<MassFlow> for Num {
     type Output = MassFlow;
+    #[inline]
     fn mul(self, rhs: MassFlow) -> MassFlow {
         MassFlow(self * rhs.0)
     }
 }
 impl Div<Num> for MassFlow {
     type Output = MassFlow;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for MassFlow {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }

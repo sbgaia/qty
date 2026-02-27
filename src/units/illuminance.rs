@@ -3,7 +3,9 @@
 
 #![allow(
     unused_parens,
+    clippy::double_parens,
     clippy::excessive_precision,
+    clippy::let_and_return,
     clippy::unreadable_literal,
     clippy::too_many_lines
 )]
@@ -33,6 +35,7 @@ impl IlluminanceUnit {
     pub const ALL: &'static [Self] = &[Self::Lux, Self::Millilux, Self::Kilolux, Self::Megalux];
 
     /// Returns the primary display abbreviation for this unit.
+    #[inline]
     pub fn abbreviation(self) -> &'static str {
         match self {
             Self::Lux => "lx",
@@ -43,6 +46,7 @@ impl IlluminanceUnit {
     }
 
     /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    #[inline]
     pub fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Lux => &["lx"],
@@ -55,6 +59,7 @@ impl IlluminanceUnit {
 
 impl Illuminance {
     /// Creates a new value from `value` expressed in `unit`.
+    #[inline]
     pub fn new(value: Num, unit: IlluminanceUnit) -> Self {
         // `x` is the idiomatic variable name used in the generated formulas.
         let x = value;
@@ -83,6 +88,7 @@ impl Illuminance {
     }
 
     /// Returns the quantity expressed in `unit`.
+    #[inline]
     pub fn convert_to(self, unit: IlluminanceUnit) -> Num {
         let x = self.0;
         match unit {
@@ -96,49 +102,57 @@ impl Illuminance {
     /// Creates a [`Illuminance`] from a value in Lux (`lx`).
     #[inline]
     pub fn from_lux(value: Num) -> Self {
-        Self::new(value, IlluminanceUnit::Lux)
+        let x = value;
+        Self(x)
     }
 
     /// Returns the value expressed in Lux (`lx`).
     #[inline]
     pub fn as_lux(self) -> Num {
-        self.convert_to(IlluminanceUnit::Lux)
+        let x = self.0;
+        x
     }
 
     /// Creates a [`Illuminance`] from a value in Millilux (`mlx`).
     #[inline]
     pub fn from_millilux(value: Num) -> Self {
-        Self::new(value, IlluminanceUnit::Millilux)
+        let x = value;
+        Self((x * 1e-3))
     }
 
     /// Returns the value expressed in Millilux (`mlx`).
     #[inline]
     pub fn as_millilux(self) -> Num {
-        self.convert_to(IlluminanceUnit::Millilux)
+        let x = self.0;
+        (x / 1e-3)
     }
 
     /// Creates a [`Illuminance`] from a value in Kilolux (`klx`).
     #[inline]
     pub fn from_kilolux(value: Num) -> Self {
-        Self::new(value, IlluminanceUnit::Kilolux)
+        let x = value;
+        Self((x * 1e3))
     }
 
     /// Returns the value expressed in Kilolux (`klx`).
     #[inline]
     pub fn as_kilolux(self) -> Num {
-        self.convert_to(IlluminanceUnit::Kilolux)
+        let x = self.0;
+        (x / 1e3)
     }
 
     /// Creates a [`Illuminance`] from a value in Megalux (`Mlx`).
     #[inline]
     pub fn from_megalux(value: Num) -> Self {
-        Self::new(value, IlluminanceUnit::Megalux)
+        let x = value;
+        Self((x * 1e6))
     }
 
     /// Returns the value expressed in Megalux (`Mlx`).
     #[inline]
     pub fn as_megalux(self) -> Num {
-        self.convert_to(IlluminanceUnit::Megalux)
+        let x = self.0;
+        (x / 1e6)
     }
 }
 
@@ -155,42 +169,49 @@ impl crate::Quantity for Illuminance {
 
 impl Add for Illuminance {
     type Output = Illuminance;
+    #[inline]
     fn add(self, rhs: Self) -> Self {
         Self(self.0 + rhs.0)
     }
 }
 impl Sub for Illuminance {
     type Output = Illuminance;
+    #[inline]
     fn sub(self, rhs: Self) -> Self {
         Self(self.0 - rhs.0)
     }
 }
 impl Neg for Illuminance {
     type Output = Illuminance;
+    #[inline]
     fn neg(self) -> Self {
         Self(-self.0)
     }
 }
 impl Mul<Num> for Illuminance {
     type Output = Illuminance;
+    #[inline]
     fn mul(self, rhs: Num) -> Self {
         Self(self.0 * rhs)
     }
 }
 impl Mul<Illuminance> for Num {
     type Output = Illuminance;
+    #[inline]
     fn mul(self, rhs: Illuminance) -> Illuminance {
         Illuminance(self * rhs.0)
     }
 }
 impl Div<Num> for Illuminance {
     type Output = Illuminance;
+    #[inline]
     fn div(self, rhs: Num) -> Self {
         Self(self.0 / rhs)
     }
 }
 impl Div for Illuminance {
     type Output = Num;
+    #[inline]
     fn div(self, rhs: Self) -> Num {
         self.0 / rhs.0
     }
