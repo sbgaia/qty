@@ -1,0 +1,14 @@
+[workspace]
+members = [".", "codegen"]
+resolver = "2"
+
+[package]
+name = "unitsnet-rs"
+version = "0.1.0"
+edition = "2021"
+description = "Strongly-typed physical quantities and unit conversions"
+license = "MIT OR Apache-2.0"
+keywords = ["units", "measurement", "physics", "conversion"]
+categories = ["science"]
+
+[dependencies]
