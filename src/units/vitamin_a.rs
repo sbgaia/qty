@@ -114,5 +114,5 @@ fixed_base!(VitaminA, InternationalUnit);
 ///
 /// Also available as [`unit::vitamin_a`](crate::unit::vitamin_a). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(InternationalUnit: VitaminA, VitaminAUnit::InternationalUnit, base InternationalUnit, 1 / 1, pi^0, from_international_units, as_international_units);
+    fixed_unit!(InternationalUnit: VitaminA, VitaminAUnit::InternationalUnit, base InternationalUnit, 1 / 1, pi^0, from_international_units, as_international_units, additive);
 }

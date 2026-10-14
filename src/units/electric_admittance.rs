@@ -443,20 +443,20 @@ fixed_base!(ElectricAdmittance, Siemens);
 ///
 /// Also available as [`unit::electric_admittance`](crate::unit::electric_admittance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Siemens: ElectricAdmittance, ElectricAdmittanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens);
-    fixed_unit!(Nanosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens);
-    fixed_unit!(Microsiemens: ElectricAdmittance, ElectricAdmittanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens);
-    fixed_unit!(Millisiemens: ElectricAdmittance, ElectricAdmittanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens);
-    fixed_unit!(Kilosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens);
-    fixed_unit!(Megasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens);
-    fixed_unit!(Gigasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens);
-    fixed_unit!(Terasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens);
-    fixed_unit!(Mho: ElectricAdmittance, ElectricAdmittanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos);
-    fixed_unit!(Nanomho: ElectricAdmittance, ElectricAdmittanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos);
-    fixed_unit!(Micromho: ElectricAdmittance, ElectricAdmittanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos);
-    fixed_unit!(Millimho: ElectricAdmittance, ElectricAdmittanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos);
-    fixed_unit!(Kilomho: ElectricAdmittance, ElectricAdmittanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos);
-    fixed_unit!(Megamho: ElectricAdmittance, ElectricAdmittanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos);
-    fixed_unit!(Gigamho: ElectricAdmittance, ElectricAdmittanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos);
-    fixed_unit!(Teramho: ElectricAdmittance, ElectricAdmittanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos);
+    fixed_unit!(Siemens: ElectricAdmittance, ElectricAdmittanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
+    fixed_unit!(Nanosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);
+    fixed_unit!(Microsiemens: ElectricAdmittance, ElectricAdmittanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens, additive);
+    fixed_unit!(Millisiemens: ElectricAdmittance, ElectricAdmittanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens, additive);
+    fixed_unit!(Kilosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens, additive);
+    fixed_unit!(Megasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens, additive);
+    fixed_unit!(Gigasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens, additive);
+    fixed_unit!(Terasiemens: ElectricAdmittance, ElectricAdmittanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens, additive);
+    fixed_unit!(Mho: ElectricAdmittance, ElectricAdmittanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos, additive);
+    fixed_unit!(Nanomho: ElectricAdmittance, ElectricAdmittanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos, additive);
+    fixed_unit!(Micromho: ElectricAdmittance, ElectricAdmittanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos, additive);
+    fixed_unit!(Millimho: ElectricAdmittance, ElectricAdmittanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos, additive);
+    fixed_unit!(Kilomho: ElectricAdmittance, ElectricAdmittanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos, additive);
+    fixed_unit!(Megamho: ElectricAdmittance, ElectricAdmittanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos, additive);
+    fixed_unit!(Gigamho: ElectricAdmittance, ElectricAdmittanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos, additive);
+    fixed_unit!(Teramho: ElectricAdmittance, ElectricAdmittanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos, additive);
 }

@@ -208,8 +208,8 @@ fixed_base!(RotationalAcceleration, RadianPerSecondSquared);
 ///
 /// Also available as [`unit::rotational_acceleration`](crate::unit::rotational_acceleration). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(RadianPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RadianPerSecondSquared, base RadianPerSecondSquared, 1 / 1, pi^0, from_radians_per_second_squared, as_radians_per_second_squared);
-    fixed_unit!(DegreePerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::DegreePerSecondSquared, base RadianPerSecondSquared, 1 / 180, pi^1, from_degrees_per_second_squared, as_degrees_per_second_squared);
-    fixed_unit!(RevolutionPerMinutePerSecond: RotationalAcceleration, RotationalAccelerationUnit::RevolutionPerMinutePerSecond, base RadianPerSecondSquared, 1 / 30, pi^1, from_revolutions_per_minute_per_second, as_revolutions_per_minute_per_second);
-    fixed_unit!(RevolutionPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RevolutionPerSecondSquared, base RadianPerSecondSquared, 2 / 1, pi^1, from_revolutions_per_second_squared, as_revolutions_per_second_squared);
+    fixed_unit!(RadianPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RadianPerSecondSquared, base RadianPerSecondSquared, 1 / 1, pi^0, from_radians_per_second_squared, as_radians_per_second_squared, additive);
+    fixed_unit!(DegreePerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::DegreePerSecondSquared, base RadianPerSecondSquared, 1 / 180, pi^1, from_degrees_per_second_squared, as_degrees_per_second_squared, additive);
+    fixed_unit!(RevolutionPerMinutePerSecond: RotationalAcceleration, RotationalAccelerationUnit::RevolutionPerMinutePerSecond, base RadianPerSecondSquared, 1 / 30, pi^1, from_revolutions_per_minute_per_second, as_revolutions_per_minute_per_second, additive);
+    fixed_unit!(RevolutionPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RevolutionPerSecondSquared, base RadianPerSecondSquared, 2 / 1, pi^1, from_revolutions_per_second_squared, as_revolutions_per_second_squared, additive);
 }

@@ -442,18 +442,18 @@ fixed_base!(Luminosity, Watt);
 ///
 /// Also available as [`unit::luminosity`](crate::unit::luminosity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Watt: Luminosity, LuminosityUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts);
-    fixed_unit!(Femtowatt: Luminosity, LuminosityUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts);
-    fixed_unit!(Picowatt: Luminosity, LuminosityUnit::Picowatt, base Watt, 1 / 1000000000000, pi^0, from_picowatts, as_picowatts);
-    fixed_unit!(Nanowatt: Luminosity, LuminosityUnit::Nanowatt, base Watt, 1 / 1000000000, pi^0, from_nanowatts, as_nanowatts);
-    fixed_unit!(Microwatt: Luminosity, LuminosityUnit::Microwatt, base Watt, 1 / 1000000, pi^0, from_microwatts, as_microwatts);
-    fixed_unit!(Milliwatt: Luminosity, LuminosityUnit::Milliwatt, base Watt, 1 / 1000, pi^0, from_milliwatts, as_milliwatts);
-    fixed_unit!(Deciwatt: Luminosity, LuminosityUnit::Deciwatt, base Watt, 1 / 10, pi^0, from_deciwatts, as_deciwatts);
-    fixed_unit!(Decawatt: Luminosity, LuminosityUnit::Decawatt, base Watt, 10 / 1, pi^0, from_decawatts, as_decawatts);
-    fixed_unit!(Kilowatt: Luminosity, LuminosityUnit::Kilowatt, base Watt, 1000 / 1, pi^0, from_kilowatts, as_kilowatts);
-    fixed_unit!(Megawatt: Luminosity, LuminosityUnit::Megawatt, base Watt, 1000000 / 1, pi^0, from_megawatts, as_megawatts);
-    fixed_unit!(Gigawatt: Luminosity, LuminosityUnit::Gigawatt, base Watt, 1000000000 / 1, pi^0, from_gigawatts, as_gigawatts);
-    fixed_unit!(Terawatt: Luminosity, LuminosityUnit::Terawatt, base Watt, 1000000000000 / 1, pi^0, from_terawatts, as_terawatts);
-    fixed_unit!(Petawatt: Luminosity, LuminosityUnit::Petawatt, base Watt, 1000000000000000 / 1, pi^0, from_petawatts, as_petawatts);
-    fixed_unit!(SolarLuminosity: Luminosity, LuminosityUnit::SolarLuminosity, base Watt, 382800000000000000000000000 / 1, pi^0, from_solar_luminosities, as_solar_luminosities);
+    fixed_unit!(Watt: Luminosity, LuminosityUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
+    fixed_unit!(Femtowatt: Luminosity, LuminosityUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);
+    fixed_unit!(Picowatt: Luminosity, LuminosityUnit::Picowatt, base Watt, 1 / 1000000000000, pi^0, from_picowatts, as_picowatts, additive);
+    fixed_unit!(Nanowatt: Luminosity, LuminosityUnit::Nanowatt, base Watt, 1 / 1000000000, pi^0, from_nanowatts, as_nanowatts, additive);
+    fixed_unit!(Microwatt: Luminosity, LuminosityUnit::Microwatt, base Watt, 1 / 1000000, pi^0, from_microwatts, as_microwatts, additive);
+    fixed_unit!(Milliwatt: Luminosity, LuminosityUnit::Milliwatt, base Watt, 1 / 1000, pi^0, from_milliwatts, as_milliwatts, additive);
+    fixed_unit!(Deciwatt: Luminosity, LuminosityUnit::Deciwatt, base Watt, 1 / 10, pi^0, from_deciwatts, as_deciwatts, additive);
+    fixed_unit!(Decawatt: Luminosity, LuminosityUnit::Decawatt, base Watt, 10 / 1, pi^0, from_decawatts, as_decawatts, additive);
+    fixed_unit!(Kilowatt: Luminosity, LuminosityUnit::Kilowatt, base Watt, 1000 / 1, pi^0, from_kilowatts, as_kilowatts, additive);
+    fixed_unit!(Megawatt: Luminosity, LuminosityUnit::Megawatt, base Watt, 1000000 / 1, pi^0, from_megawatts, as_megawatts, additive);
+    fixed_unit!(Gigawatt: Luminosity, LuminosityUnit::Gigawatt, base Watt, 1000000000 / 1, pi^0, from_gigawatts, as_gigawatts, additive);
+    fixed_unit!(Terawatt: Luminosity, LuminosityUnit::Terawatt, base Watt, 1000000000000 / 1, pi^0, from_terawatts, as_terawatts, additive);
+    fixed_unit!(Petawatt: Luminosity, LuminosityUnit::Petawatt, base Watt, 1000000000000000 / 1, pi^0, from_petawatts, as_petawatts, additive);
+    fixed_unit!(SolarLuminosity: Luminosity, LuminosityUnit::SolarLuminosity, base Watt, 382800000000000000000000000 / 1, pi^0, from_solar_luminosities, as_solar_luminosities, additive);
 }

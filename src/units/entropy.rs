@@ -266,11 +266,11 @@ fixed_base!(Entropy, JoulePerKelvin);
 ///
 /// Also available as [`unit::entropy`](crate::unit::entropy). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(JoulePerKelvin: Entropy, EntropyUnit::JoulePerKelvin, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_kelvin, as_joules_per_kelvin);
-    fixed_unit!(KilojoulePerKelvin: Entropy, EntropyUnit::KilojoulePerKelvin, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_kelvin, as_kilojoules_per_kelvin);
-    fixed_unit!(MegajoulePerKelvin: Entropy, EntropyUnit::MegajoulePerKelvin, base JoulePerKelvin, 1000000 / 1, pi^0, from_megajoules_per_kelvin, as_megajoules_per_kelvin);
-    fixed_unit!(CaloriePerKelvin: Entropy, EntropyUnit::CaloriePerKelvin, base JoulePerKelvin, 523 / 125, pi^0, from_calories_per_kelvin, as_calories_per_kelvin);
-    fixed_unit!(KilocaloriePerKelvin: Entropy, EntropyUnit::KilocaloriePerKelvin, base JoulePerKelvin, 4184 / 1, pi^0, from_kilocalories_per_kelvin, as_kilocalories_per_kelvin);
-    fixed_unit!(JoulePerDegreeCelsius: Entropy, EntropyUnit::JoulePerDegreeCelsius, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_degree_celsius, as_joules_per_degree_celsius);
-    fixed_unit!(KilojoulePerDegreeCelsius: Entropy, EntropyUnit::KilojoulePerDegreeCelsius, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_degree_celsius, as_kilojoules_per_degree_celsius);
+    fixed_unit!(JoulePerKelvin: Entropy, EntropyUnit::JoulePerKelvin, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_kelvin, as_joules_per_kelvin, additive);
+    fixed_unit!(KilojoulePerKelvin: Entropy, EntropyUnit::KilojoulePerKelvin, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_kelvin, as_kilojoules_per_kelvin, additive);
+    fixed_unit!(MegajoulePerKelvin: Entropy, EntropyUnit::MegajoulePerKelvin, base JoulePerKelvin, 1000000 / 1, pi^0, from_megajoules_per_kelvin, as_megajoules_per_kelvin, additive);
+    fixed_unit!(CaloriePerKelvin: Entropy, EntropyUnit::CaloriePerKelvin, base JoulePerKelvin, 523 / 125, pi^0, from_calories_per_kelvin, as_calories_per_kelvin, additive);
+    fixed_unit!(KilocaloriePerKelvin: Entropy, EntropyUnit::KilocaloriePerKelvin, base JoulePerKelvin, 4184 / 1, pi^0, from_kilocalories_per_kelvin, as_kilocalories_per_kelvin, additive);
+    fixed_unit!(JoulePerDegreeCelsius: Entropy, EntropyUnit::JoulePerDegreeCelsius, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_degree_celsius, as_joules_per_degree_celsius, additive);
+    fixed_unit!(KilojoulePerDegreeCelsius: Entropy, EntropyUnit::KilojoulePerDegreeCelsius, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_degree_celsius, as_kilojoules_per_degree_celsius, additive);
 }

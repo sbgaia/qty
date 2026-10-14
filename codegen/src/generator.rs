@@ -21,6 +21,20 @@ macro_rules! w {
     };
 }
 
+/// Quantities that are points on a scale rather than amounts, with the
+/// quantity measuring the difference between two points. UnitsNet does not
+/// mark this in its definitions, so the list lives here.
+const POINT_QUANTITIES: &[(&str, &str)] = &[("Temperature", "TemperatureDelta")];
+
+/// The difference quantity of a point quantity (`Temperature` →
+/// `TemperatureDelta`), or `None` for ordinary quantities.
+pub fn point_delta(name: &str) -> Option<&'static str> {
+    POINT_QUANTITIES
+        .iter()
+        .find(|(point, _)| *point == name)
+        .map(|(_, delta)| *delta)
+}
+
 /// Generates a complete `.rs` source file for `qty` and returns it as a `String`.
 pub fn generate(qty: &QuantityDef) -> String {
     let mut out = String::with_capacity(64 * 1024);
@@ -69,9 +83,10 @@ fn emit_fixed_units(qty: &QuantityDef, out: &mut String) {
         let snake = unit.plural.to_snake_case();
         w!(
             out,
-            "    fixed_unit!({s}: {name}, {name}Unit::{s}, base {base}, {num} / {den}, pi^{pi}, from_{snake}, as_{snake});",
+            "    fixed_unit!({s}: {name}, {name}Unit::{s}, base {base}, {num} / {den}, pi^{pi}, from_{snake}, as_{snake}{additive});",
             s = unit.singular,
             base = qty.base_unit,
+            additive = if point_delta(name).is_some() { "" } else { ", additive" },
         );
     }
     w!(out, "}}");
@@ -94,6 +109,9 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     );
     w!(out);
     w!(out, "use crate::Float;");
+    if let Some(delta) = point_delta(name) {
+        w!(out, "use crate::{};", delta);
+    }
     w!(out);
 
     let doc = escape_doc(&qty.doc);
@@ -111,6 +129,37 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
         out,
         "/// `#[repr(transparent)]`: same size, alignment and ABI as `T`."
     );
+    if let Some(delta) = point_delta(name) {
+        let snake = qty
+            .units
+            .iter()
+            .find(|u| u.singular == "DegreeCelsius")
+            .map_or_else(|| "kelvins".to_owned(), |u| u.plural.to_snake_case());
+        for line in [
+            "///".to_owned(),
+            format!("/// A {name} is a *point on a scale*, not an amount: two of them cannot"),
+            "/// be added (20 °C + 20 °C is not 40 °C), negated or scaled. Their".to_owned(),
+            format!("/// difference is a [`{delta}`], which can be added back:"),
+            "///".to_owned(),
+            "/// ```rust".to_owned(),
+            "/// use unitsnet_rs::*;".to_owned(),
+            "///".to_owned(),
+            format!("/// let morning = {name}::from_{snake}(12.0);"),
+            format!("/// let noon = {name}::from_{snake}(20.0);"),
+            format!("/// let rise: {delta} = noon - morning;"),
+            "/// assert!((rise.as_kelvins() - 8.0).abs() < 1e-12);".to_owned(),
+            "/// assert!((morning + rise).approx_eq_rel(noon, 1e-12));".to_owned(),
+            "/// ```".to_owned(),
+            "///".to_owned(),
+            "/// ```compile_fail".to_owned(),
+            "/// use unitsnet_rs::*;".to_owned(),
+            format!("/// let t = {name}::from_{snake}(20.0);"),
+            format!("/// let _ = t + t; // error: add a {delta} instead"),
+            "/// ```".to_owned(),
+        ] {
+            w!(out, "{}", line);
+        }
+    }
     w!(
         out,
         "#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]"
@@ -123,7 +172,14 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     w!(out, "#[must_use]");
     w!(out, "pub struct {}<T = f64>(T);", name);
     w!(out);
-    w!(out, "quantity!({}, {}Unit, {});", name, name, qty.base_unit);
+    let invocation = match point_delta(name) {
+        Some(delta) => format!(
+            "point_quantity!({name}, {name}Unit, {}, {delta});",
+            qty.base_unit
+        ),
+        None => format!("quantity!({name}, {name}Unit, {});", qty.base_unit),
+    };
+    w!(out, "{invocation}");
     w!(out);
 }
 
@@ -570,40 +626,67 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     w!(out, "}}");
     w!(out);
 
-    // Arithmetic smoke tests on exact base-unit values, for float and integer storage.
-    w!(out, "#[test]");
-    w!(out, "fn arithmetic_f64() {{");
-    w!(out, "    let a = {name}::from_base(6.0);");
-    w!(out, "    let b = {name}::from_base(2.0);");
-    w!(out, "    assert_eq!((a + b).as_base(), 8.0);");
-    w!(out, "    assert_eq!((a - b).as_base(), 4.0);");
-    w!(out, "    assert_eq!((-a).as_base(), -6.0);");
-    w!(out, "    assert_eq!((a * 2.0).as_base(), 12.0);");
-    w!(out, "    assert_eq!((2.0 * a).as_base(), 12.0);");
-    w!(out, "    assert_eq!((a / 2.0).as_base(), 3.0);");
-    w!(out, "    assert_eq!(a / b, 3.0);");
-    w!(out, "    let mut c = a;");
-    w!(out, "    c += b;");
-    w!(out, "    c -= b;");
-    w!(out, "    c *= 2.0;");
-    w!(out, "    c /= 4.0;");
-    w!(out, "    assert_eq!(c.as_base(), 3.0);");
-    w!(out, "}}");
-    w!(out);
+    if point_delta(name).is_some() {
+        // Point arithmetic: differences are deltas; deltas move points.
+        let delta = point_delta(name).unwrap_or_default();
+        w!(out, "#[test]");
+        w!(out, "fn point_arithmetic() {{");
+        w!(out, "    let a = {name}::from_base(6.0);");
+        w!(out, "    let b = {name}::from_base(2.0);");
+        w!(out, "    let d: {delta} = a - b;");
+        w!(out, "    assert_eq!(d.as_base(), 4.0);");
+        w!(out, "    assert_eq!(b + d, a);");
+        w!(out, "    assert_eq!(d + b, a);");
+        w!(out, "    assert_eq!(a - d, b);");
+        w!(out, "    assert_eq!(a / b, 3.0);");
+        w!(out, "    let mut c = b;");
+        w!(out, "    c += d;");
+        w!(out, "    assert_eq!(c, a);");
+        w!(out, "    c -= d;");
+        w!(out, "    assert_eq!(c, b);");
+        w!(
+            out,
+            "    let i: {delta}<i64> = {name}::<i64>::from_base(7) - {name}::from_base(2);"
+        );
+        w!(out, "    assert_eq!(i.as_base(), 5);");
+        w!(out, "}}");
+        w!(out);
+    } else {
+        // Arithmetic smoke tests on exact base-unit values, for float and integer storage.
+        w!(out, "#[test]");
+        w!(out, "fn arithmetic_f64() {{");
+        w!(out, "    let a = {name}::from_base(6.0);");
+        w!(out, "    let b = {name}::from_base(2.0);");
+        w!(out, "    assert_eq!((a + b).as_base(), 8.0);");
+        w!(out, "    assert_eq!((a - b).as_base(), 4.0);");
+        w!(out, "    assert_eq!((-a).as_base(), -6.0);");
+        w!(out, "    assert_eq!((a * 2.0).as_base(), 12.0);");
+        w!(out, "    assert_eq!((2.0 * a).as_base(), 12.0);");
+        w!(out, "    assert_eq!((a / 2.0).as_base(), 3.0);");
+        w!(out, "    assert_eq!(a / b, 3.0);");
+        w!(out, "    let mut c = a;");
+        w!(out, "    c += b;");
+        w!(out, "    c -= b;");
+        w!(out, "    c *= 2.0;");
+        w!(out, "    c /= 4.0;");
+        w!(out, "    assert_eq!(c.as_base(), 3.0);");
+        w!(out, "}}");
+        w!(out);
 
-    w!(out, "#[test]");
-    w!(out, "fn arithmetic_integer() {{");
-    w!(out, "    let a = {name}::<i64>::from_base(7);");
-    w!(out, "    let b = {name}::<i64>::from_base(2);");
-    w!(out, "    assert_eq!(a + b, {name}::from_base(9));");
-    w!(out, "    assert_eq!(a % b, {name}::from_base(1));");
-    w!(out, "    assert_eq!(a / b, 3);");
-    w!(out, "    assert!(a > b);");
-    w!(
-        out,
-        "    assert_eq!([a, b].iter().sum::<{name}<i64>>(), {name}::from_base(9));"
-    );
-    w!(out, "}}");
+        w!(out, "#[test]");
+        w!(out, "fn arithmetic_integer() {{");
+        w!(out, "    let a = {name}::<i64>::from_base(7);");
+        w!(out, "    let b = {name}::<i64>::from_base(2);");
+        w!(out, "    assert_eq!(a + b, {name}::from_base(9));");
+        w!(out, "    assert_eq!(a % b, {name}::from_base(1));");
+        w!(out, "    assert_eq!(a / b, 3);");
+        w!(out, "    assert!(a > b);");
+        w!(
+            out,
+            "    assert_eq!([a, b].iter().sum::<{name}<i64>>(), {name}::from_base(9));"
+        );
+        w!(out, "}}");
+    }
 
     out
 }

@@ -114,5 +114,5 @@ fixed_base!(SolidAngle, Steradian);
 ///
 /// Also available as [`unit::solid_angle`](crate::unit::solid_angle). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Steradian: SolidAngle, SolidAngleUnit::Steradian, base Steradian, 1 / 1, pi^0, from_steradians, as_steradians);
+    fixed_unit!(Steradian: SolidAngle, SolidAngleUnit::Steradian, base Steradian, 1 / 1, pi^0, from_steradians, as_steradians, additive);
 }

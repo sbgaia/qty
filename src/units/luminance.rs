@@ -339,14 +339,14 @@ fixed_base!(Luminance, CandelaPerSquareMeter);
 ///
 /// Also available as [`unit::luminance`](crate::unit::luminance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(CandelaPerSquareMeter: Luminance, LuminanceUnit::CandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1, pi^0, from_candelas_per_square_meter, as_candelas_per_square_meter);
-    fixed_unit!(NanocandelaPerSquareMeter: Luminance, LuminanceUnit::NanocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000000, pi^0, from_nanocandelas_per_square_meter, as_nanocandelas_per_square_meter);
-    fixed_unit!(MicrocandelaPerSquareMeter: Luminance, LuminanceUnit::MicrocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000, pi^0, from_microcandelas_per_square_meter, as_microcandelas_per_square_meter);
-    fixed_unit!(MillicandelaPerSquareMeter: Luminance, LuminanceUnit::MillicandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000, pi^0, from_millicandelas_per_square_meter, as_millicandelas_per_square_meter);
-    fixed_unit!(CenticandelaPerSquareMeter: Luminance, LuminanceUnit::CenticandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 100, pi^0, from_centicandelas_per_square_meter, as_centicandelas_per_square_meter);
-    fixed_unit!(DecicandelaPerSquareMeter: Luminance, LuminanceUnit::DecicandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 10, pi^0, from_decicandelas_per_square_meter, as_decicandelas_per_square_meter);
-    fixed_unit!(KilocandelaPerSquareMeter: Luminance, LuminanceUnit::KilocandelaPerSquareMeter, base CandelaPerSquareMeter, 1000 / 1, pi^0, from_kilocandelas_per_square_meter, as_kilocandelas_per_square_meter);
-    fixed_unit!(CandelaPerSquareFoot: Luminance, LuminanceUnit::CandelaPerSquareFoot, base CandelaPerSquareMeter, 1562500 / 145161, pi^0, from_candelas_per_square_foot, as_candelas_per_square_foot);
-    fixed_unit!(CandelaPerSquareInch: Luminance, LuminanceUnit::CandelaPerSquareInch, base CandelaPerSquareMeter, 25000000 / 16129, pi^0, from_candelas_per_square_inch, as_candelas_per_square_inch);
-    fixed_unit!(Nit: Luminance, LuminanceUnit::Nit, base CandelaPerSquareMeter, 1 / 1, pi^0, from_nits, as_nits);
+    fixed_unit!(CandelaPerSquareMeter: Luminance, LuminanceUnit::CandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1, pi^0, from_candelas_per_square_meter, as_candelas_per_square_meter, additive);
+    fixed_unit!(NanocandelaPerSquareMeter: Luminance, LuminanceUnit::NanocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000000, pi^0, from_nanocandelas_per_square_meter, as_nanocandelas_per_square_meter, additive);
+    fixed_unit!(MicrocandelaPerSquareMeter: Luminance, LuminanceUnit::MicrocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000, pi^0, from_microcandelas_per_square_meter, as_microcandelas_per_square_meter, additive);
+    fixed_unit!(MillicandelaPerSquareMeter: Luminance, LuminanceUnit::MillicandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000, pi^0, from_millicandelas_per_square_meter, as_millicandelas_per_square_meter, additive);
+    fixed_unit!(CenticandelaPerSquareMeter: Luminance, LuminanceUnit::CenticandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 100, pi^0, from_centicandelas_per_square_meter, as_centicandelas_per_square_meter, additive);
+    fixed_unit!(DecicandelaPerSquareMeter: Luminance, LuminanceUnit::DecicandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 10, pi^0, from_decicandelas_per_square_meter, as_decicandelas_per_square_meter, additive);
+    fixed_unit!(KilocandelaPerSquareMeter: Luminance, LuminanceUnit::KilocandelaPerSquareMeter, base CandelaPerSquareMeter, 1000 / 1, pi^0, from_kilocandelas_per_square_meter, as_kilocandelas_per_square_meter, additive);
+    fixed_unit!(CandelaPerSquareFoot: Luminance, LuminanceUnit::CandelaPerSquareFoot, base CandelaPerSquareMeter, 1562500 / 145161, pi^0, from_candelas_per_square_foot, as_candelas_per_square_foot, additive);
+    fixed_unit!(CandelaPerSquareInch: Luminance, LuminanceUnit::CandelaPerSquareInch, base CandelaPerSquareMeter, 25000000 / 16129, pi^0, from_candelas_per_square_inch, as_candelas_per_square_inch, additive);
+    fixed_unit!(Nit: Luminance, LuminanceUnit::Nit, base CandelaPerSquareMeter, 1 / 1, pi^0, from_nits, as_nits, additive);
 }

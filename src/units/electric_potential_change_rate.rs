@@ -613,24 +613,24 @@ fixed_base!(ElectricPotentialChangeRate, VoltPerSecond);
 ///
 /// Also available as [`unit::electric_potential_change_rate`](crate::unit::electric_potential_change_rate). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(VoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerSecond, base VoltPerSecond, 1 / 1, pi^0, from_volts_per_second, as_volts_per_second);
-    fixed_unit!(MicrovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerSecond, base VoltPerSecond, 1 / 1000000, pi^0, from_microvolts_per_second, as_microvolts_per_second);
-    fixed_unit!(MillivoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerSecond, base VoltPerSecond, 1 / 1000, pi^0, from_millivolts_per_second, as_millivolts_per_second);
-    fixed_unit!(KilovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerSecond, base VoltPerSecond, 1000 / 1, pi^0, from_kilovolts_per_second, as_kilovolts_per_second);
-    fixed_unit!(MegavoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerSecond, base VoltPerSecond, 1000000 / 1, pi^0, from_megavolts_per_second, as_megavolts_per_second);
-    fixed_unit!(VoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerMicrosecond, base VoltPerSecond, 1000000 / 1, pi^0, from_volts_per_microsecond, as_volts_per_microsecond);
-    fixed_unit!(MicrovoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond, base VoltPerSecond, 1 / 1, pi^0, from_microvolts_per_microsecond, as_microvolts_per_microsecond);
-    fixed_unit!(MillivoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond, base VoltPerSecond, 1000 / 1, pi^0, from_millivolts_per_microsecond, as_millivolts_per_microsecond);
-    fixed_unit!(KilovoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond, base VoltPerSecond, 1000000000 / 1, pi^0, from_kilovolts_per_microsecond, as_kilovolts_per_microsecond);
-    fixed_unit!(MegavoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond, base VoltPerSecond, 1000000000000 / 1, pi^0, from_megavolts_per_microsecond, as_megavolts_per_microsecond);
-    fixed_unit!(VoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerMinute, base VoltPerSecond, 1 / 60, pi^0, from_volts_per_minute, as_volts_per_minute);
-    fixed_unit!(MicrovoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerMinute, base VoltPerSecond, 1 / 60000000, pi^0, from_microvolts_per_minute, as_microvolts_per_minute);
-    fixed_unit!(MillivoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerMinute, base VoltPerSecond, 1 / 60000, pi^0, from_millivolts_per_minute, as_millivolts_per_minute);
-    fixed_unit!(KilovoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerMinute, base VoltPerSecond, 50 / 3, pi^0, from_kilovolts_per_minute, as_kilovolts_per_minute);
-    fixed_unit!(MegavoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerMinute, base VoltPerSecond, 50000 / 3, pi^0, from_megavolts_per_minute, as_megavolts_per_minute);
-    fixed_unit!(VoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerHour, base VoltPerSecond, 1 / 3600, pi^0, from_volts_per_hour, as_volts_per_hour);
-    fixed_unit!(MicrovoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerHour, base VoltPerSecond, 1 / 3600000000, pi^0, from_microvolts_per_hour, as_microvolts_per_hour);
-    fixed_unit!(MillivoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerHour, base VoltPerSecond, 1 / 3600000, pi^0, from_millivolts_per_hour, as_millivolts_per_hour);
-    fixed_unit!(KilovoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerHour, base VoltPerSecond, 5 / 18, pi^0, from_kilovolts_per_hour, as_kilovolts_per_hour);
-    fixed_unit!(MegavoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerHour, base VoltPerSecond, 2500 / 9, pi^0, from_megavolts_per_hour, as_megavolts_per_hour);
+    fixed_unit!(VoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerSecond, base VoltPerSecond, 1 / 1, pi^0, from_volts_per_second, as_volts_per_second, additive);
+    fixed_unit!(MicrovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerSecond, base VoltPerSecond, 1 / 1000000, pi^0, from_microvolts_per_second, as_microvolts_per_second, additive);
+    fixed_unit!(MillivoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerSecond, base VoltPerSecond, 1 / 1000, pi^0, from_millivolts_per_second, as_millivolts_per_second, additive);
+    fixed_unit!(KilovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerSecond, base VoltPerSecond, 1000 / 1, pi^0, from_kilovolts_per_second, as_kilovolts_per_second, additive);
+    fixed_unit!(MegavoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerSecond, base VoltPerSecond, 1000000 / 1, pi^0, from_megavolts_per_second, as_megavolts_per_second, additive);
+    fixed_unit!(VoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerMicrosecond, base VoltPerSecond, 1000000 / 1, pi^0, from_volts_per_microsecond, as_volts_per_microsecond, additive);
+    fixed_unit!(MicrovoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond, base VoltPerSecond, 1 / 1, pi^0, from_microvolts_per_microsecond, as_microvolts_per_microsecond, additive);
+    fixed_unit!(MillivoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond, base VoltPerSecond, 1000 / 1, pi^0, from_millivolts_per_microsecond, as_millivolts_per_microsecond, additive);
+    fixed_unit!(KilovoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond, base VoltPerSecond, 1000000000 / 1, pi^0, from_kilovolts_per_microsecond, as_kilovolts_per_microsecond, additive);
+    fixed_unit!(MegavoltPerMicrosecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond, base VoltPerSecond, 1000000000000 / 1, pi^0, from_megavolts_per_microsecond, as_megavolts_per_microsecond, additive);
+    fixed_unit!(VoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerMinute, base VoltPerSecond, 1 / 60, pi^0, from_volts_per_minute, as_volts_per_minute, additive);
+    fixed_unit!(MicrovoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerMinute, base VoltPerSecond, 1 / 60000000, pi^0, from_microvolts_per_minute, as_microvolts_per_minute, additive);
+    fixed_unit!(MillivoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerMinute, base VoltPerSecond, 1 / 60000, pi^0, from_millivolts_per_minute, as_millivolts_per_minute, additive);
+    fixed_unit!(KilovoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerMinute, base VoltPerSecond, 50 / 3, pi^0, from_kilovolts_per_minute, as_kilovolts_per_minute, additive);
+    fixed_unit!(MegavoltPerMinute: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerMinute, base VoltPerSecond, 50000 / 3, pi^0, from_megavolts_per_minute, as_megavolts_per_minute, additive);
+    fixed_unit!(VoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerHour, base VoltPerSecond, 1 / 3600, pi^0, from_volts_per_hour, as_volts_per_hour, additive);
+    fixed_unit!(MicrovoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerHour, base VoltPerSecond, 1 / 3600000000, pi^0, from_microvolts_per_hour, as_microvolts_per_hour, additive);
+    fixed_unit!(MillivoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MillivoltPerHour, base VoltPerSecond, 1 / 3600000, pi^0, from_millivolts_per_hour, as_millivolts_per_hour, additive);
+    fixed_unit!(KilovoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::KilovoltPerHour, base VoltPerSecond, 5 / 18, pi^0, from_kilovolts_per_hour, as_kilovolts_per_hour, additive);
+    fixed_unit!(MegavoltPerHour: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MegavoltPerHour, base VoltPerSecond, 2500 / 9, pi^0, from_megavolts_per_hour, as_megavolts_per_hour, additive);
 }

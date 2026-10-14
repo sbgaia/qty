@@ -191,5 +191,5 @@ fixed_base!(AmplitudeRatio, DecibelVolt);
 ///
 /// Also available as [`unit::amplitude_ratio`](crate::unit::amplitude_ratio). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts);
+    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts, additive);
 }

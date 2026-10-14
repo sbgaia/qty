@@ -216,9 +216,9 @@ fixed_base!(ElectricInductance, Henry);
 ///
 /// Also available as [`unit::electric_inductance`](crate::unit::electric_inductance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Henry: ElectricInductance, ElectricInductanceUnit::Henry, base Henry, 1 / 1, pi^0, from_henries, as_henries);
-    fixed_unit!(Picohenry: ElectricInductance, ElectricInductanceUnit::Picohenry, base Henry, 1 / 1000000000000, pi^0, from_picohenries, as_picohenries);
-    fixed_unit!(Nanohenry: ElectricInductance, ElectricInductanceUnit::Nanohenry, base Henry, 1 / 1000000000, pi^0, from_nanohenries, as_nanohenries);
-    fixed_unit!(Microhenry: ElectricInductance, ElectricInductanceUnit::Microhenry, base Henry, 1 / 1000000, pi^0, from_microhenries, as_microhenries);
-    fixed_unit!(Millihenry: ElectricInductance, ElectricInductanceUnit::Millihenry, base Henry, 1 / 1000, pi^0, from_millihenries, as_millihenries);
+    fixed_unit!(Henry: ElectricInductance, ElectricInductanceUnit::Henry, base Henry, 1 / 1, pi^0, from_henries, as_henries, additive);
+    fixed_unit!(Picohenry: ElectricInductance, ElectricInductanceUnit::Picohenry, base Henry, 1 / 1000000000000, pi^0, from_picohenries, as_picohenries, additive);
+    fixed_unit!(Nanohenry: ElectricInductance, ElectricInductanceUnit::Nanohenry, base Henry, 1 / 1000000000, pi^0, from_nanohenries, as_nanohenries, additive);
+    fixed_unit!(Microhenry: ElectricInductance, ElectricInductanceUnit::Microhenry, base Henry, 1 / 1000000, pi^0, from_microhenries, as_microhenries, additive);
+    fixed_unit!(Millihenry: ElectricInductance, ElectricInductanceUnit::Millihenry, base Henry, 1 / 1000, pi^0, from_millihenries, as_millihenries, additive);
 }

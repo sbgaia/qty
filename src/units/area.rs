@@ -445,18 +445,18 @@ fixed_base!(Area, SquareMeter);
 ///
 /// Also available as [`unit::area`](crate::unit::area). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(SquareKilometer: Area, AreaUnit::SquareKilometer, base SquareMeter, 1000000 / 1, pi^0, from_square_kilometers, as_square_kilometers);
-    fixed_unit!(SquareMeter: Area, AreaUnit::SquareMeter, base SquareMeter, 1 / 1, pi^0, from_square_meters, as_square_meters);
-    fixed_unit!(SquareDecimeter: Area, AreaUnit::SquareDecimeter, base SquareMeter, 1 / 100, pi^0, from_square_decimeters, as_square_decimeters);
-    fixed_unit!(SquareCentimeter: Area, AreaUnit::SquareCentimeter, base SquareMeter, 1 / 10000, pi^0, from_square_centimeters, as_square_centimeters);
-    fixed_unit!(SquareMillimeter: Area, AreaUnit::SquareMillimeter, base SquareMeter, 1 / 1000000, pi^0, from_square_millimeters, as_square_millimeters);
-    fixed_unit!(SquareMicrometer: Area, AreaUnit::SquareMicrometer, base SquareMeter, 1 / 1000000000000, pi^0, from_square_micrometers, as_square_micrometers);
-    fixed_unit!(SquareMile: Area, AreaUnit::SquareMile, base SquareMeter, 40468564224 / 15625, pi^0, from_square_miles, as_square_miles);
-    fixed_unit!(SquareYard: Area, AreaUnit::SquareYard, base SquareMeter, 1306449 / 1562500, pi^0, from_square_yards, as_square_yards);
-    fixed_unit!(SquareFoot: Area, AreaUnit::SquareFoot, base SquareMeter, 145161 / 1562500, pi^0, from_square_feet, as_square_feet);
-    fixed_unit!(UsSurveySquareFoot: Area, AreaUnit::UsSurveySquareFoot, base SquareMeter, 1440000 / 15499969, pi^0, from_us_survey_square_feet, as_us_survey_square_feet);
-    fixed_unit!(SquareInch: Area, AreaUnit::SquareInch, base SquareMeter, 16129 / 25000000, pi^0, from_square_inches, as_square_inches);
-    fixed_unit!(Acre: Area, AreaUnit::Acre, base SquareMeter, 316160658 / 78125, pi^0, from_acres, as_acres);
-    fixed_unit!(Hectare: Area, AreaUnit::Hectare, base SquareMeter, 10000 / 1, pi^0, from_hectares, as_hectares);
-    fixed_unit!(SquareNauticalMile: Area, AreaUnit::SquareNauticalMile, base SquareMeter, 3429904 / 1, pi^0, from_square_nautical_miles, as_square_nautical_miles);
+    fixed_unit!(SquareKilometer: Area, AreaUnit::SquareKilometer, base SquareMeter, 1000000 / 1, pi^0, from_square_kilometers, as_square_kilometers, additive);
+    fixed_unit!(SquareMeter: Area, AreaUnit::SquareMeter, base SquareMeter, 1 / 1, pi^0, from_square_meters, as_square_meters, additive);
+    fixed_unit!(SquareDecimeter: Area, AreaUnit::SquareDecimeter, base SquareMeter, 1 / 100, pi^0, from_square_decimeters, as_square_decimeters, additive);
+    fixed_unit!(SquareCentimeter: Area, AreaUnit::SquareCentimeter, base SquareMeter, 1 / 10000, pi^0, from_square_centimeters, as_square_centimeters, additive);
+    fixed_unit!(SquareMillimeter: Area, AreaUnit::SquareMillimeter, base SquareMeter, 1 / 1000000, pi^0, from_square_millimeters, as_square_millimeters, additive);
+    fixed_unit!(SquareMicrometer: Area, AreaUnit::SquareMicrometer, base SquareMeter, 1 / 1000000000000, pi^0, from_square_micrometers, as_square_micrometers, additive);
+    fixed_unit!(SquareMile: Area, AreaUnit::SquareMile, base SquareMeter, 40468564224 / 15625, pi^0, from_square_miles, as_square_miles, additive);
+    fixed_unit!(SquareYard: Area, AreaUnit::SquareYard, base SquareMeter, 1306449 / 1562500, pi^0, from_square_yards, as_square_yards, additive);
+    fixed_unit!(SquareFoot: Area, AreaUnit::SquareFoot, base SquareMeter, 145161 / 1562500, pi^0, from_square_feet, as_square_feet, additive);
+    fixed_unit!(UsSurveySquareFoot: Area, AreaUnit::UsSurveySquareFoot, base SquareMeter, 1440000 / 15499969, pi^0, from_us_survey_square_feet, as_us_survey_square_feet, additive);
+    fixed_unit!(SquareInch: Area, AreaUnit::SquareInch, base SquareMeter, 16129 / 25000000, pi^0, from_square_inches, as_square_inches, additive);
+    fixed_unit!(Acre: Area, AreaUnit::Acre, base SquareMeter, 316160658 / 78125, pi^0, from_acres, as_acres, additive);
+    fixed_unit!(Hectare: Area, AreaUnit::Hectare, base SquareMeter, 10000 / 1, pi^0, from_hectares, as_hectares, additive);
+    fixed_unit!(SquareNauticalMile: Area, AreaUnit::SquareNauticalMile, base SquareMeter, 3429904 / 1, pi^0, from_square_nautical_miles, as_square_nautical_miles, additive);
 }

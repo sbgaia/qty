@@ -170,7 +170,7 @@ fixed_base!(ElectricApparentEnergy, VoltampereHour);
 ///
 /// Also available as [`unit::electric_apparent_energy`](crate::unit::electric_apparent_energy). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(VoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::VoltampereHour, base VoltampereHour, 1 / 1, pi^0, from_voltampere_hours, as_voltampere_hours);
-    fixed_unit!(KilovoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::KilovoltampereHour, base VoltampereHour, 1000 / 1, pi^0, from_kilovoltampere_hours, as_kilovoltampere_hours);
-    fixed_unit!(MegavoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::MegavoltampereHour, base VoltampereHour, 1000000 / 1, pi^0, from_megavoltampere_hours, as_megavoltampere_hours);
+    fixed_unit!(VoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::VoltampereHour, base VoltampereHour, 1 / 1, pi^0, from_voltampere_hours, as_voltampere_hours, additive);
+    fixed_unit!(KilovoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::KilovoltampereHour, base VoltampereHour, 1000 / 1, pi^0, from_kilovoltampere_hours, as_kilovoltampere_hours, additive);
+    fixed_unit!(MegavoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::MegavoltampereHour, base VoltampereHour, 1000000 / 1, pi^0, from_megavoltampere_hours, as_megavoltampere_hours, additive);
 }

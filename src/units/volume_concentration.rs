@@ -589,24 +589,24 @@ fixed_base!(VolumeConcentration, DecimalFraction);
 ///
 /// Also available as [`unit::volume_concentration`](crate::unit::volume_concentration). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(DecimalFraction: VolumeConcentration, VolumeConcentrationUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions);
-    fixed_unit!(LiterPerLiter: VolumeConcentration, VolumeConcentrationUnit::LiterPerLiter, base DecimalFraction, 1 / 1, pi^0, from_liters_per_liter, as_liters_per_liter);
-    fixed_unit!(PicoliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::PicoliterPerLiter, base DecimalFraction, 1 / 1000000000000, pi^0, from_picoliters_per_liter, as_picoliters_per_liter);
-    fixed_unit!(NanoliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::NanoliterPerLiter, base DecimalFraction, 1 / 1000000000, pi^0, from_nanoliters_per_liter, as_nanoliters_per_liter);
-    fixed_unit!(MicroliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::MicroliterPerLiter, base DecimalFraction, 1 / 1000000, pi^0, from_microliters_per_liter, as_microliters_per_liter);
-    fixed_unit!(MilliliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::MilliliterPerLiter, base DecimalFraction, 1 / 1000, pi^0, from_milliliters_per_liter, as_milliliters_per_liter);
-    fixed_unit!(CentiliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::CentiliterPerLiter, base DecimalFraction, 1 / 100, pi^0, from_centiliters_per_liter, as_centiliters_per_liter);
-    fixed_unit!(DeciliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::DeciliterPerLiter, base DecimalFraction, 1 / 10, pi^0, from_deciliters_per_liter, as_deciliters_per_liter);
-    fixed_unit!(LiterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::LiterPerMilliliter, base DecimalFraction, 1000 / 1, pi^0, from_liters_per_milliliter, as_liters_per_milliliter);
-    fixed_unit!(PicoliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::PicoliterPerMilliliter, base DecimalFraction, 1 / 1000000000, pi^0, from_picoliters_per_milliliter, as_picoliters_per_milliliter);
-    fixed_unit!(NanoliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::NanoliterPerMilliliter, base DecimalFraction, 1 / 1000000, pi^0, from_nanoliters_per_milliliter, as_nanoliters_per_milliliter);
-    fixed_unit!(MicroliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::MicroliterPerMilliliter, base DecimalFraction, 1 / 1000, pi^0, from_microliters_per_milliliter, as_microliters_per_milliliter);
-    fixed_unit!(MilliliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::MilliliterPerMilliliter, base DecimalFraction, 1 / 1, pi^0, from_milliliters_per_milliliter, as_milliliters_per_milliliter);
-    fixed_unit!(CentiliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::CentiliterPerMilliliter, base DecimalFraction, 10 / 1, pi^0, from_centiliters_per_milliliter, as_centiliters_per_milliliter);
-    fixed_unit!(DeciliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::DeciliterPerMilliliter, base DecimalFraction, 100 / 1, pi^0, from_deciliters_per_milliliter, as_deciliters_per_milliliter);
-    fixed_unit!(Percent: VolumeConcentration, VolumeConcentrationUnit::Percent, base DecimalFraction, 1 / 100, pi^0, from_percent, as_percent);
-    fixed_unit!(PartPerThousand: VolumeConcentration, VolumeConcentrationUnit::PartPerThousand, base DecimalFraction, 1 / 1000, pi^0, from_parts_per_thousand, as_parts_per_thousand);
-    fixed_unit!(PartPerMillion: VolumeConcentration, VolumeConcentrationUnit::PartPerMillion, base DecimalFraction, 1 / 1000000, pi^0, from_parts_per_million, as_parts_per_million);
-    fixed_unit!(PartPerBillion: VolumeConcentration, VolumeConcentrationUnit::PartPerBillion, base DecimalFraction, 1 / 1000000000, pi^0, from_parts_per_billion, as_parts_per_billion);
-    fixed_unit!(PartPerTrillion: VolumeConcentration, VolumeConcentrationUnit::PartPerTrillion, base DecimalFraction, 1 / 1000000000000, pi^0, from_parts_per_trillion, as_parts_per_trillion);
+    fixed_unit!(DecimalFraction: VolumeConcentration, VolumeConcentrationUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
+    fixed_unit!(LiterPerLiter: VolumeConcentration, VolumeConcentrationUnit::LiterPerLiter, base DecimalFraction, 1 / 1, pi^0, from_liters_per_liter, as_liters_per_liter, additive);
+    fixed_unit!(PicoliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::PicoliterPerLiter, base DecimalFraction, 1 / 1000000000000, pi^0, from_picoliters_per_liter, as_picoliters_per_liter, additive);
+    fixed_unit!(NanoliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::NanoliterPerLiter, base DecimalFraction, 1 / 1000000000, pi^0, from_nanoliters_per_liter, as_nanoliters_per_liter, additive);
+    fixed_unit!(MicroliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::MicroliterPerLiter, base DecimalFraction, 1 / 1000000, pi^0, from_microliters_per_liter, as_microliters_per_liter, additive);
+    fixed_unit!(MilliliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::MilliliterPerLiter, base DecimalFraction, 1 / 1000, pi^0, from_milliliters_per_liter, as_milliliters_per_liter, additive);
+    fixed_unit!(CentiliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::CentiliterPerLiter, base DecimalFraction, 1 / 100, pi^0, from_centiliters_per_liter, as_centiliters_per_liter, additive);
+    fixed_unit!(DeciliterPerLiter: VolumeConcentration, VolumeConcentrationUnit::DeciliterPerLiter, base DecimalFraction, 1 / 10, pi^0, from_deciliters_per_liter, as_deciliters_per_liter, additive);
+    fixed_unit!(LiterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::LiterPerMilliliter, base DecimalFraction, 1000 / 1, pi^0, from_liters_per_milliliter, as_liters_per_milliliter, additive);
+    fixed_unit!(PicoliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::PicoliterPerMilliliter, base DecimalFraction, 1 / 1000000000, pi^0, from_picoliters_per_milliliter, as_picoliters_per_milliliter, additive);
+    fixed_unit!(NanoliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::NanoliterPerMilliliter, base DecimalFraction, 1 / 1000000, pi^0, from_nanoliters_per_milliliter, as_nanoliters_per_milliliter, additive);
+    fixed_unit!(MicroliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::MicroliterPerMilliliter, base DecimalFraction, 1 / 1000, pi^0, from_microliters_per_milliliter, as_microliters_per_milliliter, additive);
+    fixed_unit!(MilliliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::MilliliterPerMilliliter, base DecimalFraction, 1 / 1, pi^0, from_milliliters_per_milliliter, as_milliliters_per_milliliter, additive);
+    fixed_unit!(CentiliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::CentiliterPerMilliliter, base DecimalFraction, 10 / 1, pi^0, from_centiliters_per_milliliter, as_centiliters_per_milliliter, additive);
+    fixed_unit!(DeciliterPerMilliliter: VolumeConcentration, VolumeConcentrationUnit::DeciliterPerMilliliter, base DecimalFraction, 100 / 1, pi^0, from_deciliters_per_milliliter, as_deciliters_per_milliliter, additive);
+    fixed_unit!(Percent: VolumeConcentration, VolumeConcentrationUnit::Percent, base DecimalFraction, 1 / 100, pi^0, from_percent, as_percent, additive);
+    fixed_unit!(PartPerThousand: VolumeConcentration, VolumeConcentrationUnit::PartPerThousand, base DecimalFraction, 1 / 1000, pi^0, from_parts_per_thousand, as_parts_per_thousand, additive);
+    fixed_unit!(PartPerMillion: VolumeConcentration, VolumeConcentrationUnit::PartPerMillion, base DecimalFraction, 1 / 1000000, pi^0, from_parts_per_million, as_parts_per_million, additive);
+    fixed_unit!(PartPerBillion: VolumeConcentration, VolumeConcentrationUnit::PartPerBillion, base DecimalFraction, 1 / 1000000000, pi^0, from_parts_per_billion, as_parts_per_billion, additive);
+    fixed_unit!(PartPerTrillion: VolumeConcentration, VolumeConcentrationUnit::PartPerTrillion, base DecimalFraction, 1 / 1000000000000, pi^0, from_parts_per_trillion, as_parts_per_trillion, additive);
 }

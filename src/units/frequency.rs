@@ -344,16 +344,16 @@ fixed_base!(Frequency, Hertz);
 ///
 /// Also available as [`unit::frequency`](crate::unit::frequency). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Hertz: Frequency, FrequencyUnit::Hertz, base Hertz, 1 / 1, pi^0, from_hertz, as_hertz);
-    fixed_unit!(Microhertz: Frequency, FrequencyUnit::Microhertz, base Hertz, 1 / 1000000, pi^0, from_microhertz, as_microhertz);
-    fixed_unit!(Millihertz: Frequency, FrequencyUnit::Millihertz, base Hertz, 1 / 1000, pi^0, from_millihertz, as_millihertz);
-    fixed_unit!(Kilohertz: Frequency, FrequencyUnit::Kilohertz, base Hertz, 1000 / 1, pi^0, from_kilohertz, as_kilohertz);
-    fixed_unit!(Megahertz: Frequency, FrequencyUnit::Megahertz, base Hertz, 1000000 / 1, pi^0, from_megahertz, as_megahertz);
-    fixed_unit!(Gigahertz: Frequency, FrequencyUnit::Gigahertz, base Hertz, 1000000000 / 1, pi^0, from_gigahertz, as_gigahertz);
-    fixed_unit!(Terahertz: Frequency, FrequencyUnit::Terahertz, base Hertz, 1000000000000 / 1, pi^0, from_terahertz, as_terahertz);
-    fixed_unit!(RadianPerSecond: Frequency, FrequencyUnit::RadianPerSecond, base Hertz, 1 / 2, pi^-1, from_radians_per_second, as_radians_per_second);
-    fixed_unit!(CyclePerMinute: Frequency, FrequencyUnit::CyclePerMinute, base Hertz, 1 / 60, pi^0, from_cycles_per_minute, as_cycles_per_minute);
-    fixed_unit!(CyclePerHour: Frequency, FrequencyUnit::CyclePerHour, base Hertz, 1 / 3600, pi^0, from_cycles_per_hour, as_cycles_per_hour);
-    fixed_unit!(BeatPerMinute: Frequency, FrequencyUnit::BeatPerMinute, base Hertz, 1 / 60, pi^0, from_beats_per_minute, as_beats_per_minute);
-    fixed_unit!(PerSecond: Frequency, FrequencyUnit::PerSecond, base Hertz, 1 / 1, pi^0, from_per_second, as_per_second);
+    fixed_unit!(Hertz: Frequency, FrequencyUnit::Hertz, base Hertz, 1 / 1, pi^0, from_hertz, as_hertz, additive);
+    fixed_unit!(Microhertz: Frequency, FrequencyUnit::Microhertz, base Hertz, 1 / 1000000, pi^0, from_microhertz, as_microhertz, additive);
+    fixed_unit!(Millihertz: Frequency, FrequencyUnit::Millihertz, base Hertz, 1 / 1000, pi^0, from_millihertz, as_millihertz, additive);
+    fixed_unit!(Kilohertz: Frequency, FrequencyUnit::Kilohertz, base Hertz, 1000 / 1, pi^0, from_kilohertz, as_kilohertz, additive);
+    fixed_unit!(Megahertz: Frequency, FrequencyUnit::Megahertz, base Hertz, 1000000 / 1, pi^0, from_megahertz, as_megahertz, additive);
+    fixed_unit!(Gigahertz: Frequency, FrequencyUnit::Gigahertz, base Hertz, 1000000000 / 1, pi^0, from_gigahertz, as_gigahertz, additive);
+    fixed_unit!(Terahertz: Frequency, FrequencyUnit::Terahertz, base Hertz, 1000000000000 / 1, pi^0, from_terahertz, as_terahertz, additive);
+    fixed_unit!(RadianPerSecond: Frequency, FrequencyUnit::RadianPerSecond, base Hertz, 1 / 2, pi^-1, from_radians_per_second, as_radians_per_second, additive);
+    fixed_unit!(CyclePerMinute: Frequency, FrequencyUnit::CyclePerMinute, base Hertz, 1 / 60, pi^0, from_cycles_per_minute, as_cycles_per_minute, additive);
+    fixed_unit!(CyclePerHour: Frequency, FrequencyUnit::CyclePerHour, base Hertz, 1 / 3600, pi^0, from_cycles_per_hour, as_cycles_per_hour, additive);
+    fixed_unit!(BeatPerMinute: Frequency, FrequencyUnit::BeatPerMinute, base Hertz, 1 / 60, pi^0, from_beats_per_minute, as_beats_per_minute, additive);
+    fixed_unit!(PerSecond: Frequency, FrequencyUnit::PerSecond, base Hertz, 1 / 1, pi^0, from_per_second, as_per_second, additive);
 }

@@ -320,13 +320,13 @@ fixed_base!(VolumePerLength, CubicMeterPerMeter);
 ///
 /// Also available as [`unit::volume_per_length`](crate::unit::volume_per_length). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(CubicMeterPerMeter: VolumePerLength, VolumePerLengthUnit::CubicMeterPerMeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_cubic_meters_per_meter, as_cubic_meters_per_meter);
-    fixed_unit!(LiterPerMeter: VolumePerLength, VolumePerLengthUnit::LiterPerMeter, base CubicMeterPerMeter, 1 / 1000, pi^0, from_liters_per_meter, as_liters_per_meter);
-    fixed_unit!(LiterPerKilometer: VolumePerLength, VolumePerLengthUnit::LiterPerKilometer, base CubicMeterPerMeter, 1 / 1000000, pi^0, from_liters_per_kilometer, as_liters_per_kilometer);
-    fixed_unit!(LiterPerMillimeter: VolumePerLength, VolumePerLengthUnit::LiterPerMillimeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_liters_per_millimeter, as_liters_per_millimeter);
-    fixed_unit!(OilBarrelPerFoot: VolumePerLength, VolumePerLengthUnit::OilBarrelPerFoot, base CubicMeterPerMeter, 26080593 / 50000000, pi^0, from_oil_barrels_per_foot, as_oil_barrels_per_foot);
-    fixed_unit!(CubicYardPerFoot: VolumePerLength, VolumePerLengthUnit::CubicYardPerFoot, base CubicMeterPerMeter, 3919347 / 1562500, pi^0, from_cubic_yards_per_foot, as_cubic_yards_per_foot);
-    fixed_unit!(CubicYardPerUsSurveyFoot: VolumePerLength, VolumePerLengthUnit::CubicYardPerUsSurveyFoot, base CubicMeterPerMeter, 1959669580653 / 781250000000, pi^0, from_cubic_yards_per_us_survey_foot, as_cubic_yards_per_us_survey_foot);
-    fixed_unit!(UsGallonPerMile: VolumePerLength, VolumePerLengthUnit::UsGallonPerMile, base CubicMeterPerMeter, 112903 / 48000000000, pi^0, from_us_gallons_per_mile, as_us_gallons_per_mile);
-    fixed_unit!(ImperialGallonPerMile: VolumePerLength, VolumePerLengthUnit::ImperialGallonPerMile, base CubicMeterPerMeter, 454609 / 160934400000, pi^0, from_imperial_gallons_per_mile, as_imperial_gallons_per_mile);
+    fixed_unit!(CubicMeterPerMeter: VolumePerLength, VolumePerLengthUnit::CubicMeterPerMeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_cubic_meters_per_meter, as_cubic_meters_per_meter, additive);
+    fixed_unit!(LiterPerMeter: VolumePerLength, VolumePerLengthUnit::LiterPerMeter, base CubicMeterPerMeter, 1 / 1000, pi^0, from_liters_per_meter, as_liters_per_meter, additive);
+    fixed_unit!(LiterPerKilometer: VolumePerLength, VolumePerLengthUnit::LiterPerKilometer, base CubicMeterPerMeter, 1 / 1000000, pi^0, from_liters_per_kilometer, as_liters_per_kilometer, additive);
+    fixed_unit!(LiterPerMillimeter: VolumePerLength, VolumePerLengthUnit::LiterPerMillimeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_liters_per_millimeter, as_liters_per_millimeter, additive);
+    fixed_unit!(OilBarrelPerFoot: VolumePerLength, VolumePerLengthUnit::OilBarrelPerFoot, base CubicMeterPerMeter, 26080593 / 50000000, pi^0, from_oil_barrels_per_foot, as_oil_barrels_per_foot, additive);
+    fixed_unit!(CubicYardPerFoot: VolumePerLength, VolumePerLengthUnit::CubicYardPerFoot, base CubicMeterPerMeter, 3919347 / 1562500, pi^0, from_cubic_yards_per_foot, as_cubic_yards_per_foot, additive);
+    fixed_unit!(CubicYardPerUsSurveyFoot: VolumePerLength, VolumePerLengthUnit::CubicYardPerUsSurveyFoot, base CubicMeterPerMeter, 1959669580653 / 781250000000, pi^0, from_cubic_yards_per_us_survey_foot, as_cubic_yards_per_us_survey_foot, additive);
+    fixed_unit!(UsGallonPerMile: VolumePerLength, VolumePerLengthUnit::UsGallonPerMile, base CubicMeterPerMeter, 112903 / 48000000000, pi^0, from_us_gallons_per_mile, as_us_gallons_per_mile, additive);
+    fixed_unit!(ImperialGallonPerMile: VolumePerLength, VolumePerLengthUnit::ImperialGallonPerMile, base CubicMeterPerMeter, 454609 / 160934400000, pi^0, from_imperial_gallons_per_mile, as_imperial_gallons_per_mile, additive);
 }

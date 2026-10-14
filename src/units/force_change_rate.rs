@@ -466,19 +466,19 @@ fixed_base!(ForceChangeRate, NewtonPerSecond);
 ///
 /// Also available as [`unit::force_change_rate`](crate::unit::force_change_rate). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(NewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::NewtonPerMinute, base NewtonPerSecond, 1 / 60, pi^0, from_newtons_per_minute, as_newtons_per_minute);
-    fixed_unit!(DecanewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerMinute, base NewtonPerSecond, 1 / 6, pi^0, from_decanewtons_per_minute, as_decanewtons_per_minute);
-    fixed_unit!(KilonewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::KilonewtonPerMinute, base NewtonPerSecond, 50 / 3, pi^0, from_kilonewtons_per_minute, as_kilonewtons_per_minute);
-    fixed_unit!(NewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::NewtonPerSecond, base NewtonPerSecond, 1 / 1, pi^0, from_newtons_per_second, as_newtons_per_second);
-    fixed_unit!(NanonewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::NanonewtonPerSecond, base NewtonPerSecond, 1 / 1000000000, pi^0, from_nanonewtons_per_second, as_nanonewtons_per_second);
-    fixed_unit!(MicronewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::MicronewtonPerSecond, base NewtonPerSecond, 1 / 1000000, pi^0, from_micronewtons_per_second, as_micronewtons_per_second);
-    fixed_unit!(MillinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::MillinewtonPerSecond, base NewtonPerSecond, 1 / 1000, pi^0, from_millinewtons_per_second, as_millinewtons_per_second);
-    fixed_unit!(CentinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::CentinewtonPerSecond, base NewtonPerSecond, 1 / 100, pi^0, from_centinewtons_per_second, as_centinewtons_per_second);
-    fixed_unit!(DecinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::DecinewtonPerSecond, base NewtonPerSecond, 1 / 10, pi^0, from_decinewtons_per_second, as_decinewtons_per_second);
-    fixed_unit!(DecanewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerSecond, base NewtonPerSecond, 10 / 1, pi^0, from_decanewtons_per_second, as_decanewtons_per_second);
-    fixed_unit!(KilonewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::KilonewtonPerSecond, base NewtonPerSecond, 1000 / 1, pi^0, from_kilonewtons_per_second, as_kilonewtons_per_second);
-    fixed_unit!(PoundForcePerMinute: ForceChangeRate, ForceChangeRateUnit::PoundForcePerMinute, base NewtonPerSecond, 8896443230521 / 120000000000000, pi^0, from_pounds_force_per_minute, as_pounds_force_per_minute);
-    fixed_unit!(KilopoundForcePerMinute: ForceChangeRate, ForceChangeRateUnit::KilopoundForcePerMinute, base NewtonPerSecond, 8896443230521 / 120000000000, pi^0, from_kilopounds_force_per_minute, as_kilopounds_force_per_minute);
-    fixed_unit!(PoundForcePerSecond: ForceChangeRate, ForceChangeRateUnit::PoundForcePerSecond, base NewtonPerSecond, 8896443230521 / 2000000000000, pi^0, from_pounds_force_per_second, as_pounds_force_per_second);
-    fixed_unit!(KilopoundForcePerSecond: ForceChangeRate, ForceChangeRateUnit::KilopoundForcePerSecond, base NewtonPerSecond, 8896443230521 / 2000000000, pi^0, from_kilopounds_force_per_second, as_kilopounds_force_per_second);
+    fixed_unit!(NewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::NewtonPerMinute, base NewtonPerSecond, 1 / 60, pi^0, from_newtons_per_minute, as_newtons_per_minute, additive);
+    fixed_unit!(DecanewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerMinute, base NewtonPerSecond, 1 / 6, pi^0, from_decanewtons_per_minute, as_decanewtons_per_minute, additive);
+    fixed_unit!(KilonewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::KilonewtonPerMinute, base NewtonPerSecond, 50 / 3, pi^0, from_kilonewtons_per_minute, as_kilonewtons_per_minute, additive);
+    fixed_unit!(NewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::NewtonPerSecond, base NewtonPerSecond, 1 / 1, pi^0, from_newtons_per_second, as_newtons_per_second, additive);
+    fixed_unit!(NanonewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::NanonewtonPerSecond, base NewtonPerSecond, 1 / 1000000000, pi^0, from_nanonewtons_per_second, as_nanonewtons_per_second, additive);
+    fixed_unit!(MicronewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::MicronewtonPerSecond, base NewtonPerSecond, 1 / 1000000, pi^0, from_micronewtons_per_second, as_micronewtons_per_second, additive);
+    fixed_unit!(MillinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::MillinewtonPerSecond, base NewtonPerSecond, 1 / 1000, pi^0, from_millinewtons_per_second, as_millinewtons_per_second, additive);
+    fixed_unit!(CentinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::CentinewtonPerSecond, base NewtonPerSecond, 1 / 100, pi^0, from_centinewtons_per_second, as_centinewtons_per_second, additive);
+    fixed_unit!(DecinewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::DecinewtonPerSecond, base NewtonPerSecond, 1 / 10, pi^0, from_decinewtons_per_second, as_decinewtons_per_second, additive);
+    fixed_unit!(DecanewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerSecond, base NewtonPerSecond, 10 / 1, pi^0, from_decanewtons_per_second, as_decanewtons_per_second, additive);
+    fixed_unit!(KilonewtonPerSecond: ForceChangeRate, ForceChangeRateUnit::KilonewtonPerSecond, base NewtonPerSecond, 1000 / 1, pi^0, from_kilonewtons_per_second, as_kilonewtons_per_second, additive);
+    fixed_unit!(PoundForcePerMinute: ForceChangeRate, ForceChangeRateUnit::PoundForcePerMinute, base NewtonPerSecond, 8896443230521 / 120000000000000, pi^0, from_pounds_force_per_minute, as_pounds_force_per_minute, additive);
+    fixed_unit!(KilopoundForcePerMinute: ForceChangeRate, ForceChangeRateUnit::KilopoundForcePerMinute, base NewtonPerSecond, 8896443230521 / 120000000000, pi^0, from_kilopounds_force_per_minute, as_kilopounds_force_per_minute, additive);
+    fixed_unit!(PoundForcePerSecond: ForceChangeRate, ForceChangeRateUnit::PoundForcePerSecond, base NewtonPerSecond, 8896443230521 / 2000000000000, pi^0, from_pounds_force_per_second, as_pounds_force_per_second, additive);
+    fixed_unit!(KilopoundForcePerSecond: ForceChangeRate, ForceChangeRateUnit::KilopoundForcePerSecond, base NewtonPerSecond, 8896443230521 / 2000000000, pi^0, from_kilopounds_force_per_second, as_kilopounds_force_per_second, additive);
 }

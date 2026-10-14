@@ -316,13 +316,13 @@ fixed_base!(MolarFlow, MolePerSecond);
 ///
 /// Also available as [`unit::molar_flow`](crate::unit::molar_flow). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(MolePerSecond: MolarFlow, MolarFlowUnit::MolePerSecond, base MolePerSecond, 1 / 1, pi^0, from_moles_per_second, as_moles_per_second);
-    fixed_unit!(KilomolePerSecond: MolarFlow, MolarFlowUnit::KilomolePerSecond, base MolePerSecond, 1000 / 1, pi^0, from_kilomoles_per_second, as_kilomoles_per_second);
-    fixed_unit!(MolePerMinute: MolarFlow, MolarFlowUnit::MolePerMinute, base MolePerSecond, 1 / 60, pi^0, from_moles_per_minute, as_moles_per_minute);
-    fixed_unit!(KilomolePerMinute: MolarFlow, MolarFlowUnit::KilomolePerMinute, base MolePerSecond, 50 / 3, pi^0, from_kilomoles_per_minute, as_kilomoles_per_minute);
-    fixed_unit!(MolePerHour: MolarFlow, MolarFlowUnit::MolePerHour, base MolePerSecond, 1 / 3600, pi^0, from_moles_per_hour, as_moles_per_hour);
-    fixed_unit!(KilomolePerHour: MolarFlow, MolarFlowUnit::KilomolePerHour, base MolePerSecond, 5 / 18, pi^0, from_kilomoles_per_hour, as_kilomoles_per_hour);
-    fixed_unit!(PoundMolePerSecond: MolarFlow, MolarFlowUnit::PoundMolePerSecond, base MolePerSecond, 45359237 / 100000, pi^0, from_pound_moles_per_second, as_pound_moles_per_second);
-    fixed_unit!(PoundMolePerMinute: MolarFlow, MolarFlowUnit::PoundMolePerMinute, base MolePerSecond, 45359237 / 6000000, pi^0, from_pound_moles_per_minute, as_pound_moles_per_minute);
-    fixed_unit!(PoundMolePerHour: MolarFlow, MolarFlowUnit::PoundMolePerHour, base MolePerSecond, 45359237 / 360000000, pi^0, from_pound_moles_per_hour, as_pound_moles_per_hour);
+    fixed_unit!(MolePerSecond: MolarFlow, MolarFlowUnit::MolePerSecond, base MolePerSecond, 1 / 1, pi^0, from_moles_per_second, as_moles_per_second, additive);
+    fixed_unit!(KilomolePerSecond: MolarFlow, MolarFlowUnit::KilomolePerSecond, base MolePerSecond, 1000 / 1, pi^0, from_kilomoles_per_second, as_kilomoles_per_second, additive);
+    fixed_unit!(MolePerMinute: MolarFlow, MolarFlowUnit::MolePerMinute, base MolePerSecond, 1 / 60, pi^0, from_moles_per_minute, as_moles_per_minute, additive);
+    fixed_unit!(KilomolePerMinute: MolarFlow, MolarFlowUnit::KilomolePerMinute, base MolePerSecond, 50 / 3, pi^0, from_kilomoles_per_minute, as_kilomoles_per_minute, additive);
+    fixed_unit!(MolePerHour: MolarFlow, MolarFlowUnit::MolePerHour, base MolePerSecond, 1 / 3600, pi^0, from_moles_per_hour, as_moles_per_hour, additive);
+    fixed_unit!(KilomolePerHour: MolarFlow, MolarFlowUnit::KilomolePerHour, base MolePerSecond, 5 / 18, pi^0, from_kilomoles_per_hour, as_kilomoles_per_hour, additive);
+    fixed_unit!(PoundMolePerSecond: MolarFlow, MolarFlowUnit::PoundMolePerSecond, base MolePerSecond, 45359237 / 100000, pi^0, from_pound_moles_per_second, as_pound_moles_per_second, additive);
+    fixed_unit!(PoundMolePerMinute: MolarFlow, MolarFlowUnit::PoundMolePerMinute, base MolePerSecond, 45359237 / 6000000, pi^0, from_pound_moles_per_minute, as_pound_moles_per_minute, additive);
+    fixed_unit!(PoundMolePerHour: MolarFlow, MolarFlowUnit::PoundMolePerHour, base MolePerSecond, 45359237 / 360000000, pi^0, from_pound_moles_per_hour, as_pound_moles_per_hour, additive);
 }

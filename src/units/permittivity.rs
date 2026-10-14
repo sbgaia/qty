@@ -114,5 +114,5 @@ fixed_base!(Permittivity, FaradPerMeter);
 ///
 /// Also available as [`unit::permittivity`](crate::unit::permittivity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(FaradPerMeter: Permittivity, PermittivityUnit::FaradPerMeter, base FaradPerMeter, 1 / 1, pi^0, from_farads_per_meter, as_farads_per_meter);
+    fixed_unit!(FaradPerMeter: Permittivity, PermittivityUnit::FaradPerMeter, base FaradPerMeter, 1 / 1, pi^0, from_farads_per_meter, as_farads_per_meter, additive);
 }

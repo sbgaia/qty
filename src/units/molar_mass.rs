@@ -444,18 +444,18 @@ fixed_base!(MolarMass, KilogramPerMole);
 ///
 /// Also available as [`unit::molar_mass`](crate::unit::molar_mass). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(GramPerMole: MolarMass, MolarMassUnit::GramPerMole, base KilogramPerMole, 1 / 1000, pi^0, from_grams_per_mole, as_grams_per_mole);
-    fixed_unit!(NanogramPerMole: MolarMass, MolarMassUnit::NanogramPerMole, base KilogramPerMole, 1 / 1000000000000, pi^0, from_nanograms_per_mole, as_nanograms_per_mole);
-    fixed_unit!(MicrogramPerMole: MolarMass, MolarMassUnit::MicrogramPerMole, base KilogramPerMole, 1 / 1000000000, pi^0, from_micrograms_per_mole, as_micrograms_per_mole);
-    fixed_unit!(MilligramPerMole: MolarMass, MolarMassUnit::MilligramPerMole, base KilogramPerMole, 1 / 1000000, pi^0, from_milligrams_per_mole, as_milligrams_per_mole);
-    fixed_unit!(CentigramPerMole: MolarMass, MolarMassUnit::CentigramPerMole, base KilogramPerMole, 1 / 100000, pi^0, from_centigrams_per_mole, as_centigrams_per_mole);
-    fixed_unit!(DecigramPerMole: MolarMass, MolarMassUnit::DecigramPerMole, base KilogramPerMole, 1 / 10000, pi^0, from_decigrams_per_mole, as_decigrams_per_mole);
-    fixed_unit!(DecagramPerMole: MolarMass, MolarMassUnit::DecagramPerMole, base KilogramPerMole, 1 / 100, pi^0, from_decagrams_per_mole, as_decagrams_per_mole);
-    fixed_unit!(HectogramPerMole: MolarMass, MolarMassUnit::HectogramPerMole, base KilogramPerMole, 1 / 10, pi^0, from_hectograms_per_mole, as_hectograms_per_mole);
-    fixed_unit!(KilogramPerMole: MolarMass, MolarMassUnit::KilogramPerMole, base KilogramPerMole, 1 / 1, pi^0, from_kilograms_per_mole, as_kilograms_per_mole);
-    fixed_unit!(KilogramPerKilomole: MolarMass, MolarMassUnit::KilogramPerKilomole, base KilogramPerMole, 1 / 1000, pi^0, from_kilograms_per_kilomole, as_kilograms_per_kilomole);
-    fixed_unit!(PoundPerMole: MolarMass, MolarMassUnit::PoundPerMole, base KilogramPerMole, 45359237 / 100000000, pi^0, from_pounds_per_mole, as_pounds_per_mole);
-    fixed_unit!(KilopoundPerMole: MolarMass, MolarMassUnit::KilopoundPerMole, base KilogramPerMole, 45359237 / 100000, pi^0, from_kilopounds_per_mole, as_kilopounds_per_mole);
-    fixed_unit!(MegapoundPerMole: MolarMass, MolarMassUnit::MegapoundPerMole, base KilogramPerMole, 45359237 / 100, pi^0, from_megapounds_per_mole, as_megapounds_per_mole);
-    fixed_unit!(PoundPerPoundMole: MolarMass, MolarMassUnit::PoundPerPoundMole, base KilogramPerMole, 1 / 1000, pi^0, from_pounds_per_pound_mole, as_pounds_per_pound_mole);
+    fixed_unit!(GramPerMole: MolarMass, MolarMassUnit::GramPerMole, base KilogramPerMole, 1 / 1000, pi^0, from_grams_per_mole, as_grams_per_mole, additive);
+    fixed_unit!(NanogramPerMole: MolarMass, MolarMassUnit::NanogramPerMole, base KilogramPerMole, 1 / 1000000000000, pi^0, from_nanograms_per_mole, as_nanograms_per_mole, additive);
+    fixed_unit!(MicrogramPerMole: MolarMass, MolarMassUnit::MicrogramPerMole, base KilogramPerMole, 1 / 1000000000, pi^0, from_micrograms_per_mole, as_micrograms_per_mole, additive);
+    fixed_unit!(MilligramPerMole: MolarMass, MolarMassUnit::MilligramPerMole, base KilogramPerMole, 1 / 1000000, pi^0, from_milligrams_per_mole, as_milligrams_per_mole, additive);
+    fixed_unit!(CentigramPerMole: MolarMass, MolarMassUnit::CentigramPerMole, base KilogramPerMole, 1 / 100000, pi^0, from_centigrams_per_mole, as_centigrams_per_mole, additive);
+    fixed_unit!(DecigramPerMole: MolarMass, MolarMassUnit::DecigramPerMole, base KilogramPerMole, 1 / 10000, pi^0, from_decigrams_per_mole, as_decigrams_per_mole, additive);
+    fixed_unit!(DecagramPerMole: MolarMass, MolarMassUnit::DecagramPerMole, base KilogramPerMole, 1 / 100, pi^0, from_decagrams_per_mole, as_decagrams_per_mole, additive);
+    fixed_unit!(HectogramPerMole: MolarMass, MolarMassUnit::HectogramPerMole, base KilogramPerMole, 1 / 10, pi^0, from_hectograms_per_mole, as_hectograms_per_mole, additive);
+    fixed_unit!(KilogramPerMole: MolarMass, MolarMassUnit::KilogramPerMole, base KilogramPerMole, 1 / 1, pi^0, from_kilograms_per_mole, as_kilograms_per_mole, additive);
+    fixed_unit!(KilogramPerKilomole: MolarMass, MolarMassUnit::KilogramPerKilomole, base KilogramPerMole, 1 / 1000, pi^0, from_kilograms_per_kilomole, as_kilograms_per_kilomole, additive);
+    fixed_unit!(PoundPerMole: MolarMass, MolarMassUnit::PoundPerMole, base KilogramPerMole, 45359237 / 100000000, pi^0, from_pounds_per_mole, as_pounds_per_mole, additive);
+    fixed_unit!(KilopoundPerMole: MolarMass, MolarMassUnit::KilopoundPerMole, base KilogramPerMole, 45359237 / 100000, pi^0, from_kilopounds_per_mole, as_kilopounds_per_mole, additive);
+    fixed_unit!(MegapoundPerMole: MolarMass, MolarMassUnit::MegapoundPerMole, base KilogramPerMole, 45359237 / 100, pi^0, from_megapounds_per_mole, as_megapounds_per_mole, additive);
+    fixed_unit!(PoundPerPoundMole: MolarMass, MolarMassUnit::PoundPerPoundMole, base KilogramPerMole, 1 / 1000, pi^0, from_pounds_per_pound_mole, as_pounds_per_pound_mole, additive);
 }

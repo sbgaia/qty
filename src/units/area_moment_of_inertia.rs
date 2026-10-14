@@ -245,10 +245,10 @@ fixed_base!(AreaMomentOfInertia, MeterToTheFourth);
 ///
 /// Also available as [`unit::area_moment_of_inertia`](crate::unit::area_moment_of_inertia). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(MeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MeterToTheFourth, base MeterToTheFourth, 1 / 1, pi^0, from_meters_to_the_fourth, as_meters_to_the_fourth);
-    fixed_unit!(DecimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::DecimeterToTheFourth, base MeterToTheFourth, 1 / 10000, pi^0, from_decimeters_to_the_fourth, as_decimeters_to_the_fourth);
-    fixed_unit!(CentimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::CentimeterToTheFourth, base MeterToTheFourth, 1 / 100000000, pi^0, from_centimeters_to_the_fourth, as_centimeters_to_the_fourth);
-    fixed_unit!(MillimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MillimeterToTheFourth, base MeterToTheFourth, 1 / 1000000000000, pi^0, from_millimeters_to_the_fourth, as_millimeters_to_the_fourth);
-    fixed_unit!(FootToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::FootToTheFourth, base MeterToTheFourth, 21071715921 / 2441406250000, pi^0, from_feet_to_the_fourth, as_feet_to_the_fourth);
-    fixed_unit!(InchToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::InchToTheFourth, base MeterToTheFourth, 260144641 / 625000000000000, pi^0, from_inches_to_the_fourth, as_inches_to_the_fourth);
+    fixed_unit!(MeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MeterToTheFourth, base MeterToTheFourth, 1 / 1, pi^0, from_meters_to_the_fourth, as_meters_to_the_fourth, additive);
+    fixed_unit!(DecimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::DecimeterToTheFourth, base MeterToTheFourth, 1 / 10000, pi^0, from_decimeters_to_the_fourth, as_decimeters_to_the_fourth, additive);
+    fixed_unit!(CentimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::CentimeterToTheFourth, base MeterToTheFourth, 1 / 100000000, pi^0, from_centimeters_to_the_fourth, as_centimeters_to_the_fourth, additive);
+    fixed_unit!(MillimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MillimeterToTheFourth, base MeterToTheFourth, 1 / 1000000000000, pi^0, from_millimeters_to_the_fourth, as_millimeters_to_the_fourth, additive);
+    fixed_unit!(FootToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::FootToTheFourth, base MeterToTheFourth, 21071715921 / 2441406250000, pi^0, from_feet_to_the_fourth, as_feet_to_the_fourth, additive);
+    fixed_unit!(InchToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::InchToTheFourth, base MeterToTheFourth, 260144641 / 625000000000000, pi^0, from_inches_to_the_fourth, as_inches_to_the_fourth, additive);
 }

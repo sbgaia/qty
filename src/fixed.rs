@@ -331,6 +331,11 @@ pub trait FixedUnit: Copy + 'static {
     fn from_quantity<F: Float>(quantity: Self::Quantity<F>) -> F;
 }
 
+/// A [`FixedUnit`] whose counts can be added, subtracted, negated and
+/// scaled: every unit except those of point-like quantities (absolute
+/// temperatures, where 20 °C + 20 °C is not 40 °C).
+pub trait AdditiveUnit: FixedUnit {}
+
 const fn gcd(mut a: u128, mut b: u128) -> u128 {
     while b != 0 {
         let t = a % b;
@@ -544,6 +549,15 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
         narrow(n).map(Fixed::new)
     }
 
+    /// Ratio of two values as a rounded integer.
+    #[inline]
+    pub fn ratio_rounded(self, other: Self, mode: Rounding) -> Result<I, RoundError> {
+        div_round(widen(self.count)?, widen(other.count)?, mode).and_then(narrow)
+    }
+}
+
+/// Arithmetic helpers for units whose counts can be added.
+impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     /// Divides by an integer, rounding with `mode` (`/` truncates toward
     /// zero, like integer division).
     #[inline]
@@ -551,12 +565,6 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
         div_round(widen(self.count)?, widen(divisor)?, mode)
             .and_then(narrow)
             .map(Self::new)
-    }
-
-    /// Ratio of two values as a rounded integer.
-    #[inline]
-    pub fn ratio_rounded(self, other: Self, mode: Rounding) -> Result<I, RoundError> {
-        div_round(widen(self.count)?, widen(other.count)?, mode).and_then(narrow)
     }
 
     /// `self + other`, or `None` on overflow.
@@ -642,14 +650,14 @@ impl<U, I: Hash> Hash for Fixed<U, I> {
 
 macro_rules! fixed_binop {
     ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident) => {
-        impl<U, I: ops::$Trait<Output = I>> ops::$Trait for Fixed<U, I> {
+        impl<U: AdditiveUnit, I: ops::$Trait<Output = I>> ops::$Trait for Fixed<U, I> {
             type Output = Self;
             #[inline(always)]
             fn $method(self, rhs: Self) -> Self {
                 Self::new(ops::$Trait::$method(self.count, rhs.count))
             }
         }
-        impl<U, I: ops::$TraitAssign> ops::$TraitAssign for Fixed<U, I> {
+        impl<U: AdditiveUnit, I: ops::$TraitAssign> ops::$TraitAssign for Fixed<U, I> {
             #[inline(always)]
             fn $method_assign(&mut self, rhs: Self) {
                 ops::$TraitAssign::$method_assign(&mut self.count, rhs.count);
@@ -666,7 +674,7 @@ fixed_binop!(Rem rem RemAssign rem_assign);
 /// convert explicitly with [`Fixed::to_unit_rounded`].
 macro_rules! fixed_unit_op {
     ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident $op:tt) => {
-        impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> ops::$Trait<Fixed<V, I>>
+        impl<U: AdditiveUnit, V: AdditiveUnit<Unit = U::Unit>, I: Integer> ops::$Trait<Fixed<V, I>>
             for Fixed<U, I>
         {
             type Output = Self;
@@ -675,7 +683,7 @@ macro_rules! fixed_unit_op {
                 Self::new(self.count $op rhs.count_in::<U>())
             }
         }
-        impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> ops::$TraitAssign<Fixed<V, I>>
+        impl<U: AdditiveUnit, V: AdditiveUnit<Unit = U::Unit>, I: Integer> ops::$TraitAssign<Fixed<V, I>>
             for Fixed<U, I>
         {
             #[inline(always)]
@@ -758,14 +766,14 @@ fn mul_wide(x: u128, y: u128) -> (u128, u128) {
 
 macro_rules! fixed_scalar_op {
     ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident) => {
-        impl<U, I: ops::$Trait<Output = I>> ops::$Trait<I> for Fixed<U, I> {
+        impl<U: AdditiveUnit, I: ops::$Trait<Output = I>> ops::$Trait<I> for Fixed<U, I> {
             type Output = Self;
             #[inline(always)]
             fn $method(self, rhs: I) -> Self {
                 Self::new(ops::$Trait::$method(self.count, rhs))
             }
         }
-        impl<U, I: ops::$TraitAssign> ops::$TraitAssign<I> for Fixed<U, I> {
+        impl<U: AdditiveUnit, I: ops::$TraitAssign> ops::$TraitAssign<I> for Fixed<U, I> {
             #[inline(always)]
             fn $method_assign(&mut self, rhs: I) {
                 ops::$TraitAssign::$method_assign(&mut self.count, rhs);
@@ -776,7 +784,7 @@ macro_rules! fixed_scalar_op {
 fixed_scalar_op!(Mul mul MulAssign mul_assign);
 fixed_scalar_op!(Div div DivAssign div_assign);
 
-impl<U, I: ops::Neg<Output = I>> ops::Neg for Fixed<U, I> {
+impl<U: AdditiveUnit, I: ops::Neg<Output = I>> ops::Neg for Fixed<U, I> {
     type Output = Self;
     #[inline(always)]
     fn neg(self) -> Self {
@@ -795,7 +803,7 @@ impl<U, I: ops::Div<Output = I>> ops::Div for Fixed<U, I> {
 
 macro_rules! fixed_scalar_lhs {
     ($($t:ty),*) => {$(
-        impl<U> ops::Mul<Fixed<U, $t>> for $t {
+        impl<U: AdditiveUnit> ops::Mul<Fixed<U, $t>> for $t {
             type Output = Fixed<U, $t>;
             #[inline(always)]
             fn mul(self, rhs: Fixed<U, $t>) -> Fixed<U, $t> {
@@ -806,13 +814,15 @@ macro_rules! fixed_scalar_lhs {
 }
 fixed_scalar_lhs!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
-impl<U, I: core::iter::Sum> core::iter::Sum for Fixed<U, I> {
+impl<U: AdditiveUnit, I: core::iter::Sum> core::iter::Sum for Fixed<U, I> {
     #[inline]
     fn sum<It: Iterator<Item = Self>>(iter: It) -> Self {
         Self::new(iter.map(|f| f.count).sum())
     }
 }
-impl<'a, U, I: core::iter::Sum<&'a I> + 'a> core::iter::Sum<&'a Fixed<U, I>> for Fixed<U, I> {
+impl<'a, U: AdditiveUnit, I: core::iter::Sum<&'a I> + 'a> core::iter::Sum<&'a Fixed<U, I>>
+    for Fixed<U, I>
+{
     #[inline]
     fn sum<It: Iterator<Item = &'a Self>>(iter: It) -> Self {
         Self::new(iter.map(|f| &f.count).sum())

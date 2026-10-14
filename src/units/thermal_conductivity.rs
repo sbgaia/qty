@@ -178,7 +178,7 @@ fixed_base!(ThermalConductivity, WattPerMeterKelvin);
 ///
 /// Also available as [`unit::thermal_conductivity`](crate::unit::thermal_conductivity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(WattPerMeterKelvin: ThermalConductivity, ThermalConductivityUnit::WattPerMeterKelvin, base WattPerMeterKelvin, 1 / 1, pi^0, from_watts_per_meter_kelvin, as_watts_per_meter_kelvin);
-    fixed_unit!(BtuPerHourFootFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerHourFootFahrenheit, base WattPerMeterKelvin, 52752792631 / 30480000000, pi^0, from_btus_per_hour_foot_fahrenheit, as_btus_per_hour_foot_fahrenheit);
-    fixed_unit!(BtuPerSecondInchFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerSecondInchFahrenheit, base WattPerMeterKelvin, 474775133679 / 6350000, pi^0, from_btus_per_second_inch_fahrenheit, as_btus_per_second_inch_fahrenheit);
+    fixed_unit!(WattPerMeterKelvin: ThermalConductivity, ThermalConductivityUnit::WattPerMeterKelvin, base WattPerMeterKelvin, 1 / 1, pi^0, from_watts_per_meter_kelvin, as_watts_per_meter_kelvin, additive);
+    fixed_unit!(BtuPerHourFootFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerHourFootFahrenheit, base WattPerMeterKelvin, 52752792631 / 30480000000, pi^0, from_btus_per_hour_foot_fahrenheit, as_btus_per_hour_foot_fahrenheit, additive);
+    fixed_unit!(BtuPerSecondInchFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerSecondInchFahrenheit, base WattPerMeterKelvin, 474775133679 / 6350000, pi^0, from_btus_per_second_inch_fahrenheit, as_btus_per_second_inch_fahrenheit, additive);
 }

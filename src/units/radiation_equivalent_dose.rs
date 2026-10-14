@@ -250,10 +250,10 @@ fixed_base!(RadiationEquivalentDose, Sievert);
 ///
 /// Also available as [`unit::radiation_equivalent_dose`](crate::unit::radiation_equivalent_dose). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Sievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Sievert, base Sievert, 1 / 1, pi^0, from_sieverts, as_sieverts);
-    fixed_unit!(Nanosievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Nanosievert, base Sievert, 1 / 1000000000, pi^0, from_nanosieverts, as_nanosieverts);
-    fixed_unit!(Microsievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Microsievert, base Sievert, 1 / 1000000, pi^0, from_microsieverts, as_microsieverts);
-    fixed_unit!(Millisievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Millisievert, base Sievert, 1 / 1000, pi^0, from_millisieverts, as_millisieverts);
-    fixed_unit!(RoentgenEquivalentMan: RadiationEquivalentDose, RadiationEquivalentDoseUnit::RoentgenEquivalentMan, base Sievert, 1 / 100, pi^0, from_roentgens_equivalent_man, as_roentgens_equivalent_man);
-    fixed_unit!(MilliroentgenEquivalentMan: RadiationEquivalentDose, RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan, base Sievert, 1 / 100000, pi^0, from_milliroentgens_equivalent_man, as_milliroentgens_equivalent_man);
+    fixed_unit!(Sievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Sievert, base Sievert, 1 / 1, pi^0, from_sieverts, as_sieverts, additive);
+    fixed_unit!(Nanosievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Nanosievert, base Sievert, 1 / 1000000000, pi^0, from_nanosieverts, as_nanosieverts, additive);
+    fixed_unit!(Microsievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Microsievert, base Sievert, 1 / 1000000, pi^0, from_microsieverts, as_microsieverts, additive);
+    fixed_unit!(Millisievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Millisievert, base Sievert, 1 / 1000, pi^0, from_millisieverts, as_millisieverts, additive);
+    fixed_unit!(RoentgenEquivalentMan: RadiationEquivalentDose, RadiationEquivalentDoseUnit::RoentgenEquivalentMan, base Sievert, 1 / 100, pi^0, from_roentgens_equivalent_man, as_roentgens_equivalent_man, additive);
+    fixed_unit!(MilliroentgenEquivalentMan: RadiationEquivalentDose, RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan, base Sievert, 1 / 100000, pi^0, from_milliroentgens_equivalent_man, as_milliroentgens_equivalent_man, additive);
 }

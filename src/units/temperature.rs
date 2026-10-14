@@ -8,11 +8,32 @@
 )]
 
 use crate::Float;
+use crate::TemperatureDelta;
 
 /// A temperature is a numerical measure of hot or cold. Its measurement is by detection of heat radiation or particle velocity or kinetic energy, or by the bulk behavior of a thermometric material. It may be calibrated in any of various temperature scales, Celsius, Fahrenheit, Kelvin, etc. The fundamental physical definition of temperature is provided by thermodynamics.
 ///
 /// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureUnit::Kelvin`].
 /// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+///
+/// A Temperature is a *point on a scale*, not an amount: two of them cannot
+/// be added (20 °C + 20 °C is not 40 °C), negated or scaled. Their
+/// difference is a [`TemperatureDelta`], which can be added back:
+///
+/// ```rust
+/// use unitsnet_rs::*;
+///
+/// let morning = Temperature::from_degrees_celsius(12.0);
+/// let noon = Temperature::from_degrees_celsius(20.0);
+/// let rise: TemperatureDelta = noon - morning;
+/// assert!((rise.as_kelvins() - 8.0).abs() < 1e-12);
+/// assert!((morning + rise).approx_eq_rel(noon, 1e-12));
+/// ```
+///
+/// ```compile_fail
+/// use unitsnet_rs::*;
+/// let t = Temperature::from_degrees_celsius(20.0);
+/// let _ = t + t; // error: add a TemperatureDelta instead
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,7 +44,7 @@ use crate::Float;
 #[must_use]
 pub struct Temperature<T = f64>(T);
 
-quantity!(Temperature, TemperatureUnit, Kelvin);
+point_quantity!(Temperature, TemperatureUnit, Kelvin, TemperatureDelta);
 
 /// Unit variants for [`Temperature`].
 ///

@@ -108,5 +108,5 @@ fixed_base!(Turbidity, NTU);
 ///
 /// Also available as [`unit::turbidity`](crate::unit::turbidity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(NTU: Turbidity, TurbidityUnit::NTU, base NTU, 1 / 1, pi^0, from_ntu, as_ntu);
+    fixed_unit!(NTU: Turbidity, TurbidityUnit::NTU, base NTU, 1 / 1, pi^0, from_ntu, as_ntu, additive);
 }

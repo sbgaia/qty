@@ -370,15 +370,15 @@ fixed_base!(ReciprocalArea, InverseSquareMeter);
 ///
 /// Also available as [`unit::reciprocal_area`](crate::unit::reciprocal_area). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(InverseSquareMeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMeter, base InverseSquareMeter, 1 / 1, pi^0, from_inverse_square_meters, as_inverse_square_meters);
-    fixed_unit!(InverseSquareKilometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareKilometer, base InverseSquareMeter, 1 / 1000000, pi^0, from_inverse_square_kilometers, as_inverse_square_kilometers);
-    fixed_unit!(InverseSquareDecimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareDecimeter, base InverseSquareMeter, 100 / 1, pi^0, from_inverse_square_decimeters, as_inverse_square_decimeters);
-    fixed_unit!(InverseSquareCentimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareCentimeter, base InverseSquareMeter, 10000 / 1, pi^0, from_inverse_square_centimeters, as_inverse_square_centimeters);
-    fixed_unit!(InverseSquareMillimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMillimeter, base InverseSquareMeter, 1000000 / 1, pi^0, from_inverse_square_millimeters, as_inverse_square_millimeters);
-    fixed_unit!(InverseSquareMicrometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMicrometer, base InverseSquareMeter, 1000000000000 / 1, pi^0, from_inverse_square_micrometers, as_inverse_square_micrometers);
-    fixed_unit!(InverseSquareMile: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMile, base InverseSquareMeter, 15625 / 40468564224, pi^0, from_inverse_square_miles, as_inverse_square_miles);
-    fixed_unit!(InverseSquareYard: ReciprocalArea, ReciprocalAreaUnit::InverseSquareYard, base InverseSquareMeter, 1562500 / 1306449, pi^0, from_inverse_square_yards, as_inverse_square_yards);
-    fixed_unit!(InverseSquareFoot: ReciprocalArea, ReciprocalAreaUnit::InverseSquareFoot, base InverseSquareMeter, 1562500 / 145161, pi^0, from_inverse_square_feet, as_inverse_square_feet);
-    fixed_unit!(InverseUsSurveySquareFoot: ReciprocalArea, ReciprocalAreaUnit::InverseUsSurveySquareFoot, base InverseSquareMeter, 15499969 / 1440000, pi^0, from_inverse_us_survey_square_feet, as_inverse_us_survey_square_feet);
-    fixed_unit!(InverseSquareInch: ReciprocalArea, ReciprocalAreaUnit::InverseSquareInch, base InverseSquareMeter, 25000000 / 16129, pi^0, from_inverse_square_inches, as_inverse_square_inches);
+    fixed_unit!(InverseSquareMeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMeter, base InverseSquareMeter, 1 / 1, pi^0, from_inverse_square_meters, as_inverse_square_meters, additive);
+    fixed_unit!(InverseSquareKilometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareKilometer, base InverseSquareMeter, 1 / 1000000, pi^0, from_inverse_square_kilometers, as_inverse_square_kilometers, additive);
+    fixed_unit!(InverseSquareDecimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareDecimeter, base InverseSquareMeter, 100 / 1, pi^0, from_inverse_square_decimeters, as_inverse_square_decimeters, additive);
+    fixed_unit!(InverseSquareCentimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareCentimeter, base InverseSquareMeter, 10000 / 1, pi^0, from_inverse_square_centimeters, as_inverse_square_centimeters, additive);
+    fixed_unit!(InverseSquareMillimeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMillimeter, base InverseSquareMeter, 1000000 / 1, pi^0, from_inverse_square_millimeters, as_inverse_square_millimeters, additive);
+    fixed_unit!(InverseSquareMicrometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMicrometer, base InverseSquareMeter, 1000000000000 / 1, pi^0, from_inverse_square_micrometers, as_inverse_square_micrometers, additive);
+    fixed_unit!(InverseSquareMile: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMile, base InverseSquareMeter, 15625 / 40468564224, pi^0, from_inverse_square_miles, as_inverse_square_miles, additive);
+    fixed_unit!(InverseSquareYard: ReciprocalArea, ReciprocalAreaUnit::InverseSquareYard, base InverseSquareMeter, 1562500 / 1306449, pi^0, from_inverse_square_yards, as_inverse_square_yards, additive);
+    fixed_unit!(InverseSquareFoot: ReciprocalArea, ReciprocalAreaUnit::InverseSquareFoot, base InverseSquareMeter, 1562500 / 145161, pi^0, from_inverse_square_feet, as_inverse_square_feet, additive);
+    fixed_unit!(InverseUsSurveySquareFoot: ReciprocalArea, ReciprocalAreaUnit::InverseUsSurveySquareFoot, base InverseSquareMeter, 15499969 / 1440000, pi^0, from_inverse_us_survey_square_feet, as_inverse_us_survey_square_feet, additive);
+    fixed_unit!(InverseSquareInch: ReciprocalArea, ReciprocalAreaUnit::InverseSquareInch, base InverseSquareMeter, 25000000 / 16129, pi^0, from_inverse_square_inches, as_inverse_square_inches, additive);
 }

@@ -441,18 +441,18 @@ fixed_base!(ElectricResistivity, OhmMeter);
 ///
 /// Also available as [`unit::electric_resistivity`](crate::unit::electric_resistivity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(OhmMeter: ElectricResistivity, ElectricResistivityUnit::OhmMeter, base OhmMeter, 1 / 1, pi^0, from_ohm_meters, as_ohm_meters);
-    fixed_unit!(PicoohmMeter: ElectricResistivity, ElectricResistivityUnit::PicoohmMeter, base OhmMeter, 1 / 1000000000000, pi^0, from_picoohm_meters, as_picoohm_meters);
-    fixed_unit!(NanoohmMeter: ElectricResistivity, ElectricResistivityUnit::NanoohmMeter, base OhmMeter, 1 / 1000000000, pi^0, from_nanoohm_meters, as_nanoohm_meters);
-    fixed_unit!(MicroohmMeter: ElectricResistivity, ElectricResistivityUnit::MicroohmMeter, base OhmMeter, 1 / 1000000, pi^0, from_microohm_meters, as_microohm_meters);
-    fixed_unit!(MilliohmMeter: ElectricResistivity, ElectricResistivityUnit::MilliohmMeter, base OhmMeter, 1 / 1000, pi^0, from_milliohm_meters, as_milliohm_meters);
-    fixed_unit!(KiloohmMeter: ElectricResistivity, ElectricResistivityUnit::KiloohmMeter, base OhmMeter, 1000 / 1, pi^0, from_kiloohm_meters, as_kiloohm_meters);
-    fixed_unit!(MegaohmMeter: ElectricResistivity, ElectricResistivityUnit::MegaohmMeter, base OhmMeter, 1000000 / 1, pi^0, from_megaohm_meters, as_megaohm_meters);
-    fixed_unit!(OhmCentimeter: ElectricResistivity, ElectricResistivityUnit::OhmCentimeter, base OhmMeter, 1 / 100, pi^0, from_ohms_centimeter, as_ohms_centimeter);
-    fixed_unit!(PicoohmCentimeter: ElectricResistivity, ElectricResistivityUnit::PicoohmCentimeter, base OhmMeter, 1 / 100000000000000, pi^0, from_picoohms_centimeter, as_picoohms_centimeter);
-    fixed_unit!(NanoohmCentimeter: ElectricResistivity, ElectricResistivityUnit::NanoohmCentimeter, base OhmMeter, 1 / 100000000000, pi^0, from_nanoohms_centimeter, as_nanoohms_centimeter);
-    fixed_unit!(MicroohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MicroohmCentimeter, base OhmMeter, 1 / 100000000, pi^0, from_microohms_centimeter, as_microohms_centimeter);
-    fixed_unit!(MilliohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MilliohmCentimeter, base OhmMeter, 1 / 100000, pi^0, from_milliohms_centimeter, as_milliohms_centimeter);
-    fixed_unit!(KiloohmCentimeter: ElectricResistivity, ElectricResistivityUnit::KiloohmCentimeter, base OhmMeter, 10 / 1, pi^0, from_kiloohms_centimeter, as_kiloohms_centimeter);
-    fixed_unit!(MegaohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MegaohmCentimeter, base OhmMeter, 10000 / 1, pi^0, from_megaohms_centimeter, as_megaohms_centimeter);
+    fixed_unit!(OhmMeter: ElectricResistivity, ElectricResistivityUnit::OhmMeter, base OhmMeter, 1 / 1, pi^0, from_ohm_meters, as_ohm_meters, additive);
+    fixed_unit!(PicoohmMeter: ElectricResistivity, ElectricResistivityUnit::PicoohmMeter, base OhmMeter, 1 / 1000000000000, pi^0, from_picoohm_meters, as_picoohm_meters, additive);
+    fixed_unit!(NanoohmMeter: ElectricResistivity, ElectricResistivityUnit::NanoohmMeter, base OhmMeter, 1 / 1000000000, pi^0, from_nanoohm_meters, as_nanoohm_meters, additive);
+    fixed_unit!(MicroohmMeter: ElectricResistivity, ElectricResistivityUnit::MicroohmMeter, base OhmMeter, 1 / 1000000, pi^0, from_microohm_meters, as_microohm_meters, additive);
+    fixed_unit!(MilliohmMeter: ElectricResistivity, ElectricResistivityUnit::MilliohmMeter, base OhmMeter, 1 / 1000, pi^0, from_milliohm_meters, as_milliohm_meters, additive);
+    fixed_unit!(KiloohmMeter: ElectricResistivity, ElectricResistivityUnit::KiloohmMeter, base OhmMeter, 1000 / 1, pi^0, from_kiloohm_meters, as_kiloohm_meters, additive);
+    fixed_unit!(MegaohmMeter: ElectricResistivity, ElectricResistivityUnit::MegaohmMeter, base OhmMeter, 1000000 / 1, pi^0, from_megaohm_meters, as_megaohm_meters, additive);
+    fixed_unit!(OhmCentimeter: ElectricResistivity, ElectricResistivityUnit::OhmCentimeter, base OhmMeter, 1 / 100, pi^0, from_ohms_centimeter, as_ohms_centimeter, additive);
+    fixed_unit!(PicoohmCentimeter: ElectricResistivity, ElectricResistivityUnit::PicoohmCentimeter, base OhmMeter, 1 / 100000000000000, pi^0, from_picoohms_centimeter, as_picoohms_centimeter, additive);
+    fixed_unit!(NanoohmCentimeter: ElectricResistivity, ElectricResistivityUnit::NanoohmCentimeter, base OhmMeter, 1 / 100000000000, pi^0, from_nanoohms_centimeter, as_nanoohms_centimeter, additive);
+    fixed_unit!(MicroohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MicroohmCentimeter, base OhmMeter, 1 / 100000000, pi^0, from_microohms_centimeter, as_microohms_centimeter, additive);
+    fixed_unit!(MilliohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MilliohmCentimeter, base OhmMeter, 1 / 100000, pi^0, from_milliohms_centimeter, as_milliohms_centimeter, additive);
+    fixed_unit!(KiloohmCentimeter: ElectricResistivity, ElectricResistivityUnit::KiloohmCentimeter, base OhmMeter, 10 / 1, pi^0, from_kiloohms_centimeter, as_kiloohms_centimeter, additive);
+    fixed_unit!(MegaohmCentimeter: ElectricResistivity, ElectricResistivityUnit::MegaohmCentimeter, base OhmMeter, 10000 / 1, pi^0, from_megaohms_centimeter, as_megaohms_centimeter, additive);
 }

@@ -205,8 +205,8 @@ fixed_base!(SpecificFuelConsumption, GramPerKilonewtonSecond);
 ///
 /// Also available as [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(PoundMassPerPoundForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_pounds_mass_per_pound_force_hour, as_pounds_mass_per_pound_force_hour);
-    fixed_unit!(KilogramPerKilogramForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_kilograms_per_kilogram_force_hour, as_kilograms_per_kilogram_force_hour);
-    fixed_unit!(GramPerKilonewtonSecond: SpecificFuelConsumption, SpecificFuelConsumptionUnit::GramPerKilonewtonSecond, base GramPerKilonewtonSecond, 1 / 1, pi^0, from_grams_per_kilonewton_second, as_grams_per_kilonewton_second);
-    fixed_unit!(KilogramPerKilonewtonSecond: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond, base GramPerKilonewtonSecond, 1000 / 1, pi^0, from_kilograms_per_kilonewton_second, as_kilograms_per_kilonewton_second);
+    fixed_unit!(PoundMassPerPoundForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_pounds_mass_per_pound_force_hour, as_pounds_mass_per_pound_force_hour, additive);
+    fixed_unit!(KilogramPerKilogramForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_kilograms_per_kilogram_force_hour, as_kilograms_per_kilogram_force_hour, additive);
+    fixed_unit!(GramPerKilonewtonSecond: SpecificFuelConsumption, SpecificFuelConsumptionUnit::GramPerKilonewtonSecond, base GramPerKilonewtonSecond, 1 / 1, pi^0, from_grams_per_kilonewton_second, as_grams_per_kilonewton_second, additive);
+    fixed_unit!(KilogramPerKilonewtonSecond: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond, base GramPerKilonewtonSecond, 1000 / 1, pi^0, from_kilograms_per_kilonewton_second, as_kilograms_per_kilonewton_second, additive);
 }

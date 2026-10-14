@@ -166,7 +166,7 @@ fixed_base!(MolarEnergy, JoulePerMole);
 ///
 /// Also available as [`unit::molar_energy`](crate::unit::molar_energy). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(JoulePerMole: MolarEnergy, MolarEnergyUnit::JoulePerMole, base JoulePerMole, 1 / 1, pi^0, from_joules_per_mole, as_joules_per_mole);
-    fixed_unit!(KilojoulePerMole: MolarEnergy, MolarEnergyUnit::KilojoulePerMole, base JoulePerMole, 1000 / 1, pi^0, from_kilojoules_per_mole, as_kilojoules_per_mole);
-    fixed_unit!(MegajoulePerMole: MolarEnergy, MolarEnergyUnit::MegajoulePerMole, base JoulePerMole, 1000000 / 1, pi^0, from_megajoules_per_mole, as_megajoules_per_mole);
+    fixed_unit!(JoulePerMole: MolarEnergy, MolarEnergyUnit::JoulePerMole, base JoulePerMole, 1 / 1, pi^0, from_joules_per_mole, as_joules_per_mole, additive);
+    fixed_unit!(KilojoulePerMole: MolarEnergy, MolarEnergyUnit::KilojoulePerMole, base JoulePerMole, 1000 / 1, pi^0, from_kilojoules_per_mole, as_kilojoules_per_mole, additive);
+    fixed_unit!(MegajoulePerMole: MolarEnergy, MolarEnergyUnit::MegajoulePerMole, base JoulePerMole, 1000000 / 1, pi^0, from_megajoules_per_mole, as_megajoules_per_mole, additive);
 }

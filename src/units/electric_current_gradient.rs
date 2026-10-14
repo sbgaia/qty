@@ -270,11 +270,11 @@ fixed_base!(ElectricCurrentGradient, AmperePerSecond);
 ///
 /// Also available as [`unit::electric_current_gradient`](crate::unit::electric_current_gradient). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(AmperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerSecond, base AmperePerSecond, 1 / 1, pi^0, from_amperes_per_second, as_amperes_per_second);
-    fixed_unit!(MilliamperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerSecond, base AmperePerSecond, 1 / 1000, pi^0, from_milliamperes_per_second, as_milliamperes_per_second);
-    fixed_unit!(AmperePerMinute: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMinute, base AmperePerSecond, 1 / 60, pi^0, from_amperes_per_minute, as_amperes_per_minute);
-    fixed_unit!(MilliamperePerMinute: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerMinute, base AmperePerSecond, 1 / 60000, pi^0, from_milliamperes_per_minute, as_milliamperes_per_minute);
-    fixed_unit!(AmperePerMillisecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMillisecond, base AmperePerSecond, 1000 / 1, pi^0, from_amperes_per_millisecond, as_amperes_per_millisecond);
-    fixed_unit!(AmperePerMicrosecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMicrosecond, base AmperePerSecond, 1000000 / 1, pi^0, from_amperes_per_microsecond, as_amperes_per_microsecond);
-    fixed_unit!(AmperePerNanosecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerNanosecond, base AmperePerSecond, 1000000000 / 1, pi^0, from_amperes_per_nanosecond, as_amperes_per_nanosecond);
+    fixed_unit!(AmperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerSecond, base AmperePerSecond, 1 / 1, pi^0, from_amperes_per_second, as_amperes_per_second, additive);
+    fixed_unit!(MilliamperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerSecond, base AmperePerSecond, 1 / 1000, pi^0, from_milliamperes_per_second, as_milliamperes_per_second, additive);
+    fixed_unit!(AmperePerMinute: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMinute, base AmperePerSecond, 1 / 60, pi^0, from_amperes_per_minute, as_amperes_per_minute, additive);
+    fixed_unit!(MilliamperePerMinute: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerMinute, base AmperePerSecond, 1 / 60000, pi^0, from_milliamperes_per_minute, as_milliamperes_per_minute, additive);
+    fixed_unit!(AmperePerMillisecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMillisecond, base AmperePerSecond, 1000 / 1, pi^0, from_amperes_per_millisecond, as_amperes_per_millisecond, additive);
+    fixed_unit!(AmperePerMicrosecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerMicrosecond, base AmperePerSecond, 1000000 / 1, pi^0, from_amperes_per_microsecond, as_amperes_per_microsecond, additive);
+    fixed_unit!(AmperePerNanosecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerNanosecond, base AmperePerSecond, 1000000000 / 1, pi^0, from_amperes_per_nanosecond, as_amperes_per_nanosecond, additive);
 }

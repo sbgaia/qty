@@ -443,20 +443,20 @@ fixed_base!(ElectricSusceptance, Siemens);
 ///
 /// Also available as [`unit::electric_susceptance`](crate::unit::electric_susceptance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Siemens: ElectricSusceptance, ElectricSusceptanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens);
-    fixed_unit!(Nanosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens);
-    fixed_unit!(Microsiemens: ElectricSusceptance, ElectricSusceptanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens);
-    fixed_unit!(Millisiemens: ElectricSusceptance, ElectricSusceptanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens);
-    fixed_unit!(Kilosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens);
-    fixed_unit!(Megasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens);
-    fixed_unit!(Gigasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens);
-    fixed_unit!(Terasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens);
-    fixed_unit!(Mho: ElectricSusceptance, ElectricSusceptanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos);
-    fixed_unit!(Nanomho: ElectricSusceptance, ElectricSusceptanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos);
-    fixed_unit!(Micromho: ElectricSusceptance, ElectricSusceptanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos);
-    fixed_unit!(Millimho: ElectricSusceptance, ElectricSusceptanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos);
-    fixed_unit!(Kilomho: ElectricSusceptance, ElectricSusceptanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos);
-    fixed_unit!(Megamho: ElectricSusceptance, ElectricSusceptanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos);
-    fixed_unit!(Gigamho: ElectricSusceptance, ElectricSusceptanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos);
-    fixed_unit!(Teramho: ElectricSusceptance, ElectricSusceptanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos);
+    fixed_unit!(Siemens: ElectricSusceptance, ElectricSusceptanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
+    fixed_unit!(Nanosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);
+    fixed_unit!(Microsiemens: ElectricSusceptance, ElectricSusceptanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens, additive);
+    fixed_unit!(Millisiemens: ElectricSusceptance, ElectricSusceptanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens, additive);
+    fixed_unit!(Kilosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens, additive);
+    fixed_unit!(Megasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens, additive);
+    fixed_unit!(Gigasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens, additive);
+    fixed_unit!(Terasiemens: ElectricSusceptance, ElectricSusceptanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens, additive);
+    fixed_unit!(Mho: ElectricSusceptance, ElectricSusceptanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos, additive);
+    fixed_unit!(Nanomho: ElectricSusceptance, ElectricSusceptanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos, additive);
+    fixed_unit!(Micromho: ElectricSusceptance, ElectricSusceptanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos, additive);
+    fixed_unit!(Millimho: ElectricSusceptance, ElectricSusceptanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos, additive);
+    fixed_unit!(Kilomho: ElectricSusceptance, ElectricSusceptanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos, additive);
+    fixed_unit!(Megamho: ElectricSusceptance, ElectricSusceptanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos, additive);
+    fixed_unit!(Gigamho: ElectricSusceptance, ElectricSusceptanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos, additive);
+    fixed_unit!(Teramho: ElectricSusceptance, ElectricSusceptanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos, additive);
 }

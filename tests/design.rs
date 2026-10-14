@@ -191,6 +191,32 @@ fn round_trips_are_within_one_ulp() {
 }
 
 #[test]
+fn temperatures_are_points_and_deltas_are_amounts() {
+    let readings = [18.0, 21.0, 24.0].map(Temperature::from_degrees_celsius);
+    // Averaging points: a reference point plus the mean of the deltas.
+    let reference = readings[0];
+    let total: TemperatureDelta = readings.iter().map(|&t| t - reference).sum();
+    let mean = reference + total / readings.len() as f64;
+    assert!(mean.approx_eq_rel(Temperature::from_degrees_celsius(21.0), 1e-12));
+
+    // A change of 1 °C is a change of 1 K, and of 1.8 °F.
+    let rise = Temperature::from_degrees_celsius(25.0) - Temperature::from_degrees_celsius(24.0);
+    assert!((rise.as_kelvins() - 1.0).abs() < 1e-12);
+    assert!((rise.as_degrees_fahrenheit() - 1.8).abs() < 1e-12);
+
+    // Deltas feed the physics relations: heat = entropy × ΔT.
+    let heat: Energy = rise * Entropy::from_joules_per_kelvin(4.0);
+    assert!(heat.approx_eq_rel(Energy::from_joules(4.0), 1e-12));
+
+    // Absolute ratio (e.g. Carnot efficiency 1 − Tc/Th) stays available.
+    let (cold, hot) = (
+        Temperature::from_kelvins(300.0),
+        Temperature::from_kelvins(600.0),
+    );
+    assert_eq!(1.0 - cold / hot, 0.5);
+}
+
+#[test]
 fn temperature_is_affine() {
     let boiling = Temperature::from_degrees_celsius(100.0);
     assert!(boiling.approx_eq_rel(Temperature::from_degrees_fahrenheit(212.0), 1e-15));

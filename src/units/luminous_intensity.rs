@@ -108,5 +108,5 @@ fixed_base!(LuminousIntensity, Candela);
 ///
 /// Also available as [`unit::luminous_intensity`](crate::unit::luminous_intensity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Candela: LuminousIntensity, LuminousIntensityUnit::Candela, base Candela, 1 / 1, pi^0, from_candela, as_candela);
+    fixed_unit!(Candela: LuminousIntensity, LuminousIntensityUnit::Candela, base Candela, 1 / 1, pi^0, from_candela, as_candela, additive);
 }

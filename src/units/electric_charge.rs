@@ -367,15 +367,15 @@ fixed_base!(ElectricCharge, Coulomb);
 ///
 /// Also available as [`unit::electric_charge`](crate::unit::electric_charge). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Coulomb: ElectricCharge, ElectricChargeUnit::Coulomb, base Coulomb, 1 / 1, pi^0, from_coulombs, as_coulombs);
-    fixed_unit!(Picocoulomb: ElectricCharge, ElectricChargeUnit::Picocoulomb, base Coulomb, 1 / 1000000000000, pi^0, from_picocoulombs, as_picocoulombs);
-    fixed_unit!(Nanocoulomb: ElectricCharge, ElectricChargeUnit::Nanocoulomb, base Coulomb, 1 / 1000000000, pi^0, from_nanocoulombs, as_nanocoulombs);
-    fixed_unit!(Microcoulomb: ElectricCharge, ElectricChargeUnit::Microcoulomb, base Coulomb, 1 / 1000000, pi^0, from_microcoulombs, as_microcoulombs);
-    fixed_unit!(Millicoulomb: ElectricCharge, ElectricChargeUnit::Millicoulomb, base Coulomb, 1 / 1000, pi^0, from_millicoulombs, as_millicoulombs);
-    fixed_unit!(Kilocoulomb: ElectricCharge, ElectricChargeUnit::Kilocoulomb, base Coulomb, 1000 / 1, pi^0, from_kilocoulombs, as_kilocoulombs);
-    fixed_unit!(Megacoulomb: ElectricCharge, ElectricChargeUnit::Megacoulomb, base Coulomb, 1000000 / 1, pi^0, from_megacoulombs, as_megacoulombs);
-    fixed_unit!(AmpereHour: ElectricCharge, ElectricChargeUnit::AmpereHour, base Coulomb, 3600 / 1, pi^0, from_ampere_hours, as_ampere_hours);
-    fixed_unit!(MilliampereHour: ElectricCharge, ElectricChargeUnit::MilliampereHour, base Coulomb, 18 / 5, pi^0, from_milliampere_hours, as_milliampere_hours);
-    fixed_unit!(KiloampereHour: ElectricCharge, ElectricChargeUnit::KiloampereHour, base Coulomb, 3600000 / 1, pi^0, from_kiloampere_hours, as_kiloampere_hours);
-    fixed_unit!(MegaampereHour: ElectricCharge, ElectricChargeUnit::MegaampereHour, base Coulomb, 3600000000 / 1, pi^0, from_megaampere_hours, as_megaampere_hours);
+    fixed_unit!(Coulomb: ElectricCharge, ElectricChargeUnit::Coulomb, base Coulomb, 1 / 1, pi^0, from_coulombs, as_coulombs, additive);
+    fixed_unit!(Picocoulomb: ElectricCharge, ElectricChargeUnit::Picocoulomb, base Coulomb, 1 / 1000000000000, pi^0, from_picocoulombs, as_picocoulombs, additive);
+    fixed_unit!(Nanocoulomb: ElectricCharge, ElectricChargeUnit::Nanocoulomb, base Coulomb, 1 / 1000000000, pi^0, from_nanocoulombs, as_nanocoulombs, additive);
+    fixed_unit!(Microcoulomb: ElectricCharge, ElectricChargeUnit::Microcoulomb, base Coulomb, 1 / 1000000, pi^0, from_microcoulombs, as_microcoulombs, additive);
+    fixed_unit!(Millicoulomb: ElectricCharge, ElectricChargeUnit::Millicoulomb, base Coulomb, 1 / 1000, pi^0, from_millicoulombs, as_millicoulombs, additive);
+    fixed_unit!(Kilocoulomb: ElectricCharge, ElectricChargeUnit::Kilocoulomb, base Coulomb, 1000 / 1, pi^0, from_kilocoulombs, as_kilocoulombs, additive);
+    fixed_unit!(Megacoulomb: ElectricCharge, ElectricChargeUnit::Megacoulomb, base Coulomb, 1000000 / 1, pi^0, from_megacoulombs, as_megacoulombs, additive);
+    fixed_unit!(AmpereHour: ElectricCharge, ElectricChargeUnit::AmpereHour, base Coulomb, 3600 / 1, pi^0, from_ampere_hours, as_ampere_hours, additive);
+    fixed_unit!(MilliampereHour: ElectricCharge, ElectricChargeUnit::MilliampereHour, base Coulomb, 18 / 5, pi^0, from_milliampere_hours, as_milliampere_hours, additive);
+    fixed_unit!(KiloampereHour: ElectricCharge, ElectricChargeUnit::KiloampereHour, base Coulomb, 3600000 / 1, pi^0, from_kiloampere_hours, as_kiloampere_hours, additive);
+    fixed_unit!(MegaampereHour: ElectricCharge, ElectricChargeUnit::MegaampereHour, base Coulomb, 3600000000 / 1, pi^0, from_megaampere_hours, as_megaampere_hours, additive);
 }

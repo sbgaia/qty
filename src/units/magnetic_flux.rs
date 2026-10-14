@@ -114,5 +114,5 @@ fixed_base!(MagneticFlux, Weber);
 ///
 /// Also available as [`unit::magnetic_flux`](crate::unit::magnetic_flux). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Weber: MagneticFlux, MagneticFluxUnit::Weber, base Weber, 1 / 1, pi^0, from_webers, as_webers);
+    fixed_unit!(Weber: MagneticFlux, MagneticFluxUnit::Weber, base Weber, 1 / 1, pi^0, from_webers, as_webers, additive);
 }

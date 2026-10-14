@@ -52,6 +52,10 @@
 //!   everywhere, as does any type implementing [`Float`]. Integers (and any
 //!   other `T`) get arithmetic, comparison, hashing and the cross-quantity
 //!   operators whose base units are coherent, all working in base units.
+//! * **Points vs. amounts.** A [`Temperature`] is a point on a scale: two of
+//!   them cannot be added (20 °C + 20 °C is not 40 °C). Their difference is a
+//!   [`TemperatureDelta`], which adds, scales and sums like any amount, and
+//!   moves a temperature: `t + delta`.
 //! * **Bulk data without copies.** Because of `#[repr(transparent)]`, a
 //!   `&[f64]` of metres can be viewed as `&[Length]` and back for free, so
 //!   typed code can feed SIMD kernels or I/O buffers directly.
@@ -133,8 +137,9 @@
 //!
 //! Units are in [`unit`](mod@unit), one module per quantity (`unit::duration::Nanosecond`,
 //! `unit::mass::Gram`, …). Every linear unit has a marker; affine units such
-//! as °C do not, because adding two counts of °C is not adding two
-//! temperatures. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
+//! as °C do not. Markers of absolute temperatures (kelvin, °R) can be
+//! compared, converted and rounded but not added — they implement
+//! [`FixedUnit`] but not [`AdditiveUnit`]. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
 //! unit, which also get the cross-quantity operators) convert into each other
 //! with `From`.
 //!
@@ -458,7 +463,7 @@ macro_rules! quantity_fmt {
 /// Implements everything a quantity needs apart from its unit conversions:
 /// base-unit access, zero-copy slice views, arithmetic operators,
 /// [`Quantity`], `Display` and `FromStr`.
-macro_rules! quantity {
+macro_rules! quantity_core {
     ($Q:ident, $U:ident, $base:ident) => {
         impl<T> $Q<T> {
             /// Wraps a value expressed in the base unit. Free and `const`.
@@ -571,18 +576,6 @@ macro_rules! quantity {
                 $crate::Fixed::<<$Q<f64> as $crate::HasFixedBase>::Base, I>::round_from(quantity, mode)
                     .map(Self::from)
             }
-
-            /// `self + other`, or `None` on overflow.
-            #[inline]
-            pub fn checked_add(self, other: Self) -> Option<Self> {
-                self.0.checked_add(other.0).map(Self)
-            }
-
-            /// `self - other`, or `None` on overflow.
-            #[inline]
-            pub fn checked_sub(self, other: Self) -> Option<Self> {
-                self.0.checked_sub(other.0).map(Self)
-            }
         }
 
         impl<T: Copy> $crate::Quantity for $Q<T> {
@@ -596,6 +589,59 @@ macro_rules! quantity {
             #[inline(always)]
             fn as_base(self) -> T {
                 self.0
+            }
+        }
+
+        // ── Same-quantity ratio ──
+
+        /// Dividing two values of the same quantity gives a plain number.
+        impl<T: core::ops::Div<Output = T>> core::ops::Div for $Q<T> {
+            type Output = T;
+            #[inline(always)]
+            fn div(self, rhs: Self) -> T {
+                self.0 / rhs.0
+            }
+        }
+
+        // ── Formatting & parsing ──
+
+        quantity_fmt!($Q, $U, $base: Display, LowerExp, UpperExp);
+
+        impl core::fmt::Display for $U {
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                f.pad(self.abbreviation())
+            }
+        }
+
+        /// Parses a number followed by a unit abbreviation, e.g. `"1.5 km"`.
+        impl<T: $crate::Float + core::str::FromStr> core::str::FromStr for $Q<T> {
+            type Err = $crate::ParseError;
+            fn from_str(s: &str) -> Result<Self, $crate::ParseError> {
+                let (number, unit) = $crate::split_value_unit(s);
+                let value: T = number
+                    .parse()
+                    .map_err(|_| $crate::ParseError::InvalidNumber)?;
+                Ok(Self::new(value, unit.parse()?))
+            }
+        }
+    };
+}
+
+/// Arithmetic for ordinary ("vector") quantities: values that can be added,
+/// negated and scaled — lengths, durations, temperature differences, …
+macro_rules! quantity_vector_ops {
+    ($Q:ident) => {
+        impl<I: $crate::Integer> $Q<I> {
+            /// `self + other`, or `None` on overflow.
+            #[inline]
+            pub fn checked_add(self, other: Self) -> Option<Self> {
+                self.0.checked_add(other.0).map(Self)
+            }
+
+            /// `self - other`, or `None` on overflow.
+            #[inline]
+            pub fn checked_sub(self, other: Self) -> Option<Self> {
+                self.0.checked_sub(other.0).map(Self)
             }
         }
 
@@ -627,14 +673,6 @@ macro_rules! quantity {
             #[inline(always)]
             fn rem(self, rhs: Self) -> Self {
                 Self(self.0 % rhs.0)
-            }
-        }
-        /// Dividing two values of the same quantity gives a plain number.
-        impl<T: core::ops::Div<Output = T>> core::ops::Div for $Q<T> {
-            type Output = T;
-            #[inline(always)]
-            fn div(self, rhs: Self) -> T {
-                self.0 / rhs.0
             }
         }
         impl<T: core::ops::AddAssign> core::ops::AddAssign for $Q<T> {
@@ -702,26 +740,69 @@ macro_rules! quantity {
                 Self(iter.map(|q| &q.0).sum())
             }
         }
+    };
+}
 
-        // ── Formatting & parsing ──
+/// Implements everything an ordinary quantity needs apart from its unit
+/// conversions: base-unit access, zero-copy slice views, arithmetic
+/// operators, [`Quantity`], `Display` and `FromStr`.
+macro_rules! quantity {
+    ($Q:ident, $U:ident, $base:ident) => {
+        quantity_core!($Q, $U, $base);
+        quantity_vector_ops!($Q);
+    };
+}
 
-        quantity_fmt!($Q, $U, $base: Display, LowerExp, UpperExp);
+/// A quantity that is a *point on a scale* rather than an amount — an
+/// absolute temperature. Points cannot be added, negated or scaled
+/// (20 °C + 20 °C is not 40 °C); their differences are amounts of `$D`:
+///
+/// * `point - point = $D`
+/// * `point ± $D = point`, `$D + point = point`, `point ±= $D`
+///
+/// `point / point` remains: it is a ratio of absolute values.
+macro_rules! point_quantity {
+    ($Q:ident, $U:ident, $base:ident, $D:ident) => {
+        quantity_core!($Q, $U, $base);
 
-        impl core::fmt::Display for $U {
-            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-                f.pad(self.abbreviation())
+        impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
+            type Output = $D<T>;
+            #[inline(always)]
+            fn sub(self, rhs: Self) -> $D<T> {
+                $D::from_base(self.0 - rhs.0)
             }
         }
-
-        /// Parses a number followed by a unit abbreviation, e.g. `"1.5 km"`.
-        impl<T: $crate::Float + core::str::FromStr> core::str::FromStr for $Q<T> {
-            type Err = $crate::ParseError;
-            fn from_str(s: &str) -> Result<Self, $crate::ParseError> {
-                let (number, unit) = $crate::split_value_unit(s);
-                let value: T = number
-                    .parse()
-                    .map_err(|_| $crate::ParseError::InvalidNumber)?;
-                Ok(Self::new(value, unit.parse()?))
+        impl<T: core::ops::Add<Output = T>> core::ops::Add<$D<T>> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn add(self, rhs: $D<T>) -> Self {
+                Self(self.0 + rhs.into_base())
+            }
+        }
+        impl<T: core::ops::Add<Output = T>> core::ops::Add<$Q<T>> for $D<T> {
+            type Output = $Q<T>;
+            #[inline(always)]
+            fn add(self, rhs: $Q<T>) -> $Q<T> {
+                $Q::from_base(self.into_base() + rhs.0)
+            }
+        }
+        impl<T: core::ops::Sub<Output = T>> core::ops::Sub<$D<T>> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn sub(self, rhs: $D<T>) -> Self {
+                Self(self.0 - rhs.into_base())
+            }
+        }
+        impl<T: core::ops::AddAssign> core::ops::AddAssign<$D<T>> for $Q<T> {
+            #[inline(always)]
+            fn add_assign(&mut self, rhs: $D<T>) {
+                self.0 += rhs.into_base();
+            }
+        }
+        impl<T: core::ops::SubAssign> core::ops::SubAssign<$D<T>> for $Q<T> {
+            #[inline(always)]
+            fn sub_assign(&mut self, rhs: $D<T>) {
+                self.0 -= rhs.into_base();
             }
         }
     };
@@ -802,6 +883,12 @@ macro_rules! cross_recip {
 
 /// Declares the [`FixedUnit`] marker for one linear unit.
 macro_rules! fixed_unit {
+    // Units of ordinary quantities: counts can be added.
+    ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
+     $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident, additive) => {
+        fixed_unit!($M: $Q, $U::$V, base $B, $num / $den, pi^$pi, $from, $as);
+        impl $crate::AdditiveUnit for $M {}
+    };
     ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
      $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident) => {
         #[doc = concat!(
@@ -863,7 +950,7 @@ pub trait HasFixedBase {
 }
 
 mod fixed;
-pub use fixed::{Fixed, FixedUnit, Integer, Ordered, RoundError, Rounding, ToFloat};
+pub use fixed::{AdditiveUnit, Fixed, FixedUnit, Integer, Ordered, RoundError, Rounding, ToFloat};
 
 // Generated quantity modules — re-exports each quantity and its unit enum.
 pub mod units;

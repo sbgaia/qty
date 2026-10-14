@@ -191,8 +191,8 @@ fixed_base!(LeakRate, PascalCubicMeterPerSecond);
 ///
 /// Also available as [`unit::leak_rate`](crate::unit::leak_rate). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(PascalCubicMeterPerSecond: LeakRate, LeakRateUnit::PascalCubicMeterPerSecond, base PascalCubicMeterPerSecond, 1 / 1, pi^0, from_pascal_cubic_meters_per_second, as_pascal_cubic_meters_per_second);
-    fixed_unit!(MillibarLiterPerSecond: LeakRate, LeakRateUnit::MillibarLiterPerSecond, base PascalCubicMeterPerSecond, 1 / 10, pi^0, from_millibar_liters_per_second, as_millibar_liters_per_second);
-    fixed_unit!(TorrLiterPerSecond: LeakRate, LeakRateUnit::TorrLiterPerSecond, base PascalCubicMeterPerSecond, 2 / 15, pi^0, from_torr_liters_per_second, as_torr_liters_per_second);
-    fixed_unit!(AtmCubicCentimeterPerSecond: LeakRate, LeakRateUnit::AtmCubicCentimeterPerSecond, base PascalCubicMeterPerSecond, 4053 / 40000, pi^0, from_atm_cubic_centimeters_per_second, as_atm_cubic_centimeters_per_second);
+    fixed_unit!(PascalCubicMeterPerSecond: LeakRate, LeakRateUnit::PascalCubicMeterPerSecond, base PascalCubicMeterPerSecond, 1 / 1, pi^0, from_pascal_cubic_meters_per_second, as_pascal_cubic_meters_per_second, additive);
+    fixed_unit!(MillibarLiterPerSecond: LeakRate, LeakRateUnit::MillibarLiterPerSecond, base PascalCubicMeterPerSecond, 1 / 10, pi^0, from_millibar_liters_per_second, as_millibar_liters_per_second, additive);
+    fixed_unit!(TorrLiterPerSecond: LeakRate, LeakRateUnit::TorrLiterPerSecond, base PascalCubicMeterPerSecond, 2 / 15, pi^0, from_torr_liters_per_second, as_torr_liters_per_second, additive);
+    fixed_unit!(AtmCubicCentimeterPerSecond: LeakRate, LeakRateUnit::AtmCubicCentimeterPerSecond, base PascalCubicMeterPerSecond, 4053 / 40000, pi^0, from_atm_cubic_centimeters_per_second, as_atm_cubic_centimeters_per_second, additive);
 }

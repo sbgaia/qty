@@ -193,8 +193,8 @@ fixed_base!(TemperatureGradient, KelvinPerMeter);
 ///
 /// Also available as [`unit::temperature_gradient`](crate::unit::temperature_gradient). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(KelvinPerMeter: TemperatureGradient, TemperatureGradientUnit::KelvinPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_kelvins_per_meter, as_kelvins_per_meter);
-    fixed_unit!(DegreeCelsiusPerMeter: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_degrees_celsius_per_meter, as_degrees_celsius_per_meter);
-    fixed_unit!(DegreeFahrenheitPerFoot: TemperatureGradient, TemperatureGradientUnit::DegreeFahrenheitPerFoot, base KelvinPerMeter, 6250 / 3429, pi^0, from_degrees_fahrenheit_per_foot, as_degrees_fahrenheit_per_foot);
-    fixed_unit!(DegreeCelsiusPerKilometer: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerKilometer, base KelvinPerMeter, 1 / 1000, pi^0, from_degrees_celsius_per_kilometer, as_degrees_celsius_per_kilometer);
+    fixed_unit!(KelvinPerMeter: TemperatureGradient, TemperatureGradientUnit::KelvinPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_kelvins_per_meter, as_kelvins_per_meter, additive);
+    fixed_unit!(DegreeCelsiusPerMeter: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_degrees_celsius_per_meter, as_degrees_celsius_per_meter, additive);
+    fixed_unit!(DegreeFahrenheitPerFoot: TemperatureGradient, TemperatureGradientUnit::DegreeFahrenheitPerFoot, base KelvinPerMeter, 6250 / 3429, pi^0, from_degrees_fahrenheit_per_foot, as_degrees_fahrenheit_per_foot, additive);
+    fixed_unit!(DegreeCelsiusPerKilometer: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerKilometer, base KelvinPerMeter, 1 / 1000, pi^0, from_degrees_celsius_per_kilometer, as_degrees_celsius_per_kilometer, additive);
 }

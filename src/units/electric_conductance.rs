@@ -443,20 +443,20 @@ fixed_base!(ElectricConductance, Siemens);
 ///
 /// Also available as [`unit::electric_conductance`](crate::unit::electric_conductance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Siemens: ElectricConductance, ElectricConductanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens);
-    fixed_unit!(Nanosiemens: ElectricConductance, ElectricConductanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens);
-    fixed_unit!(Microsiemens: ElectricConductance, ElectricConductanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens);
-    fixed_unit!(Millisiemens: ElectricConductance, ElectricConductanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens);
-    fixed_unit!(Kilosiemens: ElectricConductance, ElectricConductanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens);
-    fixed_unit!(Megasiemens: ElectricConductance, ElectricConductanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens);
-    fixed_unit!(Gigasiemens: ElectricConductance, ElectricConductanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens);
-    fixed_unit!(Terasiemens: ElectricConductance, ElectricConductanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens);
-    fixed_unit!(Mho: ElectricConductance, ElectricConductanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos);
-    fixed_unit!(Nanomho: ElectricConductance, ElectricConductanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos);
-    fixed_unit!(Micromho: ElectricConductance, ElectricConductanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos);
-    fixed_unit!(Millimho: ElectricConductance, ElectricConductanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos);
-    fixed_unit!(Kilomho: ElectricConductance, ElectricConductanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos);
-    fixed_unit!(Megamho: ElectricConductance, ElectricConductanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos);
-    fixed_unit!(Gigamho: ElectricConductance, ElectricConductanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos);
-    fixed_unit!(Teramho: ElectricConductance, ElectricConductanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos);
+    fixed_unit!(Siemens: ElectricConductance, ElectricConductanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
+    fixed_unit!(Nanosiemens: ElectricConductance, ElectricConductanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);
+    fixed_unit!(Microsiemens: ElectricConductance, ElectricConductanceUnit::Microsiemens, base Siemens, 1 / 1000000, pi^0, from_microsiemens, as_microsiemens, additive);
+    fixed_unit!(Millisiemens: ElectricConductance, ElectricConductanceUnit::Millisiemens, base Siemens, 1 / 1000, pi^0, from_millisiemens, as_millisiemens, additive);
+    fixed_unit!(Kilosiemens: ElectricConductance, ElectricConductanceUnit::Kilosiemens, base Siemens, 1000 / 1, pi^0, from_kilosiemens, as_kilosiemens, additive);
+    fixed_unit!(Megasiemens: ElectricConductance, ElectricConductanceUnit::Megasiemens, base Siemens, 1000000 / 1, pi^0, from_megasiemens, as_megasiemens, additive);
+    fixed_unit!(Gigasiemens: ElectricConductance, ElectricConductanceUnit::Gigasiemens, base Siemens, 1000000000 / 1, pi^0, from_gigasiemens, as_gigasiemens, additive);
+    fixed_unit!(Terasiemens: ElectricConductance, ElectricConductanceUnit::Terasiemens, base Siemens, 1000000000000 / 1, pi^0, from_terasiemens, as_terasiemens, additive);
+    fixed_unit!(Mho: ElectricConductance, ElectricConductanceUnit::Mho, base Siemens, 1 / 1, pi^0, from_mhos, as_mhos, additive);
+    fixed_unit!(Nanomho: ElectricConductance, ElectricConductanceUnit::Nanomho, base Siemens, 1 / 1000000000, pi^0, from_nanomhos, as_nanomhos, additive);
+    fixed_unit!(Micromho: ElectricConductance, ElectricConductanceUnit::Micromho, base Siemens, 1 / 1000000, pi^0, from_micromhos, as_micromhos, additive);
+    fixed_unit!(Millimho: ElectricConductance, ElectricConductanceUnit::Millimho, base Siemens, 1 / 1000, pi^0, from_millimhos, as_millimhos, additive);
+    fixed_unit!(Kilomho: ElectricConductance, ElectricConductanceUnit::Kilomho, base Siemens, 1000 / 1, pi^0, from_kilomhos, as_kilomhos, additive);
+    fixed_unit!(Megamho: ElectricConductance, ElectricConductanceUnit::Megamho, base Siemens, 1000000 / 1, pi^0, from_megamhos, as_megamhos, additive);
+    fixed_unit!(Gigamho: ElectricConductance, ElectricConductanceUnit::Gigamho, base Siemens, 1000000000 / 1, pi^0, from_gigamhos, as_gigamhos, additive);
+    fixed_unit!(Teramho: ElectricConductance, ElectricConductanceUnit::Teramho, base Siemens, 1000000000000 / 1, pi^0, from_teramhos, as_teramhos, additive);
 }

@@ -473,19 +473,19 @@ fixed_base!(Angle, Radian);
 ///
 /// Also available as [`unit::angle`](crate::unit::angle). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Radian: Angle, AngleUnit::Radian, base Radian, 1 / 1, pi^0, from_radians, as_radians);
-    fixed_unit!(Nanoradian: Angle, AngleUnit::Nanoradian, base Radian, 1 / 1000000000, pi^0, from_nanoradians, as_nanoradians);
-    fixed_unit!(Microradian: Angle, AngleUnit::Microradian, base Radian, 1 / 1000000, pi^0, from_microradians, as_microradians);
-    fixed_unit!(Milliradian: Angle, AngleUnit::Milliradian, base Radian, 1 / 1000, pi^0, from_milliradians, as_milliradians);
-    fixed_unit!(Centiradian: Angle, AngleUnit::Centiradian, base Radian, 1 / 100, pi^0, from_centiradians, as_centiradians);
-    fixed_unit!(Deciradian: Angle, AngleUnit::Deciradian, base Radian, 1 / 10, pi^0, from_deciradians, as_deciradians);
-    fixed_unit!(Degree: Angle, AngleUnit::Degree, base Radian, 1 / 180, pi^1, from_degrees, as_degrees);
-    fixed_unit!(Nanodegree: Angle, AngleUnit::Nanodegree, base Radian, 1 / 180000000000, pi^1, from_nanodegrees, as_nanodegrees);
-    fixed_unit!(Microdegree: Angle, AngleUnit::Microdegree, base Radian, 1 / 180000000, pi^1, from_microdegrees, as_microdegrees);
-    fixed_unit!(Millidegree: Angle, AngleUnit::Millidegree, base Radian, 1 / 180000, pi^1, from_millidegrees, as_millidegrees);
-    fixed_unit!(Arcminute: Angle, AngleUnit::Arcminute, base Radian, 1 / 10800, pi^1, from_arcminutes, as_arcminutes);
-    fixed_unit!(Arcsecond: Angle, AngleUnit::Arcsecond, base Radian, 1 / 648000, pi^1, from_arcseconds, as_arcseconds);
-    fixed_unit!(Gradian: Angle, AngleUnit::Gradian, base Radian, 1 / 200, pi^1, from_gradians, as_gradians);
-    fixed_unit!(NatoMil: Angle, AngleUnit::NatoMil, base Radian, 1 / 3200, pi^1, from_nato_mils, as_nato_mils);
-    fixed_unit!(Revolution: Angle, AngleUnit::Revolution, base Radian, 2 / 1, pi^1, from_revolutions, as_revolutions);
+    fixed_unit!(Radian: Angle, AngleUnit::Radian, base Radian, 1 / 1, pi^0, from_radians, as_radians, additive);
+    fixed_unit!(Nanoradian: Angle, AngleUnit::Nanoradian, base Radian, 1 / 1000000000, pi^0, from_nanoradians, as_nanoradians, additive);
+    fixed_unit!(Microradian: Angle, AngleUnit::Microradian, base Radian, 1 / 1000000, pi^0, from_microradians, as_microradians, additive);
+    fixed_unit!(Milliradian: Angle, AngleUnit::Milliradian, base Radian, 1 / 1000, pi^0, from_milliradians, as_milliradians, additive);
+    fixed_unit!(Centiradian: Angle, AngleUnit::Centiradian, base Radian, 1 / 100, pi^0, from_centiradians, as_centiradians, additive);
+    fixed_unit!(Deciradian: Angle, AngleUnit::Deciradian, base Radian, 1 / 10, pi^0, from_deciradians, as_deciradians, additive);
+    fixed_unit!(Degree: Angle, AngleUnit::Degree, base Radian, 1 / 180, pi^1, from_degrees, as_degrees, additive);
+    fixed_unit!(Nanodegree: Angle, AngleUnit::Nanodegree, base Radian, 1 / 180000000000, pi^1, from_nanodegrees, as_nanodegrees, additive);
+    fixed_unit!(Microdegree: Angle, AngleUnit::Microdegree, base Radian, 1 / 180000000, pi^1, from_microdegrees, as_microdegrees, additive);
+    fixed_unit!(Millidegree: Angle, AngleUnit::Millidegree, base Radian, 1 / 180000, pi^1, from_millidegrees, as_millidegrees, additive);
+    fixed_unit!(Arcminute: Angle, AngleUnit::Arcminute, base Radian, 1 / 10800, pi^1, from_arcminutes, as_arcminutes, additive);
+    fixed_unit!(Arcsecond: Angle, AngleUnit::Arcsecond, base Radian, 1 / 648000, pi^1, from_arcseconds, as_arcseconds, additive);
+    fixed_unit!(Gradian: Angle, AngleUnit::Gradian, base Radian, 1 / 200, pi^1, from_gradians, as_gradians, additive);
+    fixed_unit!(NatoMil: Angle, AngleUnit::NatoMil, base Radian, 1 / 3200, pi^1, from_nato_mils, as_nato_mils, additive);
+    fixed_unit!(Revolution: Angle, AngleUnit::Revolution, base Radian, 2 / 1, pi^1, from_revolutions, as_revolutions, additive);
 }

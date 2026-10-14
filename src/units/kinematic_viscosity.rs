@@ -278,13 +278,13 @@ fixed_base!(KinematicViscosity, SquareMeterPerSecond);
 ///
 /// Also available as [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(SquareMeterPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareMeterPerSecond, base SquareMeterPerSecond, 1 / 1, pi^0, from_square_meters_per_second, as_square_meters_per_second);
-    fixed_unit!(Stokes: KinematicViscosity, KinematicViscosityUnit::Stokes, base SquareMeterPerSecond, 1 / 10000, pi^0, from_stokes, as_stokes);
-    fixed_unit!(Nanostokes: KinematicViscosity, KinematicViscosityUnit::Nanostokes, base SquareMeterPerSecond, 1 / 10000000000000, pi^0, from_nanostokes, as_nanostokes);
-    fixed_unit!(Microstokes: KinematicViscosity, KinematicViscosityUnit::Microstokes, base SquareMeterPerSecond, 1 / 10000000000, pi^0, from_microstokes, as_microstokes);
-    fixed_unit!(Millistokes: KinematicViscosity, KinematicViscosityUnit::Millistokes, base SquareMeterPerSecond, 1 / 10000000, pi^0, from_millistokes, as_millistokes);
-    fixed_unit!(Centistokes: KinematicViscosity, KinematicViscosityUnit::Centistokes, base SquareMeterPerSecond, 1 / 1000000, pi^0, from_centistokes, as_centistokes);
-    fixed_unit!(Decistokes: KinematicViscosity, KinematicViscosityUnit::Decistokes, base SquareMeterPerSecond, 1 / 100000, pi^0, from_decistokes, as_decistokes);
-    fixed_unit!(Kilostokes: KinematicViscosity, KinematicViscosityUnit::Kilostokes, base SquareMeterPerSecond, 1 / 10, pi^0, from_kilostokes, as_kilostokes);
-    fixed_unit!(SquareFootPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareFootPerSecond, base SquareMeterPerSecond, 145161 / 1562500, pi^0, from_square_feet_per_second, as_square_feet_per_second);
+    fixed_unit!(SquareMeterPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareMeterPerSecond, base SquareMeterPerSecond, 1 / 1, pi^0, from_square_meters_per_second, as_square_meters_per_second, additive);
+    fixed_unit!(Stokes: KinematicViscosity, KinematicViscosityUnit::Stokes, base SquareMeterPerSecond, 1 / 10000, pi^0, from_stokes, as_stokes, additive);
+    fixed_unit!(Nanostokes: KinematicViscosity, KinematicViscosityUnit::Nanostokes, base SquareMeterPerSecond, 1 / 10000000000000, pi^0, from_nanostokes, as_nanostokes, additive);
+    fixed_unit!(Microstokes: KinematicViscosity, KinematicViscosityUnit::Microstokes, base SquareMeterPerSecond, 1 / 10000000000, pi^0, from_microstokes, as_microstokes, additive);
+    fixed_unit!(Millistokes: KinematicViscosity, KinematicViscosityUnit::Millistokes, base SquareMeterPerSecond, 1 / 10000000, pi^0, from_millistokes, as_millistokes, additive);
+    fixed_unit!(Centistokes: KinematicViscosity, KinematicViscosityUnit::Centistokes, base SquareMeterPerSecond, 1 / 1000000, pi^0, from_centistokes, as_centistokes, additive);
+    fixed_unit!(Decistokes: KinematicViscosity, KinematicViscosityUnit::Decistokes, base SquareMeterPerSecond, 1 / 100000, pi^0, from_decistokes, as_decistokes, additive);
+    fixed_unit!(Kilostokes: KinematicViscosity, KinematicViscosityUnit::Kilostokes, base SquareMeterPerSecond, 1 / 10, pi^0, from_kilostokes, as_kilostokes, additive);
+    fixed_unit!(SquareFootPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareFootPerSecond, base SquareMeterPerSecond, 145161 / 1562500, pi^0, from_square_feet_per_second, as_square_feet_per_second, additive);
 }

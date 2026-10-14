@@ -106,5 +106,5 @@ fixed_base!(Scalar, Amount);
 ///
 /// Also available as [`unit::scalar`](crate::unit::scalar). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Amount: Scalar, ScalarUnit::Amount, base Amount, 1 / 1, pi^0, from_amount, as_amount);
+    fixed_unit!(Amount: Scalar, ScalarUnit::Amount, base Amount, 1 / 1, pi^0, from_amount, as_amount, additive);
 }

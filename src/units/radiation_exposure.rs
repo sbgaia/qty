@@ -291,12 +291,12 @@ fixed_base!(RadiationExposure, CoulombPerKilogram);
 ///
 /// Also available as [`unit::radiation_exposure`](crate::unit::radiation_exposure). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(CoulombPerKilogram: RadiationExposure, RadiationExposureUnit::CoulombPerKilogram, base CoulombPerKilogram, 1 / 1, pi^0, from_coulombs_per_kilogram, as_coulombs_per_kilogram);
-    fixed_unit!(PicocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::PicocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000000000, pi^0, from_picocoulombs_per_kilogram, as_picocoulombs_per_kilogram);
-    fixed_unit!(NanocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::NanocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000000, pi^0, from_nanocoulombs_per_kilogram, as_nanocoulombs_per_kilogram);
-    fixed_unit!(MicrocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::MicrocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000, pi^0, from_microcoulombs_per_kilogram, as_microcoulombs_per_kilogram);
-    fixed_unit!(MillicoulombPerKilogram: RadiationExposure, RadiationExposureUnit::MillicoulombPerKilogram, base CoulombPerKilogram, 1 / 1000, pi^0, from_millicoulombs_per_kilogram, as_millicoulombs_per_kilogram);
-    fixed_unit!(Roentgen: RadiationExposure, RadiationExposureUnit::Roentgen, base CoulombPerKilogram, 129 / 500000, pi^0, from_roentgens, as_roentgens);
-    fixed_unit!(Microroentgen: RadiationExposure, RadiationExposureUnit::Microroentgen, base CoulombPerKilogram, 129 / 500000000000, pi^0, from_microroentgens, as_microroentgens);
-    fixed_unit!(Milliroentgen: RadiationExposure, RadiationExposureUnit::Milliroentgen, base CoulombPerKilogram, 129 / 500000000, pi^0, from_milliroentgens, as_milliroentgens);
+    fixed_unit!(CoulombPerKilogram: RadiationExposure, RadiationExposureUnit::CoulombPerKilogram, base CoulombPerKilogram, 1 / 1, pi^0, from_coulombs_per_kilogram, as_coulombs_per_kilogram, additive);
+    fixed_unit!(PicocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::PicocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000000000, pi^0, from_picocoulombs_per_kilogram, as_picocoulombs_per_kilogram, additive);
+    fixed_unit!(NanocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::NanocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000000, pi^0, from_nanocoulombs_per_kilogram, as_nanocoulombs_per_kilogram, additive);
+    fixed_unit!(MicrocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::MicrocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000, pi^0, from_microcoulombs_per_kilogram, as_microcoulombs_per_kilogram, additive);
+    fixed_unit!(MillicoulombPerKilogram: RadiationExposure, RadiationExposureUnit::MillicoulombPerKilogram, base CoulombPerKilogram, 1 / 1000, pi^0, from_millicoulombs_per_kilogram, as_millicoulombs_per_kilogram, additive);
+    fixed_unit!(Roentgen: RadiationExposure, RadiationExposureUnit::Roentgen, base CoulombPerKilogram, 129 / 500000, pi^0, from_roentgens, as_roentgens, additive);
+    fixed_unit!(Microroentgen: RadiationExposure, RadiationExposureUnit::Microroentgen, base CoulombPerKilogram, 129 / 500000000000, pi^0, from_microroentgens, as_microroentgens, additive);
+    fixed_unit!(Milliroentgen: RadiationExposure, RadiationExposureUnit::Milliroentgen, base CoulombPerKilogram, 129 / 500000000, pi^0, from_milliroentgens, as_milliroentgens, additive);
 }

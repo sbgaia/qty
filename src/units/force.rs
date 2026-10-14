@@ -498,20 +498,20 @@ fixed_base!(Force, Newton);
 ///
 /// Also available as [`unit::force`](crate::unit::force). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Dyn: Force, ForceUnit::Dyn, base Newton, 1 / 100000, pi^0, from_dyne, as_dyne);
-    fixed_unit!(GramForce: Force, ForceUnit::GramForce, base Newton, 196133 / 20000000, pi^0, from_grams_force, as_grams_force);
-    fixed_unit!(KilogramForce: Force, ForceUnit::KilogramForce, base Newton, 196133 / 20000, pi^0, from_kilograms_force, as_kilograms_force);
-    fixed_unit!(TonneForce: Force, ForceUnit::TonneForce, base Newton, 196133 / 20, pi^0, from_tonnes_force, as_tonnes_force);
-    fixed_unit!(Newton: Force, ForceUnit::Newton, base Newton, 1 / 1, pi^0, from_newtons, as_newtons);
-    fixed_unit!(Micronewton: Force, ForceUnit::Micronewton, base Newton, 1 / 1000000, pi^0, from_micronewtons, as_micronewtons);
-    fixed_unit!(Millinewton: Force, ForceUnit::Millinewton, base Newton, 1 / 1000, pi^0, from_millinewtons, as_millinewtons);
-    fixed_unit!(Decanewton: Force, ForceUnit::Decanewton, base Newton, 10 / 1, pi^0, from_decanewtons, as_decanewtons);
-    fixed_unit!(Kilonewton: Force, ForceUnit::Kilonewton, base Newton, 1000 / 1, pi^0, from_kilonewtons, as_kilonewtons);
-    fixed_unit!(Meganewton: Force, ForceUnit::Meganewton, base Newton, 1000000 / 1, pi^0, from_meganewtons, as_meganewtons);
-    fixed_unit!(Kilopond: Force, ForceUnit::Kilopond, base Newton, 196133 / 20000, pi^0, from_kiloponds, as_kiloponds);
-    fixed_unit!(Poundal: Force, ForceUnit::Poundal, base Newton, 17281869297 / 125000000000, pi^0, from_poundals, as_poundals);
-    fixed_unit!(PoundForce: Force, ForceUnit::PoundForce, base Newton, 8896443230521 / 2000000000000, pi^0, from_pounds_force, as_pounds_force);
-    fixed_unit!(KilopoundForce: Force, ForceUnit::KilopoundForce, base Newton, 8896443230521 / 2000000000, pi^0, from_kilopounds_force, as_kilopounds_force);
-    fixed_unit!(OunceForce: Force, ForceUnit::OunceForce, base Newton, 8896443230521 / 32000000000000, pi^0, from_ounce_force, as_ounce_force);
-    fixed_unit!(ShortTonForce: Force, ForceUnit::ShortTonForce, base Newton, 8896443230521 / 1000000000, pi^0, from_short_tons_force, as_short_tons_force);
+    fixed_unit!(Dyn: Force, ForceUnit::Dyn, base Newton, 1 / 100000, pi^0, from_dyne, as_dyne, additive);
+    fixed_unit!(GramForce: Force, ForceUnit::GramForce, base Newton, 196133 / 20000000, pi^0, from_grams_force, as_grams_force, additive);
+    fixed_unit!(KilogramForce: Force, ForceUnit::KilogramForce, base Newton, 196133 / 20000, pi^0, from_kilograms_force, as_kilograms_force, additive);
+    fixed_unit!(TonneForce: Force, ForceUnit::TonneForce, base Newton, 196133 / 20, pi^0, from_tonnes_force, as_tonnes_force, additive);
+    fixed_unit!(Newton: Force, ForceUnit::Newton, base Newton, 1 / 1, pi^0, from_newtons, as_newtons, additive);
+    fixed_unit!(Micronewton: Force, ForceUnit::Micronewton, base Newton, 1 / 1000000, pi^0, from_micronewtons, as_micronewtons, additive);
+    fixed_unit!(Millinewton: Force, ForceUnit::Millinewton, base Newton, 1 / 1000, pi^0, from_millinewtons, as_millinewtons, additive);
+    fixed_unit!(Decanewton: Force, ForceUnit::Decanewton, base Newton, 10 / 1, pi^0, from_decanewtons, as_decanewtons, additive);
+    fixed_unit!(Kilonewton: Force, ForceUnit::Kilonewton, base Newton, 1000 / 1, pi^0, from_kilonewtons, as_kilonewtons, additive);
+    fixed_unit!(Meganewton: Force, ForceUnit::Meganewton, base Newton, 1000000 / 1, pi^0, from_meganewtons, as_meganewtons, additive);
+    fixed_unit!(Kilopond: Force, ForceUnit::Kilopond, base Newton, 196133 / 20000, pi^0, from_kiloponds, as_kiloponds, additive);
+    fixed_unit!(Poundal: Force, ForceUnit::Poundal, base Newton, 17281869297 / 125000000000, pi^0, from_poundals, as_poundals, additive);
+    fixed_unit!(PoundForce: Force, ForceUnit::PoundForce, base Newton, 8896443230521 / 2000000000000, pi^0, from_pounds_force, as_pounds_force, additive);
+    fixed_unit!(KilopoundForce: Force, ForceUnit::KilopoundForce, base Newton, 8896443230521 / 2000000000, pi^0, from_kilopounds_force, as_kilopounds_force, additive);
+    fixed_unit!(OunceForce: Force, ForceUnit::OunceForce, base Newton, 8896443230521 / 32000000000000, pi^0, from_ounce_force, as_ounce_force, additive);
+    fixed_unit!(ShortTonForce: Force, ForceUnit::ShortTonForce, base Newton, 8896443230521 / 1000000000, pi^0, from_short_tons_force, as_short_tons_force, additive);
 }

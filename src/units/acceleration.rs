@@ -431,18 +431,18 @@ fixed_base!(Acceleration, MeterPerSecondSquared);
 ///
 /// Also available as [`unit::acceleration`](crate::unit::acceleration). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(MeterPerSecondSquared: Acceleration, AccelerationUnit::MeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1, pi^0, from_meters_per_second_squared, as_meters_per_second_squared);
-    fixed_unit!(NanometerPerSecondSquared: Acceleration, AccelerationUnit::NanometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000000, pi^0, from_nanometers_per_second_squared, as_nanometers_per_second_squared);
-    fixed_unit!(MicrometerPerSecondSquared: Acceleration, AccelerationUnit::MicrometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000, pi^0, from_micrometers_per_second_squared, as_micrometers_per_second_squared);
-    fixed_unit!(MillimeterPerSecondSquared: Acceleration, AccelerationUnit::MillimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1000, pi^0, from_millimeters_per_second_squared, as_millimeters_per_second_squared);
-    fixed_unit!(CentimeterPerSecondSquared: Acceleration, AccelerationUnit::CentimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 100, pi^0, from_centimeters_per_second_squared, as_centimeters_per_second_squared);
-    fixed_unit!(DecimeterPerSecondSquared: Acceleration, AccelerationUnit::DecimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 10, pi^0, from_decimeters_per_second_squared, as_decimeters_per_second_squared);
-    fixed_unit!(KilometerPerSecondSquared: Acceleration, AccelerationUnit::KilometerPerSecondSquared, base MeterPerSecondSquared, 1000 / 1, pi^0, from_kilometers_per_second_squared, as_kilometers_per_second_squared);
-    fixed_unit!(InchPerSecondSquared: Acceleration, AccelerationUnit::InchPerSecondSquared, base MeterPerSecondSquared, 127 / 5000, pi^0, from_inches_per_second_squared, as_inches_per_second_squared);
-    fixed_unit!(FootPerSecondSquared: Acceleration, AccelerationUnit::FootPerSecondSquared, base MeterPerSecondSquared, 381 / 1250, pi^0, from_feet_per_second_squared, as_feet_per_second_squared);
-    fixed_unit!(KnotPerSecond: Acceleration, AccelerationUnit::KnotPerSecond, base MeterPerSecondSquared, 463 / 900, pi^0, from_knots_per_second, as_knots_per_second);
-    fixed_unit!(KnotPerMinute: Acceleration, AccelerationUnit::KnotPerMinute, base MeterPerSecondSquared, 463 / 54000, pi^0, from_knots_per_minute, as_knots_per_minute);
-    fixed_unit!(KnotPerHour: Acceleration, AccelerationUnit::KnotPerHour, base MeterPerSecondSquared, 463 / 3240000, pi^0, from_knots_per_hour, as_knots_per_hour);
-    fixed_unit!(StandardGravity: Acceleration, AccelerationUnit::StandardGravity, base MeterPerSecondSquared, 196133 / 20000, pi^0, from_standard_gravity, as_standard_gravity);
-    fixed_unit!(MillistandardGravity: Acceleration, AccelerationUnit::MillistandardGravity, base MeterPerSecondSquared, 196133 / 20000000, pi^0, from_millistandard_gravity, as_millistandard_gravity);
+    fixed_unit!(MeterPerSecondSquared: Acceleration, AccelerationUnit::MeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1, pi^0, from_meters_per_second_squared, as_meters_per_second_squared, additive);
+    fixed_unit!(NanometerPerSecondSquared: Acceleration, AccelerationUnit::NanometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000000, pi^0, from_nanometers_per_second_squared, as_nanometers_per_second_squared, additive);
+    fixed_unit!(MicrometerPerSecondSquared: Acceleration, AccelerationUnit::MicrometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000, pi^0, from_micrometers_per_second_squared, as_micrometers_per_second_squared, additive);
+    fixed_unit!(MillimeterPerSecondSquared: Acceleration, AccelerationUnit::MillimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1000, pi^0, from_millimeters_per_second_squared, as_millimeters_per_second_squared, additive);
+    fixed_unit!(CentimeterPerSecondSquared: Acceleration, AccelerationUnit::CentimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 100, pi^0, from_centimeters_per_second_squared, as_centimeters_per_second_squared, additive);
+    fixed_unit!(DecimeterPerSecondSquared: Acceleration, AccelerationUnit::DecimeterPerSecondSquared, base MeterPerSecondSquared, 1 / 10, pi^0, from_decimeters_per_second_squared, as_decimeters_per_second_squared, additive);
+    fixed_unit!(KilometerPerSecondSquared: Acceleration, AccelerationUnit::KilometerPerSecondSquared, base MeterPerSecondSquared, 1000 / 1, pi^0, from_kilometers_per_second_squared, as_kilometers_per_second_squared, additive);
+    fixed_unit!(InchPerSecondSquared: Acceleration, AccelerationUnit::InchPerSecondSquared, base MeterPerSecondSquared, 127 / 5000, pi^0, from_inches_per_second_squared, as_inches_per_second_squared, additive);
+    fixed_unit!(FootPerSecondSquared: Acceleration, AccelerationUnit::FootPerSecondSquared, base MeterPerSecondSquared, 381 / 1250, pi^0, from_feet_per_second_squared, as_feet_per_second_squared, additive);
+    fixed_unit!(KnotPerSecond: Acceleration, AccelerationUnit::KnotPerSecond, base MeterPerSecondSquared, 463 / 900, pi^0, from_knots_per_second, as_knots_per_second, additive);
+    fixed_unit!(KnotPerMinute: Acceleration, AccelerationUnit::KnotPerMinute, base MeterPerSecondSquared, 463 / 54000, pi^0, from_knots_per_minute, as_knots_per_minute, additive);
+    fixed_unit!(KnotPerHour: Acceleration, AccelerationUnit::KnotPerHour, base MeterPerSecondSquared, 463 / 3240000, pi^0, from_knots_per_hour, as_knots_per_hour, additive);
+    fixed_unit!(StandardGravity: Acceleration, AccelerationUnit::StandardGravity, base MeterPerSecondSquared, 196133 / 20000, pi^0, from_standard_gravity, as_standard_gravity, additive);
+    fixed_unit!(MillistandardGravity: Acceleration, AccelerationUnit::MillistandardGravity, base MeterPerSecondSquared, 196133 / 20000000, pi^0, from_millistandard_gravity, as_millistandard_gravity, additive);
 }

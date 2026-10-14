@@ -291,12 +291,12 @@ fixed_base!(ElectricReactance, Ohm);
 ///
 /// Also available as [`unit::electric_reactance`](crate::unit::electric_reactance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Ohm: ElectricReactance, ElectricReactanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms);
-    fixed_unit!(Nanoohm: ElectricReactance, ElectricReactanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms);
-    fixed_unit!(Microohm: ElectricReactance, ElectricReactanceUnit::Microohm, base Ohm, 1 / 1000000, pi^0, from_microohms, as_microohms);
-    fixed_unit!(Milliohm: ElectricReactance, ElectricReactanceUnit::Milliohm, base Ohm, 1 / 1000, pi^0, from_milliohms, as_milliohms);
-    fixed_unit!(Kiloohm: ElectricReactance, ElectricReactanceUnit::Kiloohm, base Ohm, 1000 / 1, pi^0, from_kiloohms, as_kiloohms);
-    fixed_unit!(Megaohm: ElectricReactance, ElectricReactanceUnit::Megaohm, base Ohm, 1000000 / 1, pi^0, from_megaohms, as_megaohms);
-    fixed_unit!(Gigaohm: ElectricReactance, ElectricReactanceUnit::Gigaohm, base Ohm, 1000000000 / 1, pi^0, from_gigaohms, as_gigaohms);
-    fixed_unit!(Teraohm: ElectricReactance, ElectricReactanceUnit::Teraohm, base Ohm, 1000000000000 / 1, pi^0, from_teraohms, as_teraohms);
+    fixed_unit!(Ohm: ElectricReactance, ElectricReactanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms, additive);
+    fixed_unit!(Nanoohm: ElectricReactance, ElectricReactanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms, additive);
+    fixed_unit!(Microohm: ElectricReactance, ElectricReactanceUnit::Microohm, base Ohm, 1 / 1000000, pi^0, from_microohms, as_microohms, additive);
+    fixed_unit!(Milliohm: ElectricReactance, ElectricReactanceUnit::Milliohm, base Ohm, 1 / 1000, pi^0, from_milliohms, as_milliohms, additive);
+    fixed_unit!(Kiloohm: ElectricReactance, ElectricReactanceUnit::Kiloohm, base Ohm, 1000 / 1, pi^0, from_kiloohms, as_kiloohms, additive);
+    fixed_unit!(Megaohm: ElectricReactance, ElectricReactanceUnit::Megaohm, base Ohm, 1000000 / 1, pi^0, from_megaohms, as_megaohms, additive);
+    fixed_unit!(Gigaohm: ElectricReactance, ElectricReactanceUnit::Gigaohm, base Ohm, 1000000000 / 1, pi^0, from_gigaohms, as_gigaohms, additive);
+    fixed_unit!(Teraohm: ElectricReactance, ElectricReactanceUnit::Teraohm, base Ohm, 1000000000000 / 1, pi^0, from_teraohms, as_teraohms, additive);
 }

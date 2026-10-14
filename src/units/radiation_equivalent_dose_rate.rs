@@ -357,14 +357,14 @@ fixed_base!(RadiationEquivalentDoseRate, SievertPerSecond);
 ///
 /// Also available as [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(SievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerHour, base SievertPerSecond, 1 / 3600, pi^0, from_sieverts_per_hour, as_sieverts_per_hour);
-    fixed_unit!(NanosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerHour, base SievertPerSecond, 1 / 3600000000000, pi^0, from_nanosieverts_per_hour, as_nanosieverts_per_hour);
-    fixed_unit!(MicrosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MicrosievertPerHour, base SievertPerSecond, 1 / 3600000000, pi^0, from_microsieverts_per_hour, as_microsieverts_per_hour);
-    fixed_unit!(MillisievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MillisievertPerHour, base SievertPerSecond, 1 / 3600000, pi^0, from_millisieverts_per_hour, as_millisieverts_per_hour);
-    fixed_unit!(SievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerSecond, base SievertPerSecond, 1 / 1, pi^0, from_sieverts_per_second, as_sieverts_per_second);
-    fixed_unit!(NanosievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerSecond, base SievertPerSecond, 1 / 1000000000, pi^0, from_nanosieverts_per_second, as_nanosieverts_per_second);
-    fixed_unit!(MicrosievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MicrosievertPerSecond, base SievertPerSecond, 1 / 1000000, pi^0, from_microsieverts_per_second, as_microsieverts_per_second);
-    fixed_unit!(MillisievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MillisievertPerSecond, base SievertPerSecond, 1 / 1000, pi^0, from_millisieverts_per_second, as_millisieverts_per_second);
-    fixed_unit!(RoentgenEquivalentManPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour, base SievertPerSecond, 1 / 360000, pi^0, from_roentgens_equivalent_man_per_hour, as_roentgens_equivalent_man_per_hour);
-    fixed_unit!(MilliroentgenEquivalentManPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour, base SievertPerSecond, 1 / 360000000, pi^0, from_milliroentgens_equivalent_man_per_hour, as_milliroentgens_equivalent_man_per_hour);
+    fixed_unit!(SievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerHour, base SievertPerSecond, 1 / 3600, pi^0, from_sieverts_per_hour, as_sieverts_per_hour, additive);
+    fixed_unit!(NanosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerHour, base SievertPerSecond, 1 / 3600000000000, pi^0, from_nanosieverts_per_hour, as_nanosieverts_per_hour, additive);
+    fixed_unit!(MicrosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MicrosievertPerHour, base SievertPerSecond, 1 / 3600000000, pi^0, from_microsieverts_per_hour, as_microsieverts_per_hour, additive);
+    fixed_unit!(MillisievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MillisievertPerHour, base SievertPerSecond, 1 / 3600000, pi^0, from_millisieverts_per_hour, as_millisieverts_per_hour, additive);
+    fixed_unit!(SievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerSecond, base SievertPerSecond, 1 / 1, pi^0, from_sieverts_per_second, as_sieverts_per_second, additive);
+    fixed_unit!(NanosievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerSecond, base SievertPerSecond, 1 / 1000000000, pi^0, from_nanosieverts_per_second, as_nanosieverts_per_second, additive);
+    fixed_unit!(MicrosievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MicrosievertPerSecond, base SievertPerSecond, 1 / 1000000, pi^0, from_microsieverts_per_second, as_microsieverts_per_second, additive);
+    fixed_unit!(MillisievertPerSecond: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MillisievertPerSecond, base SievertPerSecond, 1 / 1000, pi^0, from_millisieverts_per_second, as_millisieverts_per_second, additive);
+    fixed_unit!(RoentgenEquivalentManPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour, base SievertPerSecond, 1 / 360000, pi^0, from_roentgens_equivalent_man_per_hour, as_roentgens_equivalent_man_per_hour, additive);
+    fixed_unit!(MilliroentgenEquivalentManPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour, base SievertPerSecond, 1 / 360000000, pi^0, from_milliroentgens_equivalent_man_per_hour, as_milliroentgens_equivalent_man_per_hour, additive);
 }

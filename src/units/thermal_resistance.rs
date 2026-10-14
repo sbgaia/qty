@@ -138,6 +138,6 @@ fixed_base!(ThermalResistance, KelvinPerWatt);
 ///
 /// Also available as [`unit::thermal_resistance`](crate::unit::thermal_resistance). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(KelvinPerWatt: ThermalResistance, ThermalResistanceUnit::KelvinPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_kelvins_per_watt, as_kelvins_per_watt);
-    fixed_unit!(DegreeCelsiusPerWatt: ThermalResistance, ThermalResistanceUnit::DegreeCelsiusPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_degrees_celsius_per_watt, as_degrees_celsius_per_watt);
+    fixed_unit!(KelvinPerWatt: ThermalResistance, ThermalResistanceUnit::KelvinPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_kelvins_per_watt, as_kelvins_per_watt, additive);
+    fixed_unit!(DegreeCelsiusPerWatt: ThermalResistance, ThermalResistanceUnit::DegreeCelsiusPerWatt, base KelvinPerWatt, 1 / 1, pi^0, from_degrees_celsius_per_watt, as_degrees_celsius_per_watt, additive);
 }

@@ -195,8 +195,8 @@ fixed_base!(ElectricReactivePower, VoltampereReactive);
 ///
 /// Also available as [`unit::electric_reactive_power`](crate::unit::electric_reactive_power). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(VoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::VoltampereReactive, base VoltampereReactive, 1 / 1, pi^0, from_voltamperes_reactive, as_voltamperes_reactive);
-    fixed_unit!(KilovoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::KilovoltampereReactive, base VoltampereReactive, 1000 / 1, pi^0, from_kilovoltamperes_reactive, as_kilovoltamperes_reactive);
-    fixed_unit!(MegavoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::MegavoltampereReactive, base VoltampereReactive, 1000000 / 1, pi^0, from_megavoltamperes_reactive, as_megavoltamperes_reactive);
-    fixed_unit!(GigavoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::GigavoltampereReactive, base VoltampereReactive, 1000000000 / 1, pi^0, from_gigavoltamperes_reactive, as_gigavoltamperes_reactive);
+    fixed_unit!(VoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::VoltampereReactive, base VoltampereReactive, 1 / 1, pi^0, from_voltamperes_reactive, as_voltamperes_reactive, additive);
+    fixed_unit!(KilovoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::KilovoltampereReactive, base VoltampereReactive, 1000 / 1, pi^0, from_kilovoltamperes_reactive, as_kilovoltamperes_reactive, additive);
+    fixed_unit!(MegavoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::MegavoltampereReactive, base VoltampereReactive, 1000000 / 1, pi^0, from_megavoltamperes_reactive, as_megavoltamperes_reactive, additive);
+    fixed_unit!(GigavoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::GigavoltampereReactive, base VoltampereReactive, 1000000000 / 1, pi^0, from_gigavoltamperes_reactive, as_gigavoltamperes_reactive, additive);
 }

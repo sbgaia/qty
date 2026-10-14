@@ -351,14 +351,14 @@ fixed_base!(ReciprocalLength, InverseMeter);
 ///
 /// Also available as [`unit::reciprocal_length`](crate::unit::reciprocal_length). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(InverseMeter: ReciprocalLength, ReciprocalLengthUnit::InverseMeter, base InverseMeter, 1 / 1, pi^0, from_inverse_meters, as_inverse_meters);
-    fixed_unit!(InverseCentimeter: ReciprocalLength, ReciprocalLengthUnit::InverseCentimeter, base InverseMeter, 100 / 1, pi^0, from_inverse_centimeters, as_inverse_centimeters);
-    fixed_unit!(InverseMillimeter: ReciprocalLength, ReciprocalLengthUnit::InverseMillimeter, base InverseMeter, 1000 / 1, pi^0, from_inverse_millimeters, as_inverse_millimeters);
-    fixed_unit!(InverseMile: ReciprocalLength, ReciprocalLengthUnit::InverseMile, base InverseMeter, 125 / 201168, pi^0, from_inverse_miles, as_inverse_miles);
-    fixed_unit!(InverseYard: ReciprocalLength, ReciprocalLengthUnit::InverseYard, base InverseMeter, 1250 / 1143, pi^0, from_inverse_yards, as_inverse_yards);
-    fixed_unit!(InverseFoot: ReciprocalLength, ReciprocalLengthUnit::InverseFoot, base InverseMeter, 1250 / 381, pi^0, from_inverse_feet, as_inverse_feet);
-    fixed_unit!(InverseUsSurveyFoot: ReciprocalLength, ReciprocalLengthUnit::InverseUsSurveyFoot, base InverseMeter, 3937 / 1200, pi^0, from_inverse_us_survey_feet, as_inverse_us_survey_feet);
-    fixed_unit!(InverseInch: ReciprocalLength, ReciprocalLengthUnit::InverseInch, base InverseMeter, 5000 / 127, pi^0, from_inverse_inches, as_inverse_inches);
-    fixed_unit!(InverseMil: ReciprocalLength, ReciprocalLengthUnit::InverseMil, base InverseMeter, 5000000 / 127, pi^0, from_inverse_mils, as_inverse_mils);
-    fixed_unit!(InverseMicroinch: ReciprocalLength, ReciprocalLengthUnit::InverseMicroinch, base InverseMeter, 5000000000 / 127, pi^0, from_inverse_microinches, as_inverse_microinches);
+    fixed_unit!(InverseMeter: ReciprocalLength, ReciprocalLengthUnit::InverseMeter, base InverseMeter, 1 / 1, pi^0, from_inverse_meters, as_inverse_meters, additive);
+    fixed_unit!(InverseCentimeter: ReciprocalLength, ReciprocalLengthUnit::InverseCentimeter, base InverseMeter, 100 / 1, pi^0, from_inverse_centimeters, as_inverse_centimeters, additive);
+    fixed_unit!(InverseMillimeter: ReciprocalLength, ReciprocalLengthUnit::InverseMillimeter, base InverseMeter, 1000 / 1, pi^0, from_inverse_millimeters, as_inverse_millimeters, additive);
+    fixed_unit!(InverseMile: ReciprocalLength, ReciprocalLengthUnit::InverseMile, base InverseMeter, 125 / 201168, pi^0, from_inverse_miles, as_inverse_miles, additive);
+    fixed_unit!(InverseYard: ReciprocalLength, ReciprocalLengthUnit::InverseYard, base InverseMeter, 1250 / 1143, pi^0, from_inverse_yards, as_inverse_yards, additive);
+    fixed_unit!(InverseFoot: ReciprocalLength, ReciprocalLengthUnit::InverseFoot, base InverseMeter, 1250 / 381, pi^0, from_inverse_feet, as_inverse_feet, additive);
+    fixed_unit!(InverseUsSurveyFoot: ReciprocalLength, ReciprocalLengthUnit::InverseUsSurveyFoot, base InverseMeter, 3937 / 1200, pi^0, from_inverse_us_survey_feet, as_inverse_us_survey_feet, additive);
+    fixed_unit!(InverseInch: ReciprocalLength, ReciprocalLengthUnit::InverseInch, base InverseMeter, 5000 / 127, pi^0, from_inverse_inches, as_inverse_inches, additive);
+    fixed_unit!(InverseMil: ReciprocalLength, ReciprocalLengthUnit::InverseMil, base InverseMeter, 5000000 / 127, pi^0, from_inverse_mils, as_inverse_mils, additive);
+    fixed_unit!(InverseMicroinch: ReciprocalLength, ReciprocalLengthUnit::InverseMicroinch, base InverseMeter, 5000000000 / 127, pi^0, from_inverse_microinches, as_inverse_microinches, additive);
 }

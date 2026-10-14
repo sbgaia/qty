@@ -114,5 +114,5 @@ fixed_base!(Magnetization, AmperePerMeter);
 ///
 /// Also available as [`unit::magnetization`](crate::unit::magnetization). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(AmperePerMeter: Magnetization, MagnetizationUnit::AmperePerMeter, base AmperePerMeter, 1 / 1, pi^0, from_amperes_per_meter, as_amperes_per_meter);
+    fixed_unit!(AmperePerMeter: Magnetization, MagnetizationUnit::AmperePerMeter, base AmperePerMeter, 1 / 1, pi^0, from_amperes_per_meter, as_amperes_per_meter, additive);
 }

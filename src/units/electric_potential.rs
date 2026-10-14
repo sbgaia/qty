@@ -241,10 +241,10 @@ fixed_base!(ElectricPotential, Volt);
 ///
 /// Also available as [`unit::electric_potential`](crate::unit::electric_potential). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Volt: ElectricPotential, ElectricPotentialUnit::Volt, base Volt, 1 / 1, pi^0, from_volts, as_volts);
-    fixed_unit!(Nanovolt: ElectricPotential, ElectricPotentialUnit::Nanovolt, base Volt, 1 / 1000000000, pi^0, from_nanovolts, as_nanovolts);
-    fixed_unit!(Microvolt: ElectricPotential, ElectricPotentialUnit::Microvolt, base Volt, 1 / 1000000, pi^0, from_microvolts, as_microvolts);
-    fixed_unit!(Millivolt: ElectricPotential, ElectricPotentialUnit::Millivolt, base Volt, 1 / 1000, pi^0, from_millivolts, as_millivolts);
-    fixed_unit!(Kilovolt: ElectricPotential, ElectricPotentialUnit::Kilovolt, base Volt, 1000 / 1, pi^0, from_kilovolts, as_kilovolts);
-    fixed_unit!(Megavolt: ElectricPotential, ElectricPotentialUnit::Megavolt, base Volt, 1000000 / 1, pi^0, from_megavolts, as_megavolts);
+    fixed_unit!(Volt: ElectricPotential, ElectricPotentialUnit::Volt, base Volt, 1 / 1, pi^0, from_volts, as_volts, additive);
+    fixed_unit!(Nanovolt: ElectricPotential, ElectricPotentialUnit::Nanovolt, base Volt, 1 / 1000000000, pi^0, from_nanovolts, as_nanovolts, additive);
+    fixed_unit!(Microvolt: ElectricPotential, ElectricPotentialUnit::Microvolt, base Volt, 1 / 1000000, pi^0, from_microvolts, as_microvolts, additive);
+    fixed_unit!(Millivolt: ElectricPotential, ElectricPotentialUnit::Millivolt, base Volt, 1 / 1000, pi^0, from_millivolts, as_millivolts, additive);
+    fixed_unit!(Kilovolt: ElectricPotential, ElectricPotentialUnit::Kilovolt, base Volt, 1000 / 1, pi^0, from_kilovolts, as_kilovolts, additive);
+    fixed_unit!(Megavolt: ElectricPotential, ElectricPotentialUnit::Megavolt, base Volt, 1000000 / 1, pi^0, from_megavolts, as_megavolts, additive);
 }

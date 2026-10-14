@@ -249,10 +249,10 @@ fixed_base!(WarpingMomentOfInertia, MeterToTheSixth);
 ///
 /// Also available as [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(MeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MeterToTheSixth, base MeterToTheSixth, 1 / 1, pi^0, from_meters_to_the_sixth, as_meters_to_the_sixth);
-    fixed_unit!(DecimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::DecimeterToTheSixth, base MeterToTheSixth, 1 / 1000000, pi^0, from_decimeters_to_the_sixth, as_decimeters_to_the_sixth);
-    fixed_unit!(CentimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::CentimeterToTheSixth, base MeterToTheSixth, 1 / 1000000000000, pi^0, from_centimeters_to_the_sixth, as_centimeters_to_the_sixth);
-    fixed_unit!(MillimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MillimeterToTheSixth, base MeterToTheSixth, 1 / 1000000000000000000, pi^0, from_millimeters_to_the_sixth, as_millimeters_to_the_sixth);
-    fixed_unit!(FootToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::FootToTheSixth, base MeterToTheSixth, 3058791354808281 / 3814697265625000000, pi^0, from_feet_to_the_sixth, as_feet_to_the_sixth);
-    fixed_unit!(InchToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::InchToTheSixth, base MeterToTheSixth, 4195872914689 / 15625000000000000000000, pi^0, from_inches_to_the_sixth, as_inches_to_the_sixth);
+    fixed_unit!(MeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MeterToTheSixth, base MeterToTheSixth, 1 / 1, pi^0, from_meters_to_the_sixth, as_meters_to_the_sixth, additive);
+    fixed_unit!(DecimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::DecimeterToTheSixth, base MeterToTheSixth, 1 / 1000000, pi^0, from_decimeters_to_the_sixth, as_decimeters_to_the_sixth, additive);
+    fixed_unit!(CentimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::CentimeterToTheSixth, base MeterToTheSixth, 1 / 1000000000000, pi^0, from_centimeters_to_the_sixth, as_centimeters_to_the_sixth, additive);
+    fixed_unit!(MillimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MillimeterToTheSixth, base MeterToTheSixth, 1 / 1000000000000000000, pi^0, from_millimeters_to_the_sixth, as_millimeters_to_the_sixth, additive);
+    fixed_unit!(FootToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::FootToTheSixth, base MeterToTheSixth, 3058791354808281 / 3814697265625000000, pi^0, from_feet_to_the_sixth, as_feet_to_the_sixth, additive);
+    fixed_unit!(InchToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::InchToTheSixth, base MeterToTheSixth, 4195872914689 / 15625000000000000000000, pi^0, from_inches_to_the_sixth, as_inches_to_the_sixth, additive);
 }

@@ -114,5 +114,5 @@ fixed_base!(LuminousFlux, Lumen);
 ///
 /// Also available as [`unit::luminous_flux`](crate::unit::luminous_flux). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(Lumen: LuminousFlux, LuminousFluxUnit::Lumen, base Lumen, 1 / 1, pi^0, from_lumens, as_lumens);
+    fixed_unit!(Lumen: LuminousFlux, LuminousFluxUnit::Lumen, base Lumen, 1 / 1, pi^0, from_lumens, as_lumens, additive);
 }
