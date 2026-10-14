@@ -192,6 +192,12 @@
 //! * `libm` — the same math functions without `std`, through the `libm` crate.
 //! * `serde` — `Serialize`/`Deserialize` for every quantity (as its bare
 //!   base-unit number) and every unit enum.
+//! * `approx` — `AbsDiffEq`/`RelativeEq`/`UlpsEq`, so `assert_relative_eq!`
+//!   works on quantities.
+//! * `num-traits` — `Zero` for amount quantities and [`Fixed`].
+//! * `bytemuck` — `Pod`, `Zeroable` and `TransparentWrapper`, for zero-copy
+//!   casts between quantity buffers and bytes (GPU uploads, file I/O).
+//! * `defmt` — `defmt::Format`, for logging on embedded targets.
 
 #![no_std]
 #![warn(missing_debug_implementations)]
@@ -763,6 +769,66 @@ macro_rules! quantity_core {
             }
         }
 
+        // ── Optional integrations ──
+
+        #[cfg(feature = "approx")]
+        impl<T: approx::AbsDiffEq> approx::AbsDiffEq for $Q<T> {
+            type Epsilon = T::Epsilon;
+            #[inline]
+            fn default_epsilon() -> T::Epsilon {
+                T::default_epsilon()
+            }
+            #[inline]
+            fn abs_diff_eq(&self, other: &Self, epsilon: T::Epsilon) -> bool {
+                self.0.abs_diff_eq(&other.0, epsilon)
+            }
+        }
+        #[cfg(feature = "approx")]
+        impl<T: approx::RelativeEq> approx::RelativeEq for $Q<T> {
+            #[inline]
+            fn default_max_relative() -> T::Epsilon {
+                T::default_max_relative()
+            }
+            #[inline]
+            fn relative_eq(&self, other: &Self, epsilon: T::Epsilon, max_relative: T::Epsilon) -> bool {
+                self.0.relative_eq(&other.0, epsilon, max_relative)
+            }
+        }
+        #[cfg(feature = "approx")]
+        impl<T: approx::UlpsEq> approx::UlpsEq for $Q<T> {
+            #[inline]
+            fn default_max_ulps() -> u32 {
+                T::default_max_ulps()
+            }
+            #[inline]
+            fn ulps_eq(&self, other: &Self, epsilon: T::Epsilon, max_ulps: u32) -> bool {
+                self.0.ulps_eq(&other.0, epsilon, max_ulps)
+            }
+        }
+
+        // SAFETY: `#[repr(transparent)]` over `T`.
+        #[cfg(feature = "bytemuck")]
+        unsafe impl<T: bytemuck::Zeroable> bytemuck::Zeroable for $Q<T> {}
+        // SAFETY: as above; `Pod` requires `T: Pod`.
+        #[cfg(feature = "bytemuck")]
+        unsafe impl<T: bytemuck::Pod> bytemuck::Pod for $Q<T> {}
+        // SAFETY: as above.
+        #[cfg(feature = "bytemuck")]
+        unsafe impl<T> bytemuck::TransparentWrapper<T> for $Q<T> {}
+
+        #[cfg(feature = "defmt")]
+        impl<T: defmt::Format> defmt::Format for $Q<T> {
+            fn format(&self, f: defmt::Formatter<'_>) {
+                defmt::write!(f, "{} {=str}", self.0, $U::$base.abbreviation());
+            }
+        }
+        #[cfg(feature = "defmt")]
+        impl defmt::Format for $U {
+            fn format(&self, f: defmt::Formatter<'_>) {
+                defmt::write!(f, "{=str}", self.abbreviation());
+            }
+        }
+
         impl $crate::UnitEnum for $U {
             const ALL: &'static [Self] = $U::ALL;
             #[inline(always)]
@@ -812,6 +878,18 @@ macro_rules! quantity_vector_ops {
             #[inline]
             pub fn checked_sub(self, other: Self) -> Option<Self> {
                 self.0.checked_sub(other.0).map(Self)
+            }
+        }
+
+        #[cfg(feature = "num-traits")]
+        impl<T: num_traits::Zero> num_traits::Zero for $Q<T> {
+            #[inline]
+            fn zero() -> Self {
+                Self(T::zero())
+            }
+            #[inline]
+            fn is_zero(&self) -> bool {
+                self.0.is_zero()
             }
         }
 

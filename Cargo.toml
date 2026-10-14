@@ -22,9 +22,22 @@ libm = ["dep:libm"]
 ## `Serialize`/`Deserialize` for every quantity (as its bare base-unit number)
 ## and every unit enum.
 serde = ["dep:serde"]
+## `AbsDiffEq`/`RelativeEq`/`UlpsEq` from `approx`, for `assert_relative_eq!`.
+approx = ["dep:approx"]
+## `num_traits::Zero` for amount quantities and `Fixed`.
+num-traits = ["dep:num-traits"]
+## `Pod`, `Zeroable` and `TransparentWrapper` from `bytemuck`, for zero-copy
+## casts of quantity buffers to and from bytes.
+bytemuck = ["dep:bytemuck"]
+## `defmt::Format`, for logging on embedded targets.
+defmt = ["dep:defmt"]
 
 [dependencies]
+approx = { version = "0.5", default-features = false, optional = true }
+bytemuck = { version = "1", default-features = false, optional = true }
+defmt = { version = "0.3", optional = true }
 libm = { version = "0.2", optional = true }
+num-traits = { version = "0.2", default-features = false, optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
 
 [dev-dependencies]

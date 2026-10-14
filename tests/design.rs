@@ -707,3 +707,60 @@ mod math {
         assert!(vx.approx_eq_rel(Speed::from_meters_per_second(5.0), 1e-12));
     }
 }
+
+// ── Optional integrations ─────────────────────────────────────────────────────
+
+#[cfg(feature = "approx")]
+#[test]
+fn approx_assertions() {
+    use approx::{assert_abs_diff_eq, assert_relative_eq, assert_ulps_eq};
+    let a = Length::from_feet(3.0);
+    let b = Length::from_yards(1.0);
+    assert_relative_eq!(a, b, max_relative = 1e-15);
+    assert_abs_diff_eq!(a, b, epsilon = 1e-12);
+    assert_ulps_eq!(a, b, max_ulps = 4);
+}
+
+#[cfg(feature = "bytemuck")]
+#[test]
+fn bytemuck_casts() {
+    use unitsnet_rs::unit::length::Millimeter;
+    let lengths = [Length::from_meters(1.0), Length::from_meters(2.5)];
+    let bytes: &[u8] = bytemuck::cast_slice(&lengths);
+    assert_eq!(bytes.len(), 16);
+    let back: &[Length] = bytemuck::cast_slice(bytes);
+    assert_eq!(back, lengths);
+    let raw: &[f64] = bytemuck::TransparentWrapper::peel_slice(&lengths[..]);
+    assert_eq!(raw, [1.0, 2.5]);
+    let counts: &[Fixed<Millimeter, u32>] = bytemuck::cast_slice(&[7u32, 8]);
+    assert_eq!(counts[1].count(), 8);
+}
+
+#[cfg(feature = "num-traits")]
+#[test]
+fn num_traits_zero() {
+    use num_traits::Zero;
+    use unitsnet_rs::unit::length::Millimeter;
+    fn total<Q: Zero + Copy>(items: &[Q]) -> Q {
+        items.iter().fold(Q::zero(), |acc, &x| acc + x)
+    }
+    assert_eq!(
+        total(&[Length::from_meters(1.0), Length::from_meters(2.0)]),
+        Length::from_meters(3.0)
+    );
+    assert!(Fixed::<Millimeter>::zero().is_zero());
+    assert_eq!(
+        total(&[Fixed::<Millimeter>::new(4), Fixed::new(5)]),
+        Fixed::<Millimeter>::new(9)
+    );
+}
+
+#[cfg(feature = "defmt")]
+#[test]
+fn defmt_format_is_implemented() {
+    // Formatting itself needs a defmt logger (firmware); check the bounds.
+    fn is_format<T: defmt::Format>() {}
+    is_format::<Length>();
+    is_format::<LengthUnit>();
+    is_format::<Fixed<unitsnet_rs::unit::length::Millimeter>>();
+}

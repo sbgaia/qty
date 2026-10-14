@@ -858,6 +858,35 @@ impl<U: FixedUnit, I: core::str::FromStr> core::str::FromStr for Fixed<U, I> {
     }
 }
 
+// SAFETY: `#[repr(transparent)]` over `I` (`PhantomData` is a ZST).
+#[cfg(feature = "bytemuck")]
+unsafe impl<U, I: bytemuck::Zeroable> bytemuck::Zeroable for Fixed<U, I> {}
+// SAFETY: as above; `Pod` requires `I: Pod`, and `U: 'static` for `Self: 'static`.
+#[cfg(feature = "bytemuck")]
+unsafe impl<U: 'static, I: bytemuck::Pod> bytemuck::Pod for Fixed<U, I> {}
+// SAFETY: as above.
+#[cfg(feature = "bytemuck")]
+unsafe impl<U, I> bytemuck::TransparentWrapper<I> for Fixed<U, I> {}
+
+#[cfg(feature = "num-traits")]
+impl<U: AdditiveUnit, I: Integer + num_traits::Zero> num_traits::Zero for Fixed<U, I> {
+    #[inline]
+    fn zero() -> Self {
+        Self::new(I::zero())
+    }
+    #[inline]
+    fn is_zero(&self) -> bool {
+        self.count.is_zero()
+    }
+}
+
+#[cfg(feature = "defmt")]
+impl<U: FixedUnit, I: defmt::Format> defmt::Format for Fixed<U, I> {
+    fn format(&self, f: defmt::Formatter<'_>) {
+        defmt::write!(f, "{} {=str}", self.count, U::ABBREVIATION);
+    }
+}
+
 #[cfg(feature = "serde")]
 impl<U, I: serde::Serialize> serde::Serialize for Fixed<U, I> {
     fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
