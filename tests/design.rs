@@ -982,3 +982,120 @@ mod uncertain {
         close(x - x, 0.0, 2f64.sqrt());
     }
 }
+
+// ── Vectors ───────────────────────────────────────────────────────────────────
+
+mod vectors {
+    use unitsnet_rs::*;
+
+    fn m(x: f64, y: f64, z: f64) -> Vector3<Length> {
+        Vector3::from_base([x, y, z])
+    }
+
+    #[test]
+    fn layout_and_conversions() {
+        assert_eq!(core::mem::size_of::<Vector3<Length>>(), 24);
+        assert_eq!(core::mem::size_of::<Vector2<Length<f32>>>(), 8);
+        let v = m(1.0, 2.0, 3.0);
+        assert_eq!(v.as_base(), [1.0, 2.0, 3.0]);
+        assert_eq!(<[Length; 3]>::from(v), [v.x, v.y, v.z]);
+        assert_eq!(Vector3::from([v.x, v.y, v.z]), v);
+        assert_eq!(
+            v.map(|c| c.as_millimeters()),
+            Vector3::new(1000.0, 2000.0, 3000.0)
+        );
+        assert_eq!(v.to_array(), [v.x, v.y, v.z]);
+    }
+
+    #[test]
+    fn arithmetic_follows_the_component_types() {
+        let a = m(1.0, 2.0, 3.0);
+        let b = m(0.5, 0.5, 0.5);
+        assert_eq!(a + b, m(1.5, 2.5, 3.5));
+        assert_eq!(a - b, m(0.5, 1.5, 2.5));
+        assert_eq!(-a, m(-1.0, -2.0, -3.0));
+        assert_eq!(a * 2.0, m(2.0, 4.0, 6.0));
+        assert_eq!(2.0 * a, m(2.0, 4.0, 6.0));
+        assert_eq!(a / 2.0, m(0.5, 1.0, 1.5));
+        let mut c = a;
+        c += b;
+        c -= b;
+        c *= 3.0;
+        c /= 3.0;
+        assert_eq!(c, a);
+        // Physics: displacement / time = velocity; mass · acceleration = force.
+        let v: Vector3<Speed> = a / Duration::from_seconds(2.0);
+        assert_eq!(v, Vector3::from_base([0.5, 1.0, 1.5]));
+        let back: Vector3<Length> = v * Duration::from_seconds(2.0);
+        assert_eq!(back, a);
+        let g = Vector3::<Acceleration>::from_base([0.0, 0.0, -9.81]);
+        let w: Vector3<Force> = Mass::from_kilograms(2.0) * g;
+        assert_eq!(w, Vector3::from_base([0.0, 0.0, -19.62]));
+        let w32: Vector3<Force<f32>> =
+            Mass::from_kilograms(2.0f32) * Vector3::<Acceleration<f32>>::from_base([1.0, 0.0, 0.0]);
+        assert_eq!(w32.x, Force::from_newtons(2.0f32));
+        // Dot and cross products.
+        let area: Area = a.dot(b);
+        assert_eq!(area, Area::from_square_meters(3.0));
+        assert_eq!(a.norm_squared(), Area::from_square_meters(14.0));
+        let x = m(1.0, 0.0, 0.0);
+        let y = m(0.0, 1.0, 0.0);
+        let z: Vector3<Area> = x.cross(y);
+        assert_eq!(z, Vector3::from_base([0.0, 0.0, 1.0]));
+        let power: Power = Vector3::<Force>::from_base([1.0, 2.0, 0.0]).dot(v);
+        assert_eq!(power, Power::from_watts(2.5));
+        // Sums.
+        let total: Vector3<Length> = [a, b].iter().sum();
+        assert_eq!(total, a + b);
+        assert_eq!([a, b].into_iter().sum::<Vector3<Length>>(), a + b);
+    }
+
+    #[test]
+    fn norms_and_angles() {
+        assert_eq!(m(2.0, 3.0, 6.0).norm(), Length::from_meters(7.0));
+        // `hypot`: no overflow for huge components.
+        assert!(m(3e200, 4e200, 0.0)
+            .norm()
+            .approx_eq_rel(Length::from_meters(5e200), 1e-15));
+        assert_eq!(m(0.0, 3.0, 4.0).direction(), Vector3::new(0.0, 0.6, 0.8));
+        let right = m(1.0, 0.0, 0.0).angle_between(m(0.0, 0.0, 2.0));
+        assert!((right.as_degrees() - 90.0).abs() < 1e-12);
+        let opposite = m(1.0, 1.0, 0.0).angle_between(m(-2.0, -2.0, 0.0));
+        assert!((opposite.as_degrees() - 180.0).abs() < 1e-12);
+        let tiny = m(1.0, 0.0, 0.0).angle_between(m(1.0, 1e-9, 0.0));
+        assert!((tiny.as_base() - 1e-9).abs() < 1e-20); // atan2: accurate for small angles
+                                                        // 2D: polar coordinates and perp-dot.
+        let v = Vector2::from_polar(Length::from_meters(2.0), Angle::from_degrees(30.0));
+        assert!((v.angle().as_degrees() - 30.0).abs() < 1e-12);
+        assert!(v.norm().approx_eq_rel(Length::from_meters(2.0), 1e-15));
+        let a = Vector2::<Length>::from_base([1.0, 0.0]);
+        let b = Vector2::<Length>::from_base([0.0, 1.0]);
+        assert_eq!(a.perp_dot(b), Area::from_square_meters(1.0));
+        assert!((a.angle_between(b).as_degrees() - 90.0).abs() < 1e-12);
+        // Uncertain components are independent under `norm`.
+        let u = Vector2::<Length<Uncertain>>::from_base([
+            Uncertain::new(3.0, 0.3),
+            Uncertain::new(4.0, 0.4),
+        ]);
+        let n = u.norm().as_base();
+        assert_eq!(n.value(), 5.0);
+        assert!((n.sigma() - 0.9f64.hypot(1.6) / 5.0).abs() < 1e-15);
+    }
+
+    #[test]
+    fn display() {
+        assert_eq!(m(1.0, 2.5, -3.0).to_string(), "(1, 2.5, -3) m");
+        assert_eq!(
+            format!("{:.2}", Vector2::<Speed>::from_base([1.0, 0.5])),
+            "(1.00, 0.50) m/s"
+        );
+    }
+
+    #[cfg(feature = "bytemuck")]
+    #[test]
+    fn bytemuck_casts() {
+        let points = [m(1.0, 2.0, 3.0), m(4.0, 5.0, 6.0)];
+        let raw: &[f64] = bytemuck::cast_slice(&points);
+        assert_eq!(raw, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
+    }
+}

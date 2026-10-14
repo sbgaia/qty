@@ -55,6 +55,22 @@ let lengths: &[Length] = Length::from_base_slice(&raw);
 assert_eq!(lengths.iter().sum::<Length>(), Length::from_meters(6.0));
 ```
 
+## Vectors
+
+`Vector2<Q>` and `Vector3<Q>` hold any quantity, and the physics carries over:
+
+```rust
+use unitsnet_rs::*;
+
+let displacement = Vector3::<Length>::from_base([3.0, 4.0, 0.0]);
+let velocity: Vector3<Speed> = displacement / Duration::from_seconds(2.0);
+assert_eq!(velocity.norm(), Speed::from_meters_per_second(2.5));
+
+let force: Vector3<Force> = Mass::from_kilograms(2.0) * Vector3::<Acceleration>::from_base([0.0, 0.0, -9.81]);
+let power: Power = force.dot(velocity);
+assert_eq!(power, Power::from_watts(0.0));
+```
+
 ## Measurement uncertainty
 
 `Uncertain` is a number type carrying a standard uncertainty, so any quantity

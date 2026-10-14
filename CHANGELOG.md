@@ -31,6 +31,11 @@ adheres to [Semantic Versioning](https://semver.org/).
   `hypot`, and trigonometry on `Angle` (`sin`, `cos`, `Angle::atan2(y, x)`, …).
 - **Ordering and keys:** `total_cmp` for sorting; `Ordered<Q>` makes float
   quantities usable as `HashMap`/`BTreeMap` keys.
+- **Vectors:** `Vector2<Q>` and `Vector3<Q>` of any quantity, with the
+  physics carried over (`Vector3<Length> / Duration = Vector3<Speed>`,
+  `Mass * Vector3<Acceleration> = Vector3<Force>`), `dot`/`cross`/`perp_dot`
+  typed by the relations, overflow-free `norm`, `direction`,
+  `angle_between`, polar coordinates, `Display`, `serde` and `bytemuck`.
 - **Uncertainty propagation:** `Uncertain<F>` (value ± standard uncertainty)
   is a storage type, so `Length<Uncertain>` propagates σ through
   conversions, relations, sums and math functions (first order, independent

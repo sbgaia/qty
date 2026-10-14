@@ -83,6 +83,10 @@
 //! assert_eq!(wide.as_grams(), 1_500_000.0);
 //! ```
 //!
+//! [`Vector2`] and [`Vector3`] hold quantities: a `Vector3<Length>` divided
+//! by a `Duration` is a `Vector3<Speed>`, and dot and cross products follow
+//! the relations between quantities.
+//!
 //! [`Uncertain`] (value ± standard uncertainty) is a storage type too: a
 //! `Length<Uncertain>` propagates its uncertainty through conversions,
 //! relations and math functions.
@@ -619,6 +623,30 @@ macro_rules! scalar_lhs_mul {
     )*};
 }
 
+/// `quantity * Vector2/Vector3` for the given storage types.
+macro_rules! quantity_times_vector {
+    ($Q:ident: $($t:ty),*) => {$(
+        quantity_times_vector!(@impl $Q, [], $t, Vector2);
+        quantity_times_vector!(@impl $Q, [], $t, Vector3);
+    )*};
+    ($Q:ident<$F:ident>: $t:ty) => {
+        quantity_times_vector!(@impl $Q, [$F], $t, Vector2);
+        quantity_times_vector!(@impl $Q, [$F], $t, Vector3);
+    };
+    (@impl $Q:ident, [$($F:ident)?], $t:ty, $V:ident) => {
+        impl<$($F,)? R> core::ops::Mul<$crate::$V<R>> for $Q<$t>
+        where
+            $Q<$t>: core::ops::Mul<R> + Copy,
+        {
+            type Output = $crate::$V<<$Q<$t> as core::ops::Mul<R>>::Output>;
+            #[inline(always)]
+            fn mul(self, rhs: $crate::$V<R>) -> Self::Output {
+                rhs.map(|c| self * c)
+            }
+        }
+    };
+}
+
 /// Formats the value in the base unit followed by the unit abbreviation,
 /// honouring precision and other flags:
 /// `format!("{:.2}", Length::from_meters(1.0))` is `"1.00 m"` and
@@ -770,6 +798,13 @@ macro_rules! quantity_core {
                 self.0
             }
         }
+
+        // ── Scaling vectors: `mass * acceleration_vector` ──
+        // For concrete storage types: a generic `$Q<T>` impl would overlap
+        // with `$Q<T> * T` when `T` is itself a vector.
+        quantity_times_vector!($Q: f64, f32);
+        #[cfg(any(feature = "std", feature = "libm"))]
+        quantity_times_vector!($Q<F>: $crate::Uncertain<F>);
 
         // ── Same-quantity ratio ──
 
@@ -1330,6 +1365,9 @@ pub mod unit;
 // Trigonometry on `Angle`.
 #[cfg(any(feature = "std", feature = "libm"))]
 mod math;
+
+mod vector;
+pub use vector::{Vector2, Vector3};
 
 #[cfg(any(feature = "std", feature = "libm"))]
 mod uncertain;
