@@ -252,34 +252,20 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
-fn arithmetic_f64() {
+fn point_arithmetic() {
     let a = AmplitudeRatio::from_base(6.0);
     let b = AmplitudeRatio::from_base(2.0);
-    assert_eq!((a + b).as_base(), 8.0);
-    assert_eq!((a - b).as_base(), 4.0);
-    assert_eq!((-a).as_base(), -6.0);
-    assert_eq!((a * 2.0).as_base(), 12.0);
-    assert_eq!((2.0 * a).as_base(), 12.0);
-    assert_eq!((a / 2.0).as_base(), 3.0);
+    let d: Level = a - b;
+    assert_eq!(d.as_base(), 4.0);
+    assert_eq!(b + d, a);
+    assert_eq!(d + b, a);
+    assert_eq!(a - d, b);
     assert_eq!(a / b, 3.0);
-    let mut c = a;
-    c += b;
-    c -= b;
-    c *= 2.0;
-    c /= 4.0;
-    assert_eq!(c.as_base(), 3.0);
-}
-
-#[test]
-fn arithmetic_integer() {
-    let a = AmplitudeRatio::<i64>::from_base(7);
-    let b = AmplitudeRatio::<i64>::from_base(2);
-    assert_eq!(a + b, AmplitudeRatio::from_base(9));
-    assert_eq!(a % b, AmplitudeRatio::from_base(1));
-    assert_eq!(a / b, 3);
-    assert!(a > b);
-    assert_eq!(
-        [a, b].iter().sum::<AmplitudeRatio<i64>>(),
-        AmplitudeRatio::from_base(9)
-    );
+    let mut c = b;
+    c += d;
+    assert_eq!(c, a);
+    c -= d;
+    assert_eq!(c, b);
+    let i: Level<i64> = AmplitudeRatio::<i64>::from_base(7) - AmplitudeRatio::from_base(2);
+    assert_eq!(i.as_base(), 5);
 }

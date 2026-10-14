@@ -8,11 +8,32 @@
 )]
 
 use crate::Float;
+use crate::Level;
 
 /// The strength of a signal expressed in decibels (dB) relative to one volt RMS.
 ///
 /// Stored as a value of type `T` (default `f64`) in the base unit, [`AmplitudeRatioUnit::DecibelVolt`].
 /// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+///
+/// A AmplitudeRatio is a *point on a scale*, not an amount: two of them cannot
+/// be added (a 20 dBV signal plus a 20 dBV signal is not 40 dBV), negated or scaled. Their
+/// difference is a [`Level`], which can be added back:
+///
+/// ```rust
+/// use unitsnet_rs::*;
+///
+/// let morning = AmplitudeRatio::from_decibel_volts(12.0);
+/// let noon = AmplitudeRatio::from_decibel_volts(20.0);
+/// let rise: Level = noon - morning;
+/// assert!((rise.as_decibels() - 8.0).abs() < 1e-12);
+/// assert!((morning + rise).approx_eq_rel(noon, 1e-12));
+/// ```
+///
+/// ```compile_fail
+/// use unitsnet_rs::*;
+/// let t = AmplitudeRatio::from_decibel_volts(20.0);
+/// let _ = t + t; // error: add a Level instead
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,7 +44,7 @@ use crate::Float;
 #[must_use]
 pub struct AmplitudeRatio<T = f64>(T);
 
-quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt);
+point_quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt, Level);
 
 /// Unit variants for [`AmplitudeRatio`].
 ///
@@ -191,5 +212,5 @@ fixed_base!(AmplitudeRatio, DecibelVolt);
 ///
 /// Also available as [`unit::amplitude_ratio`](crate::unit::amplitude_ratio). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts, additive);
+    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts);
 }

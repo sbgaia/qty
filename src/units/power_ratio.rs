@@ -8,11 +8,32 @@
 )]
 
 use crate::Float;
+use crate::Level;
 
 /// The strength of a signal expressed in decibels (dB) relative to one watt.
 ///
 /// Stored as a value of type `T` (default `f64`) in the base unit, [`PowerRatioUnit::DecibelWatt`].
 /// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+///
+/// A PowerRatio is a *point on a scale*, not an amount: two of them cannot
+/// be added (a 20 dBm signal plus a 20 dBm signal is not 40 dBm), negated or scaled. Their
+/// difference is a [`Level`], which can be added back:
+///
+/// ```rust
+/// use unitsnet_rs::*;
+///
+/// let morning = PowerRatio::from_decibel_milliwatts(12.0);
+/// let noon = PowerRatio::from_decibel_milliwatts(20.0);
+/// let rise: Level = noon - morning;
+/// assert!((rise.as_decibels() - 8.0).abs() < 1e-12);
+/// assert!((morning + rise).approx_eq_rel(noon, 1e-12));
+/// ```
+///
+/// ```compile_fail
+/// use unitsnet_rs::*;
+/// let t = PowerRatio::from_decibel_milliwatts(20.0);
+/// let _ = t + t; // error: add a Level instead
+/// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,7 +44,7 @@ use crate::Float;
 #[must_use]
 pub struct PowerRatio<T = f64>(T);
 
-quantity!(PowerRatio, PowerRatioUnit, DecibelWatt);
+point_quantity!(PowerRatio, PowerRatioUnit, DecibelWatt, Level);
 
 /// Unit variants for [`PowerRatio`].
 ///
@@ -139,5 +160,5 @@ fixed_base!(PowerRatio, DecibelWatt);
 ///
 /// Also available as [`unit::power_ratio`](crate::unit::power_ratio). Affine units have no marker.
 pub mod unit {
-    fixed_unit!(DecibelWatt: PowerRatio, PowerRatioUnit::DecibelWatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_watts, as_decibel_watts, additive);
+    fixed_unit!(DecibelWatt: PowerRatio, PowerRatioUnit::DecibelWatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_watts, as_decibel_watts);
 }

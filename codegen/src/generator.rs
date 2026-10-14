@@ -21,18 +21,55 @@ macro_rules! w {
     };
 }
 
-/// Quantities that are points on a scale rather than amounts, with the
-/// quantity measuring the difference between two points. UnitsNet does not
-/// mark this in its definitions, so the list lives here.
-const POINT_QUANTITIES: &[(&str, &str)] = &[("Temperature", "TemperatureDelta")];
+/// A quantity that is a point on a scale rather than an amount, and the
+/// quantity measuring the difference between two of its points. UnitsNet
+/// does not mark this in its definitions, so the list lives here.
+pub struct PointQuantity {
+    pub point: &'static str,
+    pub delta: &'static str,
+    /// Why two points cannot be added, for the docs.
+    pub example: &'static str,
+    /// Units used in the generated doc example (plural, snake case).
+    pub point_unit: &'static str,
+    pub delta_unit: &'static str,
+}
+
+pub const POINT_QUANTITIES: &[PointQuantity] = &[
+    PointQuantity {
+        point: "Temperature",
+        delta: "TemperatureDelta",
+        example: "20 °C + 20 °C is not 40 °C",
+        point_unit: "degrees_celsius",
+        delta_unit: "kelvins",
+    },
+    // Decibel levels relative to a fixed reference (dBV, dBm, …): adding two
+    // levels would multiply the underlying amplitudes or powers. The
+    // difference between two levels is a gain, a `Level` in dB.
+    PointQuantity {
+        point: "AmplitudeRatio",
+        delta: "Level",
+        example: "a 20 dBV signal plus a 20 dBV signal is not 40 dBV",
+        point_unit: "decibel_volts",
+        delta_unit: "decibels",
+    },
+    PointQuantity {
+        point: "PowerRatio",
+        delta: "Level",
+        example: "a 20 dBm signal plus a 20 dBm signal is not 40 dBm",
+        point_unit: "decibel_milliwatts",
+        delta_unit: "decibels",
+    },
+];
+
+/// The point-quantity entry for `name`, if it is one.
+pub fn point_quantity(name: &str) -> Option<&'static PointQuantity> {
+    POINT_QUANTITIES.iter().find(|p| p.point == name)
+}
 
 /// The difference quantity of a point quantity (`Temperature` →
 /// `TemperatureDelta`), or `None` for ordinary quantities.
 pub fn point_delta(name: &str) -> Option<&'static str> {
-    POINT_QUANTITIES
-        .iter()
-        .find(|(point, _)| *point == name)
-        .map(|(_, delta)| *delta)
+    point_quantity(name).map(|p| p.delta)
 }
 
 /// Generates a complete `.rs` source file for `qty` and returns it as a `String`.
@@ -129,16 +166,12 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
         out,
         "/// `#[repr(transparent)]`: same size, alignment and ABI as `T`."
     );
-    if let Some(delta) = point_delta(name) {
-        let snake = qty
-            .units
-            .iter()
-            .find(|u| u.singular == "DegreeCelsius")
-            .map_or_else(|| "kelvins".to_owned(), |u| u.plural.to_snake_case());
+    if let Some(pq) = point_quantity(name) {
+        let (delta, snake, delta_unit) = (pq.delta, pq.point_unit, pq.delta_unit);
         for line in [
             "///".to_owned(),
             format!("/// A {name} is a *point on a scale*, not an amount: two of them cannot"),
-            "/// be added (20 °C + 20 °C is not 40 °C), negated or scaled. Their".to_owned(),
+            format!("/// be added ({}), negated or scaled. Their", pq.example),
             format!("/// difference is a [`{delta}`], which can be added back:"),
             "///".to_owned(),
             "/// ```rust".to_owned(),
@@ -147,7 +180,7 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
             format!("/// let morning = {name}::from_{snake}(12.0);"),
             format!("/// let noon = {name}::from_{snake}(20.0);"),
             format!("/// let rise: {delta} = noon - morning;"),
-            "/// assert!((rise.as_kelvins() - 8.0).abs() < 1e-12);".to_owned(),
+            format!("/// assert!((rise.as_{delta_unit}() - 8.0).abs() < 1e-12);"),
             "/// assert!((morning + rise).approx_eq_rel(noon, 1e-12));".to_owned(),
             "/// ```".to_owned(),
             "///".to_owned(),
