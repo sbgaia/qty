@@ -1327,6 +1327,11 @@ mod math;
 // These are pure `impl` blocks — no named items to re-export.
 mod cross_type;
 
+// Compile and run the README's examples as doctests.
+#[cfg(doctest)]
+#[doc = include_str!("../README.md")]
+struct ReadmeDoctests;
+
 /// Convenience alias: the UnitsNet quantity is named `Duration`; `Time` is the
 /// colloquial name.
 pub type Time<T = f64> = Duration<T>;
