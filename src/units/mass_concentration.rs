@@ -2,27 +2,39 @@
 // Source: data/quantities/MassConcentration.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In chemistry, the mass concentration ρi (or γi) is defined as the mass of a constituent mi divided by the volume of the mixture V
 ///
-/// The internal value is stored in `KilogramPerCubicMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MassConcentration(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MassConcentrationUnit::KilogramPerCubicMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct MassConcentration<T = f64>(T);
+
+quantity!(
+    MassConcentration,
+    MassConcentrationUnit,
+    KilogramPerCubicMeter
+);
 
 /// Unit variants for [`MassConcentration`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MassConcentrationUnit {
     GramPerCubicMillimeter,
     KilogramPerCubicMillimeter,
@@ -131,7 +143,7 @@ impl MassConcentrationUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerCubicMillimeter => "g/mm³",
             Self::KilogramPerCubicMillimeter => "kg/mm³",
@@ -185,9 +197,9 @@ impl MassConcentrationUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerCubicMillimeter => &["g/mm³"],
             Self::KilogramPerCubicMillimeter => &["kg/mm³"],
@@ -242,1290 +254,1068 @@ impl MassConcentrationUnit {
     }
 }
 
-impl MassConcentration {
+impl core::str::FromStr for MassConcentrationUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "g/mm³" => Ok(Self::GramPerCubicMillimeter),
+            "kg/mm³" => Ok(Self::KilogramPerCubicMillimeter),
+            "g/cm³" => Ok(Self::GramPerCubicCentimeter),
+            "kg/cm³" => Ok(Self::KilogramPerCubicCentimeter),
+            "g/m³" => Ok(Self::GramPerCubicMeter),
+            "kg/m³" => Ok(Self::KilogramPerCubicMeter),
+            "mg/m³" => Ok(Self::MilligramPerCubicMeter),
+            "µg/m³" => Ok(Self::MicrogramPerCubicMeter),
+            "g/μl" => Ok(Self::GramPerMicroliter),
+            "pg/μl" => Ok(Self::PicogramPerMicroliter),
+            "ng/μl" => Ok(Self::NanogramPerMicroliter),
+            "µg/μl" => Ok(Self::MicrogramPerMicroliter),
+            "mg/μl" => Ok(Self::MilligramPerMicroliter),
+            "cg/μl" => Ok(Self::CentigramPerMicroliter),
+            "dg/μl" => Ok(Self::DecigramPerMicroliter),
+            "g/ml" => Ok(Self::GramPerMilliliter),
+            "pg/ml" => Ok(Self::PicogramPerMilliliter),
+            "ng/ml" => Ok(Self::NanogramPerMilliliter),
+            "µg/ml" => Ok(Self::MicrogramPerMilliliter),
+            "mg/ml" => Ok(Self::MilligramPerMilliliter),
+            "cg/ml" => Ok(Self::CentigramPerMilliliter),
+            "dg/ml" => Ok(Self::DecigramPerMilliliter),
+            "g/dl" => Ok(Self::GramPerDeciliter),
+            "pg/dl" => Ok(Self::PicogramPerDeciliter),
+            "ng/dl" => Ok(Self::NanogramPerDeciliter),
+            "µg/dl" => Ok(Self::MicrogramPerDeciliter),
+            "mg/dl" => Ok(Self::MilligramPerDeciliter),
+            "cg/dl" => Ok(Self::CentigramPerDeciliter),
+            "dg/dl" => Ok(Self::DecigramPerDeciliter),
+            "g/l" => Ok(Self::GramPerLiter),
+            "pg/l" => Ok(Self::PicogramPerLiter),
+            "ng/l" => Ok(Self::NanogramPerLiter),
+            "µg/l" => Ok(Self::MicrogramPerLiter),
+            "mg/l" => Ok(Self::MilligramPerLiter),
+            "cg/l" => Ok(Self::CentigramPerLiter),
+            "dg/l" => Ok(Self::DecigramPerLiter),
+            "kg/l" => Ok(Self::KilogramPerLiter),
+            "t/mm³" => Ok(Self::TonnePerCubicMillimeter),
+            "t/cm³" => Ok(Self::TonnePerCubicCentimeter),
+            "t/m³" => Ok(Self::TonnePerCubicMeter),
+            "lb/in³" => Ok(Self::PoundPerCubicInch),
+            "klb/in³" => Ok(Self::KilopoundPerCubicInch),
+            "lb/ft³" => Ok(Self::PoundPerCubicFoot),
+            "klb/ft³" => Ok(Self::KilopoundPerCubicFoot),
+            "slug/ft³" => Ok(Self::SlugPerCubicFoot),
+            "ppg (U.S.)" => Ok(Self::PoundPerUSGallon),
+            "oz/gal (U.S.)" => Ok(Self::OuncePerUSGallon),
+            "oz/gal (imp.)" => Ok(Self::OuncePerImperialGallon),
+            "ppg (imp.)" => Ok(Self::PoundPerImperialGallon),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> MassConcentration<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MassConcentrationUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MassConcentrationUnit) -> Self {
         Self(match unit {
-            MassConcentrationUnit::GramPerCubicMillimeter => x / 1e-6,
-            MassConcentrationUnit::KilogramPerCubicMillimeter => (x * 1e3) / 1e-6,
-            MassConcentrationUnit::GramPerCubicCentimeter => x / 1e-3,
-            MassConcentrationUnit::KilogramPerCubicCentimeter => (x * 1e3) / 1e-3,
-            MassConcentrationUnit::GramPerCubicMeter => x / 1e3,
-            MassConcentrationUnit::KilogramPerCubicMeter => (x * 1e3) / 1e3,
-            MassConcentrationUnit::MilligramPerCubicMeter => (x * 1e-3) / 1e3,
-            MassConcentrationUnit::MicrogramPerCubicMeter => (x * 1e-6) / 1e3,
-            MassConcentrationUnit::GramPerMicroliter => x / 1e-6,
-            MassConcentrationUnit::PicogramPerMicroliter => (x * 1e-12) / 1e-6,
-            MassConcentrationUnit::NanogramPerMicroliter => (x * 1e-9) / 1e-6,
-            MassConcentrationUnit::MicrogramPerMicroliter => (x * 1e-6) / 1e-6,
-            MassConcentrationUnit::MilligramPerMicroliter => (x * 1e-3) / 1e-6,
-            MassConcentrationUnit::CentigramPerMicroliter => (x * 1e-2) / 1e-6,
-            MassConcentrationUnit::DecigramPerMicroliter => (x * 1e-1) / 1e-6,
-            MassConcentrationUnit::GramPerMilliliter => x / 1e-3,
-            MassConcentrationUnit::PicogramPerMilliliter => (x * 1e-12) / 1e-3,
-            MassConcentrationUnit::NanogramPerMilliliter => (x * 1e-9) / 1e-3,
-            MassConcentrationUnit::MicrogramPerMilliliter => (x * 1e-6) / 1e-3,
-            MassConcentrationUnit::MilligramPerMilliliter => (x * 1e-3) / 1e-3,
-            MassConcentrationUnit::CentigramPerMilliliter => (x * 1e-2) / 1e-3,
-            MassConcentrationUnit::DecigramPerMilliliter => (x * 1e-1) / 1e-3,
-            MassConcentrationUnit::GramPerDeciliter => x / 1e-1,
-            MassConcentrationUnit::PicogramPerDeciliter => (x * 1e-12) / 1e-1,
-            MassConcentrationUnit::NanogramPerDeciliter => (x * 1e-9) / 1e-1,
-            MassConcentrationUnit::MicrogramPerDeciliter => (x * 1e-6) / 1e-1,
-            MassConcentrationUnit::MilligramPerDeciliter => (x * 1e-3) / 1e-1,
-            MassConcentrationUnit::CentigramPerDeciliter => (x * 1e-2) / 1e-1,
-            MassConcentrationUnit::DecigramPerDeciliter => (x * 1e-1) / 1e-1,
-            MassConcentrationUnit::GramPerLiter => x,
-            MassConcentrationUnit::PicogramPerLiter => (x * 1e-12),
-            MassConcentrationUnit::NanogramPerLiter => (x * 1e-9),
-            MassConcentrationUnit::MicrogramPerLiter => (x * 1e-6),
-            MassConcentrationUnit::MilligramPerLiter => (x * 1e-3),
-            MassConcentrationUnit::CentigramPerLiter => (x * 1e-2),
-            MassConcentrationUnit::DecigramPerLiter => (x * 1e-1),
-            MassConcentrationUnit::KilogramPerLiter => (x * 1e3),
-            MassConcentrationUnit::TonnePerCubicMillimeter => x / 1e-12,
-            MassConcentrationUnit::TonnePerCubicCentimeter => x / 1e-9,
-            MassConcentrationUnit::TonnePerCubicMeter => x / 0.001,
-            MassConcentrationUnit::PoundPerCubicInch => x * 0.45359237 / 1.6387064e-5,
-            MassConcentrationUnit::KilopoundPerCubicInch => (x * 1e3) * 0.45359237 / 1.6387064e-5,
-            MassConcentrationUnit::PoundPerCubicFoot => x * 0.45359237 / 0.028316846592,
-            MassConcentrationUnit::KilopoundPerCubicFoot => (x * 1e3) * 0.45359237 / 0.028316846592,
-            MassConcentrationUnit::SlugPerCubicFoot => {
-                x * (0.45359237 * 9.80665) / (0.3048 * 0.028316846592)
+            MassConcentrationUnit::GramPerCubicMillimeter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::KilogramPerCubicMillimeter => value * T::from_f64(1e9),
+            MassConcentrationUnit::GramPerCubicCentimeter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicCentimeter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::GramPerCubicMeter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicMeter => value,
+            MassConcentrationUnit::MilligramPerCubicMeter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerCubicMeter => value / T::from_f64(1e9),
+            MassConcentrationUnit::GramPerMicroliter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::PicogramPerMicroliter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::NanogramPerMicroliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::MicrogramPerMicroliter => value,
+            MassConcentrationUnit::MilligramPerMicroliter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerMicroliter => value * T::from_f64(10000.0),
+            MassConcentrationUnit::DecigramPerMicroliter => value * T::from_f64(100000.0),
+            MassConcentrationUnit::GramPerMilliliter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::PicogramPerMilliliter => value / T::from_f64(1e9),
+            MassConcentrationUnit::NanogramPerMilliliter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerMilliliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::MilligramPerMilliliter => value,
+            MassConcentrationUnit::CentigramPerMilliliter => value * T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerMilliliter => value * T::from_f64(100.0),
+            MassConcentrationUnit::GramPerDeciliter => value * T::from_f64(10.0),
+            MassConcentrationUnit::PicogramPerDeciliter => value / T::from_f64(1e11),
+            MassConcentrationUnit::NanogramPerDeciliter => value / T::from_f64(1e8),
+            MassConcentrationUnit::MicrogramPerDeciliter => value / T::from_f64(100000.0),
+            MassConcentrationUnit::MilligramPerDeciliter => value / T::from_f64(100.0),
+            MassConcentrationUnit::CentigramPerDeciliter => value / T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerDeciliter => value,
+            MassConcentrationUnit::GramPerLiter => value,
+            MassConcentrationUnit::PicogramPerLiter => value / T::from_f64(1e12),
+            MassConcentrationUnit::NanogramPerLiter => value / T::from_f64(1e9),
+            MassConcentrationUnit::MicrogramPerLiter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::MilligramPerLiter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerLiter => value / T::from_f64(100.0),
+            MassConcentrationUnit::DecigramPerLiter => value / T::from_f64(10.0),
+            MassConcentrationUnit::KilogramPerLiter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::TonnePerCubicMillimeter => value * T::from_f64(1e12),
+            MassConcentrationUnit::TonnePerCubicCentimeter => value * T::from_f64(1e9),
+            MassConcentrationUnit::TonnePerCubicMeter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::PoundPerCubicInch => value * T::from_f64(27679.90471020312),
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                value * T::from_f64(2.7679904710203122e7)
             }
-            MassConcentrationUnit::PoundPerUSGallon => x * 0.45359237 / 0.003785411784,
-            MassConcentrationUnit::OuncePerUSGallon => x * 0.028349523125 / 0.003785411784,
-            MassConcentrationUnit::OuncePerImperialGallon => x * 0.028349523125 / 0.00454609,
-            MassConcentrationUnit::PoundPerImperialGallon => x * 0.45359237 / 0.00454609,
+            MassConcentrationUnit::PoundPerCubicFoot => value * T::from_f64(16.018463373960138),
+            MassConcentrationUnit::KilopoundPerCubicFoot => value * T::from_f64(16018.46337396014),
+            MassConcentrationUnit::SlugPerCubicFoot => value * T::from_f64(515.3788183931962),
+            MassConcentrationUnit::PoundPerUSGallon => value * T::from_f64(119.82642731689663),
+            MassConcentrationUnit::OuncePerUSGallon => value * T::from_f64(7.489151707306039),
+            MassConcentrationUnit::OuncePerImperialGallon => value * T::from_f64(6.236023291443856),
+            MassConcentrationUnit::PoundPerImperialGallon => value * T::from_f64(99.7763726631017),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MassConcentrationUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MassConcentrationUnit) -> T {
         match unit {
-            MassConcentrationUnit::GramPerCubicMillimeter => x * 1e-6,
-            MassConcentrationUnit::KilogramPerCubicMillimeter => (x / 1e3) * 1e-6,
-            MassConcentrationUnit::GramPerCubicCentimeter => x * 1e-3,
-            MassConcentrationUnit::KilogramPerCubicCentimeter => (x / 1e3) * 1e-3,
-            MassConcentrationUnit::GramPerCubicMeter => x * 1e3,
-            MassConcentrationUnit::KilogramPerCubicMeter => (x / 1e3) * 1e3,
-            MassConcentrationUnit::MilligramPerCubicMeter => (x / 1e-3) * 1e3,
-            MassConcentrationUnit::MicrogramPerCubicMeter => (x / 1e-6) * 1e3,
-            MassConcentrationUnit::GramPerMicroliter => x * 1e-6,
-            MassConcentrationUnit::PicogramPerMicroliter => (x / 1e-12) * 1e-6,
-            MassConcentrationUnit::NanogramPerMicroliter => (x / 1e-9) * 1e-6,
-            MassConcentrationUnit::MicrogramPerMicroliter => (x / 1e-6) * 1e-6,
-            MassConcentrationUnit::MilligramPerMicroliter => (x / 1e-3) * 1e-6,
-            MassConcentrationUnit::CentigramPerMicroliter => (x / 1e-2) * 1e-6,
-            MassConcentrationUnit::DecigramPerMicroliter => (x / 1e-1) * 1e-6,
-            MassConcentrationUnit::GramPerMilliliter => x * 1e-3,
-            MassConcentrationUnit::PicogramPerMilliliter => (x / 1e-12) * 1e-3,
-            MassConcentrationUnit::NanogramPerMilliliter => (x / 1e-9) * 1e-3,
-            MassConcentrationUnit::MicrogramPerMilliliter => (x / 1e-6) * 1e-3,
-            MassConcentrationUnit::MilligramPerMilliliter => (x / 1e-3) * 1e-3,
-            MassConcentrationUnit::CentigramPerMilliliter => (x / 1e-2) * 1e-3,
-            MassConcentrationUnit::DecigramPerMilliliter => (x / 1e-1) * 1e-3,
-            MassConcentrationUnit::GramPerDeciliter => x * 1e-1,
-            MassConcentrationUnit::PicogramPerDeciliter => (x / 1e-12) * 1e-1,
-            MassConcentrationUnit::NanogramPerDeciliter => (x / 1e-9) * 1e-1,
-            MassConcentrationUnit::MicrogramPerDeciliter => (x / 1e-6) * 1e-1,
-            MassConcentrationUnit::MilligramPerDeciliter => (x / 1e-3) * 1e-1,
-            MassConcentrationUnit::CentigramPerDeciliter => (x / 1e-2) * 1e-1,
-            MassConcentrationUnit::DecigramPerDeciliter => (x / 1e-1) * 1e-1,
-            MassConcentrationUnit::GramPerLiter => x,
-            MassConcentrationUnit::PicogramPerLiter => (x / 1e-12),
-            MassConcentrationUnit::NanogramPerLiter => (x / 1e-9),
-            MassConcentrationUnit::MicrogramPerLiter => (x / 1e-6),
-            MassConcentrationUnit::MilligramPerLiter => (x / 1e-3),
-            MassConcentrationUnit::CentigramPerLiter => (x / 1e-2),
-            MassConcentrationUnit::DecigramPerLiter => (x / 1e-1),
-            MassConcentrationUnit::KilogramPerLiter => (x / 1e3),
-            MassConcentrationUnit::TonnePerCubicMillimeter => x * 1e-12,
-            MassConcentrationUnit::TonnePerCubicCentimeter => x * 1e-9,
-            MassConcentrationUnit::TonnePerCubicMeter => x * 0.001,
-            MassConcentrationUnit::PoundPerCubicInch => x * 1.6387064e-5 / 0.45359237,
-            MassConcentrationUnit::KilopoundPerCubicInch => (x / 1e3) * 1.6387064e-5 / 0.45359237,
-            MassConcentrationUnit::PoundPerCubicFoot => x * 0.028316846592 / 0.45359237,
-            MassConcentrationUnit::KilopoundPerCubicFoot => (x / 1e3) * 0.028316846592 / 0.45359237,
-            MassConcentrationUnit::SlugPerCubicFoot => {
-                x * (0.3048 * 0.028316846592) / (0.45359237 * 9.80665)
+            MassConcentrationUnit::GramPerCubicMillimeter => self.0 / T::from_f64(1000000.0),
+            MassConcentrationUnit::KilogramPerCubicMillimeter => self.0 / T::from_f64(1e9),
+            MassConcentrationUnit::GramPerCubicCentimeter => self.0 / T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
+            MassConcentrationUnit::GramPerCubicMeter => self.0 * T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicMeter => self.0,
+            MassConcentrationUnit::MilligramPerCubicMeter => self.0 * T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerCubicMeter => self.0 * T::from_f64(1e9),
+            MassConcentrationUnit::GramPerMicroliter => self.0 / T::from_f64(1000000.0),
+            MassConcentrationUnit::PicogramPerMicroliter => self.0 * T::from_f64(1000000.0),
+            MassConcentrationUnit::NanogramPerMicroliter => self.0 * T::from_f64(1000.0),
+            MassConcentrationUnit::MicrogramPerMicroliter => self.0,
+            MassConcentrationUnit::MilligramPerMicroliter => self.0 / T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerMicroliter => self.0 / T::from_f64(10000.0),
+            MassConcentrationUnit::DecigramPerMicroliter => self.0 / T::from_f64(100000.0),
+            MassConcentrationUnit::GramPerMilliliter => self.0 / T::from_f64(1000.0),
+            MassConcentrationUnit::PicogramPerMilliliter => self.0 * T::from_f64(1e9),
+            MassConcentrationUnit::NanogramPerMilliliter => self.0 * T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerMilliliter => self.0 * T::from_f64(1000.0),
+            MassConcentrationUnit::MilligramPerMilliliter => self.0,
+            MassConcentrationUnit::CentigramPerMilliliter => self.0 / T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerMilliliter => self.0 / T::from_f64(100.0),
+            MassConcentrationUnit::GramPerDeciliter => self.0 / T::from_f64(10.0),
+            MassConcentrationUnit::PicogramPerDeciliter => self.0 * T::from_f64(1e11),
+            MassConcentrationUnit::NanogramPerDeciliter => self.0 * T::from_f64(1e8),
+            MassConcentrationUnit::MicrogramPerDeciliter => self.0 * T::from_f64(100000.0),
+            MassConcentrationUnit::MilligramPerDeciliter => self.0 * T::from_f64(100.0),
+            MassConcentrationUnit::CentigramPerDeciliter => self.0 * T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerDeciliter => self.0,
+            MassConcentrationUnit::GramPerLiter => self.0,
+            MassConcentrationUnit::PicogramPerLiter => self.0 * T::from_f64(1e12),
+            MassConcentrationUnit::NanogramPerLiter => self.0 * T::from_f64(1e9),
+            MassConcentrationUnit::MicrogramPerLiter => self.0 * T::from_f64(1000000.0),
+            MassConcentrationUnit::MilligramPerLiter => self.0 * T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerLiter => self.0 * T::from_f64(100.0),
+            MassConcentrationUnit::DecigramPerLiter => self.0 * T::from_f64(10.0),
+            MassConcentrationUnit::KilogramPerLiter => self.0 / T::from_f64(1000.0),
+            MassConcentrationUnit::TonnePerCubicMillimeter => self.0 / T::from_f64(1e12),
+            MassConcentrationUnit::TonnePerCubicCentimeter => self.0 / T::from_f64(1e9),
+            MassConcentrationUnit::TonnePerCubicMeter => self.0 / T::from_f64(1000.0),
+            MassConcentrationUnit::PoundPerCubicInch => self.0 / T::from_f64(27679.90471020312),
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                self.0 / T::from_f64(2.7679904710203122e7)
             }
-            MassConcentrationUnit::PoundPerUSGallon => x * 0.003785411784 / 0.45359237,
-            MassConcentrationUnit::OuncePerUSGallon => x * 0.003785411784 / 0.028349523125,
-            MassConcentrationUnit::OuncePerImperialGallon => x * 0.00454609 / 0.028349523125,
-            MassConcentrationUnit::PoundPerImperialGallon => x * 0.00454609 / 0.45359237,
+            MassConcentrationUnit::PoundPerCubicFoot => self.0 / T::from_f64(16.018463373960138),
+            MassConcentrationUnit::KilopoundPerCubicFoot => self.0 / T::from_f64(16018.46337396014),
+            MassConcentrationUnit::SlugPerCubicFoot => self.0 / T::from_f64(515.3788183931962),
+            MassConcentrationUnit::PoundPerUSGallon => self.0 / T::from_f64(119.82642731689663),
+            MassConcentrationUnit::OuncePerUSGallon => self.0 / T::from_f64(7.489151707306039),
+            MassConcentrationUnit::OuncePerImperialGallon => {
+                self.0 / T::from_f64(6.236023291443856)
+            }
+            MassConcentrationUnit::PoundPerImperialGallon => self.0 / T::from_f64(99.7763726631017),
         }
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn from_grams_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-6)
+    pub fn from_grams_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
-    pub fn as_grams_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        x * 1e-6
+    pub fn as_grams_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_millimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_millimeter(self) -> Num {
+    pub fn as_gram_per_cubic_millimeter(self) -> T {
         self.as_grams_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 1e-6)
+    pub fn from_kilograms_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1e-6
+    pub fn as_kilograms_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_millimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_millimeter(self) -> Num {
+    pub fn as_kilogram_per_cubic_millimeter(self) -> T {
         self.as_kilograms_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn from_grams_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-3)
+    pub fn from_grams_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in GramsPerCubicCentimeter (`g/cm³`).
     #[inline]
-    pub fn as_grams_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        x * 1e-3
+    pub fn as_grams_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_centimeter`].
     #[inline]
-    pub fn as_gram_per_cubic_centimeter(self) -> Num {
+    pub fn as_gram_per_cubic_centimeter(self) -> T {
         self.as_grams_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 1e-3)
+    pub fn from_kilograms_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1e-3
+    pub fn as_kilograms_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_centimeter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_centimeter(self) -> Num {
+    pub fn as_kilogram_per_cubic_centimeter(self) -> T {
         self.as_kilograms_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn from_grams_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e3)
+    pub fn from_grams_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in GramsPerCubicMeter (`g/m³`).
     #[inline]
-    pub fn as_grams_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x * 1e3
+    pub fn as_grams_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_grams_per_cubic_meter`].
     #[inline]
-    pub fn as_gram_per_cubic_meter(self) -> Num {
+    pub fn as_gram_per_cubic_meter(self) -> T {
         self.as_grams_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn from_kilograms_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 1e3)
+    pub fn from_kilograms_per_cubic_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
-    pub fn as_kilograms_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1e3
+    pub fn as_kilograms_per_cubic_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kilograms_per_cubic_meter`].
     #[inline]
-    pub fn as_kilogram_per_cubic_meter(self) -> Num {
+    pub fn as_kilogram_per_cubic_meter(self) -> T {
         self.as_kilograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn from_milligrams_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1e3)
+    pub fn from_milligrams_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MilligramsPerCubicMeter (`mg/m³`).
     #[inline]
-    pub fn as_milligrams_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1e3
+    pub fn as_milligrams_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_cubic_meter`].
     #[inline]
-    pub fn as_milligram_per_cubic_meter(self) -> Num {
+    pub fn as_milligram_per_cubic_meter(self) -> T {
         self.as_milligrams_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn from_micrograms_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1e3)
+    pub fn from_micrograms_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
-    pub fn as_micrograms_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1e3
+    pub fn as_micrograms_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_micrograms_per_cubic_meter`].
     #[inline]
-    pub fn as_microgram_per_cubic_meter(self) -> Num {
+    pub fn as_microgram_per_cubic_meter(self) -> T {
         self.as_micrograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerMicroliter (`g/μl`).
     #[inline]
-    pub fn from_grams_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-6)
+    pub fn from_grams_per_microliter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in GramsPerMicroliter (`g/μl`).
     #[inline]
-    pub fn as_grams_per_microliter(self) -> Num {
-        let x = self.0;
-        x * 1e-6
+    pub fn as_grams_per_microliter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_grams_per_microliter`].
     #[inline]
-    pub fn as_gram_per_microliter(self) -> Num {
+    pub fn as_gram_per_microliter(self) -> T {
         self.as_grams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMicroliter (`pg/μl`).
     #[inline]
-    pub fn from_picograms_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 1e-6)
+    pub fn from_picograms_per_microliter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in PicogramsPerMicroliter (`pg/μl`).
     #[inline]
-    pub fn as_picograms_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 1e-6
+    pub fn as_picograms_per_microliter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_picograms_per_microliter`].
     #[inline]
-    pub fn as_picogram_per_microliter(self) -> Num {
+    pub fn as_picogram_per_microliter(self) -> T {
         self.as_picograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMicroliter (`ng/μl`).
     #[inline]
-    pub fn from_nanograms_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 1e-6)
+    pub fn from_nanograms_per_microliter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in NanogramsPerMicroliter (`ng/μl`).
     #[inline]
-    pub fn as_nanograms_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 1e-6
+    pub fn as_nanograms_per_microliter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_nanograms_per_microliter`].
     #[inline]
-    pub fn as_nanogram_per_microliter(self) -> Num {
+    pub fn as_nanogram_per_microliter(self) -> T {
         self.as_nanograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMicroliter (`µg/μl`).
     #[inline]
-    pub fn from_micrograms_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1e-6)
+    pub fn from_micrograms_per_microliter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MicrogramsPerMicroliter (`µg/μl`).
     #[inline]
-    pub fn as_micrograms_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1e-6
+    pub fn as_micrograms_per_microliter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_micrograms_per_microliter`].
     #[inline]
-    pub fn as_microgram_per_microliter(self) -> Num {
+    pub fn as_microgram_per_microliter(self) -> T {
         self.as_micrograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMicroliter (`mg/μl`).
     #[inline]
-    pub fn from_milligrams_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1e-6)
+    pub fn from_milligrams_per_microliter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilligramsPerMicroliter (`mg/μl`).
     #[inline]
-    pub fn as_milligrams_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1e-6
+    pub fn as_milligrams_per_microliter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_microliter`].
     #[inline]
-    pub fn as_milligram_per_microliter(self) -> Num {
+    pub fn as_milligram_per_microliter(self) -> T {
         self.as_milligrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMicroliter (`cg/μl`).
     #[inline]
-    pub fn from_centigrams_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 1e-6)
+    pub fn from_centigrams_per_microliter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in CentigramsPerMicroliter (`cg/μl`).
     #[inline]
-    pub fn as_centigrams_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 1e-6
+    pub fn as_centigrams_per_microliter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_microliter`].
     #[inline]
-    pub fn as_centigram_per_microliter(self) -> Num {
+    pub fn as_centigram_per_microliter(self) -> T {
         self.as_centigrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMicroliter (`dg/μl`).
     #[inline]
-    pub fn from_decigrams_per_microliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 1e-6)
+    pub fn from_decigrams_per_microliter(value: T) -> Self {
+        Self(value * T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in DecigramsPerMicroliter (`dg/μl`).
     #[inline]
-    pub fn as_decigrams_per_microliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 1e-6
+    pub fn as_decigrams_per_microliter(self) -> T {
+        self.0 / T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_decigrams_per_microliter`].
     #[inline]
-    pub fn as_decigram_per_microliter(self) -> Num {
+    pub fn as_decigram_per_microliter(self) -> T {
         self.as_decigrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn from_grams_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-3)
+    pub fn from_grams_per_milliliter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in GramsPerMilliliter (`g/ml`).
     #[inline]
-    pub fn as_grams_per_milliliter(self) -> Num {
-        let x = self.0;
-        x * 1e-3
+    pub fn as_grams_per_milliliter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_grams_per_milliliter`].
     #[inline]
-    pub fn as_gram_per_milliliter(self) -> Num {
+    pub fn as_gram_per_milliliter(self) -> T {
         self.as_grams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn from_picograms_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 1e-3)
+    pub fn from_picograms_per_milliliter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in PicogramsPerMilliliter (`pg/ml`).
     #[inline]
-    pub fn as_picograms_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 1e-3
+    pub fn as_picograms_per_milliliter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_picograms_per_milliliter`].
     #[inline]
-    pub fn as_picogram_per_milliliter(self) -> Num {
+    pub fn as_picogram_per_milliliter(self) -> T {
         self.as_picograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn from_nanograms_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 1e-3)
+    pub fn from_nanograms_per_milliliter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
-    pub fn as_nanograms_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 1e-3
+    pub fn as_nanograms_per_milliliter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_nanograms_per_milliliter`].
     #[inline]
-    pub fn as_nanogram_per_milliliter(self) -> Num {
+    pub fn as_nanogram_per_milliliter(self) -> T {
         self.as_nanograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn from_micrograms_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1e-3)
+    pub fn from_micrograms_per_milliliter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MicrogramsPerMilliliter (`µg/ml`).
     #[inline]
-    pub fn as_micrograms_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1e-3
+    pub fn as_micrograms_per_milliliter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_micrograms_per_milliliter`].
     #[inline]
-    pub fn as_microgram_per_milliliter(self) -> Num {
+    pub fn as_microgram_per_milliliter(self) -> T {
         self.as_micrograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn from_milligrams_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1e-3)
+    pub fn from_milligrams_per_milliliter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
-    pub fn as_milligrams_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1e-3
+    pub fn as_milligrams_per_milliliter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_milligrams_per_milliliter`].
     #[inline]
-    pub fn as_milligram_per_milliliter(self) -> Num {
+    pub fn as_milligram_per_milliliter(self) -> T {
         self.as_milligrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn from_centigrams_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 1e-3)
+    pub fn from_centigrams_per_milliliter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in CentigramsPerMilliliter (`cg/ml`).
     #[inline]
-    pub fn as_centigrams_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 1e-3
+    pub fn as_centigrams_per_milliliter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_milliliter`].
     #[inline]
-    pub fn as_centigram_per_milliliter(self) -> Num {
+    pub fn as_centigram_per_milliliter(self) -> T {
         self.as_centigrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn from_decigrams_per_milliliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 1e-3)
+    pub fn from_decigrams_per_milliliter(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
-    pub fn as_decigrams_per_milliliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 1e-3
+    pub fn as_decigrams_per_milliliter(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_decigrams_per_milliliter`].
     #[inline]
-    pub fn as_decigram_per_milliliter(self) -> Num {
+    pub fn as_decigram_per_milliliter(self) -> T {
         self.as_decigrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn from_grams_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-1)
+    pub fn from_grams_per_deciliter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in GramsPerDeciliter (`g/dl`).
     #[inline]
-    pub fn as_grams_per_deciliter(self) -> Num {
-        let x = self.0;
-        x * 1e-1
+    pub fn as_grams_per_deciliter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_grams_per_deciliter`].
     #[inline]
-    pub fn as_gram_per_deciliter(self) -> Num {
+    pub fn as_gram_per_deciliter(self) -> T {
         self.as_grams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn from_picograms_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 1e-1)
+    pub fn from_picograms_per_deciliter(value: T) -> Self {
+        Self(value / T::from_f64(1e11))
     }
 
     /// Returns the value expressed in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
-    pub fn as_picograms_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 1e-1
+    pub fn as_picograms_per_deciliter(self) -> T {
+        self.0 * T::from_f64(1e11)
     }
 
     /// Alias for [`Self::as_picograms_per_deciliter`].
     #[inline]
-    pub fn as_picogram_per_deciliter(self) -> Num {
+    pub fn as_picogram_per_deciliter(self) -> T {
         self.as_picograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn from_nanograms_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 1e-1)
+    pub fn from_nanograms_per_deciliter(value: T) -> Self {
+        Self(value / T::from_f64(1e8))
     }
 
     /// Returns the value expressed in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
-    pub fn as_nanograms_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 1e-1
+    pub fn as_nanograms_per_deciliter(self) -> T {
+        self.0 * T::from_f64(1e8)
     }
 
     /// Alias for [`Self::as_nanograms_per_deciliter`].
     #[inline]
-    pub fn as_nanogram_per_deciliter(self) -> Num {
+    pub fn as_nanogram_per_deciliter(self) -> T {
         self.as_nanograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn from_micrograms_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1e-1)
+    pub fn from_micrograms_per_deciliter(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
-    pub fn as_micrograms_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1e-1
+    pub fn as_micrograms_per_deciliter(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_micrograms_per_deciliter`].
     #[inline]
-    pub fn as_microgram_per_deciliter(self) -> Num {
+    pub fn as_microgram_per_deciliter(self) -> T {
         self.as_micrograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn from_milligrams_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1e-1)
+    pub fn from_milligrams_per_deciliter(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
-    pub fn as_milligrams_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1e-1
+    pub fn as_milligrams_per_deciliter(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_deciliter`].
     #[inline]
-    pub fn as_milligram_per_deciliter(self) -> Num {
+    pub fn as_milligram_per_deciliter(self) -> T {
         self.as_milligrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn from_centigrams_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 1e-1)
+    pub fn from_centigrams_per_deciliter(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
-    pub fn as_centigrams_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 1e-1
+    pub fn as_centigrams_per_deciliter(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_deciliter`].
     #[inline]
-    pub fn as_centigram_per_deciliter(self) -> Num {
+    pub fn as_centigram_per_deciliter(self) -> T {
         self.as_centigrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn from_decigrams_per_deciliter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 1e-1)
+    pub fn from_decigrams_per_deciliter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
-    pub fn as_decigrams_per_deciliter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 1e-1
+    pub fn as_decigrams_per_deciliter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_decigrams_per_deciliter`].
     #[inline]
-    pub fn as_decigram_per_deciliter(self) -> Num {
+    pub fn as_decigram_per_deciliter(self) -> T {
         self.as_decigrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn from_grams_per_liter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_grams_per_liter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in GramsPerLiter (`g/l`).
     #[inline]
-    pub fn as_grams_per_liter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_grams_per_liter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_grams_per_liter`].
     #[inline]
-    pub fn as_gram_per_liter(self) -> Num {
+    pub fn as_gram_per_liter(self) -> T {
         self.as_grams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn from_picograms_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picograms_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in PicogramsPerLiter (`pg/l`).
     #[inline]
-    pub fn as_picograms_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picograms_per_liter(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picograms_per_liter`].
     #[inline]
-    pub fn as_picogram_per_liter(self) -> Num {
+    pub fn as_picogram_per_liter(self) -> T {
         self.as_picograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn from_nanograms_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanograms_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanogramsPerLiter (`ng/l`).
     #[inline]
-    pub fn as_nanograms_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanograms_per_liter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanograms_per_liter`].
     #[inline]
-    pub fn as_nanogram_per_liter(self) -> Num {
+    pub fn as_nanogram_per_liter(self) -> T {
         self.as_nanograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn from_micrograms_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micrograms_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrogramsPerLiter (`µg/l`).
     #[inline]
-    pub fn as_micrograms_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micrograms_per_liter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micrograms_per_liter`].
     #[inline]
-    pub fn as_microgram_per_liter(self) -> Num {
+    pub fn as_microgram_per_liter(self) -> T {
         self.as_micrograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn from_milligrams_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milligrams_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilligramsPerLiter (`mg/l`).
     #[inline]
-    pub fn as_milligrams_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milligrams_per_liter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_liter`].
     #[inline]
-    pub fn as_milligram_per_liter(self) -> Num {
+    pub fn as_milligram_per_liter(self) -> T {
         self.as_milligrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn from_centigrams_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centigrams_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentigramsPerLiter (`cg/l`).
     #[inline]
-    pub fn as_centigrams_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centigrams_per_liter(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_liter`].
     #[inline]
-    pub fn as_centigram_per_liter(self) -> Num {
+    pub fn as_centigram_per_liter(self) -> T {
         self.as_centigrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn from_decigrams_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decigrams_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecigramsPerLiter (`dg/l`).
     #[inline]
-    pub fn as_decigrams_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decigrams_per_liter(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decigrams_per_liter`].
     #[inline]
-    pub fn as_decigram_per_liter(self) -> Num {
+    pub fn as_decigram_per_liter(self) -> T {
         self.as_decigrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn from_kilograms_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilograms_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilogramsPerLiter (`kg/l`).
     #[inline]
-    pub fn as_kilograms_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilograms_per_liter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilograms_per_liter`].
     #[inline]
-    pub fn as_kilogram_per_liter(self) -> Num {
+    pub fn as_kilogram_per_liter(self) -> T {
         self.as_kilograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-12)
+    pub fn from_tonnes_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        x * 1e-12
+    pub fn as_tonnes_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_millimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_millimeter(self) -> Num {
+    pub fn as_tonne_per_cubic_millimeter(self) -> T {
         self.as_tonnes_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e-9)
+    pub fn from_tonnes_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        x * 1e-9
+    pub fn as_tonnes_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_centimeter`].
     #[inline]
-    pub fn as_tonne_per_cubic_centimeter(self) -> Num {
+    pub fn as_tonne_per_cubic_centimeter(self) -> T {
         self.as_tonnes_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn from_tonnes_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x / 0.001)
+    pub fn from_tonnes_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in TonnesPerCubicMeter (`t/m³`).
     #[inline]
-    pub fn as_tonnes_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x * 0.001
+    pub fn as_tonnes_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_tonnes_per_cubic_meter`].
     #[inline]
-    pub fn as_tonne_per_cubic_meter(self) -> Num {
+    pub fn as_tonne_per_cubic_meter(self) -> T {
         self.as_tonnes_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn from_pounds_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.45359237 / 1.6387064e-5)
+    pub fn from_pounds_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(27679.90471020312))
     }
 
     /// Returns the value expressed in PoundsPerCubicInch (`lb/in³`).
     #[inline]
-    pub fn as_pounds_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        x * 1.6387064e-5 / 0.45359237
+    pub fn as_pounds_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(27679.90471020312)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_inch`].
     #[inline]
-    pub fn as_pound_per_cubic_inch(self) -> Num {
+    pub fn as_pound_per_cubic_inch(self) -> T {
         self.as_pounds_per_cubic_inch()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 0.45359237 / 1.6387064e-5)
+    pub fn from_kilopounds_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(2.7679904710203122e7))
     }
 
     /// Returns the value expressed in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1.6387064e-5 / 0.45359237
+    pub fn as_kilopounds_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(2.7679904710203122e7)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_inch`].
     #[inline]
-    pub fn as_kilopound_per_cubic_inch(self) -> Num {
+    pub fn as_kilopound_per_cubic_inch(self) -> T {
         self.as_kilopounds_per_cubic_inch()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn from_pounds_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.45359237 / 0.028316846592)
+    pub fn from_pounds_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(16.018463373960138))
     }
 
     /// Returns the value expressed in PoundsPerCubicFoot (`lb/ft³`).
     #[inline]
-    pub fn as_pounds_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        x * 0.028316846592 / 0.45359237
+    pub fn as_pounds_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(16.018463373960138)
     }
 
     /// Alias for [`Self::as_pounds_per_cubic_foot`].
     #[inline]
-    pub fn as_pound_per_cubic_foot(self) -> Num {
+    pub fn as_pound_per_cubic_foot(self) -> T {
         self.as_pounds_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn from_kilopounds_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 0.45359237 / 0.028316846592)
+    pub fn from_kilopounds_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(16018.46337396014))
     }
 
     /// Returns the value expressed in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
-    pub fn as_kilopounds_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.028316846592 / 0.45359237
+    pub fn as_kilopounds_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(16018.46337396014)
     }
 
     /// Alias for [`Self::as_kilopounds_per_cubic_foot`].
     #[inline]
-    pub fn as_kilopound_per_cubic_foot(self) -> Num {
+    pub fn as_kilopound_per_cubic_foot(self) -> T {
         self.as_kilopounds_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn from_slugs_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * (0.45359237 * 9.80665) / (0.3048 * 0.028316846592))
+    pub fn from_slugs_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(515.3788183931962))
     }
 
     /// Returns the value expressed in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
-    pub fn as_slugs_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        x * (0.3048 * 0.028316846592) / (0.45359237 * 9.80665)
+    pub fn as_slugs_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(515.3788183931962)
     }
 
     /// Alias for [`Self::as_slugs_per_cubic_foot`].
     #[inline]
-    pub fn as_slug_per_cubic_foot(self) -> Num {
+    pub fn as_slug_per_cubic_foot(self) -> T {
         self.as_slugs_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn from_pounds_per_us_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.45359237 / 0.003785411784)
+    pub fn from_pounds_per_us_gallon(value: T) -> Self {
+        Self(value * T::from_f64(119.82642731689663))
     }
 
     /// Returns the value expressed in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
-    pub fn as_pounds_per_us_gallon(self) -> Num {
-        let x = self.0;
-        x * 0.003785411784 / 0.45359237
+    pub fn as_pounds_per_us_gallon(self) -> T {
+        self.0 / T::from_f64(119.82642731689663)
     }
 
     /// Alias for [`Self::as_pounds_per_us_gallon`].
     #[inline]
-    pub fn as_pound_per_us_gallon(self) -> Num {
+    pub fn as_pound_per_us_gallon(self) -> T {
         self.as_pounds_per_us_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in OuncesPerUSGallon (`oz/gal (U.S.)`).
     #[inline]
-    pub fn from_ounces_per_us_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028349523125 / 0.003785411784)
+    pub fn from_ounces_per_us_gallon(value: T) -> Self {
+        Self(value * T::from_f64(7.489151707306039))
     }
 
     /// Returns the value expressed in OuncesPerUSGallon (`oz/gal (U.S.)`).
     #[inline]
-    pub fn as_ounces_per_us_gallon(self) -> Num {
-        let x = self.0;
-        x * 0.003785411784 / 0.028349523125
+    pub fn as_ounces_per_us_gallon(self) -> T {
+        self.0 / T::from_f64(7.489151707306039)
     }
 
     /// Alias for [`Self::as_ounces_per_us_gallon`].
     #[inline]
-    pub fn as_ounce_per_us_gallon(self) -> Num {
+    pub fn as_ounce_per_us_gallon(self) -> T {
         self.as_ounces_per_us_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in OuncesPerImperialGallon (`oz/gal (imp.)`).
     #[inline]
-    pub fn from_ounces_per_imperial_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028349523125 / 0.00454609)
+    pub fn from_ounces_per_imperial_gallon(value: T) -> Self {
+        Self(value * T::from_f64(6.236023291443856))
     }
 
     /// Returns the value expressed in OuncesPerImperialGallon (`oz/gal (imp.)`).
     #[inline]
-    pub fn as_ounces_per_imperial_gallon(self) -> Num {
-        let x = self.0;
-        x * 0.00454609 / 0.028349523125
+    pub fn as_ounces_per_imperial_gallon(self) -> T {
+        self.0 / T::from_f64(6.236023291443856)
     }
 
     /// Alias for [`Self::as_ounces_per_imperial_gallon`].
     #[inline]
-    pub fn as_ounce_per_imperial_gallon(self) -> Num {
+    pub fn as_ounce_per_imperial_gallon(self) -> T {
         self.as_ounces_per_imperial_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn from_pounds_per_imperial_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.45359237 / 0.00454609)
+    pub fn from_pounds_per_imperial_gallon(value: T) -> Self {
+        Self(value * T::from_f64(99.7763726631017))
     }
 
     /// Returns the value expressed in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
-    pub fn as_pounds_per_imperial_gallon(self) -> Num {
-        let x = self.0;
-        x * 0.00454609 / 0.45359237
+    pub fn as_pounds_per_imperial_gallon(self) -> T {
+        self.0 / T::from_f64(99.7763726631017)
     }
 
     /// Alias for [`Self::as_pounds_per_imperial_gallon`].
     #[inline]
-    pub fn as_pound_per_imperial_gallon(self) -> Num {
+    pub fn as_pound_per_imperial_gallon(self) -> T {
         self.as_pounds_per_imperial_gallon()
     }
-}
-
-impl crate::Quantity for MassConcentration {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for MassConcentration {
-    type Output = MassConcentration;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for MassConcentration {
-    type Output = MassConcentration;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for MassConcentration {
-    type Output = MassConcentration;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for MassConcentration {
-    type Output = MassConcentration;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<MassConcentration> for Num {
-    type Output = MassConcentration;
-    #[inline]
-    fn mul(self, rhs: MassConcentration) -> MassConcentration {
-        MassConcentration(self * rhs.0)
-    }
-}
-impl Div<Num> for MassConcentration {
-    type Output = MassConcentration;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for MassConcentration {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for MassConcentration {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MassConcentrationUnit::KilogramPerCubicMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`MassConcentration`].
-#[derive(Debug)]
-pub struct ParseMassConcentrationError(String);
-
-impl fmt::Display for ParseMassConcentrationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as MassConcentration", self.0)
-    }
-}
-
-impl std::error::Error for ParseMassConcentrationError {}
-
-impl FromStr for MassConcentration {
-    type Err = ParseMassConcentrationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMassConcentrationError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MassConcentrationUnit)] = &[
-            ("oz/gal (U.S.)", MassConcentrationUnit::OuncePerUSGallon),
-            (
-                "oz/gal (imp.)",
-                MassConcentrationUnit::OuncePerImperialGallon,
-            ),
-            ("ppg (U.S.)", MassConcentrationUnit::PoundPerUSGallon),
-            ("ppg (imp.)", MassConcentrationUnit::PoundPerImperialGallon),
-            ("slug/ft³", MassConcentrationUnit::SlugPerCubicFoot),
-            ("klb/ft³", MassConcentrationUnit::KilopoundPerCubicFoot),
-            ("klb/in³", MassConcentrationUnit::KilopoundPerCubicInch),
-            ("kg/cm³", MassConcentrationUnit::KilogramPerCubicCentimeter),
-            ("kg/mm³", MassConcentrationUnit::KilogramPerCubicMillimeter),
-            ("lb/ft³", MassConcentrationUnit::PoundPerCubicFoot),
-            ("lb/in³", MassConcentrationUnit::PoundPerCubicInch),
-            ("µg/m³", MassConcentrationUnit::MicrogramPerCubicMeter),
-            ("µg/μl", MassConcentrationUnit::MicrogramPerMicroliter),
-            ("cg/μl", MassConcentrationUnit::CentigramPerMicroliter),
-            ("dg/μl", MassConcentrationUnit::DecigramPerMicroliter),
-            ("g/cm³", MassConcentrationUnit::GramPerCubicCentimeter),
-            ("g/mm³", MassConcentrationUnit::GramPerCubicMillimeter),
-            ("kg/m³", MassConcentrationUnit::KilogramPerCubicMeter),
-            ("mg/m³", MassConcentrationUnit::MilligramPerCubicMeter),
-            ("mg/μl", MassConcentrationUnit::MilligramPerMicroliter),
-            ("ng/μl", MassConcentrationUnit::NanogramPerMicroliter),
-            ("pg/μl", MassConcentrationUnit::PicogramPerMicroliter),
-            ("t/cm³", MassConcentrationUnit::TonnePerCubicCentimeter),
-            ("t/mm³", MassConcentrationUnit::TonnePerCubicMillimeter),
-            ("µg/dl", MassConcentrationUnit::MicrogramPerDeciliter),
-            ("µg/ml", MassConcentrationUnit::MicrogramPerMilliliter),
-            ("cg/dl", MassConcentrationUnit::CentigramPerDeciliter),
-            ("cg/ml", MassConcentrationUnit::CentigramPerMilliliter),
-            ("dg/dl", MassConcentrationUnit::DecigramPerDeciliter),
-            ("dg/ml", MassConcentrationUnit::DecigramPerMilliliter),
-            ("g/m³", MassConcentrationUnit::GramPerCubicMeter),
-            ("g/μl", MassConcentrationUnit::GramPerMicroliter),
-            ("mg/dl", MassConcentrationUnit::MilligramPerDeciliter),
-            ("mg/ml", MassConcentrationUnit::MilligramPerMilliliter),
-            ("ng/dl", MassConcentrationUnit::NanogramPerDeciliter),
-            ("ng/ml", MassConcentrationUnit::NanogramPerMilliliter),
-            ("pg/dl", MassConcentrationUnit::PicogramPerDeciliter),
-            ("pg/ml", MassConcentrationUnit::PicogramPerMilliliter),
-            ("t/m³", MassConcentrationUnit::TonnePerCubicMeter),
-            ("µg/l", MassConcentrationUnit::MicrogramPerLiter),
-            ("cg/l", MassConcentrationUnit::CentigramPerLiter),
-            ("dg/l", MassConcentrationUnit::DecigramPerLiter),
-            ("g/dl", MassConcentrationUnit::GramPerDeciliter),
-            ("g/ml", MassConcentrationUnit::GramPerMilliliter),
-            ("kg/l", MassConcentrationUnit::KilogramPerLiter),
-            ("mg/l", MassConcentrationUnit::MilligramPerLiter),
-            ("ng/l", MassConcentrationUnit::NanogramPerLiter),
-            ("pg/l", MassConcentrationUnit::PicogramPerLiter),
-            ("g/l", MassConcentrationUnit::GramPerLiter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMassConcentrationError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

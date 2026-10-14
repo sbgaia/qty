@@ -2,27 +2,39 @@
 // Source: data/quantities/ElectricPotentialChangeRate.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// ElectricPotential change rate is the ratio of the electric potential change to the time during which the change occurred (value of electric potential changes per unit time).
 ///
-/// The internal value is stored in `VoltPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricPotentialChangeRate(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricPotentialChangeRateUnit::VoltPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricPotentialChangeRate<T = f64>(T);
+
+quantity!(
+    ElectricPotentialChangeRate,
+    ElectricPotentialChangeRateUnit,
+    VoltPerSecond
+);
 
 /// Unit variants for [`ElectricPotentialChangeRate`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricPotentialChangeRateUnit {
     VoltPerSecond,
     MicrovoltPerSecond,
@@ -73,7 +85,7 @@ impl ElectricPotentialChangeRateUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltPerSecond => "V/s",
             Self::MicrovoltPerSecond => "µV/s",
@@ -98,9 +110,9 @@ impl ElectricPotentialChangeRateUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltPerSecond => &["V/s"],
             Self::MicrovoltPerSecond => &["µV/s"],
@@ -126,638 +138,471 @@ impl ElectricPotentialChangeRateUnit {
     }
 }
 
-impl ElectricPotentialChangeRate {
+impl core::str::FromStr for ElectricPotentialChangeRateUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "V/s" => Ok(Self::VoltPerSecond),
+            "µV/s" => Ok(Self::MicrovoltPerSecond),
+            "mV/s" => Ok(Self::MillivoltPerSecond),
+            "kV/s" => Ok(Self::KilovoltPerSecond),
+            "MV/s" => Ok(Self::MegavoltPerSecond),
+            "V/μs" => Ok(Self::VoltPerMicrosecond),
+            "µV/μs" => Ok(Self::MicrovoltPerMicrosecond),
+            "mV/μs" => Ok(Self::MillivoltPerMicrosecond),
+            "kV/μs" => Ok(Self::KilovoltPerMicrosecond),
+            "MV/μs" => Ok(Self::MegavoltPerMicrosecond),
+            "V/min" => Ok(Self::VoltPerMinute),
+            "µV/min" => Ok(Self::MicrovoltPerMinute),
+            "mV/min" => Ok(Self::MillivoltPerMinute),
+            "kV/min" => Ok(Self::KilovoltPerMinute),
+            "MV/min" => Ok(Self::MegavoltPerMinute),
+            "V/h" => Ok(Self::VoltPerHour),
+            "µV/h" => Ok(Self::MicrovoltPerHour),
+            "mV/h" => Ok(Self::MillivoltPerHour),
+            "kV/h" => Ok(Self::KilovoltPerHour),
+            "MV/h" => Ok(Self::MegavoltPerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricPotentialChangeRate<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricPotentialChangeRateUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricPotentialChangeRateUnit) -> Self {
         Self(match unit {
-            ElectricPotentialChangeRateUnit::VoltPerSecond => x,
-            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => (x * 1e-6),
-            ElectricPotentialChangeRateUnit::MillivoltPerSecond => (x * 1e-3),
-            ElectricPotentialChangeRateUnit::KilovoltPerSecond => (x * 1e3),
-            ElectricPotentialChangeRateUnit::MegavoltPerSecond => (x * 1e6),
-            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => x * 1E6,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => (x * 1e-6) * 1E6,
-            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => (x * 1e-3) * 1E6,
-            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => (x * 1e3) * 1E6,
-            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => (x * 1e6) * 1E6,
-            ElectricPotentialChangeRateUnit::VoltPerMinute => x / 60.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => (x * 1e-6) / 60.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerMinute => (x * 1e-3) / 60.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => (x * 1e3) / 60.0,
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => (x * 1e6) / 60.0,
-            ElectricPotentialChangeRateUnit::VoltPerHour => x / 3600.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerHour => (x * 1e-6) / 3600.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerHour => (x * 1e-3) / 3600.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => (x * 1e3) / 3600.0,
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => (x * 1e6) / 3600.0,
+            ElectricPotentialChangeRateUnit::VoltPerSecond => value,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => value / T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond => value * T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond => value * T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value * T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => value,
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value * T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value * T::from_f64(1e9),
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value * T::from_f64(1e12),
+            ElectricPotentialChangeRateUnit::VoltPerMinute => value / T::from_f64(60.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value / T::from_f64(6e7),
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => value / T::from_f64(60000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
+                value * T::from_f64(16.666666666666668)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
+                value * T::from_f64(16666.666666666668)
+            }
+            ElectricPotentialChangeRateUnit::VoltPerHour => value / T::from_f64(3600.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => value / T::from_f64(3.6e9),
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => value / T::from_f64(3600000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
+                value * T::from_f64(0.2777777777777778)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
+                value * T::from_f64(277.77777777777777)
+            }
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricPotentialChangeRateUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricPotentialChangeRateUnit) -> T {
         match unit {
-            ElectricPotentialChangeRateUnit::VoltPerSecond => x,
-            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => (x / 1e-6),
-            ElectricPotentialChangeRateUnit::MillivoltPerSecond => (x / 1e-3),
-            ElectricPotentialChangeRateUnit::KilovoltPerSecond => (x / 1e3),
-            ElectricPotentialChangeRateUnit::MegavoltPerSecond => (x / 1e6),
-            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => x / 1E6,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => (x / 1e-6) / 1E6,
-            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => (x / 1e-3) / 1E6,
-            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => (x / 1e3) / 1E6,
-            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => (x / 1e6) / 1E6,
-            ElectricPotentialChangeRateUnit::VoltPerMinute => x * 60.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => (x / 1e-6) * 60.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerMinute => (x / 1e-3) * 60.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => (x / 1e3) * 60.0,
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => (x / 1e6) * 60.0,
-            ElectricPotentialChangeRateUnit::VoltPerHour => x * 3600.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerHour => (x / 1e-6) * 3600.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerHour => (x / 1e-3) * 3600.0,
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => (x / 1e3) * 3600.0,
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => (x / 1e6) * 3600.0,
+            ElectricPotentialChangeRateUnit::VoltPerSecond => self.0,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => self.0 * T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => self.0 * T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond => self.0 / T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond => self.0 / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => self.0 / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => self.0,
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => {
+                self.0 / T::from_f64(1000.0)
+            }
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => self.0 / T::from_f64(1e9),
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => self.0 / T::from_f64(1e12),
+            ElectricPotentialChangeRateUnit::VoltPerMinute => self.0 * T::from_f64(60.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => self.0 * T::from_f64(6e7),
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => self.0 * T::from_f64(60000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
+                self.0 / T::from_f64(16.666666666666668)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
+                self.0 / T::from_f64(16666.666666666668)
+            }
+            ElectricPotentialChangeRateUnit::VoltPerHour => self.0 * T::from_f64(3600.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => self.0 * T::from_f64(3.6e9),
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => self.0 * T::from_f64(3600000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
+                self.0 / T::from_f64(0.2777777777777778)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
+                self.0 / T::from_f64(277.77777777777777)
+            }
         }
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerSecond (`V/s`).
     #[inline]
-    pub fn from_volts_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_volts_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in VoltsPerSecond (`V/s`).
     #[inline]
-    pub fn as_volts_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_volts_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_volts_per_second`].
     #[inline]
-    pub fn as_volt_per_second(self) -> Num {
+    pub fn as_volt_per_second(self) -> T {
         self.as_volts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerSecond (`µV/s`).
     #[inline]
-    pub fn from_microvolts_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microvolts_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrovoltsPerSecond (`µV/s`).
     #[inline]
-    pub fn as_microvolts_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microvolts_per_second(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microvolts_per_second`].
     #[inline]
-    pub fn as_microvolt_per_second(self) -> Num {
+    pub fn as_microvolt_per_second(self) -> T {
         self.as_microvolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerSecond (`mV/s`).
     #[inline]
-    pub fn from_millivolts_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millivolts_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillivoltsPerSecond (`mV/s`).
     #[inline]
-    pub fn as_millivolts_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millivolts_per_second(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millivolts_per_second`].
     #[inline]
-    pub fn as_millivolt_per_second(self) -> Num {
+    pub fn as_millivolt_per_second(self) -> T {
         self.as_millivolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerSecond (`kV/s`).
     #[inline]
-    pub fn from_kilovolts_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilovolts_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilovoltsPerSecond (`kV/s`).
     #[inline]
-    pub fn as_kilovolts_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilovolts_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilovolts_per_second`].
     #[inline]
-    pub fn as_kilovolt_per_second(self) -> Num {
+    pub fn as_kilovolt_per_second(self) -> T {
         self.as_kilovolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerSecond (`MV/s`).
     #[inline]
-    pub fn from_megavolts_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megavolts_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegavoltsPerSecond (`MV/s`).
     #[inline]
-    pub fn as_megavolts_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megavolts_per_second(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megavolts_per_second`].
     #[inline]
-    pub fn as_megavolt_per_second(self) -> Num {
+    pub fn as_megavolt_per_second(self) -> T {
         self.as_megavolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMicrosecond (`V/μs`).
     #[inline]
-    pub fn from_volts_per_microsecond(value: Num) -> Self {
-        let x = value;
-        Self(x * 1E6)
+    pub fn from_volts_per_microsecond(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in VoltsPerMicrosecond (`V/μs`).
     #[inline]
-    pub fn as_volts_per_microsecond(self) -> Num {
-        let x = self.0;
-        x / 1E6
+    pub fn as_volts_per_microsecond(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_volts_per_microsecond`].
     #[inline]
-    pub fn as_volt_per_microsecond(self) -> Num {
+    pub fn as_volt_per_microsecond(self) -> T {
         self.as_volts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMicrosecond (`µV/μs`).
     #[inline]
-    pub fn from_microvolts_per_microsecond(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 1E6)
+    pub fn from_microvolts_per_microsecond(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MicrovoltsPerMicrosecond (`µV/μs`).
     #[inline]
-    pub fn as_microvolts_per_microsecond(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 1E6
+    pub fn as_microvolts_per_microsecond(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_microvolts_per_microsecond`].
     #[inline]
-    pub fn as_microvolt_per_microsecond(self) -> Num {
+    pub fn as_microvolt_per_microsecond(self) -> T {
         self.as_microvolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMicrosecond (`mV/μs`).
     #[inline]
-    pub fn from_millivolts_per_microsecond(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1E6)
+    pub fn from_millivolts_per_microsecond(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillivoltsPerMicrosecond (`mV/μs`).
     #[inline]
-    pub fn as_millivolts_per_microsecond(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1E6
+    pub fn as_millivolts_per_microsecond(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millivolts_per_microsecond`].
     #[inline]
-    pub fn as_millivolt_per_microsecond(self) -> Num {
+    pub fn as_millivolt_per_microsecond(self) -> T {
         self.as_millivolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMicrosecond (`kV/μs`).
     #[inline]
-    pub fn from_kilovolts_per_microsecond(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1E6)
+    pub fn from_kilovolts_per_microsecond(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in KilovoltsPerMicrosecond (`kV/μs`).
     #[inline]
-    pub fn as_kilovolts_per_microsecond(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1E6
+    pub fn as_kilovolts_per_microsecond(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_kilovolts_per_microsecond`].
     #[inline]
-    pub fn as_kilovolt_per_microsecond(self) -> Num {
+    pub fn as_kilovolt_per_microsecond(self) -> T {
         self.as_kilovolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMicrosecond (`MV/μs`).
     #[inline]
-    pub fn from_megavolts_per_microsecond(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1E6)
+    pub fn from_megavolts_per_microsecond(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in MegavoltsPerMicrosecond (`MV/μs`).
     #[inline]
-    pub fn as_megavolts_per_microsecond(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1E6
+    pub fn as_megavolts_per_microsecond(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_megavolts_per_microsecond`].
     #[inline]
-    pub fn as_megavolt_per_microsecond(self) -> Num {
+    pub fn as_megavolt_per_microsecond(self) -> T {
         self.as_megavolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMinute (`V/min`).
     #[inline]
-    pub fn from_volts_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_volts_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in VoltsPerMinute (`V/min`).
     #[inline]
-    pub fn as_volts_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_volts_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_volts_per_minute`].
     #[inline]
-    pub fn as_volt_per_minute(self) -> Num {
+    pub fn as_volt_per_minute(self) -> T {
         self.as_volts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMinute (`µV/min`).
     #[inline]
-    pub fn from_microvolts_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 60.0)
+    pub fn from_microvolts_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(6e7))
     }
 
     /// Returns the value expressed in MicrovoltsPerMinute (`µV/min`).
     #[inline]
-    pub fn as_microvolts_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 60.0
+    pub fn as_microvolts_per_minute(self) -> T {
+        self.0 * T::from_f64(6e7)
     }
 
     /// Alias for [`Self::as_microvolts_per_minute`].
     #[inline]
-    pub fn as_microvolt_per_minute(self) -> Num {
+    pub fn as_microvolt_per_minute(self) -> T {
         self.as_microvolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMinute (`mV/min`).
     #[inline]
-    pub fn from_millivolts_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 60.0)
+    pub fn from_millivolts_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60000.0))
     }
 
     /// Returns the value expressed in MillivoltsPerMinute (`mV/min`).
     #[inline]
-    pub fn as_millivolts_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 60.0
+    pub fn as_millivolts_per_minute(self) -> T {
+        self.0 * T::from_f64(60000.0)
     }
 
     /// Alias for [`Self::as_millivolts_per_minute`].
     #[inline]
-    pub fn as_millivolt_per_minute(self) -> Num {
+    pub fn as_millivolt_per_minute(self) -> T {
         self.as_millivolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMinute (`kV/min`).
     #[inline]
-    pub fn from_kilovolts_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 60.0)
+    pub fn from_kilovolts_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16.666666666666668))
     }
 
     /// Returns the value expressed in KilovoltsPerMinute (`kV/min`).
     #[inline]
-    pub fn as_kilovolts_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 60.0
+    pub fn as_kilovolts_per_minute(self) -> T {
+        self.0 / T::from_f64(16.666666666666668)
     }
 
     /// Alias for [`Self::as_kilovolts_per_minute`].
     #[inline]
-    pub fn as_kilovolt_per_minute(self) -> Num {
+    pub fn as_kilovolt_per_minute(self) -> T {
         self.as_kilovolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMinute (`MV/min`).
     #[inline]
-    pub fn from_megavolts_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 60.0)
+    pub fn from_megavolts_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16666.666666666668))
     }
 
     /// Returns the value expressed in MegavoltsPerMinute (`MV/min`).
     #[inline]
-    pub fn as_megavolts_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 60.0
+    pub fn as_megavolts_per_minute(self) -> T {
+        self.0 / T::from_f64(16666.666666666668)
     }
 
     /// Alias for [`Self::as_megavolts_per_minute`].
     #[inline]
-    pub fn as_megavolt_per_minute(self) -> Num {
+    pub fn as_megavolt_per_minute(self) -> T {
         self.as_megavolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerHour (`V/h`).
     #[inline]
-    pub fn from_volts_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_volts_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in VoltsPerHour (`V/h`).
     #[inline]
-    pub fn as_volts_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_volts_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_volts_per_hour`].
     #[inline]
-    pub fn as_volt_per_hour(self) -> Num {
+    pub fn as_volt_per_hour(self) -> T {
         self.as_volts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerHour (`µV/h`).
     #[inline]
-    pub fn from_microvolts_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 3600.0)
+    pub fn from_microvolts_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3.6e9))
     }
 
     /// Returns the value expressed in MicrovoltsPerHour (`µV/h`).
     #[inline]
-    pub fn as_microvolts_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 3600.0
+    pub fn as_microvolts_per_hour(self) -> T {
+        self.0 * T::from_f64(3.6e9)
     }
 
     /// Alias for [`Self::as_microvolts_per_hour`].
     #[inline]
-    pub fn as_microvolt_per_hour(self) -> Num {
+    pub fn as_microvolt_per_hour(self) -> T {
         self.as_microvolts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerHour (`mV/h`).
     #[inline]
-    pub fn from_millivolts_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 3600.0)
+    pub fn from_millivolts_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in MillivoltsPerHour (`mV/h`).
     #[inline]
-    pub fn as_millivolts_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 3600.0
+    pub fn as_millivolts_per_hour(self) -> T {
+        self.0 * T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_millivolts_per_hour`].
     #[inline]
-    pub fn as_millivolt_per_hour(self) -> Num {
+    pub fn as_millivolt_per_hour(self) -> T {
         self.as_millivolts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerHour (`kV/h`).
     #[inline]
-    pub fn from_kilovolts_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 3600.0)
+    pub fn from_kilovolts_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2777777777777778))
     }
 
     /// Returns the value expressed in KilovoltsPerHour (`kV/h`).
     #[inline]
-    pub fn as_kilovolts_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 3600.0
+    pub fn as_kilovolts_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2777777777777778)
     }
 
     /// Alias for [`Self::as_kilovolts_per_hour`].
     #[inline]
-    pub fn as_kilovolt_per_hour(self) -> Num {
+    pub fn as_kilovolt_per_hour(self) -> T {
         self.as_kilovolts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerHour (`MV/h`).
     #[inline]
-    pub fn from_megavolts_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 3600.0)
+    pub fn from_megavolts_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(277.77777777777777))
     }
 
     /// Returns the value expressed in MegavoltsPerHour (`MV/h`).
     #[inline]
-    pub fn as_megavolts_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 3600.0
+    pub fn as_megavolts_per_hour(self) -> T {
+        self.0 / T::from_f64(277.77777777777777)
     }
 
     /// Alias for [`Self::as_megavolts_per_hour`].
     #[inline]
-    pub fn as_megavolt_per_hour(self) -> Num {
+    pub fn as_megavolt_per_hour(self) -> T {
         self.as_megavolts_per_hour()
     }
-}
-
-impl crate::Quantity for ElectricPotentialChangeRate {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricPotentialChangeRate {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricPotentialChangeRate {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricPotentialChangeRate {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricPotentialChangeRate {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricPotentialChangeRate> for Num {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn mul(self, rhs: ElectricPotentialChangeRate) -> ElectricPotentialChangeRate {
-        ElectricPotentialChangeRate(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricPotentialChangeRate {
-    type Output = ElectricPotentialChangeRate;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricPotentialChangeRate {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricPotentialChangeRate {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricPotentialChangeRateUnit::VoltPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricPotentialChangeRate`].
-#[derive(Debug)]
-pub struct ParseElectricPotentialChangeRateError(String);
-
-impl fmt::Display for ParseElectricPotentialChangeRateError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "cannot parse {:?} as ElectricPotentialChangeRate",
-            self.0
-        )
-    }
-}
-
-impl std::error::Error for ParseElectricPotentialChangeRateError {}
-
-impl FromStr for ElectricPotentialChangeRate {
-    type Err = ParseElectricPotentialChangeRateError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricPotentialChangeRateError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricPotentialChangeRateUnit)] = &[
-            (
-                "µV/min",
-                ElectricPotentialChangeRateUnit::MicrovoltPerMinute,
-            ),
-            (
-                "µV/μs",
-                ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond,
-            ),
-            ("MV/min", ElectricPotentialChangeRateUnit::MegavoltPerMinute),
-            (
-                "MV/μs",
-                ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond,
-            ),
-            ("kV/min", ElectricPotentialChangeRateUnit::KilovoltPerMinute),
-            (
-                "kV/μs",
-                ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond,
-            ),
-            (
-                "mV/min",
-                ElectricPotentialChangeRateUnit::MillivoltPerMinute,
-            ),
-            (
-                "mV/μs",
-                ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond,
-            ),
-            ("V/min", ElectricPotentialChangeRateUnit::VoltPerMinute),
-            ("V/μs", ElectricPotentialChangeRateUnit::VoltPerMicrosecond),
-            ("µV/h", ElectricPotentialChangeRateUnit::MicrovoltPerHour),
-            ("µV/s", ElectricPotentialChangeRateUnit::MicrovoltPerSecond),
-            ("MV/h", ElectricPotentialChangeRateUnit::MegavoltPerHour),
-            ("MV/s", ElectricPotentialChangeRateUnit::MegavoltPerSecond),
-            ("kV/h", ElectricPotentialChangeRateUnit::KilovoltPerHour),
-            ("kV/s", ElectricPotentialChangeRateUnit::KilovoltPerSecond),
-            ("mV/h", ElectricPotentialChangeRateUnit::MillivoltPerHour),
-            ("mV/s", ElectricPotentialChangeRateUnit::MillivoltPerSecond),
-            ("V/h", ElectricPotentialChangeRateUnit::VoltPerHour),
-            ("V/s", ElectricPotentialChangeRateUnit::VoltPerSecond),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricPotentialChangeRateError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

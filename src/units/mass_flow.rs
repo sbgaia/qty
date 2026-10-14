@@ -2,27 +2,35 @@
 // Source: data/quantities/MassFlow.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Mass flow is the ratio of the mass change to the time during which the change occurred (value of mass changes per unit time).
 ///
-/// The internal value is stored in `GramPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MassFlow(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MassFlowUnit::GramPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct MassFlow<T = f64>(T);
+
+quantity!(MassFlow, MassFlowUnit, GramPerSecond);
 
 /// Unit variants for [`MassFlow`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MassFlowUnit {
     GramPerSecond,
     NanogramPerSecond,
@@ -99,7 +107,7 @@ impl MassFlowUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::GramPerSecond => "g/s",
             Self::NanogramPerSecond => "ng/s",
@@ -137,9 +145,9 @@ impl MassFlowUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::GramPerSecond => &["g/s", "g/S"],
             Self::NanogramPerSecond => &["ng/s"],
@@ -178,916 +186,727 @@ impl MassFlowUnit {
     }
 }
 
-impl MassFlow {
+impl core::str::FromStr for MassFlowUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "g/s" => Ok(Self::GramPerSecond),
+            "g/S" => Ok(Self::GramPerSecond),
+            "ng/s" => Ok(Self::NanogramPerSecond),
+            "µg/s" => Ok(Self::MicrogramPerSecond),
+            "mg/s" => Ok(Self::MilligramPerSecond),
+            "cg/s" => Ok(Self::CentigramPerSecond),
+            "dg/s" => Ok(Self::DecigramPerSecond),
+            "dag/s" => Ok(Self::DecagramPerSecond),
+            "hg/s" => Ok(Self::HectogramPerSecond),
+            "kg/s" => Ok(Self::KilogramPerSecond),
+            "g/d" => Ok(Self::GramPerDay),
+            "ng/d" => Ok(Self::NanogramPerDay),
+            "µg/d" => Ok(Self::MicrogramPerDay),
+            "mg/d" => Ok(Self::MilligramPerDay),
+            "cg/d" => Ok(Self::CentigramPerDay),
+            "dg/d" => Ok(Self::DecigramPerDay),
+            "dag/d" => Ok(Self::DecagramPerDay),
+            "hg/d" => Ok(Self::HectogramPerDay),
+            "kg/d" => Ok(Self::KilogramPerDay),
+            "Mg/d" => Ok(Self::MegagramPerDay),
+            "g/h" => Ok(Self::GramPerHour),
+            "kg/h" => Ok(Self::KilogramPerHour),
+            "kg/min" => Ok(Self::KilogramPerMinute),
+            "t/h" => Ok(Self::TonnePerHour),
+            "lb/d" => Ok(Self::PoundPerDay),
+            "Mlb/d" => Ok(Self::MegapoundPerDay),
+            "lb/h" => Ok(Self::PoundPerHour),
+            "Mlb/h" => Ok(Self::MegapoundPerHour),
+            "lb/min" => Ok(Self::PoundPerMinute),
+            "Mlb/min" => Ok(Self::MegapoundPerMinute),
+            "lb/s" => Ok(Self::PoundPerSecond),
+            "Mlb/s" => Ok(Self::MegapoundPerSecond),
+            "t/d" => Ok(Self::TonnePerDay),
+            "short tn/h" => Ok(Self::ShortTonPerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> MassFlow<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MassFlowUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MassFlowUnit) -> Self {
         Self(match unit {
-            MassFlowUnit::GramPerSecond => x,
-            MassFlowUnit::NanogramPerSecond => (x * 1e-9),
-            MassFlowUnit::MicrogramPerSecond => (x * 1e-6),
-            MassFlowUnit::MilligramPerSecond => (x * 1e-3),
-            MassFlowUnit::CentigramPerSecond => (x * 1e-2),
-            MassFlowUnit::DecigramPerSecond => (x * 1e-1),
-            MassFlowUnit::DecagramPerSecond => (x * 1e1),
-            MassFlowUnit::HectogramPerSecond => (x * 1e2),
-            MassFlowUnit::KilogramPerSecond => (x * 1e3),
-            MassFlowUnit::GramPerDay => x / 86400.0,
-            MassFlowUnit::NanogramPerDay => (x * 1e-9) / 86400.0,
-            MassFlowUnit::MicrogramPerDay => (x * 1e-6) / 86400.0,
-            MassFlowUnit::MilligramPerDay => (x * 1e-3) / 86400.0,
-            MassFlowUnit::CentigramPerDay => (x * 1e-2) / 86400.0,
-            MassFlowUnit::DecigramPerDay => (x * 1e-1) / 86400.0,
-            MassFlowUnit::DecagramPerDay => (x * 1e1) / 86400.0,
-            MassFlowUnit::HectogramPerDay => (x * 1e2) / 86400.0,
-            MassFlowUnit::KilogramPerDay => (x * 1e3) / 86400.0,
-            MassFlowUnit::MegagramPerDay => (x * 1e6) / 86400.0,
-            MassFlowUnit::GramPerHour => x / 3600.0,
-            MassFlowUnit::KilogramPerHour => x / 3.6,
-            MassFlowUnit::KilogramPerMinute => x / 0.06,
-            MassFlowUnit::TonnePerHour => x * 1000.0 / 3.6,
-            MassFlowUnit::PoundPerDay => x * 453.59237 / 86400.0,
-            MassFlowUnit::MegapoundPerDay => (x * 1e6) * 453.59237 / 86400.0,
-            MassFlowUnit::PoundPerHour => x * 453.59237 / 3600.0,
-            MassFlowUnit::MegapoundPerHour => (x * 1e6) * 453.59237 / 3600.0,
-            MassFlowUnit::PoundPerMinute => x * 453.59237 / 60.0,
-            MassFlowUnit::MegapoundPerMinute => (x * 1e6) * 453.59237 / 60.0,
-            MassFlowUnit::PoundPerSecond => x * 453.59237,
-            MassFlowUnit::MegapoundPerSecond => (x * 1e6) * 453.59237,
-            MassFlowUnit::TonnePerDay => x / 0.0864000,
-            MassFlowUnit::ShortTonPerHour => x * 907.18474 / 3.6,
+            MassFlowUnit::GramPerSecond => value,
+            MassFlowUnit::NanogramPerSecond => value / T::from_f64(1e9),
+            MassFlowUnit::MicrogramPerSecond => value / T::from_f64(1000000.0),
+            MassFlowUnit::MilligramPerSecond => value / T::from_f64(1000.0),
+            MassFlowUnit::CentigramPerSecond => value / T::from_f64(100.0),
+            MassFlowUnit::DecigramPerSecond => value / T::from_f64(10.0),
+            MassFlowUnit::DecagramPerSecond => value * T::from_f64(10.0),
+            MassFlowUnit::HectogramPerSecond => value * T::from_f64(100.0),
+            MassFlowUnit::KilogramPerSecond => value * T::from_f64(1000.0),
+            MassFlowUnit::GramPerDay => value / T::from_f64(86400.0),
+            MassFlowUnit::NanogramPerDay => value / T::from_f64(8.64e13),
+            MassFlowUnit::MicrogramPerDay => value / T::from_f64(8.64e10),
+            MassFlowUnit::MilligramPerDay => value / T::from_f64(8.64e7),
+            MassFlowUnit::CentigramPerDay => value / T::from_f64(8640000.0),
+            MassFlowUnit::DecigramPerDay => value / T::from_f64(864000.0),
+            MassFlowUnit::DecagramPerDay => value / T::from_f64(8640.0),
+            MassFlowUnit::HectogramPerDay => value / T::from_f64(864.0),
+            MassFlowUnit::KilogramPerDay => value * T::from_f64(0.011574074074074073),
+            MassFlowUnit::MegagramPerDay => value * T::from_f64(11.574074074074074),
+            MassFlowUnit::GramPerHour => value / T::from_f64(3600.0),
+            MassFlowUnit::KilogramPerHour => value * T::from_f64(0.2777777777777778),
+            MassFlowUnit::KilogramPerMinute => value * T::from_f64(16.666666666666668),
+            MassFlowUnit::TonnePerHour => value * T::from_f64(277.77777777777777),
+            MassFlowUnit::PoundPerDay => value * T::from_f64(0.005249911689814815),
+            MassFlowUnit::MegapoundPerDay => value * T::from_f64(5249.911689814815),
+            MassFlowUnit::PoundPerHour => value * T::from_f64(0.12599788055555555),
+            MassFlowUnit::MegapoundPerHour => value * T::from_f64(125997.88055555556),
+            MassFlowUnit::PoundPerMinute => value * T::from_f64(7.559872833333333),
+            MassFlowUnit::MegapoundPerMinute => value * T::from_f64(7559872.833333333),
+            MassFlowUnit::PoundPerSecond => value * T::from_f64(453.59237),
+            MassFlowUnit::MegapoundPerSecond => value * T::from_f64(4.5359237e8),
+            MassFlowUnit::TonnePerDay => value * T::from_f64(11.574074074074074),
+            MassFlowUnit::ShortTonPerHour => value * T::from_f64(251.9957611111111),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MassFlowUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MassFlowUnit) -> T {
         match unit {
-            MassFlowUnit::GramPerSecond => x,
-            MassFlowUnit::NanogramPerSecond => (x / 1e-9),
-            MassFlowUnit::MicrogramPerSecond => (x / 1e-6),
-            MassFlowUnit::MilligramPerSecond => (x / 1e-3),
-            MassFlowUnit::CentigramPerSecond => (x / 1e-2),
-            MassFlowUnit::DecigramPerSecond => (x / 1e-1),
-            MassFlowUnit::DecagramPerSecond => (x / 1e1),
-            MassFlowUnit::HectogramPerSecond => (x / 1e2),
-            MassFlowUnit::KilogramPerSecond => (x / 1e3),
-            MassFlowUnit::GramPerDay => x * 86400.0,
-            MassFlowUnit::NanogramPerDay => (x / 1e-9) * 86400.0,
-            MassFlowUnit::MicrogramPerDay => (x / 1e-6) * 86400.0,
-            MassFlowUnit::MilligramPerDay => (x / 1e-3) * 86400.0,
-            MassFlowUnit::CentigramPerDay => (x / 1e-2) * 86400.0,
-            MassFlowUnit::DecigramPerDay => (x / 1e-1) * 86400.0,
-            MassFlowUnit::DecagramPerDay => (x / 1e1) * 86400.0,
-            MassFlowUnit::HectogramPerDay => (x / 1e2) * 86400.0,
-            MassFlowUnit::KilogramPerDay => (x / 1e3) * 86400.0,
-            MassFlowUnit::MegagramPerDay => (x / 1e6) * 86400.0,
-            MassFlowUnit::GramPerHour => x * 3600.0,
-            MassFlowUnit::KilogramPerHour => x * 3.6,
-            MassFlowUnit::KilogramPerMinute => x * 0.06,
-            MassFlowUnit::TonnePerHour => x * 3.6 / 1000.0,
-            MassFlowUnit::PoundPerDay => x * 86400.0 / 453.59237,
-            MassFlowUnit::MegapoundPerDay => (x / 1e6) * 86400.0 / 453.59237,
-            MassFlowUnit::PoundPerHour => x * 3600.0 / 453.59237,
-            MassFlowUnit::MegapoundPerHour => (x / 1e6) * 3600.0 / 453.59237,
-            MassFlowUnit::PoundPerMinute => x * 60.0 / 453.59237,
-            MassFlowUnit::MegapoundPerMinute => (x / 1e6) * 60.0 / 453.59237,
-            MassFlowUnit::PoundPerSecond => x / 453.59237,
-            MassFlowUnit::MegapoundPerSecond => (x / 1e6) / 453.59237,
-            MassFlowUnit::TonnePerDay => x * 0.0864000,
-            MassFlowUnit::ShortTonPerHour => x * 3.6 / 907.18474,
+            MassFlowUnit::GramPerSecond => self.0,
+            MassFlowUnit::NanogramPerSecond => self.0 * T::from_f64(1e9),
+            MassFlowUnit::MicrogramPerSecond => self.0 * T::from_f64(1000000.0),
+            MassFlowUnit::MilligramPerSecond => self.0 * T::from_f64(1000.0),
+            MassFlowUnit::CentigramPerSecond => self.0 * T::from_f64(100.0),
+            MassFlowUnit::DecigramPerSecond => self.0 * T::from_f64(10.0),
+            MassFlowUnit::DecagramPerSecond => self.0 / T::from_f64(10.0),
+            MassFlowUnit::HectogramPerSecond => self.0 / T::from_f64(100.0),
+            MassFlowUnit::KilogramPerSecond => self.0 / T::from_f64(1000.0),
+            MassFlowUnit::GramPerDay => self.0 * T::from_f64(86400.0),
+            MassFlowUnit::NanogramPerDay => self.0 * T::from_f64(8.64e13),
+            MassFlowUnit::MicrogramPerDay => self.0 * T::from_f64(8.64e10),
+            MassFlowUnit::MilligramPerDay => self.0 * T::from_f64(8.64e7),
+            MassFlowUnit::CentigramPerDay => self.0 * T::from_f64(8640000.0),
+            MassFlowUnit::DecigramPerDay => self.0 * T::from_f64(864000.0),
+            MassFlowUnit::DecagramPerDay => self.0 * T::from_f64(8640.0),
+            MassFlowUnit::HectogramPerDay => self.0 * T::from_f64(864.0),
+            MassFlowUnit::KilogramPerDay => self.0 / T::from_f64(0.011574074074074073),
+            MassFlowUnit::MegagramPerDay => self.0 / T::from_f64(11.574074074074074),
+            MassFlowUnit::GramPerHour => self.0 * T::from_f64(3600.0),
+            MassFlowUnit::KilogramPerHour => self.0 / T::from_f64(0.2777777777777778),
+            MassFlowUnit::KilogramPerMinute => self.0 / T::from_f64(16.666666666666668),
+            MassFlowUnit::TonnePerHour => self.0 / T::from_f64(277.77777777777777),
+            MassFlowUnit::PoundPerDay => self.0 / T::from_f64(0.005249911689814815),
+            MassFlowUnit::MegapoundPerDay => self.0 / T::from_f64(5249.911689814815),
+            MassFlowUnit::PoundPerHour => self.0 / T::from_f64(0.12599788055555555),
+            MassFlowUnit::MegapoundPerHour => self.0 / T::from_f64(125997.88055555556),
+            MassFlowUnit::PoundPerMinute => self.0 / T::from_f64(7.559872833333333),
+            MassFlowUnit::MegapoundPerMinute => self.0 / T::from_f64(7559872.833333333),
+            MassFlowUnit::PoundPerSecond => self.0 / T::from_f64(453.59237),
+            MassFlowUnit::MegapoundPerSecond => self.0 / T::from_f64(4.5359237e8),
+            MassFlowUnit::TonnePerDay => self.0 / T::from_f64(11.574074074074074),
+            MassFlowUnit::ShortTonPerHour => self.0 / T::from_f64(251.9957611111111),
         }
     }
 
     /// Creates a [`MassFlow`] from a value in GramsPerSecond (`g/s`).
     #[inline]
-    pub fn from_grams_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_grams_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in GramsPerSecond (`g/s`).
     #[inline]
-    pub fn as_grams_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_grams_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_grams_per_second`].
     #[inline]
-    pub fn as_gram_per_second(self) -> Num {
+    pub fn as_gram_per_second(self) -> T {
         self.as_grams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in NanogramsPerSecond (`ng/s`).
     #[inline]
-    pub fn from_nanograms_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanograms_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanogramsPerSecond (`ng/s`).
     #[inline]
-    pub fn as_nanograms_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanograms_per_second(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanograms_per_second`].
     #[inline]
-    pub fn as_nanogram_per_second(self) -> Num {
+    pub fn as_nanogram_per_second(self) -> T {
         self.as_nanograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in MicrogramsPerSecond (`µg/s`).
     #[inline]
-    pub fn from_micrograms_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micrograms_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrogramsPerSecond (`µg/s`).
     #[inline]
-    pub fn as_micrograms_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micrograms_per_second(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micrograms_per_second`].
     #[inline]
-    pub fn as_microgram_per_second(self) -> Num {
+    pub fn as_microgram_per_second(self) -> T {
         self.as_micrograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in MilligramsPerSecond (`mg/s`).
     #[inline]
-    pub fn from_milligrams_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milligrams_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilligramsPerSecond (`mg/s`).
     #[inline]
-    pub fn as_milligrams_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milligrams_per_second(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_second`].
     #[inline]
-    pub fn as_milligram_per_second(self) -> Num {
+    pub fn as_milligram_per_second(self) -> T {
         self.as_milligrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in CentigramsPerSecond (`cg/s`).
     #[inline]
-    pub fn from_centigrams_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centigrams_per_second(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentigramsPerSecond (`cg/s`).
     #[inline]
-    pub fn as_centigrams_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centigrams_per_second(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_second`].
     #[inline]
-    pub fn as_centigram_per_second(self) -> Num {
+    pub fn as_centigram_per_second(self) -> T {
         self.as_centigrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in DecigramsPerSecond (`dg/s`).
     #[inline]
-    pub fn from_decigrams_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decigrams_per_second(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecigramsPerSecond (`dg/s`).
     #[inline]
-    pub fn as_decigrams_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decigrams_per_second(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decigrams_per_second`].
     #[inline]
-    pub fn as_decigram_per_second(self) -> Num {
+    pub fn as_decigram_per_second(self) -> T {
         self.as_decigrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in DecagramsPerSecond (`dag/s`).
     #[inline]
-    pub fn from_decagrams_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decagrams_per_second(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecagramsPerSecond (`dag/s`).
     #[inline]
-    pub fn as_decagrams_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decagrams_per_second(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decagrams_per_second`].
     #[inline]
-    pub fn as_decagram_per_second(self) -> Num {
+    pub fn as_decagram_per_second(self) -> T {
         self.as_decagrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in HectogramsPerSecond (`hg/s`).
     #[inline]
-    pub fn from_hectograms_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2))
+    pub fn from_hectograms_per_second(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in HectogramsPerSecond (`hg/s`).
     #[inline]
-    pub fn as_hectograms_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e2)
+    pub fn as_hectograms_per_second(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_hectograms_per_second`].
     #[inline]
-    pub fn as_hectogram_per_second(self) -> Num {
+    pub fn as_hectogram_per_second(self) -> T {
         self.as_hectograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerSecond (`kg/s`).
     #[inline]
-    pub fn from_kilograms_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilograms_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilogramsPerSecond (`kg/s`).
     #[inline]
-    pub fn as_kilograms_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilograms_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilograms_per_second`].
     #[inline]
-    pub fn as_kilogram_per_second(self) -> Num {
+    pub fn as_kilogram_per_second(self) -> T {
         self.as_kilograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in GramsPerDay (`g/d`).
     #[inline]
-    pub fn from_grams_per_day(value: Num) -> Self {
-        let x = value;
-        Self(x / 86400.0)
+    pub fn from_grams_per_day(value: T) -> Self {
+        Self(value / T::from_f64(86400.0))
     }
 
     /// Returns the value expressed in GramsPerDay (`g/d`).
     #[inline]
-    pub fn as_grams_per_day(self) -> Num {
-        let x = self.0;
-        x * 86400.0
+    pub fn as_grams_per_day(self) -> T {
+        self.0 * T::from_f64(86400.0)
     }
 
     /// Alias for [`Self::as_grams_per_day`].
     #[inline]
-    pub fn as_gram_per_day(self) -> Num {
+    pub fn as_gram_per_day(self) -> T {
         self.as_grams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in NanogramsPerDay (`ng/d`).
     #[inline]
-    pub fn from_nanograms_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 86400.0)
+    pub fn from_nanograms_per_day(value: T) -> Self {
+        Self(value / T::from_f64(8.64e13))
     }
 
     /// Returns the value expressed in NanogramsPerDay (`ng/d`).
     #[inline]
-    pub fn as_nanograms_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 86400.0
+    pub fn as_nanograms_per_day(self) -> T {
+        self.0 * T::from_f64(8.64e13)
     }
 
     /// Alias for [`Self::as_nanograms_per_day`].
     #[inline]
-    pub fn as_nanogram_per_day(self) -> Num {
+    pub fn as_nanogram_per_day(self) -> T {
         self.as_nanograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MicrogramsPerDay (`µg/d`).
     #[inline]
-    pub fn from_micrograms_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 86400.0)
+    pub fn from_micrograms_per_day(value: T) -> Self {
+        Self(value / T::from_f64(8.64e10))
     }
 
     /// Returns the value expressed in MicrogramsPerDay (`µg/d`).
     #[inline]
-    pub fn as_micrograms_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 86400.0
+    pub fn as_micrograms_per_day(self) -> T {
+        self.0 * T::from_f64(8.64e10)
     }
 
     /// Alias for [`Self::as_micrograms_per_day`].
     #[inline]
-    pub fn as_microgram_per_day(self) -> Num {
+    pub fn as_microgram_per_day(self) -> T {
         self.as_micrograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MilligramsPerDay (`mg/d`).
     #[inline]
-    pub fn from_milligrams_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 86400.0)
+    pub fn from_milligrams_per_day(value: T) -> Self {
+        Self(value / T::from_f64(8.64e7))
     }
 
     /// Returns the value expressed in MilligramsPerDay (`mg/d`).
     #[inline]
-    pub fn as_milligrams_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 86400.0
+    pub fn as_milligrams_per_day(self) -> T {
+        self.0 * T::from_f64(8.64e7)
     }
 
     /// Alias for [`Self::as_milligrams_per_day`].
     #[inline]
-    pub fn as_milligram_per_day(self) -> Num {
+    pub fn as_milligram_per_day(self) -> T {
         self.as_milligrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in CentigramsPerDay (`cg/d`).
     #[inline]
-    pub fn from_centigrams_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 86400.0)
+    pub fn from_centigrams_per_day(value: T) -> Self {
+        Self(value / T::from_f64(8640000.0))
     }
 
     /// Returns the value expressed in CentigramsPerDay (`cg/d`).
     #[inline]
-    pub fn as_centigrams_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 86400.0
+    pub fn as_centigrams_per_day(self) -> T {
+        self.0 * T::from_f64(8640000.0)
     }
 
     /// Alias for [`Self::as_centigrams_per_day`].
     #[inline]
-    pub fn as_centigram_per_day(self) -> Num {
+    pub fn as_centigram_per_day(self) -> T {
         self.as_centigrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in DecigramsPerDay (`dg/d`).
     #[inline]
-    pub fn from_decigrams_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 86400.0)
+    pub fn from_decigrams_per_day(value: T) -> Self {
+        Self(value / T::from_f64(864000.0))
     }
 
     /// Returns the value expressed in DecigramsPerDay (`dg/d`).
     #[inline]
-    pub fn as_decigrams_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 86400.0
+    pub fn as_decigrams_per_day(self) -> T {
+        self.0 * T::from_f64(864000.0)
     }
 
     /// Alias for [`Self::as_decigrams_per_day`].
     #[inline]
-    pub fn as_decigram_per_day(self) -> Num {
+    pub fn as_decigram_per_day(self) -> T {
         self.as_decigrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in DecagramsPerDay (`dag/d`).
     #[inline]
-    pub fn from_decagrams_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) / 86400.0)
+    pub fn from_decagrams_per_day(value: T) -> Self {
+        Self(value / T::from_f64(8640.0))
     }
 
     /// Returns the value expressed in DecagramsPerDay (`dag/d`).
     #[inline]
-    pub fn as_decagrams_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e1) * 86400.0
+    pub fn as_decagrams_per_day(self) -> T {
+        self.0 * T::from_f64(8640.0)
     }
 
     /// Alias for [`Self::as_decagrams_per_day`].
     #[inline]
-    pub fn as_decagram_per_day(self) -> Num {
+    pub fn as_decagram_per_day(self) -> T {
         self.as_decagrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in HectogramsPerDay (`hg/d`).
     #[inline]
-    pub fn from_hectograms_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2) / 86400.0)
+    pub fn from_hectograms_per_day(value: T) -> Self {
+        Self(value / T::from_f64(864.0))
     }
 
     /// Returns the value expressed in HectogramsPerDay (`hg/d`).
     #[inline]
-    pub fn as_hectograms_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e2) * 86400.0
+    pub fn as_hectograms_per_day(self) -> T {
+        self.0 * T::from_f64(864.0)
     }
 
     /// Alias for [`Self::as_hectograms_per_day`].
     #[inline]
-    pub fn as_hectogram_per_day(self) -> Num {
+    pub fn as_hectogram_per_day(self) -> T {
         self.as_hectograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerDay (`kg/d`).
     #[inline]
-    pub fn from_kilograms_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 86400.0)
+    pub fn from_kilograms_per_day(value: T) -> Self {
+        Self(value * T::from_f64(0.011574074074074073))
     }
 
     /// Returns the value expressed in KilogramsPerDay (`kg/d`).
     #[inline]
-    pub fn as_kilograms_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 86400.0
+    pub fn as_kilograms_per_day(self) -> T {
+        self.0 / T::from_f64(0.011574074074074073)
     }
 
     /// Alias for [`Self::as_kilograms_per_day`].
     #[inline]
-    pub fn as_kilogram_per_day(self) -> Num {
+    pub fn as_kilogram_per_day(self) -> T {
         self.as_kilograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MegagramsPerDay (`Mg/d`).
     #[inline]
-    pub fn from_megagrams_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 86400.0)
+    pub fn from_megagrams_per_day(value: T) -> Self {
+        Self(value * T::from_f64(11.574074074074074))
     }
 
     /// Returns the value expressed in MegagramsPerDay (`Mg/d`).
     #[inline]
-    pub fn as_megagrams_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 86400.0
+    pub fn as_megagrams_per_day(self) -> T {
+        self.0 / T::from_f64(11.574074074074074)
     }
 
     /// Alias for [`Self::as_megagrams_per_day`].
     #[inline]
-    pub fn as_megagram_per_day(self) -> Num {
+    pub fn as_megagram_per_day(self) -> T {
         self.as_megagrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in GramsPerHour (`g/h`).
     #[inline]
-    pub fn from_grams_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_grams_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in GramsPerHour (`g/h`).
     #[inline]
-    pub fn as_grams_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_grams_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_grams_per_hour`].
     #[inline]
-    pub fn as_gram_per_hour(self) -> Num {
+    pub fn as_gram_per_hour(self) -> T {
         self.as_grams_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerHour (`kg/h`).
     #[inline]
-    pub fn from_kilograms_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3.6)
+    pub fn from_kilograms_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2777777777777778))
     }
 
     /// Returns the value expressed in KilogramsPerHour (`kg/h`).
     #[inline]
-    pub fn as_kilograms_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3.6
+    pub fn as_kilograms_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2777777777777778)
     }
 
     /// Alias for [`Self::as_kilograms_per_hour`].
     #[inline]
-    pub fn as_kilogram_per_hour(self) -> Num {
+    pub fn as_kilogram_per_hour(self) -> T {
         self.as_kilograms_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerMinute (`kg/min`).
     #[inline]
-    pub fn from_kilograms_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 0.06)
+    pub fn from_kilograms_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16.666666666666668))
     }
 
     /// Returns the value expressed in KilogramsPerMinute (`kg/min`).
     #[inline]
-    pub fn as_kilograms_per_minute(self) -> Num {
-        let x = self.0;
-        x * 0.06
+    pub fn as_kilograms_per_minute(self) -> T {
+        self.0 / T::from_f64(16.666666666666668)
     }
 
     /// Alias for [`Self::as_kilograms_per_minute`].
     #[inline]
-    pub fn as_kilogram_per_minute(self) -> Num {
+    pub fn as_kilogram_per_minute(self) -> T {
         self.as_kilograms_per_minute()
     }
 
     /// Creates a [`MassFlow`] from a value in TonnesPerHour (`t/h`).
     #[inline]
-    pub fn from_tonnes_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 1000.0 / 3.6)
+    pub fn from_tonnes_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(277.77777777777777))
     }
 
     /// Returns the value expressed in TonnesPerHour (`t/h`).
     #[inline]
-    pub fn as_tonnes_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3.6 / 1000.0
+    pub fn as_tonnes_per_hour(self) -> T {
+        self.0 / T::from_f64(277.77777777777777)
     }
 
     /// Alias for [`Self::as_tonnes_per_hour`].
     #[inline]
-    pub fn as_tonne_per_hour(self) -> Num {
+    pub fn as_tonne_per_hour(self) -> T {
         self.as_tonnes_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in PoundsPerDay (`lb/d`).
     #[inline]
-    pub fn from_pounds_per_day(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237 / 86400.0)
+    pub fn from_pounds_per_day(value: T) -> Self {
+        Self(value * T::from_f64(0.005249911689814815))
     }
 
     /// Returns the value expressed in PoundsPerDay (`lb/d`).
     #[inline]
-    pub fn as_pounds_per_day(self) -> Num {
-        let x = self.0;
-        x * 86400.0 / 453.59237
+    pub fn as_pounds_per_day(self) -> T {
+        self.0 / T::from_f64(0.005249911689814815)
     }
 
     /// Alias for [`Self::as_pounds_per_day`].
     #[inline]
-    pub fn as_pound_per_day(self) -> Num {
+    pub fn as_pound_per_day(self) -> T {
         self.as_pounds_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerDay (`Mlb/d`).
     #[inline]
-    pub fn from_megapounds_per_day(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 453.59237 / 86400.0)
+    pub fn from_megapounds_per_day(value: T) -> Self {
+        Self(value * T::from_f64(5249.911689814815))
     }
 
     /// Returns the value expressed in MegapoundsPerDay (`Mlb/d`).
     #[inline]
-    pub fn as_megapounds_per_day(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 86400.0 / 453.59237
+    pub fn as_megapounds_per_day(self) -> T {
+        self.0 / T::from_f64(5249.911689814815)
     }
 
     /// Alias for [`Self::as_megapounds_per_day`].
     #[inline]
-    pub fn as_megapound_per_day(self) -> Num {
+    pub fn as_megapound_per_day(self) -> T {
         self.as_megapounds_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in PoundsPerHour (`lb/h`).
     #[inline]
-    pub fn from_pounds_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237 / 3600.0)
+    pub fn from_pounds_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.12599788055555555))
     }
 
     /// Returns the value expressed in PoundsPerHour (`lb/h`).
     #[inline]
-    pub fn as_pounds_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0 / 453.59237
+    pub fn as_pounds_per_hour(self) -> T {
+        self.0 / T::from_f64(0.12599788055555555)
     }
 
     /// Alias for [`Self::as_pounds_per_hour`].
     #[inline]
-    pub fn as_pound_per_hour(self) -> Num {
+    pub fn as_pound_per_hour(self) -> T {
         self.as_pounds_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerHour (`Mlb/h`).
     #[inline]
-    pub fn from_megapounds_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 453.59237 / 3600.0)
+    pub fn from_megapounds_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(125997.88055555556))
     }
 
     /// Returns the value expressed in MegapoundsPerHour (`Mlb/h`).
     #[inline]
-    pub fn as_megapounds_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 3600.0 / 453.59237
+    pub fn as_megapounds_per_hour(self) -> T {
+        self.0 / T::from_f64(125997.88055555556)
     }
 
     /// Alias for [`Self::as_megapounds_per_hour`].
     #[inline]
-    pub fn as_megapound_per_hour(self) -> Num {
+    pub fn as_megapound_per_hour(self) -> T {
         self.as_megapounds_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in PoundsPerMinute (`lb/min`).
     #[inline]
-    pub fn from_pounds_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237 / 60.0)
+    pub fn from_pounds_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(7.559872833333333))
     }
 
     /// Returns the value expressed in PoundsPerMinute (`lb/min`).
     #[inline]
-    pub fn as_pounds_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0 / 453.59237
+    pub fn as_pounds_per_minute(self) -> T {
+        self.0 / T::from_f64(7.559872833333333)
     }
 
     /// Alias for [`Self::as_pounds_per_minute`].
     #[inline]
-    pub fn as_pound_per_minute(self) -> Num {
+    pub fn as_pound_per_minute(self) -> T {
         self.as_pounds_per_minute()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerMinute (`Mlb/min`).
     #[inline]
-    pub fn from_megapounds_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 453.59237 / 60.0)
+    pub fn from_megapounds_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(7559872.833333333))
     }
 
     /// Returns the value expressed in MegapoundsPerMinute (`Mlb/min`).
     #[inline]
-    pub fn as_megapounds_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 60.0 / 453.59237
+    pub fn as_megapounds_per_minute(self) -> T {
+        self.0 / T::from_f64(7559872.833333333)
     }
 
     /// Alias for [`Self::as_megapounds_per_minute`].
     #[inline]
-    pub fn as_megapound_per_minute(self) -> Num {
+    pub fn as_megapound_per_minute(self) -> T {
         self.as_megapounds_per_minute()
     }
 
     /// Creates a [`MassFlow`] from a value in PoundsPerSecond (`lb/s`).
     #[inline]
-    pub fn from_pounds_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237)
+    pub fn from_pounds_per_second(value: T) -> Self {
+        Self(value * T::from_f64(453.59237))
     }
 
     /// Returns the value expressed in PoundsPerSecond (`lb/s`).
     #[inline]
-    pub fn as_pounds_per_second(self) -> Num {
-        let x = self.0;
-        x / 453.59237
+    pub fn as_pounds_per_second(self) -> T {
+        self.0 / T::from_f64(453.59237)
     }
 
     /// Alias for [`Self::as_pounds_per_second`].
     #[inline]
-    pub fn as_pound_per_second(self) -> Num {
+    pub fn as_pound_per_second(self) -> T {
         self.as_pounds_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerSecond (`Mlb/s`).
     #[inline]
-    pub fn from_megapounds_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 453.59237)
+    pub fn from_megapounds_per_second(value: T) -> Self {
+        Self(value * T::from_f64(4.5359237e8))
     }
 
     /// Returns the value expressed in MegapoundsPerSecond (`Mlb/s`).
     #[inline]
-    pub fn as_megapounds_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 453.59237
+    pub fn as_megapounds_per_second(self) -> T {
+        self.0 / T::from_f64(4.5359237e8)
     }
 
     /// Alias for [`Self::as_megapounds_per_second`].
     #[inline]
-    pub fn as_megapound_per_second(self) -> Num {
+    pub fn as_megapound_per_second(self) -> T {
         self.as_megapounds_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in TonnesPerDay (`t/d`).
     #[inline]
-    pub fn from_tonnes_per_day(value: Num) -> Self {
-        let x = value;
-        Self(x / 0.0864000)
+    pub fn from_tonnes_per_day(value: T) -> Self {
+        Self(value * T::from_f64(11.574074074074074))
     }
 
     /// Returns the value expressed in TonnesPerDay (`t/d`).
     #[inline]
-    pub fn as_tonnes_per_day(self) -> Num {
-        let x = self.0;
-        x * 0.0864000
+    pub fn as_tonnes_per_day(self) -> T {
+        self.0 / T::from_f64(11.574074074074074)
     }
 
     /// Alias for [`Self::as_tonnes_per_day`].
     #[inline]
-    pub fn as_tonne_per_day(self) -> Num {
+    pub fn as_tonne_per_day(self) -> T {
         self.as_tonnes_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in ShortTonsPerHour (`short tn/h`).
     #[inline]
-    pub fn from_short_tons_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 907.18474 / 3.6)
+    pub fn from_short_tons_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(251.9957611111111))
     }
 
     /// Returns the value expressed in ShortTonsPerHour (`short tn/h`).
     #[inline]
-    pub fn as_short_tons_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3.6 / 907.18474
+    pub fn as_short_tons_per_hour(self) -> T {
+        self.0 / T::from_f64(251.9957611111111)
     }
 
     /// Alias for [`Self::as_short_tons_per_hour`].
     #[inline]
-    pub fn as_short_ton_per_hour(self) -> Num {
+    pub fn as_short_ton_per_hour(self) -> T {
         self.as_short_tons_per_hour()
     }
-}
-
-impl crate::Quantity for MassFlow {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for MassFlow {
-    type Output = MassFlow;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for MassFlow {
-    type Output = MassFlow;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for MassFlow {
-    type Output = MassFlow;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for MassFlow {
-    type Output = MassFlow;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<MassFlow> for Num {
-    type Output = MassFlow;
-    #[inline]
-    fn mul(self, rhs: MassFlow) -> MassFlow {
-        MassFlow(self * rhs.0)
-    }
-}
-impl Div<Num> for MassFlow {
-    type Output = MassFlow;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for MassFlow {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for MassFlow {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MassFlowUnit::GramPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`MassFlow`].
-#[derive(Debug)]
-pub struct ParseMassFlowError(String);
-
-impl fmt::Display for ParseMassFlowError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as MassFlow", self.0)
-    }
-}
-
-impl std::error::Error for ParseMassFlowError {}
-
-impl FromStr for MassFlow {
-    type Err = ParseMassFlowError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMassFlowError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MassFlowUnit)] = &[
-            ("short tn/h", MassFlowUnit::ShortTonPerHour),
-            ("Mlb/min", MassFlowUnit::MegapoundPerMinute),
-            ("kg/min", MassFlowUnit::KilogramPerMinute),
-            ("lb/min", MassFlowUnit::PoundPerMinute),
-            ("Mlb/d", MassFlowUnit::MegapoundPerDay),
-            ("Mlb/h", MassFlowUnit::MegapoundPerHour),
-            ("Mlb/s", MassFlowUnit::MegapoundPerSecond),
-            ("dag/d", MassFlowUnit::DecagramPerDay),
-            ("dag/s", MassFlowUnit::DecagramPerSecond),
-            ("µg/d", MassFlowUnit::MicrogramPerDay),
-            ("µg/s", MassFlowUnit::MicrogramPerSecond),
-            ("Mg/d", MassFlowUnit::MegagramPerDay),
-            ("cg/d", MassFlowUnit::CentigramPerDay),
-            ("cg/s", MassFlowUnit::CentigramPerSecond),
-            ("dg/d", MassFlowUnit::DecigramPerDay),
-            ("dg/s", MassFlowUnit::DecigramPerSecond),
-            ("hg/d", MassFlowUnit::HectogramPerDay),
-            ("hg/s", MassFlowUnit::HectogramPerSecond),
-            ("kg/d", MassFlowUnit::KilogramPerDay),
-            ("kg/h", MassFlowUnit::KilogramPerHour),
-            ("kg/s", MassFlowUnit::KilogramPerSecond),
-            ("lb/d", MassFlowUnit::PoundPerDay),
-            ("lb/h", MassFlowUnit::PoundPerHour),
-            ("lb/s", MassFlowUnit::PoundPerSecond),
-            ("mg/d", MassFlowUnit::MilligramPerDay),
-            ("mg/s", MassFlowUnit::MilligramPerSecond),
-            ("ng/d", MassFlowUnit::NanogramPerDay),
-            ("ng/s", MassFlowUnit::NanogramPerSecond),
-            ("g/S", MassFlowUnit::GramPerSecond),
-            ("g/d", MassFlowUnit::GramPerDay),
-            ("g/h", MassFlowUnit::GramPerHour),
-            ("g/s", MassFlowUnit::GramPerSecond),
-            ("t/d", MassFlowUnit::TonnePerDay),
-            ("t/h", MassFlowUnit::TonnePerHour),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMassFlowError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

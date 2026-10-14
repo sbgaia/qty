@@ -2,30 +2,40 @@
 // Source: data/quantities/Force.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In physics, a force is any influence that causes an object to undergo a certain change, either concerning its movement, direction, or geometrical construction. In other words, a force can cause an object with mass to change its velocity (which includes to begin moving from a state of rest), i.e., to accelerate, or a flexible object to deform, or both. Force can also be described by intuitive concepts such as a push or a pull. A force has both magnitude and direction, making it a vector quantity. It is measured in the SI unit of newtons and represented by the symbol F.
 ///
-/// The internal value is stored in `Newton` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Force(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ForceUnit::Newton`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Force<T = f64>(T);
+
+quantity!(Force, ForceUnit, Newton);
 
 /// Unit variants for [`Force`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ForceUnit {
     /// One dyne is equal to 10 micronewtons, 10e−5 N or to 10 nsn (nanosthenes) in the old metre–tonne–second system of units.
     Dyn,
+    /// The gram-force is a unit of force equal to the magnitude of force exerted by a gram of mass in standard gravity (9.80665 m/s²). It is equal to 9.80665 × 10⁻³ N.
+    GramForce,
     /// The kilogram-force, or kilopond, is equal to the magnitude of the force exerted on one kilogram of mass in a 9.80665 m/s2 gravitational field (standard gravity). Therefore, one kilogram-force is by definition equal to 9.80665 N.
     KilogramForce,
     /// The tonne-force, metric ton-force, megagram-force, and megapond (Mp) are each 1000 kilograms-force.
@@ -54,6 +64,7 @@ impl ForceUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[
         Self::Dyn,
+        Self::GramForce,
         Self::KilogramForce,
         Self::TonneForce,
         Self::Newton,
@@ -72,9 +83,10 @@ impl ForceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Dyn => "dyn",
+            Self::GramForce => "gf",
             Self::KilogramForce => "kgf",
             Self::TonneForce => "tf",
             Self::Newton => "N",
@@ -92,11 +104,12 @@ impl ForceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Dyn => &["dyn"],
+            Self::GramForce => &["gf"],
             Self::KilogramForce => &["kgf"],
             Self::TonneForce => &["tf", "Ton"],
             Self::Newton => &["N"],
@@ -115,493 +128,366 @@ impl ForceUnit {
     }
 }
 
-impl Force {
+impl core::str::FromStr for ForceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "dyn" => Ok(Self::Dyn),
+            "gf" => Ok(Self::GramForce),
+            "kgf" => Ok(Self::KilogramForce),
+            "tf" => Ok(Self::TonneForce),
+            "Ton" => Ok(Self::TonneForce),
+            "N" => Ok(Self::Newton),
+            "µN" => Ok(Self::Micronewton),
+            "mN" => Ok(Self::Millinewton),
+            "daN" => Ok(Self::Decanewton),
+            "kN" => Ok(Self::Kilonewton),
+            "MN" => Ok(Self::Meganewton),
+            "kp" => Ok(Self::Kilopond),
+            "pdl" => Ok(Self::Poundal),
+            "lbf" => Ok(Self::PoundForce),
+            "klbf" => Ok(Self::KilopoundForce),
+            "ozf" => Ok(Self::OunceForce),
+            "tf (short)" => Ok(Self::ShortTonForce),
+            "t (US)f" => Ok(Self::ShortTonForce),
+            "short tons-force" => Ok(Self::ShortTonForce),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Force<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ForceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ForceUnit) -> Self {
         Self(match unit {
-            ForceUnit::Dyn => x / 1e5,
-            ForceUnit::KilogramForce => x * 9.80665,
-            ForceUnit::TonneForce => x * (9.80665 * 1000.0),
-            ForceUnit::Newton => x,
-            ForceUnit::Micronewton => (x * 1e-6),
-            ForceUnit::Millinewton => (x * 1e-3),
-            ForceUnit::Decanewton => (x * 1e1),
-            ForceUnit::Kilonewton => (x * 1e3),
-            ForceUnit::Meganewton => (x * 1e6),
-            ForceUnit::Kilopond => x * 9.80665,
-            ForceUnit::Poundal => x * 0.138254954376,
-            ForceUnit::PoundForce => x * 4.4482216152605,
-            ForceUnit::KilopoundForce => (x * 1e3) * 4.4482216152605,
-            ForceUnit::OunceForce => x * (4.4482216152605 / 16.0),
-            ForceUnit::ShortTonForce => x * (4.4482216152605 * 2000.0),
+            ForceUnit::Dyn => value / T::from_f64(100000.0),
+            ForceUnit::GramForce => value * T::from_f64(0.00980665),
+            ForceUnit::KilogramForce => value * T::from_f64(9.80665),
+            ForceUnit::TonneForce => value * T::from_f64(9806.65),
+            ForceUnit::Newton => value,
+            ForceUnit::Micronewton => value / T::from_f64(1000000.0),
+            ForceUnit::Millinewton => value / T::from_f64(1000.0),
+            ForceUnit::Decanewton => value * T::from_f64(10.0),
+            ForceUnit::Kilonewton => value * T::from_f64(1000.0),
+            ForceUnit::Meganewton => value * T::from_f64(1000000.0),
+            ForceUnit::Kilopond => value * T::from_f64(9.80665),
+            ForceUnit::Poundal => value * T::from_f64(0.138254954376),
+            ForceUnit::PoundForce => value * T::from_f64(4.4482216152605),
+            ForceUnit::KilopoundForce => value * T::from_f64(4448.2216152605),
+            ForceUnit::OunceForce => value * T::from_f64(0.2780138509537812),
+            ForceUnit::ShortTonForce => value * T::from_f64(8896.443230521),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ForceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ForceUnit) -> T {
         match unit {
-            ForceUnit::Dyn => x * 1e5,
-            ForceUnit::KilogramForce => x / 9.80665,
-            ForceUnit::TonneForce => x / (9.80665 * 1000.0),
-            ForceUnit::Newton => x,
-            ForceUnit::Micronewton => (x / 1e-6),
-            ForceUnit::Millinewton => (x / 1e-3),
-            ForceUnit::Decanewton => (x / 1e1),
-            ForceUnit::Kilonewton => (x / 1e3),
-            ForceUnit::Meganewton => (x / 1e6),
-            ForceUnit::Kilopond => x / 9.80665,
-            ForceUnit::Poundal => x / 0.138254954376,
-            ForceUnit::PoundForce => x / 4.4482216152605,
-            ForceUnit::KilopoundForce => (x / 1e3) / 4.4482216152605,
-            ForceUnit::OunceForce => x / (4.4482216152605 / 16.0),
-            ForceUnit::ShortTonForce => x / (4.4482216152605 * 2000.0),
+            ForceUnit::Dyn => self.0 * T::from_f64(100000.0),
+            ForceUnit::GramForce => self.0 / T::from_f64(0.00980665),
+            ForceUnit::KilogramForce => self.0 / T::from_f64(9.80665),
+            ForceUnit::TonneForce => self.0 / T::from_f64(9806.65),
+            ForceUnit::Newton => self.0,
+            ForceUnit::Micronewton => self.0 * T::from_f64(1000000.0),
+            ForceUnit::Millinewton => self.0 * T::from_f64(1000.0),
+            ForceUnit::Decanewton => self.0 / T::from_f64(10.0),
+            ForceUnit::Kilonewton => self.0 / T::from_f64(1000.0),
+            ForceUnit::Meganewton => self.0 / T::from_f64(1000000.0),
+            ForceUnit::Kilopond => self.0 / T::from_f64(9.80665),
+            ForceUnit::Poundal => self.0 / T::from_f64(0.138254954376),
+            ForceUnit::PoundForce => self.0 / T::from_f64(4.4482216152605),
+            ForceUnit::KilopoundForce => self.0 / T::from_f64(4448.2216152605),
+            ForceUnit::OunceForce => self.0 / T::from_f64(0.2780138509537812),
+            ForceUnit::ShortTonForce => self.0 / T::from_f64(8896.443230521),
         }
     }
 
     /// Creates a [`Force`] from a value in Dyne (`dyn`).
     #[inline]
-    pub fn from_dyne(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e5)
+    pub fn from_dyne(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in Dyne (`dyn`).
     #[inline]
-    pub fn as_dyne(self) -> Num {
-        let x = self.0;
-        x * 1e5
+    pub fn as_dyne(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_dyne`].
     #[inline]
-    pub fn as_dyn(self) -> Num {
+    pub fn as_dyn(self) -> T {
         self.as_dyne()
+    }
+
+    /// Creates a [`Force`] from a value in GramsForce (`gf`).
+    #[inline]
+    pub fn from_grams_force(value: T) -> Self {
+        Self(value * T::from_f64(0.00980665))
+    }
+
+    /// Returns the value expressed in GramsForce (`gf`).
+    #[inline]
+    pub fn as_grams_force(self) -> T {
+        self.0 / T::from_f64(0.00980665)
+    }
+
+    /// Alias for [`Self::as_grams_force`].
+    #[inline]
+    pub fn as_gram_force(self) -> T {
+        self.as_grams_force()
     }
 
     /// Creates a [`Force`] from a value in KilogramsForce (`kgf`).
     #[inline]
-    pub fn from_kilograms_force(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665)
+    pub fn from_kilograms_force(value: T) -> Self {
+        Self(value * T::from_f64(9.80665))
     }
 
     /// Returns the value expressed in KilogramsForce (`kgf`).
     #[inline]
-    pub fn as_kilograms_force(self) -> Num {
-        let x = self.0;
-        x / 9.80665
+    pub fn as_kilograms_force(self) -> T {
+        self.0 / T::from_f64(9.80665)
     }
 
     /// Alias for [`Self::as_kilograms_force`].
     #[inline]
-    pub fn as_kilogram_force(self) -> Num {
+    pub fn as_kilogram_force(self) -> T {
         self.as_kilograms_force()
     }
 
     /// Creates a [`Force`] from a value in TonnesForce (`tf`).
     #[inline]
-    pub fn from_tonnes_force(value: Num) -> Self {
-        let x = value;
-        Self(x * (9.80665 * 1000.0))
+    pub fn from_tonnes_force(value: T) -> Self {
+        Self(value * T::from_f64(9806.65))
     }
 
     /// Returns the value expressed in TonnesForce (`tf`).
     #[inline]
-    pub fn as_tonnes_force(self) -> Num {
-        let x = self.0;
-        x / (9.80665 * 1000.0)
+    pub fn as_tonnes_force(self) -> T {
+        self.0 / T::from_f64(9806.65)
     }
 
     /// Alias for [`Self::as_tonnes_force`].
     #[inline]
-    pub fn as_tonne_force(self) -> Num {
+    pub fn as_tonne_force(self) -> T {
         self.as_tonnes_force()
     }
 
     /// Creates a [`Force`] from a value in Newtons (`N`).
     #[inline]
-    pub fn from_newtons(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_newtons(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Newtons (`N`).
     #[inline]
-    pub fn as_newtons(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_newtons(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_newtons`].
     #[inline]
-    pub fn as_newton(self) -> Num {
+    pub fn as_newton(self) -> T {
         self.as_newtons()
     }
 
     /// Creates a [`Force`] from a value in Micronewtons (`µN`).
     #[inline]
-    pub fn from_micronewtons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micronewtons(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Micronewtons (`µN`).
     #[inline]
-    pub fn as_micronewtons(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micronewtons(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micronewtons`].
     #[inline]
-    pub fn as_micronewton(self) -> Num {
+    pub fn as_micronewton(self) -> T {
         self.as_micronewtons()
     }
 
     /// Creates a [`Force`] from a value in Millinewtons (`mN`).
     #[inline]
-    pub fn from_millinewtons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millinewtons(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millinewtons (`mN`).
     #[inline]
-    pub fn as_millinewtons(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millinewtons(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millinewtons`].
     #[inline]
-    pub fn as_millinewton(self) -> Num {
+    pub fn as_millinewton(self) -> T {
         self.as_millinewtons()
     }
 
     /// Creates a [`Force`] from a value in Decanewtons (`daN`).
     #[inline]
-    pub fn from_decanewtons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decanewtons(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in Decanewtons (`daN`).
     #[inline]
-    pub fn as_decanewtons(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decanewtons(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decanewtons`].
     #[inline]
-    pub fn as_decanewton(self) -> Num {
+    pub fn as_decanewton(self) -> T {
         self.as_decanewtons()
     }
 
     /// Creates a [`Force`] from a value in Kilonewtons (`kN`).
     #[inline]
-    pub fn from_kilonewtons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilonewtons(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilonewtons (`kN`).
     #[inline]
-    pub fn as_kilonewtons(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilonewtons(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilonewtons`].
     #[inline]
-    pub fn as_kilonewton(self) -> Num {
+    pub fn as_kilonewton(self) -> T {
         self.as_kilonewtons()
     }
 
     /// Creates a [`Force`] from a value in Meganewtons (`MN`).
     #[inline]
-    pub fn from_meganewtons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_meganewtons(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Meganewtons (`MN`).
     #[inline]
-    pub fn as_meganewtons(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_meganewtons(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_meganewtons`].
     #[inline]
-    pub fn as_meganewton(self) -> Num {
+    pub fn as_meganewton(self) -> T {
         self.as_meganewtons()
     }
 
     /// Creates a [`Force`] from a value in Kiloponds (`kp`).
     #[inline]
-    pub fn from_kiloponds(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665)
+    pub fn from_kiloponds(value: T) -> Self {
+        Self(value * T::from_f64(9.80665))
     }
 
     /// Returns the value expressed in Kiloponds (`kp`).
     #[inline]
-    pub fn as_kiloponds(self) -> Num {
-        let x = self.0;
-        x / 9.80665
+    pub fn as_kiloponds(self) -> T {
+        self.0 / T::from_f64(9.80665)
     }
 
     /// Alias for [`Self::as_kiloponds`].
     #[inline]
-    pub fn as_kilopond(self) -> Num {
+    pub fn as_kilopond(self) -> T {
         self.as_kiloponds()
     }
 
     /// Creates a [`Force`] from a value in Poundals (`pdl`).
     #[inline]
-    pub fn from_poundals(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.138254954376)
+    pub fn from_poundals(value: T) -> Self {
+        Self(value * T::from_f64(0.138254954376))
     }
 
     /// Returns the value expressed in Poundals (`pdl`).
     #[inline]
-    pub fn as_poundals(self) -> Num {
-        let x = self.0;
-        x / 0.138254954376
+    pub fn as_poundals(self) -> T {
+        self.0 / T::from_f64(0.138254954376)
     }
 
     /// Alias for [`Self::as_poundals`].
     #[inline]
-    pub fn as_poundal(self) -> Num {
+    pub fn as_poundal(self) -> T {
         self.as_poundals()
     }
 
     /// Creates a [`Force`] from a value in PoundsForce (`lbf`).
     #[inline]
-    pub fn from_pounds_force(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605)
+    pub fn from_pounds_force(value: T) -> Self {
+        Self(value * T::from_f64(4.4482216152605))
     }
 
     /// Returns the value expressed in PoundsForce (`lbf`).
     #[inline]
-    pub fn as_pounds_force(self) -> Num {
-        let x = self.0;
-        x / 4.4482216152605
+    pub fn as_pounds_force(self) -> T {
+        self.0 / T::from_f64(4.4482216152605)
     }
 
     /// Alias for [`Self::as_pounds_force`].
     #[inline]
-    pub fn as_pound_force(self) -> Num {
+    pub fn as_pound_force(self) -> T {
         self.as_pounds_force()
     }
 
     /// Creates a [`Force`] from a value in KilopoundsForce (`klbf`).
     #[inline]
-    pub fn from_kilopounds_force(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.4482216152605)
+    pub fn from_kilopounds_force(value: T) -> Self {
+        Self(value * T::from_f64(4448.2216152605))
     }
 
     /// Returns the value expressed in KilopoundsForce (`klbf`).
     #[inline]
-    pub fn as_kilopounds_force(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 4.4482216152605
+    pub fn as_kilopounds_force(self) -> T {
+        self.0 / T::from_f64(4448.2216152605)
     }
 
     /// Alias for [`Self::as_kilopounds_force`].
     #[inline]
-    pub fn as_kilopound_force(self) -> Num {
+    pub fn as_kilopound_force(self) -> T {
         self.as_kilopounds_force()
     }
 
     /// Creates a [`Force`] from a value in OunceForce (`ozf`).
     #[inline]
-    pub fn from_ounce_force(value: Num) -> Self {
-        let x = value;
-        Self(x * (4.4482216152605 / 16.0))
+    pub fn from_ounce_force(value: T) -> Self {
+        Self(value * T::from_f64(0.2780138509537812))
     }
 
     /// Returns the value expressed in OunceForce (`ozf`).
     #[inline]
-    pub fn as_ounce_force(self) -> Num {
-        let x = self.0;
-        x / (4.4482216152605 / 16.0)
+    pub fn as_ounce_force(self) -> T {
+        self.0 / T::from_f64(0.2780138509537812)
     }
 
     /// Creates a [`Force`] from a value in ShortTonsForce (`tf (short)`).
     #[inline]
-    pub fn from_short_tons_force(value: Num) -> Self {
-        let x = value;
-        Self(x * (4.4482216152605 * 2000.0))
+    pub fn from_short_tons_force(value: T) -> Self {
+        Self(value * T::from_f64(8896.443230521))
     }
 
     /// Returns the value expressed in ShortTonsForce (`tf (short)`).
     #[inline]
-    pub fn as_short_tons_force(self) -> Num {
-        let x = self.0;
-        x / (4.4482216152605 * 2000.0)
+    pub fn as_short_tons_force(self) -> T {
+        self.0 / T::from_f64(8896.443230521)
     }
 
     /// Alias for [`Self::as_short_tons_force`].
     #[inline]
-    pub fn as_short_ton_force(self) -> Num {
+    pub fn as_short_ton_force(self) -> T {
         self.as_short_tons_force()
     }
-}
-
-impl crate::Quantity for Force {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Force {
-    type Output = Force;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Force {
-    type Output = Force;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Force {
-    type Output = Force;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Force {
-    type Output = Force;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Force> for Num {
-    type Output = Force;
-    #[inline]
-    fn mul(self, rhs: Force) -> Force {
-        Force(self * rhs.0)
-    }
-}
-impl Div<Num> for Force {
-    type Output = Force;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Force {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Force {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, ForceUnit::Newton.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Force`].
-#[derive(Debug)]
-pub struct ParseForceError(String);
-
-impl fmt::Display for ParseForceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Force", self.0)
-    }
-}
-
-impl std::error::Error for ParseForceError {}
-
-impl FromStr for Force {
-    type Err = ParseForceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseForceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ForceUnit)] = &[
-            ("short tons-force", ForceUnit::ShortTonForce),
-            ("tf (short)", ForceUnit::ShortTonForce),
-            ("t (US)f", ForceUnit::ShortTonForce),
-            ("klbf", ForceUnit::KilopoundForce),
-            ("Ton", ForceUnit::TonneForce),
-            ("daN", ForceUnit::Decanewton),
-            ("dyn", ForceUnit::Dyn),
-            ("kgf", ForceUnit::KilogramForce),
-            ("lbf", ForceUnit::PoundForce),
-            ("ozf", ForceUnit::OunceForce),
-            ("pdl", ForceUnit::Poundal),
-            ("µN", ForceUnit::Micronewton),
-            ("MN", ForceUnit::Meganewton),
-            ("kN", ForceUnit::Kilonewton),
-            ("kp", ForceUnit::Kilopond),
-            ("mN", ForceUnit::Millinewton),
-            ("tf", ForceUnit::TonneForce),
-            ("N", ForceUnit::Newton),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseForceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

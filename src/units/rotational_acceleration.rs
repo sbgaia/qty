@@ -2,27 +2,39 @@
 // Source: data/quantities/RotationalAcceleration.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Angular acceleration is the rate of change of rotational speed.
 ///
-/// The internal value is stored in `RadianPerSecondSquared` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RotationalAcceleration(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`RotationalAccelerationUnit::RadianPerSecondSquared`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct RotationalAcceleration<T = f64>(T);
+
+quantity!(
+    RotationalAcceleration,
+    RotationalAccelerationUnit,
+    RadianPerSecondSquared
+);
 
 /// Unit variants for [`RotationalAcceleration`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum RotationalAccelerationUnit {
     RadianPerSecondSquared,
     DegreePerSecondSquared,
@@ -41,7 +53,7 @@ impl RotationalAccelerationUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::RadianPerSecondSquared => "rad/s²",
             Self::DegreePerSecondSquared => "°/s²",
@@ -50,9 +62,9 @@ impl RotationalAccelerationUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::RadianPerSecondSquared => &["rad/s²"],
             Self::DegreePerSecondSquared => &["°/s²", "deg/s²"],
@@ -62,267 +74,130 @@ impl RotationalAccelerationUnit {
     }
 }
 
-impl RotationalAcceleration {
+impl core::str::FromStr for RotationalAccelerationUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "rad/s²" => Ok(Self::RadianPerSecondSquared),
+            "°/s²" => Ok(Self::DegreePerSecondSquared),
+            "deg/s²" => Ok(Self::DegreePerSecondSquared),
+            "rpm/s" => Ok(Self::RevolutionPerMinutePerSecond),
+            "r/s²" => Ok(Self::RevolutionPerSecondSquared),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> RotationalAcceleration<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: RotationalAccelerationUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: RotationalAccelerationUnit) -> Self {
         Self(match unit {
-            RotationalAccelerationUnit::RadianPerSecondSquared => x,
+            RotationalAccelerationUnit::RadianPerSecondSquared => value,
             RotationalAccelerationUnit::DegreePerSecondSquared => {
-                ((std::f64::consts::PI as Num) / 180.0) * x
+                value * T::from_f64(0.017453292519943295)
             }
             RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
-                ((2.0 * (std::f64::consts::PI as Num)) / 60.0) * x
+                value * T::from_f64(0.10471975511965978)
             }
             RotationalAccelerationUnit::RevolutionPerSecondSquared => {
-                (2.0 * (std::f64::consts::PI as Num)) * x
+                value * T::from_f64(6.283185307179586)
             }
         })
     }
 
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: RotationalAccelerationUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: RotationalAccelerationUnit) -> T {
         match unit {
-            RotationalAccelerationUnit::RadianPerSecondSquared => x,
+            RotationalAccelerationUnit::RadianPerSecondSquared => self.0,
             RotationalAccelerationUnit::DegreePerSecondSquared => {
-                (180.0 / (std::f64::consts::PI as Num)) * x
+                self.0 / T::from_f64(0.017453292519943295)
             }
             RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
-                (60.0 / (2.0 * (std::f64::consts::PI as Num))) * x
+                self.0 / T::from_f64(0.10471975511965978)
             }
             RotationalAccelerationUnit::RevolutionPerSecondSquared => {
-                (1.0 / (2.0 * (std::f64::consts::PI as Num))) * x
+                self.0 / T::from_f64(6.283185307179586)
             }
         }
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RadiansPerSecondSquared (`rad/s²`).
     #[inline]
-    pub fn from_radians_per_second_squared(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_radians_per_second_squared(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in RadiansPerSecondSquared (`rad/s²`).
     #[inline]
-    pub fn as_radians_per_second_squared(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_radians_per_second_squared(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_radians_per_second_squared`].
     #[inline]
-    pub fn as_radian_per_second_squared(self) -> Num {
+    pub fn as_radian_per_second_squared(self) -> T {
         self.as_radians_per_second_squared()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in DegreesPerSecondSquared (`°/s²`).
     #[inline]
-    pub fn from_degrees_per_second_squared(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / 180.0) * x)
+    pub fn from_degrees_per_second_squared(value: T) -> Self {
+        Self(value * T::from_f64(0.017453292519943295))
     }
 
     /// Returns the value expressed in DegreesPerSecondSquared (`°/s²`).
     #[inline]
-    pub fn as_degrees_per_second_squared(self) -> Num {
-        let x = self.0;
-        (180.0 / (std::f64::consts::PI as Num)) * x
+    pub fn as_degrees_per_second_squared(self) -> T {
+        self.0 / T::from_f64(0.017453292519943295)
     }
 
     /// Alias for [`Self::as_degrees_per_second_squared`].
     #[inline]
-    pub fn as_degree_per_second_squared(self) -> Num {
+    pub fn as_degree_per_second_squared(self) -> T {
         self.as_degrees_per_second_squared()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerMinutePerSecond (`rpm/s`).
     #[inline]
-    pub fn from_revolutions_per_minute_per_second(value: Num) -> Self {
-        let x = value;
-        Self(((2.0 * (std::f64::consts::PI as Num)) / 60.0) * x)
+    pub fn from_revolutions_per_minute_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.10471975511965978))
     }
 
     /// Returns the value expressed in RevolutionsPerMinutePerSecond (`rpm/s`).
     #[inline]
-    pub fn as_revolutions_per_minute_per_second(self) -> Num {
-        let x = self.0;
-        (60.0 / (2.0 * (std::f64::consts::PI as Num))) * x
+    pub fn as_revolutions_per_minute_per_second(self) -> T {
+        self.0 / T::from_f64(0.10471975511965978)
     }
 
     /// Alias for [`Self::as_revolutions_per_minute_per_second`].
     #[inline]
-    pub fn as_revolution_per_minute_per_second(self) -> Num {
+    pub fn as_revolution_per_minute_per_second(self) -> T {
         self.as_revolutions_per_minute_per_second()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerSecondSquared (`r/s²`).
     #[inline]
-    pub fn from_revolutions_per_second_squared(value: Num) -> Self {
-        let x = value;
-        Self((2.0 * (std::f64::consts::PI as Num)) * x)
+    pub fn from_revolutions_per_second_squared(value: T) -> Self {
+        Self(value * T::from_f64(6.283185307179586))
     }
 
     /// Returns the value expressed in RevolutionsPerSecondSquared (`r/s²`).
     #[inline]
-    pub fn as_revolutions_per_second_squared(self) -> Num {
-        let x = self.0;
-        (1.0 / (2.0 * (std::f64::consts::PI as Num))) * x
+    pub fn as_revolutions_per_second_squared(self) -> T {
+        self.0 / T::from_f64(6.283185307179586)
     }
 
     /// Alias for [`Self::as_revolutions_per_second_squared`].
     #[inline]
-    pub fn as_revolution_per_second_squared(self) -> Num {
+    pub fn as_revolution_per_second_squared(self) -> T {
         self.as_revolutions_per_second_squared()
     }
-}
-
-impl crate::Quantity for RotationalAcceleration {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for RotationalAcceleration {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for RotationalAcceleration {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for RotationalAcceleration {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for RotationalAcceleration {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<RotationalAcceleration> for Num {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn mul(self, rhs: RotationalAcceleration) -> RotationalAcceleration {
-        RotationalAcceleration(self * rhs.0)
-    }
-}
-impl Div<Num> for RotationalAcceleration {
-    type Output = RotationalAcceleration;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for RotationalAcceleration {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for RotationalAcceleration {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            RotationalAccelerationUnit::RadianPerSecondSquared.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`RotationalAcceleration`].
-#[derive(Debug)]
-pub struct ParseRotationalAccelerationError(String);
-
-impl fmt::Display for ParseRotationalAccelerationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as RotationalAcceleration", self.0)
-    }
-}
-
-impl std::error::Error for ParseRotationalAccelerationError {}
-
-impl FromStr for RotationalAcceleration {
-    type Err = ParseRotationalAccelerationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseRotationalAccelerationError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, RotationalAccelerationUnit)] = &[
-            ("deg/s²", RotationalAccelerationUnit::DegreePerSecondSquared),
-            ("rad/s²", RotationalAccelerationUnit::RadianPerSecondSquared),
-            ("°/s²", RotationalAccelerationUnit::DegreePerSecondSquared),
-            (
-                "r/s²",
-                RotationalAccelerationUnit::RevolutionPerSecondSquared,
-            ),
-            (
-                "rpm/s",
-                RotationalAccelerationUnit::RevolutionPerMinutePerSecond,
-            ),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseRotationalAccelerationError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

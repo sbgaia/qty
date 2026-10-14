@@ -2,27 +2,35 @@
 // Source: data/quantities/AmplitudeRatio.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The strength of a signal expressed in decibels (dB) relative to one volt RMS.
 ///
-/// The internal value is stored in `DecibelVolt` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AmplitudeRatio(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`AmplitudeRatioUnit::DecibelVolt`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct AmplitudeRatio<T = f64>(T);
+
+quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt);
 
 /// Unit variants for [`AmplitudeRatio`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum AmplitudeRatioUnit {
     DecibelVolt,
     DecibelMicrovolt,
@@ -41,7 +49,7 @@ impl AmplitudeRatioUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::DecibelVolt => "dBV",
             Self::DecibelMicrovolt => "dBµV",
@@ -50,9 +58,9 @@ impl AmplitudeRatioUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DecibelVolt => &["dBV"],
             Self::DecibelMicrovolt => &["dBµV"],
@@ -62,248 +70,117 @@ impl AmplitudeRatioUnit {
     }
 }
 
-impl AmplitudeRatio {
+impl core::str::FromStr for AmplitudeRatioUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "dBV" => Ok(Self::DecibelVolt),
+            "dBµV" => Ok(Self::DecibelMicrovolt),
+            "dBmV" => Ok(Self::DecibelMillivolt),
+            "dBu" => Ok(Self::DecibelUnloaded),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> AmplitudeRatio<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: AmplitudeRatioUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: AmplitudeRatioUnit) -> Self {
         Self(match unit {
-            AmplitudeRatioUnit::DecibelVolt => x,
-            AmplitudeRatioUnit::DecibelMicrovolt => x - 120.0,
-            AmplitudeRatioUnit::DecibelMillivolt => x - 60.0,
-            AmplitudeRatioUnit::DecibelUnloaded => x - 2.218487499,
+            AmplitudeRatioUnit::DecibelVolt => value,
+            AmplitudeRatioUnit::DecibelMicrovolt => value - T::from_f64(120.0),
+            AmplitudeRatioUnit::DecibelMillivolt => value - T::from_f64(60.0),
+            AmplitudeRatioUnit::DecibelUnloaded => value - T::from_f64(2.218487499),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: AmplitudeRatioUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: AmplitudeRatioUnit) -> T {
         match unit {
-            AmplitudeRatioUnit::DecibelVolt => x,
-            AmplitudeRatioUnit::DecibelMicrovolt => x + 120.0,
-            AmplitudeRatioUnit::DecibelMillivolt => x + 60.0,
-            AmplitudeRatioUnit::DecibelUnloaded => x + 2.218487499,
+            AmplitudeRatioUnit::DecibelVolt => self.0,
+            AmplitudeRatioUnit::DecibelMicrovolt => self.0 + T::from_f64(120.0),
+            AmplitudeRatioUnit::DecibelMillivolt => self.0 + T::from_f64(60.0),
+            AmplitudeRatioUnit::DecibelUnloaded => self.0 + T::from_f64(2.218487499),
         }
     }
 
     /// Creates a [`AmplitudeRatio`] from a value in DecibelVolts (`dBV`).
     #[inline]
-    pub fn from_decibel_volts(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_decibel_volts(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DecibelVolts (`dBV`).
     #[inline]
-    pub fn as_decibel_volts(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_decibel_volts(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_decibel_volts`].
     #[inline]
-    pub fn as_decibel_volt(self) -> Num {
+    pub fn as_decibel_volt(self) -> T {
         self.as_decibel_volts()
     }
 
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMicrovolts (`dBµV`).
     #[inline]
-    pub fn from_decibel_microvolts(value: Num) -> Self {
-        let x = value;
-        Self(x - 120.0)
+    pub fn from_decibel_microvolts(value: T) -> Self {
+        Self(value - T::from_f64(120.0))
     }
 
     /// Returns the value expressed in DecibelMicrovolts (`dBµV`).
     #[inline]
-    pub fn as_decibel_microvolts(self) -> Num {
-        let x = self.0;
-        x + 120.0
+    pub fn as_decibel_microvolts(self) -> T {
+        self.0 + T::from_f64(120.0)
     }
 
     /// Alias for [`Self::as_decibel_microvolts`].
     #[inline]
-    pub fn as_decibel_microvolt(self) -> Num {
+    pub fn as_decibel_microvolt(self) -> T {
         self.as_decibel_microvolts()
     }
 
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMillivolts (`dBmV`).
     #[inline]
-    pub fn from_decibel_millivolts(value: Num) -> Self {
-        let x = value;
-        Self(x - 60.0)
+    pub fn from_decibel_millivolts(value: T) -> Self {
+        Self(value - T::from_f64(60.0))
     }
 
     /// Returns the value expressed in DecibelMillivolts (`dBmV`).
     #[inline]
-    pub fn as_decibel_millivolts(self) -> Num {
-        let x = self.0;
-        x + 60.0
+    pub fn as_decibel_millivolts(self) -> T {
+        self.0 + T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_decibel_millivolts`].
     #[inline]
-    pub fn as_decibel_millivolt(self) -> Num {
+    pub fn as_decibel_millivolt(self) -> T {
         self.as_decibel_millivolts()
     }
 
     /// Creates a [`AmplitudeRatio`] from a value in DecibelsUnloaded (`dBu`).
     #[inline]
-    pub fn from_decibels_unloaded(value: Num) -> Self {
-        let x = value;
-        Self(x - 2.218487499)
+    pub fn from_decibels_unloaded(value: T) -> Self {
+        Self(value - T::from_f64(2.218487499))
     }
 
     /// Returns the value expressed in DecibelsUnloaded (`dBu`).
     #[inline]
-    pub fn as_decibels_unloaded(self) -> Num {
-        let x = self.0;
-        x + 2.218487499
+    pub fn as_decibels_unloaded(self) -> T {
+        self.0 + T::from_f64(2.218487499)
     }
 
     /// Alias for [`Self::as_decibels_unloaded`].
     #[inline]
-    pub fn as_decibel_unloaded(self) -> Num {
+    pub fn as_decibel_unloaded(self) -> T {
         self.as_decibels_unloaded()
     }
-}
-
-impl crate::Quantity for AmplitudeRatio {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for AmplitudeRatio {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for AmplitudeRatio {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for AmplitudeRatio {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for AmplitudeRatio {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<AmplitudeRatio> for Num {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn mul(self, rhs: AmplitudeRatio) -> AmplitudeRatio {
-        AmplitudeRatio(self * rhs.0)
-    }
-}
-impl Div<Num> for AmplitudeRatio {
-    type Output = AmplitudeRatio;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for AmplitudeRatio {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for AmplitudeRatio {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            AmplitudeRatioUnit::DecibelVolt.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`AmplitudeRatio`].
-#[derive(Debug)]
-pub struct ParseAmplitudeRatioError(String);
-
-impl fmt::Display for ParseAmplitudeRatioError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as AmplitudeRatio", self.0)
-    }
-}
-
-impl std::error::Error for ParseAmplitudeRatioError {}
-
-impl FromStr for AmplitudeRatio {
-    type Err = ParseAmplitudeRatioError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseAmplitudeRatioError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, AmplitudeRatioUnit)] = &[
-            ("dBµV", AmplitudeRatioUnit::DecibelMicrovolt),
-            ("dBmV", AmplitudeRatioUnit::DecibelMillivolt),
-            ("dBV", AmplitudeRatioUnit::DecibelVolt),
-            ("dBu", AmplitudeRatioUnit::DecibelUnloaded),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseAmplitudeRatioError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

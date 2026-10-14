@@ -2,27 +2,35 @@
 // Source: data/quantities/RotationalSpeed.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Rotational speed (sometimes called speed of revolution) is the number of complete rotations, revolutions, cycles, or turns per time unit. Rotational speed is a cyclic frequency, measured in radians per second or in hertz in the SI System by scientists, or in revolutions per minute (rpm or min-1) or revolutions per second in everyday life. The symbol for rotational speed is ω (the Greek lowercase letter "omega").
 ///
-/// The internal value is stored in `RadianPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RotationalSpeed(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`RotationalSpeedUnit::RadianPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct RotationalSpeed<T = f64>(T);
+
+quantity!(RotationalSpeed, RotationalSpeedUnit, RadianPerSecond);
 
 /// Unit variants for [`RotationalSpeed`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum RotationalSpeedUnit {
     RadianPerSecond,
     NanoradianPerSecond,
@@ -59,7 +67,7 @@ impl RotationalSpeedUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::RadianPerSecond => "rad/s",
             Self::NanoradianPerSecond => "nrad/s",
@@ -77,9 +85,9 @@ impl RotationalSpeedUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::RadianPerSecond => &["rad/s"],
             Self::NanoradianPerSecond => &["nrad/s"],
@@ -98,478 +106,315 @@ impl RotationalSpeedUnit {
     }
 }
 
-impl RotationalSpeed {
+impl core::str::FromStr for RotationalSpeedUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "rad/s" => Ok(Self::RadianPerSecond),
+            "nrad/s" => Ok(Self::NanoradianPerSecond),
+            "µrad/s" => Ok(Self::MicroradianPerSecond),
+            "mrad/s" => Ok(Self::MilliradianPerSecond),
+            "crad/s" => Ok(Self::CentiradianPerSecond),
+            "drad/s" => Ok(Self::DeciradianPerSecond),
+            "°/s" => Ok(Self::DegreePerSecond),
+            "deg/s" => Ok(Self::DegreePerSecond),
+            "n°/s" => Ok(Self::NanodegreePerSecond),
+            "µ°/s" => Ok(Self::MicrodegreePerSecond),
+            "m°/s" => Ok(Self::MillidegreePerSecond),
+            "°/min" => Ok(Self::DegreePerMinute),
+            "deg/min" => Ok(Self::DegreePerMinute),
+            "r/s" => Ok(Self::RevolutionPerSecond),
+            "rpm" => Ok(Self::RevolutionPerMinute),
+            "r/min" => Ok(Self::RevolutionPerMinute),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> RotationalSpeed<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: RotationalSpeedUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: RotationalSpeedUnit) -> Self {
         Self(match unit {
-            RotationalSpeedUnit::RadianPerSecond => x,
-            RotationalSpeedUnit::NanoradianPerSecond => (x * 1e-9),
-            RotationalSpeedUnit::MicroradianPerSecond => (x * 1e-6),
-            RotationalSpeedUnit::MilliradianPerSecond => (x * 1e-3),
-            RotationalSpeedUnit::CentiradianPerSecond => (x * 1e-2),
-            RotationalSpeedUnit::DeciradianPerSecond => (x * 1e-1),
-            RotationalSpeedUnit::DegreePerSecond => ((std::f64::consts::PI as Num) / 180.0) * x,
-            RotationalSpeedUnit::NanodegreePerSecond => {
-                ((std::f64::consts::PI as Num) / 180.0) * (x * 1e-9)
-            }
-            RotationalSpeedUnit::MicrodegreePerSecond => {
-                ((std::f64::consts::PI as Num) / 180.0) * (x * 1e-6)
-            }
-            RotationalSpeedUnit::MillidegreePerSecond => {
-                ((std::f64::consts::PI as Num) / 180.0) * (x * 1e-3)
-            }
-            RotationalSpeedUnit::DegreePerMinute => {
-                ((std::f64::consts::PI as Num) / (180.0 * 60.0)) * x
-            }
-            RotationalSpeedUnit::RevolutionPerSecond => x * 2.0 * (std::f64::consts::PI as Num),
-            RotationalSpeedUnit::RevolutionPerMinute => {
-                (x * 2.0 * (std::f64::consts::PI as Num)) / 60.0
-            }
+            RotationalSpeedUnit::RadianPerSecond => value,
+            RotationalSpeedUnit::NanoradianPerSecond => value / T::from_f64(1e9),
+            RotationalSpeedUnit::MicroradianPerSecond => value / T::from_f64(1000000.0),
+            RotationalSpeedUnit::MilliradianPerSecond => value / T::from_f64(1000.0),
+            RotationalSpeedUnit::CentiradianPerSecond => value / T::from_f64(100.0),
+            RotationalSpeedUnit::DeciradianPerSecond => value / T::from_f64(10.0),
+            RotationalSpeedUnit::DegreePerSecond => value * T::from_f64(0.017453292519943295),
+            RotationalSpeedUnit::NanodegreePerSecond => value * T::from_f64(1.7453292519943295e-11),
+            RotationalSpeedUnit::MicrodegreePerSecond => value * T::from_f64(1.7453292519943295e-8),
+            RotationalSpeedUnit::MillidegreePerSecond => value * T::from_f64(1.7453292519943296e-5),
+            RotationalSpeedUnit::DegreePerMinute => value * T::from_f64(0.0002908882086657216),
+            RotationalSpeedUnit::RevolutionPerSecond => value * T::from_f64(6.283185307179586),
+            RotationalSpeedUnit::RevolutionPerMinute => value * T::from_f64(0.10471975511965978),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: RotationalSpeedUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: RotationalSpeedUnit) -> T {
         match unit {
-            RotationalSpeedUnit::RadianPerSecond => x,
-            RotationalSpeedUnit::NanoradianPerSecond => (x / 1e-9),
-            RotationalSpeedUnit::MicroradianPerSecond => (x / 1e-6),
-            RotationalSpeedUnit::MilliradianPerSecond => (x / 1e-3),
-            RotationalSpeedUnit::CentiradianPerSecond => (x / 1e-2),
-            RotationalSpeedUnit::DeciradianPerSecond => (x / 1e-1),
-            RotationalSpeedUnit::DegreePerSecond => (180.0 / (std::f64::consts::PI as Num)) * x,
+            RotationalSpeedUnit::RadianPerSecond => self.0,
+            RotationalSpeedUnit::NanoradianPerSecond => self.0 * T::from_f64(1e9),
+            RotationalSpeedUnit::MicroradianPerSecond => self.0 * T::from_f64(1000000.0),
+            RotationalSpeedUnit::MilliradianPerSecond => self.0 * T::from_f64(1000.0),
+            RotationalSpeedUnit::CentiradianPerSecond => self.0 * T::from_f64(100.0),
+            RotationalSpeedUnit::DeciradianPerSecond => self.0 * T::from_f64(10.0),
+            RotationalSpeedUnit::DegreePerSecond => self.0 / T::from_f64(0.017453292519943295),
             RotationalSpeedUnit::NanodegreePerSecond => {
-                (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-9)
+                self.0 / T::from_f64(1.7453292519943295e-11)
             }
             RotationalSpeedUnit::MicrodegreePerSecond => {
-                (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-6)
+                self.0 / T::from_f64(1.7453292519943295e-8)
             }
             RotationalSpeedUnit::MillidegreePerSecond => {
-                (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-3)
+                self.0 / T::from_f64(1.7453292519943296e-5)
             }
-            RotationalSpeedUnit::DegreePerMinute => {
-                (180.0 * 60.0 / (std::f64::consts::PI as Num)) * x
-            }
-            RotationalSpeedUnit::RevolutionPerSecond => x / (2.0 * (std::f64::consts::PI as Num)),
-            RotationalSpeedUnit::RevolutionPerMinute => {
-                (x / (2.0 * (std::f64::consts::PI as Num))) * 60.0
-            }
+            RotationalSpeedUnit::DegreePerMinute => self.0 / T::from_f64(0.0002908882086657216),
+            RotationalSpeedUnit::RevolutionPerSecond => self.0 / T::from_f64(6.283185307179586),
+            RotationalSpeedUnit::RevolutionPerMinute => self.0 / T::from_f64(0.10471975511965978),
         }
     }
 
     /// Creates a [`RotationalSpeed`] from a value in RadiansPerSecond (`rad/s`).
     #[inline]
-    pub fn from_radians_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_radians_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in RadiansPerSecond (`rad/s`).
     #[inline]
-    pub fn as_radians_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_radians_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_radians_per_second`].
     #[inline]
-    pub fn as_radian_per_second(self) -> Num {
+    pub fn as_radian_per_second(self) -> T {
         self.as_radians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in NanoradiansPerSecond (`nrad/s`).
     #[inline]
-    pub fn from_nanoradians_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanoradians_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanoradiansPerSecond (`nrad/s`).
     #[inline]
-    pub fn as_nanoradians_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanoradians_per_second(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanoradians_per_second`].
     #[inline]
-    pub fn as_nanoradian_per_second(self) -> Num {
+    pub fn as_nanoradian_per_second(self) -> T {
         self.as_nanoradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MicroradiansPerSecond (`µrad/s`).
     #[inline]
-    pub fn from_microradians_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microradians_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicroradiansPerSecond (`µrad/s`).
     #[inline]
-    pub fn as_microradians_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microradians_per_second(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microradians_per_second`].
     #[inline]
-    pub fn as_microradian_per_second(self) -> Num {
+    pub fn as_microradian_per_second(self) -> T {
         self.as_microradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MilliradiansPerSecond (`mrad/s`).
     #[inline]
-    pub fn from_milliradians_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliradians_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilliradiansPerSecond (`mrad/s`).
     #[inline]
-    pub fn as_milliradians_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliradians_per_second(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliradians_per_second`].
     #[inline]
-    pub fn as_milliradian_per_second(self) -> Num {
+    pub fn as_milliradian_per_second(self) -> T {
         self.as_milliradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in CentiradiansPerSecond (`crad/s`).
     #[inline]
-    pub fn from_centiradians_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centiradians_per_second(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentiradiansPerSecond (`crad/s`).
     #[inline]
-    pub fn as_centiradians_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centiradians_per_second(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centiradians_per_second`].
     #[inline]
-    pub fn as_centiradian_per_second(self) -> Num {
+    pub fn as_centiradian_per_second(self) -> T {
         self.as_centiradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in DeciradiansPerSecond (`drad/s`).
     #[inline]
-    pub fn from_deciradians_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_deciradians_per_second(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DeciradiansPerSecond (`drad/s`).
     #[inline]
-    pub fn as_deciradians_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_deciradians_per_second(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_deciradians_per_second`].
     #[inline]
-    pub fn as_deciradian_per_second(self) -> Num {
+    pub fn as_deciradian_per_second(self) -> T {
         self.as_deciradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in DegreesPerSecond (`°/s`).
     #[inline]
-    pub fn from_degrees_per_second(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / 180.0) * x)
+    pub fn from_degrees_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.017453292519943295))
     }
 
     /// Returns the value expressed in DegreesPerSecond (`°/s`).
     #[inline]
-    pub fn as_degrees_per_second(self) -> Num {
-        let x = self.0;
-        (180.0 / (std::f64::consts::PI as Num)) * x
+    pub fn as_degrees_per_second(self) -> T {
+        self.0 / T::from_f64(0.017453292519943295)
     }
 
     /// Alias for [`Self::as_degrees_per_second`].
     #[inline]
-    pub fn as_degree_per_second(self) -> Num {
+    pub fn as_degree_per_second(self) -> T {
         self.as_degrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in NanodegreesPerSecond (`n°/s`).
     #[inline]
-    pub fn from_nanodegrees_per_second(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / 180.0) * (x * 1e-9))
+    pub fn from_nanodegrees_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1.7453292519943295e-11))
     }
 
     /// Returns the value expressed in NanodegreesPerSecond (`n°/s`).
     #[inline]
-    pub fn as_nanodegrees_per_second(self) -> Num {
-        let x = self.0;
-        (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-9)
+    pub fn as_nanodegrees_per_second(self) -> T {
+        self.0 / T::from_f64(1.7453292519943295e-11)
     }
 
     /// Alias for [`Self::as_nanodegrees_per_second`].
     #[inline]
-    pub fn as_nanodegree_per_second(self) -> Num {
+    pub fn as_nanodegree_per_second(self) -> T {
         self.as_nanodegrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MicrodegreesPerSecond (`µ°/s`).
     #[inline]
-    pub fn from_microdegrees_per_second(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / 180.0) * (x * 1e-6))
+    pub fn from_microdegrees_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1.7453292519943295e-8))
     }
 
     /// Returns the value expressed in MicrodegreesPerSecond (`µ°/s`).
     #[inline]
-    pub fn as_microdegrees_per_second(self) -> Num {
-        let x = self.0;
-        (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-6)
+    pub fn as_microdegrees_per_second(self) -> T {
+        self.0 / T::from_f64(1.7453292519943295e-8)
     }
 
     /// Alias for [`Self::as_microdegrees_per_second`].
     #[inline]
-    pub fn as_microdegree_per_second(self) -> Num {
+    pub fn as_microdegree_per_second(self) -> T {
         self.as_microdegrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MillidegreesPerSecond (`m°/s`).
     #[inline]
-    pub fn from_millidegrees_per_second(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / 180.0) * (x * 1e-3))
+    pub fn from_millidegrees_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1.7453292519943296e-5))
     }
 
     /// Returns the value expressed in MillidegreesPerSecond (`m°/s`).
     #[inline]
-    pub fn as_millidegrees_per_second(self) -> Num {
-        let x = self.0;
-        (180.0 / (std::f64::consts::PI as Num)) * (x / 1e-3)
+    pub fn as_millidegrees_per_second(self) -> T {
+        self.0 / T::from_f64(1.7453292519943296e-5)
     }
 
     /// Alias for [`Self::as_millidegrees_per_second`].
     #[inline]
-    pub fn as_millidegree_per_second(self) -> Num {
+    pub fn as_millidegree_per_second(self) -> T {
         self.as_millidegrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in DegreesPerMinute (`°/min`).
     #[inline]
-    pub fn from_degrees_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(((std::f64::consts::PI as Num) / (180.0 * 60.0)) * x)
+    pub fn from_degrees_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.0002908882086657216))
     }
 
     /// Returns the value expressed in DegreesPerMinute (`°/min`).
     #[inline]
-    pub fn as_degrees_per_minute(self) -> Num {
-        let x = self.0;
-        (180.0 * 60.0 / (std::f64::consts::PI as Num)) * x
+    pub fn as_degrees_per_minute(self) -> T {
+        self.0 / T::from_f64(0.0002908882086657216)
     }
 
     /// Alias for [`Self::as_degrees_per_minute`].
     #[inline]
-    pub fn as_degree_per_minute(self) -> Num {
+    pub fn as_degree_per_minute(self) -> T {
         self.as_degrees_per_minute()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in RevolutionsPerSecond (`r/s`).
     #[inline]
-    pub fn from_revolutions_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 2.0 * (std::f64::consts::PI as Num))
+    pub fn from_revolutions_per_second(value: T) -> Self {
+        Self(value * T::from_f64(6.283185307179586))
     }
 
     /// Returns the value expressed in RevolutionsPerSecond (`r/s`).
     #[inline]
-    pub fn as_revolutions_per_second(self) -> Num {
-        let x = self.0;
-        x / (2.0 * (std::f64::consts::PI as Num))
+    pub fn as_revolutions_per_second(self) -> T {
+        self.0 / T::from_f64(6.283185307179586)
     }
 
     /// Alias for [`Self::as_revolutions_per_second`].
     #[inline]
-    pub fn as_revolution_per_second(self) -> Num {
+    pub fn as_revolution_per_second(self) -> T {
         self.as_revolutions_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in RevolutionsPerMinute (`rpm`).
     #[inline]
-    pub fn from_revolutions_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 2.0 * (std::f64::consts::PI as Num)) / 60.0)
+    pub fn from_revolutions_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.10471975511965978))
     }
 
     /// Returns the value expressed in RevolutionsPerMinute (`rpm`).
     #[inline]
-    pub fn as_revolutions_per_minute(self) -> Num {
-        let x = self.0;
-        (x / (2.0 * (std::f64::consts::PI as Num))) * 60.0
+    pub fn as_revolutions_per_minute(self) -> T {
+        self.0 / T::from_f64(0.10471975511965978)
     }
 
     /// Alias for [`Self::as_revolutions_per_minute`].
     #[inline]
-    pub fn as_revolution_per_minute(self) -> Num {
+    pub fn as_revolution_per_minute(self) -> T {
         self.as_revolutions_per_minute()
     }
-}
-
-impl crate::Quantity for RotationalSpeed {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for RotationalSpeed {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for RotationalSpeed {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for RotationalSpeed {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for RotationalSpeed {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<RotationalSpeed> for Num {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn mul(self, rhs: RotationalSpeed) -> RotationalSpeed {
-        RotationalSpeed(self * rhs.0)
-    }
-}
-impl Div<Num> for RotationalSpeed {
-    type Output = RotationalSpeed;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for RotationalSpeed {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for RotationalSpeed {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            RotationalSpeedUnit::RadianPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`RotationalSpeed`].
-#[derive(Debug)]
-pub struct ParseRotationalSpeedError(String);
-
-impl fmt::Display for ParseRotationalSpeedError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as RotationalSpeed", self.0)
-    }
-}
-
-impl std::error::Error for ParseRotationalSpeedError {}
-
-impl FromStr for RotationalSpeed {
-    type Err = ParseRotationalSpeedError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseRotationalSpeedError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, RotationalSpeedUnit)] = &[
-            ("deg/min", RotationalSpeedUnit::DegreePerMinute),
-            ("µrad/s", RotationalSpeedUnit::MicroradianPerSecond),
-            ("crad/s", RotationalSpeedUnit::CentiradianPerSecond),
-            ("drad/s", RotationalSpeedUnit::DeciradianPerSecond),
-            ("mrad/s", RotationalSpeedUnit::MilliradianPerSecond),
-            ("nrad/s", RotationalSpeedUnit::NanoradianPerSecond),
-            ("°/min", RotationalSpeedUnit::DegreePerMinute),
-            ("µ°/s", RotationalSpeedUnit::MicrodegreePerSecond),
-            ("deg/s", RotationalSpeedUnit::DegreePerSecond),
-            ("m°/s", RotationalSpeedUnit::MillidegreePerSecond),
-            ("n°/s", RotationalSpeedUnit::NanodegreePerSecond),
-            ("r/min", RotationalSpeedUnit::RevolutionPerMinute),
-            ("rad/s", RotationalSpeedUnit::RadianPerSecond),
-            ("°/s", RotationalSpeedUnit::DegreePerSecond),
-            ("r/s", RotationalSpeedUnit::RevolutionPerSecond),
-            ("rpm", RotationalSpeedUnit::RevolutionPerMinute),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseRotationalSpeedError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

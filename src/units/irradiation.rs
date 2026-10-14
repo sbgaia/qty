@@ -2,27 +2,35 @@
 // Source: data/quantities/Irradiation.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Irradiation is the process by which an object is exposed to radiation. The exposure can originate from various sources, including natural sources.
 ///
-/// The internal value is stored in `JoulePerSquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Irradiation(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`IrradiationUnit::JoulePerSquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Irradiation<T = f64>(T);
+
+quantity!(Irradiation, IrradiationUnit, JoulePerSquareMeter);
 
 /// Unit variants for [`Irradiation`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum IrradiationUnit {
     JoulePerSquareMeter,
     KilojoulePerSquareMeter,
@@ -51,7 +59,7 @@ impl IrradiationUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerSquareMeter => "J/m²",
             Self::KilojoulePerSquareMeter => "kJ/m²",
@@ -65,9 +73,9 @@ impl IrradiationUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerSquareMeter => &["J/m²"],
             Self::KilojoulePerSquareMeter => &["kJ/m²"],
@@ -82,363 +90,222 @@ impl IrradiationUnit {
     }
 }
 
-impl Irradiation {
+impl core::str::FromStr for IrradiationUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "J/m²" => Ok(Self::JoulePerSquareMeter),
+            "kJ/m²" => Ok(Self::KilojoulePerSquareMeter),
+            "J/cm²" => Ok(Self::JoulePerSquareCentimeter),
+            "mJ/cm²" => Ok(Self::MillijoulePerSquareCentimeter),
+            "J/mm²" => Ok(Self::JoulePerSquareMillimeter),
+            "Wh/m²" => Ok(Self::WattHourPerSquareMeter),
+            "kWh/m²" => Ok(Self::KilowattHourPerSquareMeter),
+            "Btu/ft²" => Ok(Self::BtuPerSquareFoot),
+            "kBtu/ft²" => Ok(Self::KilobtuPerSquareFoot),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Irradiation<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: IrradiationUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: IrradiationUnit) -> Self {
         Self(match unit {
-            IrradiationUnit::JoulePerSquareMeter => x,
-            IrradiationUnit::KilojoulePerSquareMeter => (x * 1e3),
-            IrradiationUnit::JoulePerSquareCentimeter => x * 1e4,
-            IrradiationUnit::MillijoulePerSquareCentimeter => (x * 1e-3) * 1e4,
-            IrradiationUnit::JoulePerSquareMillimeter => x * 1e6,
-            IrradiationUnit::WattHourPerSquareMeter => x * 3600.0,
-            IrradiationUnit::KilowattHourPerSquareMeter => (x * 1e3) * 3600.0,
-            IrradiationUnit::BtuPerSquareFoot => x * 1055.05585262 / 9.290304e-2,
-            IrradiationUnit::KilobtuPerSquareFoot => (x * 1e3) * 1055.05585262 / 9.290304e-2,
+            IrradiationUnit::JoulePerSquareMeter => value,
+            IrradiationUnit::KilojoulePerSquareMeter => value * T::from_f64(1000.0),
+            IrradiationUnit::JoulePerSquareCentimeter => value * T::from_f64(10000.0),
+            IrradiationUnit::MillijoulePerSquareCentimeter => value * T::from_f64(10.0),
+            IrradiationUnit::JoulePerSquareMillimeter => value * T::from_f64(1000000.0),
+            IrradiationUnit::WattHourPerSquareMeter => value * T::from_f64(3600.0),
+            IrradiationUnit::KilowattHourPerSquareMeter => value * T::from_f64(3600000.0),
+            IrradiationUnit::BtuPerSquareFoot => value * T::from_f64(11356.526682226975),
+            IrradiationUnit::KilobtuPerSquareFoot => value * T::from_f64(1.1356526682226976e7),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: IrradiationUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: IrradiationUnit) -> T {
         match unit {
-            IrradiationUnit::JoulePerSquareMeter => x,
-            IrradiationUnit::KilojoulePerSquareMeter => (x / 1e3),
-            IrradiationUnit::JoulePerSquareCentimeter => x / 1e4,
-            IrradiationUnit::MillijoulePerSquareCentimeter => (x / 1e-3) / 1e4,
-            IrradiationUnit::JoulePerSquareMillimeter => x / 1e6,
-            IrradiationUnit::WattHourPerSquareMeter => x / 3600.0,
-            IrradiationUnit::KilowattHourPerSquareMeter => (x / 1e3) / 3600.0,
-            IrradiationUnit::BtuPerSquareFoot => x * 9.290304e-2 / 1055.05585262,
-            IrradiationUnit::KilobtuPerSquareFoot => (x / 1e3) * 9.290304e-2 / 1055.05585262,
+            IrradiationUnit::JoulePerSquareMeter => self.0,
+            IrradiationUnit::KilojoulePerSquareMeter => self.0 / T::from_f64(1000.0),
+            IrradiationUnit::JoulePerSquareCentimeter => self.0 / T::from_f64(10000.0),
+            IrradiationUnit::MillijoulePerSquareCentimeter => self.0 / T::from_f64(10.0),
+            IrradiationUnit::JoulePerSquareMillimeter => self.0 / T::from_f64(1000000.0),
+            IrradiationUnit::WattHourPerSquareMeter => self.0 / T::from_f64(3600.0),
+            IrradiationUnit::KilowattHourPerSquareMeter => self.0 / T::from_f64(3600000.0),
+            IrradiationUnit::BtuPerSquareFoot => self.0 / T::from_f64(11356.526682226975),
+            IrradiationUnit::KilobtuPerSquareFoot => self.0 / T::from_f64(1.1356526682226976e7),
         }
     }
 
     /// Creates a [`Irradiation`] from a value in JoulesPerSquareMeter (`J/m²`).
     #[inline]
-    pub fn from_joules_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_joules_per_square_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in JoulesPerSquareMeter (`J/m²`).
     #[inline]
-    pub fn as_joules_per_square_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_joules_per_square_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_joules_per_square_meter`].
     #[inline]
-    pub fn as_joule_per_square_meter(self) -> Num {
+    pub fn as_joule_per_square_meter(self) -> T {
         self.as_joules_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in KilojoulesPerSquareMeter (`kJ/m²`).
     #[inline]
-    pub fn from_kilojoules_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilojoules_per_square_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilojoulesPerSquareMeter (`kJ/m²`).
     #[inline]
-    pub fn as_kilojoules_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilojoules_per_square_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilojoules_per_square_meter`].
     #[inline]
-    pub fn as_kilojoule_per_square_meter(self) -> Num {
+    pub fn as_kilojoule_per_square_meter(self) -> T {
         self.as_kilojoules_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in JoulesPerSquareCentimeter (`J/cm²`).
     #[inline]
-    pub fn from_joules_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e4)
+    pub fn from_joules_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in JoulesPerSquareCentimeter (`J/cm²`).
     #[inline]
-    pub fn as_joules_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        x / 1e4
+    pub fn as_joules_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_joules_per_square_centimeter`].
     #[inline]
-    pub fn as_joule_per_square_centimeter(self) -> Num {
+    pub fn as_joule_per_square_centimeter(self) -> T {
         self.as_joules_per_square_centimeter()
     }
 
     /// Creates a [`Irradiation`] from a value in MillijoulesPerSquareCentimeter (`mJ/cm²`).
     #[inline]
-    pub fn from_millijoules_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e4)
+    pub fn from_millijoules_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in MillijoulesPerSquareCentimeter (`mJ/cm²`).
     #[inline]
-    pub fn as_millijoules_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e4
+    pub fn as_millijoules_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_millijoules_per_square_centimeter`].
     #[inline]
-    pub fn as_millijoule_per_square_centimeter(self) -> Num {
+    pub fn as_millijoule_per_square_centimeter(self) -> T {
         self.as_millijoules_per_square_centimeter()
     }
 
     /// Creates a [`Irradiation`] from a value in JoulesPerSquareMillimeter (`J/mm²`).
     #[inline]
-    pub fn from_joules_per_square_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e6)
+    pub fn from_joules_per_square_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in JoulesPerSquareMillimeter (`J/mm²`).
     #[inline]
-    pub fn as_joules_per_square_millimeter(self) -> Num {
-        let x = self.0;
-        x / 1e6
+    pub fn as_joules_per_square_millimeter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_joules_per_square_millimeter`].
     #[inline]
-    pub fn as_joule_per_square_millimeter(self) -> Num {
+    pub fn as_joule_per_square_millimeter(self) -> T {
         self.as_joules_per_square_millimeter()
     }
 
     /// Creates a [`Irradiation`] from a value in WattHoursPerSquareMeter (`Wh/m²`).
     #[inline]
-    pub fn from_watt_hours_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x * 3600.0)
+    pub fn from_watt_hours_per_square_meter(value: T) -> Self {
+        Self(value * T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in WattHoursPerSquareMeter (`Wh/m²`).
     #[inline]
-    pub fn as_watt_hours_per_square_meter(self) -> Num {
-        let x = self.0;
-        x / 3600.0
+    pub fn as_watt_hours_per_square_meter(self) -> T {
+        self.0 / T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_watt_hours_per_square_meter`].
     #[inline]
-    pub fn as_watt_hour_per_square_meter(self) -> Num {
+    pub fn as_watt_hour_per_square_meter(self) -> T {
         self.as_watt_hours_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in KilowattHoursPerSquareMeter (`kWh/m²`).
     #[inline]
-    pub fn from_kilowatt_hours_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 3600.0)
+    pub fn from_kilowatt_hours_per_square_meter(value: T) -> Self {
+        Self(value * T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in KilowattHoursPerSquareMeter (`kWh/m²`).
     #[inline]
-    pub fn as_kilowatt_hours_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 3600.0
+    pub fn as_kilowatt_hours_per_square_meter(self) -> T {
+        self.0 / T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_kilowatt_hours_per_square_meter`].
     #[inline]
-    pub fn as_kilowatt_hour_per_square_meter(self) -> Num {
+    pub fn as_kilowatt_hour_per_square_meter(self) -> T {
         self.as_kilowatt_hours_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in BtusPerSquareFoot (`Btu/ft²`).
     #[inline]
-    pub fn from_btus_per_square_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * 1055.05585262 / 9.290304e-2)
+    pub fn from_btus_per_square_foot(value: T) -> Self {
+        Self(value * T::from_f64(11356.526682226975))
     }
 
     /// Returns the value expressed in BtusPerSquareFoot (`Btu/ft²`).
     #[inline]
-    pub fn as_btus_per_square_foot(self) -> Num {
-        let x = self.0;
-        x * 9.290304e-2 / 1055.05585262
+    pub fn as_btus_per_square_foot(self) -> T {
+        self.0 / T::from_f64(11356.526682226975)
     }
 
     /// Alias for [`Self::as_btus_per_square_foot`].
     #[inline]
-    pub fn as_btu_per_square_foot(self) -> Num {
+    pub fn as_btu_per_square_foot(self) -> T {
         self.as_btus_per_square_foot()
     }
 
     /// Creates a [`Irradiation`] from a value in KilobtusPerSquareFoot (`kBtu/ft²`).
     #[inline]
-    pub fn from_kilobtus_per_square_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1055.05585262 / 9.290304e-2)
+    pub fn from_kilobtus_per_square_foot(value: T) -> Self {
+        Self(value * T::from_f64(1.1356526682226976e7))
     }
 
     /// Returns the value expressed in KilobtusPerSquareFoot (`kBtu/ft²`).
     #[inline]
-    pub fn as_kilobtus_per_square_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 9.290304e-2 / 1055.05585262
+    pub fn as_kilobtus_per_square_foot(self) -> T {
+        self.0 / T::from_f64(1.1356526682226976e7)
     }
 
     /// Alias for [`Self::as_kilobtus_per_square_foot`].
     #[inline]
-    pub fn as_kilobtu_per_square_foot(self) -> Num {
+    pub fn as_kilobtu_per_square_foot(self) -> T {
         self.as_kilobtus_per_square_foot()
     }
-}
-
-impl crate::Quantity for Irradiation {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Irradiation {
-    type Output = Irradiation;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Irradiation {
-    type Output = Irradiation;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Irradiation {
-    type Output = Irradiation;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Irradiation {
-    type Output = Irradiation;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Irradiation> for Num {
-    type Output = Irradiation;
-    #[inline]
-    fn mul(self, rhs: Irradiation) -> Irradiation {
-        Irradiation(self * rhs.0)
-    }
-}
-impl Div<Num> for Irradiation {
-    type Output = Irradiation;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Irradiation {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Irradiation {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            IrradiationUnit::JoulePerSquareMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Irradiation`].
-#[derive(Debug)]
-pub struct ParseIrradiationError(String);
-
-impl fmt::Display for ParseIrradiationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Irradiation", self.0)
-    }
-}
-
-impl std::error::Error for ParseIrradiationError {}
-
-impl FromStr for Irradiation {
-    type Err = ParseIrradiationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseIrradiationError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, IrradiationUnit)] = &[
-            ("kBtu/ft²", IrradiationUnit::KilobtuPerSquareFoot),
-            ("Btu/ft²", IrradiationUnit::BtuPerSquareFoot),
-            ("kWh/m²", IrradiationUnit::KilowattHourPerSquareMeter),
-            ("mJ/cm²", IrradiationUnit::MillijoulePerSquareCentimeter),
-            ("J/cm²", IrradiationUnit::JoulePerSquareCentimeter),
-            ("J/mm²", IrradiationUnit::JoulePerSquareMillimeter),
-            ("Wh/m²", IrradiationUnit::WattHourPerSquareMeter),
-            ("kJ/m²", IrradiationUnit::KilojoulePerSquareMeter),
-            ("J/m²", IrradiationUnit::JoulePerSquareMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseIrradiationError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

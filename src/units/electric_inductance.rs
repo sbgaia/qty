@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricInductance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Inductance is a property of an electrical conductor which opposes a change in current.
 ///
-/// The internal value is stored in `Henry` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricInductance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricInductanceUnit::Henry`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricInductance<T = f64>(T);
+
+quantity!(ElectricInductance, ElectricInductanceUnit, Henry);
 
 /// Unit variants for [`ElectricInductance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricInductanceUnit {
     Henry,
     Picohenry,
@@ -43,7 +51,7 @@ impl ElectricInductanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Henry => "H",
             Self::Picohenry => "pH",
@@ -53,9 +61,9 @@ impl ElectricInductanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Henry => &["H"],
             Self::Picohenry => &["pH"],
@@ -66,271 +74,138 @@ impl ElectricInductanceUnit {
     }
 }
 
-impl ElectricInductance {
+impl core::str::FromStr for ElectricInductanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "H" => Ok(Self::Henry),
+            "pH" => Ok(Self::Picohenry),
+            "nH" => Ok(Self::Nanohenry),
+            "µH" => Ok(Self::Microhenry),
+            "mH" => Ok(Self::Millihenry),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricInductance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricInductanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricInductanceUnit) -> Self {
         Self(match unit {
-            ElectricInductanceUnit::Henry => x,
-            ElectricInductanceUnit::Picohenry => (x * 1e-12),
-            ElectricInductanceUnit::Nanohenry => (x * 1e-9),
-            ElectricInductanceUnit::Microhenry => (x * 1e-6),
-            ElectricInductanceUnit::Millihenry => (x * 1e-3),
+            ElectricInductanceUnit::Henry => value,
+            ElectricInductanceUnit::Picohenry => value / T::from_f64(1e12),
+            ElectricInductanceUnit::Nanohenry => value / T::from_f64(1e9),
+            ElectricInductanceUnit::Microhenry => value / T::from_f64(1000000.0),
+            ElectricInductanceUnit::Millihenry => value / T::from_f64(1000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricInductanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricInductanceUnit) -> T {
         match unit {
-            ElectricInductanceUnit::Henry => x,
-            ElectricInductanceUnit::Picohenry => (x / 1e-12),
-            ElectricInductanceUnit::Nanohenry => (x / 1e-9),
-            ElectricInductanceUnit::Microhenry => (x / 1e-6),
-            ElectricInductanceUnit::Millihenry => (x / 1e-3),
+            ElectricInductanceUnit::Henry => self.0,
+            ElectricInductanceUnit::Picohenry => self.0 * T::from_f64(1e12),
+            ElectricInductanceUnit::Nanohenry => self.0 * T::from_f64(1e9),
+            ElectricInductanceUnit::Microhenry => self.0 * T::from_f64(1000000.0),
+            ElectricInductanceUnit::Millihenry => self.0 * T::from_f64(1000.0),
         }
     }
 
     /// Creates a [`ElectricInductance`] from a value in Henries (`H`).
     #[inline]
-    pub fn from_henries(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_henries(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Henries (`H`).
     #[inline]
-    pub fn as_henries(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_henries(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_henries`].
     #[inline]
-    pub fn as_henry(self) -> Num {
+    pub fn as_henry(self) -> T {
         self.as_henries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Picohenries (`pH`).
     #[inline]
-    pub fn from_picohenries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picohenries(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picohenries (`pH`).
     #[inline]
-    pub fn as_picohenries(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picohenries(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picohenries`].
     #[inline]
-    pub fn as_picohenry(self) -> Num {
+    pub fn as_picohenry(self) -> T {
         self.as_picohenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Nanohenries (`nH`).
     #[inline]
-    pub fn from_nanohenries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanohenries(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanohenries (`nH`).
     #[inline]
-    pub fn as_nanohenries(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanohenries(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanohenries`].
     #[inline]
-    pub fn as_nanohenry(self) -> Num {
+    pub fn as_nanohenry(self) -> T {
         self.as_nanohenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Microhenries (`µH`).
     #[inline]
-    pub fn from_microhenries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microhenries(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microhenries (`µH`).
     #[inline]
-    pub fn as_microhenries(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microhenries(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microhenries`].
     #[inline]
-    pub fn as_microhenry(self) -> Num {
+    pub fn as_microhenry(self) -> T {
         self.as_microhenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Millihenries (`mH`).
     #[inline]
-    pub fn from_millihenries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millihenries(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millihenries (`mH`).
     #[inline]
-    pub fn as_millihenries(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millihenries(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millihenries`].
     #[inline]
-    pub fn as_millihenry(self) -> Num {
+    pub fn as_millihenry(self) -> T {
         self.as_millihenries()
     }
-}
-
-impl crate::Quantity for ElectricInductance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricInductance {
-    type Output = ElectricInductance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricInductance {
-    type Output = ElectricInductance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricInductance {
-    type Output = ElectricInductance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricInductance {
-    type Output = ElectricInductance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricInductance> for Num {
-    type Output = ElectricInductance;
-    #[inline]
-    fn mul(self, rhs: ElectricInductance) -> ElectricInductance {
-        ElectricInductance(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricInductance {
-    type Output = ElectricInductance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricInductance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricInductance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricInductanceUnit::Henry.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricInductance`].
-#[derive(Debug)]
-pub struct ParseElectricInductanceError(String);
-
-impl fmt::Display for ParseElectricInductanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricInductance", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricInductanceError {}
-
-impl FromStr for ElectricInductance {
-    type Err = ParseElectricInductanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricInductanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricInductanceUnit)] = &[
-            ("µH", ElectricInductanceUnit::Microhenry),
-            ("mH", ElectricInductanceUnit::Millihenry),
-            ("nH", ElectricInductanceUnit::Nanohenry),
-            ("pH", ElectricInductanceUnit::Picohenry),
-            ("H", ElectricInductanceUnit::Henry),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricInductanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

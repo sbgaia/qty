@@ -2,27 +2,35 @@
 // Source: data/quantities/Temperature.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// A temperature is a numerical measure of hot or cold. Its measurement is by detection of heat radiation or particle velocity or kinetic energy, or by the bulk behavior of a thermometric material. It may be calibrated in any of various temperature scales, Celsius, Fahrenheit, Kelvin, etc. The fundamental physical definition of temperature is provided by thermodynamics.
 ///
-/// The internal value is stored in `Kelvin` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Temperature(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureUnit::Kelvin`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Temperature<T = f64>(T);
+
+quantity!(Temperature, TemperatureUnit, Kelvin);
 
 /// Unit variants for [`Temperature`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum TemperatureUnit {
     Kelvin,
     DegreeCelsius,
@@ -53,7 +61,7 @@ impl TemperatureUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Kelvin => "K",
             Self::DegreeCelsius => "°C",
@@ -68,9 +76,9 @@ impl TemperatureUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Kelvin => &["K"],
             Self::DegreeCelsius => &["°C"],
@@ -86,381 +94,259 @@ impl TemperatureUnit {
     }
 }
 
-impl Temperature {
+impl core::str::FromStr for TemperatureUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "K" => Ok(Self::Kelvin),
+            "°C" => Ok(Self::DegreeCelsius),
+            "m°C" => Ok(Self::MillidegreeCelsius),
+            "°De" => Ok(Self::DegreeDelisle),
+            "°F" => Ok(Self::DegreeFahrenheit),
+            "°N" => Ok(Self::DegreeNewton),
+            "°R" => Ok(Self::DegreeRankine),
+            "°Ré" => Ok(Self::DegreeReaumur),
+            "°Rø" => Ok(Self::DegreeRoemer),
+            "T⊙" => Ok(Self::SolarTemperature),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Temperature<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: TemperatureUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: TemperatureUnit) -> Self {
         Self(match unit {
-            TemperatureUnit::Kelvin => x,
-            TemperatureUnit::DegreeCelsius => x + 273.15,
-            TemperatureUnit::MillidegreeCelsius => x / 1000.0 + 273.15,
-            TemperatureUnit::DegreeDelisle => x * -2.0 / 3.0 + 373.15,
-            TemperatureUnit::DegreeFahrenheit => x * 5.0 / 9.0 + 459.67 * 5.0 / 9.0,
-            TemperatureUnit::DegreeNewton => x * 100.0 / 33.0 + 273.15,
-            TemperatureUnit::DegreeRankine => x * 5.0 / 9.0,
-            TemperatureUnit::DegreeReaumur => x * 5.0 / 4.0 + 273.15,
-            TemperatureUnit::DegreeRoemer => x * 40.0 / 21.0 + 273.15 - 7.5 * 40.0 / 21.0,
-            TemperatureUnit::SolarTemperature => x * 5778.0,
+            TemperatureUnit::Kelvin => value,
+            TemperatureUnit::DegreeCelsius => value + T::from_f64(273.15),
+            TemperatureUnit::MillidegreeCelsius => {
+                value / T::from_f64(1000.0) + T::from_f64(273.15)
+            }
+            TemperatureUnit::DegreeDelisle => value / T::from_f64(-1.5) + T::from_f64(373.15),
+            TemperatureUnit::DegreeFahrenheit => {
+                value * T::from_f64(0.5555555555555556) + T::from_f64(255.37222222222223)
+            }
+            TemperatureUnit::DegreeNewton => {
+                value * T::from_f64(3.0303030303030303) + T::from_f64(273.15)
+            }
+            TemperatureUnit::DegreeRankine => value * T::from_f64(0.5555555555555556),
+            TemperatureUnit::DegreeReaumur => value * T::from_f64(1.25) + T::from_f64(273.15),
+            TemperatureUnit::DegreeRoemer => {
+                value * T::from_f64(1.9047619047619047) + T::from_f64(258.8642857142857)
+            }
+            TemperatureUnit::SolarTemperature => value * T::from_f64(5778.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: TemperatureUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: TemperatureUnit) -> T {
         match unit {
-            TemperatureUnit::Kelvin => x,
-            TemperatureUnit::DegreeCelsius => x - 273.15,
-            TemperatureUnit::MillidegreeCelsius => (x - 273.15) * 1000.0,
-            TemperatureUnit::DegreeDelisle => (x - 373.15) * -3.0 / 2.0,
-            TemperatureUnit::DegreeFahrenheit => (x - 459.67 * 5.0 / 9.0) * 9.0 / 5.0,
-            TemperatureUnit::DegreeNewton => (x - 273.15) * 33.0 / 100.0,
-            TemperatureUnit::DegreeRankine => x * 9.0 / 5.0,
-            TemperatureUnit::DegreeReaumur => (x - 273.15) * 4.0 / 5.0,
-            TemperatureUnit::DegreeRoemer => (x - (273.15 - 7.5 * 40.0 / 21.0)) * 21.0 / 40.0,
-            TemperatureUnit::SolarTemperature => x / 5778.0,
+            TemperatureUnit::Kelvin => self.0,
+            TemperatureUnit::DegreeCelsius => self.0 - T::from_f64(273.15),
+            TemperatureUnit::MillidegreeCelsius => {
+                (self.0 - T::from_f64(273.15)) * T::from_f64(1000.0)
+            }
+            TemperatureUnit::DegreeDelisle => (self.0 - T::from_f64(373.15)) * T::from_f64(-1.5),
+            TemperatureUnit::DegreeFahrenheit => {
+                (self.0 - T::from_f64(255.37222222222223)) / T::from_f64(0.5555555555555556)
+            }
+            TemperatureUnit::DegreeNewton => {
+                (self.0 - T::from_f64(273.15)) / T::from_f64(3.0303030303030303)
+            }
+            TemperatureUnit::DegreeRankine => self.0 / T::from_f64(0.5555555555555556),
+            TemperatureUnit::DegreeReaumur => (self.0 - T::from_f64(273.15)) / T::from_f64(1.25),
+            TemperatureUnit::DegreeRoemer => {
+                (self.0 - T::from_f64(258.8642857142857)) / T::from_f64(1.9047619047619047)
+            }
+            TemperatureUnit::SolarTemperature => self.0 / T::from_f64(5778.0),
         }
     }
 
     /// Creates a [`Temperature`] from a value in Kelvins (`K`).
     #[inline]
-    pub fn from_kelvins(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_kelvins(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Kelvins (`K`).
     #[inline]
-    pub fn as_kelvins(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_kelvins(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kelvins`].
     #[inline]
-    pub fn as_kelvin(self) -> Num {
+    pub fn as_kelvin(self) -> T {
         self.as_kelvins()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesCelsius (`°C`).
     #[inline]
-    pub fn from_degrees_celsius(value: Num) -> Self {
-        let x = value;
-        Self(x + 273.15)
+    pub fn from_degrees_celsius(value: T) -> Self {
+        Self(value + T::from_f64(273.15))
     }
 
     /// Returns the value expressed in DegreesCelsius (`°C`).
     #[inline]
-    pub fn as_degrees_celsius(self) -> Num {
-        let x = self.0;
-        x - 273.15
+    pub fn as_degrees_celsius(self) -> T {
+        self.0 - T::from_f64(273.15)
     }
 
     /// Alias for [`Self::as_degrees_celsius`].
     #[inline]
-    pub fn as_degree_celsius(self) -> Num {
+    pub fn as_degree_celsius(self) -> T {
         self.as_degrees_celsius()
     }
 
     /// Creates a [`Temperature`] from a value in MillidegreesCelsius (`m°C`).
     #[inline]
-    pub fn from_millidegrees_celsius(value: Num) -> Self {
-        let x = value;
-        Self(x / 1000.0 + 273.15)
+    pub fn from_millidegrees_celsius(value: T) -> Self {
+        Self(value / T::from_f64(1000.0) + T::from_f64(273.15))
     }
 
     /// Returns the value expressed in MillidegreesCelsius (`m°C`).
     #[inline]
-    pub fn as_millidegrees_celsius(self) -> Num {
-        let x = self.0;
-        (x - 273.15) * 1000.0
+    pub fn as_millidegrees_celsius(self) -> T {
+        (self.0 - T::from_f64(273.15)) * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millidegrees_celsius`].
     #[inline]
-    pub fn as_millidegree_celsius(self) -> Num {
+    pub fn as_millidegree_celsius(self) -> T {
         self.as_millidegrees_celsius()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesDelisle (`°De`).
     #[inline]
-    pub fn from_degrees_delisle(value: Num) -> Self {
-        let x = value;
-        Self(x * -2.0 / 3.0 + 373.15)
+    pub fn from_degrees_delisle(value: T) -> Self {
+        Self(value / T::from_f64(-1.5) + T::from_f64(373.15))
     }
 
     /// Returns the value expressed in DegreesDelisle (`°De`).
     #[inline]
-    pub fn as_degrees_delisle(self) -> Num {
-        let x = self.0;
-        (x - 373.15) * -3.0 / 2.0
+    pub fn as_degrees_delisle(self) -> T {
+        (self.0 - T::from_f64(373.15)) * T::from_f64(-1.5)
     }
 
     /// Alias for [`Self::as_degrees_delisle`].
     #[inline]
-    pub fn as_degree_delisle(self) -> Num {
+    pub fn as_degree_delisle(self) -> T {
         self.as_degrees_delisle()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesFahrenheit (`°F`).
     #[inline]
-    pub fn from_degrees_fahrenheit(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 9.0 + 459.67 * 5.0 / 9.0)
+    pub fn from_degrees_fahrenheit(value: T) -> Self {
+        Self(value * T::from_f64(0.5555555555555556) + T::from_f64(255.37222222222223))
     }
 
     /// Returns the value expressed in DegreesFahrenheit (`°F`).
     #[inline]
-    pub fn as_degrees_fahrenheit(self) -> Num {
-        let x = self.0;
-        (x - 459.67 * 5.0 / 9.0) * 9.0 / 5.0
+    pub fn as_degrees_fahrenheit(self) -> T {
+        (self.0 - T::from_f64(255.37222222222223)) / T::from_f64(0.5555555555555556)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit`].
     #[inline]
-    pub fn as_degree_fahrenheit(self) -> Num {
+    pub fn as_degree_fahrenheit(self) -> T {
         self.as_degrees_fahrenheit()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesNewton (`°N`).
     #[inline]
-    pub fn from_degrees_newton(value: Num) -> Self {
-        let x = value;
-        Self(x * 100.0 / 33.0 + 273.15)
+    pub fn from_degrees_newton(value: T) -> Self {
+        Self(value * T::from_f64(3.0303030303030303) + T::from_f64(273.15))
     }
 
     /// Returns the value expressed in DegreesNewton (`°N`).
     #[inline]
-    pub fn as_degrees_newton(self) -> Num {
-        let x = self.0;
-        (x - 273.15) * 33.0 / 100.0
+    pub fn as_degrees_newton(self) -> T {
+        (self.0 - T::from_f64(273.15)) / T::from_f64(3.0303030303030303)
     }
 
     /// Alias for [`Self::as_degrees_newton`].
     #[inline]
-    pub fn as_degree_newton(self) -> Num {
+    pub fn as_degree_newton(self) -> T {
         self.as_degrees_newton()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesRankine (`°R`).
     #[inline]
-    pub fn from_degrees_rankine(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 9.0)
+    pub fn from_degrees_rankine(value: T) -> Self {
+        Self(value * T::from_f64(0.5555555555555556))
     }
 
     /// Returns the value expressed in DegreesRankine (`°R`).
     #[inline]
-    pub fn as_degrees_rankine(self) -> Num {
-        let x = self.0;
-        x * 9.0 / 5.0
+    pub fn as_degrees_rankine(self) -> T {
+        self.0 / T::from_f64(0.5555555555555556)
     }
 
     /// Alias for [`Self::as_degrees_rankine`].
     #[inline]
-    pub fn as_degree_rankine(self) -> Num {
+    pub fn as_degree_rankine(self) -> T {
         self.as_degrees_rankine()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesReaumur (`°Ré`).
     #[inline]
-    pub fn from_degrees_reaumur(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 4.0 + 273.15)
+    pub fn from_degrees_reaumur(value: T) -> Self {
+        Self(value * T::from_f64(1.25) + T::from_f64(273.15))
     }
 
     /// Returns the value expressed in DegreesReaumur (`°Ré`).
     #[inline]
-    pub fn as_degrees_reaumur(self) -> Num {
-        let x = self.0;
-        (x - 273.15) * 4.0 / 5.0
+    pub fn as_degrees_reaumur(self) -> T {
+        (self.0 - T::from_f64(273.15)) / T::from_f64(1.25)
     }
 
     /// Alias for [`Self::as_degrees_reaumur`].
     #[inline]
-    pub fn as_degree_reaumur(self) -> Num {
+    pub fn as_degree_reaumur(self) -> T {
         self.as_degrees_reaumur()
     }
 
     /// Creates a [`Temperature`] from a value in DegreesRoemer (`°Rø`).
     #[inline]
-    pub fn from_degrees_roemer(value: Num) -> Self {
-        let x = value;
-        Self(x * 40.0 / 21.0 + 273.15 - 7.5 * 40.0 / 21.0)
+    pub fn from_degrees_roemer(value: T) -> Self {
+        Self(value * T::from_f64(1.9047619047619047) + T::from_f64(258.8642857142857))
     }
 
     /// Returns the value expressed in DegreesRoemer (`°Rø`).
     #[inline]
-    pub fn as_degrees_roemer(self) -> Num {
-        let x = self.0;
-        (x - (273.15 - 7.5 * 40.0 / 21.0)) * 21.0 / 40.0
+    pub fn as_degrees_roemer(self) -> T {
+        (self.0 - T::from_f64(258.8642857142857)) / T::from_f64(1.9047619047619047)
     }
 
     /// Alias for [`Self::as_degrees_roemer`].
     #[inline]
-    pub fn as_degree_roemer(self) -> Num {
+    pub fn as_degree_roemer(self) -> T {
         self.as_degrees_roemer()
     }
 
     /// Creates a [`Temperature`] from a value in SolarTemperatures (`T⊙`).
     #[inline]
-    pub fn from_solar_temperatures(value: Num) -> Self {
-        let x = value;
-        Self(x * 5778.0)
+    pub fn from_solar_temperatures(value: T) -> Self {
+        Self(value * T::from_f64(5778.0))
     }
 
     /// Returns the value expressed in SolarTemperatures (`T⊙`).
     #[inline]
-    pub fn as_solar_temperatures(self) -> Num {
-        let x = self.0;
-        x / 5778.0
+    pub fn as_solar_temperatures(self) -> T {
+        self.0 / T::from_f64(5778.0)
     }
 
     /// Alias for [`Self::as_solar_temperatures`].
     #[inline]
-    pub fn as_solar_temperature(self) -> Num {
+    pub fn as_solar_temperature(self) -> T {
         self.as_solar_temperatures()
     }
-}
-
-impl crate::Quantity for Temperature {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Temperature {
-    type Output = Temperature;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Temperature {
-    type Output = Temperature;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Temperature {
-    type Output = Temperature;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Temperature {
-    type Output = Temperature;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Temperature> for Num {
-    type Output = Temperature;
-    #[inline]
-    fn mul(self, rhs: Temperature) -> Temperature {
-        Temperature(self * rhs.0)
-    }
-}
-impl Div<Num> for Temperature {
-    type Output = Temperature;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Temperature {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Temperature {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, TemperatureUnit::Kelvin.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Temperature`].
-#[derive(Debug)]
-pub struct ParseTemperatureError(String);
-
-impl fmt::Display for ParseTemperatureError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Temperature", self.0)
-    }
-}
-
-impl std::error::Error for ParseTemperatureError {}
-
-impl FromStr for Temperature {
-    type Err = ParseTemperatureError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseTemperatureError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, TemperatureUnit)] = &[
-            ("°Ré", TemperatureUnit::DegreeReaumur),
-            ("°Rø", TemperatureUnit::DegreeRoemer),
-            ("T⊙", TemperatureUnit::SolarTemperature),
-            ("m°C", TemperatureUnit::MillidegreeCelsius),
-            ("°De", TemperatureUnit::DegreeDelisle),
-            ("°C", TemperatureUnit::DegreeCelsius),
-            ("°F", TemperatureUnit::DegreeFahrenheit),
-            ("°N", TemperatureUnit::DegreeNewton),
-            ("°R", TemperatureUnit::DegreeRankine),
-            ("K", TemperatureUnit::Kelvin),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseTemperatureError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

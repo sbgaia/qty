@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricCapacitance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Capacitance is the capacity of a material object or device to store electric charge.
 ///
-/// The internal value is stored in `Farad` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricCapacitance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricCapacitanceUnit::Farad`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricCapacitance<T = f64>(T);
+
+quantity!(ElectricCapacitance, ElectricCapacitanceUnit, Farad);
 
 /// Unit variants for [`ElectricCapacitance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricCapacitanceUnit {
     Farad,
     Picofarad,
@@ -47,7 +55,7 @@ impl ElectricCapacitanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Farad => "F",
             Self::Picofarad => "pF",
@@ -59,9 +67,9 @@ impl ElectricCapacitanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Farad => &["F"],
             Self::Picofarad => &["pF"],
@@ -74,317 +82,180 @@ impl ElectricCapacitanceUnit {
     }
 }
 
-impl ElectricCapacitance {
+impl core::str::FromStr for ElectricCapacitanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "F" => Ok(Self::Farad),
+            "pF" => Ok(Self::Picofarad),
+            "nF" => Ok(Self::Nanofarad),
+            "µF" => Ok(Self::Microfarad),
+            "mF" => Ok(Self::Millifarad),
+            "kF" => Ok(Self::Kilofarad),
+            "MF" => Ok(Self::Megafarad),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricCapacitance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricCapacitanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricCapacitanceUnit) -> Self {
         Self(match unit {
-            ElectricCapacitanceUnit::Farad => x,
-            ElectricCapacitanceUnit::Picofarad => (x * 1e-12),
-            ElectricCapacitanceUnit::Nanofarad => (x * 1e-9),
-            ElectricCapacitanceUnit::Microfarad => (x * 1e-6),
-            ElectricCapacitanceUnit::Millifarad => (x * 1e-3),
-            ElectricCapacitanceUnit::Kilofarad => (x * 1e3),
-            ElectricCapacitanceUnit::Megafarad => (x * 1e6),
+            ElectricCapacitanceUnit::Farad => value,
+            ElectricCapacitanceUnit::Picofarad => value / T::from_f64(1e12),
+            ElectricCapacitanceUnit::Nanofarad => value / T::from_f64(1e9),
+            ElectricCapacitanceUnit::Microfarad => value / T::from_f64(1000000.0),
+            ElectricCapacitanceUnit::Millifarad => value / T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Kilofarad => value * T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Megafarad => value * T::from_f64(1000000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricCapacitanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricCapacitanceUnit) -> T {
         match unit {
-            ElectricCapacitanceUnit::Farad => x,
-            ElectricCapacitanceUnit::Picofarad => (x / 1e-12),
-            ElectricCapacitanceUnit::Nanofarad => (x / 1e-9),
-            ElectricCapacitanceUnit::Microfarad => (x / 1e-6),
-            ElectricCapacitanceUnit::Millifarad => (x / 1e-3),
-            ElectricCapacitanceUnit::Kilofarad => (x / 1e3),
-            ElectricCapacitanceUnit::Megafarad => (x / 1e6),
+            ElectricCapacitanceUnit::Farad => self.0,
+            ElectricCapacitanceUnit::Picofarad => self.0 * T::from_f64(1e12),
+            ElectricCapacitanceUnit::Nanofarad => self.0 * T::from_f64(1e9),
+            ElectricCapacitanceUnit::Microfarad => self.0 * T::from_f64(1000000.0),
+            ElectricCapacitanceUnit::Millifarad => self.0 * T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Kilofarad => self.0 / T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Megafarad => self.0 / T::from_f64(1000000.0),
         }
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Farads (`F`).
     #[inline]
-    pub fn from_farads(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_farads(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Farads (`F`).
     #[inline]
-    pub fn as_farads(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_farads(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_farads`].
     #[inline]
-    pub fn as_farad(self) -> Num {
+    pub fn as_farad(self) -> T {
         self.as_farads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Picofarads (`pF`).
     #[inline]
-    pub fn from_picofarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picofarads(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picofarads (`pF`).
     #[inline]
-    pub fn as_picofarads(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picofarads(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picofarads`].
     #[inline]
-    pub fn as_picofarad(self) -> Num {
+    pub fn as_picofarad(self) -> T {
         self.as_picofarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Nanofarads (`nF`).
     #[inline]
-    pub fn from_nanofarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanofarads(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanofarads (`nF`).
     #[inline]
-    pub fn as_nanofarads(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanofarads(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanofarads`].
     #[inline]
-    pub fn as_nanofarad(self) -> Num {
+    pub fn as_nanofarad(self) -> T {
         self.as_nanofarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Microfarads (`µF`).
     #[inline]
-    pub fn from_microfarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microfarads(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microfarads (`µF`).
     #[inline]
-    pub fn as_microfarads(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microfarads(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microfarads`].
     #[inline]
-    pub fn as_microfarad(self) -> Num {
+    pub fn as_microfarad(self) -> T {
         self.as_microfarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Millifarads (`mF`).
     #[inline]
-    pub fn from_millifarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millifarads(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millifarads (`mF`).
     #[inline]
-    pub fn as_millifarads(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millifarads(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millifarads`].
     #[inline]
-    pub fn as_millifarad(self) -> Num {
+    pub fn as_millifarad(self) -> T {
         self.as_millifarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Kilofarads (`kF`).
     #[inline]
-    pub fn from_kilofarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilofarads(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilofarads (`kF`).
     #[inline]
-    pub fn as_kilofarads(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilofarads(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilofarads`].
     #[inline]
-    pub fn as_kilofarad(self) -> Num {
+    pub fn as_kilofarad(self) -> T {
         self.as_kilofarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Megafarads (`MF`).
     #[inline]
-    pub fn from_megafarads(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megafarads(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megafarads (`MF`).
     #[inline]
-    pub fn as_megafarads(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megafarads(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megafarads`].
     #[inline]
-    pub fn as_megafarad(self) -> Num {
+    pub fn as_megafarad(self) -> T {
         self.as_megafarads()
     }
-}
-
-impl crate::Quantity for ElectricCapacitance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricCapacitance {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricCapacitance {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricCapacitance {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricCapacitance {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricCapacitance> for Num {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn mul(self, rhs: ElectricCapacitance) -> ElectricCapacitance {
-        ElectricCapacitance(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricCapacitance {
-    type Output = ElectricCapacitance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricCapacitance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricCapacitance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricCapacitanceUnit::Farad.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricCapacitance`].
-#[derive(Debug)]
-pub struct ParseElectricCapacitanceError(String);
-
-impl fmt::Display for ParseElectricCapacitanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricCapacitance", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricCapacitanceError {}
-
-impl FromStr for ElectricCapacitance {
-    type Err = ParseElectricCapacitanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricCapacitanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricCapacitanceUnit)] = &[
-            ("µF", ElectricCapacitanceUnit::Microfarad),
-            ("MF", ElectricCapacitanceUnit::Megafarad),
-            ("kF", ElectricCapacitanceUnit::Kilofarad),
-            ("mF", ElectricCapacitanceUnit::Millifarad),
-            ("nF", ElectricCapacitanceUnit::Nanofarad),
-            ("pF", ElectricCapacitanceUnit::Picofarad),
-            ("F", ElectricCapacitanceUnit::Farad),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricCapacitanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

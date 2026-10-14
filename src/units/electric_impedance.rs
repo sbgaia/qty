@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricImpedance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Electric impedance is the opposition to alternating current presented by the combined effect of resistance and reactance in a circuit. It is defined as the inverse of admittance. The SI unit of impedance is the ohm (symbol Ω).
 ///
-/// The internal value is stored in `Ohm` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricImpedance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricImpedanceUnit::Ohm`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricImpedance<T = f64>(T);
+
+quantity!(ElectricImpedance, ElectricImpedanceUnit, Ohm);
 
 /// Unit variants for [`ElectricImpedance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricImpedanceUnit {
     Ohm,
     Nanoohm,
@@ -49,7 +57,7 @@ impl ElectricImpedanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Ohm => "Ω",
             Self::Nanoohm => "nΩ",
@@ -62,9 +70,9 @@ impl ElectricImpedanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Ohm => &["Ω"],
             Self::Nanoohm => &["nΩ"],
@@ -78,340 +86,201 @@ impl ElectricImpedanceUnit {
     }
 }
 
-impl ElectricImpedance {
+impl core::str::FromStr for ElectricImpedanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Ω" => Ok(Self::Ohm),
+            "nΩ" => Ok(Self::Nanoohm),
+            "µΩ" => Ok(Self::Microohm),
+            "mΩ" => Ok(Self::Milliohm),
+            "kΩ" => Ok(Self::Kiloohm),
+            "MΩ" => Ok(Self::Megaohm),
+            "GΩ" => Ok(Self::Gigaohm),
+            "TΩ" => Ok(Self::Teraohm),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricImpedance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricImpedanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricImpedanceUnit) -> Self {
         Self(match unit {
-            ElectricImpedanceUnit::Ohm => x,
-            ElectricImpedanceUnit::Nanoohm => (x * 1e-9),
-            ElectricImpedanceUnit::Microohm => (x * 1e-6),
-            ElectricImpedanceUnit::Milliohm => (x * 1e-3),
-            ElectricImpedanceUnit::Kiloohm => (x * 1e3),
-            ElectricImpedanceUnit::Megaohm => (x * 1e6),
-            ElectricImpedanceUnit::Gigaohm => (x * 1e9),
-            ElectricImpedanceUnit::Teraohm => (x * 1e12),
+            ElectricImpedanceUnit::Ohm => value,
+            ElectricImpedanceUnit::Nanoohm => value / T::from_f64(1e9),
+            ElectricImpedanceUnit::Microohm => value / T::from_f64(1000000.0),
+            ElectricImpedanceUnit::Milliohm => value / T::from_f64(1000.0),
+            ElectricImpedanceUnit::Kiloohm => value * T::from_f64(1000.0),
+            ElectricImpedanceUnit::Megaohm => value * T::from_f64(1000000.0),
+            ElectricImpedanceUnit::Gigaohm => value * T::from_f64(1e9),
+            ElectricImpedanceUnit::Teraohm => value * T::from_f64(1e12),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricImpedanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricImpedanceUnit) -> T {
         match unit {
-            ElectricImpedanceUnit::Ohm => x,
-            ElectricImpedanceUnit::Nanoohm => (x / 1e-9),
-            ElectricImpedanceUnit::Microohm => (x / 1e-6),
-            ElectricImpedanceUnit::Milliohm => (x / 1e-3),
-            ElectricImpedanceUnit::Kiloohm => (x / 1e3),
-            ElectricImpedanceUnit::Megaohm => (x / 1e6),
-            ElectricImpedanceUnit::Gigaohm => (x / 1e9),
-            ElectricImpedanceUnit::Teraohm => (x / 1e12),
+            ElectricImpedanceUnit::Ohm => self.0,
+            ElectricImpedanceUnit::Nanoohm => self.0 * T::from_f64(1e9),
+            ElectricImpedanceUnit::Microohm => self.0 * T::from_f64(1000000.0),
+            ElectricImpedanceUnit::Milliohm => self.0 * T::from_f64(1000.0),
+            ElectricImpedanceUnit::Kiloohm => self.0 / T::from_f64(1000.0),
+            ElectricImpedanceUnit::Megaohm => self.0 / T::from_f64(1000000.0),
+            ElectricImpedanceUnit::Gigaohm => self.0 / T::from_f64(1e9),
+            ElectricImpedanceUnit::Teraohm => self.0 / T::from_f64(1e12),
         }
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Ohms (`Ω`).
     #[inline]
-    pub fn from_ohms(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_ohms(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Ohms (`Ω`).
     #[inline]
-    pub fn as_ohms(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_ohms(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_ohms`].
     #[inline]
-    pub fn as_ohm(self) -> Num {
+    pub fn as_ohm(self) -> T {
         self.as_ohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Nanoohms (`nΩ`).
     #[inline]
-    pub fn from_nanoohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanoohms(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanoohms (`nΩ`).
     #[inline]
-    pub fn as_nanoohms(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanoohms(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanoohms`].
     #[inline]
-    pub fn as_nanoohm(self) -> Num {
+    pub fn as_nanoohm(self) -> T {
         self.as_nanoohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Microohms (`µΩ`).
     #[inline]
-    pub fn from_microohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microohms(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microohms (`µΩ`).
     #[inline]
-    pub fn as_microohms(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microohms(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microohms`].
     #[inline]
-    pub fn as_microohm(self) -> Num {
+    pub fn as_microohm(self) -> T {
         self.as_microohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Milliohms (`mΩ`).
     #[inline]
-    pub fn from_milliohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliohms(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Milliohms (`mΩ`).
     #[inline]
-    pub fn as_milliohms(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliohms(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliohms`].
     #[inline]
-    pub fn as_milliohm(self) -> Num {
+    pub fn as_milliohm(self) -> T {
         self.as_milliohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Kiloohms (`kΩ`).
     #[inline]
-    pub fn from_kiloohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kiloohms(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kiloohms (`kΩ`).
     #[inline]
-    pub fn as_kiloohms(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kiloohms(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kiloohms`].
     #[inline]
-    pub fn as_kiloohm(self) -> Num {
+    pub fn as_kiloohm(self) -> T {
         self.as_kiloohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Megaohms (`MΩ`).
     #[inline]
-    pub fn from_megaohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megaohms(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megaohms (`MΩ`).
     #[inline]
-    pub fn as_megaohms(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megaohms(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megaohms`].
     #[inline]
-    pub fn as_megaohm(self) -> Num {
+    pub fn as_megaohm(self) -> T {
         self.as_megaohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Gigaohms (`GΩ`).
     #[inline]
-    pub fn from_gigaohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigaohms(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigaohms (`GΩ`).
     #[inline]
-    pub fn as_gigaohms(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigaohms(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigaohms`].
     #[inline]
-    pub fn as_gigaohm(self) -> Num {
+    pub fn as_gigaohm(self) -> T {
         self.as_gigaohms()
     }
 
     /// Creates a [`ElectricImpedance`] from a value in Teraohms (`TΩ`).
     #[inline]
-    pub fn from_teraohms(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_teraohms(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Teraohms (`TΩ`).
     #[inline]
-    pub fn as_teraohms(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_teraohms(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_teraohms`].
     #[inline]
-    pub fn as_teraohm(self) -> Num {
+    pub fn as_teraohm(self) -> T {
         self.as_teraohms()
     }
-}
-
-impl crate::Quantity for ElectricImpedance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricImpedance {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricImpedance {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricImpedance {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricImpedance {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricImpedance> for Num {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn mul(self, rhs: ElectricImpedance) -> ElectricImpedance {
-        ElectricImpedance(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricImpedance {
-    type Output = ElectricImpedance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricImpedance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricImpedance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricImpedanceUnit::Ohm.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricImpedance`].
-#[derive(Debug)]
-pub struct ParseElectricImpedanceError(String);
-
-impl fmt::Display for ParseElectricImpedanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricImpedance", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricImpedanceError {}
-
-impl FromStr for ElectricImpedance {
-    type Err = ParseElectricImpedanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricImpedanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricImpedanceUnit)] = &[
-            ("µΩ", ElectricImpedanceUnit::Microohm),
-            ("GΩ", ElectricImpedanceUnit::Gigaohm),
-            ("MΩ", ElectricImpedanceUnit::Megaohm),
-            ("TΩ", ElectricImpedanceUnit::Teraohm),
-            ("kΩ", ElectricImpedanceUnit::Kiloohm),
-            ("mΩ", ElectricImpedanceUnit::Milliohm),
-            ("nΩ", ElectricImpedanceUnit::Nanoohm),
-            ("Ω", ElectricImpedanceUnit::Ohm),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricImpedanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

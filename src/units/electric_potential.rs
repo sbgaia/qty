@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricPotential.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In classical electromagnetism, the electric potential (a scalar quantity denoted by Φ, ΦE or V and also called the electric field potential or the electrostatic potential) at a point is the amount of electric potential energy that a unitary point charge would have when located at that point.
 ///
-/// The internal value is stored in `Volt` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricPotential(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricPotentialUnit::Volt`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricPotential<T = f64>(T);
+
+quantity!(ElectricPotential, ElectricPotentialUnit, Volt);
 
 /// Unit variants for [`ElectricPotential`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricPotentialUnit {
     Volt,
     Nanovolt,
@@ -45,7 +53,7 @@ impl ElectricPotentialUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Volt => "V",
             Self::Nanovolt => "nV",
@@ -56,9 +64,9 @@ impl ElectricPotentialUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Volt => &["V"],
             Self::Nanovolt => &["nV"],
@@ -70,294 +78,159 @@ impl ElectricPotentialUnit {
     }
 }
 
-impl ElectricPotential {
+impl core::str::FromStr for ElectricPotentialUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "V" => Ok(Self::Volt),
+            "nV" => Ok(Self::Nanovolt),
+            "µV" => Ok(Self::Microvolt),
+            "mV" => Ok(Self::Millivolt),
+            "kV" => Ok(Self::Kilovolt),
+            "MV" => Ok(Self::Megavolt),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricPotential<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricPotentialUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricPotentialUnit) -> Self {
         Self(match unit {
-            ElectricPotentialUnit::Volt => x,
-            ElectricPotentialUnit::Nanovolt => (x * 1e-9),
-            ElectricPotentialUnit::Microvolt => (x * 1e-6),
-            ElectricPotentialUnit::Millivolt => (x * 1e-3),
-            ElectricPotentialUnit::Kilovolt => (x * 1e3),
-            ElectricPotentialUnit::Megavolt => (x * 1e6),
+            ElectricPotentialUnit::Volt => value,
+            ElectricPotentialUnit::Nanovolt => value / T::from_f64(1e9),
+            ElectricPotentialUnit::Microvolt => value / T::from_f64(1000000.0),
+            ElectricPotentialUnit::Millivolt => value / T::from_f64(1000.0),
+            ElectricPotentialUnit::Kilovolt => value * T::from_f64(1000.0),
+            ElectricPotentialUnit::Megavolt => value * T::from_f64(1000000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricPotentialUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricPotentialUnit) -> T {
         match unit {
-            ElectricPotentialUnit::Volt => x,
-            ElectricPotentialUnit::Nanovolt => (x / 1e-9),
-            ElectricPotentialUnit::Microvolt => (x / 1e-6),
-            ElectricPotentialUnit::Millivolt => (x / 1e-3),
-            ElectricPotentialUnit::Kilovolt => (x / 1e3),
-            ElectricPotentialUnit::Megavolt => (x / 1e6),
+            ElectricPotentialUnit::Volt => self.0,
+            ElectricPotentialUnit::Nanovolt => self.0 * T::from_f64(1e9),
+            ElectricPotentialUnit::Microvolt => self.0 * T::from_f64(1000000.0),
+            ElectricPotentialUnit::Millivolt => self.0 * T::from_f64(1000.0),
+            ElectricPotentialUnit::Kilovolt => self.0 / T::from_f64(1000.0),
+            ElectricPotentialUnit::Megavolt => self.0 / T::from_f64(1000000.0),
         }
     }
 
     /// Creates a [`ElectricPotential`] from a value in Volts (`V`).
     #[inline]
-    pub fn from_volts(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_volts(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Volts (`V`).
     #[inline]
-    pub fn as_volts(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_volts(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_volts`].
     #[inline]
-    pub fn as_volt(self) -> Num {
+    pub fn as_volt(self) -> T {
         self.as_volts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Nanovolts (`nV`).
     #[inline]
-    pub fn from_nanovolts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanovolts(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanovolts (`nV`).
     #[inline]
-    pub fn as_nanovolts(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanovolts(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanovolts`].
     #[inline]
-    pub fn as_nanovolt(self) -> Num {
+    pub fn as_nanovolt(self) -> T {
         self.as_nanovolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Microvolts (`µV`).
     #[inline]
-    pub fn from_microvolts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microvolts(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microvolts (`µV`).
     #[inline]
-    pub fn as_microvolts(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microvolts(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microvolts`].
     #[inline]
-    pub fn as_microvolt(self) -> Num {
+    pub fn as_microvolt(self) -> T {
         self.as_microvolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Millivolts (`mV`).
     #[inline]
-    pub fn from_millivolts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millivolts(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millivolts (`mV`).
     #[inline]
-    pub fn as_millivolts(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millivolts(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millivolts`].
     #[inline]
-    pub fn as_millivolt(self) -> Num {
+    pub fn as_millivolt(self) -> T {
         self.as_millivolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Kilovolts (`kV`).
     #[inline]
-    pub fn from_kilovolts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilovolts(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilovolts (`kV`).
     #[inline]
-    pub fn as_kilovolts(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilovolts(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilovolts`].
     #[inline]
-    pub fn as_kilovolt(self) -> Num {
+    pub fn as_kilovolt(self) -> T {
         self.as_kilovolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Megavolts (`MV`).
     #[inline]
-    pub fn from_megavolts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megavolts(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megavolts (`MV`).
     #[inline]
-    pub fn as_megavolts(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megavolts(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megavolts`].
     #[inline]
-    pub fn as_megavolt(self) -> Num {
+    pub fn as_megavolt(self) -> T {
         self.as_megavolts()
     }
-}
-
-impl crate::Quantity for ElectricPotential {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricPotential {
-    type Output = ElectricPotential;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricPotential {
-    type Output = ElectricPotential;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricPotential {
-    type Output = ElectricPotential;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricPotential {
-    type Output = ElectricPotential;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricPotential> for Num {
-    type Output = ElectricPotential;
-    #[inline]
-    fn mul(self, rhs: ElectricPotential) -> ElectricPotential {
-        ElectricPotential(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricPotential {
-    type Output = ElectricPotential;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricPotential {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricPotential {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricPotentialUnit::Volt.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricPotential`].
-#[derive(Debug)]
-pub struct ParseElectricPotentialError(String);
-
-impl fmt::Display for ParseElectricPotentialError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricPotential", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricPotentialError {}
-
-impl FromStr for ElectricPotential {
-    type Err = ParseElectricPotentialError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricPotentialError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricPotentialUnit)] = &[
-            ("µV", ElectricPotentialUnit::Microvolt),
-            ("MV", ElectricPotentialUnit::Megavolt),
-            ("kV", ElectricPotentialUnit::Kilovolt),
-            ("mV", ElectricPotentialUnit::Millivolt),
-            ("nV", ElectricPotentialUnit::Nanovolt),
-            ("V", ElectricPotentialUnit::Volt),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricPotentialError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

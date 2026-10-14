@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricCurrent.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// An electric current is a flow of electric charge. In electric circuits this charge is often carried by moving electrons in a wire. It can also be carried by ions in an electrolyte, or by both ions and electrons such as in a plasma.
 ///
-/// The internal value is stored in `Ampere` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricCurrent(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricCurrentUnit::Ampere`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricCurrent<T = f64>(T);
+
+quantity!(ElectricCurrent, ElectricCurrentUnit, Ampere);
 
 /// Unit variants for [`ElectricCurrent`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricCurrentUnit {
     Ampere,
     Femtoampere,
@@ -51,7 +59,7 @@ impl ElectricCurrentUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Ampere => "A",
             Self::Femtoampere => "fA",
@@ -65,9 +73,9 @@ impl ElectricCurrentUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Ampere => &["A"],
             Self::Femtoampere => &["fA"],
@@ -82,363 +90,222 @@ impl ElectricCurrentUnit {
     }
 }
 
-impl ElectricCurrent {
+impl core::str::FromStr for ElectricCurrentUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "A" => Ok(Self::Ampere),
+            "fA" => Ok(Self::Femtoampere),
+            "pA" => Ok(Self::Picoampere),
+            "nA" => Ok(Self::Nanoampere),
+            "µA" => Ok(Self::Microampere),
+            "mA" => Ok(Self::Milliampere),
+            "cA" => Ok(Self::Centiampere),
+            "kA" => Ok(Self::Kiloampere),
+            "MA" => Ok(Self::Megaampere),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricCurrent<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricCurrentUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricCurrentUnit) -> Self {
         Self(match unit {
-            ElectricCurrentUnit::Ampere => x,
-            ElectricCurrentUnit::Femtoampere => (x * 1e-15),
-            ElectricCurrentUnit::Picoampere => (x * 1e-12),
-            ElectricCurrentUnit::Nanoampere => (x * 1e-9),
-            ElectricCurrentUnit::Microampere => (x * 1e-6),
-            ElectricCurrentUnit::Milliampere => (x * 1e-3),
-            ElectricCurrentUnit::Centiampere => (x * 1e-2),
-            ElectricCurrentUnit::Kiloampere => (x * 1e3),
-            ElectricCurrentUnit::Megaampere => (x * 1e6),
+            ElectricCurrentUnit::Ampere => value,
+            ElectricCurrentUnit::Femtoampere => value / T::from_f64(1e15),
+            ElectricCurrentUnit::Picoampere => value / T::from_f64(1e12),
+            ElectricCurrentUnit::Nanoampere => value / T::from_f64(1e9),
+            ElectricCurrentUnit::Microampere => value / T::from_f64(1000000.0),
+            ElectricCurrentUnit::Milliampere => value / T::from_f64(1000.0),
+            ElectricCurrentUnit::Centiampere => value / T::from_f64(100.0),
+            ElectricCurrentUnit::Kiloampere => value * T::from_f64(1000.0),
+            ElectricCurrentUnit::Megaampere => value * T::from_f64(1000000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricCurrentUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricCurrentUnit) -> T {
         match unit {
-            ElectricCurrentUnit::Ampere => x,
-            ElectricCurrentUnit::Femtoampere => (x / 1e-15),
-            ElectricCurrentUnit::Picoampere => (x / 1e-12),
-            ElectricCurrentUnit::Nanoampere => (x / 1e-9),
-            ElectricCurrentUnit::Microampere => (x / 1e-6),
-            ElectricCurrentUnit::Milliampere => (x / 1e-3),
-            ElectricCurrentUnit::Centiampere => (x / 1e-2),
-            ElectricCurrentUnit::Kiloampere => (x / 1e3),
-            ElectricCurrentUnit::Megaampere => (x / 1e6),
+            ElectricCurrentUnit::Ampere => self.0,
+            ElectricCurrentUnit::Femtoampere => self.0 * T::from_f64(1e15),
+            ElectricCurrentUnit::Picoampere => self.0 * T::from_f64(1e12),
+            ElectricCurrentUnit::Nanoampere => self.0 * T::from_f64(1e9),
+            ElectricCurrentUnit::Microampere => self.0 * T::from_f64(1000000.0),
+            ElectricCurrentUnit::Milliampere => self.0 * T::from_f64(1000.0),
+            ElectricCurrentUnit::Centiampere => self.0 * T::from_f64(100.0),
+            ElectricCurrentUnit::Kiloampere => self.0 / T::from_f64(1000.0),
+            ElectricCurrentUnit::Megaampere => self.0 / T::from_f64(1000000.0),
         }
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Amperes (`A`).
     #[inline]
-    pub fn from_amperes(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_amperes(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Amperes (`A`).
     #[inline]
-    pub fn as_amperes(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_amperes(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_amperes`].
     #[inline]
-    pub fn as_ampere(self) -> Num {
+    pub fn as_ampere(self) -> T {
         self.as_amperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Femtoamperes (`fA`).
     #[inline]
-    pub fn from_femtoamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-15))
+    pub fn from_femtoamperes(value: T) -> Self {
+        Self(value / T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Femtoamperes (`fA`).
     #[inline]
-    pub fn as_femtoamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-15)
+    pub fn as_femtoamperes(self) -> T {
+        self.0 * T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_femtoamperes`].
     #[inline]
-    pub fn as_femtoampere(self) -> Num {
+    pub fn as_femtoampere(self) -> T {
         self.as_femtoamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Picoamperes (`pA`).
     #[inline]
-    pub fn from_picoamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picoamperes(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picoamperes (`pA`).
     #[inline]
-    pub fn as_picoamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picoamperes(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picoamperes`].
     #[inline]
-    pub fn as_picoampere(self) -> Num {
+    pub fn as_picoampere(self) -> T {
         self.as_picoamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Nanoamperes (`nA`).
     #[inline]
-    pub fn from_nanoamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanoamperes(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanoamperes (`nA`).
     #[inline]
-    pub fn as_nanoamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanoamperes(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanoamperes`].
     #[inline]
-    pub fn as_nanoampere(self) -> Num {
+    pub fn as_nanoampere(self) -> T {
         self.as_nanoamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Microamperes (`µA`).
     #[inline]
-    pub fn from_microamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microamperes(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microamperes (`µA`).
     #[inline]
-    pub fn as_microamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microamperes(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microamperes`].
     #[inline]
-    pub fn as_microampere(self) -> Num {
+    pub fn as_microampere(self) -> T {
         self.as_microamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Milliamperes (`mA`).
     #[inline]
-    pub fn from_milliamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliamperes(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Milliamperes (`mA`).
     #[inline]
-    pub fn as_milliamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliamperes(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliamperes`].
     #[inline]
-    pub fn as_milliampere(self) -> Num {
+    pub fn as_milliampere(self) -> T {
         self.as_milliamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Centiamperes (`cA`).
     #[inline]
-    pub fn from_centiamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centiamperes(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in Centiamperes (`cA`).
     #[inline]
-    pub fn as_centiamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centiamperes(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centiamperes`].
     #[inline]
-    pub fn as_centiampere(self) -> Num {
+    pub fn as_centiampere(self) -> T {
         self.as_centiamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Kiloamperes (`kA`).
     #[inline]
-    pub fn from_kiloamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kiloamperes(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kiloamperes (`kA`).
     #[inline]
-    pub fn as_kiloamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kiloamperes(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kiloamperes`].
     #[inline]
-    pub fn as_kiloampere(self) -> Num {
+    pub fn as_kiloampere(self) -> T {
         self.as_kiloamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Megaamperes (`MA`).
     #[inline]
-    pub fn from_megaamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megaamperes(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megaamperes (`MA`).
     #[inline]
-    pub fn as_megaamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megaamperes(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megaamperes`].
     #[inline]
-    pub fn as_megaampere(self) -> Num {
+    pub fn as_megaampere(self) -> T {
         self.as_megaamperes()
     }
-}
-
-impl crate::Quantity for ElectricCurrent {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricCurrent {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricCurrent {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricCurrent {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricCurrent {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricCurrent> for Num {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn mul(self, rhs: ElectricCurrent) -> ElectricCurrent {
-        ElectricCurrent(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricCurrent {
-    type Output = ElectricCurrent;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricCurrent {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricCurrent {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricCurrentUnit::Ampere.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricCurrent`].
-#[derive(Debug)]
-pub struct ParseElectricCurrentError(String);
-
-impl fmt::Display for ParseElectricCurrentError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricCurrent", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricCurrentError {}
-
-impl FromStr for ElectricCurrent {
-    type Err = ParseElectricCurrentError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricCurrentError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricCurrentUnit)] = &[
-            ("µA", ElectricCurrentUnit::Microampere),
-            ("MA", ElectricCurrentUnit::Megaampere),
-            ("cA", ElectricCurrentUnit::Centiampere),
-            ("fA", ElectricCurrentUnit::Femtoampere),
-            ("kA", ElectricCurrentUnit::Kiloampere),
-            ("mA", ElectricCurrentUnit::Milliampere),
-            ("nA", ElectricCurrentUnit::Nanoampere),
-            ("pA", ElectricCurrentUnit::Picoampere),
-            ("A", ElectricCurrentUnit::Ampere),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricCurrentError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

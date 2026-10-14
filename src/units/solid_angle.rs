@@ -2,27 +2,35 @@
 // Source: data/quantities/SolidAngle.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In geometry, a solid angle is the two-dimensional angle in three-dimensional space that an object subtends at a point.
 ///
-/// The internal value is stored in `Steradian` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SolidAngle(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`SolidAngleUnit::Steradian`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct SolidAngle<T = f64>(T);
+
+quantity!(SolidAngle, SolidAngleUnit, Steradian);
 
 /// Unit variants for [`SolidAngle`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum SolidAngleUnit {
     Steradian,
 }
@@ -33,187 +41,69 @@ impl SolidAngleUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Steradian => "sr",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Steradian => &["sr"],
         }
     }
 }
 
-impl SolidAngle {
+impl core::str::FromStr for SolidAngleUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "sr" => Ok(Self::Steradian),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> SolidAngle<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: SolidAngleUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: SolidAngleUnit) -> Self {
         Self(match unit {
-            SolidAngleUnit::Steradian => x,
+            SolidAngleUnit::Steradian => value,
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: SolidAngleUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: SolidAngleUnit) -> T {
         match unit {
-            SolidAngleUnit::Steradian => x,
+            SolidAngleUnit::Steradian => self.0,
         }
     }
 
     /// Creates a [`SolidAngle`] from a value in Steradians (`sr`).
     #[inline]
-    pub fn from_steradians(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_steradians(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Steradians (`sr`).
     #[inline]
-    pub fn as_steradians(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_steradians(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_steradians`].
     #[inline]
-    pub fn as_steradian(self) -> Num {
+    pub fn as_steradian(self) -> T {
         self.as_steradians()
     }
-}
-
-impl crate::Quantity for SolidAngle {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for SolidAngle {
-    type Output = SolidAngle;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for SolidAngle {
-    type Output = SolidAngle;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for SolidAngle {
-    type Output = SolidAngle;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for SolidAngle {
-    type Output = SolidAngle;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<SolidAngle> for Num {
-    type Output = SolidAngle;
-    #[inline]
-    fn mul(self, rhs: SolidAngle) -> SolidAngle {
-        SolidAngle(self * rhs.0)
-    }
-}
-impl Div<Num> for SolidAngle {
-    type Output = SolidAngle;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for SolidAngle {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for SolidAngle {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, SolidAngleUnit::Steradian.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`SolidAngle`].
-#[derive(Debug)]
-pub struct ParseSolidAngleError(String);
-
-impl fmt::Display for ParseSolidAngleError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as SolidAngle", self.0)
-    }
-}
-
-impl std::error::Error for ParseSolidAngleError {}
-
-impl FromStr for SolidAngle {
-    type Err = ParseSolidAngleError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseSolidAngleError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, SolidAngleUnit)] = &[("sr", SolidAngleUnit::Steradian)];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseSolidAngleError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/Speed.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-/// In everyday use and in kinematics, the speed of an object is the magnitude of its velocity (the rate of change of its position); it is thus a scalar quantity.[1] The average speed of an object in an interval of time is the distance travelled by the object divided by the duration of the interval;[2] the instantaneous speed is the limit of the average speed as the duration of the time interval approaches zero.
+/// In everyday use and in kinematics, the speed of an object is the magnitude of its velocity (the rate of change of its position); it is thus a scalar quantity.\[1\] The average speed of an object in an interval of time is the distance travelled by the object divided by the duration of the interval;\[2\] the instantaneous speed is the limit of the average speed as the duration of the time interval approaches zero.
 ///
-/// The internal value is stored in `MeterPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Speed(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`SpeedUnit::MeterPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Speed<T = f64>(T);
+
+quantity!(Speed, SpeedUnit, MeterPerSecond);
 
 /// Unit variants for [`Speed`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum SpeedUnit {
     MeterPerSecond,
     NanometerPerSecond,
@@ -100,7 +108,7 @@ impl SpeedUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterPerSecond => "m/s",
             Self::NanometerPerSecond => "nm/s",
@@ -138,9 +146,9 @@ impl SpeedUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterPerSecond => &["m/s"],
             Self::NanometerPerSecond => &["nm/s"],
@@ -179,910 +187,726 @@ impl SpeedUnit {
     }
 }
 
-impl Speed {
+impl core::str::FromStr for SpeedUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "m/s" => Ok(Self::MeterPerSecond),
+            "nm/s" => Ok(Self::NanometerPerSecond),
+            "µm/s" => Ok(Self::MicrometerPerSecond),
+            "mm/s" => Ok(Self::MillimeterPerSecond),
+            "cm/s" => Ok(Self::CentimeterPerSecond),
+            "dm/s" => Ok(Self::DecimeterPerSecond),
+            "km/s" => Ok(Self::KilometerPerSecond),
+            "m/min" => Ok(Self::MeterPerMinute),
+            "nm/min" => Ok(Self::NanometerPerMinute),
+            "µm/min" => Ok(Self::MicrometerPerMinute),
+            "mm/min" => Ok(Self::MillimeterPerMinute),
+            "cm/min" => Ok(Self::CentimeterPerMinute),
+            "dm/min" => Ok(Self::DecimeterPerMinute),
+            "km/min" => Ok(Self::KilometerPerMinute),
+            "m/h" => Ok(Self::MeterPerHour),
+            "mm/h" => Ok(Self::MillimeterPerHour),
+            "cm/h" => Ok(Self::CentimeterPerHour),
+            "km/h" => Ok(Self::KilometerPerHour),
+            "ft/s" => Ok(Self::FootPerSecond),
+            "ft/min" => Ok(Self::FootPerMinute),
+            "ft/h" => Ok(Self::FootPerHour),
+            "ftUS/s" => Ok(Self::UsSurveyFootPerSecond),
+            "ftUS/min" => Ok(Self::UsSurveyFootPerMinute),
+            "ftUS/h" => Ok(Self::UsSurveyFootPerHour),
+            "in/s" => Ok(Self::InchPerSecond),
+            "in/min" => Ok(Self::InchPerMinute),
+            "in/h" => Ok(Self::InchPerHour),
+            "yd/s" => Ok(Self::YardPerSecond),
+            "yd/min" => Ok(Self::YardPerMinute),
+            "yd/h" => Ok(Self::YardPerHour),
+            "kn" => Ok(Self::Knot),
+            "kt" => Ok(Self::Knot),
+            "knot" => Ok(Self::Knot),
+            "knots" => Ok(Self::Knot),
+            "mph" => Ok(Self::MilePerHour),
+            "M" => Ok(Self::Mach),
+            "Ma" => Ok(Self::Mach),
+            "MN" => Ok(Self::Mach),
+            "MACH" => Ok(Self::Mach),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Speed<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: SpeedUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: SpeedUnit) -> Self {
         Self(match unit {
-            SpeedUnit::MeterPerSecond => x,
-            SpeedUnit::NanometerPerSecond => (x * 1e-9),
-            SpeedUnit::MicrometerPerSecond => (x * 1e-6),
-            SpeedUnit::MillimeterPerSecond => (x * 1e-3),
-            SpeedUnit::CentimeterPerSecond => (x * 1e-2),
-            SpeedUnit::DecimeterPerSecond => (x * 1e-1),
-            SpeedUnit::KilometerPerSecond => (x * 1e3),
-            SpeedUnit::MeterPerMinute => x / 60.0,
-            SpeedUnit::NanometerPerMinute => (x * 1e-9) / 60.0,
-            SpeedUnit::MicrometerPerMinute => (x * 1e-6) / 60.0,
-            SpeedUnit::MillimeterPerMinute => (x * 1e-3) / 60.0,
-            SpeedUnit::CentimeterPerMinute => (x * 1e-2) / 60.0,
-            SpeedUnit::DecimeterPerMinute => (x * 1e-1) / 60.0,
-            SpeedUnit::KilometerPerMinute => (x * 1e3) / 60.0,
-            SpeedUnit::MeterPerHour => x / 3600.0,
-            SpeedUnit::MillimeterPerHour => (x * 1e-3) / 3600.0,
-            SpeedUnit::CentimeterPerHour => (x * 1e-2) / 3600.0,
-            SpeedUnit::KilometerPerHour => (x * 1e3) / 3600.0,
-            SpeedUnit::FootPerSecond => x * 0.3048,
-            SpeedUnit::FootPerMinute => x * 0.3048 / 60.0,
-            SpeedUnit::FootPerHour => x * 0.3048 / 3600.0,
-            SpeedUnit::UsSurveyFootPerSecond => x * 1200.0 / 3937.0,
-            SpeedUnit::UsSurveyFootPerMinute => (x * 1200.0 / 3937.0) / 60.0,
-            SpeedUnit::UsSurveyFootPerHour => (x * 1200.0 / 3937.0) / 3600.0,
-            SpeedUnit::InchPerSecond => x * 2.54e-2,
-            SpeedUnit::InchPerMinute => (x / 60.0) * 2.54e-2,
-            SpeedUnit::InchPerHour => (x / 3600.0) * 2.54e-2,
-            SpeedUnit::YardPerSecond => x * 0.9144,
-            SpeedUnit::YardPerMinute => x * 0.9144 / 60.0,
-            SpeedUnit::YardPerHour => x * 0.9144 / 3600.0,
-            SpeedUnit::Knot => x * (1852.0 / 3600.0),
-            SpeedUnit::MilePerHour => x * 0.44704,
-            SpeedUnit::Mach => x * 340.29,
+            SpeedUnit::MeterPerSecond => value,
+            SpeedUnit::NanometerPerSecond => value / T::from_f64(1e9),
+            SpeedUnit::MicrometerPerSecond => value / T::from_f64(1000000.0),
+            SpeedUnit::MillimeterPerSecond => value / T::from_f64(1000.0),
+            SpeedUnit::CentimeterPerSecond => value / T::from_f64(100.0),
+            SpeedUnit::DecimeterPerSecond => value / T::from_f64(10.0),
+            SpeedUnit::KilometerPerSecond => value * T::from_f64(1000.0),
+            SpeedUnit::MeterPerMinute => value / T::from_f64(60.0),
+            SpeedUnit::NanometerPerMinute => value / T::from_f64(6e10),
+            SpeedUnit::MicrometerPerMinute => value / T::from_f64(6e7),
+            SpeedUnit::MillimeterPerMinute => value / T::from_f64(60000.0),
+            SpeedUnit::CentimeterPerMinute => value / T::from_f64(6000.0),
+            SpeedUnit::DecimeterPerMinute => value / T::from_f64(600.0),
+            SpeedUnit::KilometerPerMinute => value * T::from_f64(16.666666666666668),
+            SpeedUnit::MeterPerHour => value / T::from_f64(3600.0),
+            SpeedUnit::MillimeterPerHour => value / T::from_f64(3600000.0),
+            SpeedUnit::CentimeterPerHour => value / T::from_f64(360000.0),
+            SpeedUnit::KilometerPerHour => value * T::from_f64(0.2777777777777778),
+            SpeedUnit::FootPerSecond => value * T::from_f64(0.3048),
+            SpeedUnit::FootPerMinute => value * T::from_f64(0.00508),
+            SpeedUnit::FootPerHour => value * T::from_f64(8.466666666666666e-5),
+            SpeedUnit::UsSurveyFootPerSecond => value * T::from_f64(0.3048006096012192),
+            SpeedUnit::UsSurveyFootPerMinute => value * T::from_f64(0.00508001016002032),
+            SpeedUnit::UsSurveyFootPerHour => value / T::from_f64(11811.0),
+            SpeedUnit::InchPerSecond => value * T::from_f64(0.0254),
+            SpeedUnit::InchPerMinute => value * T::from_f64(0.00042333333333333334),
+            SpeedUnit::InchPerHour => value * T::from_f64(7.055555555555556e-6),
+            SpeedUnit::YardPerSecond => value * T::from_f64(0.9144),
+            SpeedUnit::YardPerMinute => value * T::from_f64(0.01524),
+            SpeedUnit::YardPerHour => value * T::from_f64(0.000254),
+            SpeedUnit::Knot => value * T::from_f64(0.5144444444444445),
+            SpeedUnit::MilePerHour => value * T::from_f64(0.44704),
+            SpeedUnit::Mach => value * T::from_f64(340.29),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: SpeedUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: SpeedUnit) -> T {
         match unit {
-            SpeedUnit::MeterPerSecond => x,
-            SpeedUnit::NanometerPerSecond => (x / 1e-9),
-            SpeedUnit::MicrometerPerSecond => (x / 1e-6),
-            SpeedUnit::MillimeterPerSecond => (x / 1e-3),
-            SpeedUnit::CentimeterPerSecond => (x / 1e-2),
-            SpeedUnit::DecimeterPerSecond => (x / 1e-1),
-            SpeedUnit::KilometerPerSecond => (x / 1e3),
-            SpeedUnit::MeterPerMinute => x * 60.0,
-            SpeedUnit::NanometerPerMinute => (x / 1e-9) * 60.0,
-            SpeedUnit::MicrometerPerMinute => (x / 1e-6) * 60.0,
-            SpeedUnit::MillimeterPerMinute => (x / 1e-3) * 60.0,
-            SpeedUnit::CentimeterPerMinute => (x / 1e-2) * 60.0,
-            SpeedUnit::DecimeterPerMinute => (x / 1e-1) * 60.0,
-            SpeedUnit::KilometerPerMinute => (x / 1e3) * 60.0,
-            SpeedUnit::MeterPerHour => x * 3600.0,
-            SpeedUnit::MillimeterPerHour => (x / 1e-3) * 3600.0,
-            SpeedUnit::CentimeterPerHour => (x / 1e-2) * 3600.0,
-            SpeedUnit::KilometerPerHour => (x / 1e3) * 3600.0,
-            SpeedUnit::FootPerSecond => x / 0.3048,
-            SpeedUnit::FootPerMinute => x / 0.3048 * 60.0,
-            SpeedUnit::FootPerHour => x / 0.3048 * 3600.0,
-            SpeedUnit::UsSurveyFootPerSecond => x * 3937.0 / 1200.0,
-            SpeedUnit::UsSurveyFootPerMinute => (x * 3937.0 / 1200.0) * 60.0,
-            SpeedUnit::UsSurveyFootPerHour => (x * 3937.0 / 1200.0) * 3600.0,
-            SpeedUnit::InchPerSecond => x / 2.54e-2,
-            SpeedUnit::InchPerMinute => (x / 2.54e-2) * 60.0,
-            SpeedUnit::InchPerHour => (x / 2.54e-2) * 3600.0,
-            SpeedUnit::YardPerSecond => x / 0.9144,
-            SpeedUnit::YardPerMinute => x / 0.9144 * 60.0,
-            SpeedUnit::YardPerHour => x / 0.9144 * 3600.0,
-            SpeedUnit::Knot => x / (1852.0 / 3600.0),
-            SpeedUnit::MilePerHour => x / 0.44704,
-            SpeedUnit::Mach => x / 340.29,
+            SpeedUnit::MeterPerSecond => self.0,
+            SpeedUnit::NanometerPerSecond => self.0 * T::from_f64(1e9),
+            SpeedUnit::MicrometerPerSecond => self.0 * T::from_f64(1000000.0),
+            SpeedUnit::MillimeterPerSecond => self.0 * T::from_f64(1000.0),
+            SpeedUnit::CentimeterPerSecond => self.0 * T::from_f64(100.0),
+            SpeedUnit::DecimeterPerSecond => self.0 * T::from_f64(10.0),
+            SpeedUnit::KilometerPerSecond => self.0 / T::from_f64(1000.0),
+            SpeedUnit::MeterPerMinute => self.0 * T::from_f64(60.0),
+            SpeedUnit::NanometerPerMinute => self.0 * T::from_f64(6e10),
+            SpeedUnit::MicrometerPerMinute => self.0 * T::from_f64(6e7),
+            SpeedUnit::MillimeterPerMinute => self.0 * T::from_f64(60000.0),
+            SpeedUnit::CentimeterPerMinute => self.0 * T::from_f64(6000.0),
+            SpeedUnit::DecimeterPerMinute => self.0 * T::from_f64(600.0),
+            SpeedUnit::KilometerPerMinute => self.0 / T::from_f64(16.666666666666668),
+            SpeedUnit::MeterPerHour => self.0 * T::from_f64(3600.0),
+            SpeedUnit::MillimeterPerHour => self.0 * T::from_f64(3600000.0),
+            SpeedUnit::CentimeterPerHour => self.0 * T::from_f64(360000.0),
+            SpeedUnit::KilometerPerHour => self.0 / T::from_f64(0.2777777777777778),
+            SpeedUnit::FootPerSecond => self.0 / T::from_f64(0.3048),
+            SpeedUnit::FootPerMinute => self.0 / T::from_f64(0.00508),
+            SpeedUnit::FootPerHour => self.0 / T::from_f64(8.466666666666666e-5),
+            SpeedUnit::UsSurveyFootPerSecond => self.0 / T::from_f64(0.3048006096012192),
+            SpeedUnit::UsSurveyFootPerMinute => self.0 / T::from_f64(0.00508001016002032),
+            SpeedUnit::UsSurveyFootPerHour => self.0 * T::from_f64(11811.0),
+            SpeedUnit::InchPerSecond => self.0 / T::from_f64(0.0254),
+            SpeedUnit::InchPerMinute => self.0 / T::from_f64(0.00042333333333333334),
+            SpeedUnit::InchPerHour => self.0 / T::from_f64(7.055555555555556e-6),
+            SpeedUnit::YardPerSecond => self.0 / T::from_f64(0.9144),
+            SpeedUnit::YardPerMinute => self.0 / T::from_f64(0.01524),
+            SpeedUnit::YardPerHour => self.0 / T::from_f64(0.000254),
+            SpeedUnit::Knot => self.0 / T::from_f64(0.5144444444444445),
+            SpeedUnit::MilePerHour => self.0 / T::from_f64(0.44704),
+            SpeedUnit::Mach => self.0 / T::from_f64(340.29),
         }
     }
 
     /// Creates a [`Speed`] from a value in MetersPerSecond (`m/s`).
     #[inline]
-    pub fn from_meters_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_meters_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MetersPerSecond (`m/s`).
     #[inline]
-    pub fn as_meters_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_meters_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_meters_per_second`].
     #[inline]
-    pub fn as_meter_per_second(self) -> Num {
+    pub fn as_meter_per_second(self) -> T {
         self.as_meters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in NanometersPerSecond (`nm/s`).
     #[inline]
-    pub fn from_nanometers_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanometers_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanometersPerSecond (`nm/s`).
     #[inline]
-    pub fn as_nanometers_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanometers_per_second(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanometers_per_second`].
     #[inline]
-    pub fn as_nanometer_per_second(self) -> Num {
+    pub fn as_nanometer_per_second(self) -> T {
         self.as_nanometers_per_second()
     }
 
     /// Creates a [`Speed`] from a value in MicrometersPerSecond (`µm/s`).
     #[inline]
-    pub fn from_micrometers_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micrometers_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrometersPerSecond (`µm/s`).
     #[inline]
-    pub fn as_micrometers_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micrometers_per_second(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micrometers_per_second`].
     #[inline]
-    pub fn as_micrometer_per_second(self) -> Num {
+    pub fn as_micrometer_per_second(self) -> T {
         self.as_micrometers_per_second()
     }
 
     /// Creates a [`Speed`] from a value in MillimetersPerSecond (`mm/s`).
     #[inline]
-    pub fn from_millimeters_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millimeters_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillimetersPerSecond (`mm/s`).
     #[inline]
-    pub fn as_millimeters_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millimeters_per_second(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millimeters_per_second`].
     #[inline]
-    pub fn as_millimeter_per_second(self) -> Num {
+    pub fn as_millimeter_per_second(self) -> T {
         self.as_millimeters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in CentimetersPerSecond (`cm/s`).
     #[inline]
-    pub fn from_centimeters_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centimeters_per_second(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentimetersPerSecond (`cm/s`).
     #[inline]
-    pub fn as_centimeters_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centimeters_per_second(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centimeters_per_second`].
     #[inline]
-    pub fn as_centimeter_per_second(self) -> Num {
+    pub fn as_centimeter_per_second(self) -> T {
         self.as_centimeters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in DecimetersPerSecond (`dm/s`).
     #[inline]
-    pub fn from_decimeters_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decimeters_per_second(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecimetersPerSecond (`dm/s`).
     #[inline]
-    pub fn as_decimeters_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decimeters_per_second(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decimeters_per_second`].
     #[inline]
-    pub fn as_decimeter_per_second(self) -> Num {
+    pub fn as_decimeter_per_second(self) -> T {
         self.as_decimeters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in KilometersPerSecond (`km/s`).
     #[inline]
-    pub fn from_kilometers_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilometers_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilometersPerSecond (`km/s`).
     #[inline]
-    pub fn as_kilometers_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilometers_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilometers_per_second`].
     #[inline]
-    pub fn as_kilometer_per_second(self) -> Num {
+    pub fn as_kilometer_per_second(self) -> T {
         self.as_kilometers_per_second()
     }
 
     /// Creates a [`Speed`] from a value in MetersPerMinute (`m/min`).
     #[inline]
-    pub fn from_meters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_meters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in MetersPerMinute (`m/min`).
     #[inline]
-    pub fn as_meters_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_meters_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_meters_per_minute`].
     #[inline]
-    pub fn as_meter_per_minute(self) -> Num {
+    pub fn as_meter_per_minute(self) -> T {
         self.as_meters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in NanometersPerMinute (`nm/min`).
     #[inline]
-    pub fn from_nanometers_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 60.0)
+    pub fn from_nanometers_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(6e10))
     }
 
     /// Returns the value expressed in NanometersPerMinute (`nm/min`).
     #[inline]
-    pub fn as_nanometers_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 60.0
+    pub fn as_nanometers_per_minute(self) -> T {
+        self.0 * T::from_f64(6e10)
     }
 
     /// Alias for [`Self::as_nanometers_per_minute`].
     #[inline]
-    pub fn as_nanometer_per_minute(self) -> Num {
+    pub fn as_nanometer_per_minute(self) -> T {
         self.as_nanometers_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in MicrometersPerMinute (`µm/min`).
     #[inline]
-    pub fn from_micrometers_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 60.0)
+    pub fn from_micrometers_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(6e7))
     }
 
     /// Returns the value expressed in MicrometersPerMinute (`µm/min`).
     #[inline]
-    pub fn as_micrometers_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 60.0
+    pub fn as_micrometers_per_minute(self) -> T {
+        self.0 * T::from_f64(6e7)
     }
 
     /// Alias for [`Self::as_micrometers_per_minute`].
     #[inline]
-    pub fn as_micrometer_per_minute(self) -> Num {
+    pub fn as_micrometer_per_minute(self) -> T {
         self.as_micrometers_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in MillimetersPerMinute (`mm/min`).
     #[inline]
-    pub fn from_millimeters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 60.0)
+    pub fn from_millimeters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60000.0))
     }
 
     /// Returns the value expressed in MillimetersPerMinute (`mm/min`).
     #[inline]
-    pub fn as_millimeters_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 60.0
+    pub fn as_millimeters_per_minute(self) -> T {
+        self.0 * T::from_f64(60000.0)
     }
 
     /// Alias for [`Self::as_millimeters_per_minute`].
     #[inline]
-    pub fn as_millimeter_per_minute(self) -> Num {
+    pub fn as_millimeter_per_minute(self) -> T {
         self.as_millimeters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in CentimetersPerMinute (`cm/min`).
     #[inline]
-    pub fn from_centimeters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 60.0)
+    pub fn from_centimeters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(6000.0))
     }
 
     /// Returns the value expressed in CentimetersPerMinute (`cm/min`).
     #[inline]
-    pub fn as_centimeters_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 60.0
+    pub fn as_centimeters_per_minute(self) -> T {
+        self.0 * T::from_f64(6000.0)
     }
 
     /// Alias for [`Self::as_centimeters_per_minute`].
     #[inline]
-    pub fn as_centimeter_per_minute(self) -> Num {
+    pub fn as_centimeter_per_minute(self) -> T {
         self.as_centimeters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in DecimetersPerMinute (`dm/min`).
     #[inline]
-    pub fn from_decimeters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 60.0)
+    pub fn from_decimeters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(600.0))
     }
 
     /// Returns the value expressed in DecimetersPerMinute (`dm/min`).
     #[inline]
-    pub fn as_decimeters_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 60.0
+    pub fn as_decimeters_per_minute(self) -> T {
+        self.0 * T::from_f64(600.0)
     }
 
     /// Alias for [`Self::as_decimeters_per_minute`].
     #[inline]
-    pub fn as_decimeter_per_minute(self) -> Num {
+    pub fn as_decimeter_per_minute(self) -> T {
         self.as_decimeters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in KilometersPerMinute (`km/min`).
     #[inline]
-    pub fn from_kilometers_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 60.0)
+    pub fn from_kilometers_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16.666666666666668))
     }
 
     /// Returns the value expressed in KilometersPerMinute (`km/min`).
     #[inline]
-    pub fn as_kilometers_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 60.0
+    pub fn as_kilometers_per_minute(self) -> T {
+        self.0 / T::from_f64(16.666666666666668)
     }
 
     /// Alias for [`Self::as_kilometers_per_minute`].
     #[inline]
-    pub fn as_kilometer_per_minute(self) -> Num {
+    pub fn as_kilometer_per_minute(self) -> T {
         self.as_kilometers_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in MetersPerHour (`m/h`).
     #[inline]
-    pub fn from_meters_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_meters_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in MetersPerHour (`m/h`).
     #[inline]
-    pub fn as_meters_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_meters_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_meters_per_hour`].
     #[inline]
-    pub fn as_meter_per_hour(self) -> Num {
+    pub fn as_meter_per_hour(self) -> T {
         self.as_meters_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in MillimetersPerHour (`mm/h`).
     #[inline]
-    pub fn from_millimeters_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 3600.0)
+    pub fn from_millimeters_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in MillimetersPerHour (`mm/h`).
     #[inline]
-    pub fn as_millimeters_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 3600.0
+    pub fn as_millimeters_per_hour(self) -> T {
+        self.0 * T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_millimeters_per_hour`].
     #[inline]
-    pub fn as_millimeter_per_hour(self) -> Num {
+    pub fn as_millimeter_per_hour(self) -> T {
         self.as_millimeters_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in CentimetersPerHour (`cm/h`).
     #[inline]
-    pub fn from_centimeters_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 3600.0)
+    pub fn from_centimeters_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(360000.0))
     }
 
     /// Returns the value expressed in CentimetersPerHour (`cm/h`).
     #[inline]
-    pub fn as_centimeters_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 3600.0
+    pub fn as_centimeters_per_hour(self) -> T {
+        self.0 * T::from_f64(360000.0)
     }
 
     /// Alias for [`Self::as_centimeters_per_hour`].
     #[inline]
-    pub fn as_centimeter_per_hour(self) -> Num {
+    pub fn as_centimeter_per_hour(self) -> T {
         self.as_centimeters_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in KilometersPerHour (`km/h`).
     #[inline]
-    pub fn from_kilometers_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 3600.0)
+    pub fn from_kilometers_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2777777777777778))
     }
 
     /// Returns the value expressed in KilometersPerHour (`km/h`).
     #[inline]
-    pub fn as_kilometers_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 3600.0
+    pub fn as_kilometers_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2777777777777778)
     }
 
     /// Alias for [`Self::as_kilometers_per_hour`].
     #[inline]
-    pub fn as_kilometer_per_hour(self) -> Num {
+    pub fn as_kilometer_per_hour(self) -> T {
         self.as_kilometers_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in FeetPerSecond (`ft/s`).
     #[inline]
-    pub fn from_feet_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.3048)
+    pub fn from_feet_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.3048))
     }
 
     /// Returns the value expressed in FeetPerSecond (`ft/s`).
     #[inline]
-    pub fn as_feet_per_second(self) -> Num {
-        let x = self.0;
-        x / 0.3048
+    pub fn as_feet_per_second(self) -> T {
+        self.0 / T::from_f64(0.3048)
     }
 
     /// Alias for [`Self::as_feet_per_second`].
     #[inline]
-    pub fn as_foot_per_second(self) -> Num {
+    pub fn as_foot_per_second(self) -> T {
         self.as_feet_per_second()
     }
 
     /// Creates a [`Speed`] from a value in FeetPerMinute (`ft/min`).
     #[inline]
-    pub fn from_feet_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.3048 / 60.0)
+    pub fn from_feet_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.00508))
     }
 
     /// Returns the value expressed in FeetPerMinute (`ft/min`).
     #[inline]
-    pub fn as_feet_per_minute(self) -> Num {
-        let x = self.0;
-        x / 0.3048 * 60.0
+    pub fn as_feet_per_minute(self) -> T {
+        self.0 / T::from_f64(0.00508)
     }
 
     /// Alias for [`Self::as_feet_per_minute`].
     #[inline]
-    pub fn as_foot_per_minute(self) -> Num {
+    pub fn as_foot_per_minute(self) -> T {
         self.as_feet_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in FeetPerHour (`ft/h`).
     #[inline]
-    pub fn from_feet_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.3048 / 3600.0)
+    pub fn from_feet_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(8.466666666666666e-5))
     }
 
     /// Returns the value expressed in FeetPerHour (`ft/h`).
     #[inline]
-    pub fn as_feet_per_hour(self) -> Num {
-        let x = self.0;
-        x / 0.3048 * 3600.0
+    pub fn as_feet_per_hour(self) -> T {
+        self.0 / T::from_f64(8.466666666666666e-5)
     }
 
     /// Alias for [`Self::as_feet_per_hour`].
     #[inline]
-    pub fn as_foot_per_hour(self) -> Num {
+    pub fn as_foot_per_hour(self) -> T {
         self.as_feet_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerSecond (`ftUS/s`).
     #[inline]
-    pub fn from_us_survey_feet_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 1200.0 / 3937.0)
+    pub fn from_us_survey_feet_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.3048006096012192))
     }
 
     /// Returns the value expressed in UsSurveyFeetPerSecond (`ftUS/s`).
     #[inline]
-    pub fn as_us_survey_feet_per_second(self) -> Num {
-        let x = self.0;
-        x * 3937.0 / 1200.0
+    pub fn as_us_survey_feet_per_second(self) -> T {
+        self.0 / T::from_f64(0.3048006096012192)
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_second`].
     #[inline]
-    pub fn as_us_survey_foot_per_second(self) -> Num {
+    pub fn as_us_survey_foot_per_second(self) -> T {
         self.as_us_survey_feet_per_second()
     }
 
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerMinute (`ftUS/min`).
     #[inline]
-    pub fn from_us_survey_feet_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1200.0 / 3937.0) / 60.0)
+    pub fn from_us_survey_feet_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.00508001016002032))
     }
 
     /// Returns the value expressed in UsSurveyFeetPerMinute (`ftUS/min`).
     #[inline]
-    pub fn as_us_survey_feet_per_minute(self) -> Num {
-        let x = self.0;
-        (x * 3937.0 / 1200.0) * 60.0
+    pub fn as_us_survey_feet_per_minute(self) -> T {
+        self.0 / T::from_f64(0.00508001016002032)
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_minute`].
     #[inline]
-    pub fn as_us_survey_foot_per_minute(self) -> Num {
+    pub fn as_us_survey_foot_per_minute(self) -> T {
         self.as_us_survey_feet_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerHour (`ftUS/h`).
     #[inline]
-    pub fn from_us_survey_feet_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1200.0 / 3937.0) / 3600.0)
+    pub fn from_us_survey_feet_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(11811.0))
     }
 
     /// Returns the value expressed in UsSurveyFeetPerHour (`ftUS/h`).
     #[inline]
-    pub fn as_us_survey_feet_per_hour(self) -> Num {
-        let x = self.0;
-        (x * 3937.0 / 1200.0) * 3600.0
+    pub fn as_us_survey_feet_per_hour(self) -> T {
+        self.0 * T::from_f64(11811.0)
     }
 
     /// Alias for [`Self::as_us_survey_feet_per_hour`].
     #[inline]
-    pub fn as_us_survey_foot_per_hour(self) -> Num {
+    pub fn as_us_survey_foot_per_hour(self) -> T {
         self.as_us_survey_feet_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in InchesPerSecond (`in/s`).
     #[inline]
-    pub fn from_inches_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 2.54e-2)
+    pub fn from_inches_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.0254))
     }
 
     /// Returns the value expressed in InchesPerSecond (`in/s`).
     #[inline]
-    pub fn as_inches_per_second(self) -> Num {
-        let x = self.0;
-        x / 2.54e-2
+    pub fn as_inches_per_second(self) -> T {
+        self.0 / T::from_f64(0.0254)
     }
 
     /// Alias for [`Self::as_inches_per_second`].
     #[inline]
-    pub fn as_inch_per_second(self) -> Num {
+    pub fn as_inch_per_second(self) -> T {
         self.as_inches_per_second()
     }
 
     /// Creates a [`Speed`] from a value in InchesPerMinute (`in/min`).
     #[inline]
-    pub fn from_inches_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x / 60.0) * 2.54e-2)
+    pub fn from_inches_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.00042333333333333334))
     }
 
     /// Returns the value expressed in InchesPerMinute (`in/min`).
     #[inline]
-    pub fn as_inches_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 2.54e-2) * 60.0
+    pub fn as_inches_per_minute(self) -> T {
+        self.0 / T::from_f64(0.00042333333333333334)
     }
 
     /// Alias for [`Self::as_inches_per_minute`].
     #[inline]
-    pub fn as_inch_per_minute(self) -> Num {
+    pub fn as_inch_per_minute(self) -> T {
         self.as_inches_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in InchesPerHour (`in/h`).
     #[inline]
-    pub fn from_inches_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x / 3600.0) * 2.54e-2)
+    pub fn from_inches_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(7.055555555555556e-6))
     }
 
     /// Returns the value expressed in InchesPerHour (`in/h`).
     #[inline]
-    pub fn as_inches_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 2.54e-2) * 3600.0
+    pub fn as_inches_per_hour(self) -> T {
+        self.0 / T::from_f64(7.055555555555556e-6)
     }
 
     /// Alias for [`Self::as_inches_per_hour`].
     #[inline]
-    pub fn as_inch_per_hour(self) -> Num {
+    pub fn as_inch_per_hour(self) -> T {
         self.as_inches_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in YardsPerSecond (`yd/s`).
     #[inline]
-    pub fn from_yards_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.9144)
+    pub fn from_yards_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.9144))
     }
 
     /// Returns the value expressed in YardsPerSecond (`yd/s`).
     #[inline]
-    pub fn as_yards_per_second(self) -> Num {
-        let x = self.0;
-        x / 0.9144
+    pub fn as_yards_per_second(self) -> T {
+        self.0 / T::from_f64(0.9144)
     }
 
     /// Alias for [`Self::as_yards_per_second`].
     #[inline]
-    pub fn as_yard_per_second(self) -> Num {
+    pub fn as_yard_per_second(self) -> T {
         self.as_yards_per_second()
     }
 
     /// Creates a [`Speed`] from a value in YardsPerMinute (`yd/min`).
     #[inline]
-    pub fn from_yards_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.9144 / 60.0)
+    pub fn from_yards_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.01524))
     }
 
     /// Returns the value expressed in YardsPerMinute (`yd/min`).
     #[inline]
-    pub fn as_yards_per_minute(self) -> Num {
-        let x = self.0;
-        x / 0.9144 * 60.0
+    pub fn as_yards_per_minute(self) -> T {
+        self.0 / T::from_f64(0.01524)
     }
 
     /// Alias for [`Self::as_yards_per_minute`].
     #[inline]
-    pub fn as_yard_per_minute(self) -> Num {
+    pub fn as_yard_per_minute(self) -> T {
         self.as_yards_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in YardsPerHour (`yd/h`).
     #[inline]
-    pub fn from_yards_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.9144 / 3600.0)
+    pub fn from_yards_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.000254))
     }
 
     /// Returns the value expressed in YardsPerHour (`yd/h`).
     #[inline]
-    pub fn as_yards_per_hour(self) -> Num {
-        let x = self.0;
-        x / 0.9144 * 3600.0
+    pub fn as_yards_per_hour(self) -> T {
+        self.0 / T::from_f64(0.000254)
     }
 
     /// Alias for [`Self::as_yards_per_hour`].
     #[inline]
-    pub fn as_yard_per_hour(self) -> Num {
+    pub fn as_yard_per_hour(self) -> T {
         self.as_yards_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in Knots (`kn`).
     #[inline]
-    pub fn from_knots(value: Num) -> Self {
-        let x = value;
-        Self(x * (1852.0 / 3600.0))
+    pub fn from_knots(value: T) -> Self {
+        Self(value * T::from_f64(0.5144444444444445))
     }
 
     /// Returns the value expressed in Knots (`kn`).
     #[inline]
-    pub fn as_knots(self) -> Num {
-        let x = self.0;
-        x / (1852.0 / 3600.0)
+    pub fn as_knots(self) -> T {
+        self.0 / T::from_f64(0.5144444444444445)
     }
 
     /// Alias for [`Self::as_knots`].
     #[inline]
-    pub fn as_knot(self) -> Num {
+    pub fn as_knot(self) -> T {
         self.as_knots()
     }
 
     /// Creates a [`Speed`] from a value in MilesPerHour (`mph`).
     #[inline]
-    pub fn from_miles_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.44704)
+    pub fn from_miles_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.44704))
     }
 
     /// Returns the value expressed in MilesPerHour (`mph`).
     #[inline]
-    pub fn as_miles_per_hour(self) -> Num {
-        let x = self.0;
-        x / 0.44704
+    pub fn as_miles_per_hour(self) -> T {
+        self.0 / T::from_f64(0.44704)
     }
 
     /// Alias for [`Self::as_miles_per_hour`].
     #[inline]
-    pub fn as_mile_per_hour(self) -> Num {
+    pub fn as_mile_per_hour(self) -> T {
         self.as_miles_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in Mach (`M`).
     #[inline]
-    pub fn from_mach(value: Num) -> Self {
-        let x = value;
-        Self(x * 340.29)
+    pub fn from_mach(value: T) -> Self {
+        Self(value * T::from_f64(340.29))
     }
 
     /// Returns the value expressed in Mach (`M`).
     #[inline]
-    pub fn as_mach(self) -> Num {
-        let x = self.0;
-        x / 340.29
+    pub fn as_mach(self) -> T {
+        self.0 / T::from_f64(340.29)
     }
-}
-
-impl crate::Quantity for Speed {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Speed {
-    type Output = Speed;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Speed {
-    type Output = Speed;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Speed {
-    type Output = Speed;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Speed {
-    type Output = Speed;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Speed> for Num {
-    type Output = Speed;
-    #[inline]
-    fn mul(self, rhs: Speed) -> Speed {
-        Speed(self * rhs.0)
-    }
-}
-impl Div<Num> for Speed {
-    type Output = Speed;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Speed {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Speed {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, SpeedUnit::MeterPerSecond.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Speed`].
-#[derive(Debug)]
-pub struct ParseSpeedError(String);
-
-impl fmt::Display for ParseSpeedError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Speed", self.0)
-    }
-}
-
-impl std::error::Error for ParseSpeedError {}
-
-impl FromStr for Speed {
-    type Err = ParseSpeedError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseSpeedError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, SpeedUnit)] = &[
-            ("ftUS/min", SpeedUnit::UsSurveyFootPerMinute),
-            ("µm/min", SpeedUnit::MicrometerPerMinute),
-            ("cm/min", SpeedUnit::CentimeterPerMinute),
-            ("dm/min", SpeedUnit::DecimeterPerMinute),
-            ("ft/min", SpeedUnit::FootPerMinute),
-            ("ftUS/h", SpeedUnit::UsSurveyFootPerHour),
-            ("ftUS/s", SpeedUnit::UsSurveyFootPerSecond),
-            ("in/min", SpeedUnit::InchPerMinute),
-            ("km/min", SpeedUnit::KilometerPerMinute),
-            ("mm/min", SpeedUnit::MillimeterPerMinute),
-            ("nm/min", SpeedUnit::NanometerPerMinute),
-            ("yd/min", SpeedUnit::YardPerMinute),
-            ("knots", SpeedUnit::Knot),
-            ("m/min", SpeedUnit::MeterPerMinute),
-            ("µm/s", SpeedUnit::MicrometerPerSecond),
-            ("MACH", SpeedUnit::Mach),
-            ("cm/h", SpeedUnit::CentimeterPerHour),
-            ("cm/s", SpeedUnit::CentimeterPerSecond),
-            ("dm/s", SpeedUnit::DecimeterPerSecond),
-            ("ft/h", SpeedUnit::FootPerHour),
-            ("ft/s", SpeedUnit::FootPerSecond),
-            ("in/h", SpeedUnit::InchPerHour),
-            ("in/s", SpeedUnit::InchPerSecond),
-            ("km/h", SpeedUnit::KilometerPerHour),
-            ("km/s", SpeedUnit::KilometerPerSecond),
-            ("knot", SpeedUnit::Knot),
-            ("mm/h", SpeedUnit::MillimeterPerHour),
-            ("mm/s", SpeedUnit::MillimeterPerSecond),
-            ("nm/s", SpeedUnit::NanometerPerSecond),
-            ("yd/h", SpeedUnit::YardPerHour),
-            ("yd/s", SpeedUnit::YardPerSecond),
-            ("m/h", SpeedUnit::MeterPerHour),
-            ("m/s", SpeedUnit::MeterPerSecond),
-            ("mph", SpeedUnit::MilePerHour),
-            ("MN", SpeedUnit::Mach),
-            ("Ma", SpeedUnit::Mach),
-            ("kn", SpeedUnit::Knot),
-            ("kt", SpeedUnit::Knot),
-            ("M", SpeedUnit::Mach),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseSpeedError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/Power.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In physics, power is the rate of doing work. It is equivalent to an amount of energy consumed per unit time.
 ///
-/// The internal value is stored in `Watt` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Power(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`PowerUnit::Watt`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Power<T = f64>(T);
+
+quantity!(Power, PowerUnit, Watt);
 
 /// Unit variants for [`Power`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum PowerUnit {
     Watt,
     Femtowatt,
@@ -39,7 +47,7 @@ pub enum PowerUnit {
     Petawatt,
     /// Assuming the third CGPM (1901, CR 70) definition of standard gravity, gn = 9.80665 m/s2, is used to define the pound-force as well as the kilogram force, and the international avoirdupois pound (1959), one imperial horsepower is: 76.0402249 × 9.80665 kg⋅m2/s3
     MechanicalHorsepower,
-    /// DIN 66036 defines one metric horsepower as the power to raise a mass of 75 kilograms against the Earth's gravitational force over a distance of one metre in one second:[18] 75 kg × 9.80665 m/s2 × 1 m / 1 s = 75 kgf⋅m/s = 1 PS. This is equivalent to 735.49875 W, or 98.6% of an imperial horsepower.
+    /// DIN 66036 defines one metric horsepower as the power to raise a mass of 75 kilograms against the Earth's gravitational force over a distance of one metre in one second:\[18\] 75 kg × 9.80665 m/s2 × 1 m / 1 s = 75 kgf⋅m/s = 1 PS. This is equivalent to 735.49875 W, or 98.6% of an imperial horsepower.
     MetricHorsepower,
     /// Nameplates on electrical motors show their power output, not the power input (the power delivered at the shaft, not the power consumed to drive the motor). This power output is ordinarily stated in watts or kilowatts. In the United States, the power output is stated in horsepower, which for this purpose is defined as exactly 746 W.
     ElectricalHorsepower,
@@ -92,7 +100,7 @@ impl PowerUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Watt => "W",
             Self::Femtowatt => "fW",
@@ -124,9 +132,9 @@ impl PowerUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Watt => &["W"],
             Self::Femtowatt => &["fW"],
@@ -159,743 +167,571 @@ impl PowerUnit {
     }
 }
 
-impl Power {
+impl core::str::FromStr for PowerUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "W" => Ok(Self::Watt),
+            "fW" => Ok(Self::Femtowatt),
+            "pW" => Ok(Self::Picowatt),
+            "nW" => Ok(Self::Nanowatt),
+            "µW" => Ok(Self::Microwatt),
+            "mW" => Ok(Self::Milliwatt),
+            "dW" => Ok(Self::Deciwatt),
+            "daW" => Ok(Self::Decawatt),
+            "kW" => Ok(Self::Kilowatt),
+            "MW" => Ok(Self::Megawatt),
+            "GW" => Ok(Self::Gigawatt),
+            "TW" => Ok(Self::Terawatt),
+            "PW" => Ok(Self::Petawatt),
+            "hp(I)" => Ok(Self::MechanicalHorsepower),
+            "hp(M)" => Ok(Self::MetricHorsepower),
+            "hp(E)" => Ok(Self::ElectricalHorsepower),
+            "hp(S)" => Ok(Self::BoilerHorsepower),
+            "hp(H)" => Ok(Self::HydraulicHorsepower),
+            "Btu/h" => Ok(Self::BritishThermalUnitPerHour),
+            "Btu/hr" => Ok(Self::BritishThermalUnitPerHour),
+            "kBtu/h" => Ok(Self::KilobritishThermalUnitPerHour),
+            "MBtu/h" => Ok(Self::MegabritishThermalUnitPerHour),
+            "J/h" => Ok(Self::JoulePerHour),
+            "mJ/h" => Ok(Self::MillijoulePerHour),
+            "kJ/h" => Ok(Self::KilojoulePerHour),
+            "MJ/h" => Ok(Self::MegajoulePerHour),
+            "GJ/h" => Ok(Self::GigajoulePerHour),
+            "TR" => Ok(Self::TonOfRefrigeration),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Power<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: PowerUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: PowerUnit) -> Self {
         Self(match unit {
-            PowerUnit::Watt => x,
-            PowerUnit::Femtowatt => (x * 1e-15),
-            PowerUnit::Picowatt => (x * 1e-12),
-            PowerUnit::Nanowatt => (x * 1e-9),
-            PowerUnit::Microwatt => (x * 1e-6),
-            PowerUnit::Milliwatt => (x * 1e-3),
-            PowerUnit::Deciwatt => (x * 1e-1),
-            PowerUnit::Decawatt => (x * 1e1),
-            PowerUnit::Kilowatt => (x * 1e3),
-            PowerUnit::Megawatt => (x * 1e6),
-            PowerUnit::Gigawatt => (x * 1e9),
-            PowerUnit::Terawatt => (x * 1e12),
-            PowerUnit::Petawatt => (x * 1e15),
-            PowerUnit::MechanicalHorsepower => x * 76.0402249 * 9.80665,
-            PowerUnit::MetricHorsepower => x * 75.0 * 9.80665,
-            PowerUnit::ElectricalHorsepower => x * 746.0,
-            PowerUnit::BoilerHorsepower => x * 9812.5,
-            PowerUnit::HydraulicHorsepower => x * 745.69987158227022,
-            PowerUnit::BritishThermalUnitPerHour => x * 1055.05585262 / 3600.0,
-            PowerUnit::KilobritishThermalUnitPerHour => (x * 1e3) * 1055.05585262 / 3600.0,
-            PowerUnit::MegabritishThermalUnitPerHour => (x * 1e6) * 1055.05585262 / 3600.0,
-            PowerUnit::JoulePerHour => x / 3600.0,
-            PowerUnit::MillijoulePerHour => (x * 1e-3) / 3600.0,
-            PowerUnit::KilojoulePerHour => (x * 1e3) / 3600.0,
-            PowerUnit::MegajoulePerHour => (x * 1e6) / 3600.0,
-            PowerUnit::GigajoulePerHour => (x * 1e9) / 3600.0,
-            PowerUnit::TonOfRefrigeration => x * 3516.853,
+            PowerUnit::Watt => value,
+            PowerUnit::Femtowatt => value / T::from_f64(1e15),
+            PowerUnit::Picowatt => value / T::from_f64(1e12),
+            PowerUnit::Nanowatt => value / T::from_f64(1e9),
+            PowerUnit::Microwatt => value / T::from_f64(1000000.0),
+            PowerUnit::Milliwatt => value / T::from_f64(1000.0),
+            PowerUnit::Deciwatt => value / T::from_f64(10.0),
+            PowerUnit::Decawatt => value * T::from_f64(10.0),
+            PowerUnit::Kilowatt => value * T::from_f64(1000.0),
+            PowerUnit::Megawatt => value * T::from_f64(1000000.0),
+            PowerUnit::Gigawatt => value * T::from_f64(1e9),
+            PowerUnit::Terawatt => value * T::from_f64(1e12),
+            PowerUnit::Petawatt => value * T::from_f64(1e15),
+            PowerUnit::MechanicalHorsepower => value * T::from_f64(745.699871515585),
+            PowerUnit::MetricHorsepower => value * T::from_f64(735.49875),
+            PowerUnit::ElectricalHorsepower => value * T::from_f64(746.0),
+            PowerUnit::BoilerHorsepower => value * T::from_f64(9812.5),
+            PowerUnit::HydraulicHorsepower => value * T::from_f64(745.6998715822702),
+            PowerUnit::BritishThermalUnitPerHour => value * T::from_f64(0.2930710701722222),
+            PowerUnit::KilobritishThermalUnitPerHour => value * T::from_f64(293.0710701722222),
+            PowerUnit::MegabritishThermalUnitPerHour => value * T::from_f64(293071.0701722222),
+            PowerUnit::JoulePerHour => value / T::from_f64(3600.0),
+            PowerUnit::MillijoulePerHour => value / T::from_f64(3600000.0),
+            PowerUnit::KilojoulePerHour => value * T::from_f64(0.2777777777777778),
+            PowerUnit::MegajoulePerHour => value * T::from_f64(277.77777777777777),
+            PowerUnit::GigajoulePerHour => value * T::from_f64(277777.77777777775),
+            PowerUnit::TonOfRefrigeration => value * T::from_f64(3516.853),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: PowerUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: PowerUnit) -> T {
         match unit {
-            PowerUnit::Watt => x,
-            PowerUnit::Femtowatt => (x / 1e-15),
-            PowerUnit::Picowatt => (x / 1e-12),
-            PowerUnit::Nanowatt => (x / 1e-9),
-            PowerUnit::Microwatt => (x / 1e-6),
-            PowerUnit::Milliwatt => (x / 1e-3),
-            PowerUnit::Deciwatt => (x / 1e-1),
-            PowerUnit::Decawatt => (x / 1e1),
-            PowerUnit::Kilowatt => (x / 1e3),
-            PowerUnit::Megawatt => (x / 1e6),
-            PowerUnit::Gigawatt => (x / 1e9),
-            PowerUnit::Terawatt => (x / 1e12),
-            PowerUnit::Petawatt => (x / 1e15),
-            PowerUnit::MechanicalHorsepower => x / (76.0402249 * 9.80665),
-            PowerUnit::MetricHorsepower => x / (75.0 * 9.80665),
-            PowerUnit::ElectricalHorsepower => x / 746.0,
-            PowerUnit::BoilerHorsepower => x / 9812.5,
-            PowerUnit::HydraulicHorsepower => x / 745.69987158227022,
-            PowerUnit::BritishThermalUnitPerHour => x * 3600.0 / 1055.05585262,
-            PowerUnit::KilobritishThermalUnitPerHour => (x / 1e3) * 3600.0 / 1055.05585262,
-            PowerUnit::MegabritishThermalUnitPerHour => (x / 1e6) * 3600.0 / 1055.05585262,
-            PowerUnit::JoulePerHour => x * 3600.0,
-            PowerUnit::MillijoulePerHour => (x / 1e-3) * 3600.0,
-            PowerUnit::KilojoulePerHour => (x / 1e3) * 3600.0,
-            PowerUnit::MegajoulePerHour => (x / 1e6) * 3600.0,
-            PowerUnit::GigajoulePerHour => (x / 1e9) * 3600.0,
-            PowerUnit::TonOfRefrigeration => x / 3516.853,
+            PowerUnit::Watt => self.0,
+            PowerUnit::Femtowatt => self.0 * T::from_f64(1e15),
+            PowerUnit::Picowatt => self.0 * T::from_f64(1e12),
+            PowerUnit::Nanowatt => self.0 * T::from_f64(1e9),
+            PowerUnit::Microwatt => self.0 * T::from_f64(1000000.0),
+            PowerUnit::Milliwatt => self.0 * T::from_f64(1000.0),
+            PowerUnit::Deciwatt => self.0 * T::from_f64(10.0),
+            PowerUnit::Decawatt => self.0 / T::from_f64(10.0),
+            PowerUnit::Kilowatt => self.0 / T::from_f64(1000.0),
+            PowerUnit::Megawatt => self.0 / T::from_f64(1000000.0),
+            PowerUnit::Gigawatt => self.0 / T::from_f64(1e9),
+            PowerUnit::Terawatt => self.0 / T::from_f64(1e12),
+            PowerUnit::Petawatt => self.0 / T::from_f64(1e15),
+            PowerUnit::MechanicalHorsepower => self.0 / T::from_f64(745.699871515585),
+            PowerUnit::MetricHorsepower => self.0 / T::from_f64(735.49875),
+            PowerUnit::ElectricalHorsepower => self.0 / T::from_f64(746.0),
+            PowerUnit::BoilerHorsepower => self.0 / T::from_f64(9812.5),
+            PowerUnit::HydraulicHorsepower => self.0 / T::from_f64(745.6998715822702),
+            PowerUnit::BritishThermalUnitPerHour => self.0 / T::from_f64(0.2930710701722222),
+            PowerUnit::KilobritishThermalUnitPerHour => self.0 / T::from_f64(293.0710701722222),
+            PowerUnit::MegabritishThermalUnitPerHour => self.0 / T::from_f64(293071.0701722222),
+            PowerUnit::JoulePerHour => self.0 * T::from_f64(3600.0),
+            PowerUnit::MillijoulePerHour => self.0 * T::from_f64(3600000.0),
+            PowerUnit::KilojoulePerHour => self.0 / T::from_f64(0.2777777777777778),
+            PowerUnit::MegajoulePerHour => self.0 / T::from_f64(277.77777777777777),
+            PowerUnit::GigajoulePerHour => self.0 / T::from_f64(277777.77777777775),
+            PowerUnit::TonOfRefrigeration => self.0 / T::from_f64(3516.853),
         }
     }
 
     /// Creates a [`Power`] from a value in Watts (`W`).
     #[inline]
-    pub fn from_watts(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_watts(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Watts (`W`).
     #[inline]
-    pub fn as_watts(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_watts(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_watts`].
     #[inline]
-    pub fn as_watt(self) -> Num {
+    pub fn as_watt(self) -> T {
         self.as_watts()
     }
 
     /// Creates a [`Power`] from a value in Femtowatts (`fW`).
     #[inline]
-    pub fn from_femtowatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-15))
+    pub fn from_femtowatts(value: T) -> Self {
+        Self(value / T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Femtowatts (`fW`).
     #[inline]
-    pub fn as_femtowatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-15)
+    pub fn as_femtowatts(self) -> T {
+        self.0 * T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_femtowatts`].
     #[inline]
-    pub fn as_femtowatt(self) -> Num {
+    pub fn as_femtowatt(self) -> T {
         self.as_femtowatts()
     }
 
     /// Creates a [`Power`] from a value in Picowatts (`pW`).
     #[inline]
-    pub fn from_picowatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picowatts(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picowatts (`pW`).
     #[inline]
-    pub fn as_picowatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picowatts(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picowatts`].
     #[inline]
-    pub fn as_picowatt(self) -> Num {
+    pub fn as_picowatt(self) -> T {
         self.as_picowatts()
     }
 
     /// Creates a [`Power`] from a value in Nanowatts (`nW`).
     #[inline]
-    pub fn from_nanowatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanowatts(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanowatts (`nW`).
     #[inline]
-    pub fn as_nanowatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanowatts(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanowatts`].
     #[inline]
-    pub fn as_nanowatt(self) -> Num {
+    pub fn as_nanowatt(self) -> T {
         self.as_nanowatts()
     }
 
     /// Creates a [`Power`] from a value in Microwatts (`µW`).
     #[inline]
-    pub fn from_microwatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microwatts(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microwatts (`µW`).
     #[inline]
-    pub fn as_microwatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microwatts(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microwatts`].
     #[inline]
-    pub fn as_microwatt(self) -> Num {
+    pub fn as_microwatt(self) -> T {
         self.as_microwatts()
     }
 
     /// Creates a [`Power`] from a value in Milliwatts (`mW`).
     #[inline]
-    pub fn from_milliwatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliwatts(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Milliwatts (`mW`).
     #[inline]
-    pub fn as_milliwatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliwatts(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliwatts`].
     #[inline]
-    pub fn as_milliwatt(self) -> Num {
+    pub fn as_milliwatt(self) -> T {
         self.as_milliwatts()
     }
 
     /// Creates a [`Power`] from a value in Deciwatts (`dW`).
     #[inline]
-    pub fn from_deciwatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_deciwatts(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in Deciwatts (`dW`).
     #[inline]
-    pub fn as_deciwatts(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_deciwatts(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_deciwatts`].
     #[inline]
-    pub fn as_deciwatt(self) -> Num {
+    pub fn as_deciwatt(self) -> T {
         self.as_deciwatts()
     }
 
     /// Creates a [`Power`] from a value in Decawatts (`daW`).
     #[inline]
-    pub fn from_decawatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decawatts(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in Decawatts (`daW`).
     #[inline]
-    pub fn as_decawatts(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decawatts(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decawatts`].
     #[inline]
-    pub fn as_decawatt(self) -> Num {
+    pub fn as_decawatt(self) -> T {
         self.as_decawatts()
     }
 
     /// Creates a [`Power`] from a value in Kilowatts (`kW`).
     #[inline]
-    pub fn from_kilowatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilowatts(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilowatts (`kW`).
     #[inline]
-    pub fn as_kilowatts(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilowatts(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilowatts`].
     #[inline]
-    pub fn as_kilowatt(self) -> Num {
+    pub fn as_kilowatt(self) -> T {
         self.as_kilowatts()
     }
 
     /// Creates a [`Power`] from a value in Megawatts (`MW`).
     #[inline]
-    pub fn from_megawatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megawatts(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megawatts (`MW`).
     #[inline]
-    pub fn as_megawatts(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megawatts(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megawatts`].
     #[inline]
-    pub fn as_megawatt(self) -> Num {
+    pub fn as_megawatt(self) -> T {
         self.as_megawatts()
     }
 
     /// Creates a [`Power`] from a value in Gigawatts (`GW`).
     #[inline]
-    pub fn from_gigawatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigawatts(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigawatts (`GW`).
     #[inline]
-    pub fn as_gigawatts(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigawatts(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigawatts`].
     #[inline]
-    pub fn as_gigawatt(self) -> Num {
+    pub fn as_gigawatt(self) -> T {
         self.as_gigawatts()
     }
 
     /// Creates a [`Power`] from a value in Terawatts (`TW`).
     #[inline]
-    pub fn from_terawatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terawatts(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Terawatts (`TW`).
     #[inline]
-    pub fn as_terawatts(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terawatts(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_terawatts`].
     #[inline]
-    pub fn as_terawatt(self) -> Num {
+    pub fn as_terawatt(self) -> T {
         self.as_terawatts()
     }
 
     /// Creates a [`Power`] from a value in Petawatts (`PW`).
     #[inline]
-    pub fn from_petawatts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15))
+    pub fn from_petawatts(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Petawatts (`PW`).
     #[inline]
-    pub fn as_petawatts(self) -> Num {
-        let x = self.0;
-        (x / 1e15)
+    pub fn as_petawatts(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_petawatts`].
     #[inline]
-    pub fn as_petawatt(self) -> Num {
+    pub fn as_petawatt(self) -> T {
         self.as_petawatts()
     }
 
     /// Creates a [`Power`] from a value in MechanicalHorsepower (`hp(I)`).
     #[inline]
-    pub fn from_mechanical_horsepower(value: Num) -> Self {
-        let x = value;
-        Self(x * 76.0402249 * 9.80665)
+    pub fn from_mechanical_horsepower(value: T) -> Self {
+        Self(value * T::from_f64(745.699871515585))
     }
 
     /// Returns the value expressed in MechanicalHorsepower (`hp(I)`).
     #[inline]
-    pub fn as_mechanical_horsepower(self) -> Num {
-        let x = self.0;
-        x / (76.0402249 * 9.80665)
+    pub fn as_mechanical_horsepower(self) -> T {
+        self.0 / T::from_f64(745.699871515585)
     }
 
     /// Creates a [`Power`] from a value in MetricHorsepower (`hp(M)`).
     #[inline]
-    pub fn from_metric_horsepower(value: Num) -> Self {
-        let x = value;
-        Self(x * 75.0 * 9.80665)
+    pub fn from_metric_horsepower(value: T) -> Self {
+        Self(value * T::from_f64(735.49875))
     }
 
     /// Returns the value expressed in MetricHorsepower (`hp(M)`).
     #[inline]
-    pub fn as_metric_horsepower(self) -> Num {
-        let x = self.0;
-        x / (75.0 * 9.80665)
+    pub fn as_metric_horsepower(self) -> T {
+        self.0 / T::from_f64(735.49875)
     }
 
     /// Creates a [`Power`] from a value in ElectricalHorsepower (`hp(E)`).
     #[inline]
-    pub fn from_electrical_horsepower(value: Num) -> Self {
-        let x = value;
-        Self(x * 746.0)
+    pub fn from_electrical_horsepower(value: T) -> Self {
+        Self(value * T::from_f64(746.0))
     }
 
     /// Returns the value expressed in ElectricalHorsepower (`hp(E)`).
     #[inline]
-    pub fn as_electrical_horsepower(self) -> Num {
-        let x = self.0;
-        x / 746.0
+    pub fn as_electrical_horsepower(self) -> T {
+        self.0 / T::from_f64(746.0)
     }
 
     /// Creates a [`Power`] from a value in BoilerHorsepower (`hp(S)`).
     #[inline]
-    pub fn from_boiler_horsepower(value: Num) -> Self {
-        let x = value;
-        Self(x * 9812.5)
+    pub fn from_boiler_horsepower(value: T) -> Self {
+        Self(value * T::from_f64(9812.5))
     }
 
     /// Returns the value expressed in BoilerHorsepower (`hp(S)`).
     #[inline]
-    pub fn as_boiler_horsepower(self) -> Num {
-        let x = self.0;
-        x / 9812.5
+    pub fn as_boiler_horsepower(self) -> T {
+        self.0 / T::from_f64(9812.5)
     }
 
     /// Creates a [`Power`] from a value in HydraulicHorsepower (`hp(H)`).
     #[inline]
-    pub fn from_hydraulic_horsepower(value: Num) -> Self {
-        let x = value;
-        Self(x * 745.69987158227022)
+    pub fn from_hydraulic_horsepower(value: T) -> Self {
+        Self(value * T::from_f64(745.6998715822702))
     }
 
     /// Returns the value expressed in HydraulicHorsepower (`hp(H)`).
     #[inline]
-    pub fn as_hydraulic_horsepower(self) -> Num {
-        let x = self.0;
-        x / 745.69987158227022
+    pub fn as_hydraulic_horsepower(self) -> T {
+        self.0 / T::from_f64(745.6998715822702)
     }
 
     /// Creates a [`Power`] from a value in BritishThermalUnitsPerHour (`Btu/h`).
     #[inline]
-    pub fn from_british_thermal_units_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 1055.05585262 / 3600.0)
+    pub fn from_british_thermal_units_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2930710701722222))
     }
 
     /// Returns the value expressed in BritishThermalUnitsPerHour (`Btu/h`).
     #[inline]
-    pub fn as_british_thermal_units_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0 / 1055.05585262
+    pub fn as_british_thermal_units_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2930710701722222)
     }
 
     /// Alias for [`Self::as_british_thermal_units_per_hour`].
     #[inline]
-    pub fn as_british_thermal_unit_per_hour(self) -> Num {
+    pub fn as_british_thermal_unit_per_hour(self) -> T {
         self.as_british_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in KilobritishThermalUnitsPerHour (`kBtu/h`).
     #[inline]
-    pub fn from_kilobritish_thermal_units_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1055.05585262 / 3600.0)
+    pub fn from_kilobritish_thermal_units_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(293.0710701722222))
     }
 
     /// Returns the value expressed in KilobritishThermalUnitsPerHour (`kBtu/h`).
     #[inline]
-    pub fn as_kilobritish_thermal_units_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 3600.0 / 1055.05585262
+    pub fn as_kilobritish_thermal_units_per_hour(self) -> T {
+        self.0 / T::from_f64(293.0710701722222)
     }
 
     /// Alias for [`Self::as_kilobritish_thermal_units_per_hour`].
     #[inline]
-    pub fn as_kilobritish_thermal_unit_per_hour(self) -> Num {
+    pub fn as_kilobritish_thermal_unit_per_hour(self) -> T {
         self.as_kilobritish_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MegabritishThermalUnitsPerHour (`MBtu/h`).
     #[inline]
-    pub fn from_megabritish_thermal_units_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1055.05585262 / 3600.0)
+    pub fn from_megabritish_thermal_units_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(293071.0701722222))
     }
 
     /// Returns the value expressed in MegabritishThermalUnitsPerHour (`MBtu/h`).
     #[inline]
-    pub fn as_megabritish_thermal_units_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 3600.0 / 1055.05585262
+    pub fn as_megabritish_thermal_units_per_hour(self) -> T {
+        self.0 / T::from_f64(293071.0701722222)
     }
 
     /// Alias for [`Self::as_megabritish_thermal_units_per_hour`].
     #[inline]
-    pub fn as_megabritish_thermal_unit_per_hour(self) -> Num {
+    pub fn as_megabritish_thermal_unit_per_hour(self) -> T {
         self.as_megabritish_thermal_units_per_hour()
     }
 
     /// Creates a [`Power`] from a value in JoulesPerHour (`J/h`).
     #[inline]
-    pub fn from_joules_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_joules_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in JoulesPerHour (`J/h`).
     #[inline]
-    pub fn as_joules_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_joules_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_joules_per_hour`].
     #[inline]
-    pub fn as_joule_per_hour(self) -> Num {
+    pub fn as_joule_per_hour(self) -> T {
         self.as_joules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MillijoulesPerHour (`mJ/h`).
     #[inline]
-    pub fn from_millijoules_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 3600.0)
+    pub fn from_millijoules_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in MillijoulesPerHour (`mJ/h`).
     #[inline]
-    pub fn as_millijoules_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 3600.0
+    pub fn as_millijoules_per_hour(self) -> T {
+        self.0 * T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_millijoules_per_hour`].
     #[inline]
-    pub fn as_millijoule_per_hour(self) -> Num {
+    pub fn as_millijoule_per_hour(self) -> T {
         self.as_millijoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in KilojoulesPerHour (`kJ/h`).
     #[inline]
-    pub fn from_kilojoules_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 3600.0)
+    pub fn from_kilojoules_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2777777777777778))
     }
 
     /// Returns the value expressed in KilojoulesPerHour (`kJ/h`).
     #[inline]
-    pub fn as_kilojoules_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 3600.0
+    pub fn as_kilojoules_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2777777777777778)
     }
 
     /// Alias for [`Self::as_kilojoules_per_hour`].
     #[inline]
-    pub fn as_kilojoule_per_hour(self) -> Num {
+    pub fn as_kilojoule_per_hour(self) -> T {
         self.as_kilojoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in MegajoulesPerHour (`MJ/h`).
     #[inline]
-    pub fn from_megajoules_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 3600.0)
+    pub fn from_megajoules_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(277.77777777777777))
     }
 
     /// Returns the value expressed in MegajoulesPerHour (`MJ/h`).
     #[inline]
-    pub fn as_megajoules_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 3600.0
+    pub fn as_megajoules_per_hour(self) -> T {
+        self.0 / T::from_f64(277.77777777777777)
     }
 
     /// Alias for [`Self::as_megajoules_per_hour`].
     #[inline]
-    pub fn as_megajoule_per_hour(self) -> Num {
+    pub fn as_megajoule_per_hour(self) -> T {
         self.as_megajoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in GigajoulesPerHour (`GJ/h`).
     #[inline]
-    pub fn from_gigajoules_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) / 3600.0)
+    pub fn from_gigajoules_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(277777.77777777775))
     }
 
     /// Returns the value expressed in GigajoulesPerHour (`GJ/h`).
     #[inline]
-    pub fn as_gigajoules_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e9) * 3600.0
+    pub fn as_gigajoules_per_hour(self) -> T {
+        self.0 / T::from_f64(277777.77777777775)
     }
 
     /// Alias for [`Self::as_gigajoules_per_hour`].
     #[inline]
-    pub fn as_gigajoule_per_hour(self) -> Num {
+    pub fn as_gigajoule_per_hour(self) -> T {
         self.as_gigajoules_per_hour()
     }
 
     /// Creates a [`Power`] from a value in TonsOfRefrigeration (`TR`).
     #[inline]
-    pub fn from_tons_of_refrigeration(value: Num) -> Self {
-        let x = value;
-        Self(x * 3516.853)
+    pub fn from_tons_of_refrigeration(value: T) -> Self {
+        Self(value * T::from_f64(3516.853))
     }
 
     /// Returns the value expressed in TonsOfRefrigeration (`TR`).
     #[inline]
-    pub fn as_tons_of_refrigeration(self) -> Num {
-        let x = self.0;
-        x / 3516.853
+    pub fn as_tons_of_refrigeration(self) -> T {
+        self.0 / T::from_f64(3516.853)
     }
 
     /// Alias for [`Self::as_tons_of_refrigeration`].
     #[inline]
-    pub fn as_ton_of_refrigeration(self) -> Num {
+    pub fn as_ton_of_refrigeration(self) -> T {
         self.as_tons_of_refrigeration()
     }
-}
-
-impl crate::Quantity for Power {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Power {
-    type Output = Power;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Power {
-    type Output = Power;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Power {
-    type Output = Power;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Power {
-    type Output = Power;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Power> for Num {
-    type Output = Power;
-    #[inline]
-    fn mul(self, rhs: Power) -> Power {
-        Power(self * rhs.0)
-    }
-}
-impl Div<Num> for Power {
-    type Output = Power;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Power {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Power {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, PowerUnit::Watt.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Power`].
-#[derive(Debug)]
-pub struct ParsePowerError(String);
-
-impl fmt::Display for ParsePowerError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Power", self.0)
-    }
-}
-
-impl std::error::Error for ParsePowerError {}
-
-impl FromStr for Power {
-    type Err = ParsePowerError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParsePowerError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, PowerUnit)] = &[
-            ("Btu/hr", PowerUnit::BritishThermalUnitPerHour),
-            ("MBtu/h", PowerUnit::MegabritishThermalUnitPerHour),
-            ("kBtu/h", PowerUnit::KilobritishThermalUnitPerHour),
-            ("Btu/h", PowerUnit::BritishThermalUnitPerHour),
-            ("hp(E)", PowerUnit::ElectricalHorsepower),
-            ("hp(H)", PowerUnit::HydraulicHorsepower),
-            ("hp(I)", PowerUnit::MechanicalHorsepower),
-            ("hp(M)", PowerUnit::MetricHorsepower),
-            ("hp(S)", PowerUnit::BoilerHorsepower),
-            ("GJ/h", PowerUnit::GigajoulePerHour),
-            ("MJ/h", PowerUnit::MegajoulePerHour),
-            ("kJ/h", PowerUnit::KilojoulePerHour),
-            ("mJ/h", PowerUnit::MillijoulePerHour),
-            ("J/h", PowerUnit::JoulePerHour),
-            ("daW", PowerUnit::Decawatt),
-            ("µW", PowerUnit::Microwatt),
-            ("GW", PowerUnit::Gigawatt),
-            ("MW", PowerUnit::Megawatt),
-            ("PW", PowerUnit::Petawatt),
-            ("TR", PowerUnit::TonOfRefrigeration),
-            ("TW", PowerUnit::Terawatt),
-            ("dW", PowerUnit::Deciwatt),
-            ("fW", PowerUnit::Femtowatt),
-            ("kW", PowerUnit::Kilowatt),
-            ("mW", PowerUnit::Milliwatt),
-            ("nW", PowerUnit::Nanowatt),
-            ("pW", PowerUnit::Picowatt),
-            ("W", PowerUnit::Watt),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParsePowerError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

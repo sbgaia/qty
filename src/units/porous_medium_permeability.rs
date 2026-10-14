@@ -2,27 +2,37 @@
 // Source: data/quantities/PorousMediumPermeability.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-///
-///
-/// The internal value is stored in `SquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct PorousMediumPermeability(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`PorousMediumPermeabilityUnit::SquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct PorousMediumPermeability<T = f64>(T);
+
+quantity!(
+    PorousMediumPermeability,
+    PorousMediumPermeabilityUnit,
+    SquareMeter
+);
 
 /// Unit variants for [`PorousMediumPermeability`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum PorousMediumPermeabilityUnit {
     /// The darcy (or darcy unit) and millidarcy (md or mD) are units of permeability, named after Henry Darcy. They are not SI units, but they are widely used in petroleum engineering and geology.
     Darcy,
@@ -44,7 +54,7 @@ impl PorousMediumPermeabilityUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Darcy => "D",
             Self::Microdarcy => "µD",
@@ -54,9 +64,9 @@ impl PorousMediumPermeabilityUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Darcy => &["D"],
             Self::Microdarcy => &["µD"],
@@ -67,271 +77,138 @@ impl PorousMediumPermeabilityUnit {
     }
 }
 
-impl PorousMediumPermeability {
+impl core::str::FromStr for PorousMediumPermeabilityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "D" => Ok(Self::Darcy),
+            "µD" => Ok(Self::Microdarcy),
+            "mD" => Ok(Self::Millidarcy),
+            "m²" => Ok(Self::SquareMeter),
+            "cm²" => Ok(Self::SquareCentimeter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> PorousMediumPermeability<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: PorousMediumPermeabilityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: PorousMediumPermeabilityUnit) -> Self {
         Self(match unit {
-            PorousMediumPermeabilityUnit::Darcy => x * 9.869233e-13,
-            PorousMediumPermeabilityUnit::Microdarcy => (x * 1e-6) * 9.869233e-13,
-            PorousMediumPermeabilityUnit::Millidarcy => (x * 1e-3) * 9.869233e-13,
-            PorousMediumPermeabilityUnit::SquareMeter => x,
-            PorousMediumPermeabilityUnit::SquareCentimeter => x * 1e-4,
+            PorousMediumPermeabilityUnit::Darcy => value * T::from_f64(9.869233e-13),
+            PorousMediumPermeabilityUnit::Microdarcy => value * T::from_f64(9.869233e-19),
+            PorousMediumPermeabilityUnit::Millidarcy => value * T::from_f64(9.869233e-16),
+            PorousMediumPermeabilityUnit::SquareMeter => value,
+            PorousMediumPermeabilityUnit::SquareCentimeter => value / T::from_f64(10000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: PorousMediumPermeabilityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: PorousMediumPermeabilityUnit) -> T {
         match unit {
-            PorousMediumPermeabilityUnit::Darcy => x / 9.869233e-13,
-            PorousMediumPermeabilityUnit::Microdarcy => (x / 1e-6) / 9.869233e-13,
-            PorousMediumPermeabilityUnit::Millidarcy => (x / 1e-3) / 9.869233e-13,
-            PorousMediumPermeabilityUnit::SquareMeter => x,
-            PorousMediumPermeabilityUnit::SquareCentimeter => x / 1e-4,
+            PorousMediumPermeabilityUnit::Darcy => self.0 / T::from_f64(9.869233e-13),
+            PorousMediumPermeabilityUnit::Microdarcy => self.0 / T::from_f64(9.869233e-19),
+            PorousMediumPermeabilityUnit::Millidarcy => self.0 / T::from_f64(9.869233e-16),
+            PorousMediumPermeabilityUnit::SquareMeter => self.0,
+            PorousMediumPermeabilityUnit::SquareCentimeter => self.0 * T::from_f64(10000.0),
         }
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in Darcys (`D`).
     #[inline]
-    pub fn from_darcys(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.869233e-13)
+    pub fn from_darcys(value: T) -> Self {
+        Self(value * T::from_f64(9.869233e-13))
     }
 
     /// Returns the value expressed in Darcys (`D`).
     #[inline]
-    pub fn as_darcys(self) -> Num {
-        let x = self.0;
-        x / 9.869233e-13
+    pub fn as_darcys(self) -> T {
+        self.0 / T::from_f64(9.869233e-13)
     }
 
     /// Alias for [`Self::as_darcys`].
     #[inline]
-    pub fn as_darcy(self) -> Num {
+    pub fn as_darcy(self) -> T {
         self.as_darcys()
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in Microdarcys (`µD`).
     #[inline]
-    pub fn from_microdarcys(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 9.869233e-13)
+    pub fn from_microdarcys(value: T) -> Self {
+        Self(value * T::from_f64(9.869233e-19))
     }
 
     /// Returns the value expressed in Microdarcys (`µD`).
     #[inline]
-    pub fn as_microdarcys(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 9.869233e-13
+    pub fn as_microdarcys(self) -> T {
+        self.0 / T::from_f64(9.869233e-19)
     }
 
     /// Alias for [`Self::as_microdarcys`].
     #[inline]
-    pub fn as_microdarcy(self) -> Num {
+    pub fn as_microdarcy(self) -> T {
         self.as_microdarcys()
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in Millidarcys (`mD`).
     #[inline]
-    pub fn from_millidarcys(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 9.869233e-13)
+    pub fn from_millidarcys(value: T) -> Self {
+        Self(value * T::from_f64(9.869233e-16))
     }
 
     /// Returns the value expressed in Millidarcys (`mD`).
     #[inline]
-    pub fn as_millidarcys(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 9.869233e-13
+    pub fn as_millidarcys(self) -> T {
+        self.0 / T::from_f64(9.869233e-16)
     }
 
     /// Alias for [`Self::as_millidarcys`].
     #[inline]
-    pub fn as_millidarcy(self) -> Num {
+    pub fn as_millidarcy(self) -> T {
         self.as_millidarcys()
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in SquareMeters (`m²`).
     #[inline]
-    pub fn from_square_meters(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_square_meters(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in SquareMeters (`m²`).
     #[inline]
-    pub fn as_square_meters(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_square_meters(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_square_meters`].
     #[inline]
-    pub fn as_square_meter(self) -> Num {
+    pub fn as_square_meter(self) -> T {
         self.as_square_meters()
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn from_square_centimeters(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-4)
+    pub fn from_square_centimeters(value: T) -> Self {
+        Self(value / T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn as_square_centimeters(self) -> Num {
-        let x = self.0;
-        x / 1e-4
+    pub fn as_square_centimeters(self) -> T {
+        self.0 * T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_square_centimeters`].
     #[inline]
-    pub fn as_square_centimeter(self) -> Num {
+    pub fn as_square_centimeter(self) -> T {
         self.as_square_centimeters()
     }
-}
-
-impl crate::Quantity for PorousMediumPermeability {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for PorousMediumPermeability {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for PorousMediumPermeability {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for PorousMediumPermeability {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for PorousMediumPermeability {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<PorousMediumPermeability> for Num {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn mul(self, rhs: PorousMediumPermeability) -> PorousMediumPermeability {
-        PorousMediumPermeability(self * rhs.0)
-    }
-}
-impl Div<Num> for PorousMediumPermeability {
-    type Output = PorousMediumPermeability;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for PorousMediumPermeability {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for PorousMediumPermeability {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            PorousMediumPermeabilityUnit::SquareMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`PorousMediumPermeability`].
-#[derive(Debug)]
-pub struct ParsePorousMediumPermeabilityError(String);
-
-impl fmt::Display for ParsePorousMediumPermeabilityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as PorousMediumPermeability", self.0)
-    }
-}
-
-impl std::error::Error for ParsePorousMediumPermeabilityError {}
-
-impl FromStr for PorousMediumPermeability {
-    type Err = ParsePorousMediumPermeabilityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParsePorousMediumPermeabilityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, PorousMediumPermeabilityUnit)] = &[
-            ("cm²", PorousMediumPermeabilityUnit::SquareCentimeter),
-            ("m²", PorousMediumPermeabilityUnit::SquareMeter),
-            ("µD", PorousMediumPermeabilityUnit::Microdarcy),
-            ("mD", PorousMediumPermeabilityUnit::Millidarcy),
-            ("D", PorousMediumPermeabilityUnit::Darcy),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParsePorousMediumPermeabilityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

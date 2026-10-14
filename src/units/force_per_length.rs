@@ -2,27 +2,35 @@
 // Source: data/quantities/ForcePerLength.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The magnitude of force per unit length.
 ///
-/// The internal value is stored in `NewtonPerMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ForcePerLength(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ForcePerLengthUnit::NewtonPerMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ForcePerLength<T = f64>(T);
+
+quantity!(ForcePerLength, ForcePerLengthUnit, NewtonPerMeter);
 
 /// Unit variants for [`ForcePerLength`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ForcePerLengthUnit {
     NewtonPerMeter,
     NanonewtonPerMeter,
@@ -109,7 +117,7 @@ impl ForcePerLengthUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::NewtonPerMeter => "N/m",
             Self::NanonewtonPerMeter => "nN/m",
@@ -152,9 +160,9 @@ impl ForcePerLengthUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::NewtonPerMeter => &["N/m"],
             Self::NanonewtonPerMeter => &["nN/m"],
@@ -198,1034 +206,835 @@ impl ForcePerLengthUnit {
     }
 }
 
-impl ForcePerLength {
+impl core::str::FromStr for ForcePerLengthUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "N/m" => Ok(Self::NewtonPerMeter),
+            "nN/m" => Ok(Self::NanonewtonPerMeter),
+            "µN/m" => Ok(Self::MicronewtonPerMeter),
+            "mN/m" => Ok(Self::MillinewtonPerMeter),
+            "cN/m" => Ok(Self::CentinewtonPerMeter),
+            "dN/m" => Ok(Self::DecinewtonPerMeter),
+            "daN/m" => Ok(Self::DecanewtonPerMeter),
+            "kN/m" => Ok(Self::KilonewtonPerMeter),
+            "MN/m" => Ok(Self::MeganewtonPerMeter),
+            "N/cm" => Ok(Self::NewtonPerCentimeter),
+            "nN/cm" => Ok(Self::NanonewtonPerCentimeter),
+            "µN/cm" => Ok(Self::MicronewtonPerCentimeter),
+            "mN/cm" => Ok(Self::MillinewtonPerCentimeter),
+            "cN/cm" => Ok(Self::CentinewtonPerCentimeter),
+            "dN/cm" => Ok(Self::DecinewtonPerCentimeter),
+            "daN/cm" => Ok(Self::DecanewtonPerCentimeter),
+            "kN/cm" => Ok(Self::KilonewtonPerCentimeter),
+            "MN/cm" => Ok(Self::MeganewtonPerCentimeter),
+            "N/mm" => Ok(Self::NewtonPerMillimeter),
+            "nN/mm" => Ok(Self::NanonewtonPerMillimeter),
+            "µN/mm" => Ok(Self::MicronewtonPerMillimeter),
+            "mN/mm" => Ok(Self::MillinewtonPerMillimeter),
+            "cN/mm" => Ok(Self::CentinewtonPerMillimeter),
+            "dN/mm" => Ok(Self::DecinewtonPerMillimeter),
+            "daN/mm" => Ok(Self::DecanewtonPerMillimeter),
+            "kN/mm" => Ok(Self::KilonewtonPerMillimeter),
+            "MN/mm" => Ok(Self::MeganewtonPerMillimeter),
+            "kgf/m" => Ok(Self::KilogramForcePerMeter),
+            "kgf/cm" => Ok(Self::KilogramForcePerCentimeter),
+            "kgf/mm" => Ok(Self::KilogramForcePerMillimeter),
+            "tf/m" => Ok(Self::TonneForcePerMeter),
+            "tf/cm" => Ok(Self::TonneForcePerCentimeter),
+            "tf/mm" => Ok(Self::TonneForcePerMillimeter),
+            "lbf/ft" => Ok(Self::PoundForcePerFoot),
+            "lbf/in" => Ok(Self::PoundForcePerInch),
+            "lbf/yd" => Ok(Self::PoundForcePerYard),
+            "kipf/ft" => Ok(Self::KilopoundForcePerFoot),
+            "kip/ft" => Ok(Self::KilopoundForcePerFoot),
+            "k/ft" => Ok(Self::KilopoundForcePerFoot),
+            "kipf/in" => Ok(Self::KilopoundForcePerInch),
+            "kip/in" => Ok(Self::KilopoundForcePerInch),
+            "k/in" => Ok(Self::KilopoundForcePerInch),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ForcePerLength<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ForcePerLengthUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ForcePerLengthUnit) -> Self {
         Self(match unit {
-            ForcePerLengthUnit::NewtonPerMeter => x,
-            ForcePerLengthUnit::NanonewtonPerMeter => (x * 1e-9),
-            ForcePerLengthUnit::MicronewtonPerMeter => (x * 1e-6),
-            ForcePerLengthUnit::MillinewtonPerMeter => (x * 1e-3),
-            ForcePerLengthUnit::CentinewtonPerMeter => (x * 1e-2),
-            ForcePerLengthUnit::DecinewtonPerMeter => (x * 1e-1),
-            ForcePerLengthUnit::DecanewtonPerMeter => (x * 1e1),
-            ForcePerLengthUnit::KilonewtonPerMeter => (x * 1e3),
-            ForcePerLengthUnit::MeganewtonPerMeter => (x * 1e6),
-            ForcePerLengthUnit::NewtonPerCentimeter => x * 1e2,
-            ForcePerLengthUnit::NanonewtonPerCentimeter => (x * 1e-9) * 1e2,
-            ForcePerLengthUnit::MicronewtonPerCentimeter => (x * 1e-6) * 1e2,
-            ForcePerLengthUnit::MillinewtonPerCentimeter => (x * 1e-3) * 1e2,
-            ForcePerLengthUnit::CentinewtonPerCentimeter => (x * 1e-2) * 1e2,
-            ForcePerLengthUnit::DecinewtonPerCentimeter => (x * 1e-1) * 1e2,
-            ForcePerLengthUnit::DecanewtonPerCentimeter => (x * 1e1) * 1e2,
-            ForcePerLengthUnit::KilonewtonPerCentimeter => (x * 1e3) * 1e2,
-            ForcePerLengthUnit::MeganewtonPerCentimeter => (x * 1e6) * 1e2,
-            ForcePerLengthUnit::NewtonPerMillimeter => x * 1e3,
-            ForcePerLengthUnit::NanonewtonPerMillimeter => (x * 1e-9) * 1e3,
-            ForcePerLengthUnit::MicronewtonPerMillimeter => (x * 1e-6) * 1e3,
-            ForcePerLengthUnit::MillinewtonPerMillimeter => (x * 1e-3) * 1e3,
-            ForcePerLengthUnit::CentinewtonPerMillimeter => (x * 1e-2) * 1e3,
-            ForcePerLengthUnit::DecinewtonPerMillimeter => (x * 1e-1) * 1e3,
-            ForcePerLengthUnit::DecanewtonPerMillimeter => (x * 1e1) * 1e3,
-            ForcePerLengthUnit::KilonewtonPerMillimeter => (x * 1e3) * 1e3,
-            ForcePerLengthUnit::MeganewtonPerMillimeter => (x * 1e6) * 1e3,
-            ForcePerLengthUnit::KilogramForcePerMeter => x * 9.80665,
-            ForcePerLengthUnit::KilogramForcePerCentimeter => x * 980.665,
-            ForcePerLengthUnit::KilogramForcePerMillimeter => x * 9.80665e3,
-            ForcePerLengthUnit::TonneForcePerMeter => x * 9.80665e3,
-            ForcePerLengthUnit::TonneForcePerCentimeter => x * 9.80665e5,
-            ForcePerLengthUnit::TonneForcePerMillimeter => x * 9.80665e6,
-            ForcePerLengthUnit::PoundForcePerFoot => x * 4.4482216152605 / 0.3048,
-            ForcePerLengthUnit::PoundForcePerInch => x * 4.4482216152605 / 2.54e-2,
-            ForcePerLengthUnit::PoundForcePerYard => x * 4.4482216152605 / 0.9144,
-            ForcePerLengthUnit::KilopoundForcePerFoot => x * 4.4482216152605 / 0.3048e-3,
-            ForcePerLengthUnit::KilopoundForcePerInch => x * 4.4482216152605 / 2.54e-5,
+            ForcePerLengthUnit::NewtonPerMeter => value,
+            ForcePerLengthUnit::NanonewtonPerMeter => value / T::from_f64(1e9),
+            ForcePerLengthUnit::MicronewtonPerMeter => value / T::from_f64(1000000.0),
+            ForcePerLengthUnit::MillinewtonPerMeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::CentinewtonPerMeter => value / T::from_f64(100.0),
+            ForcePerLengthUnit::DecinewtonPerMeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerMeter => value * T::from_f64(10.0),
+            ForcePerLengthUnit::KilonewtonPerMeter => value * T::from_f64(1000.0),
+            ForcePerLengthUnit::MeganewtonPerMeter => value * T::from_f64(1000000.0),
+            ForcePerLengthUnit::NewtonPerCentimeter => value * T::from_f64(100.0),
+            ForcePerLengthUnit::NanonewtonPerCentimeter => value / T::from_f64(1e7),
+            ForcePerLengthUnit::MicronewtonPerCentimeter => value / T::from_f64(10000.0),
+            ForcePerLengthUnit::MillinewtonPerCentimeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::CentinewtonPerCentimeter => value,
+            ForcePerLengthUnit::DecinewtonPerCentimeter => value * T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerCentimeter => value * T::from_f64(1000.0),
+            ForcePerLengthUnit::KilonewtonPerCentimeter => value * T::from_f64(100000.0),
+            ForcePerLengthUnit::MeganewtonPerCentimeter => value * T::from_f64(1e8),
+            ForcePerLengthUnit::NewtonPerMillimeter => value * T::from_f64(1000.0),
+            ForcePerLengthUnit::NanonewtonPerMillimeter => value / T::from_f64(1000000.0),
+            ForcePerLengthUnit::MicronewtonPerMillimeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::MillinewtonPerMillimeter => value,
+            ForcePerLengthUnit::CentinewtonPerMillimeter => value * T::from_f64(10.0),
+            ForcePerLengthUnit::DecinewtonPerMillimeter => value * T::from_f64(100.0),
+            ForcePerLengthUnit::DecanewtonPerMillimeter => value * T::from_f64(10000.0),
+            ForcePerLengthUnit::KilonewtonPerMillimeter => value * T::from_f64(1000000.0),
+            ForcePerLengthUnit::MeganewtonPerMillimeter => value * T::from_f64(1e9),
+            ForcePerLengthUnit::KilogramForcePerMeter => value * T::from_f64(9.80665),
+            ForcePerLengthUnit::KilogramForcePerCentimeter => value * T::from_f64(980.665),
+            ForcePerLengthUnit::KilogramForcePerMillimeter => value * T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerMeter => value * T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerCentimeter => value * T::from_f64(980665.0),
+            ForcePerLengthUnit::TonneForcePerMillimeter => value * T::from_f64(9806650.0),
+            ForcePerLengthUnit::PoundForcePerFoot => value * T::from_f64(14.593902937206364),
+            ForcePerLengthUnit::PoundForcePerInch => value * T::from_f64(175.1268352464764),
+            ForcePerLengthUnit::PoundForcePerYard => value * T::from_f64(4.864634312402122),
+            ForcePerLengthUnit::KilopoundForcePerFoot => value * T::from_f64(14593.902937206365),
+            ForcePerLengthUnit::KilopoundForcePerInch => value * T::from_f64(175126.83524647637),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ForcePerLengthUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ForcePerLengthUnit) -> T {
         match unit {
-            ForcePerLengthUnit::NewtonPerMeter => x,
-            ForcePerLengthUnit::NanonewtonPerMeter => (x / 1e-9),
-            ForcePerLengthUnit::MicronewtonPerMeter => (x / 1e-6),
-            ForcePerLengthUnit::MillinewtonPerMeter => (x / 1e-3),
-            ForcePerLengthUnit::CentinewtonPerMeter => (x / 1e-2),
-            ForcePerLengthUnit::DecinewtonPerMeter => (x / 1e-1),
-            ForcePerLengthUnit::DecanewtonPerMeter => (x / 1e1),
-            ForcePerLengthUnit::KilonewtonPerMeter => (x / 1e3),
-            ForcePerLengthUnit::MeganewtonPerMeter => (x / 1e6),
-            ForcePerLengthUnit::NewtonPerCentimeter => x / 1e2,
-            ForcePerLengthUnit::NanonewtonPerCentimeter => (x / 1e-9) / 1e2,
-            ForcePerLengthUnit::MicronewtonPerCentimeter => (x / 1e-6) / 1e2,
-            ForcePerLengthUnit::MillinewtonPerCentimeter => (x / 1e-3) / 1e2,
-            ForcePerLengthUnit::CentinewtonPerCentimeter => (x / 1e-2) / 1e2,
-            ForcePerLengthUnit::DecinewtonPerCentimeter => (x / 1e-1) / 1e2,
-            ForcePerLengthUnit::DecanewtonPerCentimeter => (x / 1e1) / 1e2,
-            ForcePerLengthUnit::KilonewtonPerCentimeter => (x / 1e3) / 1e2,
-            ForcePerLengthUnit::MeganewtonPerCentimeter => (x / 1e6) / 1e2,
-            ForcePerLengthUnit::NewtonPerMillimeter => x / 1e3,
-            ForcePerLengthUnit::NanonewtonPerMillimeter => (x / 1e-9) / 1e3,
-            ForcePerLengthUnit::MicronewtonPerMillimeter => (x / 1e-6) / 1e3,
-            ForcePerLengthUnit::MillinewtonPerMillimeter => (x / 1e-3) / 1e3,
-            ForcePerLengthUnit::CentinewtonPerMillimeter => (x / 1e-2) / 1e3,
-            ForcePerLengthUnit::DecinewtonPerMillimeter => (x / 1e-1) / 1e3,
-            ForcePerLengthUnit::DecanewtonPerMillimeter => (x / 1e1) / 1e3,
-            ForcePerLengthUnit::KilonewtonPerMillimeter => (x / 1e3) / 1e3,
-            ForcePerLengthUnit::MeganewtonPerMillimeter => (x / 1e6) / 1e3,
-            ForcePerLengthUnit::KilogramForcePerMeter => x / 9.80665,
-            ForcePerLengthUnit::KilogramForcePerCentimeter => x / 980.665,
-            ForcePerLengthUnit::KilogramForcePerMillimeter => x / 9.80665e3,
-            ForcePerLengthUnit::TonneForcePerMeter => x / 9.80665e3,
-            ForcePerLengthUnit::TonneForcePerCentimeter => x / 9.80665e5,
-            ForcePerLengthUnit::TonneForcePerMillimeter => x / 9.80665e6,
-            ForcePerLengthUnit::PoundForcePerFoot => x * 0.3048 / 4.4482216152605,
-            ForcePerLengthUnit::PoundForcePerInch => x * 2.54e-2 / 4.4482216152605,
-            ForcePerLengthUnit::PoundForcePerYard => x * 0.9144 / 4.4482216152605,
-            ForcePerLengthUnit::KilopoundForcePerFoot => x * 0.3048e-3 / 4.4482216152605,
-            ForcePerLengthUnit::KilopoundForcePerInch => x * 2.54e-5 / 4.4482216152605,
+            ForcePerLengthUnit::NewtonPerMeter => self.0,
+            ForcePerLengthUnit::NanonewtonPerMeter => self.0 * T::from_f64(1e9),
+            ForcePerLengthUnit::MicronewtonPerMeter => self.0 * T::from_f64(1000000.0),
+            ForcePerLengthUnit::MillinewtonPerMeter => self.0 * T::from_f64(1000.0),
+            ForcePerLengthUnit::CentinewtonPerMeter => self.0 * T::from_f64(100.0),
+            ForcePerLengthUnit::DecinewtonPerMeter => self.0 * T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerMeter => self.0 / T::from_f64(10.0),
+            ForcePerLengthUnit::KilonewtonPerMeter => self.0 / T::from_f64(1000.0),
+            ForcePerLengthUnit::MeganewtonPerMeter => self.0 / T::from_f64(1000000.0),
+            ForcePerLengthUnit::NewtonPerCentimeter => self.0 / T::from_f64(100.0),
+            ForcePerLengthUnit::NanonewtonPerCentimeter => self.0 * T::from_f64(1e7),
+            ForcePerLengthUnit::MicronewtonPerCentimeter => self.0 * T::from_f64(10000.0),
+            ForcePerLengthUnit::MillinewtonPerCentimeter => self.0 * T::from_f64(10.0),
+            ForcePerLengthUnit::CentinewtonPerCentimeter => self.0,
+            ForcePerLengthUnit::DecinewtonPerCentimeter => self.0 / T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerCentimeter => self.0 / T::from_f64(1000.0),
+            ForcePerLengthUnit::KilonewtonPerCentimeter => self.0 / T::from_f64(100000.0),
+            ForcePerLengthUnit::MeganewtonPerCentimeter => self.0 / T::from_f64(1e8),
+            ForcePerLengthUnit::NewtonPerMillimeter => self.0 / T::from_f64(1000.0),
+            ForcePerLengthUnit::NanonewtonPerMillimeter => self.0 * T::from_f64(1000000.0),
+            ForcePerLengthUnit::MicronewtonPerMillimeter => self.0 * T::from_f64(1000.0),
+            ForcePerLengthUnit::MillinewtonPerMillimeter => self.0,
+            ForcePerLengthUnit::CentinewtonPerMillimeter => self.0 / T::from_f64(10.0),
+            ForcePerLengthUnit::DecinewtonPerMillimeter => self.0 / T::from_f64(100.0),
+            ForcePerLengthUnit::DecanewtonPerMillimeter => self.0 / T::from_f64(10000.0),
+            ForcePerLengthUnit::KilonewtonPerMillimeter => self.0 / T::from_f64(1000000.0),
+            ForcePerLengthUnit::MeganewtonPerMillimeter => self.0 / T::from_f64(1e9),
+            ForcePerLengthUnit::KilogramForcePerMeter => self.0 / T::from_f64(9.80665),
+            ForcePerLengthUnit::KilogramForcePerCentimeter => self.0 / T::from_f64(980.665),
+            ForcePerLengthUnit::KilogramForcePerMillimeter => self.0 / T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerMeter => self.0 / T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerCentimeter => self.0 / T::from_f64(980665.0),
+            ForcePerLengthUnit::TonneForcePerMillimeter => self.0 / T::from_f64(9806650.0),
+            ForcePerLengthUnit::PoundForcePerFoot => self.0 / T::from_f64(14.593902937206364),
+            ForcePerLengthUnit::PoundForcePerInch => self.0 / T::from_f64(175.1268352464764),
+            ForcePerLengthUnit::PoundForcePerYard => self.0 / T::from_f64(4.864634312402122),
+            ForcePerLengthUnit::KilopoundForcePerFoot => self.0 / T::from_f64(14593.902937206365),
+            ForcePerLengthUnit::KilopoundForcePerInch => self.0 / T::from_f64(175126.83524647637),
         }
     }
 
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerMeter (`N/m`).
     #[inline]
-    pub fn from_newtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_newtons_per_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in NewtonsPerMeter (`N/m`).
     #[inline]
-    pub fn as_newtons_per_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_newtons_per_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_newtons_per_meter`].
     #[inline]
-    pub fn as_newton_per_meter(self) -> Num {
+    pub fn as_newton_per_meter(self) -> T {
         self.as_newtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerMeter (`nN/m`).
     #[inline]
-    pub fn from_nanonewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanonewtons_per_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanonewtonsPerMeter (`nN/m`).
     #[inline]
-    pub fn as_nanonewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanonewtons_per_meter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanonewtons_per_meter`].
     #[inline]
-    pub fn as_nanonewton_per_meter(self) -> Num {
+    pub fn as_nanonewton_per_meter(self) -> T {
         self.as_nanonewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerMeter (`µN/m`).
     #[inline]
-    pub fn from_micronewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micronewtons_per_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicronewtonsPerMeter (`µN/m`).
     #[inline]
-    pub fn as_micronewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micronewtons_per_meter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micronewtons_per_meter`].
     #[inline]
-    pub fn as_micronewton_per_meter(self) -> Num {
+    pub fn as_micronewton_per_meter(self) -> T {
         self.as_micronewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerMeter (`mN/m`).
     #[inline]
-    pub fn from_millinewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millinewtons_per_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillinewtonsPerMeter (`mN/m`).
     #[inline]
-    pub fn as_millinewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millinewtons_per_meter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millinewtons_per_meter`].
     #[inline]
-    pub fn as_millinewton_per_meter(self) -> Num {
+    pub fn as_millinewton_per_meter(self) -> T {
         self.as_millinewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerMeter (`cN/m`).
     #[inline]
-    pub fn from_centinewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centinewtons_per_meter(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentinewtonsPerMeter (`cN/m`).
     #[inline]
-    pub fn as_centinewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centinewtons_per_meter(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centinewtons_per_meter`].
     #[inline]
-    pub fn as_centinewton_per_meter(self) -> Num {
+    pub fn as_centinewton_per_meter(self) -> T {
         self.as_centinewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerMeter (`dN/m`).
     #[inline]
-    pub fn from_decinewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decinewtons_per_meter(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecinewtonsPerMeter (`dN/m`).
     #[inline]
-    pub fn as_decinewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decinewtons_per_meter(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decinewtons_per_meter`].
     #[inline]
-    pub fn as_decinewton_per_meter(self) -> Num {
+    pub fn as_decinewton_per_meter(self) -> T {
         self.as_decinewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerMeter (`daN/m`).
     #[inline]
-    pub fn from_decanewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decanewtons_per_meter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecanewtonsPerMeter (`daN/m`).
     #[inline]
-    pub fn as_decanewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decanewtons_per_meter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decanewtons_per_meter`].
     #[inline]
-    pub fn as_decanewton_per_meter(self) -> Num {
+    pub fn as_decanewton_per_meter(self) -> T {
         self.as_decanewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerMeter (`kN/m`).
     #[inline]
-    pub fn from_kilonewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilonewtons_per_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilonewtonsPerMeter (`kN/m`).
     #[inline]
-    pub fn as_kilonewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilonewtons_per_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_meter`].
     #[inline]
-    pub fn as_kilonewton_per_meter(self) -> Num {
+    pub fn as_kilonewton_per_meter(self) -> T {
         self.as_kilonewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerMeter (`MN/m`).
     #[inline]
-    pub fn from_meganewtons_per_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_meganewtons_per_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MeganewtonsPerMeter (`MN/m`).
     #[inline]
-    pub fn as_meganewtons_per_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_meganewtons_per_meter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_meganewtons_per_meter`].
     #[inline]
-    pub fn as_meganewton_per_meter(self) -> Num {
+    pub fn as_meganewton_per_meter(self) -> T {
         self.as_meganewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerCentimeter (`N/cm`).
     #[inline]
-    pub fn from_newtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e2)
+    pub fn from_newtons_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in NewtonsPerCentimeter (`N/cm`).
     #[inline]
-    pub fn as_newtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        x / 1e2
+    pub fn as_newtons_per_centimeter(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_newtons_per_centimeter`].
     #[inline]
-    pub fn as_newton_per_centimeter(self) -> Num {
+    pub fn as_newton_per_centimeter(self) -> T {
         self.as_newtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerCentimeter (`nN/cm`).
     #[inline]
-    pub fn from_nanonewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 1e2)
+    pub fn from_nanonewtons_per_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(1e7))
     }
 
     /// Returns the value expressed in NanonewtonsPerCentimeter (`nN/cm`).
     #[inline]
-    pub fn as_nanonewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 1e2
+    pub fn as_nanonewtons_per_centimeter(self) -> T {
+        self.0 * T::from_f64(1e7)
     }
 
     /// Alias for [`Self::as_nanonewtons_per_centimeter`].
     #[inline]
-    pub fn as_nanonewton_per_centimeter(self) -> Num {
+    pub fn as_nanonewton_per_centimeter(self) -> T {
         self.as_nanonewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerCentimeter (`µN/cm`).
     #[inline]
-    pub fn from_micronewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 1e2)
+    pub fn from_micronewtons_per_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in MicronewtonsPerCentimeter (`µN/cm`).
     #[inline]
-    pub fn as_micronewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 1e2
+    pub fn as_micronewtons_per_centimeter(self) -> T {
+        self.0 * T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_micronewtons_per_centimeter`].
     #[inline]
-    pub fn as_micronewton_per_centimeter(self) -> Num {
+    pub fn as_micronewton_per_centimeter(self) -> T {
         self.as_micronewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerCentimeter (`mN/cm`).
     #[inline]
-    pub fn from_millinewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e2)
+    pub fn from_millinewtons_per_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in MillinewtonsPerCentimeter (`mN/cm`).
     #[inline]
-    pub fn as_millinewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e2
+    pub fn as_millinewtons_per_centimeter(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_millinewtons_per_centimeter`].
     #[inline]
-    pub fn as_millinewton_per_centimeter(self) -> Num {
+    pub fn as_millinewton_per_centimeter(self) -> T {
         self.as_millinewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerCentimeter (`cN/cm`).
     #[inline]
-    pub fn from_centinewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) * 1e2)
+    pub fn from_centinewtons_per_centimeter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in CentinewtonsPerCentimeter (`cN/cm`).
     #[inline]
-    pub fn as_centinewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) / 1e2
+    pub fn as_centinewtons_per_centimeter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_centinewtons_per_centimeter`].
     #[inline]
-    pub fn as_centinewton_per_centimeter(self) -> Num {
+    pub fn as_centinewton_per_centimeter(self) -> T {
         self.as_centinewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerCentimeter (`dN/cm`).
     #[inline]
-    pub fn from_decinewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) * 1e2)
+    pub fn from_decinewtons_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecinewtonsPerCentimeter (`dN/cm`).
     #[inline]
-    pub fn as_decinewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) / 1e2
+    pub fn as_decinewtons_per_centimeter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decinewtons_per_centimeter`].
     #[inline]
-    pub fn as_decinewton_per_centimeter(self) -> Num {
+    pub fn as_decinewton_per_centimeter(self) -> T {
         self.as_decinewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerCentimeter (`daN/cm`).
     #[inline]
-    pub fn from_decanewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1e2)
+    pub fn from_decanewtons_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in DecanewtonsPerCentimeter (`daN/cm`).
     #[inline]
-    pub fn as_decanewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1e2
+    pub fn as_decanewtons_per_centimeter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_decanewtons_per_centimeter`].
     #[inline]
-    pub fn as_decanewton_per_centimeter(self) -> Num {
+    pub fn as_decanewton_per_centimeter(self) -> T {
         self.as_decanewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerCentimeter (`kN/cm`).
     #[inline]
-    pub fn from_kilonewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1e2)
+    pub fn from_kilonewtons_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in KilonewtonsPerCentimeter (`kN/cm`).
     #[inline]
-    pub fn as_kilonewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1e2
+    pub fn as_kilonewtons_per_centimeter(self) -> T {
+        self.0 / T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_centimeter`].
     #[inline]
-    pub fn as_kilonewton_per_centimeter(self) -> Num {
+    pub fn as_kilonewton_per_centimeter(self) -> T {
         self.as_kilonewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerCentimeter (`MN/cm`).
     #[inline]
-    pub fn from_meganewtons_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1e2)
+    pub fn from_meganewtons_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e8))
     }
 
     /// Returns the value expressed in MeganewtonsPerCentimeter (`MN/cm`).
     #[inline]
-    pub fn as_meganewtons_per_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1e2
+    pub fn as_meganewtons_per_centimeter(self) -> T {
+        self.0 / T::from_f64(1e8)
     }
 
     /// Alias for [`Self::as_meganewtons_per_centimeter`].
     #[inline]
-    pub fn as_meganewton_per_centimeter(self) -> Num {
+    pub fn as_meganewton_per_centimeter(self) -> T {
         self.as_meganewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerMillimeter (`N/mm`).
     #[inline]
-    pub fn from_newtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e3)
+    pub fn from_newtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in NewtonsPerMillimeter (`N/mm`).
     #[inline]
-    pub fn as_newtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        x / 1e3
+    pub fn as_newtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_newtons_per_millimeter`].
     #[inline]
-    pub fn as_newton_per_millimeter(self) -> Num {
+    pub fn as_newton_per_millimeter(self) -> T {
         self.as_newtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerMillimeter (`nN/mm`).
     #[inline]
-    pub fn from_nanonewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 1e3)
+    pub fn from_nanonewtons_per_millimeter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in NanonewtonsPerMillimeter (`nN/mm`).
     #[inline]
-    pub fn as_nanonewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 1e3
+    pub fn as_nanonewtons_per_millimeter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_nanonewtons_per_millimeter`].
     #[inline]
-    pub fn as_nanonewton_per_millimeter(self) -> Num {
+    pub fn as_nanonewton_per_millimeter(self) -> T {
         self.as_nanonewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerMillimeter (`µN/mm`).
     #[inline]
-    pub fn from_micronewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 1e3)
+    pub fn from_micronewtons_per_millimeter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MicronewtonsPerMillimeter (`µN/mm`).
     #[inline]
-    pub fn as_micronewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 1e3
+    pub fn as_micronewtons_per_millimeter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_micronewtons_per_millimeter`].
     #[inline]
-    pub fn as_micronewton_per_millimeter(self) -> Num {
+    pub fn as_micronewton_per_millimeter(self) -> T {
         self.as_micronewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerMillimeter (`mN/mm`).
     #[inline]
-    pub fn from_millinewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e3)
+    pub fn from_millinewtons_per_millimeter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MillinewtonsPerMillimeter (`mN/mm`).
     #[inline]
-    pub fn as_millinewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e3
+    pub fn as_millinewtons_per_millimeter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_millinewtons_per_millimeter`].
     #[inline]
-    pub fn as_millinewton_per_millimeter(self) -> Num {
+    pub fn as_millinewton_per_millimeter(self) -> T {
         self.as_millinewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerMillimeter (`cN/mm`).
     #[inline]
-    pub fn from_centinewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) * 1e3)
+    pub fn from_centinewtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in CentinewtonsPerMillimeter (`cN/mm`).
     #[inline]
-    pub fn as_centinewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) / 1e3
+    pub fn as_centinewtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_centinewtons_per_millimeter`].
     #[inline]
-    pub fn as_centinewton_per_millimeter(self) -> Num {
+    pub fn as_centinewton_per_millimeter(self) -> T {
         self.as_centinewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerMillimeter (`dN/mm`).
     #[inline]
-    pub fn from_decinewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) * 1e3)
+    pub fn from_decinewtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in DecinewtonsPerMillimeter (`dN/mm`).
     #[inline]
-    pub fn as_decinewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) / 1e3
+    pub fn as_decinewtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_decinewtons_per_millimeter`].
     #[inline]
-    pub fn as_decinewton_per_millimeter(self) -> Num {
+    pub fn as_decinewton_per_millimeter(self) -> T {
         self.as_decinewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerMillimeter (`daN/mm`).
     #[inline]
-    pub fn from_decanewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1e3)
+    pub fn from_decanewtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in DecanewtonsPerMillimeter (`daN/mm`).
     #[inline]
-    pub fn as_decanewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1e3
+    pub fn as_decanewtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_decanewtons_per_millimeter`].
     #[inline]
-    pub fn as_decanewton_per_millimeter(self) -> Num {
+    pub fn as_decanewton_per_millimeter(self) -> T {
         self.as_decanewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerMillimeter (`kN/mm`).
     #[inline]
-    pub fn from_kilonewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1e3)
+    pub fn from_kilonewtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in KilonewtonsPerMillimeter (`kN/mm`).
     #[inline]
-    pub fn as_kilonewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1e3
+    pub fn as_kilonewtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_millimeter`].
     #[inline]
-    pub fn as_kilonewton_per_millimeter(self) -> Num {
+    pub fn as_kilonewton_per_millimeter(self) -> T {
         self.as_kilonewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerMillimeter (`MN/mm`).
     #[inline]
-    pub fn from_meganewtons_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1e3)
+    pub fn from_meganewtons_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in MeganewtonsPerMillimeter (`MN/mm`).
     #[inline]
-    pub fn as_meganewtons_per_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1e3
+    pub fn as_meganewtons_per_millimeter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_meganewtons_per_millimeter`].
     #[inline]
-    pub fn as_meganewton_per_millimeter(self) -> Num {
+    pub fn as_meganewton_per_millimeter(self) -> T {
         self.as_meganewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerMeter (`kgf/m`).
     #[inline]
-    pub fn from_kilograms_force_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665)
+    pub fn from_kilograms_force_per_meter(value: T) -> Self {
+        Self(value * T::from_f64(9.80665))
     }
 
     /// Returns the value expressed in KilogramsForcePerMeter (`kgf/m`).
     #[inline]
-    pub fn as_kilograms_force_per_meter(self) -> Num {
-        let x = self.0;
-        x / 9.80665
+    pub fn as_kilograms_force_per_meter(self) -> T {
+        self.0 / T::from_f64(9.80665)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_meter`].
     #[inline]
-    pub fn as_kilogram_force_per_meter(self) -> Num {
+    pub fn as_kilogram_force_per_meter(self) -> T {
         self.as_kilograms_force_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerCentimeter (`kgf/cm`).
     #[inline]
-    pub fn from_kilograms_force_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 980.665)
+    pub fn from_kilograms_force_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(980.665))
     }
 
     /// Returns the value expressed in KilogramsForcePerCentimeter (`kgf/cm`).
     #[inline]
-    pub fn as_kilograms_force_per_centimeter(self) -> Num {
-        let x = self.0;
-        x / 980.665
+    pub fn as_kilograms_force_per_centimeter(self) -> T {
+        self.0 / T::from_f64(980.665)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_centimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_centimeter(self) -> Num {
+    pub fn as_kilogram_force_per_centimeter(self) -> T {
         self.as_kilograms_force_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerMillimeter (`kgf/mm`).
     #[inline]
-    pub fn from_kilograms_force_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e3)
+    pub fn from_kilograms_force_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(9806.65))
     }
 
     /// Returns the value expressed in KilogramsForcePerMillimeter (`kgf/mm`).
     #[inline]
-    pub fn as_kilograms_force_per_millimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e3
+    pub fn as_kilograms_force_per_millimeter(self) -> T {
+        self.0 / T::from_f64(9806.65)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_millimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_millimeter(self) -> Num {
+    pub fn as_kilogram_force_per_millimeter(self) -> T {
         self.as_kilograms_force_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerMeter (`tf/m`).
     #[inline]
-    pub fn from_tonnes_force_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e3)
+    pub fn from_tonnes_force_per_meter(value: T) -> Self {
+        Self(value * T::from_f64(9806.65))
     }
 
     /// Returns the value expressed in TonnesForcePerMeter (`tf/m`).
     #[inline]
-    pub fn as_tonnes_force_per_meter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e3
+    pub fn as_tonnes_force_per_meter(self) -> T {
+        self.0 / T::from_f64(9806.65)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_meter`].
     #[inline]
-    pub fn as_tonne_force_per_meter(self) -> Num {
+    pub fn as_tonne_force_per_meter(self) -> T {
         self.as_tonnes_force_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerCentimeter (`tf/cm`).
     #[inline]
-    pub fn from_tonnes_force_per_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e5)
+    pub fn from_tonnes_force_per_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(980665.0))
     }
 
     /// Returns the value expressed in TonnesForcePerCentimeter (`tf/cm`).
     #[inline]
-    pub fn as_tonnes_force_per_centimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e5
+    pub fn as_tonnes_force_per_centimeter(self) -> T {
+        self.0 / T::from_f64(980665.0)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_centimeter`].
     #[inline]
-    pub fn as_tonne_force_per_centimeter(self) -> Num {
+    pub fn as_tonne_force_per_centimeter(self) -> T {
         self.as_tonnes_force_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerMillimeter (`tf/mm`).
     #[inline]
-    pub fn from_tonnes_force_per_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e6)
+    pub fn from_tonnes_force_per_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(9806650.0))
     }
 
     /// Returns the value expressed in TonnesForcePerMillimeter (`tf/mm`).
     #[inline]
-    pub fn as_tonnes_force_per_millimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e6
+    pub fn as_tonnes_force_per_millimeter(self) -> T {
+        self.0 / T::from_f64(9806650.0)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_millimeter`].
     #[inline]
-    pub fn as_tonne_force_per_millimeter(self) -> Num {
+    pub fn as_tonne_force_per_millimeter(self) -> T {
         self.as_tonnes_force_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerFoot (`lbf/ft`).
     #[inline]
-    pub fn from_pounds_force_per_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 0.3048)
+    pub fn from_pounds_force_per_foot(value: T) -> Self {
+        Self(value * T::from_f64(14.593902937206364))
     }
 
     /// Returns the value expressed in PoundsForcePerFoot (`lbf/ft`).
     #[inline]
-    pub fn as_pounds_force_per_foot(self) -> Num {
-        let x = self.0;
-        x * 0.3048 / 4.4482216152605
+    pub fn as_pounds_force_per_foot(self) -> T {
+        self.0 / T::from_f64(14.593902937206364)
     }
 
     /// Alias for [`Self::as_pounds_force_per_foot`].
     #[inline]
-    pub fn as_pound_force_per_foot(self) -> Num {
+    pub fn as_pound_force_per_foot(self) -> T {
         self.as_pounds_force_per_foot()
     }
 
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerInch (`lbf/in`).
     #[inline]
-    pub fn from_pounds_force_per_inch(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 2.54e-2)
+    pub fn from_pounds_force_per_inch(value: T) -> Self {
+        Self(value * T::from_f64(175.1268352464764))
     }
 
     /// Returns the value expressed in PoundsForcePerInch (`lbf/in`).
     #[inline]
-    pub fn as_pounds_force_per_inch(self) -> Num {
-        let x = self.0;
-        x * 2.54e-2 / 4.4482216152605
+    pub fn as_pounds_force_per_inch(self) -> T {
+        self.0 / T::from_f64(175.1268352464764)
     }
 
     /// Alias for [`Self::as_pounds_force_per_inch`].
     #[inline]
-    pub fn as_pound_force_per_inch(self) -> Num {
+    pub fn as_pound_force_per_inch(self) -> T {
         self.as_pounds_force_per_inch()
     }
 
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerYard (`lbf/yd`).
     #[inline]
-    pub fn from_pounds_force_per_yard(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 0.9144)
+    pub fn from_pounds_force_per_yard(value: T) -> Self {
+        Self(value * T::from_f64(4.864634312402122))
     }
 
     /// Returns the value expressed in PoundsForcePerYard (`lbf/yd`).
     #[inline]
-    pub fn as_pounds_force_per_yard(self) -> Num {
-        let x = self.0;
-        x * 0.9144 / 4.4482216152605
+    pub fn as_pounds_force_per_yard(self) -> T {
+        self.0 / T::from_f64(4.864634312402122)
     }
 
     /// Alias for [`Self::as_pounds_force_per_yard`].
     #[inline]
-    pub fn as_pound_force_per_yard(self) -> Num {
+    pub fn as_pound_force_per_yard(self) -> T {
         self.as_pounds_force_per_yard()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilopoundsForcePerFoot (`kipf/ft`).
     #[inline]
-    pub fn from_kilopounds_force_per_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 0.3048e-3)
+    pub fn from_kilopounds_force_per_foot(value: T) -> Self {
+        Self(value * T::from_f64(14593.902937206365))
     }
 
     /// Returns the value expressed in KilopoundsForcePerFoot (`kipf/ft`).
     #[inline]
-    pub fn as_kilopounds_force_per_foot(self) -> Num {
-        let x = self.0;
-        x * 0.3048e-3 / 4.4482216152605
+    pub fn as_kilopounds_force_per_foot(self) -> T {
+        self.0 / T::from_f64(14593.902937206365)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_foot`].
     #[inline]
-    pub fn as_kilopound_force_per_foot(self) -> Num {
+    pub fn as_kilopound_force_per_foot(self) -> T {
         self.as_kilopounds_force_per_foot()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilopoundsForcePerInch (`kipf/in`).
     #[inline]
-    pub fn from_kilopounds_force_per_inch(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 2.54e-5)
+    pub fn from_kilopounds_force_per_inch(value: T) -> Self {
+        Self(value * T::from_f64(175126.83524647637))
     }
 
     /// Returns the value expressed in KilopoundsForcePerInch (`kipf/in`).
     #[inline]
-    pub fn as_kilopounds_force_per_inch(self) -> Num {
-        let x = self.0;
-        x * 2.54e-5 / 4.4482216152605
+    pub fn as_kilopounds_force_per_inch(self) -> T {
+        self.0 / T::from_f64(175126.83524647637)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_inch`].
     #[inline]
-    pub fn as_kilopound_force_per_inch(self) -> Num {
+    pub fn as_kilopound_force_per_inch(self) -> T {
         self.as_kilopounds_force_per_inch()
     }
-}
-
-impl crate::Quantity for ForcePerLength {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ForcePerLength {
-    type Output = ForcePerLength;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ForcePerLength {
-    type Output = ForcePerLength;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ForcePerLength {
-    type Output = ForcePerLength;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ForcePerLength {
-    type Output = ForcePerLength;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ForcePerLength> for Num {
-    type Output = ForcePerLength;
-    #[inline]
-    fn mul(self, rhs: ForcePerLength) -> ForcePerLength {
-        ForcePerLength(self * rhs.0)
-    }
-}
-impl Div<Num> for ForcePerLength {
-    type Output = ForcePerLength;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ForcePerLength {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ForcePerLength {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ForcePerLengthUnit::NewtonPerMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ForcePerLength`].
-#[derive(Debug)]
-pub struct ParseForcePerLengthError(String);
-
-impl fmt::Display for ParseForcePerLengthError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ForcePerLength", self.0)
-    }
-}
-
-impl std::error::Error for ParseForcePerLengthError {}
-
-impl FromStr for ForcePerLength {
-    type Err = ParseForcePerLengthError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseForcePerLengthError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ForcePerLengthUnit)] = &[
-            ("kipf/ft", ForcePerLengthUnit::KilopoundForcePerFoot),
-            ("kipf/in", ForcePerLengthUnit::KilopoundForcePerInch),
-            ("daN/cm", ForcePerLengthUnit::DecanewtonPerCentimeter),
-            ("daN/mm", ForcePerLengthUnit::DecanewtonPerMillimeter),
-            ("kgf/cm", ForcePerLengthUnit::KilogramForcePerCentimeter),
-            ("kgf/mm", ForcePerLengthUnit::KilogramForcePerMillimeter),
-            ("kip/ft", ForcePerLengthUnit::KilopoundForcePerFoot),
-            ("kip/in", ForcePerLengthUnit::KilopoundForcePerInch),
-            ("lbf/ft", ForcePerLengthUnit::PoundForcePerFoot),
-            ("lbf/in", ForcePerLengthUnit::PoundForcePerInch),
-            ("lbf/yd", ForcePerLengthUnit::PoundForcePerYard),
-            ("µN/cm", ForcePerLengthUnit::MicronewtonPerCentimeter),
-            ("µN/mm", ForcePerLengthUnit::MicronewtonPerMillimeter),
-            ("MN/cm", ForcePerLengthUnit::MeganewtonPerCentimeter),
-            ("MN/mm", ForcePerLengthUnit::MeganewtonPerMillimeter),
-            ("cN/cm", ForcePerLengthUnit::CentinewtonPerCentimeter),
-            ("cN/mm", ForcePerLengthUnit::CentinewtonPerMillimeter),
-            ("dN/cm", ForcePerLengthUnit::DecinewtonPerCentimeter),
-            ("dN/mm", ForcePerLengthUnit::DecinewtonPerMillimeter),
-            ("daN/m", ForcePerLengthUnit::DecanewtonPerMeter),
-            ("kN/cm", ForcePerLengthUnit::KilonewtonPerCentimeter),
-            ("kN/mm", ForcePerLengthUnit::KilonewtonPerMillimeter),
-            ("kgf/m", ForcePerLengthUnit::KilogramForcePerMeter),
-            ("mN/cm", ForcePerLengthUnit::MillinewtonPerCentimeter),
-            ("mN/mm", ForcePerLengthUnit::MillinewtonPerMillimeter),
-            ("nN/cm", ForcePerLengthUnit::NanonewtonPerCentimeter),
-            ("nN/mm", ForcePerLengthUnit::NanonewtonPerMillimeter),
-            ("tf/cm", ForcePerLengthUnit::TonneForcePerCentimeter),
-            ("tf/mm", ForcePerLengthUnit::TonneForcePerMillimeter),
-            ("µN/m", ForcePerLengthUnit::MicronewtonPerMeter),
-            ("MN/m", ForcePerLengthUnit::MeganewtonPerMeter),
-            ("N/cm", ForcePerLengthUnit::NewtonPerCentimeter),
-            ("N/mm", ForcePerLengthUnit::NewtonPerMillimeter),
-            ("cN/m", ForcePerLengthUnit::CentinewtonPerMeter),
-            ("dN/m", ForcePerLengthUnit::DecinewtonPerMeter),
-            ("k/ft", ForcePerLengthUnit::KilopoundForcePerFoot),
-            ("k/in", ForcePerLengthUnit::KilopoundForcePerInch),
-            ("kN/m", ForcePerLengthUnit::KilonewtonPerMeter),
-            ("mN/m", ForcePerLengthUnit::MillinewtonPerMeter),
-            ("nN/m", ForcePerLengthUnit::NanonewtonPerMeter),
-            ("tf/m", ForcePerLengthUnit::TonneForcePerMeter),
-            ("N/m", ForcePerLengthUnit::NewtonPerMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseForcePerLengthError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

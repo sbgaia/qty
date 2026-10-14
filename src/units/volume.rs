@@ -2,27 +2,35 @@
 // Source: data/quantities/Volume.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-/// Volume is the quantity of three-dimensional space enclosed by some closed boundary, for example, the space that a substance (solid, liquid, gas, or plasma) or shape occupies or contains.[1] Volume is often quantified numerically using the SI derived unit, the cubic metre. The volume of a container is generally understood to be the capacity of the container, i. e. the amount of fluid (gas or liquid) that the container could hold, rather than the amount of space the container itself displaces.
+/// Volume is the quantity of three-dimensional space enclosed by some closed boundary, for example, the space that a substance (solid, liquid, gas, or plasma) or shape occupies or contains.\[1\] Volume is often quantified numerically using the SI derived unit, the cubic metre. The volume of a container is generally understood to be the capacity of the container, i. e. the amount of fluid (gas or liquid) that the container could hold, rather than the amount of space the container itself displaces.
 ///
-/// The internal value is stored in `CubicMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Volume(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`VolumeUnit::CubicMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Volume<T = f64>(T);
+
+quantity!(Volume, VolumeUnit, CubicMeter);
 
 /// Unit variants for [`Volume`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum VolumeUnit {
     Liter,
     Nanoliter,
@@ -35,8 +43,8 @@ pub enum VolumeUnit {
     Kiloliter,
     Megaliter,
     CubicMeter,
-    HectocubicMeter,
-    KilocubicMeter,
+    /// A count-style volume unit equal to 1000 cubic meters. This is distinct from CubicKilometer, which is (1000 m)³ or 1e9 cubic meters.
+    ThousandCubicMeter,
     CubicKilometer,
     CubicHectometer,
     CubicDecimeter,
@@ -49,9 +57,12 @@ pub enum VolumeUnit {
     CubicYard,
     /// The cubic foot (symbol ft3 or cu ft) is an imperial and US customary (non-metric) unit of volume, used in the United States and the United Kingdom. It is defined as the volume of a cube with sides of one foot (0.3048 m) in length.
     CubicFoot,
-    HectocubicFoot,
-    KilocubicFoot,
-    MegacubicFoot,
+    /// A count-style volume unit equal to 100 cubic feet, commonly abbreviated Ccf in natural gas and water utility billing.
+    HundredCubicFoot,
+    /// A count-style volume unit equal to 1000 cubic feet, commonly abbreviated Mcf in natural gas reporting.
+    ThousandCubicFoot,
+    /// A count-style volume unit equal to 1,000,000 cubic feet, commonly abbreviated MMcf in natural gas reporting.
+    MillionCubicFoot,
     /// The cubic inch (symbol in3) is a unit of volume in the Imperial units and United States customary units systems. It is the volume of a cube with each of its three dimensions (length, width, and height) being one inch long which is equivalent to 1/231 of a US gallon.
     CubicInch,
     /// The British imperial gallon (frequently called simply "gallon") is defined as exactly 4.54609 litres.
@@ -77,7 +88,7 @@ pub enum VolumeUnit {
     MetricTablespoon,
     /// In nutrition labeling in the U.S. and the U.K., a tablespoon is defined as 15 ml (0.51 US fl oz). In Australia, the definition of the tablespoon is 20 ml (0.70 imp fl oz).
     UkTablespoon,
-    /// The metric teaspoon as a unit of culinary measure is 5 ml (0.18 imp fl oz; 0.17 US fl oz),[17] equal to 5 cm3, 1⁄3 UK/Canadian metric tablespoon, or 1⁄4 Australian metric tablespoon.
+    /// The metric teaspoon as a unit of culinary measure is 5 ml (0.18 imp fl oz; 0.17 US fl oz),\[17\] equal to 5 cm3, 1⁄3 UK/Canadian metric tablespoon, or 1⁄4 Australian metric tablespoon.
     MetricTeaspoon,
     /// As a unit of culinary measure, one teaspoon in the United States is 1⁄3 tablespoon, exactly 4.92892159375 ml, 1 1⁄3 US fluid drams, 1⁄6 US fl oz, 1⁄48 US cup, 1⁄768 US liquid gallon, or 77⁄256 (0.30078125) cubic inches.
     UsTeaspoon,
@@ -121,8 +132,7 @@ impl VolumeUnit {
         Self::Kiloliter,
         Self::Megaliter,
         Self::CubicMeter,
-        Self::HectocubicMeter,
-        Self::KilocubicMeter,
+        Self::ThousandCubicMeter,
         Self::CubicKilometer,
         Self::CubicHectometer,
         Self::CubicDecimeter,
@@ -132,9 +142,9 @@ impl VolumeUnit {
         Self::CubicMile,
         Self::CubicYard,
         Self::CubicFoot,
-        Self::HectocubicFoot,
-        Self::KilocubicFoot,
-        Self::MegacubicFoot,
+        Self::HundredCubicFoot,
+        Self::ThousandCubicFoot,
+        Self::MillionCubicFoot,
         Self::CubicInch,
         Self::ImperialGallon,
         Self::KiloimperialGallon,
@@ -169,7 +179,7 @@ impl VolumeUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Liter => "l",
             Self::Nanoliter => "nl",
@@ -182,8 +192,7 @@ impl VolumeUnit {
             Self::Kiloliter => "kl",
             Self::Megaliter => "Ml",
             Self::CubicMeter => "m³",
-            Self::HectocubicMeter => "hm³",
-            Self::KilocubicMeter => "km³",
+            Self::ThousandCubicMeter => "10³·m³",
             Self::CubicKilometer => "km³",
             Self::CubicHectometer => "hm³",
             Self::CubicDecimeter => "dm³",
@@ -193,9 +202,9 @@ impl VolumeUnit {
             Self::CubicMile => "mi³",
             Self::CubicYard => "yd³",
             Self::CubicFoot => "ft³",
-            Self::HectocubicFoot => "hft³",
-            Self::KilocubicFoot => "kft³",
-            Self::MegacubicFoot => "Mft³",
+            Self::HundredCubicFoot => "Ccf",
+            Self::ThousandCubicFoot => "Mcf",
+            Self::MillionCubicFoot => "MMcf",
             Self::CubicInch => "in³",
             Self::ImperialGallon => "gal (imp.)",
             Self::KiloimperialGallon => "kgal (imp.)",
@@ -229,9 +238,9 @@ impl VolumeUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Liter => &["l"],
             Self::Nanoliter => &["nl"],
@@ -244,8 +253,7 @@ impl VolumeUnit {
             Self::Kiloliter => &["kl"],
             Self::Megaliter => &["Ml"],
             Self::CubicMeter => &["m³"],
-            Self::HectocubicMeter => &["hm³"],
-            Self::KilocubicMeter => &["km³"],
+            Self::ThousandCubicMeter => &["10³·m³", "kcm", "Kcm"],
             Self::CubicKilometer => &["km³"],
             Self::CubicHectometer => &["hm³"],
             Self::CubicDecimeter => &["dm³"],
@@ -255,9 +263,9 @@ impl VolumeUnit {
             Self::CubicMile => &["mi³"],
             Self::CubicYard => &["yd³"],
             Self::CubicFoot => &["ft³"],
-            Self::HectocubicFoot => &["hft³"],
-            Self::KilocubicFoot => &["kft³"],
-            Self::MegacubicFoot => &["Mft³"],
+            Self::HundredCubicFoot => &["Ccf", "hft³"],
+            Self::ThousandCubicFoot => &["Mcf", "kcf", "kft³"],
+            Self::MillionCubicFoot => &["MMcf", "Mft³"],
             Self::CubicInch => &["in³"],
             Self::ImperialGallon => &["gal (imp.)"],
             Self::KiloimperialGallon => &["kgal (imp.)"],
@@ -294,1433 +302,1192 @@ impl VolumeUnit {
     }
 }
 
-impl Volume {
+impl core::str::FromStr for VolumeUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "l" => Ok(Self::Liter),
+            "nl" => Ok(Self::Nanoliter),
+            "µl" => Ok(Self::Microliter),
+            "ml" => Ok(Self::Milliliter),
+            "cl" => Ok(Self::Centiliter),
+            "dl" => Ok(Self::Deciliter),
+            "dal" => Ok(Self::Decaliter),
+            "hl" => Ok(Self::Hectoliter),
+            "kl" => Ok(Self::Kiloliter),
+            "Ml" => Ok(Self::Megaliter),
+            "m³" => Ok(Self::CubicMeter),
+            "10³·m³" => Ok(Self::ThousandCubicMeter),
+            "kcm" => Ok(Self::ThousandCubicMeter),
+            "Kcm" => Ok(Self::ThousandCubicMeter),
+            "km³" => Ok(Self::CubicKilometer),
+            "hm³" => Ok(Self::CubicHectometer),
+            "dm³" => Ok(Self::CubicDecimeter),
+            "cm³" => Ok(Self::CubicCentimeter),
+            "mm³" => Ok(Self::CubicMillimeter),
+            "µm³" => Ok(Self::CubicMicrometer),
+            "mi³" => Ok(Self::CubicMile),
+            "yd³" => Ok(Self::CubicYard),
+            "ft³" => Ok(Self::CubicFoot),
+            "Ccf" => Ok(Self::HundredCubicFoot),
+            "hft³" => Ok(Self::HundredCubicFoot),
+            "Mcf" => Ok(Self::ThousandCubicFoot),
+            "kcf" => Ok(Self::ThousandCubicFoot),
+            "kft³" => Ok(Self::ThousandCubicFoot),
+            "MMcf" => Ok(Self::MillionCubicFoot),
+            "Mft³" => Ok(Self::MillionCubicFoot),
+            "in³" => Ok(Self::CubicInch),
+            "gal (imp.)" => Ok(Self::ImperialGallon),
+            "kgal (imp.)" => Ok(Self::KiloimperialGallon),
+            "Mgal (imp.)" => Ok(Self::MegaimperialGallon),
+            "oz (imp.)" => Ok(Self::ImperialOunce),
+            "gal (U.S.)" => Ok(Self::UsGallon),
+            "dagal (U.S.)" => Ok(Self::DecausGallon),
+            "dgal (U.S.)" => Ok(Self::DeciusGallon),
+            "hgal (U.S.)" => Ok(Self::HectousGallon),
+            "kgal (U.S.)" => Ok(Self::KilousGallon),
+            "Mgal (U.S.)" => Ok(Self::MegausGallon),
+            "oz (U.S.)" => Ok(Self::UsOunce),
+            "tablespoon (U.S.)" => Ok(Self::UsTablespoon),
+            "tablespoon (A.U.)" => Ok(Self::AuTablespoon),
+            "tablespoon" => Ok(Self::MetricTablespoon),
+            "tbsp" => Ok(Self::MetricTablespoon),
+            "tbsp." => Ok(Self::MetricTablespoon),
+            "tblsp" => Ok(Self::MetricTablespoon),
+            "tblsp." => Ok(Self::MetricTablespoon),
+            "tablespoon (U.K.)" => Ok(Self::UkTablespoon),
+            "tsp" => Ok(Self::MetricTeaspoon),
+            "t" => Ok(Self::MetricTeaspoon),
+            "ts" => Ok(Self::MetricTeaspoon),
+            "tspn" => Ok(Self::MetricTeaspoon),
+            "t." => Ok(Self::MetricTeaspoon),
+            "ts." => Ok(Self::MetricTeaspoon),
+            "tsp." => Ok(Self::MetricTeaspoon),
+            "tspn." => Ok(Self::MetricTeaspoon),
+            "teaspoon" => Ok(Self::MetricTeaspoon),
+            "teaspoon (U.S.)" => Ok(Self::UsTeaspoon),
+            "metric cup" => Ok(Self::MetricCup),
+            "cup (U.S. customary)" => Ok(Self::UsCustomaryCup),
+            "cup (U.S.)" => Ok(Self::UsLegalCup),
+            "bbl" => Ok(Self::OilBarrel),
+            "bl (U.S.)" => Ok(Self::UsBeerBarrel),
+            "bl (imp.)" => Ok(Self::ImperialBeerBarrel),
+            "qt (U.S.)" => Ok(Self::UsQuart),
+            "qt (imp.)" => Ok(Self::ImperialQuart),
+            "pt (U.S.)" => Ok(Self::UsPint),
+            "ac-ft" => Ok(Self::AcreFoot),
+            "acre-foot" => Ok(Self::AcreFoot),
+            "acre-feet" => Ok(Self::AcreFoot),
+            "pt (imp.)" => Ok(Self::ImperialPint),
+            "UK pt" => Ok(Self::ImperialPint),
+            "pt" => Ok(Self::ImperialPint),
+            "p" => Ok(Self::ImperialPint),
+            "bf" => Ok(Self::BoardFoot),
+            "board foot" => Ok(Self::BoardFoot),
+            "board feet" => Ok(Self::BoardFoot),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Volume<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: VolumeUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: VolumeUnit) -> Self {
         Self(match unit {
-            VolumeUnit::Liter => x / 1e3,
-            VolumeUnit::Nanoliter => (x * 1e-9) / 1e3,
-            VolumeUnit::Microliter => (x * 1e-6) / 1e3,
-            VolumeUnit::Milliliter => (x * 1e-3) / 1e3,
-            VolumeUnit::Centiliter => (x * 1e-2) / 1e3,
-            VolumeUnit::Deciliter => (x * 1e-1) / 1e3,
-            VolumeUnit::Decaliter => (x * 1e1) / 1e3,
-            VolumeUnit::Hectoliter => (x * 1e2) / 1e3,
-            VolumeUnit::Kiloliter => (x * 1e3) / 1e3,
-            VolumeUnit::Megaliter => (x * 1e6) / 1e3,
-            VolumeUnit::CubicMeter => x,
-            VolumeUnit::HectocubicMeter => (x * 1e2),
-            VolumeUnit::KilocubicMeter => (x * 1e3),
-            VolumeUnit::CubicKilometer => x * 1e9,
-            VolumeUnit::CubicHectometer => x * 1e6,
-            VolumeUnit::CubicDecimeter => x / 1e3,
-            VolumeUnit::CubicCentimeter => x / 1e6,
-            VolumeUnit::CubicMillimeter => x / 1e9,
-            VolumeUnit::CubicMicrometer => x / 1e18,
-            VolumeUnit::CubicMile => x * 4.168181825440579584e9,
-            VolumeUnit::CubicYard => x * 0.764554857984,
-            VolumeUnit::CubicFoot => x * 0.028316846592,
-            VolumeUnit::HectocubicFoot => (x * 1e2) * 0.028316846592,
-            VolumeUnit::KilocubicFoot => (x * 1e3) * 0.028316846592,
-            VolumeUnit::MegacubicFoot => (x * 1e6) * 0.028316846592,
-            VolumeUnit::CubicInch => x * 1.6387064e-5,
-            VolumeUnit::ImperialGallon => x * 0.00454609,
-            VolumeUnit::KiloimperialGallon => (x * 1e3) * 0.00454609,
-            VolumeUnit::MegaimperialGallon => (x * 1e6) * 0.00454609,
-            VolumeUnit::ImperialOunce => x * 2.84130625e-5,
-            VolumeUnit::UsGallon => x * 0.003785411784,
-            VolumeUnit::DecausGallon => (x * 1e1) * 0.003785411784,
-            VolumeUnit::DeciusGallon => (x * 1e-1) * 0.003785411784,
-            VolumeUnit::HectousGallon => (x * 1e2) * 0.003785411784,
-            VolumeUnit::KilousGallon => (x * 1e3) * 0.003785411784,
-            VolumeUnit::MegausGallon => (x * 1e6) * 0.003785411784,
-            VolumeUnit::UsOunce => x * 2.95735295625e-5,
-            VolumeUnit::UsTablespoon => x * 1.478676478125e-5,
-            VolumeUnit::AuTablespoon => x * 2e-5,
-            VolumeUnit::MetricTablespoon => x * 1.5e-5,
-            VolumeUnit::UkTablespoon => x * 1.5e-5,
-            VolumeUnit::MetricTeaspoon => x * 0.5e-5,
-            VolumeUnit::UsTeaspoon => x * 4.92892159375e-6,
-            VolumeUnit::MetricCup => x * 0.00025,
-            VolumeUnit::UsCustomaryCup => x * 0.0002365882365,
-            VolumeUnit::UsLegalCup => x * 0.00024,
-            VolumeUnit::OilBarrel => x * 0.158987294928,
-            VolumeUnit::UsBeerBarrel => x * 0.117347765304,
-            VolumeUnit::ImperialBeerBarrel => x * 0.16365924,
-            VolumeUnit::UsQuart => x * 9.46352946e-4,
-            VolumeUnit::ImperialQuart => x * 1.1365225e-3,
-            VolumeUnit::UsPint => x * 4.73176473e-4,
-            VolumeUnit::AcreFoot => x * 1233.48183754752,
-            VolumeUnit::ImperialPint => x * 5.6826125e-4,
-            VolumeUnit::BoardFoot => x * (0.028316846592 / 12.0),
+            VolumeUnit::Liter => value / T::from_f64(1000.0),
+            VolumeUnit::Nanoliter => value / T::from_f64(1e12),
+            VolumeUnit::Microliter => value / T::from_f64(1e9),
+            VolumeUnit::Milliliter => value / T::from_f64(1000000.0),
+            VolumeUnit::Centiliter => value / T::from_f64(100000.0),
+            VolumeUnit::Deciliter => value / T::from_f64(10000.0),
+            VolumeUnit::Decaliter => value / T::from_f64(100.0),
+            VolumeUnit::Hectoliter => value / T::from_f64(10.0),
+            VolumeUnit::Kiloliter => value,
+            VolumeUnit::Megaliter => value * T::from_f64(1000.0),
+            VolumeUnit::CubicMeter => value,
+            VolumeUnit::ThousandCubicMeter => value * T::from_f64(1000.0),
+            VolumeUnit::CubicKilometer => value * T::from_f64(1e9),
+            VolumeUnit::CubicHectometer => value * T::from_f64(1000000.0),
+            VolumeUnit::CubicDecimeter => value / T::from_f64(1000.0),
+            VolumeUnit::CubicCentimeter => value / T::from_f64(1000000.0),
+            VolumeUnit::CubicMillimeter => value / T::from_f64(1e9),
+            VolumeUnit::CubicMicrometer => value / T::from_f64(1e18),
+            VolumeUnit::CubicMile => value * T::from_f64(4.1681818254405794e9),
+            VolumeUnit::CubicYard => value * T::from_f64(0.764554857984),
+            VolumeUnit::CubicFoot => value * T::from_f64(0.028316846592),
+            VolumeUnit::HundredCubicFoot => value * T::from_f64(2.8316846592),
+            VolumeUnit::ThousandCubicFoot => value * T::from_f64(28.316846592),
+            VolumeUnit::MillionCubicFoot => value * T::from_f64(28316.846592),
+            VolumeUnit::CubicInch => value * T::from_f64(1.6387064e-5),
+            VolumeUnit::ImperialGallon => value * T::from_f64(0.00454609),
+            VolumeUnit::KiloimperialGallon => value * T::from_f64(4.54609),
+            VolumeUnit::MegaimperialGallon => value * T::from_f64(4546.09),
+            VolumeUnit::ImperialOunce => value * T::from_f64(2.84130625e-5),
+            VolumeUnit::UsGallon => value * T::from_f64(0.003785411784),
+            VolumeUnit::DecausGallon => value * T::from_f64(0.03785411784),
+            VolumeUnit::DeciusGallon => value * T::from_f64(0.0003785411784),
+            VolumeUnit::HectousGallon => value * T::from_f64(0.3785411784),
+            VolumeUnit::KilousGallon => value * T::from_f64(3.785411784),
+            VolumeUnit::MegausGallon => value * T::from_f64(3785.411784),
+            VolumeUnit::UsOunce => value * T::from_f64(2.95735295625e-5),
+            VolumeUnit::UsTablespoon => value * T::from_f64(1.478676478125e-5),
+            VolumeUnit::AuTablespoon => value / T::from_f64(50000.0),
+            VolumeUnit::MetricTablespoon => value * T::from_f64(1.5e-5),
+            VolumeUnit::UkTablespoon => value * T::from_f64(1.5e-5),
+            VolumeUnit::MetricTeaspoon => value / T::from_f64(200000.0),
+            VolumeUnit::UsTeaspoon => value * T::from_f64(4.92892159375e-6),
+            VolumeUnit::MetricCup => value / T::from_f64(4000.0),
+            VolumeUnit::UsCustomaryCup => value * T::from_f64(0.0002365882365),
+            VolumeUnit::UsLegalCup => value * T::from_f64(0.00024),
+            VolumeUnit::OilBarrel => value * T::from_f64(0.158987294928),
+            VolumeUnit::UsBeerBarrel => value * T::from_f64(0.117347765304),
+            VolumeUnit::ImperialBeerBarrel => value * T::from_f64(0.16365924),
+            VolumeUnit::UsQuart => value * T::from_f64(0.000946352946),
+            VolumeUnit::ImperialQuart => value * T::from_f64(0.0011365225),
+            VolumeUnit::UsPint => value * T::from_f64(0.000473176473),
+            VolumeUnit::AcreFoot => value * T::from_f64(1233.48183754752),
+            VolumeUnit::ImperialPint => value * T::from_f64(0.00056826125),
+            VolumeUnit::BoardFoot => value * T::from_f64(0.002359737216),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: VolumeUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: VolumeUnit) -> T {
         match unit {
-            VolumeUnit::Liter => x * 1e3,
-            VolumeUnit::Nanoliter => (x / 1e-9) * 1e3,
-            VolumeUnit::Microliter => (x / 1e-6) * 1e3,
-            VolumeUnit::Milliliter => (x / 1e-3) * 1e3,
-            VolumeUnit::Centiliter => (x / 1e-2) * 1e3,
-            VolumeUnit::Deciliter => (x / 1e-1) * 1e3,
-            VolumeUnit::Decaliter => (x / 1e1) * 1e3,
-            VolumeUnit::Hectoliter => (x / 1e2) * 1e3,
-            VolumeUnit::Kiloliter => (x / 1e3) * 1e3,
-            VolumeUnit::Megaliter => (x / 1e6) * 1e3,
-            VolumeUnit::CubicMeter => x,
-            VolumeUnit::HectocubicMeter => (x / 1e2),
-            VolumeUnit::KilocubicMeter => (x / 1e3),
-            VolumeUnit::CubicKilometer => x / 1e9,
-            VolumeUnit::CubicHectometer => x / 1e6,
-            VolumeUnit::CubicDecimeter => x * 1e3,
-            VolumeUnit::CubicCentimeter => x * 1e6,
-            VolumeUnit::CubicMillimeter => x * 1e9,
-            VolumeUnit::CubicMicrometer => x * 1e18,
-            VolumeUnit::CubicMile => x / 4.168181825440579584e9,
-            VolumeUnit::CubicYard => x / 0.764554857984,
-            VolumeUnit::CubicFoot => x / 0.028316846592,
-            VolumeUnit::HectocubicFoot => (x / 1e2) / 0.028316846592,
-            VolumeUnit::KilocubicFoot => (x / 1e3) / 0.028316846592,
-            VolumeUnit::MegacubicFoot => (x / 1e6) / 0.028316846592,
-            VolumeUnit::CubicInch => x / 1.6387064e-5,
-            VolumeUnit::ImperialGallon => x / 0.00454609,
-            VolumeUnit::KiloimperialGallon => (x / 1e3) / 0.00454609,
-            VolumeUnit::MegaimperialGallon => (x / 1e6) / 0.00454609,
-            VolumeUnit::ImperialOunce => x / 2.84130625e-5,
-            VolumeUnit::UsGallon => x / 0.003785411784,
-            VolumeUnit::DecausGallon => (x / 1e1) / 0.003785411784,
-            VolumeUnit::DeciusGallon => (x / 1e-1) / 0.003785411784,
-            VolumeUnit::HectousGallon => (x / 1e2) / 0.003785411784,
-            VolumeUnit::KilousGallon => (x / 1e3) / 0.003785411784,
-            VolumeUnit::MegausGallon => (x / 1e6) / 0.003785411784,
-            VolumeUnit::UsOunce => x / 2.95735295625e-5,
-            VolumeUnit::UsTablespoon => x / 1.478676478125e-5,
-            VolumeUnit::AuTablespoon => x / 2e-5,
-            VolumeUnit::MetricTablespoon => x / 1.5e-5,
-            VolumeUnit::UkTablespoon => x / 1.5e-5,
-            VolumeUnit::MetricTeaspoon => x / 0.5e-5,
-            VolumeUnit::UsTeaspoon => x / 4.92892159375e-6,
-            VolumeUnit::MetricCup => x / 0.00025,
-            VolumeUnit::UsCustomaryCup => x / 0.0002365882365,
-            VolumeUnit::UsLegalCup => x / 0.00024,
-            VolumeUnit::OilBarrel => x / 0.158987294928,
-            VolumeUnit::UsBeerBarrel => x / 0.117347765304,
-            VolumeUnit::ImperialBeerBarrel => x / 0.16365924,
-            VolumeUnit::UsQuart => x / 9.46352946e-4,
-            VolumeUnit::ImperialQuart => x / 1.1365225e-3,
-            VolumeUnit::UsPint => x / 4.73176473e-4,
-            VolumeUnit::AcreFoot => x / 1233.48183754752,
-            VolumeUnit::ImperialPint => x / 5.6826125e-4,
-            VolumeUnit::BoardFoot => x / (0.028316846592 / 12.0),
+            VolumeUnit::Liter => self.0 * T::from_f64(1000.0),
+            VolumeUnit::Nanoliter => self.0 * T::from_f64(1e12),
+            VolumeUnit::Microliter => self.0 * T::from_f64(1e9),
+            VolumeUnit::Milliliter => self.0 * T::from_f64(1000000.0),
+            VolumeUnit::Centiliter => self.0 * T::from_f64(100000.0),
+            VolumeUnit::Deciliter => self.0 * T::from_f64(10000.0),
+            VolumeUnit::Decaliter => self.0 * T::from_f64(100.0),
+            VolumeUnit::Hectoliter => self.0 * T::from_f64(10.0),
+            VolumeUnit::Kiloliter => self.0,
+            VolumeUnit::Megaliter => self.0 / T::from_f64(1000.0),
+            VolumeUnit::CubicMeter => self.0,
+            VolumeUnit::ThousandCubicMeter => self.0 / T::from_f64(1000.0),
+            VolumeUnit::CubicKilometer => self.0 / T::from_f64(1e9),
+            VolumeUnit::CubicHectometer => self.0 / T::from_f64(1000000.0),
+            VolumeUnit::CubicDecimeter => self.0 * T::from_f64(1000.0),
+            VolumeUnit::CubicCentimeter => self.0 * T::from_f64(1000000.0),
+            VolumeUnit::CubicMillimeter => self.0 * T::from_f64(1e9),
+            VolumeUnit::CubicMicrometer => self.0 * T::from_f64(1e18),
+            VolumeUnit::CubicMile => self.0 / T::from_f64(4.1681818254405794e9),
+            VolumeUnit::CubicYard => self.0 / T::from_f64(0.764554857984),
+            VolumeUnit::CubicFoot => self.0 / T::from_f64(0.028316846592),
+            VolumeUnit::HundredCubicFoot => self.0 / T::from_f64(2.8316846592),
+            VolumeUnit::ThousandCubicFoot => self.0 / T::from_f64(28.316846592),
+            VolumeUnit::MillionCubicFoot => self.0 / T::from_f64(28316.846592),
+            VolumeUnit::CubicInch => self.0 / T::from_f64(1.6387064e-5),
+            VolumeUnit::ImperialGallon => self.0 / T::from_f64(0.00454609),
+            VolumeUnit::KiloimperialGallon => self.0 / T::from_f64(4.54609),
+            VolumeUnit::MegaimperialGallon => self.0 / T::from_f64(4546.09),
+            VolumeUnit::ImperialOunce => self.0 / T::from_f64(2.84130625e-5),
+            VolumeUnit::UsGallon => self.0 / T::from_f64(0.003785411784),
+            VolumeUnit::DecausGallon => self.0 / T::from_f64(0.03785411784),
+            VolumeUnit::DeciusGallon => self.0 / T::from_f64(0.0003785411784),
+            VolumeUnit::HectousGallon => self.0 / T::from_f64(0.3785411784),
+            VolumeUnit::KilousGallon => self.0 / T::from_f64(3.785411784),
+            VolumeUnit::MegausGallon => self.0 / T::from_f64(3785.411784),
+            VolumeUnit::UsOunce => self.0 / T::from_f64(2.95735295625e-5),
+            VolumeUnit::UsTablespoon => self.0 / T::from_f64(1.478676478125e-5),
+            VolumeUnit::AuTablespoon => self.0 * T::from_f64(50000.0),
+            VolumeUnit::MetricTablespoon => self.0 / T::from_f64(1.5e-5),
+            VolumeUnit::UkTablespoon => self.0 / T::from_f64(1.5e-5),
+            VolumeUnit::MetricTeaspoon => self.0 * T::from_f64(200000.0),
+            VolumeUnit::UsTeaspoon => self.0 / T::from_f64(4.92892159375e-6),
+            VolumeUnit::MetricCup => self.0 * T::from_f64(4000.0),
+            VolumeUnit::UsCustomaryCup => self.0 / T::from_f64(0.0002365882365),
+            VolumeUnit::UsLegalCup => self.0 / T::from_f64(0.00024),
+            VolumeUnit::OilBarrel => self.0 / T::from_f64(0.158987294928),
+            VolumeUnit::UsBeerBarrel => self.0 / T::from_f64(0.117347765304),
+            VolumeUnit::ImperialBeerBarrel => self.0 / T::from_f64(0.16365924),
+            VolumeUnit::UsQuart => self.0 / T::from_f64(0.000946352946),
+            VolumeUnit::ImperialQuart => self.0 / T::from_f64(0.0011365225),
+            VolumeUnit::UsPint => self.0 / T::from_f64(0.000473176473),
+            VolumeUnit::AcreFoot => self.0 / T::from_f64(1233.48183754752),
+            VolumeUnit::ImperialPint => self.0 / T::from_f64(0.00056826125),
+            VolumeUnit::BoardFoot => self.0 / T::from_f64(0.002359737216),
         }
     }
 
     /// Creates a [`Volume`] from a value in Liters (`l`).
     #[inline]
-    pub fn from_liters(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e3)
+    pub fn from_liters(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Liters (`l`).
     #[inline]
-    pub fn as_liters(self) -> Num {
-        let x = self.0;
-        x * 1e3
+    pub fn as_liters(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_liters`].
     #[inline]
-    pub fn as_liter(self) -> Num {
+    pub fn as_liter(self) -> T {
         self.as_liters()
     }
 
     /// Creates a [`Volume`] from a value in Nanoliters (`nl`).
     #[inline]
-    pub fn from_nanoliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 1e3)
+    pub fn from_nanoliters(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Nanoliters (`nl`).
     #[inline]
-    pub fn as_nanoliters(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 1e3
+    pub fn as_nanoliters(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_nanoliters`].
     #[inline]
-    pub fn as_nanoliter(self) -> Num {
+    pub fn as_nanoliter(self) -> T {
         self.as_nanoliters()
     }
 
     /// Creates a [`Volume`] from a value in Microliters (`µl`).
     #[inline]
-    pub fn from_microliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1e3)
+    pub fn from_microliters(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Microliters (`µl`).
     #[inline]
-    pub fn as_microliters(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1e3
+    pub fn as_microliters(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_microliters`].
     #[inline]
-    pub fn as_microliter(self) -> Num {
+    pub fn as_microliter(self) -> T {
         self.as_microliters()
     }
 
     /// Creates a [`Volume`] from a value in Milliliters (`ml`).
     #[inline]
-    pub fn from_milliliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1e3)
+    pub fn from_milliliters(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Milliliters (`ml`).
     #[inline]
-    pub fn as_milliliters(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1e3
+    pub fn as_milliliters(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_milliliters`].
     #[inline]
-    pub fn as_milliliter(self) -> Num {
+    pub fn as_milliliter(self) -> T {
         self.as_milliliters()
     }
 
     /// Creates a [`Volume`] from a value in Centiliters (`cl`).
     #[inline]
-    pub fn from_centiliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) / 1e3)
+    pub fn from_centiliters(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in Centiliters (`cl`).
     #[inline]
-    pub fn as_centiliters(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) * 1e3
+    pub fn as_centiliters(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_centiliters`].
     #[inline]
-    pub fn as_centiliter(self) -> Num {
+    pub fn as_centiliter(self) -> T {
         self.as_centiliters()
     }
 
     /// Creates a [`Volume`] from a value in Deciliters (`dl`).
     #[inline]
-    pub fn from_deciliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 1e3)
+    pub fn from_deciliters(value: T) -> Self {
+        Self(value / T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in Deciliters (`dl`).
     #[inline]
-    pub fn as_deciliters(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 1e3
+    pub fn as_deciliters(self) -> T {
+        self.0 * T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_deciliters`].
     #[inline]
-    pub fn as_deciliter(self) -> Num {
+    pub fn as_deciliter(self) -> T {
         self.as_deciliters()
     }
 
     /// Creates a [`Volume`] from a value in Decaliters (`dal`).
     #[inline]
-    pub fn from_decaliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) / 1e3)
+    pub fn from_decaliters(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in Decaliters (`dal`).
     #[inline]
-    pub fn as_decaliters(self) -> Num {
-        let x = self.0;
-        (x / 1e1) * 1e3
+    pub fn as_decaliters(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_decaliters`].
     #[inline]
-    pub fn as_decaliter(self) -> Num {
+    pub fn as_decaliter(self) -> T {
         self.as_decaliters()
     }
 
     /// Creates a [`Volume`] from a value in Hectoliters (`hl`).
     #[inline]
-    pub fn from_hectoliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2) / 1e3)
+    pub fn from_hectoliters(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in Hectoliters (`hl`).
     #[inline]
-    pub fn as_hectoliters(self) -> Num {
-        let x = self.0;
-        (x / 1e2) * 1e3
+    pub fn as_hectoliters(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_hectoliters`].
     #[inline]
-    pub fn as_hectoliter(self) -> Num {
+    pub fn as_hectoliter(self) -> T {
         self.as_hectoliters()
     }
 
     /// Creates a [`Volume`] from a value in Kiloliters (`kl`).
     #[inline]
-    pub fn from_kiloliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 1e3)
+    pub fn from_kiloliters(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Kiloliters (`kl`).
     #[inline]
-    pub fn as_kiloliters(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1e3
+    pub fn as_kiloliters(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kiloliters`].
     #[inline]
-    pub fn as_kiloliter(self) -> Num {
+    pub fn as_kiloliter(self) -> T {
         self.as_kiloliters()
     }
 
     /// Creates a [`Volume`] from a value in Megaliters (`Ml`).
     #[inline]
-    pub fn from_megaliters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 1e3)
+    pub fn from_megaliters(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Megaliters (`Ml`).
     #[inline]
-    pub fn as_megaliters(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 1e3
+    pub fn as_megaliters(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_megaliters`].
     #[inline]
-    pub fn as_megaliter(self) -> Num {
+    pub fn as_megaliter(self) -> T {
         self.as_megaliters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMeters (`m³`).
     #[inline]
-    pub fn from_cubic_meters(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_cubic_meters(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in CubicMeters (`m³`).
     #[inline]
-    pub fn as_cubic_meters(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_cubic_meters(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_cubic_meters`].
     #[inline]
-    pub fn as_cubic_meter(self) -> Num {
+    pub fn as_cubic_meter(self) -> T {
         self.as_cubic_meters()
     }
 
-    /// Creates a [`Volume`] from a value in HectocubicMeters (`hm³`).
+    /// Creates a [`Volume`] from a value in ThousandCubicMeters (`10³·m³`).
     #[inline]
-    pub fn from_hectocubic_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2))
+    pub fn from_thousand_cubic_meters(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in HectocubicMeters (`hm³`).
+    /// Returns the value expressed in ThousandCubicMeters (`10³·m³`).
     #[inline]
-    pub fn as_hectocubic_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e2)
+    pub fn as_thousand_cubic_meters(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_hectocubic_meters`].
+    /// Alias for [`Self::as_thousand_cubic_meters`].
     #[inline]
-    pub fn as_hectocubic_meter(self) -> Num {
-        self.as_hectocubic_meters()
-    }
-
-    /// Creates a [`Volume`] from a value in KilocubicMeters (`km³`).
-    #[inline]
-    pub fn from_kilocubic_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
-    }
-
-    /// Returns the value expressed in KilocubicMeters (`km³`).
-    #[inline]
-    pub fn as_kilocubic_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
-    }
-
-    /// Alias for [`Self::as_kilocubic_meters`].
-    #[inline]
-    pub fn as_kilocubic_meter(self) -> Num {
-        self.as_kilocubic_meters()
+    pub fn as_thousand_cubic_meter(self) -> T {
+        self.as_thousand_cubic_meters()
     }
 
     /// Creates a [`Volume`] from a value in CubicKilometers (`km³`).
     #[inline]
-    pub fn from_cubic_kilometers(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e9)
+    pub fn from_cubic_kilometers(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in CubicKilometers (`km³`).
     #[inline]
-    pub fn as_cubic_kilometers(self) -> Num {
-        let x = self.0;
-        x / 1e9
+    pub fn as_cubic_kilometers(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_cubic_kilometers`].
     #[inline]
-    pub fn as_cubic_kilometer(self) -> Num {
+    pub fn as_cubic_kilometer(self) -> T {
         self.as_cubic_kilometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicHectometers (`hm³`).
     #[inline]
-    pub fn from_cubic_hectometers(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e6)
+    pub fn from_cubic_hectometers(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in CubicHectometers (`hm³`).
     #[inline]
-    pub fn as_cubic_hectometers(self) -> Num {
-        let x = self.0;
-        x / 1e6
+    pub fn as_cubic_hectometers(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_cubic_hectometers`].
     #[inline]
-    pub fn as_cubic_hectometer(self) -> Num {
+    pub fn as_cubic_hectometer(self) -> T {
         self.as_cubic_hectometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicDecimeters (`dm³`).
     #[inline]
-    pub fn from_cubic_decimeters(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e3)
+    pub fn from_cubic_decimeters(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in CubicDecimeters (`dm³`).
     #[inline]
-    pub fn as_cubic_decimeters(self) -> Num {
-        let x = self.0;
-        x * 1e3
+    pub fn as_cubic_decimeters(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_cubic_decimeters`].
     #[inline]
-    pub fn as_cubic_decimeter(self) -> Num {
+    pub fn as_cubic_decimeter(self) -> T {
         self.as_cubic_decimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicCentimeters (`cm³`).
     #[inline]
-    pub fn from_cubic_centimeters(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e6)
+    pub fn from_cubic_centimeters(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in CubicCentimeters (`cm³`).
     #[inline]
-    pub fn as_cubic_centimeters(self) -> Num {
-        let x = self.0;
-        x * 1e6
+    pub fn as_cubic_centimeters(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_cubic_centimeters`].
     #[inline]
-    pub fn as_cubic_centimeter(self) -> Num {
+    pub fn as_cubic_centimeter(self) -> T {
         self.as_cubic_centimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMillimeters (`mm³`).
     #[inline]
-    pub fn from_cubic_millimeters(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e9)
+    pub fn from_cubic_millimeters(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in CubicMillimeters (`mm³`).
     #[inline]
-    pub fn as_cubic_millimeters(self) -> Num {
-        let x = self.0;
-        x * 1e9
+    pub fn as_cubic_millimeters(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_cubic_millimeters`].
     #[inline]
-    pub fn as_cubic_millimeter(self) -> Num {
+    pub fn as_cubic_millimeter(self) -> T {
         self.as_cubic_millimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMicrometers (`µm³`).
     #[inline]
-    pub fn from_cubic_micrometers(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e18)
+    pub fn from_cubic_micrometers(value: T) -> Self {
+        Self(value / T::from_f64(1e18))
     }
 
     /// Returns the value expressed in CubicMicrometers (`µm³`).
     #[inline]
-    pub fn as_cubic_micrometers(self) -> Num {
-        let x = self.0;
-        x * 1e18
+    pub fn as_cubic_micrometers(self) -> T {
+        self.0 * T::from_f64(1e18)
     }
 
     /// Alias for [`Self::as_cubic_micrometers`].
     #[inline]
-    pub fn as_cubic_micrometer(self) -> Num {
+    pub fn as_cubic_micrometer(self) -> T {
         self.as_cubic_micrometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicMiles (`mi³`).
     #[inline]
-    pub fn from_cubic_miles(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.168181825440579584e9)
+    pub fn from_cubic_miles(value: T) -> Self {
+        Self(value * T::from_f64(4.1681818254405794e9))
     }
 
     /// Returns the value expressed in CubicMiles (`mi³`).
     #[inline]
-    pub fn as_cubic_miles(self) -> Num {
-        let x = self.0;
-        x / 4.168181825440579584e9
+    pub fn as_cubic_miles(self) -> T {
+        self.0 / T::from_f64(4.1681818254405794e9)
     }
 
     /// Alias for [`Self::as_cubic_miles`].
     #[inline]
-    pub fn as_cubic_mile(self) -> Num {
+    pub fn as_cubic_mile(self) -> T {
         self.as_cubic_miles()
     }
 
     /// Creates a [`Volume`] from a value in CubicYards (`yd³`).
     #[inline]
-    pub fn from_cubic_yards(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.764554857984)
+    pub fn from_cubic_yards(value: T) -> Self {
+        Self(value * T::from_f64(0.764554857984))
     }
 
     /// Returns the value expressed in CubicYards (`yd³`).
     #[inline]
-    pub fn as_cubic_yards(self) -> Num {
-        let x = self.0;
-        x / 0.764554857984
+    pub fn as_cubic_yards(self) -> T {
+        self.0 / T::from_f64(0.764554857984)
     }
 
     /// Alias for [`Self::as_cubic_yards`].
     #[inline]
-    pub fn as_cubic_yard(self) -> Num {
+    pub fn as_cubic_yard(self) -> T {
         self.as_cubic_yards()
     }
 
     /// Creates a [`Volume`] from a value in CubicFeet (`ft³`).
     #[inline]
-    pub fn from_cubic_feet(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028316846592)
+    pub fn from_cubic_feet(value: T) -> Self {
+        Self(value * T::from_f64(0.028316846592))
     }
 
     /// Returns the value expressed in CubicFeet (`ft³`).
     #[inline]
-    pub fn as_cubic_feet(self) -> Num {
-        let x = self.0;
-        x / 0.028316846592
+    pub fn as_cubic_feet(self) -> T {
+        self.0 / T::from_f64(0.028316846592)
     }
 
     /// Alias for [`Self::as_cubic_feet`].
     #[inline]
-    pub fn as_cubic_foot(self) -> Num {
+    pub fn as_cubic_foot(self) -> T {
         self.as_cubic_feet()
     }
 
-    /// Creates a [`Volume`] from a value in HectocubicFeet (`hft³`).
+    /// Creates a [`Volume`] from a value in HundredCubicFeet (`Ccf`).
     #[inline]
-    pub fn from_hectocubic_feet(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2) * 0.028316846592)
+    pub fn from_hundred_cubic_feet(value: T) -> Self {
+        Self(value * T::from_f64(2.8316846592))
     }
 
-    /// Returns the value expressed in HectocubicFeet (`hft³`).
+    /// Returns the value expressed in HundredCubicFeet (`Ccf`).
     #[inline]
-    pub fn as_hectocubic_feet(self) -> Num {
-        let x = self.0;
-        (x / 1e2) / 0.028316846592
+    pub fn as_hundred_cubic_feet(self) -> T {
+        self.0 / T::from_f64(2.8316846592)
     }
 
-    /// Alias for [`Self::as_hectocubic_feet`].
+    /// Alias for [`Self::as_hundred_cubic_feet`].
     #[inline]
-    pub fn as_hectocubic_foot(self) -> Num {
-        self.as_hectocubic_feet()
+    pub fn as_hundred_cubic_foot(self) -> T {
+        self.as_hundred_cubic_feet()
     }
 
-    /// Creates a [`Volume`] from a value in KilocubicFeet (`kft³`).
+    /// Creates a [`Volume`] from a value in ThousandCubicFeet (`Mcf`).
     #[inline]
-    pub fn from_kilocubic_feet(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 0.028316846592)
+    pub fn from_thousand_cubic_feet(value: T) -> Self {
+        Self(value * T::from_f64(28.316846592))
     }
 
-    /// Returns the value expressed in KilocubicFeet (`kft³`).
+    /// Returns the value expressed in ThousandCubicFeet (`Mcf`).
     #[inline]
-    pub fn as_kilocubic_feet(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 0.028316846592
+    pub fn as_thousand_cubic_feet(self) -> T {
+        self.0 / T::from_f64(28.316846592)
     }
 
-    /// Alias for [`Self::as_kilocubic_feet`].
+    /// Alias for [`Self::as_thousand_cubic_feet`].
     #[inline]
-    pub fn as_kilocubic_foot(self) -> Num {
-        self.as_kilocubic_feet()
+    pub fn as_thousand_cubic_foot(self) -> T {
+        self.as_thousand_cubic_feet()
     }
 
-    /// Creates a [`Volume`] from a value in MegacubicFeet (`Mft³`).
+    /// Creates a [`Volume`] from a value in MillionCubicFeet (`MMcf`).
     #[inline]
-    pub fn from_megacubic_feet(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 0.028316846592)
+    pub fn from_million_cubic_feet(value: T) -> Self {
+        Self(value * T::from_f64(28316.846592))
     }
 
-    /// Returns the value expressed in MegacubicFeet (`Mft³`).
+    /// Returns the value expressed in MillionCubicFeet (`MMcf`).
     #[inline]
-    pub fn as_megacubic_feet(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 0.028316846592
+    pub fn as_million_cubic_feet(self) -> T {
+        self.0 / T::from_f64(28316.846592)
     }
 
-    /// Alias for [`Self::as_megacubic_feet`].
+    /// Alias for [`Self::as_million_cubic_feet`].
     #[inline]
-    pub fn as_megacubic_foot(self) -> Num {
-        self.as_megacubic_feet()
+    pub fn as_million_cubic_foot(self) -> T {
+        self.as_million_cubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in CubicInches (`in³`).
     #[inline]
-    pub fn from_cubic_inches(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.6387064e-5)
+    pub fn from_cubic_inches(value: T) -> Self {
+        Self(value * T::from_f64(1.6387064e-5))
     }
 
     /// Returns the value expressed in CubicInches (`in³`).
     #[inline]
-    pub fn as_cubic_inches(self) -> Num {
-        let x = self.0;
-        x / 1.6387064e-5
+    pub fn as_cubic_inches(self) -> T {
+        self.0 / T::from_f64(1.6387064e-5)
     }
 
     /// Alias for [`Self::as_cubic_inches`].
     #[inline]
-    pub fn as_cubic_inch(self) -> Num {
+    pub fn as_cubic_inch(self) -> T {
         self.as_cubic_inches()
     }
 
     /// Creates a [`Volume`] from a value in ImperialGallons (`gal (imp.)`).
     #[inline]
-    pub fn from_imperial_gallons(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.00454609)
+    pub fn from_imperial_gallons(value: T) -> Self {
+        Self(value * T::from_f64(0.00454609))
     }
 
     /// Returns the value expressed in ImperialGallons (`gal (imp.)`).
     #[inline]
-    pub fn as_imperial_gallons(self) -> Num {
-        let x = self.0;
-        x / 0.00454609
+    pub fn as_imperial_gallons(self) -> T {
+        self.0 / T::from_f64(0.00454609)
     }
 
     /// Alias for [`Self::as_imperial_gallons`].
     #[inline]
-    pub fn as_imperial_gallon(self) -> Num {
+    pub fn as_imperial_gallon(self) -> T {
         self.as_imperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in KiloimperialGallons (`kgal (imp.)`).
     #[inline]
-    pub fn from_kiloimperial_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 0.00454609)
+    pub fn from_kiloimperial_gallons(value: T) -> Self {
+        Self(value * T::from_f64(4.54609))
     }
 
     /// Returns the value expressed in KiloimperialGallons (`kgal (imp.)`).
     #[inline]
-    pub fn as_kiloimperial_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 0.00454609
+    pub fn as_kiloimperial_gallons(self) -> T {
+        self.0 / T::from_f64(4.54609)
     }
 
     /// Alias for [`Self::as_kiloimperial_gallons`].
     #[inline]
-    pub fn as_kiloimperial_gallon(self) -> Num {
+    pub fn as_kiloimperial_gallon(self) -> T {
         self.as_kiloimperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in MegaimperialGallons (`Mgal (imp.)`).
     #[inline]
-    pub fn from_megaimperial_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 0.00454609)
+    pub fn from_megaimperial_gallons(value: T) -> Self {
+        Self(value * T::from_f64(4546.09))
     }
 
     /// Returns the value expressed in MegaimperialGallons (`Mgal (imp.)`).
     #[inline]
-    pub fn as_megaimperial_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 0.00454609
+    pub fn as_megaimperial_gallons(self) -> T {
+        self.0 / T::from_f64(4546.09)
     }
 
     /// Alias for [`Self::as_megaimperial_gallons`].
     #[inline]
-    pub fn as_megaimperial_gallon(self) -> Num {
+    pub fn as_megaimperial_gallon(self) -> T {
         self.as_megaimperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in ImperialOunces (`oz (imp.)`).
     #[inline]
-    pub fn from_imperial_ounces(value: Num) -> Self {
-        let x = value;
-        Self(x * 2.84130625e-5)
+    pub fn from_imperial_ounces(value: T) -> Self {
+        Self(value * T::from_f64(2.84130625e-5))
     }
 
     /// Returns the value expressed in ImperialOunces (`oz (imp.)`).
     #[inline]
-    pub fn as_imperial_ounces(self) -> Num {
-        let x = self.0;
-        x / 2.84130625e-5
+    pub fn as_imperial_ounces(self) -> T {
+        self.0 / T::from_f64(2.84130625e-5)
     }
 
     /// Alias for [`Self::as_imperial_ounces`].
     #[inline]
-    pub fn as_imperial_ounce(self) -> Num {
+    pub fn as_imperial_ounce(self) -> T {
         self.as_imperial_ounces()
     }
 
     /// Creates a [`Volume`] from a value in UsGallons (`gal (U.S.)`).
     #[inline]
-    pub fn from_us_gallons(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.003785411784)
+    pub fn from_us_gallons(value: T) -> Self {
+        Self(value * T::from_f64(0.003785411784))
     }
 
     /// Returns the value expressed in UsGallons (`gal (U.S.)`).
     #[inline]
-    pub fn as_us_gallons(self) -> Num {
-        let x = self.0;
-        x / 0.003785411784
+    pub fn as_us_gallons(self) -> T {
+        self.0 / T::from_f64(0.003785411784)
     }
 
     /// Alias for [`Self::as_us_gallons`].
     #[inline]
-    pub fn as_us_gallon(self) -> Num {
+    pub fn as_us_gallon(self) -> T {
         self.as_us_gallons()
     }
 
     /// Creates a [`Volume`] from a value in DecausGallons (`dagal (U.S.)`).
     #[inline]
-    pub fn from_decaus_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 0.003785411784)
+    pub fn from_decaus_gallons(value: T) -> Self {
+        Self(value * T::from_f64(0.03785411784))
     }
 
     /// Returns the value expressed in DecausGallons (`dagal (U.S.)`).
     #[inline]
-    pub fn as_decaus_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 0.003785411784
+    pub fn as_decaus_gallons(self) -> T {
+        self.0 / T::from_f64(0.03785411784)
     }
 
     /// Alias for [`Self::as_decaus_gallons`].
     #[inline]
-    pub fn as_decaus_gallon(self) -> Num {
+    pub fn as_decaus_gallon(self) -> T {
         self.as_decaus_gallons()
     }
 
     /// Creates a [`Volume`] from a value in DeciusGallons (`dgal (U.S.)`).
     #[inline]
-    pub fn from_decius_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) * 0.003785411784)
+    pub fn from_decius_gallons(value: T) -> Self {
+        Self(value * T::from_f64(0.0003785411784))
     }
 
     /// Returns the value expressed in DeciusGallons (`dgal (U.S.)`).
     #[inline]
-    pub fn as_decius_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) / 0.003785411784
+    pub fn as_decius_gallons(self) -> T {
+        self.0 / T::from_f64(0.0003785411784)
     }
 
     /// Alias for [`Self::as_decius_gallons`].
     #[inline]
-    pub fn as_decius_gallon(self) -> Num {
+    pub fn as_decius_gallon(self) -> T {
         self.as_decius_gallons()
     }
 
     /// Creates a [`Volume`] from a value in HectousGallons (`hgal (U.S.)`).
     #[inline]
-    pub fn from_hectous_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2) * 0.003785411784)
+    pub fn from_hectous_gallons(value: T) -> Self {
+        Self(value * T::from_f64(0.3785411784))
     }
 
     /// Returns the value expressed in HectousGallons (`hgal (U.S.)`).
     #[inline]
-    pub fn as_hectous_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e2) / 0.003785411784
+    pub fn as_hectous_gallons(self) -> T {
+        self.0 / T::from_f64(0.3785411784)
     }
 
     /// Alias for [`Self::as_hectous_gallons`].
     #[inline]
-    pub fn as_hectous_gallon(self) -> Num {
+    pub fn as_hectous_gallon(self) -> T {
         self.as_hectous_gallons()
     }
 
     /// Creates a [`Volume`] from a value in KilousGallons (`kgal (U.S.)`).
     #[inline]
-    pub fn from_kilous_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 0.003785411784)
+    pub fn from_kilous_gallons(value: T) -> Self {
+        Self(value * T::from_f64(3.785411784))
     }
 
     /// Returns the value expressed in KilousGallons (`kgal (U.S.)`).
     #[inline]
-    pub fn as_kilous_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 0.003785411784
+    pub fn as_kilous_gallons(self) -> T {
+        self.0 / T::from_f64(3.785411784)
     }
 
     /// Alias for [`Self::as_kilous_gallons`].
     #[inline]
-    pub fn as_kilous_gallon(self) -> Num {
+    pub fn as_kilous_gallon(self) -> T {
         self.as_kilous_gallons()
     }
 
     /// Creates a [`Volume`] from a value in MegausGallons (`Mgal (U.S.)`).
     #[inline]
-    pub fn from_megaus_gallons(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 0.003785411784)
+    pub fn from_megaus_gallons(value: T) -> Self {
+        Self(value * T::from_f64(3785.411784))
     }
 
     /// Returns the value expressed in MegausGallons (`Mgal (U.S.)`).
     #[inline]
-    pub fn as_megaus_gallons(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 0.003785411784
+    pub fn as_megaus_gallons(self) -> T {
+        self.0 / T::from_f64(3785.411784)
     }
 
     /// Alias for [`Self::as_megaus_gallons`].
     #[inline]
-    pub fn as_megaus_gallon(self) -> Num {
+    pub fn as_megaus_gallon(self) -> T {
         self.as_megaus_gallons()
     }
 
     /// Creates a [`Volume`] from a value in UsOunces (`oz (U.S.)`).
     #[inline]
-    pub fn from_us_ounces(value: Num) -> Self {
-        let x = value;
-        Self(x * 2.95735295625e-5)
+    pub fn from_us_ounces(value: T) -> Self {
+        Self(value * T::from_f64(2.95735295625e-5))
     }
 
     /// Returns the value expressed in UsOunces (`oz (U.S.)`).
     #[inline]
-    pub fn as_us_ounces(self) -> Num {
-        let x = self.0;
-        x / 2.95735295625e-5
+    pub fn as_us_ounces(self) -> T {
+        self.0 / T::from_f64(2.95735295625e-5)
     }
 
     /// Alias for [`Self::as_us_ounces`].
     #[inline]
-    pub fn as_us_ounce(self) -> Num {
+    pub fn as_us_ounce(self) -> T {
         self.as_us_ounces()
     }
 
     /// Creates a [`Volume`] from a value in UsTablespoons (`tablespoon (U.S.)`).
     #[inline]
-    pub fn from_us_tablespoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.478676478125e-5)
+    pub fn from_us_tablespoons(value: T) -> Self {
+        Self(value * T::from_f64(1.478676478125e-5))
     }
 
     /// Returns the value expressed in UsTablespoons (`tablespoon (U.S.)`).
     #[inline]
-    pub fn as_us_tablespoons(self) -> Num {
-        let x = self.0;
-        x / 1.478676478125e-5
+    pub fn as_us_tablespoons(self) -> T {
+        self.0 / T::from_f64(1.478676478125e-5)
     }
 
     /// Alias for [`Self::as_us_tablespoons`].
     #[inline]
-    pub fn as_us_tablespoon(self) -> Num {
+    pub fn as_us_tablespoon(self) -> T {
         self.as_us_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in AuTablespoons (`tablespoon (A.U.)`).
     #[inline]
-    pub fn from_au_tablespoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 2e-5)
+    pub fn from_au_tablespoons(value: T) -> Self {
+        Self(value / T::from_f64(50000.0))
     }
 
     /// Returns the value expressed in AuTablespoons (`tablespoon (A.U.)`).
     #[inline]
-    pub fn as_au_tablespoons(self) -> Num {
-        let x = self.0;
-        x / 2e-5
+    pub fn as_au_tablespoons(self) -> T {
+        self.0 * T::from_f64(50000.0)
     }
 
     /// Alias for [`Self::as_au_tablespoons`].
     #[inline]
-    pub fn as_au_tablespoon(self) -> Num {
+    pub fn as_au_tablespoon(self) -> T {
         self.as_au_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTablespoons (`tablespoon`).
     #[inline]
-    pub fn from_metric_tablespoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.5e-5)
+    pub fn from_metric_tablespoons(value: T) -> Self {
+        Self(value * T::from_f64(1.5e-5))
     }
 
     /// Returns the value expressed in MetricTablespoons (`tablespoon`).
     #[inline]
-    pub fn as_metric_tablespoons(self) -> Num {
-        let x = self.0;
-        x / 1.5e-5
+    pub fn as_metric_tablespoons(self) -> T {
+        self.0 / T::from_f64(1.5e-5)
     }
 
     /// Alias for [`Self::as_metric_tablespoons`].
     #[inline]
-    pub fn as_metric_tablespoon(self) -> Num {
+    pub fn as_metric_tablespoon(self) -> T {
         self.as_metric_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in UkTablespoons (`tablespoon (U.K.)`).
     #[inline]
-    pub fn from_uk_tablespoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.5e-5)
+    pub fn from_uk_tablespoons(value: T) -> Self {
+        Self(value * T::from_f64(1.5e-5))
     }
 
     /// Returns the value expressed in UkTablespoons (`tablespoon (U.K.)`).
     #[inline]
-    pub fn as_uk_tablespoons(self) -> Num {
-        let x = self.0;
-        x / 1.5e-5
+    pub fn as_uk_tablespoons(self) -> T {
+        self.0 / T::from_f64(1.5e-5)
     }
 
     /// Alias for [`Self::as_uk_tablespoons`].
     #[inline]
-    pub fn as_uk_tablespoon(self) -> Num {
+    pub fn as_uk_tablespoon(self) -> T {
         self.as_uk_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTeaspoons (`tsp`).
     #[inline]
-    pub fn from_metric_teaspoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.5e-5)
+    pub fn from_metric_teaspoons(value: T) -> Self {
+        Self(value / T::from_f64(200000.0))
     }
 
     /// Returns the value expressed in MetricTeaspoons (`tsp`).
     #[inline]
-    pub fn as_metric_teaspoons(self) -> Num {
-        let x = self.0;
-        x / 0.5e-5
+    pub fn as_metric_teaspoons(self) -> T {
+        self.0 * T::from_f64(200000.0)
     }
 
     /// Alias for [`Self::as_metric_teaspoons`].
     #[inline]
-    pub fn as_metric_teaspoon(self) -> Num {
+    pub fn as_metric_teaspoon(self) -> T {
         self.as_metric_teaspoons()
     }
 
     /// Creates a [`Volume`] from a value in UsTeaspoons (`teaspoon (U.S.)`).
     #[inline]
-    pub fn from_us_teaspoons(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.92892159375e-6)
+    pub fn from_us_teaspoons(value: T) -> Self {
+        Self(value * T::from_f64(4.92892159375e-6))
     }
 
     /// Returns the value expressed in UsTeaspoons (`teaspoon (U.S.)`).
     #[inline]
-    pub fn as_us_teaspoons(self) -> Num {
-        let x = self.0;
-        x / 4.92892159375e-6
+    pub fn as_us_teaspoons(self) -> T {
+        self.0 / T::from_f64(4.92892159375e-6)
     }
 
     /// Alias for [`Self::as_us_teaspoons`].
     #[inline]
-    pub fn as_us_teaspoon(self) -> Num {
+    pub fn as_us_teaspoon(self) -> T {
         self.as_us_teaspoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricCups (`metric cup`).
     #[inline]
-    pub fn from_metric_cups(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.00025)
+    pub fn from_metric_cups(value: T) -> Self {
+        Self(value / T::from_f64(4000.0))
     }
 
     /// Returns the value expressed in MetricCups (`metric cup`).
     #[inline]
-    pub fn as_metric_cups(self) -> Num {
-        let x = self.0;
-        x / 0.00025
+    pub fn as_metric_cups(self) -> T {
+        self.0 * T::from_f64(4000.0)
     }
 
     /// Alias for [`Self::as_metric_cups`].
     #[inline]
-    pub fn as_metric_cup(self) -> Num {
+    pub fn as_metric_cup(self) -> T {
         self.as_metric_cups()
     }
 
     /// Creates a [`Volume`] from a value in UsCustomaryCups (`cup (U.S. customary)`).
     #[inline]
-    pub fn from_us_customary_cups(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.0002365882365)
+    pub fn from_us_customary_cups(value: T) -> Self {
+        Self(value * T::from_f64(0.0002365882365))
     }
 
     /// Returns the value expressed in UsCustomaryCups (`cup (U.S. customary)`).
     #[inline]
-    pub fn as_us_customary_cups(self) -> Num {
-        let x = self.0;
-        x / 0.0002365882365
+    pub fn as_us_customary_cups(self) -> T {
+        self.0 / T::from_f64(0.0002365882365)
     }
 
     /// Alias for [`Self::as_us_customary_cups`].
     #[inline]
-    pub fn as_us_customary_cup(self) -> Num {
+    pub fn as_us_customary_cup(self) -> T {
         self.as_us_customary_cups()
     }
 
     /// Creates a [`Volume`] from a value in UsLegalCups (`cup (U.S.)`).
     #[inline]
-    pub fn from_us_legal_cups(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.00024)
+    pub fn from_us_legal_cups(value: T) -> Self {
+        Self(value * T::from_f64(0.00024))
     }
 
     /// Returns the value expressed in UsLegalCups (`cup (U.S.)`).
     #[inline]
-    pub fn as_us_legal_cups(self) -> Num {
-        let x = self.0;
-        x / 0.00024
+    pub fn as_us_legal_cups(self) -> T {
+        self.0 / T::from_f64(0.00024)
     }
 
     /// Alias for [`Self::as_us_legal_cups`].
     #[inline]
-    pub fn as_us_legal_cup(self) -> Num {
+    pub fn as_us_legal_cup(self) -> T {
         self.as_us_legal_cups()
     }
 
     /// Creates a [`Volume`] from a value in OilBarrels (`bbl`).
     #[inline]
-    pub fn from_oil_barrels(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.158987294928)
+    pub fn from_oil_barrels(value: T) -> Self {
+        Self(value * T::from_f64(0.158987294928))
     }
 
     /// Returns the value expressed in OilBarrels (`bbl`).
     #[inline]
-    pub fn as_oil_barrels(self) -> Num {
-        let x = self.0;
-        x / 0.158987294928
+    pub fn as_oil_barrels(self) -> T {
+        self.0 / T::from_f64(0.158987294928)
     }
 
     /// Alias for [`Self::as_oil_barrels`].
     #[inline]
-    pub fn as_oil_barrel(self) -> Num {
+    pub fn as_oil_barrel(self) -> T {
         self.as_oil_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsBeerBarrels (`bl (U.S.)`).
     #[inline]
-    pub fn from_us_beer_barrels(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.117347765304)
+    pub fn from_us_beer_barrels(value: T) -> Self {
+        Self(value * T::from_f64(0.117347765304))
     }
 
     /// Returns the value expressed in UsBeerBarrels (`bl (U.S.)`).
     #[inline]
-    pub fn as_us_beer_barrels(self) -> Num {
-        let x = self.0;
-        x / 0.117347765304
+    pub fn as_us_beer_barrels(self) -> T {
+        self.0 / T::from_f64(0.117347765304)
     }
 
     /// Alias for [`Self::as_us_beer_barrels`].
     #[inline]
-    pub fn as_us_beer_barrel(self) -> Num {
+    pub fn as_us_beer_barrel(self) -> T {
         self.as_us_beer_barrels()
     }
 
     /// Creates a [`Volume`] from a value in ImperialBeerBarrels (`bl (imp.)`).
     #[inline]
-    pub fn from_imperial_beer_barrels(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.16365924)
+    pub fn from_imperial_beer_barrels(value: T) -> Self {
+        Self(value * T::from_f64(0.16365924))
     }
 
     /// Returns the value expressed in ImperialBeerBarrels (`bl (imp.)`).
     #[inline]
-    pub fn as_imperial_beer_barrels(self) -> Num {
-        let x = self.0;
-        x / 0.16365924
+    pub fn as_imperial_beer_barrels(self) -> T {
+        self.0 / T::from_f64(0.16365924)
     }
 
     /// Alias for [`Self::as_imperial_beer_barrels`].
     #[inline]
-    pub fn as_imperial_beer_barrel(self) -> Num {
+    pub fn as_imperial_beer_barrel(self) -> T {
         self.as_imperial_beer_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsQuarts (`qt (U.S.)`).
     #[inline]
-    pub fn from_us_quarts(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.46352946e-4)
+    pub fn from_us_quarts(value: T) -> Self {
+        Self(value * T::from_f64(0.000946352946))
     }
 
     /// Returns the value expressed in UsQuarts (`qt (U.S.)`).
     #[inline]
-    pub fn as_us_quarts(self) -> Num {
-        let x = self.0;
-        x / 9.46352946e-4
+    pub fn as_us_quarts(self) -> T {
+        self.0 / T::from_f64(0.000946352946)
     }
 
     /// Alias for [`Self::as_us_quarts`].
     #[inline]
-    pub fn as_us_quart(self) -> Num {
+    pub fn as_us_quart(self) -> T {
         self.as_us_quarts()
     }
 
     /// Creates a [`Volume`] from a value in ImperialQuarts (`qt (imp.)`).
     #[inline]
-    pub fn from_imperial_quarts(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.1365225e-3)
+    pub fn from_imperial_quarts(value: T) -> Self {
+        Self(value * T::from_f64(0.0011365225))
     }
 
     /// Returns the value expressed in ImperialQuarts (`qt (imp.)`).
     #[inline]
-    pub fn as_imperial_quarts(self) -> Num {
-        let x = self.0;
-        x / 1.1365225e-3
+    pub fn as_imperial_quarts(self) -> T {
+        self.0 / T::from_f64(0.0011365225)
     }
 
     /// Alias for [`Self::as_imperial_quarts`].
     #[inline]
-    pub fn as_imperial_quart(self) -> Num {
+    pub fn as_imperial_quart(self) -> T {
         self.as_imperial_quarts()
     }
 
     /// Creates a [`Volume`] from a value in UsPints (`pt (U.S.)`).
     #[inline]
-    pub fn from_us_pints(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.73176473e-4)
+    pub fn from_us_pints(value: T) -> Self {
+        Self(value * T::from_f64(0.000473176473))
     }
 
     /// Returns the value expressed in UsPints (`pt (U.S.)`).
     #[inline]
-    pub fn as_us_pints(self) -> Num {
-        let x = self.0;
-        x / 4.73176473e-4
+    pub fn as_us_pints(self) -> T {
+        self.0 / T::from_f64(0.000473176473)
     }
 
     /// Alias for [`Self::as_us_pints`].
     #[inline]
-    pub fn as_us_pint(self) -> Num {
+    pub fn as_us_pint(self) -> T {
         self.as_us_pints()
     }
 
     /// Creates a [`Volume`] from a value in AcreFeet (`ac-ft`).
     #[inline]
-    pub fn from_acre_feet(value: Num) -> Self {
-        let x = value;
-        Self(x * 1233.48183754752)
+    pub fn from_acre_feet(value: T) -> Self {
+        Self(value * T::from_f64(1233.48183754752))
     }
 
     /// Returns the value expressed in AcreFeet (`ac-ft`).
     #[inline]
-    pub fn as_acre_feet(self) -> Num {
-        let x = self.0;
-        x / 1233.48183754752
+    pub fn as_acre_feet(self) -> T {
+        self.0 / T::from_f64(1233.48183754752)
     }
 
     /// Alias for [`Self::as_acre_feet`].
     #[inline]
-    pub fn as_acre_foot(self) -> Num {
+    pub fn as_acre_foot(self) -> T {
         self.as_acre_feet()
     }
 
     /// Creates a [`Volume`] from a value in ImperialPints (`pt (imp.)`).
     #[inline]
-    pub fn from_imperial_pints(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.6826125e-4)
+    pub fn from_imperial_pints(value: T) -> Self {
+        Self(value * T::from_f64(0.00056826125))
     }
 
     /// Returns the value expressed in ImperialPints (`pt (imp.)`).
     #[inline]
-    pub fn as_imperial_pints(self) -> Num {
-        let x = self.0;
-        x / 5.6826125e-4
+    pub fn as_imperial_pints(self) -> T {
+        self.0 / T::from_f64(0.00056826125)
     }
 
     /// Alias for [`Self::as_imperial_pints`].
     #[inline]
-    pub fn as_imperial_pint(self) -> Num {
+    pub fn as_imperial_pint(self) -> T {
         self.as_imperial_pints()
     }
 
     /// Creates a [`Volume`] from a value in BoardFeet (`bf`).
     #[inline]
-    pub fn from_board_feet(value: Num) -> Self {
-        let x = value;
-        Self(x * (0.028316846592 / 12.0))
+    pub fn from_board_feet(value: T) -> Self {
+        Self(value * T::from_f64(0.002359737216))
     }
 
     /// Returns the value expressed in BoardFeet (`bf`).
     #[inline]
-    pub fn as_board_feet(self) -> Num {
-        let x = self.0;
-        x / (0.028316846592 / 12.0)
+    pub fn as_board_feet(self) -> T {
+        self.0 / T::from_f64(0.002359737216)
     }
 
     /// Alias for [`Self::as_board_feet`].
     #[inline]
-    pub fn as_board_foot(self) -> Num {
+    pub fn as_board_foot(self) -> T {
         self.as_board_feet()
     }
-}
-
-impl crate::Quantity for Volume {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Volume {
-    type Output = Volume;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Volume {
-    type Output = Volume;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Volume {
-    type Output = Volume;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Volume {
-    type Output = Volume;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Volume> for Num {
-    type Output = Volume;
-    #[inline]
-    fn mul(self, rhs: Volume) -> Volume {
-        Volume(self * rhs.0)
-    }
-}
-impl Div<Num> for Volume {
-    type Output = Volume;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Volume {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Volume {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, VolumeUnit::CubicMeter.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Volume`].
-#[derive(Debug)]
-pub struct ParseVolumeError(String);
-
-impl fmt::Display for ParseVolumeError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Volume", self.0)
-    }
-}
-
-impl std::error::Error for ParseVolumeError {}
-
-impl FromStr for Volume {
-    type Err = ParseVolumeError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseVolumeError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, VolumeUnit)] = &[
-            ("cup (U.S. customary)", VolumeUnit::UsCustomaryCup),
-            ("tablespoon (A.U.)", VolumeUnit::AuTablespoon),
-            ("tablespoon (U.K.)", VolumeUnit::UkTablespoon),
-            ("tablespoon (U.S.)", VolumeUnit::UsTablespoon),
-            ("teaspoon (U.S.)", VolumeUnit::UsTeaspoon),
-            ("dagal (U.S.)", VolumeUnit::DecausGallon),
-            ("Mgal (U.S.)", VolumeUnit::MegausGallon),
-            ("Mgal (imp.)", VolumeUnit::MegaimperialGallon),
-            ("dgal (U.S.)", VolumeUnit::DeciusGallon),
-            ("hgal (U.S.)", VolumeUnit::HectousGallon),
-            ("kgal (U.S.)", VolumeUnit::KilousGallon),
-            ("kgal (imp.)", VolumeUnit::KiloimperialGallon),
-            ("board feet", VolumeUnit::BoardFoot),
-            ("board foot", VolumeUnit::BoardFoot),
-            ("cup (U.S.)", VolumeUnit::UsLegalCup),
-            ("gal (U.S.)", VolumeUnit::UsGallon),
-            ("gal (imp.)", VolumeUnit::ImperialGallon),
-            ("metric cup", VolumeUnit::MetricCup),
-            ("tablespoon", VolumeUnit::MetricTablespoon),
-            ("acre-feet", VolumeUnit::AcreFoot),
-            ("acre-foot", VolumeUnit::AcreFoot),
-            ("bl (U.S.)", VolumeUnit::UsBeerBarrel),
-            ("bl (imp.)", VolumeUnit::ImperialBeerBarrel),
-            ("oz (U.S.)", VolumeUnit::UsOunce),
-            ("oz (imp.)", VolumeUnit::ImperialOunce),
-            ("pt (U.S.)", VolumeUnit::UsPint),
-            ("pt (imp.)", VolumeUnit::ImperialPint),
-            ("qt (U.S.)", VolumeUnit::UsQuart),
-            ("qt (imp.)", VolumeUnit::ImperialQuart),
-            ("teaspoon", VolumeUnit::MetricTeaspoon),
-            ("tblsp.", VolumeUnit::MetricTablespoon),
-            ("Mft³", VolumeUnit::MegacubicFoot),
-            ("UK pt", VolumeUnit::ImperialPint),
-            ("ac-ft", VolumeUnit::AcreFoot),
-            ("hft³", VolumeUnit::HectocubicFoot),
-            ("kft³", VolumeUnit::KilocubicFoot),
-            ("tblsp", VolumeUnit::MetricTablespoon),
-            ("tbsp.", VolumeUnit::MetricTablespoon),
-            ("tspn.", VolumeUnit::MetricTeaspoon),
-            ("µm³", VolumeUnit::CubicMicrometer),
-            ("cm³", VolumeUnit::CubicCentimeter),
-            ("dm³", VolumeUnit::CubicDecimeter),
-            ("ft³", VolumeUnit::CubicFoot),
-            ("hm³", VolumeUnit::HectocubicMeter),
-            ("in³", VolumeUnit::CubicInch),
-            ("km³", VolumeUnit::KilocubicMeter),
-            ("mi³", VolumeUnit::CubicMile),
-            ("mm³", VolumeUnit::CubicMillimeter),
-            ("tbsp", VolumeUnit::MetricTablespoon),
-            ("tsp.", VolumeUnit::MetricTeaspoon),
-            ("tspn", VolumeUnit::MetricTeaspoon),
-            ("yd³", VolumeUnit::CubicYard),
-            ("bbl", VolumeUnit::OilBarrel),
-            ("dal", VolumeUnit::Decaliter),
-            ("m³", VolumeUnit::CubicMeter),
-            ("ts.", VolumeUnit::MetricTeaspoon),
-            ("tsp", VolumeUnit::MetricTeaspoon),
-            ("µl", VolumeUnit::Microliter),
-            ("Ml", VolumeUnit::Megaliter),
-            ("bf", VolumeUnit::BoardFoot),
-            ("cl", VolumeUnit::Centiliter),
-            ("dl", VolumeUnit::Deciliter),
-            ("hl", VolumeUnit::Hectoliter),
-            ("kl", VolumeUnit::Kiloliter),
-            ("ml", VolumeUnit::Milliliter),
-            ("nl", VolumeUnit::Nanoliter),
-            ("pt", VolumeUnit::ImperialPint),
-            ("t.", VolumeUnit::MetricTeaspoon),
-            ("ts", VolumeUnit::MetricTeaspoon),
-            ("l", VolumeUnit::Liter),
-            ("p", VolumeUnit::ImperialPint),
-            ("t", VolumeUnit::MetricTeaspoon),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseVolumeError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

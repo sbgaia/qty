@@ -2,27 +2,39 @@
 // Source: data/quantities/TemperatureChangeRate.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Temperature change rate is the ratio of the temperature change to the time during which the change occurred (value of temperature changes per unit time).
 ///
-/// The internal value is stored in `DegreeCelsiusPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct TemperatureChangeRate(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureChangeRateUnit::DegreeCelsiusPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct TemperatureChangeRate<T = f64>(T);
+
+quantity!(
+    TemperatureChangeRate,
+    TemperatureChangeRateUnit,
+    DegreeCelsiusPerSecond
+);
 
 /// Unit variants for [`TemperatureChangeRate`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum TemperatureChangeRateUnit {
     DegreeCelsiusPerSecond,
     NanodegreeCelsiusPerSecond,
@@ -67,7 +79,7 @@ impl TemperatureChangeRateUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::DegreeCelsiusPerSecond => "°C/s",
             Self::NanodegreeCelsiusPerSecond => "n°C/s",
@@ -89,9 +101,9 @@ impl TemperatureChangeRateUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::DegreeCelsiusPerSecond => &["°C/s"],
             Self::NanodegreeCelsiusPerSecond => &["n°C/s"],
@@ -114,574 +126,398 @@ impl TemperatureChangeRateUnit {
     }
 }
 
-impl TemperatureChangeRate {
+impl core::str::FromStr for TemperatureChangeRateUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "°C/s" => Ok(Self::DegreeCelsiusPerSecond),
+            "n°C/s" => Ok(Self::NanodegreeCelsiusPerSecond),
+            "µ°C/s" => Ok(Self::MicrodegreeCelsiusPerSecond),
+            "m°C/s" => Ok(Self::MillidegreeCelsiusPerSecond),
+            "c°C/s" => Ok(Self::CentidegreeCelsiusPerSecond),
+            "d°C/s" => Ok(Self::DecidegreeCelsiusPerSecond),
+            "da°C/s" => Ok(Self::DecadegreeCelsiusPerSecond),
+            "h°C/s" => Ok(Self::HectodegreeCelsiusPerSecond),
+            "k°C/s" => Ok(Self::KilodegreeCelsiusPerSecond),
+            "°C/min" => Ok(Self::DegreeCelsiusPerMinute),
+            "K/min" => Ok(Self::DegreeKelvinPerMinute),
+            "°F/min" => Ok(Self::DegreeFahrenheitPerMinute),
+            "°F/s" => Ok(Self::DegreeFahrenheitPerSecond),
+            "K/s" => Ok(Self::DegreeKelvinPerSecond),
+            "°C/h" => Ok(Self::DegreeCelsiusPerHour),
+            "K/h" => Ok(Self::DegreeKelvinPerHour),
+            "°F/h" => Ok(Self::DegreeFahrenheitPerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> TemperatureChangeRate<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: TemperatureChangeRateUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: TemperatureChangeRateUnit) -> Self {
         Self(match unit {
-            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => x,
-            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => (x * 1e-9),
-            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => (x * 1e-6),
-            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => (x * 1e-3),
-            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => (x * 1e-2),
-            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => (x * 1e-1),
-            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => (x * 1e1),
-            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => (x * 1e2),
-            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => (x * 1e3),
-            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => x / 60.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerMinute => x / 60.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => x * 5.0 / 9.0 / 60.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => x * 5.0 / 9.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerSecond => x,
-            TemperatureChangeRateUnit::DegreeCelsiusPerHour => x / 3600.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerHour => x / 3600.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => x * 5.0 / 9.0 / 3600.0,
+            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value / T::from_f64(1e9),
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
+                value / T::from_f64(1000000.0)
+            }
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value / T::from_f64(1000.0),
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value / T::from_f64(100.0),
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value / T::from_f64(10.0),
+            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value * T::from_f64(10.0),
+            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value * T::from_f64(100.0),
+            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value * T::from_f64(1000.0),
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value / T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => value / T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value / T::from_f64(108.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
+                value * T::from_f64(0.5555555555555556)
+            }
+            TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => value / T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value / T::from_f64(6480.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: TemperatureChangeRateUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: TemperatureChangeRateUnit) -> T {
         match unit {
-            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => x,
-            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => (x / 1e-9),
-            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => (x / 1e-6),
-            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => (x / 1e-3),
-            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => (x / 1e-2),
-            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => (x / 1e-1),
-            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => (x / 1e1),
-            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => (x / 1e2),
-            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => (x / 1e3),
-            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => x * 60.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerMinute => x * 60.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => x * 9.0 / 5.0 * 60.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => x * 9.0 / 5.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerSecond => x,
-            TemperatureChangeRateUnit::DegreeCelsiusPerHour => x * 3600.0,
-            TemperatureChangeRateUnit::DegreeKelvinPerHour => x * 3600.0,
-            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => x * 9.0 / 5.0 * 3600.0,
+            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => self.0,
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => self.0 * T::from_f64(1e9),
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
+                self.0 * T::from_f64(1000000.0)
+            }
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => self.0 * T::from_f64(1000.0),
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => self.0 * T::from_f64(100.0),
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => self.0 * T::from_f64(10.0),
+            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => self.0 / T::from_f64(10.0),
+            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => self.0 / T::from_f64(100.0),
+            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => self.0 / T::from_f64(1000.0),
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => self.0 * T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => self.0 * T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => self.0 * T::from_f64(108.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
+                self.0 / T::from_f64(0.5555555555555556)
+            }
+            TemperatureChangeRateUnit::DegreeKelvinPerSecond => self.0,
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => self.0 * T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => self.0 * T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => self.0 * T::from_f64(6480.0),
         }
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesCelsiusPerSecond (`°C/s`).
     #[inline]
-    pub fn from_degrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_degrees_celsius_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerSecond (`°C/s`).
     #[inline]
-    pub fn as_degrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_degrees_celsius_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_second`].
     #[inline]
-    pub fn as_degree_celsius_per_second(self) -> Num {
+    pub fn as_degree_celsius_per_second(self) -> T {
         self.as_degrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in NanodegreesCelsiusPerSecond (`n°C/s`).
     #[inline]
-    pub fn from_nanodegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanodegrees_celsius_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanodegreesCelsiusPerSecond (`n°C/s`).
     #[inline]
-    pub fn as_nanodegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanodegrees_celsius_per_second(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanodegrees_celsius_per_second`].
     #[inline]
-    pub fn as_nanodegree_celsius_per_second(self) -> Num {
+    pub fn as_nanodegree_celsius_per_second(self) -> T {
         self.as_nanodegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in MicrodegreesCelsiusPerSecond (`µ°C/s`).
     #[inline]
-    pub fn from_microdegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microdegrees_celsius_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrodegreesCelsiusPerSecond (`µ°C/s`).
     #[inline]
-    pub fn as_microdegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microdegrees_celsius_per_second(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microdegrees_celsius_per_second`].
     #[inline]
-    pub fn as_microdegree_celsius_per_second(self) -> Num {
+    pub fn as_microdegree_celsius_per_second(self) -> T {
         self.as_microdegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in MillidegreesCelsiusPerSecond (`m°C/s`).
     #[inline]
-    pub fn from_millidegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millidegrees_celsius_per_second(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillidegreesCelsiusPerSecond (`m°C/s`).
     #[inline]
-    pub fn as_millidegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millidegrees_celsius_per_second(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millidegrees_celsius_per_second`].
     #[inline]
-    pub fn as_millidegree_celsius_per_second(self) -> Num {
+    pub fn as_millidegree_celsius_per_second(self) -> T {
         self.as_millidegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in CentidegreesCelsiusPerSecond (`c°C/s`).
     #[inline]
-    pub fn from_centidegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centidegrees_celsius_per_second(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in CentidegreesCelsiusPerSecond (`c°C/s`).
     #[inline]
-    pub fn as_centidegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centidegrees_celsius_per_second(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centidegrees_celsius_per_second`].
     #[inline]
-    pub fn as_centidegree_celsius_per_second(self) -> Num {
+    pub fn as_centidegree_celsius_per_second(self) -> T {
         self.as_centidegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DecidegreesCelsiusPerSecond (`d°C/s`).
     #[inline]
-    pub fn from_decidegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decidegrees_celsius_per_second(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecidegreesCelsiusPerSecond (`d°C/s`).
     #[inline]
-    pub fn as_decidegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decidegrees_celsius_per_second(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decidegrees_celsius_per_second`].
     #[inline]
-    pub fn as_decidegree_celsius_per_second(self) -> Num {
+    pub fn as_decidegree_celsius_per_second(self) -> T {
         self.as_decidegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DecadegreesCelsiusPerSecond (`da°C/s`).
     #[inline]
-    pub fn from_decadegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decadegrees_celsius_per_second(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecadegreesCelsiusPerSecond (`da°C/s`).
     #[inline]
-    pub fn as_decadegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decadegrees_celsius_per_second(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decadegrees_celsius_per_second`].
     #[inline]
-    pub fn as_decadegree_celsius_per_second(self) -> Num {
+    pub fn as_decadegree_celsius_per_second(self) -> T {
         self.as_decadegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in HectodegreesCelsiusPerSecond (`h°C/s`).
     #[inline]
-    pub fn from_hectodegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e2))
+    pub fn from_hectodegrees_celsius_per_second(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in HectodegreesCelsiusPerSecond (`h°C/s`).
     #[inline]
-    pub fn as_hectodegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e2)
+    pub fn as_hectodegrees_celsius_per_second(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_hectodegrees_celsius_per_second`].
     #[inline]
-    pub fn as_hectodegree_celsius_per_second(self) -> Num {
+    pub fn as_hectodegree_celsius_per_second(self) -> T {
         self.as_hectodegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in KilodegreesCelsiusPerSecond (`k°C/s`).
     #[inline]
-    pub fn from_kilodegrees_celsius_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilodegrees_celsius_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilodegreesCelsiusPerSecond (`k°C/s`).
     #[inline]
-    pub fn as_kilodegrees_celsius_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilodegrees_celsius_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilodegrees_celsius_per_second`].
     #[inline]
-    pub fn as_kilodegree_celsius_per_second(self) -> Num {
+    pub fn as_kilodegree_celsius_per_second(self) -> T {
         self.as_kilodegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesCelsiusPerMinute (`°C/min`).
     #[inline]
-    pub fn from_degrees_celsius_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_degrees_celsius_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in DegreesCelsiusPerMinute (`°C/min`).
     #[inline]
-    pub fn as_degrees_celsius_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_degrees_celsius_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_minute`].
     #[inline]
-    pub fn as_degree_celsius_per_minute(self) -> Num {
+    pub fn as_degree_celsius_per_minute(self) -> T {
         self.as_degrees_celsius_per_minute()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerMinute (`K/min`).
     #[inline]
-    pub fn from_degrees_kelvin_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_degrees_kelvin_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in DegreesKelvinPerMinute (`K/min`).
     #[inline]
-    pub fn as_degrees_kelvin_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_degrees_kelvin_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_degrees_kelvin_per_minute`].
     #[inline]
-    pub fn as_degree_kelvin_per_minute(self) -> Num {
+    pub fn as_degree_kelvin_per_minute(self) -> T {
         self.as_degrees_kelvin_per_minute()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerMinute (`°F/min`).
     #[inline]
-    pub fn from_degrees_fahrenheit_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 9.0 / 60.0)
+    pub fn from_degrees_fahrenheit_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(108.0))
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerMinute (`°F/min`).
     #[inline]
-    pub fn as_degrees_fahrenheit_per_minute(self) -> Num {
-        let x = self.0;
-        x * 9.0 / 5.0 * 60.0
+    pub fn as_degrees_fahrenheit_per_minute(self) -> T {
+        self.0 * T::from_f64(108.0)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_minute`].
     #[inline]
-    pub fn as_degree_fahrenheit_per_minute(self) -> Num {
+    pub fn as_degree_fahrenheit_per_minute(self) -> T {
         self.as_degrees_fahrenheit_per_minute()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerSecond (`°F/s`).
     #[inline]
-    pub fn from_degrees_fahrenheit_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 9.0)
+    pub fn from_degrees_fahrenheit_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.5555555555555556))
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerSecond (`°F/s`).
     #[inline]
-    pub fn as_degrees_fahrenheit_per_second(self) -> Num {
-        let x = self.0;
-        x * 9.0 / 5.0
+    pub fn as_degrees_fahrenheit_per_second(self) -> T {
+        self.0 / T::from_f64(0.5555555555555556)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_second`].
     #[inline]
-    pub fn as_degree_fahrenheit_per_second(self) -> Num {
+    pub fn as_degree_fahrenheit_per_second(self) -> T {
         self.as_degrees_fahrenheit_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerSecond (`K/s`).
     #[inline]
-    pub fn from_degrees_kelvin_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_degrees_kelvin_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DegreesKelvinPerSecond (`K/s`).
     #[inline]
-    pub fn as_degrees_kelvin_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_degrees_kelvin_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_degrees_kelvin_per_second`].
     #[inline]
-    pub fn as_degree_kelvin_per_second(self) -> Num {
+    pub fn as_degree_kelvin_per_second(self) -> T {
         self.as_degrees_kelvin_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesCelsiusPerHour (`°C/h`).
     #[inline]
-    pub fn from_degrees_celsius_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_degrees_celsius_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in DegreesCelsiusPerHour (`°C/h`).
     #[inline]
-    pub fn as_degrees_celsius_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_degrees_celsius_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_hour`].
     #[inline]
-    pub fn as_degree_celsius_per_hour(self) -> Num {
+    pub fn as_degree_celsius_per_hour(self) -> T {
         self.as_degrees_celsius_per_hour()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerHour (`K/h`).
     #[inline]
-    pub fn from_degrees_kelvin_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_degrees_kelvin_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in DegreesKelvinPerHour (`K/h`).
     #[inline]
-    pub fn as_degrees_kelvin_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_degrees_kelvin_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_degrees_kelvin_per_hour`].
     #[inline]
-    pub fn as_degree_kelvin_per_hour(self) -> Num {
+    pub fn as_degree_kelvin_per_hour(self) -> T {
         self.as_degrees_kelvin_per_hour()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerHour (`°F/h`).
     #[inline]
-    pub fn from_degrees_fahrenheit_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 5.0 / 9.0 / 3600.0)
+    pub fn from_degrees_fahrenheit_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(6480.0))
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerHour (`°F/h`).
     #[inline]
-    pub fn as_degrees_fahrenheit_per_hour(self) -> Num {
-        let x = self.0;
-        x * 9.0 / 5.0 * 3600.0
+    pub fn as_degrees_fahrenheit_per_hour(self) -> T {
+        self.0 * T::from_f64(6480.0)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_hour`].
     #[inline]
-    pub fn as_degree_fahrenheit_per_hour(self) -> Num {
+    pub fn as_degree_fahrenheit_per_hour(self) -> T {
         self.as_degrees_fahrenheit_per_hour()
     }
-}
-
-impl crate::Quantity for TemperatureChangeRate {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for TemperatureChangeRate {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for TemperatureChangeRate {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for TemperatureChangeRate {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for TemperatureChangeRate {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<TemperatureChangeRate> for Num {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn mul(self, rhs: TemperatureChangeRate) -> TemperatureChangeRate {
-        TemperatureChangeRate(self * rhs.0)
-    }
-}
-impl Div<Num> for TemperatureChangeRate {
-    type Output = TemperatureChangeRate;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for TemperatureChangeRate {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for TemperatureChangeRate {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            TemperatureChangeRateUnit::DegreeCelsiusPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`TemperatureChangeRate`].
-#[derive(Debug)]
-pub struct ParseTemperatureChangeRateError(String);
-
-impl fmt::Display for ParseTemperatureChangeRateError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as TemperatureChangeRate", self.0)
-    }
-}
-
-impl std::error::Error for ParseTemperatureChangeRateError {}
-
-impl FromStr for TemperatureChangeRate {
-    type Err = ParseTemperatureChangeRateError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseTemperatureChangeRateError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, TemperatureChangeRateUnit)] = &[
-            (
-                "da°C/s",
-                TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond,
-            ),
-            ("°C/min", TemperatureChangeRateUnit::DegreeCelsiusPerMinute),
-            (
-                "°F/min",
-                TemperatureChangeRateUnit::DegreeFahrenheitPerMinute,
-            ),
-            (
-                "µ°C/s",
-                TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond,
-            ),
-            (
-                "c°C/s",
-                TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond,
-            ),
-            (
-                "d°C/s",
-                TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond,
-            ),
-            (
-                "h°C/s",
-                TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond,
-            ),
-            (
-                "k°C/s",
-                TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond,
-            ),
-            (
-                "m°C/s",
-                TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond,
-            ),
-            (
-                "n°C/s",
-                TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond,
-            ),
-            ("K/min", TemperatureChangeRateUnit::DegreeKelvinPerMinute),
-            ("°C/h", TemperatureChangeRateUnit::DegreeCelsiusPerHour),
-            ("°C/s", TemperatureChangeRateUnit::DegreeCelsiusPerSecond),
-            ("°F/h", TemperatureChangeRateUnit::DegreeFahrenheitPerHour),
-            ("°F/s", TemperatureChangeRateUnit::DegreeFahrenheitPerSecond),
-            ("K/h", TemperatureChangeRateUnit::DegreeKelvinPerHour),
-            ("K/s", TemperatureChangeRateUnit::DegreeKelvinPerSecond),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseTemperatureChangeRateError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

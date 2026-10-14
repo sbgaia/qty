@@ -2,27 +2,39 @@
 // Source: data/quantities/ThermalInsulance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Thermal insulance (R-value) is a measure of a material's resistance to the heat current. It quantifies how effectively a material can resist the transfer of heat through conduction, convection, and radiation. It has the units square metre kelvins per watt (m2⋅K/W) in SI units or square foot degree Fahrenheit–hours per British thermal unit (ft2⋅°F⋅h/Btu) in imperial units. The higher the thermal insulance, the better a material insulates against heat transfer. It is commonly used in construction to assess the insulation properties of materials such as walls, roofs, and insulation products.
 ///
-/// The internal value is stored in `SquareMeterKelvinPerKilowatt` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ThermalInsulance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ThermalInsulance<T = f64>(T);
+
+quantity!(
+    ThermalInsulance,
+    ThermalInsulanceUnit,
+    SquareMeterKelvinPerKilowatt
+);
 
 /// Unit variants for [`ThermalInsulance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ThermalInsulanceUnit {
     SquareMeterKelvinPerKilowatt,
     SquareMeterKelvinPerWatt,
@@ -47,7 +59,7 @@ impl ThermalInsulanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::SquareMeterKelvinPerKilowatt => "m²K/kW",
             Self::SquareMeterKelvinPerWatt => "m²K/W",
@@ -59,9 +71,9 @@ impl ThermalInsulanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::SquareMeterKelvinPerKilowatt => &["m²K/kW"],
             Self::SquareMeterKelvinPerWatt => &["m²K/W"],
@@ -74,340 +86,188 @@ impl ThermalInsulanceUnit {
     }
 }
 
-impl ThermalInsulance {
+impl core::str::FromStr for ThermalInsulanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "m²K/kW" => Ok(Self::SquareMeterKelvinPerKilowatt),
+            "m²K/W" => Ok(Self::SquareMeterKelvinPerWatt),
+            "m²°C/W" => Ok(Self::SquareMeterDegreeCelsiusPerWatt),
+            "cm²K/W" => Ok(Self::SquareCentimeterKelvinPerWatt),
+            "mm²K/W" => Ok(Self::SquareMillimeterKelvinPerWatt),
+            "cm²Hr°C/kcal" => Ok(Self::SquareCentimeterHourDegreeCelsiusPerKilocalorie),
+            "Hrft²°F/Btu" => Ok(Self::HourSquareFeetDegreeFahrenheitPerBtu),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ThermalInsulance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ThermalInsulanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ThermalInsulanceUnit) -> Self {
         Self(match unit {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => x,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => x * 1000.0,
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => x * 1000.0,
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => x * 0.1,
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => x * 0.001,
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value * T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value * T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / T::from_f64(10.0),
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / T::from_f64(1000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                x * (0.0001 * 3600.0) / 4.184
+                value * T::from_f64(0.08604206500956023)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                x * (1000.0 * 0.3048 * 0.3048 * 3600.0) / (1055.05585262 * 1.8)
+                value * T::from_f64(176.11018368230583)
             }
         })
     }
 
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ThermalInsulanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ThermalInsulanceUnit) -> T {
         match unit {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => x,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => x / 1000.0,
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => x / 1000.0,
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => x / 0.1,
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => x / 0.001,
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => self.0,
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => self.0 / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => self.0 / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => self.0 * T::from_f64(10.0),
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => self.0 * T::from_f64(1000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                x * 4.184 / (0.0001 * 3600.0)
+                self.0 / T::from_f64(0.08604206500956023)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                x * (1055.05585262 * 1.8) / (1000.0 * 0.3048 * 0.3048 * 3600.0)
+                self.0 / T::from_f64(176.11018368230583)
             }
         }
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerKilowatt (`m²K/kW`).
     #[inline]
-    pub fn from_square_meter_kelvins_per_kilowatt(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_square_meter_kelvins_per_kilowatt(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in SquareMeterKelvinsPerKilowatt (`m²K/kW`).
     #[inline]
-    pub fn as_square_meter_kelvins_per_kilowatt(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_square_meter_kelvins_per_kilowatt(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_square_meter_kelvins_per_kilowatt`].
     #[inline]
-    pub fn as_square_meter_kelvin_per_kilowatt(self) -> Num {
+    pub fn as_square_meter_kelvin_per_kilowatt(self) -> T {
         self.as_square_meter_kelvins_per_kilowatt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerWatt (`m²K/W`).
     #[inline]
-    pub fn from_square_meter_kelvins_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x * 1000.0)
+    pub fn from_square_meter_kelvins_per_watt(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in SquareMeterKelvinsPerWatt (`m²K/W`).
     #[inline]
-    pub fn as_square_meter_kelvins_per_watt(self) -> Num {
-        let x = self.0;
-        x / 1000.0
+    pub fn as_square_meter_kelvins_per_watt(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_square_meter_kelvins_per_watt`].
     #[inline]
-    pub fn as_square_meter_kelvin_per_watt(self) -> Num {
+    pub fn as_square_meter_kelvin_per_watt(self) -> T {
         self.as_square_meter_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterDegreesCelsiusPerWatt (`m²°C/W`).
     #[inline]
-    pub fn from_square_meter_degrees_celsius_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x * 1000.0)
+    pub fn from_square_meter_degrees_celsius_per_watt(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in SquareMeterDegreesCelsiusPerWatt (`m²°C/W`).
     #[inline]
-    pub fn as_square_meter_degrees_celsius_per_watt(self) -> Num {
-        let x = self.0;
-        x / 1000.0
+    pub fn as_square_meter_degrees_celsius_per_watt(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_square_meter_degrees_celsius_per_watt`].
     #[inline]
-    pub fn as_square_meter_degree_celsius_per_watt(self) -> Num {
+    pub fn as_square_meter_degree_celsius_per_watt(self) -> T {
         self.as_square_meter_degrees_celsius_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterKelvinsPerWatt (`cm²K/W`).
     #[inline]
-    pub fn from_square_centimeter_kelvins_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.1)
+    pub fn from_square_centimeter_kelvins_per_watt(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in SquareCentimeterKelvinsPerWatt (`cm²K/W`).
     #[inline]
-    pub fn as_square_centimeter_kelvins_per_watt(self) -> Num {
-        let x = self.0;
-        x / 0.1
+    pub fn as_square_centimeter_kelvins_per_watt(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_square_centimeter_kelvins_per_watt`].
     #[inline]
-    pub fn as_square_centimeter_kelvin_per_watt(self) -> Num {
+    pub fn as_square_centimeter_kelvin_per_watt(self) -> T {
         self.as_square_centimeter_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMillimeterKelvinsPerWatt (`mm²K/W`).
     #[inline]
-    pub fn from_square_millimeter_kelvins_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.001)
+    pub fn from_square_millimeter_kelvins_per_watt(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in SquareMillimeterKelvinsPerWatt (`mm²K/W`).
     #[inline]
-    pub fn as_square_millimeter_kelvins_per_watt(self) -> Num {
-        let x = self.0;
-        x / 0.001
+    pub fn as_square_millimeter_kelvins_per_watt(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_square_millimeter_kelvins_per_watt`].
     #[inline]
-    pub fn as_square_millimeter_kelvin_per_watt(self) -> Num {
+    pub fn as_square_millimeter_kelvin_per_watt(self) -> T {
         self.as_square_millimeter_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterHourDegreesCelsiusPerKilocalorie (`cm²Hr°C/kcal`).
     #[inline]
-    pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: Num) -> Self {
-        let x = value;
-        Self(x * (0.0001 * 3600.0) / 4.184)
+    pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: T) -> Self {
+        Self(value * T::from_f64(0.08604206500956023))
     }
 
     /// Returns the value expressed in SquareCentimeterHourDegreesCelsiusPerKilocalorie (`cm²Hr°C/kcal`).
     #[inline]
-    pub fn as_square_centimeter_hour_degrees_celsius_per_kilocalorie(self) -> Num {
-        let x = self.0;
-        x * 4.184 / (0.0001 * 3600.0)
+    pub fn as_square_centimeter_hour_degrees_celsius_per_kilocalorie(self) -> T {
+        self.0 / T::from_f64(0.08604206500956023)
     }
 
     /// Alias for [`Self::as_square_centimeter_hour_degrees_celsius_per_kilocalorie`].
     #[inline]
-    pub fn as_square_centimeter_hour_degree_celsius_per_kilocalorie(self) -> Num {
+    pub fn as_square_centimeter_hour_degree_celsius_per_kilocalorie(self) -> T {
         self.as_square_centimeter_hour_degrees_celsius_per_kilocalorie()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in HourSquareFeetDegreesFahrenheitPerBtu (`Hrft²°F/Btu`).
     #[inline]
-    pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: Num) -> Self {
-        let x = value;
-        Self(x * (1000.0 * 0.3048 * 0.3048 * 3600.0) / (1055.05585262 * 1.8))
+    pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: T) -> Self {
+        Self(value * T::from_f64(176.11018368230583))
     }
 
     /// Returns the value expressed in HourSquareFeetDegreesFahrenheitPerBtu (`Hrft²°F/Btu`).
     #[inline]
-    pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> Num {
-        let x = self.0;
-        x * (1055.05585262 * 1.8) / (1000.0 * 0.3048 * 0.3048 * 3600.0)
+    pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> T {
+        self.0 / T::from_f64(176.11018368230583)
     }
 
     /// Alias for [`Self::as_hour_square_feet_degrees_fahrenheit_per_btu`].
     #[inline]
-    pub fn as_hour_square_feet_degree_fahrenheit_per_btu(self) -> Num {
+    pub fn as_hour_square_feet_degree_fahrenheit_per_btu(self) -> T {
         self.as_hour_square_feet_degrees_fahrenheit_per_btu()
     }
-}
-
-impl crate::Quantity for ThermalInsulance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ThermalInsulance {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ThermalInsulance {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ThermalInsulance {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ThermalInsulance {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ThermalInsulance> for Num {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn mul(self, rhs: ThermalInsulance) -> ThermalInsulance {
-        ThermalInsulance(self * rhs.0)
-    }
-}
-impl Div<Num> for ThermalInsulance {
-    type Output = ThermalInsulance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ThermalInsulance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ThermalInsulance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ThermalInsulance`].
-#[derive(Debug)]
-pub struct ParseThermalInsulanceError(String);
-
-impl fmt::Display for ParseThermalInsulanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ThermalInsulance", self.0)
-    }
-}
-
-impl std::error::Error for ParseThermalInsulanceError {}
-
-impl FromStr for ThermalInsulance {
-    type Err = ParseThermalInsulanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseThermalInsulanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ThermalInsulanceUnit)] = &[
-            (
-                "cm²Hr°C/kcal",
-                ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie,
-            ),
-            (
-                "Hrft²°F/Btu",
-                ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu,
-            ),
-            (
-                "m²°C/W",
-                ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt,
-            ),
-            (
-                "cm²K/W",
-                ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt,
-            ),
-            (
-                "mm²K/W",
-                ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt,
-            ),
-            ("m²K/kW", ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt),
-            ("m²K/W", ThermalInsulanceUnit::SquareMeterKelvinPerWatt),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseThermalInsulanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

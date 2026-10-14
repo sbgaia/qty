@@ -2,27 +2,35 @@
 // Source: data/quantities/Irradiance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Irradiance is the intensity of ultraviolet (UV) or visible light incident on a surface.
 ///
-/// The internal value is stored in `WattPerSquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Irradiance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`IrradianceUnit::WattPerSquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Irradiance<T = f64>(T);
+
+quantity!(Irradiance, IrradianceUnit, WattPerSquareMeter);
 
 /// Unit variants for [`Irradiance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum IrradianceUnit {
     WattPerSquareMeter,
     PicowattPerSquareMeter,
@@ -61,7 +69,7 @@ impl IrradianceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerSquareMeter => "W/m²",
             Self::PicowattPerSquareMeter => "pW/m²",
@@ -80,9 +88,9 @@ impl IrradianceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerSquareMeter => &["W/m²"],
             Self::PicowattPerSquareMeter => &["pW/m²"],
@@ -102,478 +110,327 @@ impl IrradianceUnit {
     }
 }
 
-impl Irradiance {
+impl core::str::FromStr for IrradianceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "W/m²" => Ok(Self::WattPerSquareMeter),
+            "pW/m²" => Ok(Self::PicowattPerSquareMeter),
+            "nW/m²" => Ok(Self::NanowattPerSquareMeter),
+            "µW/m²" => Ok(Self::MicrowattPerSquareMeter),
+            "mW/m²" => Ok(Self::MilliwattPerSquareMeter),
+            "kW/m²" => Ok(Self::KilowattPerSquareMeter),
+            "MW/m²" => Ok(Self::MegawattPerSquareMeter),
+            "W/cm²" => Ok(Self::WattPerSquareCentimeter),
+            "pW/cm²" => Ok(Self::PicowattPerSquareCentimeter),
+            "nW/cm²" => Ok(Self::NanowattPerSquareCentimeter),
+            "µW/cm²" => Ok(Self::MicrowattPerSquareCentimeter),
+            "mW/cm²" => Ok(Self::MilliwattPerSquareCentimeter),
+            "kW/cm²" => Ok(Self::KilowattPerSquareCentimeter),
+            "MW/cm²" => Ok(Self::MegawattPerSquareCentimeter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Irradiance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: IrradianceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: IrradianceUnit) -> Self {
         Self(match unit {
-            IrradianceUnit::WattPerSquareMeter => x,
-            IrradianceUnit::PicowattPerSquareMeter => (x * 1e-12),
-            IrradianceUnit::NanowattPerSquareMeter => (x * 1e-9),
-            IrradianceUnit::MicrowattPerSquareMeter => (x * 1e-6),
-            IrradianceUnit::MilliwattPerSquareMeter => (x * 1e-3),
-            IrradianceUnit::KilowattPerSquareMeter => (x * 1e3),
-            IrradianceUnit::MegawattPerSquareMeter => (x * 1e6),
-            IrradianceUnit::WattPerSquareCentimeter => x * 10000.0,
-            IrradianceUnit::PicowattPerSquareCentimeter => (x * 1e-12) * 10000.0,
-            IrradianceUnit::NanowattPerSquareCentimeter => (x * 1e-9) * 10000.0,
-            IrradianceUnit::MicrowattPerSquareCentimeter => (x * 1e-6) * 10000.0,
-            IrradianceUnit::MilliwattPerSquareCentimeter => (x * 1e-3) * 10000.0,
-            IrradianceUnit::KilowattPerSquareCentimeter => (x * 1e3) * 10000.0,
-            IrradianceUnit::MegawattPerSquareCentimeter => (x * 1e6) * 10000.0,
+            IrradianceUnit::WattPerSquareMeter => value,
+            IrradianceUnit::PicowattPerSquareMeter => value / T::from_f64(1e12),
+            IrradianceUnit::NanowattPerSquareMeter => value / T::from_f64(1e9),
+            IrradianceUnit::MicrowattPerSquareMeter => value / T::from_f64(1000000.0),
+            IrradianceUnit::MilliwattPerSquareMeter => value / T::from_f64(1000.0),
+            IrradianceUnit::KilowattPerSquareMeter => value * T::from_f64(1000.0),
+            IrradianceUnit::MegawattPerSquareMeter => value * T::from_f64(1000000.0),
+            IrradianceUnit::WattPerSquareCentimeter => value * T::from_f64(10000.0),
+            IrradianceUnit::PicowattPerSquareCentimeter => value / T::from_f64(1e8),
+            IrradianceUnit::NanowattPerSquareCentimeter => value / T::from_f64(100000.0),
+            IrradianceUnit::MicrowattPerSquareCentimeter => value / T::from_f64(100.0),
+            IrradianceUnit::MilliwattPerSquareCentimeter => value * T::from_f64(10.0),
+            IrradianceUnit::KilowattPerSquareCentimeter => value * T::from_f64(1e7),
+            IrradianceUnit::MegawattPerSquareCentimeter => value * T::from_f64(1e10),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: IrradianceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: IrradianceUnit) -> T {
         match unit {
-            IrradianceUnit::WattPerSquareMeter => x,
-            IrradianceUnit::PicowattPerSquareMeter => (x / 1e-12),
-            IrradianceUnit::NanowattPerSquareMeter => (x / 1e-9),
-            IrradianceUnit::MicrowattPerSquareMeter => (x / 1e-6),
-            IrradianceUnit::MilliwattPerSquareMeter => (x / 1e-3),
-            IrradianceUnit::KilowattPerSquareMeter => (x / 1e3),
-            IrradianceUnit::MegawattPerSquareMeter => (x / 1e6),
-            IrradianceUnit::WattPerSquareCentimeter => x * 0.0001,
-            IrradianceUnit::PicowattPerSquareCentimeter => (x / 1e-12) * 0.0001,
-            IrradianceUnit::NanowattPerSquareCentimeter => (x / 1e-9) * 0.0001,
-            IrradianceUnit::MicrowattPerSquareCentimeter => (x / 1e-6) * 0.0001,
-            IrradianceUnit::MilliwattPerSquareCentimeter => (x / 1e-3) * 0.0001,
-            IrradianceUnit::KilowattPerSquareCentimeter => (x / 1e3) * 0.0001,
-            IrradianceUnit::MegawattPerSquareCentimeter => (x / 1e6) * 0.0001,
+            IrradianceUnit::WattPerSquareMeter => self.0,
+            IrradianceUnit::PicowattPerSquareMeter => self.0 * T::from_f64(1e12),
+            IrradianceUnit::NanowattPerSquareMeter => self.0 * T::from_f64(1e9),
+            IrradianceUnit::MicrowattPerSquareMeter => self.0 * T::from_f64(1000000.0),
+            IrradianceUnit::MilliwattPerSquareMeter => self.0 * T::from_f64(1000.0),
+            IrradianceUnit::KilowattPerSquareMeter => self.0 / T::from_f64(1000.0),
+            IrradianceUnit::MegawattPerSquareMeter => self.0 / T::from_f64(1000000.0),
+            IrradianceUnit::WattPerSquareCentimeter => self.0 / T::from_f64(10000.0),
+            IrradianceUnit::PicowattPerSquareCentimeter => self.0 * T::from_f64(1e8),
+            IrradianceUnit::NanowattPerSquareCentimeter => self.0 * T::from_f64(100000.0),
+            IrradianceUnit::MicrowattPerSquareCentimeter => self.0 * T::from_f64(100.0),
+            IrradianceUnit::MilliwattPerSquareCentimeter => self.0 / T::from_f64(10.0),
+            IrradianceUnit::KilowattPerSquareCentimeter => self.0 / T::from_f64(1e7),
+            IrradianceUnit::MegawattPerSquareCentimeter => self.0 / T::from_f64(1e10),
         }
     }
 
     /// Creates a [`Irradiance`] from a value in WattsPerSquareMeter (`W/m²`).
     #[inline]
-    pub fn from_watts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_watts_per_square_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in WattsPerSquareMeter (`W/m²`).
     #[inline]
-    pub fn as_watts_per_square_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_watts_per_square_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_watts_per_square_meter`].
     #[inline]
-    pub fn as_watt_per_square_meter(self) -> Num {
+    pub fn as_watt_per_square_meter(self) -> T {
         self.as_watts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareMeter (`pW/m²`).
     #[inline]
-    pub fn from_picowatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picowatts_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in PicowattsPerSquareMeter (`pW/m²`).
     #[inline]
-    pub fn as_picowatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picowatts_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picowatts_per_square_meter`].
     #[inline]
-    pub fn as_picowatt_per_square_meter(self) -> Num {
+    pub fn as_picowatt_per_square_meter(self) -> T {
         self.as_picowatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
-    pub fn from_nanowatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanowatts_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanowattsPerSquareMeter (`nW/m²`).
     #[inline]
-    pub fn as_nanowatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanowatts_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanowatts_per_square_meter`].
     #[inline]
-    pub fn as_nanowatt_per_square_meter(self) -> Num {
+    pub fn as_nanowatt_per_square_meter(self) -> T {
         self.as_nanowatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
-    pub fn from_microwatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microwatts_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
-    pub fn as_microwatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microwatts_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microwatts_per_square_meter`].
     #[inline]
-    pub fn as_microwatt_per_square_meter(self) -> Num {
+    pub fn as_microwatt_per_square_meter(self) -> T {
         self.as_microwatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
-    pub fn from_milliwatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliwatts_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilliwattsPerSquareMeter (`mW/m²`).
     #[inline]
-    pub fn as_milliwatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliwatts_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliwatts_per_square_meter`].
     #[inline]
-    pub fn as_milliwatt_per_square_meter(self) -> Num {
+    pub fn as_milliwatt_per_square_meter(self) -> T {
         self.as_milliwatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
-    pub fn from_kilowatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilowatts_per_square_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
-    pub fn as_kilowatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilowatts_per_square_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilowatts_per_square_meter`].
     #[inline]
-    pub fn as_kilowatt_per_square_meter(self) -> Num {
+    pub fn as_kilowatt_per_square_meter(self) -> T {
         self.as_kilowatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareMeter (`MW/m²`).
     #[inline]
-    pub fn from_megawatts_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megawatts_per_square_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegawattsPerSquareMeter (`MW/m²`).
     #[inline]
-    pub fn as_megawatts_per_square_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megawatts_per_square_meter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megawatts_per_square_meter`].
     #[inline]
-    pub fn as_megawatt_per_square_meter(self) -> Num {
+    pub fn as_megawatt_per_square_meter(self) -> T {
         self.as_megawatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in WattsPerSquareCentimeter (`W/cm²`).
     #[inline]
-    pub fn from_watts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 10000.0)
+    pub fn from_watts_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in WattsPerSquareCentimeter (`W/cm²`).
     #[inline]
-    pub fn as_watts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        x * 0.0001
+    pub fn as_watts_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_watts_per_square_centimeter`].
     #[inline]
-    pub fn as_watt_per_square_centimeter(self) -> Num {
+    pub fn as_watt_per_square_centimeter(self) -> T {
         self.as_watts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareCentimeter (`pW/cm²`).
     #[inline]
-    pub fn from_picowatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) * 10000.0)
+    pub fn from_picowatts_per_square_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(1e8))
     }
 
     /// Returns the value expressed in PicowattsPerSquareCentimeter (`pW/cm²`).
     #[inline]
-    pub fn as_picowatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 0.0001
+    pub fn as_picowatts_per_square_centimeter(self) -> T {
+        self.0 * T::from_f64(1e8)
     }
 
     /// Alias for [`Self::as_picowatts_per_square_centimeter`].
     #[inline]
-    pub fn as_picowatt_per_square_centimeter(self) -> Num {
+    pub fn as_picowatt_per_square_centimeter(self) -> T {
         self.as_picowatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareCentimeter (`nW/cm²`).
     #[inline]
-    pub fn from_nanowatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 10000.0)
+    pub fn from_nanowatts_per_square_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in NanowattsPerSquareCentimeter (`nW/cm²`).
     #[inline]
-    pub fn as_nanowatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 0.0001
+    pub fn as_nanowatts_per_square_centimeter(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_nanowatts_per_square_centimeter`].
     #[inline]
-    pub fn as_nanowatt_per_square_centimeter(self) -> Num {
+    pub fn as_nanowatt_per_square_centimeter(self) -> T {
         self.as_nanowatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareCentimeter (`µW/cm²`).
     #[inline]
-    pub fn from_microwatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 10000.0)
+    pub fn from_microwatts_per_square_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in MicrowattsPerSquareCentimeter (`µW/cm²`).
     #[inline]
-    pub fn as_microwatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 0.0001
+    pub fn as_microwatts_per_square_centimeter(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_microwatts_per_square_centimeter`].
     #[inline]
-    pub fn as_microwatt_per_square_centimeter(self) -> Num {
+    pub fn as_microwatt_per_square_centimeter(self) -> T {
         self.as_microwatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareCentimeter (`mW/cm²`).
     #[inline]
-    pub fn from_milliwatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 10000.0)
+    pub fn from_milliwatts_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in MilliwattsPerSquareCentimeter (`mW/cm²`).
     #[inline]
-    pub fn as_milliwatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 0.0001
+    pub fn as_milliwatts_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_milliwatts_per_square_centimeter`].
     #[inline]
-    pub fn as_milliwatt_per_square_centimeter(self) -> Num {
+    pub fn as_milliwatt_per_square_centimeter(self) -> T {
         self.as_milliwatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareCentimeter (`kW/cm²`).
     #[inline]
-    pub fn from_kilowatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 10000.0)
+    pub fn from_kilowatts_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e7))
     }
 
     /// Returns the value expressed in KilowattsPerSquareCentimeter (`kW/cm²`).
     #[inline]
-    pub fn as_kilowatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.0001
+    pub fn as_kilowatts_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(1e7)
     }
 
     /// Alias for [`Self::as_kilowatts_per_square_centimeter`].
     #[inline]
-    pub fn as_kilowatt_per_square_centimeter(self) -> Num {
+    pub fn as_kilowatt_per_square_centimeter(self) -> T {
         self.as_kilowatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareCentimeter (`MW/cm²`).
     #[inline]
-    pub fn from_megawatts_per_square_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 10000.0)
+    pub fn from_megawatts_per_square_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e10))
     }
 
     /// Returns the value expressed in MegawattsPerSquareCentimeter (`MW/cm²`).
     #[inline]
-    pub fn as_megawatts_per_square_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 0.0001
+    pub fn as_megawatts_per_square_centimeter(self) -> T {
+        self.0 / T::from_f64(1e10)
     }
 
     /// Alias for [`Self::as_megawatts_per_square_centimeter`].
     #[inline]
-    pub fn as_megawatt_per_square_centimeter(self) -> Num {
+    pub fn as_megawatt_per_square_centimeter(self) -> T {
         self.as_megawatts_per_square_centimeter()
     }
-}
-
-impl crate::Quantity for Irradiance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Irradiance {
-    type Output = Irradiance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Irradiance {
-    type Output = Irradiance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Irradiance {
-    type Output = Irradiance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Irradiance {
-    type Output = Irradiance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Irradiance> for Num {
-    type Output = Irradiance;
-    #[inline]
-    fn mul(self, rhs: Irradiance) -> Irradiance {
-        Irradiance(self * rhs.0)
-    }
-}
-impl Div<Num> for Irradiance {
-    type Output = Irradiance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Irradiance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Irradiance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            IrradianceUnit::WattPerSquareMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Irradiance`].
-#[derive(Debug)]
-pub struct ParseIrradianceError(String);
-
-impl fmt::Display for ParseIrradianceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Irradiance", self.0)
-    }
-}
-
-impl std::error::Error for ParseIrradianceError {}
-
-impl FromStr for Irradiance {
-    type Err = ParseIrradianceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseIrradianceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, IrradianceUnit)] = &[
-            ("µW/cm²", IrradianceUnit::MicrowattPerSquareCentimeter),
-            ("MW/cm²", IrradianceUnit::MegawattPerSquareCentimeter),
-            ("kW/cm²", IrradianceUnit::KilowattPerSquareCentimeter),
-            ("mW/cm²", IrradianceUnit::MilliwattPerSquareCentimeter),
-            ("nW/cm²", IrradianceUnit::NanowattPerSquareCentimeter),
-            ("pW/cm²", IrradianceUnit::PicowattPerSquareCentimeter),
-            ("µW/m²", IrradianceUnit::MicrowattPerSquareMeter),
-            ("MW/m²", IrradianceUnit::MegawattPerSquareMeter),
-            ("W/cm²", IrradianceUnit::WattPerSquareCentimeter),
-            ("kW/m²", IrradianceUnit::KilowattPerSquareMeter),
-            ("mW/m²", IrradianceUnit::MilliwattPerSquareMeter),
-            ("nW/m²", IrradianceUnit::NanowattPerSquareMeter),
-            ("pW/m²", IrradianceUnit::PicowattPerSquareMeter),
-            ("W/m²", IrradianceUnit::WattPerSquareMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseIrradianceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

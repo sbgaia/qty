@@ -1,7 +1,8 @@
 //! # unitsnet-rs
 //!
 //! Strongly-typed physical quantities and unit conversions, generated from
-//! [UnitsNet](https://github.com/angularsen/UnitsNet) definition files.
+//! [UnitsNet](https://github.com/angularsen/UnitsNet) definition files, with
+//! **zero runtime overhead** over the bare numbers they wrap.
 //!
 //! ## Quick start
 //!
@@ -12,43 +13,192 @@
 //! let time = Duration::from_hours(0.5);
 //! let speed: Speed = dist / time;
 //!
-//! // Exact comparison operators are available via the derived PartialOrd/PartialEq.
-//! // For floating-point results, prefer the approximate comparison methods from
-//! // the ApproxEq trait, which every quantity type inherits automatically.
-//! #[cfg(not(feature = "f32"))]
-//! assert!(speed.approx_eq_rel(Speed::from_kilometers_per_hour(20.0), 1e-9));
+//! // Exact comparison operators come from the derived PartialEq/PartialOrd.
+//! // For floating-point results, prefer the approximate comparisons from the
+//! // ApproxEq trait, which every float-valued quantity implements.
+//! assert!(speed.approx_eq_rel(Speed::from_kilometers_per_hour(20.0), 1e-12));
 //!
 //! let temp = Temperature::from_degrees_celsius(100.0);
-//! #[cfg(not(feature = "f32"))]
-//! assert!(temp.approx_eq_rel(Temperature::from_degrees_fahrenheit(212.0), 1e-9));
+//! assert!(temp.approx_eq_rel(Temperature::from_degrees_fahrenheit(212.0), 1e-12));
 //! ```
+//!
+//! ## Design
+//!
+//! Every quantity is a `#[repr(transparent)]` newtype over its value in the
+//! quantity's base unit (UnitsNet's choice — usually the coherent SI unit,
+//! see [`Quantity::BASE_UNIT`]), generic over the numeric storage type:
+//!
+//! ```rust
+//! # use unitsnet_rs::*;
+//! assert_eq!(core::mem::size_of::<Length>(), 8);        // Length<f64>
+//! assert_eq!(core::mem::size_of::<Length<f32>>(), 4);
+//! assert_eq!(core::mem::size_of::<Length<i32>>(), 4);
+//! ```
+//!
+//! * **Arithmetic is free.** `a + b`, `a * 2.0`, `Length / Duration` and every
+//!   other operator compiles to the single machine instruction that the bare
+//!   numbers would use — the units exist only in the type system.
+//! * **Conversions cost one operation.** At code-generation time each
+//!   UnitsNet formula (e.g. `{x} * 2.54e-2 / 72.27`) is reduced with exact
+//!   rational arithmetic to a single factor, rounded once to the nearest
+//!   `f64`. Linear units convert with one multiplication or division,
+//!   affine units (°C, °F) with two operations. Whenever the factor or its
+//!   inverse is exactly representable (km ↔ m, h ↔ s, mm ↔ m, …) the
+//!   conversion is correctly rounded.
+//!   Every conversion stays within about one ulp of the exact result, and
+//!   both directions share one rounded constant, so `from_x(v).as_x()`
+//!   returns `v` exactly in the large majority of cases.
+//! * **Any numeric type.** Storage type `T` defaults to `f64`; `f32` works
+//!   everywhere, as does any type implementing [`Float`]. Integers (and any
+//!   other `T`) get arithmetic, comparison, hashing and the cross-quantity
+//!   operators whose base units are coherent, all working in base units.
+//! * **Bulk data without copies.** Because of `#[repr(transparent)]`, a
+//!   `&[f64]` of metres can be viewed as `&[Length]` and back for free, so
+//!   typed code can feed SIMD kernels or I/O buffers directly.
+//! * **`no_std`, no dependencies, no allocation** (serde is optional).
+//!
+//! ### Different numeric types
+//!
+//! ```rust
+//! use unitsnet_rs::*;
+//!
+//! // f32 storage: half the memory, ~7 significant digits.
+//! let l: Length<f32> = Length::from_feet(3.0);
+//! assert!(l.approx_eq_rel(Length::from_inches(36.0), 1e-6));
+//!
+//! // Integer storage: exact base-unit arithmetic, plus Eq/Ord/Hash.
+//! let a = Mass::<i64>::from_base(1_500); // kilograms
+//! let b = Mass::from_base(500_i64);
+//! assert_eq!(a + b, Mass::from_base(2_000));
+//! assert!(a > b);
+//! let force: Force<i64> = a * Acceleration::from_base(2); // kg · m/s² = N
+//! assert_eq!(force.as_base(), 3_000);
+//!
+//! // Lossless widening of the storage type.
+//! let wide: Mass<f64> = Mass::<i32>::from_base(3).cast();
+//! assert_eq!(wide.as_kilograms(), 3.0);
+//! ```
+//!
+//! ### Zero-copy slices and `const` values
+//!
+//! ```rust
+//! use unitsnet_rs::*;
+//!
+//! const MARATHON: Length = Length::from_base(42_195.0);
+//!
+//! let raw = [1.0, 2.0, 3.0];
+//! let typed: &[Length] = Length::from_base_slice(&raw);
+//! let total: Length = typed.iter().sum();
+//! assert_eq!(total, Length::from_meters(6.0));
+//! assert!(MARATHON > total);
+//! ```
+//!
+//! With `f32` storage, write `quantity * 2.0` rather than `2.0 * quantity`:
+//! the reversed form is implemented for `f64` and the integer types only, so
+//! that `2.0 * Length::from_meters(1.0)` never needs a type annotation.
+//!
+//! ## Cargo features
+//!
+//! * `serde` — `Serialize`/`Deserialize` for every quantity (as its bare
+//!   base-unit number) and every unit enum.
 
-/// The underlying numeric type used by every quantity struct.
+#![no_std]
+#![warn(missing_debug_implementations)]
+
+use core::fmt;
+use core::ops::{Add, Div, Mul, Neg, Sub};
+
+// ── Numeric storage ───────────────────────────────────────────────────────────
+
+/// Floating-point storage types that support unit conversions.
 ///
-/// Defaults to `f64` (~15 significant digits). Enable the `f32` Cargo feature
-/// to switch to `f32` (~7 significant digits) for lower memory usage.
-#[cfg(feature = "f32")]
-pub type Num = f32;
-#[cfg(not(feature = "f32"))]
-pub type Num = f64;
-
-/// Core trait implemented by every generated quantity struct.
+/// Implemented for `f32` and `f64`. Implement it for your own type
+/// (half-precision floats, dual numbers for automatic differentiation, …)
+/// to unlock `from_<unit>` / `as_<unit>` conversions on it.
 ///
-/// Exposes the raw base-unit value so that [`ApproxEq`] can be implemented
-/// once for all quantity types via a blanket `impl<T: Quantity> ApproxEq for T`.
-pub trait Quantity: Copy + Sized {
-    /// Returns the raw value stored in the SI base unit.
-    fn as_base(self) -> Num;
+/// Arithmetic operators do **not** require this trait: they are available for
+/// any storage type that supports the corresponding operator, including
+/// integers.
+pub trait Float:
+    Copy
+    + PartialOrd
+    + Add<Output = Self>
+    + Sub<Output = Self>
+    + Mul<Output = Self>
+    + Div<Output = Self>
+    + Neg<Output = Self>
+{
+    /// Converts an `f64` conversion constant into `Self`, rounding to nearest.
+    ///
+    /// Always called with a literal, so it is folded away at compile time.
+    fn from_f64(value: f64) -> Self;
 
-    /// Constructs a quantity from a raw base-unit value.
-    fn from_base(value: Num) -> Self;
+    /// Absolute value.
+    fn abs(self) -> Self;
+
+    /// The larger of two values (ignoring NaN, like [`f64::max`]).
+    fn max(self, other: Self) -> Self;
+
+    /// The smaller of two values (ignoring NaN, like [`f64::min`]).
+    fn min(self, other: Self) -> Self;
 }
 
-/// Approximate floating-point comparison for any [`Quantity`].
+macro_rules! impl_float {
+    ($($t:ident: $sign:expr),*) => {$(
+        impl Float for $t {
+            #[inline(always)]
+            fn from_f64(value: f64) -> Self {
+                value as $t
+            }
+            #[inline(always)]
+            fn abs(self) -> Self {
+                // Clear the sign bit. (`abs` itself is only in `core` since
+                // Rust 1.85; this compiles to the same single instruction.)
+                $t::from_bits(self.to_bits() & !$sign)
+            }
+            #[inline(always)]
+            fn max(self, other: Self) -> Self {
+                $t::max(self, other)
+            }
+            #[inline(always)]
+            fn min(self, other: Self) -> Self {
+                $t::min(self, other)
+            }
+        }
+    )*};
+}
+impl_float!(f32: 1 << 31, f64: 1 << 63);
+
+// ── Quantity trait ────────────────────────────────────────────────────────────
+
+/// Implemented by every quantity type, for writing code that is generic over
+/// quantities.
 ///
-/// Every generated quantity type implements this trait automatically through the
-/// blanket `impl<T: Quantity> ApproxEq for T` — the comparison logic is written
-/// exactly once here, not once per type.
+/// The inherent methods of the same names are `const` and preferred in
+/// non-generic code.
+pub trait Quantity: Copy {
+    /// The numeric storage type (`f64` unless specified).
+    type Value: Copy;
+
+    /// The enum listing every unit of this quantity.
+    type Unit: Copy + Eq + fmt::Debug + fmt::Display + 'static;
+
+    /// The unit in which values are stored.
+    const BASE_UNIT: Self::Unit;
+
+    /// Wraps a value expressed in [`Self::BASE_UNIT`].
+    fn from_base(value: Self::Value) -> Self;
+
+    /// Returns the value expressed in [`Self::BASE_UNIT`].
+    fn as_base(self) -> Self::Value;
+}
+
+// ── Approximate comparison ────────────────────────────────────────────────────
+
+/// Approximate floating-point comparison for any float-valued [`Quantity`].
+///
+/// Every quantity type implements this trait automatically through a blanket
+/// implementation; the comparison logic is written exactly once.
 ///
 /// # Choosing a method
 ///
@@ -57,6 +207,8 @@ pub trait Quantity: Copy + Sized {
 /// | [`approx_eq_abs`][ApproxEq::approx_eq_abs] | `\|a−b\| ≤ ε` | magnitude is known in advance |
 /// | [`approx_eq_rel`][ApproxEq::approx_eq_rel] | `\|a−b\| ≤ tol·max(\|a\|,\|b\|)` | magnitude varies; relative accuracy matters |
 /// | [`approx_eq`][ApproxEq::approx_eq] | `\|a−b\| ≤ ε + tol·max(\|a\|,\|b\|)` | mixed: safe near zero **and** for large values |
+///
+/// Tolerances are expressed in base-unit terms.
 ///
 /// # Examples
 ///
@@ -75,62 +227,440 @@ pub trait Quantity: Copy + Sized {
 /// // Combined: absolute OR relative criterion, safe near zero.
 /// assert!(a.approx_eq(b, 1e-12, 1e-9));
 /// ```
-pub trait ApproxEq: Sized {
+pub trait ApproxEq: Quantity {
     /// Returns `true` if `|self − other| ≤ epsilon`.
-    ///
-    /// # Arguments
-    ///
-    /// * `other` - The value to compare against.
-    /// * `epsilon` - Maximum allowed absolute difference (in base-unit terms).
-    fn approx_eq_abs(self, other: Self, epsilon: Num) -> bool;
+    fn approx_eq_abs(self, other: Self, epsilon: Self::Value) -> bool;
 
     /// Returns `true` if `|self − other| ≤ rel_tol × max(|self|, |other|)`.
     ///
-    /// Returns `true` when both values are exactly zero.
-    ///
-    /// # Arguments
-    ///
-    /// * `other` - The value to compare against.
-    /// * `rel_tol` - Maximum allowed relative difference. Typical values:
-    ///   `1e-9` for `f64`, `1e-5` for `f32`.
-    fn approx_eq_rel(self, other: Self, rel_tol: Num) -> bool;
+    /// Returns `true` when both values are exactly zero. Typical tolerances:
+    /// `1e-12` for `f64`, `1e-6` for `f32`.
+    fn approx_eq_rel(self, other: Self, rel_tol: Self::Value) -> bool;
 
     /// Returns `true` if `|self − other| ≤ epsilon + rel_tol × max(|self|, |other|)`.
     ///
     /// Combines absolute and relative tolerances, matching the semantics of
     /// NumPy's [`numpy.isclose`](https://numpy.org/doc/stable/reference/generated/numpy.isclose.html).
-    /// Prefer [`approx_eq_abs`][ApproxEq::approx_eq_abs] or
-    /// [`approx_eq_rel`][ApproxEq::approx_eq_rel] when only one form is needed.
-    ///
-    /// # Arguments
-    ///
-    /// * `other` - The value to compare against.
-    /// * `epsilon` - Absolute tolerance floor (keeps the test meaningful near zero).
-    /// * `rel_tol` - Relative tolerance for large magnitudes.
-    fn approx_eq(self, other: Self, epsilon: Num, rel_tol: Num) -> bool;
+    fn approx_eq(self, other: Self, epsilon: Self::Value, rel_tol: Self::Value) -> bool;
 }
 
-impl<T: Quantity> ApproxEq for T {
+impl<Q: Quantity> ApproxEq for Q
+where
+    Q::Value: Float,
+{
     #[inline]
-    fn approx_eq_abs(self, other: Self, epsilon: Num) -> bool {
+    fn approx_eq_abs(self, other: Self, epsilon: Self::Value) -> bool {
         (self.as_base() - other.as_base()).abs() <= epsilon
     }
 
     #[inline]
-    fn approx_eq_rel(self, other: Self, rel_tol: Num) -> bool {
-        let a = self.as_base();
-        let b = other.as_base();
-        let max = a.abs().max(b.abs());
-        // Both zero → trivially equal regardless of rel_tol.
-        max == 0.0 || (a - b).abs() <= rel_tol * max
+    fn approx_eq_rel(self, other: Self, rel_tol: Self::Value) -> bool {
+        let (a, b) = (self.as_base(), other.as_base());
+        // Exactly equal (including both zero) → trivially equal.
+        a == b || (a - b).abs() <= rel_tol * a.abs().max(b.abs())
     }
 
     #[inline]
-    fn approx_eq(self, other: Self, epsilon: Num, rel_tol: Num) -> bool {
-        let diff = (self.as_base() - other.as_base()).abs();
-        let max = self.as_base().abs().max(other.as_base().abs());
-        diff <= epsilon + rel_tol * max
+    fn approx_eq(self, other: Self, epsilon: Self::Value, rel_tol: Self::Value) -> bool {
+        let (a, b) = (self.as_base(), other.as_base());
+        (a - b).abs() <= epsilon + rel_tol * a.abs().max(b.abs())
     }
+}
+
+// ── Parsing ───────────────────────────────────────────────────────────────────
+
+/// Error returned when parsing a quantity or a unit from a string fails.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum ParseError {
+    /// The numeric part is missing or malformed.
+    InvalidNumber,
+    /// The unit abbreviation is not recognised for this quantity.
+    UnknownUnit,
+}
+
+impl fmt::Display for ParseError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(match self {
+            ParseError::InvalidNumber => "invalid number",
+            ParseError::UnknownUnit => "unknown unit",
+        })
+    }
+}
+
+impl core::error::Error for ParseError {}
+
+/// Splits `"1.5e3 km/h"` into `("1.5e3", "km/h")`.
+///
+/// The number is the longest prefix matching a decimal float literal, so unit
+/// abbreviations may themselves contain digits (`"2 m3"`) and the space is
+/// optional (`"2m3"`).
+#[doc(hidden)]
+pub fn split_value_unit(s: &str) -> (&str, &str) {
+    let s = s.trim();
+    let b = s.as_bytes();
+    let digits = |mut i: usize| {
+        while i < b.len() && b[i].is_ascii_digit() {
+            i += 1;
+        }
+        i
+    };
+    let mut i = 0;
+    if i < b.len() && matches!(b[i], b'+' | b'-') {
+        i += 1;
+    }
+    i = digits(i);
+    if i < b.len() && b[i] == b'.' {
+        i = digits(i + 1);
+    }
+    if i < b.len() && matches!(b[i], b'e' | b'E') {
+        let mut j = i + 1;
+        if j < b.len() && matches!(b[j], b'+' | b'-') {
+            j += 1;
+        }
+        if j < b.len() && b[j].is_ascii_digit() {
+            i = digits(j);
+        }
+    }
+    (&s[..i], s[i..].trim_start())
+}
+
+// ── Code shared by every generated quantity ──────────────────────────────────
+
+/// Storage types that get `scalar * quantity` (the reverse of
+/// `quantity * scalar`, which is generic). Coherence rules forbid a generic
+/// impl on a foreign type parameter, so this list is explicit.
+///
+/// `f32` is deliberately absent: with two float impls, `2.0 * q` would be
+/// ambiguous whenever `q`'s float type is not yet inferred
+/// (`let q = Length::from_meters(1.0)`), forcing annotations on the far more
+/// common `f64` code. With `f32` storage, write `q * 2.0`.
+macro_rules! scalar_lhs_mul {
+    ($Q:ident: $($t:ty),*) => {$(
+        impl core::ops::Mul<$Q<$t>> for $t {
+            type Output = $Q<$t>;
+            #[inline(always)]
+            fn mul(self, rhs: $Q<$t>) -> $Q<$t> {
+                $Q::from_base(self * rhs.0)
+            }
+        }
+    )*};
+}
+
+/// Formats the value in the base unit followed by the unit abbreviation,
+/// honouring precision and other flags:
+/// `format!("{:.2}", Length::from_meters(1.0))` is `"1.00 m"` and
+/// `format!("{:e}", Length::from_meters(1500.0))` is `"1.5e3 m"`.
+macro_rules! quantity_fmt {
+    ($Q:ident, $U:ident, $base:ident: $($Trait:ident),*) => {$(
+        impl<T: core::fmt::$Trait> core::fmt::$Trait for $Q<T> {
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                core::fmt::$Trait::fmt(&self.0, f)?;
+                let abbr = $U::$base.abbreviation();
+                if abbr.is_empty() {
+                    Ok(())
+                } else {
+                    write!(f, " {abbr}")
+                }
+            }
+        }
+    )*};
+}
+
+/// Implements everything a quantity needs apart from its unit conversions:
+/// base-unit access, zero-copy slice views, arithmetic operators,
+/// [`Quantity`], `Display` and `FromStr`.
+macro_rules! quantity {
+    ($Q:ident, $U:ident, $base:ident) => {
+        impl<T> $Q<T> {
+            /// Wraps a value expressed in the base unit. Free and `const`.
+            #[inline(always)]
+            pub const fn from_base(value: T) -> Self {
+                Self(value)
+            }
+
+            /// Unwraps the value expressed in the base unit. Unlike
+            /// [`as_base`](Self::as_base) this does not require `T: Copy`.
+            #[inline(always)]
+            pub fn into_base(self) -> T {
+                self.0
+            }
+
+            /// Views a slice of base-unit values as quantities, without copying.
+            #[inline(always)]
+            pub const fn from_base_slice(values: &[T]) -> &[Self] {
+                // SAFETY: `Self` is `#[repr(transparent)]` over `T`.
+                unsafe { &*(values as *const [T] as *const [Self]) }
+            }
+
+            /// Views a mutable slice of base-unit values as quantities, without copying.
+            #[inline(always)]
+            pub fn from_base_slice_mut(values: &mut [T]) -> &mut [Self] {
+                // SAFETY: `Self` is `#[repr(transparent)]` over `T`.
+                unsafe { &mut *(values as *mut [T] as *mut [Self]) }
+            }
+
+            /// Views a slice of quantities as their base-unit values, without copying.
+            #[inline(always)]
+            pub const fn as_base_slice(values: &[Self]) -> &[T] {
+                // SAFETY: `Self` is `#[repr(transparent)]` over `T`.
+                unsafe { &*(values as *const [Self] as *const [T]) }
+            }
+
+            /// Views a mutable slice of quantities as their base-unit values, without copying.
+            #[inline(always)]
+            pub fn as_base_slice_mut(values: &mut [Self]) -> &mut [T] {
+                // SAFETY: `Self` is `#[repr(transparent)]` over `T`.
+                unsafe { &mut *(values as *mut [Self] as *mut [T]) }
+            }
+
+            /// Changes the storage type losslessly, e.g. `i32` → `f64`.
+            #[inline(always)]
+            pub fn cast<U: From<T>>(self) -> $Q<U> {
+                $Q(U::from(self.0))
+            }
+        }
+
+        impl<T: Copy> $Q<T> {
+            /// Returns the value expressed in the base unit. Free and `const`.
+            #[inline(always)]
+            pub const fn as_base(self) -> T {
+                self.0
+            }
+        }
+
+        impl<T: $crate::Float> $Q<T> {
+            /// Absolute value.
+            #[inline(always)]
+            pub fn abs(self) -> Self {
+                Self(self.0.abs())
+            }
+
+            /// The larger of two quantities (ignoring NaN).
+            #[inline(always)]
+            pub fn max(self, other: Self) -> Self {
+                Self(self.0.max(other.0))
+            }
+
+            /// The smaller of two quantities (ignoring NaN).
+            #[inline(always)]
+            pub fn min(self, other: Self) -> Self {
+                Self(self.0.min(other.0))
+            }
+        }
+
+        impl<T: Copy> $crate::Quantity for $Q<T> {
+            type Value = T;
+            type Unit = $U;
+            const BASE_UNIT: $U = $U::$base;
+            #[inline(always)]
+            fn from_base(value: T) -> Self {
+                Self(value)
+            }
+            #[inline(always)]
+            fn as_base(self) -> T {
+                self.0
+            }
+        }
+
+        // ── Arithmetic: same quantity ──
+
+        impl<T: core::ops::Add<Output = T>> core::ops::Add for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn add(self, rhs: Self) -> Self {
+                Self(self.0 + rhs.0)
+            }
+        }
+        impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn sub(self, rhs: Self) -> Self {
+                Self(self.0 - rhs.0)
+            }
+        }
+        impl<T: core::ops::Neg<Output = T>> core::ops::Neg for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn neg(self) -> Self {
+                Self(-self.0)
+            }
+        }
+        impl<T: core::ops::Rem<Output = T>> core::ops::Rem for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn rem(self, rhs: Self) -> Self {
+                Self(self.0 % rhs.0)
+            }
+        }
+        /// Dividing two values of the same quantity gives a plain number.
+        impl<T: core::ops::Div<Output = T>> core::ops::Div for $Q<T> {
+            type Output = T;
+            #[inline(always)]
+            fn div(self, rhs: Self) -> T {
+                self.0 / rhs.0
+            }
+        }
+        impl<T: core::ops::AddAssign> core::ops::AddAssign for $Q<T> {
+            #[inline(always)]
+            fn add_assign(&mut self, rhs: Self) {
+                self.0 += rhs.0;
+            }
+        }
+        impl<T: core::ops::SubAssign> core::ops::SubAssign for $Q<T> {
+            #[inline(always)]
+            fn sub_assign(&mut self, rhs: Self) {
+                self.0 -= rhs.0;
+            }
+        }
+        impl<T: core::ops::RemAssign> core::ops::RemAssign for $Q<T> {
+            #[inline(always)]
+            fn rem_assign(&mut self, rhs: Self) {
+                self.0 %= rhs.0;
+            }
+        }
+
+        // ── Arithmetic: scaling by a plain number ──
+
+        impl<T: core::ops::Mul<Output = T>> core::ops::Mul<T> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn mul(self, rhs: T) -> Self {
+                Self(self.0 * rhs)
+            }
+        }
+        impl<T: core::ops::Div<Output = T>> core::ops::Div<T> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn div(self, rhs: T) -> Self {
+                Self(self.0 / rhs)
+            }
+        }
+        impl<T: core::ops::MulAssign> core::ops::MulAssign<T> for $Q<T> {
+            #[inline(always)]
+            fn mul_assign(&mut self, rhs: T) {
+                self.0 *= rhs;
+            }
+        }
+        impl<T: core::ops::DivAssign> core::ops::DivAssign<T> for $Q<T> {
+            #[inline(always)]
+            fn div_assign(&mut self, rhs: T) {
+                self.0 /= rhs;
+            }
+        }
+        scalar_lhs_mul!($Q: f64, i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
+
+        // ── Iterators ──
+
+        // Delegates to `T`'s own `Sum`, so the semantics (and the machine
+        // code) are exactly those of summing the bare numbers.
+        impl<T: core::iter::Sum> core::iter::Sum for $Q<T> {
+            #[inline]
+            fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
+                Self(iter.map(|q| q.0).sum())
+            }
+        }
+        impl<'a, T: core::iter::Sum<&'a T> + 'a> core::iter::Sum<&'a $Q<T>> for $Q<T> {
+            #[inline]
+            fn sum<I: Iterator<Item = &'a Self>>(iter: I) -> Self {
+                Self(iter.map(|q| &q.0).sum())
+            }
+        }
+
+        // ── Formatting & parsing ──
+
+        quantity_fmt!($Q, $U, $base: Display, LowerExp, UpperExp);
+
+        impl core::fmt::Display for $U {
+            fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+                f.pad(self.abbreviation())
+            }
+        }
+
+        /// Parses a number followed by a unit abbreviation, e.g. `"1.5 km"`.
+        impl<T: $crate::Float + core::str::FromStr> core::str::FromStr for $Q<T> {
+            type Err = $crate::ParseError;
+            fn from_str(s: &str) -> Result<Self, $crate::ParseError> {
+                let (number, unit) = $crate::split_value_unit(s);
+                let value: T = number
+                    .parse()
+                    .map_err(|_| $crate::ParseError::InvalidNumber)?;
+                Ok(Self::new(value, unit.parse()?))
+            }
+        }
+    };
+}
+
+/// `A * B = C` (and `B * A = C` when emitted separately), computed in base
+/// units. `$k` is the factor relating the base units, `1` for coherent SI.
+macro_rules! cross_mul {
+    ($A:ident * $B:ident = $C:ident) => {
+        impl<T: core::ops::Mul<Output = T>> core::ops::Mul<$B<T>> for $A<T> {
+            type Output = $C<T>;
+            #[inline(always)]
+            fn mul(self, rhs: $B<T>) -> $C<T> {
+                $C::from_base(self.into_base() * rhs.into_base())
+            }
+        }
+    };
+    ($A:ident * $B:ident = $C:ident; $k:literal) => {
+        impl<T: $crate::Float> core::ops::Mul<$B<T>> for $A<T> {
+            type Output = $C<T>;
+            #[inline(always)]
+            fn mul(self, rhs: $B<T>) -> $C<T> {
+                $C::from_base(self.into_base() * rhs.into_base() * T::from_f64($k))
+            }
+        }
+    };
+}
+
+/// `A / B = C`, computed in base units.
+macro_rules! cross_div {
+    ($A:ident / $B:ident = $C:ident) => {
+        impl<T: core::ops::Div<Output = T>> core::ops::Div<$B<T>> for $A<T> {
+            type Output = $C<T>;
+            #[inline(always)]
+            fn div(self, rhs: $B<T>) -> $C<T> {
+                $C::from_base(self.into_base() / rhs.into_base())
+            }
+        }
+    };
+    ($A:ident / $B:ident = $C:ident; $k:literal) => {
+        impl<T: $crate::Float> core::ops::Div<$B<T>> for $A<T> {
+            type Output = $C<T>;
+            #[inline(always)]
+            #[allow(clippy::suspicious_arithmetic_impl)]
+            fn div(self, rhs: $B<T>) -> $C<T> {
+                $C::from_base(self.into_base() / rhs.into_base() * T::from_f64($k))
+            }
+        }
+    };
+}
+
+/// `A * B` is dimensionless: the result is a plain number.
+macro_rules! cross_mul_scalar {
+    ($A:ident * $B:ident) => {
+        impl<T: core::ops::Mul<Output = T>> core::ops::Mul<$B<T>> for $A<T> {
+            type Output = T;
+            #[inline(always)]
+            fn mul(self, rhs: $B<T>) -> T {
+                self.into_base() * rhs.into_base()
+            }
+        }
+    };
+}
+
+/// `1 / A = B` for `f64` storage, e.g. `1.0 / duration` is a `Frequency`.
+/// (`f32` is omitted for the inference reason given on `scalar_lhs_mul!`.)
+macro_rules! cross_recip {
+    ($A:ident => $B:ident) => {
+        impl core::ops::Div<$A<f64>> for f64 {
+            type Output = $B<f64>;
+            #[inline(always)]
+            fn div(self, rhs: $A<f64>) -> $B<f64> {
+                $B::from_base(self / rhs.into_base())
+            }
+        }
+    };
 }
 
 // Generated quantity modules — re-exports every public item from each module.
@@ -139,7 +669,8 @@ pub use units::*;
 
 // Generated cross-type arithmetic (Length / Duration = Speed, etc.).
 // These are pure `impl` blocks — no named items to re-export.
-pub mod cross_type;
+mod cross_type;
 
-// Convenience alias: the JSON quantity is named "Duration"; `Time` is the colloquial name.
-pub use units::duration::Duration as Time;
+/// Convenience alias: the UnitsNet quantity is named `Duration`; `Time` is the
+/// colloquial name.
+pub type Time<T = f64> = Duration<T>;

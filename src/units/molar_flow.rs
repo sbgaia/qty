@@ -2,27 +2,35 @@
 // Source: data/quantities/MolarFlow.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Molar flow is the ratio of the amount of substance change to the time during which the change occurred (value of amount of substance changes per unit time).
 ///
-/// The internal value is stored in `MolePerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MolarFlow(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarFlowUnit::MolePerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct MolarFlow<T = f64>(T);
+
+quantity!(MolarFlow, MolarFlowUnit, MolePerSecond);
 
 /// Unit variants for [`MolarFlow`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MolarFlowUnit {
     MolePerSecond,
     KilomolePerSecond,
@@ -51,30 +59,30 @@ impl MolarFlowUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::MolePerSecond => "mol/s",
             Self::KilomolePerSecond => "kmol/s",
             Self::MolePerMinute => "mol/min",
             Self::KilomolePerMinute => "kmol/min",
-            Self::MolePerHour => "kmol/h",
-            Self::KilomolePerHour => "kkmol/h",
+            Self::MolePerHour => "mol/h",
+            Self::KilomolePerHour => "kmol/h",
             Self::PoundMolePerSecond => "lbmol/s",
             Self::PoundMolePerMinute => "lbmol/min",
             Self::PoundMolePerHour => "lbmol/h",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MolePerSecond => &["mol/s"],
             Self::KilomolePerSecond => &["kmol/s"],
             Self::MolePerMinute => &["mol/min"],
             Self::KilomolePerMinute => &["kmol/min"],
-            Self::MolePerHour => &["kmol/h"],
-            Self::KilomolePerHour => &["kkmol/h"],
+            Self::MolePerHour => &["mol/h"],
+            Self::KilomolePerHour => &["kmol/h"],
             Self::PoundMolePerSecond => &["lbmol/s"],
             Self::PoundMolePerMinute => &["lbmol/min"],
             Self::PoundMolePerHour => &["lbmol/h"],
@@ -82,363 +90,222 @@ impl MolarFlowUnit {
     }
 }
 
-impl MolarFlow {
+impl core::str::FromStr for MolarFlowUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "mol/s" => Ok(Self::MolePerSecond),
+            "kmol/s" => Ok(Self::KilomolePerSecond),
+            "mol/min" => Ok(Self::MolePerMinute),
+            "kmol/min" => Ok(Self::KilomolePerMinute),
+            "mol/h" => Ok(Self::MolePerHour),
+            "kmol/h" => Ok(Self::KilomolePerHour),
+            "lbmol/s" => Ok(Self::PoundMolePerSecond),
+            "lbmol/min" => Ok(Self::PoundMolePerMinute),
+            "lbmol/h" => Ok(Self::PoundMolePerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> MolarFlow<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MolarFlowUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MolarFlowUnit) -> Self {
         Self(match unit {
-            MolarFlowUnit::MolePerSecond => x,
-            MolarFlowUnit::KilomolePerSecond => (x * 1e3),
-            MolarFlowUnit::MolePerMinute => x / 60.0,
-            MolarFlowUnit::KilomolePerMinute => (x * 1e3) / 60.0,
-            MolarFlowUnit::MolePerHour => x / 3600.0,
-            MolarFlowUnit::KilomolePerHour => (x * 1e3) / 3600.0,
-            MolarFlowUnit::PoundMolePerSecond => x * 453.59237,
-            MolarFlowUnit::PoundMolePerMinute => (x * 453.59237) / 60.0,
-            MolarFlowUnit::PoundMolePerHour => (x * 453.59237) / 3600.0,
+            MolarFlowUnit::MolePerSecond => value,
+            MolarFlowUnit::KilomolePerSecond => value * T::from_f64(1000.0),
+            MolarFlowUnit::MolePerMinute => value / T::from_f64(60.0),
+            MolarFlowUnit::KilomolePerMinute => value * T::from_f64(16.666666666666668),
+            MolarFlowUnit::MolePerHour => value / T::from_f64(3600.0),
+            MolarFlowUnit::KilomolePerHour => value * T::from_f64(0.2777777777777778),
+            MolarFlowUnit::PoundMolePerSecond => value * T::from_f64(453.59237),
+            MolarFlowUnit::PoundMolePerMinute => value * T::from_f64(7.559872833333333),
+            MolarFlowUnit::PoundMolePerHour => value * T::from_f64(0.12599788055555555),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MolarFlowUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MolarFlowUnit) -> T {
         match unit {
-            MolarFlowUnit::MolePerSecond => x,
-            MolarFlowUnit::KilomolePerSecond => (x / 1e3),
-            MolarFlowUnit::MolePerMinute => x * 60.0,
-            MolarFlowUnit::KilomolePerMinute => (x / 1e3) * 60.0,
-            MolarFlowUnit::MolePerHour => x * 3600.0,
-            MolarFlowUnit::KilomolePerHour => (x / 1e3) * 3600.0,
-            MolarFlowUnit::PoundMolePerSecond => x / 453.59237,
-            MolarFlowUnit::PoundMolePerMinute => (x / 453.59237) * 60.0,
-            MolarFlowUnit::PoundMolePerHour => (x / 453.59237) * 3600.0,
+            MolarFlowUnit::MolePerSecond => self.0,
+            MolarFlowUnit::KilomolePerSecond => self.0 / T::from_f64(1000.0),
+            MolarFlowUnit::MolePerMinute => self.0 * T::from_f64(60.0),
+            MolarFlowUnit::KilomolePerMinute => self.0 / T::from_f64(16.666666666666668),
+            MolarFlowUnit::MolePerHour => self.0 * T::from_f64(3600.0),
+            MolarFlowUnit::KilomolePerHour => self.0 / T::from_f64(0.2777777777777778),
+            MolarFlowUnit::PoundMolePerSecond => self.0 / T::from_f64(453.59237),
+            MolarFlowUnit::PoundMolePerMinute => self.0 / T::from_f64(7.559872833333333),
+            MolarFlowUnit::PoundMolePerHour => self.0 / T::from_f64(0.12599788055555555),
         }
     }
 
     /// Creates a [`MolarFlow`] from a value in MolesPerSecond (`mol/s`).
     #[inline]
-    pub fn from_moles_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_moles_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MolesPerSecond (`mol/s`).
     #[inline]
-    pub fn as_moles_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_moles_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_moles_per_second`].
     #[inline]
-    pub fn as_mole_per_second(self) -> Num {
+    pub fn as_mole_per_second(self) -> T {
         self.as_moles_per_second()
     }
 
     /// Creates a [`MolarFlow`] from a value in KilomolesPerSecond (`kmol/s`).
     #[inline]
-    pub fn from_kilomoles_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilomoles_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilomolesPerSecond (`kmol/s`).
     #[inline]
-    pub fn as_kilomoles_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilomoles_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilomoles_per_second`].
     #[inline]
-    pub fn as_kilomole_per_second(self) -> Num {
+    pub fn as_kilomole_per_second(self) -> T {
         self.as_kilomoles_per_second()
     }
 
     /// Creates a [`MolarFlow`] from a value in MolesPerMinute (`mol/min`).
     #[inline]
-    pub fn from_moles_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_moles_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in MolesPerMinute (`mol/min`).
     #[inline]
-    pub fn as_moles_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_moles_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_moles_per_minute`].
     #[inline]
-    pub fn as_mole_per_minute(self) -> Num {
+    pub fn as_mole_per_minute(self) -> T {
         self.as_moles_per_minute()
     }
 
     /// Creates a [`MolarFlow`] from a value in KilomolesPerMinute (`kmol/min`).
     #[inline]
-    pub fn from_kilomoles_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 60.0)
+    pub fn from_kilomoles_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16.666666666666668))
     }
 
     /// Returns the value expressed in KilomolesPerMinute (`kmol/min`).
     #[inline]
-    pub fn as_kilomoles_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 60.0
+    pub fn as_kilomoles_per_minute(self) -> T {
+        self.0 / T::from_f64(16.666666666666668)
     }
 
     /// Alias for [`Self::as_kilomoles_per_minute`].
     #[inline]
-    pub fn as_kilomole_per_minute(self) -> Num {
+    pub fn as_kilomole_per_minute(self) -> T {
         self.as_kilomoles_per_minute()
     }
 
-    /// Creates a [`MolarFlow`] from a value in MolesPerHour (`kmol/h`).
+    /// Creates a [`MolarFlow`] from a value in MolesPerHour (`mol/h`).
     #[inline]
-    pub fn from_moles_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_moles_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in MolesPerHour (`kmol/h`).
+    /// Returns the value expressed in MolesPerHour (`mol/h`).
     #[inline]
-    pub fn as_moles_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_moles_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_moles_per_hour`].
     #[inline]
-    pub fn as_mole_per_hour(self) -> Num {
+    pub fn as_mole_per_hour(self) -> T {
         self.as_moles_per_hour()
     }
 
-    /// Creates a [`MolarFlow`] from a value in KilomolesPerHour (`kkmol/h`).
+    /// Creates a [`MolarFlow`] from a value in KilomolesPerHour (`kmol/h`).
     #[inline]
-    pub fn from_kilomoles_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 3600.0)
+    pub fn from_kilomoles_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.2777777777777778))
     }
 
-    /// Returns the value expressed in KilomolesPerHour (`kkmol/h`).
+    /// Returns the value expressed in KilomolesPerHour (`kmol/h`).
     #[inline]
-    pub fn as_kilomoles_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 3600.0
+    pub fn as_kilomoles_per_hour(self) -> T {
+        self.0 / T::from_f64(0.2777777777777778)
     }
 
     /// Alias for [`Self::as_kilomoles_per_hour`].
     #[inline]
-    pub fn as_kilomole_per_hour(self) -> Num {
+    pub fn as_kilomole_per_hour(self) -> T {
         self.as_kilomoles_per_hour()
     }
 
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerSecond (`lbmol/s`).
     #[inline]
-    pub fn from_pound_moles_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237)
+    pub fn from_pound_moles_per_second(value: T) -> Self {
+        Self(value * T::from_f64(453.59237))
     }
 
     /// Returns the value expressed in PoundMolesPerSecond (`lbmol/s`).
     #[inline]
-    pub fn as_pound_moles_per_second(self) -> Num {
-        let x = self.0;
-        x / 453.59237
+    pub fn as_pound_moles_per_second(self) -> T {
+        self.0 / T::from_f64(453.59237)
     }
 
     /// Alias for [`Self::as_pound_moles_per_second`].
     #[inline]
-    pub fn as_pound_mole_per_second(self) -> Num {
+    pub fn as_pound_mole_per_second(self) -> T {
         self.as_pound_moles_per_second()
     }
 
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerMinute (`lbmol/min`).
     #[inline]
-    pub fn from_pound_moles_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 453.59237) / 60.0)
+    pub fn from_pound_moles_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(7.559872833333333))
     }
 
     /// Returns the value expressed in PoundMolesPerMinute (`lbmol/min`).
     #[inline]
-    pub fn as_pound_moles_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 453.59237) * 60.0
+    pub fn as_pound_moles_per_minute(self) -> T {
+        self.0 / T::from_f64(7.559872833333333)
     }
 
     /// Alias for [`Self::as_pound_moles_per_minute`].
     #[inline]
-    pub fn as_pound_mole_per_minute(self) -> Num {
+    pub fn as_pound_mole_per_minute(self) -> T {
         self.as_pound_moles_per_minute()
     }
 
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerHour (`lbmol/h`).
     #[inline]
-    pub fn from_pound_moles_per_hour(value: Num) -> Self {
-        let x = value;
-        Self((x * 453.59237) / 3600.0)
+    pub fn from_pound_moles_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(0.12599788055555555))
     }
 
     /// Returns the value expressed in PoundMolesPerHour (`lbmol/h`).
     #[inline]
-    pub fn as_pound_moles_per_hour(self) -> Num {
-        let x = self.0;
-        (x / 453.59237) * 3600.0
+    pub fn as_pound_moles_per_hour(self) -> T {
+        self.0 / T::from_f64(0.12599788055555555)
     }
 
     /// Alias for [`Self::as_pound_moles_per_hour`].
     #[inline]
-    pub fn as_pound_mole_per_hour(self) -> Num {
+    pub fn as_pound_mole_per_hour(self) -> T {
         self.as_pound_moles_per_hour()
     }
-}
-
-impl crate::Quantity for MolarFlow {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for MolarFlow {
-    type Output = MolarFlow;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for MolarFlow {
-    type Output = MolarFlow;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for MolarFlow {
-    type Output = MolarFlow;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for MolarFlow {
-    type Output = MolarFlow;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<MolarFlow> for Num {
-    type Output = MolarFlow;
-    #[inline]
-    fn mul(self, rhs: MolarFlow) -> MolarFlow {
-        MolarFlow(self * rhs.0)
-    }
-}
-impl Div<Num> for MolarFlow {
-    type Output = MolarFlow;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for MolarFlow {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for MolarFlow {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MolarFlowUnit::MolePerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`MolarFlow`].
-#[derive(Debug)]
-pub struct ParseMolarFlowError(String);
-
-impl fmt::Display for ParseMolarFlowError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as MolarFlow", self.0)
-    }
-}
-
-impl std::error::Error for ParseMolarFlowError {}
-
-impl FromStr for MolarFlow {
-    type Err = ParseMolarFlowError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMolarFlowError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MolarFlowUnit)] = &[
-            ("lbmol/min", MolarFlowUnit::PoundMolePerMinute),
-            ("kmol/min", MolarFlowUnit::KilomolePerMinute),
-            ("kkmol/h", MolarFlowUnit::KilomolePerHour),
-            ("lbmol/h", MolarFlowUnit::PoundMolePerHour),
-            ("lbmol/s", MolarFlowUnit::PoundMolePerSecond),
-            ("mol/min", MolarFlowUnit::MolePerMinute),
-            ("kmol/h", MolarFlowUnit::MolePerHour),
-            ("kmol/s", MolarFlowUnit::KilomolePerSecond),
-            ("mol/s", MolarFlowUnit::MolePerSecond),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMolarFlowError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

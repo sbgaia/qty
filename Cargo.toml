@@ -6,14 +6,19 @@ resolver = "2"
 name = "unitsnet-rs"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.81"
 description = "Strongly-typed physical quantities and unit conversions"
 license = "MIT OR Apache-2.0"
 keywords = ["units", "measurement", "physics", "conversion"]
-categories = ["science"]
+categories = ["science", "no-std", "no-std::no-alloc"]
 
 [features]
-## Store all quantity values as `f32` instead of the default `f64`.
-## Halves memory usage at the cost of ~7 significant digits (vs ~15).
-f32 = []
+## `Serialize`/`Deserialize` for every quantity (as its bare base-unit number)
+## and every unit enum.
+serde = ["dep:serde"]
 
 [dependencies]
+serde = { version = "1", default-features = false, features = ["derive"], optional = true }
+
+[dev-dependencies]
+serde_json = "1"

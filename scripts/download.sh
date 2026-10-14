@@ -4,6 +4,7 @@
 # Usage:
 #   ./scripts/download.sh              # download the default set
 #   ./scripts/download.sh --all        # download every quantity definition
+#   ./scripts/download.sh --current    # re-download the quantities in src/units/
 #   ./scripts/download.sh Length Mass  # download named quantities
 #
 # Quantity definitions are saved to data/quantities/ and the curated
@@ -36,13 +37,15 @@ DEFAULT_QUANTITIES=(
 # ── Argument parsing ───────────────────────────────────────────────────────────
 
 ALL=false
+CURRENT=false
 EXPLICIT=()
 
 for arg in "$@"; do
     case "$arg" in
         --all) ALL=true ;;
+        --current) CURRENT=true ;;
         --help|-h)
-            sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'
+            sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *) EXPLICIT+=("$arg") ;;
@@ -66,6 +69,18 @@ if $ALL; then
           | sort
     )
     echo "Found ${#QUANTITIES[@]} quantities."
+elif $CURRENT; then
+    # The generated files record their source definition; no API call needed
+    # (the GitHub API is rate-limited for unauthenticated requests).
+    QUANTITIES=()
+    while IFS= read -r name; do
+        QUANTITIES+=("$name")
+    done < <(
+        grep -h '^// Source: data/quantities/' "${REPO_ROOT}"/src/units/*.rs \
+          | sed 's#.*/##; s#\.json$##' \
+          | sort
+    )
+    echo "Found ${#QUANTITIES[@]} quantities in src/units/."
 elif [[ ${#EXPLICIT[@]} -gt 0 ]]; then
     QUANTITIES=("${EXPLICIT[@]}")
 else

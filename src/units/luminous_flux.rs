@@ -2,27 +2,35 @@
 // Source: data/quantities/LuminousFlux.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In photometry, luminous flux or luminous power is the measure of the perceived power of light.
 ///
-/// The internal value is stored in `Lumen` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct LuminousFlux(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`LuminousFluxUnit::Lumen`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct LuminousFlux<T = f64>(T);
+
+quantity!(LuminousFlux, LuminousFluxUnit, Lumen);
 
 /// Unit variants for [`LuminousFlux`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum LuminousFluxUnit {
     Lumen,
 }
@@ -33,187 +41,69 @@ impl LuminousFluxUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Lumen => "lm",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Lumen => &["lm"],
         }
     }
 }
 
-impl LuminousFlux {
+impl core::str::FromStr for LuminousFluxUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "lm" => Ok(Self::Lumen),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> LuminousFlux<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: LuminousFluxUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: LuminousFluxUnit) -> Self {
         Self(match unit {
-            LuminousFluxUnit::Lumen => x,
+            LuminousFluxUnit::Lumen => value,
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: LuminousFluxUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: LuminousFluxUnit) -> T {
         match unit {
-            LuminousFluxUnit::Lumen => x,
+            LuminousFluxUnit::Lumen => self.0,
         }
     }
 
     /// Creates a [`LuminousFlux`] from a value in Lumens (`lm`).
     #[inline]
-    pub fn from_lumens(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_lumens(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Lumens (`lm`).
     #[inline]
-    pub fn as_lumens(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_lumens(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_lumens`].
     #[inline]
-    pub fn as_lumen(self) -> Num {
+    pub fn as_lumen(self) -> T {
         self.as_lumens()
     }
-}
-
-impl crate::Quantity for LuminousFlux {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for LuminousFlux {
-    type Output = LuminousFlux;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for LuminousFlux {
-    type Output = LuminousFlux;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for LuminousFlux {
-    type Output = LuminousFlux;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for LuminousFlux {
-    type Output = LuminousFlux;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<LuminousFlux> for Num {
-    type Output = LuminousFlux;
-    #[inline]
-    fn mul(self, rhs: LuminousFlux) -> LuminousFlux {
-        LuminousFlux(self * rhs.0)
-    }
-}
-impl Div<Num> for LuminousFlux {
-    type Output = LuminousFlux;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for LuminousFlux {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for LuminousFlux {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, LuminousFluxUnit::Lumen.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`LuminousFlux`].
-#[derive(Debug)]
-pub struct ParseLuminousFluxError(String);
-
-impl fmt::Display for ParseLuminousFluxError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as LuminousFlux", self.0)
-    }
-}
-
-impl std::error::Error for ParseLuminousFluxError {}
-
-impl FromStr for LuminousFlux {
-    type Err = ParseLuminousFluxError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseLuminousFluxError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, LuminousFluxUnit)] = &[("lm", LuminousFluxUnit::Lumen)];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseLuminousFluxError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/SpecificEnergy.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The SpecificEnergy
 ///
-/// The internal value is stored in `JoulePerKilogram` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SpecificEnergy(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`SpecificEnergyUnit::JoulePerKilogram`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct SpecificEnergy<T = f64>(T);
+
+quantity!(SpecificEnergy, SpecificEnergyUnit, JoulePerKilogram);
 
 /// Unit variants for [`SpecificEnergy`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum SpecificEnergyUnit {
     JoulePerKilogram,
     KilojoulePerKilogram,
@@ -93,7 +101,7 @@ impl SpecificEnergyUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerKilogram => "J/kg",
             Self::KilojoulePerKilogram => "kJ/kg",
@@ -128,9 +136,9 @@ impl SpecificEnergyUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerKilogram => &["J/kg"],
             Self::KilojoulePerKilogram => &["kJ/kg"],
@@ -166,856 +174,661 @@ impl SpecificEnergyUnit {
     }
 }
 
-impl SpecificEnergy {
+impl core::str::FromStr for SpecificEnergyUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "J/kg" => Ok(Self::JoulePerKilogram),
+            "kJ/kg" => Ok(Self::KilojoulePerKilogram),
+            "MJ/kg" => Ok(Self::MegajoulePerKilogram),
+            "MJ/t" => Ok(Self::MegajoulePerTonne),
+            "cal/g" => Ok(Self::CaloriePerGram),
+            "kcal/g" => Ok(Self::KilocaloriePerGram),
+            "Wh/kg" => Ok(Self::WattHourPerKilogram),
+            "kWh/kg" => Ok(Self::KilowattHourPerKilogram),
+            "MWh/kg" => Ok(Self::MegawattHourPerKilogram),
+            "GWh/kg" => Ok(Self::GigawattHourPerKilogram),
+            "Wd/kg" => Ok(Self::WattDayPerKilogram),
+            "kWd/kg" => Ok(Self::KilowattDayPerKilogram),
+            "MWd/kg" => Ok(Self::MegawattDayPerKilogram),
+            "GWd/kg" => Ok(Self::GigawattDayPerKilogram),
+            "TWd/kg" => Ok(Self::TerawattDayPerKilogram),
+            "Wd/t" => Ok(Self::WattDayPerTonne),
+            "kWd/t" => Ok(Self::KilowattDayPerTonne),
+            "MWd/t" => Ok(Self::MegawattDayPerTonne),
+            "GWd/t" => Ok(Self::GigawattDayPerTonne),
+            "TWd/t" => Ok(Self::TerawattDayPerTonne),
+            "Wd/ST" => Ok(Self::WattDayPerShortTon),
+            "kWd/ST" => Ok(Self::KilowattDayPerShortTon),
+            "MWd/ST" => Ok(Self::MegawattDayPerShortTon),
+            "GWd/ST" => Ok(Self::GigawattDayPerShortTon),
+            "TWd/ST" => Ok(Self::TerawattDayPerShortTon),
+            "Wh/lbs" => Ok(Self::WattHourPerPound),
+            "kWh/lbs" => Ok(Self::KilowattHourPerPound),
+            "MWh/lbs" => Ok(Self::MegawattHourPerPound),
+            "GWh/lbs" => Ok(Self::GigawattHourPerPound),
+            "btu/lb" => Ok(Self::BtuPerPound),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> SpecificEnergy<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: SpecificEnergyUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: SpecificEnergyUnit) -> Self {
         Self(match unit {
-            SpecificEnergyUnit::JoulePerKilogram => x,
-            SpecificEnergyUnit::KilojoulePerKilogram => (x * 1e3),
-            SpecificEnergyUnit::MegajoulePerKilogram => (x * 1e6),
-            SpecificEnergyUnit::MegajoulePerTonne => x * 1e3,
-            SpecificEnergyUnit::CaloriePerGram => x * 4.184e3,
-            SpecificEnergyUnit::KilocaloriePerGram => (x * 1e3) * 4.184e3,
-            SpecificEnergyUnit::WattHourPerKilogram => x * 3.6e3,
-            SpecificEnergyUnit::KilowattHourPerKilogram => (x * 1e3) * 3.6e3,
-            SpecificEnergyUnit::MegawattHourPerKilogram => (x * 1e6) * 3.6e3,
-            SpecificEnergyUnit::GigawattHourPerKilogram => (x * 1e9) * 3.6e3,
-            SpecificEnergyUnit::WattDayPerKilogram => x * (24.0 * 3.6e3),
-            SpecificEnergyUnit::KilowattDayPerKilogram => (x * 1e3) * (24.0 * 3.6e3),
-            SpecificEnergyUnit::MegawattDayPerKilogram => (x * 1e6) * (24.0 * 3.6e3),
-            SpecificEnergyUnit::GigawattDayPerKilogram => (x * 1e9) * (24.0 * 3.6e3),
-            SpecificEnergyUnit::TerawattDayPerKilogram => (x * 1e12) * (24.0 * 3.6e3),
-            SpecificEnergyUnit::WattDayPerTonne => x * ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::KilowattDayPerTonne => (x * 1e3) * ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::MegawattDayPerTonne => (x * 1e6) * ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::GigawattDayPerTonne => (x * 1e9) * ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::TerawattDayPerTonne => (x * 1e12) * ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::WattDayPerShortTon => x * ((24.0 * 3.6e3) / 9.0718474e2),
-            SpecificEnergyUnit::KilowattDayPerShortTon => {
-                (x * 1e3) * ((24.0 * 3.6e3) / 9.0718474e2)
-            }
-            SpecificEnergyUnit::MegawattDayPerShortTon => {
-                (x * 1e6) * ((24.0 * 3.6e3) / 9.0718474e2)
-            }
-            SpecificEnergyUnit::GigawattDayPerShortTon => {
-                (x * 1e9) * ((24.0 * 3.6e3) / 9.0718474e2)
-            }
-            SpecificEnergyUnit::TerawattDayPerShortTon => {
-                (x * 1e12) * ((24.0 * 3.6e3) / 9.0718474e2)
-            }
-            SpecificEnergyUnit::WattHourPerPound => x * 7.93664e3,
-            SpecificEnergyUnit::KilowattHourPerPound => (x * 1e3) * 7.93664e3,
-            SpecificEnergyUnit::MegawattHourPerPound => (x * 1e6) * 7.93664e3,
-            SpecificEnergyUnit::GigawattHourPerPound => (x * 1e9) * 7.93664e3,
-            SpecificEnergyUnit::BtuPerPound => x * 1055.05585262 / 0.45359237,
+            SpecificEnergyUnit::JoulePerKilogram => value,
+            SpecificEnergyUnit::KilojoulePerKilogram => value * T::from_f64(1000.0),
+            SpecificEnergyUnit::MegajoulePerKilogram => value * T::from_f64(1000000.0),
+            SpecificEnergyUnit::MegajoulePerTonne => value * T::from_f64(1000.0),
+            SpecificEnergyUnit::CaloriePerGram => value * T::from_f64(4184.0),
+            SpecificEnergyUnit::KilocaloriePerGram => value * T::from_f64(4184000.0),
+            SpecificEnergyUnit::WattHourPerKilogram => value * T::from_f64(3600.0),
+            SpecificEnergyUnit::KilowattHourPerKilogram => value * T::from_f64(3600000.0),
+            SpecificEnergyUnit::MegawattHourPerKilogram => value * T::from_f64(3.6e9),
+            SpecificEnergyUnit::GigawattHourPerKilogram => value * T::from_f64(3.6e12),
+            SpecificEnergyUnit::WattDayPerKilogram => value * T::from_f64(86400.0),
+            SpecificEnergyUnit::KilowattDayPerKilogram => value * T::from_f64(8.64e7),
+            SpecificEnergyUnit::MegawattDayPerKilogram => value * T::from_f64(8.64e10),
+            SpecificEnergyUnit::GigawattDayPerKilogram => value * T::from_f64(8.64e13),
+            SpecificEnergyUnit::TerawattDayPerKilogram => value * T::from_f64(8.64e16),
+            SpecificEnergyUnit::WattDayPerTonne => value * T::from_f64(86.4),
+            SpecificEnergyUnit::KilowattDayPerTonne => value * T::from_f64(86400.0),
+            SpecificEnergyUnit::MegawattDayPerTonne => value * T::from_f64(8.64e7),
+            SpecificEnergyUnit::GigawattDayPerTonne => value * T::from_f64(8.64e10),
+            SpecificEnergyUnit::TerawattDayPerTonne => value * T::from_f64(8.64e13),
+            SpecificEnergyUnit::WattDayPerShortTon => value * T::from_f64(95.23969726386711),
+            SpecificEnergyUnit::KilowattDayPerShortTon => value * T::from_f64(95239.69726386711),
+            SpecificEnergyUnit::MegawattDayPerShortTon => value * T::from_f64(9.523969726386711e7),
+            SpecificEnergyUnit::GigawattDayPerShortTon => value * T::from_f64(9.523969726386711e10),
+            SpecificEnergyUnit::TerawattDayPerShortTon => value * T::from_f64(9.523969726386711e13),
+            SpecificEnergyUnit::WattHourPerPound => value * T::from_f64(7936.64),
+            SpecificEnergyUnit::KilowattHourPerPound => value * T::from_f64(7936640.0),
+            SpecificEnergyUnit::MegawattHourPerPound => value * T::from_f64(7.93664e9),
+            SpecificEnergyUnit::GigawattHourPerPound => value * T::from_f64(7.93664e12),
+            SpecificEnergyUnit::BtuPerPound => value * T::from_f64(2326.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: SpecificEnergyUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: SpecificEnergyUnit) -> T {
         match unit {
-            SpecificEnergyUnit::JoulePerKilogram => x,
-            SpecificEnergyUnit::KilojoulePerKilogram => (x / 1e3),
-            SpecificEnergyUnit::MegajoulePerKilogram => (x / 1e6),
-            SpecificEnergyUnit::MegajoulePerTonne => x / 1e3,
-            SpecificEnergyUnit::CaloriePerGram => x / 4.184e3,
-            SpecificEnergyUnit::KilocaloriePerGram => (x / 1e3) / 4.184e3,
-            SpecificEnergyUnit::WattHourPerKilogram => x / 3.6e3,
-            SpecificEnergyUnit::KilowattHourPerKilogram => (x / 1e3) / 3.6e3,
-            SpecificEnergyUnit::MegawattHourPerKilogram => (x / 1e6) / 3.6e3,
-            SpecificEnergyUnit::GigawattHourPerKilogram => (x / 1e9) / 3.6e3,
-            SpecificEnergyUnit::WattDayPerKilogram => x / (24.0 * 3.6e3),
-            SpecificEnergyUnit::KilowattDayPerKilogram => (x / 1e3) / (24.0 * 3.6e3),
-            SpecificEnergyUnit::MegawattDayPerKilogram => (x / 1e6) / (24.0 * 3.6e3),
-            SpecificEnergyUnit::GigawattDayPerKilogram => (x / 1e9) / (24.0 * 3.6e3),
-            SpecificEnergyUnit::TerawattDayPerKilogram => (x / 1e12) / (24.0 * 3.6e3),
-            SpecificEnergyUnit::WattDayPerTonne => x / ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::KilowattDayPerTonne => (x / 1e3) / ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::MegawattDayPerTonne => (x / 1e6) / ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::GigawattDayPerTonne => (x / 1e9) / ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::TerawattDayPerTonne => (x / 1e12) / ((24.0 * 3.6e3) / 1e3),
-            SpecificEnergyUnit::WattDayPerShortTon => x / ((24.0 * 3.6e3) / 9.0718474e2),
-            SpecificEnergyUnit::KilowattDayPerShortTon => {
-                (x / 1e3) / ((24.0 * 3.6e3) / 9.0718474e2)
-            }
-            SpecificEnergyUnit::MegawattDayPerShortTon => {
-                (x / 1e6) / ((24.0 * 3.6e3) / 9.0718474e2)
-            }
+            SpecificEnergyUnit::JoulePerKilogram => self.0,
+            SpecificEnergyUnit::KilojoulePerKilogram => self.0 / T::from_f64(1000.0),
+            SpecificEnergyUnit::MegajoulePerKilogram => self.0 / T::from_f64(1000000.0),
+            SpecificEnergyUnit::MegajoulePerTonne => self.0 / T::from_f64(1000.0),
+            SpecificEnergyUnit::CaloriePerGram => self.0 / T::from_f64(4184.0),
+            SpecificEnergyUnit::KilocaloriePerGram => self.0 / T::from_f64(4184000.0),
+            SpecificEnergyUnit::WattHourPerKilogram => self.0 / T::from_f64(3600.0),
+            SpecificEnergyUnit::KilowattHourPerKilogram => self.0 / T::from_f64(3600000.0),
+            SpecificEnergyUnit::MegawattHourPerKilogram => self.0 / T::from_f64(3.6e9),
+            SpecificEnergyUnit::GigawattHourPerKilogram => self.0 / T::from_f64(3.6e12),
+            SpecificEnergyUnit::WattDayPerKilogram => self.0 / T::from_f64(86400.0),
+            SpecificEnergyUnit::KilowattDayPerKilogram => self.0 / T::from_f64(8.64e7),
+            SpecificEnergyUnit::MegawattDayPerKilogram => self.0 / T::from_f64(8.64e10),
+            SpecificEnergyUnit::GigawattDayPerKilogram => self.0 / T::from_f64(8.64e13),
+            SpecificEnergyUnit::TerawattDayPerKilogram => self.0 / T::from_f64(8.64e16),
+            SpecificEnergyUnit::WattDayPerTonne => self.0 / T::from_f64(86.4),
+            SpecificEnergyUnit::KilowattDayPerTonne => self.0 / T::from_f64(86400.0),
+            SpecificEnergyUnit::MegawattDayPerTonne => self.0 / T::from_f64(8.64e7),
+            SpecificEnergyUnit::GigawattDayPerTonne => self.0 / T::from_f64(8.64e10),
+            SpecificEnergyUnit::TerawattDayPerTonne => self.0 / T::from_f64(8.64e13),
+            SpecificEnergyUnit::WattDayPerShortTon => self.0 / T::from_f64(95.23969726386711),
+            SpecificEnergyUnit::KilowattDayPerShortTon => self.0 / T::from_f64(95239.69726386711),
+            SpecificEnergyUnit::MegawattDayPerShortTon => self.0 / T::from_f64(9.523969726386711e7),
             SpecificEnergyUnit::GigawattDayPerShortTon => {
-                (x / 1e9) / ((24.0 * 3.6e3) / 9.0718474e2)
+                self.0 / T::from_f64(9.523969726386711e10)
             }
             SpecificEnergyUnit::TerawattDayPerShortTon => {
-                (x / 1e12) / ((24.0 * 3.6e3) / 9.0718474e2)
+                self.0 / T::from_f64(9.523969726386711e13)
             }
-            SpecificEnergyUnit::WattHourPerPound => x / 7.93664e3,
-            SpecificEnergyUnit::KilowattHourPerPound => (x / 1e3) / 7.93664e3,
-            SpecificEnergyUnit::MegawattHourPerPound => (x / 1e6) / 7.93664e3,
-            SpecificEnergyUnit::GigawattHourPerPound => (x / 1e9) / 7.93664e3,
-            SpecificEnergyUnit::BtuPerPound => x * 0.45359237 / 1055.05585262,
+            SpecificEnergyUnit::WattHourPerPound => self.0 / T::from_f64(7936.64),
+            SpecificEnergyUnit::KilowattHourPerPound => self.0 / T::from_f64(7936640.0),
+            SpecificEnergyUnit::MegawattHourPerPound => self.0 / T::from_f64(7.93664e9),
+            SpecificEnergyUnit::GigawattHourPerPound => self.0 / T::from_f64(7.93664e12),
+            SpecificEnergyUnit::BtuPerPound => self.0 / T::from_f64(2326.0),
         }
     }
 
     /// Creates a [`SpecificEnergy`] from a value in JoulesPerKilogram (`J/kg`).
     #[inline]
-    pub fn from_joules_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_joules_per_kilogram(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in JoulesPerKilogram (`J/kg`).
     #[inline]
-    pub fn as_joules_per_kilogram(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_joules_per_kilogram(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_joules_per_kilogram`].
     #[inline]
-    pub fn as_joule_per_kilogram(self) -> Num {
+    pub fn as_joule_per_kilogram(self) -> T {
         self.as_joules_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilojoulesPerKilogram (`kJ/kg`).
     #[inline]
-    pub fn from_kilojoules_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilojoules_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilojoulesPerKilogram (`kJ/kg`).
     #[inline]
-    pub fn as_kilojoules_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilojoules_per_kilogram(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilojoules_per_kilogram`].
     #[inline]
-    pub fn as_kilojoule_per_kilogram(self) -> Num {
+    pub fn as_kilojoule_per_kilogram(self) -> T {
         self.as_kilojoules_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegajoulesPerKilogram (`MJ/kg`).
     #[inline]
-    pub fn from_megajoules_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megajoules_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegajoulesPerKilogram (`MJ/kg`).
     #[inline]
-    pub fn as_megajoules_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megajoules_per_kilogram(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megajoules_per_kilogram`].
     #[inline]
-    pub fn as_megajoule_per_kilogram(self) -> Num {
+    pub fn as_megajoule_per_kilogram(self) -> T {
         self.as_megajoules_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegajoulesPerTonne (`MJ/t`).
     #[inline]
-    pub fn from_megajoules_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e3)
+    pub fn from_megajoules_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MegajoulesPerTonne (`MJ/t`).
     #[inline]
-    pub fn as_megajoules_per_tonne(self) -> Num {
-        let x = self.0;
-        x / 1e3
+    pub fn as_megajoules_per_tonne(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_megajoules_per_tonne`].
     #[inline]
-    pub fn as_megajoule_per_tonne(self) -> Num {
+    pub fn as_megajoule_per_tonne(self) -> T {
         self.as_megajoules_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in CaloriesPerGram (`cal/g`).
     #[inline]
-    pub fn from_calories_per_gram(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.184e3)
+    pub fn from_calories_per_gram(value: T) -> Self {
+        Self(value * T::from_f64(4184.0))
     }
 
     /// Returns the value expressed in CaloriesPerGram (`cal/g`).
     #[inline]
-    pub fn as_calories_per_gram(self) -> Num {
-        let x = self.0;
-        x / 4.184e3
+    pub fn as_calories_per_gram(self) -> T {
+        self.0 / T::from_f64(4184.0)
     }
 
     /// Alias for [`Self::as_calories_per_gram`].
     #[inline]
-    pub fn as_calorie_per_gram(self) -> Num {
+    pub fn as_calorie_per_gram(self) -> T {
         self.as_calories_per_gram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilocaloriesPerGram (`kcal/g`).
     #[inline]
-    pub fn from_kilocalories_per_gram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.184e3)
+    pub fn from_kilocalories_per_gram(value: T) -> Self {
+        Self(value * T::from_f64(4184000.0))
     }
 
     /// Returns the value expressed in KilocaloriesPerGram (`kcal/g`).
     #[inline]
-    pub fn as_kilocalories_per_gram(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 4.184e3
+    pub fn as_kilocalories_per_gram(self) -> T {
+        self.0 / T::from_f64(4184000.0)
     }
 
     /// Alias for [`Self::as_kilocalories_per_gram`].
     #[inline]
-    pub fn as_kilocalorie_per_gram(self) -> Num {
+    pub fn as_kilocalorie_per_gram(self) -> T {
         self.as_kilocalories_per_gram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in WattHoursPerKilogram (`Wh/kg`).
     #[inline]
-    pub fn from_watt_hours_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self(x * 3.6e3)
+    pub fn from_watt_hours_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in WattHoursPerKilogram (`Wh/kg`).
     #[inline]
-    pub fn as_watt_hours_per_kilogram(self) -> Num {
-        let x = self.0;
-        x / 3.6e3
+    pub fn as_watt_hours_per_kilogram(self) -> T {
+        self.0 / T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_watt_hours_per_kilogram`].
     #[inline]
-    pub fn as_watt_hour_per_kilogram(self) -> Num {
+    pub fn as_watt_hour_per_kilogram(self) -> T {
         self.as_watt_hours_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilowattHoursPerKilogram (`kWh/kg`).
     #[inline]
-    pub fn from_kilowatt_hours_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 3.6e3)
+    pub fn from_kilowatt_hours_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in KilowattHoursPerKilogram (`kWh/kg`).
     #[inline]
-    pub fn as_kilowatt_hours_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 3.6e3
+    pub fn as_kilowatt_hours_per_kilogram(self) -> T {
+        self.0 / T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_kilowatt_hours_per_kilogram`].
     #[inline]
-    pub fn as_kilowatt_hour_per_kilogram(self) -> Num {
+    pub fn as_kilowatt_hour_per_kilogram(self) -> T {
         self.as_kilowatt_hours_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegawattHoursPerKilogram (`MWh/kg`).
     #[inline]
-    pub fn from_megawatt_hours_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 3.6e3)
+    pub fn from_megawatt_hours_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(3.6e9))
     }
 
     /// Returns the value expressed in MegawattHoursPerKilogram (`MWh/kg`).
     #[inline]
-    pub fn as_megawatt_hours_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 3.6e3
+    pub fn as_megawatt_hours_per_kilogram(self) -> T {
+        self.0 / T::from_f64(3.6e9)
     }
 
     /// Alias for [`Self::as_megawatt_hours_per_kilogram`].
     #[inline]
-    pub fn as_megawatt_hour_per_kilogram(self) -> Num {
+    pub fn as_megawatt_hour_per_kilogram(self) -> T {
         self.as_megawatt_hours_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in GigawattHoursPerKilogram (`GWh/kg`).
     #[inline]
-    pub fn from_gigawatt_hours_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 3.6e3)
+    pub fn from_gigawatt_hours_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(3.6e12))
     }
 
     /// Returns the value expressed in GigawattHoursPerKilogram (`GWh/kg`).
     #[inline]
-    pub fn as_gigawatt_hours_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 3.6e3
+    pub fn as_gigawatt_hours_per_kilogram(self) -> T {
+        self.0 / T::from_f64(3.6e12)
     }
 
     /// Alias for [`Self::as_gigawatt_hours_per_kilogram`].
     #[inline]
-    pub fn as_gigawatt_hour_per_kilogram(self) -> Num {
+    pub fn as_gigawatt_hour_per_kilogram(self) -> T {
         self.as_gigawatt_hours_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in WattDaysPerKilogram (`Wd/kg`).
     #[inline]
-    pub fn from_watt_days_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self(x * (24.0 * 3.6e3))
+    pub fn from_watt_days_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(86400.0))
     }
 
     /// Returns the value expressed in WattDaysPerKilogram (`Wd/kg`).
     #[inline]
-    pub fn as_watt_days_per_kilogram(self) -> Num {
-        let x = self.0;
-        x / (24.0 * 3.6e3)
+    pub fn as_watt_days_per_kilogram(self) -> T {
+        self.0 / T::from_f64(86400.0)
     }
 
     /// Alias for [`Self::as_watt_days_per_kilogram`].
     #[inline]
-    pub fn as_watt_day_per_kilogram(self) -> Num {
+    pub fn as_watt_day_per_kilogram(self) -> T {
         self.as_watt_days_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilowattDaysPerKilogram (`kWd/kg`).
     #[inline]
-    pub fn from_kilowatt_days_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * (24.0 * 3.6e3))
+    pub fn from_kilowatt_days_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(8.64e7))
     }
 
     /// Returns the value expressed in KilowattDaysPerKilogram (`kWd/kg`).
     #[inline]
-    pub fn as_kilowatt_days_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / (24.0 * 3.6e3)
+    pub fn as_kilowatt_days_per_kilogram(self) -> T {
+        self.0 / T::from_f64(8.64e7)
     }
 
     /// Alias for [`Self::as_kilowatt_days_per_kilogram`].
     #[inline]
-    pub fn as_kilowatt_day_per_kilogram(self) -> Num {
+    pub fn as_kilowatt_day_per_kilogram(self) -> T {
         self.as_kilowatt_days_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegawattDaysPerKilogram (`MWd/kg`).
     #[inline]
-    pub fn from_megawatt_days_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * (24.0 * 3.6e3))
+    pub fn from_megawatt_days_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(8.64e10))
     }
 
     /// Returns the value expressed in MegawattDaysPerKilogram (`MWd/kg`).
     #[inline]
-    pub fn as_megawatt_days_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / (24.0 * 3.6e3)
+    pub fn as_megawatt_days_per_kilogram(self) -> T {
+        self.0 / T::from_f64(8.64e10)
     }
 
     /// Alias for [`Self::as_megawatt_days_per_kilogram`].
     #[inline]
-    pub fn as_megawatt_day_per_kilogram(self) -> Num {
+    pub fn as_megawatt_day_per_kilogram(self) -> T {
         self.as_megawatt_days_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in GigawattDaysPerKilogram (`GWd/kg`).
     #[inline]
-    pub fn from_gigawatt_days_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * (24.0 * 3.6e3))
+    pub fn from_gigawatt_days_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(8.64e13))
     }
 
     /// Returns the value expressed in GigawattDaysPerKilogram (`GWd/kg`).
     #[inline]
-    pub fn as_gigawatt_days_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / (24.0 * 3.6e3)
+    pub fn as_gigawatt_days_per_kilogram(self) -> T {
+        self.0 / T::from_f64(8.64e13)
     }
 
     /// Alias for [`Self::as_gigawatt_days_per_kilogram`].
     #[inline]
-    pub fn as_gigawatt_day_per_kilogram(self) -> Num {
+    pub fn as_gigawatt_day_per_kilogram(self) -> T {
         self.as_gigawatt_days_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in TerawattDaysPerKilogram (`TWd/kg`).
     #[inline]
-    pub fn from_terawatt_days_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * (24.0 * 3.6e3))
+    pub fn from_terawatt_days_per_kilogram(value: T) -> Self {
+        Self(value * T::from_f64(8.64e16))
     }
 
     /// Returns the value expressed in TerawattDaysPerKilogram (`TWd/kg`).
     #[inline]
-    pub fn as_terawatt_days_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / (24.0 * 3.6e3)
+    pub fn as_terawatt_days_per_kilogram(self) -> T {
+        self.0 / T::from_f64(8.64e16)
     }
 
     /// Alias for [`Self::as_terawatt_days_per_kilogram`].
     #[inline]
-    pub fn as_terawatt_day_per_kilogram(self) -> Num {
+    pub fn as_terawatt_day_per_kilogram(self) -> T {
         self.as_terawatt_days_per_kilogram()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in WattDaysPerTonne (`Wd/t`).
     #[inline]
-    pub fn from_watt_days_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self(x * ((24.0 * 3.6e3) / 1e3))
+    pub fn from_watt_days_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(86.4))
     }
 
     /// Returns the value expressed in WattDaysPerTonne (`Wd/t`).
     #[inline]
-    pub fn as_watt_days_per_tonne(self) -> Num {
-        let x = self.0;
-        x / ((24.0 * 3.6e3) / 1e3)
+    pub fn as_watt_days_per_tonne(self) -> T {
+        self.0 / T::from_f64(86.4)
     }
 
     /// Alias for [`Self::as_watt_days_per_tonne`].
     #[inline]
-    pub fn as_watt_day_per_tonne(self) -> Num {
+    pub fn as_watt_day_per_tonne(self) -> T {
         self.as_watt_days_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilowattDaysPerTonne (`kWd/t`).
     #[inline]
-    pub fn from_kilowatt_days_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * ((24.0 * 3.6e3) / 1e3))
+    pub fn from_kilowatt_days_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(86400.0))
     }
 
     /// Returns the value expressed in KilowattDaysPerTonne (`kWd/t`).
     #[inline]
-    pub fn as_kilowatt_days_per_tonne(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / ((24.0 * 3.6e3) / 1e3)
+    pub fn as_kilowatt_days_per_tonne(self) -> T {
+        self.0 / T::from_f64(86400.0)
     }
 
     /// Alias for [`Self::as_kilowatt_days_per_tonne`].
     #[inline]
-    pub fn as_kilowatt_day_per_tonne(self) -> Num {
+    pub fn as_kilowatt_day_per_tonne(self) -> T {
         self.as_kilowatt_days_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegawattDaysPerTonne (`MWd/t`).
     #[inline]
-    pub fn from_megawatt_days_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * ((24.0 * 3.6e3) / 1e3))
+    pub fn from_megawatt_days_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(8.64e7))
     }
 
     /// Returns the value expressed in MegawattDaysPerTonne (`MWd/t`).
     #[inline]
-    pub fn as_megawatt_days_per_tonne(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / ((24.0 * 3.6e3) / 1e3)
+    pub fn as_megawatt_days_per_tonne(self) -> T {
+        self.0 / T::from_f64(8.64e7)
     }
 
     /// Alias for [`Self::as_megawatt_days_per_tonne`].
     #[inline]
-    pub fn as_megawatt_day_per_tonne(self) -> Num {
+    pub fn as_megawatt_day_per_tonne(self) -> T {
         self.as_megawatt_days_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in GigawattDaysPerTonne (`GWd/t`).
     #[inline]
-    pub fn from_gigawatt_days_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * ((24.0 * 3.6e3) / 1e3))
+    pub fn from_gigawatt_days_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(8.64e10))
     }
 
     /// Returns the value expressed in GigawattDaysPerTonne (`GWd/t`).
     #[inline]
-    pub fn as_gigawatt_days_per_tonne(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / ((24.0 * 3.6e3) / 1e3)
+    pub fn as_gigawatt_days_per_tonne(self) -> T {
+        self.0 / T::from_f64(8.64e10)
     }
 
     /// Alias for [`Self::as_gigawatt_days_per_tonne`].
     #[inline]
-    pub fn as_gigawatt_day_per_tonne(self) -> Num {
+    pub fn as_gigawatt_day_per_tonne(self) -> T {
         self.as_gigawatt_days_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in TerawattDaysPerTonne (`TWd/t`).
     #[inline]
-    pub fn from_terawatt_days_per_tonne(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * ((24.0 * 3.6e3) / 1e3))
+    pub fn from_terawatt_days_per_tonne(value: T) -> Self {
+        Self(value * T::from_f64(8.64e13))
     }
 
     /// Returns the value expressed in TerawattDaysPerTonne (`TWd/t`).
     #[inline]
-    pub fn as_terawatt_days_per_tonne(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / ((24.0 * 3.6e3) / 1e3)
+    pub fn as_terawatt_days_per_tonne(self) -> T {
+        self.0 / T::from_f64(8.64e13)
     }
 
     /// Alias for [`Self::as_terawatt_days_per_tonne`].
     #[inline]
-    pub fn as_terawatt_day_per_tonne(self) -> Num {
+    pub fn as_terawatt_day_per_tonne(self) -> T {
         self.as_terawatt_days_per_tonne()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in WattDaysPerShortTon (`Wd/ST`).
     #[inline]
-    pub fn from_watt_days_per_short_ton(value: Num) -> Self {
-        let x = value;
-        Self(x * ((24.0 * 3.6e3) / 9.0718474e2))
+    pub fn from_watt_days_per_short_ton(value: T) -> Self {
+        Self(value * T::from_f64(95.23969726386711))
     }
 
     /// Returns the value expressed in WattDaysPerShortTon (`Wd/ST`).
     #[inline]
-    pub fn as_watt_days_per_short_ton(self) -> Num {
-        let x = self.0;
-        x / ((24.0 * 3.6e3) / 9.0718474e2)
+    pub fn as_watt_days_per_short_ton(self) -> T {
+        self.0 / T::from_f64(95.23969726386711)
     }
 
     /// Alias for [`Self::as_watt_days_per_short_ton`].
     #[inline]
-    pub fn as_watt_day_per_short_ton(self) -> Num {
+    pub fn as_watt_day_per_short_ton(self) -> T {
         self.as_watt_days_per_short_ton()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilowattDaysPerShortTon (`kWd/ST`).
     #[inline]
-    pub fn from_kilowatt_days_per_short_ton(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * ((24.0 * 3.6e3) / 9.0718474e2))
+    pub fn from_kilowatt_days_per_short_ton(value: T) -> Self {
+        Self(value * T::from_f64(95239.69726386711))
     }
 
     /// Returns the value expressed in KilowattDaysPerShortTon (`kWd/ST`).
     #[inline]
-    pub fn as_kilowatt_days_per_short_ton(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / ((24.0 * 3.6e3) / 9.0718474e2)
+    pub fn as_kilowatt_days_per_short_ton(self) -> T {
+        self.0 / T::from_f64(95239.69726386711)
     }
 
     /// Alias for [`Self::as_kilowatt_days_per_short_ton`].
     #[inline]
-    pub fn as_kilowatt_day_per_short_ton(self) -> Num {
+    pub fn as_kilowatt_day_per_short_ton(self) -> T {
         self.as_kilowatt_days_per_short_ton()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegawattDaysPerShortTon (`MWd/ST`).
     #[inline]
-    pub fn from_megawatt_days_per_short_ton(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * ((24.0 * 3.6e3) / 9.0718474e2))
+    pub fn from_megawatt_days_per_short_ton(value: T) -> Self {
+        Self(value * T::from_f64(9.523969726386711e7))
     }
 
     /// Returns the value expressed in MegawattDaysPerShortTon (`MWd/ST`).
     #[inline]
-    pub fn as_megawatt_days_per_short_ton(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / ((24.0 * 3.6e3) / 9.0718474e2)
+    pub fn as_megawatt_days_per_short_ton(self) -> T {
+        self.0 / T::from_f64(9.523969726386711e7)
     }
 
     /// Alias for [`Self::as_megawatt_days_per_short_ton`].
     #[inline]
-    pub fn as_megawatt_day_per_short_ton(self) -> Num {
+    pub fn as_megawatt_day_per_short_ton(self) -> T {
         self.as_megawatt_days_per_short_ton()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in GigawattDaysPerShortTon (`GWd/ST`).
     #[inline]
-    pub fn from_gigawatt_days_per_short_ton(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * ((24.0 * 3.6e3) / 9.0718474e2))
+    pub fn from_gigawatt_days_per_short_ton(value: T) -> Self {
+        Self(value * T::from_f64(9.523969726386711e10))
     }
 
     /// Returns the value expressed in GigawattDaysPerShortTon (`GWd/ST`).
     #[inline]
-    pub fn as_gigawatt_days_per_short_ton(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / ((24.0 * 3.6e3) / 9.0718474e2)
+    pub fn as_gigawatt_days_per_short_ton(self) -> T {
+        self.0 / T::from_f64(9.523969726386711e10)
     }
 
     /// Alias for [`Self::as_gigawatt_days_per_short_ton`].
     #[inline]
-    pub fn as_gigawatt_day_per_short_ton(self) -> Num {
+    pub fn as_gigawatt_day_per_short_ton(self) -> T {
         self.as_gigawatt_days_per_short_ton()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in TerawattDaysPerShortTon (`TWd/ST`).
     #[inline]
-    pub fn from_terawatt_days_per_short_ton(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * ((24.0 * 3.6e3) / 9.0718474e2))
+    pub fn from_terawatt_days_per_short_ton(value: T) -> Self {
+        Self(value * T::from_f64(9.523969726386711e13))
     }
 
     /// Returns the value expressed in TerawattDaysPerShortTon (`TWd/ST`).
     #[inline]
-    pub fn as_terawatt_days_per_short_ton(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / ((24.0 * 3.6e3) / 9.0718474e2)
+    pub fn as_terawatt_days_per_short_ton(self) -> T {
+        self.0 / T::from_f64(9.523969726386711e13)
     }
 
     /// Alias for [`Self::as_terawatt_days_per_short_ton`].
     #[inline]
-    pub fn as_terawatt_day_per_short_ton(self) -> Num {
+    pub fn as_terawatt_day_per_short_ton(self) -> T {
         self.as_terawatt_days_per_short_ton()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in WattHoursPerPound (`Wh/lbs`).
     #[inline]
-    pub fn from_watt_hours_per_pound(value: Num) -> Self {
-        let x = value;
-        Self(x * 7.93664e3)
+    pub fn from_watt_hours_per_pound(value: T) -> Self {
+        Self(value * T::from_f64(7936.64))
     }
 
     /// Returns the value expressed in WattHoursPerPound (`Wh/lbs`).
     #[inline]
-    pub fn as_watt_hours_per_pound(self) -> Num {
-        let x = self.0;
-        x / 7.93664e3
+    pub fn as_watt_hours_per_pound(self) -> T {
+        self.0 / T::from_f64(7936.64)
     }
 
     /// Alias for [`Self::as_watt_hours_per_pound`].
     #[inline]
-    pub fn as_watt_hour_per_pound(self) -> Num {
+    pub fn as_watt_hour_per_pound(self) -> T {
         self.as_watt_hours_per_pound()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in KilowattHoursPerPound (`kWh/lbs`).
     #[inline]
-    pub fn from_kilowatt_hours_per_pound(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 7.93664e3)
+    pub fn from_kilowatt_hours_per_pound(value: T) -> Self {
+        Self(value * T::from_f64(7936640.0))
     }
 
     /// Returns the value expressed in KilowattHoursPerPound (`kWh/lbs`).
     #[inline]
-    pub fn as_kilowatt_hours_per_pound(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 7.93664e3
+    pub fn as_kilowatt_hours_per_pound(self) -> T {
+        self.0 / T::from_f64(7936640.0)
     }
 
     /// Alias for [`Self::as_kilowatt_hours_per_pound`].
     #[inline]
-    pub fn as_kilowatt_hour_per_pound(self) -> Num {
+    pub fn as_kilowatt_hour_per_pound(self) -> T {
         self.as_kilowatt_hours_per_pound()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in MegawattHoursPerPound (`MWh/lbs`).
     #[inline]
-    pub fn from_megawatt_hours_per_pound(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 7.93664e3)
+    pub fn from_megawatt_hours_per_pound(value: T) -> Self {
+        Self(value * T::from_f64(7.93664e9))
     }
 
     /// Returns the value expressed in MegawattHoursPerPound (`MWh/lbs`).
     #[inline]
-    pub fn as_megawatt_hours_per_pound(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 7.93664e3
+    pub fn as_megawatt_hours_per_pound(self) -> T {
+        self.0 / T::from_f64(7.93664e9)
     }
 
     /// Alias for [`Self::as_megawatt_hours_per_pound`].
     #[inline]
-    pub fn as_megawatt_hour_per_pound(self) -> Num {
+    pub fn as_megawatt_hour_per_pound(self) -> T {
         self.as_megawatt_hours_per_pound()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in GigawattHoursPerPound (`GWh/lbs`).
     #[inline]
-    pub fn from_gigawatt_hours_per_pound(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 7.93664e3)
+    pub fn from_gigawatt_hours_per_pound(value: T) -> Self {
+        Self(value * T::from_f64(7.93664e12))
     }
 
     /// Returns the value expressed in GigawattHoursPerPound (`GWh/lbs`).
     #[inline]
-    pub fn as_gigawatt_hours_per_pound(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 7.93664e3
+    pub fn as_gigawatt_hours_per_pound(self) -> T {
+        self.0 / T::from_f64(7.93664e12)
     }
 
     /// Alias for [`Self::as_gigawatt_hours_per_pound`].
     #[inline]
-    pub fn as_gigawatt_hour_per_pound(self) -> Num {
+    pub fn as_gigawatt_hour_per_pound(self) -> T {
         self.as_gigawatt_hours_per_pound()
     }
 
     /// Creates a [`SpecificEnergy`] from a value in BtuPerPound (`btu/lb`).
     #[inline]
-    pub fn from_btu_per_pound(value: Num) -> Self {
-        let x = value;
-        Self(x * 1055.05585262 / 0.45359237)
+    pub fn from_btu_per_pound(value: T) -> Self {
+        Self(value * T::from_f64(2326.0))
     }
 
     /// Returns the value expressed in BtuPerPound (`btu/lb`).
     #[inline]
-    pub fn as_btu_per_pound(self) -> Num {
-        let x = self.0;
-        x * 0.45359237 / 1055.05585262
+    pub fn as_btu_per_pound(self) -> T {
+        self.0 / T::from_f64(2326.0)
     }
-}
-
-impl crate::Quantity for SpecificEnergy {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for SpecificEnergy {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for SpecificEnergy {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for SpecificEnergy {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for SpecificEnergy {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<SpecificEnergy> for Num {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn mul(self, rhs: SpecificEnergy) -> SpecificEnergy {
-        SpecificEnergy(self * rhs.0)
-    }
-}
-impl Div<Num> for SpecificEnergy {
-    type Output = SpecificEnergy;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for SpecificEnergy {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for SpecificEnergy {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            SpecificEnergyUnit::JoulePerKilogram.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`SpecificEnergy`].
-#[derive(Debug)]
-pub struct ParseSpecificEnergyError(String);
-
-impl fmt::Display for ParseSpecificEnergyError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as SpecificEnergy", self.0)
-    }
-}
-
-impl std::error::Error for ParseSpecificEnergyError {}
-
-impl FromStr for SpecificEnergy {
-    type Err = ParseSpecificEnergyError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseSpecificEnergyError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, SpecificEnergyUnit)] = &[
-            ("GWh/lbs", SpecificEnergyUnit::GigawattHourPerPound),
-            ("MWh/lbs", SpecificEnergyUnit::MegawattHourPerPound),
-            ("kWh/lbs", SpecificEnergyUnit::KilowattHourPerPound),
-            ("GWd/ST", SpecificEnergyUnit::GigawattDayPerShortTon),
-            ("GWd/kg", SpecificEnergyUnit::GigawattDayPerKilogram),
-            ("GWh/kg", SpecificEnergyUnit::GigawattHourPerKilogram),
-            ("MWd/ST", SpecificEnergyUnit::MegawattDayPerShortTon),
-            ("MWd/kg", SpecificEnergyUnit::MegawattDayPerKilogram),
-            ("MWh/kg", SpecificEnergyUnit::MegawattHourPerKilogram),
-            ("TWd/ST", SpecificEnergyUnit::TerawattDayPerShortTon),
-            ("TWd/kg", SpecificEnergyUnit::TerawattDayPerKilogram),
-            ("Wh/lbs", SpecificEnergyUnit::WattHourPerPound),
-            ("btu/lb", SpecificEnergyUnit::BtuPerPound),
-            ("kWd/ST", SpecificEnergyUnit::KilowattDayPerShortTon),
-            ("kWd/kg", SpecificEnergyUnit::KilowattDayPerKilogram),
-            ("kWh/kg", SpecificEnergyUnit::KilowattHourPerKilogram),
-            ("kcal/g", SpecificEnergyUnit::KilocaloriePerGram),
-            ("GWd/t", SpecificEnergyUnit::GigawattDayPerTonne),
-            ("MJ/kg", SpecificEnergyUnit::MegajoulePerKilogram),
-            ("MWd/t", SpecificEnergyUnit::MegawattDayPerTonne),
-            ("TWd/t", SpecificEnergyUnit::TerawattDayPerTonne),
-            ("Wd/ST", SpecificEnergyUnit::WattDayPerShortTon),
-            ("Wd/kg", SpecificEnergyUnit::WattDayPerKilogram),
-            ("Wh/kg", SpecificEnergyUnit::WattHourPerKilogram),
-            ("cal/g", SpecificEnergyUnit::CaloriePerGram),
-            ("kJ/kg", SpecificEnergyUnit::KilojoulePerKilogram),
-            ("kWd/t", SpecificEnergyUnit::KilowattDayPerTonne),
-            ("J/kg", SpecificEnergyUnit::JoulePerKilogram),
-            ("MJ/t", SpecificEnergyUnit::MegajoulePerTonne),
-            ("Wd/t", SpecificEnergyUnit::WattDayPerTonne),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseSpecificEnergyError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/Energy.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The joule, symbol J, is a derived unit of energy, work, or amount of heat in the International System of Units. It is equal to the energy transferred (or work done) when applying a force of one newton through a distance of one metre (1 newton metre or N·m), or in passing an electric current of one ampere through a resistance of one ohm for one second. Many other units of energy are included. Please do not confuse this definition of the calorie with the one colloquially used by the food industry, the large calorie, which is equivalent to 1 kcal. Thermochemical definition of the calorie is used. For BTU, the IT definition is used.
 ///
-/// The internal value is stored in `Joule` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Energy(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`EnergyUnit::Joule`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Energy<T = f64>(T);
+
+quantity!(Energy, EnergyUnit, Joule);
 
 /// Unit variants for [`Energy`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum EnergyUnit {
     Joule,
     Nanojoule,
@@ -120,7 +128,7 @@ impl EnergyUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Joule => "J",
             Self::Nanojoule => "nJ",
@@ -165,9 +173,9 @@ impl EnergyUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Joule => &["J"],
             Self::Nanojoule => &["nJ"],
@@ -213,1071 +221,873 @@ impl EnergyUnit {
     }
 }
 
-impl Energy {
+impl core::str::FromStr for EnergyUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "J" => Ok(Self::Joule),
+            "nJ" => Ok(Self::Nanojoule),
+            "µJ" => Ok(Self::Microjoule),
+            "mJ" => Ok(Self::Millijoule),
+            "kJ" => Ok(Self::Kilojoule),
+            "MJ" => Ok(Self::Megajoule),
+            "GJ" => Ok(Self::Gigajoule),
+            "TJ" => Ok(Self::Terajoule),
+            "PJ" => Ok(Self::Petajoule),
+            "cal" => Ok(Self::Calorie),
+            "kcal" => Ok(Self::Kilocalorie),
+            "Mcal" => Ok(Self::Megacalorie),
+            "BTU" => Ok(Self::BritishThermalUnit),
+            "kBTU" => Ok(Self::KilobritishThermalUnit),
+            "MBTU" => Ok(Self::MegabritishThermalUnit),
+            "GBTU" => Ok(Self::GigabritishThermalUnit),
+            "eV" => Ok(Self::ElectronVolt),
+            "keV" => Ok(Self::KiloelectronVolt),
+            "MeV" => Ok(Self::MegaelectronVolt),
+            "GeV" => Ok(Self::GigaelectronVolt),
+            "TeV" => Ok(Self::TeraelectronVolt),
+            "ft·lb" => Ok(Self::FootPound),
+            "erg" => Ok(Self::Erg),
+            "Wh" => Ok(Self::WattHour),
+            "kWh" => Ok(Self::KilowattHour),
+            "MWh" => Ok(Self::MegawattHour),
+            "GWh" => Ok(Self::GigawattHour),
+            "TWh" => Ok(Self::TerawattHour),
+            "Wd" => Ok(Self::WattDay),
+            "kWd" => Ok(Self::KilowattDay),
+            "MWd" => Ok(Self::MegawattDay),
+            "GWd" => Ok(Self::GigawattDay),
+            "TWd" => Ok(Self::TerawattDay),
+            "th (E.C.)" => Ok(Self::ThermEc),
+            "dath (E.C.)" => Ok(Self::DecathermEc),
+            "th (U.S.)" => Ok(Self::ThermUs),
+            "dath (U.S.)" => Ok(Self::DecathermUs),
+            "th (imp.)" => Ok(Self::ThermImperial),
+            "dath (imp.)" => Ok(Self::DecathermImperial),
+            "hp·h" => Ok(Self::HorsepowerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Energy<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: EnergyUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: EnergyUnit) -> Self {
         Self(match unit {
-            EnergyUnit::Joule => x,
-            EnergyUnit::Nanojoule => (x * 1e-9),
-            EnergyUnit::Microjoule => (x * 1e-6),
-            EnergyUnit::Millijoule => (x * 1e-3),
-            EnergyUnit::Kilojoule => (x * 1e3),
-            EnergyUnit::Megajoule => (x * 1e6),
-            EnergyUnit::Gigajoule => (x * 1e9),
-            EnergyUnit::Terajoule => (x * 1e12),
-            EnergyUnit::Petajoule => (x * 1e15),
-            EnergyUnit::Calorie => x * 4.184,
-            EnergyUnit::Kilocalorie => (x * 1e3) * 4.184,
-            EnergyUnit::Megacalorie => (x * 1e6) * 4.184,
-            EnergyUnit::BritishThermalUnit => x * 1055.05585262,
-            EnergyUnit::KilobritishThermalUnit => (x * 1e3) * 1055.05585262,
-            EnergyUnit::MegabritishThermalUnit => (x * 1e6) * 1055.05585262,
-            EnergyUnit::GigabritishThermalUnit => (x * 1e9) * 1055.05585262,
-            EnergyUnit::ElectronVolt => x * 1.602176634e-19,
-            EnergyUnit::KiloelectronVolt => (x * 1e3) * 1.602176634e-19,
-            EnergyUnit::MegaelectronVolt => (x * 1e6) * 1.602176634e-19,
-            EnergyUnit::GigaelectronVolt => (x * 1e9) * 1.602176634e-19,
-            EnergyUnit::TeraelectronVolt => (x * 1e12) * 1.602176634e-19,
-            EnergyUnit::FootPound => x * 1.3558179483314004,
-            EnergyUnit::Erg => x * 1e-7,
-            EnergyUnit::WattHour => x * 3600.0,
-            EnergyUnit::KilowattHour => (x * 1e3) * 3600.0,
-            EnergyUnit::MegawattHour => (x * 1e6) * 3600.0,
-            EnergyUnit::GigawattHour => (x * 1e9) * 3600.0,
-            EnergyUnit::TerawattHour => (x * 1e12) * 3600.0,
-            EnergyUnit::WattDay => x * 24.0 * 3600.0,
-            EnergyUnit::KilowattDay => (x * 1e3) * 24.0 * 3600.0,
-            EnergyUnit::MegawattDay => (x * 1e6) * 24.0 * 3600.0,
-            EnergyUnit::GigawattDay => (x * 1e9) * 24.0 * 3600.0,
-            EnergyUnit::TerawattDay => (x * 1e12) * 24.0 * 3600.0,
-            EnergyUnit::ThermEc => x * 1.05505585262e8,
-            EnergyUnit::DecathermEc => (x * 1e1) * 1.05505585262e8,
-            EnergyUnit::ThermUs => x * 1.054804e8,
-            EnergyUnit::DecathermUs => (x * 1e1) * 1.054804e8,
-            EnergyUnit::ThermImperial => x * 1.05505585257348e8,
-            EnergyUnit::DecathermImperial => (x * 1e1) * 1.05505585257348e8,
-            EnergyUnit::HorsepowerHour => x * 76.0402249 * 9.80665 * 3600.0,
+            EnergyUnit::Joule => value,
+            EnergyUnit::Nanojoule => value / T::from_f64(1e9),
+            EnergyUnit::Microjoule => value / T::from_f64(1000000.0),
+            EnergyUnit::Millijoule => value / T::from_f64(1000.0),
+            EnergyUnit::Kilojoule => value * T::from_f64(1000.0),
+            EnergyUnit::Megajoule => value * T::from_f64(1000000.0),
+            EnergyUnit::Gigajoule => value * T::from_f64(1e9),
+            EnergyUnit::Terajoule => value * T::from_f64(1e12),
+            EnergyUnit::Petajoule => value * T::from_f64(1e15),
+            EnergyUnit::Calorie => value * T::from_f64(4.184),
+            EnergyUnit::Kilocalorie => value * T::from_f64(4184.0),
+            EnergyUnit::Megacalorie => value * T::from_f64(4184000.0),
+            EnergyUnit::BritishThermalUnit => value * T::from_f64(1055.05585262),
+            EnergyUnit::KilobritishThermalUnit => value * T::from_f64(1055055.85262),
+            EnergyUnit::MegabritishThermalUnit => value * T::from_f64(1.05505585262e9),
+            EnergyUnit::GigabritishThermalUnit => value * T::from_f64(1.05505585262e12),
+            EnergyUnit::ElectronVolt => value * T::from_f64(1.602176634e-19),
+            EnergyUnit::KiloelectronVolt => value * T::from_f64(1.602176634e-16),
+            EnergyUnit::MegaelectronVolt => value * T::from_f64(1.602176634e-13),
+            EnergyUnit::GigaelectronVolt => value * T::from_f64(1.602176634e-10),
+            EnergyUnit::TeraelectronVolt => value * T::from_f64(1.602176634e-7),
+            EnergyUnit::FootPound => value * T::from_f64(1.3558179483314003),
+            EnergyUnit::Erg => value / T::from_f64(1e7),
+            EnergyUnit::WattHour => value * T::from_f64(3600.0),
+            EnergyUnit::KilowattHour => value * T::from_f64(3600000.0),
+            EnergyUnit::MegawattHour => value * T::from_f64(3.6e9),
+            EnergyUnit::GigawattHour => value * T::from_f64(3.6e12),
+            EnergyUnit::TerawattHour => value * T::from_f64(3.6e15),
+            EnergyUnit::WattDay => value * T::from_f64(86400.0),
+            EnergyUnit::KilowattDay => value * T::from_f64(8.64e7),
+            EnergyUnit::MegawattDay => value * T::from_f64(8.64e10),
+            EnergyUnit::GigawattDay => value * T::from_f64(8.64e13),
+            EnergyUnit::TerawattDay => value * T::from_f64(8.64e16),
+            EnergyUnit::ThermEc => value * T::from_f64(1.05505585262e8),
+            EnergyUnit::DecathermEc => value * T::from_f64(1.05505585262e9),
+            EnergyUnit::ThermUs => value * T::from_f64(1.054804e8),
+            EnergyUnit::DecathermUs => value * T::from_f64(1.054804e9),
+            EnergyUnit::ThermImperial => value * T::from_f64(1.05505585257348e8),
+            EnergyUnit::DecathermImperial => value * T::from_f64(1.05505585257348e9),
+            EnergyUnit::HorsepowerHour => value * T::from_f64(2684519.537456106),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: EnergyUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: EnergyUnit) -> T {
         match unit {
-            EnergyUnit::Joule => x,
-            EnergyUnit::Nanojoule => (x / 1e-9),
-            EnergyUnit::Microjoule => (x / 1e-6),
-            EnergyUnit::Millijoule => (x / 1e-3),
-            EnergyUnit::Kilojoule => (x / 1e3),
-            EnergyUnit::Megajoule => (x / 1e6),
-            EnergyUnit::Gigajoule => (x / 1e9),
-            EnergyUnit::Terajoule => (x / 1e12),
-            EnergyUnit::Petajoule => (x / 1e15),
-            EnergyUnit::Calorie => x / 4.184,
-            EnergyUnit::Kilocalorie => (x / 1e3) / 4.184,
-            EnergyUnit::Megacalorie => (x / 1e6) / 4.184,
-            EnergyUnit::BritishThermalUnit => x / 1055.05585262,
-            EnergyUnit::KilobritishThermalUnit => (x / 1e3) / 1055.05585262,
-            EnergyUnit::MegabritishThermalUnit => (x / 1e6) / 1055.05585262,
-            EnergyUnit::GigabritishThermalUnit => (x / 1e9) / 1055.05585262,
-            EnergyUnit::ElectronVolt => x / 1.602176634e-19,
-            EnergyUnit::KiloelectronVolt => (x / 1e3) / 1.602176634e-19,
-            EnergyUnit::MegaelectronVolt => (x / 1e6) / 1.602176634e-19,
-            EnergyUnit::GigaelectronVolt => (x / 1e9) / 1.602176634e-19,
-            EnergyUnit::TeraelectronVolt => (x / 1e12) / 1.602176634e-19,
-            EnergyUnit::FootPound => x / 1.3558179483314004,
-            EnergyUnit::Erg => x / 1e-7,
-            EnergyUnit::WattHour => x / 3600.0,
-            EnergyUnit::KilowattHour => (x / 1e3) / 3600.0,
-            EnergyUnit::MegawattHour => (x / 1e6) / 3600.0,
-            EnergyUnit::GigawattHour => (x / 1e9) / 3600.0,
-            EnergyUnit::TerawattHour => (x / 1e12) / 3600.0,
-            EnergyUnit::WattDay => x / (24.0 * 3600.0),
-            EnergyUnit::KilowattDay => (x / 1e3) / (24.0 * 3600.0),
-            EnergyUnit::MegawattDay => (x / 1e6) / (24.0 * 3600.0),
-            EnergyUnit::GigawattDay => (x / 1e9) / (24.0 * 3600.0),
-            EnergyUnit::TerawattDay => (x / 1e12) / (24.0 * 3600.0),
-            EnergyUnit::ThermEc => x / 1.05505585262e8,
-            EnergyUnit::DecathermEc => (x / 1e1) / 1.05505585262e8,
-            EnergyUnit::ThermUs => x / 1.054804e8,
-            EnergyUnit::DecathermUs => (x / 1e1) / 1.054804e8,
-            EnergyUnit::ThermImperial => x / 1.05505585257348e8,
-            EnergyUnit::DecathermImperial => (x / 1e1) / 1.05505585257348e8,
-            EnergyUnit::HorsepowerHour => x / (76.0402249 * 9.80665 * 3600.0),
+            EnergyUnit::Joule => self.0,
+            EnergyUnit::Nanojoule => self.0 * T::from_f64(1e9),
+            EnergyUnit::Microjoule => self.0 * T::from_f64(1000000.0),
+            EnergyUnit::Millijoule => self.0 * T::from_f64(1000.0),
+            EnergyUnit::Kilojoule => self.0 / T::from_f64(1000.0),
+            EnergyUnit::Megajoule => self.0 / T::from_f64(1000000.0),
+            EnergyUnit::Gigajoule => self.0 / T::from_f64(1e9),
+            EnergyUnit::Terajoule => self.0 / T::from_f64(1e12),
+            EnergyUnit::Petajoule => self.0 / T::from_f64(1e15),
+            EnergyUnit::Calorie => self.0 / T::from_f64(4.184),
+            EnergyUnit::Kilocalorie => self.0 / T::from_f64(4184.0),
+            EnergyUnit::Megacalorie => self.0 / T::from_f64(4184000.0),
+            EnergyUnit::BritishThermalUnit => self.0 / T::from_f64(1055.05585262),
+            EnergyUnit::KilobritishThermalUnit => self.0 / T::from_f64(1055055.85262),
+            EnergyUnit::MegabritishThermalUnit => self.0 / T::from_f64(1.05505585262e9),
+            EnergyUnit::GigabritishThermalUnit => self.0 / T::from_f64(1.05505585262e12),
+            EnergyUnit::ElectronVolt => self.0 / T::from_f64(1.602176634e-19),
+            EnergyUnit::KiloelectronVolt => self.0 / T::from_f64(1.602176634e-16),
+            EnergyUnit::MegaelectronVolt => self.0 / T::from_f64(1.602176634e-13),
+            EnergyUnit::GigaelectronVolt => self.0 / T::from_f64(1.602176634e-10),
+            EnergyUnit::TeraelectronVolt => self.0 / T::from_f64(1.602176634e-7),
+            EnergyUnit::FootPound => self.0 / T::from_f64(1.3558179483314003),
+            EnergyUnit::Erg => self.0 * T::from_f64(1e7),
+            EnergyUnit::WattHour => self.0 / T::from_f64(3600.0),
+            EnergyUnit::KilowattHour => self.0 / T::from_f64(3600000.0),
+            EnergyUnit::MegawattHour => self.0 / T::from_f64(3.6e9),
+            EnergyUnit::GigawattHour => self.0 / T::from_f64(3.6e12),
+            EnergyUnit::TerawattHour => self.0 / T::from_f64(3.6e15),
+            EnergyUnit::WattDay => self.0 / T::from_f64(86400.0),
+            EnergyUnit::KilowattDay => self.0 / T::from_f64(8.64e7),
+            EnergyUnit::MegawattDay => self.0 / T::from_f64(8.64e10),
+            EnergyUnit::GigawattDay => self.0 / T::from_f64(8.64e13),
+            EnergyUnit::TerawattDay => self.0 / T::from_f64(8.64e16),
+            EnergyUnit::ThermEc => self.0 / T::from_f64(1.05505585262e8),
+            EnergyUnit::DecathermEc => self.0 / T::from_f64(1.05505585262e9),
+            EnergyUnit::ThermUs => self.0 / T::from_f64(1.054804e8),
+            EnergyUnit::DecathermUs => self.0 / T::from_f64(1.054804e9),
+            EnergyUnit::ThermImperial => self.0 / T::from_f64(1.05505585257348e8),
+            EnergyUnit::DecathermImperial => self.0 / T::from_f64(1.05505585257348e9),
+            EnergyUnit::HorsepowerHour => self.0 / T::from_f64(2684519.537456106),
         }
     }
 
     /// Creates a [`Energy`] from a value in Joules (`J`).
     #[inline]
-    pub fn from_joules(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_joules(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Joules (`J`).
     #[inline]
-    pub fn as_joules(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_joules(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_joules`].
     #[inline]
-    pub fn as_joule(self) -> Num {
+    pub fn as_joule(self) -> T {
         self.as_joules()
     }
 
     /// Creates a [`Energy`] from a value in Nanojoules (`nJ`).
     #[inline]
-    pub fn from_nanojoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanojoules(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanojoules (`nJ`).
     #[inline]
-    pub fn as_nanojoules(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanojoules(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanojoules`].
     #[inline]
-    pub fn as_nanojoule(self) -> Num {
+    pub fn as_nanojoule(self) -> T {
         self.as_nanojoules()
     }
 
     /// Creates a [`Energy`] from a value in Microjoules (`µJ`).
     #[inline]
-    pub fn from_microjoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microjoules(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microjoules (`µJ`).
     #[inline]
-    pub fn as_microjoules(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microjoules(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microjoules`].
     #[inline]
-    pub fn as_microjoule(self) -> Num {
+    pub fn as_microjoule(self) -> T {
         self.as_microjoules()
     }
 
     /// Creates a [`Energy`] from a value in Millijoules (`mJ`).
     #[inline]
-    pub fn from_millijoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millijoules(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millijoules (`mJ`).
     #[inline]
-    pub fn as_millijoules(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millijoules(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millijoules`].
     #[inline]
-    pub fn as_millijoule(self) -> Num {
+    pub fn as_millijoule(self) -> T {
         self.as_millijoules()
     }
 
     /// Creates a [`Energy`] from a value in Kilojoules (`kJ`).
     #[inline]
-    pub fn from_kilojoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilojoules(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilojoules (`kJ`).
     #[inline]
-    pub fn as_kilojoules(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilojoules(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilojoules`].
     #[inline]
-    pub fn as_kilojoule(self) -> Num {
+    pub fn as_kilojoule(self) -> T {
         self.as_kilojoules()
     }
 
     /// Creates a [`Energy`] from a value in Megajoules (`MJ`).
     #[inline]
-    pub fn from_megajoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megajoules(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megajoules (`MJ`).
     #[inline]
-    pub fn as_megajoules(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megajoules(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megajoules`].
     #[inline]
-    pub fn as_megajoule(self) -> Num {
+    pub fn as_megajoule(self) -> T {
         self.as_megajoules()
     }
 
     /// Creates a [`Energy`] from a value in Gigajoules (`GJ`).
     #[inline]
-    pub fn from_gigajoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigajoules(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigajoules (`GJ`).
     #[inline]
-    pub fn as_gigajoules(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigajoules(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigajoules`].
     #[inline]
-    pub fn as_gigajoule(self) -> Num {
+    pub fn as_gigajoule(self) -> T {
         self.as_gigajoules()
     }
 
     /// Creates a [`Energy`] from a value in Terajoules (`TJ`).
     #[inline]
-    pub fn from_terajoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terajoules(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Terajoules (`TJ`).
     #[inline]
-    pub fn as_terajoules(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terajoules(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_terajoules`].
     #[inline]
-    pub fn as_terajoule(self) -> Num {
+    pub fn as_terajoule(self) -> T {
         self.as_terajoules()
     }
 
     /// Creates a [`Energy`] from a value in Petajoules (`PJ`).
     #[inline]
-    pub fn from_petajoules(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15))
+    pub fn from_petajoules(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Petajoules (`PJ`).
     #[inline]
-    pub fn as_petajoules(self) -> Num {
-        let x = self.0;
-        (x / 1e15)
+    pub fn as_petajoules(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_petajoules`].
     #[inline]
-    pub fn as_petajoule(self) -> Num {
+    pub fn as_petajoule(self) -> T {
         self.as_petajoules()
     }
 
     /// Creates a [`Energy`] from a value in Calories (`cal`).
     #[inline]
-    pub fn from_calories(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.184)
+    pub fn from_calories(value: T) -> Self {
+        Self(value * T::from_f64(4.184))
     }
 
     /// Returns the value expressed in Calories (`cal`).
     #[inline]
-    pub fn as_calories(self) -> Num {
-        let x = self.0;
-        x / 4.184
+    pub fn as_calories(self) -> T {
+        self.0 / T::from_f64(4.184)
     }
 
     /// Alias for [`Self::as_calories`].
     #[inline]
-    pub fn as_calorie(self) -> Num {
+    pub fn as_calorie(self) -> T {
         self.as_calories()
     }
 
     /// Creates a [`Energy`] from a value in Kilocalories (`kcal`).
     #[inline]
-    pub fn from_kilocalories(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.184)
+    pub fn from_kilocalories(value: T) -> Self {
+        Self(value * T::from_f64(4184.0))
     }
 
     /// Returns the value expressed in Kilocalories (`kcal`).
     #[inline]
-    pub fn as_kilocalories(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 4.184
+    pub fn as_kilocalories(self) -> T {
+        self.0 / T::from_f64(4184.0)
     }
 
     /// Alias for [`Self::as_kilocalories`].
     #[inline]
-    pub fn as_kilocalorie(self) -> Num {
+    pub fn as_kilocalorie(self) -> T {
         self.as_kilocalories()
     }
 
     /// Creates a [`Energy`] from a value in Megacalories (`Mcal`).
     #[inline]
-    pub fn from_megacalories(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 4.184)
+    pub fn from_megacalories(value: T) -> Self {
+        Self(value * T::from_f64(4184000.0))
     }
 
     /// Returns the value expressed in Megacalories (`Mcal`).
     #[inline]
-    pub fn as_megacalories(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 4.184
+    pub fn as_megacalories(self) -> T {
+        self.0 / T::from_f64(4184000.0)
     }
 
     /// Alias for [`Self::as_megacalories`].
     #[inline]
-    pub fn as_megacalorie(self) -> Num {
+    pub fn as_megacalorie(self) -> T {
         self.as_megacalories()
     }
 
     /// Creates a [`Energy`] from a value in BritishThermalUnits (`BTU`).
     #[inline]
-    pub fn from_british_thermal_units(value: Num) -> Self {
-        let x = value;
-        Self(x * 1055.05585262)
+    pub fn from_british_thermal_units(value: T) -> Self {
+        Self(value * T::from_f64(1055.05585262))
     }
 
     /// Returns the value expressed in BritishThermalUnits (`BTU`).
     #[inline]
-    pub fn as_british_thermal_units(self) -> Num {
-        let x = self.0;
-        x / 1055.05585262
+    pub fn as_british_thermal_units(self) -> T {
+        self.0 / T::from_f64(1055.05585262)
     }
 
     /// Alias for [`Self::as_british_thermal_units`].
     #[inline]
-    pub fn as_british_thermal_unit(self) -> Num {
+    pub fn as_british_thermal_unit(self) -> T {
         self.as_british_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in KilobritishThermalUnits (`kBTU`).
     #[inline]
-    pub fn from_kilobritish_thermal_units(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1055.05585262)
+    pub fn from_kilobritish_thermal_units(value: T) -> Self {
+        Self(value * T::from_f64(1055055.85262))
     }
 
     /// Returns the value expressed in KilobritishThermalUnits (`kBTU`).
     #[inline]
-    pub fn as_kilobritish_thermal_units(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1055.05585262
+    pub fn as_kilobritish_thermal_units(self) -> T {
+        self.0 / T::from_f64(1055055.85262)
     }
 
     /// Alias for [`Self::as_kilobritish_thermal_units`].
     #[inline]
-    pub fn as_kilobritish_thermal_unit(self) -> Num {
+    pub fn as_kilobritish_thermal_unit(self) -> T {
         self.as_kilobritish_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in MegabritishThermalUnits (`MBTU`).
     #[inline]
-    pub fn from_megabritish_thermal_units(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1055.05585262)
+    pub fn from_megabritish_thermal_units(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585262e9))
     }
 
     /// Returns the value expressed in MegabritishThermalUnits (`MBTU`).
     #[inline]
-    pub fn as_megabritish_thermal_units(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1055.05585262
+    pub fn as_megabritish_thermal_units(self) -> T {
+        self.0 / T::from_f64(1.05505585262e9)
     }
 
     /// Alias for [`Self::as_megabritish_thermal_units`].
     #[inline]
-    pub fn as_megabritish_thermal_unit(self) -> Num {
+    pub fn as_megabritish_thermal_unit(self) -> T {
         self.as_megabritish_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in GigabritishThermalUnits (`GBTU`).
     #[inline]
-    pub fn from_gigabritish_thermal_units(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 1055.05585262)
+    pub fn from_gigabritish_thermal_units(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585262e12))
     }
 
     /// Returns the value expressed in GigabritishThermalUnits (`GBTU`).
     #[inline]
-    pub fn as_gigabritish_thermal_units(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 1055.05585262
+    pub fn as_gigabritish_thermal_units(self) -> T {
+        self.0 / T::from_f64(1.05505585262e12)
     }
 
     /// Alias for [`Self::as_gigabritish_thermal_units`].
     #[inline]
-    pub fn as_gigabritish_thermal_unit(self) -> Num {
+    pub fn as_gigabritish_thermal_unit(self) -> T {
         self.as_gigabritish_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in ElectronVolts (`eV`).
     #[inline]
-    pub fn from_electron_volts(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.602176634e-19)
+    pub fn from_electron_volts(value: T) -> Self {
+        Self(value * T::from_f64(1.602176634e-19))
     }
 
     /// Returns the value expressed in ElectronVolts (`eV`).
     #[inline]
-    pub fn as_electron_volts(self) -> Num {
-        let x = self.0;
-        x / 1.602176634e-19
+    pub fn as_electron_volts(self) -> T {
+        self.0 / T::from_f64(1.602176634e-19)
     }
 
     /// Alias for [`Self::as_electron_volts`].
     #[inline]
-    pub fn as_electron_volt(self) -> Num {
+    pub fn as_electron_volt(self) -> T {
         self.as_electron_volts()
     }
 
     /// Creates a [`Energy`] from a value in KiloelectronVolts (`keV`).
     #[inline]
-    pub fn from_kiloelectron_volts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1.602176634e-19)
+    pub fn from_kiloelectron_volts(value: T) -> Self {
+        Self(value * T::from_f64(1.602176634e-16))
     }
 
     /// Returns the value expressed in KiloelectronVolts (`keV`).
     #[inline]
-    pub fn as_kiloelectron_volts(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1.602176634e-19
+    pub fn as_kiloelectron_volts(self) -> T {
+        self.0 / T::from_f64(1.602176634e-16)
     }
 
     /// Alias for [`Self::as_kiloelectron_volts`].
     #[inline]
-    pub fn as_kiloelectron_volt(self) -> Num {
+    pub fn as_kiloelectron_volt(self) -> T {
         self.as_kiloelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in MegaelectronVolts (`MeV`).
     #[inline]
-    pub fn from_megaelectron_volts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1.602176634e-19)
+    pub fn from_megaelectron_volts(value: T) -> Self {
+        Self(value * T::from_f64(1.602176634e-13))
     }
 
     /// Returns the value expressed in MegaelectronVolts (`MeV`).
     #[inline]
-    pub fn as_megaelectron_volts(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1.602176634e-19
+    pub fn as_megaelectron_volts(self) -> T {
+        self.0 / T::from_f64(1.602176634e-13)
     }
 
     /// Alias for [`Self::as_megaelectron_volts`].
     #[inline]
-    pub fn as_megaelectron_volt(self) -> Num {
+    pub fn as_megaelectron_volt(self) -> T {
         self.as_megaelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in GigaelectronVolts (`GeV`).
     #[inline]
-    pub fn from_gigaelectron_volts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 1.602176634e-19)
+    pub fn from_gigaelectron_volts(value: T) -> Self {
+        Self(value * T::from_f64(1.602176634e-10))
     }
 
     /// Returns the value expressed in GigaelectronVolts (`GeV`).
     #[inline]
-    pub fn as_gigaelectron_volts(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 1.602176634e-19
+    pub fn as_gigaelectron_volts(self) -> T {
+        self.0 / T::from_f64(1.602176634e-10)
     }
 
     /// Alias for [`Self::as_gigaelectron_volts`].
     #[inline]
-    pub fn as_gigaelectron_volt(self) -> Num {
+    pub fn as_gigaelectron_volt(self) -> T {
         self.as_gigaelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in TeraelectronVolts (`TeV`).
     #[inline]
-    pub fn from_teraelectron_volts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 1.602176634e-19)
+    pub fn from_teraelectron_volts(value: T) -> Self {
+        Self(value * T::from_f64(1.602176634e-7))
     }
 
     /// Returns the value expressed in TeraelectronVolts (`TeV`).
     #[inline]
-    pub fn as_teraelectron_volts(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 1.602176634e-19
+    pub fn as_teraelectron_volts(self) -> T {
+        self.0 / T::from_f64(1.602176634e-7)
     }
 
     /// Alias for [`Self::as_teraelectron_volts`].
     #[inline]
-    pub fn as_teraelectron_volt(self) -> Num {
+    pub fn as_teraelectron_volt(self) -> T {
         self.as_teraelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in FootPounds (`ft·lb`).
     #[inline]
-    pub fn from_foot_pounds(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.3558179483314004)
+    pub fn from_foot_pounds(value: T) -> Self {
+        Self(value * T::from_f64(1.3558179483314003))
     }
 
     /// Returns the value expressed in FootPounds (`ft·lb`).
     #[inline]
-    pub fn as_foot_pounds(self) -> Num {
-        let x = self.0;
-        x / 1.3558179483314004
+    pub fn as_foot_pounds(self) -> T {
+        self.0 / T::from_f64(1.3558179483314003)
     }
 
     /// Alias for [`Self::as_foot_pounds`].
     #[inline]
-    pub fn as_foot_pound(self) -> Num {
+    pub fn as_foot_pound(self) -> T {
         self.as_foot_pounds()
     }
 
     /// Creates a [`Energy`] from a value in Ergs (`erg`).
     #[inline]
-    pub fn from_ergs(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-7)
+    pub fn from_ergs(value: T) -> Self {
+        Self(value / T::from_f64(1e7))
     }
 
     /// Returns the value expressed in Ergs (`erg`).
     #[inline]
-    pub fn as_ergs(self) -> Num {
-        let x = self.0;
-        x / 1e-7
+    pub fn as_ergs(self) -> T {
+        self.0 * T::from_f64(1e7)
     }
 
     /// Alias for [`Self::as_ergs`].
     #[inline]
-    pub fn as_erg(self) -> Num {
+    pub fn as_erg(self) -> T {
         self.as_ergs()
     }
 
     /// Creates a [`Energy`] from a value in WattHours (`Wh`).
     #[inline]
-    pub fn from_watt_hours(value: Num) -> Self {
-        let x = value;
-        Self(x * 3600.0)
+    pub fn from_watt_hours(value: T) -> Self {
+        Self(value * T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in WattHours (`Wh`).
     #[inline]
-    pub fn as_watt_hours(self) -> Num {
-        let x = self.0;
-        x / 3600.0
+    pub fn as_watt_hours(self) -> T {
+        self.0 / T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_watt_hours`].
     #[inline]
-    pub fn as_watt_hour(self) -> Num {
+    pub fn as_watt_hour(self) -> T {
         self.as_watt_hours()
     }
 
     /// Creates a [`Energy`] from a value in KilowattHours (`kWh`).
     #[inline]
-    pub fn from_kilowatt_hours(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 3600.0)
+    pub fn from_kilowatt_hours(value: T) -> Self {
+        Self(value * T::from_f64(3600000.0))
     }
 
     /// Returns the value expressed in KilowattHours (`kWh`).
     #[inline]
-    pub fn as_kilowatt_hours(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 3600.0
+    pub fn as_kilowatt_hours(self) -> T {
+        self.0 / T::from_f64(3600000.0)
     }
 
     /// Alias for [`Self::as_kilowatt_hours`].
     #[inline]
-    pub fn as_kilowatt_hour(self) -> Num {
+    pub fn as_kilowatt_hour(self) -> T {
         self.as_kilowatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in MegawattHours (`MWh`).
     #[inline]
-    pub fn from_megawatt_hours(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 3600.0)
+    pub fn from_megawatt_hours(value: T) -> Self {
+        Self(value * T::from_f64(3.6e9))
     }
 
     /// Returns the value expressed in MegawattHours (`MWh`).
     #[inline]
-    pub fn as_megawatt_hours(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 3600.0
+    pub fn as_megawatt_hours(self) -> T {
+        self.0 / T::from_f64(3.6e9)
     }
 
     /// Alias for [`Self::as_megawatt_hours`].
     #[inline]
-    pub fn as_megawatt_hour(self) -> Num {
+    pub fn as_megawatt_hour(self) -> T {
         self.as_megawatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in GigawattHours (`GWh`).
     #[inline]
-    pub fn from_gigawatt_hours(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 3600.0)
+    pub fn from_gigawatt_hours(value: T) -> Self {
+        Self(value * T::from_f64(3.6e12))
     }
 
     /// Returns the value expressed in GigawattHours (`GWh`).
     #[inline]
-    pub fn as_gigawatt_hours(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 3600.0
+    pub fn as_gigawatt_hours(self) -> T {
+        self.0 / T::from_f64(3.6e12)
     }
 
     /// Alias for [`Self::as_gigawatt_hours`].
     #[inline]
-    pub fn as_gigawatt_hour(self) -> Num {
+    pub fn as_gigawatt_hour(self) -> T {
         self.as_gigawatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in TerawattHours (`TWh`).
     #[inline]
-    pub fn from_terawatt_hours(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 3600.0)
+    pub fn from_terawatt_hours(value: T) -> Self {
+        Self(value * T::from_f64(3.6e15))
     }
 
     /// Returns the value expressed in TerawattHours (`TWh`).
     #[inline]
-    pub fn as_terawatt_hours(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 3600.0
+    pub fn as_terawatt_hours(self) -> T {
+        self.0 / T::from_f64(3.6e15)
     }
 
     /// Alias for [`Self::as_terawatt_hours`].
     #[inline]
-    pub fn as_terawatt_hour(self) -> Num {
+    pub fn as_terawatt_hour(self) -> T {
         self.as_terawatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in WattDays (`Wd`).
     #[inline]
-    pub fn from_watt_days(value: Num) -> Self {
-        let x = value;
-        Self(x * 24.0 * 3600.0)
+    pub fn from_watt_days(value: T) -> Self {
+        Self(value * T::from_f64(86400.0))
     }
 
     /// Returns the value expressed in WattDays (`Wd`).
     #[inline]
-    pub fn as_watt_days(self) -> Num {
-        let x = self.0;
-        x / (24.0 * 3600.0)
+    pub fn as_watt_days(self) -> T {
+        self.0 / T::from_f64(86400.0)
     }
 
     /// Alias for [`Self::as_watt_days`].
     #[inline]
-    pub fn as_watt_day(self) -> Num {
+    pub fn as_watt_day(self) -> T {
         self.as_watt_days()
     }
 
     /// Creates a [`Energy`] from a value in KilowattDays (`kWd`).
     #[inline]
-    pub fn from_kilowatt_days(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 24.0 * 3600.0)
+    pub fn from_kilowatt_days(value: T) -> Self {
+        Self(value * T::from_f64(8.64e7))
     }
 
     /// Returns the value expressed in KilowattDays (`kWd`).
     #[inline]
-    pub fn as_kilowatt_days(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / (24.0 * 3600.0)
+    pub fn as_kilowatt_days(self) -> T {
+        self.0 / T::from_f64(8.64e7)
     }
 
     /// Alias for [`Self::as_kilowatt_days`].
     #[inline]
-    pub fn as_kilowatt_day(self) -> Num {
+    pub fn as_kilowatt_day(self) -> T {
         self.as_kilowatt_days()
     }
 
     /// Creates a [`Energy`] from a value in MegawattDays (`MWd`).
     #[inline]
-    pub fn from_megawatt_days(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 24.0 * 3600.0)
+    pub fn from_megawatt_days(value: T) -> Self {
+        Self(value * T::from_f64(8.64e10))
     }
 
     /// Returns the value expressed in MegawattDays (`MWd`).
     #[inline]
-    pub fn as_megawatt_days(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / (24.0 * 3600.0)
+    pub fn as_megawatt_days(self) -> T {
+        self.0 / T::from_f64(8.64e10)
     }
 
     /// Alias for [`Self::as_megawatt_days`].
     #[inline]
-    pub fn as_megawatt_day(self) -> Num {
+    pub fn as_megawatt_day(self) -> T {
         self.as_megawatt_days()
     }
 
     /// Creates a [`Energy`] from a value in GigawattDays (`GWd`).
     #[inline]
-    pub fn from_gigawatt_days(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 24.0 * 3600.0)
+    pub fn from_gigawatt_days(value: T) -> Self {
+        Self(value * T::from_f64(8.64e13))
     }
 
     /// Returns the value expressed in GigawattDays (`GWd`).
     #[inline]
-    pub fn as_gigawatt_days(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / (24.0 * 3600.0)
+    pub fn as_gigawatt_days(self) -> T {
+        self.0 / T::from_f64(8.64e13)
     }
 
     /// Alias for [`Self::as_gigawatt_days`].
     #[inline]
-    pub fn as_gigawatt_day(self) -> Num {
+    pub fn as_gigawatt_day(self) -> T {
         self.as_gigawatt_days()
     }
 
     /// Creates a [`Energy`] from a value in TerawattDays (`TWd`).
     #[inline]
-    pub fn from_terawatt_days(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 24.0 * 3600.0)
+    pub fn from_terawatt_days(value: T) -> Self {
+        Self(value * T::from_f64(8.64e16))
     }
 
     /// Returns the value expressed in TerawattDays (`TWd`).
     #[inline]
-    pub fn as_terawatt_days(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / (24.0 * 3600.0)
+    pub fn as_terawatt_days(self) -> T {
+        self.0 / T::from_f64(8.64e16)
     }
 
     /// Alias for [`Self::as_terawatt_days`].
     #[inline]
-    pub fn as_terawatt_day(self) -> Num {
+    pub fn as_terawatt_day(self) -> T {
         self.as_terawatt_days()
     }
 
     /// Creates a [`Energy`] from a value in ThermsEc (`th (E.C.)`).
     #[inline]
-    pub fn from_therms_ec(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.05505585262e8)
+    pub fn from_therms_ec(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585262e8))
     }
 
     /// Returns the value expressed in ThermsEc (`th (E.C.)`).
     #[inline]
-    pub fn as_therms_ec(self) -> Num {
-        let x = self.0;
-        x / 1.05505585262e8
+    pub fn as_therms_ec(self) -> T {
+        self.0 / T::from_f64(1.05505585262e8)
     }
 
     /// Alias for [`Self::as_therms_ec`].
     #[inline]
-    pub fn as_therm_ec(self) -> Num {
+    pub fn as_therm_ec(self) -> T {
         self.as_therms_ec()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsEc (`dath (E.C.)`).
     #[inline]
-    pub fn from_decatherms_ec(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1.05505585262e8)
+    pub fn from_decatherms_ec(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585262e9))
     }
 
     /// Returns the value expressed in DecathermsEc (`dath (E.C.)`).
     #[inline]
-    pub fn as_decatherms_ec(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1.05505585262e8
+    pub fn as_decatherms_ec(self) -> T {
+        self.0 / T::from_f64(1.05505585262e9)
     }
 
     /// Alias for [`Self::as_decatherms_ec`].
     #[inline]
-    pub fn as_decatherm_ec(self) -> Num {
+    pub fn as_decatherm_ec(self) -> T {
         self.as_decatherms_ec()
     }
 
     /// Creates a [`Energy`] from a value in ThermsUs (`th (U.S.)`).
     #[inline]
-    pub fn from_therms_us(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.054804e8)
+    pub fn from_therms_us(value: T) -> Self {
+        Self(value * T::from_f64(1.054804e8))
     }
 
     /// Returns the value expressed in ThermsUs (`th (U.S.)`).
     #[inline]
-    pub fn as_therms_us(self) -> Num {
-        let x = self.0;
-        x / 1.054804e8
+    pub fn as_therms_us(self) -> T {
+        self.0 / T::from_f64(1.054804e8)
     }
 
     /// Alias for [`Self::as_therms_us`].
     #[inline]
-    pub fn as_therm_us(self) -> Num {
+    pub fn as_therm_us(self) -> T {
         self.as_therms_us()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsUs (`dath (U.S.)`).
     #[inline]
-    pub fn from_decatherms_us(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1.054804e8)
+    pub fn from_decatherms_us(value: T) -> Self {
+        Self(value * T::from_f64(1.054804e9))
     }
 
     /// Returns the value expressed in DecathermsUs (`dath (U.S.)`).
     #[inline]
-    pub fn as_decatherms_us(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1.054804e8
+    pub fn as_decatherms_us(self) -> T {
+        self.0 / T::from_f64(1.054804e9)
     }
 
     /// Alias for [`Self::as_decatherms_us`].
     #[inline]
-    pub fn as_decatherm_us(self) -> Num {
+    pub fn as_decatherm_us(self) -> T {
         self.as_decatherms_us()
     }
 
     /// Creates a [`Energy`] from a value in ThermsImperial (`th (imp.)`).
     #[inline]
-    pub fn from_therms_imperial(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.05505585257348e8)
+    pub fn from_therms_imperial(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585257348e8))
     }
 
     /// Returns the value expressed in ThermsImperial (`th (imp.)`).
     #[inline]
-    pub fn as_therms_imperial(self) -> Num {
-        let x = self.0;
-        x / 1.05505585257348e8
+    pub fn as_therms_imperial(self) -> T {
+        self.0 / T::from_f64(1.05505585257348e8)
     }
 
     /// Alias for [`Self::as_therms_imperial`].
     #[inline]
-    pub fn as_therm_imperial(self) -> Num {
+    pub fn as_therm_imperial(self) -> T {
         self.as_therms_imperial()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsImperial (`dath (imp.)`).
     #[inline]
-    pub fn from_decatherms_imperial(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1.05505585257348e8)
+    pub fn from_decatherms_imperial(value: T) -> Self {
+        Self(value * T::from_f64(1.05505585257348e9))
     }
 
     /// Returns the value expressed in DecathermsImperial (`dath (imp.)`).
     #[inline]
-    pub fn as_decatherms_imperial(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1.05505585257348e8
+    pub fn as_decatherms_imperial(self) -> T {
+        self.0 / T::from_f64(1.05505585257348e9)
     }
 
     /// Alias for [`Self::as_decatherms_imperial`].
     #[inline]
-    pub fn as_decatherm_imperial(self) -> Num {
+    pub fn as_decatherm_imperial(self) -> T {
         self.as_decatherms_imperial()
     }
 
     /// Creates a [`Energy`] from a value in HorsepowerHours (`hp·h`).
     #[inline]
-    pub fn from_horsepower_hours(value: Num) -> Self {
-        let x = value;
-        Self(x * 76.0402249 * 9.80665 * 3600.0)
+    pub fn from_horsepower_hours(value: T) -> Self {
+        Self(value * T::from_f64(2684519.537456106))
     }
 
     /// Returns the value expressed in HorsepowerHours (`hp·h`).
     #[inline]
-    pub fn as_horsepower_hours(self) -> Num {
-        let x = self.0;
-        x / (76.0402249 * 9.80665 * 3600.0)
+    pub fn as_horsepower_hours(self) -> T {
+        self.0 / T::from_f64(2684519.537456106)
     }
 
     /// Alias for [`Self::as_horsepower_hours`].
     #[inline]
-    pub fn as_horsepower_hour(self) -> Num {
+    pub fn as_horsepower_hour(self) -> T {
         self.as_horsepower_hours()
     }
-}
-
-impl crate::Quantity for Energy {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Energy {
-    type Output = Energy;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Energy {
-    type Output = Energy;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Energy {
-    type Output = Energy;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Energy {
-    type Output = Energy;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Energy> for Num {
-    type Output = Energy;
-    #[inline]
-    fn mul(self, rhs: Energy) -> Energy {
-        Energy(self * rhs.0)
-    }
-}
-impl Div<Num> for Energy {
-    type Output = Energy;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Energy {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Energy {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, EnergyUnit::Joule.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Energy`].
-#[derive(Debug)]
-pub struct ParseEnergyError(String);
-
-impl fmt::Display for ParseEnergyError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Energy", self.0)
-    }
-}
-
-impl std::error::Error for ParseEnergyError {}
-
-impl FromStr for Energy {
-    type Err = ParseEnergyError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseEnergyError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, EnergyUnit)] = &[
-            ("dath (E.C.)", EnergyUnit::DecathermEc),
-            ("dath (U.S.)", EnergyUnit::DecathermUs),
-            ("dath (imp.)", EnergyUnit::DecathermImperial),
-            ("th (E.C.)", EnergyUnit::ThermEc),
-            ("th (U.S.)", EnergyUnit::ThermUs),
-            ("th (imp.)", EnergyUnit::ThermImperial),
-            ("ft·lb", EnergyUnit::FootPound),
-            ("hp·h", EnergyUnit::HorsepowerHour),
-            ("GBTU", EnergyUnit::GigabritishThermalUnit),
-            ("MBTU", EnergyUnit::MegabritishThermalUnit),
-            ("Mcal", EnergyUnit::Megacalorie),
-            ("kBTU", EnergyUnit::KilobritishThermalUnit),
-            ("kcal", EnergyUnit::Kilocalorie),
-            ("BTU", EnergyUnit::BritishThermalUnit),
-            ("GWd", EnergyUnit::GigawattDay),
-            ("GWh", EnergyUnit::GigawattHour),
-            ("GeV", EnergyUnit::GigaelectronVolt),
-            ("MWd", EnergyUnit::MegawattDay),
-            ("MWh", EnergyUnit::MegawattHour),
-            ("MeV", EnergyUnit::MegaelectronVolt),
-            ("TWd", EnergyUnit::TerawattDay),
-            ("TWh", EnergyUnit::TerawattHour),
-            ("TeV", EnergyUnit::TeraelectronVolt),
-            ("cal", EnergyUnit::Calorie),
-            ("erg", EnergyUnit::Erg),
-            ("kWd", EnergyUnit::KilowattDay),
-            ("kWh", EnergyUnit::KilowattHour),
-            ("keV", EnergyUnit::KiloelectronVolt),
-            ("µJ", EnergyUnit::Microjoule),
-            ("GJ", EnergyUnit::Gigajoule),
-            ("MJ", EnergyUnit::Megajoule),
-            ("PJ", EnergyUnit::Petajoule),
-            ("TJ", EnergyUnit::Terajoule),
-            ("Wd", EnergyUnit::WattDay),
-            ("Wh", EnergyUnit::WattHour),
-            ("eV", EnergyUnit::ElectronVolt),
-            ("kJ", EnergyUnit::Kilojoule),
-            ("mJ", EnergyUnit::Millijoule),
-            ("nJ", EnergyUnit::Nanojoule),
-            ("J", EnergyUnit::Joule),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseEnergyError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/AmountOfSubstance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Mole is the amount of substance containing Avagadro's Number (6.02 x 10 ^ 23) of real particles such as molecules,atoms, ions or radicals.
 ///
-/// The internal value is stored in `Mole` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AmountOfSubstance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`AmountOfSubstanceUnit::Mole`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct AmountOfSubstance<T = f64>(T);
+
+quantity!(AmountOfSubstance, AmountOfSubstanceUnit, Mole);
 
 /// Unit variants for [`AmountOfSubstance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum AmountOfSubstanceUnit {
     Mole,
     Femtomole,
@@ -67,7 +75,7 @@ impl AmountOfSubstanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Mole => "mol",
             Self::Femtomole => "fmol",
@@ -89,9 +97,9 @@ impl AmountOfSubstanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Mole => &["mol"],
             Self::Femtomole => &["fmol"],
@@ -114,547 +122,390 @@ impl AmountOfSubstanceUnit {
     }
 }
 
-impl AmountOfSubstance {
+impl core::str::FromStr for AmountOfSubstanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "mol" => Ok(Self::Mole),
+            "fmol" => Ok(Self::Femtomole),
+            "pmol" => Ok(Self::Picomole),
+            "nmol" => Ok(Self::Nanomole),
+            "µmol" => Ok(Self::Micromole),
+            "mmol" => Ok(Self::Millimole),
+            "cmol" => Ok(Self::Centimole),
+            "dmol" => Ok(Self::Decimole),
+            "kmol" => Ok(Self::Kilomole),
+            "Mmol" => Ok(Self::Megamole),
+            "lbmol" => Ok(Self::PoundMole),
+            "nlbmol" => Ok(Self::NanopoundMole),
+            "µlbmol" => Ok(Self::MicropoundMole),
+            "mlbmol" => Ok(Self::MillipoundMole),
+            "clbmol" => Ok(Self::CentipoundMole),
+            "dlbmol" => Ok(Self::DecipoundMole),
+            "klbmol" => Ok(Self::KilopoundMole),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> AmountOfSubstance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: AmountOfSubstanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: AmountOfSubstanceUnit) -> Self {
         Self(match unit {
-            AmountOfSubstanceUnit::Mole => x,
-            AmountOfSubstanceUnit::Femtomole => (x * 1e-15),
-            AmountOfSubstanceUnit::Picomole => (x * 1e-12),
-            AmountOfSubstanceUnit::Nanomole => (x * 1e-9),
-            AmountOfSubstanceUnit::Micromole => (x * 1e-6),
-            AmountOfSubstanceUnit::Millimole => (x * 1e-3),
-            AmountOfSubstanceUnit::Centimole => (x * 1e-2),
-            AmountOfSubstanceUnit::Decimole => (x * 1e-1),
-            AmountOfSubstanceUnit::Kilomole => (x * 1e3),
-            AmountOfSubstanceUnit::Megamole => (x * 1e6),
-            AmountOfSubstanceUnit::PoundMole => x * 453.59237,
-            AmountOfSubstanceUnit::NanopoundMole => (x * 1e-9) * 453.59237,
-            AmountOfSubstanceUnit::MicropoundMole => (x * 1e-6) * 453.59237,
-            AmountOfSubstanceUnit::MillipoundMole => (x * 1e-3) * 453.59237,
-            AmountOfSubstanceUnit::CentipoundMole => (x * 1e-2) * 453.59237,
-            AmountOfSubstanceUnit::DecipoundMole => (x * 1e-1) * 453.59237,
-            AmountOfSubstanceUnit::KilopoundMole => (x * 1e3) * 453.59237,
+            AmountOfSubstanceUnit::Mole => value,
+            AmountOfSubstanceUnit::Femtomole => value / T::from_f64(1e15),
+            AmountOfSubstanceUnit::Picomole => value / T::from_f64(1e12),
+            AmountOfSubstanceUnit::Nanomole => value / T::from_f64(1e9),
+            AmountOfSubstanceUnit::Micromole => value / T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::Millimole => value / T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Centimole => value / T::from_f64(100.0),
+            AmountOfSubstanceUnit::Decimole => value / T::from_f64(10.0),
+            AmountOfSubstanceUnit::Kilomole => value * T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Megamole => value * T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::PoundMole => value * T::from_f64(453.59237),
+            AmountOfSubstanceUnit::NanopoundMole => value * T::from_f64(4.5359237e-7),
+            AmountOfSubstanceUnit::MicropoundMole => value * T::from_f64(0.00045359237),
+            AmountOfSubstanceUnit::MillipoundMole => value * T::from_f64(0.45359237),
+            AmountOfSubstanceUnit::CentipoundMole => value * T::from_f64(4.5359237),
+            AmountOfSubstanceUnit::DecipoundMole => value * T::from_f64(45.359237),
+            AmountOfSubstanceUnit::KilopoundMole => value * T::from_f64(453592.37),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: AmountOfSubstanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: AmountOfSubstanceUnit) -> T {
         match unit {
-            AmountOfSubstanceUnit::Mole => x,
-            AmountOfSubstanceUnit::Femtomole => (x / 1e-15),
-            AmountOfSubstanceUnit::Picomole => (x / 1e-12),
-            AmountOfSubstanceUnit::Nanomole => (x / 1e-9),
-            AmountOfSubstanceUnit::Micromole => (x / 1e-6),
-            AmountOfSubstanceUnit::Millimole => (x / 1e-3),
-            AmountOfSubstanceUnit::Centimole => (x / 1e-2),
-            AmountOfSubstanceUnit::Decimole => (x / 1e-1),
-            AmountOfSubstanceUnit::Kilomole => (x / 1e3),
-            AmountOfSubstanceUnit::Megamole => (x / 1e6),
-            AmountOfSubstanceUnit::PoundMole => x / 453.59237,
-            AmountOfSubstanceUnit::NanopoundMole => (x / 1e-9) / 453.59237,
-            AmountOfSubstanceUnit::MicropoundMole => (x / 1e-6) / 453.59237,
-            AmountOfSubstanceUnit::MillipoundMole => (x / 1e-3) / 453.59237,
-            AmountOfSubstanceUnit::CentipoundMole => (x / 1e-2) / 453.59237,
-            AmountOfSubstanceUnit::DecipoundMole => (x / 1e-1) / 453.59237,
-            AmountOfSubstanceUnit::KilopoundMole => (x / 1e3) / 453.59237,
+            AmountOfSubstanceUnit::Mole => self.0,
+            AmountOfSubstanceUnit::Femtomole => self.0 * T::from_f64(1e15),
+            AmountOfSubstanceUnit::Picomole => self.0 * T::from_f64(1e12),
+            AmountOfSubstanceUnit::Nanomole => self.0 * T::from_f64(1e9),
+            AmountOfSubstanceUnit::Micromole => self.0 * T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::Millimole => self.0 * T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Centimole => self.0 * T::from_f64(100.0),
+            AmountOfSubstanceUnit::Decimole => self.0 * T::from_f64(10.0),
+            AmountOfSubstanceUnit::Kilomole => self.0 / T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Megamole => self.0 / T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::PoundMole => self.0 / T::from_f64(453.59237),
+            AmountOfSubstanceUnit::NanopoundMole => self.0 / T::from_f64(4.5359237e-7),
+            AmountOfSubstanceUnit::MicropoundMole => self.0 / T::from_f64(0.00045359237),
+            AmountOfSubstanceUnit::MillipoundMole => self.0 / T::from_f64(0.45359237),
+            AmountOfSubstanceUnit::CentipoundMole => self.0 / T::from_f64(4.5359237),
+            AmountOfSubstanceUnit::DecipoundMole => self.0 / T::from_f64(45.359237),
+            AmountOfSubstanceUnit::KilopoundMole => self.0 / T::from_f64(453592.37),
         }
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Moles (`mol`).
     #[inline]
-    pub fn from_moles(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_moles(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Moles (`mol`).
     #[inline]
-    pub fn as_moles(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_moles(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_moles`].
     #[inline]
-    pub fn as_mole(self) -> Num {
+    pub fn as_mole(self) -> T {
         self.as_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Femtomoles (`fmol`).
     #[inline]
-    pub fn from_femtomoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-15))
+    pub fn from_femtomoles(value: T) -> Self {
+        Self(value / T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Femtomoles (`fmol`).
     #[inline]
-    pub fn as_femtomoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-15)
+    pub fn as_femtomoles(self) -> T {
+        self.0 * T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_femtomoles`].
     #[inline]
-    pub fn as_femtomole(self) -> Num {
+    pub fn as_femtomole(self) -> T {
         self.as_femtomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Picomoles (`pmol`).
     #[inline]
-    pub fn from_picomoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picomoles(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picomoles (`pmol`).
     #[inline]
-    pub fn as_picomoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picomoles(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picomoles`].
     #[inline]
-    pub fn as_picomole(self) -> Num {
+    pub fn as_picomole(self) -> T {
         self.as_picomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Nanomoles (`nmol`).
     #[inline]
-    pub fn from_nanomoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanomoles(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanomoles (`nmol`).
     #[inline]
-    pub fn as_nanomoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanomoles(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanomoles`].
     #[inline]
-    pub fn as_nanomole(self) -> Num {
+    pub fn as_nanomole(self) -> T {
         self.as_nanomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Micromoles (`µmol`).
     #[inline]
-    pub fn from_micromoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micromoles(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Micromoles (`µmol`).
     #[inline]
-    pub fn as_micromoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micromoles(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micromoles`].
     #[inline]
-    pub fn as_micromole(self) -> Num {
+    pub fn as_micromole(self) -> T {
         self.as_micromoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Millimoles (`mmol`).
     #[inline]
-    pub fn from_millimoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millimoles(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millimoles (`mmol`).
     #[inline]
-    pub fn as_millimoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millimoles(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millimoles`].
     #[inline]
-    pub fn as_millimole(self) -> Num {
+    pub fn as_millimole(self) -> T {
         self.as_millimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Centimoles (`cmol`).
     #[inline]
-    pub fn from_centimoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2))
+    pub fn from_centimoles(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in Centimoles (`cmol`).
     #[inline]
-    pub fn as_centimoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-2)
+    pub fn as_centimoles(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_centimoles`].
     #[inline]
-    pub fn as_centimole(self) -> Num {
+    pub fn as_centimole(self) -> T {
         self.as_centimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Decimoles (`dmol`).
     #[inline]
-    pub fn from_decimoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_decimoles(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in Decimoles (`dmol`).
     #[inline]
-    pub fn as_decimoles(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_decimoles(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decimoles`].
     #[inline]
-    pub fn as_decimole(self) -> Num {
+    pub fn as_decimole(self) -> T {
         self.as_decimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Kilomoles (`kmol`).
     #[inline]
-    pub fn from_kilomoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilomoles(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilomoles (`kmol`).
     #[inline]
-    pub fn as_kilomoles(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilomoles(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilomoles`].
     #[inline]
-    pub fn as_kilomole(self) -> Num {
+    pub fn as_kilomole(self) -> T {
         self.as_kilomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Megamoles (`Mmol`).
     #[inline]
-    pub fn from_megamoles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megamoles(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megamoles (`Mmol`).
     #[inline]
-    pub fn as_megamoles(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megamoles(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megamoles`].
     #[inline]
-    pub fn as_megamole(self) -> Num {
+    pub fn as_megamole(self) -> T {
         self.as_megamoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in PoundMoles (`lbmol`).
     #[inline]
-    pub fn from_pound_moles(value: Num) -> Self {
-        let x = value;
-        Self(x * 453.59237)
+    pub fn from_pound_moles(value: T) -> Self {
+        Self(value * T::from_f64(453.59237))
     }
 
     /// Returns the value expressed in PoundMoles (`lbmol`).
     #[inline]
-    pub fn as_pound_moles(self) -> Num {
-        let x = self.0;
-        x / 453.59237
+    pub fn as_pound_moles(self) -> T {
+        self.0 / T::from_f64(453.59237)
     }
 
     /// Alias for [`Self::as_pound_moles`].
     #[inline]
-    pub fn as_pound_mole(self) -> Num {
+    pub fn as_pound_mole(self) -> T {
         self.as_pound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in NanopoundMoles (`nlbmol`).
     #[inline]
-    pub fn from_nanopound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 453.59237)
+    pub fn from_nanopound_moles(value: T) -> Self {
+        Self(value * T::from_f64(4.5359237e-7))
     }
 
     /// Returns the value expressed in NanopoundMoles (`nlbmol`).
     #[inline]
-    pub fn as_nanopound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 453.59237
+    pub fn as_nanopound_moles(self) -> T {
+        self.0 / T::from_f64(4.5359237e-7)
     }
 
     /// Alias for [`Self::as_nanopound_moles`].
     #[inline]
-    pub fn as_nanopound_mole(self) -> Num {
+    pub fn as_nanopound_mole(self) -> T {
         self.as_nanopound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in MicropoundMoles (`µlbmol`).
     #[inline]
-    pub fn from_micropound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 453.59237)
+    pub fn from_micropound_moles(value: T) -> Self {
+        Self(value * T::from_f64(0.00045359237))
     }
 
     /// Returns the value expressed in MicropoundMoles (`µlbmol`).
     #[inline]
-    pub fn as_micropound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 453.59237
+    pub fn as_micropound_moles(self) -> T {
+        self.0 / T::from_f64(0.00045359237)
     }
 
     /// Alias for [`Self::as_micropound_moles`].
     #[inline]
-    pub fn as_micropound_mole(self) -> Num {
+    pub fn as_micropound_mole(self) -> T {
         self.as_micropound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in MillipoundMoles (`mlbmol`).
     #[inline]
-    pub fn from_millipound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 453.59237)
+    pub fn from_millipound_moles(value: T) -> Self {
+        Self(value * T::from_f64(0.45359237))
     }
 
     /// Returns the value expressed in MillipoundMoles (`mlbmol`).
     #[inline]
-    pub fn as_millipound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 453.59237
+    pub fn as_millipound_moles(self) -> T {
+        self.0 / T::from_f64(0.45359237)
     }
 
     /// Alias for [`Self::as_millipound_moles`].
     #[inline]
-    pub fn as_millipound_mole(self) -> Num {
+    pub fn as_millipound_mole(self) -> T {
         self.as_millipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in CentipoundMoles (`clbmol`).
     #[inline]
-    pub fn from_centipound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-2) * 453.59237)
+    pub fn from_centipound_moles(value: T) -> Self {
+        Self(value * T::from_f64(4.5359237))
     }
 
     /// Returns the value expressed in CentipoundMoles (`clbmol`).
     #[inline]
-    pub fn as_centipound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e-2) / 453.59237
+    pub fn as_centipound_moles(self) -> T {
+        self.0 / T::from_f64(4.5359237)
     }
 
     /// Alias for [`Self::as_centipound_moles`].
     #[inline]
-    pub fn as_centipound_mole(self) -> Num {
+    pub fn as_centipound_mole(self) -> T {
         self.as_centipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in DecipoundMoles (`dlbmol`).
     #[inline]
-    pub fn from_decipound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) * 453.59237)
+    pub fn from_decipound_moles(value: T) -> Self {
+        Self(value * T::from_f64(45.359237))
     }
 
     /// Returns the value expressed in DecipoundMoles (`dlbmol`).
     #[inline]
-    pub fn as_decipound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) / 453.59237
+    pub fn as_decipound_moles(self) -> T {
+        self.0 / T::from_f64(45.359237)
     }
 
     /// Alias for [`Self::as_decipound_moles`].
     #[inline]
-    pub fn as_decipound_mole(self) -> Num {
+    pub fn as_decipound_mole(self) -> T {
         self.as_decipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in KilopoundMoles (`klbmol`).
     #[inline]
-    pub fn from_kilopound_moles(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 453.59237)
+    pub fn from_kilopound_moles(value: T) -> Self {
+        Self(value * T::from_f64(453592.37))
     }
 
     /// Returns the value expressed in KilopoundMoles (`klbmol`).
     #[inline]
-    pub fn as_kilopound_moles(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 453.59237
+    pub fn as_kilopound_moles(self) -> T {
+        self.0 / T::from_f64(453592.37)
     }
 
     /// Alias for [`Self::as_kilopound_moles`].
     #[inline]
-    pub fn as_kilopound_mole(self) -> Num {
+    pub fn as_kilopound_mole(self) -> T {
         self.as_kilopound_moles()
     }
-}
-
-impl crate::Quantity for AmountOfSubstance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for AmountOfSubstance {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for AmountOfSubstance {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for AmountOfSubstance {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for AmountOfSubstance {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<AmountOfSubstance> for Num {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn mul(self, rhs: AmountOfSubstance) -> AmountOfSubstance {
-        AmountOfSubstance(self * rhs.0)
-    }
-}
-impl Div<Num> for AmountOfSubstance {
-    type Output = AmountOfSubstance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for AmountOfSubstance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for AmountOfSubstance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            AmountOfSubstanceUnit::Mole.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`AmountOfSubstance`].
-#[derive(Debug)]
-pub struct ParseAmountOfSubstanceError(String);
-
-impl fmt::Display for ParseAmountOfSubstanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as AmountOfSubstance", self.0)
-    }
-}
-
-impl std::error::Error for ParseAmountOfSubstanceError {}
-
-impl FromStr for AmountOfSubstance {
-    type Err = ParseAmountOfSubstanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseAmountOfSubstanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, AmountOfSubstanceUnit)] = &[
-            ("µlbmol", AmountOfSubstanceUnit::MicropoundMole),
-            ("clbmol", AmountOfSubstanceUnit::CentipoundMole),
-            ("dlbmol", AmountOfSubstanceUnit::DecipoundMole),
-            ("klbmol", AmountOfSubstanceUnit::KilopoundMole),
-            ("mlbmol", AmountOfSubstanceUnit::MillipoundMole),
-            ("nlbmol", AmountOfSubstanceUnit::NanopoundMole),
-            ("lbmol", AmountOfSubstanceUnit::PoundMole),
-            ("µmol", AmountOfSubstanceUnit::Micromole),
-            ("Mmol", AmountOfSubstanceUnit::Megamole),
-            ("cmol", AmountOfSubstanceUnit::Centimole),
-            ("dmol", AmountOfSubstanceUnit::Decimole),
-            ("fmol", AmountOfSubstanceUnit::Femtomole),
-            ("kmol", AmountOfSubstanceUnit::Kilomole),
-            ("mmol", AmountOfSubstanceUnit::Millimole),
-            ("nmol", AmountOfSubstanceUnit::Nanomole),
-            ("pmol", AmountOfSubstanceUnit::Picomole),
-            ("mol", AmountOfSubstanceUnit::Mole),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseAmountOfSubstanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

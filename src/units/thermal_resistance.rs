@@ -2,27 +2,35 @@
 // Source: data/quantities/ThermalResistance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Thermal resistance (R) measures the opposition to the heat current in a material or system. It is measured in units of kelvins per watt (K/W) and indicates how much temperature difference (in kelvins) is required to transfer a unit of heat current (in watts) through the material or object. It is essential to optimize the building insulation, evaluate the efficiency of electronic devices, and enhance the performance of heat sinks in various applications.
 ///
-/// The internal value is stored in `KelvinPerWatt` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ThermalResistance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ThermalResistanceUnit::KelvinPerWatt`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ThermalResistance<T = f64>(T);
+
+quantity!(ThermalResistance, ThermalResistanceUnit, KelvinPerWatt);
 
 /// Unit variants for [`ThermalResistance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ThermalResistanceUnit {
     KelvinPerWatt,
     DegreeCelsiusPerWatt,
@@ -34,16 +42,16 @@ impl ThermalResistanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::KelvinPerWatt => "K/W",
             Self::DegreeCelsiusPerWatt => "°C/W",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::KelvinPerWatt => &["K/W"],
             Self::DegreeCelsiusPerWatt => &["°C/W"],
@@ -51,202 +59,75 @@ impl ThermalResistanceUnit {
     }
 }
 
-impl ThermalResistance {
+impl core::str::FromStr for ThermalResistanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "K/W" => Ok(Self::KelvinPerWatt),
+            "°C/W" => Ok(Self::DegreeCelsiusPerWatt),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ThermalResistance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ThermalResistanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ThermalResistanceUnit) -> Self {
         Self(match unit {
-            ThermalResistanceUnit::KelvinPerWatt => x,
-            ThermalResistanceUnit::DegreeCelsiusPerWatt => x,
+            ThermalResistanceUnit::KelvinPerWatt => value,
+            ThermalResistanceUnit::DegreeCelsiusPerWatt => value,
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ThermalResistanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ThermalResistanceUnit) -> T {
         match unit {
-            ThermalResistanceUnit::KelvinPerWatt => x,
-            ThermalResistanceUnit::DegreeCelsiusPerWatt => x,
+            ThermalResistanceUnit::KelvinPerWatt => self.0,
+            ThermalResistanceUnit::DegreeCelsiusPerWatt => self.0,
         }
     }
 
     /// Creates a [`ThermalResistance`] from a value in KelvinsPerWatt (`K/W`).
     #[inline]
-    pub fn from_kelvins_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_kelvins_per_watt(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in KelvinsPerWatt (`K/W`).
     #[inline]
-    pub fn as_kelvins_per_watt(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_kelvins_per_watt(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kelvins_per_watt`].
     #[inline]
-    pub fn as_kelvin_per_watt(self) -> Num {
+    pub fn as_kelvin_per_watt(self) -> T {
         self.as_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalResistance`] from a value in DegreesCelsiusPerWatt (`°C/W`).
     #[inline]
-    pub fn from_degrees_celsius_per_watt(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_degrees_celsius_per_watt(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerWatt (`°C/W`).
     #[inline]
-    pub fn as_degrees_celsius_per_watt(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_degrees_celsius_per_watt(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_watt`].
     #[inline]
-    pub fn as_degree_celsius_per_watt(self) -> Num {
+    pub fn as_degree_celsius_per_watt(self) -> T {
         self.as_degrees_celsius_per_watt()
     }
-}
-
-impl crate::Quantity for ThermalResistance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ThermalResistance {
-    type Output = ThermalResistance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ThermalResistance {
-    type Output = ThermalResistance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ThermalResistance {
-    type Output = ThermalResistance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ThermalResistance {
-    type Output = ThermalResistance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ThermalResistance> for Num {
-    type Output = ThermalResistance;
-    #[inline]
-    fn mul(self, rhs: ThermalResistance) -> ThermalResistance {
-        ThermalResistance(self * rhs.0)
-    }
-}
-impl Div<Num> for ThermalResistance {
-    type Output = ThermalResistance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ThermalResistance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ThermalResistance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ThermalResistanceUnit::KelvinPerWatt.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ThermalResistance`].
-#[derive(Debug)]
-pub struct ParseThermalResistanceError(String);
-
-impl fmt::Display for ParseThermalResistanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ThermalResistance", self.0)
-    }
-}
-
-impl std::error::Error for ParseThermalResistanceError {}
-
-impl FromStr for ThermalResistance {
-    type Err = ParseThermalResistanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseThermalResistanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ThermalResistanceUnit)] = &[
-            ("°C/W", ThermalResistanceUnit::DegreeCelsiusPerWatt),
-            ("K/W", ThermalResistanceUnit::KelvinPerWatt),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseThermalResistanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

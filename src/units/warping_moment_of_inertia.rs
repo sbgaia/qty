@@ -2,27 +2,39 @@
 // Source: data/quantities/WarpingMomentOfInertia.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// A geometric property of an area that is used to determine the warping stress.
 ///
-/// The internal value is stored in `MeterToTheSixth` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct WarpingMomentOfInertia(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`WarpingMomentOfInertiaUnit::MeterToTheSixth`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct WarpingMomentOfInertia<T = f64>(T);
+
+quantity!(
+    WarpingMomentOfInertia,
+    WarpingMomentOfInertiaUnit,
+    MeterToTheSixth
+);
 
 /// Unit variants for [`WarpingMomentOfInertia`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum WarpingMomentOfInertiaUnit {
     MeterToTheSixth,
     DecimeterToTheSixth,
@@ -45,7 +57,7 @@ impl WarpingMomentOfInertiaUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterToTheSixth => "m⁶",
             Self::DecimeterToTheSixth => "dm⁶",
@@ -56,9 +68,9 @@ impl WarpingMomentOfInertiaUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterToTheSixth => &["m⁶"],
             Self::DecimeterToTheSixth => &["dm⁶"],
@@ -70,294 +82,163 @@ impl WarpingMomentOfInertiaUnit {
     }
 }
 
-impl WarpingMomentOfInertia {
+impl core::str::FromStr for WarpingMomentOfInertiaUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "m⁶" => Ok(Self::MeterToTheSixth),
+            "dm⁶" => Ok(Self::DecimeterToTheSixth),
+            "cm⁶" => Ok(Self::CentimeterToTheSixth),
+            "mm⁶" => Ok(Self::MillimeterToTheSixth),
+            "ft⁶" => Ok(Self::FootToTheSixth),
+            "in⁶" => Ok(Self::InchToTheSixth),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> WarpingMomentOfInertia<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: WarpingMomentOfInertiaUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: WarpingMomentOfInertiaUnit) -> Self {
         Self(match unit {
-            WarpingMomentOfInertiaUnit::MeterToTheSixth => x,
-            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => x / 1e6,
-            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => x / 1e12,
-            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => x / 1e18,
-            WarpingMomentOfInertiaUnit::FootToTheSixth => x * 0.000801843800914862014464,
-            WarpingMomentOfInertiaUnit::InchToTheSixth => x * 0.000000000268535866540096,
+            WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value / T::from_f64(1000000.0),
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value / T::from_f64(1e12),
+            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value / T::from_f64(1e18),
+            WarpingMomentOfInertiaUnit::FootToTheSixth => value * T::from_f64(0.000801843800914862),
+            WarpingMomentOfInertiaUnit::InchToTheSixth => value * T::from_f64(2.68535866540096e-10),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: WarpingMomentOfInertiaUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: WarpingMomentOfInertiaUnit) -> T {
         match unit {
-            WarpingMomentOfInertiaUnit::MeterToTheSixth => x,
-            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => x * 1e6,
-            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => x * 1e12,
-            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => x * 1e18,
-            WarpingMomentOfInertiaUnit::FootToTheSixth => x / 0.000801843800914862014464,
-            WarpingMomentOfInertiaUnit::InchToTheSixth => x / 0.000000000268535866540096,
+            WarpingMomentOfInertiaUnit::MeterToTheSixth => self.0,
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => self.0 * T::from_f64(1000000.0),
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => self.0 * T::from_f64(1e12),
+            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => self.0 * T::from_f64(1e18),
+            WarpingMomentOfInertiaUnit::FootToTheSixth => {
+                self.0 / T::from_f64(0.000801843800914862)
+            }
+            WarpingMomentOfInertiaUnit::InchToTheSixth => {
+                self.0 / T::from_f64(2.68535866540096e-10)
+            }
         }
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in MetersToTheSixth (`m⁶`).
     #[inline]
-    pub fn from_meters_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_meters_to_the_sixth(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MetersToTheSixth (`m⁶`).
     #[inline]
-    pub fn as_meters_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_meters_to_the_sixth(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_meters_to_the_sixth`].
     #[inline]
-    pub fn as_meter_to_the_sixth(self) -> Num {
+    pub fn as_meter_to_the_sixth(self) -> T {
         self.as_meters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in DecimetersToTheSixth (`dm⁶`).
     #[inline]
-    pub fn from_decimeters_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e6)
+    pub fn from_decimeters_to_the_sixth(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in DecimetersToTheSixth (`dm⁶`).
     #[inline]
-    pub fn as_decimeters_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x * 1e6
+    pub fn as_decimeters_to_the_sixth(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_decimeters_to_the_sixth`].
     #[inline]
-    pub fn as_decimeter_to_the_sixth(self) -> Num {
+    pub fn as_decimeter_to_the_sixth(self) -> T {
         self.as_decimeters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in CentimetersToTheSixth (`cm⁶`).
     #[inline]
-    pub fn from_centimeters_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e12)
+    pub fn from_centimeters_to_the_sixth(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in CentimetersToTheSixth (`cm⁶`).
     #[inline]
-    pub fn as_centimeters_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x * 1e12
+    pub fn as_centimeters_to_the_sixth(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_centimeters_to_the_sixth`].
     #[inline]
-    pub fn as_centimeter_to_the_sixth(self) -> Num {
+    pub fn as_centimeter_to_the_sixth(self) -> T {
         self.as_centimeters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in MillimetersToTheSixth (`mm⁶`).
     #[inline]
-    pub fn from_millimeters_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e18)
+    pub fn from_millimeters_to_the_sixth(value: T) -> Self {
+        Self(value / T::from_f64(1e18))
     }
 
     /// Returns the value expressed in MillimetersToTheSixth (`mm⁶`).
     #[inline]
-    pub fn as_millimeters_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x * 1e18
+    pub fn as_millimeters_to_the_sixth(self) -> T {
+        self.0 * T::from_f64(1e18)
     }
 
     /// Alias for [`Self::as_millimeters_to_the_sixth`].
     #[inline]
-    pub fn as_millimeter_to_the_sixth(self) -> Num {
+    pub fn as_millimeter_to_the_sixth(self) -> T {
         self.as_millimeters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in FeetToTheSixth (`ft⁶`).
     #[inline]
-    pub fn from_feet_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.000801843800914862014464)
+    pub fn from_feet_to_the_sixth(value: T) -> Self {
+        Self(value * T::from_f64(0.000801843800914862))
     }
 
     /// Returns the value expressed in FeetToTheSixth (`ft⁶`).
     #[inline]
-    pub fn as_feet_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x / 0.000801843800914862014464
+    pub fn as_feet_to_the_sixth(self) -> T {
+        self.0 / T::from_f64(0.000801843800914862)
     }
 
     /// Alias for [`Self::as_feet_to_the_sixth`].
     #[inline]
-    pub fn as_foot_to_the_sixth(self) -> Num {
+    pub fn as_foot_to_the_sixth(self) -> T {
         self.as_feet_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in InchesToTheSixth (`in⁶`).
     #[inline]
-    pub fn from_inches_to_the_sixth(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.000000000268535866540096)
+    pub fn from_inches_to_the_sixth(value: T) -> Self {
+        Self(value * T::from_f64(2.68535866540096e-10))
     }
 
     /// Returns the value expressed in InchesToTheSixth (`in⁶`).
     #[inline]
-    pub fn as_inches_to_the_sixth(self) -> Num {
-        let x = self.0;
-        x / 0.000000000268535866540096
+    pub fn as_inches_to_the_sixth(self) -> T {
+        self.0 / T::from_f64(2.68535866540096e-10)
     }
 
     /// Alias for [`Self::as_inches_to_the_sixth`].
     #[inline]
-    pub fn as_inch_to_the_sixth(self) -> Num {
+    pub fn as_inch_to_the_sixth(self) -> T {
         self.as_inches_to_the_sixth()
     }
-}
-
-impl crate::Quantity for WarpingMomentOfInertia {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for WarpingMomentOfInertia {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for WarpingMomentOfInertia {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for WarpingMomentOfInertia {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for WarpingMomentOfInertia {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<WarpingMomentOfInertia> for Num {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn mul(self, rhs: WarpingMomentOfInertia) -> WarpingMomentOfInertia {
-        WarpingMomentOfInertia(self * rhs.0)
-    }
-}
-impl Div<Num> for WarpingMomentOfInertia {
-    type Output = WarpingMomentOfInertia;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for WarpingMomentOfInertia {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for WarpingMomentOfInertia {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            WarpingMomentOfInertiaUnit::MeterToTheSixth.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`WarpingMomentOfInertia`].
-#[derive(Debug)]
-pub struct ParseWarpingMomentOfInertiaError(String);
-
-impl fmt::Display for ParseWarpingMomentOfInertiaError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as WarpingMomentOfInertia", self.0)
-    }
-}
-
-impl std::error::Error for ParseWarpingMomentOfInertiaError {}
-
-impl FromStr for WarpingMomentOfInertia {
-    type Err = ParseWarpingMomentOfInertiaError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseWarpingMomentOfInertiaError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, WarpingMomentOfInertiaUnit)] = &[
-            ("cm⁶", WarpingMomentOfInertiaUnit::CentimeterToTheSixth),
-            ("dm⁶", WarpingMomentOfInertiaUnit::DecimeterToTheSixth),
-            ("ft⁶", WarpingMomentOfInertiaUnit::FootToTheSixth),
-            ("in⁶", WarpingMomentOfInertiaUnit::InchToTheSixth),
-            ("mm⁶", WarpingMomentOfInertiaUnit::MillimeterToTheSixth),
-            ("m⁶", WarpingMomentOfInertiaUnit::MeterToTheSixth),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseWarpingMomentOfInertiaError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

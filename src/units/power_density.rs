@@ -2,27 +2,35 @@
 // Source: data/quantities/PowerDensity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The amount of power in a volume.
 ///
-/// The internal value is stored in `WattPerCubicMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct PowerDensity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`PowerDensityUnit::WattPerCubicMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct PowerDensity<T = f64>(T);
+
+quantity!(PowerDensity, PowerDensityUnit, WattPerCubicMeter);
 
 /// Unit variants for [`PowerDensity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum PowerDensityUnit {
     WattPerCubicMeter,
     PicowattPerCubicMeter,
@@ -68,6 +76,8 @@ pub enum PowerDensityUnit {
     MegawattPerLiter,
     GigawattPerLiter,
     TerawattPerLiter,
+    BtuPerSecondCubicInch,
+    BtuPerSecondCubicFoot,
 }
 
 impl PowerDensityUnit {
@@ -117,11 +127,13 @@ impl PowerDensityUnit {
         Self::MegawattPerLiter,
         Self::GigawattPerLiter,
         Self::TerawattPerLiter,
+        Self::BtuPerSecondCubicInch,
+        Self::BtuPerSecondCubicFoot,
     ];
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerCubicMeter => "W/m³",
             Self::PicowattPerCubicMeter => "pW/m³",
@@ -167,12 +179,14 @@ impl PowerDensityUnit {
             Self::MegawattPerLiter => "MW/l",
             Self::GigawattPerLiter => "GW/l",
             Self::TerawattPerLiter => "TW/l",
+            Self::BtuPerSecondCubicInch => "BTU/(s·in³)",
+            Self::BtuPerSecondCubicFoot => "BTU/(s·ft³)",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerCubicMeter => &["W/m³"],
             Self::PicowattPerCubicMeter => &["pW/m³"],
@@ -218,1172 +232,1005 @@ impl PowerDensityUnit {
             Self::MegawattPerLiter => &["MW/l"],
             Self::GigawattPerLiter => &["GW/l"],
             Self::TerawattPerLiter => &["TW/l"],
+            Self::BtuPerSecondCubicInch => &["BTU/(s·in³)"],
+            Self::BtuPerSecondCubicFoot => &["BTU/(s·ft³)"],
         }
     }
 }
 
-impl PowerDensity {
+impl core::str::FromStr for PowerDensityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "W/m³" => Ok(Self::WattPerCubicMeter),
+            "pW/m³" => Ok(Self::PicowattPerCubicMeter),
+            "nW/m³" => Ok(Self::NanowattPerCubicMeter),
+            "µW/m³" => Ok(Self::MicrowattPerCubicMeter),
+            "mW/m³" => Ok(Self::MilliwattPerCubicMeter),
+            "dW/m³" => Ok(Self::DeciwattPerCubicMeter),
+            "daW/m³" => Ok(Self::DecawattPerCubicMeter),
+            "kW/m³" => Ok(Self::KilowattPerCubicMeter),
+            "MW/m³" => Ok(Self::MegawattPerCubicMeter),
+            "GW/m³" => Ok(Self::GigawattPerCubicMeter),
+            "TW/m³" => Ok(Self::TerawattPerCubicMeter),
+            "W/in³" => Ok(Self::WattPerCubicInch),
+            "pW/in³" => Ok(Self::PicowattPerCubicInch),
+            "nW/in³" => Ok(Self::NanowattPerCubicInch),
+            "µW/in³" => Ok(Self::MicrowattPerCubicInch),
+            "mW/in³" => Ok(Self::MilliwattPerCubicInch),
+            "dW/in³" => Ok(Self::DeciwattPerCubicInch),
+            "daW/in³" => Ok(Self::DecawattPerCubicInch),
+            "kW/in³" => Ok(Self::KilowattPerCubicInch),
+            "MW/in³" => Ok(Self::MegawattPerCubicInch),
+            "GW/in³" => Ok(Self::GigawattPerCubicInch),
+            "TW/in³" => Ok(Self::TerawattPerCubicInch),
+            "W/ft³" => Ok(Self::WattPerCubicFoot),
+            "pW/ft³" => Ok(Self::PicowattPerCubicFoot),
+            "nW/ft³" => Ok(Self::NanowattPerCubicFoot),
+            "µW/ft³" => Ok(Self::MicrowattPerCubicFoot),
+            "mW/ft³" => Ok(Self::MilliwattPerCubicFoot),
+            "dW/ft³" => Ok(Self::DeciwattPerCubicFoot),
+            "daW/ft³" => Ok(Self::DecawattPerCubicFoot),
+            "kW/ft³" => Ok(Self::KilowattPerCubicFoot),
+            "MW/ft³" => Ok(Self::MegawattPerCubicFoot),
+            "GW/ft³" => Ok(Self::GigawattPerCubicFoot),
+            "TW/ft³" => Ok(Self::TerawattPerCubicFoot),
+            "W/l" => Ok(Self::WattPerLiter),
+            "pW/l" => Ok(Self::PicowattPerLiter),
+            "nW/l" => Ok(Self::NanowattPerLiter),
+            "µW/l" => Ok(Self::MicrowattPerLiter),
+            "mW/l" => Ok(Self::MilliwattPerLiter),
+            "dW/l" => Ok(Self::DeciwattPerLiter),
+            "daW/l" => Ok(Self::DecawattPerLiter),
+            "kW/l" => Ok(Self::KilowattPerLiter),
+            "MW/l" => Ok(Self::MegawattPerLiter),
+            "GW/l" => Ok(Self::GigawattPerLiter),
+            "TW/l" => Ok(Self::TerawattPerLiter),
+            "BTU/(s·in³)" => Ok(Self::BtuPerSecondCubicInch),
+            "BTU/(s·ft³)" => Ok(Self::BtuPerSecondCubicFoot),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> PowerDensity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: PowerDensityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: PowerDensityUnit) -> Self {
         Self(match unit {
-            PowerDensityUnit::WattPerCubicMeter => x,
-            PowerDensityUnit::PicowattPerCubicMeter => (x * 1e-12),
-            PowerDensityUnit::NanowattPerCubicMeter => (x * 1e-9),
-            PowerDensityUnit::MicrowattPerCubicMeter => (x * 1e-6),
-            PowerDensityUnit::MilliwattPerCubicMeter => (x * 1e-3),
-            PowerDensityUnit::DeciwattPerCubicMeter => (x * 1e-1),
-            PowerDensityUnit::DecawattPerCubicMeter => (x * 1e1),
-            PowerDensityUnit::KilowattPerCubicMeter => (x * 1e3),
-            PowerDensityUnit::MegawattPerCubicMeter => (x * 1e6),
-            PowerDensityUnit::GigawattPerCubicMeter => (x * 1e9),
-            PowerDensityUnit::TerawattPerCubicMeter => (x * 1e12),
-            PowerDensityUnit::WattPerCubicInch => x / 1.6387064e-5,
-            PowerDensityUnit::PicowattPerCubicInch => (x * 1e-12) / 1.6387064e-5,
-            PowerDensityUnit::NanowattPerCubicInch => (x * 1e-9) / 1.6387064e-5,
-            PowerDensityUnit::MicrowattPerCubicInch => (x * 1e-6) / 1.6387064e-5,
-            PowerDensityUnit::MilliwattPerCubicInch => (x * 1e-3) / 1.6387064e-5,
-            PowerDensityUnit::DeciwattPerCubicInch => (x * 1e-1) / 1.6387064e-5,
-            PowerDensityUnit::DecawattPerCubicInch => (x * 1e1) / 1.6387064e-5,
-            PowerDensityUnit::KilowattPerCubicInch => (x * 1e3) / 1.6387064e-5,
-            PowerDensityUnit::MegawattPerCubicInch => (x * 1e6) / 1.6387064e-5,
-            PowerDensityUnit::GigawattPerCubicInch => (x * 1e9) / 1.6387064e-5,
-            PowerDensityUnit::TerawattPerCubicInch => (x * 1e12) / 1.6387064e-5,
-            PowerDensityUnit::WattPerCubicFoot => x / 0.028316846592,
-            PowerDensityUnit::PicowattPerCubicFoot => (x * 1e-12) / 0.028316846592,
-            PowerDensityUnit::NanowattPerCubicFoot => (x * 1e-9) / 0.028316846592,
-            PowerDensityUnit::MicrowattPerCubicFoot => (x * 1e-6) / 0.028316846592,
-            PowerDensityUnit::MilliwattPerCubicFoot => (x * 1e-3) / 0.028316846592,
-            PowerDensityUnit::DeciwattPerCubicFoot => (x * 1e-1) / 0.028316846592,
-            PowerDensityUnit::DecawattPerCubicFoot => (x * 1e1) / 0.028316846592,
-            PowerDensityUnit::KilowattPerCubicFoot => (x * 1e3) / 0.028316846592,
-            PowerDensityUnit::MegawattPerCubicFoot => (x * 1e6) / 0.028316846592,
-            PowerDensityUnit::GigawattPerCubicFoot => (x * 1e9) / 0.028316846592,
-            PowerDensityUnit::TerawattPerCubicFoot => (x * 1e12) / 0.028316846592,
-            PowerDensityUnit::WattPerLiter => x * 1.0e3,
-            PowerDensityUnit::PicowattPerLiter => (x * 1e-12) * 1.0e3,
-            PowerDensityUnit::NanowattPerLiter => (x * 1e-9) * 1.0e3,
-            PowerDensityUnit::MicrowattPerLiter => (x * 1e-6) * 1.0e3,
-            PowerDensityUnit::MilliwattPerLiter => (x * 1e-3) * 1.0e3,
-            PowerDensityUnit::DeciwattPerLiter => (x * 1e-1) * 1.0e3,
-            PowerDensityUnit::DecawattPerLiter => (x * 1e1) * 1.0e3,
-            PowerDensityUnit::KilowattPerLiter => (x * 1e3) * 1.0e3,
-            PowerDensityUnit::MegawattPerLiter => (x * 1e6) * 1.0e3,
-            PowerDensityUnit::GigawattPerLiter => (x * 1e9) * 1.0e3,
-            PowerDensityUnit::TerawattPerLiter => (x * 1e12) * 1.0e3,
+            PowerDensityUnit::WattPerCubicMeter => value,
+            PowerDensityUnit::PicowattPerCubicMeter => value / T::from_f64(1e12),
+            PowerDensityUnit::NanowattPerCubicMeter => value / T::from_f64(1e9),
+            PowerDensityUnit::MicrowattPerCubicMeter => value / T::from_f64(1000000.0),
+            PowerDensityUnit::MilliwattPerCubicMeter => value / T::from_f64(1000.0),
+            PowerDensityUnit::DeciwattPerCubicMeter => value / T::from_f64(10.0),
+            PowerDensityUnit::DecawattPerCubicMeter => value * T::from_f64(10.0),
+            PowerDensityUnit::KilowattPerCubicMeter => value * T::from_f64(1000.0),
+            PowerDensityUnit::MegawattPerCubicMeter => value * T::from_f64(1000000.0),
+            PowerDensityUnit::GigawattPerCubicMeter => value * T::from_f64(1e9),
+            PowerDensityUnit::TerawattPerCubicMeter => value * T::from_f64(1e12),
+            PowerDensityUnit::WattPerCubicInch => value * T::from_f64(61023.74409473228),
+            PowerDensityUnit::PicowattPerCubicInch => value / T::from_f64(1.6387064e7),
+            PowerDensityUnit::NanowattPerCubicInch => value * T::from_f64(6.1023744094732284e-5),
+            PowerDensityUnit::MicrowattPerCubicInch => value * T::from_f64(0.06102374409473228),
+            PowerDensityUnit::MilliwattPerCubicInch => value * T::from_f64(61.02374409473229),
+            PowerDensityUnit::DeciwattPerCubicInch => value * T::from_f64(6102.374409473228),
+            PowerDensityUnit::DecawattPerCubicInch => value * T::from_f64(610237.4409473229),
+            PowerDensityUnit::KilowattPerCubicInch => value * T::from_f64(6.1023744094732285e7),
+            PowerDensityUnit::MegawattPerCubicInch => value * T::from_f64(6.1023744094732285e10),
+            PowerDensityUnit::GigawattPerCubicInch => value * T::from_f64(6.102374409473228e13),
+            PowerDensityUnit::TerawattPerCubicInch => value * T::from_f64(6.102374409473228e16),
+            PowerDensityUnit::WattPerCubicFoot => value * T::from_f64(35.31466672148859),
+            PowerDensityUnit::PicowattPerCubicFoot => value / T::from_f64(2.8316846592e10),
+            PowerDensityUnit::NanowattPerCubicFoot => value * T::from_f64(3.531466672148859e-8),
+            PowerDensityUnit::MicrowattPerCubicFoot => value * T::from_f64(3.531466672148859e-5),
+            PowerDensityUnit::MilliwattPerCubicFoot => value * T::from_f64(0.03531466672148859),
+            PowerDensityUnit::DeciwattPerCubicFoot => value * T::from_f64(3.5314666721488592),
+            PowerDensityUnit::DecawattPerCubicFoot => value * T::from_f64(353.1466672148859),
+            PowerDensityUnit::KilowattPerCubicFoot => value * T::from_f64(35314.66672148859),
+            PowerDensityUnit::MegawattPerCubicFoot => value * T::from_f64(3.531466672148859e7),
+            PowerDensityUnit::GigawattPerCubicFoot => value * T::from_f64(3.5314666721488594e10),
+            PowerDensityUnit::TerawattPerCubicFoot => value * T::from_f64(3.531466672148859e13),
+            PowerDensityUnit::WattPerLiter => value * T::from_f64(1000.0),
+            PowerDensityUnit::PicowattPerLiter => value / T::from_f64(1e9),
+            PowerDensityUnit::NanowattPerLiter => value / T::from_f64(1000000.0),
+            PowerDensityUnit::MicrowattPerLiter => value / T::from_f64(1000.0),
+            PowerDensityUnit::MilliwattPerLiter => value,
+            PowerDensityUnit::DeciwattPerLiter => value * T::from_f64(100.0),
+            PowerDensityUnit::DecawattPerLiter => value * T::from_f64(10000.0),
+            PowerDensityUnit::KilowattPerLiter => value * T::from_f64(1000000.0),
+            PowerDensityUnit::MegawattPerLiter => value * T::from_f64(1e9),
+            PowerDensityUnit::GigawattPerLiter => value * T::from_f64(1e12),
+            PowerDensityUnit::TerawattPerLiter => value * T::from_f64(1e15),
+            PowerDensityUnit::BtuPerSecondCubicInch => value * T::from_f64(6.438345835593246e7),
+            PowerDensityUnit::BtuPerSecondCubicFoot => value * T::from_f64(37258.94580783128),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: PowerDensityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: PowerDensityUnit) -> T {
         match unit {
-            PowerDensityUnit::WattPerCubicMeter => x,
-            PowerDensityUnit::PicowattPerCubicMeter => (x / 1e-12),
-            PowerDensityUnit::NanowattPerCubicMeter => (x / 1e-9),
-            PowerDensityUnit::MicrowattPerCubicMeter => (x / 1e-6),
-            PowerDensityUnit::MilliwattPerCubicMeter => (x / 1e-3),
-            PowerDensityUnit::DeciwattPerCubicMeter => (x / 1e-1),
-            PowerDensityUnit::DecawattPerCubicMeter => (x / 1e1),
-            PowerDensityUnit::KilowattPerCubicMeter => (x / 1e3),
-            PowerDensityUnit::MegawattPerCubicMeter => (x / 1e6),
-            PowerDensityUnit::GigawattPerCubicMeter => (x / 1e9),
-            PowerDensityUnit::TerawattPerCubicMeter => (x / 1e12),
-            PowerDensityUnit::WattPerCubicInch => x * 1.6387064e-5,
-            PowerDensityUnit::PicowattPerCubicInch => (x / 1e-12) * 1.6387064e-5,
-            PowerDensityUnit::NanowattPerCubicInch => (x / 1e-9) * 1.6387064e-5,
-            PowerDensityUnit::MicrowattPerCubicInch => (x / 1e-6) * 1.6387064e-5,
-            PowerDensityUnit::MilliwattPerCubicInch => (x / 1e-3) * 1.6387064e-5,
-            PowerDensityUnit::DeciwattPerCubicInch => (x / 1e-1) * 1.6387064e-5,
-            PowerDensityUnit::DecawattPerCubicInch => (x / 1e1) * 1.6387064e-5,
-            PowerDensityUnit::KilowattPerCubicInch => (x / 1e3) * 1.6387064e-5,
-            PowerDensityUnit::MegawattPerCubicInch => (x / 1e6) * 1.6387064e-5,
-            PowerDensityUnit::GigawattPerCubicInch => (x / 1e9) * 1.6387064e-5,
-            PowerDensityUnit::TerawattPerCubicInch => (x / 1e12) * 1.6387064e-5,
-            PowerDensityUnit::WattPerCubicFoot => x * 0.028316846592,
-            PowerDensityUnit::PicowattPerCubicFoot => (x / 1e-12) * 0.028316846592,
-            PowerDensityUnit::NanowattPerCubicFoot => (x / 1e-9) * 0.028316846592,
-            PowerDensityUnit::MicrowattPerCubicFoot => (x / 1e-6) * 0.028316846592,
-            PowerDensityUnit::MilliwattPerCubicFoot => (x / 1e-3) * 0.028316846592,
-            PowerDensityUnit::DeciwattPerCubicFoot => (x / 1e-1) * 0.028316846592,
-            PowerDensityUnit::DecawattPerCubicFoot => (x / 1e1) * 0.028316846592,
-            PowerDensityUnit::KilowattPerCubicFoot => (x / 1e3) * 0.028316846592,
-            PowerDensityUnit::MegawattPerCubicFoot => (x / 1e6) * 0.028316846592,
-            PowerDensityUnit::GigawattPerCubicFoot => (x / 1e9) * 0.028316846592,
-            PowerDensityUnit::TerawattPerCubicFoot => (x / 1e12) * 0.028316846592,
-            PowerDensityUnit::WattPerLiter => x / 1.0e3,
-            PowerDensityUnit::PicowattPerLiter => (x / 1e-12) / 1.0e3,
-            PowerDensityUnit::NanowattPerLiter => (x / 1e-9) / 1.0e3,
-            PowerDensityUnit::MicrowattPerLiter => (x / 1e-6) / 1.0e3,
-            PowerDensityUnit::MilliwattPerLiter => (x / 1e-3) / 1.0e3,
-            PowerDensityUnit::DeciwattPerLiter => (x / 1e-1) / 1.0e3,
-            PowerDensityUnit::DecawattPerLiter => (x / 1e1) / 1.0e3,
-            PowerDensityUnit::KilowattPerLiter => (x / 1e3) / 1.0e3,
-            PowerDensityUnit::MegawattPerLiter => (x / 1e6) / 1.0e3,
-            PowerDensityUnit::GigawattPerLiter => (x / 1e9) / 1.0e3,
-            PowerDensityUnit::TerawattPerLiter => (x / 1e12) / 1.0e3,
+            PowerDensityUnit::WattPerCubicMeter => self.0,
+            PowerDensityUnit::PicowattPerCubicMeter => self.0 * T::from_f64(1e12),
+            PowerDensityUnit::NanowattPerCubicMeter => self.0 * T::from_f64(1e9),
+            PowerDensityUnit::MicrowattPerCubicMeter => self.0 * T::from_f64(1000000.0),
+            PowerDensityUnit::MilliwattPerCubicMeter => self.0 * T::from_f64(1000.0),
+            PowerDensityUnit::DeciwattPerCubicMeter => self.0 * T::from_f64(10.0),
+            PowerDensityUnit::DecawattPerCubicMeter => self.0 / T::from_f64(10.0),
+            PowerDensityUnit::KilowattPerCubicMeter => self.0 / T::from_f64(1000.0),
+            PowerDensityUnit::MegawattPerCubicMeter => self.0 / T::from_f64(1000000.0),
+            PowerDensityUnit::GigawattPerCubicMeter => self.0 / T::from_f64(1e9),
+            PowerDensityUnit::TerawattPerCubicMeter => self.0 / T::from_f64(1e12),
+            PowerDensityUnit::WattPerCubicInch => self.0 / T::from_f64(61023.74409473228),
+            PowerDensityUnit::PicowattPerCubicInch => self.0 * T::from_f64(1.6387064e7),
+            PowerDensityUnit::NanowattPerCubicInch => self.0 / T::from_f64(6.1023744094732284e-5),
+            PowerDensityUnit::MicrowattPerCubicInch => self.0 / T::from_f64(0.06102374409473228),
+            PowerDensityUnit::MilliwattPerCubicInch => self.0 / T::from_f64(61.02374409473229),
+            PowerDensityUnit::DeciwattPerCubicInch => self.0 / T::from_f64(6102.374409473228),
+            PowerDensityUnit::DecawattPerCubicInch => self.0 / T::from_f64(610237.4409473229),
+            PowerDensityUnit::KilowattPerCubicInch => self.0 / T::from_f64(6.1023744094732285e7),
+            PowerDensityUnit::MegawattPerCubicInch => self.0 / T::from_f64(6.1023744094732285e10),
+            PowerDensityUnit::GigawattPerCubicInch => self.0 / T::from_f64(6.102374409473228e13),
+            PowerDensityUnit::TerawattPerCubicInch => self.0 / T::from_f64(6.102374409473228e16),
+            PowerDensityUnit::WattPerCubicFoot => self.0 / T::from_f64(35.31466672148859),
+            PowerDensityUnit::PicowattPerCubicFoot => self.0 * T::from_f64(2.8316846592e10),
+            PowerDensityUnit::NanowattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e-8),
+            PowerDensityUnit::MicrowattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e-5),
+            PowerDensityUnit::MilliwattPerCubicFoot => self.0 / T::from_f64(0.03531466672148859),
+            PowerDensityUnit::DeciwattPerCubicFoot => self.0 / T::from_f64(3.5314666721488592),
+            PowerDensityUnit::DecawattPerCubicFoot => self.0 / T::from_f64(353.1466672148859),
+            PowerDensityUnit::KilowattPerCubicFoot => self.0 / T::from_f64(35314.66672148859),
+            PowerDensityUnit::MegawattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e7),
+            PowerDensityUnit::GigawattPerCubicFoot => self.0 / T::from_f64(3.5314666721488594e10),
+            PowerDensityUnit::TerawattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e13),
+            PowerDensityUnit::WattPerLiter => self.0 / T::from_f64(1000.0),
+            PowerDensityUnit::PicowattPerLiter => self.0 * T::from_f64(1e9),
+            PowerDensityUnit::NanowattPerLiter => self.0 * T::from_f64(1000000.0),
+            PowerDensityUnit::MicrowattPerLiter => self.0 * T::from_f64(1000.0),
+            PowerDensityUnit::MilliwattPerLiter => self.0,
+            PowerDensityUnit::DeciwattPerLiter => self.0 / T::from_f64(100.0),
+            PowerDensityUnit::DecawattPerLiter => self.0 / T::from_f64(10000.0),
+            PowerDensityUnit::KilowattPerLiter => self.0 / T::from_f64(1000000.0),
+            PowerDensityUnit::MegawattPerLiter => self.0 / T::from_f64(1e9),
+            PowerDensityUnit::GigawattPerLiter => self.0 / T::from_f64(1e12),
+            PowerDensityUnit::TerawattPerLiter => self.0 / T::from_f64(1e15),
+            PowerDensityUnit::BtuPerSecondCubicInch => self.0 / T::from_f64(6.438345835593246e7),
+            PowerDensityUnit::BtuPerSecondCubicFoot => self.0 / T::from_f64(37258.94580783128),
         }
     }
 
     /// Creates a [`PowerDensity`] from a value in WattsPerCubicMeter (`W/m³`).
     #[inline]
-    pub fn from_watts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_watts_per_cubic_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in WattsPerCubicMeter (`W/m³`).
     #[inline]
-    pub fn as_watts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_watts_per_cubic_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_watts_per_cubic_meter`].
     #[inline]
-    pub fn as_watt_per_cubic_meter(self) -> Num {
+    pub fn as_watt_per_cubic_meter(self) -> T {
         self.as_watts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in PicowattsPerCubicMeter (`pW/m³`).
     #[inline]
-    pub fn from_picowatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picowatts_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in PicowattsPerCubicMeter (`pW/m³`).
     #[inline]
-    pub fn as_picowatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picowatts_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picowatts_per_cubic_meter`].
     #[inline]
-    pub fn as_picowatt_per_cubic_meter(self) -> Num {
+    pub fn as_picowatt_per_cubic_meter(self) -> T {
         self.as_picowatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in NanowattsPerCubicMeter (`nW/m³`).
     #[inline]
-    pub fn from_nanowatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanowatts_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanowattsPerCubicMeter (`nW/m³`).
     #[inline]
-    pub fn as_nanowatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanowatts_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanowatts_per_cubic_meter`].
     #[inline]
-    pub fn as_nanowatt_per_cubic_meter(self) -> Num {
+    pub fn as_nanowatt_per_cubic_meter(self) -> T {
         self.as_nanowatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MicrowattsPerCubicMeter (`µW/m³`).
     #[inline]
-    pub fn from_microwatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microwatts_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrowattsPerCubicMeter (`µW/m³`).
     #[inline]
-    pub fn as_microwatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microwatts_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microwatts_per_cubic_meter`].
     #[inline]
-    pub fn as_microwatt_per_cubic_meter(self) -> Num {
+    pub fn as_microwatt_per_cubic_meter(self) -> T {
         self.as_microwatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MilliwattsPerCubicMeter (`mW/m³`).
     #[inline]
-    pub fn from_milliwatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliwatts_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilliwattsPerCubicMeter (`mW/m³`).
     #[inline]
-    pub fn as_milliwatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliwatts_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliwatts_per_cubic_meter`].
     #[inline]
-    pub fn as_milliwatt_per_cubic_meter(self) -> Num {
+    pub fn as_milliwatt_per_cubic_meter(self) -> T {
         self.as_milliwatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in DeciwattsPerCubicMeter (`dW/m³`).
     #[inline]
-    pub fn from_deciwatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1))
+    pub fn from_deciwatts_per_cubic_meter(value: T) -> Self {
+        Self(value / T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DeciwattsPerCubicMeter (`dW/m³`).
     #[inline]
-    pub fn as_deciwatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1)
+    pub fn as_deciwatts_per_cubic_meter(self) -> T {
+        self.0 * T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_deciwatts_per_cubic_meter`].
     #[inline]
-    pub fn as_deciwatt_per_cubic_meter(self) -> Num {
+    pub fn as_deciwatt_per_cubic_meter(self) -> T {
         self.as_deciwatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in DecawattsPerCubicMeter (`daW/m³`).
     #[inline]
-    pub fn from_decawatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1))
+    pub fn from_decawatts_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in DecawattsPerCubicMeter (`daW/m³`).
     #[inline]
-    pub fn as_decawatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e1)
+    pub fn as_decawatts_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_decawatts_per_cubic_meter`].
     #[inline]
-    pub fn as_decawatt_per_cubic_meter(self) -> Num {
+    pub fn as_decawatt_per_cubic_meter(self) -> T {
         self.as_decawatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in KilowattsPerCubicMeter (`kW/m³`).
     #[inline]
-    pub fn from_kilowatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilowatts_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilowattsPerCubicMeter (`kW/m³`).
     #[inline]
-    pub fn as_kilowatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilowatts_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilowatts_per_cubic_meter`].
     #[inline]
-    pub fn as_kilowatt_per_cubic_meter(self) -> Num {
+    pub fn as_kilowatt_per_cubic_meter(self) -> T {
         self.as_kilowatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MegawattsPerCubicMeter (`MW/m³`).
     #[inline]
-    pub fn from_megawatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megawatts_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegawattsPerCubicMeter (`MW/m³`).
     #[inline]
-    pub fn as_megawatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megawatts_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megawatts_per_cubic_meter`].
     #[inline]
-    pub fn as_megawatt_per_cubic_meter(self) -> Num {
+    pub fn as_megawatt_per_cubic_meter(self) -> T {
         self.as_megawatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in GigawattsPerCubicMeter (`GW/m³`).
     #[inline]
-    pub fn from_gigawatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigawatts_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in GigawattsPerCubicMeter (`GW/m³`).
     #[inline]
-    pub fn as_gigawatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigawatts_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigawatts_per_cubic_meter`].
     #[inline]
-    pub fn as_gigawatt_per_cubic_meter(self) -> Num {
+    pub fn as_gigawatt_per_cubic_meter(self) -> T {
         self.as_gigawatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in TerawattsPerCubicMeter (`TW/m³`).
     #[inline]
-    pub fn from_terawatts_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terawatts_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in TerawattsPerCubicMeter (`TW/m³`).
     #[inline]
-    pub fn as_terawatts_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terawatts_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_terawatts_per_cubic_meter`].
     #[inline]
-    pub fn as_terawatt_per_cubic_meter(self) -> Num {
+    pub fn as_terawatt_per_cubic_meter(self) -> T {
         self.as_terawatts_per_cubic_meter()
     }
 
     /// Creates a [`PowerDensity`] from a value in WattsPerCubicInch (`W/in³`).
     #[inline]
-    pub fn from_watts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self(x / 1.6387064e-5)
+    pub fn from_watts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(61023.74409473228))
     }
 
     /// Returns the value expressed in WattsPerCubicInch (`W/in³`).
     #[inline]
-    pub fn as_watts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        x * 1.6387064e-5
+    pub fn as_watts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(61023.74409473228)
     }
 
     /// Alias for [`Self::as_watts_per_cubic_inch`].
     #[inline]
-    pub fn as_watt_per_cubic_inch(self) -> Num {
+    pub fn as_watt_per_cubic_inch(self) -> T {
         self.as_watts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in PicowattsPerCubicInch (`pW/in³`).
     #[inline]
-    pub fn from_picowatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 1.6387064e-5)
+    pub fn from_picowatts_per_cubic_inch(value: T) -> Self {
+        Self(value / T::from_f64(1.6387064e7))
     }
 
     /// Returns the value expressed in PicowattsPerCubicInch (`pW/in³`).
     #[inline]
-    pub fn as_picowatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 1.6387064e-5
+    pub fn as_picowatts_per_cubic_inch(self) -> T {
+        self.0 * T::from_f64(1.6387064e7)
     }
 
     /// Alias for [`Self::as_picowatts_per_cubic_inch`].
     #[inline]
-    pub fn as_picowatt_per_cubic_inch(self) -> Num {
+    pub fn as_picowatt_per_cubic_inch(self) -> T {
         self.as_picowatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in NanowattsPerCubicInch (`nW/in³`).
     #[inline]
-    pub fn from_nanowatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 1.6387064e-5)
+    pub fn from_nanowatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.1023744094732284e-5))
     }
 
     /// Returns the value expressed in NanowattsPerCubicInch (`nW/in³`).
     #[inline]
-    pub fn as_nanowatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 1.6387064e-5
+    pub fn as_nanowatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.1023744094732284e-5)
     }
 
     /// Alias for [`Self::as_nanowatts_per_cubic_inch`].
     #[inline]
-    pub fn as_nanowatt_per_cubic_inch(self) -> Num {
+    pub fn as_nanowatt_per_cubic_inch(self) -> T {
         self.as_nanowatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in MicrowattsPerCubicInch (`µW/in³`).
     #[inline]
-    pub fn from_microwatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 1.6387064e-5)
+    pub fn from_microwatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(0.06102374409473228))
     }
 
     /// Returns the value expressed in MicrowattsPerCubicInch (`µW/in³`).
     #[inline]
-    pub fn as_microwatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 1.6387064e-5
+    pub fn as_microwatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(0.06102374409473228)
     }
 
     /// Alias for [`Self::as_microwatts_per_cubic_inch`].
     #[inline]
-    pub fn as_microwatt_per_cubic_inch(self) -> Num {
+    pub fn as_microwatt_per_cubic_inch(self) -> T {
         self.as_microwatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in MilliwattsPerCubicInch (`mW/in³`).
     #[inline]
-    pub fn from_milliwatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 1.6387064e-5)
+    pub fn from_milliwatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(61.02374409473229))
     }
 
     /// Returns the value expressed in MilliwattsPerCubicInch (`mW/in³`).
     #[inline]
-    pub fn as_milliwatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 1.6387064e-5
+    pub fn as_milliwatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(61.02374409473229)
     }
 
     /// Alias for [`Self::as_milliwatts_per_cubic_inch`].
     #[inline]
-    pub fn as_milliwatt_per_cubic_inch(self) -> Num {
+    pub fn as_milliwatt_per_cubic_inch(self) -> T {
         self.as_milliwatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in DeciwattsPerCubicInch (`dW/in³`).
     #[inline]
-    pub fn from_deciwatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 1.6387064e-5)
+    pub fn from_deciwatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6102.374409473228))
     }
 
     /// Returns the value expressed in DeciwattsPerCubicInch (`dW/in³`).
     #[inline]
-    pub fn as_deciwatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 1.6387064e-5
+    pub fn as_deciwatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6102.374409473228)
     }
 
     /// Alias for [`Self::as_deciwatts_per_cubic_inch`].
     #[inline]
-    pub fn as_deciwatt_per_cubic_inch(self) -> Num {
+    pub fn as_deciwatt_per_cubic_inch(self) -> T {
         self.as_deciwatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in DecawattsPerCubicInch (`daW/in³`).
     #[inline]
-    pub fn from_decawatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) / 1.6387064e-5)
+    pub fn from_decawatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(610237.4409473229))
     }
 
     /// Returns the value expressed in DecawattsPerCubicInch (`daW/in³`).
     #[inline]
-    pub fn as_decawatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e1) * 1.6387064e-5
+    pub fn as_decawatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(610237.4409473229)
     }
 
     /// Alias for [`Self::as_decawatts_per_cubic_inch`].
     #[inline]
-    pub fn as_decawatt_per_cubic_inch(self) -> Num {
+    pub fn as_decawatt_per_cubic_inch(self) -> T {
         self.as_decawatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in KilowattsPerCubicInch (`kW/in³`).
     #[inline]
-    pub fn from_kilowatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 1.6387064e-5)
+    pub fn from_kilowatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.1023744094732285e7))
     }
 
     /// Returns the value expressed in KilowattsPerCubicInch (`kW/in³`).
     #[inline]
-    pub fn as_kilowatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1.6387064e-5
+    pub fn as_kilowatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.1023744094732285e7)
     }
 
     /// Alias for [`Self::as_kilowatts_per_cubic_inch`].
     #[inline]
-    pub fn as_kilowatt_per_cubic_inch(self) -> Num {
+    pub fn as_kilowatt_per_cubic_inch(self) -> T {
         self.as_kilowatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in MegawattsPerCubicInch (`MW/in³`).
     #[inline]
-    pub fn from_megawatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 1.6387064e-5)
+    pub fn from_megawatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.1023744094732285e10))
     }
 
     /// Returns the value expressed in MegawattsPerCubicInch (`MW/in³`).
     #[inline]
-    pub fn as_megawatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 1.6387064e-5
+    pub fn as_megawatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.1023744094732285e10)
     }
 
     /// Alias for [`Self::as_megawatts_per_cubic_inch`].
     #[inline]
-    pub fn as_megawatt_per_cubic_inch(self) -> Num {
+    pub fn as_megawatt_per_cubic_inch(self) -> T {
         self.as_megawatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in GigawattsPerCubicInch (`GW/in³`).
     #[inline]
-    pub fn from_gigawatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) / 1.6387064e-5)
+    pub fn from_gigawatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.102374409473228e13))
     }
 
     /// Returns the value expressed in GigawattsPerCubicInch (`GW/in³`).
     #[inline]
-    pub fn as_gigawatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e9) * 1.6387064e-5
+    pub fn as_gigawatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.102374409473228e13)
     }
 
     /// Alias for [`Self::as_gigawatts_per_cubic_inch`].
     #[inline]
-    pub fn as_gigawatt_per_cubic_inch(self) -> Num {
+    pub fn as_gigawatt_per_cubic_inch(self) -> T {
         self.as_gigawatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in TerawattsPerCubicInch (`TW/in³`).
     #[inline]
-    pub fn from_terawatts_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) / 1.6387064e-5)
+    pub fn from_terawatts_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.102374409473228e16))
     }
 
     /// Returns the value expressed in TerawattsPerCubicInch (`TW/in³`).
     #[inline]
-    pub fn as_terawatts_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e12) * 1.6387064e-5
+    pub fn as_terawatts_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.102374409473228e16)
     }
 
     /// Alias for [`Self::as_terawatts_per_cubic_inch`].
     #[inline]
-    pub fn as_terawatt_per_cubic_inch(self) -> Num {
+    pub fn as_terawatt_per_cubic_inch(self) -> T {
         self.as_terawatts_per_cubic_inch()
     }
 
     /// Creates a [`PowerDensity`] from a value in WattsPerCubicFoot (`W/ft³`).
     #[inline]
-    pub fn from_watts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self(x / 0.028316846592)
+    pub fn from_watts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(35.31466672148859))
     }
 
     /// Returns the value expressed in WattsPerCubicFoot (`W/ft³`).
     #[inline]
-    pub fn as_watts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        x * 0.028316846592
+    pub fn as_watts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(35.31466672148859)
     }
 
     /// Alias for [`Self::as_watts_per_cubic_foot`].
     #[inline]
-    pub fn as_watt_per_cubic_foot(self) -> Num {
+    pub fn as_watt_per_cubic_foot(self) -> T {
         self.as_watts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in PicowattsPerCubicFoot (`pW/ft³`).
     #[inline]
-    pub fn from_picowatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 0.028316846592)
+    pub fn from_picowatts_per_cubic_foot(value: T) -> Self {
+        Self(value / T::from_f64(2.8316846592e10))
     }
 
     /// Returns the value expressed in PicowattsPerCubicFoot (`pW/ft³`).
     #[inline]
-    pub fn as_picowatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 0.028316846592
+    pub fn as_picowatts_per_cubic_foot(self) -> T {
+        self.0 * T::from_f64(2.8316846592e10)
     }
 
     /// Alias for [`Self::as_picowatts_per_cubic_foot`].
     #[inline]
-    pub fn as_picowatt_per_cubic_foot(self) -> Num {
+    pub fn as_picowatt_per_cubic_foot(self) -> T {
         self.as_picowatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in NanowattsPerCubicFoot (`nW/ft³`).
     #[inline]
-    pub fn from_nanowatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 0.028316846592)
+    pub fn from_nanowatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.531466672148859e-8))
     }
 
     /// Returns the value expressed in NanowattsPerCubicFoot (`nW/ft³`).
     #[inline]
-    pub fn as_nanowatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 0.028316846592
+    pub fn as_nanowatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.531466672148859e-8)
     }
 
     /// Alias for [`Self::as_nanowatts_per_cubic_foot`].
     #[inline]
-    pub fn as_nanowatt_per_cubic_foot(self) -> Num {
+    pub fn as_nanowatt_per_cubic_foot(self) -> T {
         self.as_nanowatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in MicrowattsPerCubicFoot (`µW/ft³`).
     #[inline]
-    pub fn from_microwatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 0.028316846592)
+    pub fn from_microwatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.531466672148859e-5))
     }
 
     /// Returns the value expressed in MicrowattsPerCubicFoot (`µW/ft³`).
     #[inline]
-    pub fn as_microwatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 0.028316846592
+    pub fn as_microwatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.531466672148859e-5)
     }
 
     /// Alias for [`Self::as_microwatts_per_cubic_foot`].
     #[inline]
-    pub fn as_microwatt_per_cubic_foot(self) -> Num {
+    pub fn as_microwatt_per_cubic_foot(self) -> T {
         self.as_microwatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in MilliwattsPerCubicFoot (`mW/ft³`).
     #[inline]
-    pub fn from_milliwatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 0.028316846592)
+    pub fn from_milliwatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(0.03531466672148859))
     }
 
     /// Returns the value expressed in MilliwattsPerCubicFoot (`mW/ft³`).
     #[inline]
-    pub fn as_milliwatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 0.028316846592
+    pub fn as_milliwatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(0.03531466672148859)
     }
 
     /// Alias for [`Self::as_milliwatts_per_cubic_foot`].
     #[inline]
-    pub fn as_milliwatt_per_cubic_foot(self) -> Num {
+    pub fn as_milliwatt_per_cubic_foot(self) -> T {
         self.as_milliwatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in DeciwattsPerCubicFoot (`dW/ft³`).
     #[inline]
-    pub fn from_deciwatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) / 0.028316846592)
+    pub fn from_deciwatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.5314666721488592))
     }
 
     /// Returns the value expressed in DeciwattsPerCubicFoot (`dW/ft³`).
     #[inline]
-    pub fn as_deciwatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) * 0.028316846592
+    pub fn as_deciwatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.5314666721488592)
     }
 
     /// Alias for [`Self::as_deciwatts_per_cubic_foot`].
     #[inline]
-    pub fn as_deciwatt_per_cubic_foot(self) -> Num {
+    pub fn as_deciwatt_per_cubic_foot(self) -> T {
         self.as_deciwatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in DecawattsPerCubicFoot (`daW/ft³`).
     #[inline]
-    pub fn from_decawatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) / 0.028316846592)
+    pub fn from_decawatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(353.1466672148859))
     }
 
     /// Returns the value expressed in DecawattsPerCubicFoot (`daW/ft³`).
     #[inline]
-    pub fn as_decawatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e1) * 0.028316846592
+    pub fn as_decawatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(353.1466672148859)
     }
 
     /// Alias for [`Self::as_decawatts_per_cubic_foot`].
     #[inline]
-    pub fn as_decawatt_per_cubic_foot(self) -> Num {
+    pub fn as_decawatt_per_cubic_foot(self) -> T {
         self.as_decawatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in KilowattsPerCubicFoot (`kW/ft³`).
     #[inline]
-    pub fn from_kilowatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 0.028316846592)
+    pub fn from_kilowatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(35314.66672148859))
     }
 
     /// Returns the value expressed in KilowattsPerCubicFoot (`kW/ft³`).
     #[inline]
-    pub fn as_kilowatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.028316846592
+    pub fn as_kilowatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(35314.66672148859)
     }
 
     /// Alias for [`Self::as_kilowatts_per_cubic_foot`].
     #[inline]
-    pub fn as_kilowatt_per_cubic_foot(self) -> Num {
+    pub fn as_kilowatt_per_cubic_foot(self) -> T {
         self.as_kilowatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in MegawattsPerCubicFoot (`MW/ft³`).
     #[inline]
-    pub fn from_megawatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 0.028316846592)
+    pub fn from_megawatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.531466672148859e7))
     }
 
     /// Returns the value expressed in MegawattsPerCubicFoot (`MW/ft³`).
     #[inline]
-    pub fn as_megawatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 0.028316846592
+    pub fn as_megawatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.531466672148859e7)
     }
 
     /// Alias for [`Self::as_megawatts_per_cubic_foot`].
     #[inline]
-    pub fn as_megawatt_per_cubic_foot(self) -> Num {
+    pub fn as_megawatt_per_cubic_foot(self) -> T {
         self.as_megawatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in GigawattsPerCubicFoot (`GW/ft³`).
     #[inline]
-    pub fn from_gigawatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) / 0.028316846592)
+    pub fn from_gigawatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.5314666721488594e10))
     }
 
     /// Returns the value expressed in GigawattsPerCubicFoot (`GW/ft³`).
     #[inline]
-    pub fn as_gigawatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e9) * 0.028316846592
+    pub fn as_gigawatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.5314666721488594e10)
     }
 
     /// Alias for [`Self::as_gigawatts_per_cubic_foot`].
     #[inline]
-    pub fn as_gigawatt_per_cubic_foot(self) -> Num {
+    pub fn as_gigawatt_per_cubic_foot(self) -> T {
         self.as_gigawatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in TerawattsPerCubicFoot (`TW/ft³`).
     #[inline]
-    pub fn from_terawatts_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) / 0.028316846592)
+    pub fn from_terawatts_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(3.531466672148859e13))
     }
 
     /// Returns the value expressed in TerawattsPerCubicFoot (`TW/ft³`).
     #[inline]
-    pub fn as_terawatts_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e12) * 0.028316846592
+    pub fn as_terawatts_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(3.531466672148859e13)
     }
 
     /// Alias for [`Self::as_terawatts_per_cubic_foot`].
     #[inline]
-    pub fn as_terawatt_per_cubic_foot(self) -> Num {
+    pub fn as_terawatt_per_cubic_foot(self) -> T {
         self.as_terawatts_per_cubic_foot()
     }
 
     /// Creates a [`PowerDensity`] from a value in WattsPerLiter (`W/l`).
     #[inline]
-    pub fn from_watts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.0e3)
+    pub fn from_watts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in WattsPerLiter (`W/l`).
     #[inline]
-    pub fn as_watts_per_liter(self) -> Num {
-        let x = self.0;
-        x / 1.0e3
+    pub fn as_watts_per_liter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_watts_per_liter`].
     #[inline]
-    pub fn as_watt_per_liter(self) -> Num {
+    pub fn as_watt_per_liter(self) -> T {
         self.as_watts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in PicowattsPerLiter (`pW/l`).
     #[inline]
-    pub fn from_picowatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) * 1.0e3)
+    pub fn from_picowatts_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in PicowattsPerLiter (`pW/l`).
     #[inline]
-    pub fn as_picowatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) / 1.0e3
+    pub fn as_picowatts_per_liter(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_picowatts_per_liter`].
     #[inline]
-    pub fn as_picowatt_per_liter(self) -> Num {
+    pub fn as_picowatt_per_liter(self) -> T {
         self.as_picowatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in NanowattsPerLiter (`nW/l`).
     #[inline]
-    pub fn from_nanowatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 1.0e3)
+    pub fn from_nanowatts_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in NanowattsPerLiter (`nW/l`).
     #[inline]
-    pub fn as_nanowatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 1.0e3
+    pub fn as_nanowatts_per_liter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_nanowatts_per_liter`].
     #[inline]
-    pub fn as_nanowatt_per_liter(self) -> Num {
+    pub fn as_nanowatt_per_liter(self) -> T {
         self.as_nanowatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MicrowattsPerLiter (`µW/l`).
     #[inline]
-    pub fn from_microwatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 1.0e3)
+    pub fn from_microwatts_per_liter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MicrowattsPerLiter (`µW/l`).
     #[inline]
-    pub fn as_microwatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 1.0e3
+    pub fn as_microwatts_per_liter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_microwatts_per_liter`].
     #[inline]
-    pub fn as_microwatt_per_liter(self) -> Num {
+    pub fn as_microwatt_per_liter(self) -> T {
         self.as_microwatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MilliwattsPerLiter (`mW/l`).
     #[inline]
-    pub fn from_milliwatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1.0e3)
+    pub fn from_milliwatts_per_liter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MilliwattsPerLiter (`mW/l`).
     #[inline]
-    pub fn as_milliwatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1.0e3
+    pub fn as_milliwatts_per_liter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_milliwatts_per_liter`].
     #[inline]
-    pub fn as_milliwatt_per_liter(self) -> Num {
+    pub fn as_milliwatt_per_liter(self) -> T {
         self.as_milliwatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in DeciwattsPerLiter (`dW/l`).
     #[inline]
-    pub fn from_deciwatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-1) * 1.0e3)
+    pub fn from_deciwatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in DeciwattsPerLiter (`dW/l`).
     #[inline]
-    pub fn as_deciwatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e-1) / 1.0e3
+    pub fn as_deciwatts_per_liter(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_deciwatts_per_liter`].
     #[inline]
-    pub fn as_deciwatt_per_liter(self) -> Num {
+    pub fn as_deciwatt_per_liter(self) -> T {
         self.as_deciwatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in DecawattsPerLiter (`daW/l`).
     #[inline]
-    pub fn from_decawatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e1) * 1.0e3)
+    pub fn from_decawatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in DecawattsPerLiter (`daW/l`).
     #[inline]
-    pub fn as_decawatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e1) / 1.0e3
+    pub fn as_decawatts_per_liter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_decawatts_per_liter`].
     #[inline]
-    pub fn as_decawatt_per_liter(self) -> Num {
+    pub fn as_decawatt_per_liter(self) -> T {
         self.as_decawatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in KilowattsPerLiter (`kW/l`).
     #[inline]
-    pub fn from_kilowatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1.0e3)
+    pub fn from_kilowatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in KilowattsPerLiter (`kW/l`).
     #[inline]
-    pub fn as_kilowatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1.0e3
+    pub fn as_kilowatts_per_liter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_kilowatts_per_liter`].
     #[inline]
-    pub fn as_kilowatt_per_liter(self) -> Num {
+    pub fn as_kilowatt_per_liter(self) -> T {
         self.as_kilowatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in MegawattsPerLiter (`MW/l`).
     #[inline]
-    pub fn from_megawatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1.0e3)
+    pub fn from_megawatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in MegawattsPerLiter (`MW/l`).
     #[inline]
-    pub fn as_megawatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1.0e3
+    pub fn as_megawatts_per_liter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_megawatts_per_liter`].
     #[inline]
-    pub fn as_megawatt_per_liter(self) -> Num {
+    pub fn as_megawatt_per_liter(self) -> T {
         self.as_megawatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in GigawattsPerLiter (`GW/l`).
     #[inline]
-    pub fn from_gigawatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 1.0e3)
+    pub fn from_gigawatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in GigawattsPerLiter (`GW/l`).
     #[inline]
-    pub fn as_gigawatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 1.0e3
+    pub fn as_gigawatts_per_liter(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_gigawatts_per_liter`].
     #[inline]
-    pub fn as_gigawatt_per_liter(self) -> Num {
+    pub fn as_gigawatt_per_liter(self) -> T {
         self.as_gigawatts_per_liter()
     }
 
     /// Creates a [`PowerDensity`] from a value in TerawattsPerLiter (`TW/l`).
     #[inline]
-    pub fn from_terawatts_per_liter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 1.0e3)
+    pub fn from_terawatts_per_liter(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in TerawattsPerLiter (`TW/l`).
     #[inline]
-    pub fn as_terawatts_per_liter(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 1.0e3
+    pub fn as_terawatts_per_liter(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_terawatts_per_liter`].
     #[inline]
-    pub fn as_terawatt_per_liter(self) -> Num {
+    pub fn as_terawatt_per_liter(self) -> T {
         self.as_terawatts_per_liter()
     }
-}
 
-impl crate::Quantity for PowerDensity {
+    /// Creates a [`PowerDensity`] from a value in BtusPerSecondCubicInch (`BTU/(s·in³)`).
     #[inline]
-    fn as_base(self) -> Num {
-        self.0
+    pub fn from_btus_per_second_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(6.438345835593246e7))
     }
+
+    /// Returns the value expressed in BtusPerSecondCubicInch (`BTU/(s·in³)`).
     #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
+    pub fn as_btus_per_second_cubic_inch(self) -> T {
+        self.0 / T::from_f64(6.438345835593246e7)
     }
-}
 
-impl Add for PowerDensity {
-    type Output = PowerDensity;
+    /// Alias for [`Self::as_btus_per_second_cubic_inch`].
     #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
+    pub fn as_btu_per_second_cubic_inch(self) -> T {
+        self.as_btus_per_second_cubic_inch()
     }
-}
-impl Sub for PowerDensity {
-    type Output = PowerDensity;
+
+    /// Creates a [`PowerDensity`] from a value in BtusPerSecondCubicFoot (`BTU/(s·ft³)`).
     #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
+    pub fn from_btus_per_second_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(37258.94580783128))
     }
-}
-impl Neg for PowerDensity {
-    type Output = PowerDensity;
+
+    /// Returns the value expressed in BtusPerSecondCubicFoot (`BTU/(s·ft³)`).
     #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
+    pub fn as_btus_per_second_cubic_foot(self) -> T {
+        self.0 / T::from_f64(37258.94580783128)
     }
-}
-impl Mul<Num> for PowerDensity {
-    type Output = PowerDensity;
+
+    /// Alias for [`Self::as_btus_per_second_cubic_foot`].
     #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
+    pub fn as_btu_per_second_cubic_foot(self) -> T {
+        self.as_btus_per_second_cubic_foot()
     }
-}
-impl Mul<PowerDensity> for Num {
-    type Output = PowerDensity;
-    #[inline]
-    fn mul(self, rhs: PowerDensity) -> PowerDensity {
-        PowerDensity(self * rhs.0)
-    }
-}
-impl Div<Num> for PowerDensity {
-    type Output = PowerDensity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for PowerDensity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for PowerDensity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            PowerDensityUnit::WattPerCubicMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`PowerDensity`].
-#[derive(Debug)]
-pub struct ParsePowerDensityError(String);
-
-impl fmt::Display for ParsePowerDensityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as PowerDensity", self.0)
-    }
-}
-
-impl std::error::Error for ParsePowerDensityError {}
-
-impl FromStr for PowerDensity {
-    type Err = ParsePowerDensityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParsePowerDensityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, PowerDensityUnit)] = &[
-            ("daW/ft³", PowerDensityUnit::DecawattPerCubicFoot),
-            ("daW/in³", PowerDensityUnit::DecawattPerCubicInch),
-            ("µW/ft³", PowerDensityUnit::MicrowattPerCubicFoot),
-            ("µW/in³", PowerDensityUnit::MicrowattPerCubicInch),
-            ("GW/ft³", PowerDensityUnit::GigawattPerCubicFoot),
-            ("GW/in³", PowerDensityUnit::GigawattPerCubicInch),
-            ("MW/ft³", PowerDensityUnit::MegawattPerCubicFoot),
-            ("MW/in³", PowerDensityUnit::MegawattPerCubicInch),
-            ("TW/ft³", PowerDensityUnit::TerawattPerCubicFoot),
-            ("TW/in³", PowerDensityUnit::TerawattPerCubicInch),
-            ("dW/ft³", PowerDensityUnit::DeciwattPerCubicFoot),
-            ("dW/in³", PowerDensityUnit::DeciwattPerCubicInch),
-            ("daW/m³", PowerDensityUnit::DecawattPerCubicMeter),
-            ("kW/ft³", PowerDensityUnit::KilowattPerCubicFoot),
-            ("kW/in³", PowerDensityUnit::KilowattPerCubicInch),
-            ("mW/ft³", PowerDensityUnit::MilliwattPerCubicFoot),
-            ("mW/in³", PowerDensityUnit::MilliwattPerCubicInch),
-            ("nW/ft³", PowerDensityUnit::NanowattPerCubicFoot),
-            ("nW/in³", PowerDensityUnit::NanowattPerCubicInch),
-            ("pW/ft³", PowerDensityUnit::PicowattPerCubicFoot),
-            ("pW/in³", PowerDensityUnit::PicowattPerCubicInch),
-            ("µW/m³", PowerDensityUnit::MicrowattPerCubicMeter),
-            ("GW/m³", PowerDensityUnit::GigawattPerCubicMeter),
-            ("MW/m³", PowerDensityUnit::MegawattPerCubicMeter),
-            ("TW/m³", PowerDensityUnit::TerawattPerCubicMeter),
-            ("W/ft³", PowerDensityUnit::WattPerCubicFoot),
-            ("W/in³", PowerDensityUnit::WattPerCubicInch),
-            ("dW/m³", PowerDensityUnit::DeciwattPerCubicMeter),
-            ("kW/m³", PowerDensityUnit::KilowattPerCubicMeter),
-            ("mW/m³", PowerDensityUnit::MilliwattPerCubicMeter),
-            ("nW/m³", PowerDensityUnit::NanowattPerCubicMeter),
-            ("pW/m³", PowerDensityUnit::PicowattPerCubicMeter),
-            ("W/m³", PowerDensityUnit::WattPerCubicMeter),
-            ("daW/l", PowerDensityUnit::DecawattPerLiter),
-            ("µW/l", PowerDensityUnit::MicrowattPerLiter),
-            ("GW/l", PowerDensityUnit::GigawattPerLiter),
-            ("MW/l", PowerDensityUnit::MegawattPerLiter),
-            ("TW/l", PowerDensityUnit::TerawattPerLiter),
-            ("dW/l", PowerDensityUnit::DeciwattPerLiter),
-            ("kW/l", PowerDensityUnit::KilowattPerLiter),
-            ("mW/l", PowerDensityUnit::MilliwattPerLiter),
-            ("nW/l", PowerDensityUnit::NanowattPerLiter),
-            ("pW/l", PowerDensityUnit::PicowattPerLiter),
-            ("W/l", PowerDensityUnit::WattPerLiter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParsePowerDensityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

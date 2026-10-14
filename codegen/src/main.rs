@@ -8,16 +8,18 @@
 //!
 //! Run with: `cargo run -p codegen`
 
+mod expr;
 mod formula;
 mod generator;
 mod parser;
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
 use heck::ToSnakeCase;
 
-use generator::{generate_cross_type_tests, generate_quantity_tests, CrossOp};
+use expr::{Const, Form};
+use generator::{generate_cross_type_tests, generate_quantity_tests, CrossKind, CrossOp};
 use parser::QuantityDef;
 
 fn main() {
@@ -46,7 +48,6 @@ fn main() {
         .collect();
 
     let mut generated_modules: Vec<String> = Vec::new();
-    let mut quantity_names: HashSet<String> = HashSet::new();
 
     for qty in &quantities {
         let source = generator::generate(qty);
@@ -64,7 +65,6 @@ fn main() {
             qty.units.len()
         );
         generated_modules.push(module_name);
-        quantity_names.insert(qty.name.clone());
     }
 
     // Write src/units.rs — the module declaration file.
@@ -74,7 +74,7 @@ fn main() {
     println!("codegen: wrote src/units.rs");
 
     // Read curated cross-type relationships from UnitRelations.json.
-    let cross_ops = parse_relations(&quantity_names);
+    let cross_ops = parse_relations(&quantities);
     let cross_source = generator::generate_cross_type(&cross_ops);
     let cross_path = Path::new("src/cross_type.rs");
     std::fs::write(cross_path, &cross_source)
@@ -121,14 +121,20 @@ fn main() {
 // ── Cross-type relations ──────────────────────────────────────────────────────
 
 /// Parses `data/relations/UnitRelations.json` and returns [`CrossOp`]s for every
-/// relation whose three quantity names are all present in `known`.
+/// relation whose quantities were all generated.
 ///
 /// Each curated entry `"C.Unit = A.Unit * B.Unit"` yields:
 /// - `Mul<B> for A = C` and `Mul<A> for B = C`
 /// - `Div<B> for C = A` and `Div<A> for C = B` (unless `-- NoInferredDivision`)
 ///
-/// Entries where the output is `1` or `double` (dimensionless) are skipped.
-fn parse_relations(known: &HashSet<String>) -> Vec<CrossOp> {
+/// Dimensionless entries (`"1 = A.Unit * B.Unit"`) yield `A * B → T`,
+/// `B * A → T`, and `1 / A = B`, `1 / B = A`.
+///
+/// The relation holds in the units it names. Operators work on base-unit
+/// values, so the factor between those units and the base units is computed
+/// exactly; it is 1 for coherent SI base units, in which case the operator is
+/// a bare multiplication or division.
+fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     let path = Path::new("data/relations/UnitRelations.json");
     let content = match std::fs::read_to_string(path) {
         Ok(c) => c,
@@ -144,7 +150,28 @@ fn parse_relations(known: &HashSet<String>) -> Vec<CrossOp> {
     let entries: Vec<String> = serde_json::from_str(&content)
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
 
+    // "Quantity.Unit" → exact to-base factor (linear units only).
+    let factors: HashMap<String, Const> = quantities
+        .iter()
+        .flat_map(|q| {
+            q.units.iter().filter_map(move |u| match &u.to_base {
+                Form::Affine { a, b } if b.is_zero() => {
+                    Some((format!("{}.{}", q.name, u.singular), a.clone()))
+                }
+                _ => None,
+            })
+        })
+        .collect();
+    let known: HashSet<&str> = quantities.iter().map(|q| q.name.as_str()).collect();
+
     let mut ops: Vec<CrossOp> = Vec::new();
+    let op = |kind, lhs: &str, rhs: &str, output: &str, factor: &Const| CrossOp {
+        kind,
+        lhs: lhs.to_owned(),
+        rhs: rhs.to_owned(),
+        output: output.to_owned(),
+        factor: (!factor.is_one()).then(|| factor.to_string()),
+    };
 
     for entry in &entries {
         // Strip the optional annotation.
@@ -160,62 +187,75 @@ fn parse_relations(known: &HashSet<String>) -> Vec<CrossOp> {
         let Some((a_str, b_str)) = rhs.split_once(" * ") else {
             continue;
         };
-
-        // Extract the quantity name (the part before '.').
         let qty_of = |s: &str| s.split('.').next().unwrap_or("").to_owned();
+        let (a_qty, b_qty) = (qty_of(a_str), qty_of(b_str));
+        if !known.contains(a_qty.as_str()) || !known.contains(b_qty.as_str()) {
+            continue;
+        }
+        let dimensionless = matches!(out_str, "1" | "double" | "QuantityValue");
         let out_qty = qty_of(out_str);
-        let a_qty = qty_of(a_str);
-        let b_qty = qty_of(b_str);
-
-        // Skip dimensionless outputs.
-        if out_qty == "1" || out_qty == "double" {
+        if !dimensionless && !known.contains(out_qty.as_str()) {
             continue;
         }
 
-        // Skip if any quantity wasn't downloaded.
-        if !known.contains(&out_qty) || !known.contains(&a_qty) || !known.contains(&b_qty) {
+        // C_base = k · A_base · B_base, where k = f_C / (f_A · f_B).
+        let lookup = |s: &str| factors.get(s).cloned();
+        let f_out = if dimensionless {
+            Some(Const::one())
+        } else {
+            lookup(out_str)
+        };
+        let (Some(fa), Some(fb), Some(fc)) = (lookup(a_str), lookup(b_str), f_out) else {
+            eprintln!("codegen: note: skipping relation with a non-linear unit: {entry}");
+            continue;
+        };
+        let k = fc / (fa * fb);
+        let k_inv = k.recip();
+
+        if dimensionless {
+            if !k.is_one() {
+                eprintln!("codegen: note: skipping non-coherent dimensionless relation: {entry}");
+                continue;
+            }
+            ops.push(op(CrossKind::MulScalar, &a_qty, &b_qty, "", &k));
+            if a_qty != b_qty {
+                ops.push(op(CrossKind::MulScalar, &b_qty, &a_qty, "", &k));
+            }
+            ops.push(op(CrossKind::Recip, "", &a_qty, &b_qty, &k));
+            if a_qty != b_qty {
+                ops.push(op(CrossKind::Recip, "", &b_qty, &a_qty, &k));
+            }
             continue;
         }
-
-        let mul = |lhs: &str, rhs: &str| CrossOp {
-            lhs: lhs.to_owned(),
-            rhs: rhs.to_owned(),
-            output: out_qty.clone(),
-            trait_name: "Mul".to_owned(),
-        };
-        let div = |lhs: &str, rhs: &str, out: &str| CrossOp {
-            lhs: lhs.to_owned(),
-            rhs: rhs.to_owned(),
-            output: out.to_owned(),
-            trait_name: "Div".to_owned(),
-        };
 
         // A * B = C  and  B * A = C  (commutative; emit both).
-        ops.push(mul(&a_qty, &b_qty));
+        ops.push(op(CrossKind::Mul, &a_qty, &b_qty, &out_qty, &k));
         if a_qty != b_qty {
-            ops.push(mul(&b_qty, &a_qty));
+            ops.push(op(CrossKind::Mul, &b_qty, &a_qty, &out_qty, &k));
         }
 
         // C / B = A  and  C / A = B  (unless division is suppressed).
-        // Skip ops where lhs == rhs: each unit file already emits
-        // `impl Div for X { type Output = f64 }` (same-type division).
+        // Skip ops where lhs == rhs: same-type division already yields `T`.
         if !no_div {
             if out_qty != b_qty {
-                ops.push(div(&out_qty, &b_qty, &a_qty));
+                ops.push(op(CrossKind::Div, &out_qty, &b_qty, &a_qty, &k_inv));
             }
             if a_qty != b_qty && out_qty != a_qty {
-                ops.push(div(&out_qty, &a_qty, &b_qty));
+                ops.push(op(CrossKind::Div, &out_qty, &a_qty, &b_qty, &k_inv));
             }
         }
     }
 
+    // Keep the first relation for each operator signature; later duplicates
+    // would be conflicting impls.
+    let mut seen = HashSet::new();
+    ops.retain(|o| seen.insert((o.kind.symbol(), o.lhs.clone(), o.rhs.clone())));
     ops.sort_by(|a, b| {
-        a.trait_name
-            .cmp(&b.trait_name)
+        a.kind
+            .cmp(&b.kind)
             .then(a.lhs.cmp(&b.lhs))
             .then(a.rhs.cmp(&b.rhs))
     });
-    ops.dedup_by(|a, b| a.trait_name == b.trait_name && a.lhs == b.lhs && a.rhs == b.rhs);
 
     ops
 }
@@ -250,11 +290,34 @@ fn write_units_mod(path: &Path, modules: &[String]) {
 fn write_test_units_mod(path: &Path, modules: &[String]) {
     let mut content =
         String::from("// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT\n\n");
+    content.push_str(TEST_HELPERS);
     for m in modules {
         content.push_str(&format!("#[path = \"units/{m}.rs\"]\nmod {m};\n"));
     }
     std::fs::write(path, content).unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
 }
+
+/// Shared helpers for the generated per-quantity tests.
+const TEST_HELPERS: &str = r#"/// Generated conversions vs. the upstream formulas evaluated step by step:
+/// both are within a few ulps of the exact value.
+const F64_TOL: f64 = 1e-14;
+/// `from_unit(v).as_unit()` returns `v` to within an ulp or two.
+const ROUND_TRIP_TOL: f64 = 1e-15;
+/// f32 storage vs. the f64 reference (f32 has ~7 significant digits).
+const F32_TOL: f64 = 1e-6;
+
+/// Asserts `actual` is within `rel_tol` (relative) of `expected`.
+#[track_caller]
+fn assert_close(actual: f64, expected: f64, rel_tol: f64) {
+    let scale = actual.abs().max(expected.abs());
+    assert!(
+        actual == expected || (actual - expected).abs() <= rel_tol * scale,
+        "{actual:e} != {expected:e} (relative error {:e} > {rel_tol:e})",
+        (actual - expected).abs() / scale
+    );
+}
+
+"#;
 
 // ── Formatting ────────────────────────────────────────────────────────────────
 

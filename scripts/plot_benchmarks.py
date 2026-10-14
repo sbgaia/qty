@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["matplotlib>=3.9"]
 # ///
-"""Generate a 2x2 grouped bar chart comparing benchmark results across libraries.
+"""Generate a grid of bar charts comparing benchmark results across libraries.
 
 Reads Criterion JSON output from target/criterion/ and produces benchmarks.png.
 
@@ -32,10 +32,14 @@ GROUPS: list[tuple[str, str]] = [
     ("convert_km_to_m", "Conversion (km to m)"),
     ("add_two_lengths", "Addition (a + b)"),
     ("chain_construct_add_convert", "Chain (construct + add + convert)"),
+    ("sum_10k_lengths", "Sum of 10k lengths"),
+    ("scale_10k_lengths", "Scale 10k lengths in place"),
 ]
 
-# Colour for unitsnet-rs vs everything else
+# Colour for unitsnet-rs, the unit-free baseline, and everything else
 HIGHLIGHT_COLOR = "#2563eb"  # blue-600
+BASELINE_NAME = "f64 (no units)"
+BASELINE_COLOR = "#334155"  # slate-700
 DEFAULT_COLOR = "#94a3b8"  # slate-400
 
 
@@ -85,8 +89,9 @@ def collect_results() -> dict[str, dict[str, float]]:
 
 
 def build_figure(results: dict[str, dict[str, float]]) -> Figure:
-    """Create a 2x2 figure with horizontal bar charts."""
-    fig, axes = plt.subplots(2, 2, figsize=(14, 8))
+    """Create a two-column grid of horizontal bar charts, one per group."""
+    rows = (len(GROUPS) + 1) // 2
+    fig, axes = plt.subplots(rows, 2, figsize=(14, 4 * rows))
     fig.suptitle(
         "Rust Units Library Benchmark Comparison",
         fontsize=16,
@@ -106,7 +111,12 @@ def build_figure(results: dict[str, dict[str, float]]) -> Figure:
         names = [name for name, _ in sorted_items]
         values = [val for _, val in sorted_items]
         colors = [
-            HIGHLIGHT_COLOR if n == "unitsnet-rs" else DEFAULT_COLOR for n in names
+            HIGHLIGHT_COLOR
+            if n == "unitsnet-rs"
+            else BASELINE_COLOR
+            if n == BASELINE_NAME
+            else DEFAULT_COLOR
+            for n in names
         ]
 
         bars = ax.barh(names, values, color=colors, height=0.6, edgecolor="white")
@@ -140,7 +150,7 @@ def build_figure(results: dict[str, dict[str, float]]) -> Figure:
                 )
 
         ax.set_title(title, fontsize=12, fontweight="bold", pad=8)
-        ax.set_xlabel("Time (ps)", fontsize=9, color="#64748b")
+        ax.set_xlabel("Mean time (lower is better)", fontsize=9, color="#64748b")
         ax.tick_params(axis="y", labelsize=10)
         ax.tick_params(axis="x", labelsize=8, colors="#94a3b8")
         ax.spines["top"].set_visible(False)

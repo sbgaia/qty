@@ -2,27 +2,35 @@
 // Source: data/quantities/Magnetization.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In classical electromagnetism, magnetization is the vector field that expresses the density of permanent or induced magnetic dipole moments in a magnetic material.
 ///
-/// The internal value is stored in `AmperePerMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Magnetization(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MagnetizationUnit::AmperePerMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Magnetization<T = f64>(T);
+
+quantity!(Magnetization, MagnetizationUnit, AmperePerMeter);
 
 /// Unit variants for [`Magnetization`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MagnetizationUnit {
     AmperePerMeter,
 }
@@ -33,192 +41,69 @@ impl MagnetizationUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::AmperePerMeter => "A/m",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::AmperePerMeter => &["A/m"],
         }
     }
 }
 
-impl Magnetization {
+impl core::str::FromStr for MagnetizationUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "A/m" => Ok(Self::AmperePerMeter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Magnetization<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MagnetizationUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MagnetizationUnit) -> Self {
         Self(match unit {
-            MagnetizationUnit::AmperePerMeter => x,
+            MagnetizationUnit::AmperePerMeter => value,
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MagnetizationUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MagnetizationUnit) -> T {
         match unit {
-            MagnetizationUnit::AmperePerMeter => x,
+            MagnetizationUnit::AmperePerMeter => self.0,
         }
     }
 
     /// Creates a [`Magnetization`] from a value in AmperesPerMeter (`A/m`).
     #[inline]
-    pub fn from_amperes_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_amperes_per_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in AmperesPerMeter (`A/m`).
     #[inline]
-    pub fn as_amperes_per_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_amperes_per_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_amperes_per_meter`].
     #[inline]
-    pub fn as_ampere_per_meter(self) -> Num {
+    pub fn as_ampere_per_meter(self) -> T {
         self.as_amperes_per_meter()
     }
-}
-
-impl crate::Quantity for Magnetization {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Magnetization {
-    type Output = Magnetization;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Magnetization {
-    type Output = Magnetization;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Magnetization {
-    type Output = Magnetization;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Magnetization {
-    type Output = Magnetization;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Magnetization> for Num {
-    type Output = Magnetization;
-    #[inline]
-    fn mul(self, rhs: Magnetization) -> Magnetization {
-        Magnetization(self * rhs.0)
-    }
-}
-impl Div<Num> for Magnetization {
-    type Output = Magnetization;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Magnetization {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Magnetization {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MagnetizationUnit::AmperePerMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Magnetization`].
-#[derive(Debug)]
-pub struct ParseMagnetizationError(String);
-
-impl fmt::Display for ParseMagnetizationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Magnetization", self.0)
-    }
-}
-
-impl std::error::Error for ParseMagnetizationError {}
-
-impl FromStr for Magnetization {
-    type Err = ParseMagnetizationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMagnetizationError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MagnetizationUnit)] = &[("A/m", MagnetizationUnit::AmperePerMeter)];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMagnetizationError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

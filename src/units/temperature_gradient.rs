@@ -2,27 +2,33 @@
 // Source: data/quantities/TemperatureGradient.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-///
-///
-/// The internal value is stored in `KelvinPerMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct TemperatureGradient(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureGradientUnit::KelvinPerMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct TemperatureGradient<T = f64>(T);
+
+quantity!(TemperatureGradient, TemperatureGradientUnit, KelvinPerMeter);
 
 /// Unit variants for [`TemperatureGradient`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum TemperatureGradientUnit {
     KelvinPerMeter,
     DegreeCelsiusPerMeter,
@@ -41,7 +47,7 @@ impl TemperatureGradientUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::KelvinPerMeter => "∆°K/m",
             Self::DegreeCelsiusPerMeter => "∆°C/m",
@@ -50,9 +56,9 @@ impl TemperatureGradientUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::KelvinPerMeter => &["∆°K/m"],
             Self::DegreeCelsiusPerMeter => &["∆°C/m"],
@@ -62,248 +68,121 @@ impl TemperatureGradientUnit {
     }
 }
 
-impl TemperatureGradient {
+impl core::str::FromStr for TemperatureGradientUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "∆°K/m" => Ok(Self::KelvinPerMeter),
+            "∆°C/m" => Ok(Self::DegreeCelsiusPerMeter),
+            "∆°F/ft" => Ok(Self::DegreeFahrenheitPerFoot),
+            "∆°C/km" => Ok(Self::DegreeCelsiusPerKilometer),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> TemperatureGradient<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: TemperatureGradientUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: TemperatureGradientUnit) -> Self {
         Self(match unit {
-            TemperatureGradientUnit::KelvinPerMeter => x,
-            TemperatureGradientUnit::DegreeCelsiusPerMeter => x,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => (x / 0.3048) * 5.0 / 9.0,
-            TemperatureGradientUnit::DegreeCelsiusPerKilometer => x / 1e3,
+            TemperatureGradientUnit::KelvinPerMeter => value,
+            TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
+                value * T::from_f64(1.8226888305628464)
+            }
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / T::from_f64(1000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: TemperatureGradientUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: TemperatureGradientUnit) -> T {
         match unit {
-            TemperatureGradientUnit::KelvinPerMeter => x,
-            TemperatureGradientUnit::DegreeCelsiusPerMeter => x,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => (x * 0.3048) * 9.0 / 5.0,
-            TemperatureGradientUnit::DegreeCelsiusPerKilometer => x * 1e3,
+            TemperatureGradientUnit::KelvinPerMeter => self.0,
+            TemperatureGradientUnit::DegreeCelsiusPerMeter => self.0,
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
+                self.0 / T::from_f64(1.8226888305628464)
+            }
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => self.0 * T::from_f64(1000.0),
         }
     }
 
     /// Creates a [`TemperatureGradient`] from a value in KelvinsPerMeter (`∆°K/m`).
     #[inline]
-    pub fn from_kelvins_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_kelvins_per_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in KelvinsPerMeter (`∆°K/m`).
     #[inline]
-    pub fn as_kelvins_per_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_kelvins_per_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kelvins_per_meter`].
     #[inline]
-    pub fn as_kelvin_per_meter(self) -> Num {
+    pub fn as_kelvin_per_meter(self) -> T {
         self.as_kelvins_per_meter()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
-    pub fn from_degrees_celsius_per_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_degrees_celsius_per_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
-    pub fn as_degrees_celsius_per_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_degrees_celsius_per_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_meter`].
     #[inline]
-    pub fn as_degree_celsius_per_meter(self) -> Num {
+    pub fn as_degree_celsius_per_meter(self) -> T {
         self.as_degrees_celsius_per_meter()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
-    pub fn from_degrees_fahrenheit_per_foot(value: Num) -> Self {
-        let x = value;
-        Self((x / 0.3048) * 5.0 / 9.0)
+    pub fn from_degrees_fahrenheit_per_foot(value: T) -> Self {
+        Self(value * T::from_f64(1.8226888305628464))
     }
 
     /// Returns the value expressed in DegreesFahrenheitPerFoot (`∆°F/ft`).
     #[inline]
-    pub fn as_degrees_fahrenheit_per_foot(self) -> Num {
-        let x = self.0;
-        (x * 0.3048) * 9.0 / 5.0
+    pub fn as_degrees_fahrenheit_per_foot(self) -> T {
+        self.0 / T::from_f64(1.8226888305628464)
     }
 
     /// Alias for [`Self::as_degrees_fahrenheit_per_foot`].
     #[inline]
-    pub fn as_degree_fahrenheit_per_foot(self) -> Num {
+    pub fn as_degree_fahrenheit_per_foot(self) -> T {
         self.as_degrees_fahrenheit_per_foot()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
-    pub fn from_degrees_celsius_per_kilometer(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e3)
+    pub fn from_degrees_celsius_per_kilometer(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
-    pub fn as_degrees_celsius_per_kilometer(self) -> Num {
-        let x = self.0;
-        x * 1e3
+    pub fn as_degrees_celsius_per_kilometer(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_degrees_celsius_per_kilometer`].
     #[inline]
-    pub fn as_degree_celsius_per_kilometer(self) -> Num {
+    pub fn as_degree_celsius_per_kilometer(self) -> T {
         self.as_degrees_celsius_per_kilometer()
     }
-}
-
-impl crate::Quantity for TemperatureGradient {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for TemperatureGradient {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for TemperatureGradient {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for TemperatureGradient {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for TemperatureGradient {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<TemperatureGradient> for Num {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn mul(self, rhs: TemperatureGradient) -> TemperatureGradient {
-        TemperatureGradient(self * rhs.0)
-    }
-}
-impl Div<Num> for TemperatureGradient {
-    type Output = TemperatureGradient;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for TemperatureGradient {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for TemperatureGradient {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            TemperatureGradientUnit::KelvinPerMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`TemperatureGradient`].
-#[derive(Debug)]
-pub struct ParseTemperatureGradientError(String);
-
-impl fmt::Display for ParseTemperatureGradientError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as TemperatureGradient", self.0)
-    }
-}
-
-impl std::error::Error for ParseTemperatureGradientError {}
-
-impl FromStr for TemperatureGradient {
-    type Err = ParseTemperatureGradientError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseTemperatureGradientError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, TemperatureGradientUnit)] = &[
-            ("∆°C/km", TemperatureGradientUnit::DegreeCelsiusPerKilometer),
-            ("∆°F/ft", TemperatureGradientUnit::DegreeFahrenheitPerFoot),
-            ("∆°C/m", TemperatureGradientUnit::DegreeCelsiusPerMeter),
-            ("∆°K/m", TemperatureGradientUnit::KelvinPerMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseTemperatureGradientError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

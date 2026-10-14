@@ -2,27 +2,39 @@
 // Source: data/quantities/ElectricReactivePower.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In electric power transmission and distribution, volt-ampere reactive (var) is a unit of measurement of reactive power. Reactive power exists in an AC circuit when the current and voltage are not in phase.
 ///
-/// The internal value is stored in `VoltampereReactive` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricReactivePower(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricReactivePowerUnit::VoltampereReactive`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricReactivePower<T = f64>(T);
+
+quantity!(
+    ElectricReactivePower,
+    ElectricReactivePowerUnit,
+    VoltampereReactive
+);
 
 /// Unit variants for [`ElectricReactivePower`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricReactivePowerUnit {
     VoltampereReactive,
     KilovoltampereReactive,
@@ -41,7 +53,7 @@ impl ElectricReactivePowerUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::VoltampereReactive => "var",
             Self::KilovoltampereReactive => "kvar",
@@ -50,9 +62,9 @@ impl ElectricReactivePowerUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::VoltampereReactive => &["var"],
             Self::KilovoltampereReactive => &["kvar"],
@@ -62,248 +74,117 @@ impl ElectricReactivePowerUnit {
     }
 }
 
-impl ElectricReactivePower {
+impl core::str::FromStr for ElectricReactivePowerUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "var" => Ok(Self::VoltampereReactive),
+            "kvar" => Ok(Self::KilovoltampereReactive),
+            "Mvar" => Ok(Self::MegavoltampereReactive),
+            "Gvar" => Ok(Self::GigavoltampereReactive),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricReactivePower<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricReactivePowerUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricReactivePowerUnit) -> Self {
         Self(match unit {
-            ElectricReactivePowerUnit::VoltampereReactive => x,
-            ElectricReactivePowerUnit::KilovoltampereReactive => (x * 1e3),
-            ElectricReactivePowerUnit::MegavoltampereReactive => (x * 1e6),
-            ElectricReactivePowerUnit::GigavoltampereReactive => (x * 1e9),
+            ElectricReactivePowerUnit::VoltampereReactive => value,
+            ElectricReactivePowerUnit::KilovoltampereReactive => value * T::from_f64(1000.0),
+            ElectricReactivePowerUnit::MegavoltampereReactive => value * T::from_f64(1000000.0),
+            ElectricReactivePowerUnit::GigavoltampereReactive => value * T::from_f64(1e9),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricReactivePowerUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricReactivePowerUnit) -> T {
         match unit {
-            ElectricReactivePowerUnit::VoltampereReactive => x,
-            ElectricReactivePowerUnit::KilovoltampereReactive => (x / 1e3),
-            ElectricReactivePowerUnit::MegavoltampereReactive => (x / 1e6),
-            ElectricReactivePowerUnit::GigavoltampereReactive => (x / 1e9),
+            ElectricReactivePowerUnit::VoltampereReactive => self.0,
+            ElectricReactivePowerUnit::KilovoltampereReactive => self.0 / T::from_f64(1000.0),
+            ElectricReactivePowerUnit::MegavoltampereReactive => self.0 / T::from_f64(1000000.0),
+            ElectricReactivePowerUnit::GigavoltampereReactive => self.0 / T::from_f64(1e9),
         }
     }
 
     /// Creates a [`ElectricReactivePower`] from a value in VoltamperesReactive (`var`).
     #[inline]
-    pub fn from_voltamperes_reactive(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_voltamperes_reactive(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in VoltamperesReactive (`var`).
     #[inline]
-    pub fn as_voltamperes_reactive(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_voltamperes_reactive(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_voltamperes_reactive`].
     #[inline]
-    pub fn as_voltampere_reactive(self) -> Num {
+    pub fn as_voltampere_reactive(self) -> T {
         self.as_voltamperes_reactive()
     }
 
     /// Creates a [`ElectricReactivePower`] from a value in KilovoltamperesReactive (`kvar`).
     #[inline]
-    pub fn from_kilovoltamperes_reactive(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilovoltamperes_reactive(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilovoltamperesReactive (`kvar`).
     #[inline]
-    pub fn as_kilovoltamperes_reactive(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilovoltamperes_reactive(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilovoltamperes_reactive`].
     #[inline]
-    pub fn as_kilovoltampere_reactive(self) -> Num {
+    pub fn as_kilovoltampere_reactive(self) -> T {
         self.as_kilovoltamperes_reactive()
     }
 
     /// Creates a [`ElectricReactivePower`] from a value in MegavoltamperesReactive (`Mvar`).
     #[inline]
-    pub fn from_megavoltamperes_reactive(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megavoltamperes_reactive(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegavoltamperesReactive (`Mvar`).
     #[inline]
-    pub fn as_megavoltamperes_reactive(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megavoltamperes_reactive(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megavoltamperes_reactive`].
     #[inline]
-    pub fn as_megavoltampere_reactive(self) -> Num {
+    pub fn as_megavoltampere_reactive(self) -> T {
         self.as_megavoltamperes_reactive()
     }
 
     /// Creates a [`ElectricReactivePower`] from a value in GigavoltamperesReactive (`Gvar`).
     #[inline]
-    pub fn from_gigavoltamperes_reactive(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigavoltamperes_reactive(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in GigavoltamperesReactive (`Gvar`).
     #[inline]
-    pub fn as_gigavoltamperes_reactive(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigavoltamperes_reactive(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigavoltamperes_reactive`].
     #[inline]
-    pub fn as_gigavoltampere_reactive(self) -> Num {
+    pub fn as_gigavoltampere_reactive(self) -> T {
         self.as_gigavoltamperes_reactive()
     }
-}
-
-impl crate::Quantity for ElectricReactivePower {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricReactivePower {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricReactivePower {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricReactivePower {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricReactivePower {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricReactivePower> for Num {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn mul(self, rhs: ElectricReactivePower) -> ElectricReactivePower {
-        ElectricReactivePower(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricReactivePower {
-    type Output = ElectricReactivePower;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricReactivePower {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricReactivePower {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricReactivePowerUnit::VoltampereReactive.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricReactivePower`].
-#[derive(Debug)]
-pub struct ParseElectricReactivePowerError(String);
-
-impl fmt::Display for ParseElectricReactivePowerError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricReactivePower", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricReactivePowerError {}
-
-impl FromStr for ElectricReactivePower {
-    type Err = ParseElectricReactivePowerError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricReactivePowerError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricReactivePowerUnit)] = &[
-            ("Gvar", ElectricReactivePowerUnit::GigavoltampereReactive),
-            ("Mvar", ElectricReactivePowerUnit::MegavoltampereReactive),
-            ("kvar", ElectricReactivePowerUnit::KilovoltampereReactive),
-            ("var", ElectricReactivePowerUnit::VoltampereReactive),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricReactivePowerError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

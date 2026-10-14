@@ -2,32 +2,42 @@
 // Source: data/quantities/AreaDensity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The area density of a two-dimensional object is calculated as the mass per unit area. For paper this is also called grammage.
 ///
-/// The internal value is stored in `KilogramPerSquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AreaDensity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`AreaDensityUnit::KilogramPerSquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct AreaDensity<T = f64>(T);
+
+quantity!(AreaDensity, AreaDensityUnit, KilogramPerSquareMeter);
 
 /// Unit variants for [`AreaDensity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum AreaDensityUnit {
     KilogramPerSquareMeter,
     /// Also known as grammage for paper industry. In fiber industry used with abbreviation 'gsm'.
     GramPerSquareMeter,
     MilligramPerSquareMeter,
+    PoundPerSquareFoot,
+    PoundPerThousandSquareFeet,
 }
 
 impl AreaDensityUnit {
@@ -36,249 +46,179 @@ impl AreaDensityUnit {
         Self::KilogramPerSquareMeter,
         Self::GramPerSquareMeter,
         Self::MilligramPerSquareMeter,
+        Self::PoundPerSquareFoot,
+        Self::PoundPerThousandSquareFeet,
     ];
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::KilogramPerSquareMeter => "kg/m²",
             Self::GramPerSquareMeter => "g/m²",
             Self::MilligramPerSquareMeter => "mg/m²",
+            Self::PoundPerSquareFoot => "lb/ft²",
+            Self::PoundPerThousandSquareFeet => "lb/MSF",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::KilogramPerSquareMeter => &["kg/m²"],
             Self::GramPerSquareMeter => &["g/m²", "gsm"],
             Self::MilligramPerSquareMeter => &["mg/m²"],
+            Self::PoundPerSquareFoot => &["lb/ft²", "lbs/ft²", "lb/SF", "lbs/SF"],
+            Self::PoundPerThousandSquareFeet => {
+                &["lb/MSF", "lbs/MSF", "lb/1000ft²", "lbs/1000ft²", "lbm/MSF"]
+            }
         }
     }
 }
 
-impl AreaDensity {
+impl core::str::FromStr for AreaDensityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "kg/m²" => Ok(Self::KilogramPerSquareMeter),
+            "g/m²" => Ok(Self::GramPerSquareMeter),
+            "gsm" => Ok(Self::GramPerSquareMeter),
+            "mg/m²" => Ok(Self::MilligramPerSquareMeter),
+            "lb/ft²" => Ok(Self::PoundPerSquareFoot),
+            "lbs/ft²" => Ok(Self::PoundPerSquareFoot),
+            "lb/SF" => Ok(Self::PoundPerSquareFoot),
+            "lbs/SF" => Ok(Self::PoundPerSquareFoot),
+            "lb/MSF" => Ok(Self::PoundPerThousandSquareFeet),
+            "lbs/MSF" => Ok(Self::PoundPerThousandSquareFeet),
+            "lb/1000ft²" => Ok(Self::PoundPerThousandSquareFeet),
+            "lbs/1000ft²" => Ok(Self::PoundPerThousandSquareFeet),
+            "lbm/MSF" => Ok(Self::PoundPerThousandSquareFeet),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> AreaDensity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: AreaDensityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: AreaDensityUnit) -> Self {
         Self(match unit {
-            AreaDensityUnit::KilogramPerSquareMeter => x,
-            AreaDensityUnit::GramPerSquareMeter => x / 1000.0,
-            AreaDensityUnit::MilligramPerSquareMeter => x / 1000000.0,
+            AreaDensityUnit::KilogramPerSquareMeter => value,
+            AreaDensityUnit::GramPerSquareMeter => value / T::from_f64(1000.0),
+            AreaDensityUnit::MilligramPerSquareMeter => value / T::from_f64(1000000.0),
+            AreaDensityUnit::PoundPerSquareFoot => value * T::from_f64(4.88242763638305),
+            AreaDensityUnit::PoundPerThousandSquareFeet => value * T::from_f64(0.00488242763638305),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: AreaDensityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: AreaDensityUnit) -> T {
         match unit {
-            AreaDensityUnit::KilogramPerSquareMeter => x,
-            AreaDensityUnit::GramPerSquareMeter => x * 1000.0,
-            AreaDensityUnit::MilligramPerSquareMeter => x * 1000000.0,
+            AreaDensityUnit::KilogramPerSquareMeter => self.0,
+            AreaDensityUnit::GramPerSquareMeter => self.0 * T::from_f64(1000.0),
+            AreaDensityUnit::MilligramPerSquareMeter => self.0 * T::from_f64(1000000.0),
+            AreaDensityUnit::PoundPerSquareFoot => self.0 / T::from_f64(4.88242763638305),
+            AreaDensityUnit::PoundPerThousandSquareFeet => {
+                self.0 / T::from_f64(0.00488242763638305)
+            }
         }
     }
 
     /// Creates a [`AreaDensity`] from a value in KilogramsPerSquareMeter (`kg/m²`).
     #[inline]
-    pub fn from_kilograms_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_kilograms_per_square_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in KilogramsPerSquareMeter (`kg/m²`).
     #[inline]
-    pub fn as_kilograms_per_square_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_kilograms_per_square_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kilograms_per_square_meter`].
     #[inline]
-    pub fn as_kilogram_per_square_meter(self) -> Num {
+    pub fn as_kilogram_per_square_meter(self) -> T {
         self.as_kilograms_per_square_meter()
     }
 
     /// Creates a [`AreaDensity`] from a value in GramsPerSquareMeter (`g/m²`).
     #[inline]
-    pub fn from_grams_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1000.0)
+    pub fn from_grams_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in GramsPerSquareMeter (`g/m²`).
     #[inline]
-    pub fn as_grams_per_square_meter(self) -> Num {
-        let x = self.0;
-        x * 1000.0
+    pub fn as_grams_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_grams_per_square_meter`].
     #[inline]
-    pub fn as_gram_per_square_meter(self) -> Num {
+    pub fn as_gram_per_square_meter(self) -> T {
         self.as_grams_per_square_meter()
     }
 
     /// Creates a [`AreaDensity`] from a value in MilligramsPerSquareMeter (`mg/m²`).
     #[inline]
-    pub fn from_milligrams_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x / 1000000.0)
+    pub fn from_milligrams_per_square_meter(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MilligramsPerSquareMeter (`mg/m²`).
     #[inline]
-    pub fn as_milligrams_per_square_meter(self) -> Num {
-        let x = self.0;
-        x * 1000000.0
+    pub fn as_milligrams_per_square_meter(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_milligrams_per_square_meter`].
     #[inline]
-    pub fn as_milligram_per_square_meter(self) -> Num {
+    pub fn as_milligram_per_square_meter(self) -> T {
         self.as_milligrams_per_square_meter()
     }
-}
 
-impl crate::Quantity for AreaDensity {
+    /// Creates a [`AreaDensity`] from a value in PoundsPerSquareFoot (`lb/ft²`).
     #[inline]
-    fn as_base(self) -> Num {
-        self.0
+    pub fn from_pounds_per_square_foot(value: T) -> Self {
+        Self(value * T::from_f64(4.88242763638305))
     }
+
+    /// Returns the value expressed in PoundsPerSquareFoot (`lb/ft²`).
     #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
+    pub fn as_pounds_per_square_foot(self) -> T {
+        self.0 / T::from_f64(4.88242763638305)
     }
-}
 
-impl Add for AreaDensity {
-    type Output = AreaDensity;
+    /// Alias for [`Self::as_pounds_per_square_foot`].
     #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
+    pub fn as_pound_per_square_foot(self) -> T {
+        self.as_pounds_per_square_foot()
     }
-}
-impl Sub for AreaDensity {
-    type Output = AreaDensity;
+
+    /// Creates a [`AreaDensity`] from a value in PoundsPerThousandSquareFeet (`lb/MSF`).
     #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
+    pub fn from_pounds_per_thousand_square_feet(value: T) -> Self {
+        Self(value * T::from_f64(0.00488242763638305))
     }
-}
-impl Neg for AreaDensity {
-    type Output = AreaDensity;
+
+    /// Returns the value expressed in PoundsPerThousandSquareFeet (`lb/MSF`).
     #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
+    pub fn as_pounds_per_thousand_square_feet(self) -> T {
+        self.0 / T::from_f64(0.00488242763638305)
     }
-}
-impl Mul<Num> for AreaDensity {
-    type Output = AreaDensity;
+
+    /// Alias for [`Self::as_pounds_per_thousand_square_feet`].
     #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
+    pub fn as_pound_per_thousand_square_feet(self) -> T {
+        self.as_pounds_per_thousand_square_feet()
     }
-}
-impl Mul<AreaDensity> for Num {
-    type Output = AreaDensity;
-    #[inline]
-    fn mul(self, rhs: AreaDensity) -> AreaDensity {
-        AreaDensity(self * rhs.0)
-    }
-}
-impl Div<Num> for AreaDensity {
-    type Output = AreaDensity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for AreaDensity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for AreaDensity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            AreaDensityUnit::KilogramPerSquareMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`AreaDensity`].
-#[derive(Debug)]
-pub struct ParseAreaDensityError(String);
-
-impl fmt::Display for ParseAreaDensityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as AreaDensity", self.0)
-    }
-}
-
-impl std::error::Error for ParseAreaDensityError {}
-
-impl FromStr for AreaDensity {
-    type Err = ParseAreaDensityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseAreaDensityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, AreaDensityUnit)] = &[
-            ("kg/m²", AreaDensityUnit::KilogramPerSquareMeter),
-            ("mg/m²", AreaDensityUnit::MilligramPerSquareMeter),
-            ("g/m²", AreaDensityUnit::GramPerSquareMeter),
-            ("gsm", AreaDensityUnit::GramPerSquareMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseAreaDensityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

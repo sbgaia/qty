@@ -3,6 +3,7 @@
 
 use serde::Deserialize;
 
+use crate::expr::{self, Const, Form};
 use crate::formula;
 
 // ── SI prefix table ──────────────────────────────────────────────────────────
@@ -13,8 +14,8 @@ pub struct PrefixInfo {
     pub name: &'static str,
     /// Symbol prepended to the base-unit abbreviation (e.g. `"k"`).
     pub symbol: &'static str,
-    /// Numeric multiplier relative to the base unit (e.g. `1e3`).
-    pub factor: f64,
+    /// Exact multiplier relative to the base unit, as a decimal literal (e.g. `"1e3"`).
+    pub factor: &'static str,
 }
 
 /// All SI and IEC binary prefixes recognised by UnitsNet definition files, in ascending order.
@@ -23,108 +24,108 @@ pub const PREFIX_TABLE: &[PrefixInfo] = &[
     PrefixInfo {
         name: "Femto",
         symbol: "f",
-        factor: 1e-15,
+        factor: "1e-15",
     },
     PrefixInfo {
         name: "Pico",
         symbol: "p",
-        factor: 1e-12,
+        factor: "1e-12",
     },
     PrefixInfo {
         name: "Nano",
         symbol: "n",
-        factor: 1e-9,
+        factor: "1e-9",
     },
     PrefixInfo {
         name: "Micro",
         symbol: "µ",
-        factor: 1e-6,
+        factor: "1e-6",
     },
     PrefixInfo {
         name: "Milli",
         symbol: "m",
-        factor: 1e-3,
+        factor: "1e-3",
     },
     PrefixInfo {
         name: "Centi",
         symbol: "c",
-        factor: 1e-2,
+        factor: "1e-2",
     },
     PrefixInfo {
         name: "Deci",
         symbol: "d",
-        factor: 1e-1,
+        factor: "1e-1",
     },
     PrefixInfo {
         name: "Deca",
         symbol: "da",
-        factor: 1e1,
+        factor: "1e1",
     },
     PrefixInfo {
         name: "Hecto",
         symbol: "h",
-        factor: 1e2,
+        factor: "1e2",
     },
     PrefixInfo {
         name: "Kilo",
         symbol: "k",
-        factor: 1e3,
+        factor: "1e3",
     },
     PrefixInfo {
         name: "Mega",
         symbol: "M",
-        factor: 1e6,
+        factor: "1e6",
     },
     PrefixInfo {
         name: "Giga",
         symbol: "G",
-        factor: 1e9,
+        factor: "1e9",
     },
     PrefixInfo {
         name: "Tera",
         symbol: "T",
-        factor: 1e12,
+        factor: "1e12",
     },
     PrefixInfo {
         name: "Peta",
         symbol: "P",
-        factor: 1e15,
+        factor: "1e15",
     },
     PrefixInfo {
         name: "Exa",
         symbol: "E",
-        factor: 1e18,
+        factor: "1e18",
     },
     // IEC binary prefixes (2^10, 2^20, …, 2^60) — used by BitRate / Information.
     PrefixInfo {
         name: "Kibi",
         symbol: "Ki",
-        factor: 1_024.0,
+        factor: "1024",
     }, // 2^10
     PrefixInfo {
         name: "Mebi",
         symbol: "Mi",
-        factor: 1_048_576.0,
+        factor: "1048576",
     }, // 2^20
     PrefixInfo {
         name: "Gibi",
         symbol: "Gi",
-        factor: 1_073_741_824.0,
+        factor: "1073741824",
     }, // 2^30
     PrefixInfo {
         name: "Tebi",
         symbol: "Ti",
-        factor: 1_099_511_627_776.0,
+        factor: "1099511627776",
     }, // 2^40
     PrefixInfo {
         name: "Pebi",
         symbol: "Pi",
-        factor: 1_125_899_906_842_624.0,
+        factor: "1125899906842624",
     }, // 2^50
     PrefixInfo {
         name: "Exbi",
         symbol: "Ei",
-        factor: 1_152_921_504_606_846_976.0,
+        factor: "1152921504606846976",
     }, // 2^60
 ];
 
@@ -182,10 +183,15 @@ pub struct UnitDef {
     pub singular: String,
     /// PascalCase plural name used to derive method names (e.g. `KilometersPerSecond`).
     pub plural: String,
-    /// Rust `f64` expression that converts `x` (in this unit) to the base unit.
-    pub to_base: String,
-    /// Rust `f64` expression that converts `x` (in the base unit) to this unit.
-    pub from_base: String,
+    /// Exact conversion from this unit to the base unit.
+    pub to_base: Form,
+    /// Exact conversion from the base unit to this unit (inverse of `to_base`).
+    pub from_base: Form,
+    /// The upstream to-base formula translated verbatim into a Rust `f64`
+    /// expression of `x`; an independent oracle for the generated tests.
+    pub oracle_to_base: String,
+    /// The upstream from-base formula, translated verbatim (test oracle).
+    pub oracle_from_base: String,
     /// Primary display abbreviation (e.g. `"km/s"`).
     pub abbreviation: String,
     /// All recognised abbreviations for `FromStr` parsing.
@@ -211,6 +217,10 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
     let mut units = Vec::new();
 
     for raw_unit in &raw.units {
+        let to_base = expr::parse(&raw_unit.from_unit_to_base_func);
+        let from_base = expr::parse(&raw_unit.from_base_to_unit_func);
+        check_inverse(&raw.name, &raw_unit.singular_name, &to_base, &from_base);
+
         let abbreviations = en_us_abbreviations(raw_unit);
         let abbreviation = abbreviations.first().cloned().unwrap_or_default();
 
@@ -218,8 +228,10 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
         units.push(UnitDef {
             singular: raw_unit.singular_name.clone(),
             plural: raw_unit.plural_name.clone(),
-            to_base: formula::translate(&raw_unit.from_unit_to_base_func, "x"),
-            from_base: formula::translate(&raw_unit.from_base_to_unit_func, "x"),
+            to_base: to_base.clone(),
+            from_base: to_base.inverse(),
+            oracle_to_base: formula::translate(&raw_unit.from_unit_to_base_func, "x"),
+            oracle_from_base: formula::translate(&raw_unit.from_base_to_unit_func, "x"),
             abbreviation: abbreviation.clone(),
             all_abbreviations: abbreviations,
             doc: raw_unit.xml_doc_summary.clone(),
@@ -235,6 +247,18 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
             // Construct names by lowercasing the first letter of the base name so that
             // `heck::to_snake_case` produces clean output: e.g. `Kilo` + `meter` = `Kilometer`
             // → snake_case → `kilometer`.
+            // UnitsNet only applies prefixes to linear units, for which
+            // prefixing the input is exact: f(x · prefix).
+            assert!(
+                to_base.is_linear(),
+                "{}.{}: prefixes on an affine unit",
+                raw.name,
+                raw_unit.singular_name
+            );
+            let prefixed = to_base
+                .clone()
+                .with_input_factor(&Const::parse_decimal(prefix.factor));
+
             let singular = prefix_expanded_name(prefix.name, &raw_unit.singular_name);
             let plural = prefix_expanded_name(prefix.name, &raw_unit.plural_name);
 
@@ -247,12 +271,14 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
             units.push(UnitDef {
                 singular,
                 plural,
-                to_base: formula::translate_with_factor(
+                to_base: prefixed.clone(),
+                from_base: prefixed.inverse(),
+                oracle_to_base: formula::translate_with_factor(
                     &raw_unit.from_unit_to_base_func,
                     prefix.factor,
                     true,
                 ),
-                from_base: formula::translate_with_factor(
+                oracle_from_base: formula::translate_with_factor(
                     &raw_unit.from_base_to_unit_func,
                     prefix.factor,
                     false,
@@ -270,6 +296,23 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
         doc: raw.xml_doc_summary,
         units,
     }
+}
+
+/// Warns when the upstream from-base formula is not the exact inverse of the
+/// to-base formula. The to-base formula is authoritative: the generated
+/// from-base conversion is always its exact inverse.
+fn check_inverse(quantity: &str, unit: &str, to_base: &Form, from_base: &Form) {
+    let diff = to_base.inverse().rel_diff(from_base);
+    if diff > 1e-15 {
+        eprintln!(
+            "codegen: note: {quantity}.{unit}: upstream from-base formula differs from the exact \
+             inverse of the to-base formula by {diff:.1e} (relative); using the exact inverse"
+        );
+    }
+    assert!(
+        diff < 1e-6,
+        "{quantity}.{unit}: to-base and from-base formulas disagree"
+    );
 }
 
 /// Returns the en-US abbreviations for `unit`, falling back to the first available culture.

@@ -2,27 +2,35 @@
 // Source: data/quantities/PressureChangeRate.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Pressure change rate is the ratio of the pressure change to the time during which the change occurred (value of pressure changes per unit time).
 ///
-/// The internal value is stored in `PascalPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct PressureChangeRate(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`PressureChangeRateUnit::PascalPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct PressureChangeRate<T = f64>(T);
+
+quantity!(PressureChangeRate, PressureChangeRateUnit, PascalPerSecond);
 
 /// Unit variants for [`PressureChangeRate`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum PressureChangeRateUnit {
     PascalPerSecond,
     KilopascalPerSecond,
@@ -69,7 +77,7 @@ impl PressureChangeRateUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::PascalPerSecond => "Pa/s",
             Self::KilopascalPerSecond => "kPa/s",
@@ -92,9 +100,9 @@ impl PressureChangeRateUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::PascalPerSecond => &["Pa/s"],
             Self::KilopascalPerSecond => &["kPa/s"],
@@ -118,623 +126,441 @@ impl PressureChangeRateUnit {
     }
 }
 
-impl PressureChangeRate {
+impl core::str::FromStr for PressureChangeRateUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Pa/s" => Ok(Self::PascalPerSecond),
+            "kPa/s" => Ok(Self::KilopascalPerSecond),
+            "MPa/s" => Ok(Self::MegapascalPerSecond),
+            "Pa/min" => Ok(Self::PascalPerMinute),
+            "kPa/min" => Ok(Self::KilopascalPerMinute),
+            "MPa/min" => Ok(Self::MegapascalPerMinute),
+            "mmHg/s" => Ok(Self::MillimeterOfMercuryPerSecond),
+            "atm/s" => Ok(Self::AtmospherePerSecond),
+            "psi/s" => Ok(Self::PoundForcePerSquareInchPerSecond),
+            "lb/in²/s" => Ok(Self::PoundForcePerSquareInchPerSecond),
+            "kpsi/s" => Ok(Self::KilopoundForcePerSquareInchPerSecond),
+            "Mpsi/s" => Ok(Self::MegapoundForcePerSquareInchPerSecond),
+            "psi/min" => Ok(Self::PoundForcePerSquareInchPerMinute),
+            "lb/in²/min" => Ok(Self::PoundForcePerSquareInchPerMinute),
+            "kpsi/min" => Ok(Self::KilopoundForcePerSquareInchPerMinute),
+            "Mpsi/min" => Ok(Self::MegapoundForcePerSquareInchPerMinute),
+            "bar/s" => Ok(Self::BarPerSecond),
+            "mbar/s" => Ok(Self::MillibarPerSecond),
+            "bar/min" => Ok(Self::BarPerMinute),
+            "mbar/min" => Ok(Self::MillibarPerMinute),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> PressureChangeRate<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: PressureChangeRateUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: PressureChangeRateUnit) -> Self {
         Self(match unit {
-            PressureChangeRateUnit::PascalPerSecond => x,
-            PressureChangeRateUnit::KilopascalPerSecond => (x * 1e3),
-            PressureChangeRateUnit::MegapascalPerSecond => (x * 1e6),
-            PressureChangeRateUnit::PascalPerMinute => x / 60.0,
-            PressureChangeRateUnit::KilopascalPerMinute => (x * 1e3) / 60.0,
-            PressureChangeRateUnit::MegapascalPerMinute => (x * 1e6) / 60.0,
-            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => x * 133.322387415,
-            PressureChangeRateUnit::AtmospherePerSecond => x * 1.01325 * 1e5,
+            PressureChangeRateUnit::PascalPerSecond => value,
+            PressureChangeRateUnit::KilopascalPerSecond => value * T::from_f64(1000.0),
+            PressureChangeRateUnit::MegapascalPerSecond => value * T::from_f64(1000000.0),
+            PressureChangeRateUnit::PascalPerMinute => value / T::from_f64(60.0),
+            PressureChangeRateUnit::KilopascalPerMinute => value * T::from_f64(16.666666666666668),
+            PressureChangeRateUnit::MegapascalPerMinute => value * T::from_f64(16666.666666666668),
+            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
+                value * T::from_f64(133.322387415)
+            }
+            PressureChangeRateUnit::AtmospherePerSecond => value * T::from_f64(101325.0),
             PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
-                x * 4.4482216152605 / 0.00064516
+                value * T::from_f64(6894.757293168362)
             }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
-                (x * 1e3) * 4.4482216152605 / 0.00064516
+                value * T::from_f64(6894757.293168361)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
-                (x * 1e6) * 4.4482216152605 / 0.00064516
+                value * T::from_f64(6.894757293168362e9)
             }
             PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => {
-                x * (4.4482216152605 / 0.00064516) / 60.0
+                value * T::from_f64(114.91262155280602)
             }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
-                (x * 1e3) * (4.4482216152605 / 0.00064516) / 60.0
+                value * T::from_f64(114912.62155280603)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
-                (x * 1e6) * (4.4482216152605 / 0.00064516) / 60.0
+                value * T::from_f64(1.1491262155280602e8)
             }
-            PressureChangeRateUnit::BarPerSecond => x * 1e5,
-            PressureChangeRateUnit::MillibarPerSecond => (x * 1e-3) * 1e5,
-            PressureChangeRateUnit::BarPerMinute => x * 1e5 / 60.0,
-            PressureChangeRateUnit::MillibarPerMinute => (x * 1e-3) * 1e5 / 60.0,
+            PressureChangeRateUnit::BarPerSecond => value * T::from_f64(100000.0),
+            PressureChangeRateUnit::MillibarPerSecond => value * T::from_f64(100.0),
+            PressureChangeRateUnit::BarPerMinute => value * T::from_f64(1666.6666666666667),
+            PressureChangeRateUnit::MillibarPerMinute => value * T::from_f64(1.6666666666666667),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: PressureChangeRateUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: PressureChangeRateUnit) -> T {
         match unit {
-            PressureChangeRateUnit::PascalPerSecond => x,
-            PressureChangeRateUnit::KilopascalPerSecond => (x / 1e3),
-            PressureChangeRateUnit::MegapascalPerSecond => (x / 1e6),
-            PressureChangeRateUnit::PascalPerMinute => x * 60.0,
-            PressureChangeRateUnit::KilopascalPerMinute => (x / 1e3) * 60.0,
-            PressureChangeRateUnit::MegapascalPerMinute => (x / 1e6) * 60.0,
-            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => x / 133.322387415,
-            PressureChangeRateUnit::AtmospherePerSecond => x / (1.01325 * 1e5),
+            PressureChangeRateUnit::PascalPerSecond => self.0,
+            PressureChangeRateUnit::KilopascalPerSecond => self.0 / T::from_f64(1000.0),
+            PressureChangeRateUnit::MegapascalPerSecond => self.0 / T::from_f64(1000000.0),
+            PressureChangeRateUnit::PascalPerMinute => self.0 * T::from_f64(60.0),
+            PressureChangeRateUnit::KilopascalPerMinute => self.0 / T::from_f64(16.666666666666668),
+            PressureChangeRateUnit::MegapascalPerMinute => self.0 / T::from_f64(16666.666666666668),
+            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
+                self.0 / T::from_f64(133.322387415)
+            }
+            PressureChangeRateUnit::AtmospherePerSecond => self.0 / T::from_f64(101325.0),
             PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
-                x * 0.00064516 / 4.4482216152605
+                self.0 / T::from_f64(6894.757293168362)
             }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
-                (x / 1e3) * 0.00064516 / 4.4482216152605
+                self.0 / T::from_f64(6894757.293168361)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
-                (x / 1e6) * 0.00064516 / 4.4482216152605
+                self.0 / T::from_f64(6.894757293168362e9)
             }
             PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => {
-                x * 60.0 / (4.4482216152605 / 0.00064516)
+                self.0 / T::from_f64(114.91262155280602)
             }
             PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
-                (x / 1e3) * 60.0 / (4.4482216152605 / 0.00064516)
+                self.0 / T::from_f64(114912.62155280603)
             }
             PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
-                (x / 1e6) * 60.0 / (4.4482216152605 / 0.00064516)
+                self.0 / T::from_f64(1.1491262155280602e8)
             }
-            PressureChangeRateUnit::BarPerSecond => x / 1e5,
-            PressureChangeRateUnit::MillibarPerSecond => (x / 1e-3) / 1e5,
-            PressureChangeRateUnit::BarPerMinute => x / 1e5 * 60.0,
-            PressureChangeRateUnit::MillibarPerMinute => (x / 1e-3) / 1e5 * 60.0,
+            PressureChangeRateUnit::BarPerSecond => self.0 / T::from_f64(100000.0),
+            PressureChangeRateUnit::MillibarPerSecond => self.0 / T::from_f64(100.0),
+            PressureChangeRateUnit::BarPerMinute => self.0 / T::from_f64(1666.6666666666667),
+            PressureChangeRateUnit::MillibarPerMinute => self.0 / T::from_f64(1.6666666666666667),
         }
     }
 
     /// Creates a [`PressureChangeRate`] from a value in PascalsPerSecond (`Pa/s`).
     #[inline]
-    pub fn from_pascals_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_pascals_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in PascalsPerSecond (`Pa/s`).
     #[inline]
-    pub fn as_pascals_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_pascals_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_pascals_per_second`].
     #[inline]
-    pub fn as_pascal_per_second(self) -> Num {
+    pub fn as_pascal_per_second(self) -> T {
         self.as_pascals_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopascalsPerSecond (`kPa/s`).
     #[inline]
-    pub fn from_kilopascals_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilopascals_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilopascalsPerSecond (`kPa/s`).
     #[inline]
-    pub fn as_kilopascals_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilopascals_per_second(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilopascals_per_second`].
     #[inline]
-    pub fn as_kilopascal_per_second(self) -> Num {
+    pub fn as_kilopascal_per_second(self) -> T {
         self.as_kilopascals_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapascalsPerSecond (`MPa/s`).
     #[inline]
-    pub fn from_megapascals_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megapascals_per_second(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegapascalsPerSecond (`MPa/s`).
     #[inline]
-    pub fn as_megapascals_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megapascals_per_second(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megapascals_per_second`].
     #[inline]
-    pub fn as_megapascal_per_second(self) -> Num {
+    pub fn as_megapascal_per_second(self) -> T {
         self.as_megapascals_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in PascalsPerMinute (`Pa/min`).
     #[inline]
-    pub fn from_pascals_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_pascals_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in PascalsPerMinute (`Pa/min`).
     #[inline]
-    pub fn as_pascals_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_pascals_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_pascals_per_minute`].
     #[inline]
-    pub fn as_pascal_per_minute(self) -> Num {
+    pub fn as_pascal_per_minute(self) -> T {
         self.as_pascals_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopascalsPerMinute (`kPa/min`).
     #[inline]
-    pub fn from_kilopascals_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 60.0)
+    pub fn from_kilopascals_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16.666666666666668))
     }
 
     /// Returns the value expressed in KilopascalsPerMinute (`kPa/min`).
     #[inline]
-    pub fn as_kilopascals_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 60.0
+    pub fn as_kilopascals_per_minute(self) -> T {
+        self.0 / T::from_f64(16.666666666666668)
     }
 
     /// Alias for [`Self::as_kilopascals_per_minute`].
     #[inline]
-    pub fn as_kilopascal_per_minute(self) -> Num {
+    pub fn as_kilopascal_per_minute(self) -> T {
         self.as_kilopascals_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapascalsPerMinute (`MPa/min`).
     #[inline]
-    pub fn from_megapascals_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 60.0)
+    pub fn from_megapascals_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(16666.666666666668))
     }
 
     /// Returns the value expressed in MegapascalsPerMinute (`MPa/min`).
     #[inline]
-    pub fn as_megapascals_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 60.0
+    pub fn as_megapascals_per_minute(self) -> T {
+        self.0 / T::from_f64(16666.666666666668)
     }
 
     /// Alias for [`Self::as_megapascals_per_minute`].
     #[inline]
-    pub fn as_megapascal_per_minute(self) -> Num {
+    pub fn as_megapascal_per_minute(self) -> T {
         self.as_megapascals_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MillimetersOfMercuryPerSecond (`mmHg/s`).
     #[inline]
-    pub fn from_millimeters_of_mercury_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 133.322387415)
+    pub fn from_millimeters_of_mercury_per_second(value: T) -> Self {
+        Self(value * T::from_f64(133.322387415))
     }
 
     /// Returns the value expressed in MillimetersOfMercuryPerSecond (`mmHg/s`).
     #[inline]
-    pub fn as_millimeters_of_mercury_per_second(self) -> Num {
-        let x = self.0;
-        x / 133.322387415
+    pub fn as_millimeters_of_mercury_per_second(self) -> T {
+        self.0 / T::from_f64(133.322387415)
     }
 
     /// Alias for [`Self::as_millimeters_of_mercury_per_second`].
     #[inline]
-    pub fn as_millimeter_of_mercury_per_second(self) -> Num {
+    pub fn as_millimeter_of_mercury_per_second(self) -> T {
         self.as_millimeters_of_mercury_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in AtmospheresPerSecond (`atm/s`).
     #[inline]
-    pub fn from_atmospheres_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.01325 * 1e5)
+    pub fn from_atmospheres_per_second(value: T) -> Self {
+        Self(value * T::from_f64(101325.0))
     }
 
     /// Returns the value expressed in AtmospheresPerSecond (`atm/s`).
     #[inline]
-    pub fn as_atmospheres_per_second(self) -> Num {
-        let x = self.0;
-        x / (1.01325 * 1e5)
+    pub fn as_atmospheres_per_second(self) -> T {
+        self.0 / T::from_f64(101325.0)
     }
 
     /// Alias for [`Self::as_atmospheres_per_second`].
     #[inline]
-    pub fn as_atmosphere_per_second(self) -> Num {
+    pub fn as_atmosphere_per_second(self) -> T {
         self.as_atmospheres_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in PoundsForcePerSquareInchPerSecond (`psi/s`).
     #[inline]
-    pub fn from_pounds_force_per_square_inch_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 0.00064516)
+    pub fn from_pounds_force_per_square_inch_per_second(value: T) -> Self {
+        Self(value * T::from_f64(6894.757293168362))
     }
 
     /// Returns the value expressed in PoundsForcePerSquareInchPerSecond (`psi/s`).
     #[inline]
-    pub fn as_pounds_force_per_square_inch_per_second(self) -> Num {
-        let x = self.0;
-        x * 0.00064516 / 4.4482216152605
+    pub fn as_pounds_force_per_square_inch_per_second(self) -> T {
+        self.0 / T::from_f64(6894.757293168362)
     }
 
     /// Alias for [`Self::as_pounds_force_per_square_inch_per_second`].
     #[inline]
-    pub fn as_pound_force_per_square_inch_per_second(self) -> Num {
+    pub fn as_pound_force_per_square_inch_per_second(self) -> T {
         self.as_pounds_force_per_square_inch_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopoundsForcePerSquareInchPerSecond (`kpsi/s`).
     #[inline]
-    pub fn from_kilopounds_force_per_square_inch_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.4482216152605 / 0.00064516)
+    pub fn from_kilopounds_force_per_square_inch_per_second(value: T) -> Self {
+        Self(value * T::from_f64(6894757.293168361))
     }
 
     /// Returns the value expressed in KilopoundsForcePerSquareInchPerSecond (`kpsi/s`).
     #[inline]
-    pub fn as_kilopounds_force_per_square_inch_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.00064516 / 4.4482216152605
+    pub fn as_kilopounds_force_per_square_inch_per_second(self) -> T {
+        self.0 / T::from_f64(6894757.293168361)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_square_inch_per_second`].
     #[inline]
-    pub fn as_kilopound_force_per_square_inch_per_second(self) -> Num {
+    pub fn as_kilopound_force_per_square_inch_per_second(self) -> T {
         self.as_kilopounds_force_per_square_inch_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapoundsForcePerSquareInchPerSecond (`Mpsi/s`).
     #[inline]
-    pub fn from_megapounds_force_per_square_inch_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 4.4482216152605 / 0.00064516)
+    pub fn from_megapounds_force_per_square_inch_per_second(value: T) -> Self {
+        Self(value * T::from_f64(6.894757293168362e9))
     }
 
     /// Returns the value expressed in MegapoundsForcePerSquareInchPerSecond (`Mpsi/s`).
     #[inline]
-    pub fn as_megapounds_force_per_square_inch_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 0.00064516 / 4.4482216152605
+    pub fn as_megapounds_force_per_square_inch_per_second(self) -> T {
+        self.0 / T::from_f64(6.894757293168362e9)
     }
 
     /// Alias for [`Self::as_megapounds_force_per_square_inch_per_second`].
     #[inline]
-    pub fn as_megapound_force_per_square_inch_per_second(self) -> Num {
+    pub fn as_megapound_force_per_square_inch_per_second(self) -> T {
         self.as_megapounds_force_per_square_inch_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in PoundsForcePerSquareInchPerMinute (`psi/min`).
     #[inline]
-    pub fn from_pounds_force_per_square_inch_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * (4.4482216152605 / 0.00064516) / 60.0)
+    pub fn from_pounds_force_per_square_inch_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(114.91262155280602))
     }
 
     /// Returns the value expressed in PoundsForcePerSquareInchPerMinute (`psi/min`).
     #[inline]
-    pub fn as_pounds_force_per_square_inch_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0 / (4.4482216152605 / 0.00064516)
+    pub fn as_pounds_force_per_square_inch_per_minute(self) -> T {
+        self.0 / T::from_f64(114.91262155280602)
     }
 
     /// Alias for [`Self::as_pounds_force_per_square_inch_per_minute`].
     #[inline]
-    pub fn as_pound_force_per_square_inch_per_minute(self) -> Num {
+    pub fn as_pound_force_per_square_inch_per_minute(self) -> T {
         self.as_pounds_force_per_square_inch_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopoundsForcePerSquareInchPerMinute (`kpsi/min`).
     #[inline]
-    pub fn from_kilopounds_force_per_square_inch_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * (4.4482216152605 / 0.00064516) / 60.0)
+    pub fn from_kilopounds_force_per_square_inch_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(114912.62155280603))
     }
 
     /// Returns the value expressed in KilopoundsForcePerSquareInchPerMinute (`kpsi/min`).
     #[inline]
-    pub fn as_kilopounds_force_per_square_inch_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 60.0 / (4.4482216152605 / 0.00064516)
+    pub fn as_kilopounds_force_per_square_inch_per_minute(self) -> T {
+        self.0 / T::from_f64(114912.62155280603)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_square_inch_per_minute`].
     #[inline]
-    pub fn as_kilopound_force_per_square_inch_per_minute(self) -> Num {
+    pub fn as_kilopound_force_per_square_inch_per_minute(self) -> T {
         self.as_kilopounds_force_per_square_inch_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapoundsForcePerSquareInchPerMinute (`Mpsi/min`).
     #[inline]
-    pub fn from_megapounds_force_per_square_inch_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * (4.4482216152605 / 0.00064516) / 60.0)
+    pub fn from_megapounds_force_per_square_inch_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(1.1491262155280602e8))
     }
 
     /// Returns the value expressed in MegapoundsForcePerSquareInchPerMinute (`Mpsi/min`).
     #[inline]
-    pub fn as_megapounds_force_per_square_inch_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 60.0 / (4.4482216152605 / 0.00064516)
+    pub fn as_megapounds_force_per_square_inch_per_minute(self) -> T {
+        self.0 / T::from_f64(1.1491262155280602e8)
     }
 
     /// Alias for [`Self::as_megapounds_force_per_square_inch_per_minute`].
     #[inline]
-    pub fn as_megapound_force_per_square_inch_per_minute(self) -> Num {
+    pub fn as_megapound_force_per_square_inch_per_minute(self) -> T {
         self.as_megapounds_force_per_square_inch_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in BarsPerSecond (`bar/s`).
     #[inline]
-    pub fn from_bars_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e5)
+    pub fn from_bars_per_second(value: T) -> Self {
+        Self(value * T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in BarsPerSecond (`bar/s`).
     #[inline]
-    pub fn as_bars_per_second(self) -> Num {
-        let x = self.0;
-        x / 1e5
+    pub fn as_bars_per_second(self) -> T {
+        self.0 / T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_bars_per_second`].
     #[inline]
-    pub fn as_bar_per_second(self) -> Num {
+    pub fn as_bar_per_second(self) -> T {
         self.as_bars_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MillibarsPerSecond (`mbar/s`).
     #[inline]
-    pub fn from_millibars_per_second(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e5)
+    pub fn from_millibars_per_second(value: T) -> Self {
+        Self(value * T::from_f64(100.0))
     }
 
     /// Returns the value expressed in MillibarsPerSecond (`mbar/s`).
     #[inline]
-    pub fn as_millibars_per_second(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e5
+    pub fn as_millibars_per_second(self) -> T {
+        self.0 / T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_millibars_per_second`].
     #[inline]
-    pub fn as_millibar_per_second(self) -> Num {
+    pub fn as_millibar_per_second(self) -> T {
         self.as_millibars_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in BarsPerMinute (`bar/min`).
     #[inline]
-    pub fn from_bars_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e5 / 60.0)
+    pub fn from_bars_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(1666.6666666666667))
     }
 
     /// Returns the value expressed in BarsPerMinute (`bar/min`).
     #[inline]
-    pub fn as_bars_per_minute(self) -> Num {
-        let x = self.0;
-        x / 1e5 * 60.0
+    pub fn as_bars_per_minute(self) -> T {
+        self.0 / T::from_f64(1666.6666666666667)
     }
 
     /// Alias for [`Self::as_bars_per_minute`].
     #[inline]
-    pub fn as_bar_per_minute(self) -> Num {
+    pub fn as_bar_per_minute(self) -> T {
         self.as_bars_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MillibarsPerMinute (`mbar/min`).
     #[inline]
-    pub fn from_millibars_per_minute(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e5 / 60.0)
+    pub fn from_millibars_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(1.6666666666666667))
     }
 
     /// Returns the value expressed in MillibarsPerMinute (`mbar/min`).
     #[inline]
-    pub fn as_millibars_per_minute(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e5 * 60.0
+    pub fn as_millibars_per_minute(self) -> T {
+        self.0 / T::from_f64(1.6666666666666667)
     }
 
     /// Alias for [`Self::as_millibars_per_minute`].
     #[inline]
-    pub fn as_millibar_per_minute(self) -> Num {
+    pub fn as_millibar_per_minute(self) -> T {
         self.as_millibars_per_minute()
     }
-}
-
-impl crate::Quantity for PressureChangeRate {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for PressureChangeRate {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for PressureChangeRate {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for PressureChangeRate {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for PressureChangeRate {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<PressureChangeRate> for Num {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn mul(self, rhs: PressureChangeRate) -> PressureChangeRate {
-        PressureChangeRate(self * rhs.0)
-    }
-}
-impl Div<Num> for PressureChangeRate {
-    type Output = PressureChangeRate;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for PressureChangeRate {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for PressureChangeRate {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            PressureChangeRateUnit::PascalPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`PressureChangeRate`].
-#[derive(Debug)]
-pub struct ParsePressureChangeRateError(String);
-
-impl fmt::Display for ParsePressureChangeRateError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as PressureChangeRate", self.0)
-    }
-}
-
-impl std::error::Error for ParsePressureChangeRateError {}
-
-impl FromStr for PressureChangeRate {
-    type Err = ParsePressureChangeRateError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParsePressureChangeRateError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, PressureChangeRateUnit)] = &[
-            (
-                "lb/in²/min",
-                PressureChangeRateUnit::PoundForcePerSquareInchPerMinute,
-            ),
-            (
-                "lb/in²/s",
-                PressureChangeRateUnit::PoundForcePerSquareInchPerSecond,
-            ),
-            (
-                "Mpsi/min",
-                PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute,
-            ),
-            (
-                "kpsi/min",
-                PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute,
-            ),
-            ("mbar/min", PressureChangeRateUnit::MillibarPerMinute),
-            ("MPa/min", PressureChangeRateUnit::MegapascalPerMinute),
-            ("bar/min", PressureChangeRateUnit::BarPerMinute),
-            ("kPa/min", PressureChangeRateUnit::KilopascalPerMinute),
-            (
-                "psi/min",
-                PressureChangeRateUnit::PoundForcePerSquareInchPerMinute,
-            ),
-            (
-                "Mpsi/s",
-                PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond,
-            ),
-            ("Pa/min", PressureChangeRateUnit::PascalPerMinute),
-            (
-                "kpsi/s",
-                PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond,
-            ),
-            ("mbar/s", PressureChangeRateUnit::MillibarPerSecond),
-            (
-                "mmHg/s",
-                PressureChangeRateUnit::MillimeterOfMercuryPerSecond,
-            ),
-            ("MPa/s", PressureChangeRateUnit::MegapascalPerSecond),
-            ("atm/s", PressureChangeRateUnit::AtmospherePerSecond),
-            ("bar/s", PressureChangeRateUnit::BarPerSecond),
-            ("kPa/s", PressureChangeRateUnit::KilopascalPerSecond),
-            (
-                "psi/s",
-                PressureChangeRateUnit::PoundForcePerSquareInchPerSecond,
-            ),
-            ("Pa/s", PressureChangeRateUnit::PascalPerSecond),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParsePressureChangeRateError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

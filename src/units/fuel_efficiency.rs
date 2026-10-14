@@ -2,27 +2,35 @@
 // Source: data/quantities/FuelEfficiency.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In the context of transport, fuel economy is the energy efficiency of a particular vehicle, given as a ratio of distance traveled per unit of fuel consumed. In most countries, using the metric system, fuel economy is stated as "fuel consumption" in liters per 100 kilometers (L/100 km) or kilometers per liter (km/L or kmpl). In countries using non-metric system, fuel economy is expressed in miles per gallon (mpg) (imperial galon or US galon).
 ///
-/// The internal value is stored in `KilometerPerLiter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct FuelEfficiency(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`FuelEfficiencyUnit::KilometerPerLiter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct FuelEfficiency<T = f64>(T);
+
+quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter);
 
 /// Unit variants for [`FuelEfficiency`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum FuelEfficiencyUnit {
     LiterPer100Kilometers,
     MilePerUsGallon,
@@ -41,7 +49,7 @@ impl FuelEfficiencyUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::LiterPer100Kilometers => "l/100km",
             Self::MilePerUsGallon => "mpg (U.S.)",
@@ -50,9 +58,9 @@ impl FuelEfficiencyUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::LiterPer100Kilometers => &["l/100km"],
             Self::MilePerUsGallon => &["mpg (U.S.)"],
@@ -62,248 +70,117 @@ impl FuelEfficiencyUnit {
     }
 }
 
-impl FuelEfficiency {
+impl core::str::FromStr for FuelEfficiencyUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "l/100km" => Ok(Self::LiterPer100Kilometers),
+            "mpg (U.S.)" => Ok(Self::MilePerUsGallon),
+            "mpg (imp.)" => Ok(Self::MilePerUkGallon),
+            "km/l" => Ok(Self::KilometerPerLiter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> FuelEfficiency<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: FuelEfficiencyUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: FuelEfficiencyUnit) -> Self {
         Self(match unit {
-            FuelEfficiencyUnit::LiterPer100Kilometers => 100.0 / x,
-            FuelEfficiencyUnit::MilePerUsGallon => x * 1.609344 / 3.785411784,
-            FuelEfficiencyUnit::MilePerUkGallon => x * 1.609344 / 4.54609,
-            FuelEfficiencyUnit::KilometerPerLiter => x,
+            FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / value,
+            FuelEfficiencyUnit::MilePerUsGallon => value * T::from_f64(0.425143707430272),
+            FuelEfficiencyUnit::MilePerUkGallon => value * T::from_f64(0.3540061899346471),
+            FuelEfficiencyUnit::KilometerPerLiter => value,
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: FuelEfficiencyUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: FuelEfficiencyUnit) -> T {
         match unit {
-            FuelEfficiencyUnit::LiterPer100Kilometers => 100.0 / x,
-            FuelEfficiencyUnit::MilePerUsGallon => x * 3.785411784 / 1.609344,
-            FuelEfficiencyUnit::MilePerUkGallon => x * 4.54609 / 1.609344,
-            FuelEfficiencyUnit::KilometerPerLiter => x,
+            FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / self.0,
+            FuelEfficiencyUnit::MilePerUsGallon => self.0 / T::from_f64(0.425143707430272),
+            FuelEfficiencyUnit::MilePerUkGallon => self.0 / T::from_f64(0.3540061899346471),
+            FuelEfficiencyUnit::KilometerPerLiter => self.0,
         }
     }
 
     /// Creates a [`FuelEfficiency`] from a value in LitersPer100Kilometers (`l/100km`).
     #[inline]
-    pub fn from_liters_per100_kilometers(value: Num) -> Self {
-        let x = value;
-        Self(100.0 / x)
+    pub fn from_liters_per100_kilometers(value: T) -> Self {
+        Self(T::from_f64(100.0) / value)
     }
 
     /// Returns the value expressed in LitersPer100Kilometers (`l/100km`).
     #[inline]
-    pub fn as_liters_per100_kilometers(self) -> Num {
-        let x = self.0;
-        100.0 / x
+    pub fn as_liters_per100_kilometers(self) -> T {
+        T::from_f64(100.0) / self.0
     }
 
     /// Alias for [`Self::as_liters_per100_kilometers`].
     #[inline]
-    pub fn as_liter_per100_kilometers(self) -> Num {
+    pub fn as_liter_per100_kilometers(self) -> T {
         self.as_liters_per100_kilometers()
     }
 
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUsGallon (`mpg (U.S.)`).
     #[inline]
-    pub fn from_miles_per_us_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.609344 / 3.785411784)
+    pub fn from_miles_per_us_gallon(value: T) -> Self {
+        Self(value * T::from_f64(0.425143707430272))
     }
 
     /// Returns the value expressed in MilesPerUsGallon (`mpg (U.S.)`).
     #[inline]
-    pub fn as_miles_per_us_gallon(self) -> Num {
-        let x = self.0;
-        x * 3.785411784 / 1.609344
+    pub fn as_miles_per_us_gallon(self) -> T {
+        self.0 / T::from_f64(0.425143707430272)
     }
 
     /// Alias for [`Self::as_miles_per_us_gallon`].
     #[inline]
-    pub fn as_mile_per_us_gallon(self) -> Num {
+    pub fn as_mile_per_us_gallon(self) -> T {
         self.as_miles_per_us_gallon()
     }
 
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUkGallon (`mpg (imp.)`).
     #[inline]
-    pub fn from_miles_per_uk_gallon(value: Num) -> Self {
-        let x = value;
-        Self(x * 1.609344 / 4.54609)
+    pub fn from_miles_per_uk_gallon(value: T) -> Self {
+        Self(value * T::from_f64(0.3540061899346471))
     }
 
     /// Returns the value expressed in MilesPerUkGallon (`mpg (imp.)`).
     #[inline]
-    pub fn as_miles_per_uk_gallon(self) -> Num {
-        let x = self.0;
-        x * 4.54609 / 1.609344
+    pub fn as_miles_per_uk_gallon(self) -> T {
+        self.0 / T::from_f64(0.3540061899346471)
     }
 
     /// Alias for [`Self::as_miles_per_uk_gallon`].
     #[inline]
-    pub fn as_mile_per_uk_gallon(self) -> Num {
+    pub fn as_mile_per_uk_gallon(self) -> T {
         self.as_miles_per_uk_gallon()
     }
 
     /// Creates a [`FuelEfficiency`] from a value in KilometersPerLiter (`km/l`).
     #[inline]
-    pub fn from_kilometers_per_liter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_kilometers_per_liter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in KilometersPerLiter (`km/l`).
     #[inline]
-    pub fn as_kilometers_per_liter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_kilometers_per_liter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_kilometers_per_liter`].
     #[inline]
-    pub fn as_kilometer_per_liter(self) -> Num {
+    pub fn as_kilometer_per_liter(self) -> T {
         self.as_kilometers_per_liter()
     }
-}
-
-impl crate::Quantity for FuelEfficiency {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for FuelEfficiency {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for FuelEfficiency {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for FuelEfficiency {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for FuelEfficiency {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<FuelEfficiency> for Num {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn mul(self, rhs: FuelEfficiency) -> FuelEfficiency {
-        FuelEfficiency(self * rhs.0)
-    }
-}
-impl Div<Num> for FuelEfficiency {
-    type Output = FuelEfficiency;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for FuelEfficiency {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for FuelEfficiency {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            FuelEfficiencyUnit::KilometerPerLiter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`FuelEfficiency`].
-#[derive(Debug)]
-pub struct ParseFuelEfficiencyError(String);
-
-impl fmt::Display for ParseFuelEfficiencyError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as FuelEfficiency", self.0)
-    }
-}
-
-impl std::error::Error for ParseFuelEfficiencyError {}
-
-impl FromStr for FuelEfficiency {
-    type Err = ParseFuelEfficiencyError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseFuelEfficiencyError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, FuelEfficiencyUnit)] = &[
-            ("mpg (U.S.)", FuelEfficiencyUnit::MilePerUsGallon),
-            ("mpg (imp.)", FuelEfficiencyUnit::MilePerUkGallon),
-            ("l/100km", FuelEfficiencyUnit::LiterPer100Kilometers),
-            ("km/l", FuelEfficiencyUnit::KilometerPerLiter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseFuelEfficiencyError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

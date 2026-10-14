@@ -2,27 +2,39 @@
 // Source: data/quantities/RadiationEquivalentDose.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Equivalent dose is a dose quantity representing the stochastic health effects of low levels of ionizing radiation on the human body which represents the probability of radiation-induced cancer and genetic damage.
 ///
-/// The internal value is stored in `Sievert` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RadiationEquivalentDose(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadiationEquivalentDoseUnit::Sievert`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct RadiationEquivalentDose<T = f64>(T);
+
+quantity!(
+    RadiationEquivalentDose,
+    RadiationEquivalentDoseUnit,
+    Sievert
+);
 
 /// Unit variants for [`RadiationEquivalentDose`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum RadiationEquivalentDoseUnit {
     /// The sievert is a unit in the International System of Units (SI) intended to represent the stochastic health risk of ionizing radiation, which is defined as the probability of causing radiation-induced cancer and genetic damage.
     Sievert,
@@ -46,7 +58,7 @@ impl RadiationEquivalentDoseUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Sievert => "Sv",
             Self::Nanosievert => "nSv",
@@ -57,9 +69,9 @@ impl RadiationEquivalentDoseUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Sievert => &["Sv"],
             Self::Nanosievert => &["nSv"],
@@ -71,297 +83,163 @@ impl RadiationEquivalentDoseUnit {
     }
 }
 
-impl RadiationEquivalentDose {
+impl core::str::FromStr for RadiationEquivalentDoseUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Sv" => Ok(Self::Sievert),
+            "nSv" => Ok(Self::Nanosievert),
+            "µSv" => Ok(Self::Microsievert),
+            "mSv" => Ok(Self::Millisievert),
+            "rem" => Ok(Self::RoentgenEquivalentMan),
+            "mrem" => Ok(Self::MilliroentgenEquivalentMan),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> RadiationEquivalentDose<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: RadiationEquivalentDoseUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: RadiationEquivalentDoseUnit) -> Self {
         Self(match unit {
-            RadiationEquivalentDoseUnit::Sievert => x,
-            RadiationEquivalentDoseUnit::Nanosievert => (x * 1e-9),
-            RadiationEquivalentDoseUnit::Microsievert => (x * 1e-6),
-            RadiationEquivalentDoseUnit::Millisievert => (x * 1e-3),
-            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => x / 100.0,
-            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => (x * 1e-3) / 100.0,
+            RadiationEquivalentDoseUnit::Sievert => value,
+            RadiationEquivalentDoseUnit::Nanosievert => value / T::from_f64(1e9),
+            RadiationEquivalentDoseUnit::Microsievert => value / T::from_f64(1000000.0),
+            RadiationEquivalentDoseUnit::Millisievert => value / T::from_f64(1000.0),
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => value / T::from_f64(100.0),
+            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
+                value / T::from_f64(100000.0)
+            }
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: RadiationEquivalentDoseUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: RadiationEquivalentDoseUnit) -> T {
         match unit {
-            RadiationEquivalentDoseUnit::Sievert => x,
-            RadiationEquivalentDoseUnit::Nanosievert => (x / 1e-9),
-            RadiationEquivalentDoseUnit::Microsievert => (x / 1e-6),
-            RadiationEquivalentDoseUnit::Millisievert => (x / 1e-3),
-            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => x * 100.0,
-            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => (x / 1e-3) * 100.0,
+            RadiationEquivalentDoseUnit::Sievert => self.0,
+            RadiationEquivalentDoseUnit::Nanosievert => self.0 * T::from_f64(1e9),
+            RadiationEquivalentDoseUnit::Microsievert => self.0 * T::from_f64(1000000.0),
+            RadiationEquivalentDoseUnit::Millisievert => self.0 * T::from_f64(1000.0),
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => self.0 * T::from_f64(100.0),
+            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
+                self.0 * T::from_f64(100000.0)
+            }
         }
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in Sieverts (`Sv`).
     #[inline]
-    pub fn from_sieverts(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_sieverts(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Sieverts (`Sv`).
     #[inline]
-    pub fn as_sieverts(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_sieverts(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_sieverts`].
     #[inline]
-    pub fn as_sievert(self) -> Num {
+    pub fn as_sievert(self) -> T {
         self.as_sieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in Nanosieverts (`nSv`).
     #[inline]
-    pub fn from_nanosieverts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanosieverts(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanosieverts (`nSv`).
     #[inline]
-    pub fn as_nanosieverts(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanosieverts(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanosieverts`].
     #[inline]
-    pub fn as_nanosievert(self) -> Num {
+    pub fn as_nanosievert(self) -> T {
         self.as_nanosieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in Microsieverts (`µSv`).
     #[inline]
-    pub fn from_microsieverts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microsieverts(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microsieverts (`µSv`).
     #[inline]
-    pub fn as_microsieverts(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microsieverts(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microsieverts`].
     #[inline]
-    pub fn as_microsievert(self) -> Num {
+    pub fn as_microsievert(self) -> T {
         self.as_microsieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in Millisieverts (`mSv`).
     #[inline]
-    pub fn from_millisieverts(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millisieverts(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millisieverts (`mSv`).
     #[inline]
-    pub fn as_millisieverts(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millisieverts(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millisieverts`].
     #[inline]
-    pub fn as_millisievert(self) -> Num {
+    pub fn as_millisievert(self) -> T {
         self.as_millisieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in RoentgensEquivalentMan (`rem`).
     #[inline]
-    pub fn from_roentgens_equivalent_man(value: Num) -> Self {
-        let x = value;
-        Self(x / 100.0)
+    pub fn from_roentgens_equivalent_man(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in RoentgensEquivalentMan (`rem`).
     #[inline]
-    pub fn as_roentgens_equivalent_man(self) -> Num {
-        let x = self.0;
-        x * 100.0
+    pub fn as_roentgens_equivalent_man(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_roentgens_equivalent_man`].
     #[inline]
-    pub fn as_roentgen_equivalent_man(self) -> Num {
+    pub fn as_roentgen_equivalent_man(self) -> T {
         self.as_roentgens_equivalent_man()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in MilliroentgensEquivalentMan (`mrem`).
     #[inline]
-    pub fn from_milliroentgens_equivalent_man(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 100.0)
+    pub fn from_milliroentgens_equivalent_man(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in MilliroentgensEquivalentMan (`mrem`).
     #[inline]
-    pub fn as_milliroentgens_equivalent_man(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 100.0
+    pub fn as_milliroentgens_equivalent_man(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_milliroentgens_equivalent_man`].
     #[inline]
-    pub fn as_milliroentgen_equivalent_man(self) -> Num {
+    pub fn as_milliroentgen_equivalent_man(self) -> T {
         self.as_milliroentgens_equivalent_man()
     }
-}
-
-impl crate::Quantity for RadiationEquivalentDose {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for RadiationEquivalentDose {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for RadiationEquivalentDose {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for RadiationEquivalentDose {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for RadiationEquivalentDose {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<RadiationEquivalentDose> for Num {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn mul(self, rhs: RadiationEquivalentDose) -> RadiationEquivalentDose {
-        RadiationEquivalentDose(self * rhs.0)
-    }
-}
-impl Div<Num> for RadiationEquivalentDose {
-    type Output = RadiationEquivalentDose;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for RadiationEquivalentDose {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for RadiationEquivalentDose {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            RadiationEquivalentDoseUnit::Sievert.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`RadiationEquivalentDose`].
-#[derive(Debug)]
-pub struct ParseRadiationEquivalentDoseError(String);
-
-impl fmt::Display for ParseRadiationEquivalentDoseError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as RadiationEquivalentDose", self.0)
-    }
-}
-
-impl std::error::Error for ParseRadiationEquivalentDoseError {}
-
-impl FromStr for RadiationEquivalentDose {
-    type Err = ParseRadiationEquivalentDoseError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseRadiationEquivalentDoseError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, RadiationEquivalentDoseUnit)] = &[
-            (
-                "mrem",
-                RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan,
-            ),
-            ("µSv", RadiationEquivalentDoseUnit::Microsievert),
-            ("mSv", RadiationEquivalentDoseUnit::Millisievert),
-            ("nSv", RadiationEquivalentDoseUnit::Nanosievert),
-            ("rem", RadiationEquivalentDoseUnit::RoentgenEquivalentMan),
-            ("Sv", RadiationEquivalentDoseUnit::Sievert),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseRadiationEquivalentDoseError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

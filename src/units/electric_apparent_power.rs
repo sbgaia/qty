@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricApparentPower.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Power engineers measure apparent power as the magnitude of the vector sum of active and reactive power. It is the product of the root mean square voltage (in volts) and the root mean square current (in amperes).
 ///
-/// The internal value is stored in `Voltampere` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricApparentPower(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricApparentPowerUnit::Voltampere`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricApparentPower<T = f64>(T);
+
+quantity!(ElectricApparentPower, ElectricApparentPowerUnit, Voltampere);
 
 /// Unit variants for [`ElectricApparentPower`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricApparentPowerUnit {
     Voltampere,
     Microvoltampere,
@@ -45,7 +53,7 @@ impl ElectricApparentPowerUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Voltampere => "VA",
             Self::Microvoltampere => "µVA",
@@ -56,9 +64,9 @@ impl ElectricApparentPowerUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Voltampere => &["VA"],
             Self::Microvoltampere => &["µVA"],
@@ -70,294 +78,159 @@ impl ElectricApparentPowerUnit {
     }
 }
 
-impl ElectricApparentPower {
+impl core::str::FromStr for ElectricApparentPowerUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "VA" => Ok(Self::Voltampere),
+            "µVA" => Ok(Self::Microvoltampere),
+            "mVA" => Ok(Self::Millivoltampere),
+            "kVA" => Ok(Self::Kilovoltampere),
+            "MVA" => Ok(Self::Megavoltampere),
+            "GVA" => Ok(Self::Gigavoltampere),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricApparentPower<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricApparentPowerUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricApparentPowerUnit) -> Self {
         Self(match unit {
-            ElectricApparentPowerUnit::Voltampere => x,
-            ElectricApparentPowerUnit::Microvoltampere => (x * 1e-6),
-            ElectricApparentPowerUnit::Millivoltampere => (x * 1e-3),
-            ElectricApparentPowerUnit::Kilovoltampere => (x * 1e3),
-            ElectricApparentPowerUnit::Megavoltampere => (x * 1e6),
-            ElectricApparentPowerUnit::Gigavoltampere => (x * 1e9),
+            ElectricApparentPowerUnit::Voltampere => value,
+            ElectricApparentPowerUnit::Microvoltampere => value / T::from_f64(1000000.0),
+            ElectricApparentPowerUnit::Millivoltampere => value / T::from_f64(1000.0),
+            ElectricApparentPowerUnit::Kilovoltampere => value * T::from_f64(1000.0),
+            ElectricApparentPowerUnit::Megavoltampere => value * T::from_f64(1000000.0),
+            ElectricApparentPowerUnit::Gigavoltampere => value * T::from_f64(1e9),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricApparentPowerUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricApparentPowerUnit) -> T {
         match unit {
-            ElectricApparentPowerUnit::Voltampere => x,
-            ElectricApparentPowerUnit::Microvoltampere => (x / 1e-6),
-            ElectricApparentPowerUnit::Millivoltampere => (x / 1e-3),
-            ElectricApparentPowerUnit::Kilovoltampere => (x / 1e3),
-            ElectricApparentPowerUnit::Megavoltampere => (x / 1e6),
-            ElectricApparentPowerUnit::Gigavoltampere => (x / 1e9),
+            ElectricApparentPowerUnit::Voltampere => self.0,
+            ElectricApparentPowerUnit::Microvoltampere => self.0 * T::from_f64(1000000.0),
+            ElectricApparentPowerUnit::Millivoltampere => self.0 * T::from_f64(1000.0),
+            ElectricApparentPowerUnit::Kilovoltampere => self.0 / T::from_f64(1000.0),
+            ElectricApparentPowerUnit::Megavoltampere => self.0 / T::from_f64(1000000.0),
+            ElectricApparentPowerUnit::Gigavoltampere => self.0 / T::from_f64(1e9),
         }
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Voltamperes (`VA`).
     #[inline]
-    pub fn from_voltamperes(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_voltamperes(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Voltamperes (`VA`).
     #[inline]
-    pub fn as_voltamperes(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_voltamperes(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_voltamperes`].
     #[inline]
-    pub fn as_voltampere(self) -> Num {
+    pub fn as_voltampere(self) -> T {
         self.as_voltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Microvoltamperes (`µVA`).
     #[inline]
-    pub fn from_microvoltamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microvoltamperes(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microvoltamperes (`µVA`).
     #[inline]
-    pub fn as_microvoltamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microvoltamperes(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microvoltamperes`].
     #[inline]
-    pub fn as_microvoltampere(self) -> Num {
+    pub fn as_microvoltampere(self) -> T {
         self.as_microvoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Millivoltamperes (`mVA`).
     #[inline]
-    pub fn from_millivoltamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millivoltamperes(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millivoltamperes (`mVA`).
     #[inline]
-    pub fn as_millivoltamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millivoltamperes(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millivoltamperes`].
     #[inline]
-    pub fn as_millivoltampere(self) -> Num {
+    pub fn as_millivoltampere(self) -> T {
         self.as_millivoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Kilovoltamperes (`kVA`).
     #[inline]
-    pub fn from_kilovoltamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilovoltamperes(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilovoltamperes (`kVA`).
     #[inline]
-    pub fn as_kilovoltamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilovoltamperes(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilovoltamperes`].
     #[inline]
-    pub fn as_kilovoltampere(self) -> Num {
+    pub fn as_kilovoltampere(self) -> T {
         self.as_kilovoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Megavoltamperes (`MVA`).
     #[inline]
-    pub fn from_megavoltamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megavoltamperes(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megavoltamperes (`MVA`).
     #[inline]
-    pub fn as_megavoltamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megavoltamperes(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megavoltamperes`].
     #[inline]
-    pub fn as_megavoltampere(self) -> Num {
+    pub fn as_megavoltampere(self) -> T {
         self.as_megavoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Gigavoltamperes (`GVA`).
     #[inline]
-    pub fn from_gigavoltamperes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigavoltamperes(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigavoltamperes (`GVA`).
     #[inline]
-    pub fn as_gigavoltamperes(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigavoltamperes(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigavoltamperes`].
     #[inline]
-    pub fn as_gigavoltampere(self) -> Num {
+    pub fn as_gigavoltampere(self) -> T {
         self.as_gigavoltamperes()
     }
-}
-
-impl crate::Quantity for ElectricApparentPower {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricApparentPower {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricApparentPower {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricApparentPower {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricApparentPower {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricApparentPower> for Num {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn mul(self, rhs: ElectricApparentPower) -> ElectricApparentPower {
-        ElectricApparentPower(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricApparentPower {
-    type Output = ElectricApparentPower;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricApparentPower {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricApparentPower {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricApparentPowerUnit::Voltampere.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricApparentPower`].
-#[derive(Debug)]
-pub struct ParseElectricApparentPowerError(String);
-
-impl fmt::Display for ParseElectricApparentPowerError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricApparentPower", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricApparentPowerError {}
-
-impl FromStr for ElectricApparentPower {
-    type Err = ParseElectricApparentPowerError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricApparentPowerError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricApparentPowerUnit)] = &[
-            ("µVA", ElectricApparentPowerUnit::Microvoltampere),
-            ("GVA", ElectricApparentPowerUnit::Gigavoltampere),
-            ("MVA", ElectricApparentPowerUnit::Megavoltampere),
-            ("kVA", ElectricApparentPowerUnit::Kilovoltampere),
-            ("mVA", ElectricApparentPowerUnit::Millivoltampere),
-            ("VA", ElectricApparentPowerUnit::Voltampere),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricApparentPowerError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

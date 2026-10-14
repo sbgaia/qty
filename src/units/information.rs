@@ -2,27 +2,35 @@
 // Source: data/quantities/Information.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In computing and telecommunications, a unit of information is the capacity of some standard data storage system or communication channel, used to measure the capacities of other systems and channels. In information theory, units of information are also used to measure the information contents or entropy of random variables.
 ///
-/// The internal value is stored in `Bit` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Information(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`InformationUnit::Bit`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Information<T = f64>(T);
+
+quantity!(Information, InformationUnit, Bit);
 
 /// Unit variants for [`Information`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum InformationUnit {
     Byte,
     Kilobyte,
@@ -111,7 +119,7 @@ impl InformationUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Byte => "B",
             Self::Kilobyte => "kB",
@@ -155,9 +163,9 @@ impl InformationUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Byte => &["B"],
             Self::Kilobyte => &["kB"],
@@ -202,1048 +210,852 @@ impl InformationUnit {
     }
 }
 
-impl Information {
+impl core::str::FromStr for InformationUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "B" => Ok(Self::Byte),
+            "kB" => Ok(Self::Kilobyte),
+            "MB" => Ok(Self::Megabyte),
+            "GB" => Ok(Self::Gigabyte),
+            "TB" => Ok(Self::Terabyte),
+            "PB" => Ok(Self::Petabyte),
+            "EB" => Ok(Self::Exabyte),
+            "KiB" => Ok(Self::Kibibyte),
+            "MiB" => Ok(Self::Mebibyte),
+            "GiB" => Ok(Self::Gibibyte),
+            "TiB" => Ok(Self::Tebibyte),
+            "PiB" => Ok(Self::Pebibyte),
+            "EiB" => Ok(Self::Exbibyte),
+            "o" => Ok(Self::Octet),
+            "ko" => Ok(Self::Kilooctet),
+            "Mo" => Ok(Self::Megaoctet),
+            "Go" => Ok(Self::Gigaoctet),
+            "To" => Ok(Self::Teraoctet),
+            "Po" => Ok(Self::Petaoctet),
+            "Eo" => Ok(Self::Exaoctet),
+            "Kio" => Ok(Self::Kibioctet),
+            "Mio" => Ok(Self::Mebioctet),
+            "Gio" => Ok(Self::Gibioctet),
+            "Tio" => Ok(Self::Tebioctet),
+            "Pio" => Ok(Self::Pebioctet),
+            "Eio" => Ok(Self::Exbioctet),
+            "b" => Ok(Self::Bit),
+            "kb" => Ok(Self::Kilobit),
+            "Mb" => Ok(Self::Megabit),
+            "Gb" => Ok(Self::Gigabit),
+            "Tb" => Ok(Self::Terabit),
+            "Pb" => Ok(Self::Petabit),
+            "Eb" => Ok(Self::Exabit),
+            "Kib" => Ok(Self::Kibibit),
+            "Mib" => Ok(Self::Mebibit),
+            "Gib" => Ok(Self::Gibibit),
+            "Tib" => Ok(Self::Tebibit),
+            "Pib" => Ok(Self::Pebibit),
+            "Eib" => Ok(Self::Exbibit),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Information<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: InformationUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: InformationUnit) -> Self {
         Self(match unit {
-            InformationUnit::Byte => x * 8.0,
-            InformationUnit::Kilobyte => (x * 1e3) * 8.0,
-            InformationUnit::Megabyte => (x * 1e6) * 8.0,
-            InformationUnit::Gigabyte => (x * 1e9) * 8.0,
-            InformationUnit::Terabyte => (x * 1e12) * 8.0,
-            InformationUnit::Petabyte => (x * 1e15) * 8.0,
-            InformationUnit::Exabyte => (x * 1e18) * 8.0,
-            InformationUnit::Kibibyte => (x * 1.024e3) * 8.0,
-            InformationUnit::Mebibyte => (x * 1.048576e6) * 8.0,
-            InformationUnit::Gibibyte => (x * 1.073741824e9) * 8.0,
-            InformationUnit::Tebibyte => (x * 1.099511627776e12) * 8.0,
-            InformationUnit::Pebibyte => (x * 1.125899906842624e15) * 8.0,
-            InformationUnit::Exbibyte => (x * 1.152921504606847e18) * 8.0,
-            InformationUnit::Octet => x * 8.0,
-            InformationUnit::Kilooctet => (x * 1e3) * 8.0,
-            InformationUnit::Megaoctet => (x * 1e6) * 8.0,
-            InformationUnit::Gigaoctet => (x * 1e9) * 8.0,
-            InformationUnit::Teraoctet => (x * 1e12) * 8.0,
-            InformationUnit::Petaoctet => (x * 1e15) * 8.0,
-            InformationUnit::Exaoctet => (x * 1e18) * 8.0,
-            InformationUnit::Kibioctet => (x * 1.024e3) * 8.0,
-            InformationUnit::Mebioctet => (x * 1.048576e6) * 8.0,
-            InformationUnit::Gibioctet => (x * 1.073741824e9) * 8.0,
-            InformationUnit::Tebioctet => (x * 1.099511627776e12) * 8.0,
-            InformationUnit::Pebioctet => (x * 1.125899906842624e15) * 8.0,
-            InformationUnit::Exbioctet => (x * 1.152921504606847e18) * 8.0,
-            InformationUnit::Bit => x,
-            InformationUnit::Kilobit => (x * 1e3),
-            InformationUnit::Megabit => (x * 1e6),
-            InformationUnit::Gigabit => (x * 1e9),
-            InformationUnit::Terabit => (x * 1e12),
-            InformationUnit::Petabit => (x * 1e15),
-            InformationUnit::Exabit => (x * 1e18),
-            InformationUnit::Kibibit => (x * 1.024e3),
-            InformationUnit::Mebibit => (x * 1.048576e6),
-            InformationUnit::Gibibit => (x * 1.073741824e9),
-            InformationUnit::Tebibit => (x * 1.099511627776e12),
-            InformationUnit::Pebibit => (x * 1.125899906842624e15),
-            InformationUnit::Exbibit => (x * 1.152921504606847e18),
+            InformationUnit::Byte => value * T::from_f64(8.0),
+            InformationUnit::Kilobyte => value * T::from_f64(8000.0),
+            InformationUnit::Megabyte => value * T::from_f64(8000000.0),
+            InformationUnit::Gigabyte => value * T::from_f64(8e9),
+            InformationUnit::Terabyte => value * T::from_f64(8e12),
+            InformationUnit::Petabyte => value * T::from_f64(8e15),
+            InformationUnit::Exabyte => value * T::from_f64(8e18),
+            InformationUnit::Kibibyte => value * T::from_f64(8192.0),
+            InformationUnit::Mebibyte => value * T::from_f64(8388608.0),
+            InformationUnit::Gibibyte => value * T::from_f64(8.589934592e9),
+            InformationUnit::Tebibyte => value * T::from_f64(8.796093022208e12),
+            InformationUnit::Pebibyte => value * T::from_f64(9.007199254740992e15),
+            InformationUnit::Exbibyte => value * T::from_f64(9.223372036854776e18),
+            InformationUnit::Octet => value * T::from_f64(8.0),
+            InformationUnit::Kilooctet => value * T::from_f64(8000.0),
+            InformationUnit::Megaoctet => value * T::from_f64(8000000.0),
+            InformationUnit::Gigaoctet => value * T::from_f64(8e9),
+            InformationUnit::Teraoctet => value * T::from_f64(8e12),
+            InformationUnit::Petaoctet => value * T::from_f64(8e15),
+            InformationUnit::Exaoctet => value * T::from_f64(8e18),
+            InformationUnit::Kibioctet => value * T::from_f64(8192.0),
+            InformationUnit::Mebioctet => value * T::from_f64(8388608.0),
+            InformationUnit::Gibioctet => value * T::from_f64(8.589934592e9),
+            InformationUnit::Tebioctet => value * T::from_f64(8.796093022208e12),
+            InformationUnit::Pebioctet => value * T::from_f64(9.007199254740992e15),
+            InformationUnit::Exbioctet => value * T::from_f64(9.223372036854776e18),
+            InformationUnit::Bit => value,
+            InformationUnit::Kilobit => value * T::from_f64(1000.0),
+            InformationUnit::Megabit => value * T::from_f64(1000000.0),
+            InformationUnit::Gigabit => value * T::from_f64(1e9),
+            InformationUnit::Terabit => value * T::from_f64(1e12),
+            InformationUnit::Petabit => value * T::from_f64(1e15),
+            InformationUnit::Exabit => value * T::from_f64(1e18),
+            InformationUnit::Kibibit => value * T::from_f64(1024.0),
+            InformationUnit::Mebibit => value * T::from_f64(1048576.0),
+            InformationUnit::Gibibit => value * T::from_f64(1.073741824e9),
+            InformationUnit::Tebibit => value * T::from_f64(1.099511627776e12),
+            InformationUnit::Pebibit => value * T::from_f64(1.125899906842624e15),
+            InformationUnit::Exbibit => value * T::from_f64(1.152921504606847e18),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: InformationUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: InformationUnit) -> T {
         match unit {
-            InformationUnit::Byte => x / 8.0,
-            InformationUnit::Kilobyte => (x / 1e3) / 8.0,
-            InformationUnit::Megabyte => (x / 1e6) / 8.0,
-            InformationUnit::Gigabyte => (x / 1e9) / 8.0,
-            InformationUnit::Terabyte => (x / 1e12) / 8.0,
-            InformationUnit::Petabyte => (x / 1e15) / 8.0,
-            InformationUnit::Exabyte => (x / 1e18) / 8.0,
-            InformationUnit::Kibibyte => (x / 1.024e3) / 8.0,
-            InformationUnit::Mebibyte => (x / 1.048576e6) / 8.0,
-            InformationUnit::Gibibyte => (x / 1.073741824e9) / 8.0,
-            InformationUnit::Tebibyte => (x / 1.099511627776e12) / 8.0,
-            InformationUnit::Pebibyte => (x / 1.125899906842624e15) / 8.0,
-            InformationUnit::Exbibyte => (x / 1.152921504606847e18) / 8.0,
-            InformationUnit::Octet => x / 8.0,
-            InformationUnit::Kilooctet => (x / 1e3) / 8.0,
-            InformationUnit::Megaoctet => (x / 1e6) / 8.0,
-            InformationUnit::Gigaoctet => (x / 1e9) / 8.0,
-            InformationUnit::Teraoctet => (x / 1e12) / 8.0,
-            InformationUnit::Petaoctet => (x / 1e15) / 8.0,
-            InformationUnit::Exaoctet => (x / 1e18) / 8.0,
-            InformationUnit::Kibioctet => (x / 1.024e3) / 8.0,
-            InformationUnit::Mebioctet => (x / 1.048576e6) / 8.0,
-            InformationUnit::Gibioctet => (x / 1.073741824e9) / 8.0,
-            InformationUnit::Tebioctet => (x / 1.099511627776e12) / 8.0,
-            InformationUnit::Pebioctet => (x / 1.125899906842624e15) / 8.0,
-            InformationUnit::Exbioctet => (x / 1.152921504606847e18) / 8.0,
-            InformationUnit::Bit => x,
-            InformationUnit::Kilobit => (x / 1e3),
-            InformationUnit::Megabit => (x / 1e6),
-            InformationUnit::Gigabit => (x / 1e9),
-            InformationUnit::Terabit => (x / 1e12),
-            InformationUnit::Petabit => (x / 1e15),
-            InformationUnit::Exabit => (x / 1e18),
-            InformationUnit::Kibibit => (x / 1.024e3),
-            InformationUnit::Mebibit => (x / 1.048576e6),
-            InformationUnit::Gibibit => (x / 1.073741824e9),
-            InformationUnit::Tebibit => (x / 1.099511627776e12),
-            InformationUnit::Pebibit => (x / 1.125899906842624e15),
-            InformationUnit::Exbibit => (x / 1.152921504606847e18),
+            InformationUnit::Byte => self.0 * T::from_f64(0.125),
+            InformationUnit::Kilobyte => self.0 / T::from_f64(8000.0),
+            InformationUnit::Megabyte => self.0 / T::from_f64(8000000.0),
+            InformationUnit::Gigabyte => self.0 / T::from_f64(8e9),
+            InformationUnit::Terabyte => self.0 / T::from_f64(8e12),
+            InformationUnit::Petabyte => self.0 / T::from_f64(8e15),
+            InformationUnit::Exabyte => self.0 / T::from_f64(8e18),
+            InformationUnit::Kibibyte => self.0 * T::from_f64(0.0001220703125),
+            InformationUnit::Mebibyte => self.0 * T::from_f64(1.1920928955078125e-7),
+            InformationUnit::Gibibyte => self.0 * T::from_f64(1.1641532182693481e-10),
+            InformationUnit::Tebibyte => self.0 * T::from_f64(1.1368683772161603e-13),
+            InformationUnit::Pebibyte => self.0 * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Exbibyte => self.0 * T::from_f64(1.0842021724855044e-19),
+            InformationUnit::Octet => self.0 * T::from_f64(0.125),
+            InformationUnit::Kilooctet => self.0 / T::from_f64(8000.0),
+            InformationUnit::Megaoctet => self.0 / T::from_f64(8000000.0),
+            InformationUnit::Gigaoctet => self.0 / T::from_f64(8e9),
+            InformationUnit::Teraoctet => self.0 / T::from_f64(8e12),
+            InformationUnit::Petaoctet => self.0 / T::from_f64(8e15),
+            InformationUnit::Exaoctet => self.0 / T::from_f64(8e18),
+            InformationUnit::Kibioctet => self.0 * T::from_f64(0.0001220703125),
+            InformationUnit::Mebioctet => self.0 * T::from_f64(1.1920928955078125e-7),
+            InformationUnit::Gibioctet => self.0 * T::from_f64(1.1641532182693481e-10),
+            InformationUnit::Tebioctet => self.0 * T::from_f64(1.1368683772161603e-13),
+            InformationUnit::Pebioctet => self.0 * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Exbioctet => self.0 * T::from_f64(1.0842021724855044e-19),
+            InformationUnit::Bit => self.0,
+            InformationUnit::Kilobit => self.0 / T::from_f64(1000.0),
+            InformationUnit::Megabit => self.0 / T::from_f64(1000000.0),
+            InformationUnit::Gigabit => self.0 / T::from_f64(1e9),
+            InformationUnit::Terabit => self.0 / T::from_f64(1e12),
+            InformationUnit::Petabit => self.0 / T::from_f64(1e15),
+            InformationUnit::Exabit => self.0 / T::from_f64(1e18),
+            InformationUnit::Kibibit => self.0 * T::from_f64(0.0009765625),
+            InformationUnit::Mebibit => self.0 * T::from_f64(9.5367431640625e-7),
+            InformationUnit::Gibibit => self.0 * T::from_f64(9.313225746154785e-10),
+            InformationUnit::Tebibit => self.0 * T::from_f64(9.094947017729282e-13),
+            InformationUnit::Pebibit => self.0 * T::from_f64(8.881784197001252e-16),
+            InformationUnit::Exbibit => self.0 * T::from_f64(8.673617379884035e-19),
         }
     }
 
     /// Creates a [`Information`] from a value in Bytes (`B`).
     #[inline]
-    pub fn from_bytes(value: Num) -> Self {
-        let x = value;
-        Self(x * 8.0)
+    pub fn from_bytes(value: T) -> Self {
+        Self(value * T::from_f64(8.0))
     }
 
     /// Returns the value expressed in Bytes (`B`).
     #[inline]
-    pub fn as_bytes(self) -> Num {
-        let x = self.0;
-        x / 8.0
+    pub fn as_bytes(self) -> T {
+        self.0 * T::from_f64(0.125)
     }
 
     /// Alias for [`Self::as_bytes`].
     #[inline]
-    pub fn as_byte(self) -> Num {
+    pub fn as_byte(self) -> T {
         self.as_bytes()
     }
 
     /// Creates a [`Information`] from a value in Kilobytes (`kB`).
     #[inline]
-    pub fn from_kilobytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 8.0)
+    pub fn from_kilobytes(value: T) -> Self {
+        Self(value * T::from_f64(8000.0))
     }
 
     /// Returns the value expressed in Kilobytes (`kB`).
     #[inline]
-    pub fn as_kilobytes(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 8.0
+    pub fn as_kilobytes(self) -> T {
+        self.0 / T::from_f64(8000.0)
     }
 
     /// Alias for [`Self::as_kilobytes`].
     #[inline]
-    pub fn as_kilobyte(self) -> Num {
+    pub fn as_kilobyte(self) -> T {
         self.as_kilobytes()
     }
 
     /// Creates a [`Information`] from a value in Megabytes (`MB`).
     #[inline]
-    pub fn from_megabytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 8.0)
+    pub fn from_megabytes(value: T) -> Self {
+        Self(value * T::from_f64(8000000.0))
     }
 
     /// Returns the value expressed in Megabytes (`MB`).
     #[inline]
-    pub fn as_megabytes(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 8.0
+    pub fn as_megabytes(self) -> T {
+        self.0 / T::from_f64(8000000.0)
     }
 
     /// Alias for [`Self::as_megabytes`].
     #[inline]
-    pub fn as_megabyte(self) -> Num {
+    pub fn as_megabyte(self) -> T {
         self.as_megabytes()
     }
 
     /// Creates a [`Information`] from a value in Gigabytes (`GB`).
     #[inline]
-    pub fn from_gigabytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 8.0)
+    pub fn from_gigabytes(value: T) -> Self {
+        Self(value * T::from_f64(8e9))
     }
 
     /// Returns the value expressed in Gigabytes (`GB`).
     #[inline]
-    pub fn as_gigabytes(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 8.0
+    pub fn as_gigabytes(self) -> T {
+        self.0 / T::from_f64(8e9)
     }
 
     /// Alias for [`Self::as_gigabytes`].
     #[inline]
-    pub fn as_gigabyte(self) -> Num {
+    pub fn as_gigabyte(self) -> T {
         self.as_gigabytes()
     }
 
     /// Creates a [`Information`] from a value in Terabytes (`TB`).
     #[inline]
-    pub fn from_terabytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 8.0)
+    pub fn from_terabytes(value: T) -> Self {
+        Self(value * T::from_f64(8e12))
     }
 
     /// Returns the value expressed in Terabytes (`TB`).
     #[inline]
-    pub fn as_terabytes(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 8.0
+    pub fn as_terabytes(self) -> T {
+        self.0 / T::from_f64(8e12)
     }
 
     /// Alias for [`Self::as_terabytes`].
     #[inline]
-    pub fn as_terabyte(self) -> Num {
+    pub fn as_terabyte(self) -> T {
         self.as_terabytes()
     }
 
     /// Creates a [`Information`] from a value in Petabytes (`PB`).
     #[inline]
-    pub fn from_petabytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15) * 8.0)
+    pub fn from_petabytes(value: T) -> Self {
+        Self(value * T::from_f64(8e15))
     }
 
     /// Returns the value expressed in Petabytes (`PB`).
     #[inline]
-    pub fn as_petabytes(self) -> Num {
-        let x = self.0;
-        (x / 1e15) / 8.0
+    pub fn as_petabytes(self) -> T {
+        self.0 / T::from_f64(8e15)
     }
 
     /// Alias for [`Self::as_petabytes`].
     #[inline]
-    pub fn as_petabyte(self) -> Num {
+    pub fn as_petabyte(self) -> T {
         self.as_petabytes()
     }
 
     /// Creates a [`Information`] from a value in Exabytes (`EB`).
     #[inline]
-    pub fn from_exabytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e18) * 8.0)
+    pub fn from_exabytes(value: T) -> Self {
+        Self(value * T::from_f64(8e18))
     }
 
     /// Returns the value expressed in Exabytes (`EB`).
     #[inline]
-    pub fn as_exabytes(self) -> Num {
-        let x = self.0;
-        (x / 1e18) / 8.0
+    pub fn as_exabytes(self) -> T {
+        self.0 / T::from_f64(8e18)
     }
 
     /// Alias for [`Self::as_exabytes`].
     #[inline]
-    pub fn as_exabyte(self) -> Num {
+    pub fn as_exabyte(self) -> T {
         self.as_exabytes()
     }
 
     /// Creates a [`Information`] from a value in Kibibytes (`KiB`).
     #[inline]
-    pub fn from_kibibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.024e3) * 8.0)
+    pub fn from_kibibytes(value: T) -> Self {
+        Self(value * T::from_f64(8192.0))
     }
 
     /// Returns the value expressed in Kibibytes (`KiB`).
     #[inline]
-    pub fn as_kibibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.024e3) / 8.0
+    pub fn as_kibibytes(self) -> T {
+        self.0 * T::from_f64(0.0001220703125)
     }
 
     /// Alias for [`Self::as_kibibytes`].
     #[inline]
-    pub fn as_kibibyte(self) -> Num {
+    pub fn as_kibibyte(self) -> T {
         self.as_kibibytes()
     }
 
     /// Creates a [`Information`] from a value in Mebibytes (`MiB`).
     #[inline]
-    pub fn from_mebibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.048576e6) * 8.0)
+    pub fn from_mebibytes(value: T) -> Self {
+        Self(value * T::from_f64(8388608.0))
     }
 
     /// Returns the value expressed in Mebibytes (`MiB`).
     #[inline]
-    pub fn as_mebibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.048576e6) / 8.0
+    pub fn as_mebibytes(self) -> T {
+        self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
     /// Alias for [`Self::as_mebibytes`].
     #[inline]
-    pub fn as_mebibyte(self) -> Num {
+    pub fn as_mebibyte(self) -> T {
         self.as_mebibytes()
     }
 
     /// Creates a [`Information`] from a value in Gibibytes (`GiB`).
     #[inline]
-    pub fn from_gibibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.073741824e9) * 8.0)
+    pub fn from_gibibytes(value: T) -> Self {
+        Self(value * T::from_f64(8.589934592e9))
     }
 
     /// Returns the value expressed in Gibibytes (`GiB`).
     #[inline]
-    pub fn as_gibibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.073741824e9) / 8.0
+    pub fn as_gibibytes(self) -> T {
+        self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
     /// Alias for [`Self::as_gibibytes`].
     #[inline]
-    pub fn as_gibibyte(self) -> Num {
+    pub fn as_gibibyte(self) -> T {
         self.as_gibibytes()
     }
 
     /// Creates a [`Information`] from a value in Tebibytes (`TiB`).
     #[inline]
-    pub fn from_tebibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.099511627776e12) * 8.0)
+    pub fn from_tebibytes(value: T) -> Self {
+        Self(value * T::from_f64(8.796093022208e12))
     }
 
     /// Returns the value expressed in Tebibytes (`TiB`).
     #[inline]
-    pub fn as_tebibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.099511627776e12) / 8.0
+    pub fn as_tebibytes(self) -> T {
+        self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
     /// Alias for [`Self::as_tebibytes`].
     #[inline]
-    pub fn as_tebibyte(self) -> Num {
+    pub fn as_tebibyte(self) -> T {
         self.as_tebibytes()
     }
 
     /// Creates a [`Information`] from a value in Pebibytes (`PiB`).
     #[inline]
-    pub fn from_pebibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.125899906842624e15) * 8.0)
+    pub fn from_pebibytes(value: T) -> Self {
+        Self(value * T::from_f64(9.007199254740992e15))
     }
 
     /// Returns the value expressed in Pebibytes (`PiB`).
     #[inline]
-    pub fn as_pebibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.125899906842624e15) / 8.0
+    pub fn as_pebibytes(self) -> T {
+        self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
     /// Alias for [`Self::as_pebibytes`].
     #[inline]
-    pub fn as_pebibyte(self) -> Num {
+    pub fn as_pebibyte(self) -> T {
         self.as_pebibytes()
     }
 
     /// Creates a [`Information`] from a value in Exbibytes (`EiB`).
     #[inline]
-    pub fn from_exbibytes(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.152921504606847e18) * 8.0)
+    pub fn from_exbibytes(value: T) -> Self {
+        Self(value * T::from_f64(9.223372036854776e18))
     }
 
     /// Returns the value expressed in Exbibytes (`EiB`).
     #[inline]
-    pub fn as_exbibytes(self) -> Num {
-        let x = self.0;
-        (x / 1.152921504606847e18) / 8.0
+    pub fn as_exbibytes(self) -> T {
+        self.0 * T::from_f64(1.0842021724855044e-19)
     }
 
     /// Alias for [`Self::as_exbibytes`].
     #[inline]
-    pub fn as_exbibyte(self) -> Num {
+    pub fn as_exbibyte(self) -> T {
         self.as_exbibytes()
     }
 
     /// Creates a [`Information`] from a value in Octets (`o`).
     #[inline]
-    pub fn from_octets(value: Num) -> Self {
-        let x = value;
-        Self(x * 8.0)
+    pub fn from_octets(value: T) -> Self {
+        Self(value * T::from_f64(8.0))
     }
 
     /// Returns the value expressed in Octets (`o`).
     #[inline]
-    pub fn as_octets(self) -> Num {
-        let x = self.0;
-        x / 8.0
+    pub fn as_octets(self) -> T {
+        self.0 * T::from_f64(0.125)
     }
 
     /// Alias for [`Self::as_octets`].
     #[inline]
-    pub fn as_octet(self) -> Num {
+    pub fn as_octet(self) -> T {
         self.as_octets()
     }
 
     /// Creates a [`Information`] from a value in Kilooctets (`ko`).
     #[inline]
-    pub fn from_kilooctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 8.0)
+    pub fn from_kilooctets(value: T) -> Self {
+        Self(value * T::from_f64(8000.0))
     }
 
     /// Returns the value expressed in Kilooctets (`ko`).
     #[inline]
-    pub fn as_kilooctets(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 8.0
+    pub fn as_kilooctets(self) -> T {
+        self.0 / T::from_f64(8000.0)
     }
 
     /// Alias for [`Self::as_kilooctets`].
     #[inline]
-    pub fn as_kilooctet(self) -> Num {
+    pub fn as_kilooctet(self) -> T {
         self.as_kilooctets()
     }
 
     /// Creates a [`Information`] from a value in Megaoctets (`Mo`).
     #[inline]
-    pub fn from_megaoctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 8.0)
+    pub fn from_megaoctets(value: T) -> Self {
+        Self(value * T::from_f64(8000000.0))
     }
 
     /// Returns the value expressed in Megaoctets (`Mo`).
     #[inline]
-    pub fn as_megaoctets(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 8.0
+    pub fn as_megaoctets(self) -> T {
+        self.0 / T::from_f64(8000000.0)
     }
 
     /// Alias for [`Self::as_megaoctets`].
     #[inline]
-    pub fn as_megaoctet(self) -> Num {
+    pub fn as_megaoctet(self) -> T {
         self.as_megaoctets()
     }
 
     /// Creates a [`Information`] from a value in Gigaoctets (`Go`).
     #[inline]
-    pub fn from_gigaoctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 8.0)
+    pub fn from_gigaoctets(value: T) -> Self {
+        Self(value * T::from_f64(8e9))
     }
 
     /// Returns the value expressed in Gigaoctets (`Go`).
     #[inline]
-    pub fn as_gigaoctets(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 8.0
+    pub fn as_gigaoctets(self) -> T {
+        self.0 / T::from_f64(8e9)
     }
 
     /// Alias for [`Self::as_gigaoctets`].
     #[inline]
-    pub fn as_gigaoctet(self) -> Num {
+    pub fn as_gigaoctet(self) -> T {
         self.as_gigaoctets()
     }
 
     /// Creates a [`Information`] from a value in Teraoctets (`To`).
     #[inline]
-    pub fn from_teraoctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 8.0)
+    pub fn from_teraoctets(value: T) -> Self {
+        Self(value * T::from_f64(8e12))
     }
 
     /// Returns the value expressed in Teraoctets (`To`).
     #[inline]
-    pub fn as_teraoctets(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 8.0
+    pub fn as_teraoctets(self) -> T {
+        self.0 / T::from_f64(8e12)
     }
 
     /// Alias for [`Self::as_teraoctets`].
     #[inline]
-    pub fn as_teraoctet(self) -> Num {
+    pub fn as_teraoctet(self) -> T {
         self.as_teraoctets()
     }
 
     /// Creates a [`Information`] from a value in Petaoctets (`Po`).
     #[inline]
-    pub fn from_petaoctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15) * 8.0)
+    pub fn from_petaoctets(value: T) -> Self {
+        Self(value * T::from_f64(8e15))
     }
 
     /// Returns the value expressed in Petaoctets (`Po`).
     #[inline]
-    pub fn as_petaoctets(self) -> Num {
-        let x = self.0;
-        (x / 1e15) / 8.0
+    pub fn as_petaoctets(self) -> T {
+        self.0 / T::from_f64(8e15)
     }
 
     /// Alias for [`Self::as_petaoctets`].
     #[inline]
-    pub fn as_petaoctet(self) -> Num {
+    pub fn as_petaoctet(self) -> T {
         self.as_petaoctets()
     }
 
     /// Creates a [`Information`] from a value in Exaoctets (`Eo`).
     #[inline]
-    pub fn from_exaoctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e18) * 8.0)
+    pub fn from_exaoctets(value: T) -> Self {
+        Self(value * T::from_f64(8e18))
     }
 
     /// Returns the value expressed in Exaoctets (`Eo`).
     #[inline]
-    pub fn as_exaoctets(self) -> Num {
-        let x = self.0;
-        (x / 1e18) / 8.0
+    pub fn as_exaoctets(self) -> T {
+        self.0 / T::from_f64(8e18)
     }
 
     /// Alias for [`Self::as_exaoctets`].
     #[inline]
-    pub fn as_exaoctet(self) -> Num {
+    pub fn as_exaoctet(self) -> T {
         self.as_exaoctets()
     }
 
     /// Creates a [`Information`] from a value in Kibioctets (`Kio`).
     #[inline]
-    pub fn from_kibioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.024e3) * 8.0)
+    pub fn from_kibioctets(value: T) -> Self {
+        Self(value * T::from_f64(8192.0))
     }
 
     /// Returns the value expressed in Kibioctets (`Kio`).
     #[inline]
-    pub fn as_kibioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.024e3) / 8.0
+    pub fn as_kibioctets(self) -> T {
+        self.0 * T::from_f64(0.0001220703125)
     }
 
     /// Alias for [`Self::as_kibioctets`].
     #[inline]
-    pub fn as_kibioctet(self) -> Num {
+    pub fn as_kibioctet(self) -> T {
         self.as_kibioctets()
     }
 
     /// Creates a [`Information`] from a value in Mebioctets (`Mio`).
     #[inline]
-    pub fn from_mebioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.048576e6) * 8.0)
+    pub fn from_mebioctets(value: T) -> Self {
+        Self(value * T::from_f64(8388608.0))
     }
 
     /// Returns the value expressed in Mebioctets (`Mio`).
     #[inline]
-    pub fn as_mebioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.048576e6) / 8.0
+    pub fn as_mebioctets(self) -> T {
+        self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
     /// Alias for [`Self::as_mebioctets`].
     #[inline]
-    pub fn as_mebioctet(self) -> Num {
+    pub fn as_mebioctet(self) -> T {
         self.as_mebioctets()
     }
 
     /// Creates a [`Information`] from a value in Gibioctets (`Gio`).
     #[inline]
-    pub fn from_gibioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.073741824e9) * 8.0)
+    pub fn from_gibioctets(value: T) -> Self {
+        Self(value * T::from_f64(8.589934592e9))
     }
 
     /// Returns the value expressed in Gibioctets (`Gio`).
     #[inline]
-    pub fn as_gibioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.073741824e9) / 8.0
+    pub fn as_gibioctets(self) -> T {
+        self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
     /// Alias for [`Self::as_gibioctets`].
     #[inline]
-    pub fn as_gibioctet(self) -> Num {
+    pub fn as_gibioctet(self) -> T {
         self.as_gibioctets()
     }
 
     /// Creates a [`Information`] from a value in Tebioctets (`Tio`).
     #[inline]
-    pub fn from_tebioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.099511627776e12) * 8.0)
+    pub fn from_tebioctets(value: T) -> Self {
+        Self(value * T::from_f64(8.796093022208e12))
     }
 
     /// Returns the value expressed in Tebioctets (`Tio`).
     #[inline]
-    pub fn as_tebioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.099511627776e12) / 8.0
+    pub fn as_tebioctets(self) -> T {
+        self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
     /// Alias for [`Self::as_tebioctets`].
     #[inline]
-    pub fn as_tebioctet(self) -> Num {
+    pub fn as_tebioctet(self) -> T {
         self.as_tebioctets()
     }
 
     /// Creates a [`Information`] from a value in Pebioctets (`Pio`).
     #[inline]
-    pub fn from_pebioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.125899906842624e15) * 8.0)
+    pub fn from_pebioctets(value: T) -> Self {
+        Self(value * T::from_f64(9.007199254740992e15))
     }
 
     /// Returns the value expressed in Pebioctets (`Pio`).
     #[inline]
-    pub fn as_pebioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.125899906842624e15) / 8.0
+    pub fn as_pebioctets(self) -> T {
+        self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
     /// Alias for [`Self::as_pebioctets`].
     #[inline]
-    pub fn as_pebioctet(self) -> Num {
+    pub fn as_pebioctet(self) -> T {
         self.as_pebioctets()
     }
 
     /// Creates a [`Information`] from a value in Exbioctets (`Eio`).
     #[inline]
-    pub fn from_exbioctets(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.152921504606847e18) * 8.0)
+    pub fn from_exbioctets(value: T) -> Self {
+        Self(value * T::from_f64(9.223372036854776e18))
     }
 
     /// Returns the value expressed in Exbioctets (`Eio`).
     #[inline]
-    pub fn as_exbioctets(self) -> Num {
-        let x = self.0;
-        (x / 1.152921504606847e18) / 8.0
+    pub fn as_exbioctets(self) -> T {
+        self.0 * T::from_f64(1.0842021724855044e-19)
     }
 
     /// Alias for [`Self::as_exbioctets`].
     #[inline]
-    pub fn as_exbioctet(self) -> Num {
+    pub fn as_exbioctet(self) -> T {
         self.as_exbioctets()
     }
 
     /// Creates a [`Information`] from a value in Bits (`b`).
     #[inline]
-    pub fn from_bits(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_bits(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Bits (`b`).
     #[inline]
-    pub fn as_bits(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_bits(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_bits`].
     #[inline]
-    pub fn as_bit(self) -> Num {
+    pub fn as_bit(self) -> T {
         self.as_bits()
     }
 
     /// Creates a [`Information`] from a value in Kilobits (`kb`).
     #[inline]
-    pub fn from_kilobits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilobits(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilobits (`kb`).
     #[inline]
-    pub fn as_kilobits(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilobits(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilobits`].
     #[inline]
-    pub fn as_kilobit(self) -> Num {
+    pub fn as_kilobit(self) -> T {
         self.as_kilobits()
     }
 
     /// Creates a [`Information`] from a value in Megabits (`Mb`).
     #[inline]
-    pub fn from_megabits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megabits(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megabits (`Mb`).
     #[inline]
-    pub fn as_megabits(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megabits(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megabits`].
     #[inline]
-    pub fn as_megabit(self) -> Num {
+    pub fn as_megabit(self) -> T {
         self.as_megabits()
     }
 
     /// Creates a [`Information`] from a value in Gigabits (`Gb`).
     #[inline]
-    pub fn from_gigabits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigabits(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigabits (`Gb`).
     #[inline]
-    pub fn as_gigabits(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigabits(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigabits`].
     #[inline]
-    pub fn as_gigabit(self) -> Num {
+    pub fn as_gigabit(self) -> T {
         self.as_gigabits()
     }
 
     /// Creates a [`Information`] from a value in Terabits (`Tb`).
     #[inline]
-    pub fn from_terabits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terabits(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Terabits (`Tb`).
     #[inline]
-    pub fn as_terabits(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terabits(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_terabits`].
     #[inline]
-    pub fn as_terabit(self) -> Num {
+    pub fn as_terabit(self) -> T {
         self.as_terabits()
     }
 
     /// Creates a [`Information`] from a value in Petabits (`Pb`).
     #[inline]
-    pub fn from_petabits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15))
+    pub fn from_petabits(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Petabits (`Pb`).
     #[inline]
-    pub fn as_petabits(self) -> Num {
-        let x = self.0;
-        (x / 1e15)
+    pub fn as_petabits(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_petabits`].
     #[inline]
-    pub fn as_petabit(self) -> Num {
+    pub fn as_petabit(self) -> T {
         self.as_petabits()
     }
 
     /// Creates a [`Information`] from a value in Exabits (`Eb`).
     #[inline]
-    pub fn from_exabits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e18))
+    pub fn from_exabits(value: T) -> Self {
+        Self(value * T::from_f64(1e18))
     }
 
     /// Returns the value expressed in Exabits (`Eb`).
     #[inline]
-    pub fn as_exabits(self) -> Num {
-        let x = self.0;
-        (x / 1e18)
+    pub fn as_exabits(self) -> T {
+        self.0 / T::from_f64(1e18)
     }
 
     /// Alias for [`Self::as_exabits`].
     #[inline]
-    pub fn as_exabit(self) -> Num {
+    pub fn as_exabit(self) -> T {
         self.as_exabits()
     }
 
     /// Creates a [`Information`] from a value in Kibibits (`Kib`).
     #[inline]
-    pub fn from_kibibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.024e3))
+    pub fn from_kibibits(value: T) -> Self {
+        Self(value * T::from_f64(1024.0))
     }
 
     /// Returns the value expressed in Kibibits (`Kib`).
     #[inline]
-    pub fn as_kibibits(self) -> Num {
-        let x = self.0;
-        (x / 1.024e3)
+    pub fn as_kibibits(self) -> T {
+        self.0 * T::from_f64(0.0009765625)
     }
 
     /// Alias for [`Self::as_kibibits`].
     #[inline]
-    pub fn as_kibibit(self) -> Num {
+    pub fn as_kibibit(self) -> T {
         self.as_kibibits()
     }
 
     /// Creates a [`Information`] from a value in Mebibits (`Mib`).
     #[inline]
-    pub fn from_mebibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.048576e6))
+    pub fn from_mebibits(value: T) -> Self {
+        Self(value * T::from_f64(1048576.0))
     }
 
     /// Returns the value expressed in Mebibits (`Mib`).
     #[inline]
-    pub fn as_mebibits(self) -> Num {
-        let x = self.0;
-        (x / 1.048576e6)
+    pub fn as_mebibits(self) -> T {
+        self.0 * T::from_f64(9.5367431640625e-7)
     }
 
     /// Alias for [`Self::as_mebibits`].
     #[inline]
-    pub fn as_mebibit(self) -> Num {
+    pub fn as_mebibit(self) -> T {
         self.as_mebibits()
     }
 
     /// Creates a [`Information`] from a value in Gibibits (`Gib`).
     #[inline]
-    pub fn from_gibibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.073741824e9))
+    pub fn from_gibibits(value: T) -> Self {
+        Self(value * T::from_f64(1.073741824e9))
     }
 
     /// Returns the value expressed in Gibibits (`Gib`).
     #[inline]
-    pub fn as_gibibits(self) -> Num {
-        let x = self.0;
-        (x / 1.073741824e9)
+    pub fn as_gibibits(self) -> T {
+        self.0 * T::from_f64(9.313225746154785e-10)
     }
 
     /// Alias for [`Self::as_gibibits`].
     #[inline]
-    pub fn as_gibibit(self) -> Num {
+    pub fn as_gibibit(self) -> T {
         self.as_gibibits()
     }
 
     /// Creates a [`Information`] from a value in Tebibits (`Tib`).
     #[inline]
-    pub fn from_tebibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.099511627776e12))
+    pub fn from_tebibits(value: T) -> Self {
+        Self(value * T::from_f64(1.099511627776e12))
     }
 
     /// Returns the value expressed in Tebibits (`Tib`).
     #[inline]
-    pub fn as_tebibits(self) -> Num {
-        let x = self.0;
-        (x / 1.099511627776e12)
+    pub fn as_tebibits(self) -> T {
+        self.0 * T::from_f64(9.094947017729282e-13)
     }
 
     /// Alias for [`Self::as_tebibits`].
     #[inline]
-    pub fn as_tebibit(self) -> Num {
+    pub fn as_tebibit(self) -> T {
         self.as_tebibits()
     }
 
     /// Creates a [`Information`] from a value in Pebibits (`Pib`).
     #[inline]
-    pub fn from_pebibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.125899906842624e15))
+    pub fn from_pebibits(value: T) -> Self {
+        Self(value * T::from_f64(1.125899906842624e15))
     }
 
     /// Returns the value expressed in Pebibits (`Pib`).
     #[inline]
-    pub fn as_pebibits(self) -> Num {
-        let x = self.0;
-        (x / 1.125899906842624e15)
+    pub fn as_pebibits(self) -> T {
+        self.0 * T::from_f64(8.881784197001252e-16)
     }
 
     /// Alias for [`Self::as_pebibits`].
     #[inline]
-    pub fn as_pebibit(self) -> Num {
+    pub fn as_pebibit(self) -> T {
         self.as_pebibits()
     }
 
     /// Creates a [`Information`] from a value in Exbibits (`Eib`).
     #[inline]
-    pub fn from_exbibits(value: Num) -> Self {
-        let x = value;
-        Self((x * 1.152921504606847e18))
+    pub fn from_exbibits(value: T) -> Self {
+        Self(value * T::from_f64(1.152921504606847e18))
     }
 
     /// Returns the value expressed in Exbibits (`Eib`).
     #[inline]
-    pub fn as_exbibits(self) -> Num {
-        let x = self.0;
-        (x / 1.152921504606847e18)
+    pub fn as_exbibits(self) -> T {
+        self.0 * T::from_f64(8.673617379884035e-19)
     }
 
     /// Alias for [`Self::as_exbibits`].
     #[inline]
-    pub fn as_exbibit(self) -> Num {
+    pub fn as_exbibit(self) -> T {
         self.as_exbibits()
     }
-}
-
-impl crate::Quantity for Information {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Information {
-    type Output = Information;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Information {
-    type Output = Information;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Information {
-    type Output = Information;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Information {
-    type Output = Information;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Information> for Num {
-    type Output = Information;
-    #[inline]
-    fn mul(self, rhs: Information) -> Information {
-        Information(self * rhs.0)
-    }
-}
-impl Div<Num> for Information {
-    type Output = Information;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Information {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Information {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, InformationUnit::Bit.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Information`].
-#[derive(Debug)]
-pub struct ParseInformationError(String);
-
-impl fmt::Display for ParseInformationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Information", self.0)
-    }
-}
-
-impl std::error::Error for ParseInformationError {}
-
-impl FromStr for Information {
-    type Err = ParseInformationError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseInformationError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, InformationUnit)] = &[
-            ("EiB", InformationUnit::Exbibyte),
-            ("Eib", InformationUnit::Exbibit),
-            ("Eio", InformationUnit::Exbioctet),
-            ("GiB", InformationUnit::Gibibyte),
-            ("Gib", InformationUnit::Gibibit),
-            ("Gio", InformationUnit::Gibioctet),
-            ("KiB", InformationUnit::Kibibyte),
-            ("Kib", InformationUnit::Kibibit),
-            ("Kio", InformationUnit::Kibioctet),
-            ("MiB", InformationUnit::Mebibyte),
-            ("Mib", InformationUnit::Mebibit),
-            ("Mio", InformationUnit::Mebioctet),
-            ("PiB", InformationUnit::Pebibyte),
-            ("Pib", InformationUnit::Pebibit),
-            ("Pio", InformationUnit::Pebioctet),
-            ("TiB", InformationUnit::Tebibyte),
-            ("Tib", InformationUnit::Tebibit),
-            ("Tio", InformationUnit::Tebioctet),
-            ("EB", InformationUnit::Exabyte),
-            ("Eb", InformationUnit::Exabit),
-            ("Eo", InformationUnit::Exaoctet),
-            ("GB", InformationUnit::Gigabyte),
-            ("Gb", InformationUnit::Gigabit),
-            ("Go", InformationUnit::Gigaoctet),
-            ("MB", InformationUnit::Megabyte),
-            ("Mb", InformationUnit::Megabit),
-            ("Mo", InformationUnit::Megaoctet),
-            ("PB", InformationUnit::Petabyte),
-            ("Pb", InformationUnit::Petabit),
-            ("Po", InformationUnit::Petaoctet),
-            ("TB", InformationUnit::Terabyte),
-            ("Tb", InformationUnit::Terabit),
-            ("To", InformationUnit::Teraoctet),
-            ("kB", InformationUnit::Kilobyte),
-            ("kb", InformationUnit::Kilobit),
-            ("ko", InformationUnit::Kilooctet),
-            ("B", InformationUnit::Byte),
-            ("b", InformationUnit::Bit),
-            ("o", InformationUnit::Octet),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseInformationError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

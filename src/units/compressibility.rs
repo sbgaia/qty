@@ -2,27 +2,33 @@
 // Source: data/quantities/Compressibility.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-///
-///
-/// The internal value is stored in `InversePascal` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Compressibility(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`CompressibilityUnit::InversePascal`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Compressibility<T = f64>(T);
+
+quantity!(Compressibility, CompressibilityUnit, InversePascal);
 
 /// Unit variants for [`Compressibility`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum CompressibilityUnit {
     InversePascal,
     InverseKilopascal,
@@ -47,7 +53,7 @@ impl CompressibilityUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::InversePascal => "Pa⁻¹",
             Self::InverseKilopascal => "kPa⁻¹",
@@ -59,9 +65,9 @@ impl CompressibilityUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::InversePascal => &["Pa⁻¹", "1/Pa"],
             Self::InverseKilopascal => &["kPa⁻¹", "1/kPa"],
@@ -74,324 +80,191 @@ impl CompressibilityUnit {
     }
 }
 
-impl Compressibility {
+impl core::str::FromStr for CompressibilityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Pa⁻¹" => Ok(Self::InversePascal),
+            "1/Pa" => Ok(Self::InversePascal),
+            "kPa⁻¹" => Ok(Self::InverseKilopascal),
+            "1/kPa" => Ok(Self::InverseKilopascal),
+            "MPa⁻¹" => Ok(Self::InverseMegapascal),
+            "1/MPa" => Ok(Self::InverseMegapascal),
+            "atm⁻¹" => Ok(Self::InverseAtmosphere),
+            "1/atm" => Ok(Self::InverseAtmosphere),
+            "mbar⁻¹" => Ok(Self::InverseMillibar),
+            "1/mbar" => Ok(Self::InverseMillibar),
+            "bar⁻¹" => Ok(Self::InverseBar),
+            "1/bar" => Ok(Self::InverseBar),
+            "psi⁻¹" => Ok(Self::InversePoundForcePerSquareInch),
+            "1/psi" => Ok(Self::InversePoundForcePerSquareInch),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Compressibility<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: CompressibilityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: CompressibilityUnit) -> Self {
         Self(match unit {
-            CompressibilityUnit::InversePascal => x,
-            CompressibilityUnit::InverseKilopascal => x * 1e3,
-            CompressibilityUnit::InverseMegapascal => x * 1e6,
-            CompressibilityUnit::InverseAtmosphere => x * 101325.0,
-            CompressibilityUnit::InverseMillibar => x * 100.0,
-            CompressibilityUnit::InverseBar => x * 1e5,
-            CompressibilityUnit::InversePoundForcePerSquareInch => x * 6.894757293168361e3,
+            CompressibilityUnit::InversePascal => value,
+            CompressibilityUnit::InverseKilopascal => value / T::from_f64(1000.0),
+            CompressibilityUnit::InverseMegapascal => value / T::from_f64(1000000.0),
+            CompressibilityUnit::InverseAtmosphere => value / T::from_f64(101325.0),
+            CompressibilityUnit::InverseMillibar => value / T::from_f64(100.0),
+            CompressibilityUnit::InverseBar => value / T::from_f64(100000.0),
+            CompressibilityUnit::InversePoundForcePerSquareInch => {
+                value * T::from_f64(0.0001450377377302092)
+            }
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: CompressibilityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: CompressibilityUnit) -> T {
         match unit {
-            CompressibilityUnit::InversePascal => x,
-            CompressibilityUnit::InverseKilopascal => x / 1e3,
-            CompressibilityUnit::InverseMegapascal => x / 1e6,
-            CompressibilityUnit::InverseAtmosphere => x / 101325.0,
-            CompressibilityUnit::InverseMillibar => x / 100.0,
-            CompressibilityUnit::InverseBar => x / 1e5,
-            CompressibilityUnit::InversePoundForcePerSquareInch => x / 6.894757293168361e3,
+            CompressibilityUnit::InversePascal => self.0,
+            CompressibilityUnit::InverseKilopascal => self.0 * T::from_f64(1000.0),
+            CompressibilityUnit::InverseMegapascal => self.0 * T::from_f64(1000000.0),
+            CompressibilityUnit::InverseAtmosphere => self.0 * T::from_f64(101325.0),
+            CompressibilityUnit::InverseMillibar => self.0 * T::from_f64(100.0),
+            CompressibilityUnit::InverseBar => self.0 * T::from_f64(100000.0),
+            CompressibilityUnit::InversePoundForcePerSquareInch => {
+                self.0 / T::from_f64(0.0001450377377302092)
+            }
         }
     }
 
     /// Creates a [`Compressibility`] from a value in InversePascals (`Pa⁻¹`).
     #[inline]
-    pub fn from_inverse_pascals(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_inverse_pascals(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in InversePascals (`Pa⁻¹`).
     #[inline]
-    pub fn as_inverse_pascals(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_inverse_pascals(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_inverse_pascals`].
     #[inline]
-    pub fn as_inverse_pascal(self) -> Num {
+    pub fn as_inverse_pascal(self) -> T {
         self.as_inverse_pascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseKilopascals (`kPa⁻¹`).
     #[inline]
-    pub fn from_inverse_kilopascals(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e3)
+    pub fn from_inverse_kilopascals(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in InverseKilopascals (`kPa⁻¹`).
     #[inline]
-    pub fn as_inverse_kilopascals(self) -> Num {
-        let x = self.0;
-        x / 1e3
+    pub fn as_inverse_kilopascals(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_inverse_kilopascals`].
     #[inline]
-    pub fn as_inverse_kilopascal(self) -> Num {
+    pub fn as_inverse_kilopascal(self) -> T {
         self.as_inverse_kilopascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMegapascals (`MPa⁻¹`).
     #[inline]
-    pub fn from_inverse_megapascals(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e6)
+    pub fn from_inverse_megapascals(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in InverseMegapascals (`MPa⁻¹`).
     #[inline]
-    pub fn as_inverse_megapascals(self) -> Num {
-        let x = self.0;
-        x / 1e6
+    pub fn as_inverse_megapascals(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_inverse_megapascals`].
     #[inline]
-    pub fn as_inverse_megapascal(self) -> Num {
+    pub fn as_inverse_megapascal(self) -> T {
         self.as_inverse_megapascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseAtmospheres (`atm⁻¹`).
     #[inline]
-    pub fn from_inverse_atmospheres(value: Num) -> Self {
-        let x = value;
-        Self(x * 101325.0)
+    pub fn from_inverse_atmospheres(value: T) -> Self {
+        Self(value / T::from_f64(101325.0))
     }
 
     /// Returns the value expressed in InverseAtmospheres (`atm⁻¹`).
     #[inline]
-    pub fn as_inverse_atmospheres(self) -> Num {
-        let x = self.0;
-        x / 101325.0
+    pub fn as_inverse_atmospheres(self) -> T {
+        self.0 * T::from_f64(101325.0)
     }
 
     /// Alias for [`Self::as_inverse_atmospheres`].
     #[inline]
-    pub fn as_inverse_atmosphere(self) -> Num {
+    pub fn as_inverse_atmosphere(self) -> T {
         self.as_inverse_atmospheres()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMillibars (`mbar⁻¹`).
     #[inline]
-    pub fn from_inverse_millibars(value: Num) -> Self {
-        let x = value;
-        Self(x * 100.0)
+    pub fn from_inverse_millibars(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in InverseMillibars (`mbar⁻¹`).
     #[inline]
-    pub fn as_inverse_millibars(self) -> Num {
-        let x = self.0;
-        x / 100.0
+    pub fn as_inverse_millibars(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_inverse_millibars`].
     #[inline]
-    pub fn as_inverse_millibar(self) -> Num {
+    pub fn as_inverse_millibar(self) -> T {
         self.as_inverse_millibars()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseBars (`bar⁻¹`).
     #[inline]
-    pub fn from_inverse_bars(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e5)
+    pub fn from_inverse_bars(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in InverseBars (`bar⁻¹`).
     #[inline]
-    pub fn as_inverse_bars(self) -> Num {
-        let x = self.0;
-        x / 1e5
+    pub fn as_inverse_bars(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_inverse_bars`].
     #[inline]
-    pub fn as_inverse_bar(self) -> Num {
+    pub fn as_inverse_bar(self) -> T {
         self.as_inverse_bars()
     }
 
     /// Creates a [`Compressibility`] from a value in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
-    pub fn from_inverse_pounds_force_per_square_inch(value: Num) -> Self {
-        let x = value;
-        Self(x * 6.894757293168361e3)
+    pub fn from_inverse_pounds_force_per_square_inch(value: T) -> Self {
+        Self(value * T::from_f64(0.0001450377377302092))
     }
 
     /// Returns the value expressed in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
-    pub fn as_inverse_pounds_force_per_square_inch(self) -> Num {
-        let x = self.0;
-        x / 6.894757293168361e3
+    pub fn as_inverse_pounds_force_per_square_inch(self) -> T {
+        self.0 / T::from_f64(0.0001450377377302092)
     }
 
     /// Alias for [`Self::as_inverse_pounds_force_per_square_inch`].
     #[inline]
-    pub fn as_inverse_pound_force_per_square_inch(self) -> Num {
+    pub fn as_inverse_pound_force_per_square_inch(self) -> T {
         self.as_inverse_pounds_force_per_square_inch()
     }
-}
-
-impl crate::Quantity for Compressibility {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Compressibility {
-    type Output = Compressibility;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Compressibility {
-    type Output = Compressibility;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Compressibility {
-    type Output = Compressibility;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Compressibility {
-    type Output = Compressibility;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Compressibility> for Num {
-    type Output = Compressibility;
-    #[inline]
-    fn mul(self, rhs: Compressibility) -> Compressibility {
-        Compressibility(self * rhs.0)
-    }
-}
-impl Div<Num> for Compressibility {
-    type Output = Compressibility;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Compressibility {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Compressibility {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            CompressibilityUnit::InversePascal.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Compressibility`].
-#[derive(Debug)]
-pub struct ParseCompressibilityError(String);
-
-impl fmt::Display for ParseCompressibilityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Compressibility", self.0)
-    }
-}
-
-impl std::error::Error for ParseCompressibilityError {}
-
-impl FromStr for Compressibility {
-    type Err = ParseCompressibilityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseCompressibilityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, CompressibilityUnit)] = &[
-            ("mbar⁻¹", CompressibilityUnit::InverseMillibar),
-            ("MPa⁻¹", CompressibilityUnit::InverseMegapascal),
-            ("atm⁻¹", CompressibilityUnit::InverseAtmosphere),
-            ("bar⁻¹", CompressibilityUnit::InverseBar),
-            ("kPa⁻¹", CompressibilityUnit::InverseKilopascal),
-            ("psi⁻¹", CompressibilityUnit::InversePoundForcePerSquareInch),
-            ("Pa⁻¹", CompressibilityUnit::InversePascal),
-            ("1/mbar", CompressibilityUnit::InverseMillibar),
-            ("1/MPa", CompressibilityUnit::InverseMegapascal),
-            ("1/atm", CompressibilityUnit::InverseAtmosphere),
-            ("1/bar", CompressibilityUnit::InverseBar),
-            ("1/kPa", CompressibilityUnit::InverseKilopascal),
-            ("1/psi", CompressibilityUnit::InversePoundForcePerSquareInch),
-            ("1/Pa", CompressibilityUnit::InversePascal),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseCompressibilityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/Radioactivity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Amount of ionizing radiation released when an element spontaneously emits energy as a result of the radioactive decay of an unstable atom per unit time.
 ///
-/// The internal value is stored in `Becquerel` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Radioactivity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadioactivityUnit::Becquerel`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Radioactivity<T = f64>(T);
+
+quantity!(Radioactivity, RadioactivityUnit, Becquerel);
 
 /// Unit variants for [`Radioactivity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum RadioactivityUnit {
     /// Activity of a quantity of radioactive material in which one nucleus decays per second.
     Becquerel,
@@ -93,7 +101,7 @@ impl RadioactivityUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Becquerel => "Bq",
             Self::Picobecquerel => "pBq",
@@ -127,9 +135,9 @@ impl RadioactivityUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Becquerel => &["Bq"],
             Self::Picobecquerel => &["pBq"],
@@ -164,823 +172,642 @@ impl RadioactivityUnit {
     }
 }
 
-impl Radioactivity {
+impl core::str::FromStr for RadioactivityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Bq" => Ok(Self::Becquerel),
+            "pBq" => Ok(Self::Picobecquerel),
+            "nBq" => Ok(Self::Nanobecquerel),
+            "µBq" => Ok(Self::Microbecquerel),
+            "mBq" => Ok(Self::Millibecquerel),
+            "kBq" => Ok(Self::Kilobecquerel),
+            "MBq" => Ok(Self::Megabecquerel),
+            "GBq" => Ok(Self::Gigabecquerel),
+            "TBq" => Ok(Self::Terabecquerel),
+            "PBq" => Ok(Self::Petabecquerel),
+            "EBq" => Ok(Self::Exabecquerel),
+            "Ci" => Ok(Self::Curie),
+            "pCi" => Ok(Self::Picocurie),
+            "nCi" => Ok(Self::Nanocurie),
+            "µCi" => Ok(Self::Microcurie),
+            "mCi" => Ok(Self::Millicurie),
+            "kCi" => Ok(Self::Kilocurie),
+            "MCi" => Ok(Self::Megacurie),
+            "GCi" => Ok(Self::Gigacurie),
+            "TCi" => Ok(Self::Teracurie),
+            "Rd" => Ok(Self::Rutherford),
+            "pRd" => Ok(Self::Picorutherford),
+            "nRd" => Ok(Self::Nanorutherford),
+            "µRd" => Ok(Self::Microrutherford),
+            "mRd" => Ok(Self::Millirutherford),
+            "kRd" => Ok(Self::Kilorutherford),
+            "MRd" => Ok(Self::Megarutherford),
+            "GRd" => Ok(Self::Gigarutherford),
+            "TRd" => Ok(Self::Terarutherford),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Radioactivity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: RadioactivityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: RadioactivityUnit) -> Self {
         Self(match unit {
-            RadioactivityUnit::Becquerel => x,
-            RadioactivityUnit::Picobecquerel => (x * 1e-12),
-            RadioactivityUnit::Nanobecquerel => (x * 1e-9),
-            RadioactivityUnit::Microbecquerel => (x * 1e-6),
-            RadioactivityUnit::Millibecquerel => (x * 1e-3),
-            RadioactivityUnit::Kilobecquerel => (x * 1e3),
-            RadioactivityUnit::Megabecquerel => (x * 1e6),
-            RadioactivityUnit::Gigabecquerel => (x * 1e9),
-            RadioactivityUnit::Terabecquerel => (x * 1e12),
-            RadioactivityUnit::Petabecquerel => (x * 1e15),
-            RadioactivityUnit::Exabecquerel => (x * 1e18),
-            RadioactivityUnit::Curie => x * 3.7e10,
-            RadioactivityUnit::Picocurie => (x * 1e-12) * 3.7e10,
-            RadioactivityUnit::Nanocurie => (x * 1e-9) * 3.7e10,
-            RadioactivityUnit::Microcurie => (x * 1e-6) * 3.7e10,
-            RadioactivityUnit::Millicurie => (x * 1e-3) * 3.7e10,
-            RadioactivityUnit::Kilocurie => (x * 1e3) * 3.7e10,
-            RadioactivityUnit::Megacurie => (x * 1e6) * 3.7e10,
-            RadioactivityUnit::Gigacurie => (x * 1e9) * 3.7e10,
-            RadioactivityUnit::Teracurie => (x * 1e12) * 3.7e10,
-            RadioactivityUnit::Rutherford => x * 1e6,
-            RadioactivityUnit::Picorutherford => (x * 1e-12) * 1e6,
-            RadioactivityUnit::Nanorutherford => (x * 1e-9) * 1e6,
-            RadioactivityUnit::Microrutherford => (x * 1e-6) * 1e6,
-            RadioactivityUnit::Millirutherford => (x * 1e-3) * 1e6,
-            RadioactivityUnit::Kilorutherford => (x * 1e3) * 1e6,
-            RadioactivityUnit::Megarutherford => (x * 1e6) * 1e6,
-            RadioactivityUnit::Gigarutherford => (x * 1e9) * 1e6,
-            RadioactivityUnit::Terarutherford => (x * 1e12) * 1e6,
+            RadioactivityUnit::Becquerel => value,
+            RadioactivityUnit::Picobecquerel => value / T::from_f64(1e12),
+            RadioactivityUnit::Nanobecquerel => value / T::from_f64(1e9),
+            RadioactivityUnit::Microbecquerel => value / T::from_f64(1000000.0),
+            RadioactivityUnit::Millibecquerel => value / T::from_f64(1000.0),
+            RadioactivityUnit::Kilobecquerel => value * T::from_f64(1000.0),
+            RadioactivityUnit::Megabecquerel => value * T::from_f64(1000000.0),
+            RadioactivityUnit::Gigabecquerel => value * T::from_f64(1e9),
+            RadioactivityUnit::Terabecquerel => value * T::from_f64(1e12),
+            RadioactivityUnit::Petabecquerel => value * T::from_f64(1e15),
+            RadioactivityUnit::Exabecquerel => value * T::from_f64(1e18),
+            RadioactivityUnit::Curie => value * T::from_f64(3.7e10),
+            RadioactivityUnit::Picocurie => value * T::from_f64(0.037),
+            RadioactivityUnit::Nanocurie => value * T::from_f64(37.0),
+            RadioactivityUnit::Microcurie => value * T::from_f64(37000.0),
+            RadioactivityUnit::Millicurie => value * T::from_f64(3.7e7),
+            RadioactivityUnit::Kilocurie => value * T::from_f64(3.7e13),
+            RadioactivityUnit::Megacurie => value * T::from_f64(3.7e16),
+            RadioactivityUnit::Gigacurie => value * T::from_f64(3.7e19),
+            RadioactivityUnit::Teracurie => value * T::from_f64(3.7e22),
+            RadioactivityUnit::Rutherford => value * T::from_f64(1000000.0),
+            RadioactivityUnit::Picorutherford => value / T::from_f64(1000000.0),
+            RadioactivityUnit::Nanorutherford => value / T::from_f64(1000.0),
+            RadioactivityUnit::Microrutherford => value,
+            RadioactivityUnit::Millirutherford => value * T::from_f64(1000.0),
+            RadioactivityUnit::Kilorutherford => value * T::from_f64(1e9),
+            RadioactivityUnit::Megarutherford => value * T::from_f64(1e12),
+            RadioactivityUnit::Gigarutherford => value * T::from_f64(1e15),
+            RadioactivityUnit::Terarutherford => value * T::from_f64(1e18),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: RadioactivityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: RadioactivityUnit) -> T {
         match unit {
-            RadioactivityUnit::Becquerel => x,
-            RadioactivityUnit::Picobecquerel => (x / 1e-12),
-            RadioactivityUnit::Nanobecquerel => (x / 1e-9),
-            RadioactivityUnit::Microbecquerel => (x / 1e-6),
-            RadioactivityUnit::Millibecquerel => (x / 1e-3),
-            RadioactivityUnit::Kilobecquerel => (x / 1e3),
-            RadioactivityUnit::Megabecquerel => (x / 1e6),
-            RadioactivityUnit::Gigabecquerel => (x / 1e9),
-            RadioactivityUnit::Terabecquerel => (x / 1e12),
-            RadioactivityUnit::Petabecquerel => (x / 1e15),
-            RadioactivityUnit::Exabecquerel => (x / 1e18),
-            RadioactivityUnit::Curie => x / 3.7e10,
-            RadioactivityUnit::Picocurie => (x / 1e-12) / 3.7e10,
-            RadioactivityUnit::Nanocurie => (x / 1e-9) / 3.7e10,
-            RadioactivityUnit::Microcurie => (x / 1e-6) / 3.7e10,
-            RadioactivityUnit::Millicurie => (x / 1e-3) / 3.7e10,
-            RadioactivityUnit::Kilocurie => (x / 1e3) / 3.7e10,
-            RadioactivityUnit::Megacurie => (x / 1e6) / 3.7e10,
-            RadioactivityUnit::Gigacurie => (x / 1e9) / 3.7e10,
-            RadioactivityUnit::Teracurie => (x / 1e12) / 3.7e10,
-            RadioactivityUnit::Rutherford => x / 1e6,
-            RadioactivityUnit::Picorutherford => (x / 1e-12) / 1e6,
-            RadioactivityUnit::Nanorutherford => (x / 1e-9) / 1e6,
-            RadioactivityUnit::Microrutherford => (x / 1e-6) / 1e6,
-            RadioactivityUnit::Millirutherford => (x / 1e-3) / 1e6,
-            RadioactivityUnit::Kilorutherford => (x / 1e3) / 1e6,
-            RadioactivityUnit::Megarutherford => (x / 1e6) / 1e6,
-            RadioactivityUnit::Gigarutherford => (x / 1e9) / 1e6,
-            RadioactivityUnit::Terarutherford => (x / 1e12) / 1e6,
+            RadioactivityUnit::Becquerel => self.0,
+            RadioactivityUnit::Picobecquerel => self.0 * T::from_f64(1e12),
+            RadioactivityUnit::Nanobecquerel => self.0 * T::from_f64(1e9),
+            RadioactivityUnit::Microbecquerel => self.0 * T::from_f64(1000000.0),
+            RadioactivityUnit::Millibecquerel => self.0 * T::from_f64(1000.0),
+            RadioactivityUnit::Kilobecquerel => self.0 / T::from_f64(1000.0),
+            RadioactivityUnit::Megabecquerel => self.0 / T::from_f64(1000000.0),
+            RadioactivityUnit::Gigabecquerel => self.0 / T::from_f64(1e9),
+            RadioactivityUnit::Terabecquerel => self.0 / T::from_f64(1e12),
+            RadioactivityUnit::Petabecquerel => self.0 / T::from_f64(1e15),
+            RadioactivityUnit::Exabecquerel => self.0 / T::from_f64(1e18),
+            RadioactivityUnit::Curie => self.0 / T::from_f64(3.7e10),
+            RadioactivityUnit::Picocurie => self.0 / T::from_f64(0.037),
+            RadioactivityUnit::Nanocurie => self.0 / T::from_f64(37.0),
+            RadioactivityUnit::Microcurie => self.0 / T::from_f64(37000.0),
+            RadioactivityUnit::Millicurie => self.0 / T::from_f64(3.7e7),
+            RadioactivityUnit::Kilocurie => self.0 / T::from_f64(3.7e13),
+            RadioactivityUnit::Megacurie => self.0 / T::from_f64(3.7e16),
+            RadioactivityUnit::Gigacurie => self.0 / T::from_f64(3.7e19),
+            RadioactivityUnit::Teracurie => self.0 / T::from_f64(3.7e22),
+            RadioactivityUnit::Rutherford => self.0 / T::from_f64(1000000.0),
+            RadioactivityUnit::Picorutherford => self.0 * T::from_f64(1000000.0),
+            RadioactivityUnit::Nanorutherford => self.0 * T::from_f64(1000.0),
+            RadioactivityUnit::Microrutherford => self.0,
+            RadioactivityUnit::Millirutherford => self.0 / T::from_f64(1000.0),
+            RadioactivityUnit::Kilorutherford => self.0 / T::from_f64(1e9),
+            RadioactivityUnit::Megarutherford => self.0 / T::from_f64(1e12),
+            RadioactivityUnit::Gigarutherford => self.0 / T::from_f64(1e15),
+            RadioactivityUnit::Terarutherford => self.0 / T::from_f64(1e18),
         }
     }
 
     /// Creates a [`Radioactivity`] from a value in Becquerels (`Bq`).
     #[inline]
-    pub fn from_becquerels(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_becquerels(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Becquerels (`Bq`).
     #[inline]
-    pub fn as_becquerels(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_becquerels(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_becquerels`].
     #[inline]
-    pub fn as_becquerel(self) -> Num {
+    pub fn as_becquerel(self) -> T {
         self.as_becquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Picobecquerels (`pBq`).
     #[inline]
-    pub fn from_picobecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picobecquerels(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Picobecquerels (`pBq`).
     #[inline]
-    pub fn as_picobecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picobecquerels(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picobecquerels`].
     #[inline]
-    pub fn as_picobecquerel(self) -> Num {
+    pub fn as_picobecquerel(self) -> T {
         self.as_picobecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Nanobecquerels (`nBq`).
     #[inline]
-    pub fn from_nanobecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanobecquerels(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanobecquerels (`nBq`).
     #[inline]
-    pub fn as_nanobecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanobecquerels(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanobecquerels`].
     #[inline]
-    pub fn as_nanobecquerel(self) -> Num {
+    pub fn as_nanobecquerel(self) -> T {
         self.as_nanobecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Microbecquerels (`µBq`).
     #[inline]
-    pub fn from_microbecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microbecquerels(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microbecquerels (`µBq`).
     #[inline]
-    pub fn as_microbecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microbecquerels(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microbecquerels`].
     #[inline]
-    pub fn as_microbecquerel(self) -> Num {
+    pub fn as_microbecquerel(self) -> T {
         self.as_microbecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Millibecquerels (`mBq`).
     #[inline]
-    pub fn from_millibecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millibecquerels(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millibecquerels (`mBq`).
     #[inline]
-    pub fn as_millibecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millibecquerels(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millibecquerels`].
     #[inline]
-    pub fn as_millibecquerel(self) -> Num {
+    pub fn as_millibecquerel(self) -> T {
         self.as_millibecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Kilobecquerels (`kBq`).
     #[inline]
-    pub fn from_kilobecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilobecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilobecquerels (`kBq`).
     #[inline]
-    pub fn as_kilobecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilobecquerels(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilobecquerels`].
     #[inline]
-    pub fn as_kilobecquerel(self) -> Num {
+    pub fn as_kilobecquerel(self) -> T {
         self.as_kilobecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Megabecquerels (`MBq`).
     #[inline]
-    pub fn from_megabecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megabecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megabecquerels (`MBq`).
     #[inline]
-    pub fn as_megabecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megabecquerels(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megabecquerels`].
     #[inline]
-    pub fn as_megabecquerel(self) -> Num {
+    pub fn as_megabecquerel(self) -> T {
         self.as_megabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Gigabecquerels (`GBq`).
     #[inline]
-    pub fn from_gigabecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigabecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigabecquerels (`GBq`).
     #[inline]
-    pub fn as_gigabecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigabecquerels(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigabecquerels`].
     #[inline]
-    pub fn as_gigabecquerel(self) -> Num {
+    pub fn as_gigabecquerel(self) -> T {
         self.as_gigabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Terabecquerels (`TBq`).
     #[inline]
-    pub fn from_terabecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terabecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Terabecquerels (`TBq`).
     #[inline]
-    pub fn as_terabecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terabecquerels(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_terabecquerels`].
     #[inline]
-    pub fn as_terabecquerel(self) -> Num {
+    pub fn as_terabecquerel(self) -> T {
         self.as_terabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Petabecquerels (`PBq`).
     #[inline]
-    pub fn from_petabecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e15))
+    pub fn from_petabecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Petabecquerels (`PBq`).
     #[inline]
-    pub fn as_petabecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e15)
+    pub fn as_petabecquerels(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_petabecquerels`].
     #[inline]
-    pub fn as_petabecquerel(self) -> Num {
+    pub fn as_petabecquerel(self) -> T {
         self.as_petabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Exabecquerels (`EBq`).
     #[inline]
-    pub fn from_exabecquerels(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e18))
+    pub fn from_exabecquerels(value: T) -> Self {
+        Self(value * T::from_f64(1e18))
     }
 
     /// Returns the value expressed in Exabecquerels (`EBq`).
     #[inline]
-    pub fn as_exabecquerels(self) -> Num {
-        let x = self.0;
-        (x / 1e18)
+    pub fn as_exabecquerels(self) -> T {
+        self.0 / T::from_f64(1e18)
     }
 
     /// Alias for [`Self::as_exabecquerels`].
     #[inline]
-    pub fn as_exabecquerel(self) -> Num {
+    pub fn as_exabecquerel(self) -> T {
         self.as_exabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Curies (`Ci`).
     #[inline]
-    pub fn from_curies(value: Num) -> Self {
-        let x = value;
-        Self(x * 3.7e10)
+    pub fn from_curies(value: T) -> Self {
+        Self(value * T::from_f64(3.7e10))
     }
 
     /// Returns the value expressed in Curies (`Ci`).
     #[inline]
-    pub fn as_curies(self) -> Num {
-        let x = self.0;
-        x / 3.7e10
+    pub fn as_curies(self) -> T {
+        self.0 / T::from_f64(3.7e10)
     }
 
     /// Alias for [`Self::as_curies`].
     #[inline]
-    pub fn as_curie(self) -> Num {
+    pub fn as_curie(self) -> T {
         self.as_curies()
     }
 
     /// Creates a [`Radioactivity`] from a value in Picocuries (`pCi`).
     #[inline]
-    pub fn from_picocuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) * 3.7e10)
+    pub fn from_picocuries(value: T) -> Self {
+        Self(value * T::from_f64(0.037))
     }
 
     /// Returns the value expressed in Picocuries (`pCi`).
     #[inline]
-    pub fn as_picocuries(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) / 3.7e10
+    pub fn as_picocuries(self) -> T {
+        self.0 / T::from_f64(0.037)
     }
 
     /// Alias for [`Self::as_picocuries`].
     #[inline]
-    pub fn as_picocurie(self) -> Num {
+    pub fn as_picocurie(self) -> T {
         self.as_picocuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Nanocuries (`nCi`).
     #[inline]
-    pub fn from_nanocuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 3.7e10)
+    pub fn from_nanocuries(value: T) -> Self {
+        Self(value * T::from_f64(37.0))
     }
 
     /// Returns the value expressed in Nanocuries (`nCi`).
     #[inline]
-    pub fn as_nanocuries(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 3.7e10
+    pub fn as_nanocuries(self) -> T {
+        self.0 / T::from_f64(37.0)
     }
 
     /// Alias for [`Self::as_nanocuries`].
     #[inline]
-    pub fn as_nanocurie(self) -> Num {
+    pub fn as_nanocurie(self) -> T {
         self.as_nanocuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Microcuries (`µCi`).
     #[inline]
-    pub fn from_microcuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 3.7e10)
+    pub fn from_microcuries(value: T) -> Self {
+        Self(value * T::from_f64(37000.0))
     }
 
     /// Returns the value expressed in Microcuries (`µCi`).
     #[inline]
-    pub fn as_microcuries(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 3.7e10
+    pub fn as_microcuries(self) -> T {
+        self.0 / T::from_f64(37000.0)
     }
 
     /// Alias for [`Self::as_microcuries`].
     #[inline]
-    pub fn as_microcurie(self) -> Num {
+    pub fn as_microcurie(self) -> T {
         self.as_microcuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Millicuries (`mCi`).
     #[inline]
-    pub fn from_millicuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 3.7e10)
+    pub fn from_millicuries(value: T) -> Self {
+        Self(value * T::from_f64(3.7e7))
     }
 
     /// Returns the value expressed in Millicuries (`mCi`).
     #[inline]
-    pub fn as_millicuries(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 3.7e10
+    pub fn as_millicuries(self) -> T {
+        self.0 / T::from_f64(3.7e7)
     }
 
     /// Alias for [`Self::as_millicuries`].
     #[inline]
-    pub fn as_millicurie(self) -> Num {
+    pub fn as_millicurie(self) -> T {
         self.as_millicuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Kilocuries (`kCi`).
     #[inline]
-    pub fn from_kilocuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 3.7e10)
+    pub fn from_kilocuries(value: T) -> Self {
+        Self(value * T::from_f64(3.7e13))
     }
 
     /// Returns the value expressed in Kilocuries (`kCi`).
     #[inline]
-    pub fn as_kilocuries(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 3.7e10
+    pub fn as_kilocuries(self) -> T {
+        self.0 / T::from_f64(3.7e13)
     }
 
     /// Alias for [`Self::as_kilocuries`].
     #[inline]
-    pub fn as_kilocurie(self) -> Num {
+    pub fn as_kilocurie(self) -> T {
         self.as_kilocuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Megacuries (`MCi`).
     #[inline]
-    pub fn from_megacuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 3.7e10)
+    pub fn from_megacuries(value: T) -> Self {
+        Self(value * T::from_f64(3.7e16))
     }
 
     /// Returns the value expressed in Megacuries (`MCi`).
     #[inline]
-    pub fn as_megacuries(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 3.7e10
+    pub fn as_megacuries(self) -> T {
+        self.0 / T::from_f64(3.7e16)
     }
 
     /// Alias for [`Self::as_megacuries`].
     #[inline]
-    pub fn as_megacurie(self) -> Num {
+    pub fn as_megacurie(self) -> T {
         self.as_megacuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Gigacuries (`GCi`).
     #[inline]
-    pub fn from_gigacuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 3.7e10)
+    pub fn from_gigacuries(value: T) -> Self {
+        Self(value * T::from_f64(3.7e19))
     }
 
     /// Returns the value expressed in Gigacuries (`GCi`).
     #[inline]
-    pub fn as_gigacuries(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 3.7e10
+    pub fn as_gigacuries(self) -> T {
+        self.0 / T::from_f64(3.7e19)
     }
 
     /// Alias for [`Self::as_gigacuries`].
     #[inline]
-    pub fn as_gigacurie(self) -> Num {
+    pub fn as_gigacurie(self) -> T {
         self.as_gigacuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Teracuries (`TCi`).
     #[inline]
-    pub fn from_teracuries(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 3.7e10)
+    pub fn from_teracuries(value: T) -> Self {
+        Self(value * T::from_f64(3.7e22))
     }
 
     /// Returns the value expressed in Teracuries (`TCi`).
     #[inline]
-    pub fn as_teracuries(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 3.7e10
+    pub fn as_teracuries(self) -> T {
+        self.0 / T::from_f64(3.7e22)
     }
 
     /// Alias for [`Self::as_teracuries`].
     #[inline]
-    pub fn as_teracurie(self) -> Num {
+    pub fn as_teracurie(self) -> T {
         self.as_teracuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Rutherfords (`Rd`).
     #[inline]
-    pub fn from_rutherfords(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e6)
+    pub fn from_rutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Rutherfords (`Rd`).
     #[inline]
-    pub fn as_rutherfords(self) -> Num {
-        let x = self.0;
-        x / 1e6
+    pub fn as_rutherfords(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_rutherfords`].
     #[inline]
-    pub fn as_rutherford(self) -> Num {
+    pub fn as_rutherford(self) -> T {
         self.as_rutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Picorutherfords (`pRd`).
     #[inline]
-    pub fn from_picorutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) * 1e6)
+    pub fn from_picorutherfords(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Picorutherfords (`pRd`).
     #[inline]
-    pub fn as_picorutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) / 1e6
+    pub fn as_picorutherfords(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_picorutherfords`].
     #[inline]
-    pub fn as_picorutherford(self) -> Num {
+    pub fn as_picorutherford(self) -> T {
         self.as_picorutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Nanorutherfords (`nRd`).
     #[inline]
-    pub fn from_nanorutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) * 1e6)
+    pub fn from_nanorutherfords(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Nanorutherfords (`nRd`).
     #[inline]
-    pub fn as_nanorutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) / 1e6
+    pub fn as_nanorutherfords(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_nanorutherfords`].
     #[inline]
-    pub fn as_nanorutherford(self) -> Num {
+    pub fn as_nanorutherford(self) -> T {
         self.as_nanorutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Microrutherfords (`µRd`).
     #[inline]
-    pub fn from_microrutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 1e6)
+    pub fn from_microrutherfords(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Microrutherfords (`µRd`).
     #[inline]
-    pub fn as_microrutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 1e6
+    pub fn as_microrutherfords(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_microrutherfords`].
     #[inline]
-    pub fn as_microrutherford(self) -> Num {
+    pub fn as_microrutherford(self) -> T {
         self.as_microrutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Millirutherfords (`mRd`).
     #[inline]
-    pub fn from_millirutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 1e6)
+    pub fn from_millirutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millirutherfords (`mRd`).
     #[inline]
-    pub fn as_millirutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 1e6
+    pub fn as_millirutherfords(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millirutherfords`].
     #[inline]
-    pub fn as_millirutherford(self) -> Num {
+    pub fn as_millirutherford(self) -> T {
         self.as_millirutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Kilorutherfords (`kRd`).
     #[inline]
-    pub fn from_kilorutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1e6)
+    pub fn from_kilorutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Kilorutherfords (`kRd`).
     #[inline]
-    pub fn as_kilorutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e3) / 1e6
+    pub fn as_kilorutherfords(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_kilorutherfords`].
     #[inline]
-    pub fn as_kilorutherford(self) -> Num {
+    pub fn as_kilorutherford(self) -> T {
         self.as_kilorutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Megarutherfords (`MRd`).
     #[inline]
-    pub fn from_megarutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) * 1e6)
+    pub fn from_megarutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Megarutherfords (`MRd`).
     #[inline]
-    pub fn as_megarutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e6) / 1e6
+    pub fn as_megarutherfords(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_megarutherfords`].
     #[inline]
-    pub fn as_megarutherford(self) -> Num {
+    pub fn as_megarutherford(self) -> T {
         self.as_megarutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Gigarutherfords (`GRd`).
     #[inline]
-    pub fn from_gigarutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9) * 1e6)
+    pub fn from_gigarutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1e15))
     }
 
     /// Returns the value expressed in Gigarutherfords (`GRd`).
     #[inline]
-    pub fn as_gigarutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e9) / 1e6
+    pub fn as_gigarutherfords(self) -> T {
+        self.0 / T::from_f64(1e15)
     }
 
     /// Alias for [`Self::as_gigarutherfords`].
     #[inline]
-    pub fn as_gigarutherford(self) -> Num {
+    pub fn as_gigarutherford(self) -> T {
         self.as_gigarutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Terarutherfords (`TRd`).
     #[inline]
-    pub fn from_terarutherfords(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12) * 1e6)
+    pub fn from_terarutherfords(value: T) -> Self {
+        Self(value * T::from_f64(1e18))
     }
 
     /// Returns the value expressed in Terarutherfords (`TRd`).
     #[inline]
-    pub fn as_terarutherfords(self) -> Num {
-        let x = self.0;
-        (x / 1e12) / 1e6
+    pub fn as_terarutherfords(self) -> T {
+        self.0 / T::from_f64(1e18)
     }
 
     /// Alias for [`Self::as_terarutherfords`].
     #[inline]
-    pub fn as_terarutherford(self) -> Num {
+    pub fn as_terarutherford(self) -> T {
         self.as_terarutherfords()
     }
-}
-
-impl crate::Quantity for Radioactivity {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Radioactivity {
-    type Output = Radioactivity;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Radioactivity {
-    type Output = Radioactivity;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Radioactivity {
-    type Output = Radioactivity;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Radioactivity {
-    type Output = Radioactivity;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Radioactivity> for Num {
-    type Output = Radioactivity;
-    #[inline]
-    fn mul(self, rhs: Radioactivity) -> Radioactivity {
-        Radioactivity(self * rhs.0)
-    }
-}
-impl Div<Num> for Radioactivity {
-    type Output = Radioactivity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Radioactivity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Radioactivity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            RadioactivityUnit::Becquerel.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Radioactivity`].
-#[derive(Debug)]
-pub struct ParseRadioactivityError(String);
-
-impl fmt::Display for ParseRadioactivityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Radioactivity", self.0)
-    }
-}
-
-impl std::error::Error for ParseRadioactivityError {}
-
-impl FromStr for Radioactivity {
-    type Err = ParseRadioactivityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseRadioactivityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, RadioactivityUnit)] = &[
-            ("µBq", RadioactivityUnit::Microbecquerel),
-            ("µCi", RadioactivityUnit::Microcurie),
-            ("µRd", RadioactivityUnit::Microrutherford),
-            ("EBq", RadioactivityUnit::Exabecquerel),
-            ("GBq", RadioactivityUnit::Gigabecquerel),
-            ("GCi", RadioactivityUnit::Gigacurie),
-            ("GRd", RadioactivityUnit::Gigarutherford),
-            ("MBq", RadioactivityUnit::Megabecquerel),
-            ("MCi", RadioactivityUnit::Megacurie),
-            ("MRd", RadioactivityUnit::Megarutherford),
-            ("PBq", RadioactivityUnit::Petabecquerel),
-            ("TBq", RadioactivityUnit::Terabecquerel),
-            ("TCi", RadioactivityUnit::Teracurie),
-            ("TRd", RadioactivityUnit::Terarutherford),
-            ("kBq", RadioactivityUnit::Kilobecquerel),
-            ("kCi", RadioactivityUnit::Kilocurie),
-            ("kRd", RadioactivityUnit::Kilorutherford),
-            ("mBq", RadioactivityUnit::Millibecquerel),
-            ("mCi", RadioactivityUnit::Millicurie),
-            ("mRd", RadioactivityUnit::Millirutherford),
-            ("nBq", RadioactivityUnit::Nanobecquerel),
-            ("nCi", RadioactivityUnit::Nanocurie),
-            ("nRd", RadioactivityUnit::Nanorutherford),
-            ("pBq", RadioactivityUnit::Picobecquerel),
-            ("pCi", RadioactivityUnit::Picocurie),
-            ("pRd", RadioactivityUnit::Picorutherford),
-            ("Bq", RadioactivityUnit::Becquerel),
-            ("Ci", RadioactivityUnit::Curie),
-            ("Rd", RadioactivityUnit::Rutherford),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseRadioactivityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

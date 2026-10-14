@@ -2,27 +2,35 @@
 // Source: data/quantities/Area.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
-/// Area is a quantity that expresses the extent of a two-dimensional surface or shape, or planar lamina, in the plane. Area can be understood as the amount of material with a given thickness that would be necessary to fashion a model of the shape, or the amount of paint necessary to cover the surface with a single coat.[1] It is the two-dimensional analog of the length of a curve (a one-dimensional concept) or the volume of a solid (a three-dimensional concept).
+/// Area is a quantity that expresses the extent of a two-dimensional surface or shape, or planar lamina, in the plane. Area can be understood as the amount of material with a given thickness that would be necessary to fashion a model of the shape, or the amount of paint necessary to cover the surface with a single coat.\[1\] It is the two-dimensional analog of the length of a curve (a one-dimensional concept) or the volume of a solid (a three-dimensional concept).
 ///
-/// The internal value is stored in `SquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct Area(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`AreaUnit::SquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct Area<T = f64>(T);
+
+quantity!(Area, AreaUnit, SquareMeter);
 
 /// Unit variants for [`Area`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum AreaUnit {
     SquareKilometer,
     SquareMeter,
@@ -65,7 +73,7 @@ impl AreaUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::SquareKilometer => "km²",
             Self::SquareMeter => "m²",
@@ -84,9 +92,9 @@ impl AreaUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::SquareKilometer => &["km²"],
             Self::SquareMeter => &["m²"],
@@ -106,473 +114,327 @@ impl AreaUnit {
     }
 }
 
-impl Area {
+impl core::str::FromStr for AreaUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "km²" => Ok(Self::SquareKilometer),
+            "m²" => Ok(Self::SquareMeter),
+            "dm²" => Ok(Self::SquareDecimeter),
+            "cm²" => Ok(Self::SquareCentimeter),
+            "mm²" => Ok(Self::SquareMillimeter),
+            "µm²" => Ok(Self::SquareMicrometer),
+            "mi²" => Ok(Self::SquareMile),
+            "yd²" => Ok(Self::SquareYard),
+            "ft²" => Ok(Self::SquareFoot),
+            "ft² (US)" => Ok(Self::UsSurveySquareFoot),
+            "in²" => Ok(Self::SquareInch),
+            "ac" => Ok(Self::Acre),
+            "ha" => Ok(Self::Hectare),
+            "nmi²" => Ok(Self::SquareNauticalMile),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> Area<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: AreaUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: AreaUnit) -> Self {
         Self(match unit {
-            AreaUnit::SquareKilometer => x * 1e6,
-            AreaUnit::SquareMeter => x,
-            AreaUnit::SquareDecimeter => x * 1e-2,
-            AreaUnit::SquareCentimeter => x * 1e-4,
-            AreaUnit::SquareMillimeter => x * 1e-6,
-            AreaUnit::SquareMicrometer => x * 1e-12,
-            AreaUnit::SquareMile => x * 1609.344 * 1609.344,
-            AreaUnit::SquareYard => x * 0.9144 * 0.9144,
-            AreaUnit::SquareFoot => x * 9.290304e-2,
-            AreaUnit::UsSurveySquareFoot => x * (1200.0 / 3937.0) * (1200.0 / 3937.0),
-            AreaUnit::SquareInch => x * 0.00064516,
-            AreaUnit::Acre => x * 4046.8564224,
-            AreaUnit::Hectare => x * 1e4,
-            AreaUnit::SquareNauticalMile => x * 3429904.0,
+            AreaUnit::SquareKilometer => value * T::from_f64(1000000.0),
+            AreaUnit::SquareMeter => value,
+            AreaUnit::SquareDecimeter => value / T::from_f64(100.0),
+            AreaUnit::SquareCentimeter => value / T::from_f64(10000.0),
+            AreaUnit::SquareMillimeter => value / T::from_f64(1000000.0),
+            AreaUnit::SquareMicrometer => value / T::from_f64(1e12),
+            AreaUnit::SquareMile => value * T::from_f64(2589988.110336),
+            AreaUnit::SquareYard => value * T::from_f64(0.83612736),
+            AreaUnit::SquareFoot => value * T::from_f64(0.09290304),
+            AreaUnit::UsSurveySquareFoot => value * T::from_f64(0.09290341161327484),
+            AreaUnit::SquareInch => value * T::from_f64(0.00064516),
+            AreaUnit::Acre => value * T::from_f64(4046.8564224),
+            AreaUnit::Hectare => value * T::from_f64(10000.0),
+            AreaUnit::SquareNauticalMile => value * T::from_f64(3429904.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: AreaUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: AreaUnit) -> T {
         match unit {
-            AreaUnit::SquareKilometer => x / 1e6,
-            AreaUnit::SquareMeter => x,
-            AreaUnit::SquareDecimeter => x / 1e-2,
-            AreaUnit::SquareCentimeter => x / 1e-4,
-            AreaUnit::SquareMillimeter => x / 1e-6,
-            AreaUnit::SquareMicrometer => x / 1e-12,
-            AreaUnit::SquareMile => x / 1609.344 / 1609.344,
-            AreaUnit::SquareYard => x / 0.9144 / 0.9144,
-            AreaUnit::SquareFoot => x / 9.290304e-2,
-            AreaUnit::UsSurveySquareFoot => x / (1200.0 / 3937.0) / (1200.0 / 3937.0),
-            AreaUnit::SquareInch => x / 0.00064516,
-            AreaUnit::Acre => x / 4046.8564224,
-            AreaUnit::Hectare => x / 1e4,
-            AreaUnit::SquareNauticalMile => x / 3429904.0,
+            AreaUnit::SquareKilometer => self.0 / T::from_f64(1000000.0),
+            AreaUnit::SquareMeter => self.0,
+            AreaUnit::SquareDecimeter => self.0 * T::from_f64(100.0),
+            AreaUnit::SquareCentimeter => self.0 * T::from_f64(10000.0),
+            AreaUnit::SquareMillimeter => self.0 * T::from_f64(1000000.0),
+            AreaUnit::SquareMicrometer => self.0 * T::from_f64(1e12),
+            AreaUnit::SquareMile => self.0 / T::from_f64(2589988.110336),
+            AreaUnit::SquareYard => self.0 / T::from_f64(0.83612736),
+            AreaUnit::SquareFoot => self.0 / T::from_f64(0.09290304),
+            AreaUnit::UsSurveySquareFoot => self.0 / T::from_f64(0.09290341161327484),
+            AreaUnit::SquareInch => self.0 / T::from_f64(0.00064516),
+            AreaUnit::Acre => self.0 / T::from_f64(4046.8564224),
+            AreaUnit::Hectare => self.0 / T::from_f64(10000.0),
+            AreaUnit::SquareNauticalMile => self.0 / T::from_f64(3429904.0),
         }
     }
 
     /// Creates a [`Area`] from a value in SquareKilometers (`km²`).
     #[inline]
-    pub fn from_square_kilometers(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e6)
+    pub fn from_square_kilometers(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in SquareKilometers (`km²`).
     #[inline]
-    pub fn as_square_kilometers(self) -> Num {
-        let x = self.0;
-        x / 1e6
+    pub fn as_square_kilometers(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_square_kilometers`].
     #[inline]
-    pub fn as_square_kilometer(self) -> Num {
+    pub fn as_square_kilometer(self) -> T {
         self.as_square_kilometers()
     }
 
     /// Creates a [`Area`] from a value in SquareMeters (`m²`).
     #[inline]
-    pub fn from_square_meters(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_square_meters(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in SquareMeters (`m²`).
     #[inline]
-    pub fn as_square_meters(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_square_meters(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_square_meters`].
     #[inline]
-    pub fn as_square_meter(self) -> Num {
+    pub fn as_square_meter(self) -> T {
         self.as_square_meters()
     }
 
     /// Creates a [`Area`] from a value in SquareDecimeters (`dm²`).
     #[inline]
-    pub fn from_square_decimeters(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-2)
+    pub fn from_square_decimeters(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in SquareDecimeters (`dm²`).
     #[inline]
-    pub fn as_square_decimeters(self) -> Num {
-        let x = self.0;
-        x / 1e-2
+    pub fn as_square_decimeters(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_square_decimeters`].
     #[inline]
-    pub fn as_square_decimeter(self) -> Num {
+    pub fn as_square_decimeter(self) -> T {
         self.as_square_decimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn from_square_centimeters(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-4)
+    pub fn from_square_centimeters(value: T) -> Self {
+        Self(value / T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in SquareCentimeters (`cm²`).
     #[inline]
-    pub fn as_square_centimeters(self) -> Num {
-        let x = self.0;
-        x / 1e-4
+    pub fn as_square_centimeters(self) -> T {
+        self.0 * T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_square_centimeters`].
     #[inline]
-    pub fn as_square_centimeter(self) -> Num {
+    pub fn as_square_centimeter(self) -> T {
         self.as_square_centimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareMillimeters (`mm²`).
     #[inline]
-    pub fn from_square_millimeters(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-6)
+    pub fn from_square_millimeters(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in SquareMillimeters (`mm²`).
     #[inline]
-    pub fn as_square_millimeters(self) -> Num {
-        let x = self.0;
-        x / 1e-6
+    pub fn as_square_millimeters(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_square_millimeters`].
     #[inline]
-    pub fn as_square_millimeter(self) -> Num {
+    pub fn as_square_millimeter(self) -> T {
         self.as_square_millimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareMicrometers (`µm²`).
     #[inline]
-    pub fn from_square_micrometers(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e-12)
+    pub fn from_square_micrometers(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in SquareMicrometers (`µm²`).
     #[inline]
-    pub fn as_square_micrometers(self) -> Num {
-        let x = self.0;
-        x / 1e-12
+    pub fn as_square_micrometers(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_square_micrometers`].
     #[inline]
-    pub fn as_square_micrometer(self) -> Num {
+    pub fn as_square_micrometer(self) -> T {
         self.as_square_micrometers()
     }
 
     /// Creates a [`Area`] from a value in SquareMiles (`mi²`).
     #[inline]
-    pub fn from_square_miles(value: Num) -> Self {
-        let x = value;
-        Self(x * 1609.344 * 1609.344)
+    pub fn from_square_miles(value: T) -> Self {
+        Self(value * T::from_f64(2589988.110336))
     }
 
     /// Returns the value expressed in SquareMiles (`mi²`).
     #[inline]
-    pub fn as_square_miles(self) -> Num {
-        let x = self.0;
-        x / 1609.344 / 1609.344
+    pub fn as_square_miles(self) -> T {
+        self.0 / T::from_f64(2589988.110336)
     }
 
     /// Alias for [`Self::as_square_miles`].
     #[inline]
-    pub fn as_square_mile(self) -> Num {
+    pub fn as_square_mile(self) -> T {
         self.as_square_miles()
     }
 
     /// Creates a [`Area`] from a value in SquareYards (`yd²`).
     #[inline]
-    pub fn from_square_yards(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.9144 * 0.9144)
+    pub fn from_square_yards(value: T) -> Self {
+        Self(value * T::from_f64(0.83612736))
     }
 
     /// Returns the value expressed in SquareYards (`yd²`).
     #[inline]
-    pub fn as_square_yards(self) -> Num {
-        let x = self.0;
-        x / 0.9144 / 0.9144
+    pub fn as_square_yards(self) -> T {
+        self.0 / T::from_f64(0.83612736)
     }
 
     /// Alias for [`Self::as_square_yards`].
     #[inline]
-    pub fn as_square_yard(self) -> Num {
+    pub fn as_square_yard(self) -> T {
         self.as_square_yards()
     }
 
     /// Creates a [`Area`] from a value in SquareFeet (`ft²`).
     #[inline]
-    pub fn from_square_feet(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.290304e-2)
+    pub fn from_square_feet(value: T) -> Self {
+        Self(value * T::from_f64(0.09290304))
     }
 
     /// Returns the value expressed in SquareFeet (`ft²`).
     #[inline]
-    pub fn as_square_feet(self) -> Num {
-        let x = self.0;
-        x / 9.290304e-2
+    pub fn as_square_feet(self) -> T {
+        self.0 / T::from_f64(0.09290304)
     }
 
     /// Alias for [`Self::as_square_feet`].
     #[inline]
-    pub fn as_square_foot(self) -> Num {
+    pub fn as_square_foot(self) -> T {
         self.as_square_feet()
     }
 
     /// Creates a [`Area`] from a value in UsSurveySquareFeet (`ft² (US)`).
     #[inline]
-    pub fn from_us_survey_square_feet(value: Num) -> Self {
-        let x = value;
-        Self(x * (1200.0 / 3937.0) * (1200.0 / 3937.0))
+    pub fn from_us_survey_square_feet(value: T) -> Self {
+        Self(value * T::from_f64(0.09290341161327484))
     }
 
     /// Returns the value expressed in UsSurveySquareFeet (`ft² (US)`).
     #[inline]
-    pub fn as_us_survey_square_feet(self) -> Num {
-        let x = self.0;
-        x / (1200.0 / 3937.0) / (1200.0 / 3937.0)
+    pub fn as_us_survey_square_feet(self) -> T {
+        self.0 / T::from_f64(0.09290341161327484)
     }
 
     /// Alias for [`Self::as_us_survey_square_feet`].
     #[inline]
-    pub fn as_us_survey_square_foot(self) -> Num {
+    pub fn as_us_survey_square_foot(self) -> T {
         self.as_us_survey_square_feet()
     }
 
     /// Creates a [`Area`] from a value in SquareInches (`in²`).
     #[inline]
-    pub fn from_square_inches(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.00064516)
+    pub fn from_square_inches(value: T) -> Self {
+        Self(value * T::from_f64(0.00064516))
     }
 
     /// Returns the value expressed in SquareInches (`in²`).
     #[inline]
-    pub fn as_square_inches(self) -> Num {
-        let x = self.0;
-        x / 0.00064516
+    pub fn as_square_inches(self) -> T {
+        self.0 / T::from_f64(0.00064516)
     }
 
     /// Alias for [`Self::as_square_inches`].
     #[inline]
-    pub fn as_square_inch(self) -> Num {
+    pub fn as_square_inch(self) -> T {
         self.as_square_inches()
     }
 
     /// Creates a [`Area`] from a value in Acres (`ac`).
     #[inline]
-    pub fn from_acres(value: Num) -> Self {
-        let x = value;
-        Self(x * 4046.8564224)
+    pub fn from_acres(value: T) -> Self {
+        Self(value * T::from_f64(4046.8564224))
     }
 
     /// Returns the value expressed in Acres (`ac`).
     #[inline]
-    pub fn as_acres(self) -> Num {
-        let x = self.0;
-        x / 4046.8564224
+    pub fn as_acres(self) -> T {
+        self.0 / T::from_f64(4046.8564224)
     }
 
     /// Alias for [`Self::as_acres`].
     #[inline]
-    pub fn as_acre(self) -> Num {
+    pub fn as_acre(self) -> T {
         self.as_acres()
     }
 
     /// Creates a [`Area`] from a value in Hectares (`ha`).
     #[inline]
-    pub fn from_hectares(value: Num) -> Self {
-        let x = value;
-        Self(x * 1e4)
+    pub fn from_hectares(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in Hectares (`ha`).
     #[inline]
-    pub fn as_hectares(self) -> Num {
-        let x = self.0;
-        x / 1e4
+    pub fn as_hectares(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_hectares`].
     #[inline]
-    pub fn as_hectare(self) -> Num {
+    pub fn as_hectare(self) -> T {
         self.as_hectares()
     }
 
     /// Creates a [`Area`] from a value in SquareNauticalMiles (`nmi²`).
     #[inline]
-    pub fn from_square_nautical_miles(value: Num) -> Self {
-        let x = value;
-        Self(x * 3429904.0)
+    pub fn from_square_nautical_miles(value: T) -> Self {
+        Self(value * T::from_f64(3429904.0))
     }
 
     /// Returns the value expressed in SquareNauticalMiles (`nmi²`).
     #[inline]
-    pub fn as_square_nautical_miles(self) -> Num {
-        let x = self.0;
-        x / 3429904.0
+    pub fn as_square_nautical_miles(self) -> T {
+        self.0 / T::from_f64(3429904.0)
     }
 
     /// Alias for [`Self::as_square_nautical_miles`].
     #[inline]
-    pub fn as_square_nautical_mile(self) -> Num {
+    pub fn as_square_nautical_mile(self) -> T {
         self.as_square_nautical_miles()
     }
-}
-
-impl crate::Quantity for Area {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for Area {
-    type Output = Area;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for Area {
-    type Output = Area;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for Area {
-    type Output = Area;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for Area {
-    type Output = Area;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<Area> for Num {
-    type Output = Area;
-    #[inline]
-    fn mul(self, rhs: Area) -> Area {
-        Area(self * rhs.0)
-    }
-}
-impl Div<Num> for Area {
-    type Output = Area;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for Area {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for Area {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{} {}", self.0, AreaUnit::SquareMeter.abbreviation())
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`Area`].
-#[derive(Debug)]
-pub struct ParseAreaError(String);
-
-impl fmt::Display for ParseAreaError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as Area", self.0)
-    }
-}
-
-impl std::error::Error for ParseAreaError {}
-
-impl FromStr for Area {
-    type Err = ParseAreaError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseAreaError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, AreaUnit)] = &[
-            ("ft² (US)", AreaUnit::UsSurveySquareFoot),
-            ("nmi²", AreaUnit::SquareNauticalMile),
-            ("µm²", AreaUnit::SquareMicrometer),
-            ("cm²", AreaUnit::SquareCentimeter),
-            ("dm²", AreaUnit::SquareDecimeter),
-            ("ft²", AreaUnit::SquareFoot),
-            ("in²", AreaUnit::SquareInch),
-            ("km²", AreaUnit::SquareKilometer),
-            ("mi²", AreaUnit::SquareMile),
-            ("mm²", AreaUnit::SquareMillimeter),
-            ("yd²", AreaUnit::SquareYard),
-            ("m²", AreaUnit::SquareMeter),
-            ("ac", AreaUnit::Acre),
-            ("ha", AreaUnit::Hectare),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseAreaError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

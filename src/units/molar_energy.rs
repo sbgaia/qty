@@ -2,27 +2,35 @@
 // Source: data/quantities/MolarEnergy.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Molar energy is the amount of energy stored in 1 mole of a substance.
 ///
-/// The internal value is stored in `JoulePerMole` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MolarEnergy(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarEnergyUnit::JoulePerMole`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct MolarEnergy<T = f64>(T);
+
+quantity!(MolarEnergy, MolarEnergyUnit, JoulePerMole);
 
 /// Unit variants for [`MolarEnergy`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MolarEnergyUnit {
     JoulePerMole,
     KilojoulePerMole,
@@ -39,7 +47,7 @@ impl MolarEnergyUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerMole => "J/mol",
             Self::KilojoulePerMole => "kJ/mol",
@@ -47,9 +55,9 @@ impl MolarEnergyUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerMole => &["J/mol"],
             Self::KilojoulePerMole => &["kJ/mol"],
@@ -58,225 +66,96 @@ impl MolarEnergyUnit {
     }
 }
 
-impl MolarEnergy {
+impl core::str::FromStr for MolarEnergyUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "J/mol" => Ok(Self::JoulePerMole),
+            "kJ/mol" => Ok(Self::KilojoulePerMole),
+            "MJ/mol" => Ok(Self::MegajoulePerMole),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> MolarEnergy<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MolarEnergyUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MolarEnergyUnit) -> Self {
         Self(match unit {
-            MolarEnergyUnit::JoulePerMole => x,
-            MolarEnergyUnit::KilojoulePerMole => (x * 1e3),
-            MolarEnergyUnit::MegajoulePerMole => (x * 1e6),
+            MolarEnergyUnit::JoulePerMole => value,
+            MolarEnergyUnit::KilojoulePerMole => value * T::from_f64(1000.0),
+            MolarEnergyUnit::MegajoulePerMole => value * T::from_f64(1000000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MolarEnergyUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MolarEnergyUnit) -> T {
         match unit {
-            MolarEnergyUnit::JoulePerMole => x,
-            MolarEnergyUnit::KilojoulePerMole => (x / 1e3),
-            MolarEnergyUnit::MegajoulePerMole => (x / 1e6),
+            MolarEnergyUnit::JoulePerMole => self.0,
+            MolarEnergyUnit::KilojoulePerMole => self.0 / T::from_f64(1000.0),
+            MolarEnergyUnit::MegajoulePerMole => self.0 / T::from_f64(1000000.0),
         }
     }
 
     /// Creates a [`MolarEnergy`] from a value in JoulesPerMole (`J/mol`).
     #[inline]
-    pub fn from_joules_per_mole(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_joules_per_mole(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in JoulesPerMole (`J/mol`).
     #[inline]
-    pub fn as_joules_per_mole(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_joules_per_mole(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_joules_per_mole`].
     #[inline]
-    pub fn as_joule_per_mole(self) -> Num {
+    pub fn as_joule_per_mole(self) -> T {
         self.as_joules_per_mole()
     }
 
     /// Creates a [`MolarEnergy`] from a value in KilojoulesPerMole (`kJ/mol`).
     #[inline]
-    pub fn from_kilojoules_per_mole(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilojoules_per_mole(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilojoulesPerMole (`kJ/mol`).
     #[inline]
-    pub fn as_kilojoules_per_mole(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilojoules_per_mole(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilojoules_per_mole`].
     #[inline]
-    pub fn as_kilojoule_per_mole(self) -> Num {
+    pub fn as_kilojoule_per_mole(self) -> T {
         self.as_kilojoules_per_mole()
     }
 
     /// Creates a [`MolarEnergy`] from a value in MegajoulesPerMole (`MJ/mol`).
     #[inline]
-    pub fn from_megajoules_per_mole(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megajoules_per_mole(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegajoulesPerMole (`MJ/mol`).
     #[inline]
-    pub fn as_megajoules_per_mole(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megajoules_per_mole(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megajoules_per_mole`].
     #[inline]
-    pub fn as_megajoule_per_mole(self) -> Num {
+    pub fn as_megajoule_per_mole(self) -> T {
         self.as_megajoules_per_mole()
     }
-}
-
-impl crate::Quantity for MolarEnergy {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for MolarEnergy {
-    type Output = MolarEnergy;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for MolarEnergy {
-    type Output = MolarEnergy;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for MolarEnergy {
-    type Output = MolarEnergy;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for MolarEnergy {
-    type Output = MolarEnergy;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<MolarEnergy> for Num {
-    type Output = MolarEnergy;
-    #[inline]
-    fn mul(self, rhs: MolarEnergy) -> MolarEnergy {
-        MolarEnergy(self * rhs.0)
-    }
-}
-impl Div<Num> for MolarEnergy {
-    type Output = MolarEnergy;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for MolarEnergy {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for MolarEnergy {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MolarEnergyUnit::JoulePerMole.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`MolarEnergy`].
-#[derive(Debug)]
-pub struct ParseMolarEnergyError(String);
-
-impl fmt::Display for ParseMolarEnergyError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as MolarEnergy", self.0)
-    }
-}
-
-impl std::error::Error for ParseMolarEnergyError {}
-
-impl FromStr for MolarEnergy {
-    type Err = ParseMolarEnergyError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMolarEnergyError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MolarEnergyUnit)] = &[
-            ("MJ/mol", MolarEnergyUnit::MegajoulePerMole),
-            ("kJ/mol", MolarEnergyUnit::KilojoulePerMole),
-            ("J/mol", MolarEnergyUnit::JoulePerMole),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMolarEnergyError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

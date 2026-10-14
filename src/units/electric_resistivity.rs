@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricResistivity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Electrical resistivity (also known as resistivity, specific electrical resistance, or volume resistivity) is a fundamental property that quantifies how strongly a given material opposes the flow of electric current.
 ///
-/// The internal value is stored in `OhmMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricResistivity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricResistivityUnit::OhmMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricResistivity<T = f64>(T);
+
+quantity!(ElectricResistivity, ElectricResistivityUnit, OhmMeter);
 
 /// Unit variants for [`ElectricResistivity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricResistivityUnit {
     OhmMeter,
     PicoohmMeter,
@@ -61,7 +69,7 @@ impl ElectricResistivityUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::OhmMeter => "Ω·m",
             Self::PicoohmMeter => "pΩ·m",
@@ -80,9 +88,9 @@ impl ElectricResistivityUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::OhmMeter => &["Ω·m"],
             Self::PicoohmMeter => &["pΩ·m"],
@@ -102,478 +110,327 @@ impl ElectricResistivityUnit {
     }
 }
 
-impl ElectricResistivity {
+impl core::str::FromStr for ElectricResistivityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Ω·m" => Ok(Self::OhmMeter),
+            "pΩ·m" => Ok(Self::PicoohmMeter),
+            "nΩ·m" => Ok(Self::NanoohmMeter),
+            "µΩ·m" => Ok(Self::MicroohmMeter),
+            "mΩ·m" => Ok(Self::MilliohmMeter),
+            "kΩ·m" => Ok(Self::KiloohmMeter),
+            "MΩ·m" => Ok(Self::MegaohmMeter),
+            "Ω·cm" => Ok(Self::OhmCentimeter),
+            "pΩ·cm" => Ok(Self::PicoohmCentimeter),
+            "nΩ·cm" => Ok(Self::NanoohmCentimeter),
+            "µΩ·cm" => Ok(Self::MicroohmCentimeter),
+            "mΩ·cm" => Ok(Self::MilliohmCentimeter),
+            "kΩ·cm" => Ok(Self::KiloohmCentimeter),
+            "MΩ·cm" => Ok(Self::MegaohmCentimeter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricResistivity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricResistivityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricResistivityUnit) -> Self {
         Self(match unit {
-            ElectricResistivityUnit::OhmMeter => x,
-            ElectricResistivityUnit::PicoohmMeter => (x * 1e-12),
-            ElectricResistivityUnit::NanoohmMeter => (x * 1e-9),
-            ElectricResistivityUnit::MicroohmMeter => (x * 1e-6),
-            ElectricResistivityUnit::MilliohmMeter => (x * 1e-3),
-            ElectricResistivityUnit::KiloohmMeter => (x * 1e3),
-            ElectricResistivityUnit::MegaohmMeter => (x * 1e6),
-            ElectricResistivityUnit::OhmCentimeter => x / 100.0,
-            ElectricResistivityUnit::PicoohmCentimeter => (x * 1e-12) / 100.0,
-            ElectricResistivityUnit::NanoohmCentimeter => (x * 1e-9) / 100.0,
-            ElectricResistivityUnit::MicroohmCentimeter => (x * 1e-6) / 100.0,
-            ElectricResistivityUnit::MilliohmCentimeter => (x * 1e-3) / 100.0,
-            ElectricResistivityUnit::KiloohmCentimeter => (x * 1e3) / 100.0,
-            ElectricResistivityUnit::MegaohmCentimeter => (x * 1e6) / 100.0,
+            ElectricResistivityUnit::OhmMeter => value,
+            ElectricResistivityUnit::PicoohmMeter => value / T::from_f64(1e12),
+            ElectricResistivityUnit::NanoohmMeter => value / T::from_f64(1e9),
+            ElectricResistivityUnit::MicroohmMeter => value / T::from_f64(1000000.0),
+            ElectricResistivityUnit::MilliohmMeter => value / T::from_f64(1000.0),
+            ElectricResistivityUnit::KiloohmMeter => value * T::from_f64(1000.0),
+            ElectricResistivityUnit::MegaohmMeter => value * T::from_f64(1000000.0),
+            ElectricResistivityUnit::OhmCentimeter => value / T::from_f64(100.0),
+            ElectricResistivityUnit::PicoohmCentimeter => value / T::from_f64(1e14),
+            ElectricResistivityUnit::NanoohmCentimeter => value / T::from_f64(1e11),
+            ElectricResistivityUnit::MicroohmCentimeter => value / T::from_f64(1e8),
+            ElectricResistivityUnit::MilliohmCentimeter => value / T::from_f64(100000.0),
+            ElectricResistivityUnit::KiloohmCentimeter => value * T::from_f64(10.0),
+            ElectricResistivityUnit::MegaohmCentimeter => value * T::from_f64(10000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricResistivityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricResistivityUnit) -> T {
         match unit {
-            ElectricResistivityUnit::OhmMeter => x,
-            ElectricResistivityUnit::PicoohmMeter => (x / 1e-12),
-            ElectricResistivityUnit::NanoohmMeter => (x / 1e-9),
-            ElectricResistivityUnit::MicroohmMeter => (x / 1e-6),
-            ElectricResistivityUnit::MilliohmMeter => (x / 1e-3),
-            ElectricResistivityUnit::KiloohmMeter => (x / 1e3),
-            ElectricResistivityUnit::MegaohmMeter => (x / 1e6),
-            ElectricResistivityUnit::OhmCentimeter => x * 100.0,
-            ElectricResistivityUnit::PicoohmCentimeter => (x / 1e-12) * 100.0,
-            ElectricResistivityUnit::NanoohmCentimeter => (x / 1e-9) * 100.0,
-            ElectricResistivityUnit::MicroohmCentimeter => (x / 1e-6) * 100.0,
-            ElectricResistivityUnit::MilliohmCentimeter => (x / 1e-3) * 100.0,
-            ElectricResistivityUnit::KiloohmCentimeter => (x / 1e3) * 100.0,
-            ElectricResistivityUnit::MegaohmCentimeter => (x / 1e6) * 100.0,
+            ElectricResistivityUnit::OhmMeter => self.0,
+            ElectricResistivityUnit::PicoohmMeter => self.0 * T::from_f64(1e12),
+            ElectricResistivityUnit::NanoohmMeter => self.0 * T::from_f64(1e9),
+            ElectricResistivityUnit::MicroohmMeter => self.0 * T::from_f64(1000000.0),
+            ElectricResistivityUnit::MilliohmMeter => self.0 * T::from_f64(1000.0),
+            ElectricResistivityUnit::KiloohmMeter => self.0 / T::from_f64(1000.0),
+            ElectricResistivityUnit::MegaohmMeter => self.0 / T::from_f64(1000000.0),
+            ElectricResistivityUnit::OhmCentimeter => self.0 * T::from_f64(100.0),
+            ElectricResistivityUnit::PicoohmCentimeter => self.0 * T::from_f64(1e14),
+            ElectricResistivityUnit::NanoohmCentimeter => self.0 * T::from_f64(1e11),
+            ElectricResistivityUnit::MicroohmCentimeter => self.0 * T::from_f64(1e8),
+            ElectricResistivityUnit::MilliohmCentimeter => self.0 * T::from_f64(100000.0),
+            ElectricResistivityUnit::KiloohmCentimeter => self.0 / T::from_f64(10.0),
+            ElectricResistivityUnit::MegaohmCentimeter => self.0 / T::from_f64(10000.0),
         }
     }
 
     /// Creates a [`ElectricResistivity`] from a value in OhmMeters (`Ω·m`).
     #[inline]
-    pub fn from_ohm_meters(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_ohm_meters(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in OhmMeters (`Ω·m`).
     #[inline]
-    pub fn as_ohm_meters(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_ohm_meters(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_ohm_meters`].
     #[inline]
-    pub fn as_ohm_meter(self) -> Num {
+    pub fn as_ohm_meter(self) -> T {
         self.as_ohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in PicoohmMeters (`pΩ·m`).
     #[inline]
-    pub fn from_picoohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picoohm_meters(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in PicoohmMeters (`pΩ·m`).
     #[inline]
-    pub fn as_picoohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picoohm_meters(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picoohm_meters`].
     #[inline]
-    pub fn as_picoohm_meter(self) -> Num {
+    pub fn as_picoohm_meter(self) -> T {
         self.as_picoohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in NanoohmMeters (`nΩ·m`).
     #[inline]
-    pub fn from_nanoohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanoohm_meters(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanoohmMeters (`nΩ·m`).
     #[inline]
-    pub fn as_nanoohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanoohm_meters(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanoohm_meters`].
     #[inline]
-    pub fn as_nanoohm_meter(self) -> Num {
+    pub fn as_nanoohm_meter(self) -> T {
         self.as_nanoohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MicroohmMeters (`µΩ·m`).
     #[inline]
-    pub fn from_microohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microohm_meters(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicroohmMeters (`µΩ·m`).
     #[inline]
-    pub fn as_microohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microohm_meters(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microohm_meters`].
     #[inline]
-    pub fn as_microohm_meter(self) -> Num {
+    pub fn as_microohm_meter(self) -> T {
         self.as_microohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MilliohmMeters (`mΩ·m`).
     #[inline]
-    pub fn from_milliohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_milliohm_meters(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MilliohmMeters (`mΩ·m`).
     #[inline]
-    pub fn as_milliohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_milliohm_meters(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_milliohm_meters`].
     #[inline]
-    pub fn as_milliohm_meter(self) -> Num {
+    pub fn as_milliohm_meter(self) -> T {
         self.as_milliohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in KiloohmMeters (`kΩ·m`).
     #[inline]
-    pub fn from_kiloohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kiloohm_meters(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KiloohmMeters (`kΩ·m`).
     #[inline]
-    pub fn as_kiloohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kiloohm_meters(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kiloohm_meters`].
     #[inline]
-    pub fn as_kiloohm_meter(self) -> Num {
+    pub fn as_kiloohm_meter(self) -> T {
         self.as_kiloohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MegaohmMeters (`MΩ·m`).
     #[inline]
-    pub fn from_megaohm_meters(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megaohm_meters(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegaohmMeters (`MΩ·m`).
     #[inline]
-    pub fn as_megaohm_meters(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megaohm_meters(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megaohm_meters`].
     #[inline]
-    pub fn as_megaohm_meter(self) -> Num {
+    pub fn as_megaohm_meter(self) -> T {
         self.as_megaohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in OhmsCentimeter (`Ω·cm`).
     #[inline]
-    pub fn from_ohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x / 100.0)
+    pub fn from_ohms_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(100.0))
     }
 
     /// Returns the value expressed in OhmsCentimeter (`Ω·cm`).
     #[inline]
-    pub fn as_ohms_centimeter(self) -> Num {
-        let x = self.0;
-        x * 100.0
+    pub fn as_ohms_centimeter(self) -> T {
+        self.0 * T::from_f64(100.0)
     }
 
     /// Alias for [`Self::as_ohms_centimeter`].
     #[inline]
-    pub fn as_ohm_centimeter(self) -> Num {
+    pub fn as_ohm_centimeter(self) -> T {
         self.as_ohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in PicoohmsCentimeter (`pΩ·cm`).
     #[inline]
-    pub fn from_picoohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12) / 100.0)
+    pub fn from_picoohms_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(1e14))
     }
 
     /// Returns the value expressed in PicoohmsCentimeter (`pΩ·cm`).
     #[inline]
-    pub fn as_picoohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-12) * 100.0
+    pub fn as_picoohms_centimeter(self) -> T {
+        self.0 * T::from_f64(1e14)
     }
 
     /// Alias for [`Self::as_picoohms_centimeter`].
     #[inline]
-    pub fn as_picoohm_centimeter(self) -> Num {
+    pub fn as_picoohm_centimeter(self) -> T {
         self.as_picoohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in NanoohmsCentimeter (`nΩ·cm`).
     #[inline]
-    pub fn from_nanoohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9) / 100.0)
+    pub fn from_nanoohms_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(1e11))
     }
 
     /// Returns the value expressed in NanoohmsCentimeter (`nΩ·cm`).
     #[inline]
-    pub fn as_nanoohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-9) * 100.0
+    pub fn as_nanoohms_centimeter(self) -> T {
+        self.0 * T::from_f64(1e11)
     }
 
     /// Alias for [`Self::as_nanoohms_centimeter`].
     #[inline]
-    pub fn as_nanoohm_centimeter(self) -> Num {
+    pub fn as_nanoohm_centimeter(self) -> T {
         self.as_nanoohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MicroohmsCentimeter (`µΩ·cm`).
     #[inline]
-    pub fn from_microohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) / 100.0)
+    pub fn from_microohms_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(1e8))
     }
 
     /// Returns the value expressed in MicroohmsCentimeter (`µΩ·cm`).
     #[inline]
-    pub fn as_microohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) * 100.0
+    pub fn as_microohms_centimeter(self) -> T {
+        self.0 * T::from_f64(1e8)
     }
 
     /// Alias for [`Self::as_microohms_centimeter`].
     #[inline]
-    pub fn as_microohm_centimeter(self) -> Num {
+    pub fn as_microohm_centimeter(self) -> T {
         self.as_microohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MilliohmsCentimeter (`mΩ·cm`).
     #[inline]
-    pub fn from_milliohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) / 100.0)
+    pub fn from_milliohms_centimeter(value: T) -> Self {
+        Self(value / T::from_f64(100000.0))
     }
 
     /// Returns the value expressed in MilliohmsCentimeter (`mΩ·cm`).
     #[inline]
-    pub fn as_milliohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) * 100.0
+    pub fn as_milliohms_centimeter(self) -> T {
+        self.0 * T::from_f64(100000.0)
     }
 
     /// Alias for [`Self::as_milliohms_centimeter`].
     #[inline]
-    pub fn as_milliohm_centimeter(self) -> Num {
+    pub fn as_milliohm_centimeter(self) -> T {
         self.as_milliohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in KiloohmsCentimeter (`kΩ·cm`).
     #[inline]
-    pub fn from_kiloohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) / 100.0)
+    pub fn from_kiloohms_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10.0))
     }
 
     /// Returns the value expressed in KiloohmsCentimeter (`kΩ·cm`).
     #[inline]
-    pub fn as_kiloohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 100.0
+    pub fn as_kiloohms_centimeter(self) -> T {
+        self.0 / T::from_f64(10.0)
     }
 
     /// Alias for [`Self::as_kiloohms_centimeter`].
     #[inline]
-    pub fn as_kiloohm_centimeter(self) -> Num {
+    pub fn as_kiloohm_centimeter(self) -> T {
         self.as_kiloohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MegaohmsCentimeter (`MΩ·cm`).
     #[inline]
-    pub fn from_megaohms_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6) / 100.0)
+    pub fn from_megaohms_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in MegaohmsCentimeter (`MΩ·cm`).
     #[inline]
-    pub fn as_megaohms_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e6) * 100.0
+    pub fn as_megaohms_centimeter(self) -> T {
+        self.0 / T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_megaohms_centimeter`].
     #[inline]
-    pub fn as_megaohm_centimeter(self) -> Num {
+    pub fn as_megaohm_centimeter(self) -> T {
         self.as_megaohms_centimeter()
     }
-}
-
-impl crate::Quantity for ElectricResistivity {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricResistivity {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricResistivity {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricResistivity {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricResistivity {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricResistivity> for Num {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn mul(self, rhs: ElectricResistivity) -> ElectricResistivity {
-        ElectricResistivity(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricResistivity {
-    type Output = ElectricResistivity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricResistivity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricResistivity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricResistivityUnit::OhmMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricResistivity`].
-#[derive(Debug)]
-pub struct ParseElectricResistivityError(String);
-
-impl fmt::Display for ParseElectricResistivityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricResistivity", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricResistivityError {}
-
-impl FromStr for ElectricResistivity {
-    type Err = ParseElectricResistivityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricResistivityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricResistivityUnit)] = &[
-            ("µΩ·cm", ElectricResistivityUnit::MicroohmCentimeter),
-            ("MΩ·cm", ElectricResistivityUnit::MegaohmCentimeter),
-            ("kΩ·cm", ElectricResistivityUnit::KiloohmCentimeter),
-            ("mΩ·cm", ElectricResistivityUnit::MilliohmCentimeter),
-            ("nΩ·cm", ElectricResistivityUnit::NanoohmCentimeter),
-            ("pΩ·cm", ElectricResistivityUnit::PicoohmCentimeter),
-            ("µΩ·m", ElectricResistivityUnit::MicroohmMeter),
-            ("MΩ·m", ElectricResistivityUnit::MegaohmMeter),
-            ("kΩ·m", ElectricResistivityUnit::KiloohmMeter),
-            ("mΩ·m", ElectricResistivityUnit::MilliohmMeter),
-            ("nΩ·m", ElectricResistivityUnit::NanoohmMeter),
-            ("pΩ·m", ElectricResistivityUnit::PicoohmMeter),
-            ("Ω·cm", ElectricResistivityUnit::OhmCentimeter),
-            ("Ω·m", ElectricResistivityUnit::OhmMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricResistivityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

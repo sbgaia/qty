@@ -1,4 +1,6 @@
-//! Translates C# arithmetic expressions (UnitsNet format) into valid Rust `f64` expressions.
+//! Translates C# arithmetic expressions (UnitsNet format) verbatim into Rust `f64`
+//! expressions. Used only to emit independent oracles in the generated tests; the
+//! library code itself uses the exact, folded forms from [`crate::expr`].
 
 use std::sync::OnceLock;
 
@@ -39,7 +41,7 @@ fn promote_integers(s: &str) -> String {
 /// 4. Bare integer literals promoted to `f64`: `365` → `365.0`
 pub fn translate(raw: &str, var: &str) -> String {
     let s = raw.replace("{x}", var);
-    let s = s.replace("Math.PI", "(std::f64::consts::PI as Num)");
+    let s = s.replace("Math.PI", "std::f64::consts::PI");
     let s = double_suffix_re().replace_all(&s, "${1}.0");
     promote_integers(&s)
 }
@@ -51,15 +53,16 @@ pub fn translate(raw: &str, var: &str) -> String {
 ///
 /// This correctly handles all linear (non-affine) formulas, which is the only kind that
 /// UnitsNet applies SI prefixes to.
-pub fn translate_with_factor(raw: &str, factor: f64, to_base: bool) -> String {
+pub fn translate_with_factor(raw: &str, factor: &str, to_base: bool) -> String {
     // Format factor in scientific notation so it is always a valid Rust `f64` literal.
+    let factor: f64 = factor.parse().expect("prefix factor");
     let factor_str = format!("{factor:e}");
     let substituted = if to_base {
         raw.replace("{x}", &format!("(x * {factor_str})"))
     } else {
         raw.replace("{x}", &format!("(x / {factor_str})"))
     };
-    let substituted = substituted.replace("Math.PI", "(std::f64::consts::PI as Num)");
+    let substituted = substituted.replace("Math.PI", "std::f64::consts::PI");
     let s = double_suffix_re().replace_all(&substituted, "${1}.0");
     promote_integers(&s)
 }
@@ -108,13 +111,13 @@ mod tests {
 
     #[test]
     fn prefix_to_base() {
-        let result = translate_with_factor("{x}", 1e3_f64, true);
+        let result = translate_with_factor("{x}", "1e3", true);
         assert_eq!(result, "(x * 1e3)");
     }
 
     #[test]
     fn prefix_from_base() {
-        let result = translate_with_factor("{x}", 1e3_f64, false);
+        let result = translate_with_factor("{x}", "1e3", false);
         assert_eq!(result, "(x / 1e3)");
     }
 }

@@ -2,27 +2,39 @@
 // Source: data/quantities/StandardVolumeFlow.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The molar flow rate of a gas corrected to standardized conditions of temperature and pressure thus representing a fixed number of moles of gas regardless of composition and actual flow conditions.
 ///
-/// The internal value is stored in `StandardCubicMeterPerSecond` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct StandardVolumeFlow(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`StandardVolumeFlowUnit::StandardCubicMeterPerSecond`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct StandardVolumeFlow<T = f64>(T);
+
+quantity!(
+    StandardVolumeFlow,
+    StandardVolumeFlowUnit,
+    StandardCubicMeterPerSecond
+);
 
 /// Unit variants for [`StandardVolumeFlow`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum StandardVolumeFlowUnit {
     StandardCubicMeterPerSecond,
     StandardCubicMeterPerMinute,
@@ -51,7 +63,7 @@ impl StandardVolumeFlowUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::StandardCubicMeterPerSecond => "Sm³/s",
             Self::StandardCubicMeterPerMinute => "Sm³/min",
@@ -65,9 +77,9 @@ impl StandardVolumeFlowUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::StandardCubicMeterPerSecond => &["Sm³/s"],
             Self::StandardCubicMeterPerMinute => &["Sm³/min"],
@@ -82,369 +94,230 @@ impl StandardVolumeFlowUnit {
     }
 }
 
-impl StandardVolumeFlow {
+impl core::str::FromStr for StandardVolumeFlowUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "Sm³/s" => Ok(Self::StandardCubicMeterPerSecond),
+            "Sm³/min" => Ok(Self::StandardCubicMeterPerMinute),
+            "Sm³/h" => Ok(Self::StandardCubicMeterPerHour),
+            "Sm³/d" => Ok(Self::StandardCubicMeterPerDay),
+            "sccm" => Ok(Self::StandardCubicCentimeterPerMinute),
+            "slm" => Ok(Self::StandardLiterPerMinute),
+            "Sft³/s" => Ok(Self::StandardCubicFootPerSecond),
+            "scfm" => Ok(Self::StandardCubicFootPerMinute),
+            "scfh" => Ok(Self::StandardCubicFootPerHour),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> StandardVolumeFlow<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: StandardVolumeFlowUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: StandardVolumeFlowUnit) -> Self {
         Self(match unit {
-            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => x,
-            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => x / 60.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerHour => x / 3600.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerDay => x / 86400.0,
-            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => x / 6e7,
-            StandardVolumeFlowUnit::StandardLiterPerMinute => x / 60000.0,
-            StandardVolumeFlowUnit::StandardCubicFootPerSecond => x * 0.028316846592,
-            StandardVolumeFlowUnit::StandardCubicFootPerMinute => x * 0.028316846592 / 60.0,
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => x * 0.028316846592 / 3600.0,
+            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value / T::from_f64(60.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => value / T::from_f64(3600.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => value / T::from_f64(86400.0),
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value / T::from_f64(6e7),
+            StandardVolumeFlowUnit::StandardLiterPerMinute => value / T::from_f64(60000.0),
+            StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
+                value * T::from_f64(0.028316846592)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
+                value * T::from_f64(0.0004719474432)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => value * T::from_f64(7.86579072e-6),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: StandardVolumeFlowUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: StandardVolumeFlowUnit) -> T {
         match unit {
-            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => x,
-            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => x * 60.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerHour => x * 3600.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerDay => x * 86400.0,
-            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => x * 6e7,
-            StandardVolumeFlowUnit::StandardLiterPerMinute => x * 60000.0,
-            StandardVolumeFlowUnit::StandardCubicFootPerSecond => x / 0.028316846592,
-            StandardVolumeFlowUnit::StandardCubicFootPerMinute => x / (0.028316846592 / 60.0),
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => x / (0.028316846592 / 3600.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => self.0,
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => self.0 * T::from_f64(60.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => self.0 * T::from_f64(3600.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => self.0 * T::from_f64(86400.0),
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => self.0 * T::from_f64(6e7),
+            StandardVolumeFlowUnit::StandardLiterPerMinute => self.0 * T::from_f64(60000.0),
+            StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
+                self.0 / T::from_f64(0.028316846592)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
+                self.0 / T::from_f64(0.0004719474432)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => self.0 / T::from_f64(7.86579072e-6),
         }
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerSecond (`Sm³/s`).
     #[inline]
-    pub fn from_standard_cubic_meters_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_standard_cubic_meters_per_second(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in StandardCubicMetersPerSecond (`Sm³/s`).
     #[inline]
-    pub fn as_standard_cubic_meters_per_second(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_standard_cubic_meters_per_second(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_standard_cubic_meters_per_second`].
     #[inline]
-    pub fn as_standard_cubic_meter_per_second(self) -> Num {
+    pub fn as_standard_cubic_meter_per_second(self) -> T {
         self.as_standard_cubic_meters_per_second()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerMinute (`Sm³/min`).
     #[inline]
-    pub fn from_standard_cubic_meters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60.0)
+    pub fn from_standard_cubic_meters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60.0))
     }
 
     /// Returns the value expressed in StandardCubicMetersPerMinute (`Sm³/min`).
     #[inline]
-    pub fn as_standard_cubic_meters_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60.0
+    pub fn as_standard_cubic_meters_per_minute(self) -> T {
+        self.0 * T::from_f64(60.0)
     }
 
     /// Alias for [`Self::as_standard_cubic_meters_per_minute`].
     #[inline]
-    pub fn as_standard_cubic_meter_per_minute(self) -> Num {
+    pub fn as_standard_cubic_meter_per_minute(self) -> T {
         self.as_standard_cubic_meters_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerHour (`Sm³/h`).
     #[inline]
-    pub fn from_standard_cubic_meters_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x / 3600.0)
+    pub fn from_standard_cubic_meters_per_hour(value: T) -> Self {
+        Self(value / T::from_f64(3600.0))
     }
 
     /// Returns the value expressed in StandardCubicMetersPerHour (`Sm³/h`).
     #[inline]
-    pub fn as_standard_cubic_meters_per_hour(self) -> Num {
-        let x = self.0;
-        x * 3600.0
+    pub fn as_standard_cubic_meters_per_hour(self) -> T {
+        self.0 * T::from_f64(3600.0)
     }
 
     /// Alias for [`Self::as_standard_cubic_meters_per_hour`].
     #[inline]
-    pub fn as_standard_cubic_meter_per_hour(self) -> Num {
+    pub fn as_standard_cubic_meter_per_hour(self) -> T {
         self.as_standard_cubic_meters_per_hour()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerDay (`Sm³/d`).
     #[inline]
-    pub fn from_standard_cubic_meters_per_day(value: Num) -> Self {
-        let x = value;
-        Self(x / 86400.0)
+    pub fn from_standard_cubic_meters_per_day(value: T) -> Self {
+        Self(value / T::from_f64(86400.0))
     }
 
     /// Returns the value expressed in StandardCubicMetersPerDay (`Sm³/d`).
     #[inline]
-    pub fn as_standard_cubic_meters_per_day(self) -> Num {
-        let x = self.0;
-        x * 86400.0
+    pub fn as_standard_cubic_meters_per_day(self) -> T {
+        self.0 * T::from_f64(86400.0)
     }
 
     /// Alias for [`Self::as_standard_cubic_meters_per_day`].
     #[inline]
-    pub fn as_standard_cubic_meter_per_day(self) -> Num {
+    pub fn as_standard_cubic_meter_per_day(self) -> T {
         self.as_standard_cubic_meters_per_day()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicCentimetersPerMinute (`sccm`).
     #[inline]
-    pub fn from_standard_cubic_centimeters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 6e7)
+    pub fn from_standard_cubic_centimeters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(6e7))
     }
 
     /// Returns the value expressed in StandardCubicCentimetersPerMinute (`sccm`).
     #[inline]
-    pub fn as_standard_cubic_centimeters_per_minute(self) -> Num {
-        let x = self.0;
-        x * 6e7
+    pub fn as_standard_cubic_centimeters_per_minute(self) -> T {
+        self.0 * T::from_f64(6e7)
     }
 
     /// Alias for [`Self::as_standard_cubic_centimeters_per_minute`].
     #[inline]
-    pub fn as_standard_cubic_centimeter_per_minute(self) -> Num {
+    pub fn as_standard_cubic_centimeter_per_minute(self) -> T {
         self.as_standard_cubic_centimeters_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardLitersPerMinute (`slm`).
     #[inline]
-    pub fn from_standard_liters_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x / 60000.0)
+    pub fn from_standard_liters_per_minute(value: T) -> Self {
+        Self(value / T::from_f64(60000.0))
     }
 
     /// Returns the value expressed in StandardLitersPerMinute (`slm`).
     #[inline]
-    pub fn as_standard_liters_per_minute(self) -> Num {
-        let x = self.0;
-        x * 60000.0
+    pub fn as_standard_liters_per_minute(self) -> T {
+        self.0 * T::from_f64(60000.0)
     }
 
     /// Alias for [`Self::as_standard_liters_per_minute`].
     #[inline]
-    pub fn as_standard_liter_per_minute(self) -> Num {
+    pub fn as_standard_liter_per_minute(self) -> T {
         self.as_standard_liters_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerSecond (`Sft³/s`).
     #[inline]
-    pub fn from_standard_cubic_feet_per_second(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028316846592)
+    pub fn from_standard_cubic_feet_per_second(value: T) -> Self {
+        Self(value * T::from_f64(0.028316846592))
     }
 
     /// Returns the value expressed in StandardCubicFeetPerSecond (`Sft³/s`).
     #[inline]
-    pub fn as_standard_cubic_feet_per_second(self) -> Num {
-        let x = self.0;
-        x / 0.028316846592
+    pub fn as_standard_cubic_feet_per_second(self) -> T {
+        self.0 / T::from_f64(0.028316846592)
     }
 
     /// Alias for [`Self::as_standard_cubic_feet_per_second`].
     #[inline]
-    pub fn as_standard_cubic_foot_per_second(self) -> Num {
+    pub fn as_standard_cubic_foot_per_second(self) -> T {
         self.as_standard_cubic_feet_per_second()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerMinute (`scfm`).
     #[inline]
-    pub fn from_standard_cubic_feet_per_minute(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028316846592 / 60.0)
+    pub fn from_standard_cubic_feet_per_minute(value: T) -> Self {
+        Self(value * T::from_f64(0.0004719474432))
     }
 
     /// Returns the value expressed in StandardCubicFeetPerMinute (`scfm`).
     #[inline]
-    pub fn as_standard_cubic_feet_per_minute(self) -> Num {
-        let x = self.0;
-        x / (0.028316846592 / 60.0)
+    pub fn as_standard_cubic_feet_per_minute(self) -> T {
+        self.0 / T::from_f64(0.0004719474432)
     }
 
     /// Alias for [`Self::as_standard_cubic_feet_per_minute`].
     #[inline]
-    pub fn as_standard_cubic_foot_per_minute(self) -> Num {
+    pub fn as_standard_cubic_foot_per_minute(self) -> T {
         self.as_standard_cubic_feet_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerHour (`scfh`).
     #[inline]
-    pub fn from_standard_cubic_feet_per_hour(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.028316846592 / 3600.0)
+    pub fn from_standard_cubic_feet_per_hour(value: T) -> Self {
+        Self(value * T::from_f64(7.86579072e-6))
     }
 
     /// Returns the value expressed in StandardCubicFeetPerHour (`scfh`).
     #[inline]
-    pub fn as_standard_cubic_feet_per_hour(self) -> Num {
-        let x = self.0;
-        x / (0.028316846592 / 3600.0)
+    pub fn as_standard_cubic_feet_per_hour(self) -> T {
+        self.0 / T::from_f64(7.86579072e-6)
     }
 
     /// Alias for [`Self::as_standard_cubic_feet_per_hour`].
     #[inline]
-    pub fn as_standard_cubic_foot_per_hour(self) -> Num {
+    pub fn as_standard_cubic_foot_per_hour(self) -> T {
         self.as_standard_cubic_feet_per_hour()
     }
-}
-
-impl crate::Quantity for StandardVolumeFlow {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for StandardVolumeFlow {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for StandardVolumeFlow {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for StandardVolumeFlow {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for StandardVolumeFlow {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<StandardVolumeFlow> for Num {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn mul(self, rhs: StandardVolumeFlow) -> StandardVolumeFlow {
-        StandardVolumeFlow(self * rhs.0)
-    }
-}
-impl Div<Num> for StandardVolumeFlow {
-    type Output = StandardVolumeFlow;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for StandardVolumeFlow {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for StandardVolumeFlow {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerSecond.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`StandardVolumeFlow`].
-#[derive(Debug)]
-pub struct ParseStandardVolumeFlowError(String);
-
-impl fmt::Display for ParseStandardVolumeFlowError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as StandardVolumeFlow", self.0)
-    }
-}
-
-impl std::error::Error for ParseStandardVolumeFlowError {}
-
-impl FromStr for StandardVolumeFlow {
-    type Err = ParseStandardVolumeFlowError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseStandardVolumeFlowError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, StandardVolumeFlowUnit)] = &[
-            (
-                "Sm³/min",
-                StandardVolumeFlowUnit::StandardCubicMeterPerMinute,
-            ),
-            ("Sft³/s", StandardVolumeFlowUnit::StandardCubicFootPerSecond),
-            ("Sm³/d", StandardVolumeFlowUnit::StandardCubicMeterPerDay),
-            ("Sm³/h", StandardVolumeFlowUnit::StandardCubicMeterPerHour),
-            ("Sm³/s", StandardVolumeFlowUnit::StandardCubicMeterPerSecond),
-            (
-                "sccm",
-                StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute,
-            ),
-            ("scfh", StandardVolumeFlowUnit::StandardCubicFootPerHour),
-            ("scfm", StandardVolumeFlowUnit::StandardCubicFootPerMinute),
-            ("slm", StandardVolumeFlowUnit::StandardLiterPerMinute),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseStandardVolumeFlowError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

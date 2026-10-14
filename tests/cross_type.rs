@@ -3,2369 +3,5565 @@
 use unitsnet_rs::*;
 
 #[test]
-fn div_acceleration_duration_gives_jerk() {
+fn mul_absorbed_dose_of_ionizing_radiation_area() {
+    let a = AbsorbedDoseOfIonizingRadiation::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: DoseAreaProduct = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: DoseAreaProduct<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_acceleration_area_density() {
     let a = Acceleration::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: Jerk = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_acceleration_jerk_gives_duration() {
-    let a = Acceleration::from_base(6.0);
-    let b = Jerk::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_amount_of_substance_duration_gives_molar_flow() {
-    let a = AmountOfSubstance::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: MolarFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_amount_of_substance_molar_flow_gives_duration() {
-    let a = AmountOfSubstance::from_base(6.0);
-    let b = MolarFlow::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_amount_of_substance_molarity_gives_volume() {
-    let a = AmountOfSubstance::from_base(6.0);
-    let b = Molarity::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_amount_of_substance_volume_gives_molarity() {
-    let a = AmountOfSubstance::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: Molarity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_angle_duration_gives_rotational_speed() {
-    let a = Angle::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: RotationalSpeed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_angle_rotational_speed_gives_duration() {
-    let a = Angle::from_base(6.0);
-    let b = RotationalSpeed::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_area_length_gives_length() {
-    let a = Area::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_area_reciprocal_length_gives_volume() {
-    let a = Area::from_base(6.0);
-    let b = ReciprocalLength::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_area_volume_gives_reciprocal_length() {
-    let a = Area::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: ReciprocalLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_area_moment_of_inertia_length_gives_volume() {
-    let a = AreaMomentOfInertia::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_area_moment_of_inertia_volume_gives_length() {
-    let a = AreaMomentOfInertia::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_dynamic_viscosity_density_gives_kinematic_viscosity() {
-    let a = DynamicViscosity::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: KinematicViscosity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_dynamic_viscosity_kinematic_viscosity_gives_density() {
-    let a = DynamicViscosity::from_base(6.0);
-    let b = KinematicViscosity::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_charge_duration_gives_electric_current() {
-    let a = ElectricCharge::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: ElectricCurrent = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_charge_electric_current_gives_duration() {
-    let a = ElectricCharge::from_base(6.0);
-    let b = ElectricCurrent::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_current_duration_gives_electric_current_gradient() {
-    let a = ElectricCurrent::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: ElectricCurrentGradient = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_current_electric_current_gradient_gives_duration() {
-    let a = ElectricCurrent::from_base(6.0);
-    let b = ElectricCurrentGradient::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_potential_electric_current_gives_electric_resistance() {
-    let a = ElectricPotential::from_base(6.0);
-    let b = ElectricCurrent::from_base(2.0);
-    let c: ElectricResistance = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_electric_potential_electric_resistance_gives_electric_current() {
-    let a = ElectricPotential::from_base(6.0);
-    let b = ElectricResistance::from_base(2.0);
-    let c: ElectricCurrent = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_amount_of_substance_gives_molar_energy() {
-    let a = Energy::from_base(6.0);
-    let b = AmountOfSubstance::from_base(2.0);
-    let c: MolarEnergy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_duration_gives_power() {
-    let a = Energy::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: Power = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_electric_charge_gives_electric_potential() {
-    let a = Energy::from_base(6.0);
-    let b = ElectricCharge::from_base(2.0);
-    let c: ElectricPotential = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_electric_potential_gives_electric_charge() {
-    let a = Energy::from_base(6.0);
-    let b = ElectricPotential::from_base(2.0);
-    let c: ElectricCharge = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_energy_density_gives_volume() {
-    let a = Energy::from_base(6.0);
-    let b = EnergyDensity::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_entropy_gives_temperature_delta() {
-    let a = Energy::from_base(6.0);
-    let b = Entropy::from_base(2.0);
-    let c: TemperatureDelta = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_mass_gives_specific_energy() {
-    let a = Energy::from_base(6.0);
-    let b = Mass::from_base(2.0);
-    let c: SpecificEnergy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_molar_energy_gives_amount_of_substance() {
-    let a = Energy::from_base(6.0);
-    let b = MolarEnergy::from_base(2.0);
-    let c: AmountOfSubstance = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_power_gives_duration() {
-    let a = Energy::from_base(6.0);
-    let b = Power::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_specific_energy_gives_mass() {
-    let a = Energy::from_base(6.0);
-    let b = SpecificEnergy::from_base(2.0);
-    let c: Mass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_temperature_delta_gives_entropy() {
-    let a = Energy::from_base(6.0);
-    let b = TemperatureDelta::from_base(2.0);
-    let c: Entropy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_energy_volume_gives_energy_density() {
-    let a = Energy::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: EnergyDensity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_entropy_mass_gives_specific_entropy() {
-    let a = Entropy::from_base(6.0);
-    let b = Mass::from_base(2.0);
-    let c: SpecificEntropy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_entropy_specific_entropy_gives_mass() {
-    let a = Entropy::from_base(6.0);
-    let b = SpecificEntropy::from_base(2.0);
-    let c: Mass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_acceleration_gives_mass() {
-    let a = Force::from_base(6.0);
-    let b = Acceleration::from_base(2.0);
-    let c: Mass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_area_gives_pressure() {
-    let a = Force::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Pressure = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_duration_gives_force_change_rate() {
-    let a = Force::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: ForceChangeRate = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_force_change_rate_gives_duration() {
-    let a = Force::from_base(6.0);
-    let b = ForceChangeRate::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_force_per_length_gives_length() {
-    let a = Force::from_base(6.0);
-    let b = ForcePerLength::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_length_gives_force_per_length() {
-    let a = Force::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: ForcePerLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_mass_gives_acceleration() {
-    let a = Force::from_base(6.0);
-    let b = Mass::from_base(2.0);
-    let c: Acceleration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_pressure_gives_area() {
-    let a = Force::from_base(6.0);
-    let b = Pressure::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_area_gives_specific_weight() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: SpecificWeight = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_force_gives_reciprocal_length() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = Force::from_base(2.0);
-    let c: ReciprocalLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_length_gives_pressure() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Pressure = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_pressure_gives_length() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = Pressure::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_reciprocal_length_gives_force() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = ReciprocalLength::from_base(2.0);
-    let c: Force = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_force_per_length_specific_weight_gives_area() {
-    let a = ForcePerLength::from_base(6.0);
-    let b = SpecificWeight::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_kinematic_viscosity_length_gives_speed() {
-    let a = KinematicViscosity::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_kinematic_viscosity_speed_gives_length() {
-    let a = KinematicViscosity::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_area_gives_reciprocal_length() {
-    let a = Length::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: ReciprocalLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_duration_gives_speed() {
-    let a = Length::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_reciprocal_area_gives_volume() {
-    let a = Length::from_base(6.0);
-    let b = ReciprocalArea::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_reciprocal_length_gives_area() {
-    let a = Length::from_base(6.0);
-    let b = ReciprocalLength::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_speed_gives_duration() {
-    let a = Length::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_length_volume_gives_reciprocal_area() {
-    let a = Length::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: ReciprocalArea = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_linear_density_area_gives_density() {
-    let a = LinearDensity::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_linear_density_density_gives_area() {
-    let a = LinearDensity::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_luminous_flux_area_gives_illuminance() {
-    let a = LuminousFlux::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Illuminance = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_luminous_flux_illuminance_gives_area() {
-    let a = LuminousFlux::from_base(6.0);
-    let b = Illuminance::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_luminous_intensity_area_gives_luminance() {
-    let a = LuminousIntensity::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Luminance = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_luminous_intensity_luminance_gives_area() {
-    let a = LuminousIntensity::from_base(6.0);
-    let b = Luminance::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_amount_of_substance_gives_molar_mass() {
-    let a = Mass::from_base(6.0);
-    let b = AmountOfSubstance::from_base(2.0);
-    let c: MolarMass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_area_gives_area_density() {
-    let a = Mass::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: AreaDensity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_area_density_gives_area() {
-    let a = Mass::from_base(6.0);
     let b = AreaDensity::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
+    let c: Pressure = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn div_mass_density_gives_volume() {
-    let a = Mass::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: Volume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_duration_gives_mass_flow() {
-    let a = Mass::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: MassFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_length_gives_linear_density() {
-    let a = Mass::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: LinearDensity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_linear_density_gives_length() {
-    let a = Mass::from_base(6.0);
-    let b = LinearDensity::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_mass_flow_gives_duration() {
-    let a = Mass::from_base(6.0);
-    let b = MassFlow::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_mass_fraction_gives_mass() {
-    let a = Mass::from_base(6.0);
-    let b = MassFraction::from_base(2.0);
-    let c: Mass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_molar_mass_gives_amount_of_substance() {
-    let a = Mass::from_base(6.0);
-    let b = MolarMass::from_base(2.0);
-    let c: AmountOfSubstance = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_volume_gives_density() {
-    let a = Mass::from_base(6.0);
-    let b = Volume::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_concentration_density_gives_volume_concentration() {
-    let a = MassConcentration::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: VolumeConcentration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_concentration_molar_mass_gives_molarity() {
-    let a = MassConcentration::from_base(6.0);
-    let b = MolarMass::from_base(2.0);
-    let c: Molarity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_concentration_molarity_gives_molar_mass() {
-    let a = MassConcentration::from_base(6.0);
-    let b = Molarity::from_base(2.0);
-    let c: MolarMass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_concentration_volume_concentration_gives_density() {
-    let a = MassConcentration::from_base(6.0);
-    let b = VolumeConcentration::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_area_gives_mass_flux() {
-    let a = MassFlow::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: MassFlux = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_brake_specific_fuel_consumption_gives_power() {
-    let a = MassFlow::from_base(6.0);
-    let b = BrakeSpecificFuelConsumption::from_base(2.0);
-    let c: Power = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_density_gives_volume_flow() {
-    let a = MassFlow::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: VolumeFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_mass_flux_gives_area() {
-    let a = MassFlow::from_base(6.0);
-    let b = MassFlux::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_molar_flow_gives_molar_mass() {
-    let a = MassFlow::from_base(6.0);
-    let b = MolarFlow::from_base(2.0);
-    let c: MolarMass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_molar_mass_gives_molar_flow() {
-    let a = MassFlow::from_base(6.0);
-    let b = MolarMass::from_base(2.0);
-    let c: MolarFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_power_gives_brake_specific_fuel_consumption() {
-    let a = MassFlow::from_base(6.0);
-    let b = Power::from_base(2.0);
-    let c: BrakeSpecificFuelConsumption = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flow_volume_flow_gives_density() {
-    let a = MassFlow::from_base(6.0);
-    let b = VolumeFlow::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flux_density_gives_speed() {
-    let a = MassFlux::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_mass_flux_speed_gives_density() {
-    let a = MassFlux::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_molar_flow_molarity_gives_volume_flow() {
-    let a = MolarFlow::from_base(6.0);
-    let b = Molarity::from_base(2.0);
-    let c: VolumeFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_molar_flow_volume_flow_gives_molarity() {
-    let a = MolarFlow::from_base(6.0);
-    let b = VolumeFlow::from_base(2.0);
-    let c: Molarity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_molarity_volume_concentration_gives_molarity() {
-    let a = Molarity::from_base(6.0);
-    let b = VolumeConcentration::from_base(2.0);
-    let c: Molarity = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_area_gives_heat_flux() {
-    let a = Power::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: HeatFlux = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_electric_current_gives_electric_potential() {
-    let a = Power::from_base(6.0);
-    let b = ElectricCurrent::from_base(2.0);
-    let c: ElectricPotential = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_electric_potential_gives_electric_current() {
-    let a = Power::from_base(6.0);
-    let b = ElectricPotential::from_base(2.0);
-    let c: ElectricCurrent = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_energy_gives_frequency() {
-    let a = Power::from_base(6.0);
-    let b = Energy::from_base(2.0);
-    let c: Frequency = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_force_gives_speed() {
-    let a = Power::from_base(6.0);
-    let b = Force::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_frequency_gives_energy() {
-    let a = Power::from_base(6.0);
-    let b = Frequency::from_base(2.0);
-    let c: Energy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_heat_flux_gives_area() {
-    let a = Power::from_base(6.0);
-    let b = HeatFlux::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_mass_flow_gives_specific_energy() {
-    let a = Power::from_base(6.0);
-    let b = MassFlow::from_base(2.0);
-    let c: SpecificEnergy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_rotational_speed_gives_torque() {
-    let a = Power::from_base(6.0);
-    let b = RotationalSpeed::from_base(2.0);
-    let c: Torque = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_specific_energy_gives_mass_flow() {
-    let a = Power::from_base(6.0);
-    let b = SpecificEnergy::from_base(2.0);
-    let c: MassFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_speed_gives_force() {
-    let a = Power::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Force = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_power_torque_gives_rotational_speed() {
-    let a = Power::from_base(6.0);
-    let b = Torque::from_base(2.0);
-    let c: RotationalSpeed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_duration_gives_pressure_change_rate() {
-    let a = Pressure::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: PressureChangeRate = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_force_gives_reciprocal_area() {
-    let a = Pressure::from_base(6.0);
-    let b = Force::from_base(2.0);
-    let c: ReciprocalArea = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_force_per_length_gives_reciprocal_length() {
-    let a = Pressure::from_base(6.0);
-    let b = ForcePerLength::from_base(2.0);
-    let c: ReciprocalLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_length_gives_specific_weight() {
-    let a = Pressure::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: SpecificWeight = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_pressure_change_rate_gives_duration() {
-    let a = Pressure::from_base(6.0);
-    let b = PressureChangeRate::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_reciprocal_area_gives_force() {
-    let a = Pressure::from_base(6.0);
-    let b = ReciprocalArea::from_base(2.0);
-    let c: Force = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_reciprocal_length_gives_force_per_length() {
-    let a = Pressure::from_base(6.0);
-    let b = ReciprocalLength::from_base(2.0);
-    let c: ForcePerLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_pressure_specific_weight_gives_length() {
-    let a = Pressure::from_base(6.0);
-    let b = SpecificWeight::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_radiation_equivalent_dose_duration_gives_radiation_equivalent_dose_rate() {
-    let a = RadiationEquivalentDose::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: RadiationEquivalentDoseRate = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate_gives_duration() {
-    let a = RadiationEquivalentDose::from_base(6.0);
-    let b = RadiationEquivalentDoseRate::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_reciprocal_area_reciprocal_length_gives_reciprocal_length() {
-    let a = ReciprocalArea::from_base(6.0);
-    let b = ReciprocalLength::from_base(2.0);
-    let c: ReciprocalLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_reciprocal_length_length_gives_reciprocal_area() {
-    let a = ReciprocalLength::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: ReciprocalArea = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_reciprocal_length_reciprocal_area_gives_length() {
-    let a = ReciprocalLength::from_base(6.0);
-    let b = ReciprocalArea::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_rotational_stiffness_length_gives_rotational_stiffness_per_length() {
-    let a = RotationalStiffness::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: RotationalStiffnessPerLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_rotational_stiffness_rotational_stiffness_per_length_gives_length() {
-    let a = RotationalStiffness::from_base(6.0);
-    let b = RotationalStiffnessPerLength::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_specific_energy_specific_entropy_gives_temperature_delta() {
-    let a = SpecificEnergy::from_base(6.0);
-    let b = SpecificEntropy::from_base(2.0);
-    let c: TemperatureDelta = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_specific_energy_speed_gives_speed() {
-    let a = SpecificEnergy::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_specific_energy_temperature_delta_gives_specific_entropy() {
-    let a = SpecificEnergy::from_base(6.0);
-    let b = TemperatureDelta::from_base(2.0);
-    let c: SpecificEntropy = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_specific_weight_acceleration_gives_density() {
-    let a = SpecificWeight::from_base(6.0);
-    let b = Acceleration::from_base(2.0);
-    let c: Density = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_specific_weight_density_gives_acceleration() {
-    let a = SpecificWeight::from_base(6.0);
-    let b = Density::from_base(2.0);
-    let c: Acceleration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_speed_acceleration_gives_duration() {
-    let a = Speed::from_base(6.0);
-    let b = Acceleration::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_speed_duration_gives_acceleration() {
-    let a = Speed::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: Acceleration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_temperature_delta_duration_gives_temperature_change_rate() {
-    let a = TemperatureDelta::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: TemperatureChangeRate = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_temperature_delta_length_gives_temperature_gradient() {
-    let a = TemperatureDelta::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: TemperatureGradient = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_temperature_delta_temperature_change_rate_gives_duration() {
-    let a = TemperatureDelta::from_base(6.0);
-    let b = TemperatureChangeRate::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_temperature_delta_temperature_gradient_gives_length() {
-    let a = TemperatureDelta::from_base(6.0);
-    let b = TemperatureGradient::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_angle_gives_rotational_stiffness() {
-    let a = Torque::from_base(6.0);
-    let b = Angle::from_base(2.0);
-    let c: RotationalStiffness = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_area_gives_force_per_length() {
-    let a = Torque::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: ForcePerLength = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_force_gives_length() {
-    let a = Torque::from_base(6.0);
-    let b = Force::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_force_per_length_gives_area() {
-    let a = Torque::from_base(6.0);
-    let b = ForcePerLength::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_length_gives_force() {
-    let a = Torque::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Force = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_torque_rotational_stiffness_gives_angle() {
-    let a = Torque::from_base(6.0);
-    let b = RotationalStiffness::from_base(2.0);
-    let c: Angle = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_area_gives_length() {
-    let a = Volume::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Length = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_duration_gives_volume_flow() {
-    let a = Volume::from_base(6.0);
-    let b = Duration::from_base(2.0);
-    let c: VolumeFlow = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_length_gives_area() {
-    let a = Volume::from_base(6.0);
-    let b = Length::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_mass_gives_specific_volume() {
-    let a = Volume::from_base(6.0);
-    let b = Mass::from_base(2.0);
-    let c: SpecificVolume = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_specific_volume_gives_mass() {
-    let a = Volume::from_base(6.0);
-    let b = SpecificVolume::from_base(2.0);
-    let c: Mass = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_volume_flow_gives_duration() {
-    let a = Volume::from_base(6.0);
-    let b = VolumeFlow::from_base(2.0);
-    let c: Duration = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_flow_area_gives_speed() {
-    let a = VolumeFlow::from_base(6.0);
-    let b = Area::from_base(2.0);
-    let c: Speed = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn div_volume_flow_speed_gives_area() {
-    let a = VolumeFlow::from_base(6.0);
-    let b = Speed::from_base(2.0);
-    let c: Area = a / b;
-    assert!((c.as_base() - 3.0).abs() < 1e-12);
-}
-
-#[test]
-fn mul_acceleration_density_gives_specific_weight() {
+fn mul_acceleration_density() {
     let a = Acceleration::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: SpecificWeight = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: SpecificWeight<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_acceleration_duration_gives_speed() {
+fn mul_acceleration_duration() {
     let a = Acceleration::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Speed = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Speed<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_acceleration_mass_gives_force() {
+fn mul_acceleration_linear_density() {
+    let a = Acceleration::from_base(6.0);
+    let b = LinearDensity::from_base(2.0);
+    let c: ForcePerLength = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = LinearDensity::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_acceleration_mass() {
     let a = Acceleration::from_base(6.0);
     let b = Mass::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_amount_of_substance_molar_energy_gives_energy() {
+fn mul_amount_of_substance_molar_energy() {
     let a = AmountOfSubstance::from_base(6.0);
     let b = MolarEnergy::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = MolarEnergy::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_amount_of_substance_molar_mass_gives_mass() {
+fn mul_amount_of_substance_molar_mass() {
     let a = AmountOfSubstance::from_base(6.0);
     let b = MolarMass::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_angle_rotational_stiffness_gives_torque() {
+fn mul_angle_rotational_stiffness() {
     let a = Angle::from_base(6.0);
     let b = RotationalStiffness::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Angle::<i32>::from_base(6);
+    let b = RotationalStiffness::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_area_density_gives_mass() {
+fn mul_area_absorbed_dose_of_ionizing_radiation() {
+    let a = Area::from_base(6.0);
+    let b = AbsorbedDoseOfIonizingRadiation::from_base(2.0);
+    let c: DoseAreaProduct = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
+    let c: DoseAreaProduct<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_area() {
+    let a = Area::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: AreaMomentOfInertia = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: AreaMomentOfInertia<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_area_density() {
     let a = Area::from_base(6.0);
     let b = AreaDensity::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_density_gives_linear_density() {
+fn mul_area_density() {
     let a = Area::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: LinearDensity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_force_per_length_gives_torque() {
+fn mul_area_electric_current_density() {
+    let a = Area::from_base(6.0);
+    let b = ElectricCurrentDensity::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = ElectricCurrentDensity::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_electric_surface_charge_density() {
+    let a = Area::from_base(6.0);
+    let b = ElectricSurfaceChargeDensity::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_force_per_length() {
     let a = Area::from_base(6.0);
     let b = ForcePerLength::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_heat_flux_gives_power() {
+fn mul_area_heat_flux() {
     let a = Area::from_base(6.0);
     let b = HeatFlux::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = HeatFlux::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_illuminance_gives_luminous_flux() {
+fn mul_area_illuminance() {
     let a = Area::from_base(6.0);
     let b = Illuminance::from_base(2.0);
     let c: LuminousFlux = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Illuminance::<i32>::from_base(2);
+    let c: LuminousFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_length_gives_volume() {
+fn mul_area_length() {
     let a = Area::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_luminance_gives_luminous_intensity() {
+fn mul_area_luminance() {
     let a = Area::from_base(6.0);
     let b = Luminance::from_base(2.0);
     let c: LuminousIntensity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Luminance::<i32>::from_base(2);
+    let c: LuminousIntensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_mass_flux_gives_mass_flow() {
+fn mul_area_magnetic_field() {
+    let a = Area::from_base(6.0);
+    let b = MagneticField::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = MagneticField::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_mass_flux() {
     let a = Area::from_base(6.0);
     let b = MassFlux::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_area_pressure_gives_force() {
+fn mul_area_pressure() {
     let a = Area::from_base(6.0);
     let b = Pressure::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_reciprocal_area_gives_ratio() {
-    let a = Area::from_base(6.0);
-    let b = ReciprocalArea::from_base(2.0);
-    let c: Ratio = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
-}
-
-#[test]
-fn mul_area_reciprocal_length_gives_length() {
+fn mul_area_reciprocal_length() {
     let a = Area::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_specific_weight_gives_force_per_length() {
+fn mul_area_specific_weight() {
     let a = Area::from_base(6.0);
     let b = SpecificWeight::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_speed_gives_volume_flow() {
+fn mul_area_speed() {
     let a = Area::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: VolumeFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_area_density_area_gives_mass() {
+fn mul_area_volume_flow_per_area() {
+    let a = Area::from_base(6.0);
+    let b = VolumeFlowPerArea::from_base(2.0);
+    let c: VolumeFlow = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = VolumeFlowPerArea::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_density_acceleration() {
+    let a = AreaDensity::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: Pressure = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaDensity::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_area_density_area() {
     let a = AreaDensity::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaDensity::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_brake_specific_fuel_consumption_power_gives_mass_flow() {
+fn mul_area_density_length() {
+    let a = AreaDensity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: LinearDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaDensity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_bit_rate_duration() {
+    let a = BitRate::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Information = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = BitRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Information<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_brake_specific_fuel_consumption_power() {
     let a = BrakeSpecificFuelConsumption::from_base(6.0);
     let b = Power::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_coefficient_of_thermal_expansion_temperature_delta_gives_ratio() {
+fn mul_coefficient_of_thermal_expansion_temperature_delta() {
     let a = CoefficientOfThermalExpansion::from_base(6.0);
     let b = TemperatureDelta::from_base(2.0);
     let c: Ratio = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = CoefficientOfThermalExpansion::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_acceleration_gives_specific_weight() {
+fn mul_compressibility_pressure() {
+    let a = Compressibility::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: Ratio = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Compressibility::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_density_acceleration() {
     let a = Density::from_base(6.0);
     let b = Acceleration::from_base(2.0);
     let c: SpecificWeight = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: SpecificWeight<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_area_gives_linear_density() {
+fn mul_density_area() {
     let a = Density::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: LinearDensity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_kinematic_viscosity_gives_dynamic_viscosity() {
+fn mul_density_kinematic_viscosity() {
     let a = Density::from_base(6.0);
     let b = KinematicViscosity::from_base(2.0);
     let c: DynamicViscosity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = KinematicViscosity::<i32>::from_base(2);
+    let c: DynamicViscosity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_speed_gives_mass_flux() {
+fn mul_density_length() {
+    let a = Density::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: AreaDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: AreaDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_density_speed() {
     let a = Density::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: MassFlux = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: MassFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_volume_gives_mass() {
+fn mul_density_volume() {
     let a = Density::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_volume_concentration_gives_mass_concentration() {
+fn mul_density_volume_concentration() {
     let a = Density::from_base(6.0);
     let b = VolumeConcentration::from_base(2.0);
     let c: MassConcentration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Density::<i32>::from_base(6);
+    let b = VolumeConcentration::<i32>::from_base(2);
+    let c: MassConcentration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_density_volume_flow_gives_mass_flow() {
+fn mul_density_volume_flow() {
     let a = Density::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_duration_acceleration_gives_speed() {
+fn mul_duration_acceleration() {
     let a = Duration::from_base(6.0);
     let b = Acceleration::from_base(2.0);
     let c: Speed = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Speed<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_electric_current_gives_electric_charge() {
+fn mul_duration_bit_rate() {
+    let a = Duration::from_base(6.0);
+    let b = BitRate::from_base(2.0);
+    let c: Information = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = BitRate::<i32>::from_base(2);
+    let c: Information<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_electric_apparent_power() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricApparentPower::from_base(2.0);
+    let c: ElectricApparentEnergy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+}
+
+#[test]
+fn mul_duration_electric_current() {
     let a = Duration::from_base(6.0);
     let b = ElectricCurrent::from_base(2.0);
     let c: ElectricCharge = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_electric_current_gradient_gives_electric_current() {
+fn mul_duration_electric_current_gradient() {
     let a = Duration::from_base(6.0);
     let b = ElectricCurrentGradient::from_base(2.0);
     let c: ElectricCurrent = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricCurrentGradient::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_force_change_rate_gives_force() {
+fn mul_duration_electric_potential_change_rate() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricPotentialChangeRate::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricPotentialChangeRate::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_electric_reactive_power() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricReactivePower::from_base(2.0);
+    let c: ElectricReactiveEnergy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+}
+
+#[test]
+fn mul_duration_force() {
+    let a = Duration::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: Impulse = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Impulse<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_force_change_rate() {
     let a = Duration::from_base(6.0);
     let b = ForceChangeRate::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ForceChangeRate::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_jerk_gives_acceleration() {
+fn mul_duration_irradiance() {
+    let a = Duration::from_base(6.0);
+    let b = Irradiance::from_base(2.0);
+    let c: Irradiation = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Irradiance::<i32>::from_base(2);
+    let c: Irradiation<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_jerk() {
     let a = Duration::from_base(6.0);
     let b = Jerk::from_base(2.0);
     let c: Acceleration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Jerk::<i32>::from_base(2);
+    let c: Acceleration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_kinematic_viscosity_gives_area() {
+fn mul_duration_kinematic_viscosity() {
     let a = Duration::from_base(6.0);
     let b = KinematicViscosity::from_base(2.0);
     let c: Area = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = KinematicViscosity::<i32>::from_base(2);
+    let c: Area<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_mass_flow_gives_mass() {
+fn mul_duration_mass_flow() {
     let a = Duration::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
 #[test]
-fn mul_duration_molar_flow_gives_amount_of_substance() {
+fn mul_duration_molar_flow() {
     let a = Duration::from_base(6.0);
     let b = MolarFlow::from_base(2.0);
     let c: AmountOfSubstance = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = MolarFlow::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_power_gives_energy() {
+fn mul_duration_power() {
     let a = Duration::from_base(6.0);
     let b = Power::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_pressure_change_rate_gives_pressure() {
+fn mul_duration_pressure_change_rate() {
     let a = Duration::from_base(6.0);
     let b = PressureChangeRate::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = PressureChangeRate::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_radiation_equivalent_dose_rate_gives_radiation_equivalent_dose() {
+fn mul_duration_radiation_equivalent_dose_rate() {
     let a = Duration::from_base(6.0);
     let b = RadiationEquivalentDoseRate::from_base(2.0);
     let c: RadiationEquivalentDose = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
+    let c: RadiationEquivalentDose<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_rotational_speed_gives_angle() {
+fn mul_duration_ratio_change_rate() {
+    let a = Duration::from_base(6.0);
+    let b = RatioChangeRate::from_base(2.0);
+    let c: Ratio = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = RatioChangeRate::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_rotational_acceleration() {
+    let a = Duration::from_base(6.0);
+    let b = RotationalAcceleration::from_base(2.0);
+    let c: RotationalSpeed = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = RotationalAcceleration::<i32>::from_base(2);
+    let c: RotationalSpeed<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_duration_rotational_speed() {
     let a = Duration::from_base(6.0);
     let b = RotationalSpeed::from_base(2.0);
     let c: Angle = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = RotationalSpeed::<i32>::from_base(2);
+    let c: Angle<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_speed_gives_length() {
+fn mul_duration_speed() {
     let a = Duration::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_temperature_change_rate_gives_temperature_delta() {
+fn mul_duration_temperature_change_rate() {
     let a = Duration::from_base(6.0);
     let b = TemperatureChangeRate::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = TemperatureChangeRate::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_duration_volume_flow_gives_volume() {
+fn mul_duration_volume_flow() {
     let a = Duration::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_charge_electric_potential_gives_energy() {
+fn mul_electric_apparent_power_duration() {
+    let a = ElectricApparentPower::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricApparentEnergy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+}
+
+#[test]
+fn mul_electric_capacitance_electric_potential() {
+    let a = ElectricCapacitance::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCapacitance::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_charge_electric_potential() {
     let a = ElectricCharge::from_base(6.0);
     let b = ElectricPotential::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_current_duration_gives_electric_charge() {
+fn mul_electric_charge_density_volume() {
+    let a = ElectricChargeDensity::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricChargeDensity::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_conductance_electric_potential() {
+    let a = ElectricConductance::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricConductance::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_current_duration() {
     let a = ElectricCurrent::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: ElectricCharge = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_current_electric_potential_gives_power() {
+fn mul_electric_current_electric_potential() {
     let a = ElectricCurrent::from_base(6.0);
     let b = ElectricPotential::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_current_electric_resistance_gives_electric_potential() {
+fn mul_electric_current_electric_resistance() {
     let a = ElectricCurrent::from_base(6.0);
     let b = ElectricResistance::from_base(2.0);
     let c: ElectricPotential = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricResistance::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_current_gradient_duration_gives_electric_current() {
+fn mul_electric_current_density_area() {
+    let a = ElectricCurrentDensity::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentDensity::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_current_gradient_duration() {
     let a = ElectricCurrentGradient::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: ElectricCurrent = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentGradient::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_potential_electric_charge_gives_energy() {
+fn mul_electric_field_length() {
+    let a = ElectricField::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricField::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_potential_electric_capacitance() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_potential_electric_charge() {
     let a = ElectricPotential::from_base(6.0);
     let b = ElectricCharge::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricCharge::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_potential_electric_current_gives_power() {
+fn mul_electric_potential_electric_conductance() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricConductance::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricConductance::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_potential_electric_current() {
     let a = ElectricPotential::from_base(6.0);
     let b = ElectricCurrent::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_electric_resistance_electric_current_gives_electric_potential() {
+fn mul_electric_potential_change_rate_duration() {
+    let a = ElectricPotentialChangeRate::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotentialChangeRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_electric_reactive_power_duration() {
+    let a = ElectricReactivePower::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricReactiveEnergy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+}
+
+#[test]
+fn mul_electric_resistance_electric_current() {
     let a = ElectricResistance::from_base(6.0);
     let b = ElectricCurrent::from_base(2.0);
     let c: ElectricPotential = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricResistance::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_energy_frequency_gives_power() {
+fn mul_electric_surface_charge_density_area() {
+    let a = ElectricSurfaceChargeDensity::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricSurfaceChargeDensity::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_energy_frequency() {
     let a = Energy::from_base(6.0);
     let b = Frequency::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Frequency::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_energy_density_volume_gives_energy() {
+fn mul_energy_density_volume() {
     let a = EnergyDensity::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = EnergyDensity::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_entropy_temperature_delta_gives_energy() {
+fn mul_entropy_temperature_delta() {
     let a = Entropy::from_base(6.0);
     let b = TemperatureDelta::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Entropy::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_length_gives_torque() {
+fn mul_fluid_resistance_volume_flow() {
+    let a = FluidResistance::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: Pressure = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = FluidResistance::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_force_duration() {
+    let a = Force::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Impulse = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Impulse<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_force_length() {
     let a = Force::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_reciprocal_area_gives_pressure() {
+fn mul_force_reciprocal_area() {
     let a = Force::from_base(6.0);
     let b = ReciprocalArea::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_reciprocal_length_gives_force_per_length() {
+fn mul_force_reciprocal_length() {
     let a = Force::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_speed_gives_power() {
+fn mul_force_speed() {
     let a = Force::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_change_rate_duration_gives_force() {
+fn mul_force_change_rate_duration() {
     let a = ForceChangeRate::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForceChangeRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_per_length_area_gives_torque() {
+fn mul_force_per_length_area() {
     let a = ForcePerLength::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_per_length_length_gives_force() {
+fn mul_force_per_length_length() {
     let a = ForcePerLength::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_force_per_length_reciprocal_length_gives_pressure() {
+fn mul_force_per_length_reciprocal_length() {
     let a = ForcePerLength::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_frequency_energy_gives_power() {
+fn mul_frequency_energy() {
     let a = Frequency::from_base(6.0);
     let b = Energy::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Frequency::<i32>::from_base(6);
+    let b = Energy::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_heat_flux_area_gives_power() {
+fn mul_frequency_information() {
+    let a = Frequency::from_base(6.0);
+    let b = Information::from_base(2.0);
+    let c: BitRate = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Frequency::<i32>::from_base(6);
+    let b = Information::<i32>::from_base(2);
+    let c: BitRate<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_heat_flux_area() {
     let a = HeatFlux::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatFlux::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_illuminance_area_gives_luminous_flux() {
+fn mul_heat_flux_thermal_insulance() {
+    let a = HeatFlux::from_base(6.0);
+    let b = ThermalInsulance::from_base(2.0);
+    let c: TemperatureDelta = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.001);
+}
+
+#[test]
+fn mul_heat_transfer_coefficient_temperature_delta() {
+    let a = HeatTransferCoefficient::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: HeatFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatTransferCoefficient::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: HeatFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_illuminance_area() {
     let a = Illuminance::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: LuminousFlux = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Illuminance::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: LuminousFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_jerk_duration_gives_acceleration() {
+fn mul_information_frequency() {
+    let a = Information::from_base(6.0);
+    let b = Frequency::from_base(2.0);
+    let c: BitRate = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Information::<i32>::from_base(6);
+    let b = Frequency::<i32>::from_base(2);
+    let c: BitRate<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_irradiance_duration() {
+    let a = Irradiance::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Irradiation = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Irradiance::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Irradiation<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_jerk_duration() {
     let a = Jerk::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Acceleration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Jerk::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Acceleration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_kinematic_viscosity_density_gives_dynamic_viscosity() {
+fn mul_kinematic_viscosity_density() {
     let a = KinematicViscosity::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: DynamicViscosity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = KinematicViscosity::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: DynamicViscosity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_kinematic_viscosity_duration_gives_area() {
+fn mul_kinematic_viscosity_duration() {
     let a = KinematicViscosity::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Area = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = KinematicViscosity::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Area<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_area_gives_volume() {
+fn mul_length_area() {
     let a = Length::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_force_gives_torque() {
+fn mul_length_area_density() {
+    let a = Length::from_base(6.0);
+    let b = AreaDensity::from_base(2.0);
+    let c: LinearDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_length_density() {
+    let a = Length::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: AreaDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: AreaDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_length_electric_field() {
+    let a = Length::from_base(6.0);
+    let b = ElectricField::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = ElectricField::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_length_force() {
     let a = Length::from_base(6.0);
     let b = Force::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_force_per_length_gives_force() {
+fn mul_length_force_per_length() {
     let a = Length::from_base(6.0);
     let b = ForcePerLength::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_length_gives_area() {
+fn mul_length_length() {
     let a = Length::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Area = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Area<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_linear_density_gives_mass() {
+fn mul_length_linear_density() {
     let a = Length::from_base(6.0);
     let b = LinearDensity::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = LinearDensity::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_pressure_gives_force_per_length() {
+fn mul_length_linear_power_density() {
+    let a = Length::from_base(6.0);
+    let b = LinearPowerDensity::from_base(2.0);
+    let c: Power = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = LinearPowerDensity::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_length_pressure() {
     let a = Length::from_base(6.0);
     let b = Pressure::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_reciprocal_area_gives_reciprocal_length() {
+fn mul_length_reciprocal_area() {
     let a = Length::from_base(6.0);
     let b = ReciprocalArea::from_base(2.0);
     let c: ReciprocalLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_rotational_stiffness_per_length_gives_rotational_stiffness() {
+fn mul_length_rotational_stiffness_per_length() {
     let a = Length::from_base(6.0);
     let b = RotationalStiffnessPerLength::from_base(2.0);
     let c: RotationalStiffness = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = RotationalStiffnessPerLength::<i32>::from_base(2);
+    let c: RotationalStiffness<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_specific_weight_gives_pressure() {
+fn mul_length_specific_weight() {
     let a = Length::from_base(6.0);
     let b = SpecificWeight::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_speed_gives_kinematic_viscosity() {
+fn mul_length_speed() {
     let a = Length::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: KinematicViscosity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: KinematicViscosity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_temperature_gradient_gives_temperature_delta() {
+fn mul_length_temperature_gradient() {
     let a = Length::from_base(6.0);
     let b = TemperatureGradient::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = TemperatureGradient::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_length_volume_gives_area_moment_of_inertia() {
+fn mul_length_volume() {
     let a = Length::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: AreaMomentOfInertia = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: AreaMomentOfInertia<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_linear_density_length_gives_mass() {
+fn mul_length_volume_per_length() {
+    let a = Length::from_base(6.0);
+    let b = VolumePerLength::from_base(2.0);
+    let c: Volume = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = VolumePerLength::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_linear_density_acceleration() {
+    let a = LinearDensity::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: ForcePerLength = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_linear_density_length() {
     let a = LinearDensity::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_luminance_area_gives_luminous_intensity() {
+fn mul_linear_power_density_length() {
+    let a = LinearPowerDensity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Power = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearPowerDensity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_luminance_area() {
     let a = Luminance::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: LuminousIntensity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Luminance::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: LuminousIntensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_acceleration_gives_force() {
+fn mul_luminous_intensity_solid_angle() {
+    let a = LuminousIntensity::from_base(6.0);
+    let b = SolidAngle::from_base(2.0);
+    let c: LuminousFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousIntensity::<i32>::from_base(6);
+    let b = SolidAngle::<i32>::from_base(2);
+    let c: LuminousFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_magnetic_field_area() {
+    let a = MagneticField::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticField::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_mass_acceleration() {
     let a = Mass::from_base(6.0);
     let b = Acceleration::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_mass_fraction_gives_mass() {
+fn mul_mass_mass_fraction() {
     let a = Mass::from_base(6.0);
     let b = MassFraction::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = MassFraction::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_specific_energy_gives_energy() {
+fn mul_mass_specific_energy() {
     let a = Mass::from_base(6.0);
     let b = SpecificEnergy::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = SpecificEnergy::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_specific_entropy_gives_entropy() {
+fn mul_mass_specific_entropy() {
     let a = Mass::from_base(6.0);
     let b = SpecificEntropy::from_base(2.0);
     let c: Entropy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = SpecificEntropy::<i32>::from_base(2);
+    let c: Entropy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_specific_volume_gives_volume() {
+fn mul_mass_specific_volume() {
     let a = Mass::from_base(6.0);
     let b = SpecificVolume::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = SpecificVolume::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_concentration_volume_gives_mass() {
+fn mul_mass_concentration_volume() {
     let a = MassConcentration::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassConcentration::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_mass_flow_duration_gives_mass() {
+fn mul_mass_flow_duration() {
     let a = MassFlow::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
 #[test]
-fn mul_mass_flow_specific_energy_gives_power() {
+fn mul_mass_flow_specific_energy() {
     let a = MassFlow::from_base(6.0);
     let b = SpecificEnergy::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
 #[test]
-fn mul_mass_flux_area_gives_mass_flow() {
+fn mul_mass_flux_area() {
     let a = MassFlux::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_mass_fraction_mass_gives_mass() {
+fn mul_mass_fraction_mass() {
     let a = MassFraction::from_base(6.0);
     let b = Mass::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFraction::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molar_energy_amount_of_substance_gives_energy() {
+fn mul_molar_energy_amount_of_substance() {
     let a = MolarEnergy::from_base(6.0);
     let b = AmountOfSubstance::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarEnergy::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molar_flow_duration_gives_amount_of_substance() {
+fn mul_molar_flow_duration() {
     let a = MolarFlow::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: AmountOfSubstance = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarFlow::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molar_flow_molar_mass_gives_mass_flow() {
+fn mul_molar_flow_molar_mass() {
     let a = MolarFlow::from_base(6.0);
     let b = MolarMass::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_molar_mass_amount_of_substance_gives_mass() {
+fn mul_molar_mass_amount_of_substance() {
     let a = MolarMass::from_base(6.0);
     let b = AmountOfSubstance::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarMass::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molar_mass_molar_flow_gives_mass_flow() {
+fn mul_molar_mass_molar_flow() {
     let a = MolarMass::from_base(6.0);
     let b = MolarFlow::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_molar_mass_molarity_gives_mass_concentration() {
+fn mul_molar_mass_molarity() {
     let a = MolarMass::from_base(6.0);
     let b = Molarity::from_base(2.0);
     let c: MassConcentration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarMass::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: MassConcentration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molarity_molar_mass_gives_mass_concentration() {
+fn mul_molarity_molar_mass() {
     let a = Molarity::from_base(6.0);
     let b = MolarMass::from_base(2.0);
     let c: MassConcentration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molarity::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: MassConcentration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molarity_volume_gives_amount_of_substance() {
+fn mul_molarity_volume() {
     let a = Molarity::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: AmountOfSubstance = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molarity::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molarity_volume_concentration_gives_molarity() {
+fn mul_molarity_volume_concentration() {
     let a = Molarity::from_base(6.0);
     let b = VolumeConcentration::from_base(2.0);
     let c: Molarity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molarity::<i32>::from_base(6);
+    let b = VolumeConcentration::<i32>::from_base(2);
+    let c: Molarity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_molarity_volume_flow_gives_molar_flow() {
+fn mul_molarity_volume_flow() {
     let a = Molarity::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);
     let c: MolarFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molarity::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: MolarFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_power_brake_specific_fuel_consumption_gives_mass_flow() {
+fn mul_power_brake_specific_fuel_consumption() {
     let a = Power::from_base(6.0);
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_power_duration_gives_energy() {
+fn mul_power_duration() {
     let a = Power::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_pressure_area_gives_force() {
+fn mul_power_thermal_resistance() {
+    let a = Power::from_base(6.0);
+    let b = ThermalResistance::from_base(2.0);
+    let c: TemperatureDelta = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = ThermalResistance::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_power_density_volume() {
+    let a = PowerDensity::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: Power = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = PowerDensity::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_pressure_area() {
     let a = Pressure::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Force = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_pressure_length_gives_force_per_length() {
+fn mul_pressure_compressibility() {
+    let a = Pressure::from_base(6.0);
+    let b = Compressibility::from_base(2.0);
+    let c: Ratio = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Compressibility::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_pressure_length() {
     let a = Pressure::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_pressure_change_rate_duration_gives_pressure() {
+fn mul_pressure_volume_flow() {
+    let a = Pressure::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: LeakRate = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: LeakRate<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_pressure_change_rate_duration() {
     let a = PressureChangeRate::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = PressureChangeRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_radiation_equivalent_dose_rate_duration_gives_radiation_equivalent_dose() {
+fn mul_radiation_equivalent_dose_rate_duration() {
     let a = RadiationEquivalentDoseRate::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: RadiationEquivalentDose = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RadiationEquivalentDoseRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RadiationEquivalentDose<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_area_area_gives_ratio() {
-    let a = ReciprocalArea::from_base(6.0);
-    let b = Area::from_base(2.0);
+fn mul_ratio_change_rate_duration() {
+    let a = RatioChangeRate::from_base(6.0);
+    let b = Duration::from_base(2.0);
     let c: Ratio = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RatioChangeRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_area_force_gives_pressure() {
+fn mul_reciprocal_area_force() {
     let a = ReciprocalArea::from_base(6.0);
     let b = Force::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalArea::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_area_length_gives_reciprocal_length() {
+fn mul_reciprocal_area_length() {
     let a = ReciprocalArea::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: ReciprocalLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalArea::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_area_volume_gives_length() {
+fn mul_reciprocal_area_volume() {
     let a = ReciprocalArea::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalArea::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_length_area_gives_length() {
+fn mul_reciprocal_length_area() {
     let a = ReciprocalLength::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_length_force_gives_force_per_length() {
+fn mul_reciprocal_length_force() {
     let a = ReciprocalLength::from_base(6.0);
     let b = Force::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_length_force_per_length_gives_pressure() {
+fn mul_reciprocal_length_force_per_length() {
     let a = ReciprocalLength::from_base(6.0);
     let b = ForcePerLength::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_length_reciprocal_length_gives_reciprocal_area() {
+fn mul_reciprocal_length_reciprocal_length() {
     let a = ReciprocalLength::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);
     let c: ReciprocalArea = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: ReciprocalArea<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_reciprocal_length_volume_gives_area() {
+fn mul_reciprocal_length_volume() {
     let a = ReciprocalLength::from_base(6.0);
     let b = Volume::from_base(2.0);
     let c: Area = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Area<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_rotational_speed_duration_gives_angle() {
+fn mul_rotational_acceleration_duration() {
+    let a = RotationalAcceleration::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: RotationalSpeed = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalAcceleration::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RotationalSpeed<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_rotational_speed_duration() {
     let a = RotationalSpeed::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Angle = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalSpeed::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Angle<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_rotational_speed_torque_gives_power() {
+fn mul_rotational_speed_torque() {
     let a = RotationalSpeed::from_base(6.0);
     let b = Torque::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalSpeed::<i32>::from_base(6);
+    let b = Torque::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_rotational_stiffness_angle_gives_torque() {
+fn mul_rotational_stiffness_angle() {
     let a = RotationalStiffness::from_base(6.0);
     let b = Angle::from_base(2.0);
     let c: Torque = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalStiffness::<i32>::from_base(6);
+    let b = Angle::<i32>::from_base(2);
+    let c: Torque<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_rotational_stiffness_per_length_length_gives_rotational_stiffness() {
+fn mul_rotational_stiffness_per_length_length() {
     let a = RotationalStiffnessPerLength::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: RotationalStiffness = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalStiffnessPerLength::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: RotationalStiffness<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_energy_mass_gives_energy() {
+fn mul_solid_angle_luminous_intensity() {
+    let a = SolidAngle::from_base(6.0);
+    let b = LuminousIntensity::from_base(2.0);
+    let c: LuminousFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SolidAngle::<i32>::from_base(6);
+    let b = LuminousIntensity::<i32>::from_base(2);
+    let c: LuminousFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_specific_energy_mass() {
     let a = SpecificEnergy::from_base(6.0);
     let b = Mass::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEnergy::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_energy_mass_flow_gives_power() {
+fn mul_specific_energy_mass_flow() {
     let a = SpecificEnergy::from_base(6.0);
     let b = MassFlow::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
 #[test]
-fn mul_specific_entropy_mass_gives_entropy() {
+fn mul_specific_entropy_mass() {
     let a = SpecificEntropy::from_base(6.0);
     let b = Mass::from_base(2.0);
     let c: Entropy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEntropy::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Entropy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_entropy_temperature_delta_gives_specific_energy() {
+fn mul_specific_entropy_temperature_delta() {
     let a = SpecificEntropy::from_base(6.0);
     let b = TemperatureDelta::from_base(2.0);
     let c: SpecificEnergy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEntropy::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: SpecificEnergy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_volume_mass_gives_volume() {
+fn mul_specific_volume_mass() {
     let a = SpecificVolume::from_base(6.0);
     let b = Mass::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificVolume::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_weight_area_gives_force_per_length() {
+fn mul_specific_weight_area() {
     let a = SpecificWeight::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: ForcePerLength = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificWeight::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_specific_weight_length_gives_pressure() {
+fn mul_specific_weight_length() {
     let a = SpecificWeight::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: Pressure = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificWeight::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_area_gives_volume_flow() {
+fn mul_specific_weight_volume() {
+    let a = SpecificWeight::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: Force = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificWeight::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_speed_area() {
     let a = Speed::from_base(6.0);
     let b = Area::from_base(2.0);
     let c: VolumeFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_density_gives_mass_flux() {
+fn mul_speed_density() {
     let a = Speed::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: MassFlux = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: MassFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_duration_gives_length() {
+fn mul_speed_duration() {
     let a = Speed::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_force_gives_power() {
+fn mul_speed_force() {
     let a = Speed::from_base(6.0);
     let b = Force::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_length_gives_kinematic_viscosity() {
+fn mul_speed_length() {
     let a = Speed::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: KinematicViscosity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: KinematicViscosity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_speed_speed_gives_specific_energy() {
+fn mul_speed_speed() {
     let a = Speed::from_base(6.0);
     let b = Speed::from_base(2.0);
     let c: SpecificEnergy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: SpecificEnergy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_temperature_change_rate_duration_gives_temperature_delta() {
+fn mul_temperature_change_rate_duration() {
     let a = TemperatureChangeRate::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureChangeRate::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_temperature_delta_coefficient_of_thermal_expansion_gives_ratio() {
+fn mul_temperature_delta_coefficient_of_thermal_expansion() {
     let a = TemperatureDelta::from_base(6.0);
     let b = CoefficientOfThermalExpansion::from_base(2.0);
     let c: Ratio = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = CoefficientOfThermalExpansion::<i32>::from_base(2);
+    let c: Ratio<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_temperature_delta_entropy_gives_energy() {
+fn mul_temperature_delta_entropy() {
     let a = TemperatureDelta::from_base(6.0);
     let b = Entropy::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = Entropy::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_temperature_delta_specific_entropy_gives_specific_energy() {
+fn mul_temperature_delta_heat_transfer_coefficient() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = HeatTransferCoefficient::from_base(2.0);
+    let c: HeatFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = HeatTransferCoefficient::<i32>::from_base(2);
+    let c: HeatFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_temperature_delta_specific_entropy() {
     let a = TemperatureDelta::from_base(6.0);
     let b = SpecificEntropy::from_base(2.0);
     let c: SpecificEnergy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = SpecificEntropy::<i32>::from_base(2);
+    let c: SpecificEnergy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_temperature_gradient_length_gives_temperature_delta() {
+fn mul_temperature_delta_volumetric_heat_capacity() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = VolumetricHeatCapacity::from_base(2.0);
+    let c: EnergyDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = VolumetricHeatCapacity::<i32>::from_base(2);
+    let c: EnergyDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_temperature_gradient_length() {
     let a = TemperatureGradient::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: TemperatureDelta = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureGradient::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_torque_rotational_speed_gives_power() {
+fn mul_thermal_insulance_heat_flux() {
+    let a = ThermalInsulance::from_base(6.0);
+    let b = HeatFlux::from_base(2.0);
+    let c: TemperatureDelta = a * b;
+    assert_eq!(c.as_base(), 12.0 * 0.001);
+}
+
+#[test]
+fn mul_thermal_resistance_power() {
+    let a = ThermalResistance::from_base(6.0);
+    let b = Power::from_base(2.0);
+    let c: TemperatureDelta = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ThermalResistance::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_torque_rotational_speed() {
     let a = Torque::from_base(6.0);
     let b = RotationalSpeed::from_base(2.0);
     let c: Power = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = RotationalSpeed::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_density_gives_mass() {
+fn mul_volume_density() {
     let a = Volume::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_energy_density_gives_energy() {
+fn mul_volume_electric_charge_density() {
+    let a = Volume::from_base(6.0);
+    let b = ElectricChargeDensity::from_base(2.0);
+    let c: ElectricCharge = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = ElectricChargeDensity::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_energy_density() {
     let a = Volume::from_base(6.0);
     let b = EnergyDensity::from_base(2.0);
     let c: Energy = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = EnergyDensity::<i32>::from_base(2);
+    let c: Energy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_length_gives_area_moment_of_inertia() {
+fn mul_volume_length() {
     let a = Volume::from_base(6.0);
     let b = Length::from_base(2.0);
     let c: AreaMomentOfInertia = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: AreaMomentOfInertia<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_mass_concentration_gives_mass() {
+fn mul_volume_mass_concentration() {
     let a = Volume::from_base(6.0);
     let b = MassConcentration::from_base(2.0);
     let c: Mass = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = MassConcentration::<i32>::from_base(2);
+    let c: Mass<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_molarity_gives_amount_of_substance() {
+fn mul_volume_molarity() {
     let a = Volume::from_base(6.0);
     let b = Molarity::from_base(2.0);
     let c: AmountOfSubstance = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_reciprocal_area_gives_length() {
+fn mul_volume_power_density() {
+    let a = Volume::from_base(6.0);
+    let b = PowerDensity::from_base(2.0);
+    let c: Power = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = PowerDensity::<i32>::from_base(2);
+    let c: Power<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_reciprocal_area() {
     let a = Volume::from_base(6.0);
     let b = ReciprocalArea::from_base(2.0);
     let c: Length = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: Length<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_reciprocal_length_gives_area() {
+fn mul_volume_reciprocal_length() {
     let a = Volume::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);
     let c: Area = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Area<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_concentration_density_gives_mass_concentration() {
+fn mul_volume_specific_weight() {
+    let a = Volume::from_base(6.0);
+    let b = SpecificWeight::from_base(2.0);
+    let c: Force = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: Force<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_concentration_density() {
     let a = VolumeConcentration::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: MassConcentration = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeConcentration::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: MassConcentration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_concentration_molarity_gives_molarity() {
+fn mul_volume_concentration_molarity() {
     let a = VolumeConcentration::from_base(6.0);
     let b = Molarity::from_base(2.0);
     let c: Molarity = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeConcentration::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: Molarity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_flow_density_gives_mass_flow() {
+fn mul_volume_flow_density() {
     let a = VolumeFlow::from_base(6.0);
     let b = Density::from_base(2.0);
     let c: MassFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
 #[test]
-fn mul_volume_flow_duration_gives_volume() {
+fn mul_volume_flow_duration() {
     let a = VolumeFlow::from_base(6.0);
     let b = Duration::from_base(2.0);
     let c: Volume = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
 }
 
 #[test]
-fn mul_volume_flow_molarity_gives_molar_flow() {
+fn mul_volume_flow_fluid_resistance() {
+    let a = VolumeFlow::from_base(6.0);
+    let b = FluidResistance::from_base(2.0);
+    let c: Pressure = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = FluidResistance::<i32>::from_base(2);
+    let c: Pressure<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_flow_molarity() {
     let a = VolumeFlow::from_base(6.0);
     let b = Molarity::from_base(2.0);
     let c: MolarFlow = a * b;
-    assert!((c.as_base() - 12.0).abs() < 1e-12);
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: MolarFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_flow_pressure() {
+    let a = VolumeFlow::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: LeakRate = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: LeakRate<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_flow_per_area_area() {
+    let a = VolumeFlowPerArea::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: VolumeFlow = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlowPerArea::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volume_per_length_length() {
+    let a = VolumePerLength::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Volume = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumePerLength::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Volume<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn mul_volumetric_heat_capacity_temperature_delta() {
+    let a = VolumetricHeatCapacity::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: EnergyDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumetricHeatCapacity::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: EnergyDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+}
+
+#[test]
+fn div_acceleration_duration() {
+    let a = Acceleration::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Jerk = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Jerk<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_acceleration_jerk() {
+    let a = Acceleration::from_base(6.0);
+    let b = Jerk::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Acceleration::<i32>::from_base(6);
+    let b = Jerk::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_amount_of_substance_duration() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: MolarFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: MolarFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_amount_of_substance_molar_flow() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = MolarFlow::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = MolarFlow::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_amount_of_substance_molarity() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = Molarity::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_amount_of_substance_volume() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: Molarity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Molarity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_angle_duration() {
+    let a = Angle::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: RotationalSpeed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Angle::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RotationalSpeed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_angle_rotational_speed() {
+    let a = Angle::from_base(6.0);
+    let b = RotationalSpeed::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Angle::<i32>::from_base(6);
+    let b = RotationalSpeed::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_length() {
+    let a = Area::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_reciprocal_length() {
+    let a = Area::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_volume() {
+    let a = Area::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: ReciprocalLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Area::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_density_density() {
+    let a = AreaDensity::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaDensity::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_density_length() {
+    let a = AreaDensity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaDensity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_moment_of_inertia_area() {
+    let a = AreaMomentOfInertia::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaMomentOfInertia::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_moment_of_inertia_length() {
+    let a = AreaMomentOfInertia::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaMomentOfInertia::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_area_moment_of_inertia_volume() {
+    let a = AreaMomentOfInertia::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AreaMomentOfInertia::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_bit_rate_frequency() {
+    let a = BitRate::from_base(6.0);
+    let b = Frequency::from_base(2.0);
+    let c: Information = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = BitRate::<i32>::from_base(6);
+    let b = Frequency::<i32>::from_base(2);
+    let c: Information<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_bit_rate_information() {
+    let a = BitRate::from_base(6.0);
+    let b = Information::from_base(2.0);
+    let c: Frequency = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = BitRate::<i32>::from_base(6);
+    let b = Information::<i32>::from_base(2);
+    let c: Frequency<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_dose_area_product_absorbed_dose_of_ionizing_radiation() {
+    let a = DoseAreaProduct::from_base(6.0);
+    let b = AbsorbedDoseOfIonizingRadiation::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = DoseAreaProduct::<i32>::from_base(6);
+    let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_dose_area_product_area() {
+    let a = DoseAreaProduct::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: AbsorbedDoseOfIonizingRadiation = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = DoseAreaProduct::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: AbsorbedDoseOfIonizingRadiation<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_dynamic_viscosity_density() {
+    let a = DynamicViscosity::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: KinematicViscosity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = DynamicViscosity::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: KinematicViscosity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_dynamic_viscosity_kinematic_viscosity() {
+    let a = DynamicViscosity::from_base(6.0);
+    let b = KinematicViscosity::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = DynamicViscosity::<i32>::from_base(6);
+    let b = KinematicViscosity::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_apparent_energy_duration() {
+    let a = ElectricApparentEnergy::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricApparentPower = a / b;
+    assert_eq!(c.as_base(), 3.0 * 3600.0);
+}
+
+#[test]
+fn div_electric_apparent_energy_electric_apparent_power() {
+    let a = ElectricApparentEnergy::from_base(6.0);
+    let b = ElectricApparentPower::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 3600.0);
+}
+
+#[test]
+fn div_electric_charge_area() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ElectricSurfaceChargeDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ElectricSurfaceChargeDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_duration() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricCurrent = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_electric_capacitance() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: ElectricPotential = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_electric_charge_density() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = ElectricChargeDensity::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricChargeDensity::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_electric_current() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = ElectricCurrent::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_electric_potential() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricCapacitance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricCapacitance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_electric_surface_charge_density() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = ElectricSurfaceChargeDensity::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_charge_volume() {
+    let a = ElectricCharge::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: ElectricChargeDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCharge::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: ElectricChargeDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_area() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ElectricCurrentDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ElectricCurrentDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_duration() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricCurrentGradient = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricCurrentGradient<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_electric_conductance() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricConductance::from_base(2.0);
+    let c: ElectricPotential = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricConductance::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_electric_current_density() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricCurrentDensity::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricCurrentDensity::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_electric_current_gradient() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricCurrentGradient::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricCurrentGradient::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_current_electric_potential() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricConductance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricConductance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_duration() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricPotentialChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricPotentialChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_electric_current() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricCurrent::from_base(2.0);
+    let c: ElectricResistance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: ElectricResistance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_electric_field() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricField::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricField::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_electric_potential_change_rate() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricPotentialChangeRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricPotentialChangeRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_electric_resistance() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricResistance::from_base(2.0);
+    let c: ElectricCurrent = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricResistance::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_potential_length() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ElectricField = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ElectricField<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_electric_reactive_energy_duration() {
+    let a = ElectricReactiveEnergy::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricReactivePower = a / b;
+    assert_eq!(c.as_base(), 3.0 * 3600.0);
+}
+
+#[test]
+fn div_electric_reactive_energy_electric_reactive_power() {
+    let a = ElectricReactiveEnergy::from_base(6.0);
+    let b = ElectricReactivePower::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 3600.0);
+}
+
+#[test]
+fn div_energy_amount_of_substance() {
+    let a = Energy::from_base(6.0);
+    let b = AmountOfSubstance::from_base(2.0);
+    let c: MolarEnergy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: MolarEnergy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_duration() {
+    let a = Energy::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Power = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Power<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_electric_charge() {
+    let a = Energy::from_base(6.0);
+    let b = ElectricCharge::from_base(2.0);
+    let c: ElectricPotential = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = ElectricCharge::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_electric_potential() {
+    let a = Energy::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricCharge = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricCharge<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_energy_density() {
+    let a = Energy::from_base(6.0);
+    let b = EnergyDensity::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = EnergyDensity::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_entropy() {
+    let a = Energy::from_base(6.0);
+    let b = Entropy::from_base(2.0);
+    let c: TemperatureDelta = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Entropy::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_mass() {
+    let a = Energy::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: SpecificEnergy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: SpecificEnergy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_molar_energy() {
+    let a = Energy::from_base(6.0);
+    let b = MolarEnergy::from_base(2.0);
+    let c: AmountOfSubstance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = MolarEnergy::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_power() {
+    let a = Energy::from_base(6.0);
+    let b = Power::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_specific_energy() {
+    let a = Energy::from_base(6.0);
+    let b = SpecificEnergy::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = SpecificEnergy::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_temperature_delta() {
+    let a = Energy::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: Entropy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: Entropy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_volume() {
+    let a = Energy::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: EnergyDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: EnergyDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_density_temperature_delta() {
+    let a = EnergyDensity::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: VolumetricHeatCapacity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = EnergyDensity::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: VolumetricHeatCapacity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_energy_density_volumetric_heat_capacity() {
+    let a = EnergyDensity::from_base(6.0);
+    let b = VolumetricHeatCapacity::from_base(2.0);
+    let c: TemperatureDelta = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = EnergyDensity::<i32>::from_base(6);
+    let b = VolumetricHeatCapacity::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_entropy_mass() {
+    let a = Entropy::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: SpecificEntropy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Entropy::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: SpecificEntropy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_entropy_specific_entropy() {
+    let a = Entropy::from_base(6.0);
+    let b = SpecificEntropy::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Entropy::<i32>::from_base(6);
+    let b = SpecificEntropy::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_acceleration() {
+    let a = Force::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_area() {
+    let a = Force::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Pressure = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Pressure<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_duration() {
+    let a = Force::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ForceChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ForceChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_force_change_rate() {
+    let a = Force::from_base(6.0);
+    let b = ForceChangeRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = ForceChangeRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_force_per_length() {
+    let a = Force::from_base(6.0);
+    let b = ForcePerLength::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_length() {
+    let a = Force::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ForcePerLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_mass() {
+    let a = Force::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: Acceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Acceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_pressure() {
+    let a = Force::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_specific_weight() {
+    let a = Force::from_base(6.0);
+    let b = SpecificWeight::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_volume() {
+    let a = Force::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: SpecificWeight = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Force::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: SpecificWeight<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_acceleration() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: LinearDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_area() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: SpecificWeight = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: SpecificWeight<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_force() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: ReciprocalLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_length() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Pressure = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Pressure<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_linear_density() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = LinearDensity::from_base(2.0);
+    let c: Acceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = LinearDensity::<i32>::from_base(2);
+    let c: Acceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_pressure() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_reciprocal_length() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_force_per_length_specific_weight() {
+    let a = ForcePerLength::from_base(6.0);
+    let b = SpecificWeight::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ForcePerLength::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_heat_flux_heat_transfer_coefficient() {
+    let a = HeatFlux::from_base(6.0);
+    let b = HeatTransferCoefficient::from_base(2.0);
+    let c: TemperatureDelta = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatFlux::<i32>::from_base(6);
+    let b = HeatTransferCoefficient::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_heat_flux_temperature_delta() {
+    let a = HeatFlux::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: HeatTransferCoefficient = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatFlux::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: HeatTransferCoefficient<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_impulse_duration() {
+    let a = Impulse::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Impulse::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_impulse_force() {
+    let a = Impulse::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Impulse::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_information_bit_rate() {
+    let a = Information::from_base(6.0);
+    let b = BitRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Information::<i32>::from_base(6);
+    let b = BitRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_information_duration() {
+    let a = Information::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: BitRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Information::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: BitRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_irradiation_duration() {
+    let a = Irradiation::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Irradiance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Irradiation::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Irradiance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_irradiation_irradiance() {
+    let a = Irradiation::from_base(6.0);
+    let b = Irradiance::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Irradiation::<i32>::from_base(6);
+    let b = Irradiance::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_kinematic_viscosity_length() {
+    let a = KinematicViscosity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = KinematicViscosity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_kinematic_viscosity_speed() {
+    let a = KinematicViscosity::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = KinematicViscosity::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_leak_rate_pressure() {
+    let a = LeakRate::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: VolumeFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LeakRate::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_leak_rate_volume_flow() {
+    let a = LeakRate::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: Pressure = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LeakRate::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Pressure<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_area() {
+    let a = Length::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ReciprocalLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_duration() {
+    let a = Length::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_reciprocal_area() {
+    let a = Length::from_base(6.0);
+    let b = ReciprocalArea::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_reciprocal_length() {
+    let a = Length::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_speed() {
+    let a = Length::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_length_volume() {
+    let a = Length::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: ReciprocalArea = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: ReciprocalArea<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_linear_density_area() {
+    let a = LinearDensity::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_linear_density_area_density() {
+    let a = LinearDensity::from_base(6.0);
+    let b = AreaDensity::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_linear_density_density() {
+    let a = LinearDensity::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_linear_density_length() {
+    let a = LinearDensity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: AreaDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LinearDensity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: AreaDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_flux_area() {
+    let a = LuminousFlux::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Illuminance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousFlux::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Illuminance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_flux_illuminance() {
+    let a = LuminousFlux::from_base(6.0);
+    let b = Illuminance::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousFlux::<i32>::from_base(6);
+    let b = Illuminance::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_flux_luminous_intensity() {
+    let a = LuminousFlux::from_base(6.0);
+    let b = LuminousIntensity::from_base(2.0);
+    let c: SolidAngle = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousFlux::<i32>::from_base(6);
+    let b = LuminousIntensity::<i32>::from_base(2);
+    let c: SolidAngle<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_flux_solid_angle() {
+    let a = LuminousFlux::from_base(6.0);
+    let b = SolidAngle::from_base(2.0);
+    let c: LuminousIntensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousFlux::<i32>::from_base(6);
+    let b = SolidAngle::<i32>::from_base(2);
+    let c: LuminousIntensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_intensity_area() {
+    let a = LuminousIntensity::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Luminance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousIntensity::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Luminance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_luminous_intensity_luminance() {
+    let a = LuminousIntensity::from_base(6.0);
+    let b = Luminance::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = LuminousIntensity::<i32>::from_base(6);
+    let b = Luminance::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_magnetic_flux_area() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: MagneticField = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: MagneticField<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_magnetic_flux_magnetic_field() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = MagneticField::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = MagneticField::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_amount_of_substance() {
+    let a = Mass::from_base(6.0);
+    let b = AmountOfSubstance::from_base(2.0);
+    let c: MolarMass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: MolarMass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_area() {
+    let a = Mass::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: AreaDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: AreaDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_area_density() {
+    let a = Mass::from_base(6.0);
+    let b = AreaDensity::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_density() {
+    let a = Mass::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_duration() {
+    let a = Mass::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: MassFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_mass_length() {
+    let a = Mass::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: LinearDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: LinearDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_linear_density() {
+    let a = Mass::from_base(6.0);
+    let b = LinearDensity::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = LinearDensity::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_mass_flow() {
+    let a = Mass::from_base(6.0);
+    let b = MassFlow::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_mass_mass_fraction() {
+    let a = Mass::from_base(6.0);
+    let b = MassFraction::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = MassFraction::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_molar_mass() {
+    let a = Mass::from_base(6.0);
+    let b = MolarMass::from_base(2.0);
+    let c: AmountOfSubstance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_volume() {
+    let a = Mass::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_concentration_density() {
+    let a = MassConcentration::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: VolumeConcentration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassConcentration::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: VolumeConcentration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_concentration_molar_mass() {
+    let a = MassConcentration::from_base(6.0);
+    let b = MolarMass::from_base(2.0);
+    let c: Molarity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassConcentration::<i32>::from_base(6);
+    let b = MolarMass::<i32>::from_base(2);
+    let c: Molarity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_concentration_molarity() {
+    let a = MassConcentration::from_base(6.0);
+    let b = Molarity::from_base(2.0);
+    let c: MolarMass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassConcentration::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: MolarMass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_concentration_volume_concentration() {
+    let a = MassConcentration::from_base(6.0);
+    let b = VolumeConcentration::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassConcentration::<i32>::from_base(6);
+    let b = VolumeConcentration::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_flow_area() {
+    let a = MassFlow::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: MassFlux = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_brake_specific_fuel_consumption() {
+    let a = MassFlow::from_base(6.0);
+    let b = BrakeSpecificFuelConsumption::from_base(2.0);
+    let c: Power = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_density() {
+    let a = MassFlow::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: VolumeFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_mass_flux() {
+    let a = MassFlow::from_base(6.0);
+    let b = MassFlux::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_molar_flow() {
+    let a = MassFlow::from_base(6.0);
+    let b = MolarFlow::from_base(2.0);
+    let c: MolarMass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_molar_mass() {
+    let a = MassFlow::from_base(6.0);
+    let b = MolarMass::from_base(2.0);
+    let c: MolarFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_power() {
+    let a = MassFlow::from_base(6.0);
+    let b = Power::from_base(2.0);
+    let c: BrakeSpecificFuelConsumption = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flow_volume_flow() {
+    let a = MassFlow::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 0.001);
+}
+
+#[test]
+fn div_mass_flux_density() {
+    let a = MassFlux::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlux::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_mass_flux_speed() {
+    let a = MassFlux::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MassFlux::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_molar_flow_molarity() {
+    let a = MolarFlow::from_base(6.0);
+    let b = Molarity::from_base(2.0);
+    let c: VolumeFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarFlow::<i32>::from_base(6);
+    let b = Molarity::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_molar_flow_volume_flow() {
+    let a = MolarFlow::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: Molarity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarFlow::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Molarity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_molarity_volume_concentration() {
+    let a = Molarity::from_base(6.0);
+    let b = VolumeConcentration::from_base(2.0);
+    let c: Molarity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molarity::<i32>::from_base(6);
+    let b = VolumeConcentration::<i32>::from_base(2);
+    let c: Molarity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_area() {
+    let a = Power::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: HeatFlux = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: HeatFlux<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_electric_current() {
+    let a = Power::from_base(6.0);
+    let b = ElectricCurrent::from_base(2.0);
+    let c: ElectricPotential = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_electric_potential() {
+    let a = Power::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: ElectricCurrent = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_energy() {
+    let a = Power::from_base(6.0);
+    let b = Energy::from_base(2.0);
+    let c: Frequency = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Energy::<i32>::from_base(2);
+    let c: Frequency<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_force() {
+    let a = Power::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_frequency() {
+    let a = Power::from_base(6.0);
+    let b = Frequency::from_base(2.0);
+    let c: Energy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Frequency::<i32>::from_base(2);
+    let c: Energy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_heat_flux() {
+    let a = Power::from_base(6.0);
+    let b = HeatFlux::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = HeatFlux::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_length() {
+    let a = Power::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: LinearPowerDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: LinearPowerDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_linear_power_density() {
+    let a = Power::from_base(6.0);
+    let b = LinearPowerDensity::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = LinearPowerDensity::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_mass_flow() {
+    let a = Power::from_base(6.0);
+    let b = MassFlow::from_base(2.0);
+    let c: SpecificEnergy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_power_power_density() {
+    let a = Power::from_base(6.0);
+    let b = PowerDensity::from_base(2.0);
+    let c: Volume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = PowerDensity::<i32>::from_base(2);
+    let c: Volume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_rotational_speed() {
+    let a = Power::from_base(6.0);
+    let b = RotationalSpeed::from_base(2.0);
+    let c: Torque = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = RotationalSpeed::<i32>::from_base(2);
+    let c: Torque<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_specific_energy() {
+    let a = Power::from_base(6.0);
+    let b = SpecificEnergy::from_base(2.0);
+    let c: MassFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_power_speed() {
+    let a = Power::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_torque() {
+    let a = Power::from_base(6.0);
+    let b = Torque::from_base(2.0);
+    let c: RotationalSpeed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Torque::<i32>::from_base(2);
+    let c: RotationalSpeed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_power_volume() {
+    let a = Power::from_base(6.0);
+    let b = Volume::from_base(2.0);
+    let c: PowerDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Power::<i32>::from_base(6);
+    let b = Volume::<i32>::from_base(2);
+    let c: PowerDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_acceleration() {
+    let a = Pressure::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: AreaDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: AreaDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_area_density() {
+    let a = Pressure::from_base(6.0);
+    let b = AreaDensity::from_base(2.0);
+    let c: Acceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = AreaDensity::<i32>::from_base(2);
+    let c: Acceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_duration() {
+    let a = Pressure::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: PressureChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: PressureChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_fluid_resistance() {
+    let a = Pressure::from_base(6.0);
+    let b = FluidResistance::from_base(2.0);
+    let c: VolumeFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = FluidResistance::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_force() {
+    let a = Pressure::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: ReciprocalArea = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: ReciprocalArea<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_force_per_length() {
+    let a = Pressure::from_base(6.0);
+    let b = ForcePerLength::from_base(2.0);
+    let c: ReciprocalLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_length() {
+    let a = Pressure::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: SpecificWeight = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: SpecificWeight<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_pressure_change_rate() {
+    let a = Pressure::from_base(6.0);
+    let b = PressureChangeRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = PressureChangeRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_reciprocal_area() {
+    let a = Pressure::from_base(6.0);
+    let b = ReciprocalArea::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_reciprocal_length() {
+    let a = Pressure::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: ForcePerLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_specific_weight() {
+    let a = Pressure::from_base(6.0);
+    let b = SpecificWeight::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = SpecificWeight::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_pressure_volume_flow() {
+    let a = Pressure::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: FluidResistance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Pressure::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: FluidResistance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_radiation_equivalent_dose_duration() {
+    let a = RadiationEquivalentDose::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: RadiationEquivalentDoseRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RadiationEquivalentDose::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RadiationEquivalentDoseRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate() {
+    let a = RadiationEquivalentDose::from_base(6.0);
+    let b = RadiationEquivalentDoseRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RadiationEquivalentDose::<i32>::from_base(6);
+    let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_ratio_compressibility() {
+    let a = Ratio::from_base(6.0);
+    let b = Compressibility::from_base(2.0);
+    let c: Pressure = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Ratio::<i32>::from_base(6);
+    let b = Compressibility::<i32>::from_base(2);
+    let c: Pressure<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_ratio_duration() {
+    let a = Ratio::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: RatioChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Ratio::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RatioChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_ratio_pressure() {
+    let a = Ratio::from_base(6.0);
+    let b = Pressure::from_base(2.0);
+    let c: Compressibility = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Ratio::<i32>::from_base(6);
+    let b = Pressure::<i32>::from_base(2);
+    let c: Compressibility<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_ratio_ratio_change_rate() {
+    let a = Ratio::from_base(6.0);
+    let b = RatioChangeRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Ratio::<i32>::from_base(6);
+    let b = RatioChangeRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_reciprocal_area_reciprocal_length() {
+    let a = ReciprocalArea::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: ReciprocalLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalArea::<i32>::from_base(6);
+    let b = ReciprocalLength::<i32>::from_base(2);
+    let c: ReciprocalLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_reciprocal_length_length() {
+    let a = ReciprocalLength::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ReciprocalArea = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ReciprocalArea<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_reciprocal_length_reciprocal_area() {
+    let a = ReciprocalLength::from_base(6.0);
+    let b = ReciprocalArea::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ReciprocalLength::<i32>::from_base(6);
+    let b = ReciprocalArea::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_rotational_speed_duration() {
+    let a = RotationalSpeed::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: RotationalAcceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalSpeed::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: RotationalAcceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_rotational_speed_rotational_acceleration() {
+    let a = RotationalSpeed::from_base(6.0);
+    let b = RotationalAcceleration::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalSpeed::<i32>::from_base(6);
+    let b = RotationalAcceleration::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_rotational_stiffness_length() {
+    let a = RotationalStiffness::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: RotationalStiffnessPerLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalStiffness::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: RotationalStiffnessPerLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_rotational_stiffness_rotational_stiffness_per_length() {
+    let a = RotationalStiffness::from_base(6.0);
+    let b = RotationalStiffnessPerLength::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = RotationalStiffness::<i32>::from_base(6);
+    let b = RotationalStiffnessPerLength::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_specific_energy_specific_entropy() {
+    let a = SpecificEnergy::from_base(6.0);
+    let b = SpecificEntropy::from_base(2.0);
+    let c: TemperatureDelta = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEnergy::<i32>::from_base(6);
+    let b = SpecificEntropy::<i32>::from_base(2);
+    let c: TemperatureDelta<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_specific_energy_speed() {
+    let a = SpecificEnergy::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEnergy::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_specific_energy_temperature_delta() {
+    let a = SpecificEnergy::from_base(6.0);
+    let b = TemperatureDelta::from_base(2.0);
+    let c: SpecificEntropy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificEnergy::<i32>::from_base(6);
+    let b = TemperatureDelta::<i32>::from_base(2);
+    let c: SpecificEntropy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_specific_weight_acceleration() {
+    let a = SpecificWeight::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: Density = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificWeight::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Density<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_specific_weight_density() {
+    let a = SpecificWeight::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: Acceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = SpecificWeight::<i32>::from_base(6);
+    let b = Density::<i32>::from_base(2);
+    let c: Acceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_speed_acceleration() {
+    let a = Speed::from_base(6.0);
+    let b = Acceleration::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Acceleration::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_speed_duration() {
+    let a = Speed::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: Acceleration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: Acceleration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_duration() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: TemperatureChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: TemperatureChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_heat_flux() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = HeatFlux::from_base(2.0);
+    let c: ThermalInsulance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_temperature_delta_length() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: TemperatureGradient = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: TemperatureGradient<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_power() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = Power::from_base(2.0);
+    let c: ThermalResistance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = Power::<i32>::from_base(2);
+    let c: ThermalResistance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_temperature_change_rate() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = TemperatureChangeRate::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = TemperatureChangeRate::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_temperature_gradient() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = TemperatureGradient::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = TemperatureGradient::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_temperature_delta_thermal_insulance() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = ThermalInsulance::from_base(2.0);
+    let c: HeatFlux = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1000.0);
+}
+
+#[test]
+fn div_temperature_delta_thermal_resistance() {
+    let a = TemperatureDelta::from_base(6.0);
+    let b = ThermalResistance::from_base(2.0);
+    let c: Power = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = TemperatureDelta::<i32>::from_base(6);
+    let b = ThermalResistance::<i32>::from_base(2);
+    let c: Power<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_angle() {
+    let a = Torque::from_base(6.0);
+    let b = Angle::from_base(2.0);
+    let c: RotationalStiffness = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = Angle::<i32>::from_base(2);
+    let c: RotationalStiffness<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_area() {
+    let a = Torque::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: ForcePerLength = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: ForcePerLength<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_force() {
+    let a = Torque::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_force_per_length() {
+    let a = Torque::from_base(6.0);
+    let b = ForcePerLength::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = ForcePerLength::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_length() {
+    let a = Torque::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_torque_rotational_stiffness() {
+    let a = Torque::from_base(6.0);
+    let b = RotationalStiffness::from_base(2.0);
+    let c: Angle = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Torque::<i32>::from_base(6);
+    let b = RotationalStiffness::<i32>::from_base(2);
+    let c: Angle<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_area() {
+    let a = Volume::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_duration() {
+    let a = Volume::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: VolumeFlow = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: VolumeFlow<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_length() {
+    let a = Volume::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_mass() {
+    let a = Volume::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: SpecificVolume = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: SpecificVolume<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_specific_volume() {
+    let a = Volume::from_base(6.0);
+    let b = SpecificVolume::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = SpecificVolume::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_volume_flow() {
+    let a = Volume::from_base(6.0);
+    let b = VolumeFlow::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Volume::<i32>::from_base(6);
+    let b = VolumeFlow::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_flow_area() {
+    let a = VolumeFlow::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Area::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn div_volume_flow_speed() {
+    let a = VolumeFlow::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Area = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = VolumeFlow::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Area<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+}
+
+#[test]
+fn mul_scalar_area_reciprocal_area() {
+    let a = Area::from_base(6.0);
+    let b = ReciprocalArea::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_brake_specific_fuel_consumption_specific_energy() {
+    let a = BrakeSpecificFuelConsumption::from_base(6.0);
+    let b = SpecificEnergy::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_density_specific_volume() {
+    let a = Density::from_base(6.0);
+    let b = SpecificVolume::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_duration_frequency() {
+    let a = Duration::from_base(6.0);
+    let b = Frequency::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_electric_conductivity_electric_resistivity() {
+    let a = ElectricConductivity::from_base(6.0);
+    let b = ElectricResistivity::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_electric_resistivity_electric_conductivity() {
+    let a = ElectricResistivity::from_base(6.0);
+    let b = ElectricConductivity::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_frequency_duration() {
+    let a = Frequency::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_length_reciprocal_length() {
+    let a = Length::from_base(6.0);
+    let b = ReciprocalLength::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_reciprocal_area_area() {
+    let a = ReciprocalArea::from_base(6.0);
+    let b = Area::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_reciprocal_length_length() {
+    let a = ReciprocalLength::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_specific_energy_brake_specific_fuel_consumption() {
+    let a = SpecificEnergy::from_base(6.0);
+    let b = BrakeSpecificFuelConsumption::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn mul_scalar_specific_volume_density() {
+    let a = SpecificVolume::from_base(6.0);
+    let b = Density::from_base(2.0);
+    let c: f64 = a * b;
+    assert_eq!(c, 12.0);
+}
+
+#[test]
+fn recip_one_area() {
+    let b = Area::from_base(4.0);
+    let c: ReciprocalArea = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_brake_specific_fuel_consumption() {
+    let b = BrakeSpecificFuelConsumption::from_base(4.0);
+    let c: SpecificEnergy = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_density() {
+    let b = Density::from_base(4.0);
+    let c: SpecificVolume = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_duration() {
+    let b = Duration::from_base(4.0);
+    let c: Frequency = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_electric_conductivity() {
+    let b = ElectricConductivity::from_base(4.0);
+    let c: ElectricResistivity = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_electric_resistivity() {
+    let b = ElectricResistivity::from_base(4.0);
+    let c: ElectricConductivity = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_frequency() {
+    let b = Frequency::from_base(4.0);
+    let c: Duration = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_length() {
+    let b = Length::from_base(4.0);
+    let c: ReciprocalLength = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_reciprocal_area() {
+    let b = ReciprocalArea::from_base(4.0);
+    let c: Area = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_reciprocal_length() {
+    let b = ReciprocalLength::from_base(4.0);
+    let c: Length = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_specific_energy() {
+    let b = SpecificEnergy::from_base(4.0);
+    let c: BrakeSpecificFuelConsumption = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
+}
+
+#[test]
+fn recip_one_specific_volume() {
+    let b = SpecificVolume::from_base(4.0);
+    let c: Density = 1.0 / b;
+    assert_eq!(c.as_base(), 0.25);
 }

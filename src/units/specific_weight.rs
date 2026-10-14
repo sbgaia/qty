@@ -2,27 +2,35 @@
 // Source: data/quantities/SpecificWeight.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// The SpecificWeight, or more precisely, the volumetric weight density, of a substance is its weight per unit volume.
 ///
-/// The internal value is stored in `NewtonPerCubicMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct SpecificWeight(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`SpecificWeightUnit::NewtonPerCubicMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct SpecificWeight<T = f64>(T);
+
+quantity!(SpecificWeight, SpecificWeightUnit, NewtonPerCubicMeter);
 
 /// Unit variants for [`SpecificWeight`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum SpecificWeightUnit {
     NewtonPerCubicMillimeter,
     KilonewtonPerCubicMillimeter,
@@ -67,7 +75,7 @@ impl SpecificWeightUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::NewtonPerCubicMillimeter => "N/mm³",
             Self::KilonewtonPerCubicMillimeter => "kN/mm³",
@@ -89,9 +97,9 @@ impl SpecificWeightUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::NewtonPerCubicMillimeter => &["N/mm³"],
             Self::KilonewtonPerCubicMillimeter => &["kN/mm³"],
@@ -114,561 +122,398 @@ impl SpecificWeightUnit {
     }
 }
 
-impl SpecificWeight {
+impl core::str::FromStr for SpecificWeightUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "N/mm³" => Ok(Self::NewtonPerCubicMillimeter),
+            "kN/mm³" => Ok(Self::KilonewtonPerCubicMillimeter),
+            "N/cm³" => Ok(Self::NewtonPerCubicCentimeter),
+            "kN/cm³" => Ok(Self::KilonewtonPerCubicCentimeter),
+            "N/m³" => Ok(Self::NewtonPerCubicMeter),
+            "kN/m³" => Ok(Self::KilonewtonPerCubicMeter),
+            "MN/m³" => Ok(Self::MeganewtonPerCubicMeter),
+            "kgf/mm³" => Ok(Self::KilogramForcePerCubicMillimeter),
+            "kgf/cm³" => Ok(Self::KilogramForcePerCubicCentimeter),
+            "kgf/m³" => Ok(Self::KilogramForcePerCubicMeter),
+            "lbf/in³" => Ok(Self::PoundForcePerCubicInch),
+            "klbf/in³" => Ok(Self::KilopoundForcePerCubicInch),
+            "lbf/ft³" => Ok(Self::PoundForcePerCubicFoot),
+            "klbf/ft³" => Ok(Self::KilopoundForcePerCubicFoot),
+            "tf/mm³" => Ok(Self::TonneForcePerCubicMillimeter),
+            "tf/cm³" => Ok(Self::TonneForcePerCubicCentimeter),
+            "tf/m³" => Ok(Self::TonneForcePerCubicMeter),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> SpecificWeight<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: SpecificWeightUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: SpecificWeightUnit) -> Self {
         Self(match unit {
-            SpecificWeightUnit::NewtonPerCubicMillimeter => x * 1000000000.0,
-            SpecificWeightUnit::KilonewtonPerCubicMillimeter => (x * 1e3) * 1000000000.0,
-            SpecificWeightUnit::NewtonPerCubicCentimeter => x * 1000000.0,
-            SpecificWeightUnit::KilonewtonPerCubicCentimeter => (x * 1e3) * 1000000.0,
-            SpecificWeightUnit::NewtonPerCubicMeter => x,
-            SpecificWeightUnit::KilonewtonPerCubicMeter => (x * 1e3),
-            SpecificWeightUnit::MeganewtonPerCubicMeter => (x * 1e6),
-            SpecificWeightUnit::KilogramForcePerCubicMillimeter => x * 9.80665e9,
-            SpecificWeightUnit::KilogramForcePerCubicCentimeter => x * 9.80665e6,
-            SpecificWeightUnit::KilogramForcePerCubicMeter => x * 9.80665,
-            SpecificWeightUnit::PoundForcePerCubicInch => x * 4.4482216152605 / 1.6387064e-5,
+            SpecificWeightUnit::NewtonPerCubicMillimeter => value * T::from_f64(1e9),
+            SpecificWeightUnit::KilonewtonPerCubicMillimeter => value * T::from_f64(1e12),
+            SpecificWeightUnit::NewtonPerCubicCentimeter => value * T::from_f64(1000000.0),
+            SpecificWeightUnit::KilonewtonPerCubicCentimeter => value * T::from_f64(1e9),
+            SpecificWeightUnit::NewtonPerCubicMeter => value,
+            SpecificWeightUnit::KilonewtonPerCubicMeter => value * T::from_f64(1000.0),
+            SpecificWeightUnit::MeganewtonPerCubicMeter => value * T::from_f64(1000000.0),
+            SpecificWeightUnit::KilogramForcePerCubicMillimeter => value * T::from_f64(9.80665e9),
+            SpecificWeightUnit::KilogramForcePerCubicCentimeter => value * T::from_f64(9806650.0),
+            SpecificWeightUnit::KilogramForcePerCubicMeter => value * T::from_f64(9.80665),
+            SpecificWeightUnit::PoundForcePerCubicInch => value * T::from_f64(271447.1375263134),
             SpecificWeightUnit::KilopoundForcePerCubicInch => {
-                (x * 1e3) * 4.4482216152605 / 1.6387064e-5
+                value * T::from_f64(2.714471375263134e8)
             }
-            SpecificWeightUnit::PoundForcePerCubicFoot => x * 4.4482216152605 / 0.028316846592,
+            SpecificWeightUnit::PoundForcePerCubicFoot => value * T::from_f64(157.0874638462462),
             SpecificWeightUnit::KilopoundForcePerCubicFoot => {
-                (x * 1e3) * 4.4482216152605 / 0.028316846592
+                value * T::from_f64(157087.46384624622)
             }
-            SpecificWeightUnit::TonneForcePerCubicMillimeter => x * 9.80665e12,
-            SpecificWeightUnit::TonneForcePerCubicCentimeter => x * 9.80665e9,
-            SpecificWeightUnit::TonneForcePerCubicMeter => x * 9.80665e3,
+            SpecificWeightUnit::TonneForcePerCubicMillimeter => value * T::from_f64(9.80665e12),
+            SpecificWeightUnit::TonneForcePerCubicCentimeter => value * T::from_f64(9.80665e9),
+            SpecificWeightUnit::TonneForcePerCubicMeter => value * T::from_f64(9806.65),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: SpecificWeightUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: SpecificWeightUnit) -> T {
         match unit {
-            SpecificWeightUnit::NewtonPerCubicMillimeter => x * 0.000000001,
-            SpecificWeightUnit::KilonewtonPerCubicMillimeter => (x / 1e3) * 0.000000001,
-            SpecificWeightUnit::NewtonPerCubicCentimeter => x * 0.000001,
-            SpecificWeightUnit::KilonewtonPerCubicCentimeter => (x / 1e3) * 0.000001,
-            SpecificWeightUnit::NewtonPerCubicMeter => x,
-            SpecificWeightUnit::KilonewtonPerCubicMeter => (x / 1e3),
-            SpecificWeightUnit::MeganewtonPerCubicMeter => (x / 1e6),
-            SpecificWeightUnit::KilogramForcePerCubicMillimeter => x / 9.80665e9,
-            SpecificWeightUnit::KilogramForcePerCubicCentimeter => x / 9.80665e6,
-            SpecificWeightUnit::KilogramForcePerCubicMeter => x / 9.80665,
-            SpecificWeightUnit::PoundForcePerCubicInch => x * 1.6387064e-5 / 4.4482216152605,
+            SpecificWeightUnit::NewtonPerCubicMillimeter => self.0 / T::from_f64(1e9),
+            SpecificWeightUnit::KilonewtonPerCubicMillimeter => self.0 / T::from_f64(1e12),
+            SpecificWeightUnit::NewtonPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
+            SpecificWeightUnit::KilonewtonPerCubicCentimeter => self.0 / T::from_f64(1e9),
+            SpecificWeightUnit::NewtonPerCubicMeter => self.0,
+            SpecificWeightUnit::KilonewtonPerCubicMeter => self.0 / T::from_f64(1000.0),
+            SpecificWeightUnit::MeganewtonPerCubicMeter => self.0 / T::from_f64(1000000.0),
+            SpecificWeightUnit::KilogramForcePerCubicMillimeter => self.0 / T::from_f64(9.80665e9),
+            SpecificWeightUnit::KilogramForcePerCubicCentimeter => self.0 / T::from_f64(9806650.0),
+            SpecificWeightUnit::KilogramForcePerCubicMeter => self.0 / T::from_f64(9.80665),
+            SpecificWeightUnit::PoundForcePerCubicInch => self.0 / T::from_f64(271447.1375263134),
             SpecificWeightUnit::KilopoundForcePerCubicInch => {
-                (x / 1e3) * 1.6387064e-5 / 4.4482216152605
+                self.0 / T::from_f64(2.714471375263134e8)
             }
-            SpecificWeightUnit::PoundForcePerCubicFoot => x * 0.028316846592 / 4.4482216152605,
+            SpecificWeightUnit::PoundForcePerCubicFoot => self.0 / T::from_f64(157.0874638462462),
             SpecificWeightUnit::KilopoundForcePerCubicFoot => {
-                (x / 1e3) * 0.028316846592 / 4.4482216152605
+                self.0 / T::from_f64(157087.46384624622)
             }
-            SpecificWeightUnit::TonneForcePerCubicMillimeter => x / 9.80665e12,
-            SpecificWeightUnit::TonneForcePerCubicCentimeter => x / 9.80665e9,
-            SpecificWeightUnit::TonneForcePerCubicMeter => x / 9.80665e3,
+            SpecificWeightUnit::TonneForcePerCubicMillimeter => self.0 / T::from_f64(9.80665e12),
+            SpecificWeightUnit::TonneForcePerCubicCentimeter => self.0 / T::from_f64(9.80665e9),
+            SpecificWeightUnit::TonneForcePerCubicMeter => self.0 / T::from_f64(9806.65),
         }
     }
 
     /// Creates a [`SpecificWeight`] from a value in NewtonsPerCubicMillimeter (`N/mm³`).
     #[inline]
-    pub fn from_newtons_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1000000000.0)
+    pub fn from_newtons_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NewtonsPerCubicMillimeter (`N/mm³`).
     #[inline]
-    pub fn as_newtons_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        x * 0.000000001
+    pub fn as_newtons_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_newtons_per_cubic_millimeter`].
     #[inline]
-    pub fn as_newton_per_cubic_millimeter(self) -> Num {
+    pub fn as_newton_per_cubic_millimeter(self) -> T {
         self.as_newtons_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicMillimeter (`kN/mm³`).
     #[inline]
-    pub fn from_kilonewtons_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1000000000.0)
+    pub fn from_kilonewtons_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in KilonewtonsPerCubicMillimeter (`kN/mm³`).
     #[inline]
-    pub fn as_kilonewtons_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.000000001
+    pub fn as_kilonewtons_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_cubic_millimeter`].
     #[inline]
-    pub fn as_kilonewton_per_cubic_millimeter(self) -> Num {
+    pub fn as_kilonewton_per_cubic_millimeter(self) -> T {
         self.as_kilonewtons_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in NewtonsPerCubicCentimeter (`N/cm³`).
     #[inline]
-    pub fn from_newtons_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 1000000.0)
+    pub fn from_newtons_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in NewtonsPerCubicCentimeter (`N/cm³`).
     #[inline]
-    pub fn as_newtons_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        x * 0.000001
+    pub fn as_newtons_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_newtons_per_cubic_centimeter`].
     #[inline]
-    pub fn as_newton_per_cubic_centimeter(self) -> Num {
+    pub fn as_newton_per_cubic_centimeter(self) -> T {
         self.as_newtons_per_cubic_centimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicCentimeter (`kN/cm³`).
     #[inline]
-    pub fn from_kilonewtons_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 1000000.0)
+    pub fn from_kilonewtons_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in KilonewtonsPerCubicCentimeter (`kN/cm³`).
     #[inline]
-    pub fn as_kilonewtons_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.000001
+    pub fn as_kilonewtons_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_cubic_centimeter`].
     #[inline]
-    pub fn as_kilonewton_per_cubic_centimeter(self) -> Num {
+    pub fn as_kilonewton_per_cubic_centimeter(self) -> T {
         self.as_kilonewtons_per_cubic_centimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in NewtonsPerCubicMeter (`N/m³`).
     #[inline]
-    pub fn from_newtons_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_newtons_per_cubic_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in NewtonsPerCubicMeter (`N/m³`).
     #[inline]
-    pub fn as_newtons_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_newtons_per_cubic_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_newtons_per_cubic_meter`].
     #[inline]
-    pub fn as_newton_per_cubic_meter(self) -> Num {
+    pub fn as_newton_per_cubic_meter(self) -> T {
         self.as_newtons_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicMeter (`kN/m³`).
     #[inline]
-    pub fn from_kilonewtons_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilonewtons_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilonewtonsPerCubicMeter (`kN/m³`).
     #[inline]
-    pub fn as_kilonewtons_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilonewtons_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilonewtons_per_cubic_meter`].
     #[inline]
-    pub fn as_kilonewton_per_cubic_meter(self) -> Num {
+    pub fn as_kilonewton_per_cubic_meter(self) -> T {
         self.as_kilonewtons_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in MeganewtonsPerCubicMeter (`MN/m³`).
     #[inline]
-    pub fn from_meganewtons_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_meganewtons_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MeganewtonsPerCubicMeter (`MN/m³`).
     #[inline]
-    pub fn as_meganewtons_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_meganewtons_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_meganewtons_per_cubic_meter`].
     #[inline]
-    pub fn as_meganewton_per_cubic_meter(self) -> Num {
+    pub fn as_meganewton_per_cubic_meter(self) -> T {
         self.as_meganewtons_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicMillimeter (`kgf/mm³`).
     #[inline]
-    pub fn from_kilograms_force_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e9)
+    pub fn from_kilograms_force_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(9.80665e9))
     }
 
     /// Returns the value expressed in KilogramsForcePerCubicMillimeter (`kgf/mm³`).
     #[inline]
-    pub fn as_kilograms_force_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e9
+    pub fn as_kilograms_force_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(9.80665e9)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_cubic_millimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_cubic_millimeter(self) -> Num {
+    pub fn as_kilogram_force_per_cubic_millimeter(self) -> T {
         self.as_kilograms_force_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicCentimeter (`kgf/cm³`).
     #[inline]
-    pub fn from_kilograms_force_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e6)
+    pub fn from_kilograms_force_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(9806650.0))
     }
 
     /// Returns the value expressed in KilogramsForcePerCubicCentimeter (`kgf/cm³`).
     #[inline]
-    pub fn as_kilograms_force_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e6
+    pub fn as_kilograms_force_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(9806650.0)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_cubic_centimeter`].
     #[inline]
-    pub fn as_kilogram_force_per_cubic_centimeter(self) -> Num {
+    pub fn as_kilogram_force_per_cubic_centimeter(self) -> T {
         self.as_kilograms_force_per_cubic_centimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicMeter (`kgf/m³`).
     #[inline]
-    pub fn from_kilograms_force_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665)
+    pub fn from_kilograms_force_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(9.80665))
     }
 
     /// Returns the value expressed in KilogramsForcePerCubicMeter (`kgf/m³`).
     #[inline]
-    pub fn as_kilograms_force_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x / 9.80665
+    pub fn as_kilograms_force_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(9.80665)
     }
 
     /// Alias for [`Self::as_kilograms_force_per_cubic_meter`].
     #[inline]
-    pub fn as_kilogram_force_per_cubic_meter(self) -> Num {
+    pub fn as_kilogram_force_per_cubic_meter(self) -> T {
         self.as_kilograms_force_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in PoundsForcePerCubicInch (`lbf/in³`).
     #[inline]
-    pub fn from_pounds_force_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 1.6387064e-5)
+    pub fn from_pounds_force_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(271447.1375263134))
     }
 
     /// Returns the value expressed in PoundsForcePerCubicInch (`lbf/in³`).
     #[inline]
-    pub fn as_pounds_force_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        x * 1.6387064e-5 / 4.4482216152605
+    pub fn as_pounds_force_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(271447.1375263134)
     }
 
     /// Alias for [`Self::as_pounds_force_per_cubic_inch`].
     #[inline]
-    pub fn as_pound_force_per_cubic_inch(self) -> Num {
+    pub fn as_pound_force_per_cubic_inch(self) -> T {
         self.as_pounds_force_per_cubic_inch()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilopoundsForcePerCubicInch (`klbf/in³`).
     #[inline]
-    pub fn from_kilopounds_force_per_cubic_inch(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.4482216152605 / 1.6387064e-5)
+    pub fn from_kilopounds_force_per_cubic_inch(value: T) -> Self {
+        Self(value * T::from_f64(2.714471375263134e8))
     }
 
     /// Returns the value expressed in KilopoundsForcePerCubicInch (`klbf/in³`).
     #[inline]
-    pub fn as_kilopounds_force_per_cubic_inch(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 1.6387064e-5 / 4.4482216152605
+    pub fn as_kilopounds_force_per_cubic_inch(self) -> T {
+        self.0 / T::from_f64(2.714471375263134e8)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_cubic_inch`].
     #[inline]
-    pub fn as_kilopound_force_per_cubic_inch(self) -> Num {
+    pub fn as_kilopound_force_per_cubic_inch(self) -> T {
         self.as_kilopounds_force_per_cubic_inch()
     }
 
     /// Creates a [`SpecificWeight`] from a value in PoundsForcePerCubicFoot (`lbf/ft³`).
     #[inline]
-    pub fn from_pounds_force_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self(x * 4.4482216152605 / 0.028316846592)
+    pub fn from_pounds_force_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(157.0874638462462))
     }
 
     /// Returns the value expressed in PoundsForcePerCubicFoot (`lbf/ft³`).
     #[inline]
-    pub fn as_pounds_force_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        x * 0.028316846592 / 4.4482216152605
+    pub fn as_pounds_force_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(157.0874638462462)
     }
 
     /// Alias for [`Self::as_pounds_force_per_cubic_foot`].
     #[inline]
-    pub fn as_pound_force_per_cubic_foot(self) -> Num {
+    pub fn as_pound_force_per_cubic_foot(self) -> T {
         self.as_pounds_force_per_cubic_foot()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilopoundsForcePerCubicFoot (`klbf/ft³`).
     #[inline]
-    pub fn from_kilopounds_force_per_cubic_foot(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3) * 4.4482216152605 / 0.028316846592)
+    pub fn from_kilopounds_force_per_cubic_foot(value: T) -> Self {
+        Self(value * T::from_f64(157087.46384624622))
     }
 
     /// Returns the value expressed in KilopoundsForcePerCubicFoot (`klbf/ft³`).
     #[inline]
-    pub fn as_kilopounds_force_per_cubic_foot(self) -> Num {
-        let x = self.0;
-        (x / 1e3) * 0.028316846592 / 4.4482216152605
+    pub fn as_kilopounds_force_per_cubic_foot(self) -> T {
+        self.0 / T::from_f64(157087.46384624622)
     }
 
     /// Alias for [`Self::as_kilopounds_force_per_cubic_foot`].
     #[inline]
-    pub fn as_kilopound_force_per_cubic_foot(self) -> Num {
+    pub fn as_kilopound_force_per_cubic_foot(self) -> T {
         self.as_kilopounds_force_per_cubic_foot()
     }
 
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicMillimeter (`tf/mm³`).
     #[inline]
-    pub fn from_tonnes_force_per_cubic_millimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e12)
+    pub fn from_tonnes_force_per_cubic_millimeter(value: T) -> Self {
+        Self(value * T::from_f64(9.80665e12))
     }
 
     /// Returns the value expressed in TonnesForcePerCubicMillimeter (`tf/mm³`).
     #[inline]
-    pub fn as_tonnes_force_per_cubic_millimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e12
+    pub fn as_tonnes_force_per_cubic_millimeter(self) -> T {
+        self.0 / T::from_f64(9.80665e12)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_cubic_millimeter`].
     #[inline]
-    pub fn as_tonne_force_per_cubic_millimeter(self) -> Num {
+    pub fn as_tonne_force_per_cubic_millimeter(self) -> T {
         self.as_tonnes_force_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicCentimeter (`tf/cm³`).
     #[inline]
-    pub fn from_tonnes_force_per_cubic_centimeter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e9)
+    pub fn from_tonnes_force_per_cubic_centimeter(value: T) -> Self {
+        Self(value * T::from_f64(9.80665e9))
     }
 
     /// Returns the value expressed in TonnesForcePerCubicCentimeter (`tf/cm³`).
     #[inline]
-    pub fn as_tonnes_force_per_cubic_centimeter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e9
+    pub fn as_tonnes_force_per_cubic_centimeter(self) -> T {
+        self.0 / T::from_f64(9.80665e9)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_cubic_centimeter`].
     #[inline]
-    pub fn as_tonne_force_per_cubic_centimeter(self) -> Num {
+    pub fn as_tonne_force_per_cubic_centimeter(self) -> T {
         self.as_tonnes_force_per_cubic_centimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicMeter (`tf/m³`).
     #[inline]
-    pub fn from_tonnes_force_per_cubic_meter(value: Num) -> Self {
-        let x = value;
-        Self(x * 9.80665e3)
+    pub fn from_tonnes_force_per_cubic_meter(value: T) -> Self {
+        Self(value * T::from_f64(9806.65))
     }
 
     /// Returns the value expressed in TonnesForcePerCubicMeter (`tf/m³`).
     #[inline]
-    pub fn as_tonnes_force_per_cubic_meter(self) -> Num {
-        let x = self.0;
-        x / 9.80665e3
+    pub fn as_tonnes_force_per_cubic_meter(self) -> T {
+        self.0 / T::from_f64(9806.65)
     }
 
     /// Alias for [`Self::as_tonnes_force_per_cubic_meter`].
     #[inline]
-    pub fn as_tonne_force_per_cubic_meter(self) -> Num {
+    pub fn as_tonne_force_per_cubic_meter(self) -> T {
         self.as_tonnes_force_per_cubic_meter()
     }
-}
-
-impl crate::Quantity for SpecificWeight {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for SpecificWeight {
-    type Output = SpecificWeight;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for SpecificWeight {
-    type Output = SpecificWeight;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for SpecificWeight {
-    type Output = SpecificWeight;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for SpecificWeight {
-    type Output = SpecificWeight;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<SpecificWeight> for Num {
-    type Output = SpecificWeight;
-    #[inline]
-    fn mul(self, rhs: SpecificWeight) -> SpecificWeight {
-        SpecificWeight(self * rhs.0)
-    }
-}
-impl Div<Num> for SpecificWeight {
-    type Output = SpecificWeight;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for SpecificWeight {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for SpecificWeight {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            SpecificWeightUnit::NewtonPerCubicMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`SpecificWeight`].
-#[derive(Debug)]
-pub struct ParseSpecificWeightError(String);
-
-impl fmt::Display for ParseSpecificWeightError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as SpecificWeight", self.0)
-    }
-}
-
-impl std::error::Error for ParseSpecificWeightError {}
-
-impl FromStr for SpecificWeight {
-    type Err = ParseSpecificWeightError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseSpecificWeightError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, SpecificWeightUnit)] = &[
-            ("klbf/ft³", SpecificWeightUnit::KilopoundForcePerCubicFoot),
-            ("klbf/in³", SpecificWeightUnit::KilopoundForcePerCubicInch),
-            (
-                "kgf/cm³",
-                SpecificWeightUnit::KilogramForcePerCubicCentimeter,
-            ),
-            (
-                "kgf/mm³",
-                SpecificWeightUnit::KilogramForcePerCubicMillimeter,
-            ),
-            ("lbf/ft³", SpecificWeightUnit::PoundForcePerCubicFoot),
-            ("lbf/in³", SpecificWeightUnit::PoundForcePerCubicInch),
-            ("kN/cm³", SpecificWeightUnit::KilonewtonPerCubicCentimeter),
-            ("kN/mm³", SpecificWeightUnit::KilonewtonPerCubicMillimeter),
-            ("kgf/m³", SpecificWeightUnit::KilogramForcePerCubicMeter),
-            ("tf/cm³", SpecificWeightUnit::TonneForcePerCubicCentimeter),
-            ("tf/mm³", SpecificWeightUnit::TonneForcePerCubicMillimeter),
-            ("MN/m³", SpecificWeightUnit::MeganewtonPerCubicMeter),
-            ("N/cm³", SpecificWeightUnit::NewtonPerCubicCentimeter),
-            ("N/mm³", SpecificWeightUnit::NewtonPerCubicMillimeter),
-            ("kN/m³", SpecificWeightUnit::KilonewtonPerCubicMeter),
-            ("tf/m³", SpecificWeightUnit::TonneForcePerCubicMeter),
-            ("N/m³", SpecificWeightUnit::NewtonPerCubicMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseSpecificWeightError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

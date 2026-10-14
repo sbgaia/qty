@@ -2,27 +2,39 @@
 // Source: data/quantities/ElectricCurrentDensity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// In electromagnetism, current density is the electric current per unit area of cross section.
 ///
-/// The internal value is stored in `AmperePerSquareMeter` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricCurrentDensity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricCurrentDensityUnit::AmperePerSquareMeter`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricCurrentDensity<T = f64>(T);
+
+quantity!(
+    ElectricCurrentDensity,
+    ElectricCurrentDensityUnit,
+    AmperePerSquareMeter
+);
 
 /// Unit variants for [`ElectricCurrentDensity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricCurrentDensityUnit {
     AmperePerSquareMeter,
     AmperePerSquareInch,
@@ -39,7 +51,7 @@ impl ElectricCurrentDensityUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::AmperePerSquareMeter => "A/m²",
             Self::AmperePerSquareInch => "A/in²",
@@ -47,9 +59,9 @@ impl ElectricCurrentDensityUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::AmperePerSquareMeter => &["A/m²"],
             Self::AmperePerSquareInch => &["A/in²"],
@@ -58,225 +70,102 @@ impl ElectricCurrentDensityUnit {
     }
 }
 
-impl ElectricCurrentDensity {
+impl core::str::FromStr for ElectricCurrentDensityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "A/m²" => Ok(Self::AmperePerSquareMeter),
+            "A/in²" => Ok(Self::AmperePerSquareInch),
+            "A/ft²" => Ok(Self::AmperePerSquareFoot),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricCurrentDensity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricCurrentDensityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricCurrentDensityUnit) -> Self {
         Self(match unit {
-            ElectricCurrentDensityUnit::AmperePerSquareMeter => x,
-            ElectricCurrentDensityUnit::AmperePerSquareInch => x / 0.00064516,
-            ElectricCurrentDensityUnit::AmperePerSquareFoot => x / 9.290304e-2,
+            ElectricCurrentDensityUnit::AmperePerSquareMeter => value,
+            ElectricCurrentDensityUnit::AmperePerSquareInch => value * T::from_f64(1550.0031000062),
+            ElectricCurrentDensityUnit::AmperePerSquareFoot => {
+                value * T::from_f64(10.763910416709722)
+            }
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricCurrentDensityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricCurrentDensityUnit) -> T {
         match unit {
-            ElectricCurrentDensityUnit::AmperePerSquareMeter => x,
-            ElectricCurrentDensityUnit::AmperePerSquareInch => x * 0.00064516,
-            ElectricCurrentDensityUnit::AmperePerSquareFoot => x * 9.290304e-2,
+            ElectricCurrentDensityUnit::AmperePerSquareMeter => self.0,
+            ElectricCurrentDensityUnit::AmperePerSquareInch => {
+                self.0 / T::from_f64(1550.0031000062)
+            }
+            ElectricCurrentDensityUnit::AmperePerSquareFoot => {
+                self.0 / T::from_f64(10.763910416709722)
+            }
         }
     }
 
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareMeter (`A/m²`).
     #[inline]
-    pub fn from_amperes_per_square_meter(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_amperes_per_square_meter(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in AmperesPerSquareMeter (`A/m²`).
     #[inline]
-    pub fn as_amperes_per_square_meter(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_amperes_per_square_meter(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_amperes_per_square_meter`].
     #[inline]
-    pub fn as_ampere_per_square_meter(self) -> Num {
+    pub fn as_ampere_per_square_meter(self) -> T {
         self.as_amperes_per_square_meter()
     }
 
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareInch (`A/in²`).
     #[inline]
-    pub fn from_amperes_per_square_inch(value: Num) -> Self {
-        let x = value;
-        Self(x / 0.00064516)
+    pub fn from_amperes_per_square_inch(value: T) -> Self {
+        Self(value * T::from_f64(1550.0031000062))
     }
 
     /// Returns the value expressed in AmperesPerSquareInch (`A/in²`).
     #[inline]
-    pub fn as_amperes_per_square_inch(self) -> Num {
-        let x = self.0;
-        x * 0.00064516
+    pub fn as_amperes_per_square_inch(self) -> T {
+        self.0 / T::from_f64(1550.0031000062)
     }
 
     /// Alias for [`Self::as_amperes_per_square_inch`].
     #[inline]
-    pub fn as_ampere_per_square_inch(self) -> Num {
+    pub fn as_ampere_per_square_inch(self) -> T {
         self.as_amperes_per_square_inch()
     }
 
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareFoot (`A/ft²`).
     #[inline]
-    pub fn from_amperes_per_square_foot(value: Num) -> Self {
-        let x = value;
-        Self(x / 9.290304e-2)
+    pub fn from_amperes_per_square_foot(value: T) -> Self {
+        Self(value * T::from_f64(10.763910416709722))
     }
 
     /// Returns the value expressed in AmperesPerSquareFoot (`A/ft²`).
     #[inline]
-    pub fn as_amperes_per_square_foot(self) -> Num {
-        let x = self.0;
-        x * 9.290304e-2
+    pub fn as_amperes_per_square_foot(self) -> T {
+        self.0 / T::from_f64(10.763910416709722)
     }
 
     /// Alias for [`Self::as_amperes_per_square_foot`].
     #[inline]
-    pub fn as_ampere_per_square_foot(self) -> Num {
+    pub fn as_ampere_per_square_foot(self) -> T {
         self.as_amperes_per_square_foot()
     }
-}
-
-impl crate::Quantity for ElectricCurrentDensity {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricCurrentDensity {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricCurrentDensity {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricCurrentDensity {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricCurrentDensity {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricCurrentDensity> for Num {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn mul(self, rhs: ElectricCurrentDensity) -> ElectricCurrentDensity {
-        ElectricCurrentDensity(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricCurrentDensity {
-    type Output = ElectricCurrentDensity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricCurrentDensity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricCurrentDensity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricCurrentDensityUnit::AmperePerSquareMeter.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricCurrentDensity`].
-#[derive(Debug)]
-pub struct ParseElectricCurrentDensityError(String);
-
-impl fmt::Display for ParseElectricCurrentDensityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricCurrentDensity", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricCurrentDensityError {}
-
-impl FromStr for ElectricCurrentDensity {
-    type Err = ParseElectricCurrentDensityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricCurrentDensityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricCurrentDensityUnit)] = &[
-            ("A/ft²", ElectricCurrentDensityUnit::AmperePerSquareFoot),
-            ("A/in²", ElectricCurrentDensityUnit::AmperePerSquareInch),
-            ("A/m²", ElectricCurrentDensityUnit::AmperePerSquareMeter),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricCurrentDensityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

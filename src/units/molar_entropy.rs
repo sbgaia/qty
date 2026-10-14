@@ -2,27 +2,35 @@
 // Source: data/quantities/MolarEntropy.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Molar entropy is amount of energy required to increase temperature of 1 mole substance by 1 Kelvin.
 ///
-/// The internal value is stored in `JoulePerMoleKelvin` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct MolarEntropy(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarEntropyUnit::JoulePerMoleKelvin`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct MolarEntropy<T = f64>(T);
+
+quantity!(MolarEntropy, MolarEntropyUnit, JoulePerMoleKelvin);
 
 /// Unit variants for [`MolarEntropy`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum MolarEntropyUnit {
     JoulePerMoleKelvin,
     KilojoulePerMoleKelvin,
@@ -39,7 +47,7 @@ impl MolarEntropyUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::JoulePerMoleKelvin => "J/(mol·K)",
             Self::KilojoulePerMoleKelvin => "kJ/(mol·K)",
@@ -47,9 +55,9 @@ impl MolarEntropyUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::JoulePerMoleKelvin => &["J/(mol·K)"],
             Self::KilojoulePerMoleKelvin => &["kJ/(mol·K)"],
@@ -58,225 +66,96 @@ impl MolarEntropyUnit {
     }
 }
 
-impl MolarEntropy {
+impl core::str::FromStr for MolarEntropyUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "J/(mol·K)" => Ok(Self::JoulePerMoleKelvin),
+            "kJ/(mol·K)" => Ok(Self::KilojoulePerMoleKelvin),
+            "MJ/(mol·K)" => Ok(Self::MegajoulePerMoleKelvin),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> MolarEntropy<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: MolarEntropyUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: MolarEntropyUnit) -> Self {
         Self(match unit {
-            MolarEntropyUnit::JoulePerMoleKelvin => x,
-            MolarEntropyUnit::KilojoulePerMoleKelvin => (x * 1e3),
-            MolarEntropyUnit::MegajoulePerMoleKelvin => (x * 1e6),
+            MolarEntropyUnit::JoulePerMoleKelvin => value,
+            MolarEntropyUnit::KilojoulePerMoleKelvin => value * T::from_f64(1000.0),
+            MolarEntropyUnit::MegajoulePerMoleKelvin => value * T::from_f64(1000000.0),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: MolarEntropyUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: MolarEntropyUnit) -> T {
         match unit {
-            MolarEntropyUnit::JoulePerMoleKelvin => x,
-            MolarEntropyUnit::KilojoulePerMoleKelvin => (x / 1e3),
-            MolarEntropyUnit::MegajoulePerMoleKelvin => (x / 1e6),
+            MolarEntropyUnit::JoulePerMoleKelvin => self.0,
+            MolarEntropyUnit::KilojoulePerMoleKelvin => self.0 / T::from_f64(1000.0),
+            MolarEntropyUnit::MegajoulePerMoleKelvin => self.0 / T::from_f64(1000000.0),
         }
     }
 
     /// Creates a [`MolarEntropy`] from a value in JoulesPerMoleKelvin (`J/(mol·K)`).
     #[inline]
-    pub fn from_joules_per_mole_kelvin(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_joules_per_mole_kelvin(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in JoulesPerMoleKelvin (`J/(mol·K)`).
     #[inline]
-    pub fn as_joules_per_mole_kelvin(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_joules_per_mole_kelvin(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_joules_per_mole_kelvin`].
     #[inline]
-    pub fn as_joule_per_mole_kelvin(self) -> Num {
+    pub fn as_joule_per_mole_kelvin(self) -> T {
         self.as_joules_per_mole_kelvin()
     }
 
     /// Creates a [`MolarEntropy`] from a value in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
     #[inline]
-    pub fn from_kilojoules_per_mole_kelvin(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilojoules_per_mole_kelvin(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
     #[inline]
-    pub fn as_kilojoules_per_mole_kelvin(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilojoules_per_mole_kelvin(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilojoules_per_mole_kelvin`].
     #[inline]
-    pub fn as_kilojoule_per_mole_kelvin(self) -> Num {
+    pub fn as_kilojoule_per_mole_kelvin(self) -> T {
         self.as_kilojoules_per_mole_kelvin()
     }
 
     /// Creates a [`MolarEntropy`] from a value in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
     #[inline]
-    pub fn from_megajoules_per_mole_kelvin(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megajoules_per_mole_kelvin(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
     #[inline]
-    pub fn as_megajoules_per_mole_kelvin(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megajoules_per_mole_kelvin(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megajoules_per_mole_kelvin`].
     #[inline]
-    pub fn as_megajoule_per_mole_kelvin(self) -> Num {
+    pub fn as_megajoule_per_mole_kelvin(self) -> T {
         self.as_megajoules_per_mole_kelvin()
     }
-}
-
-impl crate::Quantity for MolarEntropy {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for MolarEntropy {
-    type Output = MolarEntropy;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for MolarEntropy {
-    type Output = MolarEntropy;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for MolarEntropy {
-    type Output = MolarEntropy;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for MolarEntropy {
-    type Output = MolarEntropy;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<MolarEntropy> for Num {
-    type Output = MolarEntropy;
-    #[inline]
-    fn mul(self, rhs: MolarEntropy) -> MolarEntropy {
-        MolarEntropy(self * rhs.0)
-    }
-}
-impl Div<Num> for MolarEntropy {
-    type Output = MolarEntropy;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for MolarEntropy {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for MolarEntropy {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            MolarEntropyUnit::JoulePerMoleKelvin.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`MolarEntropy`].
-#[derive(Debug)]
-pub struct ParseMolarEntropyError(String);
-
-impl fmt::Display for ParseMolarEntropyError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as MolarEntropy", self.0)
-    }
-}
-
-impl std::error::Error for ParseMolarEntropyError {}
-
-impl FromStr for MolarEntropy {
-    type Err = ParseMolarEntropyError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseMolarEntropyError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, MolarEntropyUnit)] = &[
-            ("MJ/(mol·K)", MolarEntropyUnit::MegajoulePerMoleKelvin),
-            ("kJ/(mol·K)", MolarEntropyUnit::KilojoulePerMoleKelvin),
-            ("J/(mol·K)", MolarEntropyUnit::JoulePerMoleKelvin),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseMolarEntropyError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,27 +2,35 @@
 // Source: data/quantities/RadiationExposure.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Radiation exposure is a measure of the ionization of air due to ionizing radiation from photons.
 ///
-/// The internal value is stored in `CoulombPerKilogram` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct RadiationExposure(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadiationExposureUnit::CoulombPerKilogram`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct RadiationExposure<T = f64>(T);
+
+quantity!(RadiationExposure, RadiationExposureUnit, CoulombPerKilogram);
 
 /// Unit variants for [`RadiationExposure`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum RadiationExposureUnit {
     CoulombPerKilogram,
     PicocoulombPerKilogram,
@@ -49,7 +57,7 @@ impl RadiationExposureUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::CoulombPerKilogram => "C/kg",
             Self::PicocoulombPerKilogram => "pC/kg",
@@ -62,9 +70,9 @@ impl RadiationExposureUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::CoulombPerKilogram => &["C/kg"],
             Self::PicocoulombPerKilogram => &["pC/kg"],
@@ -78,340 +86,201 @@ impl RadiationExposureUnit {
     }
 }
 
-impl RadiationExposure {
+impl core::str::FromStr for RadiationExposureUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "C/kg" => Ok(Self::CoulombPerKilogram),
+            "pC/kg" => Ok(Self::PicocoulombPerKilogram),
+            "nC/kg" => Ok(Self::NanocoulombPerKilogram),
+            "µC/kg" => Ok(Self::MicrocoulombPerKilogram),
+            "mC/kg" => Ok(Self::MillicoulombPerKilogram),
+            "R" => Ok(Self::Roentgen),
+            "µR" => Ok(Self::Microroentgen),
+            "mR" => Ok(Self::Milliroentgen),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> RadiationExposure<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: RadiationExposureUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: RadiationExposureUnit) -> Self {
         Self(match unit {
-            RadiationExposureUnit::CoulombPerKilogram => x,
-            RadiationExposureUnit::PicocoulombPerKilogram => (x * 1e-12),
-            RadiationExposureUnit::NanocoulombPerKilogram => (x * 1e-9),
-            RadiationExposureUnit::MicrocoulombPerKilogram => (x * 1e-6),
-            RadiationExposureUnit::MillicoulombPerKilogram => (x * 1e-3),
-            RadiationExposureUnit::Roentgen => x * 2.58e-4,
-            RadiationExposureUnit::Microroentgen => (x * 1e-6) * 2.58e-4,
-            RadiationExposureUnit::Milliroentgen => (x * 1e-3) * 2.58e-4,
+            RadiationExposureUnit::CoulombPerKilogram => value,
+            RadiationExposureUnit::PicocoulombPerKilogram => value / T::from_f64(1e12),
+            RadiationExposureUnit::NanocoulombPerKilogram => value / T::from_f64(1e9),
+            RadiationExposureUnit::MicrocoulombPerKilogram => value / T::from_f64(1000000.0),
+            RadiationExposureUnit::MillicoulombPerKilogram => value / T::from_f64(1000.0),
+            RadiationExposureUnit::Roentgen => value * T::from_f64(0.000258),
+            RadiationExposureUnit::Microroentgen => value * T::from_f64(2.58e-10),
+            RadiationExposureUnit::Milliroentgen => value * T::from_f64(2.58e-7),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: RadiationExposureUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: RadiationExposureUnit) -> T {
         match unit {
-            RadiationExposureUnit::CoulombPerKilogram => x,
-            RadiationExposureUnit::PicocoulombPerKilogram => (x / 1e-12),
-            RadiationExposureUnit::NanocoulombPerKilogram => (x / 1e-9),
-            RadiationExposureUnit::MicrocoulombPerKilogram => (x / 1e-6),
-            RadiationExposureUnit::MillicoulombPerKilogram => (x / 1e-3),
-            RadiationExposureUnit::Roentgen => x / 2.58e-4,
-            RadiationExposureUnit::Microroentgen => (x / 1e-6) / 2.58e-4,
-            RadiationExposureUnit::Milliroentgen => (x / 1e-3) / 2.58e-4,
+            RadiationExposureUnit::CoulombPerKilogram => self.0,
+            RadiationExposureUnit::PicocoulombPerKilogram => self.0 * T::from_f64(1e12),
+            RadiationExposureUnit::NanocoulombPerKilogram => self.0 * T::from_f64(1e9),
+            RadiationExposureUnit::MicrocoulombPerKilogram => self.0 * T::from_f64(1000000.0),
+            RadiationExposureUnit::MillicoulombPerKilogram => self.0 * T::from_f64(1000.0),
+            RadiationExposureUnit::Roentgen => self.0 / T::from_f64(0.000258),
+            RadiationExposureUnit::Microroentgen => self.0 / T::from_f64(2.58e-10),
+            RadiationExposureUnit::Milliroentgen => self.0 / T::from_f64(2.58e-7),
         }
     }
 
     /// Creates a [`RadiationExposure`] from a value in CoulombsPerKilogram (`C/kg`).
     #[inline]
-    pub fn from_coulombs_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_coulombs_per_kilogram(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in CoulombsPerKilogram (`C/kg`).
     #[inline]
-    pub fn as_coulombs_per_kilogram(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_coulombs_per_kilogram(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_coulombs_per_kilogram`].
     #[inline]
-    pub fn as_coulomb_per_kilogram(self) -> Num {
+    pub fn as_coulomb_per_kilogram(self) -> T {
         self.as_coulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
-    pub fn from_picocoulombs_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-12))
+    pub fn from_picocoulombs_per_kilogram(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
-    pub fn as_picocoulombs_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e-12)
+    pub fn as_picocoulombs_per_kilogram(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_picocoulombs_per_kilogram`].
     #[inline]
-    pub fn as_picocoulomb_per_kilogram(self) -> Num {
+    pub fn as_picocoulomb_per_kilogram(self) -> T {
         self.as_picocoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
-    pub fn from_nanocoulombs_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanocoulombs_per_kilogram(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in NanocoulombsPerKilogram (`nC/kg`).
     #[inline]
-    pub fn as_nanocoulombs_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanocoulombs_per_kilogram(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanocoulombs_per_kilogram`].
     #[inline]
-    pub fn as_nanocoulomb_per_kilogram(self) -> Num {
+    pub fn as_nanocoulomb_per_kilogram(self) -> T {
         self.as_nanocoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
-    pub fn from_microcoulombs_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microcoulombs_per_kilogram(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
-    pub fn as_microcoulombs_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microcoulombs_per_kilogram(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_microcoulombs_per_kilogram`].
     #[inline]
-    pub fn as_microcoulomb_per_kilogram(self) -> Num {
+    pub fn as_microcoulomb_per_kilogram(self) -> T {
         self.as_microcoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
-    pub fn from_millicoulombs_per_kilogram(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millicoulombs_per_kilogram(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in MillicoulombsPerKilogram (`mC/kg`).
     #[inline]
-    pub fn as_millicoulombs_per_kilogram(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millicoulombs_per_kilogram(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millicoulombs_per_kilogram`].
     #[inline]
-    pub fn as_millicoulomb_per_kilogram(self) -> Num {
+    pub fn as_millicoulomb_per_kilogram(self) -> T {
         self.as_millicoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Roentgens (`R`).
     #[inline]
-    pub fn from_roentgens(value: Num) -> Self {
-        let x = value;
-        Self(x * 2.58e-4)
+    pub fn from_roentgens(value: T) -> Self {
+        Self(value * T::from_f64(0.000258))
     }
 
     /// Returns the value expressed in Roentgens (`R`).
     #[inline]
-    pub fn as_roentgens(self) -> Num {
-        let x = self.0;
-        x / 2.58e-4
+    pub fn as_roentgens(self) -> T {
+        self.0 / T::from_f64(0.000258)
     }
 
     /// Alias for [`Self::as_roentgens`].
     #[inline]
-    pub fn as_roentgen(self) -> Num {
+    pub fn as_roentgen(self) -> T {
         self.as_roentgens()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Microroentgens (`µR`).
     #[inline]
-    pub fn from_microroentgens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6) * 2.58e-4)
+    pub fn from_microroentgens(value: T) -> Self {
+        Self(value * T::from_f64(2.58e-10))
     }
 
     /// Returns the value expressed in Microroentgens (`µR`).
     #[inline]
-    pub fn as_microroentgens(self) -> Num {
-        let x = self.0;
-        (x / 1e-6) / 2.58e-4
+    pub fn as_microroentgens(self) -> T {
+        self.0 / T::from_f64(2.58e-10)
     }
 
     /// Alias for [`Self::as_microroentgens`].
     #[inline]
-    pub fn as_microroentgen(self) -> Num {
+    pub fn as_microroentgen(self) -> T {
         self.as_microroentgens()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Milliroentgens (`mR`).
     #[inline]
-    pub fn from_milliroentgens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3) * 2.58e-4)
+    pub fn from_milliroentgens(value: T) -> Self {
+        Self(value * T::from_f64(2.58e-7))
     }
 
     /// Returns the value expressed in Milliroentgens (`mR`).
     #[inline]
-    pub fn as_milliroentgens(self) -> Num {
-        let x = self.0;
-        (x / 1e-3) / 2.58e-4
+    pub fn as_milliroentgens(self) -> T {
+        self.0 / T::from_f64(2.58e-7)
     }
 
     /// Alias for [`Self::as_milliroentgens`].
     #[inline]
-    pub fn as_milliroentgen(self) -> Num {
+    pub fn as_milliroentgen(self) -> T {
         self.as_milliroentgens()
     }
-}
-
-impl crate::Quantity for RadiationExposure {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for RadiationExposure {
-    type Output = RadiationExposure;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for RadiationExposure {
-    type Output = RadiationExposure;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for RadiationExposure {
-    type Output = RadiationExposure;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for RadiationExposure {
-    type Output = RadiationExposure;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<RadiationExposure> for Num {
-    type Output = RadiationExposure;
-    #[inline]
-    fn mul(self, rhs: RadiationExposure) -> RadiationExposure {
-        RadiationExposure(self * rhs.0)
-    }
-}
-impl Div<Num> for RadiationExposure {
-    type Output = RadiationExposure;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for RadiationExposure {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for RadiationExposure {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            RadiationExposureUnit::CoulombPerKilogram.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`RadiationExposure`].
-#[derive(Debug)]
-pub struct ParseRadiationExposureError(String);
-
-impl fmt::Display for ParseRadiationExposureError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as RadiationExposure", self.0)
-    }
-}
-
-impl std::error::Error for ParseRadiationExposureError {}
-
-impl FromStr for RadiationExposure {
-    type Err = ParseRadiationExposureError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseRadiationExposureError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, RadiationExposureUnit)] = &[
-            ("µC/kg", RadiationExposureUnit::MicrocoulombPerKilogram),
-            ("mC/kg", RadiationExposureUnit::MillicoulombPerKilogram),
-            ("nC/kg", RadiationExposureUnit::NanocoulombPerKilogram),
-            ("pC/kg", RadiationExposureUnit::PicocoulombPerKilogram),
-            ("C/kg", RadiationExposureUnit::CoulombPerKilogram),
-            ("µR", RadiationExposureUnit::Microroentgen),
-            ("mR", RadiationExposureUnit::Milliroentgen),
-            ("R", RadiationExposureUnit::Roentgen),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseRadiationExposureError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

@@ -2,258 +2,172 @@
 // Source: data/quantities/ThermalConductivity.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Thermal conductivity is the property of a material to conduct heat.
 ///
-/// The internal value is stored in `WattPerMeterKelvin` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ThermalConductivity(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ThermalConductivityUnit::WattPerMeterKelvin`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ThermalConductivity<T = f64>(T);
+
+quantity!(
+    ThermalConductivity,
+    ThermalConductivityUnit,
+    WattPerMeterKelvin
+);
 
 /// Unit variants for [`ThermalConductivity`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ThermalConductivityUnit {
     WattPerMeterKelvin,
     BtuPerHourFootFahrenheit,
+    BtuPerSecondInchFahrenheit,
 }
 
 impl ThermalConductivityUnit {
     /// Every unit variant for this quantity.
-    pub const ALL: &'static [Self] = &[Self::WattPerMeterKelvin, Self::BtuPerHourFootFahrenheit];
+    pub const ALL: &'static [Self] = &[
+        Self::WattPerMeterKelvin,
+        Self::BtuPerHourFootFahrenheit,
+        Self::BtuPerSecondInchFahrenheit,
+    ];
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::WattPerMeterKelvin => "W/(m·K)",
             Self::BtuPerHourFootFahrenheit => "BTU/(h·ft·°F)",
+            Self::BtuPerSecondInchFahrenheit => "BTU/(s·in·°F)",
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::WattPerMeterKelvin => &["W/(m·K)"],
             Self::BtuPerHourFootFahrenheit => &["BTU/(h·ft·°F)"],
+            Self::BtuPerSecondInchFahrenheit => &["BTU/(s·in·°F)"],
         }
     }
 }
 
-impl ThermalConductivity {
+impl core::str::FromStr for ThermalConductivityUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "W/(m·K)" => Ok(Self::WattPerMeterKelvin),
+            "BTU/(h·ft·°F)" => Ok(Self::BtuPerHourFootFahrenheit),
+            "BTU/(s·in·°F)" => Ok(Self::BtuPerSecondInchFahrenheit),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ThermalConductivity<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ThermalConductivityUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ThermalConductivityUnit) -> Self {
         Self(match unit {
-            ThermalConductivityUnit::WattPerMeterKelvin => x,
+            ThermalConductivityUnit::WattPerMeterKelvin => value,
             ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
-                x * ((1055.05585262 / (0.3048 * 3600.0)) * 1.8)
+                value * T::from_f64(1.7307346663713912)
+            }
+            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
+                value * T::from_f64(74767.73758724409)
             }
         })
     }
 
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ThermalConductivityUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ThermalConductivityUnit) -> T {
         match unit {
-            ThermalConductivityUnit::WattPerMeterKelvin => x,
+            ThermalConductivityUnit::WattPerMeterKelvin => self.0,
             ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
-                x / ((1055.05585262 / (0.3048 * 3600.0)) * 1.8)
+                self.0 / T::from_f64(1.7307346663713912)
+            }
+            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
+                self.0 / T::from_f64(74767.73758724409)
             }
         }
     }
 
     /// Creates a [`ThermalConductivity`] from a value in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
-    pub fn from_watts_per_meter_kelvin(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_watts_per_meter_kelvin(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
-    pub fn as_watts_per_meter_kelvin(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_watts_per_meter_kelvin(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_watts_per_meter_kelvin`].
     #[inline]
-    pub fn as_watt_per_meter_kelvin(self) -> Num {
+    pub fn as_watt_per_meter_kelvin(self) -> T {
         self.as_watts_per_meter_kelvin()
     }
 
     /// Creates a [`ThermalConductivity`] from a value in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
-    pub fn from_btus_per_hour_foot_fahrenheit(value: Num) -> Self {
-        let x = value;
-        Self(x * ((1055.05585262 / (0.3048 * 3600.0)) * 1.8))
+    pub fn from_btus_per_hour_foot_fahrenheit(value: T) -> Self {
+        Self(value * T::from_f64(1.7307346663713912))
     }
 
     /// Returns the value expressed in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
-    pub fn as_btus_per_hour_foot_fahrenheit(self) -> Num {
-        let x = self.0;
-        x / ((1055.05585262 / (0.3048 * 3600.0)) * 1.8)
+    pub fn as_btus_per_hour_foot_fahrenheit(self) -> T {
+        self.0 / T::from_f64(1.7307346663713912)
     }
 
     /// Alias for [`Self::as_btus_per_hour_foot_fahrenheit`].
     #[inline]
-    pub fn as_btu_per_hour_foot_fahrenheit(self) -> Num {
+    pub fn as_btu_per_hour_foot_fahrenheit(self) -> T {
         self.as_btus_per_hour_foot_fahrenheit()
     }
-}
 
-impl crate::Quantity for ThermalConductivity {
+    /// Creates a [`ThermalConductivity`] from a value in BtusPerSecondInchFahrenheit (`BTU/(s·in·°F)`).
     #[inline]
-    fn as_base(self) -> Num {
-        self.0
+    pub fn from_btus_per_second_inch_fahrenheit(value: T) -> Self {
+        Self(value * T::from_f64(74767.73758724409))
     }
+
+    /// Returns the value expressed in BtusPerSecondInchFahrenheit (`BTU/(s·in·°F)`).
     #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
+    pub fn as_btus_per_second_inch_fahrenheit(self) -> T {
+        self.0 / T::from_f64(74767.73758724409)
     }
-}
 
-impl Add for ThermalConductivity {
-    type Output = ThermalConductivity;
+    /// Alias for [`Self::as_btus_per_second_inch_fahrenheit`].
     #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
+    pub fn as_btu_per_second_inch_fahrenheit(self) -> T {
+        self.as_btus_per_second_inch_fahrenheit()
     }
-}
-impl Sub for ThermalConductivity {
-    type Output = ThermalConductivity;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ThermalConductivity {
-    type Output = ThermalConductivity;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ThermalConductivity {
-    type Output = ThermalConductivity;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ThermalConductivity> for Num {
-    type Output = ThermalConductivity;
-    #[inline]
-    fn mul(self, rhs: ThermalConductivity) -> ThermalConductivity {
-        ThermalConductivity(self * rhs.0)
-    }
-}
-impl Div<Num> for ThermalConductivity {
-    type Output = ThermalConductivity;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ThermalConductivity {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ThermalConductivity {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ThermalConductivityUnit::WattPerMeterKelvin.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ThermalConductivity`].
-#[derive(Debug)]
-pub struct ParseThermalConductivityError(String);
-
-impl fmt::Display for ParseThermalConductivityError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ThermalConductivity", self.0)
-    }
-}
-
-impl std::error::Error for ParseThermalConductivityError {}
-
-impl FromStr for ThermalConductivity {
-    type Err = ParseThermalConductivityError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseThermalConductivityError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ThermalConductivityUnit)] = &[
-            (
-                "BTU/(h·ft·°F)",
-                ThermalConductivityUnit::BtuPerHourFootFahrenheit,
-            ),
-            ("W/(m·K)", ThermalConductivityUnit::WattPerMeterKelvin),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseThermalConductivityError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

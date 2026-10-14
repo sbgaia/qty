@@ -2,27 +2,35 @@
 // Source: data/quantities/ElectricSusceptance.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// Electrical susceptance is the imaginary part of admittance, where the real part is conductance.
 ///
-/// The internal value is stored in `Siemens` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct ElectricSusceptance(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricSusceptanceUnit::Siemens`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct ElectricSusceptance<T = f64>(T);
+
+quantity!(ElectricSusceptance, ElectricSusceptanceUnit, Siemens);
 
 /// Unit variants for [`ElectricSusceptance`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum ElectricSusceptanceUnit {
     Siemens,
     Nanosiemens,
@@ -65,7 +73,7 @@ impl ElectricSusceptanceUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::Siemens => "S",
             Self::Nanosiemens => "nS",
@@ -86,9 +94,9 @@ impl ElectricSusceptanceUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::Siemens => &["S"],
             Self::Nanosiemens => &["nS"],
@@ -110,476 +118,321 @@ impl ElectricSusceptanceUnit {
     }
 }
 
-impl ElectricSusceptance {
+impl core::str::FromStr for ElectricSusceptanceUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "S" => Ok(Self::Siemens),
+            "nS" => Ok(Self::Nanosiemens),
+            "µS" => Ok(Self::Microsiemens),
+            "mS" => Ok(Self::Millisiemens),
+            "kS" => Ok(Self::Kilosiemens),
+            "MS" => Ok(Self::Megasiemens),
+            "GS" => Ok(Self::Gigasiemens),
+            "TS" => Ok(Self::Terasiemens),
+            "℧" => Ok(Self::Mho),
+            "n℧" => Ok(Self::Nanomho),
+            "µ℧" => Ok(Self::Micromho),
+            "m℧" => Ok(Self::Millimho),
+            "k℧" => Ok(Self::Kilomho),
+            "M℧" => Ok(Self::Megamho),
+            "G℧" => Ok(Self::Gigamho),
+            "T℧" => Ok(Self::Teramho),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> ElectricSusceptance<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: ElectricSusceptanceUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: ElectricSusceptanceUnit) -> Self {
         Self(match unit {
-            ElectricSusceptanceUnit::Siemens => x,
-            ElectricSusceptanceUnit::Nanosiemens => (x * 1e-9),
-            ElectricSusceptanceUnit::Microsiemens => (x * 1e-6),
-            ElectricSusceptanceUnit::Millisiemens => (x * 1e-3),
-            ElectricSusceptanceUnit::Kilosiemens => (x * 1e3),
-            ElectricSusceptanceUnit::Megasiemens => (x * 1e6),
-            ElectricSusceptanceUnit::Gigasiemens => (x * 1e9),
-            ElectricSusceptanceUnit::Terasiemens => (x * 1e12),
-            ElectricSusceptanceUnit::Mho => x,
-            ElectricSusceptanceUnit::Nanomho => (x * 1e-9),
-            ElectricSusceptanceUnit::Micromho => (x * 1e-6),
-            ElectricSusceptanceUnit::Millimho => (x * 1e-3),
-            ElectricSusceptanceUnit::Kilomho => (x * 1e3),
-            ElectricSusceptanceUnit::Megamho => (x * 1e6),
-            ElectricSusceptanceUnit::Gigamho => (x * 1e9),
-            ElectricSusceptanceUnit::Teramho => (x * 1e12),
+            ElectricSusceptanceUnit::Siemens => value,
+            ElectricSusceptanceUnit::Nanosiemens => value / T::from_f64(1e9),
+            ElectricSusceptanceUnit::Microsiemens => value / T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Millisiemens => value / T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Kilosiemens => value * T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Megasiemens => value * T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Gigasiemens => value * T::from_f64(1e9),
+            ElectricSusceptanceUnit::Terasiemens => value * T::from_f64(1e12),
+            ElectricSusceptanceUnit::Mho => value,
+            ElectricSusceptanceUnit::Nanomho => value / T::from_f64(1e9),
+            ElectricSusceptanceUnit::Micromho => value / T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Millimho => value / T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Kilomho => value * T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Megamho => value * T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Gigamho => value * T::from_f64(1e9),
+            ElectricSusceptanceUnit::Teramho => value * T::from_f64(1e12),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: ElectricSusceptanceUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: ElectricSusceptanceUnit) -> T {
         match unit {
-            ElectricSusceptanceUnit::Siemens => x,
-            ElectricSusceptanceUnit::Nanosiemens => (x / 1e-9),
-            ElectricSusceptanceUnit::Microsiemens => (x / 1e-6),
-            ElectricSusceptanceUnit::Millisiemens => (x / 1e-3),
-            ElectricSusceptanceUnit::Kilosiemens => (x / 1e3),
-            ElectricSusceptanceUnit::Megasiemens => (x / 1e6),
-            ElectricSusceptanceUnit::Gigasiemens => (x / 1e9),
-            ElectricSusceptanceUnit::Terasiemens => (x / 1e12),
-            ElectricSusceptanceUnit::Mho => x,
-            ElectricSusceptanceUnit::Nanomho => (x / 1e-9),
-            ElectricSusceptanceUnit::Micromho => (x / 1e-6),
-            ElectricSusceptanceUnit::Millimho => (x / 1e-3),
-            ElectricSusceptanceUnit::Kilomho => (x / 1e3),
-            ElectricSusceptanceUnit::Megamho => (x / 1e6),
-            ElectricSusceptanceUnit::Gigamho => (x / 1e9),
-            ElectricSusceptanceUnit::Teramho => (x / 1e12),
+            ElectricSusceptanceUnit::Siemens => self.0,
+            ElectricSusceptanceUnit::Nanosiemens => self.0 * T::from_f64(1e9),
+            ElectricSusceptanceUnit::Microsiemens => self.0 * T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Millisiemens => self.0 * T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Kilosiemens => self.0 / T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Megasiemens => self.0 / T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Gigasiemens => self.0 / T::from_f64(1e9),
+            ElectricSusceptanceUnit::Terasiemens => self.0 / T::from_f64(1e12),
+            ElectricSusceptanceUnit::Mho => self.0,
+            ElectricSusceptanceUnit::Nanomho => self.0 * T::from_f64(1e9),
+            ElectricSusceptanceUnit::Micromho => self.0 * T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Millimho => self.0 * T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Kilomho => self.0 / T::from_f64(1000.0),
+            ElectricSusceptanceUnit::Megamho => self.0 / T::from_f64(1000000.0),
+            ElectricSusceptanceUnit::Gigamho => self.0 / T::from_f64(1e9),
+            ElectricSusceptanceUnit::Teramho => self.0 / T::from_f64(1e12),
         }
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Siemens (`S`).
     #[inline]
-    pub fn from_siemens(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_siemens(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Siemens (`S`).
     #[inline]
-    pub fn as_siemens(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_siemens(self) -> T {
+        self.0
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Nanosiemens (`nS`).
     #[inline]
-    pub fn from_nanosiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanosiemens(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanosiemens (`nS`).
     #[inline]
-    pub fn as_nanosiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanosiemens(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Microsiemens (`µS`).
     #[inline]
-    pub fn from_microsiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_microsiemens(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Microsiemens (`µS`).
     #[inline]
-    pub fn as_microsiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_microsiemens(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Millisiemens (`mS`).
     #[inline]
-    pub fn from_millisiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millisiemens(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millisiemens (`mS`).
     #[inline]
-    pub fn as_millisiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millisiemens(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Kilosiemens (`kS`).
     #[inline]
-    pub fn from_kilosiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilosiemens(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilosiemens (`kS`).
     #[inline]
-    pub fn as_kilosiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilosiemens(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Megasiemens (`MS`).
     #[inline]
-    pub fn from_megasiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megasiemens(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megasiemens (`MS`).
     #[inline]
-    pub fn as_megasiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megasiemens(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Gigasiemens (`GS`).
     #[inline]
-    pub fn from_gigasiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigasiemens(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigasiemens (`GS`).
     #[inline]
-    pub fn as_gigasiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigasiemens(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Terasiemens (`TS`).
     #[inline]
-    pub fn from_terasiemens(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_terasiemens(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Terasiemens (`TS`).
     #[inline]
-    pub fn as_terasiemens(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_terasiemens(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Mhos (`℧`).
     #[inline]
-    pub fn from_mhos(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_mhos(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in Mhos (`℧`).
     #[inline]
-    pub fn as_mhos(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_mhos(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_mhos`].
     #[inline]
-    pub fn as_mho(self) -> Num {
+    pub fn as_mho(self) -> T {
         self.as_mhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Nanomhos (`n℧`).
     #[inline]
-    pub fn from_nanomhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-9))
+    pub fn from_nanomhos(value: T) -> Self {
+        Self(value / T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Nanomhos (`n℧`).
     #[inline]
-    pub fn as_nanomhos(self) -> Num {
-        let x = self.0;
-        (x / 1e-9)
+    pub fn as_nanomhos(self) -> T {
+        self.0 * T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_nanomhos`].
     #[inline]
-    pub fn as_nanomho(self) -> Num {
+    pub fn as_nanomho(self) -> T {
         self.as_nanomhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Micromhos (`µ℧`).
     #[inline]
-    pub fn from_micromhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-6))
+    pub fn from_micromhos(value: T) -> Self {
+        Self(value / T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Micromhos (`µ℧`).
     #[inline]
-    pub fn as_micromhos(self) -> Num {
-        let x = self.0;
-        (x / 1e-6)
+    pub fn as_micromhos(self) -> T {
+        self.0 * T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_micromhos`].
     #[inline]
-    pub fn as_micromho(self) -> Num {
+    pub fn as_micromho(self) -> T {
         self.as_micromhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Millimhos (`m℧`).
     #[inline]
-    pub fn from_millimhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e-3))
+    pub fn from_millimhos(value: T) -> Self {
+        Self(value / T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Millimhos (`m℧`).
     #[inline]
-    pub fn as_millimhos(self) -> Num {
-        let x = self.0;
-        (x / 1e-3)
+    pub fn as_millimhos(self) -> T {
+        self.0 * T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_millimhos`].
     #[inline]
-    pub fn as_millimho(self) -> Num {
+    pub fn as_millimho(self) -> T {
         self.as_millimhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Kilomhos (`k℧`).
     #[inline]
-    pub fn from_kilomhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e3))
+    pub fn from_kilomhos(value: T) -> Self {
+        Self(value * T::from_f64(1000.0))
     }
 
     /// Returns the value expressed in Kilomhos (`k℧`).
     #[inline]
-    pub fn as_kilomhos(self) -> Num {
-        let x = self.0;
-        (x / 1e3)
+    pub fn as_kilomhos(self) -> T {
+        self.0 / T::from_f64(1000.0)
     }
 
     /// Alias for [`Self::as_kilomhos`].
     #[inline]
-    pub fn as_kilomho(self) -> Num {
+    pub fn as_kilomho(self) -> T {
         self.as_kilomhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Megamhos (`M℧`).
     #[inline]
-    pub fn from_megamhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e6))
+    pub fn from_megamhos(value: T) -> Self {
+        Self(value * T::from_f64(1000000.0))
     }
 
     /// Returns the value expressed in Megamhos (`M℧`).
     #[inline]
-    pub fn as_megamhos(self) -> Num {
-        let x = self.0;
-        (x / 1e6)
+    pub fn as_megamhos(self) -> T {
+        self.0 / T::from_f64(1000000.0)
     }
 
     /// Alias for [`Self::as_megamhos`].
     #[inline]
-    pub fn as_megamho(self) -> Num {
+    pub fn as_megamho(self) -> T {
         self.as_megamhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Gigamhos (`G℧`).
     #[inline]
-    pub fn from_gigamhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e9))
+    pub fn from_gigamhos(value: T) -> Self {
+        Self(value * T::from_f64(1e9))
     }
 
     /// Returns the value expressed in Gigamhos (`G℧`).
     #[inline]
-    pub fn as_gigamhos(self) -> Num {
-        let x = self.0;
-        (x / 1e9)
+    pub fn as_gigamhos(self) -> T {
+        self.0 / T::from_f64(1e9)
     }
 
     /// Alias for [`Self::as_gigamhos`].
     #[inline]
-    pub fn as_gigamho(self) -> Num {
+    pub fn as_gigamho(self) -> T {
         self.as_gigamhos()
     }
 
     /// Creates a [`ElectricSusceptance`] from a value in Teramhos (`T℧`).
     #[inline]
-    pub fn from_teramhos(value: Num) -> Self {
-        let x = value;
-        Self((x * 1e12))
+    pub fn from_teramhos(value: T) -> Self {
+        Self(value * T::from_f64(1e12))
     }
 
     /// Returns the value expressed in Teramhos (`T℧`).
     #[inline]
-    pub fn as_teramhos(self) -> Num {
-        let x = self.0;
-        (x / 1e12)
+    pub fn as_teramhos(self) -> T {
+        self.0 / T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_teramhos`].
     #[inline]
-    pub fn as_teramho(self) -> Num {
+    pub fn as_teramho(self) -> T {
         self.as_teramhos()
     }
-}
-
-impl crate::Quantity for ElectricSusceptance {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for ElectricSusceptance {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for ElectricSusceptance {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for ElectricSusceptance {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for ElectricSusceptance {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<ElectricSusceptance> for Num {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn mul(self, rhs: ElectricSusceptance) -> ElectricSusceptance {
-        ElectricSusceptance(self * rhs.0)
-    }
-}
-impl Div<Num> for ElectricSusceptance {
-    type Output = ElectricSusceptance;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for ElectricSusceptance {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for ElectricSusceptance {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            ElectricSusceptanceUnit::Siemens.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`ElectricSusceptance`].
-#[derive(Debug)]
-pub struct ParseElectricSusceptanceError(String);
-
-impl fmt::Display for ParseElectricSusceptanceError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as ElectricSusceptance", self.0)
-    }
-}
-
-impl std::error::Error for ParseElectricSusceptanceError {}
-
-impl FromStr for ElectricSusceptance {
-    type Err = ParseElectricSusceptanceError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseElectricSusceptanceError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, ElectricSusceptanceUnit)] = &[
-            ("µ℧", ElectricSusceptanceUnit::Micromho),
-            ("G℧", ElectricSusceptanceUnit::Gigamho),
-            ("M℧", ElectricSusceptanceUnit::Megamho),
-            ("T℧", ElectricSusceptanceUnit::Teramho),
-            ("k℧", ElectricSusceptanceUnit::Kilomho),
-            ("m℧", ElectricSusceptanceUnit::Millimho),
-            ("n℧", ElectricSusceptanceUnit::Nanomho),
-            ("µS", ElectricSusceptanceUnit::Microsiemens),
-            ("℧", ElectricSusceptanceUnit::Mho),
-            ("GS", ElectricSusceptanceUnit::Gigasiemens),
-            ("MS", ElectricSusceptanceUnit::Megasiemens),
-            ("TS", ElectricSusceptanceUnit::Terasiemens),
-            ("kS", ElectricSusceptanceUnit::Kilosiemens),
-            ("mS", ElectricSusceptanceUnit::Millisiemens),
-            ("nS", ElectricSusceptanceUnit::Nanosiemens),
-            ("S", ElectricSusceptanceUnit::Siemens),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseElectricSusceptanceError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

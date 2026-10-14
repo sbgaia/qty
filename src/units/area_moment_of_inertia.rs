@@ -2,27 +2,39 @@
 // Source: data/quantities/AreaMomentOfInertia.json
 
 #![allow(
-    unused_parens,
-    clippy::double_parens,
+    clippy::approx_constant,
     clippy::excessive_precision,
-    clippy::let_and_return,
-    clippy::unreadable_literal,
-    clippy::too_many_lines
+    clippy::unreadable_literal
 )]
 
-use crate::Num;
-use std::fmt;
-use std::ops::{Add, Div, Mul, Neg, Sub};
-use std::str::FromStr;
+use crate::Float;
 
 /// A geometric property of an area that reflects how its points are distributed with regard to an axis.
 ///
-/// The internal value is stored in `MeterToTheFourth` (SI base unit).
-#[derive(Debug, Clone, Copy, PartialEq, PartialOrd, Default)]
-pub struct AreaMomentOfInertia(Num);
+/// Stored as a value of type `T` (default `f64`) in the base unit, [`AreaMomentOfInertiaUnit::MeterToTheFourth`].
+/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+#[cfg_attr(
+    feature = "serde",
+    derive(serde::Serialize, serde::Deserialize),
+    serde(transparent)
+)]
+#[repr(transparent)]
+#[must_use]
+pub struct AreaMomentOfInertia<T = f64>(T);
+
+quantity!(
+    AreaMomentOfInertia,
+    AreaMomentOfInertiaUnit,
+    MeterToTheFourth
+);
 
 /// Unit variants for [`AreaMomentOfInertia`].
+///
+/// Non-exhaustive: upstream UnitsNet regularly adds units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[non_exhaustive]
 pub enum AreaMomentOfInertiaUnit {
     MeterToTheFourth,
     DecimeterToTheFourth,
@@ -45,7 +57,7 @@ impl AreaMomentOfInertiaUnit {
 
     /// Returns the primary display abbreviation for this unit.
     #[inline]
-    pub fn abbreviation(self) -> &'static str {
+    pub const fn abbreviation(self) -> &'static str {
         match self {
             Self::MeterToTheFourth => "m⁴",
             Self::DecimeterToTheFourth => "dm⁴",
@@ -56,9 +68,9 @@ impl AreaMomentOfInertiaUnit {
         }
     }
 
-    /// Returns all abbreviations recognised during [`FromStr`] parsing.
+    /// Returns every abbreviation recognised when parsing this unit.
     #[inline]
-    pub fn all_abbreviations(self) -> &'static [&'static str] {
+    pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
             Self::MeterToTheFourth => &["m⁴"],
             Self::DecimeterToTheFourth => &["dm⁴"],
@@ -70,294 +82,159 @@ impl AreaMomentOfInertiaUnit {
     }
 }
 
-impl AreaMomentOfInertia {
+impl core::str::FromStr for AreaMomentOfInertiaUnit {
+    type Err = crate::ParseError;
+
+    /// Parses a unit abbreviation, e.g. `"km"`.
+    fn from_str(s: &str) -> Result<Self, crate::ParseError> {
+        match s {
+            "m⁴" => Ok(Self::MeterToTheFourth),
+            "dm⁴" => Ok(Self::DecimeterToTheFourth),
+            "cm⁴" => Ok(Self::CentimeterToTheFourth),
+            "mm⁴" => Ok(Self::MillimeterToTheFourth),
+            "ft⁴" => Ok(Self::FootToTheFourth),
+            "in⁴" => Ok(Self::InchToTheFourth),
+            _ => Err(crate::ParseError::UnknownUnit),
+        }
+    }
+}
+
+/// Unit conversions, available for floating-point storage.
+///
+/// Every conversion is a single multiplication or division by a constant
+/// folded at code-generation time (two operations for affine units).
+impl<T: Float> AreaMomentOfInertia<T> {
     /// Creates a new value from `value` expressed in `unit`.
     #[inline]
-    pub fn new(value: Num, unit: AreaMomentOfInertiaUnit) -> Self {
-        // `x` is the idiomatic variable name used in the generated formulas.
-        let x = value;
+    pub fn new(value: T, unit: AreaMomentOfInertiaUnit) -> Self {
         Self(match unit {
-            AreaMomentOfInertiaUnit::MeterToTheFourth => x,
-            AreaMomentOfInertiaUnit::DecimeterToTheFourth => x / 1e4,
-            AreaMomentOfInertiaUnit::CentimeterToTheFourth => x / 1e8,
-            AreaMomentOfInertiaUnit::MillimeterToTheFourth => x / 1e12,
-            AreaMomentOfInertiaUnit::FootToTheFourth => x * 0.0086309748412416,
-            AreaMomentOfInertiaUnit::InchToTheFourth => x * 0.0000004162314256,
+            AreaMomentOfInertiaUnit::MeterToTheFourth => value,
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => value / T::from_f64(10000.0),
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => value / T::from_f64(1e8),
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => value / T::from_f64(1e12),
+            AreaMomentOfInertiaUnit::FootToTheFourth => value * T::from_f64(0.0086309748412416),
+            AreaMomentOfInertiaUnit::InchToTheFourth => value * T::from_f64(4.162314256e-7),
         })
-    }
-
-    /// Returns the raw value stored in the SI base unit.
-    ///
-    /// Used for cross-type arithmetic (e.g. `Length / Duration = Speed`).
-    #[inline]
-    pub fn as_base(self) -> Num {
-        self.0
-    }
-
-    /// Wraps a raw base-unit value into this type.
-    ///
-    /// Used for cross-type arithmetic.
-    #[inline]
-    pub fn from_base(value: Num) -> Self {
-        Self(value)
     }
 
     /// Returns the quantity expressed in `unit`.
     #[inline]
-    pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> Num {
-        let x = self.0;
+    pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> T {
         match unit {
-            AreaMomentOfInertiaUnit::MeterToTheFourth => x,
-            AreaMomentOfInertiaUnit::DecimeterToTheFourth => x * 1e4,
-            AreaMomentOfInertiaUnit::CentimeterToTheFourth => x * 1e8,
-            AreaMomentOfInertiaUnit::MillimeterToTheFourth => x * 1e12,
-            AreaMomentOfInertiaUnit::FootToTheFourth => x / 0.0086309748412416,
-            AreaMomentOfInertiaUnit::InchToTheFourth => x / 0.0000004162314256,
+            AreaMomentOfInertiaUnit::MeterToTheFourth => self.0,
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => self.0 * T::from_f64(10000.0),
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => self.0 * T::from_f64(1e8),
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => self.0 * T::from_f64(1e12),
+            AreaMomentOfInertiaUnit::FootToTheFourth => self.0 / T::from_f64(0.0086309748412416),
+            AreaMomentOfInertiaUnit::InchToTheFourth => self.0 / T::from_f64(4.162314256e-7),
         }
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in MetersToTheFourth (`m⁴`).
     #[inline]
-    pub fn from_meters_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x)
+    pub fn from_meters_to_the_fourth(value: T) -> Self {
+        Self(value)
     }
 
     /// Returns the value expressed in MetersToTheFourth (`m⁴`).
     #[inline]
-    pub fn as_meters_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x
+    pub fn as_meters_to_the_fourth(self) -> T {
+        self.0
     }
 
     /// Alias for [`Self::as_meters_to_the_fourth`].
     #[inline]
-    pub fn as_meter_to_the_fourth(self) -> Num {
+    pub fn as_meter_to_the_fourth(self) -> T {
         self.as_meters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in DecimetersToTheFourth (`dm⁴`).
     #[inline]
-    pub fn from_decimeters_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e4)
+    pub fn from_decimeters_to_the_fourth(value: T) -> Self {
+        Self(value / T::from_f64(10000.0))
     }
 
     /// Returns the value expressed in DecimetersToTheFourth (`dm⁴`).
     #[inline]
-    pub fn as_decimeters_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x * 1e4
+    pub fn as_decimeters_to_the_fourth(self) -> T {
+        self.0 * T::from_f64(10000.0)
     }
 
     /// Alias for [`Self::as_decimeters_to_the_fourth`].
     #[inline]
-    pub fn as_decimeter_to_the_fourth(self) -> Num {
+    pub fn as_decimeter_to_the_fourth(self) -> T {
         self.as_decimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in CentimetersToTheFourth (`cm⁴`).
     #[inline]
-    pub fn from_centimeters_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e8)
+    pub fn from_centimeters_to_the_fourth(value: T) -> Self {
+        Self(value / T::from_f64(1e8))
     }
 
     /// Returns the value expressed in CentimetersToTheFourth (`cm⁴`).
     #[inline]
-    pub fn as_centimeters_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x * 1e8
+    pub fn as_centimeters_to_the_fourth(self) -> T {
+        self.0 * T::from_f64(1e8)
     }
 
     /// Alias for [`Self::as_centimeters_to_the_fourth`].
     #[inline]
-    pub fn as_centimeter_to_the_fourth(self) -> Num {
+    pub fn as_centimeter_to_the_fourth(self) -> T {
         self.as_centimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in MillimetersToTheFourth (`mm⁴`).
     #[inline]
-    pub fn from_millimeters_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x / 1e12)
+    pub fn from_millimeters_to_the_fourth(value: T) -> Self {
+        Self(value / T::from_f64(1e12))
     }
 
     /// Returns the value expressed in MillimetersToTheFourth (`mm⁴`).
     #[inline]
-    pub fn as_millimeters_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x * 1e12
+    pub fn as_millimeters_to_the_fourth(self) -> T {
+        self.0 * T::from_f64(1e12)
     }
 
     /// Alias for [`Self::as_millimeters_to_the_fourth`].
     #[inline]
-    pub fn as_millimeter_to_the_fourth(self) -> Num {
+    pub fn as_millimeter_to_the_fourth(self) -> T {
         self.as_millimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in FeetToTheFourth (`ft⁴`).
     #[inline]
-    pub fn from_feet_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.0086309748412416)
+    pub fn from_feet_to_the_fourth(value: T) -> Self {
+        Self(value * T::from_f64(0.0086309748412416))
     }
 
     /// Returns the value expressed in FeetToTheFourth (`ft⁴`).
     #[inline]
-    pub fn as_feet_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x / 0.0086309748412416
+    pub fn as_feet_to_the_fourth(self) -> T {
+        self.0 / T::from_f64(0.0086309748412416)
     }
 
     /// Alias for [`Self::as_feet_to_the_fourth`].
     #[inline]
-    pub fn as_foot_to_the_fourth(self) -> Num {
+    pub fn as_foot_to_the_fourth(self) -> T {
         self.as_feet_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in InchesToTheFourth (`in⁴`).
     #[inline]
-    pub fn from_inches_to_the_fourth(value: Num) -> Self {
-        let x = value;
-        Self(x * 0.0000004162314256)
+    pub fn from_inches_to_the_fourth(value: T) -> Self {
+        Self(value * T::from_f64(4.162314256e-7))
     }
 
     /// Returns the value expressed in InchesToTheFourth (`in⁴`).
     #[inline]
-    pub fn as_inches_to_the_fourth(self) -> Num {
-        let x = self.0;
-        x / 0.0000004162314256
+    pub fn as_inches_to_the_fourth(self) -> T {
+        self.0 / T::from_f64(4.162314256e-7)
     }
 
     /// Alias for [`Self::as_inches_to_the_fourth`].
     #[inline]
-    pub fn as_inch_to_the_fourth(self) -> Num {
+    pub fn as_inch_to_the_fourth(self) -> T {
         self.as_inches_to_the_fourth()
     }
-}
-
-impl crate::Quantity for AreaMomentOfInertia {
-    #[inline]
-    fn as_base(self) -> Num {
-        self.0
-    }
-    #[inline]
-    fn from_base(value: Num) -> Self {
-        Self(value)
-    }
-}
-
-impl Add for AreaMomentOfInertia {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn add(self, rhs: Self) -> Self {
-        Self(self.0 + rhs.0)
-    }
-}
-impl Sub for AreaMomentOfInertia {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn sub(self, rhs: Self) -> Self {
-        Self(self.0 - rhs.0)
-    }
-}
-impl Neg for AreaMomentOfInertia {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn neg(self) -> Self {
-        Self(-self.0)
-    }
-}
-impl Mul<Num> for AreaMomentOfInertia {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn mul(self, rhs: Num) -> Self {
-        Self(self.0 * rhs)
-    }
-}
-impl Mul<AreaMomentOfInertia> for Num {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn mul(self, rhs: AreaMomentOfInertia) -> AreaMomentOfInertia {
-        AreaMomentOfInertia(self * rhs.0)
-    }
-}
-impl Div<Num> for AreaMomentOfInertia {
-    type Output = AreaMomentOfInertia;
-    #[inline]
-    fn div(self, rhs: Num) -> Self {
-        Self(self.0 / rhs)
-    }
-}
-impl Div for AreaMomentOfInertia {
-    type Output = Num;
-    #[inline]
-    fn div(self, rhs: Self) -> Num {
-        self.0 / rhs.0
-    }
-}
-
-impl fmt::Display for AreaMomentOfInertia {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} {}",
-            self.0,
-            AreaMomentOfInertiaUnit::MeterToTheFourth.abbreviation()
-        )
-    }
-}
-
-/// Error returned when a string cannot be parsed as a [`AreaMomentOfInertia`].
-#[derive(Debug)]
-pub struct ParseAreaMomentOfInertiaError(String);
-
-impl fmt::Display for ParseAreaMomentOfInertiaError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "cannot parse {:?} as AreaMomentOfInertia", self.0)
-    }
-}
-
-impl std::error::Error for ParseAreaMomentOfInertiaError {}
-
-impl FromStr for AreaMomentOfInertia {
-    type Err = ParseAreaMomentOfInertiaError;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.trim();
-        // Find the end of the numeric part by scanning for the last digit or '.'.
-        let split = s
-            .rfind(|c: char| c.is_ascii_digit() || c == '.')
-            .map(|i| i + c_len_at(s, i))
-            .unwrap_or(0);
-        let (num_str, unit_str) = s.split_at(split);
-        let value: Num = num_str
-            .trim()
-            .parse()
-            .map_err(|_| ParseAreaMomentOfInertiaError(s.to_owned()))?;
-        let unit_str = unit_str.trim();
-
-        const MAP: &[(&str, AreaMomentOfInertiaUnit)] = &[
-            ("cm⁴", AreaMomentOfInertiaUnit::CentimeterToTheFourth),
-            ("dm⁴", AreaMomentOfInertiaUnit::DecimeterToTheFourth),
-            ("ft⁴", AreaMomentOfInertiaUnit::FootToTheFourth),
-            ("in⁴", AreaMomentOfInertiaUnit::InchToTheFourth),
-            ("mm⁴", AreaMomentOfInertiaUnit::MillimeterToTheFourth),
-            ("m⁴", AreaMomentOfInertiaUnit::MeterToTheFourth),
-        ];
-
-        for &(abbr, unit) in MAP {
-            if unit_str == abbr {
-                return Ok(Self::new(value, unit));
-            }
-        }
-        Err(ParseAreaMomentOfInertiaError(s.to_owned()))
-    }
-}
-
-/// Returns the byte length of the UTF-8 char starting at byte index `i` in `s`.
-#[inline]
-fn c_len_at(s: &str, i: usize) -> usize {
-    s[i..].chars().next().map_or(1, |c| c.len_utf8())
 }

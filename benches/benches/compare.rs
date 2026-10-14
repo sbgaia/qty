@@ -1,5 +1,5 @@
 //! Benchmark comparing `unitsnet-rs` against popular Rust unit-conversion
-//! libraries across four representative operations:
+//! libraries across six representative operations:
 //!
 //! 1. **`construction_from_km`** — build a `Length` value from a kilometres
 //!    input (reveals whether the library eagerly converts to SI base at
@@ -11,6 +11,9 @@
 //!    timed loop so only the `+` itself is measured).
 //! 4. **`chain`** — realistic round-trip: construct from km, construct from m,
 //!    add them, then read the result as metres.
+//! 5. **`sum_10k_lengths`** — fold-sum 10 000 lengths, against bare `f64`.
+//! 6. **`scale_10k_lengths`** — scale 10 000 lengths in place, against bare
+//!    `f64` (checks that the wrapper does not block SIMD vectorisation).
 //!
 //! # Running
 //!
@@ -326,5 +329,88 @@ fn bench_chain(c: &mut Criterion) {
     g.finish();
 }
 
-criterion_group!(benches, bench_construction, bench_conversion, bench_add, bench_chain);
+// ─── Bulk data ────────────────────────────────────────────────────────────────
+
+/// Number of values in the bulk benchmarks.
+const N: usize = 10_000;
+
+/// Builds `N` lengths in metres with each library from the same raw values.
+fn raw_values() -> Vec<f64> {
+    (0..N).map(|i| 0.5 + i as f64 * 1e-3).collect()
+}
+
+/// Benchmark 5 — sum `N` lengths with a left fold of `+`.
+///
+/// A strict-order float fold cannot be vectorised, so this measures whether a
+/// library's `+` stays a bare `addsd` inside a loop. The `f64` entry is the
+/// unit-free baseline.
+fn bench_sum(c: &mut Criterion) {
+    let raw = raw_values();
+    let u: Vec<unitsnet_rs::Length> = raw.iter().map(|&m| unitsnet_rs::Length::from_meters(m)).collect();
+    let q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
+    let s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
+    let me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
+
+    let mut g = c.benchmark_group("sum_10k_lengths");
+    g.bench_function("f64 (no units)", |b| {
+        b.iter(|| black_box(&raw).iter().fold(0.0, |acc, &x| acc + x))
+    });
+    g.bench_function("unitsnet-rs", |b| {
+        b.iter(|| black_box(&u).iter().fold(unitsnet_rs::Length::default(), |acc, &x| acc + x))
+    });
+    g.bench_function("uom", |b| {
+        b.iter(|| black_box(&q).iter().fold(UomLength::new::<uom_m>(0.0), |acc, &x| acc + x))
+    });
+    g.bench_function("simple-si-units", |b| {
+        b.iter(|| black_box(&s).iter().fold(Distance::<f64>::from_m(0.0), |acc, &x| acc + x))
+    });
+    g.bench_function("measurements", |b| {
+        b.iter(|| black_box(&me).iter().fold(MeasLength::from_meters(0.0), |acc, &x| acc + x))
+    });
+    g.finish();
+}
+
+/// Benchmark 6 — scale `N` lengths in place by a plain number.
+///
+/// Independent per-element work: any library whose wrapper is transparent to
+/// the optimiser gets the same SIMD loop as bare `f64`.
+fn bench_scale(c: &mut Criterion) {
+    let raw = raw_values();
+    let mut r = raw.clone();
+    let mut u: Vec<unitsnet_rs::Length> = raw.iter().map(|&m| unitsnet_rs::Length::from_meters(m)).collect();
+    let mut q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
+    let mut s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
+    let mut me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
+    // Multiplying by 1.0 keeps the values stable across iterations without
+    // letting the optimiser skip the work (`k` is opaque).
+    let k = black_box(1.0_f64);
+
+    let mut g = c.benchmark_group("scale_10k_lengths");
+    g.bench_function("f64 (no units)", |b| {
+        b.iter(|| black_box(&mut r).iter_mut().for_each(|x| *x = *x * k))
+    });
+    g.bench_function("unitsnet-rs", |b| {
+        b.iter(|| black_box(&mut u).iter_mut().for_each(|x| *x = *x * k))
+    });
+    g.bench_function("uom", |b| {
+        b.iter(|| black_box(&mut q).iter_mut().for_each(|x| *x = *x * k))
+    });
+    g.bench_function("simple-si-units", |b| {
+        b.iter(|| black_box(&mut s).iter_mut().for_each(|x| *x = *x * k))
+    });
+    g.bench_function("measurements", |b| {
+        b.iter(|| black_box(&mut me).iter_mut().for_each(|x| *x = *x * k))
+    });
+    g.finish();
+}
+
+criterion_group!(
+    benches,
+    bench_construction,
+    bench_conversion,
+    bench_add,
+    bench_chain,
+    bench_sum,
+    bench_scale
+);
 criterion_main!(benches);
