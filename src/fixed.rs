@@ -75,6 +75,9 @@ pub trait Integer:
     fn saturating_add(self, rhs: Self) -> Self;
     #[doc(hidden)]
     fn saturating_sub(self, rhs: Self) -> Self;
+    /// `(is_negative, |self|)`, defined for every value of every type.
+    #[doc(hidden)]
+    fn sign_magnitude(self) -> (bool, u128);
 }
 
 macro_rules! impl_integer {
@@ -108,6 +111,16 @@ macro_rules! impl_integer {
             #[inline(always)]
             fn saturating_sub(self, rhs: Self) -> Self {
                 <$t>::saturating_sub(self, rhs)
+            }
+            #[inline(always)]
+            #[allow(unused_comparisons, clippy::cast_lossless)]
+            fn sign_magnitude(self) -> (bool, u128) {
+                // `unsigned_abs` exists only on signed types; widen instead.
+                if self < 0 {
+                    (true, (self as i128).unsigned_abs())
+                } else {
+                    (false, self as u128)
+                }
             }
         }
     )*};
@@ -352,7 +365,9 @@ impl<From: FixedUnit, To: FixedUnit> Ratio<From, To> {
     const DEN: u128 = Self::PARTS.1;
     const EXACT: () = assert!(
         Self::DEN == 1,
-        "this conversion can lose precision: use `to_unit_rounded` instead of `to_unit`"
+        "this unit conversion is not exact (the target unit does not divide the \
+         source unit): for `+`/`-` put the finer unit on the left (`mm + m`), \
+         for conversions use `to_unit_rounded` with a `Rounding` mode"
     );
 }
 
@@ -374,9 +389,12 @@ fn rescale(count: i128, num: u128, den: u128, mode: Rounding) -> Result<i128, Ro
 /// An integer number of a fixed unit `U`, e.g. `Fixed<Millimeter>` is a
 /// whole number of millimetres stored as an `i64`.
 ///
-/// * **The unit is part of the type**: `Fixed<Millimeter>` and
-///   `Fixed<Meter>` cannot be mixed by accident; converting between them is
-///   explicit, and the lossy direction requires a [`Rounding`] mode.
+/// * **The unit is part of the type.** Mixing units is allowed exactly where
+///   it is lossless: `millimetres + metres` gives millimetres, while
+///   `metres + millimetres` does not compile (the result would need
+///   rounding: swap the operands, or use
+///   [`to_unit_rounded`](Self::to_unit_rounded) with a [`Rounding`] mode).
+///   Comparisons (`==`, `<`, …) work between any two units, exactly.
 /// * **Exact and free**: arithmetic in the same unit is plain integer
 ///   arithmetic (`#[repr(transparent)]`, same machine code as the bare
 ///   integer), and values are `Eq + Ord + Hash` — ideal as map keys.
@@ -387,10 +405,19 @@ fn rescale(count: i128, num: u128, den: u128, mode: Rounding) -> Result<i128, Ro
 /// use unitsnet_rs::*;
 /// use unitsnet_rs::unit::length::{Meter, Millimeter};
 ///
-/// let a = Fixed::<Millimeter>::new(1_250);
-/// let b = Fixed::<Millimeter>::new(300);
-/// assert_eq!(a + b, Fixed::new(1_550));
+/// // Type aliases keep literals short.
+/// type Millimeters = Fixed<Millimeter>;
+/// type Meters = Fixed<Meter>;
+///
+/// let a = Millimeters::new(1_250);
+/// let b = Millimeters::new(300);
+/// assert_eq!(a + b, Millimeters::new(1_550));
 /// assert_eq!(format!("{}", a + b), "1550 mm");
+///
+/// // Mixed units: exact, in the left operand's unit.
+/// assert_eq!(a + Meters::new(2), Millimeters::new(3_250));
+/// assert!(Meters::new(1) < a);
+/// assert_eq!(Meters::new(2), Millimeters::new(2_000));
 ///
 /// // To floats and back.
 /// assert_eq!(a.to_f64(), Length::from_meters(1.25));
@@ -578,20 +605,29 @@ impl<U, I: Default> Default for Fixed<U, I> {
         Self::new(I::default())
     }
 }
-impl<U, I: PartialEq> PartialEq for Fixed<U, I> {
+/// Exact comparison across units of the same quantity: `2 m > 1500 mm`.
+///
+/// Decided with exact integer arithmetic (no rounding, no floats, no
+/// overflow), so equality and order are mathematically correct for any two
+/// values. Comparing within one unit compiles to a plain integer comparison.
+impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> PartialEq<Fixed<V, I>>
+    for Fixed<U, I>
+{
     #[inline(always)]
-    fn eq(&self, other: &Self) -> bool {
-        self.count == other.count
+    fn eq(&self, other: &Fixed<V, I>) -> bool {
+        cmp_units::<U, V, I>(self.count, other.count) == Ordering::Equal
     }
 }
-impl<U, I: Eq> Eq for Fixed<U, I> {}
-impl<U, I: PartialOrd> PartialOrd for Fixed<U, I> {
+impl<U: FixedUnit, I: Integer> Eq for Fixed<U, I> {}
+impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> PartialOrd<Fixed<V, I>>
+    for Fixed<U, I>
+{
     #[inline(always)]
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.count.partial_cmp(&other.count)
+    fn partial_cmp(&self, other: &Fixed<V, I>) -> Option<Ordering> {
+        Some(cmp_units::<U, V, I>(self.count, other.count))
     }
 }
-impl<U, I: Ord> Ord for Fixed<U, I> {
+impl<U: FixedUnit, I: Integer> Ord for Fixed<U, I> {
     #[inline(always)]
     fn cmp(&self, other: &Self) -> Ordering {
         self.count.cmp(&other.count)
@@ -621,9 +657,104 @@ macro_rules! fixed_binop {
         }
     };
 }
-fixed_binop!(Add add AddAssign add_assign);
-fixed_binop!(Sub sub SubAssign sub_assign);
 fixed_binop!(Rem rem RemAssign rem_assign);
+
+/// Adding or subtracting another unit of the same quantity: the result is in
+/// the left operand's unit, so the right operand must convert into it
+/// exactly. `millimetres + metres` is fine (1 m = 1000 mm);
+/// `metres + millimetres` is a compile-time error — swap the operands, or
+/// convert explicitly with [`Fixed::to_unit_rounded`].
+macro_rules! fixed_unit_op {
+    ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident $op:tt) => {
+        impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> ops::$Trait<Fixed<V, I>>
+            for Fixed<U, I>
+        {
+            type Output = Self;
+            #[inline(always)]
+            fn $method(self, rhs: Fixed<V, I>) -> Self {
+                Self::new(self.count $op rhs.count_in::<U>())
+            }
+        }
+        impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> ops::$TraitAssign<Fixed<V, I>>
+            for Fixed<U, I>
+        {
+            #[inline(always)]
+            fn $method_assign(&mut self, rhs: Fixed<V, I>) {
+                self.count = self.count $op rhs.count_in::<U>();
+            }
+        }
+    };
+}
+fixed_unit_op!(Add add AddAssign add_assign +);
+fixed_unit_op!(Sub sub SubAssign sub_assign -);
+
+impl<V: FixedUnit, I: Integer> Fixed<V, I> {
+    /// The count expressed in `U`, which this unit must divide exactly
+    /// (checked at compile time). Overflow behaves like integer `*`.
+    #[inline(always)]
+    fn count_in<U: FixedUnit<Unit = V::Unit>>(self) -> I {
+        #[allow(clippy::let_unit_value)]
+        let () = Ratio::<V, U>::EXACT;
+        if Ratio::<V, U>::NUM == 1 {
+            return self.count;
+        }
+        match i128::try_from(Ratio::<V, U>::NUM)
+            .ok()
+            .and_then(I::from_i128)
+        {
+            Some(k) => self.count * k,
+            // The factor alone exceeds `I`: only zero converts.
+            None if self.count == I::default() => self.count,
+            None => panic!("attempt to convert units with overflow"),
+        }
+    }
+}
+
+/// Exact `a [U]` vs `b [V]`: compares `a · num` with `b · den`.
+#[inline(always)]
+fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I) -> Ordering {
+    let (num, den) = (Ratio::<U, V>::NUM, Ratio::<U, V>::DEN);
+    if num == 1 && den == 1 {
+        return a.cmp(&b);
+    }
+    // Fast path: both products fit in i128 (all realistic values).
+    if let (Some(a), Some(b), Ok(num), Ok(den)) = (
+        a.to_i128(),
+        b.to_i128(),
+        i128::try_from(num),
+        i128::try_from(den),
+    ) {
+        if let (Some(pa), Some(pb)) = (a.checked_mul(num), b.checked_mul(den)) {
+            return pa.cmp(&pb);
+        }
+    }
+    // Exact for any magnitudes: sign and 256-bit magnitude.
+    let (neg_a, mag_a) = a.sign_magnitude();
+    let (neg_b, mag_b) = b.sign_magnitude();
+    let (pa, pb) = (mul_wide(mag_a, num), mul_wide(mag_b, den));
+    // Zero has no sign: compare magnitudes when the signs agree or both are zero.
+    let neg_a = neg_a && pa != (0, 0);
+    let neg_b = neg_b && pb != (0, 0);
+    match (neg_a, neg_b) {
+        (false, false) => pa.cmp(&pb),
+        (true, true) => pb.cmp(&pa),
+        (true, false) => Ordering::Less,
+        (false, true) => Ordering::Greater,
+    }
+}
+
+/// Full 256-bit product of two `u128`, as `(high, low)`.
+#[inline(always)]
+fn mul_wide(x: u128, y: u128) -> (u128, u128) {
+    const LO: u128 = u64::MAX as u128;
+    let (x1, x0) = (x >> 64, x & LO);
+    let (y1, y0) = (y >> 64, y & LO);
+    let (p00, p01, p10, p11) = (x0 * y0, x0 * y1, x1 * y0, x1 * y1);
+    let mid = (p00 >> 64) + (p01 & LO) + (p10 & LO);
+    let low = (mid << 64) | (p00 & LO);
+    let high = p11 + (p01 >> 64) + (p10 >> 64) + (mid >> 64);
+    (high, low)
+}
 
 macro_rules! fixed_scalar_op {
     ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident) => {
@@ -909,6 +1040,21 @@ mod tests {
             div_round(i128::MAX, i128::MAX - 1, Rounding::NearestTiesEven),
             Ok(1)
         );
+    }
+
+    #[test]
+    fn mul_wide_matches_u128_where_it_fits_and_is_exact_beyond() {
+        for (x, y) in [
+            (0, 5),
+            (7, 9),
+            (u64::MAX as u128, u64::MAX as u128),
+            (1 << 100, 3),
+        ] {
+            assert_eq!(mul_wide(x, y), (0, x * y));
+        }
+        assert_eq!(mul_wide(u128::MAX, 2), (1, u128::MAX - 1));
+        assert_eq!(mul_wide(u128::MAX, u128::MAX), (u128::MAX - 1, 1));
+        assert_eq!(mul_wide(1 << 127, 1 << 127), (1 << 126, 0));
     }
 
     #[test]

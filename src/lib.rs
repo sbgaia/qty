@@ -88,28 +88,38 @@
 //!
 //! Rounding happens only where information is lost — float → integer, a
 //! fine unit → a coarser one, integer division — and there the [`Rounding`]
-//! mode is always explicit. Lossless conversions take no mode; converting to
-//! a unit that does not divide evenly with `to_unit` is rejected when the
-//! code is compiled (by `cargo build`/`cargo test`; `cargo check` does not
-//! evaluate it).
+//! mode is always explicit. Lossless operations take no mode: `mm + m`
+//! (the result is in the left operand's unit) and `m.to_unit::<Millimeter>()`
+//! just work, and comparisons work between any two units. The lossy forms
+//! (`m + mm`, `mm.to_unit::<Meter>()`) are rejected when the code is
+//! compiled (by `cargo build`/`cargo test`; `cargo check` does not evaluate
+//! the unit ratio).
 //!
 //! ```rust
 //! use std::collections::HashMap;
 //! use unitsnet_rs::*;
 //! use unitsnet_rs::unit::length::{Meter, Millimeter};
 //!
+//! // Type aliases keep literals short.
+//! type Millimeters = Fixed<Millimeter>;
+//! type Meters = Fixed<Meter>;
+//!
 //! // Quantise a float measurement: 12.5 mm, ties to even → 12 mm.
-//! let a = Fixed::<Millimeter>::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven)?;
-//! assert_eq!(a, Fixed::new(12));
+//! let a = Millimeters::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven)?;
+//! assert_eq!(a, Millimeters::new(12));
 //!
 //! // Exact integer arithmetic; integer keys.
-//! let mut stock: HashMap<Fixed<Millimeter>, u32> = HashMap::new();
-//! *stock.entry(a + Fixed::new(588)).or_default() += 1;
-//! assert_eq!(stock[&Fixed::new(600)], 1);
+//! let mut stock: HashMap<Millimeters, u32> = HashMap::new();
+//! *stock.entry(a + Millimeters::new(588)).or_default() += 1;
+//! assert_eq!(stock[&Millimeters::new(600)], 1);
 //!
-//! // Lossless: no rounding mode. Lossy: explicit rounding mode.
-//! assert_eq!(Fixed::<Meter>::new(2).to_unit::<Millimeter>()?, Fixed::new(2_000));
-//! assert_eq!(Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Fixed::new(2));
+//! // Mixing units where it is lossless: the result is in the left unit.
+//! assert_eq!(a + Meters::new(1), Millimeters::new(1_012));
+//! assert!(Meters::new(1) > a); // comparisons work across any units, exactly
+//!
+//! // Converting: lossless needs no rounding mode; lossy needs one.
+//! assert_eq!(Meters::new(2).to_unit::<Millimeter>()?, Millimeters::new(2_000));
+//! assert_eq!(Millimeters::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Meters::new(2));
 //! assert_eq!(
 //!     Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Exact),
 //!     Err(RoundError::Inexact)

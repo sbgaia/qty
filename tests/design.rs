@@ -305,6 +305,9 @@ mod fixed {
     use unitsnet_rs::unit::length::{Inch, Meter, Millimeter};
     use unitsnet_rs::*;
 
+    type Millimeters = Fixed<Millimeter>;
+    type Meters = Fixed<Meter>;
+
     #[test]
     fn layout_and_arithmetic_are_those_of_the_integer() {
         assert_eq!(std::mem::size_of::<Fixed<Millimeter>>(), 8);
@@ -312,33 +315,75 @@ mod fixed {
 
         let a = Fixed::<Millimeter>::new(1_250);
         let b = Fixed::<Millimeter>::new(300);
-        assert_eq!(a + b, Fixed::new(1_550));
-        assert_eq!(a - b, Fixed::new(950));
-        assert_eq!(-a, Fixed::new(-1_250));
-        assert_eq!(a * 2, Fixed::new(2_500));
-        assert_eq!(2 * a, Fixed::new(2_500));
-        assert_eq!(a / 3, Fixed::new(416)); // truncates, like integers
+        assert_eq!(a + b, Millimeters::new(1_550));
+        assert_eq!(a - b, Millimeters::new(950));
+        assert_eq!(-a, Millimeters::new(-1_250));
+        assert_eq!(a * 2, Millimeters::new(2_500));
+        assert_eq!(2 * a, Millimeters::new(2_500));
+        assert_eq!(a / 3, Millimeters::new(416)); // truncates, like integers
         assert_eq!(a / b, 4);
-        assert_eq!(a % b, Fixed::new(50));
+        assert_eq!(a % b, Millimeters::new(50));
         let mut c = a;
         c += b;
         c -= b;
         c *= 4;
         c /= 2;
-        assert_eq!(c, Fixed::new(2_500));
-        assert_eq!([a, b].iter().sum::<Fixed<Millimeter>>(), Fixed::new(1_550));
+        assert_eq!(c, Millimeters::new(2_500));
+        assert_eq!(
+            [a, b].iter().sum::<Fixed<Millimeter>>(),
+            Millimeters::new(1_550)
+        );
         assert_eq!(a.count(), 1_250);
+    }
+
+    #[test]
+    fn mixing_units_is_allowed_exactly_where_it_is_lossless() {
+        let mut total = Millimeters::new(250);
+        total += Meters::new(2); // 1 m = 1000 mm: exact
+        assert_eq!(total, Millimeters::new(2_250));
+        assert_eq!(total - Meters::new(1), Millimeters::new(1_250));
+        assert_eq!(
+            total + Fixed::<unit::length::Kilometer>::new(1),
+            Millimeters::new(1_002_250)
+        );
+        // Inches into millimetres is not exact (25.4), but into microinches it is.
+        let x = Fixed::<unit::length::Microinch>::new(5) + Fixed::<Inch>::new(1);
+        assert_eq!(x.count(), 1_000_005);
+        // `Meters + Millimeters` does not compile: it would need rounding.
+    }
+
+    #[test]
+    fn comparisons_across_units_are_exact() {
+        assert_eq!(Meters::new(2), Millimeters::new(2_000));
+        assert_ne!(Meters::new(2), Millimeters::new(2_001));
+        assert!(Meters::new(1) < Millimeters::new(1_001));
+        assert!(Millimeters::new(999) < Meters::new(1));
+        assert!(Millimeters::new(-1_001) < Meters::new(-1));
+        assert!(Meters::new(0) == Millimeters::new(0));
+        // Not exactly representable either way (1 in = 25.4 mm), still exact.
+        assert!(Fixed::<Inch>::new(5) == Millimeters::new(127));
+        assert!(Fixed::<Inch>::new(1) > Millimeters::new(25));
+        assert!(Fixed::<Inch>::new(1) < Millimeters::new(26));
+        // Extreme ratios: no overflow (compared in 256 bits).
+        let ly = Fixed::<unit::length::LightYear>::new(i64::MAX);
+        let fm = Fixed::<unit::length::Femtometer>::new(i64::MAX);
+        assert!(ly > fm);
+        assert!(-ly < fm);
+        assert_eq!(
+            Fixed::<unit::length::LightYear, i128>::new(1),
+            Fixed::<unit::length::Femtometer, i128>::new(9_460_730_472_580_000_000_000_000_000_000)
+        );
     }
 
     #[test]
     fn keys_in_hash_and_tree_collections() {
         let mut stock: HashMap<Fixed<Millimeter>, u32> = HashMap::new();
-        *stock.entry(Fixed::new(600)).or_default() += 2;
-        *stock.entry(Fixed::new(600)).or_default() += 1;
-        assert_eq!(stock[&Fixed::new(600)], 3);
+        *stock.entry(Millimeters::new(600)).or_default() += 2;
+        *stock.entry(Millimeters::new(600)).or_default() += 1;
+        assert_eq!(stock[&Millimeters::new(600)], 3);
 
         let sorted: BTreeSet<_> = [300, 100, 200].map(Fixed::<Millimeter>::new).into();
-        assert_eq!(sorted.first(), Some(&Fixed::new(100)));
+        assert_eq!(sorted.first(), Some(&Millimeters::new(100)));
     }
 
     #[test]
@@ -422,7 +467,10 @@ mod fixed {
         assert_eq!(a.ratio_rounded(Fixed::new(4), Rounding::Ceil), Ok(3));
         let max = Fixed::<Millimeter, u8>::new(250);
         assert_eq!(max.checked_add(Fixed::new(10)), None);
-        assert_eq!(max.saturating_add(Fixed::new(10)), Fixed::new(255));
+        assert_eq!(
+            max.saturating_add(Fixed::new(10)),
+            Fixed::<Millimeter, u8>::new(255)
+        );
         assert_eq!(max.checked_mul(2), None);
     }
 
@@ -469,7 +517,10 @@ mod fixed {
     fn zero_copy_count_slices() {
         let raw = [1, 2, 3];
         let typed = Fixed::<Millisecond>::from_count_slice(&raw);
-        assert_eq!(typed.iter().sum::<Fixed<Millisecond>>(), Fixed::new(6));
+        assert_eq!(
+            typed.iter().sum::<Fixed<Millisecond>>(),
+            Fixed::<Millisecond>::new(6)
+        );
         assert_eq!(Fixed::as_count_slice(typed), &raw);
     }
 
