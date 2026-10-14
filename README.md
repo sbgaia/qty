@@ -55,6 +55,21 @@ let lengths: &[Length] = Length::from_base_slice(&raw);
 assert_eq!(lengths.iter().sum::<Length>(), Length::from_meters(6.0));
 ```
 
+## Measurement uncertainty
+
+`Uncertain` is a number type carrying a standard uncertainty, so any quantity
+can hold one; conversions, relations and math functions propagate it (to
+first order, for independent inputs):
+
+```rust
+use unitsnet_rs::*;
+
+let distance = Length::from_meters(Uncertain::new(100.0, 0.5));
+let time = Duration::from_seconds(Uncertain::new(9.58, 0.01));
+let speed = distance / time;
+assert_eq!(format!("{:.1}", speed.in_unit(SpeedUnit::KilometerPerHour)), "37.6 ± 0.2 km/h");
+```
+
 ## Integers in a chosen unit, with explicit rounding
 
 `Fixed<U, I = i64>` is a whole number of the unit `U`. Lossless operations

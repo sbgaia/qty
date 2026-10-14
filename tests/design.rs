@@ -870,3 +870,115 @@ fn defmt_format_is_implemented() {
     is_format::<LengthUnit>();
     is_format::<Fixed<unitsnet_rs::unit::length::Millimeter>>();
 }
+
+// ── Uncertainty propagation ──────────────────────────────────────────────────
+
+mod uncertain {
+    use unitsnet_rs::*;
+
+    fn u(value: f64, sigma: f64) -> Uncertain {
+        Uncertain::new(value, sigma)
+    }
+
+    fn close(a: Uncertain, value: f64, sigma: f64) {
+        assert!(
+            (a.value() - value).abs() <= 1e-12 * value.abs().max(1.0),
+            "{a} vs value {value}"
+        );
+        assert!(
+            (a.sigma() - sigma).abs() <= 1e-12 * sigma.abs().max(1.0),
+            "{a} vs sigma {sigma}"
+        );
+    }
+
+    #[test]
+    fn propagation_rules() {
+        // Sums and differences: absolute uncertainties add in quadrature.
+        close(u(10.0, 3.0) + u(5.0, 4.0), 15.0, 5.0);
+        close(u(10.0, 3.0) - u(5.0, 4.0), 5.0, 5.0);
+        // Products and quotients: relative uncertainties add in quadrature.
+        close(
+            u(10.0, 0.3) * u(5.0, 0.2),
+            50.0,
+            50.0 * (0.03f64.hypot(0.04)),
+        );
+        close(u(10.0, 0.3) / u(5.0, 0.2), 2.0, 2.0 * (0.03f64.hypot(0.04)));
+        // Exact constants scale σ.
+        close(u(10.0, 0.3) * Uncertain::from(-2.0), -20.0, 0.6);
+        close(-u(10.0, 0.3), -10.0, 0.3);
+        // Functions: σ·|f′(x)|.
+        close(u(16.0, 0.8).sqrt(), 4.0, 0.1);
+        close(u(27.0, 2.7).cbrt(), 3.0, 0.1);
+        close(u(0.0, 0.01).sin(), 0.0, 0.01);
+        close(u(0.0, 0.01).cos(), 1.0, 0.0);
+        close(u(3.0, 0.3).hypot(u(4.0, 0.4)), 5.0, 0.9f64.hypot(1.6) / 5.0);
+        close(
+            u(1.0, 0.1).atan2(u(1.0, 0.0)),
+            core::f64::consts::FRAC_PI_4,
+            0.05,
+        );
+        // Sums of many independent values.
+        let total: Uncertain = [u(1.0, 0.3), u(2.0, 0.4)].into_iter().sum();
+        close(total, 3.0, 0.5);
+        // The sign of sigma is ignored; intervals.
+        assert_eq!(u(1.0, -0.5).sigma(), 0.5);
+        assert_eq!(u(10.0, 0.5).interval(2.0), (9.0, 11.0));
+        assert_eq!(u(10.0, 0.5).relative(), 0.05);
+    }
+
+    #[test]
+    fn quantities_carry_uncertainty() {
+        // Conversions scale σ by the unit factor.
+        let d = Length::from_kilometers(u(1.5, 0.002));
+        close(d.as_meters(), 1500.0, 2.0);
+        close(
+            Length::from_meters(u(1.0, 0.01)).as_centimeters(),
+            100.0,
+            1.0,
+        );
+        // Affine conversions shift without changing σ.
+        let t = Temperature::from_degrees_celsius(u(20.0, 0.1));
+        close(t.as_kelvins(), 293.15, 0.1);
+        // Relations, roots and trigonometry.
+        let v: Speed<Uncertain> =
+            Length::from_meters(u(100.0, 1.0)) / Duration::from_seconds(u(10.0, 0.1));
+        close(v.as_base(), 10.0, 10.0 * 0.01f64.hypot(0.01));
+        let side: Length<Uncertain> = Area::from_square_meters(u(16.0, 0.8)).sqrt();
+        close(side.as_base(), 4.0, 0.1);
+        let heading = Angle::atan2(
+            Length::from_meters(u(1.0, 0.1)),
+            Length::from_meters(u(1.0, 0.0)),
+        );
+        close(heading.as_base(), core::f64::consts::FRAC_PI_4, 0.05);
+        // Sums, comparisons, formatting.
+        let laps = [
+            Length::from_meters(u(400.0, 0.3)),
+            Length::from_meters(u(400.0, 0.4)),
+        ];
+        close(
+            laps.iter().copied().sum::<Length<Uncertain>>().as_base(),
+            800.0,
+            0.5,
+        );
+        assert!(laps[0] < Length::from_meters(u(401.0, 5.0)));
+        assert_eq!(laps[0].partial_cmp(&laps[1]), None); // equal values, different σ
+        assert_eq!(
+            format!("{:.2}", Length::from_meters(u(1.5, 0.25))),
+            "1.50 ± 0.25 m"
+        );
+        assert_eq!(
+            Length::from_meters(u(1.5, 0.25)).to_f64(),
+            Length::from_meters(1.5)
+        );
+        let mut x = Length::from_meters(u(1.0, 0.3));
+        x += Length::from_meters(u(1.0, 0.4));
+        close(x.as_base(), 2.0, 0.5);
+    }
+
+    #[test]
+    fn same_value_twice_is_not_independent() {
+        // Documented limitation: operands are assumed independent.
+        let x = u(10.0, 1.0);
+        close(x - x, 0.0, 2f64.sqrt());
+    }
+}

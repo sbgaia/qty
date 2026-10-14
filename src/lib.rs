@@ -83,6 +83,10 @@
 //! assert_eq!(wide.as_grams(), 1_500_000.0);
 //! ```
 //!
+//! [`Uncertain`] (value ± standard uncertainty) is a storage type too: a
+//! `Length<Uncertain>` propagates its uncertainty through conversions,
+//! relations and math functions.
+//!
 //! ### Integers in a unit of your choice, with explicit rounding
 //!
 //! [`Fixed<U, I>`](Fixed) is a whole number of the unit `U` — for example
@@ -1326,6 +1330,11 @@ pub mod unit;
 // Trigonometry on `Angle`.
 #[cfg(any(feature = "std", feature = "libm"))]
 mod math;
+
+#[cfg(any(feature = "std", feature = "libm"))]
+mod uncertain;
+#[cfg(any(feature = "std", feature = "libm"))]
+pub use uncertain::Uncertain;
 
 // Generated cross-type arithmetic (Length / Duration = Speed, etc.).
 // These are pure `impl` blocks — no named items to re-export.
