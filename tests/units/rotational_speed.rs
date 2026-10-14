@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -490,6 +490,29 @@ fn revolutions_per_minute() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::rotational_speed::RadianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::RadianPerSecond>();
+    check_fixed::<unit::rotational_speed::NanoradianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::NanoradianPerSecond>();
+    check_fixed::<unit::rotational_speed::MicroradianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::MicroradianPerSecond>();
+    check_fixed::<unit::rotational_speed::MilliradianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::MilliradianPerSecond>();
+    check_fixed::<unit::rotational_speed::CentiradianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::CentiradianPerSecond>();
+    check_fixed::<unit::rotational_speed::DeciradianPerSecond>();
+    check_fixed_rescale::<unit::rotational_speed::DeciradianPerSecond>();
+    check_fixed::<unit::rotational_speed::DegreePerSecond>();
+    check_fixed::<unit::rotational_speed::NanodegreePerSecond>();
+    check_fixed::<unit::rotational_speed::MicrodegreePerSecond>();
+    check_fixed::<unit::rotational_speed::MillidegreePerSecond>();
+    check_fixed::<unit::rotational_speed::DegreePerMinute>();
+    check_fixed::<unit::rotational_speed::RevolutionPerSecond>();
+    check_fixed::<unit::rotational_speed::RevolutionPerMinute>();
 }
 
 #[test]

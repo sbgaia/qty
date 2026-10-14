@@ -167,3 +167,14 @@ impl<T: Float> ElectricReactiveEnergy<T> {
         self.as_megavoltampere_reactive_hours()
     }
 }
+
+fixed_base!(ElectricReactiveEnergy, VoltampereReactiveHour);
+
+/// Unit markers for counting [`ElectricReactiveEnergy`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_reactive_energy`](crate::unit::electric_reactive_energy). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(VoltampereReactiveHour: ElectricReactiveEnergy, ElectricReactiveEnergyUnit::VoltampereReactiveHour, base VoltampereReactiveHour, 1 / 1, pi^0, from_voltampere_reactive_hours, as_voltampere_reactive_hours);
+    fixed_unit!(KilovoltampereReactiveHour: ElectricReactiveEnergy, ElectricReactiveEnergyUnit::KilovoltampereReactiveHour, base VoltampereReactiveHour, 1000 / 1, pi^0, from_kilovoltampere_reactive_hours, as_kilovoltampere_reactive_hours);
+    fixed_unit!(MegavoltampereReactiveHour: ElectricReactiveEnergy, ElectricReactiveEnergyUnit::MegavoltampereReactiveHour, base VoltampereReactiveHour, 1000000 / 1, pi^0, from_megavoltampere_reactive_hours, as_megavoltampere_reactive_hours);
+}

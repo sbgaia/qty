@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1193,6 +1193,90 @@ fn horsepower_hours() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::energy::Joule>();
+    check_fixed_rescale::<unit::energy::Joule>();
+    check_fixed::<unit::energy::Nanojoule>();
+    check_fixed_rescale::<unit::energy::Nanojoule>();
+    check_fixed::<unit::energy::Microjoule>();
+    check_fixed_rescale::<unit::energy::Microjoule>();
+    check_fixed::<unit::energy::Millijoule>();
+    check_fixed_rescale::<unit::energy::Millijoule>();
+    check_fixed::<unit::energy::Kilojoule>();
+    check_fixed_rescale::<unit::energy::Kilojoule>();
+    check_fixed::<unit::energy::Megajoule>();
+    check_fixed_rescale::<unit::energy::Megajoule>();
+    check_fixed::<unit::energy::Gigajoule>();
+    check_fixed_rescale::<unit::energy::Gigajoule>();
+    check_fixed::<unit::energy::Terajoule>();
+    check_fixed_rescale::<unit::energy::Terajoule>();
+    check_fixed::<unit::energy::Petajoule>();
+    check_fixed_rescale::<unit::energy::Petajoule>();
+    check_fixed::<unit::energy::Calorie>();
+    check_fixed_rescale::<unit::energy::Calorie>();
+    check_fixed::<unit::energy::Kilocalorie>();
+    check_fixed_rescale::<unit::energy::Kilocalorie>();
+    check_fixed::<unit::energy::Megacalorie>();
+    check_fixed_rescale::<unit::energy::Megacalorie>();
+    check_fixed::<unit::energy::BritishThermalUnit>();
+    check_fixed_rescale::<unit::energy::BritishThermalUnit>();
+    check_fixed::<unit::energy::KilobritishThermalUnit>();
+    check_fixed_rescale::<unit::energy::KilobritishThermalUnit>();
+    check_fixed::<unit::energy::MegabritishThermalUnit>();
+    check_fixed_rescale::<unit::energy::MegabritishThermalUnit>();
+    check_fixed::<unit::energy::GigabritishThermalUnit>();
+    check_fixed_rescale::<unit::energy::GigabritishThermalUnit>();
+    check_fixed::<unit::energy::ElectronVolt>();
+    check_fixed_rescale::<unit::energy::ElectronVolt>();
+    check_fixed::<unit::energy::KiloelectronVolt>();
+    check_fixed_rescale::<unit::energy::KiloelectronVolt>();
+    check_fixed::<unit::energy::MegaelectronVolt>();
+    check_fixed_rescale::<unit::energy::MegaelectronVolt>();
+    check_fixed::<unit::energy::GigaelectronVolt>();
+    check_fixed_rescale::<unit::energy::GigaelectronVolt>();
+    check_fixed::<unit::energy::TeraelectronVolt>();
+    check_fixed_rescale::<unit::energy::TeraelectronVolt>();
+    check_fixed::<unit::energy::FootPound>();
+    check_fixed_rescale::<unit::energy::FootPound>();
+    check_fixed::<unit::energy::Erg>();
+    check_fixed_rescale::<unit::energy::Erg>();
+    check_fixed::<unit::energy::WattHour>();
+    check_fixed_rescale::<unit::energy::WattHour>();
+    check_fixed::<unit::energy::KilowattHour>();
+    check_fixed_rescale::<unit::energy::KilowattHour>();
+    check_fixed::<unit::energy::MegawattHour>();
+    check_fixed_rescale::<unit::energy::MegawattHour>();
+    check_fixed::<unit::energy::GigawattHour>();
+    check_fixed_rescale::<unit::energy::GigawattHour>();
+    check_fixed::<unit::energy::TerawattHour>();
+    check_fixed_rescale::<unit::energy::TerawattHour>();
+    check_fixed::<unit::energy::WattDay>();
+    check_fixed_rescale::<unit::energy::WattDay>();
+    check_fixed::<unit::energy::KilowattDay>();
+    check_fixed_rescale::<unit::energy::KilowattDay>();
+    check_fixed::<unit::energy::MegawattDay>();
+    check_fixed_rescale::<unit::energy::MegawattDay>();
+    check_fixed::<unit::energy::GigawattDay>();
+    check_fixed_rescale::<unit::energy::GigawattDay>();
+    check_fixed::<unit::energy::TerawattDay>();
+    check_fixed_rescale::<unit::energy::TerawattDay>();
+    check_fixed::<unit::energy::ThermEc>();
+    check_fixed_rescale::<unit::energy::ThermEc>();
+    check_fixed::<unit::energy::DecathermEc>();
+    check_fixed_rescale::<unit::energy::DecathermEc>();
+    check_fixed::<unit::energy::ThermUs>();
+    check_fixed_rescale::<unit::energy::ThermUs>();
+    check_fixed::<unit::energy::DecathermUs>();
+    check_fixed_rescale::<unit::energy::DecathermUs>();
+    check_fixed::<unit::energy::ThermImperial>();
+    check_fixed_rescale::<unit::energy::ThermImperial>();
+    check_fixed::<unit::energy::DecathermImperial>();
+    check_fixed_rescale::<unit::energy::DecathermImperial>();
+    check_fixed::<unit::energy::HorsepowerHour>();
+    check_fixed_rescale::<unit::energy::HorsepowerHour>();
 }
 
 #[test]

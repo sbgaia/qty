@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -530,6 +530,38 @@ fn millistandard_gravity() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::acceleration::MeterPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::MeterPerSecondSquared>();
+    check_fixed::<unit::acceleration::NanometerPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::NanometerPerSecondSquared>();
+    check_fixed::<unit::acceleration::MicrometerPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::MicrometerPerSecondSquared>();
+    check_fixed::<unit::acceleration::MillimeterPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::MillimeterPerSecondSquared>();
+    check_fixed::<unit::acceleration::CentimeterPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::CentimeterPerSecondSquared>();
+    check_fixed::<unit::acceleration::DecimeterPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::DecimeterPerSecondSquared>();
+    check_fixed::<unit::acceleration::KilometerPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::KilometerPerSecondSquared>();
+    check_fixed::<unit::acceleration::InchPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::InchPerSecondSquared>();
+    check_fixed::<unit::acceleration::FootPerSecondSquared>();
+    check_fixed_rescale::<unit::acceleration::FootPerSecondSquared>();
+    check_fixed::<unit::acceleration::KnotPerSecond>();
+    check_fixed_rescale::<unit::acceleration::KnotPerSecond>();
+    check_fixed::<unit::acceleration::KnotPerMinute>();
+    check_fixed_rescale::<unit::acceleration::KnotPerMinute>();
+    check_fixed::<unit::acceleration::KnotPerHour>();
+    check_fixed_rescale::<unit::acceleration::KnotPerHour>();
+    check_fixed::<unit::acceleration::StandardGravity>();
+    check_fixed_rescale::<unit::acceleration::StandardGravity>();
+    check_fixed::<unit::acceleration::MillistandardGravity>();
+    check_fixed_rescale::<unit::acceleration::MillistandardGravity>();
 }
 
 #[test]

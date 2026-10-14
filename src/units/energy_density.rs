@@ -382,3 +382,23 @@ impl<T: Float> EnergyDensity<T> {
         self.as_petawatt_hours_per_cubic_meter()
     }
 }
+
+fixed_base!(EnergyDensity, JoulePerCubicMeter);
+
+/// Unit markers for counting [`EnergyDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::energy_density`](crate::unit::energy_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::JoulePerCubicMeter, base JoulePerCubicMeter, 1 / 1, pi^0, from_joules_per_cubic_meter, as_joules_per_cubic_meter);
+    fixed_unit!(KilojoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::KilojoulePerCubicMeter, base JoulePerCubicMeter, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter, as_kilojoules_per_cubic_meter);
+    fixed_unit!(MegajoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::MegajoulePerCubicMeter, base JoulePerCubicMeter, 1000000 / 1, pi^0, from_megajoules_per_cubic_meter, as_megajoules_per_cubic_meter);
+    fixed_unit!(GigajoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::GigajoulePerCubicMeter, base JoulePerCubicMeter, 1000000000 / 1, pi^0, from_gigajoules_per_cubic_meter, as_gigajoules_per_cubic_meter);
+    fixed_unit!(TerajoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::TerajoulePerCubicMeter, base JoulePerCubicMeter, 1000000000000 / 1, pi^0, from_terajoules_per_cubic_meter, as_terajoules_per_cubic_meter);
+    fixed_unit!(PetajoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::PetajoulePerCubicMeter, base JoulePerCubicMeter, 1000000000000000 / 1, pi^0, from_petajoules_per_cubic_meter, as_petajoules_per_cubic_meter);
+    fixed_unit!(WattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::WattHourPerCubicMeter, base JoulePerCubicMeter, 3600 / 1, pi^0, from_watt_hours_per_cubic_meter, as_watt_hours_per_cubic_meter);
+    fixed_unit!(KilowattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::KilowattHourPerCubicMeter, base JoulePerCubicMeter, 3600000 / 1, pi^0, from_kilowatt_hours_per_cubic_meter, as_kilowatt_hours_per_cubic_meter);
+    fixed_unit!(MegawattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::MegawattHourPerCubicMeter, base JoulePerCubicMeter, 3600000000 / 1, pi^0, from_megawatt_hours_per_cubic_meter, as_megawatt_hours_per_cubic_meter);
+    fixed_unit!(GigawattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::GigawattHourPerCubicMeter, base JoulePerCubicMeter, 3600000000000 / 1, pi^0, from_gigawatt_hours_per_cubic_meter, as_gigawatt_hours_per_cubic_meter);
+    fixed_unit!(TerawattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::TerawattHourPerCubicMeter, base JoulePerCubicMeter, 3600000000000000 / 1, pi^0, from_terawatt_hours_per_cubic_meter, as_terawatt_hours_per_cubic_meter);
+    fixed_unit!(PetawattHourPerCubicMeter: EnergyDensity, EnergyDensityUnit::PetawattHourPerCubicMeter, base JoulePerCubicMeter, 3600000000000000000 / 1, pi^0, from_petawatt_hours_per_cubic_meter, as_petawatt_hours_per_cubic_meter);
+}

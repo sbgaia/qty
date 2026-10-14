@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -659,6 +659,44 @@ fn degrees_fahrenheit_per_hour() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::temperature_change_rate::DegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::NanodegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::NanodegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::MicrodegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::MicrodegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::MillidegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::MillidegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::CentidegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::CentidegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::DecidegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::DecidegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::DecadegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::DecadegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::HectodegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::HectodegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::KilodegreeCelsiusPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::KilodegreeCelsiusPerSecond>();
+    check_fixed::<unit::temperature_change_rate::DegreeCelsiusPerMinute>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeCelsiusPerMinute>();
+    check_fixed::<unit::temperature_change_rate::DegreeKelvinPerMinute>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeKelvinPerMinute>();
+    check_fixed::<unit::temperature_change_rate::DegreeFahrenheitPerMinute>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeFahrenheitPerMinute>();
+    check_fixed::<unit::temperature_change_rate::DegreeFahrenheitPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeFahrenheitPerSecond>();
+    check_fixed::<unit::temperature_change_rate::DegreeKelvinPerSecond>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeKelvinPerSecond>();
+    check_fixed::<unit::temperature_change_rate::DegreeCelsiusPerHour>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeCelsiusPerHour>();
+    check_fixed::<unit::temperature_change_rate::DegreeKelvinPerHour>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeKelvinPerHour>();
+    check_fixed::<unit::temperature_change_rate::DegreeFahrenheitPerHour>();
+    check_fixed_rescale::<unit::temperature_change_rate::DegreeFahrenheitPerHour>();
 }
 
 #[test]

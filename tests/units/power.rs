@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -806,6 +806,64 @@ fn tons_of_refrigeration() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::power::Watt>();
+    check_fixed_rescale::<unit::power::Watt>();
+    check_fixed::<unit::power::Femtowatt>();
+    check_fixed_rescale::<unit::power::Femtowatt>();
+    check_fixed::<unit::power::Picowatt>();
+    check_fixed_rescale::<unit::power::Picowatt>();
+    check_fixed::<unit::power::Nanowatt>();
+    check_fixed_rescale::<unit::power::Nanowatt>();
+    check_fixed::<unit::power::Microwatt>();
+    check_fixed_rescale::<unit::power::Microwatt>();
+    check_fixed::<unit::power::Milliwatt>();
+    check_fixed_rescale::<unit::power::Milliwatt>();
+    check_fixed::<unit::power::Deciwatt>();
+    check_fixed_rescale::<unit::power::Deciwatt>();
+    check_fixed::<unit::power::Decawatt>();
+    check_fixed_rescale::<unit::power::Decawatt>();
+    check_fixed::<unit::power::Kilowatt>();
+    check_fixed_rescale::<unit::power::Kilowatt>();
+    check_fixed::<unit::power::Megawatt>();
+    check_fixed_rescale::<unit::power::Megawatt>();
+    check_fixed::<unit::power::Gigawatt>();
+    check_fixed_rescale::<unit::power::Gigawatt>();
+    check_fixed::<unit::power::Terawatt>();
+    check_fixed_rescale::<unit::power::Terawatt>();
+    check_fixed::<unit::power::Petawatt>();
+    check_fixed_rescale::<unit::power::Petawatt>();
+    check_fixed::<unit::power::MechanicalHorsepower>();
+    check_fixed_rescale::<unit::power::MechanicalHorsepower>();
+    check_fixed::<unit::power::MetricHorsepower>();
+    check_fixed_rescale::<unit::power::MetricHorsepower>();
+    check_fixed::<unit::power::ElectricalHorsepower>();
+    check_fixed_rescale::<unit::power::ElectricalHorsepower>();
+    check_fixed::<unit::power::BoilerHorsepower>();
+    check_fixed_rescale::<unit::power::BoilerHorsepower>();
+    check_fixed::<unit::power::HydraulicHorsepower>();
+    check_fixed_rescale::<unit::power::HydraulicHorsepower>();
+    check_fixed::<unit::power::BritishThermalUnitPerHour>();
+    check_fixed_rescale::<unit::power::BritishThermalUnitPerHour>();
+    check_fixed::<unit::power::KilobritishThermalUnitPerHour>();
+    check_fixed_rescale::<unit::power::KilobritishThermalUnitPerHour>();
+    check_fixed::<unit::power::MegabritishThermalUnitPerHour>();
+    check_fixed_rescale::<unit::power::MegabritishThermalUnitPerHour>();
+    check_fixed::<unit::power::JoulePerHour>();
+    check_fixed_rescale::<unit::power::JoulePerHour>();
+    check_fixed::<unit::power::MillijoulePerHour>();
+    check_fixed_rescale::<unit::power::MillijoulePerHour>();
+    check_fixed::<unit::power::KilojoulePerHour>();
+    check_fixed_rescale::<unit::power::KilojoulePerHour>();
+    check_fixed::<unit::power::MegajoulePerHour>();
+    check_fixed_rescale::<unit::power::MegajoulePerHour>();
+    check_fixed::<unit::power::GigajoulePerHour>();
+    check_fixed_rescale::<unit::power::GigajoulePerHour>();
+    check_fixed::<unit::power::TonOfRefrigeration>();
+    check_fixed_rescale::<unit::power::TonOfRefrigeration>();
 }
 
 #[test]

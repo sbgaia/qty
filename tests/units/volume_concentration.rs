@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -749,6 +749,50 @@ fn parts_per_trillion() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::volume_concentration::DecimalFraction>();
+    check_fixed_rescale::<unit::volume_concentration::DecimalFraction>();
+    check_fixed::<unit::volume_concentration::LiterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::LiterPerLiter>();
+    check_fixed::<unit::volume_concentration::PicoliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::PicoliterPerLiter>();
+    check_fixed::<unit::volume_concentration::NanoliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::NanoliterPerLiter>();
+    check_fixed::<unit::volume_concentration::MicroliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::MicroliterPerLiter>();
+    check_fixed::<unit::volume_concentration::MilliliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::MilliliterPerLiter>();
+    check_fixed::<unit::volume_concentration::CentiliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::CentiliterPerLiter>();
+    check_fixed::<unit::volume_concentration::DeciliterPerLiter>();
+    check_fixed_rescale::<unit::volume_concentration::DeciliterPerLiter>();
+    check_fixed::<unit::volume_concentration::LiterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::LiterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::PicoliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::PicoliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::NanoliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::NanoliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::MicroliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::MicroliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::MilliliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::MilliliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::CentiliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::CentiliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::DeciliterPerMilliliter>();
+    check_fixed_rescale::<unit::volume_concentration::DeciliterPerMilliliter>();
+    check_fixed::<unit::volume_concentration::Percent>();
+    check_fixed_rescale::<unit::volume_concentration::Percent>();
+    check_fixed::<unit::volume_concentration::PartPerThousand>();
+    check_fixed_rescale::<unit::volume_concentration::PartPerThousand>();
+    check_fixed::<unit::volume_concentration::PartPerMillion>();
+    check_fixed_rescale::<unit::volume_concentration::PartPerMillion>();
+    check_fixed::<unit::volume_concentration::PartPerBillion>();
+    check_fixed_rescale::<unit::volume_concentration::PartPerBillion>();
+    check_fixed::<unit::volume_concentration::PartPerTrillion>();
+    check_fixed_rescale::<unit::volume_concentration::PartPerTrillion>();
 }
 
 #[test]

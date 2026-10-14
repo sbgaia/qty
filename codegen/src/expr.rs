@@ -86,6 +86,19 @@ impl Const {
         Self { r, pi: 0 }
     }
 
+    /// `(numerator, denominator, power of π)` when the constant is positive
+    /// and its reduced fraction fits in `u128`.
+    pub fn exact_parts(&self) -> Option<(u128, u128, i32)> {
+        if !self.r.is_positive() {
+            return None;
+        }
+        Some((
+            self.r.numer().to_u128()?,
+            self.r.denom().to_u128()?,
+            self.pi,
+        ))
+    }
+
     pub fn from_f64_exact(v: f64) -> Self {
         Self {
             r: BigRational::from_float(v).expect("finite"),

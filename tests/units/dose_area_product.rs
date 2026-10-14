@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -934,6 +934,60 @@ fn decigray_square_micrometers() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::dose_area_product::GraySquareMeter>();
+    check_fixed_rescale::<unit::dose_area_product::GraySquareMeter>();
+    check_fixed::<unit::dose_area_product::MicrograySquareMeter>();
+    check_fixed_rescale::<unit::dose_area_product::MicrograySquareMeter>();
+    check_fixed::<unit::dose_area_product::MilligraySquareMeter>();
+    check_fixed_rescale::<unit::dose_area_product::MilligraySquareMeter>();
+    check_fixed::<unit::dose_area_product::CentigraySquareMeter>();
+    check_fixed_rescale::<unit::dose_area_product::CentigraySquareMeter>();
+    check_fixed::<unit::dose_area_product::DecigraySquareMeter>();
+    check_fixed_rescale::<unit::dose_area_product::DecigraySquareMeter>();
+    check_fixed::<unit::dose_area_product::GraySquareDecimeter>();
+    check_fixed_rescale::<unit::dose_area_product::GraySquareDecimeter>();
+    check_fixed::<unit::dose_area_product::MicrograySquareDecimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MicrograySquareDecimeter>();
+    check_fixed::<unit::dose_area_product::MilligraySquareDecimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MilligraySquareDecimeter>();
+    check_fixed::<unit::dose_area_product::CentigraySquareDecimeter>();
+    check_fixed_rescale::<unit::dose_area_product::CentigraySquareDecimeter>();
+    check_fixed::<unit::dose_area_product::DecigraySquareDecimeter>();
+    check_fixed_rescale::<unit::dose_area_product::DecigraySquareDecimeter>();
+    check_fixed::<unit::dose_area_product::GraySquareCentimeter>();
+    check_fixed_rescale::<unit::dose_area_product::GraySquareCentimeter>();
+    check_fixed::<unit::dose_area_product::MicrograySquareCentimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MicrograySquareCentimeter>();
+    check_fixed::<unit::dose_area_product::MilligraySquareCentimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MilligraySquareCentimeter>();
+    check_fixed::<unit::dose_area_product::CentigraySquareCentimeter>();
+    check_fixed_rescale::<unit::dose_area_product::CentigraySquareCentimeter>();
+    check_fixed::<unit::dose_area_product::DecigraySquareCentimeter>();
+    check_fixed_rescale::<unit::dose_area_product::DecigraySquareCentimeter>();
+    check_fixed::<unit::dose_area_product::GraySquareMillimeter>();
+    check_fixed_rescale::<unit::dose_area_product::GraySquareMillimeter>();
+    check_fixed::<unit::dose_area_product::MicrograySquareMillimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MicrograySquareMillimeter>();
+    check_fixed::<unit::dose_area_product::MilligraySquareMillimeter>();
+    check_fixed_rescale::<unit::dose_area_product::MilligraySquareMillimeter>();
+    check_fixed::<unit::dose_area_product::CentigraySquareMillimeter>();
+    check_fixed_rescale::<unit::dose_area_product::CentigraySquareMillimeter>();
+    check_fixed::<unit::dose_area_product::DecigraySquareMillimeter>();
+    check_fixed_rescale::<unit::dose_area_product::DecigraySquareMillimeter>();
+    check_fixed::<unit::dose_area_product::GraySquareMicrometer>();
+    check_fixed_rescale::<unit::dose_area_product::GraySquareMicrometer>();
+    check_fixed::<unit::dose_area_product::MicrograySquareMicrometer>();
+    check_fixed_rescale::<unit::dose_area_product::MicrograySquareMicrometer>();
+    check_fixed::<unit::dose_area_product::MilligraySquareMicrometer>();
+    check_fixed_rescale::<unit::dose_area_product::MilligraySquareMicrometer>();
+    check_fixed::<unit::dose_area_product::CentigraySquareMicrometer>();
+    check_fixed_rescale::<unit::dose_area_product::CentigraySquareMicrometer>();
+    check_fixed::<unit::dose_area_product::DecigraySquareMicrometer>();
+    check_fixed_rescale::<unit::dose_area_product::DecigraySquareMicrometer>();
 }
 
 #[test]

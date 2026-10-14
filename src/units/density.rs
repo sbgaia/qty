@@ -1491,3 +1491,67 @@ impl<T: Float> Density<T> {
         self.as_slugs_per_cubic_inch()
     }
 }
+
+fixed_base!(Density, KilogramPerCubicMeter);
+
+/// Unit markers for counting [`Density`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::density`](crate::unit::density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(GramPerCubicMillimeter: Density, DensityUnit::GramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000 / 1, pi^0, from_grams_per_cubic_millimeter, as_grams_per_cubic_millimeter);
+    fixed_unit!(KilogramPerCubicMillimeter: Density, DensityUnit::KilogramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000000 / 1, pi^0, from_kilograms_per_cubic_millimeter, as_kilograms_per_cubic_millimeter);
+    fixed_unit!(GramPerCubicCentimeter: Density, DensityUnit::GramPerCubicCentimeter, base KilogramPerCubicMeter, 1000 / 1, pi^0, from_grams_per_cubic_centimeter, as_grams_per_cubic_centimeter);
+    fixed_unit!(KilogramPerCubicCentimeter: Density, DensityUnit::KilogramPerCubicCentimeter, base KilogramPerCubicMeter, 1000000 / 1, pi^0, from_kilograms_per_cubic_centimeter, as_kilograms_per_cubic_centimeter);
+    fixed_unit!(GramPerCubicMeter: Density, DensityUnit::GramPerCubicMeter, base KilogramPerCubicMeter, 1 / 1000, pi^0, from_grams_per_cubic_meter, as_grams_per_cubic_meter);
+    fixed_unit!(KilogramPerCubicMeter: Density, DensityUnit::KilogramPerCubicMeter, base KilogramPerCubicMeter, 1 / 1, pi^0, from_kilograms_per_cubic_meter, as_kilograms_per_cubic_meter);
+    fixed_unit!(MilligramPerCubicMeter: Density, DensityUnit::MilligramPerCubicMeter, base KilogramPerCubicMeter, 1 / 1000000, pi^0, from_milligrams_per_cubic_meter, as_milligrams_per_cubic_meter);
+    fixed_unit!(MicrogramPerCubicMeter: Density, DensityUnit::MicrogramPerCubicMeter, base KilogramPerCubicMeter, 1 / 1000000000, pi^0, from_micrograms_per_cubic_meter, as_micrograms_per_cubic_meter);
+    fixed_unit!(PoundPerCubicInch: Density, DensityUnit::PoundPerCubicInch, base KilogramPerCubicMeter, 56699046250 / 2048383, pi^0, from_pounds_per_cubic_inch, as_pounds_per_cubic_inch);
+    fixed_unit!(KilopoundPerCubicInch: Density, DensityUnit::KilopoundPerCubicInch, base KilogramPerCubicMeter, 56699046250000 / 2048383, pi^0, from_kilopounds_per_cubic_inch, as_kilopounds_per_cubic_inch);
+    fixed_unit!(PoundPerCubicFoot: Density, DensityUnit::PoundPerCubicFoot, base KilogramPerCubicMeter, 28349523125 / 1769802912, pi^0, from_pounds_per_cubic_foot, as_pounds_per_cubic_foot);
+    fixed_unit!(KilopoundPerCubicFoot: Density, DensityUnit::KilopoundPerCubicFoot, base KilogramPerCubicMeter, 3543690390625 / 221225364, pi^0, from_kilopounds_per_cubic_foot, as_kilopounds_per_cubic_foot);
+    fixed_unit!(PoundPerCubicYard: Density, DensityUnit::PoundPerCubicYard, base KilogramPerCubicMeter, 28349523125 / 47784678624, pi^0, from_pounds_per_cubic_yard, as_pounds_per_cubic_yard);
+    fixed_unit!(KilopoundPerCubicYard: Density, DensityUnit::KilopoundPerCubicYard, base KilogramPerCubicMeter, 3543690390625 / 5973084828, pi^0, from_kilopounds_per_cubic_yard, as_kilopounds_per_cubic_yard);
+    fixed_unit!(TonnePerCubicMillimeter: Density, DensityUnit::TonnePerCubicMillimeter, base KilogramPerCubicMeter, 1000000000000 / 1, pi^0, from_tonnes_per_cubic_millimeter, as_tonnes_per_cubic_millimeter);
+    fixed_unit!(TonnePerCubicCentimeter: Density, DensityUnit::TonnePerCubicCentimeter, base KilogramPerCubicMeter, 1000000000 / 1, pi^0, from_tonnes_per_cubic_centimeter, as_tonnes_per_cubic_centimeter);
+    fixed_unit!(TonnePerCubicMeter: Density, DensityUnit::TonnePerCubicMeter, base KilogramPerCubicMeter, 1000 / 1, pi^0, from_tonnes_per_cubic_meter, as_tonnes_per_cubic_meter);
+    fixed_unit!(SlugPerCubicFoot: Density, DensityUnit::SlugPerCubicFoot, base KilogramPerCubicMeter, 5560277019075625 / 10788718551552, pi^0, from_slugs_per_cubic_foot, as_slugs_per_cubic_foot);
+    fixed_unit!(GramPerLiter: Density, DensityUnit::GramPerLiter, base KilogramPerCubicMeter, 1 / 1, pi^0, from_grams_per_liter, as_grams_per_liter);
+    fixed_unit!(FemtogramPerLiter: Density, DensityUnit::FemtogramPerLiter, base KilogramPerCubicMeter, 1 / 1000000000000000, pi^0, from_femtograms_per_liter, as_femtograms_per_liter);
+    fixed_unit!(PicogramPerLiter: Density, DensityUnit::PicogramPerLiter, base KilogramPerCubicMeter, 1 / 1000000000000, pi^0, from_picograms_per_liter, as_picograms_per_liter);
+    fixed_unit!(NanogramPerLiter: Density, DensityUnit::NanogramPerLiter, base KilogramPerCubicMeter, 1 / 1000000000, pi^0, from_nanograms_per_liter, as_nanograms_per_liter);
+    fixed_unit!(MicrogramPerLiter: Density, DensityUnit::MicrogramPerLiter, base KilogramPerCubicMeter, 1 / 1000000, pi^0, from_micrograms_per_liter, as_micrograms_per_liter);
+    fixed_unit!(MilligramPerLiter: Density, DensityUnit::MilligramPerLiter, base KilogramPerCubicMeter, 1 / 1000, pi^0, from_milligrams_per_liter, as_milligrams_per_liter);
+    fixed_unit!(CentigramPerLiter: Density, DensityUnit::CentigramPerLiter, base KilogramPerCubicMeter, 1 / 100, pi^0, from_centigrams_per_liter, as_centigrams_per_liter);
+    fixed_unit!(DecigramPerLiter: Density, DensityUnit::DecigramPerLiter, base KilogramPerCubicMeter, 1 / 10, pi^0, from_decigrams_per_liter, as_decigrams_per_liter);
+    fixed_unit!(GramPerDeciliter: Density, DensityUnit::GramPerDeciliter, base KilogramPerCubicMeter, 10 / 1, pi^0, from_grams_per_deciliter, as_grams_per_deciliter);
+    fixed_unit!(FemtogramPerDeciliter: Density, DensityUnit::FemtogramPerDeciliter, base KilogramPerCubicMeter, 1 / 100000000000000, pi^0, from_femtograms_per_deciliter, as_femtograms_per_deciliter);
+    fixed_unit!(PicogramPerDeciliter: Density, DensityUnit::PicogramPerDeciliter, base KilogramPerCubicMeter, 1 / 100000000000, pi^0, from_picograms_per_deciliter, as_picograms_per_deciliter);
+    fixed_unit!(NanogramPerDeciliter: Density, DensityUnit::NanogramPerDeciliter, base KilogramPerCubicMeter, 1 / 100000000, pi^0, from_nanograms_per_deciliter, as_nanograms_per_deciliter);
+    fixed_unit!(MicrogramPerDeciliter: Density, DensityUnit::MicrogramPerDeciliter, base KilogramPerCubicMeter, 1 / 100000, pi^0, from_micrograms_per_deciliter, as_micrograms_per_deciliter);
+    fixed_unit!(MilligramPerDeciliter: Density, DensityUnit::MilligramPerDeciliter, base KilogramPerCubicMeter, 1 / 100, pi^0, from_milligrams_per_deciliter, as_milligrams_per_deciliter);
+    fixed_unit!(CentigramPerDeciliter: Density, DensityUnit::CentigramPerDeciliter, base KilogramPerCubicMeter, 1 / 10, pi^0, from_centigrams_per_deciliter, as_centigrams_per_deciliter);
+    fixed_unit!(DecigramPerDeciliter: Density, DensityUnit::DecigramPerDeciliter, base KilogramPerCubicMeter, 1 / 1, pi^0, from_decigrams_per_deciliter, as_decigrams_per_deciliter);
+    fixed_unit!(GramPerMilliliter: Density, DensityUnit::GramPerMilliliter, base KilogramPerCubicMeter, 1000 / 1, pi^0, from_grams_per_milliliter, as_grams_per_milliliter);
+    fixed_unit!(FemtogramPerMilliliter: Density, DensityUnit::FemtogramPerMilliliter, base KilogramPerCubicMeter, 1 / 1000000000000, pi^0, from_femtograms_per_milliliter, as_femtograms_per_milliliter);
+    fixed_unit!(PicogramPerMilliliter: Density, DensityUnit::PicogramPerMilliliter, base KilogramPerCubicMeter, 1 / 1000000000, pi^0, from_picograms_per_milliliter, as_picograms_per_milliliter);
+    fixed_unit!(NanogramPerMilliliter: Density, DensityUnit::NanogramPerMilliliter, base KilogramPerCubicMeter, 1 / 1000000, pi^0, from_nanograms_per_milliliter, as_nanograms_per_milliliter);
+    fixed_unit!(MicrogramPerMilliliter: Density, DensityUnit::MicrogramPerMilliliter, base KilogramPerCubicMeter, 1 / 1000, pi^0, from_micrograms_per_milliliter, as_micrograms_per_milliliter);
+    fixed_unit!(MilligramPerMilliliter: Density, DensityUnit::MilligramPerMilliliter, base KilogramPerCubicMeter, 1 / 1, pi^0, from_milligrams_per_milliliter, as_milligrams_per_milliliter);
+    fixed_unit!(CentigramPerMilliliter: Density, DensityUnit::CentigramPerMilliliter, base KilogramPerCubicMeter, 10 / 1, pi^0, from_centigrams_per_milliliter, as_centigrams_per_milliliter);
+    fixed_unit!(DecigramPerMilliliter: Density, DensityUnit::DecigramPerMilliliter, base KilogramPerCubicMeter, 100 / 1, pi^0, from_decigrams_per_milliliter, as_decigrams_per_milliliter);
+    fixed_unit!(PoundPerUSGallon: Density, DensityUnit::PoundPerUSGallon, base KilogramPerCubicMeter, 736351250 / 6145149, pi^0, from_pounds_per_us_gallon, as_pounds_per_us_gallon);
+    fixed_unit!(PoundPerImperialGallon: Density, DensityUnit::PoundPerImperialGallon, base KilogramPerCubicMeter, 45359237 / 454609, pi^0, from_pounds_per_imperial_gallon, as_pounds_per_imperial_gallon);
+    fixed_unit!(KilogramPerLiter: Density, DensityUnit::KilogramPerLiter, base KilogramPerCubicMeter, 1000 / 1, pi^0, from_kilograms_per_liter, as_kilograms_per_liter);
+    fixed_unit!(TonnePerCubicFoot: Density, DensityUnit::TonnePerCubicFoot, base KilogramPerCubicMeter, 1953125000000 / 55306341, pi^0, from_tonnes_per_cubic_foot, as_tonnes_per_cubic_foot);
+    fixed_unit!(TonnePerCubicInch: Density, DensityUnit::TonnePerCubicInch, base KilogramPerCubicMeter, 125000000000000 / 2048383, pi^0, from_tonnes_per_cubic_inch, as_tonnes_per_cubic_inch);
+    fixed_unit!(GramPerCubicFoot: Density, DensityUnit::GramPerCubicFoot, base KilogramPerCubicMeter, 1953125 / 55306341, pi^0, from_grams_per_cubic_foot, as_grams_per_cubic_foot);
+    fixed_unit!(GramPerCubicInch: Density, DensityUnit::GramPerCubicInch, base KilogramPerCubicMeter, 125000000 / 2048383, pi^0, from_grams_per_cubic_inch, as_grams_per_cubic_inch);
+    fixed_unit!(PoundPerCubicMeter: Density, DensityUnit::PoundPerCubicMeter, base KilogramPerCubicMeter, 45359237 / 100000000, pi^0, from_pounds_per_cubic_meter, as_pounds_per_cubic_meter);
+    fixed_unit!(PoundPerCubicCentimeter: Density, DensityUnit::PoundPerCubicCentimeter, base KilogramPerCubicMeter, 45359237 / 100, pi^0, from_pounds_per_cubic_centimeter, as_pounds_per_cubic_centimeter);
+    fixed_unit!(PoundPerCubicMillimeter: Density, DensityUnit::PoundPerCubicMillimeter, base KilogramPerCubicMeter, 453592370 / 1, pi^0, from_pounds_per_cubic_millimeter, as_pounds_per_cubic_millimeter);
+    fixed_unit!(SlugPerCubicMeter: Density, DensityUnit::SlugPerCubicMeter, base KilogramPerCubicMeter, 8896443230521 / 609600000000, pi^0, from_slugs_per_cubic_meter, as_slugs_per_cubic_meter);
+    fixed_unit!(SlugPerCubicCentimeter: Density, DensityUnit::SlugPerCubicCentimeter, base KilogramPerCubicMeter, 8896443230521 / 609600, pi^0, from_slugs_per_cubic_centimeter, as_slugs_per_cubic_centimeter);
+    fixed_unit!(SlugPerCubicMillimeter: Density, DensityUnit::SlugPerCubicMillimeter, base KilogramPerCubicMeter, 44482216152605 / 3048, pi^0, from_slugs_per_cubic_millimeter, as_slugs_per_cubic_millimeter);
+    fixed_unit!(SlugPerCubicInch: Density, DensityUnit::SlugPerCubicInch, base KilogramPerCubicMeter, 5560277019075625 / 6243471384, pi^0, from_slugs_per_cubic_inch, as_slugs_per_cubic_inch);
+}

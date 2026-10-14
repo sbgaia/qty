@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -379,6 +379,30 @@ fn inverse_microinches() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::reciprocal_length::InverseMeter>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseMeter>();
+    check_fixed::<unit::reciprocal_length::InverseCentimeter>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseCentimeter>();
+    check_fixed::<unit::reciprocal_length::InverseMillimeter>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseMillimeter>();
+    check_fixed::<unit::reciprocal_length::InverseMile>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseMile>();
+    check_fixed::<unit::reciprocal_length::InverseYard>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseYard>();
+    check_fixed::<unit::reciprocal_length::InverseFoot>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseFoot>();
+    check_fixed::<unit::reciprocal_length::InverseUsSurveyFoot>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseUsSurveyFoot>();
+    check_fixed::<unit::reciprocal_length::InverseInch>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseInch>();
+    check_fixed::<unit::reciprocal_length::InverseMil>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseMil>();
+    check_fixed::<unit::reciprocal_length::InverseMicroinch>();
+    check_fixed_rescale::<unit::reciprocal_length::InverseMicroinch>();
 }
 
 #[test]

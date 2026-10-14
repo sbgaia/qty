@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1082,6 +1082,76 @@ fn mach() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::speed::MeterPerSecond>();
+    check_fixed_rescale::<unit::speed::MeterPerSecond>();
+    check_fixed::<unit::speed::NanometerPerSecond>();
+    check_fixed_rescale::<unit::speed::NanometerPerSecond>();
+    check_fixed::<unit::speed::MicrometerPerSecond>();
+    check_fixed_rescale::<unit::speed::MicrometerPerSecond>();
+    check_fixed::<unit::speed::MillimeterPerSecond>();
+    check_fixed_rescale::<unit::speed::MillimeterPerSecond>();
+    check_fixed::<unit::speed::CentimeterPerSecond>();
+    check_fixed_rescale::<unit::speed::CentimeterPerSecond>();
+    check_fixed::<unit::speed::DecimeterPerSecond>();
+    check_fixed_rescale::<unit::speed::DecimeterPerSecond>();
+    check_fixed::<unit::speed::KilometerPerSecond>();
+    check_fixed_rescale::<unit::speed::KilometerPerSecond>();
+    check_fixed::<unit::speed::MeterPerMinute>();
+    check_fixed_rescale::<unit::speed::MeterPerMinute>();
+    check_fixed::<unit::speed::NanometerPerMinute>();
+    check_fixed_rescale::<unit::speed::NanometerPerMinute>();
+    check_fixed::<unit::speed::MicrometerPerMinute>();
+    check_fixed_rescale::<unit::speed::MicrometerPerMinute>();
+    check_fixed::<unit::speed::MillimeterPerMinute>();
+    check_fixed_rescale::<unit::speed::MillimeterPerMinute>();
+    check_fixed::<unit::speed::CentimeterPerMinute>();
+    check_fixed_rescale::<unit::speed::CentimeterPerMinute>();
+    check_fixed::<unit::speed::DecimeterPerMinute>();
+    check_fixed_rescale::<unit::speed::DecimeterPerMinute>();
+    check_fixed::<unit::speed::KilometerPerMinute>();
+    check_fixed_rescale::<unit::speed::KilometerPerMinute>();
+    check_fixed::<unit::speed::MeterPerHour>();
+    check_fixed_rescale::<unit::speed::MeterPerHour>();
+    check_fixed::<unit::speed::MillimeterPerHour>();
+    check_fixed_rescale::<unit::speed::MillimeterPerHour>();
+    check_fixed::<unit::speed::CentimeterPerHour>();
+    check_fixed_rescale::<unit::speed::CentimeterPerHour>();
+    check_fixed::<unit::speed::KilometerPerHour>();
+    check_fixed_rescale::<unit::speed::KilometerPerHour>();
+    check_fixed::<unit::speed::FootPerSecond>();
+    check_fixed_rescale::<unit::speed::FootPerSecond>();
+    check_fixed::<unit::speed::FootPerMinute>();
+    check_fixed_rescale::<unit::speed::FootPerMinute>();
+    check_fixed::<unit::speed::FootPerHour>();
+    check_fixed_rescale::<unit::speed::FootPerHour>();
+    check_fixed::<unit::speed::UsSurveyFootPerSecond>();
+    check_fixed_rescale::<unit::speed::UsSurveyFootPerSecond>();
+    check_fixed::<unit::speed::UsSurveyFootPerMinute>();
+    check_fixed_rescale::<unit::speed::UsSurveyFootPerMinute>();
+    check_fixed::<unit::speed::UsSurveyFootPerHour>();
+    check_fixed_rescale::<unit::speed::UsSurveyFootPerHour>();
+    check_fixed::<unit::speed::InchPerSecond>();
+    check_fixed_rescale::<unit::speed::InchPerSecond>();
+    check_fixed::<unit::speed::InchPerMinute>();
+    check_fixed_rescale::<unit::speed::InchPerMinute>();
+    check_fixed::<unit::speed::InchPerHour>();
+    check_fixed_rescale::<unit::speed::InchPerHour>();
+    check_fixed::<unit::speed::YardPerSecond>();
+    check_fixed_rescale::<unit::speed::YardPerSecond>();
+    check_fixed::<unit::speed::YardPerMinute>();
+    check_fixed_rescale::<unit::speed::YardPerMinute>();
+    check_fixed::<unit::speed::YardPerHour>();
+    check_fixed_rescale::<unit::speed::YardPerHour>();
+    check_fixed::<unit::speed::Knot>();
+    check_fixed_rescale::<unit::speed::Knot>();
+    check_fixed::<unit::speed::MilePerHour>();
+    check_fixed_rescale::<unit::speed::MilePerHour>();
+    check_fixed::<unit::speed::Mach>();
+    check_fixed_rescale::<unit::speed::Mach>();
 }
 
 #[test]

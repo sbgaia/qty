@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -413,6 +413,32 @@ fn millistandard_gravities_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::jerk::MeterPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::MeterPerSecondCubed>();
+    check_fixed::<unit::jerk::NanometerPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::NanometerPerSecondCubed>();
+    check_fixed::<unit::jerk::MicrometerPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::MicrometerPerSecondCubed>();
+    check_fixed::<unit::jerk::MillimeterPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::MillimeterPerSecondCubed>();
+    check_fixed::<unit::jerk::CentimeterPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::CentimeterPerSecondCubed>();
+    check_fixed::<unit::jerk::DecimeterPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::DecimeterPerSecondCubed>();
+    check_fixed::<unit::jerk::KilometerPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::KilometerPerSecondCubed>();
+    check_fixed::<unit::jerk::InchPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::InchPerSecondCubed>();
+    check_fixed::<unit::jerk::FootPerSecondCubed>();
+    check_fixed_rescale::<unit::jerk::FootPerSecondCubed>();
+    check_fixed::<unit::jerk::StandardGravitiesPerSecond>();
+    check_fixed_rescale::<unit::jerk::StandardGravitiesPerSecond>();
+    check_fixed::<unit::jerk::MillistandardGravitiesPerSecond>();
+    check_fixed_rescale::<unit::jerk::MillistandardGravitiesPerSecond>();
 }
 
 #[test]

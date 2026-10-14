@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -195,6 +195,20 @@ fn pounds_per_thousand_square_feet() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::area_density::KilogramPerSquareMeter>();
+    check_fixed_rescale::<unit::area_density::KilogramPerSquareMeter>();
+    check_fixed::<unit::area_density::GramPerSquareMeter>();
+    check_fixed_rescale::<unit::area_density::GramPerSquareMeter>();
+    check_fixed::<unit::area_density::MilligramPerSquareMeter>();
+    check_fixed_rescale::<unit::area_density::MilligramPerSquareMeter>();
+    check_fixed::<unit::area_density::PoundPerSquareFoot>();
+    check_fixed_rescale::<unit::area_density::PoundPerSquareFoot>();
+    check_fixed::<unit::area_density::PoundPerThousandSquareFeet>();
+    check_fixed_rescale::<unit::area_density::PoundPerThousandSquareFeet>();
 }
 
 #[test]

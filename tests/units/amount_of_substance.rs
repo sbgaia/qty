@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -630,6 +630,44 @@ fn kilopound_moles() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::amount_of_substance::Mole>();
+    check_fixed_rescale::<unit::amount_of_substance::Mole>();
+    check_fixed::<unit::amount_of_substance::Femtomole>();
+    check_fixed_rescale::<unit::amount_of_substance::Femtomole>();
+    check_fixed::<unit::amount_of_substance::Picomole>();
+    check_fixed_rescale::<unit::amount_of_substance::Picomole>();
+    check_fixed::<unit::amount_of_substance::Nanomole>();
+    check_fixed_rescale::<unit::amount_of_substance::Nanomole>();
+    check_fixed::<unit::amount_of_substance::Micromole>();
+    check_fixed_rescale::<unit::amount_of_substance::Micromole>();
+    check_fixed::<unit::amount_of_substance::Millimole>();
+    check_fixed_rescale::<unit::amount_of_substance::Millimole>();
+    check_fixed::<unit::amount_of_substance::Centimole>();
+    check_fixed_rescale::<unit::amount_of_substance::Centimole>();
+    check_fixed::<unit::amount_of_substance::Decimole>();
+    check_fixed_rescale::<unit::amount_of_substance::Decimole>();
+    check_fixed::<unit::amount_of_substance::Kilomole>();
+    check_fixed_rescale::<unit::amount_of_substance::Kilomole>();
+    check_fixed::<unit::amount_of_substance::Megamole>();
+    check_fixed_rescale::<unit::amount_of_substance::Megamole>();
+    check_fixed::<unit::amount_of_substance::PoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::PoundMole>();
+    check_fixed::<unit::amount_of_substance::NanopoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::NanopoundMole>();
+    check_fixed::<unit::amount_of_substance::MicropoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::MicropoundMole>();
+    check_fixed::<unit::amount_of_substance::MillipoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::MillipoundMole>();
+    check_fixed::<unit::amount_of_substance::CentipoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::CentipoundMole>();
+    check_fixed::<unit::amount_of_substance::DecipoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::DecipoundMole>();
+    check_fixed::<unit::amount_of_substance::KilopoundMole>();
+    check_fixed_rescale::<unit::amount_of_substance::KilopoundMole>();
 }
 
 #[test]

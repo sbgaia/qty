@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -2073,6 +2073,122 @@ fn slugs_per_cubic_inch() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::density::GramPerCubicMillimeter>();
+    check_fixed_rescale::<unit::density::GramPerCubicMillimeter>();
+    check_fixed::<unit::density::KilogramPerCubicMillimeter>();
+    check_fixed_rescale::<unit::density::KilogramPerCubicMillimeter>();
+    check_fixed::<unit::density::GramPerCubicCentimeter>();
+    check_fixed_rescale::<unit::density::GramPerCubicCentimeter>();
+    check_fixed::<unit::density::KilogramPerCubicCentimeter>();
+    check_fixed_rescale::<unit::density::KilogramPerCubicCentimeter>();
+    check_fixed::<unit::density::GramPerCubicMeter>();
+    check_fixed_rescale::<unit::density::GramPerCubicMeter>();
+    check_fixed::<unit::density::KilogramPerCubicMeter>();
+    check_fixed_rescale::<unit::density::KilogramPerCubicMeter>();
+    check_fixed::<unit::density::MilligramPerCubicMeter>();
+    check_fixed_rescale::<unit::density::MilligramPerCubicMeter>();
+    check_fixed::<unit::density::MicrogramPerCubicMeter>();
+    check_fixed_rescale::<unit::density::MicrogramPerCubicMeter>();
+    check_fixed::<unit::density::PoundPerCubicInch>();
+    check_fixed_rescale::<unit::density::PoundPerCubicInch>();
+    check_fixed::<unit::density::KilopoundPerCubicInch>();
+    check_fixed_rescale::<unit::density::KilopoundPerCubicInch>();
+    check_fixed::<unit::density::PoundPerCubicFoot>();
+    check_fixed_rescale::<unit::density::PoundPerCubicFoot>();
+    check_fixed::<unit::density::KilopoundPerCubicFoot>();
+    check_fixed_rescale::<unit::density::KilopoundPerCubicFoot>();
+    check_fixed::<unit::density::PoundPerCubicYard>();
+    check_fixed_rescale::<unit::density::PoundPerCubicYard>();
+    check_fixed::<unit::density::KilopoundPerCubicYard>();
+    check_fixed_rescale::<unit::density::KilopoundPerCubicYard>();
+    check_fixed::<unit::density::TonnePerCubicMillimeter>();
+    check_fixed_rescale::<unit::density::TonnePerCubicMillimeter>();
+    check_fixed::<unit::density::TonnePerCubicCentimeter>();
+    check_fixed_rescale::<unit::density::TonnePerCubicCentimeter>();
+    check_fixed::<unit::density::TonnePerCubicMeter>();
+    check_fixed_rescale::<unit::density::TonnePerCubicMeter>();
+    check_fixed::<unit::density::SlugPerCubicFoot>();
+    check_fixed_rescale::<unit::density::SlugPerCubicFoot>();
+    check_fixed::<unit::density::GramPerLiter>();
+    check_fixed_rescale::<unit::density::GramPerLiter>();
+    check_fixed::<unit::density::FemtogramPerLiter>();
+    check_fixed_rescale::<unit::density::FemtogramPerLiter>();
+    check_fixed::<unit::density::PicogramPerLiter>();
+    check_fixed_rescale::<unit::density::PicogramPerLiter>();
+    check_fixed::<unit::density::NanogramPerLiter>();
+    check_fixed_rescale::<unit::density::NanogramPerLiter>();
+    check_fixed::<unit::density::MicrogramPerLiter>();
+    check_fixed_rescale::<unit::density::MicrogramPerLiter>();
+    check_fixed::<unit::density::MilligramPerLiter>();
+    check_fixed_rescale::<unit::density::MilligramPerLiter>();
+    check_fixed::<unit::density::CentigramPerLiter>();
+    check_fixed_rescale::<unit::density::CentigramPerLiter>();
+    check_fixed::<unit::density::DecigramPerLiter>();
+    check_fixed_rescale::<unit::density::DecigramPerLiter>();
+    check_fixed::<unit::density::GramPerDeciliter>();
+    check_fixed_rescale::<unit::density::GramPerDeciliter>();
+    check_fixed::<unit::density::FemtogramPerDeciliter>();
+    check_fixed_rescale::<unit::density::FemtogramPerDeciliter>();
+    check_fixed::<unit::density::PicogramPerDeciliter>();
+    check_fixed_rescale::<unit::density::PicogramPerDeciliter>();
+    check_fixed::<unit::density::NanogramPerDeciliter>();
+    check_fixed_rescale::<unit::density::NanogramPerDeciliter>();
+    check_fixed::<unit::density::MicrogramPerDeciliter>();
+    check_fixed_rescale::<unit::density::MicrogramPerDeciliter>();
+    check_fixed::<unit::density::MilligramPerDeciliter>();
+    check_fixed_rescale::<unit::density::MilligramPerDeciliter>();
+    check_fixed::<unit::density::CentigramPerDeciliter>();
+    check_fixed_rescale::<unit::density::CentigramPerDeciliter>();
+    check_fixed::<unit::density::DecigramPerDeciliter>();
+    check_fixed_rescale::<unit::density::DecigramPerDeciliter>();
+    check_fixed::<unit::density::GramPerMilliliter>();
+    check_fixed_rescale::<unit::density::GramPerMilliliter>();
+    check_fixed::<unit::density::FemtogramPerMilliliter>();
+    check_fixed_rescale::<unit::density::FemtogramPerMilliliter>();
+    check_fixed::<unit::density::PicogramPerMilliliter>();
+    check_fixed_rescale::<unit::density::PicogramPerMilliliter>();
+    check_fixed::<unit::density::NanogramPerMilliliter>();
+    check_fixed_rescale::<unit::density::NanogramPerMilliliter>();
+    check_fixed::<unit::density::MicrogramPerMilliliter>();
+    check_fixed_rescale::<unit::density::MicrogramPerMilliliter>();
+    check_fixed::<unit::density::MilligramPerMilliliter>();
+    check_fixed_rescale::<unit::density::MilligramPerMilliliter>();
+    check_fixed::<unit::density::CentigramPerMilliliter>();
+    check_fixed_rescale::<unit::density::CentigramPerMilliliter>();
+    check_fixed::<unit::density::DecigramPerMilliliter>();
+    check_fixed_rescale::<unit::density::DecigramPerMilliliter>();
+    check_fixed::<unit::density::PoundPerUSGallon>();
+    check_fixed_rescale::<unit::density::PoundPerUSGallon>();
+    check_fixed::<unit::density::PoundPerImperialGallon>();
+    check_fixed_rescale::<unit::density::PoundPerImperialGallon>();
+    check_fixed::<unit::density::KilogramPerLiter>();
+    check_fixed_rescale::<unit::density::KilogramPerLiter>();
+    check_fixed::<unit::density::TonnePerCubicFoot>();
+    check_fixed_rescale::<unit::density::TonnePerCubicFoot>();
+    check_fixed::<unit::density::TonnePerCubicInch>();
+    check_fixed_rescale::<unit::density::TonnePerCubicInch>();
+    check_fixed::<unit::density::GramPerCubicFoot>();
+    check_fixed_rescale::<unit::density::GramPerCubicFoot>();
+    check_fixed::<unit::density::GramPerCubicInch>();
+    check_fixed_rescale::<unit::density::GramPerCubicInch>();
+    check_fixed::<unit::density::PoundPerCubicMeter>();
+    check_fixed_rescale::<unit::density::PoundPerCubicMeter>();
+    check_fixed::<unit::density::PoundPerCubicCentimeter>();
+    check_fixed_rescale::<unit::density::PoundPerCubicCentimeter>();
+    check_fixed::<unit::density::PoundPerCubicMillimeter>();
+    check_fixed_rescale::<unit::density::PoundPerCubicMillimeter>();
+    check_fixed::<unit::density::SlugPerCubicMeter>();
+    check_fixed_rescale::<unit::density::SlugPerCubicMeter>();
+    check_fixed::<unit::density::SlugPerCubicCentimeter>();
+    check_fixed_rescale::<unit::density::SlugPerCubicCentimeter>();
+    check_fixed::<unit::density::SlugPerCubicMillimeter>();
+    check_fixed_rescale::<unit::density::SlugPerCubicMillimeter>();
+    check_fixed::<unit::density::SlugPerCubicInch>();
+    check_fixed_rescale::<unit::density::SlugPerCubicInch>();
 }
 
 #[test]

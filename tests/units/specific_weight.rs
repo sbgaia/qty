@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -647,6 +647,44 @@ fn tonnes_force_per_cubic_meter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::specific_weight::NewtonPerCubicMillimeter>();
+    check_fixed_rescale::<unit::specific_weight::NewtonPerCubicMillimeter>();
+    check_fixed::<unit::specific_weight::KilonewtonPerCubicMillimeter>();
+    check_fixed_rescale::<unit::specific_weight::KilonewtonPerCubicMillimeter>();
+    check_fixed::<unit::specific_weight::NewtonPerCubicCentimeter>();
+    check_fixed_rescale::<unit::specific_weight::NewtonPerCubicCentimeter>();
+    check_fixed::<unit::specific_weight::KilonewtonPerCubicCentimeter>();
+    check_fixed_rescale::<unit::specific_weight::KilonewtonPerCubicCentimeter>();
+    check_fixed::<unit::specific_weight::NewtonPerCubicMeter>();
+    check_fixed_rescale::<unit::specific_weight::NewtonPerCubicMeter>();
+    check_fixed::<unit::specific_weight::KilonewtonPerCubicMeter>();
+    check_fixed_rescale::<unit::specific_weight::KilonewtonPerCubicMeter>();
+    check_fixed::<unit::specific_weight::MeganewtonPerCubicMeter>();
+    check_fixed_rescale::<unit::specific_weight::MeganewtonPerCubicMeter>();
+    check_fixed::<unit::specific_weight::KilogramForcePerCubicMillimeter>();
+    check_fixed_rescale::<unit::specific_weight::KilogramForcePerCubicMillimeter>();
+    check_fixed::<unit::specific_weight::KilogramForcePerCubicCentimeter>();
+    check_fixed_rescale::<unit::specific_weight::KilogramForcePerCubicCentimeter>();
+    check_fixed::<unit::specific_weight::KilogramForcePerCubicMeter>();
+    check_fixed_rescale::<unit::specific_weight::KilogramForcePerCubicMeter>();
+    check_fixed::<unit::specific_weight::PoundForcePerCubicInch>();
+    check_fixed_rescale::<unit::specific_weight::PoundForcePerCubicInch>();
+    check_fixed::<unit::specific_weight::KilopoundForcePerCubicInch>();
+    check_fixed_rescale::<unit::specific_weight::KilopoundForcePerCubicInch>();
+    check_fixed::<unit::specific_weight::PoundForcePerCubicFoot>();
+    check_fixed_rescale::<unit::specific_weight::PoundForcePerCubicFoot>();
+    check_fixed::<unit::specific_weight::KilopoundForcePerCubicFoot>();
+    check_fixed_rescale::<unit::specific_weight::KilopoundForcePerCubicFoot>();
+    check_fixed::<unit::specific_weight::TonneForcePerCubicMillimeter>();
+    check_fixed_rescale::<unit::specific_weight::TonneForcePerCubicMillimeter>();
+    check_fixed::<unit::specific_weight::TonneForcePerCubicCentimeter>();
+    check_fixed_rescale::<unit::specific_weight::TonneForcePerCubicCentimeter>();
+    check_fixed::<unit::specific_weight::TonneForcePerCubicMeter>();
+    check_fixed_rescale::<unit::specific_weight::TonneForcePerCubicMeter>();
 }
 
 #[test]

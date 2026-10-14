@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -344,6 +344,28 @@ fn kilobtus_per_square_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::irradiation::JoulePerSquareMeter>();
+    check_fixed_rescale::<unit::irradiation::JoulePerSquareMeter>();
+    check_fixed::<unit::irradiation::KilojoulePerSquareMeter>();
+    check_fixed_rescale::<unit::irradiation::KilojoulePerSquareMeter>();
+    check_fixed::<unit::irradiation::JoulePerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiation::JoulePerSquareCentimeter>();
+    check_fixed::<unit::irradiation::MillijoulePerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiation::MillijoulePerSquareCentimeter>();
+    check_fixed::<unit::irradiation::JoulePerSquareMillimeter>();
+    check_fixed_rescale::<unit::irradiation::JoulePerSquareMillimeter>();
+    check_fixed::<unit::irradiation::WattHourPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiation::WattHourPerSquareMeter>();
+    check_fixed::<unit::irradiation::KilowattHourPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiation::KilowattHourPerSquareMeter>();
+    check_fixed::<unit::irradiation::BtuPerSquareFoot>();
+    check_fixed_rescale::<unit::irradiation::BtuPerSquareFoot>();
+    check_fixed::<unit::irradiation::KilobtuPerSquareFoot>();
+    check_fixed_rescale::<unit::irradiation::KilobtuPerSquareFoot>();
 }
 
 #[test]

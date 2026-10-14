@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1824,6 +1824,108 @@ fn pounds_per_imperial_gallon() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass_concentration::GramPerCubicMillimeter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerCubicMillimeter>();
+    check_fixed::<unit::mass_concentration::KilogramPerCubicMillimeter>();
+    check_fixed_rescale::<unit::mass_concentration::KilogramPerCubicMillimeter>();
+    check_fixed::<unit::mass_concentration::GramPerCubicCentimeter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerCubicCentimeter>();
+    check_fixed::<unit::mass_concentration::KilogramPerCubicCentimeter>();
+    check_fixed_rescale::<unit::mass_concentration::KilogramPerCubicCentimeter>();
+    check_fixed::<unit::mass_concentration::GramPerCubicMeter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerCubicMeter>();
+    check_fixed::<unit::mass_concentration::KilogramPerCubicMeter>();
+    check_fixed_rescale::<unit::mass_concentration::KilogramPerCubicMeter>();
+    check_fixed::<unit::mass_concentration::MilligramPerCubicMeter>();
+    check_fixed_rescale::<unit::mass_concentration::MilligramPerCubicMeter>();
+    check_fixed::<unit::mass_concentration::MicrogramPerCubicMeter>();
+    check_fixed_rescale::<unit::mass_concentration::MicrogramPerCubicMeter>();
+    check_fixed::<unit::mass_concentration::GramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::PicogramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::PicogramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::NanogramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::NanogramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::MicrogramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::MicrogramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::MilligramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::MilligramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::CentigramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::CentigramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::DecigramPerMicroliter>();
+    check_fixed_rescale::<unit::mass_concentration::DecigramPerMicroliter>();
+    check_fixed::<unit::mass_concentration::GramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::PicogramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::PicogramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::NanogramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::NanogramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::MicrogramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::MicrogramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::MilligramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::MilligramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::CentigramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::CentigramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::DecigramPerMilliliter>();
+    check_fixed_rescale::<unit::mass_concentration::DecigramPerMilliliter>();
+    check_fixed::<unit::mass_concentration::GramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::PicogramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::PicogramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::NanogramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::NanogramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::MicrogramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::MicrogramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::MilligramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::MilligramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::CentigramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::CentigramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::DecigramPerDeciliter>();
+    check_fixed_rescale::<unit::mass_concentration::DecigramPerDeciliter>();
+    check_fixed::<unit::mass_concentration::GramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::GramPerLiter>();
+    check_fixed::<unit::mass_concentration::PicogramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::PicogramPerLiter>();
+    check_fixed::<unit::mass_concentration::NanogramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::NanogramPerLiter>();
+    check_fixed::<unit::mass_concentration::MicrogramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::MicrogramPerLiter>();
+    check_fixed::<unit::mass_concentration::MilligramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::MilligramPerLiter>();
+    check_fixed::<unit::mass_concentration::CentigramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::CentigramPerLiter>();
+    check_fixed::<unit::mass_concentration::DecigramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::DecigramPerLiter>();
+    check_fixed::<unit::mass_concentration::KilogramPerLiter>();
+    check_fixed_rescale::<unit::mass_concentration::KilogramPerLiter>();
+    check_fixed::<unit::mass_concentration::TonnePerCubicMillimeter>();
+    check_fixed_rescale::<unit::mass_concentration::TonnePerCubicMillimeter>();
+    check_fixed::<unit::mass_concentration::TonnePerCubicCentimeter>();
+    check_fixed_rescale::<unit::mass_concentration::TonnePerCubicCentimeter>();
+    check_fixed::<unit::mass_concentration::TonnePerCubicMeter>();
+    check_fixed_rescale::<unit::mass_concentration::TonnePerCubicMeter>();
+    check_fixed::<unit::mass_concentration::PoundPerCubicInch>();
+    check_fixed_rescale::<unit::mass_concentration::PoundPerCubicInch>();
+    check_fixed::<unit::mass_concentration::KilopoundPerCubicInch>();
+    check_fixed_rescale::<unit::mass_concentration::KilopoundPerCubicInch>();
+    check_fixed::<unit::mass_concentration::PoundPerCubicFoot>();
+    check_fixed_rescale::<unit::mass_concentration::PoundPerCubicFoot>();
+    check_fixed::<unit::mass_concentration::KilopoundPerCubicFoot>();
+    check_fixed_rescale::<unit::mass_concentration::KilopoundPerCubicFoot>();
+    check_fixed::<unit::mass_concentration::SlugPerCubicFoot>();
+    check_fixed_rescale::<unit::mass_concentration::SlugPerCubicFoot>();
+    check_fixed::<unit::mass_concentration::PoundPerUSGallon>();
+    check_fixed_rescale::<unit::mass_concentration::PoundPerUSGallon>();
+    check_fixed::<unit::mass_concentration::OuncePerUSGallon>();
+    check_fixed_rescale::<unit::mass_concentration::OuncePerUSGallon>();
+    check_fixed::<unit::mass_concentration::OuncePerImperialGallon>();
+    check_fixed_rescale::<unit::mass_concentration::OuncePerImperialGallon>();
+    check_fixed::<unit::mass_concentration::PoundPerImperialGallon>();
+    check_fixed_rescale::<unit::mass_concentration::PoundPerImperialGallon>();
 }
 
 #[test]

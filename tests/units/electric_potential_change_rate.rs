@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -757,6 +757,50 @@ fn megavolts_per_hour() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_potential_change_rate::VoltPerSecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::VoltPerSecond>();
+    check_fixed::<unit::electric_potential_change_rate::MicrovoltPerSecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MicrovoltPerSecond>();
+    check_fixed::<unit::electric_potential_change_rate::MillivoltPerSecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MillivoltPerSecond>();
+    check_fixed::<unit::electric_potential_change_rate::KilovoltPerSecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::KilovoltPerSecond>();
+    check_fixed::<unit::electric_potential_change_rate::MegavoltPerSecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MegavoltPerSecond>();
+    check_fixed::<unit::electric_potential_change_rate::VoltPerMicrosecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::VoltPerMicrosecond>();
+    check_fixed::<unit::electric_potential_change_rate::MicrovoltPerMicrosecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MicrovoltPerMicrosecond>();
+    check_fixed::<unit::electric_potential_change_rate::MillivoltPerMicrosecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MillivoltPerMicrosecond>();
+    check_fixed::<unit::electric_potential_change_rate::KilovoltPerMicrosecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::KilovoltPerMicrosecond>();
+    check_fixed::<unit::electric_potential_change_rate::MegavoltPerMicrosecond>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MegavoltPerMicrosecond>();
+    check_fixed::<unit::electric_potential_change_rate::VoltPerMinute>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::VoltPerMinute>();
+    check_fixed::<unit::electric_potential_change_rate::MicrovoltPerMinute>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MicrovoltPerMinute>();
+    check_fixed::<unit::electric_potential_change_rate::MillivoltPerMinute>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MillivoltPerMinute>();
+    check_fixed::<unit::electric_potential_change_rate::KilovoltPerMinute>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::KilovoltPerMinute>();
+    check_fixed::<unit::electric_potential_change_rate::MegavoltPerMinute>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MegavoltPerMinute>();
+    check_fixed::<unit::electric_potential_change_rate::VoltPerHour>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::VoltPerHour>();
+    check_fixed::<unit::electric_potential_change_rate::MicrovoltPerHour>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MicrovoltPerHour>();
+    check_fixed::<unit::electric_potential_change_rate::MillivoltPerHour>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MillivoltPerHour>();
+    check_fixed::<unit::electric_potential_change_rate::KilovoltPerHour>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::KilovoltPerHour>();
+    check_fixed::<unit::electric_potential_change_rate::MegavoltPerHour>();
+    check_fixed_rescale::<unit::electric_potential_change_rate::MegavoltPerHour>();
 }
 
 #[test]

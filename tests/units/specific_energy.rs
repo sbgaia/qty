@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1119,6 +1119,70 @@ fn btu_per_pound() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::specific_energy::JoulePerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::JoulePerKilogram>();
+    check_fixed::<unit::specific_energy::KilojoulePerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::KilojoulePerKilogram>();
+    check_fixed::<unit::specific_energy::MegajoulePerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::MegajoulePerKilogram>();
+    check_fixed::<unit::specific_energy::MegajoulePerTonne>();
+    check_fixed_rescale::<unit::specific_energy::MegajoulePerTonne>();
+    check_fixed::<unit::specific_energy::CaloriePerGram>();
+    check_fixed_rescale::<unit::specific_energy::CaloriePerGram>();
+    check_fixed::<unit::specific_energy::KilocaloriePerGram>();
+    check_fixed_rescale::<unit::specific_energy::KilocaloriePerGram>();
+    check_fixed::<unit::specific_energy::WattHourPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::WattHourPerKilogram>();
+    check_fixed::<unit::specific_energy::KilowattHourPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::KilowattHourPerKilogram>();
+    check_fixed::<unit::specific_energy::MegawattHourPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::MegawattHourPerKilogram>();
+    check_fixed::<unit::specific_energy::GigawattHourPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::GigawattHourPerKilogram>();
+    check_fixed::<unit::specific_energy::WattDayPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::WattDayPerKilogram>();
+    check_fixed::<unit::specific_energy::KilowattDayPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::KilowattDayPerKilogram>();
+    check_fixed::<unit::specific_energy::MegawattDayPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::MegawattDayPerKilogram>();
+    check_fixed::<unit::specific_energy::GigawattDayPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::GigawattDayPerKilogram>();
+    check_fixed::<unit::specific_energy::TerawattDayPerKilogram>();
+    check_fixed_rescale::<unit::specific_energy::TerawattDayPerKilogram>();
+    check_fixed::<unit::specific_energy::WattDayPerTonne>();
+    check_fixed_rescale::<unit::specific_energy::WattDayPerTonne>();
+    check_fixed::<unit::specific_energy::KilowattDayPerTonne>();
+    check_fixed_rescale::<unit::specific_energy::KilowattDayPerTonne>();
+    check_fixed::<unit::specific_energy::MegawattDayPerTonne>();
+    check_fixed_rescale::<unit::specific_energy::MegawattDayPerTonne>();
+    check_fixed::<unit::specific_energy::GigawattDayPerTonne>();
+    check_fixed_rescale::<unit::specific_energy::GigawattDayPerTonne>();
+    check_fixed::<unit::specific_energy::TerawattDayPerTonne>();
+    check_fixed_rescale::<unit::specific_energy::TerawattDayPerTonne>();
+    check_fixed::<unit::specific_energy::WattDayPerShortTon>();
+    check_fixed_rescale::<unit::specific_energy::WattDayPerShortTon>();
+    check_fixed::<unit::specific_energy::KilowattDayPerShortTon>();
+    check_fixed_rescale::<unit::specific_energy::KilowattDayPerShortTon>();
+    check_fixed::<unit::specific_energy::MegawattDayPerShortTon>();
+    check_fixed_rescale::<unit::specific_energy::MegawattDayPerShortTon>();
+    check_fixed::<unit::specific_energy::GigawattDayPerShortTon>();
+    check_fixed_rescale::<unit::specific_energy::GigawattDayPerShortTon>();
+    check_fixed::<unit::specific_energy::TerawattDayPerShortTon>();
+    check_fixed_rescale::<unit::specific_energy::TerawattDayPerShortTon>();
+    check_fixed::<unit::specific_energy::WattHourPerPound>();
+    check_fixed_rescale::<unit::specific_energy::WattHourPerPound>();
+    check_fixed::<unit::specific_energy::KilowattHourPerPound>();
+    check_fixed_rescale::<unit::specific_energy::KilowattHourPerPound>();
+    check_fixed::<unit::specific_energy::MegawattHourPerPound>();
+    check_fixed_rescale::<unit::specific_energy::MegawattHourPerPound>();
+    check_fixed::<unit::specific_energy::GigawattHourPerPound>();
+    check_fixed_rescale::<unit::specific_energy::GigawattHourPerPound>();
+    check_fixed::<unit::specific_energy::BtuPerPound>();
+    check_fixed_rescale::<unit::specific_energy::BtuPerPound>();
 }
 
 #[test]

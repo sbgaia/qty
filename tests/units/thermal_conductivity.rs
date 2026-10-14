@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -122,6 +122,16 @@ fn btus_per_second_inch_fahrenheit() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::thermal_conductivity::WattPerMeterKelvin>();
+    check_fixed_rescale::<unit::thermal_conductivity::WattPerMeterKelvin>();
+    check_fixed::<unit::thermal_conductivity::BtuPerHourFootFahrenheit>();
+    check_fixed_rescale::<unit::thermal_conductivity::BtuPerHourFootFahrenheit>();
+    check_fixed::<unit::thermal_conductivity::BtuPerSecondInchFahrenheit>();
+    check_fixed_rescale::<unit::thermal_conductivity::BtuPerSecondInchFahrenheit>();
 }
 
 #[test]

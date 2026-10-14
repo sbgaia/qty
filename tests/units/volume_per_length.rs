@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -343,6 +343,28 @@ fn imperial_gallons_per_mile() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::volume_per_length::CubicMeterPerMeter>();
+    check_fixed_rescale::<unit::volume_per_length::CubicMeterPerMeter>();
+    check_fixed::<unit::volume_per_length::LiterPerMeter>();
+    check_fixed_rescale::<unit::volume_per_length::LiterPerMeter>();
+    check_fixed::<unit::volume_per_length::LiterPerKilometer>();
+    check_fixed_rescale::<unit::volume_per_length::LiterPerKilometer>();
+    check_fixed::<unit::volume_per_length::LiterPerMillimeter>();
+    check_fixed_rescale::<unit::volume_per_length::LiterPerMillimeter>();
+    check_fixed::<unit::volume_per_length::OilBarrelPerFoot>();
+    check_fixed_rescale::<unit::volume_per_length::OilBarrelPerFoot>();
+    check_fixed::<unit::volume_per_length::CubicYardPerFoot>();
+    check_fixed_rescale::<unit::volume_per_length::CubicYardPerFoot>();
+    check_fixed::<unit::volume_per_length::CubicYardPerUsSurveyFoot>();
+    check_fixed_rescale::<unit::volume_per_length::CubicYardPerUsSurveyFoot>();
+    check_fixed::<unit::volume_per_length::UsGallonPerMile>();
+    check_fixed_rescale::<unit::volume_per_length::UsGallonPerMile>();
+    check_fixed::<unit::volume_per_length::ImperialGallonPerMile>();
+    check_fixed_rescale::<unit::volume_per_length::ImperialGallonPerMile>();
 }
 
 #[test]

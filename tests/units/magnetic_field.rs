@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -195,6 +195,22 @@ fn milligausses() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::magnetic_field::Tesla>();
+    check_fixed_rescale::<unit::magnetic_field::Tesla>();
+    check_fixed::<unit::magnetic_field::Nanotesla>();
+    check_fixed_rescale::<unit::magnetic_field::Nanotesla>();
+    check_fixed::<unit::magnetic_field::Microtesla>();
+    check_fixed_rescale::<unit::magnetic_field::Microtesla>();
+    check_fixed::<unit::magnetic_field::Millitesla>();
+    check_fixed_rescale::<unit::magnetic_field::Millitesla>();
+    check_fixed::<unit::magnetic_field::Gauss>();
+    check_fixed_rescale::<unit::magnetic_field::Gauss>();
+    check_fixed::<unit::magnetic_field::Milligauss>();
+    check_fixed_rescale::<unit::magnetic_field::Milligauss>();
 }
 
 #[test]

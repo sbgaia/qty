@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -462,6 +462,36 @@ fn slug_feet_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::impulse::KilogramMeterPerSecond>();
+    check_fixed_rescale::<unit::impulse::KilogramMeterPerSecond>();
+    check_fixed::<unit::impulse::NewtonSecond>();
+    check_fixed_rescale::<unit::impulse::NewtonSecond>();
+    check_fixed::<unit::impulse::NanonewtonSecond>();
+    check_fixed_rescale::<unit::impulse::NanonewtonSecond>();
+    check_fixed::<unit::impulse::MicronewtonSecond>();
+    check_fixed_rescale::<unit::impulse::MicronewtonSecond>();
+    check_fixed::<unit::impulse::MillinewtonSecond>();
+    check_fixed_rescale::<unit::impulse::MillinewtonSecond>();
+    check_fixed::<unit::impulse::CentinewtonSecond>();
+    check_fixed_rescale::<unit::impulse::CentinewtonSecond>();
+    check_fixed::<unit::impulse::DecinewtonSecond>();
+    check_fixed_rescale::<unit::impulse::DecinewtonSecond>();
+    check_fixed::<unit::impulse::DecanewtonSecond>();
+    check_fixed_rescale::<unit::impulse::DecanewtonSecond>();
+    check_fixed::<unit::impulse::KilonewtonSecond>();
+    check_fixed_rescale::<unit::impulse::KilonewtonSecond>();
+    check_fixed::<unit::impulse::MeganewtonSecond>();
+    check_fixed_rescale::<unit::impulse::MeganewtonSecond>();
+    check_fixed::<unit::impulse::PoundFootPerSecond>();
+    check_fixed_rescale::<unit::impulse::PoundFootPerSecond>();
+    check_fixed::<unit::impulse::PoundForceSecond>();
+    check_fixed_rescale::<unit::impulse::PoundForceSecond>();
+    check_fixed::<unit::impulse::SlugFootPerSecond>();
+    check_fixed_rescale::<unit::impulse::SlugFootPerSecond>();
 }
 
 #[test]

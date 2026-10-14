@@ -160,3 +160,14 @@ impl<T: Float> SpecificVolume<T> {
         self.as_cubic_feet_per_pound()
     }
 }
+
+fixed_base!(SpecificVolume, CubicMeterPerKilogram);
+
+/// Unit markers for counting [`SpecificVolume`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::specific_volume`](crate::unit::specific_volume). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(CubicMeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMeterPerKilogram, base CubicMeterPerKilogram, 1 / 1, pi^0, from_cubic_meters_per_kilogram, as_cubic_meters_per_kilogram);
+    fixed_unit!(CubicMillimeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMillimeterPerKilogram, base CubicMeterPerKilogram, 1 / 1000000000, pi^0, from_cubic_millimeters_per_kilogram, as_cubic_millimeters_per_kilogram);
+    fixed_unit!(CubicFootPerPound: SpecificVolume, SpecificVolumeUnit::CubicFootPerPound, base CubicMeterPerKilogram, 1769802912 / 28349523125, pi^0, from_cubic_feet_per_pound, as_cubic_feet_per_pound);
+}

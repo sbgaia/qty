@@ -295,3 +295,213 @@ fn serde_is_transparent() {
         "\"Kilometer\""
     );
 }
+
+// ── Integers in a chosen unit, rounding, ordering ─────────────────────────────
+
+mod fixed {
+    use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
+
+    use unitsnet_rs::unit::duration::{Microsecond, Millisecond, Second};
+    use unitsnet_rs::unit::length::{Inch, Meter, Millimeter};
+    use unitsnet_rs::*;
+
+    #[test]
+    fn layout_and_arithmetic_are_those_of_the_integer() {
+        assert_eq!(std::mem::size_of::<Fixed<Millimeter>>(), 8);
+        assert_eq!(std::mem::size_of::<Fixed<Millimeter, u16>>(), 2);
+
+        let a = Fixed::<Millimeter>::new(1_250);
+        let b = Fixed::<Millimeter>::new(300);
+        assert_eq!(a + b, Fixed::new(1_550));
+        assert_eq!(a - b, Fixed::new(950));
+        assert_eq!(-a, Fixed::new(-1_250));
+        assert_eq!(a * 2, Fixed::new(2_500));
+        assert_eq!(2 * a, Fixed::new(2_500));
+        assert_eq!(a / 3, Fixed::new(416)); // truncates, like integers
+        assert_eq!(a / b, 4);
+        assert_eq!(a % b, Fixed::new(50));
+        let mut c = a;
+        c += b;
+        c -= b;
+        c *= 4;
+        c /= 2;
+        assert_eq!(c, Fixed::new(2_500));
+        assert_eq!([a, b].iter().sum::<Fixed<Millimeter>>(), Fixed::new(1_550));
+        assert_eq!(a.count(), 1_250);
+    }
+
+    #[test]
+    fn keys_in_hash_and_tree_collections() {
+        let mut stock: HashMap<Fixed<Millimeter>, u32> = HashMap::new();
+        *stock.entry(Fixed::new(600)).or_default() += 2;
+        *stock.entry(Fixed::new(600)).or_default() += 1;
+        assert_eq!(stock[&Fixed::new(600)], 3);
+
+        let sorted: BTreeSet<_> = [300, 100, 200].map(Fixed::<Millimeter>::new).into();
+        assert_eq!(sorted.first(), Some(&Fixed::new(100)));
+    }
+
+    #[test]
+    fn rounding_from_floats() {
+        let r = |m: f64, mode| Fixed::<Millimeter>::round_from(Length::from_meters(m), mode);
+        assert_eq!(r(0.0125, Rounding::NearestTiesEven), Ok(Fixed::new(12)));
+        assert_eq!(r(0.0125, Rounding::NearestTiesAway), Ok(Fixed::new(13)));
+        assert_eq!(r(0.0127, Rounding::Floor), Ok(Fixed::new(12)));
+        assert_eq!(r(-0.0121, Rounding::Floor), Ok(Fixed::new(-13)));
+        assert_eq!(r(0.0121, Rounding::Ceil), Ok(Fixed::new(13)));
+        assert_eq!(r(0.012, Rounding::Exact), Ok(Fixed::new(12)));
+        assert_eq!(r(0.0121, Rounding::Exact), Err(RoundError::Inexact));
+        assert_eq!(r(f64::NAN, Rounding::Floor), Err(RoundError::NotFinite));
+        assert_eq!(
+            Fixed::<Millimeter, i16>::round_from(Length::from_meters(40.0), Rounding::Floor),
+            Err(RoundError::Overflow)
+        );
+        // A float count in the unit itself: ties are seen exactly.
+        assert_eq!(
+            Fixed::<Millimeter>::round_from_count(2.5, Rounding::NearestTiesEven),
+            Ok(Fixed::new(2))
+        );
+        // Base-unit integer quantities round too.
+        assert_eq!(
+            Length::<i64>::round_from(Length::from_centimeters(250.0), Rounding::NearestTiesEven),
+            Ok(Length::from_base(2))
+        );
+    }
+
+    #[test]
+    fn converting_between_units() {
+        // Exact direction: no rounding argument, only overflow can fail.
+        assert_eq!(
+            Fixed::<Second>::new(3).to_unit::<Millisecond>(),
+            Ok(Fixed::new(3_000))
+        );
+        assert_eq!(
+            Fixed::<Second, i32>::new(3_000_000).to_unit::<Microsecond>(),
+            Err(RoundError::Overflow)
+        );
+        // Lossy direction: explicit rounding.
+        let t = Fixed::<Millisecond>::new(2_500);
+        assert_eq!(
+            t.to_unit_rounded::<Second>(Rounding::NearestTiesEven),
+            Ok(Fixed::new(2))
+        );
+        assert_eq!(
+            t.to_unit_rounded::<Second>(Rounding::Ceil),
+            Ok(Fixed::new(3))
+        );
+        assert_eq!(
+            t.to_unit_rounded::<Second>(Rounding::Exact),
+            Err(RoundError::Inexact)
+        );
+        // Non-integer ratios (1 in = 25.4 mm) are exact rational arithmetic.
+        assert_eq!(
+            Fixed::<Millimeter>::new(127).to_unit_rounded::<Inch>(Rounding::Exact),
+            Ok(Fixed::new(5))
+        );
+        assert_eq!(
+            Fixed::<Inch>::new(1).to_unit_rounded::<Millimeter>(Rounding::Floor),
+            Ok(Fixed::new(25))
+        );
+    }
+
+    #[test]
+    fn rounded_division_and_overflow_helpers() {
+        let a = Fixed::<Millimeter>::new(10);
+        assert_eq!(
+            a.div_rounded(4, Rounding::NearestTiesEven),
+            Ok(Fixed::new(2))
+        );
+        assert_eq!(
+            a.div_rounded(4, Rounding::NearestTiesAway),
+            Ok(Fixed::new(3))
+        );
+        assert_eq!(
+            a.div_rounded(0, Rounding::Floor),
+            Err(RoundError::DivisionByZero)
+        );
+        assert_eq!(a.ratio_rounded(Fixed::new(4), Rounding::Ceil), Ok(3));
+        let max = Fixed::<Millimeter, u8>::new(250);
+        assert_eq!(max.checked_add(Fixed::new(10)), None);
+        assert_eq!(max.saturating_add(Fixed::new(10)), Fixed::new(255));
+        assert_eq!(max.checked_mul(2), None);
+    }
+
+    #[test]
+    fn bridges_to_floats_and_base_quantities() {
+        let a = Fixed::<Millimeter>::new(1_250);
+        assert_eq!(a.to_f64(), Length::from_meters(1.25));
+        assert_eq!(a.to_f32(), Length::from_meters(1.25_f32));
+        // Fixed<Meter, I> and Length<I> are the same thing.
+        let l: Length<i64> = Fixed::<Meter>::new(3).into();
+        assert_eq!(l, Length::from_base(3));
+        let back: Fixed<Meter> = l.into();
+        assert_eq!(back.to_unit::<Millimeter>(), Ok(Fixed::new(3_000)));
+        // `to_f64` on any quantity, no unwrapping.
+        assert_eq!(
+            Length::<i64>::from_base(3).to_f64(),
+            Length::from_meters(3.0)
+        );
+        assert_eq!(
+            Length::from_meters(1.5_f32).to_f64(),
+            Length::from_meters(1.5)
+        );
+    }
+
+    #[test]
+    fn display_and_parse() {
+        let a = Fixed::<Millimeter>::new(1_550);
+        assert_eq!(a.to_string(), "1550 mm");
+        assert_eq!(format!("{a:>6}"), "  1550 mm");
+        assert_eq!(format!("{a:?}"), "1550 mm");
+        assert_eq!("1550 mm".parse(), Ok(a));
+        assert_eq!("1550mm".parse(), Ok(a));
+        assert_eq!(
+            "1550 m".parse::<Fixed<Millimeter>>(),
+            Err(ParseError::UnknownUnit)
+        );
+        assert_eq!(
+            "15.5 mm".parse::<Fixed<Millimeter>>(),
+            Err(ParseError::InvalidNumber)
+        );
+    }
+
+    #[test]
+    fn zero_copy_count_slices() {
+        let raw = [1, 2, 3];
+        let typed = Fixed::<Millisecond>::from_count_slice(&raw);
+        assert_eq!(typed.iter().sum::<Fixed<Millisecond>>(), Fixed::new(6));
+        assert_eq!(Fixed::as_count_slice(typed), &raw);
+    }
+
+    #[test]
+    fn float_keys_and_sorting() {
+        // Sorting floats: total order.
+        let mut v = [
+            Length::from_meters(2.0),
+            Length::from_inches(1.0),
+            Length::from_meters(f64::NAN),
+        ];
+        v.sort_by(Length::total_cmp);
+        assert_eq!(v[0], Length::from_inches(1.0));
+        assert!(v[2].as_base().is_nan());
+
+        // Float keys: Ordered gives Eq + Ord + Hash.
+        let mut m = HashMap::new();
+        m.insert(Ordered(Length::from_meters(0.0)), "zero");
+        assert_eq!(m[&Ordered(Length::from_meters(-0.0))], "zero"); // -0.0 == 0.0
+        m.insert(Ordered(Length::from_meters(f64::NAN)), "nan");
+        assert_eq!(m[&Ordered(Length::from_meters(-f64::NAN))], "nan"); // all NaNs are one key
+
+        let tree: BTreeMap<Ordered<Length>, &str> = [
+            (Ordered(Length::from_kilometers(1.0)), "km"),
+            (Ordered(Length::from_meters(1.0)), "m"),
+        ]
+        .into();
+        assert_eq!(tree.values().copied().collect::<Vec<_>>(), ["m", "km"]);
+
+        let set: HashSet<Ordered<Length<f32>>> = [1.0_f32, 1.0, 2.0]
+            .map(|m| Ordered(Length::from_meters(m)))
+            .into();
+        assert_eq!(set.len(), 2);
+    }
+}

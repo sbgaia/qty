@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -377,6 +377,33 @@ fn per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::frequency::Hertz>();
+    check_fixed_rescale::<unit::frequency::Hertz>();
+    check_fixed::<unit::frequency::Microhertz>();
+    check_fixed_rescale::<unit::frequency::Microhertz>();
+    check_fixed::<unit::frequency::Millihertz>();
+    check_fixed_rescale::<unit::frequency::Millihertz>();
+    check_fixed::<unit::frequency::Kilohertz>();
+    check_fixed_rescale::<unit::frequency::Kilohertz>();
+    check_fixed::<unit::frequency::Megahertz>();
+    check_fixed_rescale::<unit::frequency::Megahertz>();
+    check_fixed::<unit::frequency::Gigahertz>();
+    check_fixed_rescale::<unit::frequency::Gigahertz>();
+    check_fixed::<unit::frequency::Terahertz>();
+    check_fixed_rescale::<unit::frequency::Terahertz>();
+    check_fixed::<unit::frequency::RadianPerSecond>();
+    check_fixed::<unit::frequency::CyclePerMinute>();
+    check_fixed_rescale::<unit::frequency::CyclePerMinute>();
+    check_fixed::<unit::frequency::CyclePerHour>();
+    check_fixed_rescale::<unit::frequency::CyclePerHour>();
+    check_fixed::<unit::frequency::BeatPerMinute>();
+    check_fixed_rescale::<unit::frequency::BeatPerMinute>();
+    check_fixed::<unit::frequency::PerSecond>();
+    check_fixed_rescale::<unit::frequency::PerSecond>();
 }
 
 #[test]

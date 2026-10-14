@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -934,6 +934,60 @@ fn gigawatts_per_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::linear_power_density::WattPerMeter>();
+    check_fixed_rescale::<unit::linear_power_density::WattPerMeter>();
+    check_fixed::<unit::linear_power_density::MilliwattPerMeter>();
+    check_fixed_rescale::<unit::linear_power_density::MilliwattPerMeter>();
+    check_fixed::<unit::linear_power_density::KilowattPerMeter>();
+    check_fixed_rescale::<unit::linear_power_density::KilowattPerMeter>();
+    check_fixed::<unit::linear_power_density::MegawattPerMeter>();
+    check_fixed_rescale::<unit::linear_power_density::MegawattPerMeter>();
+    check_fixed::<unit::linear_power_density::GigawattPerMeter>();
+    check_fixed_rescale::<unit::linear_power_density::GigawattPerMeter>();
+    check_fixed::<unit::linear_power_density::WattPerCentimeter>();
+    check_fixed_rescale::<unit::linear_power_density::WattPerCentimeter>();
+    check_fixed::<unit::linear_power_density::MilliwattPerCentimeter>();
+    check_fixed_rescale::<unit::linear_power_density::MilliwattPerCentimeter>();
+    check_fixed::<unit::linear_power_density::KilowattPerCentimeter>();
+    check_fixed_rescale::<unit::linear_power_density::KilowattPerCentimeter>();
+    check_fixed::<unit::linear_power_density::MegawattPerCentimeter>();
+    check_fixed_rescale::<unit::linear_power_density::MegawattPerCentimeter>();
+    check_fixed::<unit::linear_power_density::GigawattPerCentimeter>();
+    check_fixed_rescale::<unit::linear_power_density::GigawattPerCentimeter>();
+    check_fixed::<unit::linear_power_density::WattPerMillimeter>();
+    check_fixed_rescale::<unit::linear_power_density::WattPerMillimeter>();
+    check_fixed::<unit::linear_power_density::MilliwattPerMillimeter>();
+    check_fixed_rescale::<unit::linear_power_density::MilliwattPerMillimeter>();
+    check_fixed::<unit::linear_power_density::KilowattPerMillimeter>();
+    check_fixed_rescale::<unit::linear_power_density::KilowattPerMillimeter>();
+    check_fixed::<unit::linear_power_density::MegawattPerMillimeter>();
+    check_fixed_rescale::<unit::linear_power_density::MegawattPerMillimeter>();
+    check_fixed::<unit::linear_power_density::GigawattPerMillimeter>();
+    check_fixed_rescale::<unit::linear_power_density::GigawattPerMillimeter>();
+    check_fixed::<unit::linear_power_density::WattPerInch>();
+    check_fixed_rescale::<unit::linear_power_density::WattPerInch>();
+    check_fixed::<unit::linear_power_density::MilliwattPerInch>();
+    check_fixed_rescale::<unit::linear_power_density::MilliwattPerInch>();
+    check_fixed::<unit::linear_power_density::KilowattPerInch>();
+    check_fixed_rescale::<unit::linear_power_density::KilowattPerInch>();
+    check_fixed::<unit::linear_power_density::MegawattPerInch>();
+    check_fixed_rescale::<unit::linear_power_density::MegawattPerInch>();
+    check_fixed::<unit::linear_power_density::GigawattPerInch>();
+    check_fixed_rescale::<unit::linear_power_density::GigawattPerInch>();
+    check_fixed::<unit::linear_power_density::WattPerFoot>();
+    check_fixed_rescale::<unit::linear_power_density::WattPerFoot>();
+    check_fixed::<unit::linear_power_density::MilliwattPerFoot>();
+    check_fixed_rescale::<unit::linear_power_density::MilliwattPerFoot>();
+    check_fixed::<unit::linear_power_density::KilowattPerFoot>();
+    check_fixed_rescale::<unit::linear_power_density::KilowattPerFoot>();
+    check_fixed::<unit::linear_power_density::MegawattPerFoot>();
+    check_fixed_rescale::<unit::linear_power_density::MegawattPerFoot>();
+    check_fixed::<unit::linear_power_density::GigawattPerFoot>();
+    check_fixed_rescale::<unit::linear_power_density::GigawattPerFoot>();
 }
 
 #[test]

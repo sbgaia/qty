@@ -335,3 +335,21 @@ impl<T: Float> DynamicViscosity<T> {
         self.as_pounds_per_foot_second()
     }
 }
+
+fixed_base!(DynamicViscosity, NewtonSecondPerMeterSquared);
+
+/// Unit markers for counting [`DynamicViscosity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(NewtonSecondPerMeterSquared: DynamicViscosity, DynamicViscosityUnit::NewtonSecondPerMeterSquared, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_newton_seconds_per_meter_squared, as_newton_seconds_per_meter_squared);
+    fixed_unit!(PascalSecond: DynamicViscosity, DynamicViscosityUnit::PascalSecond, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_pascal_seconds, as_pascal_seconds);
+    fixed_unit!(MillipascalSecond: DynamicViscosity, DynamicViscosityUnit::MillipascalSecond, base NewtonSecondPerMeterSquared, 1 / 1000, pi^0, from_millipascal_seconds, as_millipascal_seconds);
+    fixed_unit!(MicropascalSecond: DynamicViscosity, DynamicViscosityUnit::MicropascalSecond, base NewtonSecondPerMeterSquared, 1 / 1000000, pi^0, from_micropascal_seconds, as_micropascal_seconds);
+    fixed_unit!(Poise: DynamicViscosity, DynamicViscosityUnit::Poise, base NewtonSecondPerMeterSquared, 1 / 10, pi^0, from_poise, as_poise);
+    fixed_unit!(Centipoise: DynamicViscosity, DynamicViscosityUnit::Centipoise, base NewtonSecondPerMeterSquared, 1 / 1000, pi^0, from_centipoise, as_centipoise);
+    fixed_unit!(Reyn: DynamicViscosity, DynamicViscosityUnit::Reyn, base NewtonSecondPerMeterSquared, 8896443230521 / 1290320000, pi^0, from_reyns, as_reyns);
+    fixed_unit!(PoundForceSecondPerSquareInch: DynamicViscosity, DynamicViscosityUnit::PoundForceSecondPerSquareInch, base NewtonSecondPerMeterSquared, 8896443230521 / 1290320000, pi^0, from_pounds_force_second_per_square_inch, as_pounds_force_second_per_square_inch);
+    fixed_unit!(PoundForceSecondPerSquareFoot: DynamicViscosity, DynamicViscosityUnit::PoundForceSecondPerSquareFoot, base NewtonSecondPerMeterSquared, 8896443230521 / 185806080000, pi^0, from_pounds_force_second_per_square_foot, as_pounds_force_second_per_square_foot);
+    fixed_unit!(PoundPerFootSecond: DynamicViscosity, DynamicViscosityUnit::PoundPerFootSecond, base NewtonSecondPerMeterSquared, 45359237 / 30480000, pi^0, from_pounds_per_foot_second, as_pounds_per_foot_second);
+}

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -419,6 +419,38 @@ fn solar_luminosities() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::luminosity::Watt>();
+    check_fixed_rescale::<unit::luminosity::Watt>();
+    check_fixed::<unit::luminosity::Femtowatt>();
+    check_fixed_rescale::<unit::luminosity::Femtowatt>();
+    check_fixed::<unit::luminosity::Picowatt>();
+    check_fixed_rescale::<unit::luminosity::Picowatt>();
+    check_fixed::<unit::luminosity::Nanowatt>();
+    check_fixed_rescale::<unit::luminosity::Nanowatt>();
+    check_fixed::<unit::luminosity::Microwatt>();
+    check_fixed_rescale::<unit::luminosity::Microwatt>();
+    check_fixed::<unit::luminosity::Milliwatt>();
+    check_fixed_rescale::<unit::luminosity::Milliwatt>();
+    check_fixed::<unit::luminosity::Deciwatt>();
+    check_fixed_rescale::<unit::luminosity::Deciwatt>();
+    check_fixed::<unit::luminosity::Decawatt>();
+    check_fixed_rescale::<unit::luminosity::Decawatt>();
+    check_fixed::<unit::luminosity::Kilowatt>();
+    check_fixed_rescale::<unit::luminosity::Kilowatt>();
+    check_fixed::<unit::luminosity::Megawatt>();
+    check_fixed_rescale::<unit::luminosity::Megawatt>();
+    check_fixed::<unit::luminosity::Gigawatt>();
+    check_fixed_rescale::<unit::luminosity::Gigawatt>();
+    check_fixed::<unit::luminosity::Terawatt>();
+    check_fixed_rescale::<unit::luminosity::Terawatt>();
+    check_fixed::<unit::luminosity::Petawatt>();
+    check_fixed_rescale::<unit::luminosity::Petawatt>();
+    check_fixed::<unit::luminosity::SolarLuminosity>();
+    check_fixed_rescale::<unit::luminosity::SolarLuminosity>();
 }
 
 #[test]

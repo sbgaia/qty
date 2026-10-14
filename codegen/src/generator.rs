@@ -29,7 +29,52 @@ pub fn generate(qty: &QuantityDef) -> String {
     emit_enum(qty, &mut out);
     emit_enum_impl(qty, &mut out);
     emit_struct_impl(qty, &mut out);
+    emit_fixed_units(qty, &mut out);
     out
+}
+
+/// The `Fixed` marker for `unit`, if it has one: linear units whose factor is
+/// an exact fraction (times a power of π) fitting in `u128`.
+pub fn fixed_parts(unit: &UnitDef) -> Option<(u128, u128, i32)> {
+    match &unit.to_base {
+        Form::Affine { a, b } if b.is_zero() => a.exact_parts(),
+        _ => None,
+    }
+}
+
+// ── Fixed unit markers ────────────────────────────────────────────────────────
+
+fn emit_fixed_units(qty: &QuantityDef, out: &mut String) {
+    let name = &qty.name;
+    w!(out);
+    w!(out, "fixed_base!({}, {});", name, qty.base_unit);
+    w!(out);
+    w!(
+        out,
+        "/// Unit markers for counting [`{}`] as an integer with [`Fixed`](crate::Fixed).",
+        name
+    );
+    w!(out, "///");
+    w!(
+        out,
+        "/// Also available as [`unit::{}`](crate::unit::{}). Affine units have no marker.",
+        name.to_snake_case(),
+        name.to_snake_case()
+    );
+    w!(out, "pub mod unit {{");
+    for unit in &qty.units {
+        let Some((num, den, pi)) = fixed_parts(unit) else {
+            continue;
+        };
+        let snake = unit.plural.to_snake_case();
+        w!(
+            out,
+            "    fixed_unit!({s}: {name}, {name}Unit::{s}, base {base}, {num} / {den}, pi^{pi}, from_{snake}, as_{snake});",
+            s = unit.singular,
+            base = qty.base_unit,
+        );
+    }
+    w!(out, "}}");
 }
 
 // ── File header & struct definition ──────────────────────────────────────────
@@ -455,13 +500,33 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     w!(out);
     w!(
         out,
-        "use super::{{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL}};"
+        "use super::{{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL}};"
     );
     w!(out, "use unitsnet_rs::*;");
     w!(out);
 
     for unit in &qty.units {
         emit_unit_test(name, unit, &mut out);
+    }
+
+    // Fixed markers: float bridge and integer rescaling agree with floats.
+    let markers: Vec<&UnitDef> = qty
+        .units
+        .iter()
+        .filter(|u| fixed_parts(u).is_some())
+        .collect();
+    if !markers.is_empty() {
+        w!(out, "#[test]");
+        w!(out, "fn fixed_units() {{");
+        for unit in markers {
+            let path = format!("unit::{}::{}", name.to_snake_case(), unit.singular);
+            w!(out, "    check_fixed::<{path}>();");
+            if fixed_parts(unit).is_some_and(|(_, _, pi)| pi == 0) {
+                w!(out, "    check_fixed_rescale::<{path}>();");
+            }
+        }
+        w!(out, "}}");
+        w!(out);
     }
 
     // `new` / `convert_to` agree with the per-unit methods.

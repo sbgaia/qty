@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -187,6 +187,22 @@ fn parts_per_trillion() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::ratio::DecimalFraction>();
+    check_fixed_rescale::<unit::ratio::DecimalFraction>();
+    check_fixed::<unit::ratio::Percent>();
+    check_fixed_rescale::<unit::ratio::Percent>();
+    check_fixed::<unit::ratio::PartPerThousand>();
+    check_fixed_rescale::<unit::ratio::PartPerThousand>();
+    check_fixed::<unit::ratio::PartPerMillion>();
+    check_fixed_rescale::<unit::ratio::PartPerMillion>();
+    check_fixed::<unit::ratio::PartPerBillion>();
+    check_fixed_rescale::<unit::ratio::PartPerBillion>();
+    check_fixed::<unit::ratio::PartPerTrillion>();
+    check_fixed_rescale::<unit::ratio::PartPerTrillion>();
 }
 
 #[test]

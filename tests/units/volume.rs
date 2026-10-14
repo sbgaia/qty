@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1623,6 +1623,118 @@ fn board_feet() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::volume::Liter>();
+    check_fixed_rescale::<unit::volume::Liter>();
+    check_fixed::<unit::volume::Nanoliter>();
+    check_fixed_rescale::<unit::volume::Nanoliter>();
+    check_fixed::<unit::volume::Microliter>();
+    check_fixed_rescale::<unit::volume::Microliter>();
+    check_fixed::<unit::volume::Milliliter>();
+    check_fixed_rescale::<unit::volume::Milliliter>();
+    check_fixed::<unit::volume::Centiliter>();
+    check_fixed_rescale::<unit::volume::Centiliter>();
+    check_fixed::<unit::volume::Deciliter>();
+    check_fixed_rescale::<unit::volume::Deciliter>();
+    check_fixed::<unit::volume::Decaliter>();
+    check_fixed_rescale::<unit::volume::Decaliter>();
+    check_fixed::<unit::volume::Hectoliter>();
+    check_fixed_rescale::<unit::volume::Hectoliter>();
+    check_fixed::<unit::volume::Kiloliter>();
+    check_fixed_rescale::<unit::volume::Kiloliter>();
+    check_fixed::<unit::volume::Megaliter>();
+    check_fixed_rescale::<unit::volume::Megaliter>();
+    check_fixed::<unit::volume::CubicMeter>();
+    check_fixed_rescale::<unit::volume::CubicMeter>();
+    check_fixed::<unit::volume::ThousandCubicMeter>();
+    check_fixed_rescale::<unit::volume::ThousandCubicMeter>();
+    check_fixed::<unit::volume::CubicKilometer>();
+    check_fixed_rescale::<unit::volume::CubicKilometer>();
+    check_fixed::<unit::volume::CubicHectometer>();
+    check_fixed_rescale::<unit::volume::CubicHectometer>();
+    check_fixed::<unit::volume::CubicDecimeter>();
+    check_fixed_rescale::<unit::volume::CubicDecimeter>();
+    check_fixed::<unit::volume::CubicCentimeter>();
+    check_fixed_rescale::<unit::volume::CubicCentimeter>();
+    check_fixed::<unit::volume::CubicMillimeter>();
+    check_fixed_rescale::<unit::volume::CubicMillimeter>();
+    check_fixed::<unit::volume::CubicMicrometer>();
+    check_fixed_rescale::<unit::volume::CubicMicrometer>();
+    check_fixed::<unit::volume::CubicMile>();
+    check_fixed_rescale::<unit::volume::CubicMile>();
+    check_fixed::<unit::volume::CubicYard>();
+    check_fixed_rescale::<unit::volume::CubicYard>();
+    check_fixed::<unit::volume::CubicFoot>();
+    check_fixed_rescale::<unit::volume::CubicFoot>();
+    check_fixed::<unit::volume::HundredCubicFoot>();
+    check_fixed_rescale::<unit::volume::HundredCubicFoot>();
+    check_fixed::<unit::volume::ThousandCubicFoot>();
+    check_fixed_rescale::<unit::volume::ThousandCubicFoot>();
+    check_fixed::<unit::volume::MillionCubicFoot>();
+    check_fixed_rescale::<unit::volume::MillionCubicFoot>();
+    check_fixed::<unit::volume::CubicInch>();
+    check_fixed_rescale::<unit::volume::CubicInch>();
+    check_fixed::<unit::volume::ImperialGallon>();
+    check_fixed_rescale::<unit::volume::ImperialGallon>();
+    check_fixed::<unit::volume::KiloimperialGallon>();
+    check_fixed_rescale::<unit::volume::KiloimperialGallon>();
+    check_fixed::<unit::volume::MegaimperialGallon>();
+    check_fixed_rescale::<unit::volume::MegaimperialGallon>();
+    check_fixed::<unit::volume::ImperialOunce>();
+    check_fixed_rescale::<unit::volume::ImperialOunce>();
+    check_fixed::<unit::volume::UsGallon>();
+    check_fixed_rescale::<unit::volume::UsGallon>();
+    check_fixed::<unit::volume::DecausGallon>();
+    check_fixed_rescale::<unit::volume::DecausGallon>();
+    check_fixed::<unit::volume::DeciusGallon>();
+    check_fixed_rescale::<unit::volume::DeciusGallon>();
+    check_fixed::<unit::volume::HectousGallon>();
+    check_fixed_rescale::<unit::volume::HectousGallon>();
+    check_fixed::<unit::volume::KilousGallon>();
+    check_fixed_rescale::<unit::volume::KilousGallon>();
+    check_fixed::<unit::volume::MegausGallon>();
+    check_fixed_rescale::<unit::volume::MegausGallon>();
+    check_fixed::<unit::volume::UsOunce>();
+    check_fixed_rescale::<unit::volume::UsOunce>();
+    check_fixed::<unit::volume::UsTablespoon>();
+    check_fixed_rescale::<unit::volume::UsTablespoon>();
+    check_fixed::<unit::volume::AuTablespoon>();
+    check_fixed_rescale::<unit::volume::AuTablespoon>();
+    check_fixed::<unit::volume::MetricTablespoon>();
+    check_fixed_rescale::<unit::volume::MetricTablespoon>();
+    check_fixed::<unit::volume::UkTablespoon>();
+    check_fixed_rescale::<unit::volume::UkTablespoon>();
+    check_fixed::<unit::volume::MetricTeaspoon>();
+    check_fixed_rescale::<unit::volume::MetricTeaspoon>();
+    check_fixed::<unit::volume::UsTeaspoon>();
+    check_fixed_rescale::<unit::volume::UsTeaspoon>();
+    check_fixed::<unit::volume::MetricCup>();
+    check_fixed_rescale::<unit::volume::MetricCup>();
+    check_fixed::<unit::volume::UsCustomaryCup>();
+    check_fixed_rescale::<unit::volume::UsCustomaryCup>();
+    check_fixed::<unit::volume::UsLegalCup>();
+    check_fixed_rescale::<unit::volume::UsLegalCup>();
+    check_fixed::<unit::volume::OilBarrel>();
+    check_fixed_rescale::<unit::volume::OilBarrel>();
+    check_fixed::<unit::volume::UsBeerBarrel>();
+    check_fixed_rescale::<unit::volume::UsBeerBarrel>();
+    check_fixed::<unit::volume::ImperialBeerBarrel>();
+    check_fixed_rescale::<unit::volume::ImperialBeerBarrel>();
+    check_fixed::<unit::volume::UsQuart>();
+    check_fixed_rescale::<unit::volume::UsQuart>();
+    check_fixed::<unit::volume::ImperialQuart>();
+    check_fixed_rescale::<unit::volume::ImperialQuart>();
+    check_fixed::<unit::volume::UsPint>();
+    check_fixed_rescale::<unit::volume::UsPint>();
+    check_fixed::<unit::volume::AcreFoot>();
+    check_fixed_rescale::<unit::volume::AcreFoot>();
+    check_fixed::<unit::volume::ImperialPint>();
+    check_fixed_rescale::<unit::volume::ImperialPint>();
+    check_fixed::<unit::volume::BoardFoot>();
+    check_fixed_rescale::<unit::volume::BoardFoot>();
 }
 
 #[test]

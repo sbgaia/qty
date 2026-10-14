@@ -509,3 +509,28 @@ impl<T: Float> AmountOfSubstance<T> {
         self.as_kilopound_moles()
     }
 }
+
+fixed_base!(AmountOfSubstance, Mole);
+
+/// Unit markers for counting [`AmountOfSubstance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::amount_of_substance`](crate::unit::amount_of_substance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Mole: AmountOfSubstance, AmountOfSubstanceUnit::Mole, base Mole, 1 / 1, pi^0, from_moles, as_moles);
+    fixed_unit!(Femtomole: AmountOfSubstance, AmountOfSubstanceUnit::Femtomole, base Mole, 1 / 1000000000000000, pi^0, from_femtomoles, as_femtomoles);
+    fixed_unit!(Picomole: AmountOfSubstance, AmountOfSubstanceUnit::Picomole, base Mole, 1 / 1000000000000, pi^0, from_picomoles, as_picomoles);
+    fixed_unit!(Nanomole: AmountOfSubstance, AmountOfSubstanceUnit::Nanomole, base Mole, 1 / 1000000000, pi^0, from_nanomoles, as_nanomoles);
+    fixed_unit!(Micromole: AmountOfSubstance, AmountOfSubstanceUnit::Micromole, base Mole, 1 / 1000000, pi^0, from_micromoles, as_micromoles);
+    fixed_unit!(Millimole: AmountOfSubstance, AmountOfSubstanceUnit::Millimole, base Mole, 1 / 1000, pi^0, from_millimoles, as_millimoles);
+    fixed_unit!(Centimole: AmountOfSubstance, AmountOfSubstanceUnit::Centimole, base Mole, 1 / 100, pi^0, from_centimoles, as_centimoles);
+    fixed_unit!(Decimole: AmountOfSubstance, AmountOfSubstanceUnit::Decimole, base Mole, 1 / 10, pi^0, from_decimoles, as_decimoles);
+    fixed_unit!(Kilomole: AmountOfSubstance, AmountOfSubstanceUnit::Kilomole, base Mole, 1000 / 1, pi^0, from_kilomoles, as_kilomoles);
+    fixed_unit!(Megamole: AmountOfSubstance, AmountOfSubstanceUnit::Megamole, base Mole, 1000000 / 1, pi^0, from_megamoles, as_megamoles);
+    fixed_unit!(PoundMole: AmountOfSubstance, AmountOfSubstanceUnit::PoundMole, base Mole, 45359237 / 100000, pi^0, from_pound_moles, as_pound_moles);
+    fixed_unit!(NanopoundMole: AmountOfSubstance, AmountOfSubstanceUnit::NanopoundMole, base Mole, 45359237 / 100000000000000, pi^0, from_nanopound_moles, as_nanopound_moles);
+    fixed_unit!(MicropoundMole: AmountOfSubstance, AmountOfSubstanceUnit::MicropoundMole, base Mole, 45359237 / 100000000000, pi^0, from_micropound_moles, as_micropound_moles);
+    fixed_unit!(MillipoundMole: AmountOfSubstance, AmountOfSubstanceUnit::MillipoundMole, base Mole, 45359237 / 100000000, pi^0, from_millipound_moles, as_millipound_moles);
+    fixed_unit!(CentipoundMole: AmountOfSubstance, AmountOfSubstanceUnit::CentipoundMole, base Mole, 45359237 / 10000000, pi^0, from_centipound_moles, as_centipound_moles);
+    fixed_unit!(DecipoundMole: AmountOfSubstance, AmountOfSubstanceUnit::DecipoundMole, base Mole, 45359237 / 1000000, pi^0, from_decipound_moles, as_decipound_moles);
+    fixed_unit!(KilopoundMole: AmountOfSubstance, AmountOfSubstanceUnit::KilopoundMole, base Mole, 45359237 / 100, pi^0, from_kilopound_moles, as_kilopound_moles);
+}

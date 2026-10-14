@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1056,6 +1056,66 @@ fn slug_square_inches() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass_moment_of_inertia::GramSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::GramSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MilligramSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MilligramSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilogramSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilogramSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::GramSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::GramSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MilligramSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MilligramSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilogramSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilogramSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::GramSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::GramSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MilligramSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MilligramSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilogramSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilogramSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::GramSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::GramSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MilligramSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MilligramSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilogramSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilogramSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::TonneSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::TonneSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilotonneSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilotonneSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MegatonneSquareMeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MegatonneSquareMeter>();
+    check_fixed::<unit::mass_moment_of_inertia::TonneSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::TonneSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilotonneSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilotonneSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MegatonneSquareDecimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MegatonneSquareDecimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::TonneSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::TonneSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilotonneSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilotonneSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MegatonneSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MegatonneSquareCentimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::TonneSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::TonneSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::KilotonneSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::KilotonneSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::MegatonneSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::MegatonneSquareMillimeter>();
+    check_fixed::<unit::mass_moment_of_inertia::PoundSquareFoot>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::PoundSquareFoot>();
+    check_fixed::<unit::mass_moment_of_inertia::PoundSquareInch>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::PoundSquareInch>();
+    check_fixed::<unit::mass_moment_of_inertia::SlugSquareFoot>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::SlugSquareFoot>();
+    check_fixed::<unit::mass_moment_of_inertia::SlugSquareInch>();
+    check_fixed_rescale::<unit::mass_moment_of_inertia::SlugSquareInch>();
 }
 
 #[test]

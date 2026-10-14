@@ -534,3 +534,29 @@ impl<T: Float> LinearDensity<T> {
         self.as_kilograms_per_foot()
     }
 }
+
+fixed_base!(LinearDensity, KilogramPerMeter);
+
+/// Unit markers for counting [`LinearDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::linear_density`](crate::unit::linear_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(GramPerMillimeter: LinearDensity, LinearDensityUnit::GramPerMillimeter, base KilogramPerMeter, 1 / 1, pi^0, from_grams_per_millimeter, as_grams_per_millimeter);
+    fixed_unit!(MicrogramPerMillimeter: LinearDensity, LinearDensityUnit::MicrogramPerMillimeter, base KilogramPerMeter, 1 / 1000000, pi^0, from_micrograms_per_millimeter, as_micrograms_per_millimeter);
+    fixed_unit!(MilligramPerMillimeter: LinearDensity, LinearDensityUnit::MilligramPerMillimeter, base KilogramPerMeter, 1 / 1000, pi^0, from_milligrams_per_millimeter, as_milligrams_per_millimeter);
+    fixed_unit!(KilogramPerMillimeter: LinearDensity, LinearDensityUnit::KilogramPerMillimeter, base KilogramPerMeter, 1000 / 1, pi^0, from_kilograms_per_millimeter, as_kilograms_per_millimeter);
+    fixed_unit!(GramPerCentimeter: LinearDensity, LinearDensityUnit::GramPerCentimeter, base KilogramPerMeter, 1 / 10, pi^0, from_grams_per_centimeter, as_grams_per_centimeter);
+    fixed_unit!(MicrogramPerCentimeter: LinearDensity, LinearDensityUnit::MicrogramPerCentimeter, base KilogramPerMeter, 1 / 10000000, pi^0, from_micrograms_per_centimeter, as_micrograms_per_centimeter);
+    fixed_unit!(MilligramPerCentimeter: LinearDensity, LinearDensityUnit::MilligramPerCentimeter, base KilogramPerMeter, 1 / 10000, pi^0, from_milligrams_per_centimeter, as_milligrams_per_centimeter);
+    fixed_unit!(KilogramPerCentimeter: LinearDensity, LinearDensityUnit::KilogramPerCentimeter, base KilogramPerMeter, 100 / 1, pi^0, from_kilograms_per_centimeter, as_kilograms_per_centimeter);
+    fixed_unit!(GramPerMeter: LinearDensity, LinearDensityUnit::GramPerMeter, base KilogramPerMeter, 1 / 1000, pi^0, from_grams_per_meter, as_grams_per_meter);
+    fixed_unit!(MicrogramPerMeter: LinearDensity, LinearDensityUnit::MicrogramPerMeter, base KilogramPerMeter, 1 / 1000000000, pi^0, from_micrograms_per_meter, as_micrograms_per_meter);
+    fixed_unit!(MilligramPerMeter: LinearDensity, LinearDensityUnit::MilligramPerMeter, base KilogramPerMeter, 1 / 1000000, pi^0, from_milligrams_per_meter, as_milligrams_per_meter);
+    fixed_unit!(KilogramPerMeter: LinearDensity, LinearDensityUnit::KilogramPerMeter, base KilogramPerMeter, 1 / 1, pi^0, from_kilograms_per_meter, as_kilograms_per_meter);
+    fixed_unit!(PoundPerInch: LinearDensity, LinearDensityUnit::PoundPerInch, base KilogramPerMeter, 45359237 / 2540000, pi^0, from_pounds_per_inch, as_pounds_per_inch);
+    fixed_unit!(PoundPerFoot: LinearDensity, LinearDensityUnit::PoundPerFoot, base KilogramPerMeter, 45359237 / 30480000, pi^0, from_pounds_per_foot, as_pounds_per_foot);
+    fixed_unit!(GramPerFoot: LinearDensity, LinearDensityUnit::GramPerFoot, base KilogramPerMeter, 5 / 1524, pi^0, from_grams_per_foot, as_grams_per_foot);
+    fixed_unit!(MicrogramPerFoot: LinearDensity, LinearDensityUnit::MicrogramPerFoot, base KilogramPerMeter, 1 / 304800000, pi^0, from_micrograms_per_foot, as_micrograms_per_foot);
+    fixed_unit!(MilligramPerFoot: LinearDensity, LinearDensityUnit::MilligramPerFoot, base KilogramPerMeter, 1 / 304800, pi^0, from_milligrams_per_foot, as_milligrams_per_foot);
+    fixed_unit!(KilogramPerFoot: LinearDensity, LinearDensityUnit::KilogramPerFoot, base KilogramPerMeter, 1250 / 381, pi^0, from_kilograms_per_foot, as_kilograms_per_foot);
+}

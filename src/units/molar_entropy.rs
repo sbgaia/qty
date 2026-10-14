@@ -159,3 +159,14 @@ impl<T: Float> MolarEntropy<T> {
         self.as_megajoules_per_mole_kelvin()
     }
 }
+
+fixed_base!(MolarEntropy, JoulePerMoleKelvin);
+
+/// Unit markers for counting [`MolarEntropy`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::molar_entropy`](crate::unit::molar_entropy). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::JoulePerMoleKelvin, base JoulePerMoleKelvin, 1 / 1, pi^0, from_joules_per_mole_kelvin, as_joules_per_mole_kelvin);
+    fixed_unit!(KilojoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::KilojoulePerMoleKelvin, base JoulePerMoleKelvin, 1000 / 1, pi^0, from_kilojoules_per_mole_kelvin, as_kilojoules_per_mole_kelvin);
+    fixed_unit!(MegajoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::MegajoulePerMoleKelvin, base JoulePerMoleKelvin, 1000000 / 1, pi^0, from_megajoules_per_mole_kelvin, as_megajoules_per_mole_kelvin);
+}

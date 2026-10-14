@@ -210,3 +210,17 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
         self.0 / T::from_f64(1.8e-6)
     }
 }
+
+fixed_base!(CoefficientOfThermalExpansion, PerKelvin);
+
+/// Unit markers for counting [`CoefficientOfThermalExpansion`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(PerKelvin: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerKelvin, base PerKelvin, 1 / 1, pi^0, from_per_kelvin, as_per_kelvin);
+    fixed_unit!(PerDegreeCelsius: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerDegreeCelsius, base PerKelvin, 1 / 1, pi^0, from_per_degree_celsius, as_per_degree_celsius);
+    fixed_unit!(PerDegreeFahrenheit: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit, base PerKelvin, 9 / 5, pi^0, from_per_degree_fahrenheit, as_per_degree_fahrenheit);
+    fixed_unit!(PpmPerKelvin: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PpmPerKelvin, base PerKelvin, 1 / 1000000, pi^0, from_ppm_per_kelvin, as_ppm_per_kelvin);
+    fixed_unit!(PpmPerDegreeCelsius: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius, base PerKelvin, 1 / 1000000, pi^0, from_ppm_per_degree_celsius, as_ppm_per_degree_celsius);
+    fixed_unit!(PpmPerDegreeFahrenheit: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit, base PerKelvin, 9 / 5000000, pi^0, from_ppm_per_degree_fahrenheit, as_ppm_per_degree_fahrenheit);
+}

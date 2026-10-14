@@ -309,3 +309,20 @@ impl<T: Float> Irradiation<T> {
         self.as_kilobtus_per_square_foot()
     }
 }
+
+fixed_base!(Irradiation, JoulePerSquareMeter);
+
+/// Unit markers for counting [`Irradiation`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::irradiation`](crate::unit::irradiation). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerSquareMeter: Irradiation, IrradiationUnit::JoulePerSquareMeter, base JoulePerSquareMeter, 1 / 1, pi^0, from_joules_per_square_meter, as_joules_per_square_meter);
+    fixed_unit!(KilojoulePerSquareMeter: Irradiation, IrradiationUnit::KilojoulePerSquareMeter, base JoulePerSquareMeter, 1000 / 1, pi^0, from_kilojoules_per_square_meter, as_kilojoules_per_square_meter);
+    fixed_unit!(JoulePerSquareCentimeter: Irradiation, IrradiationUnit::JoulePerSquareCentimeter, base JoulePerSquareMeter, 10000 / 1, pi^0, from_joules_per_square_centimeter, as_joules_per_square_centimeter);
+    fixed_unit!(MillijoulePerSquareCentimeter: Irradiation, IrradiationUnit::MillijoulePerSquareCentimeter, base JoulePerSquareMeter, 10 / 1, pi^0, from_millijoules_per_square_centimeter, as_millijoules_per_square_centimeter);
+    fixed_unit!(JoulePerSquareMillimeter: Irradiation, IrradiationUnit::JoulePerSquareMillimeter, base JoulePerSquareMeter, 1000000 / 1, pi^0, from_joules_per_square_millimeter, as_joules_per_square_millimeter);
+    fixed_unit!(WattHourPerSquareMeter: Irradiation, IrradiationUnit::WattHourPerSquareMeter, base JoulePerSquareMeter, 3600 / 1, pi^0, from_watt_hours_per_square_meter, as_watt_hours_per_square_meter);
+    fixed_unit!(KilowattHourPerSquareMeter: Irradiation, IrradiationUnit::KilowattHourPerSquareMeter, base JoulePerSquareMeter, 3600000 / 1, pi^0, from_kilowatt_hours_per_square_meter, as_kilowatt_hours_per_square_meter);
+    fixed_unit!(BtuPerSquareFoot: Irradiation, IrradiationUnit::BtuPerSquareFoot, base JoulePerSquareMeter, 52752792631 / 4645152, pi^0, from_btus_per_square_foot, as_btus_per_square_foot);
+    fixed_unit!(KilobtuPerSquareFoot: Irradiation, IrradiationUnit::KilobtuPerSquareFoot, base JoulePerSquareMeter, 6594099078875 / 580644, pi^0, from_kilobtus_per_square_foot, as_kilobtus_per_square_foot);
+}

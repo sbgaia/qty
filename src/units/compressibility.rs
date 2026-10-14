@@ -268,3 +268,18 @@ impl<T: Float> Compressibility<T> {
         self.as_inverse_pounds_force_per_square_inch()
     }
 }
+
+fixed_base!(Compressibility, InversePascal);
+
+/// Unit markers for counting [`Compressibility`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::compressibility`](crate::unit::compressibility). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(InversePascal: Compressibility, CompressibilityUnit::InversePascal, base InversePascal, 1 / 1, pi^0, from_inverse_pascals, as_inverse_pascals);
+    fixed_unit!(InverseKilopascal: Compressibility, CompressibilityUnit::InverseKilopascal, base InversePascal, 1 / 1000, pi^0, from_inverse_kilopascals, as_inverse_kilopascals);
+    fixed_unit!(InverseMegapascal: Compressibility, CompressibilityUnit::InverseMegapascal, base InversePascal, 1 / 1000000, pi^0, from_inverse_megapascals, as_inverse_megapascals);
+    fixed_unit!(InverseAtmosphere: Compressibility, CompressibilityUnit::InverseAtmosphere, base InversePascal, 1 / 101325, pi^0, from_inverse_atmospheres, as_inverse_atmospheres);
+    fixed_unit!(InverseMillibar: Compressibility, CompressibilityUnit::InverseMillibar, base InversePascal, 1 / 100, pi^0, from_inverse_millibars, as_inverse_millibars);
+    fixed_unit!(InverseBar: Compressibility, CompressibilityUnit::InverseBar, base InversePascal, 1 / 100000, pi^0, from_inverse_bars, as_inverse_bars);
+    fixed_unit!(InversePoundForcePerSquareInch: Compressibility, CompressibilityUnit::InversePoundForcePerSquareInch, base InversePascal, 1000000000000 / 6894757293168361, pi^0, from_inverse_pounds_force_per_square_inch, as_inverse_pounds_force_per_square_inch);
+}

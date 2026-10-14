@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1432,6 +1432,88 @@ fn exbioctets_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::bit_rate::BitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::BitPerSecond>();
+    check_fixed::<unit::bit_rate::KilobitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KilobitPerSecond>();
+    check_fixed::<unit::bit_rate::MegabitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MegabitPerSecond>();
+    check_fixed::<unit::bit_rate::GigabitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GigabitPerSecond>();
+    check_fixed::<unit::bit_rate::TerabitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TerabitPerSecond>();
+    check_fixed::<unit::bit_rate::PetabitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PetabitPerSecond>();
+    check_fixed::<unit::bit_rate::ExabitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExabitPerSecond>();
+    check_fixed::<unit::bit_rate::KibibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KibibitPerSecond>();
+    check_fixed::<unit::bit_rate::MebibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MebibitPerSecond>();
+    check_fixed::<unit::bit_rate::GibibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GibibitPerSecond>();
+    check_fixed::<unit::bit_rate::TebibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TebibitPerSecond>();
+    check_fixed::<unit::bit_rate::PebibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PebibitPerSecond>();
+    check_fixed::<unit::bit_rate::ExbibitPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExbibitPerSecond>();
+    check_fixed::<unit::bit_rate::BytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::BytePerSecond>();
+    check_fixed::<unit::bit_rate::KilobytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KilobytePerSecond>();
+    check_fixed::<unit::bit_rate::MegabytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MegabytePerSecond>();
+    check_fixed::<unit::bit_rate::GigabytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GigabytePerSecond>();
+    check_fixed::<unit::bit_rate::TerabytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TerabytePerSecond>();
+    check_fixed::<unit::bit_rate::PetabytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PetabytePerSecond>();
+    check_fixed::<unit::bit_rate::ExabytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExabytePerSecond>();
+    check_fixed::<unit::bit_rate::KibibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KibibytePerSecond>();
+    check_fixed::<unit::bit_rate::MebibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MebibytePerSecond>();
+    check_fixed::<unit::bit_rate::GibibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GibibytePerSecond>();
+    check_fixed::<unit::bit_rate::TebibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TebibytePerSecond>();
+    check_fixed::<unit::bit_rate::PebibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PebibytePerSecond>();
+    check_fixed::<unit::bit_rate::ExbibytePerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExbibytePerSecond>();
+    check_fixed::<unit::bit_rate::OctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::OctetPerSecond>();
+    check_fixed::<unit::bit_rate::KilooctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KilooctetPerSecond>();
+    check_fixed::<unit::bit_rate::MegaoctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MegaoctetPerSecond>();
+    check_fixed::<unit::bit_rate::GigaoctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GigaoctetPerSecond>();
+    check_fixed::<unit::bit_rate::TeraoctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TeraoctetPerSecond>();
+    check_fixed::<unit::bit_rate::PetaoctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PetaoctetPerSecond>();
+    check_fixed::<unit::bit_rate::ExaoctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExaoctetPerSecond>();
+    check_fixed::<unit::bit_rate::KibioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::KibioctetPerSecond>();
+    check_fixed::<unit::bit_rate::MebioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::MebioctetPerSecond>();
+    check_fixed::<unit::bit_rate::GibioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::GibioctetPerSecond>();
+    check_fixed::<unit::bit_rate::TebioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::TebioctetPerSecond>();
+    check_fixed::<unit::bit_rate::PebioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::PebioctetPerSecond>();
+    check_fixed::<unit::bit_rate::ExbioctetPerSecond>();
+    check_fixed_rescale::<unit::bit_rate::ExbioctetPerSecond>();
 }
 
 #[test]

@@ -222,3 +222,16 @@ impl<T: Float> AreaDensity<T> {
         self.as_pounds_per_thousand_square_feet()
     }
 }
+
+fixed_base!(AreaDensity, KilogramPerSquareMeter);
+
+/// Unit markers for counting [`AreaDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::area_density`](crate::unit::area_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(KilogramPerSquareMeter: AreaDensity, AreaDensityUnit::KilogramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_square_meter, as_kilograms_per_square_meter);
+    fixed_unit!(GramPerSquareMeter: AreaDensity, AreaDensityUnit::GramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1000, pi^0, from_grams_per_square_meter, as_grams_per_square_meter);
+    fixed_unit!(MilligramPerSquareMeter: AreaDensity, AreaDensityUnit::MilligramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1000000, pi^0, from_milligrams_per_square_meter, as_milligrams_per_square_meter);
+    fixed_unit!(PoundPerSquareFoot: AreaDensity, AreaDensityUnit::PoundPerSquareFoot, base KilogramPerSquareMeter, 45359237 / 9290304, pi^0, from_pounds_per_square_foot, as_pounds_per_square_foot);
+    fixed_unit!(PoundPerThousandSquareFeet: AreaDensity, AreaDensityUnit::PoundPerThousandSquareFeet, base KilogramPerSquareMeter, 45359237 / 9290304000, pi^0, from_pounds_per_thousand_square_feet, as_pounds_per_thousand_square_feet);
+}

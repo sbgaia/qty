@@ -209,3 +209,16 @@ impl<T: Float> ElectricInductance<T> {
         self.as_millihenries()
     }
 }
+
+fixed_base!(ElectricInductance, Henry);
+
+/// Unit markers for counting [`ElectricInductance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_inductance`](crate::unit::electric_inductance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Henry: ElectricInductance, ElectricInductanceUnit::Henry, base Henry, 1 / 1, pi^0, from_henries, as_henries);
+    fixed_unit!(Picohenry: ElectricInductance, ElectricInductanceUnit::Picohenry, base Henry, 1 / 1000000000000, pi^0, from_picohenries, as_picohenries);
+    fixed_unit!(Nanohenry: ElectricInductance, ElectricInductanceUnit::Nanohenry, base Henry, 1 / 1000000000, pi^0, from_nanohenries, as_nanohenries);
+    fixed_unit!(Microhenry: ElectricInductance, ElectricInductanceUnit::Microhenry, base Henry, 1 / 1000000, pi^0, from_microhenries, as_microhenries);
+    fixed_unit!(Millihenry: ElectricInductance, ElectricInductanceUnit::Millihenry, base Henry, 1 / 1000, pi^0, from_millihenries, as_millihenries);
+}

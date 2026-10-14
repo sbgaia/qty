@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -112,6 +112,16 @@ fn moles_per_gram() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::molality::MolePerKilogram>();
+    check_fixed_rescale::<unit::molality::MolePerKilogram>();
+    check_fixed::<unit::molality::MillimolePerKilogram>();
+    check_fixed_rescale::<unit::molality::MillimolePerKilogram>();
+    check_fixed::<unit::molality::MolePerGram>();
+    check_fixed_rescale::<unit::molality::MolePerGram>();
 }
 
 #[test]

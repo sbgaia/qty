@@ -418,3 +418,24 @@ impl<T: Float> RotationalSpeed<T> {
         self.as_revolutions_per_minute()
     }
 }
+
+fixed_base!(RotationalSpeed, RadianPerSecond);
+
+/// Unit markers for counting [`RotationalSpeed`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::rotational_speed`](crate::unit::rotational_speed). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(RadianPerSecond: RotationalSpeed, RotationalSpeedUnit::RadianPerSecond, base RadianPerSecond, 1 / 1, pi^0, from_radians_per_second, as_radians_per_second);
+    fixed_unit!(NanoradianPerSecond: RotationalSpeed, RotationalSpeedUnit::NanoradianPerSecond, base RadianPerSecond, 1 / 1000000000, pi^0, from_nanoradians_per_second, as_nanoradians_per_second);
+    fixed_unit!(MicroradianPerSecond: RotationalSpeed, RotationalSpeedUnit::MicroradianPerSecond, base RadianPerSecond, 1 / 1000000, pi^0, from_microradians_per_second, as_microradians_per_second);
+    fixed_unit!(MilliradianPerSecond: RotationalSpeed, RotationalSpeedUnit::MilliradianPerSecond, base RadianPerSecond, 1 / 1000, pi^0, from_milliradians_per_second, as_milliradians_per_second);
+    fixed_unit!(CentiradianPerSecond: RotationalSpeed, RotationalSpeedUnit::CentiradianPerSecond, base RadianPerSecond, 1 / 100, pi^0, from_centiradians_per_second, as_centiradians_per_second);
+    fixed_unit!(DeciradianPerSecond: RotationalSpeed, RotationalSpeedUnit::DeciradianPerSecond, base RadianPerSecond, 1 / 10, pi^0, from_deciradians_per_second, as_deciradians_per_second);
+    fixed_unit!(DegreePerSecond: RotationalSpeed, RotationalSpeedUnit::DegreePerSecond, base RadianPerSecond, 1 / 180, pi^1, from_degrees_per_second, as_degrees_per_second);
+    fixed_unit!(NanodegreePerSecond: RotationalSpeed, RotationalSpeedUnit::NanodegreePerSecond, base RadianPerSecond, 1 / 180000000000, pi^1, from_nanodegrees_per_second, as_nanodegrees_per_second);
+    fixed_unit!(MicrodegreePerSecond: RotationalSpeed, RotationalSpeedUnit::MicrodegreePerSecond, base RadianPerSecond, 1 / 180000000, pi^1, from_microdegrees_per_second, as_microdegrees_per_second);
+    fixed_unit!(MillidegreePerSecond: RotationalSpeed, RotationalSpeedUnit::MillidegreePerSecond, base RadianPerSecond, 1 / 180000, pi^1, from_millidegrees_per_second, as_millidegrees_per_second);
+    fixed_unit!(DegreePerMinute: RotationalSpeed, RotationalSpeedUnit::DegreePerMinute, base RadianPerSecond, 1 / 10800, pi^1, from_degrees_per_minute, as_degrees_per_minute);
+    fixed_unit!(RevolutionPerSecond: RotationalSpeed, RotationalSpeedUnit::RevolutionPerSecond, base RadianPerSecond, 2 / 1, pi^1, from_revolutions_per_second, as_revolutions_per_second);
+    fixed_unit!(RevolutionPerMinute: RotationalSpeed, RotationalSpeedUnit::RevolutionPerMinute, base RadianPerSecond, 1 / 30, pi^1, from_revolutions_per_minute, as_revolutions_per_minute);
+}

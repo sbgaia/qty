@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -282,6 +282,25 @@ fn hour_square_feet_degrees_fahrenheit_per_btu() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>();
+    check_fixed::<unit::thermal_insulance::SquareMeterKelvinPerWatt>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareMeterKelvinPerWatt>();
+    check_fixed::<unit::thermal_insulance::SquareMeterDegreeCelsiusPerWatt>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareMeterDegreeCelsiusPerWatt>();
+    check_fixed::<unit::thermal_insulance::SquareCentimeterKelvinPerWatt>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareCentimeterKelvinPerWatt>();
+    check_fixed::<unit::thermal_insulance::SquareMillimeterKelvinPerWatt>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareMillimeterKelvinPerWatt>();
+    check_fixed::<unit::thermal_insulance::SquareCentimeterHourDegreeCelsiusPerKilocalorie>();
+    check_fixed_rescale::<unit::thermal_insulance::SquareCentimeterHourDegreeCelsiusPerKilocalorie>(
+    );
+    check_fixed::<unit::thermal_insulance::HourSquareFeetDegreeFahrenheitPerBtu>();
+    check_fixed_rescale::<unit::thermal_insulance::HourSquareFeetDegreeFahrenheitPerBtu>();
 }
 
 #[test]

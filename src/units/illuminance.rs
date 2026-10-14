@@ -155,3 +155,15 @@ impl<T: Float> Illuminance<T> {
         self.0 / T::from_f64(1000000.0)
     }
 }
+
+fixed_base!(Illuminance, Lux);
+
+/// Unit markers for counting [`Illuminance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::illuminance`](crate::unit::illuminance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Lux: Illuminance, IlluminanceUnit::Lux, base Lux, 1 / 1, pi^0, from_lux, as_lux);
+    fixed_unit!(Millilux: Illuminance, IlluminanceUnit::Millilux, base Lux, 1 / 1000, pi^0, from_millilux, as_millilux);
+    fixed_unit!(Kilolux: Illuminance, IlluminanceUnit::Kilolux, base Lux, 1000 / 1, pi^0, from_kilolux, as_kilolux);
+    fixed_unit!(Megalux: Illuminance, IlluminanceUnit::Megalux, base Lux, 1000000 / 1, pi^0, from_megalux, as_megalux);
+}

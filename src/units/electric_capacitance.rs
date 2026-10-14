@@ -259,3 +259,18 @@ impl<T: Float> ElectricCapacitance<T> {
         self.as_megafarads()
     }
 }
+
+fixed_base!(ElectricCapacitance, Farad);
+
+/// Unit markers for counting [`ElectricCapacitance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_capacitance`](crate::unit::electric_capacitance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Farad: ElectricCapacitance, ElectricCapacitanceUnit::Farad, base Farad, 1 / 1, pi^0, from_farads, as_farads);
+    fixed_unit!(Picofarad: ElectricCapacitance, ElectricCapacitanceUnit::Picofarad, base Farad, 1 / 1000000000000, pi^0, from_picofarads, as_picofarads);
+    fixed_unit!(Nanofarad: ElectricCapacitance, ElectricCapacitanceUnit::Nanofarad, base Farad, 1 / 1000000000, pi^0, from_nanofarads, as_nanofarads);
+    fixed_unit!(Microfarad: ElectricCapacitance, ElectricCapacitanceUnit::Microfarad, base Farad, 1 / 1000000, pi^0, from_microfarads, as_microfarads);
+    fixed_unit!(Millifarad: ElectricCapacitance, ElectricCapacitanceUnit::Millifarad, base Farad, 1 / 1000, pi^0, from_millifarads, as_millifarads);
+    fixed_unit!(Kilofarad: ElectricCapacitance, ElectricCapacitanceUnit::Kilofarad, base Farad, 1000 / 1, pi^0, from_kilofarads, as_kilofarads);
+    fixed_unit!(Megafarad: ElectricCapacitance, ElectricCapacitanceUnit::Megafarad, base Farad, 1000000 / 1, pi^0, from_megafarads, as_megafarads);
+}

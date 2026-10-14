@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -231,6 +231,22 @@ fn inches_to_the_sixth() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::warping_moment_of_inertia::MeterToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::MeterToTheSixth>();
+    check_fixed::<unit::warping_moment_of_inertia::DecimeterToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::DecimeterToTheSixth>();
+    check_fixed::<unit::warping_moment_of_inertia::CentimeterToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::CentimeterToTheSixth>();
+    check_fixed::<unit::warping_moment_of_inertia::MillimeterToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::MillimeterToTheSixth>();
+    check_fixed::<unit::warping_moment_of_inertia::FootToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::FootToTheSixth>();
+    check_fixed::<unit::warping_moment_of_inertia::InchToTheSixth>();
+    check_fixed_rescale::<unit::warping_moment_of_inertia::InchToTheSixth>();
 }
 
 #[test]

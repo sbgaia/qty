@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -740,6 +740,48 @@ fn wood_units() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::fluid_resistance::PascalSecondPerLiter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalSecondPerLiter>();
+    check_fixed::<unit::fluid_resistance::PascalMinutePerLiter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalMinutePerLiter>();
+    check_fixed::<unit::fluid_resistance::PascalSecondPerMilliliter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalSecondPerMilliliter>();
+    check_fixed::<unit::fluid_resistance::PascalMinutePerMilliliter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalMinutePerMilliliter>();
+    check_fixed::<unit::fluid_resistance::PascalSecondPerCubicMeter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalSecondPerCubicMeter>();
+    check_fixed::<unit::fluid_resistance::MegapascalSecondPerCubicMeter>();
+    check_fixed_rescale::<unit::fluid_resistance::MegapascalSecondPerCubicMeter>();
+    check_fixed::<unit::fluid_resistance::PascalMinutePerCubicMeter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalMinutePerCubicMeter>();
+    check_fixed::<unit::fluid_resistance::PascalSecondPerCubicCentimeter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalSecondPerCubicCentimeter>();
+    check_fixed::<unit::fluid_resistance::PascalMinutePerCubicCentimeter>();
+    check_fixed_rescale::<unit::fluid_resistance::PascalMinutePerCubicCentimeter>();
+    check_fixed::<unit::fluid_resistance::DyneSecondPerCentimeterToTheFifth>();
+    check_fixed_rescale::<unit::fluid_resistance::DyneSecondPerCentimeterToTheFifth>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercurySecondPerLiter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercurySecondPerLiter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercuryMinutePerLiter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercuryMinutePerLiter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercurySecondPerMilliliter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercurySecondPerMilliliter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercuryMinutePerMilliliter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercuryMinutePerMilliliter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercurySecondPerCubicCentimeter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercurySecondPerCubicCentimeter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercuryMinutePerCubicCentimeter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercuryMinutePerCubicCentimeter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercurySecondPerCubicMeter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercurySecondPerCubicMeter>();
+    check_fixed::<unit::fluid_resistance::MillimeterMercuryMinutePerCubicMeter>();
+    check_fixed_rescale::<unit::fluid_resistance::MillimeterMercuryMinutePerCubicMeter>();
+    check_fixed::<unit::fluid_resistance::WoodUnit>();
+    check_fixed_rescale::<unit::fluid_resistance::WoodUnit>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -354,6 +354,36 @@ fn sols() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::duration::Year365>();
+    check_fixed_rescale::<unit::duration::Year365>();
+    check_fixed::<unit::duration::Month30>();
+    check_fixed_rescale::<unit::duration::Month30>();
+    check_fixed::<unit::duration::Week>();
+    check_fixed_rescale::<unit::duration::Week>();
+    check_fixed::<unit::duration::Day>();
+    check_fixed_rescale::<unit::duration::Day>();
+    check_fixed::<unit::duration::Hour>();
+    check_fixed_rescale::<unit::duration::Hour>();
+    check_fixed::<unit::duration::Minute>();
+    check_fixed_rescale::<unit::duration::Minute>();
+    check_fixed::<unit::duration::Second>();
+    check_fixed_rescale::<unit::duration::Second>();
+    check_fixed::<unit::duration::Picosecond>();
+    check_fixed_rescale::<unit::duration::Picosecond>();
+    check_fixed::<unit::duration::Nanosecond>();
+    check_fixed_rescale::<unit::duration::Nanosecond>();
+    check_fixed::<unit::duration::Microsecond>();
+    check_fixed_rescale::<unit::duration::Microsecond>();
+    check_fixed::<unit::duration::Millisecond>();
+    check_fixed_rescale::<unit::duration::Millisecond>();
+    check_fixed::<unit::duration::JulianYear>();
+    check_fixed_rescale::<unit::duration::JulianYear>();
+    check_fixed::<unit::duration::Sol>();
+    check_fixed_rescale::<unit::duration::Sol>();
 }
 
 #[test]

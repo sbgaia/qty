@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1030,6 +1030,68 @@ fn terarutherfords() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::radioactivity::Becquerel>();
+    check_fixed_rescale::<unit::radioactivity::Becquerel>();
+    check_fixed::<unit::radioactivity::Picobecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Picobecquerel>();
+    check_fixed::<unit::radioactivity::Nanobecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Nanobecquerel>();
+    check_fixed::<unit::radioactivity::Microbecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Microbecquerel>();
+    check_fixed::<unit::radioactivity::Millibecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Millibecquerel>();
+    check_fixed::<unit::radioactivity::Kilobecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Kilobecquerel>();
+    check_fixed::<unit::radioactivity::Megabecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Megabecquerel>();
+    check_fixed::<unit::radioactivity::Gigabecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Gigabecquerel>();
+    check_fixed::<unit::radioactivity::Terabecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Terabecquerel>();
+    check_fixed::<unit::radioactivity::Petabecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Petabecquerel>();
+    check_fixed::<unit::radioactivity::Exabecquerel>();
+    check_fixed_rescale::<unit::radioactivity::Exabecquerel>();
+    check_fixed::<unit::radioactivity::Curie>();
+    check_fixed_rescale::<unit::radioactivity::Curie>();
+    check_fixed::<unit::radioactivity::Picocurie>();
+    check_fixed_rescale::<unit::radioactivity::Picocurie>();
+    check_fixed::<unit::radioactivity::Nanocurie>();
+    check_fixed_rescale::<unit::radioactivity::Nanocurie>();
+    check_fixed::<unit::radioactivity::Microcurie>();
+    check_fixed_rescale::<unit::radioactivity::Microcurie>();
+    check_fixed::<unit::radioactivity::Millicurie>();
+    check_fixed_rescale::<unit::radioactivity::Millicurie>();
+    check_fixed::<unit::radioactivity::Kilocurie>();
+    check_fixed_rescale::<unit::radioactivity::Kilocurie>();
+    check_fixed::<unit::radioactivity::Megacurie>();
+    check_fixed_rescale::<unit::radioactivity::Megacurie>();
+    check_fixed::<unit::radioactivity::Gigacurie>();
+    check_fixed_rescale::<unit::radioactivity::Gigacurie>();
+    check_fixed::<unit::radioactivity::Teracurie>();
+    check_fixed_rescale::<unit::radioactivity::Teracurie>();
+    check_fixed::<unit::radioactivity::Rutherford>();
+    check_fixed_rescale::<unit::radioactivity::Rutherford>();
+    check_fixed::<unit::radioactivity::Picorutherford>();
+    check_fixed_rescale::<unit::radioactivity::Picorutherford>();
+    check_fixed::<unit::radioactivity::Nanorutherford>();
+    check_fixed_rescale::<unit::radioactivity::Nanorutherford>();
+    check_fixed::<unit::radioactivity::Microrutherford>();
+    check_fixed_rescale::<unit::radioactivity::Microrutherford>();
+    check_fixed::<unit::radioactivity::Millirutherford>();
+    check_fixed_rescale::<unit::radioactivity::Millirutherford>();
+    check_fixed::<unit::radioactivity::Kilorutherford>();
+    check_fixed_rescale::<unit::radioactivity::Kilorutherford>();
+    check_fixed::<unit::radioactivity::Megarutherford>();
+    check_fixed_rescale::<unit::radioactivity::Megarutherford>();
+    check_fixed::<unit::radioactivity::Gigarutherford>();
+    check_fixed_rescale::<unit::radioactivity::Gigarutherford>();
+    check_fixed::<unit::radioactivity::Terarutherford>();
+    check_fixed_rescale::<unit::radioactivity::Terarutherford>();
 }
 
 #[test]

@@ -811,3 +811,40 @@ impl<T: Float> Radioactivity<T> {
         self.as_terarutherfords()
     }
 }
+
+fixed_base!(Radioactivity, Becquerel);
+
+/// Unit markers for counting [`Radioactivity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::radioactivity`](crate::unit::radioactivity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Becquerel: Radioactivity, RadioactivityUnit::Becquerel, base Becquerel, 1 / 1, pi^0, from_becquerels, as_becquerels);
+    fixed_unit!(Picobecquerel: Radioactivity, RadioactivityUnit::Picobecquerel, base Becquerel, 1 / 1000000000000, pi^0, from_picobecquerels, as_picobecquerels);
+    fixed_unit!(Nanobecquerel: Radioactivity, RadioactivityUnit::Nanobecquerel, base Becquerel, 1 / 1000000000, pi^0, from_nanobecquerels, as_nanobecquerels);
+    fixed_unit!(Microbecquerel: Radioactivity, RadioactivityUnit::Microbecquerel, base Becquerel, 1 / 1000000, pi^0, from_microbecquerels, as_microbecquerels);
+    fixed_unit!(Millibecquerel: Radioactivity, RadioactivityUnit::Millibecquerel, base Becquerel, 1 / 1000, pi^0, from_millibecquerels, as_millibecquerels);
+    fixed_unit!(Kilobecquerel: Radioactivity, RadioactivityUnit::Kilobecquerel, base Becquerel, 1000 / 1, pi^0, from_kilobecquerels, as_kilobecquerels);
+    fixed_unit!(Megabecquerel: Radioactivity, RadioactivityUnit::Megabecquerel, base Becquerel, 1000000 / 1, pi^0, from_megabecquerels, as_megabecquerels);
+    fixed_unit!(Gigabecquerel: Radioactivity, RadioactivityUnit::Gigabecquerel, base Becquerel, 1000000000 / 1, pi^0, from_gigabecquerels, as_gigabecquerels);
+    fixed_unit!(Terabecquerel: Radioactivity, RadioactivityUnit::Terabecquerel, base Becquerel, 1000000000000 / 1, pi^0, from_terabecquerels, as_terabecquerels);
+    fixed_unit!(Petabecquerel: Radioactivity, RadioactivityUnit::Petabecquerel, base Becquerel, 1000000000000000 / 1, pi^0, from_petabecquerels, as_petabecquerels);
+    fixed_unit!(Exabecquerel: Radioactivity, RadioactivityUnit::Exabecquerel, base Becquerel, 1000000000000000000 / 1, pi^0, from_exabecquerels, as_exabecquerels);
+    fixed_unit!(Curie: Radioactivity, RadioactivityUnit::Curie, base Becquerel, 37000000000 / 1, pi^0, from_curies, as_curies);
+    fixed_unit!(Picocurie: Radioactivity, RadioactivityUnit::Picocurie, base Becquerel, 37 / 1000, pi^0, from_picocuries, as_picocuries);
+    fixed_unit!(Nanocurie: Radioactivity, RadioactivityUnit::Nanocurie, base Becquerel, 37 / 1, pi^0, from_nanocuries, as_nanocuries);
+    fixed_unit!(Microcurie: Radioactivity, RadioactivityUnit::Microcurie, base Becquerel, 37000 / 1, pi^0, from_microcuries, as_microcuries);
+    fixed_unit!(Millicurie: Radioactivity, RadioactivityUnit::Millicurie, base Becquerel, 37000000 / 1, pi^0, from_millicuries, as_millicuries);
+    fixed_unit!(Kilocurie: Radioactivity, RadioactivityUnit::Kilocurie, base Becquerel, 37000000000000 / 1, pi^0, from_kilocuries, as_kilocuries);
+    fixed_unit!(Megacurie: Radioactivity, RadioactivityUnit::Megacurie, base Becquerel, 37000000000000000 / 1, pi^0, from_megacuries, as_megacuries);
+    fixed_unit!(Gigacurie: Radioactivity, RadioactivityUnit::Gigacurie, base Becquerel, 37000000000000000000 / 1, pi^0, from_gigacuries, as_gigacuries);
+    fixed_unit!(Teracurie: Radioactivity, RadioactivityUnit::Teracurie, base Becquerel, 37000000000000000000000 / 1, pi^0, from_teracuries, as_teracuries);
+    fixed_unit!(Rutherford: Radioactivity, RadioactivityUnit::Rutherford, base Becquerel, 1000000 / 1, pi^0, from_rutherfords, as_rutherfords);
+    fixed_unit!(Picorutherford: Radioactivity, RadioactivityUnit::Picorutherford, base Becquerel, 1 / 1000000, pi^0, from_picorutherfords, as_picorutherfords);
+    fixed_unit!(Nanorutherford: Radioactivity, RadioactivityUnit::Nanorutherford, base Becquerel, 1 / 1000, pi^0, from_nanorutherfords, as_nanorutherfords);
+    fixed_unit!(Microrutherford: Radioactivity, RadioactivityUnit::Microrutherford, base Becquerel, 1 / 1, pi^0, from_microrutherfords, as_microrutherfords);
+    fixed_unit!(Millirutherford: Radioactivity, RadioactivityUnit::Millirutherford, base Becquerel, 1000 / 1, pi^0, from_millirutherfords, as_millirutherfords);
+    fixed_unit!(Kilorutherford: Radioactivity, RadioactivityUnit::Kilorutherford, base Becquerel, 1000000000 / 1, pi^0, from_kilorutherfords, as_kilorutherfords);
+    fixed_unit!(Megarutherford: Radioactivity, RadioactivityUnit::Megarutherford, base Becquerel, 1000000000000 / 1, pi^0, from_megarutherfords, as_megarutherfords);
+    fixed_unit!(Gigarutherford: Radioactivity, RadioactivityUnit::Gigarutherford, base Becquerel, 1000000000000000 / 1, pi^0, from_gigarutherfords, as_gigarutherfords);
+    fixed_unit!(Terarutherford: Radioactivity, RadioactivityUnit::Terarutherford, base Becquerel, 1000000000000000000 / 1, pi^0, from_terarutherfords, as_terarutherfords);
+}

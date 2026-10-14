@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -675,6 +675,46 @@ fn kilograms_per_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::linear_density::GramPerMillimeter>();
+    check_fixed_rescale::<unit::linear_density::GramPerMillimeter>();
+    check_fixed::<unit::linear_density::MicrogramPerMillimeter>();
+    check_fixed_rescale::<unit::linear_density::MicrogramPerMillimeter>();
+    check_fixed::<unit::linear_density::MilligramPerMillimeter>();
+    check_fixed_rescale::<unit::linear_density::MilligramPerMillimeter>();
+    check_fixed::<unit::linear_density::KilogramPerMillimeter>();
+    check_fixed_rescale::<unit::linear_density::KilogramPerMillimeter>();
+    check_fixed::<unit::linear_density::GramPerCentimeter>();
+    check_fixed_rescale::<unit::linear_density::GramPerCentimeter>();
+    check_fixed::<unit::linear_density::MicrogramPerCentimeter>();
+    check_fixed_rescale::<unit::linear_density::MicrogramPerCentimeter>();
+    check_fixed::<unit::linear_density::MilligramPerCentimeter>();
+    check_fixed_rescale::<unit::linear_density::MilligramPerCentimeter>();
+    check_fixed::<unit::linear_density::KilogramPerCentimeter>();
+    check_fixed_rescale::<unit::linear_density::KilogramPerCentimeter>();
+    check_fixed::<unit::linear_density::GramPerMeter>();
+    check_fixed_rescale::<unit::linear_density::GramPerMeter>();
+    check_fixed::<unit::linear_density::MicrogramPerMeter>();
+    check_fixed_rescale::<unit::linear_density::MicrogramPerMeter>();
+    check_fixed::<unit::linear_density::MilligramPerMeter>();
+    check_fixed_rescale::<unit::linear_density::MilligramPerMeter>();
+    check_fixed::<unit::linear_density::KilogramPerMeter>();
+    check_fixed_rescale::<unit::linear_density::KilogramPerMeter>();
+    check_fixed::<unit::linear_density::PoundPerInch>();
+    check_fixed_rescale::<unit::linear_density::PoundPerInch>();
+    check_fixed::<unit::linear_density::PoundPerFoot>();
+    check_fixed_rescale::<unit::linear_density::PoundPerFoot>();
+    check_fixed::<unit::linear_density::GramPerFoot>();
+    check_fixed_rescale::<unit::linear_density::GramPerFoot>();
+    check_fixed::<unit::linear_density::MicrogramPerFoot>();
+    check_fixed_rescale::<unit::linear_density::MicrogramPerFoot>();
+    check_fixed::<unit::linear_density::MilligramPerFoot>();
+    check_fixed_rescale::<unit::linear_density::MilligramPerFoot>();
+    check_fixed::<unit::linear_density::KilogramPerFoot>();
+    check_fixed_rescale::<unit::linear_density::KilogramPerFoot>();
 }
 
 #[test]

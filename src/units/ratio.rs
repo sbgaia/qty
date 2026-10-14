@@ -227,3 +227,17 @@ impl<T: Float> Ratio<T> {
         self.as_parts_per_trillion()
     }
 }
+
+fixed_base!(Ratio, DecimalFraction);
+
+/// Unit markers for counting [`Ratio`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::ratio`](crate::unit::ratio). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(DecimalFraction: Ratio, RatioUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions);
+    fixed_unit!(Percent: Ratio, RatioUnit::Percent, base DecimalFraction, 1 / 100, pi^0, from_percent, as_percent);
+    fixed_unit!(PartPerThousand: Ratio, RatioUnit::PartPerThousand, base DecimalFraction, 1 / 1000, pi^0, from_parts_per_thousand, as_parts_per_thousand);
+    fixed_unit!(PartPerMillion: Ratio, RatioUnit::PartPerMillion, base DecimalFraction, 1 / 1000000, pi^0, from_parts_per_million, as_parts_per_million);
+    fixed_unit!(PartPerBillion: Ratio, RatioUnit::PartPerBillion, base DecimalFraction, 1 / 1000000000, pi^0, from_parts_per_billion, as_parts_per_billion);
+    fixed_unit!(PartPerTrillion: Ratio, RatioUnit::PartPerTrillion, base DecimalFraction, 1 / 1000000000000, pi^0, from_parts_per_trillion, as_parts_per_trillion);
+}

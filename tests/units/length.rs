@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1143,6 +1143,94 @@ fn data_miles() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::length::Meter>();
+    check_fixed_rescale::<unit::length::Meter>();
+    check_fixed::<unit::length::Femtometer>();
+    check_fixed_rescale::<unit::length::Femtometer>();
+    check_fixed::<unit::length::Picometer>();
+    check_fixed_rescale::<unit::length::Picometer>();
+    check_fixed::<unit::length::Nanometer>();
+    check_fixed_rescale::<unit::length::Nanometer>();
+    check_fixed::<unit::length::Micrometer>();
+    check_fixed_rescale::<unit::length::Micrometer>();
+    check_fixed::<unit::length::Millimeter>();
+    check_fixed_rescale::<unit::length::Millimeter>();
+    check_fixed::<unit::length::Centimeter>();
+    check_fixed_rescale::<unit::length::Centimeter>();
+    check_fixed::<unit::length::Decimeter>();
+    check_fixed_rescale::<unit::length::Decimeter>();
+    check_fixed::<unit::length::Decameter>();
+    check_fixed_rescale::<unit::length::Decameter>();
+    check_fixed::<unit::length::Hectometer>();
+    check_fixed_rescale::<unit::length::Hectometer>();
+    check_fixed::<unit::length::Kilometer>();
+    check_fixed_rescale::<unit::length::Kilometer>();
+    check_fixed::<unit::length::Megameter>();
+    check_fixed_rescale::<unit::length::Megameter>();
+    check_fixed::<unit::length::Gigameter>();
+    check_fixed_rescale::<unit::length::Gigameter>();
+    check_fixed::<unit::length::Mile>();
+    check_fixed_rescale::<unit::length::Mile>();
+    check_fixed::<unit::length::Yard>();
+    check_fixed_rescale::<unit::length::Yard>();
+    check_fixed::<unit::length::Kiloyard>();
+    check_fixed_rescale::<unit::length::Kiloyard>();
+    check_fixed::<unit::length::Foot>();
+    check_fixed_rescale::<unit::length::Foot>();
+    check_fixed::<unit::length::Kilofoot>();
+    check_fixed_rescale::<unit::length::Kilofoot>();
+    check_fixed::<unit::length::UsSurveyFoot>();
+    check_fixed_rescale::<unit::length::UsSurveyFoot>();
+    check_fixed::<unit::length::Inch>();
+    check_fixed_rescale::<unit::length::Inch>();
+    check_fixed::<unit::length::Mil>();
+    check_fixed_rescale::<unit::length::Mil>();
+    check_fixed::<unit::length::NauticalMile>();
+    check_fixed_rescale::<unit::length::NauticalMile>();
+    check_fixed::<unit::length::Fathom>();
+    check_fixed_rescale::<unit::length::Fathom>();
+    check_fixed::<unit::length::Shackle>();
+    check_fixed_rescale::<unit::length::Shackle>();
+    check_fixed::<unit::length::Microinch>();
+    check_fixed_rescale::<unit::length::Microinch>();
+    check_fixed::<unit::length::PrinterPoint>();
+    check_fixed_rescale::<unit::length::PrinterPoint>();
+    check_fixed::<unit::length::DtpPoint>();
+    check_fixed_rescale::<unit::length::DtpPoint>();
+    check_fixed::<unit::length::PrinterPica>();
+    check_fixed_rescale::<unit::length::PrinterPica>();
+    check_fixed::<unit::length::DtpPica>();
+    check_fixed_rescale::<unit::length::DtpPica>();
+    check_fixed::<unit::length::Twip>();
+    check_fixed_rescale::<unit::length::Twip>();
+    check_fixed::<unit::length::Hand>();
+    check_fixed_rescale::<unit::length::Hand>();
+    check_fixed::<unit::length::AstronomicalUnit>();
+    check_fixed_rescale::<unit::length::AstronomicalUnit>();
+    check_fixed::<unit::length::Parsec>();
+    check_fixed_rescale::<unit::length::Parsec>();
+    check_fixed::<unit::length::Kiloparsec>();
+    check_fixed_rescale::<unit::length::Kiloparsec>();
+    check_fixed::<unit::length::Megaparsec>();
+    check_fixed_rescale::<unit::length::Megaparsec>();
+    check_fixed::<unit::length::LightYear>();
+    check_fixed_rescale::<unit::length::LightYear>();
+    check_fixed::<unit::length::KilolightYear>();
+    check_fixed_rescale::<unit::length::KilolightYear>();
+    check_fixed::<unit::length::MegalightYear>();
+    check_fixed_rescale::<unit::length::MegalightYear>();
+    check_fixed::<unit::length::SolarRadius>();
+    check_fixed_rescale::<unit::length::SolarRadius>();
+    check_fixed::<unit::length::Chain>();
+    check_fixed_rescale::<unit::length::Chain>();
+    check_fixed::<unit::length::Angstrom>();
+    check_fixed_rescale::<unit::length::Angstrom>();
+    check_fixed::<unit::length::DataMile>();
+    check_fixed_rescale::<unit::length::DataMile>();
 }
 
 #[test]

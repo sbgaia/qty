@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -120,6 +120,16 @@ fn megajoules_per_mole_kelvin() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::molar_entropy::JoulePerMoleKelvin>();
+    check_fixed_rescale::<unit::molar_entropy::JoulePerMoleKelvin>();
+    check_fixed::<unit::molar_entropy::KilojoulePerMoleKelvin>();
+    check_fixed_rescale::<unit::molar_entropy::KilojoulePerMoleKelvin>();
+    check_fixed::<unit::molar_entropy::MegajoulePerMoleKelvin>();
+    check_fixed_rescale::<unit::molar_entropy::MegajoulePerMoleKelvin>();
 }
 
 #[test]

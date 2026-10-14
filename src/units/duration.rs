@@ -430,3 +430,24 @@ impl<T: Float> Duration<T> {
         self.as_sols()
     }
 }
+
+fixed_base!(Duration, Second);
+
+/// Unit markers for counting [`Duration`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::duration`](crate::unit::duration). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Year365: Duration, DurationUnit::Year365, base Second, 31536000 / 1, pi^0, from_years365, as_years365);
+    fixed_unit!(Month30: Duration, DurationUnit::Month30, base Second, 2592000 / 1, pi^0, from_months30, as_months30);
+    fixed_unit!(Week: Duration, DurationUnit::Week, base Second, 604800 / 1, pi^0, from_weeks, as_weeks);
+    fixed_unit!(Day: Duration, DurationUnit::Day, base Second, 86400 / 1, pi^0, from_days, as_days);
+    fixed_unit!(Hour: Duration, DurationUnit::Hour, base Second, 3600 / 1, pi^0, from_hours, as_hours);
+    fixed_unit!(Minute: Duration, DurationUnit::Minute, base Second, 60 / 1, pi^0, from_minutes, as_minutes);
+    fixed_unit!(Second: Duration, DurationUnit::Second, base Second, 1 / 1, pi^0, from_seconds, as_seconds);
+    fixed_unit!(Picosecond: Duration, DurationUnit::Picosecond, base Second, 1 / 1000000000000, pi^0, from_picoseconds, as_picoseconds);
+    fixed_unit!(Nanosecond: Duration, DurationUnit::Nanosecond, base Second, 1 / 1000000000, pi^0, from_nanoseconds, as_nanoseconds);
+    fixed_unit!(Microsecond: Duration, DurationUnit::Microsecond, base Second, 1 / 1000000, pi^0, from_microseconds, as_microseconds);
+    fixed_unit!(Millisecond: Duration, DurationUnit::Millisecond, base Second, 1 / 1000, pi^0, from_milliseconds, as_milliseconds);
+    fixed_unit!(JulianYear: Duration, DurationUnit::JulianYear, base Second, 31557600 / 1, pi^0, from_julian_years, as_julian_years);
+    fixed_unit!(Sol: Duration, DurationUnit::Sol, base Second, 22193811 / 250, pi^0, from_sols, as_sols);
+}

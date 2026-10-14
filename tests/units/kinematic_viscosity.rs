@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -338,6 +338,28 @@ fn square_feet_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>();
+    check_fixed_rescale::<unit::kinematic_viscosity::SquareMeterPerSecond>();
+    check_fixed::<unit::kinematic_viscosity::Stokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Stokes>();
+    check_fixed::<unit::kinematic_viscosity::Nanostokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Nanostokes>();
+    check_fixed::<unit::kinematic_viscosity::Microstokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Microstokes>();
+    check_fixed::<unit::kinematic_viscosity::Millistokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Millistokes>();
+    check_fixed::<unit::kinematic_viscosity::Centistokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Centistokes>();
+    check_fixed::<unit::kinematic_viscosity::Decistokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Decistokes>();
+    check_fixed::<unit::kinematic_viscosity::Kilostokes>();
+    check_fixed_rescale::<unit::kinematic_viscosity::Kilostokes>();
+    check_fixed::<unit::kinematic_viscosity::SquareFootPerSecond>();
+    check_fixed_rescale::<unit::kinematic_viscosity::SquareFootPerSecond>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -533,6 +533,38 @@ fn megawatts_per_square_centimeter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::irradiance::WattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::WattPerSquareMeter>();
+    check_fixed::<unit::irradiance::PicowattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::PicowattPerSquareMeter>();
+    check_fixed::<unit::irradiance::NanowattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::NanowattPerSquareMeter>();
+    check_fixed::<unit::irradiance::MicrowattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::MicrowattPerSquareMeter>();
+    check_fixed::<unit::irradiance::MilliwattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::MilliwattPerSquareMeter>();
+    check_fixed::<unit::irradiance::KilowattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::KilowattPerSquareMeter>();
+    check_fixed::<unit::irradiance::MegawattPerSquareMeter>();
+    check_fixed_rescale::<unit::irradiance::MegawattPerSquareMeter>();
+    check_fixed::<unit::irradiance::WattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::WattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::PicowattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::PicowattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::NanowattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::NanowattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::MicrowattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::MicrowattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::MilliwattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::MilliwattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::KilowattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::KilowattPerSquareCentimeter>();
+    check_fixed::<unit::irradiance::MegawattPerSquareCentimeter>();
+    check_fixed_rescale::<unit::irradiance::MegawattPerSquareCentimeter>();
 }
 
 #[test]

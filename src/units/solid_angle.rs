@@ -107,3 +107,12 @@ impl<T: Float> SolidAngle<T> {
         self.as_steradians()
     }
 }
+
+fixed_base!(SolidAngle, Steradian);
+
+/// Unit markers for counting [`SolidAngle`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::solid_angle`](crate::unit::solid_angle). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Steradian: SolidAngle, SolidAngleUnit::Steradian, base Steradian, 1 / 1, pi^0, from_steradians, as_steradians);
+}

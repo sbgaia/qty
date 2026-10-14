@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -417,6 +417,32 @@ fn inverse_square_inches() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::reciprocal_area::InverseSquareMeter>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareMeter>();
+    check_fixed::<unit::reciprocal_area::InverseSquareKilometer>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareKilometer>();
+    check_fixed::<unit::reciprocal_area::InverseSquareDecimeter>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareDecimeter>();
+    check_fixed::<unit::reciprocal_area::InverseSquareCentimeter>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareCentimeter>();
+    check_fixed::<unit::reciprocal_area::InverseSquareMillimeter>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareMillimeter>();
+    check_fixed::<unit::reciprocal_area::InverseSquareMicrometer>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareMicrometer>();
+    check_fixed::<unit::reciprocal_area::InverseSquareMile>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareMile>();
+    check_fixed::<unit::reciprocal_area::InverseSquareYard>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareYard>();
+    check_fixed::<unit::reciprocal_area::InverseSquareFoot>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareFoot>();
+    check_fixed::<unit::reciprocal_area::InverseUsSurveySquareFoot>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseUsSurveySquareFoot>();
+    check_fixed::<unit::reciprocal_area::InverseSquareInch>();
+    check_fixed_rescale::<unit::reciprocal_area::InverseSquareInch>();
 }
 
 #[test]

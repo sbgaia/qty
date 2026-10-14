@@ -111,3 +111,12 @@ impl<T: Float> ElectricChargeDensity<T> {
         self.as_coulombs_per_cubic_meter()
     }
 }
+
+fixed_base!(ElectricChargeDensity, CoulombPerCubicMeter);
+
+/// Unit markers for counting [`ElectricChargeDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_charge_density`](crate::unit::electric_charge_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(CoulombPerCubicMeter: ElectricChargeDensity, ElectricChargeDensityUnit::CoulombPerCubicMeter, base CoulombPerCubicMeter, 1 / 1, pi^0, from_coulombs_per_cubic_meter, as_coulombs_per_cubic_meter);
+}

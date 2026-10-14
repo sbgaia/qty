@@ -271,3 +271,18 @@ impl<T: Float> ThermalInsulance<T> {
         self.as_hour_square_feet_degrees_fahrenheit_per_btu()
     }
 }
+
+fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
+
+/// Unit markers for counting [`ThermalInsulance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::thermal_insulance`](crate::unit::thermal_insulance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(SquareMeterKelvinPerKilowatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt, base SquareMeterKelvinPerKilowatt, 1 / 1, pi^0, from_square_meter_kelvins_per_kilowatt, as_square_meter_kelvins_per_kilowatt);
+    fixed_unit!(SquareMeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_kelvins_per_watt, as_square_meter_kelvins_per_watt);
+    fixed_unit!(SquareMeterDegreeCelsiusPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_degrees_celsius_per_watt, as_square_meter_degrees_celsius_per_watt);
+    fixed_unit!(SquareCentimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1 / 10, pi^0, from_square_centimeter_kelvins_per_watt, as_square_centimeter_kelvins_per_watt);
+    fixed_unit!(SquareMillimeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1 / 1000, pi^0, from_square_millimeter_kelvins_per_watt, as_square_millimeter_kelvins_per_watt);
+    fixed_unit!(SquareCentimeterHourDegreeCelsiusPerKilocalorie: ThermalInsulance, ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie, base SquareMeterKelvinPerKilowatt, 45 / 523, pi^0, from_square_centimeter_hour_degrees_celsius_per_kilocalorie, as_square_centimeter_hour_degrees_celsius_per_kilocalorie);
+    fixed_unit!(HourSquareFeetDegreeFahrenheitPerBtu: ThermalInsulance, ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu, base SquareMeterKelvinPerKilowatt, 9290304000000 / 52752792631, pi^0, from_hour_square_feet_degrees_fahrenheit_per_btu, as_hour_square_feet_degrees_fahrenheit_per_btu);
+}

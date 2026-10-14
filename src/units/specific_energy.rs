@@ -832,3 +832,41 @@ impl<T: Float> SpecificEnergy<T> {
         self.0 / T::from_f64(2326.0)
     }
 }
+
+fixed_base!(SpecificEnergy, JoulePerKilogram);
+
+/// Unit markers for counting [`SpecificEnergy`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::specific_energy`](crate::unit::specific_energy). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::JoulePerKilogram, base JoulePerKilogram, 1 / 1, pi^0, from_joules_per_kilogram, as_joules_per_kilogram);
+    fixed_unit!(KilojoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::KilojoulePerKilogram, base JoulePerKilogram, 1000 / 1, pi^0, from_kilojoules_per_kilogram, as_kilojoules_per_kilogram);
+    fixed_unit!(MegajoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::MegajoulePerKilogram, base JoulePerKilogram, 1000000 / 1, pi^0, from_megajoules_per_kilogram, as_megajoules_per_kilogram);
+    fixed_unit!(MegajoulePerTonne: SpecificEnergy, SpecificEnergyUnit::MegajoulePerTonne, base JoulePerKilogram, 1000 / 1, pi^0, from_megajoules_per_tonne, as_megajoules_per_tonne);
+    fixed_unit!(CaloriePerGram: SpecificEnergy, SpecificEnergyUnit::CaloriePerGram, base JoulePerKilogram, 4184 / 1, pi^0, from_calories_per_gram, as_calories_per_gram);
+    fixed_unit!(KilocaloriePerGram: SpecificEnergy, SpecificEnergyUnit::KilocaloriePerGram, base JoulePerKilogram, 4184000 / 1, pi^0, from_kilocalories_per_gram, as_kilocalories_per_gram);
+    fixed_unit!(WattHourPerKilogram: SpecificEnergy, SpecificEnergyUnit::WattHourPerKilogram, base JoulePerKilogram, 3600 / 1, pi^0, from_watt_hours_per_kilogram, as_watt_hours_per_kilogram);
+    fixed_unit!(KilowattHourPerKilogram: SpecificEnergy, SpecificEnergyUnit::KilowattHourPerKilogram, base JoulePerKilogram, 3600000 / 1, pi^0, from_kilowatt_hours_per_kilogram, as_kilowatt_hours_per_kilogram);
+    fixed_unit!(MegawattHourPerKilogram: SpecificEnergy, SpecificEnergyUnit::MegawattHourPerKilogram, base JoulePerKilogram, 3600000000 / 1, pi^0, from_megawatt_hours_per_kilogram, as_megawatt_hours_per_kilogram);
+    fixed_unit!(GigawattHourPerKilogram: SpecificEnergy, SpecificEnergyUnit::GigawattHourPerKilogram, base JoulePerKilogram, 3600000000000 / 1, pi^0, from_gigawatt_hours_per_kilogram, as_gigawatt_hours_per_kilogram);
+    fixed_unit!(WattDayPerKilogram: SpecificEnergy, SpecificEnergyUnit::WattDayPerKilogram, base JoulePerKilogram, 86400 / 1, pi^0, from_watt_days_per_kilogram, as_watt_days_per_kilogram);
+    fixed_unit!(KilowattDayPerKilogram: SpecificEnergy, SpecificEnergyUnit::KilowattDayPerKilogram, base JoulePerKilogram, 86400000 / 1, pi^0, from_kilowatt_days_per_kilogram, as_kilowatt_days_per_kilogram);
+    fixed_unit!(MegawattDayPerKilogram: SpecificEnergy, SpecificEnergyUnit::MegawattDayPerKilogram, base JoulePerKilogram, 86400000000 / 1, pi^0, from_megawatt_days_per_kilogram, as_megawatt_days_per_kilogram);
+    fixed_unit!(GigawattDayPerKilogram: SpecificEnergy, SpecificEnergyUnit::GigawattDayPerKilogram, base JoulePerKilogram, 86400000000000 / 1, pi^0, from_gigawatt_days_per_kilogram, as_gigawatt_days_per_kilogram);
+    fixed_unit!(TerawattDayPerKilogram: SpecificEnergy, SpecificEnergyUnit::TerawattDayPerKilogram, base JoulePerKilogram, 86400000000000000 / 1, pi^0, from_terawatt_days_per_kilogram, as_terawatt_days_per_kilogram);
+    fixed_unit!(WattDayPerTonne: SpecificEnergy, SpecificEnergyUnit::WattDayPerTonne, base JoulePerKilogram, 432 / 5, pi^0, from_watt_days_per_tonne, as_watt_days_per_tonne);
+    fixed_unit!(KilowattDayPerTonne: SpecificEnergy, SpecificEnergyUnit::KilowattDayPerTonne, base JoulePerKilogram, 86400 / 1, pi^0, from_kilowatt_days_per_tonne, as_kilowatt_days_per_tonne);
+    fixed_unit!(MegawattDayPerTonne: SpecificEnergy, SpecificEnergyUnit::MegawattDayPerTonne, base JoulePerKilogram, 86400000 / 1, pi^0, from_megawatt_days_per_tonne, as_megawatt_days_per_tonne);
+    fixed_unit!(GigawattDayPerTonne: SpecificEnergy, SpecificEnergyUnit::GigawattDayPerTonne, base JoulePerKilogram, 86400000000 / 1, pi^0, from_gigawatt_days_per_tonne, as_gigawatt_days_per_tonne);
+    fixed_unit!(TerawattDayPerTonne: SpecificEnergy, SpecificEnergyUnit::TerawattDayPerTonne, base JoulePerKilogram, 86400000000000 / 1, pi^0, from_terawatt_days_per_tonne, as_terawatt_days_per_tonne);
+    fixed_unit!(WattDayPerShortTon: SpecificEnergy, SpecificEnergyUnit::WattDayPerShortTon, base JoulePerKilogram, 4320000000 / 45359237, pi^0, from_watt_days_per_short_ton, as_watt_days_per_short_ton);
+    fixed_unit!(KilowattDayPerShortTon: SpecificEnergy, SpecificEnergyUnit::KilowattDayPerShortTon, base JoulePerKilogram, 4320000000000 / 45359237, pi^0, from_kilowatt_days_per_short_ton, as_kilowatt_days_per_short_ton);
+    fixed_unit!(MegawattDayPerShortTon: SpecificEnergy, SpecificEnergyUnit::MegawattDayPerShortTon, base JoulePerKilogram, 4320000000000000 / 45359237, pi^0, from_megawatt_days_per_short_ton, as_megawatt_days_per_short_ton);
+    fixed_unit!(GigawattDayPerShortTon: SpecificEnergy, SpecificEnergyUnit::GigawattDayPerShortTon, base JoulePerKilogram, 4320000000000000000 / 45359237, pi^0, from_gigawatt_days_per_short_ton, as_gigawatt_days_per_short_ton);
+    fixed_unit!(TerawattDayPerShortTon: SpecificEnergy, SpecificEnergyUnit::TerawattDayPerShortTon, base JoulePerKilogram, 4320000000000000000000 / 45359237, pi^0, from_terawatt_days_per_short_ton, as_terawatt_days_per_short_ton);
+    fixed_unit!(WattHourPerPound: SpecificEnergy, SpecificEnergyUnit::WattHourPerPound, base JoulePerKilogram, 198416 / 25, pi^0, from_watt_hours_per_pound, as_watt_hours_per_pound);
+    fixed_unit!(KilowattHourPerPound: SpecificEnergy, SpecificEnergyUnit::KilowattHourPerPound, base JoulePerKilogram, 7936640 / 1, pi^0, from_kilowatt_hours_per_pound, as_kilowatt_hours_per_pound);
+    fixed_unit!(MegawattHourPerPound: SpecificEnergy, SpecificEnergyUnit::MegawattHourPerPound, base JoulePerKilogram, 7936640000 / 1, pi^0, from_megawatt_hours_per_pound, as_megawatt_hours_per_pound);
+    fixed_unit!(GigawattHourPerPound: SpecificEnergy, SpecificEnergyUnit::GigawattHourPerPound, base JoulePerKilogram, 7936640000000 / 1, pi^0, from_gigawatt_hours_per_pound, as_gigawatt_hours_per_pound);
+    fixed_unit!(BtuPerPound: SpecificEnergy, SpecificEnergyUnit::BtuPerPound, base JoulePerKilogram, 2326 / 1, pi^0, from_btu_per_pound, as_btu_per_pound);
+}

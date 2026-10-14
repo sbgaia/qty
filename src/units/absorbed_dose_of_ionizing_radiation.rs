@@ -515,3 +515,28 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.as_megarads()
     }
 }
+
+fixed_base!(AbsorbedDoseOfIonizingRadiation, Gray);
+
+/// Unit markers for counting [`AbsorbedDoseOfIonizingRadiation`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::absorbed_dose_of_ionizing_radiation`](crate::unit::absorbed_dose_of_ionizing_radiation). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Gray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Gray, base Gray, 1 / 1, pi^0, from_grays, as_grays);
+    fixed_unit!(Femtogray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Femtogray, base Gray, 1 / 1000000000000000, pi^0, from_femtograys, as_femtograys);
+    fixed_unit!(Picogray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Picogray, base Gray, 1 / 1000000000000, pi^0, from_picograys, as_picograys);
+    fixed_unit!(Nanogray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Nanogray, base Gray, 1 / 1000000000, pi^0, from_nanograys, as_nanograys);
+    fixed_unit!(Microgray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Microgray, base Gray, 1 / 1000000, pi^0, from_micrograys, as_micrograys);
+    fixed_unit!(Milligray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Milligray, base Gray, 1 / 1000, pi^0, from_milligrays, as_milligrays);
+    fixed_unit!(Centigray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Centigray, base Gray, 1 / 100, pi^0, from_centigrays, as_centigrays);
+    fixed_unit!(Decigray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Decigray, base Gray, 1 / 10, pi^0, from_decigrays, as_decigrays);
+    fixed_unit!(Kilogray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Kilogray, base Gray, 1000 / 1, pi^0, from_kilograys, as_kilograys);
+    fixed_unit!(Megagray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Megagray, base Gray, 1000000 / 1, pi^0, from_megagrays, as_megagrays);
+    fixed_unit!(Gigagray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Gigagray, base Gray, 1000000000 / 1, pi^0, from_gigagrays, as_gigagrays);
+    fixed_unit!(Teragray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Teragray, base Gray, 1000000000000 / 1, pi^0, from_teragrays, as_teragrays);
+    fixed_unit!(Petagray: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Petagray, base Gray, 1000000000000000 / 1, pi^0, from_petagrays, as_petagrays);
+    fixed_unit!(Rad: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Rad, base Gray, 1 / 100, pi^0, from_rads, as_rads);
+    fixed_unit!(Millirad: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Millirad, base Gray, 1 / 100000, pi^0, from_millirads, as_millirads);
+    fixed_unit!(Kilorad: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Kilorad, base Gray, 10 / 1, pi^0, from_kilorads, as_kilorads);
+    fixed_unit!(Megarad: AbsorbedDoseOfIonizingRadiation, AbsorbedDoseOfIonizingRadiationUnit::Megarad, base Gray, 10000 / 1, pi^0, from_megarads, as_megarads);
+}

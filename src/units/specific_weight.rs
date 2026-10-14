@@ -517,3 +517,28 @@ impl<T: Float> SpecificWeight<T> {
         self.as_tonnes_force_per_cubic_meter()
     }
 }
+
+fixed_base!(SpecificWeight, NewtonPerCubicMeter);
+
+/// Unit markers for counting [`SpecificWeight`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::specific_weight`](crate::unit::specific_weight). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(NewtonPerCubicMillimeter: SpecificWeight, SpecificWeightUnit::NewtonPerCubicMillimeter, base NewtonPerCubicMeter, 1000000000 / 1, pi^0, from_newtons_per_cubic_millimeter, as_newtons_per_cubic_millimeter);
+    fixed_unit!(KilonewtonPerCubicMillimeter: SpecificWeight, SpecificWeightUnit::KilonewtonPerCubicMillimeter, base NewtonPerCubicMeter, 1000000000000 / 1, pi^0, from_kilonewtons_per_cubic_millimeter, as_kilonewtons_per_cubic_millimeter);
+    fixed_unit!(NewtonPerCubicCentimeter: SpecificWeight, SpecificWeightUnit::NewtonPerCubicCentimeter, base NewtonPerCubicMeter, 1000000 / 1, pi^0, from_newtons_per_cubic_centimeter, as_newtons_per_cubic_centimeter);
+    fixed_unit!(KilonewtonPerCubicCentimeter: SpecificWeight, SpecificWeightUnit::KilonewtonPerCubicCentimeter, base NewtonPerCubicMeter, 1000000000 / 1, pi^0, from_kilonewtons_per_cubic_centimeter, as_kilonewtons_per_cubic_centimeter);
+    fixed_unit!(NewtonPerCubicMeter: SpecificWeight, SpecificWeightUnit::NewtonPerCubicMeter, base NewtonPerCubicMeter, 1 / 1, pi^0, from_newtons_per_cubic_meter, as_newtons_per_cubic_meter);
+    fixed_unit!(KilonewtonPerCubicMeter: SpecificWeight, SpecificWeightUnit::KilonewtonPerCubicMeter, base NewtonPerCubicMeter, 1000 / 1, pi^0, from_kilonewtons_per_cubic_meter, as_kilonewtons_per_cubic_meter);
+    fixed_unit!(MeganewtonPerCubicMeter: SpecificWeight, SpecificWeightUnit::MeganewtonPerCubicMeter, base NewtonPerCubicMeter, 1000000 / 1, pi^0, from_meganewtons_per_cubic_meter, as_meganewtons_per_cubic_meter);
+    fixed_unit!(KilogramForcePerCubicMillimeter: SpecificWeight, SpecificWeightUnit::KilogramForcePerCubicMillimeter, base NewtonPerCubicMeter, 9806650000 / 1, pi^0, from_kilograms_force_per_cubic_millimeter, as_kilograms_force_per_cubic_millimeter);
+    fixed_unit!(KilogramForcePerCubicCentimeter: SpecificWeight, SpecificWeightUnit::KilogramForcePerCubicCentimeter, base NewtonPerCubicMeter, 9806650 / 1, pi^0, from_kilograms_force_per_cubic_centimeter, as_kilograms_force_per_cubic_centimeter);
+    fixed_unit!(KilogramForcePerCubicMeter: SpecificWeight, SpecificWeightUnit::KilogramForcePerCubicMeter, base NewtonPerCubicMeter, 196133 / 20000, pi^0, from_kilograms_force_per_cubic_meter, as_kilograms_force_per_cubic_meter);
+    fixed_unit!(PoundForcePerCubicInch: SpecificWeight, SpecificWeightUnit::PoundForcePerCubicInch, base NewtonPerCubicMeter, 8896443230521 / 32774128, pi^0, from_pounds_force_per_cubic_inch, as_pounds_force_per_cubic_inch);
+    fixed_unit!(KilopoundForcePerCubicInch: SpecificWeight, SpecificWeightUnit::KilopoundForcePerCubicInch, base NewtonPerCubicMeter, 1112055403815125 / 4096766, pi^0, from_kilopounds_force_per_cubic_inch, as_kilopounds_force_per_cubic_inch);
+    fixed_unit!(PoundForcePerCubicFoot: SpecificWeight, SpecificWeightUnit::PoundForcePerCubicFoot, base NewtonPerCubicMeter, 8896443230521 / 56633693184, pi^0, from_pounds_force_per_cubic_foot, as_pounds_force_per_cubic_foot);
+    fixed_unit!(KilopoundForcePerCubicFoot: SpecificWeight, SpecificWeightUnit::KilopoundForcePerCubicFoot, base NewtonPerCubicMeter, 1112055403815125 / 7079211648, pi^0, from_kilopounds_force_per_cubic_foot, as_kilopounds_force_per_cubic_foot);
+    fixed_unit!(TonneForcePerCubicMillimeter: SpecificWeight, SpecificWeightUnit::TonneForcePerCubicMillimeter, base NewtonPerCubicMeter, 9806650000000 / 1, pi^0, from_tonnes_force_per_cubic_millimeter, as_tonnes_force_per_cubic_millimeter);
+    fixed_unit!(TonneForcePerCubicCentimeter: SpecificWeight, SpecificWeightUnit::TonneForcePerCubicCentimeter, base NewtonPerCubicMeter, 9806650000 / 1, pi^0, from_tonnes_force_per_cubic_centimeter, as_tonnes_force_per_cubic_centimeter);
+    fixed_unit!(TonneForcePerCubicMeter: SpecificWeight, SpecificWeightUnit::TonneForcePerCubicMeter, base NewtonPerCubicMeter, 196133 / 20, pi^0, from_tonnes_force_per_cubic_meter, as_tonnes_force_per_cubic_meter);
+}

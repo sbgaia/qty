@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -420,6 +420,31 @@ fn revolutions() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::angle::Radian>();
+    check_fixed_rescale::<unit::angle::Radian>();
+    check_fixed::<unit::angle::Nanoradian>();
+    check_fixed_rescale::<unit::angle::Nanoradian>();
+    check_fixed::<unit::angle::Microradian>();
+    check_fixed_rescale::<unit::angle::Microradian>();
+    check_fixed::<unit::angle::Milliradian>();
+    check_fixed_rescale::<unit::angle::Milliradian>();
+    check_fixed::<unit::angle::Centiradian>();
+    check_fixed_rescale::<unit::angle::Centiradian>();
+    check_fixed::<unit::angle::Deciradian>();
+    check_fixed_rescale::<unit::angle::Deciradian>();
+    check_fixed::<unit::angle::Degree>();
+    check_fixed::<unit::angle::Nanodegree>();
+    check_fixed::<unit::angle::Microdegree>();
+    check_fixed::<unit::angle::Millidegree>();
+    check_fixed::<unit::angle::Arcminute>();
+    check_fixed::<unit::angle::Arcsecond>();
+    check_fixed::<unit::angle::Gradian>();
+    check_fixed::<unit::angle::NatoMil>();
+    check_fixed::<unit::angle::Revolution>();
 }
 
 #[test]

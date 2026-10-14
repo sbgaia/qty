@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -367,6 +367,30 @@ fn nits() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::luminance::CandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::CandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::NanocandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::NanocandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::MicrocandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::MicrocandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::MillicandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::MillicandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::CenticandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::CenticandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::DecicandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::DecicandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::KilocandelaPerSquareMeter>();
+    check_fixed_rescale::<unit::luminance::KilocandelaPerSquareMeter>();
+    check_fixed::<unit::luminance::CandelaPerSquareFoot>();
+    check_fixed_rescale::<unit::luminance::CandelaPerSquareFoot>();
+    check_fixed::<unit::luminance::CandelaPerSquareInch>();
+    check_fixed_rescale::<unit::luminance::CandelaPerSquareInch>();
+    check_fixed::<unit::luminance::Nit>();
+    check_fixed_rescale::<unit::luminance::Nit>();
 }
 
 #[test]

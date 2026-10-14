@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -330,6 +330,28 @@ fn pound_moles_per_hour() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::molar_flow::MolePerSecond>();
+    check_fixed_rescale::<unit::molar_flow::MolePerSecond>();
+    check_fixed::<unit::molar_flow::KilomolePerSecond>();
+    check_fixed_rescale::<unit::molar_flow::KilomolePerSecond>();
+    check_fixed::<unit::molar_flow::MolePerMinute>();
+    check_fixed_rescale::<unit::molar_flow::MolePerMinute>();
+    check_fixed::<unit::molar_flow::KilomolePerMinute>();
+    check_fixed_rescale::<unit::molar_flow::KilomolePerMinute>();
+    check_fixed::<unit::molar_flow::MolePerHour>();
+    check_fixed_rescale::<unit::molar_flow::MolePerHour>();
+    check_fixed::<unit::molar_flow::KilomolePerHour>();
+    check_fixed_rescale::<unit::molar_flow::KilomolePerHour>();
+    check_fixed::<unit::molar_flow::PoundMolePerSecond>();
+    check_fixed_rescale::<unit::molar_flow::PoundMolePerSecond>();
+    check_fixed::<unit::molar_flow::PoundMolePerMinute>();
+    check_fixed_rescale::<unit::molar_flow::PoundMolePerMinute>();
+    check_fixed::<unit::molar_flow::PoundMolePerHour>();
+    check_fixed_rescale::<unit::molar_flow::PoundMolePerHour>();
 }
 
 #[test]

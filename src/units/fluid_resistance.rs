@@ -595,3 +595,30 @@ impl<T: Float> FluidResistance<T> {
         self.as_wood_units()
     }
 }
+
+fixed_base!(FluidResistance, PascalSecondPerCubicMeter);
+
+/// Unit markers for counting [`FluidResistance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::fluid_resistance`](crate::unit::fluid_resistance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(PascalSecondPerLiter: FluidResistance, FluidResistanceUnit::PascalSecondPerLiter, base PascalSecondPerCubicMeter, 1000 / 1, pi^0, from_pascal_seconds_per_liter, as_pascal_seconds_per_liter);
+    fixed_unit!(PascalMinutePerLiter: FluidResistance, FluidResistanceUnit::PascalMinutePerLiter, base PascalSecondPerCubicMeter, 60000 / 1, pi^0, from_pascal_minutes_per_liter, as_pascal_minutes_per_liter);
+    fixed_unit!(PascalSecondPerMilliliter: FluidResistance, FluidResistanceUnit::PascalSecondPerMilliliter, base PascalSecondPerCubicMeter, 1000000 / 1, pi^0, from_pascal_seconds_per_milliliter, as_pascal_seconds_per_milliliter);
+    fixed_unit!(PascalMinutePerMilliliter: FluidResistance, FluidResistanceUnit::PascalMinutePerMilliliter, base PascalSecondPerCubicMeter, 60000000 / 1, pi^0, from_pascal_minutes_per_milliliter, as_pascal_minutes_per_milliliter);
+    fixed_unit!(PascalSecondPerCubicMeter: FluidResistance, FluidResistanceUnit::PascalSecondPerCubicMeter, base PascalSecondPerCubicMeter, 1 / 1, pi^0, from_pascal_seconds_per_cubic_meter, as_pascal_seconds_per_cubic_meter);
+    fixed_unit!(MegapascalSecondPerCubicMeter: FluidResistance, FluidResistanceUnit::MegapascalSecondPerCubicMeter, base PascalSecondPerCubicMeter, 1000000 / 1, pi^0, from_megapascal_seconds_per_cubic_meter, as_megapascal_seconds_per_cubic_meter);
+    fixed_unit!(PascalMinutePerCubicMeter: FluidResistance, FluidResistanceUnit::PascalMinutePerCubicMeter, base PascalSecondPerCubicMeter, 60 / 1, pi^0, from_pascal_minutes_per_cubic_meter, as_pascal_minutes_per_cubic_meter);
+    fixed_unit!(PascalSecondPerCubicCentimeter: FluidResistance, FluidResistanceUnit::PascalSecondPerCubicCentimeter, base PascalSecondPerCubicMeter, 1000000 / 1, pi^0, from_pascal_seconds_per_cubic_centimeter, as_pascal_seconds_per_cubic_centimeter);
+    fixed_unit!(PascalMinutePerCubicCentimeter: FluidResistance, FluidResistanceUnit::PascalMinutePerCubicCentimeter, base PascalSecondPerCubicMeter, 60000000 / 1, pi^0, from_pascal_minutes_per_cubic_centimeter, as_pascal_minutes_per_cubic_centimeter);
+    fixed_unit!(DyneSecondPerCentimeterToTheFifth: FluidResistance, FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth, base PascalSecondPerCubicMeter, 100000 / 1, pi^0, from_dyne_seconds_per_centimeter_to_the_fifth, as_dyne_seconds_per_centimeter_to_the_fifth);
+    fixed_unit!(MillimeterMercurySecondPerLiter: FluidResistance, FluidResistanceUnit::MillimeterMercurySecondPerLiter, base PascalSecondPerCubicMeter, 16665296 / 125, pi^0, from_millimeter_mercury_seconds_per_liter, as_millimeter_mercury_seconds_per_liter);
+    fixed_unit!(MillimeterMercuryMinutePerLiter: FluidResistance, FluidResistanceUnit::MillimeterMercuryMinutePerLiter, base PascalSecondPerCubicMeter, 199983552 / 25, pi^0, from_millimeter_mercury_minutes_per_liter, as_millimeter_mercury_minutes_per_liter);
+    fixed_unit!(MillimeterMercurySecondPerMilliliter: FluidResistance, FluidResistanceUnit::MillimeterMercurySecondPerMilliliter, base PascalSecondPerCubicMeter, 133322368 / 1, pi^0, from_millimeter_mercury_seconds_per_milliliter, as_millimeter_mercury_seconds_per_milliliter);
+    fixed_unit!(MillimeterMercuryMinutePerMilliliter: FluidResistance, FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter, base PascalSecondPerCubicMeter, 7999342080 / 1, pi^0, from_millimeter_mercury_minutes_per_milliliter, as_millimeter_mercury_minutes_per_milliliter);
+    fixed_unit!(MillimeterMercurySecondPerCubicCentimeter: FluidResistance, FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter, base PascalSecondPerCubicMeter, 133322368 / 1, pi^0, from_millimeter_mercury_seconds_per_cubic_centimeter, as_millimeter_mercury_seconds_per_cubic_centimeter);
+    fixed_unit!(MillimeterMercuryMinutePerCubicCentimeter: FluidResistance, FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter, base PascalSecondPerCubicMeter, 7999342080 / 1, pi^0, from_millimeter_mercury_minutes_per_cubic_centimeter, as_millimeter_mercury_minutes_per_cubic_centimeter);
+    fixed_unit!(MillimeterMercurySecondPerCubicMeter: FluidResistance, FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter, base PascalSecondPerCubicMeter, 2083162 / 15625, pi^0, from_millimeter_mercury_seconds_per_cubic_meter, as_millimeter_mercury_seconds_per_cubic_meter);
+    fixed_unit!(MillimeterMercuryMinutePerCubicMeter: FluidResistance, FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter, base PascalSecondPerCubicMeter, 24997944 / 3125, pi^0, from_millimeter_mercury_minutes_per_cubic_meter, as_millimeter_mercury_minutes_per_cubic_meter);
+    fixed_unit!(WoodUnit: FluidResistance, FluidResistanceUnit::WoodUnit, base PascalSecondPerCubicMeter, 199983552 / 25, pi^0, from_wood_units, as_wood_units);
+}

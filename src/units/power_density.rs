@@ -1234,3 +1234,57 @@ impl<T: Float> PowerDensity<T> {
         self.as_btus_per_second_cubic_foot()
     }
 }
+
+fixed_base!(PowerDensity, WattPerCubicMeter);
+
+/// Unit markers for counting [`PowerDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::power_density`](crate::unit::power_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(WattPerCubicMeter: PowerDensity, PowerDensityUnit::WattPerCubicMeter, base WattPerCubicMeter, 1 / 1, pi^0, from_watts_per_cubic_meter, as_watts_per_cubic_meter);
+    fixed_unit!(PicowattPerCubicMeter: PowerDensity, PowerDensityUnit::PicowattPerCubicMeter, base WattPerCubicMeter, 1 / 1000000000000, pi^0, from_picowatts_per_cubic_meter, as_picowatts_per_cubic_meter);
+    fixed_unit!(NanowattPerCubicMeter: PowerDensity, PowerDensityUnit::NanowattPerCubicMeter, base WattPerCubicMeter, 1 / 1000000000, pi^0, from_nanowatts_per_cubic_meter, as_nanowatts_per_cubic_meter);
+    fixed_unit!(MicrowattPerCubicMeter: PowerDensity, PowerDensityUnit::MicrowattPerCubicMeter, base WattPerCubicMeter, 1 / 1000000, pi^0, from_microwatts_per_cubic_meter, as_microwatts_per_cubic_meter);
+    fixed_unit!(MilliwattPerCubicMeter: PowerDensity, PowerDensityUnit::MilliwattPerCubicMeter, base WattPerCubicMeter, 1 / 1000, pi^0, from_milliwatts_per_cubic_meter, as_milliwatts_per_cubic_meter);
+    fixed_unit!(DeciwattPerCubicMeter: PowerDensity, PowerDensityUnit::DeciwattPerCubicMeter, base WattPerCubicMeter, 1 / 10, pi^0, from_deciwatts_per_cubic_meter, as_deciwatts_per_cubic_meter);
+    fixed_unit!(DecawattPerCubicMeter: PowerDensity, PowerDensityUnit::DecawattPerCubicMeter, base WattPerCubicMeter, 10 / 1, pi^0, from_decawatts_per_cubic_meter, as_decawatts_per_cubic_meter);
+    fixed_unit!(KilowattPerCubicMeter: PowerDensity, PowerDensityUnit::KilowattPerCubicMeter, base WattPerCubicMeter, 1000 / 1, pi^0, from_kilowatts_per_cubic_meter, as_kilowatts_per_cubic_meter);
+    fixed_unit!(MegawattPerCubicMeter: PowerDensity, PowerDensityUnit::MegawattPerCubicMeter, base WattPerCubicMeter, 1000000 / 1, pi^0, from_megawatts_per_cubic_meter, as_megawatts_per_cubic_meter);
+    fixed_unit!(GigawattPerCubicMeter: PowerDensity, PowerDensityUnit::GigawattPerCubicMeter, base WattPerCubicMeter, 1000000000 / 1, pi^0, from_gigawatts_per_cubic_meter, as_gigawatts_per_cubic_meter);
+    fixed_unit!(TerawattPerCubicMeter: PowerDensity, PowerDensityUnit::TerawattPerCubicMeter, base WattPerCubicMeter, 1000000000000 / 1, pi^0, from_terawatts_per_cubic_meter, as_terawatts_per_cubic_meter);
+    fixed_unit!(WattPerCubicInch: PowerDensity, PowerDensityUnit::WattPerCubicInch, base WattPerCubicMeter, 125000000000 / 2048383, pi^0, from_watts_per_cubic_inch, as_watts_per_cubic_inch);
+    fixed_unit!(PicowattPerCubicInch: PowerDensity, PowerDensityUnit::PicowattPerCubicInch, base WattPerCubicMeter, 1 / 16387064, pi^0, from_picowatts_per_cubic_inch, as_picowatts_per_cubic_inch);
+    fixed_unit!(NanowattPerCubicInch: PowerDensity, PowerDensityUnit::NanowattPerCubicInch, base WattPerCubicMeter, 125 / 2048383, pi^0, from_nanowatts_per_cubic_inch, as_nanowatts_per_cubic_inch);
+    fixed_unit!(MicrowattPerCubicInch: PowerDensity, PowerDensityUnit::MicrowattPerCubicInch, base WattPerCubicMeter, 125000 / 2048383, pi^0, from_microwatts_per_cubic_inch, as_microwatts_per_cubic_inch);
+    fixed_unit!(MilliwattPerCubicInch: PowerDensity, PowerDensityUnit::MilliwattPerCubicInch, base WattPerCubicMeter, 125000000 / 2048383, pi^0, from_milliwatts_per_cubic_inch, as_milliwatts_per_cubic_inch);
+    fixed_unit!(DeciwattPerCubicInch: PowerDensity, PowerDensityUnit::DeciwattPerCubicInch, base WattPerCubicMeter, 12500000000 / 2048383, pi^0, from_deciwatts_per_cubic_inch, as_deciwatts_per_cubic_inch);
+    fixed_unit!(DecawattPerCubicInch: PowerDensity, PowerDensityUnit::DecawattPerCubicInch, base WattPerCubicMeter, 1250000000000 / 2048383, pi^0, from_decawatts_per_cubic_inch, as_decawatts_per_cubic_inch);
+    fixed_unit!(KilowattPerCubicInch: PowerDensity, PowerDensityUnit::KilowattPerCubicInch, base WattPerCubicMeter, 125000000000000 / 2048383, pi^0, from_kilowatts_per_cubic_inch, as_kilowatts_per_cubic_inch);
+    fixed_unit!(MegawattPerCubicInch: PowerDensity, PowerDensityUnit::MegawattPerCubicInch, base WattPerCubicMeter, 125000000000000000 / 2048383, pi^0, from_megawatts_per_cubic_inch, as_megawatts_per_cubic_inch);
+    fixed_unit!(GigawattPerCubicInch: PowerDensity, PowerDensityUnit::GigawattPerCubicInch, base WattPerCubicMeter, 125000000000000000000 / 2048383, pi^0, from_gigawatts_per_cubic_inch, as_gigawatts_per_cubic_inch);
+    fixed_unit!(TerawattPerCubicInch: PowerDensity, PowerDensityUnit::TerawattPerCubicInch, base WattPerCubicMeter, 125000000000000000000000 / 2048383, pi^0, from_terawatts_per_cubic_inch, as_terawatts_per_cubic_inch);
+    fixed_unit!(WattPerCubicFoot: PowerDensity, PowerDensityUnit::WattPerCubicFoot, base WattPerCubicMeter, 1953125000 / 55306341, pi^0, from_watts_per_cubic_foot, as_watts_per_cubic_foot);
+    fixed_unit!(PicowattPerCubicFoot: PowerDensity, PowerDensityUnit::PicowattPerCubicFoot, base WattPerCubicMeter, 1 / 28316846592, pi^0, from_picowatts_per_cubic_foot, as_picowatts_per_cubic_foot);
+    fixed_unit!(NanowattPerCubicFoot: PowerDensity, PowerDensityUnit::NanowattPerCubicFoot, base WattPerCubicMeter, 125 / 3539605824, pi^0, from_nanowatts_per_cubic_foot, as_nanowatts_per_cubic_foot);
+    fixed_unit!(MicrowattPerCubicFoot: PowerDensity, PowerDensityUnit::MicrowattPerCubicFoot, base WattPerCubicMeter, 15625 / 442450728, pi^0, from_microwatts_per_cubic_foot, as_microwatts_per_cubic_foot);
+    fixed_unit!(MilliwattPerCubicFoot: PowerDensity, PowerDensityUnit::MilliwattPerCubicFoot, base WattPerCubicMeter, 1953125 / 55306341, pi^0, from_milliwatts_per_cubic_foot, as_milliwatts_per_cubic_foot);
+    fixed_unit!(DeciwattPerCubicFoot: PowerDensity, PowerDensityUnit::DeciwattPerCubicFoot, base WattPerCubicMeter, 195312500 / 55306341, pi^0, from_deciwatts_per_cubic_foot, as_deciwatts_per_cubic_foot);
+    fixed_unit!(DecawattPerCubicFoot: PowerDensity, PowerDensityUnit::DecawattPerCubicFoot, base WattPerCubicMeter, 19531250000 / 55306341, pi^0, from_decawatts_per_cubic_foot, as_decawatts_per_cubic_foot);
+    fixed_unit!(KilowattPerCubicFoot: PowerDensity, PowerDensityUnit::KilowattPerCubicFoot, base WattPerCubicMeter, 1953125000000 / 55306341, pi^0, from_kilowatts_per_cubic_foot, as_kilowatts_per_cubic_foot);
+    fixed_unit!(MegawattPerCubicFoot: PowerDensity, PowerDensityUnit::MegawattPerCubicFoot, base WattPerCubicMeter, 1953125000000000 / 55306341, pi^0, from_megawatts_per_cubic_foot, as_megawatts_per_cubic_foot);
+    fixed_unit!(GigawattPerCubicFoot: PowerDensity, PowerDensityUnit::GigawattPerCubicFoot, base WattPerCubicMeter, 1953125000000000000 / 55306341, pi^0, from_gigawatts_per_cubic_foot, as_gigawatts_per_cubic_foot);
+    fixed_unit!(TerawattPerCubicFoot: PowerDensity, PowerDensityUnit::TerawattPerCubicFoot, base WattPerCubicMeter, 1953125000000000000000 / 55306341, pi^0, from_terawatts_per_cubic_foot, as_terawatts_per_cubic_foot);
+    fixed_unit!(WattPerLiter: PowerDensity, PowerDensityUnit::WattPerLiter, base WattPerCubicMeter, 1000 / 1, pi^0, from_watts_per_liter, as_watts_per_liter);
+    fixed_unit!(PicowattPerLiter: PowerDensity, PowerDensityUnit::PicowattPerLiter, base WattPerCubicMeter, 1 / 1000000000, pi^0, from_picowatts_per_liter, as_picowatts_per_liter);
+    fixed_unit!(NanowattPerLiter: PowerDensity, PowerDensityUnit::NanowattPerLiter, base WattPerCubicMeter, 1 / 1000000, pi^0, from_nanowatts_per_liter, as_nanowatts_per_liter);
+    fixed_unit!(MicrowattPerLiter: PowerDensity, PowerDensityUnit::MicrowattPerLiter, base WattPerCubicMeter, 1 / 1000, pi^0, from_microwatts_per_liter, as_microwatts_per_liter);
+    fixed_unit!(MilliwattPerLiter: PowerDensity, PowerDensityUnit::MilliwattPerLiter, base WattPerCubicMeter, 1 / 1, pi^0, from_milliwatts_per_liter, as_milliwatts_per_liter);
+    fixed_unit!(DeciwattPerLiter: PowerDensity, PowerDensityUnit::DeciwattPerLiter, base WattPerCubicMeter, 100 / 1, pi^0, from_deciwatts_per_liter, as_deciwatts_per_liter);
+    fixed_unit!(DecawattPerLiter: PowerDensity, PowerDensityUnit::DecawattPerLiter, base WattPerCubicMeter, 10000 / 1, pi^0, from_decawatts_per_liter, as_decawatts_per_liter);
+    fixed_unit!(KilowattPerLiter: PowerDensity, PowerDensityUnit::KilowattPerLiter, base WattPerCubicMeter, 1000000 / 1, pi^0, from_kilowatts_per_liter, as_kilowatts_per_liter);
+    fixed_unit!(MegawattPerLiter: PowerDensity, PowerDensityUnit::MegawattPerLiter, base WattPerCubicMeter, 1000000000 / 1, pi^0, from_megawatts_per_liter, as_megawatts_per_liter);
+    fixed_unit!(GigawattPerLiter: PowerDensity, PowerDensityUnit::GigawattPerLiter, base WattPerCubicMeter, 1000000000000 / 1, pi^0, from_gigawatts_per_liter, as_gigawatts_per_liter);
+    fixed_unit!(TerawattPerLiter: PowerDensity, PowerDensityUnit::TerawattPerLiter, base WattPerCubicMeter, 1000000000000000 / 1, pi^0, from_terawatts_per_liter, as_terawatts_per_liter);
+    fixed_unit!(BtuPerSecondCubicInch: PowerDensity, PowerDensityUnit::BtuPerSecondCubicInch, base WattPerCubicMeter, 131881981577500 / 2048383, pi^0, from_btus_per_second_cubic_inch, as_btus_per_second_cubic_inch);
+    fixed_unit!(BtuPerSecondCubicFoot: PowerDensity, PowerDensityUnit::BtuPerSecondCubicFoot, base WattPerCubicMeter, 32970495394375 / 884901456, pi^0, from_btus_per_second_cubic_foot, as_btus_per_second_cubic_foot);
+}

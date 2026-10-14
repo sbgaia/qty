@@ -212,3 +212,16 @@ impl<T: Float> PorousMediumPermeability<T> {
         self.as_square_centimeters()
     }
 }
+
+fixed_base!(PorousMediumPermeability, SquareMeter);
+
+/// Unit markers for counting [`PorousMediumPermeability`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::porous_medium_permeability`](crate::unit::porous_medium_permeability). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Darcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Darcy, base SquareMeter, 9869233 / 10000000000000000000, pi^0, from_darcys, as_darcys);
+    fixed_unit!(Microdarcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Microdarcy, base SquareMeter, 9869233 / 10000000000000000000000000, pi^0, from_microdarcys, as_microdarcys);
+    fixed_unit!(Millidarcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Millidarcy, base SquareMeter, 9869233 / 10000000000000000000000, pi^0, from_millidarcys, as_millidarcys);
+    fixed_unit!(SquareMeter: PorousMediumPermeability, PorousMediumPermeabilityUnit::SquareMeter, base SquareMeter, 1 / 1, pi^0, from_square_meters, as_square_meters);
+    fixed_unit!(SquareCentimeter: PorousMediumPermeability, PorousMediumPermeabilityUnit::SquareCentimeter, base SquareMeter, 1 / 10000, pi^0, from_square_centimeters, as_square_centimeters);
+}

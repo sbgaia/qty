@@ -321,3 +321,20 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.as_standard_cubic_feet_per_hour()
     }
 }
+
+fixed_base!(StandardVolumeFlow, StandardCubicMeterPerSecond);
+
+/// Unit markers for counting [`StandardVolumeFlow`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::standard_volume_flow`](crate::unit::standard_volume_flow). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(StandardCubicMeterPerSecond: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerSecond, base StandardCubicMeterPerSecond, 1 / 1, pi^0, from_standard_cubic_meters_per_second, as_standard_cubic_meters_per_second);
+    fixed_unit!(StandardCubicMeterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerMinute, base StandardCubicMeterPerSecond, 1 / 60, pi^0, from_standard_cubic_meters_per_minute, as_standard_cubic_meters_per_minute);
+    fixed_unit!(StandardCubicMeterPerHour: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerHour, base StandardCubicMeterPerSecond, 1 / 3600, pi^0, from_standard_cubic_meters_per_hour, as_standard_cubic_meters_per_hour);
+    fixed_unit!(StandardCubicMeterPerDay: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerDay, base StandardCubicMeterPerSecond, 1 / 86400, pi^0, from_standard_cubic_meters_per_day, as_standard_cubic_meters_per_day);
+    fixed_unit!(StandardCubicCentimeterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute, base StandardCubicMeterPerSecond, 1 / 60000000, pi^0, from_standard_cubic_centimeters_per_minute, as_standard_cubic_centimeters_per_minute);
+    fixed_unit!(StandardLiterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardLiterPerMinute, base StandardCubicMeterPerSecond, 1 / 60000, pi^0, from_standard_liters_per_minute, as_standard_liters_per_minute);
+    fixed_unit!(StandardCubicFootPerSecond: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicFootPerSecond, base StandardCubicMeterPerSecond, 55306341 / 1953125000, pi^0, from_standard_cubic_feet_per_second, as_standard_cubic_feet_per_second);
+    fixed_unit!(StandardCubicFootPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicFootPerMinute, base StandardCubicMeterPerSecond, 18435447 / 39062500000, pi^0, from_standard_cubic_feet_per_minute, as_standard_cubic_feet_per_minute);
+    fixed_unit!(StandardCubicFootPerHour: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicFootPerHour, base StandardCubicMeterPerSecond, 6145149 / 781250000000, pi^0, from_standard_cubic_feet_per_hour, as_standard_cubic_feet_per_hour);
+}

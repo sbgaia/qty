@@ -184,3 +184,14 @@ impl<T: Float> FuelEfficiency<T> {
         self.as_kilometers_per_liter()
     }
 }
+
+fixed_base!(FuelEfficiency, KilometerPerLiter);
+
+/// Unit markers for counting [`FuelEfficiency`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::fuel_efficiency`](crate::unit::fuel_efficiency). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(MilePerUsGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUsGallon, base KilometerPerLiter, 48000 / 112903, pi^0, from_miles_per_us_gallon, as_miles_per_us_gallon);
+    fixed_unit!(MilePerUkGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUkGallon, base KilometerPerLiter, 804672 / 2273045, pi^0, from_miles_per_uk_gallon, as_miles_per_uk_gallon);
+    fixed_unit!(KilometerPerLiter: FuelEfficiency, FuelEfficiencyUnit::KilometerPerLiter, base KilometerPerLiter, 1 / 1, pi^0, from_kilometers_per_liter, as_kilometers_per_liter);
+}

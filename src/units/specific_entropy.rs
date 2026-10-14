@@ -314,3 +314,20 @@ impl<T: Float> SpecificEntropy<T> {
         self.as_btus_per_pound_fahrenheit()
     }
 }
+
+fixed_base!(SpecificEntropy, JoulePerKilogramKelvin);
+
+/// Unit markers for counting [`SpecificEntropy`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::specific_entropy`](crate::unit::specific_entropy). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerKilogramKelvin: SpecificEntropy, SpecificEntropyUnit::JoulePerKilogramKelvin, base JoulePerKilogramKelvin, 1 / 1, pi^0, from_joules_per_kilogram_kelvin, as_joules_per_kilogram_kelvin);
+    fixed_unit!(KilojoulePerKilogramKelvin: SpecificEntropy, SpecificEntropyUnit::KilojoulePerKilogramKelvin, base JoulePerKilogramKelvin, 1000 / 1, pi^0, from_kilojoules_per_kilogram_kelvin, as_kilojoules_per_kilogram_kelvin);
+    fixed_unit!(MegajoulePerKilogramKelvin: SpecificEntropy, SpecificEntropyUnit::MegajoulePerKilogramKelvin, base JoulePerKilogramKelvin, 1000000 / 1, pi^0, from_megajoules_per_kilogram_kelvin, as_megajoules_per_kilogram_kelvin);
+    fixed_unit!(JoulePerKilogramDegreeCelsius: SpecificEntropy, SpecificEntropyUnit::JoulePerKilogramDegreeCelsius, base JoulePerKilogramKelvin, 1 / 1, pi^0, from_joules_per_kilogram_degree_celsius, as_joules_per_kilogram_degree_celsius);
+    fixed_unit!(KilojoulePerKilogramDegreeCelsius: SpecificEntropy, SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius, base JoulePerKilogramKelvin, 1000 / 1, pi^0, from_kilojoules_per_kilogram_degree_celsius, as_kilojoules_per_kilogram_degree_celsius);
+    fixed_unit!(MegajoulePerKilogramDegreeCelsius: SpecificEntropy, SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius, base JoulePerKilogramKelvin, 1000000 / 1, pi^0, from_megajoules_per_kilogram_degree_celsius, as_megajoules_per_kilogram_degree_celsius);
+    fixed_unit!(CaloriePerGramKelvin: SpecificEntropy, SpecificEntropyUnit::CaloriePerGramKelvin, base JoulePerKilogramKelvin, 4184 / 1, pi^0, from_calories_per_gram_kelvin, as_calories_per_gram_kelvin);
+    fixed_unit!(KilocaloriePerGramKelvin: SpecificEntropy, SpecificEntropyUnit::KilocaloriePerGramKelvin, base JoulePerKilogramKelvin, 4184000 / 1, pi^0, from_kilocalories_per_gram_kelvin, as_kilocalories_per_gram_kelvin);
+    fixed_unit!(BtuPerPoundFahrenheit: SpecificEntropy, SpecificEntropyUnit::BtuPerPoundFahrenheit, base JoulePerKilogramKelvin, 20934 / 5, pi^0, from_btus_per_pound_fahrenheit, as_btus_per_pound_fahrenheit);
+}

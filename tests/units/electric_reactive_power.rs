@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -157,6 +157,18 @@ fn gigavoltamperes_reactive() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_reactive_power::VoltampereReactive>();
+    check_fixed_rescale::<unit::electric_reactive_power::VoltampereReactive>();
+    check_fixed::<unit::electric_reactive_power::KilovoltampereReactive>();
+    check_fixed_rescale::<unit::electric_reactive_power::KilovoltampereReactive>();
+    check_fixed::<unit::electric_reactive_power::MegavoltampereReactive>();
+    check_fixed_rescale::<unit::electric_reactive_power::MegavoltampereReactive>();
+    check_fixed::<unit::electric_reactive_power::GigavoltampereReactive>();
+    check_fixed_rescale::<unit::electric_reactive_power::GigavoltampereReactive>();
 }
 
 #[test]

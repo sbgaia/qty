@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -190,6 +190,20 @@ fn millihenries() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_inductance::Henry>();
+    check_fixed_rescale::<unit::electric_inductance::Henry>();
+    check_fixed::<unit::electric_inductance::Picohenry>();
+    check_fixed_rescale::<unit::electric_inductance::Picohenry>();
+    check_fixed::<unit::electric_inductance::Nanohenry>();
+    check_fixed_rescale::<unit::electric_inductance::Nanohenry>();
+    check_fixed::<unit::electric_inductance::Microhenry>();
+    check_fixed_rescale::<unit::electric_inductance::Microhenry>();
+    check_fixed::<unit::electric_inductance::Millihenry>();
+    check_fixed_rescale::<unit::electric_inductance::Millihenry>();
 }
 
 #[test]

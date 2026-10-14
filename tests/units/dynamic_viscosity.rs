@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -368,6 +368,30 @@ fn pounds_per_foot_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::dynamic_viscosity::NewtonSecondPerMeterSquared>();
+    check_fixed_rescale::<unit::dynamic_viscosity::NewtonSecondPerMeterSquared>();
+    check_fixed::<unit::dynamic_viscosity::PascalSecond>();
+    check_fixed_rescale::<unit::dynamic_viscosity::PascalSecond>();
+    check_fixed::<unit::dynamic_viscosity::MillipascalSecond>();
+    check_fixed_rescale::<unit::dynamic_viscosity::MillipascalSecond>();
+    check_fixed::<unit::dynamic_viscosity::MicropascalSecond>();
+    check_fixed_rescale::<unit::dynamic_viscosity::MicropascalSecond>();
+    check_fixed::<unit::dynamic_viscosity::Poise>();
+    check_fixed_rescale::<unit::dynamic_viscosity::Poise>();
+    check_fixed::<unit::dynamic_viscosity::Centipoise>();
+    check_fixed_rescale::<unit::dynamic_viscosity::Centipoise>();
+    check_fixed::<unit::dynamic_viscosity::Reyn>();
+    check_fixed_rescale::<unit::dynamic_viscosity::Reyn>();
+    check_fixed::<unit::dynamic_viscosity::PoundForceSecondPerSquareInch>();
+    check_fixed_rescale::<unit::dynamic_viscosity::PoundForceSecondPerSquareInch>();
+    check_fixed::<unit::dynamic_viscosity::PoundForceSecondPerSquareFoot>();
+    check_fixed_rescale::<unit::dynamic_viscosity::PoundForceSecondPerSquareFoot>();
+    check_fixed::<unit::dynamic_viscosity::PoundPerFootSecond>();
+    check_fixed_rescale::<unit::dynamic_viscosity::PoundPerFootSecond>();
 }
 
 #[test]

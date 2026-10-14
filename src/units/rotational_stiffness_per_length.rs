@@ -242,3 +242,16 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
         self.as_kilopound_force_feet_per_degrees_per_feet()
     }
 }
+
+fixed_base!(RotationalStiffnessPerLength, NewtonMeterPerRadianPerMeter);
+
+/// Unit markers for counting [`RotationalStiffnessPerLength`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::rotational_stiffness_per_length`](crate::unit::rotational_stiffness_per_length). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(NewtonMeterPerRadianPerMeter: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter, base NewtonMeterPerRadianPerMeter, 1 / 1, pi^0, from_newton_meters_per_radian_per_meter, as_newton_meters_per_radian_per_meter);
+    fixed_unit!(KilonewtonMeterPerRadianPerMeter: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter, base NewtonMeterPerRadianPerMeter, 1000 / 1, pi^0, from_kilonewton_meters_per_radian_per_meter, as_kilonewton_meters_per_radian_per_meter);
+    fixed_unit!(MeganewtonMeterPerRadianPerMeter: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter, base NewtonMeterPerRadianPerMeter, 1000000 / 1, pi^0, from_meganewton_meters_per_radian_per_meter, as_meganewton_meters_per_radian_per_meter);
+    fixed_unit!(PoundForceFootPerDegreesPerFoot: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot, base NewtonMeterPerRadianPerMeter, 80067989074689 / 100000000000, pi^-1, from_pound_force_feet_per_degrees_per_feet, as_pound_force_feet_per_degrees_per_feet);
+    fixed_unit!(KilopoundForceFootPerDegreesPerFoot: RotationalStiffnessPerLength, RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot, base NewtonMeterPerRadianPerMeter, 80067989074689 / 100000000, pi^-1, from_kilopound_force_feet_per_degrees_per_feet, as_kilopound_force_feet_per_degrees_per_feet);
+}

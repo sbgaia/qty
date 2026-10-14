@@ -309,3 +309,19 @@ impl<T: Float> TemperatureDelta<T> {
         self.as_degrees_roemer()
     }
 }
+
+fixed_base!(TemperatureDelta, Kelvin);
+
+/// Unit markers for counting [`TemperatureDelta`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::temperature_delta`](crate::unit::temperature_delta). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Kelvin: TemperatureDelta, TemperatureDeltaUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins);
+    fixed_unit!(DegreeCelsius: TemperatureDelta, TemperatureDeltaUnit::DegreeCelsius, base Kelvin, 1 / 1, pi^0, from_degrees_celsius, as_degrees_celsius);
+    fixed_unit!(MillidegreeCelsius: TemperatureDelta, TemperatureDeltaUnit::MillidegreeCelsius, base Kelvin, 1 / 1000, pi^0, from_millidegrees_celsius, as_millidegrees_celsius);
+    fixed_unit!(DegreeFahrenheit: TemperatureDelta, TemperatureDeltaUnit::DegreeFahrenheit, base Kelvin, 5 / 9, pi^0, from_degrees_fahrenheit, as_degrees_fahrenheit);
+    fixed_unit!(DegreeNewton: TemperatureDelta, TemperatureDeltaUnit::DegreeNewton, base Kelvin, 100 / 33, pi^0, from_degrees_newton, as_degrees_newton);
+    fixed_unit!(DegreeRankine: TemperatureDelta, TemperatureDeltaUnit::DegreeRankine, base Kelvin, 5 / 9, pi^0, from_degrees_rankine, as_degrees_rankine);
+    fixed_unit!(DegreeReaumur: TemperatureDelta, TemperatureDeltaUnit::DegreeReaumur, base Kelvin, 5 / 4, pi^0, from_degrees_reaumur, as_degrees_reaumur);
+    fixed_unit!(DegreeRoemer: TemperatureDelta, TemperatureDeltaUnit::DegreeRoemer, base Kelvin, 40 / 21, pi^0, from_degrees_roemer, as_degrees_roemer);
+}

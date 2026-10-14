@@ -434,3 +434,25 @@ impl<T: Float> Irradiance<T> {
         self.as_megawatts_per_square_centimeter()
     }
 }
+
+fixed_base!(Irradiance, WattPerSquareMeter);
+
+/// Unit markers for counting [`Irradiance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::irradiance`](crate::unit::irradiance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(WattPerSquareMeter: Irradiance, IrradianceUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter);
+    fixed_unit!(PicowattPerSquareMeter: Irradiance, IrradianceUnit::PicowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000000, pi^0, from_picowatts_per_square_meter, as_picowatts_per_square_meter);
+    fixed_unit!(NanowattPerSquareMeter: Irradiance, IrradianceUnit::NanowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000, pi^0, from_nanowatts_per_square_meter, as_nanowatts_per_square_meter);
+    fixed_unit!(MicrowattPerSquareMeter: Irradiance, IrradianceUnit::MicrowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000, pi^0, from_microwatts_per_square_meter, as_microwatts_per_square_meter);
+    fixed_unit!(MilliwattPerSquareMeter: Irradiance, IrradianceUnit::MilliwattPerSquareMeter, base WattPerSquareMeter, 1 / 1000, pi^0, from_milliwatts_per_square_meter, as_milliwatts_per_square_meter);
+    fixed_unit!(KilowattPerSquareMeter: Irradiance, IrradianceUnit::KilowattPerSquareMeter, base WattPerSquareMeter, 1000 / 1, pi^0, from_kilowatts_per_square_meter, as_kilowatts_per_square_meter);
+    fixed_unit!(MegawattPerSquareMeter: Irradiance, IrradianceUnit::MegawattPerSquareMeter, base WattPerSquareMeter, 1000000 / 1, pi^0, from_megawatts_per_square_meter, as_megawatts_per_square_meter);
+    fixed_unit!(WattPerSquareCentimeter: Irradiance, IrradianceUnit::WattPerSquareCentimeter, base WattPerSquareMeter, 10000 / 1, pi^0, from_watts_per_square_centimeter, as_watts_per_square_centimeter);
+    fixed_unit!(PicowattPerSquareCentimeter: Irradiance, IrradianceUnit::PicowattPerSquareCentimeter, base WattPerSquareMeter, 1 / 100000000, pi^0, from_picowatts_per_square_centimeter, as_picowatts_per_square_centimeter);
+    fixed_unit!(NanowattPerSquareCentimeter: Irradiance, IrradianceUnit::NanowattPerSquareCentimeter, base WattPerSquareMeter, 1 / 100000, pi^0, from_nanowatts_per_square_centimeter, as_nanowatts_per_square_centimeter);
+    fixed_unit!(MicrowattPerSquareCentimeter: Irradiance, IrradianceUnit::MicrowattPerSquareCentimeter, base WattPerSquareMeter, 1 / 100, pi^0, from_microwatts_per_square_centimeter, as_microwatts_per_square_centimeter);
+    fixed_unit!(MilliwattPerSquareCentimeter: Irradiance, IrradianceUnit::MilliwattPerSquareCentimeter, base WattPerSquareMeter, 10 / 1, pi^0, from_milliwatts_per_square_centimeter, as_milliwatts_per_square_centimeter);
+    fixed_unit!(KilowattPerSquareCentimeter: Irradiance, IrradianceUnit::KilowattPerSquareCentimeter, base WattPerSquareMeter, 10000000 / 1, pi^0, from_kilowatts_per_square_centimeter, as_kilowatts_per_square_centimeter);
+    fixed_unit!(MegawattPerSquareCentimeter: Irradiance, IrradianceUnit::MegawattPerSquareCentimeter, base WattPerSquareMeter, 10000000000 / 1, pi^0, from_megawatts_per_square_centimeter, as_megawatts_per_square_centimeter);
+}

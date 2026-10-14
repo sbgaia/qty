@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1124,6 +1124,88 @@ fn exbibits() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::information::Byte>();
+    check_fixed_rescale::<unit::information::Byte>();
+    check_fixed::<unit::information::Kilobyte>();
+    check_fixed_rescale::<unit::information::Kilobyte>();
+    check_fixed::<unit::information::Megabyte>();
+    check_fixed_rescale::<unit::information::Megabyte>();
+    check_fixed::<unit::information::Gigabyte>();
+    check_fixed_rescale::<unit::information::Gigabyte>();
+    check_fixed::<unit::information::Terabyte>();
+    check_fixed_rescale::<unit::information::Terabyte>();
+    check_fixed::<unit::information::Petabyte>();
+    check_fixed_rescale::<unit::information::Petabyte>();
+    check_fixed::<unit::information::Exabyte>();
+    check_fixed_rescale::<unit::information::Exabyte>();
+    check_fixed::<unit::information::Kibibyte>();
+    check_fixed_rescale::<unit::information::Kibibyte>();
+    check_fixed::<unit::information::Mebibyte>();
+    check_fixed_rescale::<unit::information::Mebibyte>();
+    check_fixed::<unit::information::Gibibyte>();
+    check_fixed_rescale::<unit::information::Gibibyte>();
+    check_fixed::<unit::information::Tebibyte>();
+    check_fixed_rescale::<unit::information::Tebibyte>();
+    check_fixed::<unit::information::Pebibyte>();
+    check_fixed_rescale::<unit::information::Pebibyte>();
+    check_fixed::<unit::information::Exbibyte>();
+    check_fixed_rescale::<unit::information::Exbibyte>();
+    check_fixed::<unit::information::Octet>();
+    check_fixed_rescale::<unit::information::Octet>();
+    check_fixed::<unit::information::Kilooctet>();
+    check_fixed_rescale::<unit::information::Kilooctet>();
+    check_fixed::<unit::information::Megaoctet>();
+    check_fixed_rescale::<unit::information::Megaoctet>();
+    check_fixed::<unit::information::Gigaoctet>();
+    check_fixed_rescale::<unit::information::Gigaoctet>();
+    check_fixed::<unit::information::Teraoctet>();
+    check_fixed_rescale::<unit::information::Teraoctet>();
+    check_fixed::<unit::information::Petaoctet>();
+    check_fixed_rescale::<unit::information::Petaoctet>();
+    check_fixed::<unit::information::Exaoctet>();
+    check_fixed_rescale::<unit::information::Exaoctet>();
+    check_fixed::<unit::information::Kibioctet>();
+    check_fixed_rescale::<unit::information::Kibioctet>();
+    check_fixed::<unit::information::Mebioctet>();
+    check_fixed_rescale::<unit::information::Mebioctet>();
+    check_fixed::<unit::information::Gibioctet>();
+    check_fixed_rescale::<unit::information::Gibioctet>();
+    check_fixed::<unit::information::Tebioctet>();
+    check_fixed_rescale::<unit::information::Tebioctet>();
+    check_fixed::<unit::information::Pebioctet>();
+    check_fixed_rescale::<unit::information::Pebioctet>();
+    check_fixed::<unit::information::Exbioctet>();
+    check_fixed_rescale::<unit::information::Exbioctet>();
+    check_fixed::<unit::information::Bit>();
+    check_fixed_rescale::<unit::information::Bit>();
+    check_fixed::<unit::information::Kilobit>();
+    check_fixed_rescale::<unit::information::Kilobit>();
+    check_fixed::<unit::information::Megabit>();
+    check_fixed_rescale::<unit::information::Megabit>();
+    check_fixed::<unit::information::Gigabit>();
+    check_fixed_rescale::<unit::information::Gigabit>();
+    check_fixed::<unit::information::Terabit>();
+    check_fixed_rescale::<unit::information::Terabit>();
+    check_fixed::<unit::information::Petabit>();
+    check_fixed_rescale::<unit::information::Petabit>();
+    check_fixed::<unit::information::Exabit>();
+    check_fixed_rescale::<unit::information::Exabit>();
+    check_fixed::<unit::information::Kibibit>();
+    check_fixed_rescale::<unit::information::Kibibit>();
+    check_fixed::<unit::information::Mebibit>();
+    check_fixed_rescale::<unit::information::Mebibit>();
+    check_fixed::<unit::information::Gibibit>();
+    check_fixed_rescale::<unit::information::Gibibit>();
+    check_fixed::<unit::information::Tebibit>();
+    check_fixed_rescale::<unit::information::Tebibit>();
+    check_fixed::<unit::information::Pebibit>();
+    check_fixed_rescale::<unit::information::Pebibit>();
+    check_fixed::<unit::information::Exbibit>();
+    check_fixed_rescale::<unit::information::Exbibit>();
 }
 
 #[test]

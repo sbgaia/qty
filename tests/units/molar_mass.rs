@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -519,6 +519,38 @@ fn pounds_per_pound_mole() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::molar_mass::GramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::GramPerMole>();
+    check_fixed::<unit::molar_mass::NanogramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::NanogramPerMole>();
+    check_fixed::<unit::molar_mass::MicrogramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::MicrogramPerMole>();
+    check_fixed::<unit::molar_mass::MilligramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::MilligramPerMole>();
+    check_fixed::<unit::molar_mass::CentigramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::CentigramPerMole>();
+    check_fixed::<unit::molar_mass::DecigramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::DecigramPerMole>();
+    check_fixed::<unit::molar_mass::DecagramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::DecagramPerMole>();
+    check_fixed::<unit::molar_mass::HectogramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::HectogramPerMole>();
+    check_fixed::<unit::molar_mass::KilogramPerMole>();
+    check_fixed_rescale::<unit::molar_mass::KilogramPerMole>();
+    check_fixed::<unit::molar_mass::KilogramPerKilomole>();
+    check_fixed_rescale::<unit::molar_mass::KilogramPerKilomole>();
+    check_fixed::<unit::molar_mass::PoundPerMole>();
+    check_fixed_rescale::<unit::molar_mass::PoundPerMole>();
+    check_fixed::<unit::molar_mass::KilopoundPerMole>();
+    check_fixed_rescale::<unit::molar_mass::KilopoundPerMole>();
+    check_fixed::<unit::molar_mass::MegapoundPerMole>();
+    check_fixed_rescale::<unit::molar_mass::MegapoundPerMole>();
+    check_fixed::<unit::molar_mass::PoundPerPoundMole>();
+    check_fixed_rescale::<unit::molar_mass::PoundPerPoundMole>();
 }
 
 #[test]

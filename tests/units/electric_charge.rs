@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -408,6 +408,32 @@ fn megaampere_hours() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_charge::Coulomb>();
+    check_fixed_rescale::<unit::electric_charge::Coulomb>();
+    check_fixed::<unit::electric_charge::Picocoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Picocoulomb>();
+    check_fixed::<unit::electric_charge::Nanocoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Nanocoulomb>();
+    check_fixed::<unit::electric_charge::Microcoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Microcoulomb>();
+    check_fixed::<unit::electric_charge::Millicoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Millicoulomb>();
+    check_fixed::<unit::electric_charge::Kilocoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Kilocoulomb>();
+    check_fixed::<unit::electric_charge::Megacoulomb>();
+    check_fixed_rescale::<unit::electric_charge::Megacoulomb>();
+    check_fixed::<unit::electric_charge::AmpereHour>();
+    check_fixed_rescale::<unit::electric_charge::AmpereHour>();
+    check_fixed::<unit::electric_charge::MilliampereHour>();
+    check_fixed_rescale::<unit::electric_charge::MilliampereHour>();
+    check_fixed::<unit::electric_charge::KiloampereHour>();
+    check_fixed_rescale::<unit::electric_charge::KiloampereHour>();
+    check_fixed::<unit::electric_charge::MegaampereHour>();
+    check_fixed_rescale::<unit::electric_charge::MegaampereHour>();
 }
 
 #[test]

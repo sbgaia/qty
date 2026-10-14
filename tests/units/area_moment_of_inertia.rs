@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -231,6 +231,22 @@ fn inches_to_the_fourth() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::area_moment_of_inertia::MeterToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::MeterToTheFourth>();
+    check_fixed::<unit::area_moment_of_inertia::DecimeterToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::DecimeterToTheFourth>();
+    check_fixed::<unit::area_moment_of_inertia::CentimeterToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::CentimeterToTheFourth>();
+    check_fixed::<unit::area_moment_of_inertia::MillimeterToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::MillimeterToTheFourth>();
+    check_fixed::<unit::area_moment_of_inertia::FootToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::FootToTheFourth>();
+    check_fixed::<unit::area_moment_of_inertia::InchToTheFourth>();
+    check_fixed_rescale::<unit::area_moment_of_inertia::InchToTheFourth>();
 }
 
 #[test]

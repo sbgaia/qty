@@ -1048,3 +1048,45 @@ impl<T: Float> RotationalStiffness<T> {
         self.as_kilopound_force_feet_per_radian()
     }
 }
+
+fixed_base!(RotationalStiffness, NewtonMeterPerRadian);
+
+/// Unit markers for counting [`RotationalStiffness`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::rotational_stiffness`](crate::unit::rotational_stiffness). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(NewtonMeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::NewtonMeterPerRadian, base NewtonMeterPerRadian, 1 / 1, pi^0, from_newton_meters_per_radian, as_newton_meters_per_radian);
+    fixed_unit!(KilonewtonMeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::KilonewtonMeterPerRadian, base NewtonMeterPerRadian, 1000 / 1, pi^0, from_kilonewton_meters_per_radian, as_kilonewton_meters_per_radian);
+    fixed_unit!(MeganewtonMeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::MeganewtonMeterPerRadian, base NewtonMeterPerRadian, 1000000 / 1, pi^0, from_meganewton_meters_per_radian, as_meganewton_meters_per_radian);
+    fixed_unit!(PoundForceFootPerDegrees: RotationalStiffness, RotationalStiffnessUnit::PoundForceFootPerDegrees, base NewtonMeterPerRadian, 30505903837456509 / 125000000000000, pi^-1, from_pound_force_feet_per_degrees, as_pound_force_feet_per_degrees);
+    fixed_unit!(KilopoundForceFootPerDegrees: RotationalStiffness, RotationalStiffnessUnit::KilopoundForceFootPerDegrees, base NewtonMeterPerRadian, 30505903837456509 / 125000000000, pi^-1, from_kilopound_force_feet_per_degrees, as_kilopound_force_feet_per_degrees);
+    fixed_unit!(NewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::NewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 50, pi^-1, from_newton_millimeters_per_degree, as_newton_millimeters_per_degree);
+    fixed_unit!(NanonewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::NanonewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 50000000000, pi^-1, from_nanonewton_millimeters_per_degree, as_nanonewton_millimeters_per_degree);
+    fixed_unit!(MicronewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MicronewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 50000000, pi^-1, from_micronewton_millimeters_per_degree, as_micronewton_millimeters_per_degree);
+    fixed_unit!(MillinewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MillinewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 50000, pi^-1, from_millinewton_millimeters_per_degree, as_millinewton_millimeters_per_degree);
+    fixed_unit!(CentinewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::CentinewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 5000, pi^-1, from_centinewton_millimeters_per_degree, as_centinewton_millimeters_per_degree);
+    fixed_unit!(DecinewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::DecinewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 500, pi^-1, from_decinewton_millimeters_per_degree, as_decinewton_millimeters_per_degree);
+    fixed_unit!(DecanewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::DecanewtonMillimeterPerDegree, base NewtonMeterPerRadian, 9 / 5, pi^-1, from_decanewton_millimeters_per_degree, as_decanewton_millimeters_per_degree);
+    fixed_unit!(KilonewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::KilonewtonMillimeterPerDegree, base NewtonMeterPerRadian, 180 / 1, pi^-1, from_kilonewton_millimeters_per_degree, as_kilonewton_millimeters_per_degree);
+    fixed_unit!(MeganewtonMillimeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MeganewtonMillimeterPerDegree, base NewtonMeterPerRadian, 180000 / 1, pi^-1, from_meganewton_millimeters_per_degree, as_meganewton_millimeters_per_degree);
+    fixed_unit!(NewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::NewtonMeterPerDegree, base NewtonMeterPerRadian, 180 / 1, pi^-1, from_newton_meters_per_degree, as_newton_meters_per_degree);
+    fixed_unit!(NanonewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::NanonewtonMeterPerDegree, base NewtonMeterPerRadian, 9 / 50000000, pi^-1, from_nanonewton_meters_per_degree, as_nanonewton_meters_per_degree);
+    fixed_unit!(MicronewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MicronewtonMeterPerDegree, base NewtonMeterPerRadian, 9 / 50000, pi^-1, from_micronewton_meters_per_degree, as_micronewton_meters_per_degree);
+    fixed_unit!(MillinewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MillinewtonMeterPerDegree, base NewtonMeterPerRadian, 9 / 50, pi^-1, from_millinewton_meters_per_degree, as_millinewton_meters_per_degree);
+    fixed_unit!(CentinewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::CentinewtonMeterPerDegree, base NewtonMeterPerRadian, 9 / 5, pi^-1, from_centinewton_meters_per_degree, as_centinewton_meters_per_degree);
+    fixed_unit!(DecinewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::DecinewtonMeterPerDegree, base NewtonMeterPerRadian, 18 / 1, pi^-1, from_decinewton_meters_per_degree, as_decinewton_meters_per_degree);
+    fixed_unit!(DecanewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::DecanewtonMeterPerDegree, base NewtonMeterPerRadian, 1800 / 1, pi^-1, from_decanewton_meters_per_degree, as_decanewton_meters_per_degree);
+    fixed_unit!(KilonewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::KilonewtonMeterPerDegree, base NewtonMeterPerRadian, 180000 / 1, pi^-1, from_kilonewton_meters_per_degree, as_kilonewton_meters_per_degree);
+    fixed_unit!(MeganewtonMeterPerDegree: RotationalStiffness, RotationalStiffnessUnit::MeganewtonMeterPerDegree, base NewtonMeterPerRadian, 180000000 / 1, pi^-1, from_meganewton_meters_per_degree, as_meganewton_meters_per_degree);
+    fixed_unit!(NewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::NewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 1000, pi^0, from_newton_millimeters_per_radian, as_newton_millimeters_per_radian);
+    fixed_unit!(NanonewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::NanonewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 1000000000000, pi^0, from_nanonewton_millimeters_per_radian, as_nanonewton_millimeters_per_radian);
+    fixed_unit!(MicronewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::MicronewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 1000000000, pi^0, from_micronewton_millimeters_per_radian, as_micronewton_millimeters_per_radian);
+    fixed_unit!(MillinewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::MillinewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 1000000, pi^0, from_millinewton_millimeters_per_radian, as_millinewton_millimeters_per_radian);
+    fixed_unit!(CentinewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::CentinewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 100000, pi^0, from_centinewton_millimeters_per_radian, as_centinewton_millimeters_per_radian);
+    fixed_unit!(DecinewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::DecinewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 10000, pi^0, from_decinewton_millimeters_per_radian, as_decinewton_millimeters_per_radian);
+    fixed_unit!(DecanewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::DecanewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 100, pi^0, from_decanewton_millimeters_per_radian, as_decanewton_millimeters_per_radian);
+    fixed_unit!(KilonewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::KilonewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1 / 1, pi^0, from_kilonewton_millimeters_per_radian, as_kilonewton_millimeters_per_radian);
+    fixed_unit!(MeganewtonMillimeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::MeganewtonMillimeterPerRadian, base NewtonMeterPerRadian, 1000 / 1, pi^0, from_meganewton_millimeters_per_radian, as_meganewton_millimeters_per_radian);
+    fixed_unit!(PoundForceFeetPerRadian: RotationalStiffness, RotationalStiffnessUnit::PoundForceFeetPerRadian, base NewtonMeterPerRadian, 3389544870828501 / 2500000000000000, pi^0, from_pound_force_feet_per_radian, as_pound_force_feet_per_radian);
+    fixed_unit!(KilopoundForceFootPerRadian: RotationalStiffness, RotationalStiffnessUnit::KilopoundForceFootPerRadian, base NewtonMeterPerRadian, 3389544870828501 / 2500000000000, pi^0, from_kilopound_force_feet_per_radian, as_kilopound_force_feet_per_radian);
+}

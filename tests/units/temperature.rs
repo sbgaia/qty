@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -359,6 +359,16 @@ fn solar_temperatures() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::temperature::Kelvin>();
+    check_fixed_rescale::<unit::temperature::Kelvin>();
+    check_fixed::<unit::temperature::DegreeRankine>();
+    check_fixed_rescale::<unit::temperature::DegreeRankine>();
+    check_fixed::<unit::temperature::SolarTemperature>();
+    check_fixed_rescale::<unit::temperature::SolarTemperature>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -305,6 +305,26 @@ fn milliroentgens() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::radiation_exposure::CoulombPerKilogram>();
+    check_fixed_rescale::<unit::radiation_exposure::CoulombPerKilogram>();
+    check_fixed::<unit::radiation_exposure::PicocoulombPerKilogram>();
+    check_fixed_rescale::<unit::radiation_exposure::PicocoulombPerKilogram>();
+    check_fixed::<unit::radiation_exposure::NanocoulombPerKilogram>();
+    check_fixed_rescale::<unit::radiation_exposure::NanocoulombPerKilogram>();
+    check_fixed::<unit::radiation_exposure::MicrocoulombPerKilogram>();
+    check_fixed_rescale::<unit::radiation_exposure::MicrocoulombPerKilogram>();
+    check_fixed::<unit::radiation_exposure::MillicoulombPerKilogram>();
+    check_fixed_rescale::<unit::radiation_exposure::MillicoulombPerKilogram>();
+    check_fixed::<unit::radiation_exposure::Roentgen>();
+    check_fixed_rescale::<unit::radiation_exposure::Roentgen>();
+    check_fixed::<unit::radiation_exposure::Microroentgen>();
+    check_fixed_rescale::<unit::radiation_exposure::Microroentgen>();
+    check_fixed::<unit::radiation_exposure::Milliroentgen>();
+    check_fixed_rescale::<unit::radiation_exposure::Milliroentgen>();
 }
 
 #[test]

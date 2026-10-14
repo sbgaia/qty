@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -214,6 +214,20 @@ fn kilopound_force_feet_per_degrees_per_feet() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter>();
+    check_fixed_rescale::<unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter>();
+    check_fixed::<unit::rotational_stiffness_per_length::KilonewtonMeterPerRadianPerMeter>();
+    check_fixed_rescale::<unit::rotational_stiffness_per_length::KilonewtonMeterPerRadianPerMeter>(
+    );
+    check_fixed::<unit::rotational_stiffness_per_length::MeganewtonMeterPerRadianPerMeter>();
+    check_fixed_rescale::<unit::rotational_stiffness_per_length::MeganewtonMeterPerRadianPerMeter>(
+    );
+    check_fixed::<unit::rotational_stiffness_per_length::PoundForceFootPerDegreesPerFoot>();
+    check_fixed::<unit::rotational_stiffness_per_length::KilopoundForceFootPerDegreesPerFoot>();
 }
 
 #[test]

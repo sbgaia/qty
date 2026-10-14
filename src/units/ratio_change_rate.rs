@@ -135,3 +135,13 @@ impl<T: Float> RatioChangeRate<T> {
         self.as_decimal_fractions_per_second()
     }
 }
+
+fixed_base!(RatioChangeRate, DecimalFractionPerSecond);
+
+/// Unit markers for counting [`RatioChangeRate`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::ratio_change_rate`](crate::unit::ratio_change_rate). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(PercentPerSecond: RatioChangeRate, RatioChangeRateUnit::PercentPerSecond, base DecimalFractionPerSecond, 1 / 100, pi^0, from_percents_per_second, as_percents_per_second);
+    fixed_unit!(DecimalFractionPerSecond: RatioChangeRate, RatioChangeRateUnit::DecimalFractionPerSecond, base DecimalFractionPerSecond, 1 / 1, pi^0, from_decimal_fractions_per_second, as_decimal_fractions_per_second);
+}

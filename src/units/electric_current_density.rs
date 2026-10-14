@@ -169,3 +169,14 @@ impl<T: Float> ElectricCurrentDensity<T> {
         self.as_amperes_per_square_foot()
     }
 }
+
+fixed_base!(ElectricCurrentDensity, AmperePerSquareMeter);
+
+/// Unit markers for counting [`ElectricCurrentDensity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_current_density`](crate::unit::electric_current_density). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(AmperePerSquareMeter: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareMeter, base AmperePerSquareMeter, 1 / 1, pi^0, from_amperes_per_square_meter, as_amperes_per_square_meter);
+    fixed_unit!(AmperePerSquareInch: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareInch, base AmperePerSquareMeter, 25000000 / 16129, pi^0, from_amperes_per_square_inch, as_amperes_per_square_inch);
+    fixed_unit!(AmperePerSquareFoot: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareFoot, base AmperePerSquareMeter, 1562500 / 145161, pi^0, from_amperes_per_square_foot, as_amperes_per_square_foot);
+}

@@ -735,3 +735,38 @@ impl<T: Float> Power<T> {
         self.as_tons_of_refrigeration()
     }
 }
+
+fixed_base!(Power, Watt);
+
+/// Unit markers for counting [`Power`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::power`](crate::unit::power). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Watt: Power, PowerUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts);
+    fixed_unit!(Femtowatt: Power, PowerUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts);
+    fixed_unit!(Picowatt: Power, PowerUnit::Picowatt, base Watt, 1 / 1000000000000, pi^0, from_picowatts, as_picowatts);
+    fixed_unit!(Nanowatt: Power, PowerUnit::Nanowatt, base Watt, 1 / 1000000000, pi^0, from_nanowatts, as_nanowatts);
+    fixed_unit!(Microwatt: Power, PowerUnit::Microwatt, base Watt, 1 / 1000000, pi^0, from_microwatts, as_microwatts);
+    fixed_unit!(Milliwatt: Power, PowerUnit::Milliwatt, base Watt, 1 / 1000, pi^0, from_milliwatts, as_milliwatts);
+    fixed_unit!(Deciwatt: Power, PowerUnit::Deciwatt, base Watt, 1 / 10, pi^0, from_deciwatts, as_deciwatts);
+    fixed_unit!(Decawatt: Power, PowerUnit::Decawatt, base Watt, 10 / 1, pi^0, from_decawatts, as_decawatts);
+    fixed_unit!(Kilowatt: Power, PowerUnit::Kilowatt, base Watt, 1000 / 1, pi^0, from_kilowatts, as_kilowatts);
+    fixed_unit!(Megawatt: Power, PowerUnit::Megawatt, base Watt, 1000000 / 1, pi^0, from_megawatts, as_megawatts);
+    fixed_unit!(Gigawatt: Power, PowerUnit::Gigawatt, base Watt, 1000000000 / 1, pi^0, from_gigawatts, as_gigawatts);
+    fixed_unit!(Terawatt: Power, PowerUnit::Terawatt, base Watt, 1000000000000 / 1, pi^0, from_terawatts, as_terawatts);
+    fixed_unit!(Petawatt: Power, PowerUnit::Petawatt, base Watt, 1000000000000000 / 1, pi^0, from_petawatts, as_petawatts);
+    fixed_unit!(MechanicalHorsepower: Power, PowerUnit::MechanicalHorsepower, base Watt, 149139974303117 / 200000000000, pi^0, from_mechanical_horsepower, as_mechanical_horsepower);
+    fixed_unit!(MetricHorsepower: Power, PowerUnit::MetricHorsepower, base Watt, 588399 / 800, pi^0, from_metric_horsepower, as_metric_horsepower);
+    fixed_unit!(ElectricalHorsepower: Power, PowerUnit::ElectricalHorsepower, base Watt, 746 / 1, pi^0, from_electrical_horsepower, as_electrical_horsepower);
+    fixed_unit!(BoilerHorsepower: Power, PowerUnit::BoilerHorsepower, base Watt, 19625 / 2, pi^0, from_boiler_horsepower, as_boiler_horsepower);
+    fixed_unit!(HydraulicHorsepower: Power, PowerUnit::HydraulicHorsepower, base Watt, 37284993579113511 / 50000000000000, pi^0, from_hydraulic_horsepower, as_hydraulic_horsepower);
+    fixed_unit!(BritishThermalUnitPerHour: Power, PowerUnit::BritishThermalUnitPerHour, base Watt, 52752792631 / 180000000000, pi^0, from_british_thermal_units_per_hour, as_british_thermal_units_per_hour);
+    fixed_unit!(KilobritishThermalUnitPerHour: Power, PowerUnit::KilobritishThermalUnitPerHour, base Watt, 52752792631 / 180000000, pi^0, from_kilobritish_thermal_units_per_hour, as_kilobritish_thermal_units_per_hour);
+    fixed_unit!(MegabritishThermalUnitPerHour: Power, PowerUnit::MegabritishThermalUnitPerHour, base Watt, 52752792631 / 180000, pi^0, from_megabritish_thermal_units_per_hour, as_megabritish_thermal_units_per_hour);
+    fixed_unit!(JoulePerHour: Power, PowerUnit::JoulePerHour, base Watt, 1 / 3600, pi^0, from_joules_per_hour, as_joules_per_hour);
+    fixed_unit!(MillijoulePerHour: Power, PowerUnit::MillijoulePerHour, base Watt, 1 / 3600000, pi^0, from_millijoules_per_hour, as_millijoules_per_hour);
+    fixed_unit!(KilojoulePerHour: Power, PowerUnit::KilojoulePerHour, base Watt, 5 / 18, pi^0, from_kilojoules_per_hour, as_kilojoules_per_hour);
+    fixed_unit!(MegajoulePerHour: Power, PowerUnit::MegajoulePerHour, base Watt, 2500 / 9, pi^0, from_megajoules_per_hour, as_megajoules_per_hour);
+    fixed_unit!(GigajoulePerHour: Power, PowerUnit::GigajoulePerHour, base Watt, 2500000 / 9, pi^0, from_gigajoules_per_hour, as_gigajoules_per_hour);
+    fixed_unit!(TonOfRefrigeration: Power, PowerUnit::TonOfRefrigeration, base Watt, 3516853 / 1000, pi^0, from_tons_of_refrigeration, as_tons_of_refrigeration);
+}

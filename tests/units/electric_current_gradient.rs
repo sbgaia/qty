@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -268,6 +268,24 @@ fn amperes_per_nanosecond() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_current_gradient::AmperePerSecond>();
+    check_fixed_rescale::<unit::electric_current_gradient::AmperePerSecond>();
+    check_fixed::<unit::electric_current_gradient::MilliamperePerSecond>();
+    check_fixed_rescale::<unit::electric_current_gradient::MilliamperePerSecond>();
+    check_fixed::<unit::electric_current_gradient::AmperePerMinute>();
+    check_fixed_rescale::<unit::electric_current_gradient::AmperePerMinute>();
+    check_fixed::<unit::electric_current_gradient::MilliamperePerMinute>();
+    check_fixed_rescale::<unit::electric_current_gradient::MilliamperePerMinute>();
+    check_fixed::<unit::electric_current_gradient::AmperePerMillisecond>();
+    check_fixed_rescale::<unit::electric_current_gradient::AmperePerMillisecond>();
+    check_fixed::<unit::electric_current_gradient::AmperePerMicrosecond>();
+    check_fixed_rescale::<unit::electric_current_gradient::AmperePerMicrosecond>();
+    check_fixed::<unit::electric_current_gradient::AmperePerNanosecond>();
+    check_fixed_rescale::<unit::electric_current_gradient::AmperePerNanosecond>();
 }
 
 #[test]

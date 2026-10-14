@@ -8,6 +8,54 @@ const ROUND_TRIP_TOL: f64 = 1e-15;
 /// f32 storage vs. the f64 reference (f32 has ~7 significant digits).
 const F32_TOL: f64 = 1e-6;
 
+/// Checks a `Fixed` unit marker: the float bridge, and that exact integer
+/// rescaling to and from the base unit agrees with float arithmetic.
+fn check_fixed<U: unitsnet_rs::FixedUnit>() {
+    use unitsnet_rs::{Fixed, Rounding};
+    let f = Fixed::<U>::new(7);
+    assert_eq!(f.to_f64(), U::to_quantity(7.0_f64));
+    assert_eq!(
+        Fixed::<U>::round_from(f.to_f64(), Rounding::NearestTiesEven),
+        Ok(f)
+    );
+    assert_eq!(
+        Fixed::<U, i32>::round_from_count(2.5_f64, Rounding::NearestTiesEven),
+        Ok(Fixed::new(2))
+    );
+    assert_eq!(format!("{f}"), format!("7 {}", U::ABBREVIATION));
+}
+
+/// Checks that exact integer rescaling between a `Fixed` unit and its base
+/// unit agrees with float arithmetic. (Not for units related to the base by
+/// a power of π: that ratio is irrational and refused at compile time.)
+fn check_fixed_rescale<U: unitsnet_rs::FixedUnit>() {
+    use unitsnet_rs::{Fixed, Quantity, RoundError, Rounding};
+    let f = Fixed::<U>::new(7);
+
+    // Integer rescaling is exact; compare with floats where those are
+    // unambiguous (not near a tie, comfortably inside i64).
+    let check = |exact: Result<i64, RoundError>, float: f64| {
+        let frac = (float - float.trunc()).abs();
+        if float.abs() < 1e15 && (frac - 0.5).abs() > 1e-6 {
+            assert_eq!(exact, Ok(float.round() as i64), "{float}");
+        } else if float.abs() > 1e19 {
+            assert_eq!(exact, Err(RoundError::Overflow), "{float}");
+        }
+    };
+    let to_base = f
+        .to_unit_rounded::<U::Base>(Rounding::NearestTiesAway)
+        .map(|b| b.count());
+    check(to_base, f.to_f64().as_base());
+    let base = Fixed::<U::Base>::new(7_000_000_000);
+    let from_base = base
+        .to_unit_rounded::<U>(Rounding::NearestTiesAway)
+        .map(|u| u.count());
+    check(
+        from_base,
+        U::from_quantity(U::Quantity::<f64>::from_base(7e9)),
+    );
+}
+
 /// Asserts `actual` is within `rel_tol` (relative) of `expected`.
 #[track_caller]
 fn assert_close(actual: f64, expected: f64, rel_tol: f64) {

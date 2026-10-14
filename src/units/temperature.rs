@@ -350,3 +350,14 @@ impl<T: Float> Temperature<T> {
         self.as_solar_temperatures()
     }
 }
+
+fixed_base!(Temperature, Kelvin);
+
+/// Unit markers for counting [`Temperature`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::temperature`](crate::unit::temperature). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Kelvin: Temperature, TemperatureUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins);
+    fixed_unit!(DegreeRankine: Temperature, TemperatureUnit::DegreeRankine, base Kelvin, 5 / 9, pi^0, from_degrees_rankine, as_degrees_rankine);
+    fixed_unit!(SolarTemperature: Temperature, TemperatureUnit::SolarTemperature, base Kelvin, 5778 / 1, pi^0, from_solar_temperatures, as_solar_temperatures);
+}

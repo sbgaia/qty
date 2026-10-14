@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -273,6 +273,26 @@ fn teraohms() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_impedance::Ohm>();
+    check_fixed_rescale::<unit::electric_impedance::Ohm>();
+    check_fixed::<unit::electric_impedance::Nanoohm>();
+    check_fixed_rescale::<unit::electric_impedance::Nanoohm>();
+    check_fixed::<unit::electric_impedance::Microohm>();
+    check_fixed_rescale::<unit::electric_impedance::Microohm>();
+    check_fixed::<unit::electric_impedance::Milliohm>();
+    check_fixed_rescale::<unit::electric_impedance::Milliohm>();
+    check_fixed::<unit::electric_impedance::Kiloohm>();
+    check_fixed_rescale::<unit::electric_impedance::Kiloohm>();
+    check_fixed::<unit::electric_impedance::Megaohm>();
+    check_fixed_rescale::<unit::electric_impedance::Megaohm>();
+    check_fixed::<unit::electric_impedance::Gigaohm>();
+    check_fixed_rescale::<unit::electric_impedance::Gigaohm>();
+    check_fixed::<unit::electric_impedance::Teraohm>();
+    check_fixed_rescale::<unit::electric_impedance::Teraohm>();
 }
 
 #[test]

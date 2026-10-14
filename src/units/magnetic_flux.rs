@@ -107,3 +107,12 @@ impl<T: Float> MagneticFlux<T> {
         self.as_webers()
     }
 }
+
+fixed_base!(MagneticFlux, Weber);
+
+/// Unit markers for counting [`MagneticFlux`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::magnetic_flux`](crate::unit::magnetic_flux). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Weber: MagneticFlux, MagneticFluxUnit::Weber, base Weber, 1 / 1, pi^0, from_webers, as_webers);
+}

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -564,6 +564,40 @@ fn kilopounds_force_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::force_change_rate::NewtonPerMinute>();
+    check_fixed_rescale::<unit::force_change_rate::NewtonPerMinute>();
+    check_fixed::<unit::force_change_rate::DecanewtonPerMinute>();
+    check_fixed_rescale::<unit::force_change_rate::DecanewtonPerMinute>();
+    check_fixed::<unit::force_change_rate::KilonewtonPerMinute>();
+    check_fixed_rescale::<unit::force_change_rate::KilonewtonPerMinute>();
+    check_fixed::<unit::force_change_rate::NewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::NewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::NanonewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::NanonewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::MicronewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::MicronewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::MillinewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::MillinewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::CentinewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::CentinewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::DecinewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::DecinewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::DecanewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::DecanewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::KilonewtonPerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::KilonewtonPerSecond>();
+    check_fixed::<unit::force_change_rate::PoundForcePerMinute>();
+    check_fixed_rescale::<unit::force_change_rate::PoundForcePerMinute>();
+    check_fixed::<unit::force_change_rate::KilopoundForcePerMinute>();
+    check_fixed_rescale::<unit::force_change_rate::KilopoundForcePerMinute>();
+    check_fixed::<unit::force_change_rate::PoundForcePerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::PoundForcePerSecond>();
+    check_fixed::<unit::force_change_rate::KilopoundForcePerSecond>();
+    check_fixed_rescale::<unit::force_change_rate::KilopoundForcePerSecond>();
 }
 
 #[test]

@@ -284,3 +284,19 @@ impl<T: Float> ElectricResistance<T> {
         self.as_teraohms()
     }
 }
+
+fixed_base!(ElectricResistance, Ohm);
+
+/// Unit markers for counting [`ElectricResistance`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_resistance`](crate::unit::electric_resistance). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Ohm: ElectricResistance, ElectricResistanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms);
+    fixed_unit!(Nanoohm: ElectricResistance, ElectricResistanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms);
+    fixed_unit!(Microohm: ElectricResistance, ElectricResistanceUnit::Microohm, base Ohm, 1 / 1000000, pi^0, from_microohms, as_microohms);
+    fixed_unit!(Milliohm: ElectricResistance, ElectricResistanceUnit::Milliohm, base Ohm, 1 / 1000, pi^0, from_milliohms, as_milliohms);
+    fixed_unit!(Kiloohm: ElectricResistance, ElectricResistanceUnit::Kiloohm, base Ohm, 1000 / 1, pi^0, from_kiloohms, as_kiloohms);
+    fixed_unit!(Megaohm: ElectricResistance, ElectricResistanceUnit::Megaohm, base Ohm, 1000000 / 1, pi^0, from_megaohms, as_megaohms);
+    fixed_unit!(Gigaohm: ElectricResistance, ElectricResistanceUnit::Gigaohm, base Ohm, 1000000000 / 1, pi^0, from_gigaohms, as_gigaohms);
+    fixed_unit!(Teraohm: ElectricResistance, ElectricResistanceUnit::Teraohm, base Ohm, 1000000000000 / 1, pi^0, from_teraohms, as_teraohms);
+}

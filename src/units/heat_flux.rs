@@ -710,3 +710,36 @@ impl<T: Float> HeatFlux<T> {
         self.as_pounds_per_second_cubed()
     }
 }
+
+fixed_base!(HeatFlux, WattPerSquareMeter);
+
+/// Unit markers for counting [`HeatFlux`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::heat_flux`](crate::unit::heat_flux). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(WattPerSquareMeter: HeatFlux, HeatFluxUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter);
+    fixed_unit!(NanowattPerSquareMeter: HeatFlux, HeatFluxUnit::NanowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000, pi^0, from_nanowatts_per_square_meter, as_nanowatts_per_square_meter);
+    fixed_unit!(MicrowattPerSquareMeter: HeatFlux, HeatFluxUnit::MicrowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000, pi^0, from_microwatts_per_square_meter, as_microwatts_per_square_meter);
+    fixed_unit!(MilliwattPerSquareMeter: HeatFlux, HeatFluxUnit::MilliwattPerSquareMeter, base WattPerSquareMeter, 1 / 1000, pi^0, from_milliwatts_per_square_meter, as_milliwatts_per_square_meter);
+    fixed_unit!(CentiwattPerSquareMeter: HeatFlux, HeatFluxUnit::CentiwattPerSquareMeter, base WattPerSquareMeter, 1 / 100, pi^0, from_centiwatts_per_square_meter, as_centiwatts_per_square_meter);
+    fixed_unit!(DeciwattPerSquareMeter: HeatFlux, HeatFluxUnit::DeciwattPerSquareMeter, base WattPerSquareMeter, 1 / 10, pi^0, from_deciwatts_per_square_meter, as_deciwatts_per_square_meter);
+    fixed_unit!(KilowattPerSquareMeter: HeatFlux, HeatFluxUnit::KilowattPerSquareMeter, base WattPerSquareMeter, 1000 / 1, pi^0, from_kilowatts_per_square_meter, as_kilowatts_per_square_meter);
+    fixed_unit!(WattPerSquareMillimeter: HeatFlux, HeatFluxUnit::WattPerSquareMillimeter, base WattPerSquareMeter, 1000000 / 1, pi^0, from_watts_per_square_millimeter, as_watts_per_square_millimeter);
+    fixed_unit!(NanowattPerSquareMillimeter: HeatFlux, HeatFluxUnit::NanowattPerSquareMillimeter, base WattPerSquareMeter, 1 / 1000, pi^0, from_nanowatts_per_square_millimeter, as_nanowatts_per_square_millimeter);
+    fixed_unit!(MicrowattPerSquareMillimeter: HeatFlux, HeatFluxUnit::MicrowattPerSquareMillimeter, base WattPerSquareMeter, 1 / 1, pi^0, from_microwatts_per_square_millimeter, as_microwatts_per_square_millimeter);
+    fixed_unit!(MilliwattPerSquareMillimeter: HeatFlux, HeatFluxUnit::MilliwattPerSquareMillimeter, base WattPerSquareMeter, 1000 / 1, pi^0, from_milliwatts_per_square_millimeter, as_milliwatts_per_square_millimeter);
+    fixed_unit!(CentiwattPerSquareMillimeter: HeatFlux, HeatFluxUnit::CentiwattPerSquareMillimeter, base WattPerSquareMeter, 10000 / 1, pi^0, from_centiwatts_per_square_millimeter, as_centiwatts_per_square_millimeter);
+    fixed_unit!(DeciwattPerSquareMillimeter: HeatFlux, HeatFluxUnit::DeciwattPerSquareMillimeter, base WattPerSquareMeter, 100000 / 1, pi^0, from_deciwatts_per_square_millimeter, as_deciwatts_per_square_millimeter);
+    fixed_unit!(KilowattPerSquareMillimeter: HeatFlux, HeatFluxUnit::KilowattPerSquareMillimeter, base WattPerSquareMeter, 1000000000 / 1, pi^0, from_kilowatts_per_square_millimeter, as_kilowatts_per_square_millimeter);
+    fixed_unit!(WattPerSquareInch: HeatFlux, HeatFluxUnit::WattPerSquareInch, base WattPerSquareMeter, 25000000 / 16129, pi^0, from_watts_per_square_inch, as_watts_per_square_inch);
+    fixed_unit!(WattPerSquareFoot: HeatFlux, HeatFluxUnit::WattPerSquareFoot, base WattPerSquareMeter, 1562500 / 145161, pi^0, from_watts_per_square_foot, as_watts_per_square_foot);
+    fixed_unit!(BtuPerSecondSquareInch: HeatFlux, HeatFluxUnit::BtuPerSecondSquareInch, base WattPerSquareMeter, 52752792631 / 32258, pi^0, from_btus_per_second_square_inch, as_btus_per_second_square_inch);
+    fixed_unit!(BtuPerSecondSquareFoot: HeatFlux, HeatFluxUnit::BtuPerSecondSquareFoot, base WattPerSquareMeter, 52752792631 / 4645152, pi^0, from_btus_per_second_square_foot, as_btus_per_second_square_foot);
+    fixed_unit!(BtuPerMinuteSquareFoot: HeatFlux, HeatFluxUnit::BtuPerMinuteSquareFoot, base WattPerSquareMeter, 52752792631 / 278709120, pi^0, from_btus_per_minute_square_foot, as_btus_per_minute_square_foot);
+    fixed_unit!(BtuPerHourSquareFoot: HeatFlux, HeatFluxUnit::BtuPerHourSquareFoot, base WattPerSquareMeter, 52752792631 / 16722547200, pi^0, from_btus_per_hour_square_foot, as_btus_per_hour_square_foot);
+    fixed_unit!(CaloriePerSecondSquareCentimeter: HeatFlux, HeatFluxUnit::CaloriePerSecondSquareCentimeter, base WattPerSquareMeter, 41840 / 1, pi^0, from_calories_per_second_square_centimeter, as_calories_per_second_square_centimeter);
+    fixed_unit!(KilocaloriePerSecondSquareCentimeter: HeatFlux, HeatFluxUnit::KilocaloriePerSecondSquareCentimeter, base WattPerSquareMeter, 41840000 / 1, pi^0, from_kilocalories_per_second_square_centimeter, as_kilocalories_per_second_square_centimeter);
+    fixed_unit!(KilocaloriePerHourSquareMeter: HeatFlux, HeatFluxUnit::KilocaloriePerHourSquareMeter, base WattPerSquareMeter, 523 / 450, pi^0, from_kilocalories_per_hour_square_meter, as_kilocalories_per_hour_square_meter);
+    fixed_unit!(PoundForcePerFootSecond: HeatFlux, HeatFluxUnit::PoundForcePerFootSecond, base WattPerSquareMeter, 8896443230521 / 609600000000, pi^0, from_pounds_force_per_foot_second, as_pounds_force_per_foot_second);
+    fixed_unit!(PoundPerSecondCubed: HeatFlux, HeatFluxUnit::PoundPerSecondCubed, base WattPerSquareMeter, 45359237 / 100000000, pi^0, from_pounds_per_second_cubed, as_pounds_per_second_cubed);
+}

@@ -202,3 +202,17 @@ impl<T: Float> ElectricConductivity<T> {
         self.0 * T::from_f64(10.0)
     }
 }
+
+fixed_base!(ElectricConductivity, SiemensPerMeter);
+
+/// Unit markers for counting [`ElectricConductivity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_conductivity`](crate::unit::electric_conductivity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(SiemensPerMeter: ElectricConductivity, ElectricConductivityUnit::SiemensPerMeter, base SiemensPerMeter, 1 / 1, pi^0, from_siemens_per_meter, as_siemens_per_meter);
+    fixed_unit!(SiemensPerInch: ElectricConductivity, ElectricConductivityUnit::SiemensPerInch, base SiemensPerMeter, 5000 / 127, pi^0, from_siemens_per_inch, as_siemens_per_inch);
+    fixed_unit!(SiemensPerFoot: ElectricConductivity, ElectricConductivityUnit::SiemensPerFoot, base SiemensPerMeter, 1250 / 381, pi^0, from_siemens_per_foot, as_siemens_per_foot);
+    fixed_unit!(SiemensPerCentimeter: ElectricConductivity, ElectricConductivityUnit::SiemensPerCentimeter, base SiemensPerMeter, 100 / 1, pi^0, from_siemens_per_centimeter, as_siemens_per_centimeter);
+    fixed_unit!(MicrosiemensPerCentimeter: ElectricConductivity, ElectricConductivityUnit::MicrosiemensPerCentimeter, base SiemensPerMeter, 1 / 10000, pi^0, from_microsiemens_per_centimeter, as_microsiemens_per_centimeter);
+    fixed_unit!(MillisiemensPerCentimeter: ElectricConductivity, ElectricConductivityUnit::MillisiemensPerCentimeter, base SiemensPerMeter, 1 / 10, pi^0, from_millisiemens_per_centimeter, as_millisiemens_per_centimeter);
+}

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1417,6 +1417,86 @@ fn kilopounds_force_per_inch() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::force_per_length::NewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::NewtonPerMeter>();
+    check_fixed::<unit::force_per_length::NanonewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::NanonewtonPerMeter>();
+    check_fixed::<unit::force_per_length::MicronewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::MicronewtonPerMeter>();
+    check_fixed::<unit::force_per_length::MillinewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::MillinewtonPerMeter>();
+    check_fixed::<unit::force_per_length::CentinewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::CentinewtonPerMeter>();
+    check_fixed::<unit::force_per_length::DecinewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::DecinewtonPerMeter>();
+    check_fixed::<unit::force_per_length::DecanewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::DecanewtonPerMeter>();
+    check_fixed::<unit::force_per_length::KilonewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::KilonewtonPerMeter>();
+    check_fixed::<unit::force_per_length::MeganewtonPerMeter>();
+    check_fixed_rescale::<unit::force_per_length::MeganewtonPerMeter>();
+    check_fixed::<unit::force_per_length::NewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::NewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::NanonewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::NanonewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::MicronewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::MicronewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::MillinewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::MillinewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::CentinewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::CentinewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::DecinewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::DecinewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::DecanewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::DecanewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::KilonewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::KilonewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::MeganewtonPerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::MeganewtonPerCentimeter>();
+    check_fixed::<unit::force_per_length::NewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::NewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::NanonewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::NanonewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::MicronewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::MicronewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::MillinewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::MillinewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::CentinewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::CentinewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::DecinewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::DecinewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::DecanewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::DecanewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::KilonewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::KilonewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::MeganewtonPerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::MeganewtonPerMillimeter>();
+    check_fixed::<unit::force_per_length::KilogramForcePerMeter>();
+    check_fixed_rescale::<unit::force_per_length::KilogramForcePerMeter>();
+    check_fixed::<unit::force_per_length::KilogramForcePerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::KilogramForcePerCentimeter>();
+    check_fixed::<unit::force_per_length::KilogramForcePerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::KilogramForcePerMillimeter>();
+    check_fixed::<unit::force_per_length::TonneForcePerMeter>();
+    check_fixed_rescale::<unit::force_per_length::TonneForcePerMeter>();
+    check_fixed::<unit::force_per_length::TonneForcePerCentimeter>();
+    check_fixed_rescale::<unit::force_per_length::TonneForcePerCentimeter>();
+    check_fixed::<unit::force_per_length::TonneForcePerMillimeter>();
+    check_fixed_rescale::<unit::force_per_length::TonneForcePerMillimeter>();
+    check_fixed::<unit::force_per_length::PoundForcePerFoot>();
+    check_fixed_rescale::<unit::force_per_length::PoundForcePerFoot>();
+    check_fixed::<unit::force_per_length::PoundForcePerInch>();
+    check_fixed_rescale::<unit::force_per_length::PoundForcePerInch>();
+    check_fixed::<unit::force_per_length::PoundForcePerYard>();
+    check_fixed_rescale::<unit::force_per_length::PoundForcePerYard>();
+    check_fixed::<unit::force_per_length::KilopoundForcePerFoot>();
+    check_fixed_rescale::<unit::force_per_length::KilopoundForcePerFoot>();
+    check_fixed::<unit::force_per_length::KilopoundForcePerInch>();
+    check_fixed_rescale::<unit::force_per_length::KilopoundForcePerInch>();
 }
 
 #[test]

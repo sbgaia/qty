@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -127,6 +127,16 @@ fn coulombs_per_square_inch() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_surface_charge_density::CoulombPerSquareMeter>();
+    check_fixed_rescale::<unit::electric_surface_charge_density::CoulombPerSquareMeter>();
+    check_fixed::<unit::electric_surface_charge_density::CoulombPerSquareCentimeter>();
+    check_fixed_rescale::<unit::electric_surface_charge_density::CoulombPerSquareCentimeter>();
+    check_fixed::<unit::electric_surface_charge_density::CoulombPerSquareInch>();
+    check_fixed_rescale::<unit::electric_surface_charge_density::CoulombPerSquareInch>();
 }
 
 #[test]

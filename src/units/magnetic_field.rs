@@ -234,3 +234,17 @@ impl<T: Float> MagneticField<T> {
         self.as_milligausses()
     }
 }
+
+fixed_base!(MagneticField, Tesla);
+
+/// Unit markers for counting [`MagneticField`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::magnetic_field`](crate::unit::magnetic_field). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Tesla: MagneticField, MagneticFieldUnit::Tesla, base Tesla, 1 / 1, pi^0, from_teslas, as_teslas);
+    fixed_unit!(Nanotesla: MagneticField, MagneticFieldUnit::Nanotesla, base Tesla, 1 / 1000000000, pi^0, from_nanoteslas, as_nanoteslas);
+    fixed_unit!(Microtesla: MagneticField, MagneticFieldUnit::Microtesla, base Tesla, 1 / 1000000, pi^0, from_microteslas, as_microteslas);
+    fixed_unit!(Millitesla: MagneticField, MagneticFieldUnit::Millitesla, base Tesla, 1 / 1000, pi^0, from_milliteslas, as_milliteslas);
+    fixed_unit!(Gauss: MagneticField, MagneticFieldUnit::Gauss, base Tesla, 1 / 10000, pi^0, from_gausses, as_gausses);
+    fixed_unit!(Milligauss: MagneticField, MagneticFieldUnit::Milligauss, base Tesla, 1 / 10000000, pi^0, from_milligausses, as_milligausses);
+}

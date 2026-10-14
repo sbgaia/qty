@@ -234,3 +234,17 @@ impl<T: Float> ElectricApparentPower<T> {
         self.as_gigavoltamperes()
     }
 }
+
+fixed_base!(ElectricApparentPower, Voltampere);
+
+/// Unit markers for counting [`ElectricApparentPower`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_apparent_power`](crate::unit::electric_apparent_power). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Voltampere: ElectricApparentPower, ElectricApparentPowerUnit::Voltampere, base Voltampere, 1 / 1, pi^0, from_voltamperes, as_voltamperes);
+    fixed_unit!(Microvoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Microvoltampere, base Voltampere, 1 / 1000000, pi^0, from_microvoltamperes, as_microvoltamperes);
+    fixed_unit!(Millivoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Millivoltampere, base Voltampere, 1 / 1000, pi^0, from_millivoltamperes, as_millivoltamperes);
+    fixed_unit!(Kilovoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Kilovoltampere, base Voltampere, 1000 / 1, pi^0, from_kilovoltamperes, as_kilovoltamperes);
+    fixed_unit!(Megavoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Megavoltampere, base Voltampere, 1000000 / 1, pi^0, from_megavoltamperes, as_megavoltamperes);
+    fixed_unit!(Gigavoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Gigavoltampere, base Voltampere, 1000000000 / 1, pi^0, from_gigavoltamperes, as_gigavoltamperes);
+}

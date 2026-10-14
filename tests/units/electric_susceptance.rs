@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -597,6 +597,42 @@ fn teramhos() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_susceptance::Siemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Siemens>();
+    check_fixed::<unit::electric_susceptance::Nanosiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Nanosiemens>();
+    check_fixed::<unit::electric_susceptance::Microsiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Microsiemens>();
+    check_fixed::<unit::electric_susceptance::Millisiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Millisiemens>();
+    check_fixed::<unit::electric_susceptance::Kilosiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Kilosiemens>();
+    check_fixed::<unit::electric_susceptance::Megasiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Megasiemens>();
+    check_fixed::<unit::electric_susceptance::Gigasiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Gigasiemens>();
+    check_fixed::<unit::electric_susceptance::Terasiemens>();
+    check_fixed_rescale::<unit::electric_susceptance::Terasiemens>();
+    check_fixed::<unit::electric_susceptance::Mho>();
+    check_fixed_rescale::<unit::electric_susceptance::Mho>();
+    check_fixed::<unit::electric_susceptance::Nanomho>();
+    check_fixed_rescale::<unit::electric_susceptance::Nanomho>();
+    check_fixed::<unit::electric_susceptance::Micromho>();
+    check_fixed_rescale::<unit::electric_susceptance::Micromho>();
+    check_fixed::<unit::electric_susceptance::Millimho>();
+    check_fixed_rescale::<unit::electric_susceptance::Millimho>();
+    check_fixed::<unit::electric_susceptance::Kilomho>();
+    check_fixed_rescale::<unit::electric_susceptance::Kilomho>();
+    check_fixed::<unit::electric_susceptance::Megamho>();
+    check_fixed_rescale::<unit::electric_susceptance::Megamho>();
+    check_fixed::<unit::electric_susceptance::Gigamho>();
+    check_fixed_rescale::<unit::electric_susceptance::Gigamho>();
+    check_fixed::<unit::electric_susceptance::Teramho>();
+    check_fixed_rescale::<unit::electric_susceptance::Teramho>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -233,6 +233,22 @@ fn milliroentgens_equivalent_man() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::radiation_equivalent_dose::Sievert>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::Sievert>();
+    check_fixed::<unit::radiation_equivalent_dose::Nanosievert>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::Nanosievert>();
+    check_fixed::<unit::radiation_equivalent_dose::Microsievert>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::Microsievert>();
+    check_fixed::<unit::radiation_equivalent_dose::Millisievert>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::Millisievert>();
+    check_fixed::<unit::radiation_equivalent_dose::RoentgenEquivalentMan>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::RoentgenEquivalentMan>();
+    check_fixed::<unit::radiation_equivalent_dose::MilliroentgenEquivalentMan>();
+    check_fixed_rescale::<unit::radiation_equivalent_dose::MilliroentgenEquivalentMan>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -784,6 +784,72 @@ fn gigadaltons() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass::Gram>();
+    check_fixed_rescale::<unit::mass::Gram>();
+    check_fixed::<unit::mass::Femtogram>();
+    check_fixed_rescale::<unit::mass::Femtogram>();
+    check_fixed::<unit::mass::Picogram>();
+    check_fixed_rescale::<unit::mass::Picogram>();
+    check_fixed::<unit::mass::Nanogram>();
+    check_fixed_rescale::<unit::mass::Nanogram>();
+    check_fixed::<unit::mass::Microgram>();
+    check_fixed_rescale::<unit::mass::Microgram>();
+    check_fixed::<unit::mass::Milligram>();
+    check_fixed_rescale::<unit::mass::Milligram>();
+    check_fixed::<unit::mass::Centigram>();
+    check_fixed_rescale::<unit::mass::Centigram>();
+    check_fixed::<unit::mass::Decigram>();
+    check_fixed_rescale::<unit::mass::Decigram>();
+    check_fixed::<unit::mass::Decagram>();
+    check_fixed_rescale::<unit::mass::Decagram>();
+    check_fixed::<unit::mass::Hectogram>();
+    check_fixed_rescale::<unit::mass::Hectogram>();
+    check_fixed::<unit::mass::Kilogram>();
+    check_fixed_rescale::<unit::mass::Kilogram>();
+    check_fixed::<unit::mass::Tonne>();
+    check_fixed_rescale::<unit::mass::Tonne>();
+    check_fixed::<unit::mass::Kilotonne>();
+    check_fixed_rescale::<unit::mass::Kilotonne>();
+    check_fixed::<unit::mass::Megatonne>();
+    check_fixed_rescale::<unit::mass::Megatonne>();
+    check_fixed::<unit::mass::ShortTon>();
+    check_fixed_rescale::<unit::mass::ShortTon>();
+    check_fixed::<unit::mass::LongTon>();
+    check_fixed_rescale::<unit::mass::LongTon>();
+    check_fixed::<unit::mass::Pound>();
+    check_fixed_rescale::<unit::mass::Pound>();
+    check_fixed::<unit::mass::Kilopound>();
+    check_fixed_rescale::<unit::mass::Kilopound>();
+    check_fixed::<unit::mass::Megapound>();
+    check_fixed_rescale::<unit::mass::Megapound>();
+    check_fixed::<unit::mass::Ounce>();
+    check_fixed_rescale::<unit::mass::Ounce>();
+    check_fixed::<unit::mass::Slug>();
+    check_fixed_rescale::<unit::mass::Slug>();
+    check_fixed::<unit::mass::Stone>();
+    check_fixed_rescale::<unit::mass::Stone>();
+    check_fixed::<unit::mass::ShortHundredweight>();
+    check_fixed_rescale::<unit::mass::ShortHundredweight>();
+    check_fixed::<unit::mass::LongHundredweight>();
+    check_fixed_rescale::<unit::mass::LongHundredweight>();
+    check_fixed::<unit::mass::Grain>();
+    check_fixed_rescale::<unit::mass::Grain>();
+    check_fixed::<unit::mass::SolarMass>();
+    check_fixed_rescale::<unit::mass::SolarMass>();
+    check_fixed::<unit::mass::EarthMass>();
+    check_fixed_rescale::<unit::mass::EarthMass>();
+    check_fixed::<unit::mass::Dalton>();
+    check_fixed_rescale::<unit::mass::Dalton>();
+    check_fixed::<unit::mass::Kilodalton>();
+    check_fixed_rescale::<unit::mass::Kilodalton>();
+    check_fixed::<unit::mass::Megadalton>();
+    check_fixed_rescale::<unit::mass::Megadalton>();
+    check_fixed::<unit::mass::Gigadalton>();
+    check_fixed_rescale::<unit::mass::Gigadalton>();
 }
 
 #[test]

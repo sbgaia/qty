@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1316,6 +1316,58 @@ fn kilopound_force_feet_per_radian() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::NewtonMeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::KilonewtonMeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::KilonewtonMeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::MeganewtonMeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::MeganewtonMeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::PoundForceFootPerDegrees>();
+    check_fixed::<unit::rotational_stiffness::KilopoundForceFootPerDegrees>();
+    check_fixed::<unit::rotational_stiffness::NewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::NanonewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MicronewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MillinewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::CentinewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::DecinewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::DecanewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::KilonewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MeganewtonMillimeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::NewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::NanonewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MicronewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MillinewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::CentinewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::DecinewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::DecanewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::KilonewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::MeganewtonMeterPerDegree>();
+    check_fixed::<unit::rotational_stiffness::NewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::NewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::NanonewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::NanonewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::MicronewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::MicronewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::MillinewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::MillinewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::CentinewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::CentinewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::DecinewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::DecinewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::DecanewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::DecanewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::KilonewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::KilonewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::MeganewtonMillimeterPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::MeganewtonMillimeterPerRadian>();
+    check_fixed::<unit::rotational_stiffness::PoundForceFeetPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::PoundForceFeetPerRadian>();
+    check_fixed::<unit::rotational_stiffness::KilopoundForceFootPerRadian>();
+    check_fixed_rescale::<unit::rotational_stiffness::KilopoundForceFootPerRadian>();
 }
 
 #[test]

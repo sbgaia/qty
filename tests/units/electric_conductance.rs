@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -597,6 +597,42 @@ fn teramhos() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_conductance::Siemens>();
+    check_fixed_rescale::<unit::electric_conductance::Siemens>();
+    check_fixed::<unit::electric_conductance::Nanosiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Nanosiemens>();
+    check_fixed::<unit::electric_conductance::Microsiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Microsiemens>();
+    check_fixed::<unit::electric_conductance::Millisiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Millisiemens>();
+    check_fixed::<unit::electric_conductance::Kilosiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Kilosiemens>();
+    check_fixed::<unit::electric_conductance::Megasiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Megasiemens>();
+    check_fixed::<unit::electric_conductance::Gigasiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Gigasiemens>();
+    check_fixed::<unit::electric_conductance::Terasiemens>();
+    check_fixed_rescale::<unit::electric_conductance::Terasiemens>();
+    check_fixed::<unit::electric_conductance::Mho>();
+    check_fixed_rescale::<unit::electric_conductance::Mho>();
+    check_fixed::<unit::electric_conductance::Nanomho>();
+    check_fixed_rescale::<unit::electric_conductance::Nanomho>();
+    check_fixed::<unit::electric_conductance::Micromho>();
+    check_fixed_rescale::<unit::electric_conductance::Micromho>();
+    check_fixed::<unit::electric_conductance::Millimho>();
+    check_fixed_rescale::<unit::electric_conductance::Millimho>();
+    check_fixed::<unit::electric_conductance::Kilomho>();
+    check_fixed_rescale::<unit::electric_conductance::Kilomho>();
+    check_fixed::<unit::electric_conductance::Megamho>();
+    check_fixed_rescale::<unit::electric_conductance::Megamho>();
+    check_fixed::<unit::electric_conductance::Gigamho>();
+    check_fixed_rescale::<unit::electric_conductance::Gigamho>();
+    check_fixed::<unit::electric_conductance::Teramho>();
+    check_fixed_rescale::<unit::electric_conductance::Teramho>();
 }
 
 #[test]

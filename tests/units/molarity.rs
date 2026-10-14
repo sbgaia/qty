@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -412,6 +412,32 @@ fn pound_moles_per_cubic_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::molarity::MolePerCubicMeter>();
+    check_fixed_rescale::<unit::molarity::MolePerCubicMeter>();
+    check_fixed::<unit::molarity::KilomolePerCubicMeter>();
+    check_fixed_rescale::<unit::molarity::KilomolePerCubicMeter>();
+    check_fixed::<unit::molarity::MolePerLiter>();
+    check_fixed_rescale::<unit::molarity::MolePerLiter>();
+    check_fixed::<unit::molarity::FemtomolePerLiter>();
+    check_fixed_rescale::<unit::molarity::FemtomolePerLiter>();
+    check_fixed::<unit::molarity::PicomolePerLiter>();
+    check_fixed_rescale::<unit::molarity::PicomolePerLiter>();
+    check_fixed::<unit::molarity::NanomolePerLiter>();
+    check_fixed_rescale::<unit::molarity::NanomolePerLiter>();
+    check_fixed::<unit::molarity::MicromolePerLiter>();
+    check_fixed_rescale::<unit::molarity::MicromolePerLiter>();
+    check_fixed::<unit::molarity::MillimolePerLiter>();
+    check_fixed_rescale::<unit::molarity::MillimolePerLiter>();
+    check_fixed::<unit::molarity::CentimolePerLiter>();
+    check_fixed_rescale::<unit::molarity::CentimolePerLiter>();
+    check_fixed::<unit::molarity::DecimolePerLiter>();
+    check_fixed_rescale::<unit::molarity::DecimolePerLiter>();
+    check_fixed::<unit::molarity::PoundMolePerCubicFoot>();
+    check_fixed_rescale::<unit::molarity::PoundMolePerCubicFoot>();
 }
 
 #[test]

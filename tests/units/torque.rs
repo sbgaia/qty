@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -944,6 +944,64 @@ fn tonne_force_meters() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::torque::NewtonMillimeter>();
+    check_fixed_rescale::<unit::torque::NewtonMillimeter>();
+    check_fixed::<unit::torque::KilonewtonMillimeter>();
+    check_fixed_rescale::<unit::torque::KilonewtonMillimeter>();
+    check_fixed::<unit::torque::MeganewtonMillimeter>();
+    check_fixed_rescale::<unit::torque::MeganewtonMillimeter>();
+    check_fixed::<unit::torque::NewtonCentimeter>();
+    check_fixed_rescale::<unit::torque::NewtonCentimeter>();
+    check_fixed::<unit::torque::KilonewtonCentimeter>();
+    check_fixed_rescale::<unit::torque::KilonewtonCentimeter>();
+    check_fixed::<unit::torque::MeganewtonCentimeter>();
+    check_fixed_rescale::<unit::torque::MeganewtonCentimeter>();
+    check_fixed::<unit::torque::NewtonMeter>();
+    check_fixed_rescale::<unit::torque::NewtonMeter>();
+    check_fixed::<unit::torque::KilonewtonMeter>();
+    check_fixed_rescale::<unit::torque::KilonewtonMeter>();
+    check_fixed::<unit::torque::MeganewtonMeter>();
+    check_fixed_rescale::<unit::torque::MeganewtonMeter>();
+    check_fixed::<unit::torque::OunceForceFoot>();
+    check_fixed_rescale::<unit::torque::OunceForceFoot>();
+    check_fixed::<unit::torque::OunceForceInch>();
+    check_fixed_rescale::<unit::torque::OunceForceInch>();
+    check_fixed::<unit::torque::PoundalFoot>();
+    check_fixed_rescale::<unit::torque::PoundalFoot>();
+    check_fixed::<unit::torque::PoundForceInch>();
+    check_fixed_rescale::<unit::torque::PoundForceInch>();
+    check_fixed::<unit::torque::KilopoundForceInch>();
+    check_fixed_rescale::<unit::torque::KilopoundForceInch>();
+    check_fixed::<unit::torque::MegapoundForceInch>();
+    check_fixed_rescale::<unit::torque::MegapoundForceInch>();
+    check_fixed::<unit::torque::PoundForceFoot>();
+    check_fixed_rescale::<unit::torque::PoundForceFoot>();
+    check_fixed::<unit::torque::KilopoundForceFoot>();
+    check_fixed_rescale::<unit::torque::KilopoundForceFoot>();
+    check_fixed::<unit::torque::MegapoundForceFoot>();
+    check_fixed_rescale::<unit::torque::MegapoundForceFoot>();
+    check_fixed::<unit::torque::GramForceMillimeter>();
+    check_fixed_rescale::<unit::torque::GramForceMillimeter>();
+    check_fixed::<unit::torque::GramForceCentimeter>();
+    check_fixed_rescale::<unit::torque::GramForceCentimeter>();
+    check_fixed::<unit::torque::GramForceMeter>();
+    check_fixed_rescale::<unit::torque::GramForceMeter>();
+    check_fixed::<unit::torque::KilogramForceMillimeter>();
+    check_fixed_rescale::<unit::torque::KilogramForceMillimeter>();
+    check_fixed::<unit::torque::KilogramForceCentimeter>();
+    check_fixed_rescale::<unit::torque::KilogramForceCentimeter>();
+    check_fixed::<unit::torque::KilogramForceMeter>();
+    check_fixed_rescale::<unit::torque::KilogramForceMeter>();
+    check_fixed::<unit::torque::TonneForceMillimeter>();
+    check_fixed_rescale::<unit::torque::TonneForceMillimeter>();
+    check_fixed::<unit::torque::TonneForceCentimeter>();
+    check_fixed_rescale::<unit::torque::TonneForceCentimeter>();
+    check_fixed::<unit::torque::TonneForceMeter>();
+    check_fixed_rescale::<unit::torque::TonneForceMeter>();
 }
 
 #[test]

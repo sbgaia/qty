@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -264,6 +264,24 @@ fn kilojoules_per_degree_celsius() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::entropy::JoulePerKelvin>();
+    check_fixed_rescale::<unit::entropy::JoulePerKelvin>();
+    check_fixed::<unit::entropy::KilojoulePerKelvin>();
+    check_fixed_rescale::<unit::entropy::KilojoulePerKelvin>();
+    check_fixed::<unit::entropy::MegajoulePerKelvin>();
+    check_fixed_rescale::<unit::entropy::MegajoulePerKelvin>();
+    check_fixed::<unit::entropy::CaloriePerKelvin>();
+    check_fixed_rescale::<unit::entropy::CaloriePerKelvin>();
+    check_fixed::<unit::entropy::KilocaloriePerKelvin>();
+    check_fixed_rescale::<unit::entropy::KilocaloriePerKelvin>();
+    check_fixed::<unit::entropy::JoulePerDegreeCelsius>();
+    check_fixed_rescale::<unit::entropy::JoulePerDegreeCelsius>();
+    check_fixed::<unit::entropy::KilojoulePerDegreeCelsius>();
+    check_fixed_rescale::<unit::entropy::KilojoulePerDegreeCelsius>();
 }
 
 #[test]

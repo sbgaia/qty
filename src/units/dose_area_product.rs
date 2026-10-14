@@ -709,3 +709,36 @@ impl<T: Float> DoseAreaProduct<T> {
         self.as_decigray_square_micrometers()
     }
 }
+
+fixed_base!(DoseAreaProduct, GraySquareMeter);
+
+/// Unit markers for counting [`DoseAreaProduct`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::dose_area_product`](crate::unit::dose_area_product). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(GraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareMeter, base GraySquareMeter, 1 / 1, pi^0, from_gray_square_meters, as_gray_square_meters);
+    fixed_unit!(MicrograySquareMeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMeter, base GraySquareMeter, 1 / 1000000, pi^0, from_microgray_square_meters, as_microgray_square_meters);
+    fixed_unit!(MilligraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::MilligraySquareMeter, base GraySquareMeter, 1 / 1000, pi^0, from_milligray_square_meters, as_milligray_square_meters);
+    fixed_unit!(CentigraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::CentigraySquareMeter, base GraySquareMeter, 1 / 100, pi^0, from_centigray_square_meters, as_centigray_square_meters);
+    fixed_unit!(DecigraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::DecigraySquareMeter, base GraySquareMeter, 1 / 10, pi^0, from_decigray_square_meters, as_decigray_square_meters);
+    fixed_unit!(GraySquareDecimeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareDecimeter, base GraySquareMeter, 1 / 100, pi^0, from_gray_square_decimeters, as_gray_square_decimeters);
+    fixed_unit!(MicrograySquareDecimeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareDecimeter, base GraySquareMeter, 1 / 100000000, pi^0, from_microgray_square_decimeters, as_microgray_square_decimeters);
+    fixed_unit!(MilligraySquareDecimeter: DoseAreaProduct, DoseAreaProductUnit::MilligraySquareDecimeter, base GraySquareMeter, 1 / 100000, pi^0, from_milligray_square_decimeters, as_milligray_square_decimeters);
+    fixed_unit!(CentigraySquareDecimeter: DoseAreaProduct, DoseAreaProductUnit::CentigraySquareDecimeter, base GraySquareMeter, 1 / 10000, pi^0, from_centigray_square_decimeters, as_centigray_square_decimeters);
+    fixed_unit!(DecigraySquareDecimeter: DoseAreaProduct, DoseAreaProductUnit::DecigraySquareDecimeter, base GraySquareMeter, 1 / 1000, pi^0, from_decigray_square_decimeters, as_decigray_square_decimeters);
+    fixed_unit!(GraySquareCentimeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareCentimeter, base GraySquareMeter, 1 / 10000, pi^0, from_gray_square_centimeters, as_gray_square_centimeters);
+    fixed_unit!(MicrograySquareCentimeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareCentimeter, base GraySquareMeter, 1 / 10000000000, pi^0, from_microgray_square_centimeters, as_microgray_square_centimeters);
+    fixed_unit!(MilligraySquareCentimeter: DoseAreaProduct, DoseAreaProductUnit::MilligraySquareCentimeter, base GraySquareMeter, 1 / 10000000, pi^0, from_milligray_square_centimeters, as_milligray_square_centimeters);
+    fixed_unit!(CentigraySquareCentimeter: DoseAreaProduct, DoseAreaProductUnit::CentigraySquareCentimeter, base GraySquareMeter, 1 / 1000000, pi^0, from_centigray_square_centimeters, as_centigray_square_centimeters);
+    fixed_unit!(DecigraySquareCentimeter: DoseAreaProduct, DoseAreaProductUnit::DecigraySquareCentimeter, base GraySquareMeter, 1 / 100000, pi^0, from_decigray_square_centimeters, as_decigray_square_centimeters);
+    fixed_unit!(GraySquareMillimeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareMillimeter, base GraySquareMeter, 1 / 1000000, pi^0, from_gray_square_millimeters, as_gray_square_millimeters);
+    fixed_unit!(MicrograySquareMillimeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMillimeter, base GraySquareMeter, 1 / 1000000000000, pi^0, from_microgray_square_millimeters, as_microgray_square_millimeters);
+    fixed_unit!(MilligraySquareMillimeter: DoseAreaProduct, DoseAreaProductUnit::MilligraySquareMillimeter, base GraySquareMeter, 1 / 1000000000, pi^0, from_milligray_square_millimeters, as_milligray_square_millimeters);
+    fixed_unit!(CentigraySquareMillimeter: DoseAreaProduct, DoseAreaProductUnit::CentigraySquareMillimeter, base GraySquareMeter, 1 / 100000000, pi^0, from_centigray_square_millimeters, as_centigray_square_millimeters);
+    fixed_unit!(DecigraySquareMillimeter: DoseAreaProduct, DoseAreaProductUnit::DecigraySquareMillimeter, base GraySquareMeter, 1 / 10000000, pi^0, from_decigray_square_millimeters, as_decigray_square_millimeters);
+    fixed_unit!(GraySquareMicrometer: DoseAreaProduct, DoseAreaProductUnit::GraySquareMicrometer, base GraySquareMeter, 1 / 1000000000000, pi^0, from_gray_square_micrometers, as_gray_square_micrometers);
+    fixed_unit!(MicrograySquareMicrometer: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMicrometer, base GraySquareMeter, 1 / 1000000000000000000, pi^0, from_microgray_square_micrometers, as_microgray_square_micrometers);
+    fixed_unit!(MilligraySquareMicrometer: DoseAreaProduct, DoseAreaProductUnit::MilligraySquareMicrometer, base GraySquareMeter, 1 / 1000000000000000, pi^0, from_milligray_square_micrometers, as_milligray_square_micrometers);
+    fixed_unit!(CentigraySquareMicrometer: DoseAreaProduct, DoseAreaProductUnit::CentigraySquareMicrometer, base GraySquareMeter, 1 / 100000000000000, pi^0, from_centigray_square_micrometers, as_centigray_square_micrometers);
+    fixed_unit!(DecigraySquareMicrometer: DoseAreaProduct, DoseAreaProductUnit::DecigraySquareMicrometer, base GraySquareMeter, 1 / 10000000000000, pi^0, from_decigray_square_micrometers, as_decigray_square_micrometers);
+}

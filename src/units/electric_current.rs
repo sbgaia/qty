@@ -309,3 +309,20 @@ impl<T: Float> ElectricCurrent<T> {
         self.as_megaamperes()
     }
 }
+
+fixed_base!(ElectricCurrent, Ampere);
+
+/// Unit markers for counting [`ElectricCurrent`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::electric_current`](crate::unit::electric_current). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Ampere: ElectricCurrent, ElectricCurrentUnit::Ampere, base Ampere, 1 / 1, pi^0, from_amperes, as_amperes);
+    fixed_unit!(Femtoampere: ElectricCurrent, ElectricCurrentUnit::Femtoampere, base Ampere, 1 / 1000000000000000, pi^0, from_femtoamperes, as_femtoamperes);
+    fixed_unit!(Picoampere: ElectricCurrent, ElectricCurrentUnit::Picoampere, base Ampere, 1 / 1000000000000, pi^0, from_picoamperes, as_picoamperes);
+    fixed_unit!(Nanoampere: ElectricCurrent, ElectricCurrentUnit::Nanoampere, base Ampere, 1 / 1000000000, pi^0, from_nanoamperes, as_nanoamperes);
+    fixed_unit!(Microampere: ElectricCurrent, ElectricCurrentUnit::Microampere, base Ampere, 1 / 1000000, pi^0, from_microamperes, as_microamperes);
+    fixed_unit!(Milliampere: ElectricCurrent, ElectricCurrentUnit::Milliampere, base Ampere, 1 / 1000, pi^0, from_milliamperes, as_milliamperes);
+    fixed_unit!(Centiampere: ElectricCurrent, ElectricCurrentUnit::Centiampere, base Ampere, 1 / 100, pi^0, from_centiamperes, as_centiamperes);
+    fixed_unit!(Kiloampere: ElectricCurrent, ElectricCurrentUnit::Kiloampere, base Ampere, 1000 / 1, pi^0, from_kiloamperes, as_kiloamperes);
+    fixed_unit!(Megaampere: ElectricCurrent, ElectricCurrentUnit::Megaampere, base Ampere, 1000000 / 1, pi^0, from_megaamperes, as_megaamperes);
+}

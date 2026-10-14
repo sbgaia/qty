@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -334,6 +334,28 @@ fn megaamperes() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_current::Ampere>();
+    check_fixed_rescale::<unit::electric_current::Ampere>();
+    check_fixed::<unit::electric_current::Femtoampere>();
+    check_fixed_rescale::<unit::electric_current::Femtoampere>();
+    check_fixed::<unit::electric_current::Picoampere>();
+    check_fixed_rescale::<unit::electric_current::Picoampere>();
+    check_fixed::<unit::electric_current::Nanoampere>();
+    check_fixed_rescale::<unit::electric_current::Nanoampere>();
+    check_fixed::<unit::electric_current::Microampere>();
+    check_fixed_rescale::<unit::electric_current::Microampere>();
+    check_fixed::<unit::electric_current::Milliampere>();
+    check_fixed_rescale::<unit::electric_current::Milliampere>();
+    check_fixed::<unit::electric_current::Centiampere>();
+    check_fixed_rescale::<unit::electric_current::Centiampere>();
+    check_fixed::<unit::electric_current::Kiloampere>();
+    check_fixed_rescale::<unit::electric_current::Kiloampere>();
+    check_fixed::<unit::electric_current::Megaampere>();
+    check_fixed_rescale::<unit::electric_current::Megaampere>();
 }
 
 #[test]

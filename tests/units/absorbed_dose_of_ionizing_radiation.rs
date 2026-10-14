@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -638,6 +638,44 @@ fn megarads() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Gray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Gray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Femtogray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Femtogray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Picogray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Picogray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Nanogray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Nanogray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Microgray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Microgray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Milligray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Milligray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Centigray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Centigray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Decigray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Decigray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Kilogray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Kilogray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Megagray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Megagray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Gigagray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Gigagray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Teragray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Teragray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Petagray>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Petagray>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Rad>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Rad>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Millirad>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Millirad>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Kilorad>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Kilorad>();
+    check_fixed::<unit::absorbed_dose_of_ionizing_radiation::Megarad>();
+    check_fixed_rescale::<unit::absorbed_dose_of_ionizing_radiation::Megarad>();
 }
 
 #[test]

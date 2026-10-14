@@ -339,3 +339,20 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.as_btus_per_cubic_foot_degree_fahrenheit()
     }
 }
+
+fixed_base!(VolumetricHeatCapacity, JoulePerCubicMeterKelvin);
+
+/// Unit markers for counting [`VolumetricHeatCapacity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::volumetric_heat_capacity`](crate::unit::volumetric_heat_capacity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(JoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1 / 1, pi^0, from_joules_per_cubic_meter_kelvin, as_joules_per_cubic_meter_kelvin);
+    fixed_unit!(KilojoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter_kelvin, as_kilojoules_per_cubic_meter_kelvin);
+    fixed_unit!(MegajoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1000000 / 1, pi^0, from_megajoules_per_cubic_meter_kelvin, as_megajoules_per_cubic_meter_kelvin);
+    fixed_unit!(JoulePerCubicMeterDegreeCelsius: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius, base JoulePerCubicMeterKelvin, 1 / 1, pi^0, from_joules_per_cubic_meter_degree_celsius, as_joules_per_cubic_meter_degree_celsius);
+    fixed_unit!(KilojoulePerCubicMeterDegreeCelsius: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius, base JoulePerCubicMeterKelvin, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter_degree_celsius, as_kilojoules_per_cubic_meter_degree_celsius);
+    fixed_unit!(MegajoulePerCubicMeterDegreeCelsius: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius, base JoulePerCubicMeterKelvin, 1000000 / 1, pi^0, from_megajoules_per_cubic_meter_degree_celsius, as_megajoules_per_cubic_meter_degree_celsius);
+    fixed_unit!(CaloriePerCubicCentimeterDegreeCelsius: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius, base JoulePerCubicMeterKelvin, 4184000 / 1, pi^0, from_calories_per_cubic_centimeter_degree_celsius, as_calories_per_cubic_centimeter_degree_celsius);
+    fixed_unit!(KilocaloriePerCubicCentimeterDegreeCelsius: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius, base JoulePerCubicMeterKelvin, 4184000000 / 1, pi^0, from_kilocalories_per_cubic_centimeter_degree_celsius, as_kilocalories_per_cubic_centimeter_degree_celsius);
+    fixed_unit!(BtuPerCubicFootDegreeFahrenheit: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit, base JoulePerCubicMeterKelvin, 6594099078875 / 98322384, pi^0, from_btus_per_cubic_foot_degree_fahrenheit, as_btus_per_cubic_foot_degree_fahrenheit);
+}

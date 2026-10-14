@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1711,6 +1711,102 @@ fn btus_per_second_cubic_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::power_density::WattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::WattPerCubicMeter>();
+    check_fixed::<unit::power_density::PicowattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::PicowattPerCubicMeter>();
+    check_fixed::<unit::power_density::NanowattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::NanowattPerCubicMeter>();
+    check_fixed::<unit::power_density::MicrowattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::MicrowattPerCubicMeter>();
+    check_fixed::<unit::power_density::MilliwattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::MilliwattPerCubicMeter>();
+    check_fixed::<unit::power_density::DeciwattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::DeciwattPerCubicMeter>();
+    check_fixed::<unit::power_density::DecawattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::DecawattPerCubicMeter>();
+    check_fixed::<unit::power_density::KilowattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::KilowattPerCubicMeter>();
+    check_fixed::<unit::power_density::MegawattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::MegawattPerCubicMeter>();
+    check_fixed::<unit::power_density::GigawattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::GigawattPerCubicMeter>();
+    check_fixed::<unit::power_density::TerawattPerCubicMeter>();
+    check_fixed_rescale::<unit::power_density::TerawattPerCubicMeter>();
+    check_fixed::<unit::power_density::WattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::WattPerCubicInch>();
+    check_fixed::<unit::power_density::PicowattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::PicowattPerCubicInch>();
+    check_fixed::<unit::power_density::NanowattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::NanowattPerCubicInch>();
+    check_fixed::<unit::power_density::MicrowattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::MicrowattPerCubicInch>();
+    check_fixed::<unit::power_density::MilliwattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::MilliwattPerCubicInch>();
+    check_fixed::<unit::power_density::DeciwattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::DeciwattPerCubicInch>();
+    check_fixed::<unit::power_density::DecawattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::DecawattPerCubicInch>();
+    check_fixed::<unit::power_density::KilowattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::KilowattPerCubicInch>();
+    check_fixed::<unit::power_density::MegawattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::MegawattPerCubicInch>();
+    check_fixed::<unit::power_density::GigawattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::GigawattPerCubicInch>();
+    check_fixed::<unit::power_density::TerawattPerCubicInch>();
+    check_fixed_rescale::<unit::power_density::TerawattPerCubicInch>();
+    check_fixed::<unit::power_density::WattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::WattPerCubicFoot>();
+    check_fixed::<unit::power_density::PicowattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::PicowattPerCubicFoot>();
+    check_fixed::<unit::power_density::NanowattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::NanowattPerCubicFoot>();
+    check_fixed::<unit::power_density::MicrowattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::MicrowattPerCubicFoot>();
+    check_fixed::<unit::power_density::MilliwattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::MilliwattPerCubicFoot>();
+    check_fixed::<unit::power_density::DeciwattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::DeciwattPerCubicFoot>();
+    check_fixed::<unit::power_density::DecawattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::DecawattPerCubicFoot>();
+    check_fixed::<unit::power_density::KilowattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::KilowattPerCubicFoot>();
+    check_fixed::<unit::power_density::MegawattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::MegawattPerCubicFoot>();
+    check_fixed::<unit::power_density::GigawattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::GigawattPerCubicFoot>();
+    check_fixed::<unit::power_density::TerawattPerCubicFoot>();
+    check_fixed_rescale::<unit::power_density::TerawattPerCubicFoot>();
+    check_fixed::<unit::power_density::WattPerLiter>();
+    check_fixed_rescale::<unit::power_density::WattPerLiter>();
+    check_fixed::<unit::power_density::PicowattPerLiter>();
+    check_fixed_rescale::<unit::power_density::PicowattPerLiter>();
+    check_fixed::<unit::power_density::NanowattPerLiter>();
+    check_fixed_rescale::<unit::power_density::NanowattPerLiter>();
+    check_fixed::<unit::power_density::MicrowattPerLiter>();
+    check_fixed_rescale::<unit::power_density::MicrowattPerLiter>();
+    check_fixed::<unit::power_density::MilliwattPerLiter>();
+    check_fixed_rescale::<unit::power_density::MilliwattPerLiter>();
+    check_fixed::<unit::power_density::DeciwattPerLiter>();
+    check_fixed_rescale::<unit::power_density::DeciwattPerLiter>();
+    check_fixed::<unit::power_density::DecawattPerLiter>();
+    check_fixed_rescale::<unit::power_density::DecawattPerLiter>();
+    check_fixed::<unit::power_density::KilowattPerLiter>();
+    check_fixed_rescale::<unit::power_density::KilowattPerLiter>();
+    check_fixed::<unit::power_density::MegawattPerLiter>();
+    check_fixed_rescale::<unit::power_density::MegawattPerLiter>();
+    check_fixed::<unit::power_density::GigawattPerLiter>();
+    check_fixed_rescale::<unit::power_density::GigawattPerLiter>();
+    check_fixed::<unit::power_density::TerawattPerLiter>();
+    check_fixed_rescale::<unit::power_density::TerawattPerLiter>();
+    check_fixed::<unit::power_density::BtuPerSecondCubicInch>();
+    check_fixed_rescale::<unit::power_density::BtuPerSecondCubicInch>();
+    check_fixed::<unit::power_density::BtuPerSecondCubicFoot>();
+    check_fixed_rescale::<unit::power_density::BtuPerSecondCubicFoot>();
 }
 
 #[test]

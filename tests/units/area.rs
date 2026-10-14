@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -411,6 +411,38 @@ fn square_nautical_miles() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::area::SquareKilometer>();
+    check_fixed_rescale::<unit::area::SquareKilometer>();
+    check_fixed::<unit::area::SquareMeter>();
+    check_fixed_rescale::<unit::area::SquareMeter>();
+    check_fixed::<unit::area::SquareDecimeter>();
+    check_fixed_rescale::<unit::area::SquareDecimeter>();
+    check_fixed::<unit::area::SquareCentimeter>();
+    check_fixed_rescale::<unit::area::SquareCentimeter>();
+    check_fixed::<unit::area::SquareMillimeter>();
+    check_fixed_rescale::<unit::area::SquareMillimeter>();
+    check_fixed::<unit::area::SquareMicrometer>();
+    check_fixed_rescale::<unit::area::SquareMicrometer>();
+    check_fixed::<unit::area::SquareMile>();
+    check_fixed_rescale::<unit::area::SquareMile>();
+    check_fixed::<unit::area::SquareYard>();
+    check_fixed_rescale::<unit::area::SquareYard>();
+    check_fixed::<unit::area::SquareFoot>();
+    check_fixed_rescale::<unit::area::SquareFoot>();
+    check_fixed::<unit::area::UsSurveySquareFoot>();
+    check_fixed_rescale::<unit::area::UsSurveySquareFoot>();
+    check_fixed::<unit::area::SquareInch>();
+    check_fixed_rescale::<unit::area::SquareInch>();
+    check_fixed::<unit::area::Acre>();
+    check_fixed_rescale::<unit::area::Acre>();
+    check_fixed::<unit::area::Hectare>();
+    check_fixed_rescale::<unit::area::Hectare>();
+    check_fixed::<unit::area::SquareNauticalMile>();
+    check_fixed_rescale::<unit::area::SquareNauticalMile>();
 }
 
 #[test]

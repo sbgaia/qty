@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -695,6 +695,46 @@ fn millibars_per_minute() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::pressure_change_rate::PascalPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::PascalPerSecond>();
+    check_fixed::<unit::pressure_change_rate::KilopascalPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::KilopascalPerSecond>();
+    check_fixed::<unit::pressure_change_rate::MegapascalPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::MegapascalPerSecond>();
+    check_fixed::<unit::pressure_change_rate::PascalPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::PascalPerMinute>();
+    check_fixed::<unit::pressure_change_rate::KilopascalPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::KilopascalPerMinute>();
+    check_fixed::<unit::pressure_change_rate::MegapascalPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::MegapascalPerMinute>();
+    check_fixed::<unit::pressure_change_rate::MillimeterOfMercuryPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::MillimeterOfMercuryPerSecond>();
+    check_fixed::<unit::pressure_change_rate::AtmospherePerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::AtmospherePerSecond>();
+    check_fixed::<unit::pressure_change_rate::PoundForcePerSquareInchPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::PoundForcePerSquareInchPerSecond>();
+    check_fixed::<unit::pressure_change_rate::KilopoundForcePerSquareInchPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::KilopoundForcePerSquareInchPerSecond>();
+    check_fixed::<unit::pressure_change_rate::MegapoundForcePerSquareInchPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::MegapoundForcePerSquareInchPerSecond>();
+    check_fixed::<unit::pressure_change_rate::PoundForcePerSquareInchPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::PoundForcePerSquareInchPerMinute>();
+    check_fixed::<unit::pressure_change_rate::KilopoundForcePerSquareInchPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::KilopoundForcePerSquareInchPerMinute>();
+    check_fixed::<unit::pressure_change_rate::MegapoundForcePerSquareInchPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::MegapoundForcePerSquareInchPerMinute>();
+    check_fixed::<unit::pressure_change_rate::BarPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::BarPerSecond>();
+    check_fixed::<unit::pressure_change_rate::MillibarPerSecond>();
+    check_fixed_rescale::<unit::pressure_change_rate::MillibarPerSecond>();
+    check_fixed::<unit::pressure_change_rate::BarPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::BarPerMinute>();
+    check_fixed::<unit::pressure_change_rate::MillibarPerMinute>();
+    check_fixed_rescale::<unit::pressure_change_rate::MillibarPerMinute>();
 }
 
 #[test]

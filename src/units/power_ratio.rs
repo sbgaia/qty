@@ -132,3 +132,12 @@ impl<T: Float> PowerRatio<T> {
         self.as_decibel_milliwatts()
     }
 }
+
+fixed_base!(PowerRatio, DecibelWatt);
+
+/// Unit markers for counting [`PowerRatio`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::power_ratio`](crate::unit::power_ratio). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(DecibelWatt: PowerRatio, PowerRatioUnit::DecibelWatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_watts, as_decibel_watts);
+}

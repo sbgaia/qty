@@ -107,3 +107,12 @@ impl<T: Float> Permittivity<T> {
         self.as_farads_per_meter()
     }
 }
+
+fixed_base!(Permittivity, FaradPerMeter);
+
+/// Unit markers for counting [`Permittivity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::permittivity`](crate::unit::permittivity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(FaradPerMeter: Permittivity, PermittivityUnit::FaradPerMeter, base FaradPerMeter, 1 / 1, pi^0, from_farads_per_meter, as_farads_per_meter);
+}

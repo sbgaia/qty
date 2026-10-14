@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1682,6 +1682,110 @@ fn milligrams_force_per_square_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::pressure::Pascal>();
+    check_fixed_rescale::<unit::pressure::Pascal>();
+    check_fixed::<unit::pressure::Micropascal>();
+    check_fixed_rescale::<unit::pressure::Micropascal>();
+    check_fixed::<unit::pressure::Millipascal>();
+    check_fixed_rescale::<unit::pressure::Millipascal>();
+    check_fixed::<unit::pressure::Decapascal>();
+    check_fixed_rescale::<unit::pressure::Decapascal>();
+    check_fixed::<unit::pressure::Hectopascal>();
+    check_fixed_rescale::<unit::pressure::Hectopascal>();
+    check_fixed::<unit::pressure::Kilopascal>();
+    check_fixed_rescale::<unit::pressure::Kilopascal>();
+    check_fixed::<unit::pressure::Megapascal>();
+    check_fixed_rescale::<unit::pressure::Megapascal>();
+    check_fixed::<unit::pressure::Gigapascal>();
+    check_fixed_rescale::<unit::pressure::Gigapascal>();
+    check_fixed::<unit::pressure::Atmosphere>();
+    check_fixed_rescale::<unit::pressure::Atmosphere>();
+    check_fixed::<unit::pressure::Bar>();
+    check_fixed_rescale::<unit::pressure::Bar>();
+    check_fixed::<unit::pressure::Microbar>();
+    check_fixed_rescale::<unit::pressure::Microbar>();
+    check_fixed::<unit::pressure::Millibar>();
+    check_fixed_rescale::<unit::pressure::Millibar>();
+    check_fixed::<unit::pressure::Centibar>();
+    check_fixed_rescale::<unit::pressure::Centibar>();
+    check_fixed::<unit::pressure::Decibar>();
+    check_fixed_rescale::<unit::pressure::Decibar>();
+    check_fixed::<unit::pressure::Kilobar>();
+    check_fixed_rescale::<unit::pressure::Kilobar>();
+    check_fixed::<unit::pressure::Megabar>();
+    check_fixed_rescale::<unit::pressure::Megabar>();
+    check_fixed::<unit::pressure::KilogramForcePerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::KilogramForcePerSquareMeter>();
+    check_fixed::<unit::pressure::KilogramForcePerSquareCentimeter>();
+    check_fixed_rescale::<unit::pressure::KilogramForcePerSquareCentimeter>();
+    check_fixed::<unit::pressure::KilogramForcePerSquareMillimeter>();
+    check_fixed_rescale::<unit::pressure::KilogramForcePerSquareMillimeter>();
+    check_fixed::<unit::pressure::NewtonPerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::NewtonPerSquareMeter>();
+    check_fixed::<unit::pressure::KilonewtonPerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::KilonewtonPerSquareMeter>();
+    check_fixed::<unit::pressure::MeganewtonPerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::MeganewtonPerSquareMeter>();
+    check_fixed::<unit::pressure::NewtonPerSquareCentimeter>();
+    check_fixed_rescale::<unit::pressure::NewtonPerSquareCentimeter>();
+    check_fixed::<unit::pressure::KilonewtonPerSquareCentimeter>();
+    check_fixed_rescale::<unit::pressure::KilonewtonPerSquareCentimeter>();
+    check_fixed::<unit::pressure::NewtonPerSquareMillimeter>();
+    check_fixed_rescale::<unit::pressure::NewtonPerSquareMillimeter>();
+    check_fixed::<unit::pressure::KilonewtonPerSquareMillimeter>();
+    check_fixed_rescale::<unit::pressure::KilonewtonPerSquareMillimeter>();
+    check_fixed::<unit::pressure::TechnicalAtmosphere>();
+    check_fixed_rescale::<unit::pressure::TechnicalAtmosphere>();
+    check_fixed::<unit::pressure::Torr>();
+    check_fixed_rescale::<unit::pressure::Torr>();
+    check_fixed::<unit::pressure::Millitorr>();
+    check_fixed_rescale::<unit::pressure::Millitorr>();
+    check_fixed::<unit::pressure::PoundForcePerSquareInch>();
+    check_fixed_rescale::<unit::pressure::PoundForcePerSquareInch>();
+    check_fixed::<unit::pressure::KilopoundForcePerSquareInch>();
+    check_fixed_rescale::<unit::pressure::KilopoundForcePerSquareInch>();
+    check_fixed::<unit::pressure::PoundForcePerSquareMil>();
+    check_fixed_rescale::<unit::pressure::PoundForcePerSquareMil>();
+    check_fixed::<unit::pressure::KilopoundForcePerSquareMil>();
+    check_fixed_rescale::<unit::pressure::KilopoundForcePerSquareMil>();
+    check_fixed::<unit::pressure::PoundForcePerSquareFoot>();
+    check_fixed_rescale::<unit::pressure::PoundForcePerSquareFoot>();
+    check_fixed::<unit::pressure::KilopoundForcePerSquareFoot>();
+    check_fixed_rescale::<unit::pressure::KilopoundForcePerSquareFoot>();
+    check_fixed::<unit::pressure::TonneForcePerSquareMillimeter>();
+    check_fixed_rescale::<unit::pressure::TonneForcePerSquareMillimeter>();
+    check_fixed::<unit::pressure::TonneForcePerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::TonneForcePerSquareMeter>();
+    check_fixed::<unit::pressure::MeterOfHead>();
+    check_fixed_rescale::<unit::pressure::MeterOfHead>();
+    check_fixed::<unit::pressure::TonneForcePerSquareCentimeter>();
+    check_fixed_rescale::<unit::pressure::TonneForcePerSquareCentimeter>();
+    check_fixed::<unit::pressure::FootOfHead>();
+    check_fixed_rescale::<unit::pressure::FootOfHead>();
+    check_fixed::<unit::pressure::MillimeterOfMercury>();
+    check_fixed_rescale::<unit::pressure::MillimeterOfMercury>();
+    check_fixed::<unit::pressure::InchOfMercury>();
+    check_fixed_rescale::<unit::pressure::InchOfMercury>();
+    check_fixed::<unit::pressure::DynePerSquareCentimeter>();
+    check_fixed_rescale::<unit::pressure::DynePerSquareCentimeter>();
+    check_fixed::<unit::pressure::PoundPerInchSecondSquared>();
+    check_fixed_rescale::<unit::pressure::PoundPerInchSecondSquared>();
+    check_fixed::<unit::pressure::MeterOfWaterColumn>();
+    check_fixed_rescale::<unit::pressure::MeterOfWaterColumn>();
+    check_fixed::<unit::pressure::MillimeterOfWaterColumn>();
+    check_fixed_rescale::<unit::pressure::MillimeterOfWaterColumn>();
+    check_fixed::<unit::pressure::CentimeterOfWaterColumn>();
+    check_fixed_rescale::<unit::pressure::CentimeterOfWaterColumn>();
+    check_fixed::<unit::pressure::InchOfWaterColumn>();
+    check_fixed_rescale::<unit::pressure::InchOfWaterColumn>();
+    check_fixed::<unit::pressure::MilligramForcePerSquareMeter>();
+    check_fixed_rescale::<unit::pressure::MilligramForcePerSquareMeter>();
+    check_fixed::<unit::pressure::MilligramForcePerSquareFoot>();
+    check_fixed_rescale::<unit::pressure::MilligramForcePerSquareFoot>();
 }
 
 #[test]

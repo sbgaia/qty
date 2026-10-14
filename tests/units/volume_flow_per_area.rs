@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -89,6 +89,14 @@ fn cubic_feet_per_minute_per_square_foot() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::volume_flow_per_area::CubicMeterPerSecondPerSquareMeter>();
+    check_fixed_rescale::<unit::volume_flow_per_area::CubicMeterPerSecondPerSquareMeter>();
+    check_fixed::<unit::volume_flow_per_area::CubicFootPerMinutePerSquareFoot>();
+    check_fixed_rescale::<unit::volume_flow_per_area::CubicFootPerMinutePerSquareFoot>();
 }
 
 #[test]

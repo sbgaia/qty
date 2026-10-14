@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -194,6 +194,20 @@ fn square_centimeters() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::porous_medium_permeability::Darcy>();
+    check_fixed_rescale::<unit::porous_medium_permeability::Darcy>();
+    check_fixed::<unit::porous_medium_permeability::Microdarcy>();
+    check_fixed_rescale::<unit::porous_medium_permeability::Microdarcy>();
+    check_fixed::<unit::porous_medium_permeability::Millidarcy>();
+    check_fixed_rescale::<unit::porous_medium_permeability::Millidarcy>();
+    check_fixed::<unit::porous_medium_permeability::SquareMeter>();
+    check_fixed_rescale::<unit::porous_medium_permeability::SquareMeter>();
+    check_fixed::<unit::porous_medium_permeability::SquareCentimeter>();
+    check_fixed_rescale::<unit::porous_medium_permeability::SquareCentimeter>();
 }
 
 #[test]

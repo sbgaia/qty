@@ -360,3 +360,22 @@ impl<T: Float> Molarity<T> {
         self.as_pound_moles_per_cubic_foot()
     }
 }
+
+fixed_base!(Molarity, MolePerCubicMeter);
+
+/// Unit markers for counting [`Molarity`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::molarity`](crate::unit::molarity). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(MolePerCubicMeter: Molarity, MolarityUnit::MolePerCubicMeter, base MolePerCubicMeter, 1 / 1, pi^0, from_moles_per_cubic_meter, as_moles_per_cubic_meter);
+    fixed_unit!(KilomolePerCubicMeter: Molarity, MolarityUnit::KilomolePerCubicMeter, base MolePerCubicMeter, 1000 / 1, pi^0, from_kilomoles_per_cubic_meter, as_kilomoles_per_cubic_meter);
+    fixed_unit!(MolePerLiter: Molarity, MolarityUnit::MolePerLiter, base MolePerCubicMeter, 1000 / 1, pi^0, from_moles_per_liter, as_moles_per_liter);
+    fixed_unit!(FemtomolePerLiter: Molarity, MolarityUnit::FemtomolePerLiter, base MolePerCubicMeter, 1 / 1000000000000, pi^0, from_femtomoles_per_liter, as_femtomoles_per_liter);
+    fixed_unit!(PicomolePerLiter: Molarity, MolarityUnit::PicomolePerLiter, base MolePerCubicMeter, 1 / 1000000000, pi^0, from_picomoles_per_liter, as_picomoles_per_liter);
+    fixed_unit!(NanomolePerLiter: Molarity, MolarityUnit::NanomolePerLiter, base MolePerCubicMeter, 1 / 1000000, pi^0, from_nanomoles_per_liter, as_nanomoles_per_liter);
+    fixed_unit!(MicromolePerLiter: Molarity, MolarityUnit::MicromolePerLiter, base MolePerCubicMeter, 1 / 1000, pi^0, from_micromoles_per_liter, as_micromoles_per_liter);
+    fixed_unit!(MillimolePerLiter: Molarity, MolarityUnit::MillimolePerLiter, base MolePerCubicMeter, 1 / 1, pi^0, from_millimoles_per_liter, as_millimoles_per_liter);
+    fixed_unit!(CentimolePerLiter: Molarity, MolarityUnit::CentimolePerLiter, base MolePerCubicMeter, 10 / 1, pi^0, from_centimoles_per_liter, as_centimoles_per_liter);
+    fixed_unit!(DecimolePerLiter: Molarity, MolarityUnit::DecimolePerLiter, base MolePerCubicMeter, 100 / 1, pi^0, from_decimoles_per_liter, as_decimoles_per_liter);
+    fixed_unit!(PoundMolePerCubicFoot: Molarity, MolarityUnit::PoundMolePerCubicFoot, base MolePerCubicMeter, 3543690390625 / 221225364, pi^0, from_pound_moles_per_cubic_foot, as_pound_moles_per_cubic_foot);
+}

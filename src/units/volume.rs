@@ -1491,3 +1491,65 @@ impl<T: Float> Volume<T> {
         self.as_board_feet()
     }
 }
+
+fixed_base!(Volume, CubicMeter);
+
+/// Unit markers for counting [`Volume`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::volume`](crate::unit::volume). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Liter: Volume, VolumeUnit::Liter, base CubicMeter, 1 / 1000, pi^0, from_liters, as_liters);
+    fixed_unit!(Nanoliter: Volume, VolumeUnit::Nanoliter, base CubicMeter, 1 / 1000000000000, pi^0, from_nanoliters, as_nanoliters);
+    fixed_unit!(Microliter: Volume, VolumeUnit::Microliter, base CubicMeter, 1 / 1000000000, pi^0, from_microliters, as_microliters);
+    fixed_unit!(Milliliter: Volume, VolumeUnit::Milliliter, base CubicMeter, 1 / 1000000, pi^0, from_milliliters, as_milliliters);
+    fixed_unit!(Centiliter: Volume, VolumeUnit::Centiliter, base CubicMeter, 1 / 100000, pi^0, from_centiliters, as_centiliters);
+    fixed_unit!(Deciliter: Volume, VolumeUnit::Deciliter, base CubicMeter, 1 / 10000, pi^0, from_deciliters, as_deciliters);
+    fixed_unit!(Decaliter: Volume, VolumeUnit::Decaliter, base CubicMeter, 1 / 100, pi^0, from_decaliters, as_decaliters);
+    fixed_unit!(Hectoliter: Volume, VolumeUnit::Hectoliter, base CubicMeter, 1 / 10, pi^0, from_hectoliters, as_hectoliters);
+    fixed_unit!(Kiloliter: Volume, VolumeUnit::Kiloliter, base CubicMeter, 1 / 1, pi^0, from_kiloliters, as_kiloliters);
+    fixed_unit!(Megaliter: Volume, VolumeUnit::Megaliter, base CubicMeter, 1000 / 1, pi^0, from_megaliters, as_megaliters);
+    fixed_unit!(CubicMeter: Volume, VolumeUnit::CubicMeter, base CubicMeter, 1 / 1, pi^0, from_cubic_meters, as_cubic_meters);
+    fixed_unit!(ThousandCubicMeter: Volume, VolumeUnit::ThousandCubicMeter, base CubicMeter, 1000 / 1, pi^0, from_thousand_cubic_meters, as_thousand_cubic_meters);
+    fixed_unit!(CubicKilometer: Volume, VolumeUnit::CubicKilometer, base CubicMeter, 1000000000 / 1, pi^0, from_cubic_kilometers, as_cubic_kilometers);
+    fixed_unit!(CubicHectometer: Volume, VolumeUnit::CubicHectometer, base CubicMeter, 1000000 / 1, pi^0, from_cubic_hectometers, as_cubic_hectometers);
+    fixed_unit!(CubicDecimeter: Volume, VolumeUnit::CubicDecimeter, base CubicMeter, 1 / 1000, pi^0, from_cubic_decimeters, as_cubic_decimeters);
+    fixed_unit!(CubicCentimeter: Volume, VolumeUnit::CubicCentimeter, base CubicMeter, 1 / 1000000, pi^0, from_cubic_centimeters, as_cubic_centimeters);
+    fixed_unit!(CubicMillimeter: Volume, VolumeUnit::CubicMillimeter, base CubicMeter, 1 / 1000000000, pi^0, from_cubic_millimeters, as_cubic_millimeters);
+    fixed_unit!(CubicMicrometer: Volume, VolumeUnit::CubicMicrometer, base CubicMeter, 1 / 1000000000000000000, pi^0, from_cubic_micrometers, as_cubic_micrometers);
+    fixed_unit!(CubicMile: Volume, VolumeUnit::CubicMile, base CubicMeter, 8140980127813632 / 1953125, pi^0, from_cubic_miles, as_cubic_miles);
+    fixed_unit!(CubicYard: Volume, VolumeUnit::CubicYard, base CubicMeter, 1493271207 / 1953125000, pi^0, from_cubic_yards, as_cubic_yards);
+    fixed_unit!(CubicFoot: Volume, VolumeUnit::CubicFoot, base CubicMeter, 55306341 / 1953125000, pi^0, from_cubic_feet, as_cubic_feet);
+    fixed_unit!(HundredCubicFoot: Volume, VolumeUnit::HundredCubicFoot, base CubicMeter, 55306341 / 19531250, pi^0, from_hundred_cubic_feet, as_hundred_cubic_feet);
+    fixed_unit!(ThousandCubicFoot: Volume, VolumeUnit::ThousandCubicFoot, base CubicMeter, 55306341 / 1953125, pi^0, from_thousand_cubic_feet, as_thousand_cubic_feet);
+    fixed_unit!(MillionCubicFoot: Volume, VolumeUnit::MillionCubicFoot, base CubicMeter, 442450728 / 15625, pi^0, from_million_cubic_feet, as_million_cubic_feet);
+    fixed_unit!(CubicInch: Volume, VolumeUnit::CubicInch, base CubicMeter, 2048383 / 125000000000, pi^0, from_cubic_inches, as_cubic_inches);
+    fixed_unit!(ImperialGallon: Volume, VolumeUnit::ImperialGallon, base CubicMeter, 454609 / 100000000, pi^0, from_imperial_gallons, as_imperial_gallons);
+    fixed_unit!(KiloimperialGallon: Volume, VolumeUnit::KiloimperialGallon, base CubicMeter, 454609 / 100000, pi^0, from_kiloimperial_gallons, as_kiloimperial_gallons);
+    fixed_unit!(MegaimperialGallon: Volume, VolumeUnit::MegaimperialGallon, base CubicMeter, 454609 / 100, pi^0, from_megaimperial_gallons, as_megaimperial_gallons);
+    fixed_unit!(ImperialOunce: Volume, VolumeUnit::ImperialOunce, base CubicMeter, 454609 / 16000000000, pi^0, from_imperial_ounces, as_imperial_ounces);
+    fixed_unit!(UsGallon: Volume, VolumeUnit::UsGallon, base CubicMeter, 473176473 / 125000000000, pi^0, from_us_gallons, as_us_gallons);
+    fixed_unit!(DecausGallon: Volume, VolumeUnit::DecausGallon, base CubicMeter, 473176473 / 12500000000, pi^0, from_decaus_gallons, as_decaus_gallons);
+    fixed_unit!(DeciusGallon: Volume, VolumeUnit::DeciusGallon, base CubicMeter, 473176473 / 1250000000000, pi^0, from_decius_gallons, as_decius_gallons);
+    fixed_unit!(HectousGallon: Volume, VolumeUnit::HectousGallon, base CubicMeter, 473176473 / 1250000000, pi^0, from_hectous_gallons, as_hectous_gallons);
+    fixed_unit!(KilousGallon: Volume, VolumeUnit::KilousGallon, base CubicMeter, 473176473 / 125000000, pi^0, from_kilous_gallons, as_kilous_gallons);
+    fixed_unit!(MegausGallon: Volume, VolumeUnit::MegausGallon, base CubicMeter, 473176473 / 125000, pi^0, from_megaus_gallons, as_megaus_gallons);
+    fixed_unit!(UsOunce: Volume, VolumeUnit::UsOunce, base CubicMeter, 473176473 / 16000000000000, pi^0, from_us_ounces, as_us_ounces);
+    fixed_unit!(UsTablespoon: Volume, VolumeUnit::UsTablespoon, base CubicMeter, 473176473 / 32000000000000, pi^0, from_us_tablespoons, as_us_tablespoons);
+    fixed_unit!(AuTablespoon: Volume, VolumeUnit::AuTablespoon, base CubicMeter, 1 / 50000, pi^0, from_au_tablespoons, as_au_tablespoons);
+    fixed_unit!(MetricTablespoon: Volume, VolumeUnit::MetricTablespoon, base CubicMeter, 3 / 200000, pi^0, from_metric_tablespoons, as_metric_tablespoons);
+    fixed_unit!(UkTablespoon: Volume, VolumeUnit::UkTablespoon, base CubicMeter, 3 / 200000, pi^0, from_uk_tablespoons, as_uk_tablespoons);
+    fixed_unit!(MetricTeaspoon: Volume, VolumeUnit::MetricTeaspoon, base CubicMeter, 1 / 200000, pi^0, from_metric_teaspoons, as_metric_teaspoons);
+    fixed_unit!(UsTeaspoon: Volume, VolumeUnit::UsTeaspoon, base CubicMeter, 157725491 / 32000000000000, pi^0, from_us_teaspoons, as_us_teaspoons);
+    fixed_unit!(MetricCup: Volume, VolumeUnit::MetricCup, base CubicMeter, 1 / 4000, pi^0, from_metric_cups, as_metric_cups);
+    fixed_unit!(UsCustomaryCup: Volume, VolumeUnit::UsCustomaryCup, base CubicMeter, 473176473 / 2000000000000, pi^0, from_us_customary_cups, as_us_customary_cups);
+    fixed_unit!(UsLegalCup: Volume, VolumeUnit::UsLegalCup, base CubicMeter, 3 / 12500, pi^0, from_us_legal_cups, as_us_legal_cups);
+    fixed_unit!(OilBarrel: Volume, VolumeUnit::OilBarrel, base CubicMeter, 9936705933 / 62500000000, pi^0, from_oil_barrels, as_oil_barrels);
+    fixed_unit!(UsBeerBarrel: Volume, VolumeUnit::UsBeerBarrel, base CubicMeter, 14668470663 / 125000000000, pi^0, from_us_beer_barrels, as_us_beer_barrels);
+    fixed_unit!(ImperialBeerBarrel: Volume, VolumeUnit::ImperialBeerBarrel, base CubicMeter, 4091481 / 25000000, pi^0, from_imperial_beer_barrels, as_imperial_beer_barrels);
+    fixed_unit!(UsQuart: Volume, VolumeUnit::UsQuart, base CubicMeter, 473176473 / 500000000000, pi^0, from_us_quarts, as_us_quarts);
+    fixed_unit!(ImperialQuart: Volume, VolumeUnit::ImperialQuart, base CubicMeter, 454609 / 400000000, pi^0, from_imperial_quarts, as_imperial_quarts);
+    fixed_unit!(UsPint: Volume, VolumeUnit::UsPint, base CubicMeter, 473176473 / 1000000000000, pi^0, from_us_pints, as_us_pints);
+    fixed_unit!(AcreFoot: Volume, VolumeUnit::AcreFoot, base CubicMeter, 60228605349 / 48828125, pi^0, from_acre_feet, as_acre_feet);
+    fixed_unit!(ImperialPint: Volume, VolumeUnit::ImperialPint, base CubicMeter, 454609 / 800000000, pi^0, from_imperial_pints, as_imperial_pints);
+    fixed_unit!(BoardFoot: Volume, VolumeUnit::BoardFoot, base CubicMeter, 18435447 / 7812500000, pi^0, from_board_feet, as_board_feet);
+}

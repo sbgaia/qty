@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -527,6 +527,38 @@ fn megaohms_centimeter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_resistivity::OhmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::OhmMeter>();
+    check_fixed::<unit::electric_resistivity::PicoohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::PicoohmMeter>();
+    check_fixed::<unit::electric_resistivity::NanoohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::NanoohmMeter>();
+    check_fixed::<unit::electric_resistivity::MicroohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MicroohmMeter>();
+    check_fixed::<unit::electric_resistivity::MilliohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MilliohmMeter>();
+    check_fixed::<unit::electric_resistivity::KiloohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::KiloohmMeter>();
+    check_fixed::<unit::electric_resistivity::MegaohmMeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MegaohmMeter>();
+    check_fixed::<unit::electric_resistivity::OhmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::OhmCentimeter>();
+    check_fixed::<unit::electric_resistivity::PicoohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::PicoohmCentimeter>();
+    check_fixed::<unit::electric_resistivity::NanoohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::NanoohmCentimeter>();
+    check_fixed::<unit::electric_resistivity::MicroohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MicroohmCentimeter>();
+    check_fixed::<unit::electric_resistivity::MilliohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MilliohmCentimeter>();
+    check_fixed::<unit::electric_resistivity::KiloohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::KiloohmCentimeter>();
+    check_fixed::<unit::electric_resistivity::MegaohmCentimeter>();
+    check_fixed_rescale::<unit::electric_resistivity::MegaohmCentimeter>();
 }
 
 #[test]

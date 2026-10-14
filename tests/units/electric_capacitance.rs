@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -264,6 +264,24 @@ fn megafarads() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_capacitance::Farad>();
+    check_fixed_rescale::<unit::electric_capacitance::Farad>();
+    check_fixed::<unit::electric_capacitance::Picofarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Picofarad>();
+    check_fixed::<unit::electric_capacitance::Nanofarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Nanofarad>();
+    check_fixed::<unit::electric_capacitance::Microfarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Microfarad>();
+    check_fixed::<unit::electric_capacitance::Millifarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Millifarad>();
+    check_fixed::<unit::electric_capacitance::Kilofarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Kilofarad>();
+    check_fixed::<unit::electric_capacitance::Megafarad>();
+    check_fixed_rescale::<unit::electric_capacitance::Megafarad>();
 }
 
 #[test]

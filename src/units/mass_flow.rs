@@ -910,3 +910,44 @@ impl<T: Float> MassFlow<T> {
         self.as_short_tons_per_hour()
     }
 }
+
+fixed_base!(MassFlow, GramPerSecond);
+
+/// Unit markers for counting [`MassFlow`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::mass_flow`](crate::unit::mass_flow). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(GramPerSecond: MassFlow, MassFlowUnit::GramPerSecond, base GramPerSecond, 1 / 1, pi^0, from_grams_per_second, as_grams_per_second);
+    fixed_unit!(NanogramPerSecond: MassFlow, MassFlowUnit::NanogramPerSecond, base GramPerSecond, 1 / 1000000000, pi^0, from_nanograms_per_second, as_nanograms_per_second);
+    fixed_unit!(MicrogramPerSecond: MassFlow, MassFlowUnit::MicrogramPerSecond, base GramPerSecond, 1 / 1000000, pi^0, from_micrograms_per_second, as_micrograms_per_second);
+    fixed_unit!(MilligramPerSecond: MassFlow, MassFlowUnit::MilligramPerSecond, base GramPerSecond, 1 / 1000, pi^0, from_milligrams_per_second, as_milligrams_per_second);
+    fixed_unit!(CentigramPerSecond: MassFlow, MassFlowUnit::CentigramPerSecond, base GramPerSecond, 1 / 100, pi^0, from_centigrams_per_second, as_centigrams_per_second);
+    fixed_unit!(DecigramPerSecond: MassFlow, MassFlowUnit::DecigramPerSecond, base GramPerSecond, 1 / 10, pi^0, from_decigrams_per_second, as_decigrams_per_second);
+    fixed_unit!(DecagramPerSecond: MassFlow, MassFlowUnit::DecagramPerSecond, base GramPerSecond, 10 / 1, pi^0, from_decagrams_per_second, as_decagrams_per_second);
+    fixed_unit!(HectogramPerSecond: MassFlow, MassFlowUnit::HectogramPerSecond, base GramPerSecond, 100 / 1, pi^0, from_hectograms_per_second, as_hectograms_per_second);
+    fixed_unit!(KilogramPerSecond: MassFlow, MassFlowUnit::KilogramPerSecond, base GramPerSecond, 1000 / 1, pi^0, from_kilograms_per_second, as_kilograms_per_second);
+    fixed_unit!(GramPerDay: MassFlow, MassFlowUnit::GramPerDay, base GramPerSecond, 1 / 86400, pi^0, from_grams_per_day, as_grams_per_day);
+    fixed_unit!(NanogramPerDay: MassFlow, MassFlowUnit::NanogramPerDay, base GramPerSecond, 1 / 86400000000000, pi^0, from_nanograms_per_day, as_nanograms_per_day);
+    fixed_unit!(MicrogramPerDay: MassFlow, MassFlowUnit::MicrogramPerDay, base GramPerSecond, 1 / 86400000000, pi^0, from_micrograms_per_day, as_micrograms_per_day);
+    fixed_unit!(MilligramPerDay: MassFlow, MassFlowUnit::MilligramPerDay, base GramPerSecond, 1 / 86400000, pi^0, from_milligrams_per_day, as_milligrams_per_day);
+    fixed_unit!(CentigramPerDay: MassFlow, MassFlowUnit::CentigramPerDay, base GramPerSecond, 1 / 8640000, pi^0, from_centigrams_per_day, as_centigrams_per_day);
+    fixed_unit!(DecigramPerDay: MassFlow, MassFlowUnit::DecigramPerDay, base GramPerSecond, 1 / 864000, pi^0, from_decigrams_per_day, as_decigrams_per_day);
+    fixed_unit!(DecagramPerDay: MassFlow, MassFlowUnit::DecagramPerDay, base GramPerSecond, 1 / 8640, pi^0, from_decagrams_per_day, as_decagrams_per_day);
+    fixed_unit!(HectogramPerDay: MassFlow, MassFlowUnit::HectogramPerDay, base GramPerSecond, 1 / 864, pi^0, from_hectograms_per_day, as_hectograms_per_day);
+    fixed_unit!(KilogramPerDay: MassFlow, MassFlowUnit::KilogramPerDay, base GramPerSecond, 5 / 432, pi^0, from_kilograms_per_day, as_kilograms_per_day);
+    fixed_unit!(MegagramPerDay: MassFlow, MassFlowUnit::MegagramPerDay, base GramPerSecond, 625 / 54, pi^0, from_megagrams_per_day, as_megagrams_per_day);
+    fixed_unit!(GramPerHour: MassFlow, MassFlowUnit::GramPerHour, base GramPerSecond, 1 / 3600, pi^0, from_grams_per_hour, as_grams_per_hour);
+    fixed_unit!(KilogramPerHour: MassFlow, MassFlowUnit::KilogramPerHour, base GramPerSecond, 5 / 18, pi^0, from_kilograms_per_hour, as_kilograms_per_hour);
+    fixed_unit!(KilogramPerMinute: MassFlow, MassFlowUnit::KilogramPerMinute, base GramPerSecond, 50 / 3, pi^0, from_kilograms_per_minute, as_kilograms_per_minute);
+    fixed_unit!(TonnePerHour: MassFlow, MassFlowUnit::TonnePerHour, base GramPerSecond, 2500 / 9, pi^0, from_tonnes_per_hour, as_tonnes_per_hour);
+    fixed_unit!(PoundPerDay: MassFlow, MassFlowUnit::PoundPerDay, base GramPerSecond, 45359237 / 8640000000, pi^0, from_pounds_per_day, as_pounds_per_day);
+    fixed_unit!(MegapoundPerDay: MassFlow, MassFlowUnit::MegapoundPerDay, base GramPerSecond, 45359237 / 8640, pi^0, from_megapounds_per_day, as_megapounds_per_day);
+    fixed_unit!(PoundPerHour: MassFlow, MassFlowUnit::PoundPerHour, base GramPerSecond, 45359237 / 360000000, pi^0, from_pounds_per_hour, as_pounds_per_hour);
+    fixed_unit!(MegapoundPerHour: MassFlow, MassFlowUnit::MegapoundPerHour, base GramPerSecond, 45359237 / 360, pi^0, from_megapounds_per_hour, as_megapounds_per_hour);
+    fixed_unit!(PoundPerMinute: MassFlow, MassFlowUnit::PoundPerMinute, base GramPerSecond, 45359237 / 6000000, pi^0, from_pounds_per_minute, as_pounds_per_minute);
+    fixed_unit!(MegapoundPerMinute: MassFlow, MassFlowUnit::MegapoundPerMinute, base GramPerSecond, 45359237 / 6, pi^0, from_megapounds_per_minute, as_megapounds_per_minute);
+    fixed_unit!(PoundPerSecond: MassFlow, MassFlowUnit::PoundPerSecond, base GramPerSecond, 45359237 / 100000, pi^0, from_pounds_per_second, as_pounds_per_second);
+    fixed_unit!(MegapoundPerSecond: MassFlow, MassFlowUnit::MegapoundPerSecond, base GramPerSecond, 453592370 / 1, pi^0, from_megapounds_per_second, as_megapounds_per_second);
+    fixed_unit!(TonnePerDay: MassFlow, MassFlowUnit::TonnePerDay, base GramPerSecond, 625 / 54, pi^0, from_tonnes_per_day, as_tonnes_per_day);
+    fixed_unit!(ShortTonPerHour: MassFlow, MassFlowUnit::ShortTonPerHour, base GramPerSecond, 45359237 / 180000, pi^0, from_short_tons_per_hour, as_short_tons_per_hour);
+}

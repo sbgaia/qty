@@ -1353,3 +1353,61 @@ impl<T: Float> Pressure<T> {
         self.as_milligrams_force_per_square_foot()
     }
 }
+
+fixed_base!(Pressure, Pascal);
+
+/// Unit markers for counting [`Pressure`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::pressure`](crate::unit::pressure). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Pascal: Pressure, PressureUnit::Pascal, base Pascal, 1 / 1, pi^0, from_pascals, as_pascals);
+    fixed_unit!(Micropascal: Pressure, PressureUnit::Micropascal, base Pascal, 1 / 1000000, pi^0, from_micropascals, as_micropascals);
+    fixed_unit!(Millipascal: Pressure, PressureUnit::Millipascal, base Pascal, 1 / 1000, pi^0, from_millipascals, as_millipascals);
+    fixed_unit!(Decapascal: Pressure, PressureUnit::Decapascal, base Pascal, 10 / 1, pi^0, from_decapascals, as_decapascals);
+    fixed_unit!(Hectopascal: Pressure, PressureUnit::Hectopascal, base Pascal, 100 / 1, pi^0, from_hectopascals, as_hectopascals);
+    fixed_unit!(Kilopascal: Pressure, PressureUnit::Kilopascal, base Pascal, 1000 / 1, pi^0, from_kilopascals, as_kilopascals);
+    fixed_unit!(Megapascal: Pressure, PressureUnit::Megapascal, base Pascal, 1000000 / 1, pi^0, from_megapascals, as_megapascals);
+    fixed_unit!(Gigapascal: Pressure, PressureUnit::Gigapascal, base Pascal, 1000000000 / 1, pi^0, from_gigapascals, as_gigapascals);
+    fixed_unit!(Atmosphere: Pressure, PressureUnit::Atmosphere, base Pascal, 101325 / 1, pi^0, from_atmospheres, as_atmospheres);
+    fixed_unit!(Bar: Pressure, PressureUnit::Bar, base Pascal, 100000 / 1, pi^0, from_bars, as_bars);
+    fixed_unit!(Microbar: Pressure, PressureUnit::Microbar, base Pascal, 1 / 10, pi^0, from_microbars, as_microbars);
+    fixed_unit!(Millibar: Pressure, PressureUnit::Millibar, base Pascal, 100 / 1, pi^0, from_millibars, as_millibars);
+    fixed_unit!(Centibar: Pressure, PressureUnit::Centibar, base Pascal, 1000 / 1, pi^0, from_centibars, as_centibars);
+    fixed_unit!(Decibar: Pressure, PressureUnit::Decibar, base Pascal, 10000 / 1, pi^0, from_decibars, as_decibars);
+    fixed_unit!(Kilobar: Pressure, PressureUnit::Kilobar, base Pascal, 100000000 / 1, pi^0, from_kilobars, as_kilobars);
+    fixed_unit!(Megabar: Pressure, PressureUnit::Megabar, base Pascal, 100000000000 / 1, pi^0, from_megabars, as_megabars);
+    fixed_unit!(KilogramForcePerSquareMeter: Pressure, PressureUnit::KilogramForcePerSquareMeter, base Pascal, 196133 / 20000, pi^0, from_kilograms_force_per_square_meter, as_kilograms_force_per_square_meter);
+    fixed_unit!(KilogramForcePerSquareCentimeter: Pressure, PressureUnit::KilogramForcePerSquareCentimeter, base Pascal, 196133 / 2, pi^0, from_kilograms_force_per_square_centimeter, as_kilograms_force_per_square_centimeter);
+    fixed_unit!(KilogramForcePerSquareMillimeter: Pressure, PressureUnit::KilogramForcePerSquareMillimeter, base Pascal, 9806650 / 1, pi^0, from_kilograms_force_per_square_millimeter, as_kilograms_force_per_square_millimeter);
+    fixed_unit!(NewtonPerSquareMeter: Pressure, PressureUnit::NewtonPerSquareMeter, base Pascal, 1 / 1, pi^0, from_newtons_per_square_meter, as_newtons_per_square_meter);
+    fixed_unit!(KilonewtonPerSquareMeter: Pressure, PressureUnit::KilonewtonPerSquareMeter, base Pascal, 1000 / 1, pi^0, from_kilonewtons_per_square_meter, as_kilonewtons_per_square_meter);
+    fixed_unit!(MeganewtonPerSquareMeter: Pressure, PressureUnit::MeganewtonPerSquareMeter, base Pascal, 1000000 / 1, pi^0, from_meganewtons_per_square_meter, as_meganewtons_per_square_meter);
+    fixed_unit!(NewtonPerSquareCentimeter: Pressure, PressureUnit::NewtonPerSquareCentimeter, base Pascal, 10000 / 1, pi^0, from_newtons_per_square_centimeter, as_newtons_per_square_centimeter);
+    fixed_unit!(KilonewtonPerSquareCentimeter: Pressure, PressureUnit::KilonewtonPerSquareCentimeter, base Pascal, 10000000 / 1, pi^0, from_kilonewtons_per_square_centimeter, as_kilonewtons_per_square_centimeter);
+    fixed_unit!(NewtonPerSquareMillimeter: Pressure, PressureUnit::NewtonPerSquareMillimeter, base Pascal, 1000000 / 1, pi^0, from_newtons_per_square_millimeter, as_newtons_per_square_millimeter);
+    fixed_unit!(KilonewtonPerSquareMillimeter: Pressure, PressureUnit::KilonewtonPerSquareMillimeter, base Pascal, 1000000000 / 1, pi^0, from_kilonewtons_per_square_millimeter, as_kilonewtons_per_square_millimeter);
+    fixed_unit!(TechnicalAtmosphere: Pressure, PressureUnit::TechnicalAtmosphere, base Pascal, 196133 / 2, pi^0, from_technical_atmospheres, as_technical_atmospheres);
+    fixed_unit!(Torr: Pressure, PressureUnit::Torr, base Pascal, 20265 / 152, pi^0, from_torrs, as_torrs);
+    fixed_unit!(Millitorr: Pressure, PressureUnit::Millitorr, base Pascal, 4053 / 30400, pi^0, from_millitorrs, as_millitorrs);
+    fixed_unit!(PoundForcePerSquareInch: Pressure, PressureUnit::PoundForcePerSquareInch, base Pascal, 8896443230521 / 1290320000, pi^0, from_pounds_force_per_square_inch, as_pounds_force_per_square_inch);
+    fixed_unit!(KilopoundForcePerSquareInch: Pressure, PressureUnit::KilopoundForcePerSquareInch, base Pascal, 8896443230521 / 1290320, pi^0, from_kilopounds_force_per_square_inch, as_kilopounds_force_per_square_inch);
+    fixed_unit!(PoundForcePerSquareMil: Pressure, PressureUnit::PoundForcePerSquareMil, base Pascal, 222411080763025 / 32258, pi^0, from_pounds_force_per_square_mil, as_pounds_force_per_square_mil);
+    fixed_unit!(KilopoundForcePerSquareMil: Pressure, PressureUnit::KilopoundForcePerSquareMil, base Pascal, 111205540381512500 / 16129, pi^0, from_kilopounds_force_per_square_mil, as_kilopounds_force_per_square_mil);
+    fixed_unit!(PoundForcePerSquareFoot: Pressure, PressureUnit::PoundForcePerSquareFoot, base Pascal, 8896443230521 / 185806080000, pi^0, from_pounds_force_per_square_foot, as_pounds_force_per_square_foot);
+    fixed_unit!(KilopoundForcePerSquareFoot: Pressure, PressureUnit::KilopoundForcePerSquareFoot, base Pascal, 8896443230521 / 185806080, pi^0, from_kilopounds_force_per_square_foot, as_kilopounds_force_per_square_foot);
+    fixed_unit!(TonneForcePerSquareMillimeter: Pressure, PressureUnit::TonneForcePerSquareMillimeter, base Pascal, 9806650000 / 1, pi^0, from_tonnes_force_per_square_millimeter, as_tonnes_force_per_square_millimeter);
+    fixed_unit!(TonneForcePerSquareMeter: Pressure, PressureUnit::TonneForcePerSquareMeter, base Pascal, 196133 / 20, pi^0, from_tonnes_force_per_square_meter, as_tonnes_force_per_square_meter);
+    fixed_unit!(MeterOfHead: Pressure, PressureUnit::MeterOfHead, base Pascal, 1225517429 / 125000, pi^0, from_meters_of_head, as_meters_of_head);
+    fixed_unit!(TonneForcePerSquareCentimeter: Pressure, PressureUnit::TonneForcePerSquareCentimeter, base Pascal, 98066500 / 1, pi^0, from_tonnes_force_per_square_centimeter, as_tonnes_force_per_square_centimeter);
+    fixed_unit!(FootOfHead: Pressure, PressureUnit::FootOfHead, base Pascal, 466922140449 / 156250000, pi^0, from_feet_of_head, as_feet_of_head);
+    fixed_unit!(MillimeterOfMercury: Pressure, PressureUnit::MillimeterOfMercury, base Pascal, 26664477483 / 200000000, pi^0, from_millimeters_of_mercury, as_millimeters_of_mercury);
+    fixed_unit!(InchOfMercury: Pressure, PressureUnit::InchOfMercury, base Pascal, 3386388640341 / 1000000000, pi^0, from_inches_of_mercury, as_inches_of_mercury);
+    fixed_unit!(DynePerSquareCentimeter: Pressure, PressureUnit::DynePerSquareCentimeter, base Pascal, 1 / 10, pi^0, from_dynes_per_square_centimeter, as_dynes_per_square_centimeter);
+    fixed_unit!(PoundPerInchSecondSquared: Pressure, PressureUnit::PoundPerInchSecondSquared, base Pascal, 8896443230521 / 498177842352, pi^0, from_pounds_per_inch_second_squared, as_pounds_per_inch_second_squared);
+    fixed_unit!(MeterOfWaterColumn: Pressure, PressureUnit::MeterOfWaterColumn, base Pascal, 196133 / 20, pi^0, from_meters_of_water_column, as_meters_of_water_column);
+    fixed_unit!(MillimeterOfWaterColumn: Pressure, PressureUnit::MillimeterOfWaterColumn, base Pascal, 196133 / 20000, pi^0, from_millimeters_of_water_column, as_millimeters_of_water_column);
+    fixed_unit!(CentimeterOfWaterColumn: Pressure, PressureUnit::CentimeterOfWaterColumn, base Pascal, 196133 / 2000, pi^0, from_centimeters_of_water_column, as_centimeters_of_water_column);
+    fixed_unit!(InchOfWaterColumn: Pressure, PressureUnit::InchOfWaterColumn, base Pascal, 24908891 / 100000, pi^0, from_inches_of_water_column, as_inches_of_water_column);
+    fixed_unit!(MilligramForcePerSquareMeter: Pressure, PressureUnit::MilligramForcePerSquareMeter, base Pascal, 196133 / 20000000000, pi^0, from_milligrams_force_per_square_meter, as_milligrams_force_per_square_meter);
+    fixed_unit!(MilligramForcePerSquareFoot: Pressure, PressureUnit::MilligramForcePerSquareFoot, base Pascal, 196133 / 1858060800, pi^0, from_milligrams_force_per_square_foot, as_milligrams_force_per_square_foot);
+}

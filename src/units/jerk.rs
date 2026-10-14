@@ -345,3 +345,22 @@ impl<T: Float> Jerk<T> {
         self.0 / T::from_f64(0.00980665)
     }
 }
+
+fixed_base!(Jerk, MeterPerSecondCubed);
+
+/// Unit markers for counting [`Jerk`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::jerk`](crate::unit::jerk). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(MeterPerSecondCubed: Jerk, JerkUnit::MeterPerSecondCubed, base MeterPerSecondCubed, 1 / 1, pi^0, from_meters_per_second_cubed, as_meters_per_second_cubed);
+    fixed_unit!(NanometerPerSecondCubed: Jerk, JerkUnit::NanometerPerSecondCubed, base MeterPerSecondCubed, 1 / 1000000000, pi^0, from_nanometers_per_second_cubed, as_nanometers_per_second_cubed);
+    fixed_unit!(MicrometerPerSecondCubed: Jerk, JerkUnit::MicrometerPerSecondCubed, base MeterPerSecondCubed, 1 / 1000000, pi^0, from_micrometers_per_second_cubed, as_micrometers_per_second_cubed);
+    fixed_unit!(MillimeterPerSecondCubed: Jerk, JerkUnit::MillimeterPerSecondCubed, base MeterPerSecondCubed, 1 / 1000, pi^0, from_millimeters_per_second_cubed, as_millimeters_per_second_cubed);
+    fixed_unit!(CentimeterPerSecondCubed: Jerk, JerkUnit::CentimeterPerSecondCubed, base MeterPerSecondCubed, 1 / 100, pi^0, from_centimeters_per_second_cubed, as_centimeters_per_second_cubed);
+    fixed_unit!(DecimeterPerSecondCubed: Jerk, JerkUnit::DecimeterPerSecondCubed, base MeterPerSecondCubed, 1 / 10, pi^0, from_decimeters_per_second_cubed, as_decimeters_per_second_cubed);
+    fixed_unit!(KilometerPerSecondCubed: Jerk, JerkUnit::KilometerPerSecondCubed, base MeterPerSecondCubed, 1000 / 1, pi^0, from_kilometers_per_second_cubed, as_kilometers_per_second_cubed);
+    fixed_unit!(InchPerSecondCubed: Jerk, JerkUnit::InchPerSecondCubed, base MeterPerSecondCubed, 127 / 5000, pi^0, from_inches_per_second_cubed, as_inches_per_second_cubed);
+    fixed_unit!(FootPerSecondCubed: Jerk, JerkUnit::FootPerSecondCubed, base MeterPerSecondCubed, 381 / 1250, pi^0, from_feet_per_second_cubed, as_feet_per_second_cubed);
+    fixed_unit!(StandardGravitiesPerSecond: Jerk, JerkUnit::StandardGravitiesPerSecond, base MeterPerSecondCubed, 196133 / 20000, pi^0, from_standard_gravities_per_second, as_standard_gravities_per_second);
+    fixed_unit!(MillistandardGravitiesPerSecond: Jerk, JerkUnit::MillistandardGravitiesPerSecond, base MeterPerSecondCubed, 196133 / 20000000, pi^0, from_millistandard_gravities_per_second, as_millistandard_gravities_per_second);
+}

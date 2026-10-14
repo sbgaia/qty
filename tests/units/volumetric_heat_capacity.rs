@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -371,6 +371,29 @@ fn btus_per_cubic_foot_degree_fahrenheit() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin>();
+    check_fixed::<unit::volumetric_heat_capacity::KilojoulePerCubicMeterKelvin>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::KilojoulePerCubicMeterKelvin>();
+    check_fixed::<unit::volumetric_heat_capacity::MegajoulePerCubicMeterKelvin>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::MegajoulePerCubicMeterKelvin>();
+    check_fixed::<unit::volumetric_heat_capacity::JoulePerCubicMeterDegreeCelsius>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::JoulePerCubicMeterDegreeCelsius>();
+    check_fixed::<unit::volumetric_heat_capacity::KilojoulePerCubicMeterDegreeCelsius>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::KilojoulePerCubicMeterDegreeCelsius>();
+    check_fixed::<unit::volumetric_heat_capacity::MegajoulePerCubicMeterDegreeCelsius>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::MegajoulePerCubicMeterDegreeCelsius>();
+    check_fixed::<unit::volumetric_heat_capacity::CaloriePerCubicCentimeterDegreeCelsius>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::CaloriePerCubicCentimeterDegreeCelsius>();
+    check_fixed::<unit::volumetric_heat_capacity::KilocaloriePerCubicCentimeterDegreeCelsius>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::KilocaloriePerCubicCentimeterDegreeCelsius>(
+    );
+    check_fixed::<unit::volumetric_heat_capacity::BtuPerCubicFootDegreeFahrenheit>();
+    check_fixed_rescale::<unit::volumetric_heat_capacity::BtuPerCubicFootDegreeFahrenheit>();
 }
 
 #[test]

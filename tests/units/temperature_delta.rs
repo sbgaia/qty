@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -338,6 +338,26 @@ fn degrees_roemer() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::temperature_delta::Kelvin>();
+    check_fixed_rescale::<unit::temperature_delta::Kelvin>();
+    check_fixed::<unit::temperature_delta::DegreeCelsius>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeCelsius>();
+    check_fixed::<unit::temperature_delta::MillidegreeCelsius>();
+    check_fixed_rescale::<unit::temperature_delta::MillidegreeCelsius>();
+    check_fixed::<unit::temperature_delta::DegreeFahrenheit>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeFahrenheit>();
+    check_fixed::<unit::temperature_delta::DegreeNewton>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeNewton>();
+    check_fixed::<unit::temperature_delta::DegreeRankine>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeRankine>();
+    check_fixed::<unit::temperature_delta::DegreeReaumur>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeReaumur>();
+    check_fixed::<unit::temperature_delta::DegreeRoemer>();
+    check_fixed_rescale::<unit::temperature_delta::DegreeRoemer>();
 }
 
 #[test]

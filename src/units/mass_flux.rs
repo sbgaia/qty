@@ -394,3 +394,23 @@ impl<T: Float> MassFlux<T> {
         self.as_kilograms_per_hour_per_square_millimeter()
     }
 }
+
+fixed_base!(MassFlux, KilogramPerSecondPerSquareMeter);
+
+/// Unit markers for counting [`MassFlux`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::mass_flux`](crate::unit::mass_flux). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(GramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1000, pi^0, from_grams_per_second_per_square_meter, as_grams_per_second_per_square_meter);
+    fixed_unit!(KilogramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_second_per_square_meter, as_kilograms_per_second_per_square_meter);
+    fixed_unit!(GramPerSecondPerSquareCentimeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareCentimeter, base KilogramPerSecondPerSquareMeter, 10 / 1, pi^0, from_grams_per_second_per_square_centimeter, as_grams_per_second_per_square_centimeter);
+    fixed_unit!(KilogramPerSecondPerSquareCentimeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareCentimeter, base KilogramPerSecondPerSquareMeter, 10000 / 1, pi^0, from_kilograms_per_second_per_square_centimeter, as_kilograms_per_second_per_square_centimeter);
+    fixed_unit!(GramPerSecondPerSquareMillimeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareMillimeter, base KilogramPerSecondPerSquareMeter, 1000 / 1, pi^0, from_grams_per_second_per_square_millimeter, as_grams_per_second_per_square_millimeter);
+    fixed_unit!(KilogramPerSecondPerSquareMillimeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareMillimeter, base KilogramPerSecondPerSquareMeter, 1000000 / 1, pi^0, from_kilograms_per_second_per_square_millimeter, as_kilograms_per_second_per_square_millimeter);
+    fixed_unit!(GramPerHourPerSquareMeter: MassFlux, MassFluxUnit::GramPerHourPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 3600000, pi^0, from_grams_per_hour_per_square_meter, as_grams_per_hour_per_square_meter);
+    fixed_unit!(KilogramPerHourPerSquareMeter: MassFlux, MassFluxUnit::KilogramPerHourPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 3600, pi^0, from_kilograms_per_hour_per_square_meter, as_kilograms_per_hour_per_square_meter);
+    fixed_unit!(GramPerHourPerSquareCentimeter: MassFlux, MassFluxUnit::GramPerHourPerSquareCentimeter, base KilogramPerSecondPerSquareMeter, 1 / 360, pi^0, from_grams_per_hour_per_square_centimeter, as_grams_per_hour_per_square_centimeter);
+    fixed_unit!(KilogramPerHourPerSquareCentimeter: MassFlux, MassFluxUnit::KilogramPerHourPerSquareCentimeter, base KilogramPerSecondPerSquareMeter, 25 / 9, pi^0, from_kilograms_per_hour_per_square_centimeter, as_kilograms_per_hour_per_square_centimeter);
+    fixed_unit!(GramPerHourPerSquareMillimeter: MassFlux, MassFluxUnit::GramPerHourPerSquareMillimeter, base KilogramPerSecondPerSquareMeter, 5 / 18, pi^0, from_grams_per_hour_per_square_millimeter, as_grams_per_hour_per_square_millimeter);
+    fixed_unit!(KilogramPerHourPerSquareMillimeter: MassFlux, MassFluxUnit::KilogramPerHourPerSquareMillimeter, base KilogramPerSecondPerSquareMeter, 2500 / 9, pi^0, from_kilograms_per_hour_per_square_millimeter, as_kilograms_per_hour_per_square_millimeter);
+}

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -940,6 +940,60 @@ fn pounds_per_second_cubed() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::heat_flux::WattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::WattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::NanowattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::NanowattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::MicrowattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::MicrowattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::MilliwattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::MilliwattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::CentiwattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::CentiwattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::DeciwattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::DeciwattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::KilowattPerSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::KilowattPerSquareMeter>();
+    check_fixed::<unit::heat_flux::WattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::WattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::NanowattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::NanowattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::MicrowattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::MicrowattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::MilliwattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::MilliwattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::CentiwattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::CentiwattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::DeciwattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::DeciwattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::KilowattPerSquareMillimeter>();
+    check_fixed_rescale::<unit::heat_flux::KilowattPerSquareMillimeter>();
+    check_fixed::<unit::heat_flux::WattPerSquareInch>();
+    check_fixed_rescale::<unit::heat_flux::WattPerSquareInch>();
+    check_fixed::<unit::heat_flux::WattPerSquareFoot>();
+    check_fixed_rescale::<unit::heat_flux::WattPerSquareFoot>();
+    check_fixed::<unit::heat_flux::BtuPerSecondSquareInch>();
+    check_fixed_rescale::<unit::heat_flux::BtuPerSecondSquareInch>();
+    check_fixed::<unit::heat_flux::BtuPerSecondSquareFoot>();
+    check_fixed_rescale::<unit::heat_flux::BtuPerSecondSquareFoot>();
+    check_fixed::<unit::heat_flux::BtuPerMinuteSquareFoot>();
+    check_fixed_rescale::<unit::heat_flux::BtuPerMinuteSquareFoot>();
+    check_fixed::<unit::heat_flux::BtuPerHourSquareFoot>();
+    check_fixed_rescale::<unit::heat_flux::BtuPerHourSquareFoot>();
+    check_fixed::<unit::heat_flux::CaloriePerSecondSquareCentimeter>();
+    check_fixed_rescale::<unit::heat_flux::CaloriePerSecondSquareCentimeter>();
+    check_fixed::<unit::heat_flux::KilocaloriePerSecondSquareCentimeter>();
+    check_fixed_rescale::<unit::heat_flux::KilocaloriePerSecondSquareCentimeter>();
+    check_fixed::<unit::heat_flux::KilocaloriePerHourSquareMeter>();
+    check_fixed_rescale::<unit::heat_flux::KilocaloriePerHourSquareMeter>();
+    check_fixed::<unit::heat_flux::PoundForcePerFootSecond>();
+    check_fixed_rescale::<unit::heat_flux::PoundForcePerFootSecond>();
+    check_fixed::<unit::heat_flux::PoundPerSecondCubed>();
+    check_fixed_rescale::<unit::heat_flux::PoundPerSecondCubed>();
 }
 
 #[test]

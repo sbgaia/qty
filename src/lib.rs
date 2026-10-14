@@ -74,9 +74,80 @@
 //! let force: Force<i64> = a * Acceleration::from_base(2); // kg · m/s² = N
 //! assert_eq!(force.as_base(), 3_000);
 //!
-//! // Lossless widening of the storage type.
-//! let wide: Mass<f64> = Mass::<i32>::from_base(3).cast();
-//! assert_eq!(wide.as_kilograms(), 3.0);
+//! // To float storage (like `as f64`), without unwrapping.
+//! let wide: Mass<f64> = a.to_f64();
+//! assert_eq!(wide.as_grams(), 1_500_000.0);
+//! ```
+//!
+//! ### Integers in a unit of your choice, with explicit rounding
+//!
+//! [`Fixed<U, I>`](Fixed) is a whole number of the unit `U` — for example
+//! `Fixed<Millimeter>` counts millimetres in an `i64`. The unit is part of
+//! the type, so millimetres and metres cannot be mixed by accident. Values
+//! are exact, `Eq + Ord + Hash`, and arithmetic is plain integer arithmetic.
+//!
+//! Rounding happens only where information is lost — float → integer, a
+//! fine unit → a coarser one, integer division — and there the [`Rounding`]
+//! mode is always explicit. Lossless conversions take no mode; converting to
+//! a unit that does not divide evenly with `to_unit` is rejected when the
+//! code is compiled (by `cargo build`/`cargo test`; `cargo check` does not
+//! evaluate it).
+//!
+//! ```rust
+//! use std::collections::HashMap;
+//! use unitsnet_rs::*;
+//! use unitsnet_rs::unit::length::{Meter, Millimeter};
+//!
+//! // Quantise a float measurement: 12.5 mm, ties to even → 12 mm.
+//! let a = Fixed::<Millimeter>::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven)?;
+//! assert_eq!(a, Fixed::new(12));
+//!
+//! // Exact integer arithmetic; integer keys.
+//! let mut stock: HashMap<Fixed<Millimeter>, u32> = HashMap::new();
+//! *stock.entry(a + Fixed::new(588)).or_default() += 1;
+//! assert_eq!(stock[&Fixed::new(600)], 1);
+//!
+//! // Lossless: no rounding mode. Lossy: explicit rounding mode.
+//! assert_eq!(Fixed::<Meter>::new(2).to_unit::<Millimeter>()?, Fixed::new(2_000));
+//! assert_eq!(Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Fixed::new(2));
+//! assert_eq!(
+//!     Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Exact),
+//!     Err(RoundError::Inexact)
+//! );
+//!
+//! // Back to floats for everything else.
+//! let l: Length = a.to_f64();
+//! assert_eq!(l.as_millimeters(), 12.0);
+//! # Ok::<(), RoundError>(())
+//! ```
+//!
+//! Units are in [`unit`](mod@unit), one module per quantity (`unit::duration::Nanosecond`,
+//! `unit::mass::Gram`, …). Every linear unit has a marker; affine units such
+//! as °C do not, because adding two counts of °C is not adding two
+//! temperatures. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
+//! unit, which also get the cross-quantity operators) convert into each other
+//! with `From`.
+//!
+//! ### Comparing, sorting and map keys
+//!
+//! Quantities of the same kind compare with `<`, `==`, `max`, … regardless
+//! of the unit they were created in, since all are stored in the base unit.
+//! Floats are not totally ordered (NaN), so for sorting use
+//! [`total_cmp`](Length::total_cmp), and for `HashMap`/`BTreeMap` keys wrap
+//! them in [`Ordered`]:
+//!
+//! ```rust
+//! use std::collections::BTreeMap;
+//! use unitsnet_rs::*;
+//!
+//! let mut v = vec![Length::from_meters(2.0), Length::from_inches(1.0)];
+//! v.sort_by(Length::total_cmp);
+//! assert_eq!(v[0], Length::from_inches(1.0));
+//!
+//! let mut names = BTreeMap::new();
+//! names.insert(Ordered(Length::from_kilometers(1.0)), "km");
+//! names.insert(Ordered(Length::from_meters(1.0)), "m");
+//! assert_eq!(names.values().copied().collect::<Vec<_>>(), ["m", "km"]);
 //! ```
 //!
 //! ### Zero-copy slices and `const` values
@@ -120,7 +191,8 @@ use core::ops::{Add, Div, Mul, Neg, Sub};
 /// any storage type that supports the corresponding operator, including
 /// integers.
 pub trait Float:
-    Copy
+    ToFloat
+    + fmt::Debug
     + PartialOrd
     + Add<Output = Self>
     + Sub<Output = Self>
@@ -141,6 +213,9 @@ pub trait Float:
 
     /// The smaller of two values (ignoring NaN, like [`f64::min`]).
     fn min(self, other: Self) -> Self;
+
+    /// IEEE 754 total order, like [`f64::total_cmp`].
+    fn total_cmp(&self, other: &Self) -> core::cmp::Ordering;
 }
 
 macro_rules! impl_float {
@@ -163,6 +238,10 @@ macro_rules! impl_float {
             #[inline(always)]
             fn min(self, other: Self) -> Self {
                 $t::min(self, other)
+            }
+            #[inline(always)]
+            fn total_cmp(&self, other: &Self) -> core::cmp::Ordering {
+                $t::total_cmp(self, other)
             }
         }
     )*};
@@ -446,6 +525,54 @@ macro_rules! quantity {
             pub fn min(self, other: Self) -> Self {
                 Self(self.0.min(other.0))
             }
+
+            /// IEEE 754 total order (like [`f64::total_cmp`]), for sorting:
+            /// `values.sort_by(Length::total_cmp)`. For map keys, see
+            /// [`Ordered`](crate::Ordered).
+            #[inline(always)]
+            pub fn total_cmp(&self, other: &Self) -> core::cmp::Ordering {
+                self.0.total_cmp(&other.0)
+            }
+        }
+
+        impl<T: $crate::ToFloat> $Q<T> {
+            /// Converts the storage to `f64` (like `as f64`), e.g.
+            /// `Length<i64>` → `Length<f64>`.
+            #[inline(always)]
+            pub fn to_f64(self) -> $Q<f64> {
+                $Q(self.0.to_f64())
+            }
+
+            /// Converts the storage to `f32` (like `as f32`).
+            #[inline(always)]
+            pub fn to_f32(self) -> $Q<f32> {
+                $Q(self.0.to_f32())
+            }
+        }
+
+        impl<I: $crate::Integer> $Q<I> {
+            /// Rounds a float quantity to a whole number of base units.
+            /// For other units, see [`Fixed`](crate::Fixed).
+            #[inline]
+            pub fn round_from<F: $crate::Float>(
+                quantity: $Q<F>,
+                mode: $crate::Rounding,
+            ) -> Result<Self, $crate::RoundError> {
+                $crate::Fixed::<<$Q<f64> as $crate::HasFixedBase>::Base, I>::round_from(quantity, mode)
+                    .map(Self::from)
+            }
+
+            /// `self + other`, or `None` on overflow.
+            #[inline]
+            pub fn checked_add(self, other: Self) -> Option<Self> {
+                self.0.checked_add(other.0).map(Self)
+            }
+
+            /// `self - other`, or `None` on overflow.
+            #[inline]
+            pub fn checked_sub(self, other: Self) -> Option<Self> {
+                self.0.checked_sub(other.0).map(Self)
+            }
         }
 
         impl<T: Copy> $crate::Quantity for $Q<T> {
@@ -663,9 +790,77 @@ macro_rules! cross_recip {
     };
 }
 
-// Generated quantity modules — re-exports every public item from each module.
+/// Declares the [`FixedUnit`] marker for one linear unit.
+macro_rules! fixed_unit {
+    ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
+     $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident) => {
+        #[doc = concat!(
+                    "Marker for counting [`", stringify!($Q), "`](super::", stringify!($Q),
+                    ") in [`", stringify!($V), "`](super::", stringify!($U), "::", stringify!($V),
+                    ") with [`Fixed`](crate::Fixed)."
+                )]
+        #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        pub struct $M;
+
+        impl $crate::FixedUnit for $M {
+            type Quantity<F: $crate::Float> = super::$Q<F>;
+            type Unit = super::$U;
+            type Base = $B;
+            const UNIT: super::$U = super::$U::$V;
+            const ABBREVIATION: &'static str = super::$U::$V.abbreviation();
+            const ABBREVIATIONS: &'static [&'static str] = super::$U::$V.all_abbreviations();
+            const NUM: u128 = $num;
+            const DEN: u128 = $den;
+            const PI_POW: i32 = $pi;
+            #[inline(always)]
+            fn to_quantity<F: $crate::Float>(count: F) -> super::$Q<F> {
+                super::$Q::$from(count)
+            }
+            #[inline(always)]
+            fn from_quantity<F: $crate::Float>(quantity: super::$Q<F>) -> F {
+                quantity.$as()
+            }
+        }
+    };
+}
+
+/// Links a quantity with its base-unit marker: `Length<I>` and
+/// `Fixed<Meter, I>` are the same thing and convert freely.
+macro_rules! fixed_base {
+    ($Q:ident, $B:ident) => {
+        impl<T> $crate::HasFixedBase for $Q<T> {
+            type Base = unit::$B;
+        }
+        impl<I> From<$Q<I>> for $crate::Fixed<unit::$B, I> {
+            #[inline(always)]
+            fn from(q: $Q<I>) -> Self {
+                $crate::Fixed::new(q.into_base())
+            }
+        }
+        impl<I: Copy> From<$crate::Fixed<unit::$B, I>> for $Q<I> {
+            #[inline(always)]
+            fn from(f: $crate::Fixed<unit::$B, I>) -> Self {
+                $Q::from_base(f.count())
+            }
+        }
+    };
+}
+
+/// Maps a quantity type to the [`FixedUnit`] marker of its base unit.
+#[doc(hidden)]
+pub trait HasFixedBase {
+    type Base: FixedUnit;
+}
+
+mod fixed;
+pub use fixed::{Fixed, FixedUnit, Integer, Ordered, RoundError, Rounding, ToFloat};
+
+// Generated quantity modules — re-exports each quantity and its unit enum.
 pub mod units;
 pub use units::*;
+
+// Generated: `unit::<quantity>::<Unit>` markers for `Fixed`.
+pub mod unit;
 
 // Generated cross-type arithmetic (Length / Duration = Speed, etc.).
 // These are pure `impl` blocks — no named items to re-export.

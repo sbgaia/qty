@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -352,6 +352,28 @@ fn standard_cubic_feet_per_hour() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::standard_volume_flow::StandardCubicMeterPerSecond>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicMeterPerSecond>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicMeterPerMinute>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicMeterPerMinute>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicMeterPerHour>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicMeterPerHour>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicMeterPerDay>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicMeterPerDay>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicCentimeterPerMinute>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicCentimeterPerMinute>();
+    check_fixed::<unit::standard_volume_flow::StandardLiterPerMinute>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardLiterPerMinute>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicFootPerSecond>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicFootPerSecond>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicFootPerMinute>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicFootPerMinute>();
+    check_fixed::<unit::standard_volume_flow::StandardCubicFootPerHour>();
+    check_fixed_rescale::<unit::standard_volume_flow::StandardCubicFootPerHour>();
 }
 
 #[test]

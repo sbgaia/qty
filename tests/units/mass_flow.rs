@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -1158,6 +1158,76 @@ fn short_tons_per_hour() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass_flow::GramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::GramPerSecond>();
+    check_fixed::<unit::mass_flow::NanogramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::NanogramPerSecond>();
+    check_fixed::<unit::mass_flow::MicrogramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::MicrogramPerSecond>();
+    check_fixed::<unit::mass_flow::MilligramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::MilligramPerSecond>();
+    check_fixed::<unit::mass_flow::CentigramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::CentigramPerSecond>();
+    check_fixed::<unit::mass_flow::DecigramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::DecigramPerSecond>();
+    check_fixed::<unit::mass_flow::DecagramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::DecagramPerSecond>();
+    check_fixed::<unit::mass_flow::HectogramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::HectogramPerSecond>();
+    check_fixed::<unit::mass_flow::KilogramPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::KilogramPerSecond>();
+    check_fixed::<unit::mass_flow::GramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::GramPerDay>();
+    check_fixed::<unit::mass_flow::NanogramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::NanogramPerDay>();
+    check_fixed::<unit::mass_flow::MicrogramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::MicrogramPerDay>();
+    check_fixed::<unit::mass_flow::MilligramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::MilligramPerDay>();
+    check_fixed::<unit::mass_flow::CentigramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::CentigramPerDay>();
+    check_fixed::<unit::mass_flow::DecigramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::DecigramPerDay>();
+    check_fixed::<unit::mass_flow::DecagramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::DecagramPerDay>();
+    check_fixed::<unit::mass_flow::HectogramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::HectogramPerDay>();
+    check_fixed::<unit::mass_flow::KilogramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::KilogramPerDay>();
+    check_fixed::<unit::mass_flow::MegagramPerDay>();
+    check_fixed_rescale::<unit::mass_flow::MegagramPerDay>();
+    check_fixed::<unit::mass_flow::GramPerHour>();
+    check_fixed_rescale::<unit::mass_flow::GramPerHour>();
+    check_fixed::<unit::mass_flow::KilogramPerHour>();
+    check_fixed_rescale::<unit::mass_flow::KilogramPerHour>();
+    check_fixed::<unit::mass_flow::KilogramPerMinute>();
+    check_fixed_rescale::<unit::mass_flow::KilogramPerMinute>();
+    check_fixed::<unit::mass_flow::TonnePerHour>();
+    check_fixed_rescale::<unit::mass_flow::TonnePerHour>();
+    check_fixed::<unit::mass_flow::PoundPerDay>();
+    check_fixed_rescale::<unit::mass_flow::PoundPerDay>();
+    check_fixed::<unit::mass_flow::MegapoundPerDay>();
+    check_fixed_rescale::<unit::mass_flow::MegapoundPerDay>();
+    check_fixed::<unit::mass_flow::PoundPerHour>();
+    check_fixed_rescale::<unit::mass_flow::PoundPerHour>();
+    check_fixed::<unit::mass_flow::MegapoundPerHour>();
+    check_fixed_rescale::<unit::mass_flow::MegapoundPerHour>();
+    check_fixed::<unit::mass_flow::PoundPerMinute>();
+    check_fixed_rescale::<unit::mass_flow::PoundPerMinute>();
+    check_fixed::<unit::mass_flow::MegapoundPerMinute>();
+    check_fixed_rescale::<unit::mass_flow::MegapoundPerMinute>();
+    check_fixed::<unit::mass_flow::PoundPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::PoundPerSecond>();
+    check_fixed::<unit::mass_flow::MegapoundPerSecond>();
+    check_fixed_rescale::<unit::mass_flow::MegapoundPerSecond>();
+    check_fixed::<unit::mass_flow::TonnePerDay>();
+    check_fixed_rescale::<unit::mass_flow::TonnePerDay>();
+    check_fixed::<unit::mass_flow::ShortTonPerHour>();
+    check_fixed_rescale::<unit::mass_flow::ShortTonPerHour>();
 }
 
 #[test]

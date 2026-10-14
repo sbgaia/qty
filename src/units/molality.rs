@@ -159,3 +159,14 @@ impl<T: Float> Molality<T> {
         self.as_moles_per_gram()
     }
 }
+
+fixed_base!(Molality, MolePerKilogram);
+
+/// Unit markers for counting [`Molality`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::molality`](crate::unit::molality). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(MolePerKilogram: Molality, MolalityUnit::MolePerKilogram, base MolePerKilogram, 1 / 1, pi^0, from_moles_per_kilogram, as_moles_per_kilogram);
+    fixed_unit!(MillimolePerKilogram: Molality, MolalityUnit::MillimolePerKilogram, base MolePerKilogram, 1 / 1000, pi^0, from_millimoles_per_kilogram, as_millimoles_per_kilogram);
+    fixed_unit!(MolePerGram: Molality, MolalityUnit::MolePerGram, base MolePerKilogram, 1000 / 1, pi^0, from_moles_per_gram, as_moles_per_gram);
+}

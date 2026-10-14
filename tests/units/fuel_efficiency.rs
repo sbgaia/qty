@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -157,6 +157,16 @@ fn kilometers_per_liter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::fuel_efficiency::MilePerUsGallon>();
+    check_fixed_rescale::<unit::fuel_efficiency::MilePerUsGallon>();
+    check_fixed::<unit::fuel_efficiency::MilePerUkGallon>();
+    check_fixed_rescale::<unit::fuel_efficiency::MilePerUkGallon>();
+    check_fixed::<unit::fuel_efficiency::KilometerPerLiter>();
+    check_fixed_rescale::<unit::fuel_efficiency::KilometerPerLiter>();
 }
 
 #[test]

@@ -409,3 +409,24 @@ impl<T: Float> Impulse<T> {
         self.as_slug_feet_per_second()
     }
 }
+
+fixed_base!(Impulse, NewtonSecond);
+
+/// Unit markers for counting [`Impulse`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::impulse`](crate::unit::impulse). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(KilogramMeterPerSecond: Impulse, ImpulseUnit::KilogramMeterPerSecond, base NewtonSecond, 1 / 1, pi^0, from_kilogram_meters_per_second, as_kilogram_meters_per_second);
+    fixed_unit!(NewtonSecond: Impulse, ImpulseUnit::NewtonSecond, base NewtonSecond, 1 / 1, pi^0, from_newton_seconds, as_newton_seconds);
+    fixed_unit!(NanonewtonSecond: Impulse, ImpulseUnit::NanonewtonSecond, base NewtonSecond, 1 / 1000000000, pi^0, from_nanonewton_seconds, as_nanonewton_seconds);
+    fixed_unit!(MicronewtonSecond: Impulse, ImpulseUnit::MicronewtonSecond, base NewtonSecond, 1 / 1000000, pi^0, from_micronewton_seconds, as_micronewton_seconds);
+    fixed_unit!(MillinewtonSecond: Impulse, ImpulseUnit::MillinewtonSecond, base NewtonSecond, 1 / 1000, pi^0, from_millinewton_seconds, as_millinewton_seconds);
+    fixed_unit!(CentinewtonSecond: Impulse, ImpulseUnit::CentinewtonSecond, base NewtonSecond, 1 / 100, pi^0, from_centinewton_seconds, as_centinewton_seconds);
+    fixed_unit!(DecinewtonSecond: Impulse, ImpulseUnit::DecinewtonSecond, base NewtonSecond, 1 / 10, pi^0, from_decinewton_seconds, as_decinewton_seconds);
+    fixed_unit!(DecanewtonSecond: Impulse, ImpulseUnit::DecanewtonSecond, base NewtonSecond, 10 / 1, pi^0, from_decanewton_seconds, as_decanewton_seconds);
+    fixed_unit!(KilonewtonSecond: Impulse, ImpulseUnit::KilonewtonSecond, base NewtonSecond, 1000 / 1, pi^0, from_kilonewton_seconds, as_kilonewton_seconds);
+    fixed_unit!(MeganewtonSecond: Impulse, ImpulseUnit::MeganewtonSecond, base NewtonSecond, 1000000 / 1, pi^0, from_meganewton_seconds, as_meganewton_seconds);
+    fixed_unit!(PoundFootPerSecond: Impulse, ImpulseUnit::PoundFootPerSecond, base NewtonSecond, 17281869297 / 125000000000, pi^0, from_pound_feet_per_second, as_pound_feet_per_second);
+    fixed_unit!(PoundForceSecond: Impulse, ImpulseUnit::PoundForceSecond, base NewtonSecond, 8896443230521 / 2000000000000, pi^0, from_pound_force_seconds, as_pound_force_seconds);
+    fixed_unit!(SlugFootPerSecond: Impulse, ImpulseUnit::SlugFootPerSecond, base NewtonSecond, 8896443230521 / 2000000000000, pi^0, from_slug_feet_per_second, as_slug_feet_per_second);
+}

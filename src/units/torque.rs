@@ -774,3 +774,38 @@ impl<T: Float> Torque<T> {
         self.as_tonne_force_meters()
     }
 }
+
+fixed_base!(Torque, NewtonMeter);
+
+/// Unit markers for counting [`Torque`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::torque`](crate::unit::torque). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(NewtonMillimeter: Torque, TorqueUnit::NewtonMillimeter, base NewtonMeter, 1 / 1000, pi^0, from_newton_millimeters, as_newton_millimeters);
+    fixed_unit!(KilonewtonMillimeter: Torque, TorqueUnit::KilonewtonMillimeter, base NewtonMeter, 1 / 1, pi^0, from_kilonewton_millimeters, as_kilonewton_millimeters);
+    fixed_unit!(MeganewtonMillimeter: Torque, TorqueUnit::MeganewtonMillimeter, base NewtonMeter, 1000 / 1, pi^0, from_meganewton_millimeters, as_meganewton_millimeters);
+    fixed_unit!(NewtonCentimeter: Torque, TorqueUnit::NewtonCentimeter, base NewtonMeter, 1 / 100, pi^0, from_newton_centimeters, as_newton_centimeters);
+    fixed_unit!(KilonewtonCentimeter: Torque, TorqueUnit::KilonewtonCentimeter, base NewtonMeter, 10 / 1, pi^0, from_kilonewton_centimeters, as_kilonewton_centimeters);
+    fixed_unit!(MeganewtonCentimeter: Torque, TorqueUnit::MeganewtonCentimeter, base NewtonMeter, 10000 / 1, pi^0, from_meganewton_centimeters, as_meganewton_centimeters);
+    fixed_unit!(NewtonMeter: Torque, TorqueUnit::NewtonMeter, base NewtonMeter, 1 / 1, pi^0, from_newton_meters, as_newton_meters);
+    fixed_unit!(KilonewtonMeter: Torque, TorqueUnit::KilonewtonMeter, base NewtonMeter, 1000 / 1, pi^0, from_kilonewton_meters, as_kilonewton_meters);
+    fixed_unit!(MeganewtonMeter: Torque, TorqueUnit::MeganewtonMeter, base NewtonMeter, 1000000 / 1, pi^0, from_meganewton_meters, as_meganewton_meters);
+    fixed_unit!(OunceForceFoot: Torque, TorqueUnit::OunceForceFoot, base NewtonMeter, 3389544870828501 / 40000000000000000, pi^0, from_ounce_force_feet, as_ounce_force_feet);
+    fixed_unit!(OunceForceInch: Torque, TorqueUnit::OunceForceInch, base NewtonMeter, 1129848290276167 / 160000000000000000, pi^0, from_ounce_force_inches, as_ounce_force_inches);
+    fixed_unit!(PoundalFoot: Torque, TorqueUnit::PoundalFoot, base NewtonMeter, 6584392202157 / 156250000000000, pi^0, from_poundal_feet, as_poundal_feet);
+    fixed_unit!(PoundForceInch: Torque, TorqueUnit::PoundForceInch, base NewtonMeter, 1129848290276167 / 10000000000000000, pi^0, from_pound_force_inches, as_pound_force_inches);
+    fixed_unit!(KilopoundForceInch: Torque, TorqueUnit::KilopoundForceInch, base NewtonMeter, 1129848290276167 / 10000000000000, pi^0, from_kilopound_force_inches, as_kilopound_force_inches);
+    fixed_unit!(MegapoundForceInch: Torque, TorqueUnit::MegapoundForceInch, base NewtonMeter, 1129848290276167 / 10000000000, pi^0, from_megapound_force_inches, as_megapound_force_inches);
+    fixed_unit!(PoundForceFoot: Torque, TorqueUnit::PoundForceFoot, base NewtonMeter, 3389544870828501 / 2500000000000000, pi^0, from_pound_force_feet, as_pound_force_feet);
+    fixed_unit!(KilopoundForceFoot: Torque, TorqueUnit::KilopoundForceFoot, base NewtonMeter, 3389544870828501 / 2500000000000, pi^0, from_kilopound_force_feet, as_kilopound_force_feet);
+    fixed_unit!(MegapoundForceFoot: Torque, TorqueUnit::MegapoundForceFoot, base NewtonMeter, 3389544870828501 / 2500000000, pi^0, from_megapound_force_feet, as_megapound_force_feet);
+    fixed_unit!(GramForceMillimeter: Torque, TorqueUnit::GramForceMillimeter, base NewtonMeter, 196133 / 20000000000, pi^0, from_gram_force_millimeters, as_gram_force_millimeters);
+    fixed_unit!(GramForceCentimeter: Torque, TorqueUnit::GramForceCentimeter, base NewtonMeter, 196133 / 2000000000, pi^0, from_gram_force_centimeters, as_gram_force_centimeters);
+    fixed_unit!(GramForceMeter: Torque, TorqueUnit::GramForceMeter, base NewtonMeter, 196133 / 20000000, pi^0, from_gram_force_meters, as_gram_force_meters);
+    fixed_unit!(KilogramForceMillimeter: Torque, TorqueUnit::KilogramForceMillimeter, base NewtonMeter, 196133 / 20000000, pi^0, from_kilogram_force_millimeters, as_kilogram_force_millimeters);
+    fixed_unit!(KilogramForceCentimeter: Torque, TorqueUnit::KilogramForceCentimeter, base NewtonMeter, 196133 / 2000000, pi^0, from_kilogram_force_centimeters, as_kilogram_force_centimeters);
+    fixed_unit!(KilogramForceMeter: Torque, TorqueUnit::KilogramForceMeter, base NewtonMeter, 196133 / 20000, pi^0, from_kilogram_force_meters, as_kilogram_force_meters);
+    fixed_unit!(TonneForceMillimeter: Torque, TorqueUnit::TonneForceMillimeter, base NewtonMeter, 196133 / 20000, pi^0, from_tonne_force_millimeters, as_tonne_force_millimeters);
+    fixed_unit!(TonneForceCentimeter: Torque, TorqueUnit::TonneForceCentimeter, base NewtonMeter, 196133 / 2000, pi^0, from_tonne_force_centimeters, as_tonne_force_centimeters);
+    fixed_unit!(TonneForceMeter: Torque, TorqueUnit::TonneForceMeter, base NewtonMeter, 196133 / 20, pi^0, from_tonne_force_meters, as_tonne_force_meters);
+}

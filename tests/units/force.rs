@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -453,6 +453,42 @@ fn short_tons_force() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::force::Dyn>();
+    check_fixed_rescale::<unit::force::Dyn>();
+    check_fixed::<unit::force::GramForce>();
+    check_fixed_rescale::<unit::force::GramForce>();
+    check_fixed::<unit::force::KilogramForce>();
+    check_fixed_rescale::<unit::force::KilogramForce>();
+    check_fixed::<unit::force::TonneForce>();
+    check_fixed_rescale::<unit::force::TonneForce>();
+    check_fixed::<unit::force::Newton>();
+    check_fixed_rescale::<unit::force::Newton>();
+    check_fixed::<unit::force::Micronewton>();
+    check_fixed_rescale::<unit::force::Micronewton>();
+    check_fixed::<unit::force::Millinewton>();
+    check_fixed_rescale::<unit::force::Millinewton>();
+    check_fixed::<unit::force::Decanewton>();
+    check_fixed_rescale::<unit::force::Decanewton>();
+    check_fixed::<unit::force::Kilonewton>();
+    check_fixed_rescale::<unit::force::Kilonewton>();
+    check_fixed::<unit::force::Meganewton>();
+    check_fixed_rescale::<unit::force::Meganewton>();
+    check_fixed::<unit::force::Kilopond>();
+    check_fixed_rescale::<unit::force::Kilopond>();
+    check_fixed::<unit::force::Poundal>();
+    check_fixed_rescale::<unit::force::Poundal>();
+    check_fixed::<unit::force::PoundForce>();
+    check_fixed_rescale::<unit::force::PoundForce>();
+    check_fixed::<unit::force::KilopoundForce>();
+    check_fixed_rescale::<unit::force::KilopoundForce>();
+    check_fixed::<unit::force::OunceForce>();
+    check_fixed_rescale::<unit::force::OunceForce>();
+    check_fixed::<unit::force::ShortTonForce>();
+    check_fixed_rescale::<unit::force::ShortTonForce>();
 }
 
 #[test]

@@ -1059,3 +1059,50 @@ impl<T: Float> Information<T> {
         self.as_exbibits()
     }
 }
+
+fixed_base!(Information, Bit);
+
+/// Unit markers for counting [`Information`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::information`](crate::unit::information). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Byte: Information, InformationUnit::Byte, base Bit, 8 / 1, pi^0, from_bytes, as_bytes);
+    fixed_unit!(Kilobyte: Information, InformationUnit::Kilobyte, base Bit, 8000 / 1, pi^0, from_kilobytes, as_kilobytes);
+    fixed_unit!(Megabyte: Information, InformationUnit::Megabyte, base Bit, 8000000 / 1, pi^0, from_megabytes, as_megabytes);
+    fixed_unit!(Gigabyte: Information, InformationUnit::Gigabyte, base Bit, 8000000000 / 1, pi^0, from_gigabytes, as_gigabytes);
+    fixed_unit!(Terabyte: Information, InformationUnit::Terabyte, base Bit, 8000000000000 / 1, pi^0, from_terabytes, as_terabytes);
+    fixed_unit!(Petabyte: Information, InformationUnit::Petabyte, base Bit, 8000000000000000 / 1, pi^0, from_petabytes, as_petabytes);
+    fixed_unit!(Exabyte: Information, InformationUnit::Exabyte, base Bit, 8000000000000000000 / 1, pi^0, from_exabytes, as_exabytes);
+    fixed_unit!(Kibibyte: Information, InformationUnit::Kibibyte, base Bit, 8192 / 1, pi^0, from_kibibytes, as_kibibytes);
+    fixed_unit!(Mebibyte: Information, InformationUnit::Mebibyte, base Bit, 8388608 / 1, pi^0, from_mebibytes, as_mebibytes);
+    fixed_unit!(Gibibyte: Information, InformationUnit::Gibibyte, base Bit, 8589934592 / 1, pi^0, from_gibibytes, as_gibibytes);
+    fixed_unit!(Tebibyte: Information, InformationUnit::Tebibyte, base Bit, 8796093022208 / 1, pi^0, from_tebibytes, as_tebibytes);
+    fixed_unit!(Pebibyte: Information, InformationUnit::Pebibyte, base Bit, 9007199254740992 / 1, pi^0, from_pebibytes, as_pebibytes);
+    fixed_unit!(Exbibyte: Information, InformationUnit::Exbibyte, base Bit, 9223372036854775808 / 1, pi^0, from_exbibytes, as_exbibytes);
+    fixed_unit!(Octet: Information, InformationUnit::Octet, base Bit, 8 / 1, pi^0, from_octets, as_octets);
+    fixed_unit!(Kilooctet: Information, InformationUnit::Kilooctet, base Bit, 8000 / 1, pi^0, from_kilooctets, as_kilooctets);
+    fixed_unit!(Megaoctet: Information, InformationUnit::Megaoctet, base Bit, 8000000 / 1, pi^0, from_megaoctets, as_megaoctets);
+    fixed_unit!(Gigaoctet: Information, InformationUnit::Gigaoctet, base Bit, 8000000000 / 1, pi^0, from_gigaoctets, as_gigaoctets);
+    fixed_unit!(Teraoctet: Information, InformationUnit::Teraoctet, base Bit, 8000000000000 / 1, pi^0, from_teraoctets, as_teraoctets);
+    fixed_unit!(Petaoctet: Information, InformationUnit::Petaoctet, base Bit, 8000000000000000 / 1, pi^0, from_petaoctets, as_petaoctets);
+    fixed_unit!(Exaoctet: Information, InformationUnit::Exaoctet, base Bit, 8000000000000000000 / 1, pi^0, from_exaoctets, as_exaoctets);
+    fixed_unit!(Kibioctet: Information, InformationUnit::Kibioctet, base Bit, 8192 / 1, pi^0, from_kibioctets, as_kibioctets);
+    fixed_unit!(Mebioctet: Information, InformationUnit::Mebioctet, base Bit, 8388608 / 1, pi^0, from_mebioctets, as_mebioctets);
+    fixed_unit!(Gibioctet: Information, InformationUnit::Gibioctet, base Bit, 8589934592 / 1, pi^0, from_gibioctets, as_gibioctets);
+    fixed_unit!(Tebioctet: Information, InformationUnit::Tebioctet, base Bit, 8796093022208 / 1, pi^0, from_tebioctets, as_tebioctets);
+    fixed_unit!(Pebioctet: Information, InformationUnit::Pebioctet, base Bit, 9007199254740992 / 1, pi^0, from_pebioctets, as_pebioctets);
+    fixed_unit!(Exbioctet: Information, InformationUnit::Exbioctet, base Bit, 9223372036854775808 / 1, pi^0, from_exbioctets, as_exbioctets);
+    fixed_unit!(Bit: Information, InformationUnit::Bit, base Bit, 1 / 1, pi^0, from_bits, as_bits);
+    fixed_unit!(Kilobit: Information, InformationUnit::Kilobit, base Bit, 1000 / 1, pi^0, from_kilobits, as_kilobits);
+    fixed_unit!(Megabit: Information, InformationUnit::Megabit, base Bit, 1000000 / 1, pi^0, from_megabits, as_megabits);
+    fixed_unit!(Gigabit: Information, InformationUnit::Gigabit, base Bit, 1000000000 / 1, pi^0, from_gigabits, as_gigabits);
+    fixed_unit!(Terabit: Information, InformationUnit::Terabit, base Bit, 1000000000000 / 1, pi^0, from_terabits, as_terabits);
+    fixed_unit!(Petabit: Information, InformationUnit::Petabit, base Bit, 1000000000000000 / 1, pi^0, from_petabits, as_petabits);
+    fixed_unit!(Exabit: Information, InformationUnit::Exabit, base Bit, 1000000000000000000 / 1, pi^0, from_exabits, as_exabits);
+    fixed_unit!(Kibibit: Information, InformationUnit::Kibibit, base Bit, 1024 / 1, pi^0, from_kibibits, as_kibibits);
+    fixed_unit!(Mebibit: Information, InformationUnit::Mebibit, base Bit, 1048576 / 1, pi^0, from_mebibits, as_mebibits);
+    fixed_unit!(Gibibit: Information, InformationUnit::Gibibit, base Bit, 1073741824 / 1, pi^0, from_gibibits, as_gibibits);
+    fixed_unit!(Tebibit: Information, InformationUnit::Tebibit, base Bit, 1099511627776 / 1, pi^0, from_tebibits, as_tebibits);
+    fixed_unit!(Pebibit: Information, InformationUnit::Pebibit, base Bit, 1125899906842624 / 1, pi^0, from_pebibits, as_pebibits);
+    fixed_unit!(Exbibit: Information, InformationUnit::Exbibit, base Bit, 1152921504606846976 / 1, pi^0, from_exbibits, as_exbibits);
+}

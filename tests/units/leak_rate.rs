@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -158,6 +158,18 @@ fn atm_cubic_centimeters_per_second() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::leak_rate::PascalCubicMeterPerSecond>();
+    check_fixed_rescale::<unit::leak_rate::PascalCubicMeterPerSecond>();
+    check_fixed::<unit::leak_rate::MillibarLiterPerSecond>();
+    check_fixed_rescale::<unit::leak_rate::MillibarLiterPerSecond>();
+    check_fixed::<unit::leak_rate::TorrLiterPerSecond>();
+    check_fixed_rescale::<unit::leak_rate::TorrLiterPerSecond>();
+    check_fixed::<unit::leak_rate::AtmCubicCentimeterPerSecond>();
+    check_fixed_rescale::<unit::leak_rate::AtmCubicCentimeterPerSecond>();
 }
 
 #[test]

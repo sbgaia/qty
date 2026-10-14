@@ -521,3 +521,28 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.as_degrees_fahrenheit_per_hour()
     }
 }
+
+fixed_base!(TemperatureChangeRate, DegreeCelsiusPerSecond);
+
+/// Unit markers for counting [`TemperatureChangeRate`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::temperature_change_rate`](crate::unit::temperature_change_rate). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(DegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1, pi^0, from_degrees_celsius_per_second, as_degrees_celsius_per_second);
+    fixed_unit!(NanodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1000000000, pi^0, from_nanodegrees_celsius_per_second, as_nanodegrees_celsius_per_second);
+    fixed_unit!(MicrodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1000000, pi^0, from_microdegrees_celsius_per_second, as_microdegrees_celsius_per_second);
+    fixed_unit!(MillidegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1000, pi^0, from_millidegrees_celsius_per_second, as_millidegrees_celsius_per_second);
+    fixed_unit!(CentidegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 100, pi^0, from_centidegrees_celsius_per_second, as_centidegrees_celsius_per_second);
+    fixed_unit!(DecidegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 10, pi^0, from_decidegrees_celsius_per_second, as_decidegrees_celsius_per_second);
+    fixed_unit!(DecadegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 10 / 1, pi^0, from_decadegrees_celsius_per_second, as_decadegrees_celsius_per_second);
+    fixed_unit!(HectodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 100 / 1, pi^0, from_hectodegrees_celsius_per_second, as_hectodegrees_celsius_per_second);
+    fixed_unit!(KilodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1000 / 1, pi^0, from_kilodegrees_celsius_per_second, as_kilodegrees_celsius_per_second);
+    fixed_unit!(DegreeCelsiusPerMinute: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeCelsiusPerMinute, base DegreeCelsiusPerSecond, 1 / 60, pi^0, from_degrees_celsius_per_minute, as_degrees_celsius_per_minute);
+    fixed_unit!(DegreeKelvinPerMinute: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeKelvinPerMinute, base DegreeCelsiusPerSecond, 1 / 60, pi^0, from_degrees_kelvin_per_minute, as_degrees_kelvin_per_minute);
+    fixed_unit!(DegreeFahrenheitPerMinute: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeFahrenheitPerMinute, base DegreeCelsiusPerSecond, 1 / 108, pi^0, from_degrees_fahrenheit_per_minute, as_degrees_fahrenheit_per_minute);
+    fixed_unit!(DegreeFahrenheitPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeFahrenheitPerSecond, base DegreeCelsiusPerSecond, 5 / 9, pi^0, from_degrees_fahrenheit_per_second, as_degrees_fahrenheit_per_second);
+    fixed_unit!(DegreeKelvinPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeKelvinPerSecond, base DegreeCelsiusPerSecond, 1 / 1, pi^0, from_degrees_kelvin_per_second, as_degrees_kelvin_per_second);
+    fixed_unit!(DegreeCelsiusPerHour: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeCelsiusPerHour, base DegreeCelsiusPerSecond, 1 / 3600, pi^0, from_degrees_celsius_per_hour, as_degrees_celsius_per_hour);
+    fixed_unit!(DegreeKelvinPerHour: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeKelvinPerHour, base DegreeCelsiusPerSecond, 1 / 3600, pi^0, from_degrees_kelvin_per_hour, as_degrees_kelvin_per_hour);
+    fixed_unit!(DegreeFahrenheitPerHour: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeFahrenheitPerHour, base DegreeCelsiusPerSecond, 1 / 6480, pi^0, from_degrees_fahrenheit_per_hour, as_degrees_fahrenheit_per_hour);
+}

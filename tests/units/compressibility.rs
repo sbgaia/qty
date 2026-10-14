@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -270,6 +270,24 @@ fn inverse_pounds_force_per_square_inch() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::compressibility::InversePascal>();
+    check_fixed_rescale::<unit::compressibility::InversePascal>();
+    check_fixed::<unit::compressibility::InverseKilopascal>();
+    check_fixed_rescale::<unit::compressibility::InverseKilopascal>();
+    check_fixed::<unit::compressibility::InverseMegapascal>();
+    check_fixed_rescale::<unit::compressibility::InverseMegapascal>();
+    check_fixed::<unit::compressibility::InverseAtmosphere>();
+    check_fixed_rescale::<unit::compressibility::InverseAtmosphere>();
+    check_fixed::<unit::compressibility::InverseMillibar>();
+    check_fixed_rescale::<unit::compressibility::InverseMillibar>();
+    check_fixed::<unit::compressibility::InverseBar>();
+    check_fixed_rescale::<unit::compressibility::InverseBar>();
+    check_fixed::<unit::compressibility::InversePoundForcePerSquareInch>();
+    check_fixed_rescale::<unit::compressibility::InversePoundForcePerSquareInch>();
 }
 
 #[test]

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -458,6 +458,34 @@ fn petawatt_hours_per_cubic_meter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::energy_density::JoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::JoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::KilojoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::KilojoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::MegajoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::MegajoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::GigajoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::GigajoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::TerajoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::TerajoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::PetajoulePerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::PetajoulePerCubicMeter>();
+    check_fixed::<unit::energy_density::WattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::WattHourPerCubicMeter>();
+    check_fixed::<unit::energy_density::KilowattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::KilowattHourPerCubicMeter>();
+    check_fixed::<unit::energy_density::MegawattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::MegawattHourPerCubicMeter>();
+    check_fixed::<unit::energy_density::GigawattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::GigawattHourPerCubicMeter>();
+    check_fixed::<unit::energy_density::TerawattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::TerawattHourPerCubicMeter>();
+    check_fixed::<unit::energy_density::PetawattHourPerCubicMeter>();
+    check_fixed_rescale::<unit::energy_density::PetawattHourPerCubicMeter>();
 }
 
 #[test]

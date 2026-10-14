@@ -107,3 +107,12 @@ impl<T: Float> LuminousFlux<T> {
         self.as_lumens()
     }
 }
+
+fixed_base!(LuminousFlux, Lumen);
+
+/// Unit markers for counting [`LuminousFlux`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::luminous_flux`](crate::unit::luminous_flux). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Lumen: LuminousFlux, LuminousFluxUnit::Lumen, base Lumen, 1 / 1, pi^0, from_lumens, as_lumens);
+}

@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -464,6 +464,34 @@ fn kilograms_per_hour_per_square_millimeter() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass_flux::GramPerSecondPerSquareMeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerSecondPerSquareMeter>();
+    check_fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerSecondPerSquareMeter>();
+    check_fixed::<unit::mass_flux::GramPerSecondPerSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerSecondPerSquareCentimeter>();
+    check_fixed::<unit::mass_flux::KilogramPerSecondPerSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerSecondPerSquareCentimeter>();
+    check_fixed::<unit::mass_flux::GramPerSecondPerSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerSecondPerSquareMillimeter>();
+    check_fixed::<unit::mass_flux::KilogramPerSecondPerSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerSecondPerSquareMillimeter>();
+    check_fixed::<unit::mass_flux::GramPerHourPerSquareMeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerHourPerSquareMeter>();
+    check_fixed::<unit::mass_flux::KilogramPerHourPerSquareMeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerHourPerSquareMeter>();
+    check_fixed::<unit::mass_flux::GramPerHourPerSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerHourPerSquareCentimeter>();
+    check_fixed::<unit::mass_flux::KilogramPerHourPerSquareCentimeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerHourPerSquareCentimeter>();
+    check_fixed::<unit::mass_flux::GramPerHourPerSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_flux::GramPerHourPerSquareMillimeter>();
+    check_fixed::<unit::mass_flux::KilogramPerHourPerSquareMillimeter>();
+    check_fixed_rescale::<unit::mass_flux::KilogramPerHourPerSquareMillimeter>();
 }
 
 #[test]

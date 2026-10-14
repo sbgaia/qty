@@ -1091,3 +1091,51 @@ impl<T: Float> Energy<T> {
         self.as_horsepower_hours()
     }
 }
+
+fixed_base!(Energy, Joule);
+
+/// Unit markers for counting [`Energy`] as an integer with [`Fixed`](crate::Fixed).
+///
+/// Also available as [`unit::energy`](crate::unit::energy). Affine units have no marker.
+pub mod unit {
+    fixed_unit!(Joule: Energy, EnergyUnit::Joule, base Joule, 1 / 1, pi^0, from_joules, as_joules);
+    fixed_unit!(Nanojoule: Energy, EnergyUnit::Nanojoule, base Joule, 1 / 1000000000, pi^0, from_nanojoules, as_nanojoules);
+    fixed_unit!(Microjoule: Energy, EnergyUnit::Microjoule, base Joule, 1 / 1000000, pi^0, from_microjoules, as_microjoules);
+    fixed_unit!(Millijoule: Energy, EnergyUnit::Millijoule, base Joule, 1 / 1000, pi^0, from_millijoules, as_millijoules);
+    fixed_unit!(Kilojoule: Energy, EnergyUnit::Kilojoule, base Joule, 1000 / 1, pi^0, from_kilojoules, as_kilojoules);
+    fixed_unit!(Megajoule: Energy, EnergyUnit::Megajoule, base Joule, 1000000 / 1, pi^0, from_megajoules, as_megajoules);
+    fixed_unit!(Gigajoule: Energy, EnergyUnit::Gigajoule, base Joule, 1000000000 / 1, pi^0, from_gigajoules, as_gigajoules);
+    fixed_unit!(Terajoule: Energy, EnergyUnit::Terajoule, base Joule, 1000000000000 / 1, pi^0, from_terajoules, as_terajoules);
+    fixed_unit!(Petajoule: Energy, EnergyUnit::Petajoule, base Joule, 1000000000000000 / 1, pi^0, from_petajoules, as_petajoules);
+    fixed_unit!(Calorie: Energy, EnergyUnit::Calorie, base Joule, 523 / 125, pi^0, from_calories, as_calories);
+    fixed_unit!(Kilocalorie: Energy, EnergyUnit::Kilocalorie, base Joule, 4184 / 1, pi^0, from_kilocalories, as_kilocalories);
+    fixed_unit!(Megacalorie: Energy, EnergyUnit::Megacalorie, base Joule, 4184000 / 1, pi^0, from_megacalories, as_megacalories);
+    fixed_unit!(BritishThermalUnit: Energy, EnergyUnit::BritishThermalUnit, base Joule, 52752792631 / 50000000, pi^0, from_british_thermal_units, as_british_thermal_units);
+    fixed_unit!(KilobritishThermalUnit: Energy, EnergyUnit::KilobritishThermalUnit, base Joule, 52752792631 / 50000, pi^0, from_kilobritish_thermal_units, as_kilobritish_thermal_units);
+    fixed_unit!(MegabritishThermalUnit: Energy, EnergyUnit::MegabritishThermalUnit, base Joule, 52752792631 / 50, pi^0, from_megabritish_thermal_units, as_megabritish_thermal_units);
+    fixed_unit!(GigabritishThermalUnit: Energy, EnergyUnit::GigabritishThermalUnit, base Joule, 1055055852620 / 1, pi^0, from_gigabritish_thermal_units, as_gigabritish_thermal_units);
+    fixed_unit!(ElectronVolt: Energy, EnergyUnit::ElectronVolt, base Joule, 801088317 / 5000000000000000000000000000, pi^0, from_electron_volts, as_electron_volts);
+    fixed_unit!(KiloelectronVolt: Energy, EnergyUnit::KiloelectronVolt, base Joule, 801088317 / 5000000000000000000000000, pi^0, from_kiloelectron_volts, as_kiloelectron_volts);
+    fixed_unit!(MegaelectronVolt: Energy, EnergyUnit::MegaelectronVolt, base Joule, 801088317 / 5000000000000000000000, pi^0, from_megaelectron_volts, as_megaelectron_volts);
+    fixed_unit!(GigaelectronVolt: Energy, EnergyUnit::GigaelectronVolt, base Joule, 801088317 / 5000000000000000000, pi^0, from_gigaelectron_volts, as_gigaelectron_volts);
+    fixed_unit!(TeraelectronVolt: Energy, EnergyUnit::TeraelectronVolt, base Joule, 801088317 / 5000000000000000, pi^0, from_teraelectron_volts, as_teraelectron_volts);
+    fixed_unit!(FootPound: Energy, EnergyUnit::FootPound, base Joule, 3389544870828501 / 2500000000000000, pi^0, from_foot_pounds, as_foot_pounds);
+    fixed_unit!(Erg: Energy, EnergyUnit::Erg, base Joule, 1 / 10000000, pi^0, from_ergs, as_ergs);
+    fixed_unit!(WattHour: Energy, EnergyUnit::WattHour, base Joule, 3600 / 1, pi^0, from_watt_hours, as_watt_hours);
+    fixed_unit!(KilowattHour: Energy, EnergyUnit::KilowattHour, base Joule, 3600000 / 1, pi^0, from_kilowatt_hours, as_kilowatt_hours);
+    fixed_unit!(MegawattHour: Energy, EnergyUnit::MegawattHour, base Joule, 3600000000 / 1, pi^0, from_megawatt_hours, as_megawatt_hours);
+    fixed_unit!(GigawattHour: Energy, EnergyUnit::GigawattHour, base Joule, 3600000000000 / 1, pi^0, from_gigawatt_hours, as_gigawatt_hours);
+    fixed_unit!(TerawattHour: Energy, EnergyUnit::TerawattHour, base Joule, 3600000000000000 / 1, pi^0, from_terawatt_hours, as_terawatt_hours);
+    fixed_unit!(WattDay: Energy, EnergyUnit::WattDay, base Joule, 86400 / 1, pi^0, from_watt_days, as_watt_days);
+    fixed_unit!(KilowattDay: Energy, EnergyUnit::KilowattDay, base Joule, 86400000 / 1, pi^0, from_kilowatt_days, as_kilowatt_days);
+    fixed_unit!(MegawattDay: Energy, EnergyUnit::MegawattDay, base Joule, 86400000000 / 1, pi^0, from_megawatt_days, as_megawatt_days);
+    fixed_unit!(GigawattDay: Energy, EnergyUnit::GigawattDay, base Joule, 86400000000000 / 1, pi^0, from_gigawatt_days, as_gigawatt_days);
+    fixed_unit!(TerawattDay: Energy, EnergyUnit::TerawattDay, base Joule, 86400000000000000 / 1, pi^0, from_terawatt_days, as_terawatt_days);
+    fixed_unit!(ThermEc: Energy, EnergyUnit::ThermEc, base Joule, 52752792631 / 500, pi^0, from_therms_ec, as_therms_ec);
+    fixed_unit!(DecathermEc: Energy, EnergyUnit::DecathermEc, base Joule, 52752792631 / 50, pi^0, from_decatherms_ec, as_decatherms_ec);
+    fixed_unit!(ThermUs: Energy, EnergyUnit::ThermUs, base Joule, 105480400 / 1, pi^0, from_therms_us, as_therms_us);
+    fixed_unit!(DecathermUs: Energy, EnergyUnit::DecathermUs, base Joule, 1054804000 / 1, pi^0, from_decatherms_us, as_decatherms_us);
+    fixed_unit!(ThermImperial: Energy, EnergyUnit::ThermImperial, base Joule, 26376396314337 / 250000, pi^0, from_therms_imperial, as_therms_imperial);
+    fixed_unit!(DecathermImperial: Energy, EnergyUnit::DecathermImperial, base Joule, 26376396314337 / 25000, pi^0, from_decatherms_imperial, as_decatherms_imperial);
+    fixed_unit!(HorsepowerHour: Energy, EnergyUnit::HorsepowerHour, base Joule, 1342259768728053 / 500000000, pi^0, from_horsepower_hours, as_horsepower_hours);
+}

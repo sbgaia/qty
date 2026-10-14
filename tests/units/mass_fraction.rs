@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -889,6 +889,58 @@ fn parts_per_trillion() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::mass_fraction::DecimalFraction>();
+    check_fixed_rescale::<unit::mass_fraction::DecimalFraction>();
+    check_fixed::<unit::mass_fraction::GramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::GramPerGram>();
+    check_fixed::<unit::mass_fraction::NanogramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::NanogramPerGram>();
+    check_fixed::<unit::mass_fraction::MicrogramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::MicrogramPerGram>();
+    check_fixed::<unit::mass_fraction::MilligramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::MilligramPerGram>();
+    check_fixed::<unit::mass_fraction::CentigramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::CentigramPerGram>();
+    check_fixed::<unit::mass_fraction::DecigramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::DecigramPerGram>();
+    check_fixed::<unit::mass_fraction::DecagramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::DecagramPerGram>();
+    check_fixed::<unit::mass_fraction::HectogramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::HectogramPerGram>();
+    check_fixed::<unit::mass_fraction::KilogramPerGram>();
+    check_fixed_rescale::<unit::mass_fraction::KilogramPerGram>();
+    check_fixed::<unit::mass_fraction::GramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::GramPerKilogram>();
+    check_fixed::<unit::mass_fraction::NanogramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::NanogramPerKilogram>();
+    check_fixed::<unit::mass_fraction::MicrogramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::MicrogramPerKilogram>();
+    check_fixed::<unit::mass_fraction::MilligramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::MilligramPerKilogram>();
+    check_fixed::<unit::mass_fraction::CentigramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::CentigramPerKilogram>();
+    check_fixed::<unit::mass_fraction::DecigramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::DecigramPerKilogram>();
+    check_fixed::<unit::mass_fraction::DecagramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::DecagramPerKilogram>();
+    check_fixed::<unit::mass_fraction::HectogramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::HectogramPerKilogram>();
+    check_fixed::<unit::mass_fraction::KilogramPerKilogram>();
+    check_fixed_rescale::<unit::mass_fraction::KilogramPerKilogram>();
+    check_fixed::<unit::mass_fraction::Percent>();
+    check_fixed_rescale::<unit::mass_fraction::Percent>();
+    check_fixed::<unit::mass_fraction::PartPerThousand>();
+    check_fixed_rescale::<unit::mass_fraction::PartPerThousand>();
+    check_fixed::<unit::mass_fraction::PartPerMillion>();
+    check_fixed_rescale::<unit::mass_fraction::PartPerMillion>();
+    check_fixed::<unit::mass_fraction::PartPerBillion>();
+    check_fixed_rescale::<unit::mass_fraction::PartPerBillion>();
+    check_fixed::<unit::mass_fraction::PartPerTrillion>();
+    check_fixed_rescale::<unit::mass_fraction::PartPerTrillion>();
 }
 
 #[test]

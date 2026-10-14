@@ -8,7 +8,7 @@
     unused_parens
 )]
 
-use super::{assert_close, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
+use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
 use unitsnet_rs::*;
 
 #[test]
@@ -589,6 +589,42 @@ fn teramhos() {
             F32_TOL,
         );
     }
+}
+
+#[test]
+fn fixed_units() {
+    check_fixed::<unit::electric_admittance::Siemens>();
+    check_fixed_rescale::<unit::electric_admittance::Siemens>();
+    check_fixed::<unit::electric_admittance::Nanosiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Nanosiemens>();
+    check_fixed::<unit::electric_admittance::Microsiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Microsiemens>();
+    check_fixed::<unit::electric_admittance::Millisiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Millisiemens>();
+    check_fixed::<unit::electric_admittance::Kilosiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Kilosiemens>();
+    check_fixed::<unit::electric_admittance::Megasiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Megasiemens>();
+    check_fixed::<unit::electric_admittance::Gigasiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Gigasiemens>();
+    check_fixed::<unit::electric_admittance::Terasiemens>();
+    check_fixed_rescale::<unit::electric_admittance::Terasiemens>();
+    check_fixed::<unit::electric_admittance::Mho>();
+    check_fixed_rescale::<unit::electric_admittance::Mho>();
+    check_fixed::<unit::electric_admittance::Nanomho>();
+    check_fixed_rescale::<unit::electric_admittance::Nanomho>();
+    check_fixed::<unit::electric_admittance::Micromho>();
+    check_fixed_rescale::<unit::electric_admittance::Micromho>();
+    check_fixed::<unit::electric_admittance::Millimho>();
+    check_fixed_rescale::<unit::electric_admittance::Millimho>();
+    check_fixed::<unit::electric_admittance::Kilomho>();
+    check_fixed_rescale::<unit::electric_admittance::Kilomho>();
+    check_fixed::<unit::electric_admittance::Megamho>();
+    check_fixed_rescale::<unit::electric_admittance::Megamho>();
+    check_fixed::<unit::electric_admittance::Gigamho>();
+    check_fixed_rescale::<unit::electric_admittance::Gigamho>();
+    check_fixed::<unit::electric_admittance::Teramho>();
+    check_fixed_rescale::<unit::electric_admittance::Teramho>();
 }
 
 #[test]
