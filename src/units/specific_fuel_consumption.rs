@@ -72,19 +72,38 @@ impl SpecificFuelConsumptionUnit {
             Self::KilogramPerKilonewtonSecond => &["kg/(kN·s)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "poundmassperpoundforcehour" => Some(Self::PoundMassPerPoundForceHour),
+            "poundsmassperpoundforcehour" => Some(Self::PoundMassPerPoundForceHour),
+            "kilogramperkilogramforcehour" => Some(Self::KilogramPerKilogramForceHour),
+            "kilogramsperkilogramforcehour" => Some(Self::KilogramPerKilogramForceHour),
+            "gramperkilonewtonsecond" => Some(Self::GramPerKilonewtonSecond),
+            "gramsperkilonewtonsecond" => Some(Self::GramPerKilonewtonSecond),
+            "kilogramperkilonewtonsecond" => Some(Self::KilogramPerKilonewtonSecond),
+            "kilogramsperkilonewtonsecond" => Some(Self::KilogramPerKilonewtonSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for SpecificFuelConsumptionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "lb/(lbf·h)" => Ok(Self::PoundMassPerPoundForceHour),
             "kg/(kgf·h)" => Ok(Self::KilogramPerKilogramForceHour),
             "g/(kN·s)" => Ok(Self::GramPerKilonewtonSecond),
             "kg/(kN·s)" => Ok(Self::KilogramPerKilonewtonSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

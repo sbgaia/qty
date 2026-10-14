@@ -529,6 +529,226 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolarFlowUnit::from_name("molepersecond"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("mole per second"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLE PER SECOND"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("molespersecond"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("moles per second"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLES PER SECOND"),
+        Some(MolarFlowUnit::MolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomolepersecond"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomole per second"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLE PER SECOND"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomolespersecond"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomoles per second"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLES PER SECOND"),
+        Some(MolarFlowUnit::KilomolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("moleperminute"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("mole per minute"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLE PER MINUTE"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("molesperminute"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("moles per minute"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLES PER MINUTE"),
+        Some(MolarFlowUnit::MolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomoleperminute"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomole per minute"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLE PER MINUTE"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomolesperminute"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomoles per minute"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLES PER MINUTE"),
+        Some(MolarFlowUnit::KilomolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("moleperhour"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("mole per hour"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLE PER HOUR"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("molesperhour"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("moles per hour"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("MOLES PER HOUR"),
+        Some(MolarFlowUnit::MolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomoleperhour"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomole per hour"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLE PER HOUR"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomolesperhour"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("kilomoles per hour"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("KILOMOLES PER HOUR"),
+        Some(MolarFlowUnit::KilomolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmolepersecond"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound mole per second"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLE PER SECOND"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmolespersecond"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound moles per second"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLES PER SECOND"),
+        Some(MolarFlowUnit::PoundMolePerSecond)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmoleperminute"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound mole per minute"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLE PER MINUTE"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmolesperminute"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound moles per minute"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLES PER MINUTE"),
+        Some(MolarFlowUnit::PoundMolePerMinute)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmoleperhour"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound mole per hour"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLE PER HOUR"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("poundmolesperhour"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("pound moles per hour"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+    assert_eq!(
+        MolarFlowUnit::from_name("POUND MOLES PER HOUR"),
+        Some(MolarFlowUnit::PoundMolePerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MolarFlow::from_base(6.0);
     let b = MolarFlow::from_base(2.0);

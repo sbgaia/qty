@@ -62,17 +62,32 @@ impl VolumeFlowPerAreaUnit {
             Self::CubicFootPerMinutePerSquareFoot => &["CFM/ft²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "cubicmeterpersecondpersquaremeter" => Some(Self::CubicMeterPerSecondPerSquareMeter),
+            "cubicmeterspersecondpersquaremeter" => Some(Self::CubicMeterPerSecondPerSquareMeter),
+            "cubicfootperminutepersquarefoot" => Some(Self::CubicFootPerMinutePerSquareFoot),
+            "cubicfeetperminutepersquarefoot" => Some(Self::CubicFootPerMinutePerSquareFoot),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for VolumeFlowPerAreaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m³/(s·m²)" => Ok(Self::CubicMeterPerSecondPerSquareMeter),
             "CFM/ft²" => Ok(Self::CubicFootPerMinutePerSquareFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

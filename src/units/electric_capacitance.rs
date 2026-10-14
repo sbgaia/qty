@@ -80,12 +80,37 @@ impl ElectricCapacitanceUnit {
             Self::Megafarad => &["MF"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "farad" => Some(Self::Farad),
+            "farads" => Some(Self::Farad),
+            "picofarad" => Some(Self::Picofarad),
+            "picofarads" => Some(Self::Picofarad),
+            "nanofarad" => Some(Self::Nanofarad),
+            "nanofarads" => Some(Self::Nanofarad),
+            "microfarad" => Some(Self::Microfarad),
+            "microfarads" => Some(Self::Microfarad),
+            "millifarad" => Some(Self::Millifarad),
+            "millifarads" => Some(Self::Millifarad),
+            "kilofarad" => Some(Self::Kilofarad),
+            "kilofarads" => Some(Self::Kilofarad),
+            "megafarad" => Some(Self::Megafarad),
+            "megafarads" => Some(Self::Megafarad),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricCapacitanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "F" => Ok(Self::Farad),
@@ -95,7 +120,7 @@ impl core::str::FromStr for ElectricCapacitanceUnit {
             "mF" => Ok(Self::Millifarad),
             "kF" => Ok(Self::Kilofarad),
             "MF" => Ok(Self::Megafarad),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

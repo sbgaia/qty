@@ -1578,6 +1578,658 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        TorqueUnit::from_name("newtonmillimeter"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton millimeter"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON MILLIMETER"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newtonmillimeters"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton millimeters"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON MILLIMETERS"),
+        Some(TorqueUnit::NewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtonmillimeter"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton millimeter"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON MILLIMETER"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtonmillimeters"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton millimeters"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON MILLIMETERS"),
+        Some(TorqueUnit::KilonewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtonmillimeter"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton millimeter"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON MILLIMETER"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtonmillimeters"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton millimeters"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON MILLIMETERS"),
+        Some(TorqueUnit::MeganewtonMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newtoncentimeter"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton centimeter"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON CENTIMETER"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newtoncentimeters"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton centimeters"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON CENTIMETERS"),
+        Some(TorqueUnit::NewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtoncentimeter"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton centimeter"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON CENTIMETER"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtoncentimeters"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton centimeters"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON CENTIMETERS"),
+        Some(TorqueUnit::KilonewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtoncentimeter"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton centimeter"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON CENTIMETER"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtoncentimeters"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton centimeters"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON CENTIMETERS"),
+        Some(TorqueUnit::MeganewtonCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newtonmeter"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton meter"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON METER"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newtonmeters"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("newton meters"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("NEWTON METERS"),
+        Some(TorqueUnit::NewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtonmeter"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton meter"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON METER"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewtonmeters"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilonewton meters"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILONEWTON METERS"),
+        Some(TorqueUnit::KilonewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtonmeter"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton meter"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON METER"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewtonmeters"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("meganewton meters"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGANEWTON METERS"),
+        Some(TorqueUnit::MeganewtonMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounceforcefoot"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounce force foot"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("OUNCE FORCE FOOT"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounceforcefeet"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounce force feet"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("OUNCE FORCE FEET"),
+        Some(TorqueUnit::OunceForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounceforceinch"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounce force inch"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("OUNCE FORCE INCH"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounceforceinches"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("ounce force inches"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("OUNCE FORCE INCHES"),
+        Some(TorqueUnit::OunceForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundalfoot"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundal foot"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUNDAL FOOT"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundalfeet"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundal feet"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUNDAL FEET"),
+        Some(TorqueUnit::PoundalFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundforceinch"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("pound force inch"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUND FORCE INCH"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundforceinches"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("pound force inches"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUND FORCE INCHES"),
+        Some(TorqueUnit::PoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopoundforceinch"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopound force inch"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOPOUND FORCE INCH"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopoundforceinches"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopound force inches"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOPOUND FORCE INCHES"),
+        Some(TorqueUnit::KilopoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapoundforceinch"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapound force inch"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGAPOUND FORCE INCH"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapoundforceinches"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapound force inches"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGAPOUND FORCE INCHES"),
+        Some(TorqueUnit::MegapoundForceInch)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundforcefoot"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("pound force foot"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUND FORCE FOOT"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("poundforcefeet"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("pound force feet"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("POUND FORCE FEET"),
+        Some(TorqueUnit::PoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopoundforcefoot"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopound force foot"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOPOUND FORCE FOOT"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopoundforcefeet"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilopound force feet"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOPOUND FORCE FEET"),
+        Some(TorqueUnit::KilopoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapoundforcefoot"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapound force foot"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGAPOUND FORCE FOOT"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapoundforcefeet"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("megapound force feet"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("MEGAPOUND FORCE FEET"),
+        Some(TorqueUnit::MegapoundForceFoot)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcemillimeter"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force millimeter"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE MILLIMETER"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcemillimeters"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force millimeters"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE MILLIMETERS"),
+        Some(TorqueUnit::GramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcecentimeter"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force centimeter"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE CENTIMETER"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcecentimeters"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force centimeters"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE CENTIMETERS"),
+        Some(TorqueUnit::GramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcemeter"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force meter"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE METER"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gramforcemeters"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("gram force meters"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("GRAM FORCE METERS"),
+        Some(TorqueUnit::GramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcemillimeter"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force millimeter"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE MILLIMETER"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcemillimeters"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force millimeters"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE MILLIMETERS"),
+        Some(TorqueUnit::KilogramForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcecentimeter"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force centimeter"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE CENTIMETER"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcecentimeters"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force centimeters"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE CENTIMETERS"),
+        Some(TorqueUnit::KilogramForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcemeter"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force meter"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE METER"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogramforcemeters"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("kilogram force meters"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("KILOGRAM FORCE METERS"),
+        Some(TorqueUnit::KilogramForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcemillimeter"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force millimeter"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE MILLIMETER"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcemillimeters"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force millimeters"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE MILLIMETERS"),
+        Some(TorqueUnit::TonneForceMillimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcecentimeter"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force centimeter"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE CENTIMETER"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcecentimeters"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force centimeters"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE CENTIMETERS"),
+        Some(TorqueUnit::TonneForceCentimeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcemeter"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force meter"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE METER"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonneforcemeters"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("tonne force meters"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+    assert_eq!(
+        TorqueUnit::from_name("TONNE FORCE METERS"),
+        Some(TorqueUnit::TonneForceMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Torque::from_base(6.0);
     let b = Torque::from_base(2.0);

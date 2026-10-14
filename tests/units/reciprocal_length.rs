@@ -734,6 +734,250 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemeter"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse meter"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE METER"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemeters"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse meters"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE METERS"),
+        Some(ReciprocalLengthUnit::InverseMeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversecentimeter"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse centimeter"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE CENTIMETER"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversecentimeters"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse centimeters"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE CENTIMETERS"),
+        Some(ReciprocalLengthUnit::InverseCentimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemillimeter"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse millimeter"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MILLIMETER"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemillimeters"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse millimeters"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MILLIMETERS"),
+        Some(ReciprocalLengthUnit::InverseMillimeter)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemile"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse mile"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MILE"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemiles"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse miles"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MILES"),
+        Some(ReciprocalLengthUnit::InverseMile)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseyard"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse yard"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE YARD"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseyards"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse yards"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE YARDS"),
+        Some(ReciprocalLengthUnit::InverseYard)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversefoot"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse foot"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE FOOT"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversefeet"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse feet"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE FEET"),
+        Some(ReciprocalLengthUnit::InverseFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseussurveyfoot"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse us survey foot"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE US SURVEY FOOT"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseussurveyfeet"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse us survey feet"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE US SURVEY FEET"),
+        Some(ReciprocalLengthUnit::InverseUsSurveyFoot)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseinch"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse inch"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE INCH"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverseinches"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse inches"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE INCHES"),
+        Some(ReciprocalLengthUnit::InverseInch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemil"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse mil"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MIL"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemils"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse mils"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MILS"),
+        Some(ReciprocalLengthUnit::InverseMil)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemicroinch"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse microinch"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MICROINCH"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inversemicroinches"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("inverse microinches"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+    assert_eq!(
+        ReciprocalLengthUnit::from_name("INVERSE MICROINCHES"),
+        Some(ReciprocalLengthUnit::InverseMicroinch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ReciprocalLength::from_base(6.0);
     let b = ReciprocalLength::from_base(2.0);

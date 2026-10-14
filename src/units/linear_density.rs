@@ -124,12 +124,59 @@ impl LinearDensityUnit {
             Self::KilogramPerFoot => &["kg/ft"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "grampermillimeter" => Some(Self::GramPerMillimeter),
+            "gramspermillimeter" => Some(Self::GramPerMillimeter),
+            "microgrampermillimeter" => Some(Self::MicrogramPerMillimeter),
+            "microgramspermillimeter" => Some(Self::MicrogramPerMillimeter),
+            "milligrampermillimeter" => Some(Self::MilligramPerMillimeter),
+            "milligramspermillimeter" => Some(Self::MilligramPerMillimeter),
+            "kilogrampermillimeter" => Some(Self::KilogramPerMillimeter),
+            "kilogramspermillimeter" => Some(Self::KilogramPerMillimeter),
+            "grampercentimeter" => Some(Self::GramPerCentimeter),
+            "gramspercentimeter" => Some(Self::GramPerCentimeter),
+            "microgrampercentimeter" => Some(Self::MicrogramPerCentimeter),
+            "microgramspercentimeter" => Some(Self::MicrogramPerCentimeter),
+            "milligrampercentimeter" => Some(Self::MilligramPerCentimeter),
+            "milligramspercentimeter" => Some(Self::MilligramPerCentimeter),
+            "kilogrampercentimeter" => Some(Self::KilogramPerCentimeter),
+            "kilogramspercentimeter" => Some(Self::KilogramPerCentimeter),
+            "grampermeter" => Some(Self::GramPerMeter),
+            "gramspermeter" => Some(Self::GramPerMeter),
+            "microgrampermeter" => Some(Self::MicrogramPerMeter),
+            "microgramspermeter" => Some(Self::MicrogramPerMeter),
+            "milligrampermeter" => Some(Self::MilligramPerMeter),
+            "milligramspermeter" => Some(Self::MilligramPerMeter),
+            "kilogrampermeter" => Some(Self::KilogramPerMeter),
+            "kilogramspermeter" => Some(Self::KilogramPerMeter),
+            "poundperinch" => Some(Self::PoundPerInch),
+            "poundsperinch" => Some(Self::PoundPerInch),
+            "poundperfoot" => Some(Self::PoundPerFoot),
+            "poundsperfoot" => Some(Self::PoundPerFoot),
+            "gramperfoot" => Some(Self::GramPerFoot),
+            "gramsperfoot" => Some(Self::GramPerFoot),
+            "microgramperfoot" => Some(Self::MicrogramPerFoot),
+            "microgramsperfoot" => Some(Self::MicrogramPerFoot),
+            "milligramperfoot" => Some(Self::MilligramPerFoot),
+            "milligramsperfoot" => Some(Self::MilligramPerFoot),
+            "kilogramperfoot" => Some(Self::KilogramPerFoot),
+            "kilogramsperfoot" => Some(Self::KilogramPerFoot),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LinearDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/mm" => Ok(Self::GramPerMillimeter),
@@ -150,7 +197,7 @@ impl core::str::FromStr for LinearDensityUnit {
             "µg/ft" => Ok(Self::MicrogramPerFoot),
             "mg/ft" => Ok(Self::MilligramPerFoot),
             "kg/ft" => Ok(Self::KilogramPerFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

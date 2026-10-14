@@ -120,12 +120,57 @@ impl AmountOfSubstanceUnit {
             Self::KilopoundMole => &["klbmol"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "mole" => Some(Self::Mole),
+            "moles" => Some(Self::Mole),
+            "femtomole" => Some(Self::Femtomole),
+            "femtomoles" => Some(Self::Femtomole),
+            "picomole" => Some(Self::Picomole),
+            "picomoles" => Some(Self::Picomole),
+            "nanomole" => Some(Self::Nanomole),
+            "nanomoles" => Some(Self::Nanomole),
+            "micromole" => Some(Self::Micromole),
+            "micromoles" => Some(Self::Micromole),
+            "millimole" => Some(Self::Millimole),
+            "millimoles" => Some(Self::Millimole),
+            "centimole" => Some(Self::Centimole),
+            "centimoles" => Some(Self::Centimole),
+            "decimole" => Some(Self::Decimole),
+            "decimoles" => Some(Self::Decimole),
+            "kilomole" => Some(Self::Kilomole),
+            "kilomoles" => Some(Self::Kilomole),
+            "megamole" => Some(Self::Megamole),
+            "megamoles" => Some(Self::Megamole),
+            "poundmole" => Some(Self::PoundMole),
+            "poundmoles" => Some(Self::PoundMole),
+            "nanopoundmole" => Some(Self::NanopoundMole),
+            "nanopoundmoles" => Some(Self::NanopoundMole),
+            "micropoundmole" => Some(Self::MicropoundMole),
+            "micropoundmoles" => Some(Self::MicropoundMole),
+            "millipoundmole" => Some(Self::MillipoundMole),
+            "millipoundmoles" => Some(Self::MillipoundMole),
+            "centipoundmole" => Some(Self::CentipoundMole),
+            "centipoundmoles" => Some(Self::CentipoundMole),
+            "decipoundmole" => Some(Self::DecipoundMole),
+            "decipoundmoles" => Some(Self::DecipoundMole),
+            "kilopoundmole" => Some(Self::KilopoundMole),
+            "kilopoundmoles" => Some(Self::KilopoundMole),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AmountOfSubstanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol" => Ok(Self::Mole),
@@ -145,7 +190,7 @@ impl core::str::FromStr for AmountOfSubstanceUnit {
             "clbmol" => Ok(Self::CentipoundMole),
             "dlbmol" => Ok(Self::DecipoundMole),
             "klbmol" => Ok(Self::KilopoundMole),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

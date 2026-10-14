@@ -463,6 +463,178 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperepersecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampere per second"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERE PER SECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperespersecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperes per second"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERES PER SECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliamperepersecond"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliampere per second"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("MILLIAMPERE PER SECOND"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliamperespersecond"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliamperes per second"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("MILLIAMPERES PER SECOND"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerSecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampereperminute"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampere per minute"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERE PER MINUTE"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperesperminute"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperes per minute"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERES PER MINUTE"),
+        Some(ElectricCurrentGradientUnit::AmperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliampereperminute"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliampere per minute"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("MILLIAMPERE PER MINUTE"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliamperesperminute"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("milliamperes per minute"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("MILLIAMPERES PER MINUTE"),
+        Some(ElectricCurrentGradientUnit::MilliamperePerMinute)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperepermillisecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampere per millisecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERE PER MILLISECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperespermillisecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperes per millisecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERES PER MILLISECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerMillisecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperepermicrosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampere per microsecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERE PER MICROSECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperespermicrosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperes per microsecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERES PER MICROSECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerMicrosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperepernanosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("ampere per nanosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERE PER NANOSECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperespernanosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("amperes per nanosecond"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+    assert_eq!(
+        ElectricCurrentGradientUnit::from_name("AMPERES PER NANOSECOND"),
+        Some(ElectricCurrentGradientUnit::AmperePerNanosecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricCurrentGradient::from_base(6.0);
     let b = ElectricCurrentGradient::from_base(2.0);

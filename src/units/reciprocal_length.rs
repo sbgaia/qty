@@ -92,12 +92,43 @@ impl ReciprocalLengthUnit {
             Self::InverseMicroinch => &["µin⁻¹", "1/µin"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "inversemeter" => Some(Self::InverseMeter),
+            "inversemeters" => Some(Self::InverseMeter),
+            "inversecentimeter" => Some(Self::InverseCentimeter),
+            "inversecentimeters" => Some(Self::InverseCentimeter),
+            "inversemillimeter" => Some(Self::InverseMillimeter),
+            "inversemillimeters" => Some(Self::InverseMillimeter),
+            "inversemile" => Some(Self::InverseMile),
+            "inversemiles" => Some(Self::InverseMile),
+            "inverseyard" => Some(Self::InverseYard),
+            "inverseyards" => Some(Self::InverseYard),
+            "inversefoot" => Some(Self::InverseFoot),
+            "inversefeet" => Some(Self::InverseFoot),
+            "inverseussurveyfoot" => Some(Self::InverseUsSurveyFoot),
+            "inverseussurveyfeet" => Some(Self::InverseUsSurveyFoot),
+            "inverseinch" => Some(Self::InverseInch),
+            "inverseinches" => Some(Self::InverseInch),
+            "inversemil" => Some(Self::InverseMil),
+            "inversemils" => Some(Self::InverseMil),
+            "inversemicroinch" => Some(Self::InverseMicroinch),
+            "inversemicroinches" => Some(Self::InverseMicroinch),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ReciprocalLengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁻¹" => Ok(Self::InverseMeter),
@@ -120,7 +151,7 @@ impl core::str::FromStr for ReciprocalLengthUnit {
             "1/mil" => Ok(Self::InverseMil),
             "µin⁻¹" => Ok(Self::InverseMicroinch),
             "1/µin" => Ok(Self::InverseMicroinch),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

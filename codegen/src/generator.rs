@@ -300,31 +300,68 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     }
     w!(out, "        }}");
     w!(out, "    }}");
+    w!(out);
 
+    // Names: case-insensitive, singular or plural, spaces/`_`/`-` ignored.
+    w!(
+        out,
+        "    /// Parses a unit *name*, singular or plural, ignoring case, spaces,"
+    );
+    w!(
+        out,
+        "    /// `_` and `-`, and accepting British spellings: `\"kilometres\"`,"
+    );
+    w!(out, "    /// `\"Square Meter\"`, `\"square_meters\"`.");
+    w!(out, "    pub fn from_name(name: &str) -> Option<Self> {{");
+    w!(out, "        let mut buf = [0; 64];");
+    w!(
+        out,
+        "        match crate::normalize_unit_name(name, &mut buf)? {{"
+    );
+    for (key, variant) in name_map(qty) {
+        w!(
+            out,
+            "            {} => Some(Self::{}),",
+            rust_str_literal(&key),
+            variant
+        );
+    }
+    w!(out, "            _ => None,");
+    w!(out, "        }}");
+    w!(out, "    }}");
     w!(out, "}}");
     w!(out);
 
-    // FromStr: a `match` on the abbreviation, compiled to an efficient
-    // decision tree rather than a linear scan.
+    // FromStr: a `match` on the abbreviation (exact, case-sensitive: `mm`
+    // is not `Mm`), then on the name.
     w!(out, "impl core::str::FromStr for {} {{", enum_name);
     w!(out, "    type Err = crate::ParseError;");
     w!(out);
-    w!(out, "    /// Parses a unit abbreviation, e.g. `\"km\"`.");
+    w!(
+        out,
+        "    /// Parses a unit abbreviation (exact, e.g. `\"km\"`) or name (lenient,"
+    );
+    w!(
+        out,
+        "    /// e.g. `\"kilometers\"`); see [`Self::from_name`]."
+    );
     w!(
         out,
         "    fn from_str(s: &str) -> Result<Self, crate::ParseError> {{"
     );
-    let map = parse_map(qty);
-    if map.is_empty() {
-        w!(out, "        let _ = s;");
-        w!(out, "        Err(crate::ParseError::UnknownUnit)");
+    let abbreviations = parse_map(qty);
+    if abbreviations.is_empty() {
+        w!(
+            out,
+            "        Self::from_name(s).ok_or(crate::ParseError::UnknownUnit)"
+        );
         w!(out, "    }}");
         w!(out, "}}");
         w!(out);
         return;
     }
     w!(out, "        match s {{");
-    for (abbr, variant) in map {
+    for (abbr, variant) in abbreviations {
         w!(
             out,
             "            {} => Ok(Self::{}),",
@@ -332,11 +369,35 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
             variant
         );
     }
-    w!(out, "            _ => Err(crate::ParseError::UnknownUnit),");
+    w!(
+        out,
+        "            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),"
+    );
     w!(out, "        }}");
     w!(out, "    }}");
     w!(out, "}}");
     w!(out);
+}
+
+/// Every normalised unit name (singular and plural) and its variant. Names
+/// shared by two units are left out: ambiguous, so not accepted.
+pub fn name_map(qty: &QuantityDef) -> Vec<(String, &str)> {
+    let mut map: Vec<(String, &str)> = Vec::new();
+    let mut ambiguous = std::collections::HashSet::new();
+    for unit in &qty.units {
+        for name in [&unit.singular, &unit.plural] {
+            let key = name.to_lowercase();
+            match map.iter().find(|(k, _)| *k == key) {
+                Some((_, v)) if *v != unit.singular => {
+                    ambiguous.insert(key);
+                }
+                Some(_) => {}
+                None => map.push((key, &unit.singular)),
+            }
+        }
+    }
+    map.retain(|(k, _)| !ambiguous.contains(k));
+    map
 }
 
 /// Every `(abbreviation, variant)` pair accepted by `FromStr`. When several
@@ -782,6 +843,35 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
         out,
         "    assert_eq!(\"1 not-a-unit\".parse::<{name}>(), Err(ParseError::UnknownUnit));"
     );
+    w!(out, "}}");
+    w!(out);
+
+    // Names: every singular and plural name, in several spellings.
+    w!(out, "#[test]");
+    w!(out, "fn parse_every_name() {{");
+    for unit in &qty.units {
+        for written in [&unit.singular, &unit.plural] {
+            if !name_map(qty)
+                .iter()
+                .any(|(k, v)| *k == written.to_lowercase() && *v == unit.singular)
+            {
+                continue;
+            }
+            let spaced = written.to_snake_case().replace('_', " ");
+            for form in [
+                written.to_lowercase(),
+                spaced.clone(),
+                spaced.to_uppercase(),
+            ] {
+                w!(
+                    out,
+                    "    assert_eq!({enum_name}::from_name({}), Some({enum_name}::{}));",
+                    rust_str_literal(&form),
+                    unit.singular
+                );
+            }
+        }
+    }
     w!(out, "}}");
     w!(out);
 

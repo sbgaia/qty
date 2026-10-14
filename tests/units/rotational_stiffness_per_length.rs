@@ -448,6 +448,130 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("newtonmeterperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("newton meter per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("NEWTON METER PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("newtonmetersperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("newton meters per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("NEWTON METERS PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilonewtonmeterperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilonewton meter per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("KILONEWTON METER PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilonewtonmetersperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilonewton meters per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("KILONEWTON METERS PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("meganewtonmeterperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("meganewton meter per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("MEGANEWTON METER PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("meganewtonmetersperradianpermeter"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("meganewton meters per radian per meter"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("MEGANEWTON METERS PER RADIAN PER METER"),
+        Some(RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("poundforcefootperdegreesperfoot"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("pound force foot per degrees per foot"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("POUND FORCE FOOT PER DEGREES PER FOOT"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("poundforcefeetperdegreesperfeet"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("pound force feet per degrees per feet"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("POUND FORCE FEET PER DEGREES PER FEET"),
+        Some(RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilopoundforcefootperdegreesperfoot"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilopound force foot per degrees per foot"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("KILOPOUND FORCE FOOT PER DEGREES PER FOOT"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilopoundforcefeetperdegreesperfeet"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("kilopound force feet per degrees per feet"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+    assert_eq!(
+        RotationalStiffnessPerLengthUnit::from_name("KILOPOUND FORCE FEET PER DEGREES PER FEET"),
+        Some(RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RotationalStiffnessPerLength::from_base(6.0);
     let b = RotationalStiffnessPerLength::from_base(2.0);

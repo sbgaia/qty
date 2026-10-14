@@ -172,12 +172,82 @@ impl SpecificEnergyUnit {
             Self::BtuPerPound => &["btu/lb"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "jouleperkilogram" => Some(Self::JoulePerKilogram),
+            "joulesperkilogram" => Some(Self::JoulePerKilogram),
+            "kilojouleperkilogram" => Some(Self::KilojoulePerKilogram),
+            "kilojoulesperkilogram" => Some(Self::KilojoulePerKilogram),
+            "megajouleperkilogram" => Some(Self::MegajoulePerKilogram),
+            "megajoulesperkilogram" => Some(Self::MegajoulePerKilogram),
+            "megajoulepertonne" => Some(Self::MegajoulePerTonne),
+            "megajoulespertonne" => Some(Self::MegajoulePerTonne),
+            "caloriepergram" => Some(Self::CaloriePerGram),
+            "caloriespergram" => Some(Self::CaloriePerGram),
+            "kilocaloriepergram" => Some(Self::KilocaloriePerGram),
+            "kilocaloriespergram" => Some(Self::KilocaloriePerGram),
+            "watthourperkilogram" => Some(Self::WattHourPerKilogram),
+            "watthoursperkilogram" => Some(Self::WattHourPerKilogram),
+            "kilowatthourperkilogram" => Some(Self::KilowattHourPerKilogram),
+            "kilowatthoursperkilogram" => Some(Self::KilowattHourPerKilogram),
+            "megawatthourperkilogram" => Some(Self::MegawattHourPerKilogram),
+            "megawatthoursperkilogram" => Some(Self::MegawattHourPerKilogram),
+            "gigawatthourperkilogram" => Some(Self::GigawattHourPerKilogram),
+            "gigawatthoursperkilogram" => Some(Self::GigawattHourPerKilogram),
+            "wattdayperkilogram" => Some(Self::WattDayPerKilogram),
+            "wattdaysperkilogram" => Some(Self::WattDayPerKilogram),
+            "kilowattdayperkilogram" => Some(Self::KilowattDayPerKilogram),
+            "kilowattdaysperkilogram" => Some(Self::KilowattDayPerKilogram),
+            "megawattdayperkilogram" => Some(Self::MegawattDayPerKilogram),
+            "megawattdaysperkilogram" => Some(Self::MegawattDayPerKilogram),
+            "gigawattdayperkilogram" => Some(Self::GigawattDayPerKilogram),
+            "gigawattdaysperkilogram" => Some(Self::GigawattDayPerKilogram),
+            "terawattdayperkilogram" => Some(Self::TerawattDayPerKilogram),
+            "terawattdaysperkilogram" => Some(Self::TerawattDayPerKilogram),
+            "wattdaypertonne" => Some(Self::WattDayPerTonne),
+            "wattdayspertonne" => Some(Self::WattDayPerTonne),
+            "kilowattdaypertonne" => Some(Self::KilowattDayPerTonne),
+            "kilowattdayspertonne" => Some(Self::KilowattDayPerTonne),
+            "megawattdaypertonne" => Some(Self::MegawattDayPerTonne),
+            "megawattdayspertonne" => Some(Self::MegawattDayPerTonne),
+            "gigawattdaypertonne" => Some(Self::GigawattDayPerTonne),
+            "gigawattdayspertonne" => Some(Self::GigawattDayPerTonne),
+            "terawattdaypertonne" => Some(Self::TerawattDayPerTonne),
+            "terawattdayspertonne" => Some(Self::TerawattDayPerTonne),
+            "wattdaypershortton" => Some(Self::WattDayPerShortTon),
+            "wattdayspershortton" => Some(Self::WattDayPerShortTon),
+            "kilowattdaypershortton" => Some(Self::KilowattDayPerShortTon),
+            "kilowattdayspershortton" => Some(Self::KilowattDayPerShortTon),
+            "megawattdaypershortton" => Some(Self::MegawattDayPerShortTon),
+            "megawattdayspershortton" => Some(Self::MegawattDayPerShortTon),
+            "gigawattdaypershortton" => Some(Self::GigawattDayPerShortTon),
+            "gigawattdayspershortton" => Some(Self::GigawattDayPerShortTon),
+            "terawattdaypershortton" => Some(Self::TerawattDayPerShortTon),
+            "terawattdayspershortton" => Some(Self::TerawattDayPerShortTon),
+            "watthourperpound" => Some(Self::WattHourPerPound),
+            "watthoursperpound" => Some(Self::WattHourPerPound),
+            "kilowatthourperpound" => Some(Self::KilowattHourPerPound),
+            "kilowatthoursperpound" => Some(Self::KilowattHourPerPound),
+            "megawatthourperpound" => Some(Self::MegawattHourPerPound),
+            "megawatthoursperpound" => Some(Self::MegawattHourPerPound),
+            "gigawatthourperpound" => Some(Self::GigawattHourPerPound),
+            "gigawatthoursperpound" => Some(Self::GigawattHourPerPound),
+            "btuperpound" => Some(Self::BtuPerPound),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for SpecificEnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/kg" => Ok(Self::JoulePerKilogram),
@@ -210,7 +280,7 @@ impl core::str::FromStr for SpecificEnergyUnit {
             "MWh/lbs" => Ok(Self::MegawattHourPerPound),
             "GWh/lbs" => Ok(Self::GigawattHourPerPound),
             "btu/lb" => Ok(Self::BtuPerPound),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

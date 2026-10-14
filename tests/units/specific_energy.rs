@@ -1784,6 +1784,730 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SpecificEnergyUnit::from_name("jouleperkilogram"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("joule per kilogram"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("JOULE PER KILOGRAM"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("joulesperkilogram"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("joules per kilogram"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("JOULES PER KILOGRAM"),
+        Some(SpecificEnergyUnit::JoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilojouleperkilogram"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilojoule per kilogram"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOJOULE PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilojoulesperkilogram"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilojoules per kilogram"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOJOULES PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilojoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajouleperkilogram"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoule per kilogram"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAJOULE PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoulesperkilogram"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoules per kilogram"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAJOULES PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegajoulePerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoulepertonne"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoule per tonne"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAJOULE PER TONNE"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoulespertonne"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megajoules per tonne"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAJOULES PER TONNE"),
+        Some(SpecificEnergyUnit::MegajoulePerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("caloriepergram"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("calorie per gram"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("CALORIE PER GRAM"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("caloriespergram"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("calories per gram"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("CALORIES PER GRAM"),
+        Some(SpecificEnergyUnit::CaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilocaloriepergram"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilocalorie per gram"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOCALORIE PER GRAM"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilocaloriespergram"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilocalories per gram"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOCALORIES PER GRAM"),
+        Some(SpecificEnergyUnit::KilocaloriePerGram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watthourperkilogram"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt hour per kilogram"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT HOUR PER KILOGRAM"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watthoursperkilogram"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt hours per kilogram"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT HOURS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::WattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatthourperkilogram"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt hour per kilogram"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT HOUR PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatthoursperkilogram"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt hours per kilogram"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT HOURS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilowattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatthourperkilogram"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt hour per kilogram"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT HOUR PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatthoursperkilogram"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt hours per kilogram"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT HOURS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatthourperkilogram"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt hour per kilogram"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT HOUR PER KILOGRAM"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatthoursperkilogram"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt hours per kilogram"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT HOURS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::GigawattHourPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdayperkilogram"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt day per kilogram"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAY PER KILOGRAM"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdaysperkilogram"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt days per kilogram"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAYS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::WattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdayperkilogram"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt day per kilogram"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAY PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdaysperkilogram"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt days per kilogram"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAYS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::KilowattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdayperkilogram"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt day per kilogram"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAY PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdaysperkilogram"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt days per kilogram"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAYS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::MegawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdayperkilogram"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt day per kilogram"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAY PER KILOGRAM"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdaysperkilogram"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt days per kilogram"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAYS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::GigawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdayperkilogram"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt day per kilogram"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAY PER KILOGRAM"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdaysperkilogram"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt days per kilogram"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAYS PER KILOGRAM"),
+        Some(SpecificEnergyUnit::TerawattDayPerKilogram)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdaypertonne"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt day per tonne"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAY PER TONNE"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdayspertonne"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt days per tonne"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAYS PER TONNE"),
+        Some(SpecificEnergyUnit::WattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdaypertonne"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt day per tonne"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAY PER TONNE"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdayspertonne"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt days per tonne"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAYS PER TONNE"),
+        Some(SpecificEnergyUnit::KilowattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdaypertonne"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt day per tonne"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAY PER TONNE"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdayspertonne"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt days per tonne"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAYS PER TONNE"),
+        Some(SpecificEnergyUnit::MegawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdaypertonne"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt day per tonne"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAY PER TONNE"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdayspertonne"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt days per tonne"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAYS PER TONNE"),
+        Some(SpecificEnergyUnit::GigawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdaypertonne"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt day per tonne"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAY PER TONNE"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdayspertonne"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt days per tonne"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAYS PER TONNE"),
+        Some(SpecificEnergyUnit::TerawattDayPerTonne)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdaypershortton"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt day per short ton"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAY PER SHORT TON"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("wattdayspershortton"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt days per short ton"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT DAYS PER SHORT TON"),
+        Some(SpecificEnergyUnit::WattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdaypershortton"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt day per short ton"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAY PER SHORT TON"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowattdayspershortton"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt days per short ton"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT DAYS PER SHORT TON"),
+        Some(SpecificEnergyUnit::KilowattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdaypershortton"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt day per short ton"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAY PER SHORT TON"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawattdayspershortton"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt days per short ton"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT DAYS PER SHORT TON"),
+        Some(SpecificEnergyUnit::MegawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdaypershortton"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt day per short ton"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAY PER SHORT TON"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawattdayspershortton"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt days per short ton"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT DAYS PER SHORT TON"),
+        Some(SpecificEnergyUnit::GigawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdaypershortton"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt day per short ton"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAY PER SHORT TON"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawattdayspershortton"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("terawatt days per short ton"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("TERAWATT DAYS PER SHORT TON"),
+        Some(SpecificEnergyUnit::TerawattDayPerShortTon)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watthourperpound"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt hour per pound"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT HOUR PER POUND"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watthoursperpound"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("watt hours per pound"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("WATT HOURS PER POUND"),
+        Some(SpecificEnergyUnit::WattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatthourperpound"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt hour per pound"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT HOUR PER POUND"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatthoursperpound"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("kilowatt hours per pound"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("KILOWATT HOURS PER POUND"),
+        Some(SpecificEnergyUnit::KilowattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatthourperpound"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt hour per pound"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT HOUR PER POUND"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatthoursperpound"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("megawatt hours per pound"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("MEGAWATT HOURS PER POUND"),
+        Some(SpecificEnergyUnit::MegawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatthourperpound"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt hour per pound"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT HOUR PER POUND"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatthoursperpound"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("gigawatt hours per pound"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("GIGAWATT HOURS PER POUND"),
+        Some(SpecificEnergyUnit::GigawattHourPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("btuperpound"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("btu per pound"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("BTU PER POUND"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("btuperpound"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("btu per pound"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+    assert_eq!(
+        SpecificEnergyUnit::from_name("BTU PER POUND"),
+        Some(SpecificEnergyUnit::BtuPerPound)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = SpecificEnergy::from_base(6.0);
     let b = SpecificEnergy::from_base(2.0);

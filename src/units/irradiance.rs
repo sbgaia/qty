@@ -108,12 +108,51 @@ impl IrradianceUnit {
             Self::MegawattPerSquareCentimeter => &["MW/cm²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "wattpersquaremeter" => Some(Self::WattPerSquareMeter),
+            "wattspersquaremeter" => Some(Self::WattPerSquareMeter),
+            "picowattpersquaremeter" => Some(Self::PicowattPerSquareMeter),
+            "picowattspersquaremeter" => Some(Self::PicowattPerSquareMeter),
+            "nanowattpersquaremeter" => Some(Self::NanowattPerSquareMeter),
+            "nanowattspersquaremeter" => Some(Self::NanowattPerSquareMeter),
+            "microwattpersquaremeter" => Some(Self::MicrowattPerSquareMeter),
+            "microwattspersquaremeter" => Some(Self::MicrowattPerSquareMeter),
+            "milliwattpersquaremeter" => Some(Self::MilliwattPerSquareMeter),
+            "milliwattspersquaremeter" => Some(Self::MilliwattPerSquareMeter),
+            "kilowattpersquaremeter" => Some(Self::KilowattPerSquareMeter),
+            "kilowattspersquaremeter" => Some(Self::KilowattPerSquareMeter),
+            "megawattpersquaremeter" => Some(Self::MegawattPerSquareMeter),
+            "megawattspersquaremeter" => Some(Self::MegawattPerSquareMeter),
+            "wattpersquarecentimeter" => Some(Self::WattPerSquareCentimeter),
+            "wattspersquarecentimeter" => Some(Self::WattPerSquareCentimeter),
+            "picowattpersquarecentimeter" => Some(Self::PicowattPerSquareCentimeter),
+            "picowattspersquarecentimeter" => Some(Self::PicowattPerSquareCentimeter),
+            "nanowattpersquarecentimeter" => Some(Self::NanowattPerSquareCentimeter),
+            "nanowattspersquarecentimeter" => Some(Self::NanowattPerSquareCentimeter),
+            "microwattpersquarecentimeter" => Some(Self::MicrowattPerSquareCentimeter),
+            "microwattspersquarecentimeter" => Some(Self::MicrowattPerSquareCentimeter),
+            "milliwattpersquarecentimeter" => Some(Self::MilliwattPerSquareCentimeter),
+            "milliwattspersquarecentimeter" => Some(Self::MilliwattPerSquareCentimeter),
+            "kilowattpersquarecentimeter" => Some(Self::KilowattPerSquareCentimeter),
+            "kilowattspersquarecentimeter" => Some(Self::KilowattPerSquareCentimeter),
+            "megawattpersquarecentimeter" => Some(Self::MegawattPerSquareCentimeter),
+            "megawattspersquarecentimeter" => Some(Self::MegawattPerSquareCentimeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for IrradianceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/m²" => Ok(Self::WattPerSquareMeter),
@@ -130,7 +169,7 @@ impl core::str::FromStr for IrradianceUnit {
             "mW/cm²" => Ok(Self::MilliwattPerSquareCentimeter),
             "kW/cm²" => Ok(Self::KilowattPerSquareCentimeter),
             "MW/cm²" => Ok(Self::MegawattPerSquareCentimeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

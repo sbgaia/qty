@@ -629,6 +629,226 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joulepercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joule per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("JOULE PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joulespercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joules per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("JOULES PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoulepercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoule per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOJOULE PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoulespercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoules per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOJOULES PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoulepercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoule per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("MEGAJOULE PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoulespercubicmeterkelvin"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoules per cubic meter kelvin"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("MEGAJOULES PER CUBIC METER KELVIN"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joulepercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joule per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("JOULE PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joulespercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("joules per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("JOULES PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoulepercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoule per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOJOULE PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoulespercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilojoules per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOJOULES PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoulepercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoule per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("MEGAJOULE PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoulespercubicmeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("megajoules per cubic meter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("MEGAJOULES PER CUBIC METER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("caloriepercubiccentimeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("calorie per cubic centimeter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("CALORIE PER CUBIC CENTIMETER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("caloriespercubiccentimeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("calories per cubic centimeter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("CALORIES PER CUBIC CENTIMETER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilocaloriepercubiccentimeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilocalorie per cubic centimeter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOCALORIE PER CUBIC CENTIMETER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilocaloriespercubiccentimeterdegreecelsius"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("kilocalories per cubic centimeter degree celsius"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("KILOCALORIES PER CUBIC CENTIMETER DEGREE CELSIUS"),
+        Some(VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("btupercubicfootdegreefahrenheit"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("btu per cubic foot degree fahrenheit"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("BTU PER CUBIC FOOT DEGREE FAHRENHEIT"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("btuspercubicfootdegreefahrenheit"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("btus per cubic foot degree fahrenheit"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        VolumetricHeatCapacityUnit::from_name("BTUS PER CUBIC FOOT DEGREE FAHRENHEIT"),
+        Some(VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VolumetricHeatCapacity::from_base(6.0);
     let b = VolumetricHeatCapacity::from_base(2.0);

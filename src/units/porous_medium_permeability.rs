@@ -75,12 +75,33 @@ impl PorousMediumPermeabilityUnit {
             Self::SquareCentimeter => &["cm²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "darcy" => Some(Self::Darcy),
+            "darcys" => Some(Self::Darcy),
+            "microdarcy" => Some(Self::Microdarcy),
+            "microdarcys" => Some(Self::Microdarcy),
+            "millidarcy" => Some(Self::Millidarcy),
+            "millidarcys" => Some(Self::Millidarcy),
+            "squaremeter" => Some(Self::SquareMeter),
+            "squaremeters" => Some(Self::SquareMeter),
+            "squarecentimeter" => Some(Self::SquareCentimeter),
+            "squarecentimeters" => Some(Self::SquareCentimeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for PorousMediumPermeabilityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "D" => Ok(Self::Darcy),
@@ -88,7 +109,7 @@ impl core::str::FromStr for PorousMediumPermeabilityUnit {
             "mD" => Ok(Self::Millidarcy),
             "m²" => Ok(Self::SquareMeter),
             "cm²" => Ok(Self::SquareCentimeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

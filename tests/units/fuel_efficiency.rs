@@ -280,6 +280,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("literper100kilometers"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("liter per100 kilometers"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("LITER PER100 KILOMETERS"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("litersper100kilometers"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("liters per100 kilometers"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("LITERS PER100 KILOMETERS"),
+        Some(FuelEfficiencyUnit::LiterPer100Kilometers)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("mileperusgallon"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("mile per us gallon"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("MILE PER US GALLON"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("milesperusgallon"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("miles per us gallon"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("MILES PER US GALLON"),
+        Some(FuelEfficiencyUnit::MilePerUsGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("mileperukgallon"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("mile per uk gallon"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("MILE PER UK GALLON"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("milesperukgallon"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("miles per uk gallon"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("MILES PER UK GALLON"),
+        Some(FuelEfficiencyUnit::MilePerUkGallon)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("kilometerperliter"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("kilometer per liter"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("KILOMETER PER LITER"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("kilometersperliter"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("kilometers per liter"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+    assert_eq!(
+        FuelEfficiencyUnit::from_name("KILOMETERS PER LITER"),
+        Some(FuelEfficiencyUnit::KilometerPerLiter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = FuelEfficiency::from_base(6.0);
     let b = FuelEfficiency::from_base(2.0);

@@ -84,12 +84,39 @@ impl RadiationExposureUnit {
             Self::Milliroentgen => &["mR"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "coulombperkilogram" => Some(Self::CoulombPerKilogram),
+            "coulombsperkilogram" => Some(Self::CoulombPerKilogram),
+            "picocoulombperkilogram" => Some(Self::PicocoulombPerKilogram),
+            "picocoulombsperkilogram" => Some(Self::PicocoulombPerKilogram),
+            "nanocoulombperkilogram" => Some(Self::NanocoulombPerKilogram),
+            "nanocoulombsperkilogram" => Some(Self::NanocoulombPerKilogram),
+            "microcoulombperkilogram" => Some(Self::MicrocoulombPerKilogram),
+            "microcoulombsperkilogram" => Some(Self::MicrocoulombPerKilogram),
+            "millicoulombperkilogram" => Some(Self::MillicoulombPerKilogram),
+            "millicoulombsperkilogram" => Some(Self::MillicoulombPerKilogram),
+            "roentgen" => Some(Self::Roentgen),
+            "roentgens" => Some(Self::Roentgen),
+            "microroentgen" => Some(Self::Microroentgen),
+            "microroentgens" => Some(Self::Microroentgen),
+            "milliroentgen" => Some(Self::Milliroentgen),
+            "milliroentgens" => Some(Self::Milliroentgen),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RadiationExposureUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "C/kg" => Ok(Self::CoulombPerKilogram),
@@ -100,7 +127,7 @@ impl core::str::FromStr for RadiationExposureUnit {
             "R" => Ok(Self::Roentgen),
             "µR" => Ok(Self::Microroentgen),
             "mR" => Ok(Self::Milliroentgen),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -306,6 +306,136 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RatioUnit::from_name("decimalfraction"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(
+        RatioUnit::from_name("decimal fraction"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(
+        RatioUnit::from_name("DECIMAL FRACTION"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(
+        RatioUnit::from_name("decimalfractions"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(
+        RatioUnit::from_name("decimal fractions"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(
+        RatioUnit::from_name("DECIMAL FRACTIONS"),
+        Some(RatioUnit::DecimalFraction)
+    );
+    assert_eq!(RatioUnit::from_name("percent"), Some(RatioUnit::Percent));
+    assert_eq!(RatioUnit::from_name("percent"), Some(RatioUnit::Percent));
+    assert_eq!(RatioUnit::from_name("PERCENT"), Some(RatioUnit::Percent));
+    assert_eq!(RatioUnit::from_name("percent"), Some(RatioUnit::Percent));
+    assert_eq!(RatioUnit::from_name("percent"), Some(RatioUnit::Percent));
+    assert_eq!(RatioUnit::from_name("PERCENT"), Some(RatioUnit::Percent));
+    assert_eq!(
+        RatioUnit::from_name("partperthousand"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("part per thousand"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PART PER THOUSAND"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partsperthousand"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("parts per thousand"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PARTS PER THOUSAND"),
+        Some(RatioUnit::PartPerThousand)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partpermillion"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("part per million"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PART PER MILLION"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partspermillion"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("parts per million"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PARTS PER MILLION"),
+        Some(RatioUnit::PartPerMillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partperbillion"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("part per billion"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PART PER BILLION"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partsperbillion"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("parts per billion"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PARTS PER BILLION"),
+        Some(RatioUnit::PartPerBillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partpertrillion"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("part per trillion"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PART PER TRILLION"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("partspertrillion"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("parts per trillion"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        RatioUnit::from_name("PARTS PER TRILLION"),
+        Some(RatioUnit::PartPerTrillion)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Ratio::from_base(6.0);
     let b = Ratio::from_base(2.0);

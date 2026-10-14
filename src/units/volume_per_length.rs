@@ -88,12 +88,41 @@ impl VolumePerLengthUnit {
             Self::ImperialGallonPerMile => &["gal (imp.)/mi"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "cubicmeterpermeter" => Some(Self::CubicMeterPerMeter),
+            "cubicmeterspermeter" => Some(Self::CubicMeterPerMeter),
+            "literpermeter" => Some(Self::LiterPerMeter),
+            "literspermeter" => Some(Self::LiterPerMeter),
+            "literperkilometer" => Some(Self::LiterPerKilometer),
+            "litersperkilometer" => Some(Self::LiterPerKilometer),
+            "literpermillimeter" => Some(Self::LiterPerMillimeter),
+            "literspermillimeter" => Some(Self::LiterPerMillimeter),
+            "oilbarrelperfoot" => Some(Self::OilBarrelPerFoot),
+            "oilbarrelsperfoot" => Some(Self::OilBarrelPerFoot),
+            "cubicyardperfoot" => Some(Self::CubicYardPerFoot),
+            "cubicyardsperfoot" => Some(Self::CubicYardPerFoot),
+            "cubicyardperussurveyfoot" => Some(Self::CubicYardPerUsSurveyFoot),
+            "cubicyardsperussurveyfoot" => Some(Self::CubicYardPerUsSurveyFoot),
+            "usgallonpermile" => Some(Self::UsGallonPerMile),
+            "usgallonspermile" => Some(Self::UsGallonPerMile),
+            "imperialgallonpermile" => Some(Self::ImperialGallonPerMile),
+            "imperialgallonspermile" => Some(Self::ImperialGallonPerMile),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for VolumePerLengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m³/m" => Ok(Self::CubicMeterPerMeter),
@@ -105,7 +134,7 @@ impl core::str::FromStr for VolumePerLengthUnit {
             "yd³/ftUS" => Ok(Self::CubicYardPerUsSurveyFoot),
             "gal (U.S.)/mi" => Ok(Self::UsGallonPerMile),
             "gal (imp.)/mi" => Ok(Self::ImperialGallonPerMile),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

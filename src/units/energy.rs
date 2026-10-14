@@ -219,12 +219,103 @@ impl EnergyUnit {
             Self::HorsepowerHour => &["hp·h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "joule" => Some(Self::Joule),
+            "joules" => Some(Self::Joule),
+            "nanojoule" => Some(Self::Nanojoule),
+            "nanojoules" => Some(Self::Nanojoule),
+            "microjoule" => Some(Self::Microjoule),
+            "microjoules" => Some(Self::Microjoule),
+            "millijoule" => Some(Self::Millijoule),
+            "millijoules" => Some(Self::Millijoule),
+            "kilojoule" => Some(Self::Kilojoule),
+            "kilojoules" => Some(Self::Kilojoule),
+            "megajoule" => Some(Self::Megajoule),
+            "megajoules" => Some(Self::Megajoule),
+            "gigajoule" => Some(Self::Gigajoule),
+            "gigajoules" => Some(Self::Gigajoule),
+            "terajoule" => Some(Self::Terajoule),
+            "terajoules" => Some(Self::Terajoule),
+            "petajoule" => Some(Self::Petajoule),
+            "petajoules" => Some(Self::Petajoule),
+            "calorie" => Some(Self::Calorie),
+            "calories" => Some(Self::Calorie),
+            "kilocalorie" => Some(Self::Kilocalorie),
+            "kilocalories" => Some(Self::Kilocalorie),
+            "megacalorie" => Some(Self::Megacalorie),
+            "megacalories" => Some(Self::Megacalorie),
+            "britishthermalunit" => Some(Self::BritishThermalUnit),
+            "britishthermalunits" => Some(Self::BritishThermalUnit),
+            "kilobritishthermalunit" => Some(Self::KilobritishThermalUnit),
+            "kilobritishthermalunits" => Some(Self::KilobritishThermalUnit),
+            "megabritishthermalunit" => Some(Self::MegabritishThermalUnit),
+            "megabritishthermalunits" => Some(Self::MegabritishThermalUnit),
+            "gigabritishthermalunit" => Some(Self::GigabritishThermalUnit),
+            "gigabritishthermalunits" => Some(Self::GigabritishThermalUnit),
+            "electronvolt" => Some(Self::ElectronVolt),
+            "electronvolts" => Some(Self::ElectronVolt),
+            "kiloelectronvolt" => Some(Self::KiloelectronVolt),
+            "kiloelectronvolts" => Some(Self::KiloelectronVolt),
+            "megaelectronvolt" => Some(Self::MegaelectronVolt),
+            "megaelectronvolts" => Some(Self::MegaelectronVolt),
+            "gigaelectronvolt" => Some(Self::GigaelectronVolt),
+            "gigaelectronvolts" => Some(Self::GigaelectronVolt),
+            "teraelectronvolt" => Some(Self::TeraelectronVolt),
+            "teraelectronvolts" => Some(Self::TeraelectronVolt),
+            "footpound" => Some(Self::FootPound),
+            "footpounds" => Some(Self::FootPound),
+            "erg" => Some(Self::Erg),
+            "ergs" => Some(Self::Erg),
+            "watthour" => Some(Self::WattHour),
+            "watthours" => Some(Self::WattHour),
+            "kilowatthour" => Some(Self::KilowattHour),
+            "kilowatthours" => Some(Self::KilowattHour),
+            "megawatthour" => Some(Self::MegawattHour),
+            "megawatthours" => Some(Self::MegawattHour),
+            "gigawatthour" => Some(Self::GigawattHour),
+            "gigawatthours" => Some(Self::GigawattHour),
+            "terawatthour" => Some(Self::TerawattHour),
+            "terawatthours" => Some(Self::TerawattHour),
+            "wattday" => Some(Self::WattDay),
+            "wattdays" => Some(Self::WattDay),
+            "kilowattday" => Some(Self::KilowattDay),
+            "kilowattdays" => Some(Self::KilowattDay),
+            "megawattday" => Some(Self::MegawattDay),
+            "megawattdays" => Some(Self::MegawattDay),
+            "gigawattday" => Some(Self::GigawattDay),
+            "gigawattdays" => Some(Self::GigawattDay),
+            "terawattday" => Some(Self::TerawattDay),
+            "terawattdays" => Some(Self::TerawattDay),
+            "thermec" => Some(Self::ThermEc),
+            "thermsec" => Some(Self::ThermEc),
+            "decathermec" => Some(Self::DecathermEc),
+            "decathermsec" => Some(Self::DecathermEc),
+            "thermus" => Some(Self::ThermUs),
+            "thermsus" => Some(Self::ThermUs),
+            "decathermus" => Some(Self::DecathermUs),
+            "decathermsus" => Some(Self::DecathermUs),
+            "thermimperial" => Some(Self::ThermImperial),
+            "thermsimperial" => Some(Self::ThermImperial),
+            "decathermimperial" => Some(Self::DecathermImperial),
+            "decathermsimperial" => Some(Self::DecathermImperial),
+            "horsepowerhour" => Some(Self::HorsepowerHour),
+            "horsepowerhours" => Some(Self::HorsepowerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for EnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J" => Ok(Self::Joule),
@@ -267,7 +358,7 @@ impl core::str::FromStr for EnergyUnit {
             "th (imp.)" => Ok(Self::ThermImperial),
             "dath (imp.)" => Ok(Self::DecathermImperial),
             "hp·h" => Ok(Self::HorsepowerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

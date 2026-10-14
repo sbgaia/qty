@@ -166,6 +166,58 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ThermalResistanceUnit::from_name("kelvinperwatt"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("kelvin per watt"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("KELVIN PER WATT"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("kelvinsperwatt"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("kelvins per watt"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("KELVINS PER WATT"),
+        Some(ThermalResistanceUnit::KelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("degreecelsiusperwatt"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("degree celsius per watt"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("DEGREE CELSIUS PER WATT"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("degreescelsiusperwatt"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("degrees celsius per watt"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalResistanceUnit::from_name("DEGREES CELSIUS PER WATT"),
+        Some(ThermalResistanceUnit::DegreeCelsiusPerWatt)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ThermalResistance::from_base(6.0);
     let b = ThermalResistance::from_base(2.0);

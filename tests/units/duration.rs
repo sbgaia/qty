@@ -691,6 +691,250 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        DurationUnit::from_name("year365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("year365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("YEAR365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("years365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("years365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("YEARS365"),
+        Some(DurationUnit::Year365)
+    );
+    assert_eq!(
+        DurationUnit::from_name("month30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(
+        DurationUnit::from_name("month30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MONTH30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(
+        DurationUnit::from_name("months30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(
+        DurationUnit::from_name("months30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MONTHS30"),
+        Some(DurationUnit::Month30)
+    );
+    assert_eq!(DurationUnit::from_name("week"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("week"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("WEEK"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("weeks"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("weeks"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("WEEKS"), Some(DurationUnit::Week));
+    assert_eq!(DurationUnit::from_name("day"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("day"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("DAY"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("days"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("days"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("DAYS"), Some(DurationUnit::Day));
+    assert_eq!(DurationUnit::from_name("hour"), Some(DurationUnit::Hour));
+    assert_eq!(DurationUnit::from_name("hour"), Some(DurationUnit::Hour));
+    assert_eq!(DurationUnit::from_name("HOUR"), Some(DurationUnit::Hour));
+    assert_eq!(DurationUnit::from_name("hours"), Some(DurationUnit::Hour));
+    assert_eq!(DurationUnit::from_name("hours"), Some(DurationUnit::Hour));
+    assert_eq!(DurationUnit::from_name("HOURS"), Some(DurationUnit::Hour));
+    assert_eq!(
+        DurationUnit::from_name("minute"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("minute"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MINUTE"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("minutes"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("minutes"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MINUTES"),
+        Some(DurationUnit::Minute)
+    );
+    assert_eq!(
+        DurationUnit::from_name("second"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("second"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("SECOND"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("seconds"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("seconds"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("SECONDS"),
+        Some(DurationUnit::Second)
+    );
+    assert_eq!(
+        DurationUnit::from_name("picosecond"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("picosecond"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("PICOSECOND"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("picoseconds"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("picoseconds"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("PICOSECONDS"),
+        Some(DurationUnit::Picosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("nanosecond"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("nanosecond"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("NANOSECOND"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("nanoseconds"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("nanoseconds"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("NANOSECONDS"),
+        Some(DurationUnit::Nanosecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("microsecond"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("microsecond"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MICROSECOND"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("microseconds"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("microseconds"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MICROSECONDS"),
+        Some(DurationUnit::Microsecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("millisecond"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("millisecond"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MILLISECOND"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("milliseconds"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("milliseconds"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("MILLISECONDS"),
+        Some(DurationUnit::Millisecond)
+    );
+    assert_eq!(
+        DurationUnit::from_name("julianyear"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(
+        DurationUnit::from_name("julian year"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(
+        DurationUnit::from_name("JULIAN YEAR"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(
+        DurationUnit::from_name("julianyears"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(
+        DurationUnit::from_name("julian years"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(
+        DurationUnit::from_name("JULIAN YEARS"),
+        Some(DurationUnit::JulianYear)
+    );
+    assert_eq!(DurationUnit::from_name("sol"), Some(DurationUnit::Sol));
+    assert_eq!(DurationUnit::from_name("sol"), Some(DurationUnit::Sol));
+    assert_eq!(DurationUnit::from_name("SOL"), Some(DurationUnit::Sol));
+    assert_eq!(DurationUnit::from_name("sols"), Some(DurationUnit::Sol));
+    assert_eq!(DurationUnit::from_name("sols"), Some(DurationUnit::Sol));
+    assert_eq!(DurationUnit::from_name("SOLS"), Some(DurationUnit::Sol));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Duration::from_base(6.0);
     let b = Duration::from_base(2.0);

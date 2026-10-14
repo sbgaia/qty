@@ -93,6 +93,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MagneticFluxUnit::from_name("weber"),
+        Some(MagneticFluxUnit::Weber)
+    );
+    assert_eq!(
+        MagneticFluxUnit::from_name("weber"),
+        Some(MagneticFluxUnit::Weber)
+    );
+    assert_eq!(
+        MagneticFluxUnit::from_name("WEBER"),
+        Some(MagneticFluxUnit::Weber)
+    );
+    assert_eq!(
+        MagneticFluxUnit::from_name("webers"),
+        Some(MagneticFluxUnit::Weber)
+    );
+    assert_eq!(
+        MagneticFluxUnit::from_name("webers"),
+        Some(MagneticFluxUnit::Weber)
+    );
+    assert_eq!(
+        MagneticFluxUnit::from_name("WEBERS"),
+        Some(MagneticFluxUnit::Weber)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MagneticFlux::from_base(6.0);
     let b = MagneticFlux::from_base(2.0);

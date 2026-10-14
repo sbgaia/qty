@@ -136,12 +136,63 @@ impl ElectricPotentialChangeRateUnit {
             Self::MegavoltPerHour => &["MV/h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "voltpersecond" => Some(Self::VoltPerSecond),
+            "voltspersecond" => Some(Self::VoltPerSecond),
+            "microvoltpersecond" => Some(Self::MicrovoltPerSecond),
+            "microvoltspersecond" => Some(Self::MicrovoltPerSecond),
+            "millivoltpersecond" => Some(Self::MillivoltPerSecond),
+            "millivoltspersecond" => Some(Self::MillivoltPerSecond),
+            "kilovoltpersecond" => Some(Self::KilovoltPerSecond),
+            "kilovoltspersecond" => Some(Self::KilovoltPerSecond),
+            "megavoltpersecond" => Some(Self::MegavoltPerSecond),
+            "megavoltspersecond" => Some(Self::MegavoltPerSecond),
+            "voltpermicrosecond" => Some(Self::VoltPerMicrosecond),
+            "voltspermicrosecond" => Some(Self::VoltPerMicrosecond),
+            "microvoltpermicrosecond" => Some(Self::MicrovoltPerMicrosecond),
+            "microvoltspermicrosecond" => Some(Self::MicrovoltPerMicrosecond),
+            "millivoltpermicrosecond" => Some(Self::MillivoltPerMicrosecond),
+            "millivoltspermicrosecond" => Some(Self::MillivoltPerMicrosecond),
+            "kilovoltpermicrosecond" => Some(Self::KilovoltPerMicrosecond),
+            "kilovoltspermicrosecond" => Some(Self::KilovoltPerMicrosecond),
+            "megavoltpermicrosecond" => Some(Self::MegavoltPerMicrosecond),
+            "megavoltspermicrosecond" => Some(Self::MegavoltPerMicrosecond),
+            "voltperminute" => Some(Self::VoltPerMinute),
+            "voltsperminute" => Some(Self::VoltPerMinute),
+            "microvoltperminute" => Some(Self::MicrovoltPerMinute),
+            "microvoltsperminute" => Some(Self::MicrovoltPerMinute),
+            "millivoltperminute" => Some(Self::MillivoltPerMinute),
+            "millivoltsperminute" => Some(Self::MillivoltPerMinute),
+            "kilovoltperminute" => Some(Self::KilovoltPerMinute),
+            "kilovoltsperminute" => Some(Self::KilovoltPerMinute),
+            "megavoltperminute" => Some(Self::MegavoltPerMinute),
+            "megavoltsperminute" => Some(Self::MegavoltPerMinute),
+            "voltperhour" => Some(Self::VoltPerHour),
+            "voltsperhour" => Some(Self::VoltPerHour),
+            "microvoltperhour" => Some(Self::MicrovoltPerHour),
+            "microvoltsperhour" => Some(Self::MicrovoltPerHour),
+            "millivoltperhour" => Some(Self::MillivoltPerHour),
+            "millivoltsperhour" => Some(Self::MillivoltPerHour),
+            "kilovoltperhour" => Some(Self::KilovoltPerHour),
+            "kilovoltsperhour" => Some(Self::KilovoltPerHour),
+            "megavoltperhour" => Some(Self::MegavoltPerHour),
+            "megavoltsperhour" => Some(Self::MegavoltPerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricPotentialChangeRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "V/s" => Ok(Self::VoltPerSecond),
@@ -164,7 +215,7 @@ impl core::str::FromStr for ElectricPotentialChangeRateUnit {
             "mV/h" => Ok(Self::MillivoltPerHour),
             "kV/h" => Ok(Self::KilovoltPerHour),
             "MV/h" => Ok(Self::MegavoltPerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

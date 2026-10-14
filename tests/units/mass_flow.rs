@@ -1788,6 +1788,802 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MassFlowUnit::from_name("grampersecond"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gram per second"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAM PER SECOND"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gramspersecond"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("grams per second"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAMS PER SECOND"),
+        Some(MassFlowUnit::GramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogrampersecond"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogram per second"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("NANOGRAM PER SECOND"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogramspersecond"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanograms per second"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("NANOGRAMS PER SECOND"),
+        Some(MassFlowUnit::NanogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgrampersecond"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgram per second"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MICROGRAM PER SECOND"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgramspersecond"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("micrograms per second"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MICROGRAMS PER SECOND"),
+        Some(MassFlowUnit::MicrogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligrampersecond"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligram per second"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MILLIGRAM PER SECOND"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligramspersecond"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligrams per second"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MILLIGRAMS PER SECOND"),
+        Some(MassFlowUnit::MilligramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigrampersecond"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigram per second"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("CENTIGRAM PER SECOND"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigramspersecond"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigrams per second"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("CENTIGRAMS PER SECOND"),
+        Some(MassFlowUnit::CentigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigrampersecond"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigram per second"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECIGRAM PER SECOND"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigramspersecond"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigrams per second"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECIGRAMS PER SECOND"),
+        Some(MassFlowUnit::DecigramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagrampersecond"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagram per second"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECAGRAM PER SECOND"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagramspersecond"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagrams per second"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECAGRAMS PER SECOND"),
+        Some(MassFlowUnit::DecagramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogrampersecond"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogram per second"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("HECTOGRAM PER SECOND"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogramspersecond"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectograms per second"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("HECTOGRAMS PER SECOND"),
+        Some(MassFlowUnit::HectogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogrampersecond"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogram per second"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAM PER SECOND"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramspersecond"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilograms per second"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAMS PER SECOND"),
+        Some(MassFlowUnit::KilogramPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gramperday"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gram per day"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAM PER DAY"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gramsperday"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("grams per day"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAMS PER DAY"),
+        Some(MassFlowUnit::GramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogramperday"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogram per day"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("NANOGRAM PER DAY"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanogramsperday"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("nanograms per day"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("NANOGRAMS PER DAY"),
+        Some(MassFlowUnit::NanogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgramperday"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgram per day"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MICROGRAM PER DAY"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("microgramsperday"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("micrograms per day"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MICROGRAMS PER DAY"),
+        Some(MassFlowUnit::MicrogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligramperday"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligram per day"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MILLIGRAM PER DAY"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligramsperday"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("milligrams per day"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MILLIGRAMS PER DAY"),
+        Some(MassFlowUnit::MilligramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigramperday"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigram per day"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("CENTIGRAM PER DAY"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigramsperday"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("centigrams per day"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("CENTIGRAMS PER DAY"),
+        Some(MassFlowUnit::CentigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigramperday"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigram per day"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECIGRAM PER DAY"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigramsperday"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decigrams per day"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECIGRAMS PER DAY"),
+        Some(MassFlowUnit::DecigramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagramperday"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagram per day"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECAGRAM PER DAY"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagramsperday"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("decagrams per day"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("DECAGRAMS PER DAY"),
+        Some(MassFlowUnit::DecagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogramperday"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogram per day"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("HECTOGRAM PER DAY"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectogramsperday"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("hectograms per day"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("HECTOGRAMS PER DAY"),
+        Some(MassFlowUnit::HectogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramperday"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogram per day"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAM PER DAY"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramsperday"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilograms per day"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAMS PER DAY"),
+        Some(MassFlowUnit::KilogramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megagramperday"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megagram per day"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAGRAM PER DAY"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megagramsperday"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megagrams per day"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAGRAMS PER DAY"),
+        Some(MassFlowUnit::MegagramPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gramperhour"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gram per hour"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAM PER HOUR"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("gramsperhour"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("grams per hour"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("GRAMS PER HOUR"),
+        Some(MassFlowUnit::GramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramperhour"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogram per hour"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAM PER HOUR"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramsperhour"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilograms per hour"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAMS PER HOUR"),
+        Some(MassFlowUnit::KilogramPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramperminute"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogram per minute"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAM PER MINUTE"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilogramsperminute"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("kilograms per minute"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("KILOGRAMS PER MINUTE"),
+        Some(MassFlowUnit::KilogramPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonneperhour"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonne per hour"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("TONNE PER HOUR"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonnesperhour"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonnes per hour"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("TONNES PER HOUR"),
+        Some(MassFlowUnit::TonnePerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundperday"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pound per day"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUND PER DAY"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundsperday"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pounds per day"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUNDS PER DAY"),
+        Some(MassFlowUnit::PoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundperday"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapound per day"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUND PER DAY"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundsperday"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapounds per day"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUNDS PER DAY"),
+        Some(MassFlowUnit::MegapoundPerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundperhour"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pound per hour"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUND PER HOUR"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundsperhour"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pounds per hour"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUNDS PER HOUR"),
+        Some(MassFlowUnit::PoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundperhour"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapound per hour"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUND PER HOUR"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundsperhour"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapounds per hour"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUNDS PER HOUR"),
+        Some(MassFlowUnit::MegapoundPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundperminute"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pound per minute"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUND PER MINUTE"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundsperminute"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pounds per minute"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUNDS PER MINUTE"),
+        Some(MassFlowUnit::PoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundperminute"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapound per minute"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUND PER MINUTE"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundsperminute"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapounds per minute"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUNDS PER MINUTE"),
+        Some(MassFlowUnit::MegapoundPerMinute)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundpersecond"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pound per second"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUND PER SECOND"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("poundspersecond"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("pounds per second"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("POUNDS PER SECOND"),
+        Some(MassFlowUnit::PoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundpersecond"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapound per second"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUND PER SECOND"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapoundspersecond"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("megapounds per second"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("MEGAPOUNDS PER SECOND"),
+        Some(MassFlowUnit::MegapoundPerSecond)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonneperday"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonne per day"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("TONNE PER DAY"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonnesperday"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("tonnes per day"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("TONNES PER DAY"),
+        Some(MassFlowUnit::TonnePerDay)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("shorttonperhour"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("short ton per hour"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("SHORT TON PER HOUR"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("shorttonsperhour"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("short tons per hour"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+    assert_eq!(
+        MassFlowUnit::from_name("SHORT TONS PER HOUR"),
+        Some(MassFlowUnit::ShortTonPerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MassFlow::from_base(6.0);
     let b = MassFlow::from_base(2.0);

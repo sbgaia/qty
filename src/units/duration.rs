@@ -104,12 +104,49 @@ impl DurationUnit {
             Self::Sol => &["sol"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "year365" => Some(Self::Year365),
+            "years365" => Some(Self::Year365),
+            "month30" => Some(Self::Month30),
+            "months30" => Some(Self::Month30),
+            "week" => Some(Self::Week),
+            "weeks" => Some(Self::Week),
+            "day" => Some(Self::Day),
+            "days" => Some(Self::Day),
+            "hour" => Some(Self::Hour),
+            "hours" => Some(Self::Hour),
+            "minute" => Some(Self::Minute),
+            "minutes" => Some(Self::Minute),
+            "second" => Some(Self::Second),
+            "seconds" => Some(Self::Second),
+            "picosecond" => Some(Self::Picosecond),
+            "picoseconds" => Some(Self::Picosecond),
+            "nanosecond" => Some(Self::Nanosecond),
+            "nanoseconds" => Some(Self::Nanosecond),
+            "microsecond" => Some(Self::Microsecond),
+            "microseconds" => Some(Self::Microsecond),
+            "millisecond" => Some(Self::Millisecond),
+            "milliseconds" => Some(Self::Millisecond),
+            "julianyear" => Some(Self::JulianYear),
+            "julianyears" => Some(Self::JulianYear),
+            "sol" => Some(Self::Sol),
+            "sols" => Some(Self::Sol),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for DurationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "yr" => Ok(Self::Year365),
@@ -146,7 +183,7 @@ impl core::str::FromStr for DurationUnit {
             "jyear" => Ok(Self::JulianYear),
             "jyears" => Ok(Self::JulianYear),
             "sol" => Ok(Self::Sol),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

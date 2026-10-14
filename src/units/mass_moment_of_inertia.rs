@@ -168,12 +168,79 @@ impl MassMomentOfInertiaUnit {
             Self::SlugSquareInch => &["slug·in²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "gramsquaremeter" => Some(Self::GramSquareMeter),
+            "gramsquaremeters" => Some(Self::GramSquareMeter),
+            "milligramsquaremeter" => Some(Self::MilligramSquareMeter),
+            "milligramsquaremeters" => Some(Self::MilligramSquareMeter),
+            "kilogramsquaremeter" => Some(Self::KilogramSquareMeter),
+            "kilogramsquaremeters" => Some(Self::KilogramSquareMeter),
+            "gramsquaredecimeter" => Some(Self::GramSquareDecimeter),
+            "gramsquaredecimeters" => Some(Self::GramSquareDecimeter),
+            "milligramsquaredecimeter" => Some(Self::MilligramSquareDecimeter),
+            "milligramsquaredecimeters" => Some(Self::MilligramSquareDecimeter),
+            "kilogramsquaredecimeter" => Some(Self::KilogramSquareDecimeter),
+            "kilogramsquaredecimeters" => Some(Self::KilogramSquareDecimeter),
+            "gramsquarecentimeter" => Some(Self::GramSquareCentimeter),
+            "gramsquarecentimeters" => Some(Self::GramSquareCentimeter),
+            "milligramsquarecentimeter" => Some(Self::MilligramSquareCentimeter),
+            "milligramsquarecentimeters" => Some(Self::MilligramSquareCentimeter),
+            "kilogramsquarecentimeter" => Some(Self::KilogramSquareCentimeter),
+            "kilogramsquarecentimeters" => Some(Self::KilogramSquareCentimeter),
+            "gramsquaremillimeter" => Some(Self::GramSquareMillimeter),
+            "gramsquaremillimeters" => Some(Self::GramSquareMillimeter),
+            "milligramsquaremillimeter" => Some(Self::MilligramSquareMillimeter),
+            "milligramsquaremillimeters" => Some(Self::MilligramSquareMillimeter),
+            "kilogramsquaremillimeter" => Some(Self::KilogramSquareMillimeter),
+            "kilogramsquaremillimeters" => Some(Self::KilogramSquareMillimeter),
+            "tonnesquaremeter" => Some(Self::TonneSquareMeter),
+            "tonnesquaremeters" => Some(Self::TonneSquareMeter),
+            "kilotonnesquaremeter" => Some(Self::KilotonneSquareMeter),
+            "kilotonnesquaremeters" => Some(Self::KilotonneSquareMeter),
+            "megatonnesquaremeter" => Some(Self::MegatonneSquareMeter),
+            "megatonnesquaremeters" => Some(Self::MegatonneSquareMeter),
+            "tonnesquaredecimeter" => Some(Self::TonneSquareDecimeter),
+            "tonnesquaredecimeters" => Some(Self::TonneSquareDecimeter),
+            "kilotonnesquaredecimeter" => Some(Self::KilotonneSquareDecimeter),
+            "kilotonnesquaredecimeters" => Some(Self::KilotonneSquareDecimeter),
+            "megatonnesquaredecimeter" => Some(Self::MegatonneSquareDecimeter),
+            "megatonnesquaredecimeters" => Some(Self::MegatonneSquareDecimeter),
+            "tonnesquarecentimeter" => Some(Self::TonneSquareCentimeter),
+            "tonnesquarecentimeters" => Some(Self::TonneSquareCentimeter),
+            "kilotonnesquarecentimeter" => Some(Self::KilotonneSquareCentimeter),
+            "kilotonnesquarecentimeters" => Some(Self::KilotonneSquareCentimeter),
+            "megatonnesquarecentimeter" => Some(Self::MegatonneSquareCentimeter),
+            "megatonnesquarecentimeters" => Some(Self::MegatonneSquareCentimeter),
+            "tonnesquaremillimeter" => Some(Self::TonneSquareMillimeter),
+            "tonnesquaremillimeters" => Some(Self::TonneSquareMillimeter),
+            "kilotonnesquaremillimeter" => Some(Self::KilotonneSquareMillimeter),
+            "kilotonnesquaremillimeters" => Some(Self::KilotonneSquareMillimeter),
+            "megatonnesquaremillimeter" => Some(Self::MegatonneSquareMillimeter),
+            "megatonnesquaremillimeters" => Some(Self::MegatonneSquareMillimeter),
+            "poundsquarefoot" => Some(Self::PoundSquareFoot),
+            "poundsquarefeet" => Some(Self::PoundSquareFoot),
+            "poundsquareinch" => Some(Self::PoundSquareInch),
+            "poundsquareinches" => Some(Self::PoundSquareInch),
+            "slugsquarefoot" => Some(Self::SlugSquareFoot),
+            "slugsquarefeet" => Some(Self::SlugSquareFoot),
+            "slugsquareinch" => Some(Self::SlugSquareInch),
+            "slugsquareinches" => Some(Self::SlugSquareInch),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MassMomentOfInertiaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g·m²" => Ok(Self::GramSquareMeter),
@@ -204,7 +271,7 @@ impl core::str::FromStr for MassMomentOfInertiaUnit {
             "lb·in²" => Ok(Self::PoundSquareInch),
             "slug·ft²" => Ok(Self::SlugSquareFoot),
             "slug·in²" => Ok(Self::SlugSquareInch),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

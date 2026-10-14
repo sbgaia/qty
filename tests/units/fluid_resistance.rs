@@ -1214,6 +1214,466 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondperliter"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal second per liter"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECOND PER LITER"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondsperliter"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal seconds per liter"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECONDS PER LITER"),
+        Some(FluidResistanceUnit::PascalSecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminuteperliter"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minute per liter"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTE PER LITER"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutesperliter"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minutes per liter"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTES PER LITER"),
+        Some(FluidResistanceUnit::PascalMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondpermilliliter"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal second per milliliter"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECOND PER MILLILITER"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondspermilliliter"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal seconds per milliliter"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECONDS PER MILLILITER"),
+        Some(FluidResistanceUnit::PascalSecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutepermilliliter"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minute per milliliter"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTE PER MILLILITER"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutespermilliliter"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minutes per milliliter"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTES PER MILLILITER"),
+        Some(FluidResistanceUnit::PascalMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondpercubicmeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal second per cubic meter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECOND PER CUBIC METER"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondspercubicmeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal seconds per cubic meter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECONDS PER CUBIC METER"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("megapascalsecondpercubicmeter"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("megapascal second per cubic meter"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MEGAPASCAL SECOND PER CUBIC METER"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("megapascalsecondspercubicmeter"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("megapascal seconds per cubic meter"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MEGAPASCAL SECONDS PER CUBIC METER"),
+        Some(FluidResistanceUnit::MegapascalSecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutepercubicmeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minute per cubic meter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTE PER CUBIC METER"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutespercubicmeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minutes per cubic meter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTES PER CUBIC METER"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondpercubiccentimeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal second per cubic centimeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECOND PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalsecondspercubiccentimeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal seconds per cubic centimeter"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL SECONDS PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::PascalSecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutepercubiccentimeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minute per cubic centimeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTE PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascalminutespercubiccentimeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("pascal minutes per cubic centimeter"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("PASCAL MINUTES PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::PascalMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("dynesecondpercentimetertothefifth"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("dyne second per centimeter to the fifth"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("DYNE SECOND PER CENTIMETER TO THE FIFTH"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("dynesecondspercentimetertothefifth"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("dyne seconds per centimeter to the fifth"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("DYNE SECONDS PER CENTIMETER TO THE FIFTH"),
+        Some(FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondperliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury second per liter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECOND PER LITER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondsperliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury seconds per liter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECONDS PER LITER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminuteperliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minute per liter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTE PER LITER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutesperliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minutes per liter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTES PER LITER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerLiter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondpermilliliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury second per milliliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECOND PER MILLILITER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondspermilliliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury seconds per milliliter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECONDS PER MILLILITER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutepermilliliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minute per milliliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTE PER MILLILITER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutespermilliliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minutes per milliliter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTES PER MILLILITER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondpercubiccentimeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury second per cubic centimeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECOND PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondspercubiccentimeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury seconds per cubic centimeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECONDS PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutepercubiccentimeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minute per cubic centimeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTE PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutespercubiccentimeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minutes per cubic centimeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTES PER CUBIC CENTIMETER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondpercubicmeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury second per cubic meter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECOND PER CUBIC METER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercurysecondspercubicmeter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury seconds per cubic meter"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY SECONDS PER CUBIC METER"),
+        Some(FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutepercubicmeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minute per cubic meter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTE PER CUBIC METER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimetermercuryminutespercubicmeter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("millimeter mercury minutes per cubic meter"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("MILLIMETER MERCURY MINUTES PER CUBIC METER"),
+        Some(FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("woodunit"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("wood unit"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("WOOD UNIT"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("woodunits"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("wood units"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+    assert_eq!(
+        FluidResistanceUnit::from_name("WOOD UNITS"),
+        Some(FluidResistanceUnit::WoodUnit)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = FluidResistance::from_base(6.0);
     let b = FluidResistance::from_base(2.0);

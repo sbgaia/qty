@@ -104,12 +104,49 @@ impl ImpulseUnit {
             Self::SlugFootPerSecond => &["slug·ft/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "kilogrammeterpersecond" => Some(Self::KilogramMeterPerSecond),
+            "kilogrammeterspersecond" => Some(Self::KilogramMeterPerSecond),
+            "newtonsecond" => Some(Self::NewtonSecond),
+            "newtonseconds" => Some(Self::NewtonSecond),
+            "nanonewtonsecond" => Some(Self::NanonewtonSecond),
+            "nanonewtonseconds" => Some(Self::NanonewtonSecond),
+            "micronewtonsecond" => Some(Self::MicronewtonSecond),
+            "micronewtonseconds" => Some(Self::MicronewtonSecond),
+            "millinewtonsecond" => Some(Self::MillinewtonSecond),
+            "millinewtonseconds" => Some(Self::MillinewtonSecond),
+            "centinewtonsecond" => Some(Self::CentinewtonSecond),
+            "centinewtonseconds" => Some(Self::CentinewtonSecond),
+            "decinewtonsecond" => Some(Self::DecinewtonSecond),
+            "decinewtonseconds" => Some(Self::DecinewtonSecond),
+            "decanewtonsecond" => Some(Self::DecanewtonSecond),
+            "decanewtonseconds" => Some(Self::DecanewtonSecond),
+            "kilonewtonsecond" => Some(Self::KilonewtonSecond),
+            "kilonewtonseconds" => Some(Self::KilonewtonSecond),
+            "meganewtonsecond" => Some(Self::MeganewtonSecond),
+            "meganewtonseconds" => Some(Self::MeganewtonSecond),
+            "poundfootpersecond" => Some(Self::PoundFootPerSecond),
+            "poundfeetpersecond" => Some(Self::PoundFootPerSecond),
+            "poundforcesecond" => Some(Self::PoundForceSecond),
+            "poundforceseconds" => Some(Self::PoundForceSecond),
+            "slugfootpersecond" => Some(Self::SlugFootPerSecond),
+            "slugfeetpersecond" => Some(Self::SlugFootPerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ImpulseUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "kg·m/s" => Ok(Self::KilogramMeterPerSecond),
@@ -125,7 +162,7 @@ impl core::str::FromStr for ImpulseUnit {
             "lb·ft/s" => Ok(Self::PoundFootPerSecond),
             "lbf·s" => Ok(Self::PoundForceSecond),
             "slug·ft/s" => Ok(Self::SlugFootPerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

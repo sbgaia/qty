@@ -124,12 +124,57 @@ impl TemperatureChangeRateUnit {
             Self::DegreeFahrenheitPerHour => &["°F/h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "degreecelsiuspersecond" => Some(Self::DegreeCelsiusPerSecond),
+            "degreescelsiuspersecond" => Some(Self::DegreeCelsiusPerSecond),
+            "nanodegreecelsiuspersecond" => Some(Self::NanodegreeCelsiusPerSecond),
+            "nanodegreescelsiuspersecond" => Some(Self::NanodegreeCelsiusPerSecond),
+            "microdegreecelsiuspersecond" => Some(Self::MicrodegreeCelsiusPerSecond),
+            "microdegreescelsiuspersecond" => Some(Self::MicrodegreeCelsiusPerSecond),
+            "millidegreecelsiuspersecond" => Some(Self::MillidegreeCelsiusPerSecond),
+            "millidegreescelsiuspersecond" => Some(Self::MillidegreeCelsiusPerSecond),
+            "centidegreecelsiuspersecond" => Some(Self::CentidegreeCelsiusPerSecond),
+            "centidegreescelsiuspersecond" => Some(Self::CentidegreeCelsiusPerSecond),
+            "decidegreecelsiuspersecond" => Some(Self::DecidegreeCelsiusPerSecond),
+            "decidegreescelsiuspersecond" => Some(Self::DecidegreeCelsiusPerSecond),
+            "decadegreecelsiuspersecond" => Some(Self::DecadegreeCelsiusPerSecond),
+            "decadegreescelsiuspersecond" => Some(Self::DecadegreeCelsiusPerSecond),
+            "hectodegreecelsiuspersecond" => Some(Self::HectodegreeCelsiusPerSecond),
+            "hectodegreescelsiuspersecond" => Some(Self::HectodegreeCelsiusPerSecond),
+            "kilodegreecelsiuspersecond" => Some(Self::KilodegreeCelsiusPerSecond),
+            "kilodegreescelsiuspersecond" => Some(Self::KilodegreeCelsiusPerSecond),
+            "degreecelsiusperminute" => Some(Self::DegreeCelsiusPerMinute),
+            "degreescelsiusperminute" => Some(Self::DegreeCelsiusPerMinute),
+            "degreekelvinperminute" => Some(Self::DegreeKelvinPerMinute),
+            "degreeskelvinperminute" => Some(Self::DegreeKelvinPerMinute),
+            "degreefahrenheitperminute" => Some(Self::DegreeFahrenheitPerMinute),
+            "degreesfahrenheitperminute" => Some(Self::DegreeFahrenheitPerMinute),
+            "degreefahrenheitpersecond" => Some(Self::DegreeFahrenheitPerSecond),
+            "degreesfahrenheitpersecond" => Some(Self::DegreeFahrenheitPerSecond),
+            "degreekelvinpersecond" => Some(Self::DegreeKelvinPerSecond),
+            "degreeskelvinpersecond" => Some(Self::DegreeKelvinPerSecond),
+            "degreecelsiusperhour" => Some(Self::DegreeCelsiusPerHour),
+            "degreescelsiusperhour" => Some(Self::DegreeCelsiusPerHour),
+            "degreekelvinperhour" => Some(Self::DegreeKelvinPerHour),
+            "degreeskelvinperhour" => Some(Self::DegreeKelvinPerHour),
+            "degreefahrenheitperhour" => Some(Self::DegreeFahrenheitPerHour),
+            "degreesfahrenheitperhour" => Some(Self::DegreeFahrenheitPerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for TemperatureChangeRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "°C/s" => Ok(Self::DegreeCelsiusPerSecond),
@@ -149,7 +194,7 @@ impl core::str::FromStr for TemperatureChangeRateUnit {
             "°C/h" => Ok(Self::DegreeCelsiusPerHour),
             "K/h" => Ok(Self::DegreeKelvinPerHour),
             "°F/h" => Ok(Self::DegreeFahrenheitPerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

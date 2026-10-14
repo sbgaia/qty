@@ -658,6 +658,274 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricChargeUnit::from_name("coulomb"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("coulomb"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("COULOMB"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("coulombs"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("coulombs"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("COULOMBS"),
+        Some(ElectricChargeUnit::Coulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("picocoulomb"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("picocoulomb"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("PICOCOULOMB"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("picocoulombs"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("picocoulombs"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("PICOCOULOMBS"),
+        Some(ElectricChargeUnit::Picocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("nanocoulomb"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("nanocoulomb"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("NANOCOULOMB"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("nanocoulombs"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("nanocoulombs"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("NANOCOULOMBS"),
+        Some(ElectricChargeUnit::Nanocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("microcoulomb"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("microcoulomb"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MICROCOULOMB"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("microcoulombs"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("microcoulombs"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MICROCOULOMBS"),
+        Some(ElectricChargeUnit::Microcoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("millicoulomb"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("millicoulomb"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MILLICOULOMB"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("millicoulombs"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("millicoulombs"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MILLICOULOMBS"),
+        Some(ElectricChargeUnit::Millicoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kilocoulomb"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kilocoulomb"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("KILOCOULOMB"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kilocoulombs"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kilocoulombs"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("KILOCOULOMBS"),
+        Some(ElectricChargeUnit::Kilocoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megacoulomb"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megacoulomb"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MEGACOULOMB"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megacoulombs"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megacoulombs"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MEGACOULOMBS"),
+        Some(ElectricChargeUnit::Megacoulomb)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("amperehour"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("ampere hour"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("AMPERE HOUR"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("amperehours"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("ampere hours"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("AMPERE HOURS"),
+        Some(ElectricChargeUnit::AmpereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("milliamperehour"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("milliampere hour"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MILLIAMPERE HOUR"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("milliamperehours"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("milliampere hours"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MILLIAMPERE HOURS"),
+        Some(ElectricChargeUnit::MilliampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kiloamperehour"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kiloampere hour"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("KILOAMPERE HOUR"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kiloamperehours"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("kiloampere hours"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("KILOAMPERE HOURS"),
+        Some(ElectricChargeUnit::KiloampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megaamperehour"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megaampere hour"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MEGAAMPERE HOUR"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megaamperehours"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("megaampere hours"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+    assert_eq!(
+        ElectricChargeUnit::from_name("MEGAAMPERE HOURS"),
+        Some(ElectricChargeUnit::MegaampereHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricCharge::from_base(6.0);
     let b = ElectricCharge::from_base(2.0);

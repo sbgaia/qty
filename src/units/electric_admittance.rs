@@ -116,12 +116,47 @@ impl ElectricAdmittanceUnit {
             Self::Teramho => &["T℧"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "siemens" => Some(Self::Siemens),
+            "nanosiemens" => Some(Self::Nanosiemens),
+            "microsiemens" => Some(Self::Microsiemens),
+            "millisiemens" => Some(Self::Millisiemens),
+            "kilosiemens" => Some(Self::Kilosiemens),
+            "megasiemens" => Some(Self::Megasiemens),
+            "gigasiemens" => Some(Self::Gigasiemens),
+            "terasiemens" => Some(Self::Terasiemens),
+            "mho" => Some(Self::Mho),
+            "mhos" => Some(Self::Mho),
+            "nanomho" => Some(Self::Nanomho),
+            "nanomhos" => Some(Self::Nanomho),
+            "micromho" => Some(Self::Micromho),
+            "micromhos" => Some(Self::Micromho),
+            "millimho" => Some(Self::Millimho),
+            "millimhos" => Some(Self::Millimho),
+            "kilomho" => Some(Self::Kilomho),
+            "kilomhos" => Some(Self::Kilomho),
+            "megamho" => Some(Self::Megamho),
+            "megamhos" => Some(Self::Megamho),
+            "gigamho" => Some(Self::Gigamho),
+            "gigamhos" => Some(Self::Gigamho),
+            "teramho" => Some(Self::Teramho),
+            "teramhos" => Some(Self::Teramho),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricAdmittanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "S" => Ok(Self::Siemens),
@@ -140,7 +175,7 @@ impl core::str::FromStr for ElectricAdmittanceUnit {
             "M℧" => Ok(Self::Megamho),
             "G℧" => Ok(Self::Gigamho),
             "T℧" => Ok(Self::Teramho),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

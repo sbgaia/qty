@@ -545,6 +545,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("wattpersquaremeterkelvin"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("watt per square meter kelvin"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("WATT PER SQUARE METER KELVIN"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("wattspersquaremeterkelvin"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("watts per square meter kelvin"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("WATTS PER SQUARE METER KELVIN"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("wattpersquaremetercelsius"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("watt per square meter celsius"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("WATT PER SQUARE METER CELSIUS"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("wattspersquaremetercelsius"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("watts per square meter celsius"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("WATTS PER SQUARE METER CELSIUS"),
+        Some(HeatTransferCoefficientUnit::WattPerSquareMeterCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btuperhoursquarefootdegreefahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btu per hour square foot degree fahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("BTU PER HOUR SQUARE FOOT DEGREE FAHRENHEIT"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btusperhoursquarefootdegreefahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btus per hour square foot degree fahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("BTUS PER HOUR SQUARE FOOT DEGREE FAHRENHEIT"),
+        Some(HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btupersecondsquareinchdegreefahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btu per second square inch degree fahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("BTU PER SECOND SQUARE INCH DEGREE FAHRENHEIT"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btuspersecondsquareinchdegreefahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("btus per second square inch degree fahrenheit"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("BTUS PER SECOND SQUARE INCH DEGREE FAHRENHEIT"),
+        Some(HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("calorieperhoursquaremeterdegreecelsius"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("calorie per hour square meter degree celsius"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("CALORIE PER HOUR SQUARE METER DEGREE CELSIUS"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("caloriesperhoursquaremeterdegreecelsius"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("calories per hour square meter degree celsius"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("CALORIES PER HOUR SQUARE METER DEGREE CELSIUS"),
+        Some(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("kilocalorieperhoursquaremeterdegreecelsius"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("kilocalorie per hour square meter degree celsius"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("KILOCALORIE PER HOUR SQUARE METER DEGREE CELSIUS"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("kilocaloriesperhoursquaremeterdegreecelsius"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("kilocalories per hour square meter degree celsius"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        HeatTransferCoefficientUnit::from_name("KILOCALORIES PER HOUR SQUARE METER DEGREE CELSIUS"),
+        Some(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = HeatTransferCoefficient::from_base(6.0);
     let b = HeatTransferCoefficient::from_base(2.0);

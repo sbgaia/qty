@@ -427,6 +427,178 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        EntropyUnit::from_name("jouleperkelvin"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joule per kelvin"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("JOULE PER KELVIN"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joulesperkelvin"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joules per kelvin"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("JOULES PER KELVIN"),
+        Some(EntropyUnit::JoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojouleperkelvin"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoule per kelvin"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOJOULE PER KELVIN"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoulesperkelvin"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoules per kelvin"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOJOULES PER KELVIN"),
+        Some(EntropyUnit::KilojoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("megajouleperkelvin"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("megajoule per kelvin"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("MEGAJOULE PER KELVIN"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("megajoulesperkelvin"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("megajoules per kelvin"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("MEGAJOULES PER KELVIN"),
+        Some(EntropyUnit::MegajoulePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("calorieperkelvin"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("calorie per kelvin"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("CALORIE PER KELVIN"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("caloriesperkelvin"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("calories per kelvin"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("CALORIES PER KELVIN"),
+        Some(EntropyUnit::CaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilocalorieperkelvin"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilocalorie per kelvin"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOCALORIE PER KELVIN"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilocaloriesperkelvin"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilocalories per kelvin"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOCALORIES PER KELVIN"),
+        Some(EntropyUnit::KilocaloriePerKelvin)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("jouleperdegreecelsius"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joule per degree celsius"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("JOULE PER DEGREE CELSIUS"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joulesperdegreecelsius"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("joules per degree celsius"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("JOULES PER DEGREE CELSIUS"),
+        Some(EntropyUnit::JoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojouleperdegreecelsius"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoule per degree celsius"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOJOULE PER DEGREE CELSIUS"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoulesperdegreecelsius"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("kilojoules per degree celsius"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+    assert_eq!(
+        EntropyUnit::from_name("KILOJOULES PER DEGREE CELSIUS"),
+        Some(EntropyUnit::KilojoulePerDegreeCelsius)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Entropy::from_base(6.0);
     let b = Entropy::from_base(2.0);

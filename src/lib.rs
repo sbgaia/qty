@@ -501,6 +501,38 @@ impl fmt::Display for ParseError {
 
 impl core::error::Error for ParseError {}
 
+/// Normalises a unit *name* for matching: ASCII lowercase, without spaces,
+/// `_` or `-`, with British "-re" spellings (metre, litre) turned into
+/// "-er". Returns `None` for input that cannot be a name (non-ASCII, or
+/// longer than the buffer).
+#[doc(hidden)]
+pub fn normalize_unit_name<'a>(name: &str, buf: &'a mut [u8; 64]) -> Option<&'a str> {
+    let mut len = 0;
+    for &b in name.trim().as_bytes() {
+        if matches!(b, b' ' | b'_' | b'-') {
+            continue;
+        }
+        if !b.is_ascii() || len == buf.len() {
+            return None;
+        }
+        buf[len] = b.to_ascii_lowercase();
+        len += 1;
+    }
+    let out = &mut buf[..len];
+    for word in [&b"metre"[..], b"litre"] {
+        let mut i = 0;
+        while i + word.len() <= out.len() {
+            if &out[i..i + word.len()] == word {
+                out[i + word.len() - 2..i + word.len()].copy_from_slice(b"er");
+                i += word.len();
+            } else {
+                i += 1;
+            }
+        }
+    }
+    core::str::from_utf8(out).ok()
+}
+
 /// Splits `"1.5e3 km/h"` into `("1.5e3", "km/h")`.
 ///
 /// The number is the longest prefix matching a decimal float literal, so unit

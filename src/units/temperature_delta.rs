@@ -88,12 +88,41 @@ impl TemperatureDeltaUnit {
             Self::DegreeRoemer => &["∆°Rø"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "kelvin" => Some(Self::Kelvin),
+            "kelvins" => Some(Self::Kelvin),
+            "degreecelsius" => Some(Self::DegreeCelsius),
+            "degreescelsius" => Some(Self::DegreeCelsius),
+            "millidegreecelsius" => Some(Self::MillidegreeCelsius),
+            "millidegreescelsius" => Some(Self::MillidegreeCelsius),
+            "degreedelisle" => Some(Self::DegreeDelisle),
+            "degreesdelisle" => Some(Self::DegreeDelisle),
+            "degreefahrenheit" => Some(Self::DegreeFahrenheit),
+            "degreesfahrenheit" => Some(Self::DegreeFahrenheit),
+            "degreenewton" => Some(Self::DegreeNewton),
+            "degreesnewton" => Some(Self::DegreeNewton),
+            "degreerankine" => Some(Self::DegreeRankine),
+            "degreesrankine" => Some(Self::DegreeRankine),
+            "degreereaumur" => Some(Self::DegreeReaumur),
+            "degreesreaumur" => Some(Self::DegreeReaumur),
+            "degreeroemer" => Some(Self::DegreeRoemer),
+            "degreesroemer" => Some(Self::DegreeRoemer),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for TemperatureDeltaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "∆K" => Ok(Self::Kelvin),
@@ -105,7 +134,7 @@ impl core::str::FromStr for TemperatureDeltaUnit {
             "∆°R" => Ok(Self::DegreeRankine),
             "∆°Ré" => Ok(Self::DegreeReaumur),
             "∆°Rø" => Ok(Self::DegreeRoemer),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

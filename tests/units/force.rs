@@ -736,6 +736,322 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(ForceUnit::from_name("dyn"), Some(ForceUnit::Dyn));
+    assert_eq!(ForceUnit::from_name("dyn"), Some(ForceUnit::Dyn));
+    assert_eq!(ForceUnit::from_name("DYN"), Some(ForceUnit::Dyn));
+    assert_eq!(ForceUnit::from_name("dyne"), Some(ForceUnit::Dyn));
+    assert_eq!(ForceUnit::from_name("dyne"), Some(ForceUnit::Dyn));
+    assert_eq!(ForceUnit::from_name("DYNE"), Some(ForceUnit::Dyn));
+    assert_eq!(
+        ForceUnit::from_name("gramforce"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("gram force"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("GRAM FORCE"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("gramsforce"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("grams force"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("GRAMS FORCE"),
+        Some(ForceUnit::GramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilogramforce"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilogram force"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILOGRAM FORCE"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilogramsforce"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilograms force"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILOGRAMS FORCE"),
+        Some(ForceUnit::KilogramForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("tonneforce"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("tonne force"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("TONNE FORCE"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("tonnesforce"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("tonnes force"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("TONNES FORCE"),
+        Some(ForceUnit::TonneForce)
+    );
+    assert_eq!(ForceUnit::from_name("newton"), Some(ForceUnit::Newton));
+    assert_eq!(ForceUnit::from_name("newton"), Some(ForceUnit::Newton));
+    assert_eq!(ForceUnit::from_name("NEWTON"), Some(ForceUnit::Newton));
+    assert_eq!(ForceUnit::from_name("newtons"), Some(ForceUnit::Newton));
+    assert_eq!(ForceUnit::from_name("newtons"), Some(ForceUnit::Newton));
+    assert_eq!(ForceUnit::from_name("NEWTONS"), Some(ForceUnit::Newton));
+    assert_eq!(
+        ForceUnit::from_name("micronewton"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("micronewton"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MICRONEWTON"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("micronewtons"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("micronewtons"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MICRONEWTONS"),
+        Some(ForceUnit::Micronewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("millinewton"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("millinewton"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MILLINEWTON"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("millinewtons"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("millinewtons"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MILLINEWTONS"),
+        Some(ForceUnit::Millinewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("decanewton"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("decanewton"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("DECANEWTON"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("decanewtons"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("decanewtons"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("DECANEWTONS"),
+        Some(ForceUnit::Decanewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilonewton"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilonewton"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILONEWTON"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilonewtons"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilonewtons"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILONEWTONS"),
+        Some(ForceUnit::Kilonewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("meganewton"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("meganewton"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MEGANEWTON"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("meganewtons"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("meganewtons"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(
+        ForceUnit::from_name("MEGANEWTONS"),
+        Some(ForceUnit::Meganewton)
+    );
+    assert_eq!(ForceUnit::from_name("kilopond"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("kilopond"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("KILOPOND"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("kiloponds"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("kiloponds"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("KILOPONDS"), Some(ForceUnit::Kilopond));
+    assert_eq!(ForceUnit::from_name("poundal"), Some(ForceUnit::Poundal));
+    assert_eq!(ForceUnit::from_name("poundal"), Some(ForceUnit::Poundal));
+    assert_eq!(ForceUnit::from_name("POUNDAL"), Some(ForceUnit::Poundal));
+    assert_eq!(ForceUnit::from_name("poundals"), Some(ForceUnit::Poundal));
+    assert_eq!(ForceUnit::from_name("poundals"), Some(ForceUnit::Poundal));
+    assert_eq!(ForceUnit::from_name("POUNDALS"), Some(ForceUnit::Poundal));
+    assert_eq!(
+        ForceUnit::from_name("poundforce"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("pound force"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("POUND FORCE"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("poundsforce"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("pounds force"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("POUNDS FORCE"),
+        Some(ForceUnit::PoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilopoundforce"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilopound force"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILOPOUND FORCE"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilopoundsforce"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("kilopounds force"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("KILOPOUNDS FORCE"),
+        Some(ForceUnit::KilopoundForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("ounceforce"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("ounce force"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("OUNCE FORCE"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("ounceforce"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("ounce force"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("OUNCE FORCE"),
+        Some(ForceUnit::OunceForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("shorttonforce"),
+        Some(ForceUnit::ShortTonForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("short ton force"),
+        Some(ForceUnit::ShortTonForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("SHORT TON FORCE"),
+        Some(ForceUnit::ShortTonForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("shorttonsforce"),
+        Some(ForceUnit::ShortTonForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("short tons force"),
+        Some(ForceUnit::ShortTonForce)
+    );
+    assert_eq!(
+        ForceUnit::from_name("SHORT TONS FORCE"),
+        Some(ForceUnit::ShortTonForce)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Force::from_base(6.0);
     let b = Force::from_base(2.0);

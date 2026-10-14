@@ -403,6 +403,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemenspermeter"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per meter"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER METER"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemenspermeter"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per meter"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER METER"),
+        Some(ElectricConductivityUnit::SiemensPerMeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemensperinch"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per inch"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER INCH"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemensperinch"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per inch"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER INCH"),
+        Some(ElectricConductivityUnit::SiemensPerInch)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemensperfoot"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per foot"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER FOOT"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemensperfoot"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per foot"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER FOOT"),
+        Some(ElectricConductivityUnit::SiemensPerFoot)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemenspercentimeter"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per centimeter"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemenspercentimeter"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("siemens per centimeter"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("SIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::SiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("microsiemenspercentimeter"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("microsiemens per centimeter"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("MICROSIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("microsiemenspercentimeter"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("microsiemens per centimeter"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("MICROSIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::MicrosiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("millisiemenspercentimeter"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("millisiemens per centimeter"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("MILLISIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("millisiemenspercentimeter"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("millisiemens per centimeter"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+    assert_eq!(
+        ElectricConductivityUnit::from_name("MILLISIEMENS PER CENTIMETER"),
+        Some(ElectricConductivityUnit::MillisiemensPerCentimeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricConductivity::from_base(6.0);
     let b = ElectricConductivity::from_base(2.0);

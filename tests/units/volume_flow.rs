@@ -4444,6 +4444,1882 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmeterpersecond"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meter per second"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METER PER SECOND"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmeterspersecond"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meters per second"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METERS PER SECOND"),
+        Some(VolumeFlowUnit::CubicMeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmeterperminute"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meter per minute"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METER PER MINUTE"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmetersperminute"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meters per minute"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METERS PER MINUTE"),
+        Some(VolumeFlowUnit::CubicMeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmeterperhour"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meter per hour"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METER PER HOUR"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmetersperhour"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meters per hour"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METERS PER HOUR"),
+        Some(VolumeFlowUnit::CubicMeterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmeterperday"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meter per day"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METER PER DAY"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmetersperday"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic meters per day"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC METERS PER DAY"),
+        Some(VolumeFlowUnit::CubicMeterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfootpersecond"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic foot per second"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FOOT PER SECOND"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfeetpersecond"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic feet per second"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FEET PER SECOND"),
+        Some(VolumeFlowUnit::CubicFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicinchpersecond"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic inch per second"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC INCH PER SECOND"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicinchespersecond"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic inches per second"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC INCHES PER SECOND"),
+        Some(VolumeFlowUnit::CubicInchPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfootperminute"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic foot per minute"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FOOT PER MINUTE"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfeetperminute"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic feet per minute"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FEET PER MINUTE"),
+        Some(VolumeFlowUnit::CubicFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicinchperminute"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic inch per minute"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC INCH PER MINUTE"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicinchesperminute"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic inches per minute"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC INCHES PER MINUTE"),
+        Some(VolumeFlowUnit::CubicInchPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfootperhour"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic foot per hour"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FOOT PER HOUR"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicfeetperhour"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic feet per hour"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC FEET PER HOUR"),
+        Some(VolumeFlowUnit::CubicFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardpersecond"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yard per second"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARD PER SECOND"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardspersecond"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yards per second"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARDS PER SECOND"),
+        Some(VolumeFlowUnit::CubicYardPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardperminute"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yard per minute"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARD PER MINUTE"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardsperminute"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yards per minute"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARDS PER MINUTE"),
+        Some(VolumeFlowUnit::CubicYardPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardperhour"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yard per hour"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARD PER HOUR"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardsperhour"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yards per hour"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARDS PER HOUR"),
+        Some(VolumeFlowUnit::CubicYardPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardperday"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yard per day"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARD PER DAY"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicyardsperday"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic yards per day"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC YARDS PER DAY"),
+        Some(VolumeFlowUnit::CubicYardPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("millionusgallonperday"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("million us gallon per day"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLION US GALLON PER DAY"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("millionusgallonsperday"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("million us gallons per day"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLION US GALLONS PER DAY"),
+        Some(VolumeFlowUnit::MillionUsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonperday"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallon per day"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLON PER DAY"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonsperday"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallons per day"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLONS PER DAY"),
+        Some(VolumeFlowUnit::UsGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megausgallonperday"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaus gallon per day"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUS GALLON PER DAY"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megausgallonsperday"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaus gallons per day"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUS GALLONS PER DAY"),
+        Some(VolumeFlowUnit::MegausGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("literpersecond"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liter per second"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITER PER SECOND"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("literspersecond"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liters per second"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITERS PER SECOND"),
+        Some(VolumeFlowUnit::LiterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliterpersecond"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliter per second"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITER PER SECOND"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliterspersecond"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliters per second"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITERS PER SECOND"),
+        Some(VolumeFlowUnit::NanoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliterpersecond"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliter per second"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITER PER SECOND"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliterspersecond"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliters per second"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITERS PER SECOND"),
+        Some(VolumeFlowUnit::MicroliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliterpersecond"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliter per second"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITER PER SECOND"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliterspersecond"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliters per second"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITERS PER SECOND"),
+        Some(VolumeFlowUnit::MilliliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliterpersecond"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliter per second"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITER PER SECOND"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliterspersecond"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliters per second"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITERS PER SECOND"),
+        Some(VolumeFlowUnit::CentiliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliterpersecond"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliter per second"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITER PER SECOND"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliterspersecond"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliters per second"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITERS PER SECOND"),
+        Some(VolumeFlowUnit::DeciliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliterpersecond"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliter per second"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITER PER SECOND"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliterspersecond"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliters per second"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITERS PER SECOND"),
+        Some(VolumeFlowUnit::DecaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliterpersecond"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliter per second"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITER PER SECOND"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliterspersecond"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliters per second"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITERS PER SECOND"),
+        Some(VolumeFlowUnit::HectoliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliterpersecond"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliter per second"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITER PER SECOND"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliterspersecond"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliters per second"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITERS PER SECOND"),
+        Some(VolumeFlowUnit::KiloliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliterpersecond"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliter per second"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITER PER SECOND"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliterspersecond"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliters per second"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITERS PER SECOND"),
+        Some(VolumeFlowUnit::MegaliterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("literperminute"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liter per minute"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITER PER MINUTE"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("litersperminute"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liters per minute"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITERS PER MINUTE"),
+        Some(VolumeFlowUnit::LiterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliterperminute"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliter per minute"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITER PER MINUTE"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanolitersperminute"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliters per minute"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITERS PER MINUTE"),
+        Some(VolumeFlowUnit::NanoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliterperminute"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliter per minute"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITER PER MINUTE"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microlitersperminute"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliters per minute"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITERS PER MINUTE"),
+        Some(VolumeFlowUnit::MicroliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliterperminute"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliter per minute"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITER PER MINUTE"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("millilitersperminute"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliters per minute"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITERS PER MINUTE"),
+        Some(VolumeFlowUnit::MilliliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliterperminute"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliter per minute"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITER PER MINUTE"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centilitersperminute"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliters per minute"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITERS PER MINUTE"),
+        Some(VolumeFlowUnit::CentiliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliterperminute"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliter per minute"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITER PER MINUTE"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decilitersperminute"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliters per minute"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITERS PER MINUTE"),
+        Some(VolumeFlowUnit::DeciliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliterperminute"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliter per minute"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITER PER MINUTE"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decalitersperminute"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliters per minute"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITERS PER MINUTE"),
+        Some(VolumeFlowUnit::DecaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliterperminute"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliter per minute"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITER PER MINUTE"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectolitersperminute"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliters per minute"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITERS PER MINUTE"),
+        Some(VolumeFlowUnit::HectoliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliterperminute"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliter per minute"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITER PER MINUTE"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilolitersperminute"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliters per minute"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITERS PER MINUTE"),
+        Some(VolumeFlowUnit::KiloliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliterperminute"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliter per minute"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITER PER MINUTE"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megalitersperminute"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliters per minute"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITERS PER MINUTE"),
+        Some(VolumeFlowUnit::MegaliterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("literperhour"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liter per hour"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITER PER HOUR"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("litersperhour"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liters per hour"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITERS PER HOUR"),
+        Some(VolumeFlowUnit::LiterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliterperhour"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliter per hour"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITER PER HOUR"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanolitersperhour"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliters per hour"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITERS PER HOUR"),
+        Some(VolumeFlowUnit::NanoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliterperhour"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliter per hour"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITER PER HOUR"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microlitersperhour"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliters per hour"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITERS PER HOUR"),
+        Some(VolumeFlowUnit::MicroliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliterperhour"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliter per hour"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITER PER HOUR"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("millilitersperhour"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliters per hour"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITERS PER HOUR"),
+        Some(VolumeFlowUnit::MilliliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliterperhour"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliter per hour"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITER PER HOUR"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centilitersperhour"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliters per hour"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITERS PER HOUR"),
+        Some(VolumeFlowUnit::CentiliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliterperhour"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliter per hour"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITER PER HOUR"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decilitersperhour"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliters per hour"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITERS PER HOUR"),
+        Some(VolumeFlowUnit::DeciliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliterperhour"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliter per hour"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITER PER HOUR"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decalitersperhour"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliters per hour"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITERS PER HOUR"),
+        Some(VolumeFlowUnit::DecaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliterperhour"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliter per hour"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITER PER HOUR"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectolitersperhour"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliters per hour"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITERS PER HOUR"),
+        Some(VolumeFlowUnit::HectoliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliterperhour"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliter per hour"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITER PER HOUR"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilolitersperhour"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliters per hour"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITERS PER HOUR"),
+        Some(VolumeFlowUnit::KiloliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliterperhour"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliter per hour"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITER PER HOUR"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megalitersperhour"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliters per hour"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITERS PER HOUR"),
+        Some(VolumeFlowUnit::MegaliterPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("literperday"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liter per day"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITER PER DAY"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("litersperday"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("liters per day"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("LITERS PER DAY"),
+        Some(VolumeFlowUnit::LiterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliterperday"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliter per day"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITER PER DAY"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanolitersperday"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("nanoliters per day"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("NANOLITERS PER DAY"),
+        Some(VolumeFlowUnit::NanoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliterperday"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliter per day"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITER PER DAY"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microlitersperday"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("microliters per day"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MICROLITERS PER DAY"),
+        Some(VolumeFlowUnit::MicroliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliterperday"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliter per day"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITER PER DAY"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("millilitersperday"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("milliliters per day"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MILLILITERS PER DAY"),
+        Some(VolumeFlowUnit::MilliliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliterperday"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliter per day"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITER PER DAY"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centilitersperday"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("centiliters per day"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CENTILITERS PER DAY"),
+        Some(VolumeFlowUnit::CentiliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliterperday"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliter per day"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITER PER DAY"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decilitersperday"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("deciliters per day"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECILITERS PER DAY"),
+        Some(VolumeFlowUnit::DeciliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliterperday"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliter per day"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITER PER DAY"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decalitersperday"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("decaliters per day"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("DECALITERS PER DAY"),
+        Some(VolumeFlowUnit::DecaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliterperday"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliter per day"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITER PER DAY"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectolitersperday"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("hectoliters per day"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("HECTOLITERS PER DAY"),
+        Some(VolumeFlowUnit::HectoliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliterperday"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliter per day"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITER PER DAY"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilolitersperday"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kiloliters per day"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOLITERS PER DAY"),
+        Some(VolumeFlowUnit::KiloliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliterperday"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliter per day"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITER PER DAY"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megalitersperday"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaliters per day"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGALITERS PER DAY"),
+        Some(VolumeFlowUnit::MegaliterPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonpersecond"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallon per second"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLON PER SECOND"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonspersecond"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallons per second"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLONS PER SECOND"),
+        Some(VolumeFlowUnit::UsGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonperminute"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallon per minute"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLON PER MINUTE"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonsperminute"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallons per minute"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLONS PER MINUTE"),
+        Some(VolumeFlowUnit::UsGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonperday"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallon per day"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLON PER DAY"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonsperday"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallons per day"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLONS PER DAY"),
+        Some(VolumeFlowUnit::UkGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaukgallonperday"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megauk gallon per day"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUK GALLON PER DAY"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaukgallonsperday"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megauk gallons per day"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUK GALLONS PER DAY"),
+        Some(VolumeFlowUnit::MegaukGallonPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonperhour"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallon per hour"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLON PER HOUR"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonsperhour"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallons per hour"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLONS PER HOUR"),
+        Some(VolumeFlowUnit::UkGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonperminute"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallon per minute"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLON PER MINUTE"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonsperminute"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallons per minute"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLONS PER MINUTE"),
+        Some(VolumeFlowUnit::UkGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonpersecond"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallon per second"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLON PER SECOND"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ukgallonspersecond"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("uk gallons per second"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("UK GALLONS PER SECOND"),
+        Some(VolumeFlowUnit::UkGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaukgallonpersecond"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megauk gallon per second"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUK GALLON PER SECOND"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megaukgallonspersecond"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("megauk gallons per second"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("MEGAUK GALLONS PER SECOND"),
+        Some(VolumeFlowUnit::MegaukGallonPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilousgallonperminute"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilous gallon per minute"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOUS GALLON PER MINUTE"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilousgallonsperminute"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("kilous gallons per minute"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("KILOUS GALLONS PER MINUTE"),
+        Some(VolumeFlowUnit::KilousGallonPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonperhour"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallon per hour"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLON PER HOUR"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("usgallonsperhour"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("us gallons per hour"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("US GALLONS PER HOUR"),
+        Some(VolumeFlowUnit::UsGallonPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicdecimeterperminute"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic decimeter per minute"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC DECIMETER PER MINUTE"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicdecimetersperminute"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic decimeters per minute"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC DECIMETERS PER MINUTE"),
+        Some(VolumeFlowUnit::CubicDecimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelperday"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrel per day"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARREL PER DAY"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelsperday"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrels per day"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARRELS PER DAY"),
+        Some(VolumeFlowUnit::OilBarrelPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelperminute"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrel per minute"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARREL PER MINUTE"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelsperminute"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrels per minute"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARRELS PER MINUTE"),
+        Some(VolumeFlowUnit::OilBarrelPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelperhour"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrel per hour"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARREL PER HOUR"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelsperhour"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrels per hour"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARRELS PER HOUR"),
+        Some(VolumeFlowUnit::OilBarrelPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelpersecond"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrel per second"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARREL PER SECOND"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oilbarrelspersecond"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("oil barrels per second"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("OIL BARRELS PER SECOND"),
+        Some(VolumeFlowUnit::OilBarrelPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmillimeterpersecond"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic millimeter per second"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC MILLIMETER PER SECOND"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmillimeterspersecond"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic millimeters per second"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC MILLIMETERS PER SECOND"),
+        Some(VolumeFlowUnit::CubicMillimeterPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmillimeterperminute"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic millimeter per minute"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC MILLIMETER PER MINUTE"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubicmillimetersperminute"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic millimeters per minute"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC MILLIMETERS PER MINUTE"),
+        Some(VolumeFlowUnit::CubicMillimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefootpersecond"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre foot per second"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FOOT PER SECOND"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefeetpersecond"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre feet per second"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FEET PER SECOND"),
+        Some(VolumeFlowUnit::AcreFootPerSecond)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefootperminute"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre foot per minute"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FOOT PER MINUTE"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefeetperminute"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre feet per minute"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FEET PER MINUTE"),
+        Some(VolumeFlowUnit::AcreFootPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefootperhour"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre foot per hour"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FOOT PER HOUR"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefeetperhour"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre feet per hour"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FEET PER HOUR"),
+        Some(VolumeFlowUnit::AcreFootPerHour)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefootperday"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre foot per day"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FOOT PER DAY"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acrefeetperday"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("acre feet per day"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("ACRE FEET PER DAY"),
+        Some(VolumeFlowUnit::AcreFootPerDay)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubiccentimeterperminute"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic centimeter per minute"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC CENTIMETER PER MINUTE"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubiccentimetersperminute"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("cubic centimeters per minute"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        VolumeFlowUnit::from_name("CUBIC CENTIMETERS PER MINUTE"),
+        Some(VolumeFlowUnit::CubicCentimeterPerMinute)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VolumeFlow::from_base(6.0);
     let b = VolumeFlow::from_base(2.0);

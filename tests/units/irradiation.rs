@@ -565,6 +565,226 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        IrradiationUnit::from_name("joulepersquaremeter"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joule per square meter"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULE PER SQUARE METER"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joulespersquaremeter"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joules per square meter"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULES PER SQUARE METER"),
+        Some(IrradiationUnit::JoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilojoulepersquaremeter"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilojoule per square meter"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOJOULE PER SQUARE METER"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilojoulespersquaremeter"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilojoules per square meter"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOJOULES PER SQUARE METER"),
+        Some(IrradiationUnit::KilojoulePerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joulepersquarecentimeter"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joule per square centimeter"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULE PER SQUARE CENTIMETER"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joulespersquarecentimeter"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joules per square centimeter"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULES PER SQUARE CENTIMETER"),
+        Some(IrradiationUnit::JoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("millijoulepersquarecentimeter"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("millijoule per square centimeter"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("MILLIJOULE PER SQUARE CENTIMETER"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("millijoulespersquarecentimeter"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("millijoules per square centimeter"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("MILLIJOULES PER SQUARE CENTIMETER"),
+        Some(IrradiationUnit::MillijoulePerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joulepersquaremillimeter"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joule per square millimeter"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULE PER SQUARE MILLIMETER"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joulespersquaremillimeter"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("joules per square millimeter"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("JOULES PER SQUARE MILLIMETER"),
+        Some(IrradiationUnit::JoulePerSquareMillimeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("watthourpersquaremeter"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("watt hour per square meter"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("WATT HOUR PER SQUARE METER"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("watthourspersquaremeter"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("watt hours per square meter"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("WATT HOURS PER SQUARE METER"),
+        Some(IrradiationUnit::WattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilowatthourpersquaremeter"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilowatt hour per square meter"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOWATT HOUR PER SQUARE METER"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilowatthourspersquaremeter"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilowatt hours per square meter"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOWATT HOURS PER SQUARE METER"),
+        Some(IrradiationUnit::KilowattHourPerSquareMeter)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("btupersquarefoot"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("btu per square foot"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("BTU PER SQUARE FOOT"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("btuspersquarefoot"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("btus per square foot"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("BTUS PER SQUARE FOOT"),
+        Some(IrradiationUnit::BtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilobtupersquarefoot"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilobtu per square foot"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOBTU PER SQUARE FOOT"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilobtuspersquarefoot"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("kilobtus per square foot"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+    assert_eq!(
+        IrradiationUnit::from_name("KILOBTUS PER SQUARE FOOT"),
+        Some(IrradiationUnit::KilobtuPerSquareFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Irradiation::from_base(6.0);
     let b = Irradiation::from_base(2.0);

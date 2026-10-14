@@ -88,12 +88,41 @@ impl ElectricCurrentUnit {
             Self::Megaampere => &["MA"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "ampere" => Some(Self::Ampere),
+            "amperes" => Some(Self::Ampere),
+            "femtoampere" => Some(Self::Femtoampere),
+            "femtoamperes" => Some(Self::Femtoampere),
+            "picoampere" => Some(Self::Picoampere),
+            "picoamperes" => Some(Self::Picoampere),
+            "nanoampere" => Some(Self::Nanoampere),
+            "nanoamperes" => Some(Self::Nanoampere),
+            "microampere" => Some(Self::Microampere),
+            "microamperes" => Some(Self::Microampere),
+            "milliampere" => Some(Self::Milliampere),
+            "milliamperes" => Some(Self::Milliampere),
+            "centiampere" => Some(Self::Centiampere),
+            "centiamperes" => Some(Self::Centiampere),
+            "kiloampere" => Some(Self::Kiloampere),
+            "kiloamperes" => Some(Self::Kiloampere),
+            "megaampere" => Some(Self::Megaampere),
+            "megaamperes" => Some(Self::Megaampere),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricCurrentUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "A" => Ok(Self::Ampere),
@@ -105,7 +134,7 @@ impl core::str::FromStr for ElectricCurrentUnit {
             "cA" => Ok(Self::Centiampere),
             "kA" => Ok(Self::Kiloampere),
             "MA" => Ok(Self::Megaampere),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

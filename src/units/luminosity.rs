@@ -109,12 +109,51 @@ impl LuminosityUnit {
             Self::SolarLuminosity => &["L⊙"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "watt" => Some(Self::Watt),
+            "watts" => Some(Self::Watt),
+            "femtowatt" => Some(Self::Femtowatt),
+            "femtowatts" => Some(Self::Femtowatt),
+            "picowatt" => Some(Self::Picowatt),
+            "picowatts" => Some(Self::Picowatt),
+            "nanowatt" => Some(Self::Nanowatt),
+            "nanowatts" => Some(Self::Nanowatt),
+            "microwatt" => Some(Self::Microwatt),
+            "microwatts" => Some(Self::Microwatt),
+            "milliwatt" => Some(Self::Milliwatt),
+            "milliwatts" => Some(Self::Milliwatt),
+            "deciwatt" => Some(Self::Deciwatt),
+            "deciwatts" => Some(Self::Deciwatt),
+            "decawatt" => Some(Self::Decawatt),
+            "decawatts" => Some(Self::Decawatt),
+            "kilowatt" => Some(Self::Kilowatt),
+            "kilowatts" => Some(Self::Kilowatt),
+            "megawatt" => Some(Self::Megawatt),
+            "megawatts" => Some(Self::Megawatt),
+            "gigawatt" => Some(Self::Gigawatt),
+            "gigawatts" => Some(Self::Gigawatt),
+            "terawatt" => Some(Self::Terawatt),
+            "terawatts" => Some(Self::Terawatt),
+            "petawatt" => Some(Self::Petawatt),
+            "petawatts" => Some(Self::Petawatt),
+            "solarluminosity" => Some(Self::SolarLuminosity),
+            "solarluminosities" => Some(Self::SolarLuminosity),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LuminosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W" => Ok(Self::Watt),
@@ -131,7 +170,7 @@ impl core::str::FromStr for LuminosityUnit {
             "TW" => Ok(Self::Terawatt),
             "PW" => Ok(Self::Petawatt),
             "L⊙" => Ok(Self::SolarLuminosity),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

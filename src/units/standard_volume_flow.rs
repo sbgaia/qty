@@ -92,12 +92,41 @@ impl StandardVolumeFlowUnit {
             Self::StandardCubicFootPerHour => &["scfh"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "standardcubicmeterpersecond" => Some(Self::StandardCubicMeterPerSecond),
+            "standardcubicmeterspersecond" => Some(Self::StandardCubicMeterPerSecond),
+            "standardcubicmeterperminute" => Some(Self::StandardCubicMeterPerMinute),
+            "standardcubicmetersperminute" => Some(Self::StandardCubicMeterPerMinute),
+            "standardcubicmeterperhour" => Some(Self::StandardCubicMeterPerHour),
+            "standardcubicmetersperhour" => Some(Self::StandardCubicMeterPerHour),
+            "standardcubicmeterperday" => Some(Self::StandardCubicMeterPerDay),
+            "standardcubicmetersperday" => Some(Self::StandardCubicMeterPerDay),
+            "standardcubiccentimeterperminute" => Some(Self::StandardCubicCentimeterPerMinute),
+            "standardcubiccentimetersperminute" => Some(Self::StandardCubicCentimeterPerMinute),
+            "standardliterperminute" => Some(Self::StandardLiterPerMinute),
+            "standardlitersperminute" => Some(Self::StandardLiterPerMinute),
+            "standardcubicfootpersecond" => Some(Self::StandardCubicFootPerSecond),
+            "standardcubicfeetpersecond" => Some(Self::StandardCubicFootPerSecond),
+            "standardcubicfootperminute" => Some(Self::StandardCubicFootPerMinute),
+            "standardcubicfeetperminute" => Some(Self::StandardCubicFootPerMinute),
+            "standardcubicfootperhour" => Some(Self::StandardCubicFootPerHour),
+            "standardcubicfeetperhour" => Some(Self::StandardCubicFootPerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for StandardVolumeFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sm³/s" => Ok(Self::StandardCubicMeterPerSecond),
@@ -109,7 +138,7 @@ impl core::str::FromStr for StandardVolumeFlowUnit {
             "Sft³/s" => Ok(Self::StandardCubicFootPerSecond),
             "scfm" => Ok(Self::StandardCubicFootPerMinute),
             "scfh" => Ok(Self::StandardCubicFootPerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

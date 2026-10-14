@@ -84,12 +84,39 @@ impl ElectricImpedanceUnit {
             Self::Teraohm => &["TΩ"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "ohm" => Some(Self::Ohm),
+            "ohms" => Some(Self::Ohm),
+            "nanoohm" => Some(Self::Nanoohm),
+            "nanoohms" => Some(Self::Nanoohm),
+            "microohm" => Some(Self::Microohm),
+            "microohms" => Some(Self::Microohm),
+            "milliohm" => Some(Self::Milliohm),
+            "milliohms" => Some(Self::Milliohm),
+            "kiloohm" => Some(Self::Kiloohm),
+            "kiloohms" => Some(Self::Kiloohm),
+            "megaohm" => Some(Self::Megaohm),
+            "megaohms" => Some(Self::Megaohm),
+            "gigaohm" => Some(Self::Gigaohm),
+            "gigaohms" => Some(Self::Gigaohm),
+            "teraohm" => Some(Self::Teraohm),
+            "teraohms" => Some(Self::Teraohm),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricImpedanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Ω" => Ok(Self::Ohm),
@@ -100,7 +127,7 @@ impl core::str::FromStr for ElectricImpedanceUnit {
             "MΩ" => Ok(Self::Megaohm),
             "GΩ" => Ok(Self::Gigaohm),
             "TΩ" => Ok(Self::Teraohm),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

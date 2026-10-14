@@ -110,12 +110,51 @@ impl MolarMassUnit {
             Self::PoundPerPoundMole => &["lb/lbmol", "lbm/lbmol"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "grampermole" => Some(Self::GramPerMole),
+            "gramspermole" => Some(Self::GramPerMole),
+            "nanogrampermole" => Some(Self::NanogramPerMole),
+            "nanogramspermole" => Some(Self::NanogramPerMole),
+            "microgrampermole" => Some(Self::MicrogramPerMole),
+            "microgramspermole" => Some(Self::MicrogramPerMole),
+            "milligrampermole" => Some(Self::MilligramPerMole),
+            "milligramspermole" => Some(Self::MilligramPerMole),
+            "centigrampermole" => Some(Self::CentigramPerMole),
+            "centigramspermole" => Some(Self::CentigramPerMole),
+            "decigrampermole" => Some(Self::DecigramPerMole),
+            "decigramspermole" => Some(Self::DecigramPerMole),
+            "decagrampermole" => Some(Self::DecagramPerMole),
+            "decagramspermole" => Some(Self::DecagramPerMole),
+            "hectogrampermole" => Some(Self::HectogramPerMole),
+            "hectogramspermole" => Some(Self::HectogramPerMole),
+            "kilogrampermole" => Some(Self::KilogramPerMole),
+            "kilogramspermole" => Some(Self::KilogramPerMole),
+            "kilogramperkilomole" => Some(Self::KilogramPerKilomole),
+            "kilogramsperkilomole" => Some(Self::KilogramPerKilomole),
+            "poundpermole" => Some(Self::PoundPerMole),
+            "poundspermole" => Some(Self::PoundPerMole),
+            "kilopoundpermole" => Some(Self::KilopoundPerMole),
+            "kilopoundspermole" => Some(Self::KilopoundPerMole),
+            "megapoundpermole" => Some(Self::MegapoundPerMole),
+            "megapoundspermole" => Some(Self::MegapoundPerMole),
+            "poundperpoundmole" => Some(Self::PoundPerPoundMole),
+            "poundsperpoundmole" => Some(Self::PoundPerPoundMole),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolarMassUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/mol" => Ok(Self::GramPerMole),
@@ -133,7 +172,7 @@ impl core::str::FromStr for MolarMassUnit {
             "Mlb/mol" => Ok(Self::MegapoundPerMole),
             "lb/lbmol" => Ok(Self::PoundPerPoundMole),
             "lbm/lbmol" => Ok(Self::PoundPerPoundMole),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

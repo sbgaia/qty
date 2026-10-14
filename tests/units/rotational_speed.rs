@@ -830,6 +830,322 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RotationalSpeedUnit::from_name("radianpersecond"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("radian per second"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("RADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("radianspersecond"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("radians per second"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("RADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanoradianpersecond"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanoradian per second"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("NANORADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanoradianspersecond"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanoradians per second"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("NANORADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::NanoradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microradianpersecond"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microradian per second"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MICRORADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microradianspersecond"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microradians per second"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MICRORADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::MicroradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("milliradianpersecond"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("milliradian per second"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MILLIRADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("milliradianspersecond"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("milliradians per second"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MILLIRADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::MilliradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("centiradianpersecond"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("centiradian per second"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("CENTIRADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("centiradianspersecond"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("centiradians per second"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("CENTIRADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::CentiradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("deciradianpersecond"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("deciradian per second"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DECIRADIAN PER SECOND"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("deciradianspersecond"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("deciradians per second"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DECIRADIANS PER SECOND"),
+        Some(RotationalSpeedUnit::DeciradianPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degreepersecond"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degree per second"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DEGREE PER SECOND"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degreespersecond"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degrees per second"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DEGREES PER SECOND"),
+        Some(RotationalSpeedUnit::DegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanodegreepersecond"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanodegree per second"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("NANODEGREE PER SECOND"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanodegreespersecond"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("nanodegrees per second"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("NANODEGREES PER SECOND"),
+        Some(RotationalSpeedUnit::NanodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microdegreepersecond"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microdegree per second"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MICRODEGREE PER SECOND"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microdegreespersecond"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("microdegrees per second"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MICRODEGREES PER SECOND"),
+        Some(RotationalSpeedUnit::MicrodegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("millidegreepersecond"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("millidegree per second"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MILLIDEGREE PER SECOND"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("millidegreespersecond"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("millidegrees per second"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("MILLIDEGREES PER SECOND"),
+        Some(RotationalSpeedUnit::MillidegreePerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degreeperminute"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degree per minute"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DEGREE PER MINUTE"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degreesperminute"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("degrees per minute"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("DEGREES PER MINUTE"),
+        Some(RotationalSpeedUnit::DegreePerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutionpersecond"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolution per second"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("REVOLUTION PER SECOND"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutionspersecond"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutions per second"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("REVOLUTIONS PER SECOND"),
+        Some(RotationalSpeedUnit::RevolutionPerSecond)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutionperminute"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolution per minute"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("REVOLUTION PER MINUTE"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutionsperminute"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("revolutions per minute"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+    assert_eq!(
+        RotationalSpeedUnit::from_name("REVOLUTIONS PER MINUTE"),
+        Some(RotationalSpeedUnit::RevolutionPerMinute)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RotationalSpeed::from_base(6.0);
     let b = RotationalSpeed::from_base(2.0);

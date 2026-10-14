@@ -1216,6 +1216,490 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("decimalfraction"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("decimal fraction"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECIMAL FRACTION"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("decimalfractions"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("decimal fractions"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECIMAL FRACTIONS"),
+        Some(VolumeConcentrationUnit::DecimalFraction)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("literperliter"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("liter per liter"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("LITER PER LITER"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("litersperliter"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("liters per liter"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("LITERS PER LITER"),
+        Some(VolumeConcentrationUnit::LiterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliterperliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliter per liter"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PICOLITER PER LITER"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picolitersperliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliters per liter"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PICOLITERS PER LITER"),
+        Some(VolumeConcentrationUnit::PicoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliterperliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliter per liter"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("NANOLITER PER LITER"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanolitersperliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliters per liter"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("NANOLITERS PER LITER"),
+        Some(VolumeConcentrationUnit::NanoliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliterperliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliter per liter"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MICROLITER PER LITER"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microlitersperliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliters per liter"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MICROLITERS PER LITER"),
+        Some(VolumeConcentrationUnit::MicroliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliterperliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliter per liter"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MILLILITER PER LITER"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("millilitersperliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliters per liter"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MILLILITERS PER LITER"),
+        Some(VolumeConcentrationUnit::MilliliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliterperliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliter per liter"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("CENTILITER PER LITER"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centilitersperliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliters per liter"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("CENTILITERS PER LITER"),
+        Some(VolumeConcentrationUnit::CentiliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliterperliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliter per liter"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECILITER PER LITER"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("decilitersperliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliters per liter"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECILITERS PER LITER"),
+        Some(VolumeConcentrationUnit::DeciliterPerLiter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("literpermilliliter"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("liter per milliliter"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("LITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("literspermilliliter"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("liters per milliliter"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("LITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::LiterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliterpermilliliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliter per milliliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PICOLITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliterspermilliliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("picoliters per milliliter"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PICOLITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::PicoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliterpermilliliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliter per milliliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("NANOLITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliterspermilliliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("nanoliters per milliliter"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("NANOLITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::NanoliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliterpermilliliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliter per milliliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MICROLITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliterspermilliliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("microliters per milliliter"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MICROLITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::MicroliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliterpermilliliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliter per milliliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MILLILITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliterspermilliliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("milliliters per milliliter"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("MILLILITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::MilliliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliterpermilliliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliter per milliliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("CENTILITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliterspermilliliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("centiliters per milliliter"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("CENTILITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::CentiliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliterpermilliliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliter per milliliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECILITER PER MILLILITER"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliterspermilliliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("deciliters per milliliter"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("DECILITERS PER MILLILITER"),
+        Some(VolumeConcentrationUnit::DeciliterPerMilliliter)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("percent"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("percent"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PERCENT"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("percent"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("percent"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PERCENT"),
+        Some(VolumeConcentrationUnit::Percent)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partperthousand"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("part per thousand"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PART PER THOUSAND"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partsperthousand"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("parts per thousand"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PARTS PER THOUSAND"),
+        Some(VolumeConcentrationUnit::PartPerThousand)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partpermillion"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("part per million"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PART PER MILLION"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partspermillion"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("parts per million"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PARTS PER MILLION"),
+        Some(VolumeConcentrationUnit::PartPerMillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partperbillion"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("part per billion"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PART PER BILLION"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partsperbillion"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("parts per billion"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PARTS PER BILLION"),
+        Some(VolumeConcentrationUnit::PartPerBillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partpertrillion"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("part per trillion"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PART PER TRILLION"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("partspertrillion"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("parts per trillion"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        VolumeConcentrationUnit::from_name("PARTS PER TRILLION"),
+        Some(VolumeConcentrationUnit::PartPerTrillion)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VolumeConcentration::from_base(6.0);
     let b = VolumeConcentration::from_base(2.0);

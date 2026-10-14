@@ -68,18 +68,35 @@ impl ThermalConductivityUnit {
             Self::BtuPerSecondInchFahrenheit => &["BTU/(s·in·°F)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "wattpermeterkelvin" => Some(Self::WattPerMeterKelvin),
+            "wattspermeterkelvin" => Some(Self::WattPerMeterKelvin),
+            "btuperhourfootfahrenheit" => Some(Self::BtuPerHourFootFahrenheit),
+            "btusperhourfootfahrenheit" => Some(Self::BtuPerHourFootFahrenheit),
+            "btupersecondinchfahrenheit" => Some(Self::BtuPerSecondInchFahrenheit),
+            "btuspersecondinchfahrenheit" => Some(Self::BtuPerSecondInchFahrenheit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ThermalConductivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/(m·K)" => Ok(Self::WattPerMeterKelvin),
             "BTU/(h·ft·°F)" => Ok(Self::BtuPerHourFootFahrenheit),
             "BTU/(s·in·°F)" => Ok(Self::BtuPerSecondInchFahrenheit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

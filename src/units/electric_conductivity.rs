@@ -80,12 +80,29 @@ impl ElectricConductivityUnit {
             Self::MillisiemensPerCentimeter => &["mS/cm"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "siemenspermeter" => Some(Self::SiemensPerMeter),
+            "siemensperinch" => Some(Self::SiemensPerInch),
+            "siemensperfoot" => Some(Self::SiemensPerFoot),
+            "siemenspercentimeter" => Some(Self::SiemensPerCentimeter),
+            "microsiemenspercentimeter" => Some(Self::MicrosiemensPerCentimeter),
+            "millisiemenspercentimeter" => Some(Self::MillisiemensPerCentimeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricConductivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "S/m" => Ok(Self::SiemensPerMeter),
@@ -94,7 +111,7 @@ impl core::str::FromStr for ElectricConductivityUnit {
             "S/cm" => Ok(Self::SiemensPerCentimeter),
             "µS/cm" => Ok(Self::MicrosiemensPerCentimeter),
             "mS/cm" => Ok(Self::MillisiemensPerCentimeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

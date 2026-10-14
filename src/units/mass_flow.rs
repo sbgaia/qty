@@ -184,12 +184,89 @@ impl MassFlowUnit {
             Self::ShortTonPerHour => &["short tn/h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "grampersecond" => Some(Self::GramPerSecond),
+            "gramspersecond" => Some(Self::GramPerSecond),
+            "nanogrampersecond" => Some(Self::NanogramPerSecond),
+            "nanogramspersecond" => Some(Self::NanogramPerSecond),
+            "microgrampersecond" => Some(Self::MicrogramPerSecond),
+            "microgramspersecond" => Some(Self::MicrogramPerSecond),
+            "milligrampersecond" => Some(Self::MilligramPerSecond),
+            "milligramspersecond" => Some(Self::MilligramPerSecond),
+            "centigrampersecond" => Some(Self::CentigramPerSecond),
+            "centigramspersecond" => Some(Self::CentigramPerSecond),
+            "decigrampersecond" => Some(Self::DecigramPerSecond),
+            "decigramspersecond" => Some(Self::DecigramPerSecond),
+            "decagrampersecond" => Some(Self::DecagramPerSecond),
+            "decagramspersecond" => Some(Self::DecagramPerSecond),
+            "hectogrampersecond" => Some(Self::HectogramPerSecond),
+            "hectogramspersecond" => Some(Self::HectogramPerSecond),
+            "kilogrampersecond" => Some(Self::KilogramPerSecond),
+            "kilogramspersecond" => Some(Self::KilogramPerSecond),
+            "gramperday" => Some(Self::GramPerDay),
+            "gramsperday" => Some(Self::GramPerDay),
+            "nanogramperday" => Some(Self::NanogramPerDay),
+            "nanogramsperday" => Some(Self::NanogramPerDay),
+            "microgramperday" => Some(Self::MicrogramPerDay),
+            "microgramsperday" => Some(Self::MicrogramPerDay),
+            "milligramperday" => Some(Self::MilligramPerDay),
+            "milligramsperday" => Some(Self::MilligramPerDay),
+            "centigramperday" => Some(Self::CentigramPerDay),
+            "centigramsperday" => Some(Self::CentigramPerDay),
+            "decigramperday" => Some(Self::DecigramPerDay),
+            "decigramsperday" => Some(Self::DecigramPerDay),
+            "decagramperday" => Some(Self::DecagramPerDay),
+            "decagramsperday" => Some(Self::DecagramPerDay),
+            "hectogramperday" => Some(Self::HectogramPerDay),
+            "hectogramsperday" => Some(Self::HectogramPerDay),
+            "kilogramperday" => Some(Self::KilogramPerDay),
+            "kilogramsperday" => Some(Self::KilogramPerDay),
+            "megagramperday" => Some(Self::MegagramPerDay),
+            "megagramsperday" => Some(Self::MegagramPerDay),
+            "gramperhour" => Some(Self::GramPerHour),
+            "gramsperhour" => Some(Self::GramPerHour),
+            "kilogramperhour" => Some(Self::KilogramPerHour),
+            "kilogramsperhour" => Some(Self::KilogramPerHour),
+            "kilogramperminute" => Some(Self::KilogramPerMinute),
+            "kilogramsperminute" => Some(Self::KilogramPerMinute),
+            "tonneperhour" => Some(Self::TonnePerHour),
+            "tonnesperhour" => Some(Self::TonnePerHour),
+            "poundperday" => Some(Self::PoundPerDay),
+            "poundsperday" => Some(Self::PoundPerDay),
+            "megapoundperday" => Some(Self::MegapoundPerDay),
+            "megapoundsperday" => Some(Self::MegapoundPerDay),
+            "poundperhour" => Some(Self::PoundPerHour),
+            "poundsperhour" => Some(Self::PoundPerHour),
+            "megapoundperhour" => Some(Self::MegapoundPerHour),
+            "megapoundsperhour" => Some(Self::MegapoundPerHour),
+            "poundperminute" => Some(Self::PoundPerMinute),
+            "poundsperminute" => Some(Self::PoundPerMinute),
+            "megapoundperminute" => Some(Self::MegapoundPerMinute),
+            "megapoundsperminute" => Some(Self::MegapoundPerMinute),
+            "poundpersecond" => Some(Self::PoundPerSecond),
+            "poundspersecond" => Some(Self::PoundPerSecond),
+            "megapoundpersecond" => Some(Self::MegapoundPerSecond),
+            "megapoundspersecond" => Some(Self::MegapoundPerSecond),
+            "tonneperday" => Some(Self::TonnePerDay),
+            "tonnesperday" => Some(Self::TonnePerDay),
+            "shorttonperhour" => Some(Self::ShortTonPerHour),
+            "shorttonsperhour" => Some(Self::ShortTonPerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MassFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/s" => Ok(Self::GramPerSecond),
@@ -226,7 +303,7 @@ impl core::str::FromStr for MassFlowUnit {
             "Mlb/s" => Ok(Self::MegapoundPerSecond),
             "t/d" => Ok(Self::TonnePerDay),
             "short tn/h" => Ok(Self::ShortTonPerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -1699,6 +1699,682 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaremeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square meter"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaremeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square meters"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::GramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaremeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square meter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaremeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square meters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaremeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square meter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaremeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square meters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square decimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square decimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::GramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square decimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square decimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square decimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square decimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square centimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square centimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::GramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square centimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square centimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square centimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square centimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square millimeter"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gramsquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("gram square millimeters"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("GRAM SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::GramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square millimeter"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligramsquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("milligram square millimeters"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MILLIGRAM SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::MilligramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square millimeter"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogramsquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilogram square millimeters"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOGRAM SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilogramSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaremeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square meter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaremeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square meters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaremeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square meter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaremeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square meters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaremeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square meter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE METER"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaremeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square meters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE METERS"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square decimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square decimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::TonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square decimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square decimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaredecimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square decimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE DECIMETER"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaredecimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square decimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE DECIMETERS"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareDecimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square centimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square centimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::TonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square centimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square centimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquarecentimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square centimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE CENTIMETER"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquarecentimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square centimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE CENTIMETERS"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareCentimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square millimeter"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonnesquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("tonne square millimeters"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("TONNE SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::TonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square millimeter"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonnesquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("kilotonne square millimeters"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("KILOTONNE SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::KilotonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaremillimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square millimeter"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE MILLIMETER"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonnesquaremillimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("megatonne square millimeters"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("MEGATONNE SQUARE MILLIMETERS"),
+        Some(MassMomentOfInertiaUnit::MegatonneSquareMillimeter)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("poundsquarefoot"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("pound square foot"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("POUND SQUARE FOOT"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("poundsquarefeet"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("pound square feet"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("POUND SQUARE FEET"),
+        Some(MassMomentOfInertiaUnit::PoundSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("poundsquareinch"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("pound square inch"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("POUND SQUARE INCH"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("poundsquareinches"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("pound square inches"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("POUND SQUARE INCHES"),
+        Some(MassMomentOfInertiaUnit::PoundSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slugsquarefoot"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slug square foot"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("SLUG SQUARE FOOT"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slugsquarefeet"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slug square feet"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("SLUG SQUARE FEET"),
+        Some(MassMomentOfInertiaUnit::SlugSquareFoot)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slugsquareinch"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slug square inch"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("SLUG SQUARE INCH"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slugsquareinches"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("slug square inches"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+    assert_eq!(
+        MassMomentOfInertiaUnit::from_name("SLUG SQUARE INCHES"),
+        Some(MassMomentOfInertiaUnit::SlugSquareInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MassMomentOfInertia::from_base(6.0);
     let b = MassMomentOfInertia::from_base(2.0);

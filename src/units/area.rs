@@ -112,12 +112,51 @@ impl AreaUnit {
             Self::SquareNauticalMile => &["nmi²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "squarekilometer" => Some(Self::SquareKilometer),
+            "squarekilometers" => Some(Self::SquareKilometer),
+            "squaremeter" => Some(Self::SquareMeter),
+            "squaremeters" => Some(Self::SquareMeter),
+            "squaredecimeter" => Some(Self::SquareDecimeter),
+            "squaredecimeters" => Some(Self::SquareDecimeter),
+            "squarecentimeter" => Some(Self::SquareCentimeter),
+            "squarecentimeters" => Some(Self::SquareCentimeter),
+            "squaremillimeter" => Some(Self::SquareMillimeter),
+            "squaremillimeters" => Some(Self::SquareMillimeter),
+            "squaremicrometer" => Some(Self::SquareMicrometer),
+            "squaremicrometers" => Some(Self::SquareMicrometer),
+            "squaremile" => Some(Self::SquareMile),
+            "squaremiles" => Some(Self::SquareMile),
+            "squareyard" => Some(Self::SquareYard),
+            "squareyards" => Some(Self::SquareYard),
+            "squarefoot" => Some(Self::SquareFoot),
+            "squarefeet" => Some(Self::SquareFoot),
+            "ussurveysquarefoot" => Some(Self::UsSurveySquareFoot),
+            "ussurveysquarefeet" => Some(Self::UsSurveySquareFoot),
+            "squareinch" => Some(Self::SquareInch),
+            "squareinches" => Some(Self::SquareInch),
+            "acre" => Some(Self::Acre),
+            "acres" => Some(Self::Acre),
+            "hectare" => Some(Self::Hectare),
+            "hectares" => Some(Self::Hectare),
+            "squarenauticalmile" => Some(Self::SquareNauticalMile),
+            "squarenauticalmiles" => Some(Self::SquareNauticalMile),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AreaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "km²" => Ok(Self::SquareKilometer),
@@ -134,7 +173,7 @@ impl core::str::FromStr for AreaUnit {
             "ac" => Ok(Self::Acre),
             "ha" => Ok(Self::Hectare),
             "nmi²" => Ok(Self::SquareNauticalMile),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

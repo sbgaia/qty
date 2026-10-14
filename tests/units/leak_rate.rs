@@ -270,6 +270,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LeakRateUnit::from_name("pascalcubicmeterpersecond"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("pascal cubic meter per second"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("PASCAL CUBIC METER PER SECOND"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("pascalcubicmeterspersecond"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("pascal cubic meters per second"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("PASCAL CUBIC METERS PER SECOND"),
+        Some(LeakRateUnit::PascalCubicMeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("millibarliterpersecond"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("millibar liter per second"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("MILLIBAR LITER PER SECOND"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("millibarliterspersecond"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("millibar liters per second"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("MILLIBAR LITERS PER SECOND"),
+        Some(LeakRateUnit::MillibarLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("torrliterpersecond"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("torr liter per second"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("TORR LITER PER SECOND"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("torrliterspersecond"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("torr liters per second"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("TORR LITERS PER SECOND"),
+        Some(LeakRateUnit::TorrLiterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("atmcubiccentimeterpersecond"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("atm cubic centimeter per second"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("ATM CUBIC CENTIMETER PER SECOND"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("atmcubiccentimeterspersecond"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("atm cubic centimeters per second"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+    assert_eq!(
+        LeakRateUnit::from_name("ATM CUBIC CENTIMETERS PER SECOND"),
+        Some(LeakRateUnit::AtmCubicCentimeterPerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = LeakRate::from_base(6.0);
     let b = LeakRate::from_base(2.0);

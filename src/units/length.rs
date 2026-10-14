@@ -238,12 +238,107 @@ impl LengthUnit {
             Self::DataMile => &["DM"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "meter" => Some(Self::Meter),
+            "meters" => Some(Self::Meter),
+            "femtometer" => Some(Self::Femtometer),
+            "femtometers" => Some(Self::Femtometer),
+            "picometer" => Some(Self::Picometer),
+            "picometers" => Some(Self::Picometer),
+            "nanometer" => Some(Self::Nanometer),
+            "nanometers" => Some(Self::Nanometer),
+            "micrometer" => Some(Self::Micrometer),
+            "micrometers" => Some(Self::Micrometer),
+            "millimeter" => Some(Self::Millimeter),
+            "millimeters" => Some(Self::Millimeter),
+            "centimeter" => Some(Self::Centimeter),
+            "centimeters" => Some(Self::Centimeter),
+            "decimeter" => Some(Self::Decimeter),
+            "decimeters" => Some(Self::Decimeter),
+            "decameter" => Some(Self::Decameter),
+            "decameters" => Some(Self::Decameter),
+            "hectometer" => Some(Self::Hectometer),
+            "hectometers" => Some(Self::Hectometer),
+            "kilometer" => Some(Self::Kilometer),
+            "kilometers" => Some(Self::Kilometer),
+            "megameter" => Some(Self::Megameter),
+            "megameters" => Some(Self::Megameter),
+            "gigameter" => Some(Self::Gigameter),
+            "gigameters" => Some(Self::Gigameter),
+            "mile" => Some(Self::Mile),
+            "miles" => Some(Self::Mile),
+            "yard" => Some(Self::Yard),
+            "yards" => Some(Self::Yard),
+            "kiloyard" => Some(Self::Kiloyard),
+            "kiloyards" => Some(Self::Kiloyard),
+            "foot" => Some(Self::Foot),
+            "feet" => Some(Self::Foot),
+            "kilofoot" => Some(Self::Kilofoot),
+            "kilofeet" => Some(Self::Kilofoot),
+            "ussurveyfoot" => Some(Self::UsSurveyFoot),
+            "ussurveyfeet" => Some(Self::UsSurveyFoot),
+            "inch" => Some(Self::Inch),
+            "inches" => Some(Self::Inch),
+            "mil" => Some(Self::Mil),
+            "mils" => Some(Self::Mil),
+            "nauticalmile" => Some(Self::NauticalMile),
+            "nauticalmiles" => Some(Self::NauticalMile),
+            "fathom" => Some(Self::Fathom),
+            "fathoms" => Some(Self::Fathom),
+            "shackle" => Some(Self::Shackle),
+            "shackles" => Some(Self::Shackle),
+            "microinch" => Some(Self::Microinch),
+            "microinches" => Some(Self::Microinch),
+            "printerpoint" => Some(Self::PrinterPoint),
+            "printerpoints" => Some(Self::PrinterPoint),
+            "dtppoint" => Some(Self::DtpPoint),
+            "dtppoints" => Some(Self::DtpPoint),
+            "printerpica" => Some(Self::PrinterPica),
+            "printerpicas" => Some(Self::PrinterPica),
+            "dtppica" => Some(Self::DtpPica),
+            "dtppicas" => Some(Self::DtpPica),
+            "twip" => Some(Self::Twip),
+            "twips" => Some(Self::Twip),
+            "hand" => Some(Self::Hand),
+            "hands" => Some(Self::Hand),
+            "astronomicalunit" => Some(Self::AstronomicalUnit),
+            "astronomicalunits" => Some(Self::AstronomicalUnit),
+            "parsec" => Some(Self::Parsec),
+            "parsecs" => Some(Self::Parsec),
+            "kiloparsec" => Some(Self::Kiloparsec),
+            "kiloparsecs" => Some(Self::Kiloparsec),
+            "megaparsec" => Some(Self::Megaparsec),
+            "megaparsecs" => Some(Self::Megaparsec),
+            "lightyear" => Some(Self::LightYear),
+            "lightyears" => Some(Self::LightYear),
+            "kilolightyear" => Some(Self::KilolightYear),
+            "kilolightyears" => Some(Self::KilolightYear),
+            "megalightyear" => Some(Self::MegalightYear),
+            "megalightyears" => Some(Self::MegalightYear),
+            "solarradius" => Some(Self::SolarRadius),
+            "solarradiuses" => Some(Self::SolarRadius),
+            "chain" => Some(Self::Chain),
+            "chains" => Some(Self::Chain),
+            "angstrom" => Some(Self::Angstrom),
+            "angstroms" => Some(Self::Angstrom),
+            "datamile" => Some(Self::DataMile),
+            "datamiles" => Some(Self::DataMile),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m" => Ok(Self::Meter),
@@ -294,7 +389,7 @@ impl core::str::FromStr for LengthUnit {
             "Å" => Ok(Self::Angstrom),
             "A" => Ok(Self::Angstrom),
             "DM" => Ok(Self::DataMile),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

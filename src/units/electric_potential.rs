@@ -76,12 +76,35 @@ impl ElectricPotentialUnit {
             Self::Megavolt => &["MV"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "volt" => Some(Self::Volt),
+            "volts" => Some(Self::Volt),
+            "nanovolt" => Some(Self::Nanovolt),
+            "nanovolts" => Some(Self::Nanovolt),
+            "microvolt" => Some(Self::Microvolt),
+            "microvolts" => Some(Self::Microvolt),
+            "millivolt" => Some(Self::Millivolt),
+            "millivolts" => Some(Self::Millivolt),
+            "kilovolt" => Some(Self::Kilovolt),
+            "kilovolts" => Some(Self::Kilovolt),
+            "megavolt" => Some(Self::Megavolt),
+            "megavolts" => Some(Self::Megavolt),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricPotentialUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "V" => Ok(Self::Volt),
@@ -90,7 +113,7 @@ impl core::str::FromStr for ElectricPotentialUnit {
             "mV" => Ok(Self::Millivolt),
             "kV" => Ok(Self::Kilovolt),
             "MV" => Ok(Self::Megavolt),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

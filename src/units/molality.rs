@@ -64,18 +64,35 @@ impl MolalityUnit {
             Self::MolePerGram => &["mol/g"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "moleperkilogram" => Some(Self::MolePerKilogram),
+            "molesperkilogram" => Some(Self::MolePerKilogram),
+            "millimoleperkilogram" => Some(Self::MillimolePerKilogram),
+            "millimolesperkilogram" => Some(Self::MillimolePerKilogram),
+            "molepergram" => Some(Self::MolePerGram),
+            "molespergram" => Some(Self::MolePerGram),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolalityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/kg" => Ok(Self::MolePerKilogram),
             "mmol/kg" => Ok(Self::MillimolePerKilogram),
             "mol/g" => Ok(Self::MolePerGram),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

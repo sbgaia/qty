@@ -273,6 +273,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelvolt"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel volt"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL VOLT"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelvolts"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel volts"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL VOLTS"),
+        Some(AmplitudeRatioUnit::DecibelVolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelmicrovolt"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel microvolt"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL MICROVOLT"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelmicrovolts"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel microvolts"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL MICROVOLTS"),
+        Some(AmplitudeRatioUnit::DecibelMicrovolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelmillivolt"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel millivolt"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL MILLIVOLT"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelmillivolts"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel millivolts"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL MILLIVOLTS"),
+        Some(AmplitudeRatioUnit::DecibelMillivolt)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelunloaded"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibel unloaded"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBEL UNLOADED"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibelsunloaded"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("decibels unloaded"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+    assert_eq!(
+        AmplitudeRatioUnit::from_name("DECIBELS UNLOADED"),
+        Some(AmplitudeRatioUnit::DecibelUnloaded)
+    );
+}
+
+#[test]
 fn point_arithmetic() {
     let a = AmplitudeRatio::from_base(6.0);
     let b = AmplitudeRatio::from_base(2.0);

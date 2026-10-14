@@ -208,12 +208,101 @@ impl InformationUnit {
             Self::Exbibit => &["Eib"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "byte" => Some(Self::Byte),
+            "bytes" => Some(Self::Byte),
+            "kilobyte" => Some(Self::Kilobyte),
+            "kilobytes" => Some(Self::Kilobyte),
+            "megabyte" => Some(Self::Megabyte),
+            "megabytes" => Some(Self::Megabyte),
+            "gigabyte" => Some(Self::Gigabyte),
+            "gigabytes" => Some(Self::Gigabyte),
+            "terabyte" => Some(Self::Terabyte),
+            "terabytes" => Some(Self::Terabyte),
+            "petabyte" => Some(Self::Petabyte),
+            "petabytes" => Some(Self::Petabyte),
+            "exabyte" => Some(Self::Exabyte),
+            "exabytes" => Some(Self::Exabyte),
+            "kibibyte" => Some(Self::Kibibyte),
+            "kibibytes" => Some(Self::Kibibyte),
+            "mebibyte" => Some(Self::Mebibyte),
+            "mebibytes" => Some(Self::Mebibyte),
+            "gibibyte" => Some(Self::Gibibyte),
+            "gibibytes" => Some(Self::Gibibyte),
+            "tebibyte" => Some(Self::Tebibyte),
+            "tebibytes" => Some(Self::Tebibyte),
+            "pebibyte" => Some(Self::Pebibyte),
+            "pebibytes" => Some(Self::Pebibyte),
+            "exbibyte" => Some(Self::Exbibyte),
+            "exbibytes" => Some(Self::Exbibyte),
+            "octet" => Some(Self::Octet),
+            "octets" => Some(Self::Octet),
+            "kilooctet" => Some(Self::Kilooctet),
+            "kilooctets" => Some(Self::Kilooctet),
+            "megaoctet" => Some(Self::Megaoctet),
+            "megaoctets" => Some(Self::Megaoctet),
+            "gigaoctet" => Some(Self::Gigaoctet),
+            "gigaoctets" => Some(Self::Gigaoctet),
+            "teraoctet" => Some(Self::Teraoctet),
+            "teraoctets" => Some(Self::Teraoctet),
+            "petaoctet" => Some(Self::Petaoctet),
+            "petaoctets" => Some(Self::Petaoctet),
+            "exaoctet" => Some(Self::Exaoctet),
+            "exaoctets" => Some(Self::Exaoctet),
+            "kibioctet" => Some(Self::Kibioctet),
+            "kibioctets" => Some(Self::Kibioctet),
+            "mebioctet" => Some(Self::Mebioctet),
+            "mebioctets" => Some(Self::Mebioctet),
+            "gibioctet" => Some(Self::Gibioctet),
+            "gibioctets" => Some(Self::Gibioctet),
+            "tebioctet" => Some(Self::Tebioctet),
+            "tebioctets" => Some(Self::Tebioctet),
+            "pebioctet" => Some(Self::Pebioctet),
+            "pebioctets" => Some(Self::Pebioctet),
+            "exbioctet" => Some(Self::Exbioctet),
+            "exbioctets" => Some(Self::Exbioctet),
+            "bit" => Some(Self::Bit),
+            "bits" => Some(Self::Bit),
+            "kilobit" => Some(Self::Kilobit),
+            "kilobits" => Some(Self::Kilobit),
+            "megabit" => Some(Self::Megabit),
+            "megabits" => Some(Self::Megabit),
+            "gigabit" => Some(Self::Gigabit),
+            "gigabits" => Some(Self::Gigabit),
+            "terabit" => Some(Self::Terabit),
+            "terabits" => Some(Self::Terabit),
+            "petabit" => Some(Self::Petabit),
+            "petabits" => Some(Self::Petabit),
+            "exabit" => Some(Self::Exabit),
+            "exabits" => Some(Self::Exabit),
+            "kibibit" => Some(Self::Kibibit),
+            "kibibits" => Some(Self::Kibibit),
+            "mebibit" => Some(Self::Mebibit),
+            "mebibits" => Some(Self::Mebibit),
+            "gibibit" => Some(Self::Gibibit),
+            "gibibits" => Some(Self::Gibibit),
+            "tebibit" => Some(Self::Tebibit),
+            "tebibits" => Some(Self::Tebibit),
+            "pebibit" => Some(Self::Pebibit),
+            "pebibits" => Some(Self::Pebibit),
+            "exbibit" => Some(Self::Exbibit),
+            "exbibits" => Some(Self::Exbibit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for InformationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "B" => Ok(Self::Byte),
@@ -255,7 +344,7 @@ impl core::str::FromStr for InformationUnit {
             "Tib" => Ok(Self::Tebibit),
             "Pib" => Ok(Self::Pebibit),
             "Eib" => Ok(Self::Exbibit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

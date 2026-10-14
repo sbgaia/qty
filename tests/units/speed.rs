@@ -1689,6 +1689,766 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SpeedUnit::from_name("meterpersecond"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meter per second"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METER PER SECOND"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meterspersecond"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meters per second"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METERS PER SECOND"),
+        Some(SpeedUnit::MeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometerpersecond"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometer per second"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("NANOMETER PER SECOND"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometerspersecond"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometers per second"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("NANOMETERS PER SECOND"),
+        Some(SpeedUnit::NanometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometerpersecond"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometer per second"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MICROMETER PER SECOND"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometerspersecond"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometers per second"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MICROMETERS PER SECOND"),
+        Some(SpeedUnit::MicrometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeterpersecond"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeter per second"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETER PER SECOND"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeterspersecond"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeters per second"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETERS PER SECOND"),
+        Some(SpeedUnit::MillimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeterpersecond"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeter per second"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETER PER SECOND"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeterspersecond"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeters per second"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETERS PER SECOND"),
+        Some(SpeedUnit::CentimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeterpersecond"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeter per second"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("DECIMETER PER SECOND"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeterspersecond"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeters per second"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("DECIMETERS PER SECOND"),
+        Some(SpeedUnit::DecimeterPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometerpersecond"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometer per second"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETER PER SECOND"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometerspersecond"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometers per second"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETERS PER SECOND"),
+        Some(SpeedUnit::KilometerPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meterperminute"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meter per minute"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METER PER MINUTE"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("metersperminute"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meters per minute"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METERS PER MINUTE"),
+        Some(SpeedUnit::MeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometerperminute"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometer per minute"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("NANOMETER PER MINUTE"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometersperminute"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("nanometers per minute"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("NANOMETERS PER MINUTE"),
+        Some(SpeedUnit::NanometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometerperminute"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometer per minute"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MICROMETER PER MINUTE"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometersperminute"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("micrometers per minute"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MICROMETERS PER MINUTE"),
+        Some(SpeedUnit::MicrometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeterperminute"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeter per minute"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETER PER MINUTE"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimetersperminute"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeters per minute"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETERS PER MINUTE"),
+        Some(SpeedUnit::MillimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeterperminute"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeter per minute"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETER PER MINUTE"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimetersperminute"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeters per minute"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETERS PER MINUTE"),
+        Some(SpeedUnit::CentimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeterperminute"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeter per minute"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("DECIMETER PER MINUTE"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimetersperminute"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("decimeters per minute"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("DECIMETERS PER MINUTE"),
+        Some(SpeedUnit::DecimeterPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometerperminute"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometer per minute"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETER PER MINUTE"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometersperminute"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometers per minute"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETERS PER MINUTE"),
+        Some(SpeedUnit::KilometerPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meterperhour"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meter per hour"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METER PER HOUR"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("metersperhour"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("meters per hour"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("METERS PER HOUR"),
+        Some(SpeedUnit::MeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeterperhour"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeter per hour"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETER PER HOUR"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimetersperhour"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("millimeters per hour"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILLIMETERS PER HOUR"),
+        Some(SpeedUnit::MillimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeterperhour"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeter per hour"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETER PER HOUR"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimetersperhour"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("centimeters per hour"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("CENTIMETERS PER HOUR"),
+        Some(SpeedUnit::CentimeterPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometerperhour"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometer per hour"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETER PER HOUR"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometersperhour"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("kilometers per hour"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("KILOMETERS PER HOUR"),
+        Some(SpeedUnit::KilometerPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("footpersecond"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("foot per second"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FOOT PER SECOND"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feetpersecond"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feet per second"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FEET PER SECOND"),
+        Some(SpeedUnit::FootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("footperminute"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("foot per minute"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FOOT PER MINUTE"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feetperminute"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feet per minute"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FEET PER MINUTE"),
+        Some(SpeedUnit::FootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("footperhour"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("foot per hour"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FOOT PER HOUR"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feetperhour"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("feet per hour"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("FEET PER HOUR"),
+        Some(SpeedUnit::FootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfootpersecond"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey foot per second"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FOOT PER SECOND"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfeetpersecond"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey feet per second"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FEET PER SECOND"),
+        Some(SpeedUnit::UsSurveyFootPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfootperminute"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey foot per minute"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FOOT PER MINUTE"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfeetperminute"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey feet per minute"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FEET PER MINUTE"),
+        Some(SpeedUnit::UsSurveyFootPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfootperhour"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey foot per hour"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FOOT PER HOUR"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("ussurveyfeetperhour"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("us survey feet per hour"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("US SURVEY FEET PER HOUR"),
+        Some(SpeedUnit::UsSurveyFootPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchpersecond"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inch per second"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCH PER SECOND"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchespersecond"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inches per second"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCHES PER SECOND"),
+        Some(SpeedUnit::InchPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchperminute"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inch per minute"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCH PER MINUTE"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchesperminute"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inches per minute"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCHES PER MINUTE"),
+        Some(SpeedUnit::InchPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchperhour"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inch per hour"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCH PER HOUR"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inchesperhour"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("inches per hour"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("INCHES PER HOUR"),
+        Some(SpeedUnit::InchPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardpersecond"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yard per second"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARD PER SECOND"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardspersecond"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yards per second"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARDS PER SECOND"),
+        Some(SpeedUnit::YardPerSecond)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardperminute"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yard per minute"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARD PER MINUTE"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardsperminute"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yards per minute"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARDS PER MINUTE"),
+        Some(SpeedUnit::YardPerMinute)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardperhour"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yard per hour"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARD PER HOUR"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yardsperhour"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("yards per hour"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("YARDS PER HOUR"),
+        Some(SpeedUnit::YardPerHour)
+    );
+    assert_eq!(SpeedUnit::from_name("knot"), Some(SpeedUnit::Knot));
+    assert_eq!(SpeedUnit::from_name("knot"), Some(SpeedUnit::Knot));
+    assert_eq!(SpeedUnit::from_name("KNOT"), Some(SpeedUnit::Knot));
+    assert_eq!(SpeedUnit::from_name("knots"), Some(SpeedUnit::Knot));
+    assert_eq!(SpeedUnit::from_name("knots"), Some(SpeedUnit::Knot));
+    assert_eq!(SpeedUnit::from_name("KNOTS"), Some(SpeedUnit::Knot));
+    assert_eq!(
+        SpeedUnit::from_name("mileperhour"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("mile per hour"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILE PER HOUR"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("milesperhour"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("miles per hour"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(
+        SpeedUnit::from_name("MILES PER HOUR"),
+        Some(SpeedUnit::MilePerHour)
+    );
+    assert_eq!(SpeedUnit::from_name("mach"), Some(SpeedUnit::Mach));
+    assert_eq!(SpeedUnit::from_name("mach"), Some(SpeedUnit::Mach));
+    assert_eq!(SpeedUnit::from_name("MACH"), Some(SpeedUnit::Mach));
+    assert_eq!(SpeedUnit::from_name("mach"), Some(SpeedUnit::Mach));
+    assert_eq!(SpeedUnit::from_name("mach"), Some(SpeedUnit::Mach));
+    assert_eq!(SpeedUnit::from_name("MACH"), Some(SpeedUnit::Mach));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Speed::from_base(6.0);
     let b = Speed::from_base(2.0);

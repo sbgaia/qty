@@ -590,6 +590,226 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmeterpersecond"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meter per second"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METER PER SECOND"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmeterspersecond"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meters per second"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METERS PER SECOND"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmeterperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meter per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METER PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmetersperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meters per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METERS PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmeterperhour"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meter per hour"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METER PER HOUR"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmetersperhour"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meters per hour"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METERS PER HOUR"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmeterperday"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meter per day"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METER PER DAY"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicmetersperday"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic meters per day"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC METERS PER DAY"),
+        Some(StandardVolumeFlowUnit::StandardCubicMeterPerDay)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubiccentimeterperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic centimeter per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC CENTIMETER PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubiccentimetersperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic centimeters per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC CENTIMETERS PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardliterperminute"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard liter per minute"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD LITER PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardlitersperminute"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard liters per minute"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD LITERS PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardLiterPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfootpersecond"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic foot per second"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FOOT PER SECOND"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfeetpersecond"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic feet per second"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FEET PER SECOND"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerSecond)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfootperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic foot per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FOOT PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfeetperminute"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic feet per minute"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FEET PER MINUTE"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerMinute)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfootperhour"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic foot per hour"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FOOT PER HOUR"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standardcubicfeetperhour"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("standard cubic feet per hour"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+    assert_eq!(
+        StandardVolumeFlowUnit::from_name("STANDARD CUBIC FEET PER HOUR"),
+        Some(StandardVolumeFlowUnit::StandardCubicFootPerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = StandardVolumeFlow::from_base(6.0);
     let b = StandardVolumeFlow::from_base(2.0);

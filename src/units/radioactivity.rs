@@ -170,12 +170,81 @@ impl RadioactivityUnit {
             Self::Terarutherford => &["TRd"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "becquerel" => Some(Self::Becquerel),
+            "becquerels" => Some(Self::Becquerel),
+            "picobecquerel" => Some(Self::Picobecquerel),
+            "picobecquerels" => Some(Self::Picobecquerel),
+            "nanobecquerel" => Some(Self::Nanobecquerel),
+            "nanobecquerels" => Some(Self::Nanobecquerel),
+            "microbecquerel" => Some(Self::Microbecquerel),
+            "microbecquerels" => Some(Self::Microbecquerel),
+            "millibecquerel" => Some(Self::Millibecquerel),
+            "millibecquerels" => Some(Self::Millibecquerel),
+            "kilobecquerel" => Some(Self::Kilobecquerel),
+            "kilobecquerels" => Some(Self::Kilobecquerel),
+            "megabecquerel" => Some(Self::Megabecquerel),
+            "megabecquerels" => Some(Self::Megabecquerel),
+            "gigabecquerel" => Some(Self::Gigabecquerel),
+            "gigabecquerels" => Some(Self::Gigabecquerel),
+            "terabecquerel" => Some(Self::Terabecquerel),
+            "terabecquerels" => Some(Self::Terabecquerel),
+            "petabecquerel" => Some(Self::Petabecquerel),
+            "petabecquerels" => Some(Self::Petabecquerel),
+            "exabecquerel" => Some(Self::Exabecquerel),
+            "exabecquerels" => Some(Self::Exabecquerel),
+            "curie" => Some(Self::Curie),
+            "curies" => Some(Self::Curie),
+            "picocurie" => Some(Self::Picocurie),
+            "picocuries" => Some(Self::Picocurie),
+            "nanocurie" => Some(Self::Nanocurie),
+            "nanocuries" => Some(Self::Nanocurie),
+            "microcurie" => Some(Self::Microcurie),
+            "microcuries" => Some(Self::Microcurie),
+            "millicurie" => Some(Self::Millicurie),
+            "millicuries" => Some(Self::Millicurie),
+            "kilocurie" => Some(Self::Kilocurie),
+            "kilocuries" => Some(Self::Kilocurie),
+            "megacurie" => Some(Self::Megacurie),
+            "megacuries" => Some(Self::Megacurie),
+            "gigacurie" => Some(Self::Gigacurie),
+            "gigacuries" => Some(Self::Gigacurie),
+            "teracurie" => Some(Self::Teracurie),
+            "teracuries" => Some(Self::Teracurie),
+            "rutherford" => Some(Self::Rutherford),
+            "rutherfords" => Some(Self::Rutherford),
+            "picorutherford" => Some(Self::Picorutherford),
+            "picorutherfords" => Some(Self::Picorutherford),
+            "nanorutherford" => Some(Self::Nanorutherford),
+            "nanorutherfords" => Some(Self::Nanorutherford),
+            "microrutherford" => Some(Self::Microrutherford),
+            "microrutherfords" => Some(Self::Microrutherford),
+            "millirutherford" => Some(Self::Millirutherford),
+            "millirutherfords" => Some(Self::Millirutherford),
+            "kilorutherford" => Some(Self::Kilorutherford),
+            "kilorutherfords" => Some(Self::Kilorutherford),
+            "megarutherford" => Some(Self::Megarutherford),
+            "megarutherfords" => Some(Self::Megarutherford),
+            "gigarutherford" => Some(Self::Gigarutherford),
+            "gigarutherfords" => Some(Self::Gigarutherford),
+            "terarutherford" => Some(Self::Terarutherford),
+            "terarutherfords" => Some(Self::Terarutherford),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RadioactivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Bq" => Ok(Self::Becquerel),
@@ -207,7 +276,7 @@ impl core::str::FromStr for RadioactivityUnit {
             "MRd" => Ok(Self::Megarutherford),
             "GRd" => Ok(Self::Gigarutherford),
             "TRd" => Ok(Self::Terarutherford),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

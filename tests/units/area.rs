@@ -649,6 +649,310 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        AreaUnit::from_name("squarekilometer"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square kilometer"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE KILOMETER"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarekilometers"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square kilometers"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE KILOMETERS"),
+        Some(AreaUnit::SquareKilometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremeter"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square meter"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE METER"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremeters"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square meters"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE METERS"),
+        Some(AreaUnit::SquareMeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaredecimeter"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square decimeter"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE DECIMETER"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaredecimeters"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square decimeters"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE DECIMETERS"),
+        Some(AreaUnit::SquareDecimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarecentimeter"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square centimeter"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE CENTIMETER"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarecentimeters"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square centimeters"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE CENTIMETERS"),
+        Some(AreaUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremillimeter"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square millimeter"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MILLIMETER"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremillimeters"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square millimeters"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MILLIMETERS"),
+        Some(AreaUnit::SquareMillimeter)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremicrometer"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square micrometer"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MICROMETER"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremicrometers"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square micrometers"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MICROMETERS"),
+        Some(AreaUnit::SquareMicrometer)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremile"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square mile"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MILE"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squaremiles"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square miles"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE MILES"),
+        Some(AreaUnit::SquareMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squareyard"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square yard"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE YARD"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squareyards"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square yards"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE YARDS"),
+        Some(AreaUnit::SquareYard)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarefoot"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square foot"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE FOOT"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarefeet"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square feet"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE FEET"),
+        Some(AreaUnit::SquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("ussurveysquarefoot"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("us survey square foot"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("US SURVEY SQUARE FOOT"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("ussurveysquarefeet"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("us survey square feet"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("US SURVEY SQUARE FEET"),
+        Some(AreaUnit::UsSurveySquareFoot)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squareinch"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square inch"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE INCH"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squareinches"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square inches"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE INCHES"),
+        Some(AreaUnit::SquareInch)
+    );
+    assert_eq!(AreaUnit::from_name("acre"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("acre"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("ACRE"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("acres"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("acres"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("ACRES"), Some(AreaUnit::Acre));
+    assert_eq!(AreaUnit::from_name("hectare"), Some(AreaUnit::Hectare));
+    assert_eq!(AreaUnit::from_name("hectare"), Some(AreaUnit::Hectare));
+    assert_eq!(AreaUnit::from_name("HECTARE"), Some(AreaUnit::Hectare));
+    assert_eq!(AreaUnit::from_name("hectares"), Some(AreaUnit::Hectare));
+    assert_eq!(AreaUnit::from_name("hectares"), Some(AreaUnit::Hectare));
+    assert_eq!(AreaUnit::from_name("HECTARES"), Some(AreaUnit::Hectare));
+    assert_eq!(
+        AreaUnit::from_name("squarenauticalmile"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square nautical mile"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE NAUTICAL MILE"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("squarenauticalmiles"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("square nautical miles"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+    assert_eq!(
+        AreaUnit::from_name("SQUARE NAUTICAL MILES"),
+        Some(AreaUnit::SquareNauticalMile)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Area::from_base(6.0);
     let b = Area::from_base(2.0);

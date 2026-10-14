@@ -227,6 +227,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperepersquaremeter"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("ampere per square meter"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERE PER SQUARE METER"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperespersquaremeter"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperes per square meter"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERES PER SQUARE METER"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperepersquareinch"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("ampere per square inch"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERE PER SQUARE INCH"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperespersquareinch"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperes per square inch"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERES PER SQUARE INCH"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareInch)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperepersquarefoot"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("ampere per square foot"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERE PER SQUARE FOOT"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperespersquarefoot"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("amperes per square foot"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+    assert_eq!(
+        ElectricCurrentDensityUnit::from_name("AMPERES PER SQUARE FOOT"),
+        Some(ElectricCurrentDensityUnit::AmperePerSquareFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricCurrentDensity::from_base(6.0);
     let b = ElectricCurrentDensity::from_base(2.0);

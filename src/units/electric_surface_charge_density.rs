@@ -68,18 +68,35 @@ impl ElectricSurfaceChargeDensityUnit {
             Self::CoulombPerSquareInch => &["C/in²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "coulombpersquaremeter" => Some(Self::CoulombPerSquareMeter),
+            "coulombspersquaremeter" => Some(Self::CoulombPerSquareMeter),
+            "coulombpersquarecentimeter" => Some(Self::CoulombPerSquareCentimeter),
+            "coulombspersquarecentimeter" => Some(Self::CoulombPerSquareCentimeter),
+            "coulombpersquareinch" => Some(Self::CoulombPerSquareInch),
+            "coulombspersquareinch" => Some(Self::CoulombPerSquareInch),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricSurfaceChargeDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "C/m²" => Ok(Self::CoulombPerSquareMeter),
             "C/cm²" => Ok(Self::CoulombPerSquareCentimeter),
             "C/in²" => Ok(Self::CoulombPerSquareInch),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

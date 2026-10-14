@@ -132,12 +132,85 @@ impl FluidResistanceUnit {
             Self::WoodUnit => &["WU", "HRU"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "pascalsecondperliter" => Some(Self::PascalSecondPerLiter),
+            "pascalsecondsperliter" => Some(Self::PascalSecondPerLiter),
+            "pascalminuteperliter" => Some(Self::PascalMinutePerLiter),
+            "pascalminutesperliter" => Some(Self::PascalMinutePerLiter),
+            "pascalsecondpermilliliter" => Some(Self::PascalSecondPerMilliliter),
+            "pascalsecondspermilliliter" => Some(Self::PascalSecondPerMilliliter),
+            "pascalminutepermilliliter" => Some(Self::PascalMinutePerMilliliter),
+            "pascalminutespermilliliter" => Some(Self::PascalMinutePerMilliliter),
+            "pascalsecondpercubicmeter" => Some(Self::PascalSecondPerCubicMeter),
+            "pascalsecondspercubicmeter" => Some(Self::PascalSecondPerCubicMeter),
+            "megapascalsecondpercubicmeter" => Some(Self::MegapascalSecondPerCubicMeter),
+            "megapascalsecondspercubicmeter" => Some(Self::MegapascalSecondPerCubicMeter),
+            "pascalminutepercubicmeter" => Some(Self::PascalMinutePerCubicMeter),
+            "pascalminutespercubicmeter" => Some(Self::PascalMinutePerCubicMeter),
+            "pascalsecondpercubiccentimeter" => Some(Self::PascalSecondPerCubicCentimeter),
+            "pascalsecondspercubiccentimeter" => Some(Self::PascalSecondPerCubicCentimeter),
+            "pascalminutepercubiccentimeter" => Some(Self::PascalMinutePerCubicCentimeter),
+            "pascalminutespercubiccentimeter" => Some(Self::PascalMinutePerCubicCentimeter),
+            "dynesecondpercentimetertothefifth" => Some(Self::DyneSecondPerCentimeterToTheFifth),
+            "dynesecondspercentimetertothefifth" => Some(Self::DyneSecondPerCentimeterToTheFifth),
+            "millimetermercurysecondperliter" => Some(Self::MillimeterMercurySecondPerLiter),
+            "millimetermercurysecondsperliter" => Some(Self::MillimeterMercurySecondPerLiter),
+            "millimetermercuryminuteperliter" => Some(Self::MillimeterMercuryMinutePerLiter),
+            "millimetermercuryminutesperliter" => Some(Self::MillimeterMercuryMinutePerLiter),
+            "millimetermercurysecondpermilliliter" => {
+                Some(Self::MillimeterMercurySecondPerMilliliter)
+            }
+            "millimetermercurysecondspermilliliter" => {
+                Some(Self::MillimeterMercurySecondPerMilliliter)
+            }
+            "millimetermercuryminutepermilliliter" => {
+                Some(Self::MillimeterMercuryMinutePerMilliliter)
+            }
+            "millimetermercuryminutespermilliliter" => {
+                Some(Self::MillimeterMercuryMinutePerMilliliter)
+            }
+            "millimetermercurysecondpercubiccentimeter" => {
+                Some(Self::MillimeterMercurySecondPerCubicCentimeter)
+            }
+            "millimetermercurysecondspercubiccentimeter" => {
+                Some(Self::MillimeterMercurySecondPerCubicCentimeter)
+            }
+            "millimetermercuryminutepercubiccentimeter" => {
+                Some(Self::MillimeterMercuryMinutePerCubicCentimeter)
+            }
+            "millimetermercuryminutespercubiccentimeter" => {
+                Some(Self::MillimeterMercuryMinutePerCubicCentimeter)
+            }
+            "millimetermercurysecondpercubicmeter" => {
+                Some(Self::MillimeterMercurySecondPerCubicMeter)
+            }
+            "millimetermercurysecondspercubicmeter" => {
+                Some(Self::MillimeterMercurySecondPerCubicMeter)
+            }
+            "millimetermercuryminutepercubicmeter" => {
+                Some(Self::MillimeterMercuryMinutePerCubicMeter)
+            }
+            "millimetermercuryminutespercubicmeter" => {
+                Some(Self::MillimeterMercuryMinutePerCubicMeter)
+            }
+            "woodunit" => Some(Self::WoodUnit),
+            "woodunits" => Some(Self::WoodUnit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for FluidResistanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa·s/l" => Ok(Self::PascalSecondPerLiter),
@@ -161,7 +234,7 @@ impl core::str::FromStr for FluidResistanceUnit {
             "mmHg·min/m³" => Ok(Self::MillimeterMercuryMinutePerCubicMeter),
             "WU" => Ok(Self::WoodUnit),
             "HRU" => Ok(Self::WoodUnit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

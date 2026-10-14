@@ -402,6 +402,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("sievert"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("sievert"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("SIEVERT"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("sieverts"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("sieverts"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("SIEVERTS"),
+        Some(RadiationEquivalentDoseUnit::Sievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("nanosievert"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("nanosievert"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("NANOSIEVERT"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("nanosieverts"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("nanosieverts"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("NANOSIEVERTS"),
+        Some(RadiationEquivalentDoseUnit::Nanosievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("microsievert"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("microsievert"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MICROSIEVERT"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("microsieverts"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("microsieverts"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MICROSIEVERTS"),
+        Some(RadiationEquivalentDoseUnit::Microsievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("millisievert"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("millisievert"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MILLISIEVERT"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("millisieverts"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("millisieverts"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MILLISIEVERTS"),
+        Some(RadiationEquivalentDoseUnit::Millisievert)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("roentgenequivalentman"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("roentgen equivalent man"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("ROENTGEN EQUIVALENT MAN"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("roentgensequivalentman"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("roentgens equivalent man"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("ROENTGENS EQUIVALENT MAN"),
+        Some(RadiationEquivalentDoseUnit::RoentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("milliroentgenequivalentman"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("milliroentgen equivalent man"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MILLIROENTGEN EQUIVALENT MAN"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("milliroentgensequivalentman"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("milliroentgens equivalent man"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseUnit::from_name("MILLIROENTGENS EQUIVALENT MAN"),
+        Some(RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RadiationEquivalentDose::from_base(6.0);
     let b = RadiationEquivalentDose::from_base(2.0);

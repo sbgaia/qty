@@ -185,12 +185,88 @@ impl SpeedUnit {
             Self::Mach => &["M", "Ma", "MN", "MACH"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "meterpersecond" => Some(Self::MeterPerSecond),
+            "meterspersecond" => Some(Self::MeterPerSecond),
+            "nanometerpersecond" => Some(Self::NanometerPerSecond),
+            "nanometerspersecond" => Some(Self::NanometerPerSecond),
+            "micrometerpersecond" => Some(Self::MicrometerPerSecond),
+            "micrometerspersecond" => Some(Self::MicrometerPerSecond),
+            "millimeterpersecond" => Some(Self::MillimeterPerSecond),
+            "millimeterspersecond" => Some(Self::MillimeterPerSecond),
+            "centimeterpersecond" => Some(Self::CentimeterPerSecond),
+            "centimeterspersecond" => Some(Self::CentimeterPerSecond),
+            "decimeterpersecond" => Some(Self::DecimeterPerSecond),
+            "decimeterspersecond" => Some(Self::DecimeterPerSecond),
+            "kilometerpersecond" => Some(Self::KilometerPerSecond),
+            "kilometerspersecond" => Some(Self::KilometerPerSecond),
+            "meterperminute" => Some(Self::MeterPerMinute),
+            "metersperminute" => Some(Self::MeterPerMinute),
+            "nanometerperminute" => Some(Self::NanometerPerMinute),
+            "nanometersperminute" => Some(Self::NanometerPerMinute),
+            "micrometerperminute" => Some(Self::MicrometerPerMinute),
+            "micrometersperminute" => Some(Self::MicrometerPerMinute),
+            "millimeterperminute" => Some(Self::MillimeterPerMinute),
+            "millimetersperminute" => Some(Self::MillimeterPerMinute),
+            "centimeterperminute" => Some(Self::CentimeterPerMinute),
+            "centimetersperminute" => Some(Self::CentimeterPerMinute),
+            "decimeterperminute" => Some(Self::DecimeterPerMinute),
+            "decimetersperminute" => Some(Self::DecimeterPerMinute),
+            "kilometerperminute" => Some(Self::KilometerPerMinute),
+            "kilometersperminute" => Some(Self::KilometerPerMinute),
+            "meterperhour" => Some(Self::MeterPerHour),
+            "metersperhour" => Some(Self::MeterPerHour),
+            "millimeterperhour" => Some(Self::MillimeterPerHour),
+            "millimetersperhour" => Some(Self::MillimeterPerHour),
+            "centimeterperhour" => Some(Self::CentimeterPerHour),
+            "centimetersperhour" => Some(Self::CentimeterPerHour),
+            "kilometerperhour" => Some(Self::KilometerPerHour),
+            "kilometersperhour" => Some(Self::KilometerPerHour),
+            "footpersecond" => Some(Self::FootPerSecond),
+            "feetpersecond" => Some(Self::FootPerSecond),
+            "footperminute" => Some(Self::FootPerMinute),
+            "feetperminute" => Some(Self::FootPerMinute),
+            "footperhour" => Some(Self::FootPerHour),
+            "feetperhour" => Some(Self::FootPerHour),
+            "ussurveyfootpersecond" => Some(Self::UsSurveyFootPerSecond),
+            "ussurveyfeetpersecond" => Some(Self::UsSurveyFootPerSecond),
+            "ussurveyfootperminute" => Some(Self::UsSurveyFootPerMinute),
+            "ussurveyfeetperminute" => Some(Self::UsSurveyFootPerMinute),
+            "ussurveyfootperhour" => Some(Self::UsSurveyFootPerHour),
+            "ussurveyfeetperhour" => Some(Self::UsSurveyFootPerHour),
+            "inchpersecond" => Some(Self::InchPerSecond),
+            "inchespersecond" => Some(Self::InchPerSecond),
+            "inchperminute" => Some(Self::InchPerMinute),
+            "inchesperminute" => Some(Self::InchPerMinute),
+            "inchperhour" => Some(Self::InchPerHour),
+            "inchesperhour" => Some(Self::InchPerHour),
+            "yardpersecond" => Some(Self::YardPerSecond),
+            "yardspersecond" => Some(Self::YardPerSecond),
+            "yardperminute" => Some(Self::YardPerMinute),
+            "yardsperminute" => Some(Self::YardPerMinute),
+            "yardperhour" => Some(Self::YardPerHour),
+            "yardsperhour" => Some(Self::YardPerHour),
+            "knot" => Some(Self::Knot),
+            "knots" => Some(Self::Knot),
+            "mileperhour" => Some(Self::MilePerHour),
+            "milesperhour" => Some(Self::MilePerHour),
+            "mach" => Some(Self::Mach),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for SpeedUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m/s" => Ok(Self::MeterPerSecond),
@@ -232,7 +308,7 @@ impl core::str::FromStr for SpeedUnit {
             "Ma" => Ok(Self::Mach),
             "MN" => Ok(Self::Mach),
             "MACH" => Ok(Self::Mach),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

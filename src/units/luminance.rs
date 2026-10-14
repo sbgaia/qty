@@ -90,12 +90,43 @@ impl LuminanceUnit {
             Self::Nit => &["nt"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "candelapersquaremeter" => Some(Self::CandelaPerSquareMeter),
+            "candelaspersquaremeter" => Some(Self::CandelaPerSquareMeter),
+            "nanocandelapersquaremeter" => Some(Self::NanocandelaPerSquareMeter),
+            "nanocandelaspersquaremeter" => Some(Self::NanocandelaPerSquareMeter),
+            "microcandelapersquaremeter" => Some(Self::MicrocandelaPerSquareMeter),
+            "microcandelaspersquaremeter" => Some(Self::MicrocandelaPerSquareMeter),
+            "millicandelapersquaremeter" => Some(Self::MillicandelaPerSquareMeter),
+            "millicandelaspersquaremeter" => Some(Self::MillicandelaPerSquareMeter),
+            "centicandelapersquaremeter" => Some(Self::CenticandelaPerSquareMeter),
+            "centicandelaspersquaremeter" => Some(Self::CenticandelaPerSquareMeter),
+            "decicandelapersquaremeter" => Some(Self::DecicandelaPerSquareMeter),
+            "decicandelaspersquaremeter" => Some(Self::DecicandelaPerSquareMeter),
+            "kilocandelapersquaremeter" => Some(Self::KilocandelaPerSquareMeter),
+            "kilocandelaspersquaremeter" => Some(Self::KilocandelaPerSquareMeter),
+            "candelapersquarefoot" => Some(Self::CandelaPerSquareFoot),
+            "candelaspersquarefoot" => Some(Self::CandelaPerSquareFoot),
+            "candelapersquareinch" => Some(Self::CandelaPerSquareInch),
+            "candelaspersquareinch" => Some(Self::CandelaPerSquareInch),
+            "nit" => Some(Self::Nit),
+            "nits" => Some(Self::Nit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LuminanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Cd/m²" => Ok(Self::CandelaPerSquareMeter),
@@ -108,7 +139,7 @@ impl core::str::FromStr for LuminanceUnit {
             "Cd/ft²" => Ok(Self::CandelaPerSquareFoot),
             "Cd/in²" => Ok(Self::CandelaPerSquareInch),
             "nt" => Ok(Self::Nit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

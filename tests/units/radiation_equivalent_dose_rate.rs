@@ -659,6 +659,250 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievertperhour"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievert per hour"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("SIEVERT PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievertsperhour"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sieverts per hour"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("SIEVERTS PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievertperhour"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievert per hour"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("NANOSIEVERT PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievertsperhour"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosieverts per hour"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("NANOSIEVERTS PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievertperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievert per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MICROSIEVERT PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievertsperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsieverts per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MICROSIEVERTS PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievertperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievert per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLISIEVERT PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievertsperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisieverts per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLISIEVERTS PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievertpersecond"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievert per second"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("SIEVERT PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sievertspersecond"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("sieverts per second"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("SIEVERTS PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::SievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievertpersecond"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievert per second"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("NANOSIEVERT PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosievertspersecond"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("nanosieverts per second"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("NANOSIEVERTS PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::NanosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievertpersecond"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievert per second"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MICROSIEVERT PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsievertspersecond"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("microsieverts per second"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MICROSIEVERTS PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::MicrosievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievertpersecond"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievert per second"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLISIEVERT PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisievertspersecond"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("millisieverts per second"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLISIEVERTS PER SECOND"),
+        Some(RadiationEquivalentDoseRateUnit::MillisievertPerSecond)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("roentgenequivalentmanperhour"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("roentgen equivalent man per hour"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("ROENTGEN EQUIVALENT MAN PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("roentgensequivalentmanperhour"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("roentgens equivalent man per hour"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("ROENTGENS EQUIVALENT MAN PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("milliroentgenequivalentmanperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("milliroentgen equivalent man per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLIROENTGEN EQUIVALENT MAN PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("milliroentgensequivalentmanperhour"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("milliroentgens equivalent man per hour"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+    assert_eq!(
+        RadiationEquivalentDoseRateUnit::from_name("MILLIROENTGENS EQUIVALENT MAN PER HOUR"),
+        Some(RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RadiationEquivalentDoseRate::from_base(6.0);
     let b = RadiationEquivalentDoseRate::from_base(2.0);

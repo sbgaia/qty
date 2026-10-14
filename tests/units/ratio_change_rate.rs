@@ -166,6 +166,58 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RatioChangeRateUnit::from_name("percentpersecond"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("percent per second"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("PERCENT PER SECOND"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("percentspersecond"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("percents per second"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("PERCENTS PER SECOND"),
+        Some(RatioChangeRateUnit::PercentPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("decimalfractionpersecond"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("decimal fraction per second"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("DECIMAL FRACTION PER SECOND"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("decimalfractionspersecond"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("decimal fractions per second"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+    assert_eq!(
+        RatioChangeRateUnit::from_name("DECIMAL FRACTIONS PER SECOND"),
+        Some(RatioChangeRateUnit::DecimalFractionPerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RatioChangeRate::from_base(6.0);
     let b = RatioChangeRate::from_base(2.0);

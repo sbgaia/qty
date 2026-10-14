@@ -69,18 +69,35 @@ impl BrakeSpecificFuelConsumptionUnit {
             Self::PoundPerMechanicalHorsepowerHour => &["lb/hph"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "gramperkilowatthour" => Some(Self::GramPerKiloWattHour),
+            "gramsperkilowatthour" => Some(Self::GramPerKiloWattHour),
+            "kilogramperjoule" => Some(Self::KilogramPerJoule),
+            "kilogramsperjoule" => Some(Self::KilogramPerJoule),
+            "poundpermechanicalhorsepowerhour" => Some(Self::PoundPerMechanicalHorsepowerHour),
+            "poundspermechanicalhorsepowerhour" => Some(Self::PoundPerMechanicalHorsepowerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for BrakeSpecificFuelConsumptionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/kWh" => Ok(Self::GramPerKiloWattHour),
             "kg/J" => Ok(Self::KilogramPerJoule),
             "lb/hph" => Ok(Self::PoundPerMechanicalHorsepowerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

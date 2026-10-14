@@ -174,6 +174,58 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubicmeterpersecondpersquaremeter"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubic meter per second per square meter"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("CUBIC METER PER SECOND PER SQUARE METER"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubicmeterspersecondpersquaremeter"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubic meters per second per square meter"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("CUBIC METERS PER SECOND PER SQUARE METER"),
+        Some(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubicfootperminutepersquarefoot"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubic foot per minute per square foot"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("CUBIC FOOT PER MINUTE PER SQUARE FOOT"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubicfeetperminutepersquarefoot"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("cubic feet per minute per square foot"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+    assert_eq!(
+        VolumeFlowPerAreaUnit::from_name("CUBIC FEET PER MINUTE PER SQUARE FOOT"),
+        Some(VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VolumeFlowPerArea::from_base(6.0);
     let b = VolumeFlowPerArea::from_base(2.0);

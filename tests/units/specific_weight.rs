@@ -1047,6 +1047,418 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonpercubicmillimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newton per cubic millimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTON PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonspercubicmillimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtons per cubic millimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTONS PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::NewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonpercubicmillimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewton per cubic millimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTON PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonspercubicmillimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtons per cubic millimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTONS PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonpercubiccentimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newton per cubic centimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTON PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonspercubiccentimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtons per cubic centimeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTONS PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::NewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonpercubiccentimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewton per cubic centimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTON PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonspercubiccentimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtons per cubic centimeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTONS PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonpercubicmeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newton per cubic meter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTON PER CUBIC METER"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtonspercubicmeter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("newtons per cubic meter"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("NEWTONS PER CUBIC METER"),
+        Some(SpecificWeightUnit::NewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonpercubicmeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewton per cubic meter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTON PER CUBIC METER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtonspercubicmeter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilonewtons per cubic meter"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILONEWTONS PER CUBIC METER"),
+        Some(SpecificWeightUnit::KilonewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("meganewtonpercubicmeter"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("meganewton per cubic meter"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("MEGANEWTON PER CUBIC METER"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("meganewtonspercubicmeter"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("meganewtons per cubic meter"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("MEGANEWTONS PER CUBIC METER"),
+        Some(SpecificWeightUnit::MeganewtonPerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramforcepercubicmillimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogram force per cubic millimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAM FORCE PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramsforcepercubicmillimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilograms force per cubic millimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAMS FORCE PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramforcepercubiccentimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogram force per cubic centimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAM FORCE PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramsforcepercubiccentimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilograms force per cubic centimeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAMS FORCE PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramforcepercubicmeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogram force per cubic meter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAM FORCE PER CUBIC METER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilogramsforcepercubicmeter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilograms force per cubic meter"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOGRAMS FORCE PER CUBIC METER"),
+        Some(SpecificWeightUnit::KilogramForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("poundforcepercubicinch"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("pound force per cubic inch"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("POUND FORCE PER CUBIC INCH"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("poundsforcepercubicinch"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("pounds force per cubic inch"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("POUNDS FORCE PER CUBIC INCH"),
+        Some(SpecificWeightUnit::PoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopoundforcepercubicinch"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopound force per cubic inch"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOPOUND FORCE PER CUBIC INCH"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopoundsforcepercubicinch"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopounds force per cubic inch"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOPOUNDS FORCE PER CUBIC INCH"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicInch)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("poundforcepercubicfoot"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("pound force per cubic foot"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("POUND FORCE PER CUBIC FOOT"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("poundsforcepercubicfoot"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("pounds force per cubic foot"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("POUNDS FORCE PER CUBIC FOOT"),
+        Some(SpecificWeightUnit::PoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopoundforcepercubicfoot"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopound force per cubic foot"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOPOUND FORCE PER CUBIC FOOT"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopoundsforcepercubicfoot"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("kilopounds force per cubic foot"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("KILOPOUNDS FORCE PER CUBIC FOOT"),
+        Some(SpecificWeightUnit::KilopoundForcePerCubicFoot)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonneforcepercubicmillimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonne force per cubic millimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNE FORCE PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnesforcepercubicmillimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnes force per cubic millimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNES FORCE PER CUBIC MILLIMETER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMillimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonneforcepercubiccentimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonne force per cubic centimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNE FORCE PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnesforcepercubiccentimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnes force per cubic centimeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNES FORCE PER CUBIC CENTIMETER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicCentimeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonneforcepercubicmeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonne force per cubic meter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNE FORCE PER CUBIC METER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnesforcepercubicmeter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("tonnes force per cubic meter"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+    assert_eq!(
+        SpecificWeightUnit::from_name("TONNES FORCE PER CUBIC METER"),
+        Some(SpecificWeightUnit::TonneForcePerCubicMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = SpecificWeight::from_base(6.0);
     let b = SpecificWeight::from_base(2.0);

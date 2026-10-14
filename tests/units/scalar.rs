@@ -75,6 +75,16 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(ScalarUnit::from_name("amount"), Some(ScalarUnit::Amount));
+    assert_eq!(ScalarUnit::from_name("amount"), Some(ScalarUnit::Amount));
+    assert_eq!(ScalarUnit::from_name("AMOUNT"), Some(ScalarUnit::Amount));
+    assert_eq!(ScalarUnit::from_name("amount"), Some(ScalarUnit::Amount));
+    assert_eq!(ScalarUnit::from_name("amount"), Some(ScalarUnit::Amount));
+    assert_eq!(ScalarUnit::from_name("AMOUNT"), Some(ScalarUnit::Amount));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Scalar::from_base(6.0);
     let b = Scalar::from_base(2.0);

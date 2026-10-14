@@ -152,12 +152,73 @@ impl LinearPowerDensityUnit {
             Self::GigawattPerFoot => &["GW/ft"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "wattpermeter" => Some(Self::WattPerMeter),
+            "wattspermeter" => Some(Self::WattPerMeter),
+            "milliwattpermeter" => Some(Self::MilliwattPerMeter),
+            "milliwattspermeter" => Some(Self::MilliwattPerMeter),
+            "kilowattpermeter" => Some(Self::KilowattPerMeter),
+            "kilowattspermeter" => Some(Self::KilowattPerMeter),
+            "megawattpermeter" => Some(Self::MegawattPerMeter),
+            "megawattspermeter" => Some(Self::MegawattPerMeter),
+            "gigawattpermeter" => Some(Self::GigawattPerMeter),
+            "gigawattspermeter" => Some(Self::GigawattPerMeter),
+            "wattpercentimeter" => Some(Self::WattPerCentimeter),
+            "wattspercentimeter" => Some(Self::WattPerCentimeter),
+            "milliwattpercentimeter" => Some(Self::MilliwattPerCentimeter),
+            "milliwattspercentimeter" => Some(Self::MilliwattPerCentimeter),
+            "kilowattpercentimeter" => Some(Self::KilowattPerCentimeter),
+            "kilowattspercentimeter" => Some(Self::KilowattPerCentimeter),
+            "megawattpercentimeter" => Some(Self::MegawattPerCentimeter),
+            "megawattspercentimeter" => Some(Self::MegawattPerCentimeter),
+            "gigawattpercentimeter" => Some(Self::GigawattPerCentimeter),
+            "gigawattspercentimeter" => Some(Self::GigawattPerCentimeter),
+            "wattpermillimeter" => Some(Self::WattPerMillimeter),
+            "wattspermillimeter" => Some(Self::WattPerMillimeter),
+            "milliwattpermillimeter" => Some(Self::MilliwattPerMillimeter),
+            "milliwattspermillimeter" => Some(Self::MilliwattPerMillimeter),
+            "kilowattpermillimeter" => Some(Self::KilowattPerMillimeter),
+            "kilowattspermillimeter" => Some(Self::KilowattPerMillimeter),
+            "megawattpermillimeter" => Some(Self::MegawattPerMillimeter),
+            "megawattspermillimeter" => Some(Self::MegawattPerMillimeter),
+            "gigawattpermillimeter" => Some(Self::GigawattPerMillimeter),
+            "gigawattspermillimeter" => Some(Self::GigawattPerMillimeter),
+            "wattperinch" => Some(Self::WattPerInch),
+            "wattsperinch" => Some(Self::WattPerInch),
+            "milliwattperinch" => Some(Self::MilliwattPerInch),
+            "milliwattsperinch" => Some(Self::MilliwattPerInch),
+            "kilowattperinch" => Some(Self::KilowattPerInch),
+            "kilowattsperinch" => Some(Self::KilowattPerInch),
+            "megawattperinch" => Some(Self::MegawattPerInch),
+            "megawattsperinch" => Some(Self::MegawattPerInch),
+            "gigawattperinch" => Some(Self::GigawattPerInch),
+            "gigawattsperinch" => Some(Self::GigawattPerInch),
+            "wattperfoot" => Some(Self::WattPerFoot),
+            "wattsperfoot" => Some(Self::WattPerFoot),
+            "milliwattperfoot" => Some(Self::MilliwattPerFoot),
+            "milliwattsperfoot" => Some(Self::MilliwattPerFoot),
+            "kilowattperfoot" => Some(Self::KilowattPerFoot),
+            "kilowattsperfoot" => Some(Self::KilowattPerFoot),
+            "megawattperfoot" => Some(Self::MegawattPerFoot),
+            "megawattsperfoot" => Some(Self::MegawattPerFoot),
+            "gigawattperfoot" => Some(Self::GigawattPerFoot),
+            "gigawattsperfoot" => Some(Self::GigawattPerFoot),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LinearPowerDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/m" => Ok(Self::WattPerMeter),
@@ -185,7 +246,7 @@ impl core::str::FromStr for LinearPowerDensityUnit {
             "kW/ft" => Ok(Self::KilowattPerFoot),
             "MW/ft" => Ok(Self::MegawattPerFoot),
             "GW/ft" => Ok(Self::GigawattPerFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

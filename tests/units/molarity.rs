@@ -652,6 +652,274 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolarityUnit::from_name("molepercubicmeter"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("mole per cubic meter"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MOLE PER CUBIC METER"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("molespercubicmeter"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("moles per cubic meter"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MOLES PER CUBIC METER"),
+        Some(MolarityUnit::MolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("kilomolepercubicmeter"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("kilomole per cubic meter"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("KILOMOLE PER CUBIC METER"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("kilomolespercubicmeter"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("kilomoles per cubic meter"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("KILOMOLES PER CUBIC METER"),
+        Some(MolarityUnit::KilomolePerCubicMeter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("moleperliter"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("mole per liter"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MOLE PER LITER"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("molesperliter"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("moles per liter"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MOLES PER LITER"),
+        Some(MolarityUnit::MolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("femtomoleperliter"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("femtomole per liter"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("FEMTOMOLE PER LITER"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("femtomolesperliter"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("femtomoles per liter"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("FEMTOMOLES PER LITER"),
+        Some(MolarityUnit::FemtomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("picomoleperliter"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("picomole per liter"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("PICOMOLE PER LITER"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("picomolesperliter"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("picomoles per liter"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("PICOMOLES PER LITER"),
+        Some(MolarityUnit::PicomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("nanomoleperliter"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("nanomole per liter"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("NANOMOLE PER LITER"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("nanomolesperliter"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("nanomoles per liter"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("NANOMOLES PER LITER"),
+        Some(MolarityUnit::NanomolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("micromoleperliter"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("micromole per liter"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MICROMOLE PER LITER"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("micromolesperliter"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("micromoles per liter"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MICROMOLES PER LITER"),
+        Some(MolarityUnit::MicromolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("millimoleperliter"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("millimole per liter"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MILLIMOLE PER LITER"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("millimolesperliter"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("millimoles per liter"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("MILLIMOLES PER LITER"),
+        Some(MolarityUnit::MillimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("centimoleperliter"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("centimole per liter"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("CENTIMOLE PER LITER"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("centimolesperliter"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("centimoles per liter"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("CENTIMOLES PER LITER"),
+        Some(MolarityUnit::CentimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("decimoleperliter"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("decimole per liter"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("DECIMOLE PER LITER"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("decimolesperliter"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("decimoles per liter"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("DECIMOLES PER LITER"),
+        Some(MolarityUnit::DecimolePerLiter)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("poundmolepercubicfoot"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("pound mole per cubic foot"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("POUND MOLE PER CUBIC FOOT"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("poundmolespercubicfoot"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("pound moles per cubic foot"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+    assert_eq!(
+        MolarityUnit::from_name("POUND MOLES PER CUBIC FOOT"),
+        Some(MolarityUnit::PoundMolePerCubicFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Molarity::from_base(6.0);
     let b = Molarity::from_base(2.0);

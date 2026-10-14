@@ -420,6 +420,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perkelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per kelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER KELVIN"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perkelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per kelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER KELVIN"),
+        Some(CoefficientOfThermalExpansionUnit::PerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perdegreecelsius"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per degree celsius"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER DEGREE CELSIUS"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perdegreecelsius"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per degree celsius"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER DEGREE CELSIUS"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perdegreefahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per degree fahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER DEGREE FAHRENHEIT"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("perdegreefahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("per degree fahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PER DEGREE FAHRENHEIT"),
+        Some(CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperkelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per kelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER KELVIN"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperkelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per kelvin"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER KELVIN"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerKelvin)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperdegreecelsius"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per degree celsius"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER DEGREE CELSIUS"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperdegreecelsius"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per degree celsius"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER DEGREE CELSIUS"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperdegreefahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per degree fahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER DEGREE FAHRENHEIT"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppmperdegreefahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("ppm per degree fahrenheit"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+    assert_eq!(
+        CoefficientOfThermalExpansionUnit::from_name("PPM PER DEGREE FAHRENHEIT"),
+        Some(CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = CoefficientOfThermalExpansion::from_base(6.0);
     let b = CoefficientOfThermalExpansion::from_base(2.0);

@@ -63,19 +63,34 @@ impl IlluminanceUnit {
             Self::Megalux => &["Mlx"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "lux" => Some(Self::Lux),
+            "millilux" => Some(Self::Millilux),
+            "kilolux" => Some(Self::Kilolux),
+            "megalux" => Some(Self::Megalux),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for IlluminanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "lx" => Ok(Self::Lux),
             "mlx" => Ok(Self::Millilux),
             "klx" => Ok(Self::Kilolux),
             "Mlx" => Ok(Self::Megalux),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

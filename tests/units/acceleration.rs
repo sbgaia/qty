@@ -853,6 +853,346 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        AccelerationUnit::from_name("meterpersecondsquared"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("meter per second squared"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("METER PER SECOND SQUARED"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("meterspersecondsquared"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("meters per second squared"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("METERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::MeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("nanometerpersecondsquared"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("nanometer per second squared"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("NANOMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("nanometerspersecondsquared"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("nanometers per second squared"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("NANOMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::NanometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("micrometerpersecondsquared"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("micrometer per second squared"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MICROMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("micrometerspersecondsquared"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("micrometers per second squared"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MICROMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::MicrometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millimeterpersecondsquared"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millimeter per second squared"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MILLIMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millimeterspersecondsquared"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millimeters per second squared"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MILLIMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::MillimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("centimeterpersecondsquared"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("centimeter per second squared"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("CENTIMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("centimeterspersecondsquared"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("centimeters per second squared"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("CENTIMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::CentimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("decimeterpersecondsquared"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("decimeter per second squared"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("DECIMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("decimeterspersecondsquared"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("decimeters per second squared"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("DECIMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::DecimeterPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("kilometerpersecondsquared"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("kilometer per second squared"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KILOMETER PER SECOND SQUARED"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("kilometerspersecondsquared"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("kilometers per second squared"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KILOMETERS PER SECOND SQUARED"),
+        Some(AccelerationUnit::KilometerPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("inchpersecondsquared"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("inch per second squared"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("INCH PER SECOND SQUARED"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("inchespersecondsquared"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("inches per second squared"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("INCHES PER SECOND SQUARED"),
+        Some(AccelerationUnit::InchPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("footpersecondsquared"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("foot per second squared"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("FOOT PER SECOND SQUARED"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("feetpersecondsquared"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("feet per second squared"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("FEET PER SECOND SQUARED"),
+        Some(AccelerationUnit::FootPerSecondSquared)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotpersecond"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knot per second"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOT PER SECOND"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotspersecond"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knots per second"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOTS PER SECOND"),
+        Some(AccelerationUnit::KnotPerSecond)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotperminute"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knot per minute"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOT PER MINUTE"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotsperminute"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knots per minute"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOTS PER MINUTE"),
+        Some(AccelerationUnit::KnotPerMinute)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotperhour"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knot per hour"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOT PER HOUR"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knotsperhour"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("knots per hour"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("KNOTS PER HOUR"),
+        Some(AccelerationUnit::KnotPerHour)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("standardgravity"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("standard gravity"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("STANDARD GRAVITY"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("standardgravity"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("standard gravity"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("STANDARD GRAVITY"),
+        Some(AccelerationUnit::StandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millistandardgravity"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millistandard gravity"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MILLISTANDARD GRAVITY"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millistandardgravity"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("millistandard gravity"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+    assert_eq!(
+        AccelerationUnit::from_name("MILLISTANDARD GRAVITY"),
+        Some(AccelerationUnit::MillistandardGravity)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Acceleration::from_base(6.0);
     let b = Acceleration::from_base(2.0);

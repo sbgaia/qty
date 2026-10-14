@@ -96,12 +96,45 @@ impl ReciprocalAreaUnit {
             Self::InverseSquareInch => &["in⁻²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "inversesquaremeter" => Some(Self::InverseSquareMeter),
+            "inversesquaremeters" => Some(Self::InverseSquareMeter),
+            "inversesquarekilometer" => Some(Self::InverseSquareKilometer),
+            "inversesquarekilometers" => Some(Self::InverseSquareKilometer),
+            "inversesquaredecimeter" => Some(Self::InverseSquareDecimeter),
+            "inversesquaredecimeters" => Some(Self::InverseSquareDecimeter),
+            "inversesquarecentimeter" => Some(Self::InverseSquareCentimeter),
+            "inversesquarecentimeters" => Some(Self::InverseSquareCentimeter),
+            "inversesquaremillimeter" => Some(Self::InverseSquareMillimeter),
+            "inversesquaremillimeters" => Some(Self::InverseSquareMillimeter),
+            "inversesquaremicrometer" => Some(Self::InverseSquareMicrometer),
+            "inversesquaremicrometers" => Some(Self::InverseSquareMicrometer),
+            "inversesquaremile" => Some(Self::InverseSquareMile),
+            "inversesquaremiles" => Some(Self::InverseSquareMile),
+            "inversesquareyard" => Some(Self::InverseSquareYard),
+            "inversesquareyards" => Some(Self::InverseSquareYard),
+            "inversesquarefoot" => Some(Self::InverseSquareFoot),
+            "inversesquarefeet" => Some(Self::InverseSquareFoot),
+            "inverseussurveysquarefoot" => Some(Self::InverseUsSurveySquareFoot),
+            "inverseussurveysquarefeet" => Some(Self::InverseUsSurveySquareFoot),
+            "inversesquareinch" => Some(Self::InverseSquareInch),
+            "inversesquareinches" => Some(Self::InverseSquareInch),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ReciprocalAreaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁻²" => Ok(Self::InverseSquareMeter),
@@ -115,7 +148,7 @@ impl core::str::FromStr for ReciprocalAreaUnit {
             "ft⁻²" => Ok(Self::InverseSquareFoot),
             "ft⁻² (US)" => Ok(Self::InverseUsSurveySquareFoot),
             "in⁻²" => Ok(Self::InverseSquareInch),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -96,12 +96,41 @@ impl DynamicViscosityUnit {
             Self::PoundPerFootSecond => &["lb/(ft·s)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonsecondpermetersquared" => Some(Self::NewtonSecondPerMeterSquared),
+            "newtonsecondspermetersquared" => Some(Self::NewtonSecondPerMeterSquared),
+            "pascalsecond" => Some(Self::PascalSecond),
+            "pascalseconds" => Some(Self::PascalSecond),
+            "millipascalsecond" => Some(Self::MillipascalSecond),
+            "millipascalseconds" => Some(Self::MillipascalSecond),
+            "micropascalsecond" => Some(Self::MicropascalSecond),
+            "micropascalseconds" => Some(Self::MicropascalSecond),
+            "poise" => Some(Self::Poise),
+            "centipoise" => Some(Self::Centipoise),
+            "reyn" => Some(Self::Reyn),
+            "reyns" => Some(Self::Reyn),
+            "poundforcesecondpersquareinch" => Some(Self::PoundForceSecondPerSquareInch),
+            "poundsforcesecondpersquareinch" => Some(Self::PoundForceSecondPerSquareInch),
+            "poundforcesecondpersquarefoot" => Some(Self::PoundForceSecondPerSquareFoot),
+            "poundsforcesecondpersquarefoot" => Some(Self::PoundForceSecondPerSquareFoot),
+            "poundperfootsecond" => Some(Self::PoundPerFootSecond),
+            "poundsperfootsecond" => Some(Self::PoundPerFootSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for DynamicViscosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Ns/m²" => Ok(Self::NewtonSecondPerMeterSquared),
@@ -115,7 +144,7 @@ impl core::str::FromStr for DynamicViscosityUnit {
             "lbf·s/in²" => Ok(Self::PoundForceSecondPerSquareInch),
             "lbf·s/ft²" => Ok(Self::PoundForceSecondPerSquareFoot),
             "lb/(ft·s)" => Ok(Self::PoundPerFootSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

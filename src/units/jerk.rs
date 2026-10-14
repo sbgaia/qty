@@ -94,12 +94,43 @@ impl JerkUnit {
             Self::MillistandardGravitiesPerSecond => &["mg/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "meterpersecondcubed" => Some(Self::MeterPerSecondCubed),
+            "meterspersecondcubed" => Some(Self::MeterPerSecondCubed),
+            "nanometerpersecondcubed" => Some(Self::NanometerPerSecondCubed),
+            "nanometerspersecondcubed" => Some(Self::NanometerPerSecondCubed),
+            "micrometerpersecondcubed" => Some(Self::MicrometerPerSecondCubed),
+            "micrometerspersecondcubed" => Some(Self::MicrometerPerSecondCubed),
+            "millimeterpersecondcubed" => Some(Self::MillimeterPerSecondCubed),
+            "millimeterspersecondcubed" => Some(Self::MillimeterPerSecondCubed),
+            "centimeterpersecondcubed" => Some(Self::CentimeterPerSecondCubed),
+            "centimeterspersecondcubed" => Some(Self::CentimeterPerSecondCubed),
+            "decimeterpersecondcubed" => Some(Self::DecimeterPerSecondCubed),
+            "decimeterspersecondcubed" => Some(Self::DecimeterPerSecondCubed),
+            "kilometerpersecondcubed" => Some(Self::KilometerPerSecondCubed),
+            "kilometerspersecondcubed" => Some(Self::KilometerPerSecondCubed),
+            "inchpersecondcubed" => Some(Self::InchPerSecondCubed),
+            "inchespersecondcubed" => Some(Self::InchPerSecondCubed),
+            "footpersecondcubed" => Some(Self::FootPerSecondCubed),
+            "feetpersecondcubed" => Some(Self::FootPerSecondCubed),
+            "standardgravitiespersecond" => Some(Self::StandardGravitiesPerSecond),
+            "millistandardgravitiespersecond" => Some(Self::MillistandardGravitiesPerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for JerkUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m/s³" => Ok(Self::MeterPerSecondCubed),
@@ -113,7 +144,7 @@ impl core::str::FromStr for JerkUnit {
             "ft/s³" => Ok(Self::FootPerSecondCubed),
             "g/s" => Ok(Self::StandardGravitiesPerSecond),
             "mg/s" => Ok(Self::MillistandardGravitiesPerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

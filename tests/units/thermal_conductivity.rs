@@ -228,6 +228,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ThermalConductivityUnit::from_name("wattpermeterkelvin"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("watt per meter kelvin"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("WATT PER METER KELVIN"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("wattspermeterkelvin"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("watts per meter kelvin"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("WATTS PER METER KELVIN"),
+        Some(ThermalConductivityUnit::WattPerMeterKelvin)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btuperhourfootfahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btu per hour foot fahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("BTU PER HOUR FOOT FAHRENHEIT"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btusperhourfootfahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btus per hour foot fahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("BTUS PER HOUR FOOT FAHRENHEIT"),
+        Some(ThermalConductivityUnit::BtuPerHourFootFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btupersecondinchfahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btu per second inch fahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("BTU PER SECOND INCH FAHRENHEIT"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btuspersecondinchfahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("btus per second inch fahrenheit"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+    assert_eq!(
+        ThermalConductivityUnit::from_name("BTUS PER SECOND INCH FAHRENHEIT"),
+        Some(ThermalConductivityUnit::BtuPerSecondInchFahrenheit)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ThermalConductivity::from_base(6.0);
     let b = ThermalConductivity::from_base(2.0);

@@ -1386,6 +1386,586 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MassFractionUnit::from_name("decimalfraction"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decimal fraction"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIMAL FRACTION"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decimalfractions"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decimal fractions"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIMAL FRACTIONS"),
+        Some(MassFractionUnit::DecimalFraction)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("grampergram"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("gram per gram"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("GRAM PER GRAM"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("gramspergram"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("grams per gram"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("GRAMS PER GRAM"),
+        Some(MassFractionUnit::GramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogrampergram"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogram per gram"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("NANOGRAM PER GRAM"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogramspergram"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanograms per gram"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("NANOGRAMS PER GRAM"),
+        Some(MassFractionUnit::NanogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgrampergram"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgram per gram"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MICROGRAM PER GRAM"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgramspergram"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("micrograms per gram"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MICROGRAMS PER GRAM"),
+        Some(MassFractionUnit::MicrogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligrampergram"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligram per gram"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MILLIGRAM PER GRAM"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligramspergram"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligrams per gram"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MILLIGRAMS PER GRAM"),
+        Some(MassFractionUnit::MilligramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigrampergram"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigram per gram"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("CENTIGRAM PER GRAM"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigramspergram"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigrams per gram"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("CENTIGRAMS PER GRAM"),
+        Some(MassFractionUnit::CentigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigrampergram"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigram per gram"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIGRAM PER GRAM"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigramspergram"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigrams per gram"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIGRAMS PER GRAM"),
+        Some(MassFractionUnit::DecigramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagrampergram"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagram per gram"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECAGRAM PER GRAM"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagramspergram"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagrams per gram"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECAGRAMS PER GRAM"),
+        Some(MassFractionUnit::DecagramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogrampergram"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogram per gram"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("HECTOGRAM PER GRAM"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogramspergram"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectograms per gram"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("HECTOGRAMS PER GRAM"),
+        Some(MassFractionUnit::HectogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogrampergram"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogram per gram"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("KILOGRAM PER GRAM"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogramspergram"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilograms per gram"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("KILOGRAMS PER GRAM"),
+        Some(MassFractionUnit::KilogramPerGram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("gramperkilogram"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("gram per kilogram"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("GRAM PER KILOGRAM"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("gramsperkilogram"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("grams per kilogram"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("GRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::GramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogramperkilogram"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogram per kilogram"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("NANOGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanogramsperkilogram"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("nanograms per kilogram"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("NANOGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::NanogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgramperkilogram"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgram per kilogram"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MICROGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("microgramsperkilogram"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("micrograms per kilogram"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MICROGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::MicrogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligramperkilogram"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligram per kilogram"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MILLIGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligramsperkilogram"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("milligrams per kilogram"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("MILLIGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::MilligramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigramperkilogram"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigram per kilogram"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("CENTIGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigramsperkilogram"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("centigrams per kilogram"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("CENTIGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::CentigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigramperkilogram"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigram per kilogram"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigramsperkilogram"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decigrams per kilogram"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECIGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::DecigramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagramperkilogram"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagram per kilogram"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECAGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagramsperkilogram"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("decagrams per kilogram"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("DECAGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::DecagramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogramperkilogram"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogram per kilogram"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("HECTOGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectogramsperkilogram"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("hectograms per kilogram"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("HECTOGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::HectogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogramperkilogram"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogram per kilogram"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("KILOGRAM PER KILOGRAM"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilogramsperkilogram"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("kilograms per kilogram"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("KILOGRAMS PER KILOGRAM"),
+        Some(MassFractionUnit::KilogramPerKilogram)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("percent"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("percent"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PERCENT"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("percent"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("percent"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PERCENT"),
+        Some(MassFractionUnit::Percent)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partperthousand"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("part per thousand"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PART PER THOUSAND"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partsperthousand"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("parts per thousand"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PARTS PER THOUSAND"),
+        Some(MassFractionUnit::PartPerThousand)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partpermillion"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("part per million"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PART PER MILLION"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partspermillion"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("parts per million"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PARTS PER MILLION"),
+        Some(MassFractionUnit::PartPerMillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partperbillion"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("part per billion"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PART PER BILLION"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partsperbillion"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("parts per billion"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PARTS PER BILLION"),
+        Some(MassFractionUnit::PartPerBillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partpertrillion"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("part per trillion"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PART PER TRILLION"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("partspertrillion"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("parts per trillion"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+    assert_eq!(
+        MassFractionUnit::from_name("PARTS PER TRILLION"),
+        Some(MassFractionUnit::PartPerTrillion)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MassFraction::from_base(6.0);
     let b = MassFraction::from_base(2.0);

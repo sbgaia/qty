@@ -730,6 +730,322 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ImpulseUnit::from_name("kilogrammeterpersecond"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilogram meter per second"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("KILOGRAM METER PER SECOND"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilogrammeterspersecond"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilogram meters per second"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("KILOGRAM METERS PER SECOND"),
+        Some(ImpulseUnit::KilogramMeterPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("newtonsecond"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("newton second"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("NEWTON SECOND"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("newtonseconds"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("newton seconds"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("NEWTON SECONDS"),
+        Some(ImpulseUnit::NewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("nanonewtonsecond"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("nanonewton second"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("NANONEWTON SECOND"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("nanonewtonseconds"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("nanonewton seconds"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("NANONEWTON SECONDS"),
+        Some(ImpulseUnit::NanonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("micronewtonsecond"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("micronewton second"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MICRONEWTON SECOND"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("micronewtonseconds"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("micronewton seconds"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MICRONEWTON SECONDS"),
+        Some(ImpulseUnit::MicronewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("millinewtonsecond"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("millinewton second"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MILLINEWTON SECOND"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("millinewtonseconds"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("millinewton seconds"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MILLINEWTON SECONDS"),
+        Some(ImpulseUnit::MillinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("centinewtonsecond"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("centinewton second"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("CENTINEWTON SECOND"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("centinewtonseconds"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("centinewton seconds"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("CENTINEWTON SECONDS"),
+        Some(ImpulseUnit::CentinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decinewtonsecond"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decinewton second"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("DECINEWTON SECOND"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decinewtonseconds"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decinewton seconds"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("DECINEWTON SECONDS"),
+        Some(ImpulseUnit::DecinewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decanewtonsecond"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decanewton second"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("DECANEWTON SECOND"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decanewtonseconds"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("decanewton seconds"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("DECANEWTON SECONDS"),
+        Some(ImpulseUnit::DecanewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilonewtonsecond"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilonewton second"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("KILONEWTON SECOND"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilonewtonseconds"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("kilonewton seconds"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("KILONEWTON SECONDS"),
+        Some(ImpulseUnit::KilonewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("meganewtonsecond"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("meganewton second"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MEGANEWTON SECOND"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("meganewtonseconds"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("meganewton seconds"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("MEGANEWTON SECONDS"),
+        Some(ImpulseUnit::MeganewtonSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("poundfootpersecond"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("pound foot per second"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("POUND FOOT PER SECOND"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("poundfeetpersecond"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("pound feet per second"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("POUND FEET PER SECOND"),
+        Some(ImpulseUnit::PoundFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("poundforcesecond"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("pound force second"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("POUND FORCE SECOND"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("poundforceseconds"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("pound force seconds"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("POUND FORCE SECONDS"),
+        Some(ImpulseUnit::PoundForceSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("slugfootpersecond"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("slug foot per second"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("SLUG FOOT PER SECOND"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("slugfeetpersecond"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("slug feet per second"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+    assert_eq!(
+        ImpulseUnit::from_name("SLUG FEET PER SECOND"),
+        Some(ImpulseUnit::SlugFootPerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Impulse::from_base(6.0);
     let b = Impulse::from_base(2.0);

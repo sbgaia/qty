@@ -86,6 +86,16 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(TurbidityUnit::from_name("ntu"), Some(TurbidityUnit::NTU));
+    assert_eq!(TurbidityUnit::from_name("ntu"), Some(TurbidityUnit::NTU));
+    assert_eq!(TurbidityUnit::from_name("NTU"), Some(TurbidityUnit::NTU));
+    assert_eq!(TurbidityUnit::from_name("ntu"), Some(TurbidityUnit::NTU));
+    assert_eq!(TurbidityUnit::from_name("ntu"), Some(TurbidityUnit::NTU));
+    assert_eq!(TurbidityUnit::from_name("NTU"), Some(TurbidityUnit::NTU));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Turbidity::from_base(6.0);
     let b = Turbidity::from_base(2.0);

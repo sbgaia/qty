@@ -64,18 +64,35 @@ impl MolarEnergyUnit {
             Self::MegajoulePerMole => &["MJ/mol"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "joulepermole" => Some(Self::JoulePerMole),
+            "joulespermole" => Some(Self::JoulePerMole),
+            "kilojoulepermole" => Some(Self::KilojoulePerMole),
+            "kilojoulespermole" => Some(Self::KilojoulePerMole),
+            "megajoulepermole" => Some(Self::MegajoulePerMole),
+            "megajoulespermole" => Some(Self::MegajoulePerMole),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolarEnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/mol" => Ok(Self::JoulePerMole),
             "kJ/mol" => Ok(Self::KilojoulePerMole),
             "MJ/mol" => Ok(Self::MegajoulePerMole),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

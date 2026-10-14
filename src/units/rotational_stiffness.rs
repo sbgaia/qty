@@ -199,12 +199,90 @@ impl RotationalStiffnessUnit {
             Self::KilopoundForceFootPerRadian => &["kipf·ft/rad", "kip·ft/rad", "k·ft/rad"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonmeterperradian" => Some(Self::NewtonMeterPerRadian),
+            "newtonmetersperradian" => Some(Self::NewtonMeterPerRadian),
+            "kilonewtonmeterperradian" => Some(Self::KilonewtonMeterPerRadian),
+            "kilonewtonmetersperradian" => Some(Self::KilonewtonMeterPerRadian),
+            "meganewtonmeterperradian" => Some(Self::MeganewtonMeterPerRadian),
+            "meganewtonmetersperradian" => Some(Self::MeganewtonMeterPerRadian),
+            "poundforcefootperdegrees" => Some(Self::PoundForceFootPerDegrees),
+            "poundforcefeetperdegrees" => Some(Self::PoundForceFootPerDegrees),
+            "kilopoundforcefootperdegrees" => Some(Self::KilopoundForceFootPerDegrees),
+            "kilopoundforcefeetperdegrees" => Some(Self::KilopoundForceFootPerDegrees),
+            "newtonmillimeterperdegree" => Some(Self::NewtonMillimeterPerDegree),
+            "newtonmillimetersperdegree" => Some(Self::NewtonMillimeterPerDegree),
+            "nanonewtonmillimeterperdegree" => Some(Self::NanonewtonMillimeterPerDegree),
+            "nanonewtonmillimetersperdegree" => Some(Self::NanonewtonMillimeterPerDegree),
+            "micronewtonmillimeterperdegree" => Some(Self::MicronewtonMillimeterPerDegree),
+            "micronewtonmillimetersperdegree" => Some(Self::MicronewtonMillimeterPerDegree),
+            "millinewtonmillimeterperdegree" => Some(Self::MillinewtonMillimeterPerDegree),
+            "millinewtonmillimetersperdegree" => Some(Self::MillinewtonMillimeterPerDegree),
+            "centinewtonmillimeterperdegree" => Some(Self::CentinewtonMillimeterPerDegree),
+            "centinewtonmillimetersperdegree" => Some(Self::CentinewtonMillimeterPerDegree),
+            "decinewtonmillimeterperdegree" => Some(Self::DecinewtonMillimeterPerDegree),
+            "decinewtonmillimetersperdegree" => Some(Self::DecinewtonMillimeterPerDegree),
+            "decanewtonmillimeterperdegree" => Some(Self::DecanewtonMillimeterPerDegree),
+            "decanewtonmillimetersperdegree" => Some(Self::DecanewtonMillimeterPerDegree),
+            "kilonewtonmillimeterperdegree" => Some(Self::KilonewtonMillimeterPerDegree),
+            "kilonewtonmillimetersperdegree" => Some(Self::KilonewtonMillimeterPerDegree),
+            "meganewtonmillimeterperdegree" => Some(Self::MeganewtonMillimeterPerDegree),
+            "meganewtonmillimetersperdegree" => Some(Self::MeganewtonMillimeterPerDegree),
+            "newtonmeterperdegree" => Some(Self::NewtonMeterPerDegree),
+            "newtonmetersperdegree" => Some(Self::NewtonMeterPerDegree),
+            "nanonewtonmeterperdegree" => Some(Self::NanonewtonMeterPerDegree),
+            "nanonewtonmetersperdegree" => Some(Self::NanonewtonMeterPerDegree),
+            "micronewtonmeterperdegree" => Some(Self::MicronewtonMeterPerDegree),
+            "micronewtonmetersperdegree" => Some(Self::MicronewtonMeterPerDegree),
+            "millinewtonmeterperdegree" => Some(Self::MillinewtonMeterPerDegree),
+            "millinewtonmetersperdegree" => Some(Self::MillinewtonMeterPerDegree),
+            "centinewtonmeterperdegree" => Some(Self::CentinewtonMeterPerDegree),
+            "centinewtonmetersperdegree" => Some(Self::CentinewtonMeterPerDegree),
+            "decinewtonmeterperdegree" => Some(Self::DecinewtonMeterPerDegree),
+            "decinewtonmetersperdegree" => Some(Self::DecinewtonMeterPerDegree),
+            "decanewtonmeterperdegree" => Some(Self::DecanewtonMeterPerDegree),
+            "decanewtonmetersperdegree" => Some(Self::DecanewtonMeterPerDegree),
+            "kilonewtonmeterperdegree" => Some(Self::KilonewtonMeterPerDegree),
+            "kilonewtonmetersperdegree" => Some(Self::KilonewtonMeterPerDegree),
+            "meganewtonmeterperdegree" => Some(Self::MeganewtonMeterPerDegree),
+            "meganewtonmetersperdegree" => Some(Self::MeganewtonMeterPerDegree),
+            "newtonmillimeterperradian" => Some(Self::NewtonMillimeterPerRadian),
+            "newtonmillimetersperradian" => Some(Self::NewtonMillimeterPerRadian),
+            "nanonewtonmillimeterperradian" => Some(Self::NanonewtonMillimeterPerRadian),
+            "nanonewtonmillimetersperradian" => Some(Self::NanonewtonMillimeterPerRadian),
+            "micronewtonmillimeterperradian" => Some(Self::MicronewtonMillimeterPerRadian),
+            "micronewtonmillimetersperradian" => Some(Self::MicronewtonMillimeterPerRadian),
+            "millinewtonmillimeterperradian" => Some(Self::MillinewtonMillimeterPerRadian),
+            "millinewtonmillimetersperradian" => Some(Self::MillinewtonMillimeterPerRadian),
+            "centinewtonmillimeterperradian" => Some(Self::CentinewtonMillimeterPerRadian),
+            "centinewtonmillimetersperradian" => Some(Self::CentinewtonMillimeterPerRadian),
+            "decinewtonmillimeterperradian" => Some(Self::DecinewtonMillimeterPerRadian),
+            "decinewtonmillimetersperradian" => Some(Self::DecinewtonMillimeterPerRadian),
+            "decanewtonmillimeterperradian" => Some(Self::DecanewtonMillimeterPerRadian),
+            "decanewtonmillimetersperradian" => Some(Self::DecanewtonMillimeterPerRadian),
+            "kilonewtonmillimeterperradian" => Some(Self::KilonewtonMillimeterPerRadian),
+            "kilonewtonmillimetersperradian" => Some(Self::KilonewtonMillimeterPerRadian),
+            "meganewtonmillimeterperradian" => Some(Self::MeganewtonMillimeterPerRadian),
+            "meganewtonmillimetersperradian" => Some(Self::MeganewtonMillimeterPerRadian),
+            "poundforcefeetperradian" => Some(Self::PoundForceFeetPerRadian),
+            "kilopoundforcefootperradian" => Some(Self::KilopoundForceFootPerRadian),
+            "kilopoundforcefeetperradian" => Some(Self::KilopoundForceFootPerRadian),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RotationalStiffnessUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N·m/rad" => Ok(Self::NewtonMeterPerRadian),
@@ -256,7 +334,7 @@ impl core::str::FromStr for RotationalStiffnessUnit {
             "kipf·ft/rad" => Ok(Self::KilopoundForceFootPerRadian),
             "kip·ft/rad" => Ok(Self::KilopoundForceFootPerRadian),
             "k·ft/rad" => Ok(Self::KilopoundForceFootPerRadian),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

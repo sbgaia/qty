@@ -72,12 +72,33 @@ impl ElectricInductanceUnit {
             Self::Millihenry => &["mH"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "henry" => Some(Self::Henry),
+            "henries" => Some(Self::Henry),
+            "picohenry" => Some(Self::Picohenry),
+            "picohenries" => Some(Self::Picohenry),
+            "nanohenry" => Some(Self::Nanohenry),
+            "nanohenries" => Some(Self::Nanohenry),
+            "microhenry" => Some(Self::Microhenry),
+            "microhenries" => Some(Self::Microhenry),
+            "millihenry" => Some(Self::Millihenry),
+            "millihenries" => Some(Self::Millihenry),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricInductanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "H" => Ok(Self::Henry),
@@ -85,7 +106,7 @@ impl core::str::FromStr for ElectricInductanceUnit {
             "nH" => Ok(Self::Nanohenry),
             "µH" => Ok(Self::Microhenry),
             "mH" => Ok(Self::Millihenry),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

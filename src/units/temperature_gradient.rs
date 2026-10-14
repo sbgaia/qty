@@ -66,19 +66,38 @@ impl TemperatureGradientUnit {
             Self::DegreeCelsiusPerKilometer => &["∆°C/km"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "kelvinpermeter" => Some(Self::KelvinPerMeter),
+            "kelvinspermeter" => Some(Self::KelvinPerMeter),
+            "degreecelsiuspermeter" => Some(Self::DegreeCelsiusPerMeter),
+            "degreescelsiuspermeter" => Some(Self::DegreeCelsiusPerMeter),
+            "degreefahrenheitperfoot" => Some(Self::DegreeFahrenheitPerFoot),
+            "degreesfahrenheitperfoot" => Some(Self::DegreeFahrenheitPerFoot),
+            "degreecelsiusperkilometer" => Some(Self::DegreeCelsiusPerKilometer),
+            "degreescelsiusperkilometer" => Some(Self::DegreeCelsiusPerKilometer),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for TemperatureGradientUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "∆°K/m" => Ok(Self::KelvinPerMeter),
             "∆°C/m" => Ok(Self::DegreeCelsiusPerMeter),
             "∆°F/ft" => Ok(Self::DegreeFahrenheitPerFoot),
             "∆°C/km" => Ok(Self::DegreeCelsiusPerKilometer),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -689,6 +689,274 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremeter"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square meter"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE METER"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremeters"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square meters"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE METERS"),
+        Some(ReciprocalAreaUnit::InverseSquareMeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarekilometer"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square kilometer"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE KILOMETER"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarekilometers"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square kilometers"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE KILOMETERS"),
+        Some(ReciprocalAreaUnit::InverseSquareKilometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaredecimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square decimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE DECIMETER"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaredecimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square decimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE DECIMETERS"),
+        Some(ReciprocalAreaUnit::InverseSquareDecimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarecentimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square centimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE CENTIMETER"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarecentimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square centimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE CENTIMETERS"),
+        Some(ReciprocalAreaUnit::InverseSquareCentimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremillimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square millimeter"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MILLIMETER"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremillimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square millimeters"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MILLIMETERS"),
+        Some(ReciprocalAreaUnit::InverseSquareMillimeter)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremicrometer"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square micrometer"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MICROMETER"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremicrometers"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square micrometers"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MICROMETERS"),
+        Some(ReciprocalAreaUnit::InverseSquareMicrometer)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremile"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square mile"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MILE"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquaremiles"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square miles"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE MILES"),
+        Some(ReciprocalAreaUnit::InverseSquareMile)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquareyard"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square yard"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE YARD"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquareyards"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square yards"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE YARDS"),
+        Some(ReciprocalAreaUnit::InverseSquareYard)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarefoot"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square foot"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE FOOT"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquarefeet"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square feet"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE FEET"),
+        Some(ReciprocalAreaUnit::InverseSquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverseussurveysquarefoot"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse us survey square foot"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE US SURVEY SQUARE FOOT"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverseussurveysquarefeet"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse us survey square feet"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE US SURVEY SQUARE FEET"),
+        Some(ReciprocalAreaUnit::InverseUsSurveySquareFoot)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquareinch"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square inch"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE INCH"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inversesquareinches"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("inverse square inches"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+    assert_eq!(
+        ReciprocalAreaUnit::from_name("INVERSE SQUARE INCHES"),
+        Some(ReciprocalAreaUnit::InverseSquareInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ReciprocalArea::from_base(6.0);
     let b = ReciprocalArea::from_base(2.0);

@@ -599,6 +599,232 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LuminanceUnit::from_name("candelapersquaremeter"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candela per square meter"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelaspersquaremeter"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelas per square meter"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::CandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("nanocandelapersquaremeter"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("nanocandela per square meter"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("NANOCANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("nanocandelaspersquaremeter"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("nanocandelas per square meter"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("NANOCANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::NanocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("microcandelapersquaremeter"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("microcandela per square meter"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("MICROCANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("microcandelaspersquaremeter"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("microcandelas per square meter"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("MICROCANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::MicrocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("millicandelapersquaremeter"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("millicandela per square meter"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("MILLICANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("millicandelaspersquaremeter"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("millicandelas per square meter"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("MILLICANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::MillicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("centicandelapersquaremeter"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("centicandela per square meter"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CENTICANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("centicandelaspersquaremeter"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("centicandelas per square meter"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CENTICANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::CenticandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("decicandelapersquaremeter"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("decicandela per square meter"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("DECICANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("decicandelaspersquaremeter"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("decicandelas per square meter"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("DECICANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::DecicandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("kilocandelapersquaremeter"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("kilocandela per square meter"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("KILOCANDELA PER SQUARE METER"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("kilocandelaspersquaremeter"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("kilocandelas per square meter"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("KILOCANDELAS PER SQUARE METER"),
+        Some(LuminanceUnit::KilocandelaPerSquareMeter)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelapersquarefoot"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candela per square foot"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELA PER SQUARE FOOT"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelaspersquarefoot"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelas per square foot"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELAS PER SQUARE FOOT"),
+        Some(LuminanceUnit::CandelaPerSquareFoot)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelapersquareinch"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candela per square inch"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELA PER SQUARE INCH"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelaspersquareinch"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("candelas per square inch"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(
+        LuminanceUnit::from_name("CANDELAS PER SQUARE INCH"),
+        Some(LuminanceUnit::CandelaPerSquareInch)
+    );
+    assert_eq!(LuminanceUnit::from_name("nit"), Some(LuminanceUnit::Nit));
+    assert_eq!(LuminanceUnit::from_name("nit"), Some(LuminanceUnit::Nit));
+    assert_eq!(LuminanceUnit::from_name("NIT"), Some(LuminanceUnit::Nit));
+    assert_eq!(LuminanceUnit::from_name("nits"), Some(LuminanceUnit::Nit));
+    assert_eq!(LuminanceUnit::from_name("nits"), Some(LuminanceUnit::Nit));
+    assert_eq!(LuminanceUnit::from_name("NITS"), Some(LuminanceUnit::Nit));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Luminance::from_base(6.0);
     let b = Luminance::from_base(2.0);

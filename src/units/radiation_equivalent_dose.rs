@@ -81,12 +81,35 @@ impl RadiationEquivalentDoseUnit {
             Self::MilliroentgenEquivalentMan => &["mrem"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "sievert" => Some(Self::Sievert),
+            "sieverts" => Some(Self::Sievert),
+            "nanosievert" => Some(Self::Nanosievert),
+            "nanosieverts" => Some(Self::Nanosievert),
+            "microsievert" => Some(Self::Microsievert),
+            "microsieverts" => Some(Self::Microsievert),
+            "millisievert" => Some(Self::Millisievert),
+            "millisieverts" => Some(Self::Millisievert),
+            "roentgenequivalentman" => Some(Self::RoentgenEquivalentMan),
+            "roentgensequivalentman" => Some(Self::RoentgenEquivalentMan),
+            "milliroentgenequivalentman" => Some(Self::MilliroentgenEquivalentMan),
+            "milliroentgensequivalentman" => Some(Self::MilliroentgenEquivalentMan),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RadiationEquivalentDoseUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sv" => Ok(Self::Sievert),
@@ -95,7 +118,7 @@ impl core::str::FromStr for RadiationEquivalentDoseUnit {
             "mSv" => Ok(Self::Millisievert),
             "rem" => Ok(Self::RoentgenEquivalentMan),
             "mrem" => Ok(Self::MilliroentgenEquivalentMan),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -101,6 +101,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LuminousIntensityUnit::from_name("candela"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+    assert_eq!(
+        LuminousIntensityUnit::from_name("candela"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+    assert_eq!(
+        LuminousIntensityUnit::from_name("CANDELA"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+    assert_eq!(
+        LuminousIntensityUnit::from_name("candela"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+    assert_eq!(
+        LuminousIntensityUnit::from_name("candela"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+    assert_eq!(
+        LuminousIntensityUnit::from_name("CANDELA"),
+        Some(LuminousIntensityUnit::Candela)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = LuminousIntensity::from_base(6.0);
     let b = LuminousIntensity::from_base(2.0);

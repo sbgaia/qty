@@ -158,6 +158,58 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PowerRatioUnit::from_name("decibelwatt"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibel watt"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("DECIBEL WATT"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibelwatts"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibel watts"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("DECIBEL WATTS"),
+        Some(PowerRatioUnit::DecibelWatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibelmilliwatt"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibel milliwatt"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("DECIBEL MILLIWATT"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibelmilliwatts"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("decibel milliwatts"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+    assert_eq!(
+        PowerRatioUnit::from_name("DECIBEL MILLIWATTS"),
+        Some(PowerRatioUnit::DecibelMilliwatt)
+    );
+}
+
+#[test]
 fn point_arithmetic() {
     let a = PowerRatio::from_base(6.0);
     let b = PowerRatio::from_base(2.0);

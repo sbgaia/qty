@@ -84,12 +84,45 @@ impl ThermalInsulanceUnit {
             Self::HourSquareFeetDegreeFahrenheitPerBtu => &["Hrft²°F/Btu"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "squaremeterkelvinperkilowatt" => Some(Self::SquareMeterKelvinPerKilowatt),
+            "squaremeterkelvinsperkilowatt" => Some(Self::SquareMeterKelvinPerKilowatt),
+            "squaremeterkelvinperwatt" => Some(Self::SquareMeterKelvinPerWatt),
+            "squaremeterkelvinsperwatt" => Some(Self::SquareMeterKelvinPerWatt),
+            "squaremeterdegreecelsiusperwatt" => Some(Self::SquareMeterDegreeCelsiusPerWatt),
+            "squaremeterdegreescelsiusperwatt" => Some(Self::SquareMeterDegreeCelsiusPerWatt),
+            "squarecentimeterkelvinperwatt" => Some(Self::SquareCentimeterKelvinPerWatt),
+            "squarecentimeterkelvinsperwatt" => Some(Self::SquareCentimeterKelvinPerWatt),
+            "squaremillimeterkelvinperwatt" => Some(Self::SquareMillimeterKelvinPerWatt),
+            "squaremillimeterkelvinsperwatt" => Some(Self::SquareMillimeterKelvinPerWatt),
+            "squarecentimeterhourdegreecelsiusperkilocalorie" => {
+                Some(Self::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+            }
+            "squarecentimeterhourdegreescelsiusperkilocalorie" => {
+                Some(Self::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+            }
+            "hoursquarefeetdegreefahrenheitperbtu" => {
+                Some(Self::HourSquareFeetDegreeFahrenheitPerBtu)
+            }
+            "hoursquarefeetdegreesfahrenheitperbtu" => {
+                Some(Self::HourSquareFeetDegreeFahrenheitPerBtu)
+            }
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ThermalInsulanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m²K/kW" => Ok(Self::SquareMeterKelvinPerKilowatt),
@@ -99,7 +132,7 @@ impl core::str::FromStr for ThermalInsulanceUnit {
             "mm²K/W" => Ok(Self::SquareMillimeterKelvinPerWatt),
             "cm²Hr°C/kcal" => Ok(Self::SquareCentimeterHourDegreeCelsiusPerKilocalorie),
             "Hrft²°F/Btu" => Ok(Self::HourSquareFeetDegreeFahrenheitPerBtu),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

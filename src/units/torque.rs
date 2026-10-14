@@ -160,12 +160,77 @@ impl TorqueUnit {
             Self::TonneForceMeter => &["tf·m"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonmillimeter" => Some(Self::NewtonMillimeter),
+            "newtonmillimeters" => Some(Self::NewtonMillimeter),
+            "kilonewtonmillimeter" => Some(Self::KilonewtonMillimeter),
+            "kilonewtonmillimeters" => Some(Self::KilonewtonMillimeter),
+            "meganewtonmillimeter" => Some(Self::MeganewtonMillimeter),
+            "meganewtonmillimeters" => Some(Self::MeganewtonMillimeter),
+            "newtoncentimeter" => Some(Self::NewtonCentimeter),
+            "newtoncentimeters" => Some(Self::NewtonCentimeter),
+            "kilonewtoncentimeter" => Some(Self::KilonewtonCentimeter),
+            "kilonewtoncentimeters" => Some(Self::KilonewtonCentimeter),
+            "meganewtoncentimeter" => Some(Self::MeganewtonCentimeter),
+            "meganewtoncentimeters" => Some(Self::MeganewtonCentimeter),
+            "newtonmeter" => Some(Self::NewtonMeter),
+            "newtonmeters" => Some(Self::NewtonMeter),
+            "kilonewtonmeter" => Some(Self::KilonewtonMeter),
+            "kilonewtonmeters" => Some(Self::KilonewtonMeter),
+            "meganewtonmeter" => Some(Self::MeganewtonMeter),
+            "meganewtonmeters" => Some(Self::MeganewtonMeter),
+            "ounceforcefoot" => Some(Self::OunceForceFoot),
+            "ounceforcefeet" => Some(Self::OunceForceFoot),
+            "ounceforceinch" => Some(Self::OunceForceInch),
+            "ounceforceinches" => Some(Self::OunceForceInch),
+            "poundalfoot" => Some(Self::PoundalFoot),
+            "poundalfeet" => Some(Self::PoundalFoot),
+            "poundforceinch" => Some(Self::PoundForceInch),
+            "poundforceinches" => Some(Self::PoundForceInch),
+            "kilopoundforceinch" => Some(Self::KilopoundForceInch),
+            "kilopoundforceinches" => Some(Self::KilopoundForceInch),
+            "megapoundforceinch" => Some(Self::MegapoundForceInch),
+            "megapoundforceinches" => Some(Self::MegapoundForceInch),
+            "poundforcefoot" => Some(Self::PoundForceFoot),
+            "poundforcefeet" => Some(Self::PoundForceFoot),
+            "kilopoundforcefoot" => Some(Self::KilopoundForceFoot),
+            "kilopoundforcefeet" => Some(Self::KilopoundForceFoot),
+            "megapoundforcefoot" => Some(Self::MegapoundForceFoot),
+            "megapoundforcefeet" => Some(Self::MegapoundForceFoot),
+            "gramforcemillimeter" => Some(Self::GramForceMillimeter),
+            "gramforcemillimeters" => Some(Self::GramForceMillimeter),
+            "gramforcecentimeter" => Some(Self::GramForceCentimeter),
+            "gramforcecentimeters" => Some(Self::GramForceCentimeter),
+            "gramforcemeter" => Some(Self::GramForceMeter),
+            "gramforcemeters" => Some(Self::GramForceMeter),
+            "kilogramforcemillimeter" => Some(Self::KilogramForceMillimeter),
+            "kilogramforcemillimeters" => Some(Self::KilogramForceMillimeter),
+            "kilogramforcecentimeter" => Some(Self::KilogramForceCentimeter),
+            "kilogramforcecentimeters" => Some(Self::KilogramForceCentimeter),
+            "kilogramforcemeter" => Some(Self::KilogramForceMeter),
+            "kilogramforcemeters" => Some(Self::KilogramForceMeter),
+            "tonneforcemillimeter" => Some(Self::TonneForceMillimeter),
+            "tonneforcemillimeters" => Some(Self::TonneForceMillimeter),
+            "tonneforcecentimeter" => Some(Self::TonneForceCentimeter),
+            "tonneforcecentimeters" => Some(Self::TonneForceCentimeter),
+            "tonneforcemeter" => Some(Self::TonneForceMeter),
+            "tonneforcemeters" => Some(Self::TonneForceMeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for TorqueUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N·mm" => Ok(Self::NewtonMillimeter),
@@ -210,7 +275,7 @@ impl core::str::FromStr for TorqueUnit {
             "tf·mm" => Ok(Self::TonneForceMillimeter),
             "tf·cm" => Ok(Self::TonneForceCentimeter),
             "tf·m" => Ok(Self::TonneForceMeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

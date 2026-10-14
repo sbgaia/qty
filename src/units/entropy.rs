@@ -80,12 +80,37 @@ impl EntropyUnit {
             Self::KilojoulePerDegreeCelsius => &["kJ/°C"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "jouleperkelvin" => Some(Self::JoulePerKelvin),
+            "joulesperkelvin" => Some(Self::JoulePerKelvin),
+            "kilojouleperkelvin" => Some(Self::KilojoulePerKelvin),
+            "kilojoulesperkelvin" => Some(Self::KilojoulePerKelvin),
+            "megajouleperkelvin" => Some(Self::MegajoulePerKelvin),
+            "megajoulesperkelvin" => Some(Self::MegajoulePerKelvin),
+            "calorieperkelvin" => Some(Self::CaloriePerKelvin),
+            "caloriesperkelvin" => Some(Self::CaloriePerKelvin),
+            "kilocalorieperkelvin" => Some(Self::KilocaloriePerKelvin),
+            "kilocaloriesperkelvin" => Some(Self::KilocaloriePerKelvin),
+            "jouleperdegreecelsius" => Some(Self::JoulePerDegreeCelsius),
+            "joulesperdegreecelsius" => Some(Self::JoulePerDegreeCelsius),
+            "kilojouleperdegreecelsius" => Some(Self::KilojoulePerDegreeCelsius),
+            "kilojoulesperdegreecelsius" => Some(Self::KilojoulePerDegreeCelsius),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for EntropyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/K" => Ok(Self::JoulePerKelvin),
@@ -95,7 +120,7 @@ impl core::str::FromStr for EntropyUnit {
             "kcal/K" => Ok(Self::KilocaloriePerKelvin),
             "J/°C" => Ok(Self::JoulePerDegreeCelsius),
             "kJ/°C" => Ok(Self::KilojoulePerDegreeCelsius),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

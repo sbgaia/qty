@@ -816,6 +816,346 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolarMassUnit::from_name("grampermole"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("gram per mole"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("GRAM PER MOLE"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("gramspermole"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("grams per mole"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("GRAMS PER MOLE"),
+        Some(MolarMassUnit::GramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("nanogrampermole"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("nanogram per mole"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("NANOGRAM PER MOLE"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("nanogramspermole"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("nanograms per mole"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("NANOGRAMS PER MOLE"),
+        Some(MolarMassUnit::NanogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("microgrampermole"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("microgram per mole"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MICROGRAM PER MOLE"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("microgramspermole"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("micrograms per mole"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MICROGRAMS PER MOLE"),
+        Some(MolarMassUnit::MicrogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("milligrampermole"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("milligram per mole"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MILLIGRAM PER MOLE"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("milligramspermole"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("milligrams per mole"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MILLIGRAMS PER MOLE"),
+        Some(MolarMassUnit::MilligramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("centigrampermole"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("centigram per mole"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("CENTIGRAM PER MOLE"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("centigramspermole"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("centigrams per mole"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("CENTIGRAMS PER MOLE"),
+        Some(MolarMassUnit::CentigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decigrampermole"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decigram per mole"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("DECIGRAM PER MOLE"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decigramspermole"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decigrams per mole"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("DECIGRAMS PER MOLE"),
+        Some(MolarMassUnit::DecigramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decagrampermole"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decagram per mole"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("DECAGRAM PER MOLE"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decagramspermole"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("decagrams per mole"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("DECAGRAMS PER MOLE"),
+        Some(MolarMassUnit::DecagramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("hectogrampermole"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("hectogram per mole"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("HECTOGRAM PER MOLE"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("hectogramspermole"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("hectograms per mole"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("HECTOGRAMS PER MOLE"),
+        Some(MolarMassUnit::HectogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogrampermole"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogram per mole"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOGRAM PER MOLE"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogramspermole"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilograms per mole"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOGRAMS PER MOLE"),
+        Some(MolarMassUnit::KilogramPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogramperkilomole"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogram per kilomole"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOGRAM PER KILOMOLE"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilogramsperkilomole"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilograms per kilomole"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOGRAMS PER KILOMOLE"),
+        Some(MolarMassUnit::KilogramPerKilomole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("poundpermole"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("pound per mole"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("POUND PER MOLE"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("poundspermole"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("pounds per mole"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("POUNDS PER MOLE"),
+        Some(MolarMassUnit::PoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilopoundpermole"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilopound per mole"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOPOUND PER MOLE"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilopoundspermole"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("kilopounds per mole"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("KILOPOUNDS PER MOLE"),
+        Some(MolarMassUnit::KilopoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("megapoundpermole"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("megapound per mole"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MEGAPOUND PER MOLE"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("megapoundspermole"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("megapounds per mole"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("MEGAPOUNDS PER MOLE"),
+        Some(MolarMassUnit::MegapoundPerMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("poundperpoundmole"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("pound per pound mole"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("POUND PER POUND MOLE"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("poundsperpoundmole"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("pounds per pound mole"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+    assert_eq!(
+        MolarMassUnit::from_name("POUNDS PER POUND MOLE"),
+        Some(MolarMassUnit::PoundPerPoundMole)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MolarMass::from_base(6.0);
     let b = MolarMass::from_base(2.0);

@@ -109,6 +109,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("coulombpercubicmeter"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("coulomb per cubic meter"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("COULOMB PER CUBIC METER"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("coulombspercubicmeter"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("coulombs per cubic meter"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+    assert_eq!(
+        ElectricChargeDensityUnit::from_name("COULOMBS PER CUBIC METER"),
+        Some(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricChargeDensity::from_base(6.0);
     let b = ElectricChargeDensity::from_base(2.0);

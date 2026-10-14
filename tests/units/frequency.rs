@@ -611,6 +611,298 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        FrequencyUnit::from_name("hertz"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("hertz"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("HERTZ"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("hertz"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("hertz"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("HERTZ"),
+        Some(FrequencyUnit::Hertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("microhertz"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("microhertz"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MICROHERTZ"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("microhertz"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("microhertz"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MICROHERTZ"),
+        Some(FrequencyUnit::Microhertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("millihertz"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("millihertz"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MILLIHERTZ"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("millihertz"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("millihertz"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MILLIHERTZ"),
+        Some(FrequencyUnit::Millihertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("kilohertz"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("kilohertz"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("KILOHERTZ"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("kilohertz"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("kilohertz"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("KILOHERTZ"),
+        Some(FrequencyUnit::Kilohertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("megahertz"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("megahertz"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MEGAHERTZ"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("megahertz"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("megahertz"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("MEGAHERTZ"),
+        Some(FrequencyUnit::Megahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("gigahertz"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("gigahertz"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("GIGAHERTZ"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("gigahertz"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("gigahertz"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("GIGAHERTZ"),
+        Some(FrequencyUnit::Gigahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("terahertz"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("terahertz"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("TERAHERTZ"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("terahertz"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("terahertz"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("TERAHERTZ"),
+        Some(FrequencyUnit::Terahertz)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("radianpersecond"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("radian per second"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("RADIAN PER SECOND"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("radianspersecond"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("radians per second"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("RADIANS PER SECOND"),
+        Some(FrequencyUnit::RadianPerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycleperminute"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycle per minute"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("CYCLE PER MINUTE"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cyclesperminute"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycles per minute"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("CYCLES PER MINUTE"),
+        Some(FrequencyUnit::CyclePerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycleperhour"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycle per hour"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("CYCLE PER HOUR"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cyclesperhour"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("cycles per hour"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("CYCLES PER HOUR"),
+        Some(FrequencyUnit::CyclePerHour)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("beatperminute"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("beat per minute"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("BEAT PER MINUTE"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("beatsperminute"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("beats per minute"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("BEATS PER MINUTE"),
+        Some(FrequencyUnit::BeatPerMinute)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("persecond"),
+        Some(FrequencyUnit::PerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("per second"),
+        Some(FrequencyUnit::PerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("PER SECOND"),
+        Some(FrequencyUnit::PerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("persecond"),
+        Some(FrequencyUnit::PerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("per second"),
+        Some(FrequencyUnit::PerSecond)
+    );
+    assert_eq!(
+        FrequencyUnit::from_name("PER SECOND"),
+        Some(FrequencyUnit::PerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Frequency::from_base(6.0);
     let b = Frequency::from_base(2.0);

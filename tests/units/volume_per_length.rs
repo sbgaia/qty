@@ -573,6 +573,226 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicmeterpermeter"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic meter per meter"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC METER PER METER"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicmeterspermeter"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic meters per meter"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC METERS PER METER"),
+        Some(VolumePerLengthUnit::CubicMeterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("literpermeter"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liter per meter"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITER PER METER"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("literspermeter"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liters per meter"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITERS PER METER"),
+        Some(VolumePerLengthUnit::LiterPerMeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("literperkilometer"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liter per kilometer"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITER PER KILOMETER"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("litersperkilometer"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liters per kilometer"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITERS PER KILOMETER"),
+        Some(VolumePerLengthUnit::LiterPerKilometer)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("literpermillimeter"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liter per millimeter"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITER PER MILLIMETER"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("literspermillimeter"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("liters per millimeter"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("LITERS PER MILLIMETER"),
+        Some(VolumePerLengthUnit::LiterPerMillimeter)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("oilbarrelperfoot"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("oil barrel per foot"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("OIL BARREL PER FOOT"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("oilbarrelsperfoot"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("oil barrels per foot"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("OIL BARRELS PER FOOT"),
+        Some(VolumePerLengthUnit::OilBarrelPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicyardperfoot"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic yard per foot"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC YARD PER FOOT"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicyardsperfoot"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic yards per foot"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC YARDS PER FOOT"),
+        Some(VolumePerLengthUnit::CubicYardPerFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicyardperussurveyfoot"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic yard per us survey foot"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC YARD PER US SURVEY FOOT"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubicyardsperussurveyfoot"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("cubic yards per us survey foot"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("CUBIC YARDS PER US SURVEY FOOT"),
+        Some(VolumePerLengthUnit::CubicYardPerUsSurveyFoot)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("usgallonpermile"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("us gallon per mile"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("US GALLON PER MILE"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("usgallonspermile"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("us gallons per mile"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("US GALLONS PER MILE"),
+        Some(VolumePerLengthUnit::UsGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("imperialgallonpermile"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("imperial gallon per mile"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("IMPERIAL GALLON PER MILE"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("imperialgallonspermile"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("imperial gallons per mile"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+    assert_eq!(
+        VolumePerLengthUnit::from_name("IMPERIAL GALLONS PER MILE"),
+        Some(VolumePerLengthUnit::ImperialGallonPerMile)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VolumePerLength::from_base(6.0);
     let b = VolumePerLength::from_base(2.0);

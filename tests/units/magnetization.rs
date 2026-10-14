@@ -105,6 +105,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MagnetizationUnit::from_name("amperepermeter"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+    assert_eq!(
+        MagnetizationUnit::from_name("ampere per meter"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+    assert_eq!(
+        MagnetizationUnit::from_name("AMPERE PER METER"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+    assert_eq!(
+        MagnetizationUnit::from_name("amperespermeter"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+    assert_eq!(
+        MagnetizationUnit::from_name("amperes per meter"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+    assert_eq!(
+        MagnetizationUnit::from_name("AMPERES PER METER"),
+        Some(MagnetizationUnit::AmperePerMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Magnetization::from_base(6.0);
     let b = Magnetization::from_base(2.0);

@@ -1500,6 +1500,610 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattpermeter"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watt per meter"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATT PER METER"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattspermeter"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watts per meter"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATTS PER METER"),
+        Some(LinearPowerDensityUnit::WattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattpermeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatt per meter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATT PER METER"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattspermeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatts per meter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATTS PER METER"),
+        Some(LinearPowerDensityUnit::MilliwattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattpermeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatt per meter"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATT PER METER"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattspermeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatts per meter"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATTS PER METER"),
+        Some(LinearPowerDensityUnit::KilowattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattpermeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatt per meter"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATT PER METER"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattspermeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatts per meter"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATTS PER METER"),
+        Some(LinearPowerDensityUnit::MegawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattpermeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatt per meter"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATT PER METER"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattspermeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatts per meter"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATTS PER METER"),
+        Some(LinearPowerDensityUnit::GigawattPerMeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattpercentimeter"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watt per centimeter"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATT PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattspercentimeter"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watts per centimeter"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATTS PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::WattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattpercentimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatt per centimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATT PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattspercentimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatts per centimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATTS PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::MilliwattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattpercentimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatt per centimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATT PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattspercentimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatts per centimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATTS PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::KilowattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattpercentimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatt per centimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATT PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattspercentimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatts per centimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATTS PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::MegawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattpercentimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatt per centimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATT PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattspercentimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatts per centimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATTS PER CENTIMETER"),
+        Some(LinearPowerDensityUnit::GigawattPerCentimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattpermillimeter"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watt per millimeter"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATT PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattspermillimeter"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watts per millimeter"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATTS PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::WattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattpermillimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatt per millimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATT PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattspermillimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatts per millimeter"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATTS PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::MilliwattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattpermillimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatt per millimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATT PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattspermillimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatts per millimeter"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATTS PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::KilowattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattpermillimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatt per millimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATT PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattspermillimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatts per millimeter"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATTS PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::MegawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattpermillimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatt per millimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATT PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattspermillimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatts per millimeter"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATTS PER MILLIMETER"),
+        Some(LinearPowerDensityUnit::GigawattPerMillimeter)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattperinch"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watt per inch"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATT PER INCH"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattsperinch"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watts per inch"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATTS PER INCH"),
+        Some(LinearPowerDensityUnit::WattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattperinch"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatt per inch"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATT PER INCH"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattsperinch"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatts per inch"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATTS PER INCH"),
+        Some(LinearPowerDensityUnit::MilliwattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattperinch"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatt per inch"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATT PER INCH"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattsperinch"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatts per inch"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATTS PER INCH"),
+        Some(LinearPowerDensityUnit::KilowattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattperinch"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatt per inch"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATT PER INCH"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattsperinch"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatts per inch"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATTS PER INCH"),
+        Some(LinearPowerDensityUnit::MegawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattperinch"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatt per inch"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATT PER INCH"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattsperinch"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatts per inch"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATTS PER INCH"),
+        Some(LinearPowerDensityUnit::GigawattPerInch)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattperfoot"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watt per foot"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATT PER FOOT"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("wattsperfoot"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("watts per foot"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("WATTS PER FOOT"),
+        Some(LinearPowerDensityUnit::WattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattperfoot"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatt per foot"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATT PER FOOT"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwattsperfoot"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("milliwatts per foot"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MILLIWATTS PER FOOT"),
+        Some(LinearPowerDensityUnit::MilliwattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattperfoot"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatt per foot"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATT PER FOOT"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowattsperfoot"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("kilowatts per foot"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("KILOWATTS PER FOOT"),
+        Some(LinearPowerDensityUnit::KilowattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattperfoot"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatt per foot"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATT PER FOOT"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawattsperfoot"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("megawatts per foot"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("MEGAWATTS PER FOOT"),
+        Some(LinearPowerDensityUnit::MegawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattperfoot"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatt per foot"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATT PER FOOT"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawattsperfoot"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("gigawatts per foot"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+    assert_eq!(
+        LinearPowerDensityUnit::from_name("GIGAWATTS PER FOOT"),
+        Some(LinearPowerDensityUnit::GigawattPerFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = LinearPowerDensity::from_base(6.0);
     let b = LinearPowerDensity::from_base(2.0);

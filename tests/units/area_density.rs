@@ -411,6 +411,130 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        AreaDensityUnit::from_name("kilogrampersquaremeter"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("kilogram per square meter"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("KILOGRAM PER SQUARE METER"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("kilogramspersquaremeter"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("kilograms per square meter"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("KILOGRAMS PER SQUARE METER"),
+        Some(AreaDensityUnit::KilogramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("grampersquaremeter"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("gram per square meter"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("GRAM PER SQUARE METER"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("gramspersquaremeter"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("grams per square meter"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("GRAMS PER SQUARE METER"),
+        Some(AreaDensityUnit::GramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("milligrampersquaremeter"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("milligram per square meter"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("MILLIGRAM PER SQUARE METER"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("milligramspersquaremeter"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("milligrams per square meter"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("MILLIGRAMS PER SQUARE METER"),
+        Some(AreaDensityUnit::MilligramPerSquareMeter)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("poundpersquarefoot"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("pound per square foot"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("POUND PER SQUARE FOOT"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("poundspersquarefoot"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("pounds per square foot"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("POUNDS PER SQUARE FOOT"),
+        Some(AreaDensityUnit::PoundPerSquareFoot)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("poundperthousandsquarefeet"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("pound per thousand square feet"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("POUND PER THOUSAND SQUARE FEET"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("poundsperthousandsquarefeet"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("pounds per thousand square feet"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+    assert_eq!(
+        AreaDensityUnit::from_name("POUNDS PER THOUSAND SQUARE FEET"),
+        Some(AreaDensityUnit::PoundPerThousandSquareFeet)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = AreaDensity::from_base(6.0);
     let b = AreaDensity::from_base(2.0);

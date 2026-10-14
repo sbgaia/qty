@@ -105,6 +105,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PermeabilityUnit::from_name("henrypermeter"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+    assert_eq!(
+        PermeabilityUnit::from_name("henry per meter"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+    assert_eq!(
+        PermeabilityUnit::from_name("HENRY PER METER"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+    assert_eq!(
+        PermeabilityUnit::from_name("henriespermeter"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+    assert_eq!(
+        PermeabilityUnit::from_name("henries per meter"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+    assert_eq!(
+        PermeabilityUnit::from_name("HENRIES PER METER"),
+        Some(PermeabilityUnit::HenryPerMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Permeability::from_base(6.0);
     let b = Permeability::from_base(2.0);

@@ -64,18 +64,35 @@ impl MolarEntropyUnit {
             Self::MegajoulePerMoleKelvin => &["MJ/(mol·K)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "joulepermolekelvin" => Some(Self::JoulePerMoleKelvin),
+            "joulespermolekelvin" => Some(Self::JoulePerMoleKelvin),
+            "kilojoulepermolekelvin" => Some(Self::KilojoulePerMoleKelvin),
+            "kilojoulespermolekelvin" => Some(Self::KilojoulePerMoleKelvin),
+            "megajoulepermolekelvin" => Some(Self::MegajoulePerMoleKelvin),
+            "megajoulespermolekelvin" => Some(Self::MegajoulePerMoleKelvin),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolarEntropyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/(mol·K)" => Ok(Self::JoulePerMoleKelvin),
             "kJ/(mol·K)" => Ok(Self::KilojoulePerMoleKelvin),
             "MJ/(mol·K)" => Ok(Self::MegajoulePerMoleKelvin),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

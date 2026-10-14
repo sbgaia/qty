@@ -112,12 +112,53 @@ impl AngleUnit {
             Self::Revolution => &["r"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "radian" => Some(Self::Radian),
+            "radians" => Some(Self::Radian),
+            "nanoradian" => Some(Self::Nanoradian),
+            "nanoradians" => Some(Self::Nanoradian),
+            "microradian" => Some(Self::Microradian),
+            "microradians" => Some(Self::Microradian),
+            "milliradian" => Some(Self::Milliradian),
+            "milliradians" => Some(Self::Milliradian),
+            "centiradian" => Some(Self::Centiradian),
+            "centiradians" => Some(Self::Centiradian),
+            "deciradian" => Some(Self::Deciradian),
+            "deciradians" => Some(Self::Deciradian),
+            "degree" => Some(Self::Degree),
+            "degrees" => Some(Self::Degree),
+            "nanodegree" => Some(Self::Nanodegree),
+            "nanodegrees" => Some(Self::Nanodegree),
+            "microdegree" => Some(Self::Microdegree),
+            "microdegrees" => Some(Self::Microdegree),
+            "millidegree" => Some(Self::Millidegree),
+            "millidegrees" => Some(Self::Millidegree),
+            "arcminute" => Some(Self::Arcminute),
+            "arcminutes" => Some(Self::Arcminute),
+            "arcsecond" => Some(Self::Arcsecond),
+            "arcseconds" => Some(Self::Arcsecond),
+            "gradian" => Some(Self::Gradian),
+            "gradians" => Some(Self::Gradian),
+            "natomil" => Some(Self::NatoMil),
+            "natomils" => Some(Self::NatoMil),
+            "revolution" => Some(Self::Revolution),
+            "revolutions" => Some(Self::Revolution),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AngleUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "rad" => Ok(Self::Radian),
@@ -142,7 +183,7 @@ impl core::str::FromStr for AngleUnit {
             "g" => Ok(Self::Gradian),
             "mil" => Ok(Self::NatoMil),
             "r" => Ok(Self::Revolution),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

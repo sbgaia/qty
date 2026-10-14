@@ -287,6 +287,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        TemperatureGradientUnit::from_name("kelvinpermeter"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("kelvin per meter"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("KELVIN PER METER"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("kelvinspermeter"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("kelvins per meter"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("KELVINS PER METER"),
+        Some(TemperatureGradientUnit::KelvinPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreecelsiuspermeter"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degree celsius per meter"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREE CELSIUS PER METER"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreescelsiuspermeter"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degrees celsius per meter"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREES CELSIUS PER METER"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerMeter)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreefahrenheitperfoot"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degree fahrenheit per foot"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREE FAHRENHEIT PER FOOT"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreesfahrenheitperfoot"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degrees fahrenheit per foot"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREES FAHRENHEIT PER FOOT"),
+        Some(TemperatureGradientUnit::DegreeFahrenheitPerFoot)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreecelsiusperkilometer"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degree celsius per kilometer"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREE CELSIUS PER KILOMETER"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degreescelsiusperkilometer"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("degrees celsius per kilometer"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+    assert_eq!(
+        TemperatureGradientUnit::from_name("DEGREES CELSIUS PER KILOMETER"),
+        Some(TemperatureGradientUnit::DegreeCelsiusPerKilometer)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = TemperatureGradient::from_base(6.0);
     let b = TemperatureGradient::from_base(2.0);

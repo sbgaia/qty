@@ -203,6 +203,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolalityUnit::from_name("moleperkilogram"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("mole per kilogram"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MOLE PER KILOGRAM"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("molesperkilogram"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("moles per kilogram"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MOLES PER KILOGRAM"),
+        Some(MolalityUnit::MolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("millimoleperkilogram"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("millimole per kilogram"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MILLIMOLE PER KILOGRAM"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("millimolesperkilogram"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("millimoles per kilogram"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MILLIMOLES PER KILOGRAM"),
+        Some(MolalityUnit::MillimolePerKilogram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("molepergram"),
+        Some(MolalityUnit::MolePerGram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("mole per gram"),
+        Some(MolalityUnit::MolePerGram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MOLE PER GRAM"),
+        Some(MolalityUnit::MolePerGram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("molespergram"),
+        Some(MolalityUnit::MolePerGram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("moles per gram"),
+        Some(MolalityUnit::MolePerGram)
+    );
+    assert_eq!(
+        MolalityUnit::from_name("MOLES PER GRAM"),
+        Some(MolalityUnit::MolePerGram)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Molality::from_base(6.0);
     let b = Molality::from_base(2.0);

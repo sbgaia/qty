@@ -101,6 +101,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RelativeHumidityUnit::from_name("percent"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+    assert_eq!(
+        RelativeHumidityUnit::from_name("percent"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+    assert_eq!(
+        RelativeHumidityUnit::from_name("PERCENT"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+    assert_eq!(
+        RelativeHumidityUnit::from_name("percent"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+    assert_eq!(
+        RelativeHumidityUnit::from_name("percent"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+    assert_eq!(
+        RelativeHumidityUnit::from_name("PERCENT"),
+        Some(RelativeHumidityUnit::Percent)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RelativeHumidity::from_base(6.0);
     let b = RelativeHumidity::from_base(2.0);

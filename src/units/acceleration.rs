@@ -110,12 +110,49 @@ impl AccelerationUnit {
             Self::MillistandardGravity => &["mg"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "meterpersecondsquared" => Some(Self::MeterPerSecondSquared),
+            "meterspersecondsquared" => Some(Self::MeterPerSecondSquared),
+            "nanometerpersecondsquared" => Some(Self::NanometerPerSecondSquared),
+            "nanometerspersecondsquared" => Some(Self::NanometerPerSecondSquared),
+            "micrometerpersecondsquared" => Some(Self::MicrometerPerSecondSquared),
+            "micrometerspersecondsquared" => Some(Self::MicrometerPerSecondSquared),
+            "millimeterpersecondsquared" => Some(Self::MillimeterPerSecondSquared),
+            "millimeterspersecondsquared" => Some(Self::MillimeterPerSecondSquared),
+            "centimeterpersecondsquared" => Some(Self::CentimeterPerSecondSquared),
+            "centimeterspersecondsquared" => Some(Self::CentimeterPerSecondSquared),
+            "decimeterpersecondsquared" => Some(Self::DecimeterPerSecondSquared),
+            "decimeterspersecondsquared" => Some(Self::DecimeterPerSecondSquared),
+            "kilometerpersecondsquared" => Some(Self::KilometerPerSecondSquared),
+            "kilometerspersecondsquared" => Some(Self::KilometerPerSecondSquared),
+            "inchpersecondsquared" => Some(Self::InchPerSecondSquared),
+            "inchespersecondsquared" => Some(Self::InchPerSecondSquared),
+            "footpersecondsquared" => Some(Self::FootPerSecondSquared),
+            "feetpersecondsquared" => Some(Self::FootPerSecondSquared),
+            "knotpersecond" => Some(Self::KnotPerSecond),
+            "knotspersecond" => Some(Self::KnotPerSecond),
+            "knotperminute" => Some(Self::KnotPerMinute),
+            "knotsperminute" => Some(Self::KnotPerMinute),
+            "knotperhour" => Some(Self::KnotPerHour),
+            "knotsperhour" => Some(Self::KnotPerHour),
+            "standardgravity" => Some(Self::StandardGravity),
+            "millistandardgravity" => Some(Self::MillistandardGravity),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AccelerationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m/s²" => Ok(Self::MeterPerSecondSquared),
@@ -132,7 +169,7 @@ impl core::str::FromStr for AccelerationUnit {
             "kn/h" => Ok(Self::KnotPerHour),
             "g" => Ok(Self::StandardGravity),
             "mg" => Ok(Self::MillistandardGravity),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

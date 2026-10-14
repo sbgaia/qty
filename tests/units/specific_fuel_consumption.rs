@@ -296,6 +296,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("poundmassperpoundforcehour"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("pound mass per pound force hour"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("POUND MASS PER POUND FORCE HOUR"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("poundsmassperpoundforcehour"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("pounds mass per pound force hour"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("POUNDS MASS PER POUND FORCE HOUR"),
+        Some(SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogramperkilogramforcehour"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogram per kilogram force hour"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("KILOGRAM PER KILOGRAM FORCE HOUR"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogramsperkilogramforcehour"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilograms per kilogram force hour"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("KILOGRAMS PER KILOGRAM FORCE HOUR"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("gramperkilonewtonsecond"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("gram per kilonewton second"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("GRAM PER KILONEWTON SECOND"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("gramsperkilonewtonsecond"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("grams per kilonewton second"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("GRAMS PER KILONEWTON SECOND"),
+        Some(SpecificFuelConsumptionUnit::GramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogramperkilonewtonsecond"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogram per kilonewton second"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("KILOGRAM PER KILONEWTON SECOND"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilogramsperkilonewtonsecond"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("kilograms per kilonewton second"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+    assert_eq!(
+        SpecificFuelConsumptionUnit::from_name("KILOGRAMS PER KILONEWTON SECOND"),
+        Some(SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = SpecificFuelConsumption::from_base(6.0);
     let b = SpecificFuelConsumption::from_base(2.0);

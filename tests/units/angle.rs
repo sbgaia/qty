@@ -693,6 +693,298 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(AngleUnit::from_name("radian"), Some(AngleUnit::Radian));
+    assert_eq!(AngleUnit::from_name("radian"), Some(AngleUnit::Radian));
+    assert_eq!(AngleUnit::from_name("RADIAN"), Some(AngleUnit::Radian));
+    assert_eq!(AngleUnit::from_name("radians"), Some(AngleUnit::Radian));
+    assert_eq!(AngleUnit::from_name("radians"), Some(AngleUnit::Radian));
+    assert_eq!(AngleUnit::from_name("RADIANS"), Some(AngleUnit::Radian));
+    assert_eq!(
+        AngleUnit::from_name("nanoradian"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanoradian"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("NANORADIAN"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanoradians"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanoradians"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("NANORADIANS"),
+        Some(AngleUnit::Nanoradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microradian"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microradian"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MICRORADIAN"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microradians"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microradians"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MICRORADIANS"),
+        Some(AngleUnit::Microradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("milliradian"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("milliradian"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MILLIRADIAN"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("milliradians"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("milliradians"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MILLIRADIANS"),
+        Some(AngleUnit::Milliradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("centiradian"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("centiradian"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("CENTIRADIAN"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("centiradians"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("centiradians"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("CENTIRADIANS"),
+        Some(AngleUnit::Centiradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("deciradian"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("deciradian"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("DECIRADIAN"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("deciradians"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("deciradians"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(
+        AngleUnit::from_name("DECIRADIANS"),
+        Some(AngleUnit::Deciradian)
+    );
+    assert_eq!(AngleUnit::from_name("degree"), Some(AngleUnit::Degree));
+    assert_eq!(AngleUnit::from_name("degree"), Some(AngleUnit::Degree));
+    assert_eq!(AngleUnit::from_name("DEGREE"), Some(AngleUnit::Degree));
+    assert_eq!(AngleUnit::from_name("degrees"), Some(AngleUnit::Degree));
+    assert_eq!(AngleUnit::from_name("degrees"), Some(AngleUnit::Degree));
+    assert_eq!(AngleUnit::from_name("DEGREES"), Some(AngleUnit::Degree));
+    assert_eq!(
+        AngleUnit::from_name("nanodegree"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanodegree"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("NANODEGREE"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanodegrees"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("nanodegrees"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("NANODEGREES"),
+        Some(AngleUnit::Nanodegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microdegree"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microdegree"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MICRODEGREE"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microdegrees"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("microdegrees"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MICRODEGREES"),
+        Some(AngleUnit::Microdegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("millidegree"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("millidegree"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MILLIDEGREE"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("millidegrees"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("millidegrees"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("MILLIDEGREES"),
+        Some(AngleUnit::Millidegree)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcminute"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcminute"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("ARCMINUTE"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcminutes"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcminutes"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("ARCMINUTES"),
+        Some(AngleUnit::Arcminute)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcsecond"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcsecond"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(
+        AngleUnit::from_name("ARCSECOND"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcseconds"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(
+        AngleUnit::from_name("arcseconds"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(
+        AngleUnit::from_name("ARCSECONDS"),
+        Some(AngleUnit::Arcsecond)
+    );
+    assert_eq!(AngleUnit::from_name("gradian"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("gradian"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("GRADIAN"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("gradians"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("gradians"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("GRADIANS"), Some(AngleUnit::Gradian));
+    assert_eq!(AngleUnit::from_name("natomil"), Some(AngleUnit::NatoMil));
+    assert_eq!(AngleUnit::from_name("nato mil"), Some(AngleUnit::NatoMil));
+    assert_eq!(AngleUnit::from_name("NATO MIL"), Some(AngleUnit::NatoMil));
+    assert_eq!(AngleUnit::from_name("natomils"), Some(AngleUnit::NatoMil));
+    assert_eq!(AngleUnit::from_name("nato mils"), Some(AngleUnit::NatoMil));
+    assert_eq!(AngleUnit::from_name("NATO MILS"), Some(AngleUnit::NatoMil));
+    assert_eq!(
+        AngleUnit::from_name("revolution"),
+        Some(AngleUnit::Revolution)
+    );
+    assert_eq!(
+        AngleUnit::from_name("revolution"),
+        Some(AngleUnit::Revolution)
+    );
+    assert_eq!(
+        AngleUnit::from_name("REVOLUTION"),
+        Some(AngleUnit::Revolution)
+    );
+    assert_eq!(
+        AngleUnit::from_name("revolutions"),
+        Some(AngleUnit::Revolution)
+    );
+    assert_eq!(
+        AngleUnit::from_name("revolutions"),
+        Some(AngleUnit::Revolution)
+    );
+    assert_eq!(
+        AngleUnit::from_name("REVOLUTIONS"),
+        Some(AngleUnit::Revolution)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Angle::from_base(6.0);
     let b = Angle::from_base(2.0);

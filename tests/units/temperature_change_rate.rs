@@ -1074,6 +1074,418 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree celsius per second"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees celsius per second"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("nanodegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("nanodegree celsius per second"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("NANODEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("nanodegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("nanodegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("NANODEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("microdegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("microdegree celsius per second"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("MICRODEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("microdegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("microdegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("MICRODEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("millidegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("millidegree celsius per second"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("MILLIDEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("millidegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("millidegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("MILLIDEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("centidegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("centidegree celsius per second"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("CENTIDEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("centidegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("centidegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("CENTIDEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decidegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decidegree celsius per second"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DECIDEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decidegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decidegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DECIDEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decadegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decadegree celsius per second"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DECADEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decadegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("decadegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DECADEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("hectodegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("hectodegree celsius per second"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("HECTODEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("hectodegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("hectodegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("HECTODEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("kilodegreecelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("kilodegree celsius per second"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("KILODEGREE CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("kilodegreescelsiuspersecond"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("kilodegrees celsius per second"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("KILODEGREES CELSIUS PER SECOND"),
+        Some(TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreecelsiusperminute"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree celsius per minute"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE CELSIUS PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreescelsiusperminute"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees celsius per minute"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES CELSIUS PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreekelvinperminute"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree kelvin per minute"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE KELVIN PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreeskelvinperminute"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees kelvin per minute"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES KELVIN PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreefahrenheitperminute"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree fahrenheit per minute"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE FAHRENHEIT PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreesfahrenheitperminute"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees fahrenheit per minute"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES FAHRENHEIT PER MINUTE"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerMinute)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreefahrenheitpersecond"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree fahrenheit per second"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE FAHRENHEIT PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreesfahrenheitpersecond"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees fahrenheit per second"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES FAHRENHEIT PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreekelvinpersecond"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree kelvin per second"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE KELVIN PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreeskelvinpersecond"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees kelvin per second"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES KELVIN PER SECOND"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerSecond)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreecelsiusperhour"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree celsius per hour"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE CELSIUS PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreescelsiusperhour"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees celsius per hour"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES CELSIUS PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeCelsiusPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreekelvinperhour"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree kelvin per hour"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE KELVIN PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreeskelvinperhour"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees kelvin per hour"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES KELVIN PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeKelvinPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreefahrenheitperhour"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degree fahrenheit per hour"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREE FAHRENHEIT PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degreesfahrenheitperhour"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("degrees fahrenheit per hour"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+    assert_eq!(
+        TemperatureChangeRateUnit::from_name("DEGREES FAHRENHEIT PER HOUR"),
+        Some(TemperatureChangeRateUnit::DegreeFahrenheitPerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = TemperatureChangeRate::from_base(6.0);
     let b = TemperatureChangeRate::from_base(2.0);

@@ -68,19 +68,38 @@ impl LeakRateUnit {
             Self::AtmCubicCentimeterPerSecond => &["atm·cm³/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "pascalcubicmeterpersecond" => Some(Self::PascalCubicMeterPerSecond),
+            "pascalcubicmeterspersecond" => Some(Self::PascalCubicMeterPerSecond),
+            "millibarliterpersecond" => Some(Self::MillibarLiterPerSecond),
+            "millibarliterspersecond" => Some(Self::MillibarLiterPerSecond),
+            "torrliterpersecond" => Some(Self::TorrLiterPerSecond),
+            "torrliterspersecond" => Some(Self::TorrLiterPerSecond),
+            "atmcubiccentimeterpersecond" => Some(Self::AtmCubicCentimeterPerSecond),
+            "atmcubiccentimeterspersecond" => Some(Self::AtmCubicCentimeterPerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for LeakRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa·m³/s" => Ok(Self::PascalCubicMeterPerSecond),
             "mbar·l/s" => Ok(Self::MillibarLiterPerSecond),
             "Torr·l/s" => Ok(Self::TorrLiterPerSecond),
             "atm·cm³/s" => Ok(Self::AtmCubicCentimeterPerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

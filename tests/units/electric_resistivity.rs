@@ -862,6 +862,346 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohmmeter"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohm meter"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("OHM METER"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohmmeters"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohm meters"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("OHM METERS"),
+        Some(ElectricResistivityUnit::OhmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohmmeter"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohm meter"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("PICOOHM METER"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohmmeters"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohm meters"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("PICOOHM METERS"),
+        Some(ElectricResistivityUnit::PicoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohmmeter"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohm meter"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("NANOOHM METER"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohmmeters"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohm meters"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("NANOOHM METERS"),
+        Some(ElectricResistivityUnit::NanoohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohmmeter"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohm meter"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MICROOHM METER"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohmmeters"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohm meters"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MICROOHM METERS"),
+        Some(ElectricResistivityUnit::MicroohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohmmeter"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohm meter"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MILLIOHM METER"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohmmeters"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohm meters"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MILLIOHM METERS"),
+        Some(ElectricResistivityUnit::MilliohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohmmeter"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohm meter"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("KILOOHM METER"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohmmeters"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohm meters"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("KILOOHM METERS"),
+        Some(ElectricResistivityUnit::KiloohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohmmeter"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohm meter"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MEGAOHM METER"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohmmeters"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohm meters"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MEGAOHM METERS"),
+        Some(ElectricResistivityUnit::MegaohmMeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohmcentimeter"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohm centimeter"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("OHM CENTIMETER"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohmscentimeter"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("ohms centimeter"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("OHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::OhmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohmcentimeter"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohm centimeter"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("PICOOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohmscentimeter"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("picoohms centimeter"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("PICOOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::PicoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohmcentimeter"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohm centimeter"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("NANOOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohmscentimeter"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("nanoohms centimeter"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("NANOOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::NanoohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohmcentimeter"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohm centimeter"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MICROOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohmscentimeter"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("microohms centimeter"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MICROOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::MicroohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohmcentimeter"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohm centimeter"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MILLIOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohmscentimeter"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("milliohms centimeter"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MILLIOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::MilliohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohmcentimeter"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohm centimeter"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("KILOOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohmscentimeter"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("kiloohms centimeter"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("KILOOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::KiloohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohmcentimeter"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohm centimeter"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MEGAOHM CENTIMETER"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohmscentimeter"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("megaohms centimeter"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+    assert_eq!(
+        ElectricResistivityUnit::from_name("MEGAOHMS CENTIMETER"),
+        Some(ElectricResistivityUnit::MegaohmCentimeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricResistivity::from_base(6.0);
     let b = ElectricResistivity::from_base(2.0);

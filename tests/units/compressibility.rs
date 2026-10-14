@@ -530,6 +530,178 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        CompressibilityUnit::from_name("inversepascal"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse pascal"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE PASCAL"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversepascals"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse pascals"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE PASCALS"),
+        Some(CompressibilityUnit::InversePascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversekilopascal"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse kilopascal"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE KILOPASCAL"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversekilopascals"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse kilopascals"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE KILOPASCALS"),
+        Some(CompressibilityUnit::InverseKilopascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversemegapascal"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse megapascal"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE MEGAPASCAL"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversemegapascals"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse megapascals"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE MEGAPASCALS"),
+        Some(CompressibilityUnit::InverseMegapascal)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverseatmosphere"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse atmosphere"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE ATMOSPHERE"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverseatmospheres"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse atmospheres"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE ATMOSPHERES"),
+        Some(CompressibilityUnit::InverseAtmosphere)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversemillibar"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse millibar"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE MILLIBAR"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversemillibars"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse millibars"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE MILLIBARS"),
+        Some(CompressibilityUnit::InverseMillibar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversebar"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse bar"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE BAR"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversebars"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse bars"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE BARS"),
+        Some(CompressibilityUnit::InverseBar)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversepoundforcepersquareinch"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse pound force per square inch"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE POUND FORCE PER SQUARE INCH"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inversepoundsforcepersquareinch"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("inverse pounds force per square inch"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+    assert_eq!(
+        CompressibilityUnit::from_name("INVERSE POUNDS FORCE PER SQUARE INCH"),
+        Some(CompressibilityUnit::InversePoundForcePerSquareInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Compressibility::from_base(6.0);
     let b = Compressibility::from_base(2.0);

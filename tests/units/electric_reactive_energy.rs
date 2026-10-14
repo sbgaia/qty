@@ -232,6 +232,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("voltamperereactivehour"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("voltampere reactive hour"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("VOLTAMPERE REACTIVE HOUR"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("voltamperereactivehours"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("voltampere reactive hours"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("VOLTAMPERE REACTIVE HOURS"),
+        Some(ElectricReactiveEnergyUnit::VoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("kilovoltamperereactivehour"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("kilovoltampere reactive hour"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("KILOVOLTAMPERE REACTIVE HOUR"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("kilovoltamperereactivehours"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("kilovoltampere reactive hours"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("KILOVOLTAMPERE REACTIVE HOURS"),
+        Some(ElectricReactiveEnergyUnit::KilovoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("megavoltamperereactivehour"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("megavoltampere reactive hour"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("MEGAVOLTAMPERE REACTIVE HOUR"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("megavoltamperereactivehours"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("megavoltampere reactive hours"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+    assert_eq!(
+        ElectricReactiveEnergyUnit::from_name("MEGAVOLTAMPERE REACTIVE HOURS"),
+        Some(ElectricReactiveEnergyUnit::MegavoltampereReactiveHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricReactiveEnergy::from_base(6.0);
     let b = ElectricReactiveEnergy::from_base(2.0);

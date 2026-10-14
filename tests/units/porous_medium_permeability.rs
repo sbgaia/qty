@@ -342,6 +342,130 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("darcy"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("darcy"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("DARCY"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("darcys"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("darcys"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("DARCYS"),
+        Some(PorousMediumPermeabilityUnit::Darcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("microdarcy"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("microdarcy"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("MICRODARCY"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("microdarcys"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("microdarcys"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("MICRODARCYS"),
+        Some(PorousMediumPermeabilityUnit::Microdarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("millidarcy"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("millidarcy"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("MILLIDARCY"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("millidarcys"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("millidarcys"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("MILLIDARCYS"),
+        Some(PorousMediumPermeabilityUnit::Millidarcy)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("squaremeter"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("square meter"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("SQUARE METER"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("squaremeters"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("square meters"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("SQUARE METERS"),
+        Some(PorousMediumPermeabilityUnit::SquareMeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("squarecentimeter"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("square centimeter"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("SQUARE CENTIMETER"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("squarecentimeters"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("square centimeters"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+    assert_eq!(
+        PorousMediumPermeabilityUnit::from_name("SQUARE CENTIMETERS"),
+        Some(PorousMediumPermeabilityUnit::SquareCentimeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = PorousMediumPermeability::from_base(6.0);
     let b = PorousMediumPermeability::from_base(2.0);

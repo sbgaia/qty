@@ -2248,6 +2248,826 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmeterperradian"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton meter per radian"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON METER PER RADIAN"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmetersperradian"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton meters per radian"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON METERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmeterperradian"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton meter per radian"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON METER PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmetersperradian"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton meters per radian"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON METERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmeterperradian"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton meter per radian"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON METER PER RADIAN"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmetersperradian"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton meters per radian"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON METERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("poundforcefootperdegrees"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("pound force foot per degrees"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("POUND FORCE FOOT PER DEGREES"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("poundforcefeetperdegrees"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("pound force feet per degrees"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("POUND FORCE FEET PER DEGREES"),
+        Some(RotationalStiffnessUnit::PoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopoundforcefootperdegrees"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopound force foot per degrees"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILOPOUND FORCE FOOT PER DEGREES"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopoundforcefeetperdegrees"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopound force feet per degrees"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILOPOUND FORCE FEET PER DEGREES"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerDegrees)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton millimeter per degree"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton millimeters per degree"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmillimeterperdegree"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton millimeter per degree"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON MILLIMETER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmillimetersperdegree"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton millimeters per degree"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON MILLIMETERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton meter per degree"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton meters per degree"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::NewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton meter per degree"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton meters per degree"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::NanonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton meter per degree"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton meters per degree"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MicronewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton meter per degree"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton meters per degree"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MillinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton meter per degree"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton meters per degree"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::CentinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton meter per degree"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton meters per degree"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecinewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton meter per degree"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton meters per degree"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::DecanewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton meter per degree"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton meters per degree"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::KilonewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmeterperdegree"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton meter per degree"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON METER PER DEGREE"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmetersperdegree"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton meters per degree"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON METERS PER DEGREE"),
+        Some(RotationalStiffnessUnit::MeganewtonMeterPerDegree)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton millimeter per radian"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("newton millimeters per radian"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::NewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("nanonewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("NANONEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::NanonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("micronewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MICRONEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::MicronewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("millinewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MILLINEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::MillinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("centinewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("CENTINEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::CentinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decinewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECINEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::DecinewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("decanewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("DECANEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::DecanewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilonewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILONEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilonewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmillimeterperradian"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton millimeter per radian"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON MILLIMETER PER RADIAN"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewtonmillimetersperradian"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("meganewton millimeters per radian"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("MEGANEWTON MILLIMETERS PER RADIAN"),
+        Some(RotationalStiffnessUnit::MeganewtonMillimeterPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("poundforcefeetperradian"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("pound force feet per radian"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("POUND FORCE FEET PER RADIAN"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("poundforcefeetperradian"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("pound force feet per radian"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("POUND FORCE FEET PER RADIAN"),
+        Some(RotationalStiffnessUnit::PoundForceFeetPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopoundforcefootperradian"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopound force foot per radian"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILOPOUND FORCE FOOT PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopoundforcefeetperradian"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("kilopound force feet per radian"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+    assert_eq!(
+        RotationalStiffnessUnit::from_name("KILOPOUND FORCE FEET PER RADIAN"),
+        Some(RotationalStiffnessUnit::KilopoundForceFootPerRadian)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RotationalStiffness::from_base(6.0);
     let b = RotationalStiffness::from_base(2.0);

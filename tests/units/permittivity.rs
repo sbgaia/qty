@@ -105,6 +105,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PermittivityUnit::from_name("faradpermeter"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+    assert_eq!(
+        PermittivityUnit::from_name("farad per meter"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+    assert_eq!(
+        PermittivityUnit::from_name("FARAD PER METER"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+    assert_eq!(
+        PermittivityUnit::from_name("faradspermeter"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+    assert_eq!(
+        PermittivityUnit::from_name("farads per meter"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+    assert_eq!(
+        PermittivityUnit::from_name("FARADS PER METER"),
+        Some(PermittivityUnit::FaradPerMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Permittivity::from_base(6.0);
     let b = Permittivity::from_base(2.0);

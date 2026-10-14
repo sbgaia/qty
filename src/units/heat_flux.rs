@@ -152,12 +152,77 @@ impl HeatFluxUnit {
             Self::PoundPerSecondCubed => &["lb/s³", "lbm/s³"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "wattpersquaremeter" => Some(Self::WattPerSquareMeter),
+            "wattspersquaremeter" => Some(Self::WattPerSquareMeter),
+            "nanowattpersquaremeter" => Some(Self::NanowattPerSquareMeter),
+            "nanowattspersquaremeter" => Some(Self::NanowattPerSquareMeter),
+            "microwattpersquaremeter" => Some(Self::MicrowattPerSquareMeter),
+            "microwattspersquaremeter" => Some(Self::MicrowattPerSquareMeter),
+            "milliwattpersquaremeter" => Some(Self::MilliwattPerSquareMeter),
+            "milliwattspersquaremeter" => Some(Self::MilliwattPerSquareMeter),
+            "centiwattpersquaremeter" => Some(Self::CentiwattPerSquareMeter),
+            "centiwattspersquaremeter" => Some(Self::CentiwattPerSquareMeter),
+            "deciwattpersquaremeter" => Some(Self::DeciwattPerSquareMeter),
+            "deciwattspersquaremeter" => Some(Self::DeciwattPerSquareMeter),
+            "kilowattpersquaremeter" => Some(Self::KilowattPerSquareMeter),
+            "kilowattspersquaremeter" => Some(Self::KilowattPerSquareMeter),
+            "wattpersquaremillimeter" => Some(Self::WattPerSquareMillimeter),
+            "wattspersquaremillimeter" => Some(Self::WattPerSquareMillimeter),
+            "nanowattpersquaremillimeter" => Some(Self::NanowattPerSquareMillimeter),
+            "nanowattspersquaremillimeter" => Some(Self::NanowattPerSquareMillimeter),
+            "microwattpersquaremillimeter" => Some(Self::MicrowattPerSquareMillimeter),
+            "microwattspersquaremillimeter" => Some(Self::MicrowattPerSquareMillimeter),
+            "milliwattpersquaremillimeter" => Some(Self::MilliwattPerSquareMillimeter),
+            "milliwattspersquaremillimeter" => Some(Self::MilliwattPerSquareMillimeter),
+            "centiwattpersquaremillimeter" => Some(Self::CentiwattPerSquareMillimeter),
+            "centiwattspersquaremillimeter" => Some(Self::CentiwattPerSquareMillimeter),
+            "deciwattpersquaremillimeter" => Some(Self::DeciwattPerSquareMillimeter),
+            "deciwattspersquaremillimeter" => Some(Self::DeciwattPerSquareMillimeter),
+            "kilowattpersquaremillimeter" => Some(Self::KilowattPerSquareMillimeter),
+            "kilowattspersquaremillimeter" => Some(Self::KilowattPerSquareMillimeter),
+            "wattpersquareinch" => Some(Self::WattPerSquareInch),
+            "wattspersquareinch" => Some(Self::WattPerSquareInch),
+            "wattpersquarefoot" => Some(Self::WattPerSquareFoot),
+            "wattspersquarefoot" => Some(Self::WattPerSquareFoot),
+            "btupersecondsquareinch" => Some(Self::BtuPerSecondSquareInch),
+            "btuspersecondsquareinch" => Some(Self::BtuPerSecondSquareInch),
+            "btupersecondsquarefoot" => Some(Self::BtuPerSecondSquareFoot),
+            "btuspersecondsquarefoot" => Some(Self::BtuPerSecondSquareFoot),
+            "btuperminutesquarefoot" => Some(Self::BtuPerMinuteSquareFoot),
+            "btusperminutesquarefoot" => Some(Self::BtuPerMinuteSquareFoot),
+            "btuperhoursquarefoot" => Some(Self::BtuPerHourSquareFoot),
+            "btusperhoursquarefoot" => Some(Self::BtuPerHourSquareFoot),
+            "caloriepersecondsquarecentimeter" => Some(Self::CaloriePerSecondSquareCentimeter),
+            "caloriespersecondsquarecentimeter" => Some(Self::CaloriePerSecondSquareCentimeter),
+            "kilocaloriepersecondsquarecentimeter" => {
+                Some(Self::KilocaloriePerSecondSquareCentimeter)
+            }
+            "kilocaloriespersecondsquarecentimeter" => {
+                Some(Self::KilocaloriePerSecondSquareCentimeter)
+            }
+            "kilocalorieperhoursquaremeter" => Some(Self::KilocaloriePerHourSquareMeter),
+            "kilocaloriesperhoursquaremeter" => Some(Self::KilocaloriePerHourSquareMeter),
+            "poundforceperfootsecond" => Some(Self::PoundForcePerFootSecond),
+            "poundsforceperfootsecond" => Some(Self::PoundForcePerFootSecond),
+            "poundpersecondcubed" => Some(Self::PoundPerSecondCubed),
+            "poundspersecondcubed" => Some(Self::PoundPerSecondCubed),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for HeatFluxUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/m²" => Ok(Self::WattPerSquareMeter),
@@ -186,7 +251,7 @@ impl core::str::FromStr for HeatFluxUnit {
             "lbf/(ft·s)" => Ok(Self::PoundForcePerFootSecond),
             "lb/s³" => Ok(Self::PoundPerSecondCubed),
             "lbm/s³" => Ok(Self::PoundPerSecondCubed),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

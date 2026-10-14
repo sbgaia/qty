@@ -75,12 +75,33 @@ impl AreaDensityUnit {
             }
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "kilogrampersquaremeter" => Some(Self::KilogramPerSquareMeter),
+            "kilogramspersquaremeter" => Some(Self::KilogramPerSquareMeter),
+            "grampersquaremeter" => Some(Self::GramPerSquareMeter),
+            "gramspersquaremeter" => Some(Self::GramPerSquareMeter),
+            "milligrampersquaremeter" => Some(Self::MilligramPerSquareMeter),
+            "milligramspersquaremeter" => Some(Self::MilligramPerSquareMeter),
+            "poundpersquarefoot" => Some(Self::PoundPerSquareFoot),
+            "poundspersquarefoot" => Some(Self::PoundPerSquareFoot),
+            "poundperthousandsquarefeet" => Some(Self::PoundPerThousandSquareFeet),
+            "poundsperthousandsquarefeet" => Some(Self::PoundPerThousandSquareFeet),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AreaDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "kg/m²" => Ok(Self::KilogramPerSquareMeter),
@@ -96,7 +117,7 @@ impl core::str::FromStr for AreaDensityUnit {
             "lb/1000ft²" => Ok(Self::PoundPerThousandSquareFeet),
             "lbs/1000ft²" => Ok(Self::PoundPerThousandSquareFeet),
             "lbm/MSF" => Ok(Self::PoundPerThousandSquareFeet),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -1233,6 +1233,304 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(MassUnit::from_name("gram"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("gram"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("GRAM"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("grams"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("grams"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("GRAMS"), Some(MassUnit::Gram));
+    assert_eq!(MassUnit::from_name("femtogram"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("femtogram"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("FEMTOGRAM"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("femtograms"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("femtograms"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("FEMTOGRAMS"), Some(MassUnit::Femtogram));
+    assert_eq!(MassUnit::from_name("picogram"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("picogram"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("PICOGRAM"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("picograms"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("picograms"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("PICOGRAMS"), Some(MassUnit::Picogram));
+    assert_eq!(MassUnit::from_name("nanogram"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("nanogram"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("NANOGRAM"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("nanograms"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("nanograms"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("NANOGRAMS"), Some(MassUnit::Nanogram));
+    assert_eq!(MassUnit::from_name("microgram"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("microgram"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("MICROGRAM"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("micrograms"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("micrograms"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("MICROGRAMS"), Some(MassUnit::Microgram));
+    assert_eq!(MassUnit::from_name("milligram"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("milligram"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("MILLIGRAM"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("milligrams"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("milligrams"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("MILLIGRAMS"), Some(MassUnit::Milligram));
+    assert_eq!(MassUnit::from_name("centigram"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("centigram"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("CENTIGRAM"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("centigrams"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("centigrams"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("CENTIGRAMS"), Some(MassUnit::Centigram));
+    assert_eq!(MassUnit::from_name("decigram"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("decigram"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("DECIGRAM"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("decigrams"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("decigrams"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("DECIGRAMS"), Some(MassUnit::Decigram));
+    assert_eq!(MassUnit::from_name("decagram"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("decagram"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("DECAGRAM"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("decagrams"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("decagrams"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("DECAGRAMS"), Some(MassUnit::Decagram));
+    assert_eq!(MassUnit::from_name("hectogram"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("hectogram"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("HECTOGRAM"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("hectograms"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("hectograms"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("HECTOGRAMS"), Some(MassUnit::Hectogram));
+    assert_eq!(MassUnit::from_name("kilogram"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("kilogram"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("KILOGRAM"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("kilograms"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("kilograms"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("KILOGRAMS"), Some(MassUnit::Kilogram));
+    assert_eq!(MassUnit::from_name("tonne"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("tonne"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("TONNE"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("tonnes"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("tonnes"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("TONNES"), Some(MassUnit::Tonne));
+    assert_eq!(MassUnit::from_name("kilotonne"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("kilotonne"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("KILOTONNE"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("kilotonnes"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("kilotonnes"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("KILOTONNES"), Some(MassUnit::Kilotonne));
+    assert_eq!(MassUnit::from_name("megatonne"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("megatonne"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("MEGATONNE"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("megatonnes"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("megatonnes"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("MEGATONNES"), Some(MassUnit::Megatonne));
+    assert_eq!(MassUnit::from_name("shortton"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("short ton"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("SHORT TON"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("shorttons"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("short tons"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("SHORT TONS"), Some(MassUnit::ShortTon));
+    assert_eq!(MassUnit::from_name("longton"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("long ton"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("LONG TON"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("longtons"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("long tons"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("LONG TONS"), Some(MassUnit::LongTon));
+    assert_eq!(MassUnit::from_name("pound"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("pound"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("POUND"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("pounds"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("pounds"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("POUNDS"), Some(MassUnit::Pound));
+    assert_eq!(MassUnit::from_name("kilopound"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("kilopound"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("KILOPOUND"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("kilopounds"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("kilopounds"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("KILOPOUNDS"), Some(MassUnit::Kilopound));
+    assert_eq!(MassUnit::from_name("megapound"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("megapound"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("MEGAPOUND"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("megapounds"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("megapounds"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("MEGAPOUNDS"), Some(MassUnit::Megapound));
+    assert_eq!(MassUnit::from_name("ounce"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("ounce"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("OUNCE"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("ounces"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("ounces"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("OUNCES"), Some(MassUnit::Ounce));
+    assert_eq!(MassUnit::from_name("slug"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("slug"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("SLUG"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("slugs"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("slugs"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("SLUGS"), Some(MassUnit::Slug));
+    assert_eq!(MassUnit::from_name("stone"), Some(MassUnit::Stone));
+    assert_eq!(MassUnit::from_name("stone"), Some(MassUnit::Stone));
+    assert_eq!(MassUnit::from_name("STONE"), Some(MassUnit::Stone));
+    assert_eq!(MassUnit::from_name("stone"), Some(MassUnit::Stone));
+    assert_eq!(MassUnit::from_name("stone"), Some(MassUnit::Stone));
+    assert_eq!(MassUnit::from_name("STONE"), Some(MassUnit::Stone));
+    assert_eq!(
+        MassUnit::from_name("shorthundredweight"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("short hundredweight"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("SHORT HUNDREDWEIGHT"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("shorthundredweight"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("short hundredweight"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("SHORT HUNDREDWEIGHT"),
+        Some(MassUnit::ShortHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("longhundredweight"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("long hundredweight"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("LONG HUNDREDWEIGHT"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("longhundredweight"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("long hundredweight"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(
+        MassUnit::from_name("LONG HUNDREDWEIGHT"),
+        Some(MassUnit::LongHundredweight)
+    );
+    assert_eq!(MassUnit::from_name("grain"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("grain"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("GRAIN"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("grains"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("grains"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("GRAINS"), Some(MassUnit::Grain));
+    assert_eq!(MassUnit::from_name("solarmass"), Some(MassUnit::SolarMass));
+    assert_eq!(MassUnit::from_name("solar mass"), Some(MassUnit::SolarMass));
+    assert_eq!(MassUnit::from_name("SOLAR MASS"), Some(MassUnit::SolarMass));
+    assert_eq!(
+        MassUnit::from_name("solarmasses"),
+        Some(MassUnit::SolarMass)
+    );
+    assert_eq!(
+        MassUnit::from_name("solar masses"),
+        Some(MassUnit::SolarMass)
+    );
+    assert_eq!(
+        MassUnit::from_name("SOLAR MASSES"),
+        Some(MassUnit::SolarMass)
+    );
+    assert_eq!(MassUnit::from_name("earthmass"), Some(MassUnit::EarthMass));
+    assert_eq!(MassUnit::from_name("earth mass"), Some(MassUnit::EarthMass));
+    assert_eq!(MassUnit::from_name("EARTH MASS"), Some(MassUnit::EarthMass));
+    assert_eq!(
+        MassUnit::from_name("earthmasses"),
+        Some(MassUnit::EarthMass)
+    );
+    assert_eq!(
+        MassUnit::from_name("earth masses"),
+        Some(MassUnit::EarthMass)
+    );
+    assert_eq!(
+        MassUnit::from_name("EARTH MASSES"),
+        Some(MassUnit::EarthMass)
+    );
+    assert_eq!(MassUnit::from_name("dalton"), Some(MassUnit::Dalton));
+    assert_eq!(MassUnit::from_name("dalton"), Some(MassUnit::Dalton));
+    assert_eq!(MassUnit::from_name("DALTON"), Some(MassUnit::Dalton));
+    assert_eq!(MassUnit::from_name("daltons"), Some(MassUnit::Dalton));
+    assert_eq!(MassUnit::from_name("daltons"), Some(MassUnit::Dalton));
+    assert_eq!(MassUnit::from_name("DALTONS"), Some(MassUnit::Dalton));
+    assert_eq!(
+        MassUnit::from_name("kilodalton"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("kilodalton"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("KILODALTON"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("kilodaltons"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("kilodaltons"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("KILODALTONS"),
+        Some(MassUnit::Kilodalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("megadalton"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("megadalton"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("MEGADALTON"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("megadaltons"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("megadaltons"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("MEGADALTONS"),
+        Some(MassUnit::Megadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("gigadalton"),
+        Some(MassUnit::Gigadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("gigadalton"),
+        Some(MassUnit::Gigadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("GIGADALTON"),
+        Some(MassUnit::Gigadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("gigadaltons"),
+        Some(MassUnit::Gigadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("gigadaltons"),
+        Some(MassUnit::Gigadalton)
+    );
+    assert_eq!(
+        MassUnit::from_name("GIGADALTONS"),
+        Some(MassUnit::Gigadalton)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Mass::from_base(6.0);
     let b = Mass::from_base(2.0);

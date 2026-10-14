@@ -148,12 +148,70 @@ impl MassFractionUnit {
             Self::PartPerTrillion => &["ppt"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "decimalfraction" => Some(Self::DecimalFraction),
+            "decimalfractions" => Some(Self::DecimalFraction),
+            "grampergram" => Some(Self::GramPerGram),
+            "gramspergram" => Some(Self::GramPerGram),
+            "nanogrampergram" => Some(Self::NanogramPerGram),
+            "nanogramspergram" => Some(Self::NanogramPerGram),
+            "microgrampergram" => Some(Self::MicrogramPerGram),
+            "microgramspergram" => Some(Self::MicrogramPerGram),
+            "milligrampergram" => Some(Self::MilligramPerGram),
+            "milligramspergram" => Some(Self::MilligramPerGram),
+            "centigrampergram" => Some(Self::CentigramPerGram),
+            "centigramspergram" => Some(Self::CentigramPerGram),
+            "decigrampergram" => Some(Self::DecigramPerGram),
+            "decigramspergram" => Some(Self::DecigramPerGram),
+            "decagrampergram" => Some(Self::DecagramPerGram),
+            "decagramspergram" => Some(Self::DecagramPerGram),
+            "hectogrampergram" => Some(Self::HectogramPerGram),
+            "hectogramspergram" => Some(Self::HectogramPerGram),
+            "kilogrampergram" => Some(Self::KilogramPerGram),
+            "kilogramspergram" => Some(Self::KilogramPerGram),
+            "gramperkilogram" => Some(Self::GramPerKilogram),
+            "gramsperkilogram" => Some(Self::GramPerKilogram),
+            "nanogramperkilogram" => Some(Self::NanogramPerKilogram),
+            "nanogramsperkilogram" => Some(Self::NanogramPerKilogram),
+            "microgramperkilogram" => Some(Self::MicrogramPerKilogram),
+            "microgramsperkilogram" => Some(Self::MicrogramPerKilogram),
+            "milligramperkilogram" => Some(Self::MilligramPerKilogram),
+            "milligramsperkilogram" => Some(Self::MilligramPerKilogram),
+            "centigramperkilogram" => Some(Self::CentigramPerKilogram),
+            "centigramsperkilogram" => Some(Self::CentigramPerKilogram),
+            "decigramperkilogram" => Some(Self::DecigramPerKilogram),
+            "decigramsperkilogram" => Some(Self::DecigramPerKilogram),
+            "decagramperkilogram" => Some(Self::DecagramPerKilogram),
+            "decagramsperkilogram" => Some(Self::DecagramPerKilogram),
+            "hectogramperkilogram" => Some(Self::HectogramPerKilogram),
+            "hectogramsperkilogram" => Some(Self::HectogramPerKilogram),
+            "kilogramperkilogram" => Some(Self::KilogramPerKilogram),
+            "kilogramsperkilogram" => Some(Self::KilogramPerKilogram),
+            "percent" => Some(Self::Percent),
+            "partperthousand" => Some(Self::PartPerThousand),
+            "partsperthousand" => Some(Self::PartPerThousand),
+            "partpermillion" => Some(Self::PartPerMillion),
+            "partspermillion" => Some(Self::PartPerMillion),
+            "partperbillion" => Some(Self::PartPerBillion),
+            "partsperbillion" => Some(Self::PartPerBillion),
+            "partpertrillion" => Some(Self::PartPerTrillion),
+            "partspertrillion" => Some(Self::PartPerTrillion),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MassFractionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/g" => Ok(Self::GramPerGram),
@@ -180,7 +238,7 @@ impl core::str::FromStr for MassFractionUnit {
             "ppm" => Ok(Self::PartPerMillion),
             "ppb" => Ok(Self::PartPerBillion),
             "ppt" => Ok(Self::PartPerTrillion),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

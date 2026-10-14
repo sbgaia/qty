@@ -2659,6 +2659,1174 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PressureUnit::from_name("pascal"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pascal"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("PASCAL"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pascals"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pascals"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("PASCALS"),
+        Some(PressureUnit::Pascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("micropascal"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("micropascal"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MICROPASCAL"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("micropascals"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("micropascals"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MICROPASCALS"),
+        Some(PressureUnit::Micropascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millipascal"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millipascal"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIPASCAL"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millipascals"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millipascals"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIPASCALS"),
+        Some(PressureUnit::Millipascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decapascal"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decapascal"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DECAPASCAL"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decapascals"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decapascals"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DECAPASCALS"),
+        Some(PressureUnit::Decapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("hectopascal"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("hectopascal"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("HECTOPASCAL"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("hectopascals"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("hectopascals"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("HECTOPASCALS"),
+        Some(PressureUnit::Hectopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopascal"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopascal"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPASCAL"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopascals"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopascals"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPASCALS"),
+        Some(PressureUnit::Kilopascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megapascal"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megapascal"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGAPASCAL"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megapascals"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megapascals"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGAPASCALS"),
+        Some(PressureUnit::Megapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("gigapascal"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("gigapascal"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("GIGAPASCAL"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("gigapascals"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("gigapascals"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("GIGAPASCALS"),
+        Some(PressureUnit::Gigapascal)
+    );
+    assert_eq!(
+        PressureUnit::from_name("atmosphere"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("atmosphere"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("ATMOSPHERE"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("atmospheres"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("atmospheres"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("ATMOSPHERES"),
+        Some(PressureUnit::Atmosphere)
+    );
+    assert_eq!(PressureUnit::from_name("bar"), Some(PressureUnit::Bar));
+    assert_eq!(PressureUnit::from_name("bar"), Some(PressureUnit::Bar));
+    assert_eq!(PressureUnit::from_name("BAR"), Some(PressureUnit::Bar));
+    assert_eq!(PressureUnit::from_name("bars"), Some(PressureUnit::Bar));
+    assert_eq!(PressureUnit::from_name("bars"), Some(PressureUnit::Bar));
+    assert_eq!(PressureUnit::from_name("BARS"), Some(PressureUnit::Bar));
+    assert_eq!(
+        PressureUnit::from_name("microbar"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("microbar"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MICROBAR"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("microbars"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("microbars"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MICROBARS"),
+        Some(PressureUnit::Microbar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millibar"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millibar"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIBAR"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millibars"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millibars"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIBARS"),
+        Some(PressureUnit::Millibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centibar"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centibar"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("CENTIBAR"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centibars"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centibars"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("CENTIBARS"),
+        Some(PressureUnit::Centibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decibar"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decibar"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DECIBAR"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decibars"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("decibars"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DECIBARS"),
+        Some(PressureUnit::Decibar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilobar"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilobar"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOBAR"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilobars"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilobars"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOBARS"),
+        Some(PressureUnit::Kilobar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megabar"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megabar"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGABAR"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megabars"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("megabars"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGABARS"),
+        Some(PressureUnit::Megabar)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramforcepersquaremeter"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogram force per square meter"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAM FORCE PER SQUARE METER"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramsforcepersquaremeter"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilograms force per square meter"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAMS FORCE PER SQUARE METER"),
+        Some(PressureUnit::KilogramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramforcepersquarecentimeter"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogram force per square centimeter"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAM FORCE PER SQUARE CENTIMETER"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramsforcepersquarecentimeter"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilograms force per square centimeter"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAMS FORCE PER SQUARE CENTIMETER"),
+        Some(PressureUnit::KilogramForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramforcepersquaremillimeter"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogram force per square millimeter"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAM FORCE PER SQUARE MILLIMETER"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilogramsforcepersquaremillimeter"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilograms force per square millimeter"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOGRAMS FORCE PER SQUARE MILLIMETER"),
+        Some(PressureUnit::KilogramForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonpersquaremeter"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newton per square meter"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTON PER SQUARE METER"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonspersquaremeter"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtons per square meter"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTONS PER SQUARE METER"),
+        Some(PressureUnit::NewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonpersquaremeter"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewton per square meter"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTON PER SQUARE METER"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonspersquaremeter"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtons per square meter"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTONS PER SQUARE METER"),
+        Some(PressureUnit::KilonewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meganewtonpersquaremeter"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meganewton per square meter"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGANEWTON PER SQUARE METER"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meganewtonspersquaremeter"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meganewtons per square meter"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MEGANEWTONS PER SQUARE METER"),
+        Some(PressureUnit::MeganewtonPerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonpersquarecentimeter"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newton per square centimeter"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTON PER SQUARE CENTIMETER"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonspersquarecentimeter"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtons per square centimeter"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTONS PER SQUARE CENTIMETER"),
+        Some(PressureUnit::NewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonpersquarecentimeter"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewton per square centimeter"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTON PER SQUARE CENTIMETER"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonspersquarecentimeter"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtons per square centimeter"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTONS PER SQUARE CENTIMETER"),
+        Some(PressureUnit::KilonewtonPerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonpersquaremillimeter"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newton per square millimeter"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTON PER SQUARE MILLIMETER"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtonspersquaremillimeter"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("newtons per square millimeter"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("NEWTONS PER SQUARE MILLIMETER"),
+        Some(PressureUnit::NewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonpersquaremillimeter"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewton per square millimeter"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTON PER SQUARE MILLIMETER"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtonspersquaremillimeter"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilonewtons per square millimeter"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILONEWTONS PER SQUARE MILLIMETER"),
+        Some(PressureUnit::KilonewtonPerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("technicalatmosphere"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("technical atmosphere"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TECHNICAL ATMOSPHERE"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("technicalatmospheres"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("technical atmospheres"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TECHNICAL ATMOSPHERES"),
+        Some(PressureUnit::TechnicalAtmosphere)
+    );
+    assert_eq!(PressureUnit::from_name("torr"), Some(PressureUnit::Torr));
+    assert_eq!(PressureUnit::from_name("torr"), Some(PressureUnit::Torr));
+    assert_eq!(PressureUnit::from_name("TORR"), Some(PressureUnit::Torr));
+    assert_eq!(PressureUnit::from_name("torrs"), Some(PressureUnit::Torr));
+    assert_eq!(PressureUnit::from_name("torrs"), Some(PressureUnit::Torr));
+    assert_eq!(PressureUnit::from_name("TORRS"), Some(PressureUnit::Torr));
+    assert_eq!(
+        PressureUnit::from_name("millitorr"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millitorr"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLITORR"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millitorrs"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millitorrs"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLITORRS"),
+        Some(PressureUnit::Millitorr)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundforcepersquareinch"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pound force per square inch"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUND FORCE PER SQUARE INCH"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundsforcepersquareinch"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pounds force per square inch"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUNDS FORCE PER SQUARE INCH"),
+        Some(PressureUnit::PoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundforcepersquareinch"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopound force per square inch"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUND FORCE PER SQUARE INCH"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundsforcepersquareinch"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopounds force per square inch"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUNDS FORCE PER SQUARE INCH"),
+        Some(PressureUnit::KilopoundForcePerSquareInch)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundforcepersquaremil"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pound force per square mil"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUND FORCE PER SQUARE MIL"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundsforcepersquaremil"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pounds force per square mil"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUNDS FORCE PER SQUARE MIL"),
+        Some(PressureUnit::PoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundforcepersquaremil"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopound force per square mil"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUND FORCE PER SQUARE MIL"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundsforcepersquaremil"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopounds force per square mil"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUNDS FORCE PER SQUARE MIL"),
+        Some(PressureUnit::KilopoundForcePerSquareMil)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundforcepersquarefoot"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pound force per square foot"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUND FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundsforcepersquarefoot"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pounds force per square foot"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUNDS FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::PoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundforcepersquarefoot"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopound force per square foot"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUND FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopoundsforcepersquarefoot"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("kilopounds force per square foot"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("KILOPOUNDS FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::KilopoundForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonneforcepersquaremillimeter"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonne force per square millimeter"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNE FORCE PER SQUARE MILLIMETER"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnesforcepersquaremillimeter"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnes force per square millimeter"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNES FORCE PER SQUARE MILLIMETER"),
+        Some(PressureUnit::TonneForcePerSquareMillimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonneforcepersquaremeter"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonne force per square meter"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNE FORCE PER SQUARE METER"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnesforcepersquaremeter"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnes force per square meter"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNES FORCE PER SQUARE METER"),
+        Some(PressureUnit::TonneForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meterofhead"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meter of head"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("METER OF HEAD"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("metersofhead"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meters of head"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("METERS OF HEAD"),
+        Some(PressureUnit::MeterOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonneforcepersquarecentimeter"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonne force per square centimeter"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNE FORCE PER SQUARE CENTIMETER"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnesforcepersquarecentimeter"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("tonnes force per square centimeter"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("TONNES FORCE PER SQUARE CENTIMETER"),
+        Some(PressureUnit::TonneForcePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("footofhead"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("foot of head"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("FOOT OF HEAD"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("feetofhead"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("feet of head"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("FEET OF HEAD"),
+        Some(PressureUnit::FootOfHead)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeterofmercury"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeter of mercury"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIMETER OF MERCURY"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimetersofmercury"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeters of mercury"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIMETERS OF MERCURY"),
+        Some(PressureUnit::MillimeterOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inchofmercury"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inch of mercury"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("INCH OF MERCURY"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inchesofmercury"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inches of mercury"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("INCHES OF MERCURY"),
+        Some(PressureUnit::InchOfMercury)
+    );
+    assert_eq!(
+        PressureUnit::from_name("dynepersquarecentimeter"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("dyne per square centimeter"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DYNE PER SQUARE CENTIMETER"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("dynespersquarecentimeter"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("dynes per square centimeter"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("DYNES PER SQUARE CENTIMETER"),
+        Some(PressureUnit::DynePerSquareCentimeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundperinchsecondsquared"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pound per inch second squared"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUND PER INCH SECOND SQUARED"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("poundsperinchsecondsquared"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("pounds per inch second squared"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("POUNDS PER INCH SECOND SQUARED"),
+        Some(PressureUnit::PoundPerInchSecondSquared)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meterofwatercolumn"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meter of water column"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("METER OF WATER COLUMN"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("metersofwatercolumn"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("meters of water column"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("METERS OF WATER COLUMN"),
+        Some(PressureUnit::MeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeterofwatercolumn"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeter of water column"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIMETER OF WATER COLUMN"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimetersofwatercolumn"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("millimeters of water column"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIMETERS OF WATER COLUMN"),
+        Some(PressureUnit::MillimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centimeterofwatercolumn"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centimeter of water column"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("CENTIMETER OF WATER COLUMN"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centimetersofwatercolumn"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("centimeters of water column"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("CENTIMETERS OF WATER COLUMN"),
+        Some(PressureUnit::CentimeterOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inchofwatercolumn"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inch of water column"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("INCH OF WATER COLUMN"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inchesofwatercolumn"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("inches of water column"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("INCHES OF WATER COLUMN"),
+        Some(PressureUnit::InchOfWaterColumn)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligramforcepersquaremeter"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligram force per square meter"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIGRAM FORCE PER SQUARE METER"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligramsforcepersquaremeter"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligrams force per square meter"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIGRAMS FORCE PER SQUARE METER"),
+        Some(PressureUnit::MilligramForcePerSquareMeter)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligramforcepersquarefoot"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligram force per square foot"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIGRAM FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligramsforcepersquarefoot"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("milligrams force per square foot"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+    assert_eq!(
+        PressureUnit::from_name("MILLIGRAMS FORCE PER SQUARE FOOT"),
+        Some(PressureUnit::MilligramForcePerSquareFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Pressure::from_base(6.0);
     let b = Pressure::from_base(2.0);

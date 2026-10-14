@@ -223,6 +223,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        IlluminanceUnit::from_name("lux"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("lux"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("LUX"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("lux"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("lux"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("LUX"),
+        Some(IlluminanceUnit::Lux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("millilux"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("millilux"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("MILLILUX"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("millilux"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("millilux"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("MILLILUX"),
+        Some(IlluminanceUnit::Millilux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("kilolux"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("kilolux"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("KILOLUX"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("kilolux"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("kilolux"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("KILOLUX"),
+        Some(IlluminanceUnit::Kilolux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("megalux"),
+        Some(IlluminanceUnit::Megalux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("megalux"),
+        Some(IlluminanceUnit::Megalux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("MEGALUX"),
+        Some(IlluminanceUnit::Megalux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("megalux"),
+        Some(IlluminanceUnit::Megalux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("megalux"),
+        Some(IlluminanceUnit::Megalux)
+    );
+    assert_eq!(
+        IlluminanceUnit::from_name("MEGALUX"),
+        Some(IlluminanceUnit::Megalux)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Illuminance::from_base(6.0);
     let b = Illuminance::from_base(2.0);

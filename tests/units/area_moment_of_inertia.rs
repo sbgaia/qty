@@ -400,6 +400,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("metertothefourth"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("meter to the fourth"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("METER TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("meterstothefourth"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("meters to the fourth"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("METERS TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("decimetertothefourth"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("decimeter to the fourth"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("DECIMETER TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("decimeterstothefourth"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("decimeters to the fourth"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("DECIMETERS TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::DecimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("centimetertothefourth"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("centimeter to the fourth"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("CENTIMETER TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("centimeterstothefourth"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("centimeters to the fourth"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("CENTIMETERS TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::CentimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("millimetertothefourth"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("millimeter to the fourth"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("MILLIMETER TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("millimeterstothefourth"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("millimeters to the fourth"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("MILLIMETERS TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::MillimeterToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("foottothefourth"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("foot to the fourth"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("FOOT TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("feettothefourth"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("feet to the fourth"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("FEET TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::FootToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("inchtothefourth"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("inch to the fourth"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("INCH TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("inchestothefourth"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("inches to the fourth"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+    assert_eq!(
+        AreaMomentOfInertiaUnit::from_name("INCHES TO THE FOURTH"),
+        Some(AreaMomentOfInertiaUnit::InchToTheFourth)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = AreaMomentOfInertia::from_base(6.0);
     let b = AreaMomentOfInertia::from_base(2.0);

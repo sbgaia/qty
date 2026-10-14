@@ -563,6 +563,250 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        TemperatureUnit::from_name("kelvin"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("kelvin"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("KELVIN"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("kelvins"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("kelvins"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("KELVINS"),
+        Some(TemperatureUnit::Kelvin)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreecelsius"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree celsius"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE CELSIUS"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreescelsius"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees celsius"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES CELSIUS"),
+        Some(TemperatureUnit::DegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("millidegreecelsius"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("millidegree celsius"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("MILLIDEGREE CELSIUS"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("millidegreescelsius"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("millidegrees celsius"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("MILLIDEGREES CELSIUS"),
+        Some(TemperatureUnit::MillidegreeCelsius)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreedelisle"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree delisle"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE DELISLE"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesdelisle"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees delisle"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES DELISLE"),
+        Some(TemperatureUnit::DegreeDelisle)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreefahrenheit"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree fahrenheit"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE FAHRENHEIT"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesfahrenheit"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees fahrenheit"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES FAHRENHEIT"),
+        Some(TemperatureUnit::DegreeFahrenheit)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreenewton"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree newton"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE NEWTON"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesnewton"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees newton"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES NEWTON"),
+        Some(TemperatureUnit::DegreeNewton)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreerankine"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree rankine"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE RANKINE"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesrankine"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees rankine"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES RANKINE"),
+        Some(TemperatureUnit::DegreeRankine)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreereaumur"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree reaumur"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE REAUMUR"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesreaumur"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees reaumur"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES REAUMUR"),
+        Some(TemperatureUnit::DegreeReaumur)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreeroemer"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degree roemer"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREE ROEMER"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degreesroemer"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("degrees roemer"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("DEGREES ROEMER"),
+        Some(TemperatureUnit::DegreeRoemer)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("solartemperature"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("solar temperature"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("SOLAR TEMPERATURE"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("solartemperatures"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("solar temperatures"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+    assert_eq!(
+        TemperatureUnit::from_name("SOLAR TEMPERATURES"),
+        Some(TemperatureUnit::SolarTemperature)
+    );
+}
+
+#[test]
 fn point_arithmetic() {
     let a = Temperature::from_base(6.0);
     let b = Temperature::from_base(2.0);

@@ -101,6 +101,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        VitaminAUnit::from_name("internationalunit"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+    assert_eq!(
+        VitaminAUnit::from_name("international unit"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+    assert_eq!(
+        VitaminAUnit::from_name("INTERNATIONAL UNIT"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+    assert_eq!(
+        VitaminAUnit::from_name("internationalunits"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+    assert_eq!(
+        VitaminAUnit::from_name("international units"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+    assert_eq!(
+        VitaminAUnit::from_name("INTERNATIONAL UNITS"),
+        Some(VitaminAUnit::InternationalUnit)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = VitaminA::from_base(6.0);
     let b = VitaminA::from_base(2.0);

@@ -1155,6 +1155,442 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascalpersecond"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascal per second"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("PASCAL PER SECOND"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascalspersecond"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascals per second"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("PASCALS PER SECOND"),
+        Some(PressureChangeRateUnit::PascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascalpersecond"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascal per second"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPASCAL PER SECOND"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascalspersecond"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascals per second"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPASCALS PER SECOND"),
+        Some(PressureChangeRateUnit::KilopascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascalpersecond"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascal per second"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPASCAL PER SECOND"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascalspersecond"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascals per second"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPASCALS PER SECOND"),
+        Some(PressureChangeRateUnit::MegapascalPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascalperminute"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascal per minute"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("PASCAL PER MINUTE"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascalsperminute"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pascals per minute"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("PASCALS PER MINUTE"),
+        Some(PressureChangeRateUnit::PascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascalperminute"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascal per minute"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPASCAL PER MINUTE"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascalsperminute"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopascals per minute"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPASCALS PER MINUTE"),
+        Some(PressureChangeRateUnit::KilopascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascalperminute"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascal per minute"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPASCAL PER MINUTE"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascalsperminute"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapascals per minute"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPASCALS PER MINUTE"),
+        Some(PressureChangeRateUnit::MegapascalPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millimeterofmercurypersecond"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millimeter of mercury per second"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIMETER OF MERCURY PER SECOND"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millimetersofmercurypersecond"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millimeters of mercury per second"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIMETERS OF MERCURY PER SECOND"),
+        Some(PressureChangeRateUnit::MillimeterOfMercuryPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("atmospherepersecond"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("atmosphere per second"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("ATMOSPHERE PER SECOND"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("atmospherespersecond"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("atmospheres per second"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("ATMOSPHERES PER SECOND"),
+        Some(PressureChangeRateUnit::AtmospherePerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("poundforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pound force per square inch per second"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("POUND FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("poundsforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pounds force per square inch per second"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("POUNDS FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopoundforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopound force per square inch per second"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPOUND FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopoundsforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopounds force per square inch per second"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPOUNDS FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapoundforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapound force per square inch per second"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPOUND FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapoundsforcepersquareinchpersecond"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapounds force per square inch per second"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPOUNDS FORCE PER SQUARE INCH PER SECOND"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("poundforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pound force per square inch per minute"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("POUND FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("poundsforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("pounds force per square inch per minute"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("POUNDS FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::PoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopoundforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopound force per square inch per minute"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPOUND FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopoundsforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("kilopounds force per square inch per minute"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("KILOPOUNDS FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapoundforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapound force per square inch per minute"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPOUND FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapoundsforcepersquareinchperminute"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("megapounds force per square inch per minute"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MEGAPOUNDS FORCE PER SQUARE INCH PER MINUTE"),
+        Some(PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("barpersecond"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("bar per second"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("BAR PER SECOND"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("barspersecond"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("bars per second"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("BARS PER SECOND"),
+        Some(PressureChangeRateUnit::BarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibarpersecond"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibar per second"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIBAR PER SECOND"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibarspersecond"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibars per second"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIBARS PER SECOND"),
+        Some(PressureChangeRateUnit::MillibarPerSecond)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("barperminute"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("bar per minute"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("BAR PER MINUTE"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("barsperminute"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("bars per minute"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("BARS PER MINUTE"),
+        Some(PressureChangeRateUnit::BarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibarperminute"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibar per minute"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIBAR PER MINUTE"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibarsperminute"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("millibars per minute"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+    assert_eq!(
+        PressureChangeRateUnit::from_name("MILLIBARS PER MINUTE"),
+        Some(PressureChangeRateUnit::MillibarPerMinute)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = PressureChangeRate::from_base(6.0);
     let b = PressureChangeRate::from_base(2.0);

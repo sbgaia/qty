@@ -2706,6 +2706,1246 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(VolumeUnit::from_name("liter"), Some(VolumeUnit::Liter));
+    assert_eq!(VolumeUnit::from_name("liter"), Some(VolumeUnit::Liter));
+    assert_eq!(VolumeUnit::from_name("LITER"), Some(VolumeUnit::Liter));
+    assert_eq!(VolumeUnit::from_name("liters"), Some(VolumeUnit::Liter));
+    assert_eq!(VolumeUnit::from_name("liters"), Some(VolumeUnit::Liter));
+    assert_eq!(VolumeUnit::from_name("LITERS"), Some(VolumeUnit::Liter));
+    assert_eq!(
+        VolumeUnit::from_name("nanoliter"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("nanoliter"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("NANOLITER"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("nanoliters"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("nanoliters"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("NANOLITERS"),
+        Some(VolumeUnit::Nanoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("microliter"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("microliter"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MICROLITER"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("microliters"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("microliters"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MICROLITERS"),
+        Some(VolumeUnit::Microliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("milliliter"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("milliliter"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MILLILITER"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("milliliters"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("milliliters"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MILLILITERS"),
+        Some(VolumeUnit::Milliliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("centiliter"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("centiliter"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CENTILITER"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("centiliters"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("centiliters"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CENTILITERS"),
+        Some(VolumeUnit::Centiliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciliter"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciliter"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECILITER"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciliters"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciliters"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECILITERS"),
+        Some(VolumeUnit::Deciliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaliter"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaliter"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECALITER"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaliters"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaliters"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECALITERS"),
+        Some(VolumeUnit::Decaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectoliter"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectoliter"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HECTOLITER"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectoliters"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectoliters"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HECTOLITERS"),
+        Some(VolumeUnit::Hectoliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloliter"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloliter"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOLITER"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloliters"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloliters"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOLITERS"),
+        Some(VolumeUnit::Kiloliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaliter"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaliter"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGALITER"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaliters"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaliters"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGALITERS"),
+        Some(VolumeUnit::Megaliter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmeter"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic meter"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC METER"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmeters"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic meters"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC METERS"),
+        Some(VolumeUnit::CubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousandcubicmeter"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousand cubic meter"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("THOUSAND CUBIC METER"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousandcubicmeters"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousand cubic meters"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("THOUSAND CUBIC METERS"),
+        Some(VolumeUnit::ThousandCubicMeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubickilometer"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic kilometer"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC KILOMETER"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubickilometers"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic kilometers"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC KILOMETERS"),
+        Some(VolumeUnit::CubicKilometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubichectometer"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic hectometer"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC HECTOMETER"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubichectometers"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic hectometers"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC HECTOMETERS"),
+        Some(VolumeUnit::CubicHectometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicdecimeter"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic decimeter"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC DECIMETER"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicdecimeters"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic decimeters"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC DECIMETERS"),
+        Some(VolumeUnit::CubicDecimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubiccentimeter"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic centimeter"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC CENTIMETER"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubiccentimeters"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic centimeters"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC CENTIMETERS"),
+        Some(VolumeUnit::CubicCentimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmillimeter"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic millimeter"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MILLIMETER"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmillimeters"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic millimeters"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MILLIMETERS"),
+        Some(VolumeUnit::CubicMillimeter)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmicrometer"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic micrometer"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MICROMETER"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmicrometers"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic micrometers"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MICROMETERS"),
+        Some(VolumeUnit::CubicMicrometer)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmile"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic mile"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MILE"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicmiles"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic miles"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC MILES"),
+        Some(VolumeUnit::CubicMile)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicyard"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic yard"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC YARD"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicyards"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic yards"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC YARDS"),
+        Some(VolumeUnit::CubicYard)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicfoot"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic foot"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC FOOT"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicfeet"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic feet"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC FEET"),
+        Some(VolumeUnit::CubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hundredcubicfoot"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hundred cubic foot"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HUNDRED CUBIC FOOT"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hundredcubicfeet"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hundred cubic feet"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HUNDRED CUBIC FEET"),
+        Some(VolumeUnit::HundredCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousandcubicfoot"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousand cubic foot"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("THOUSAND CUBIC FOOT"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousandcubicfeet"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("thousand cubic feet"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("THOUSAND CUBIC FEET"),
+        Some(VolumeUnit::ThousandCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("millioncubicfoot"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("million cubic foot"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MILLION CUBIC FOOT"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("millioncubicfeet"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("million cubic feet"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MILLION CUBIC FEET"),
+        Some(VolumeUnit::MillionCubicFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicinch"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic inch"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC INCH"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubicinches"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("cubic inches"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("CUBIC INCHES"),
+        Some(VolumeUnit::CubicInch)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialgallon"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial gallon"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL GALLON"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialgallons"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial gallons"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL GALLONS"),
+        Some(VolumeUnit::ImperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloimperialgallon"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloimperial gallon"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOIMPERIAL GALLON"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloimperialgallons"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kiloimperial gallons"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOIMPERIAL GALLONS"),
+        Some(VolumeUnit::KiloimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaimperialgallon"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaimperial gallon"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGAIMPERIAL GALLON"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaimperialgallons"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaimperial gallons"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGAIMPERIAL GALLONS"),
+        Some(VolumeUnit::MegaimperialGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialounce"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial ounce"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL OUNCE"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialounces"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial ounces"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL OUNCES"),
+        Some(VolumeUnit::ImperialOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usgallon"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us gallon"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US GALLON"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usgallons"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us gallons"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US GALLONS"),
+        Some(VolumeUnit::UsGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decausgallon"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaus gallon"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECAUS GALLON"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decausgallons"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decaus gallons"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECAUS GALLONS"),
+        Some(VolumeUnit::DecausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciusgallon"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decius gallon"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECIUS GALLON"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("deciusgallons"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("decius gallons"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("DECIUS GALLONS"),
+        Some(VolumeUnit::DeciusGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectousgallon"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectous gallon"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HECTOUS GALLON"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectousgallons"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("hectous gallons"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("HECTOUS GALLONS"),
+        Some(VolumeUnit::HectousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kilousgallon"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kilous gallon"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOUS GALLON"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kilousgallons"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("kilous gallons"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("KILOUS GALLONS"),
+        Some(VolumeUnit::KilousGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megausgallon"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaus gallon"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGAUS GALLON"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megausgallons"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("megaus gallons"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("MEGAUS GALLONS"),
+        Some(VolumeUnit::MegausGallon)
+    );
+    assert_eq!(VolumeUnit::from_name("usounce"), Some(VolumeUnit::UsOunce));
+    assert_eq!(VolumeUnit::from_name("us ounce"), Some(VolumeUnit::UsOunce));
+    assert_eq!(VolumeUnit::from_name("US OUNCE"), Some(VolumeUnit::UsOunce));
+    assert_eq!(VolumeUnit::from_name("usounces"), Some(VolumeUnit::UsOunce));
+    assert_eq!(
+        VolumeUnit::from_name("us ounces"),
+        Some(VolumeUnit::UsOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US OUNCES"),
+        Some(VolumeUnit::UsOunce)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("ustablespoon"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us tablespoon"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US TABLESPOON"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("ustablespoons"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us tablespoons"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US TABLESPOONS"),
+        Some(VolumeUnit::UsTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("autablespoon"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("au tablespoon"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("AU TABLESPOON"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("autablespoons"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("au tablespoons"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("AU TABLESPOONS"),
+        Some(VolumeUnit::AuTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metrictablespoon"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric tablespoon"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC TABLESPOON"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metrictablespoons"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric tablespoons"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC TABLESPOONS"),
+        Some(VolumeUnit::MetricTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uktablespoon"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uk tablespoon"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("UK TABLESPOON"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uktablespoons"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uk tablespoons"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("UK TABLESPOONS"),
+        Some(VolumeUnit::UkTablespoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metricteaspoon"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric teaspoon"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC TEASPOON"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metricteaspoons"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric teaspoons"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC TEASPOONS"),
+        Some(VolumeUnit::MetricTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usteaspoon"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us teaspoon"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US TEASPOON"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usteaspoons"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us teaspoons"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US TEASPOONS"),
+        Some(VolumeUnit::UsTeaspoon)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metriccup"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric cup"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC CUP"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metriccups"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("metric cups"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("METRIC CUPS"),
+        Some(VolumeUnit::MetricCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uscustomarycup"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us customary cup"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US CUSTOMARY CUP"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uscustomarycups"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us customary cups"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US CUSTOMARY CUPS"),
+        Some(VolumeUnit::UsCustomaryCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uslegalcup"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us legal cup"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US LEGAL CUP"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("uslegalcups"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us legal cups"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US LEGAL CUPS"),
+        Some(VolumeUnit::UsLegalCup)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("oilbarrel"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("oil barrel"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("OIL BARREL"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("oilbarrels"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("oil barrels"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("OIL BARRELS"),
+        Some(VolumeUnit::OilBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usbeerbarrel"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us beer barrel"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US BEER BARREL"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("usbeerbarrels"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("us beer barrels"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US BEER BARRELS"),
+        Some(VolumeUnit::UsBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialbeerbarrel"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial beer barrel"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL BEER BARREL"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialbeerbarrels"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial beer barrels"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL BEER BARRELS"),
+        Some(VolumeUnit::ImperialBeerBarrel)
+    );
+    assert_eq!(VolumeUnit::from_name("usquart"), Some(VolumeUnit::UsQuart));
+    assert_eq!(VolumeUnit::from_name("us quart"), Some(VolumeUnit::UsQuart));
+    assert_eq!(VolumeUnit::from_name("US QUART"), Some(VolumeUnit::UsQuart));
+    assert_eq!(VolumeUnit::from_name("usquarts"), Some(VolumeUnit::UsQuart));
+    assert_eq!(
+        VolumeUnit::from_name("us quarts"),
+        Some(VolumeUnit::UsQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("US QUARTS"),
+        Some(VolumeUnit::UsQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialquart"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial quart"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL QUART"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialquarts"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial quarts"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL QUARTS"),
+        Some(VolumeUnit::ImperialQuart)
+    );
+    assert_eq!(VolumeUnit::from_name("uspint"), Some(VolumeUnit::UsPint));
+    assert_eq!(VolumeUnit::from_name("us pint"), Some(VolumeUnit::UsPint));
+    assert_eq!(VolumeUnit::from_name("US PINT"), Some(VolumeUnit::UsPint));
+    assert_eq!(VolumeUnit::from_name("uspints"), Some(VolumeUnit::UsPint));
+    assert_eq!(VolumeUnit::from_name("us pints"), Some(VolumeUnit::UsPint));
+    assert_eq!(VolumeUnit::from_name("US PINTS"), Some(VolumeUnit::UsPint));
+    assert_eq!(
+        VolumeUnit::from_name("acrefoot"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("acre foot"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("ACRE FOOT"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("acrefeet"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("acre feet"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("ACRE FEET"),
+        Some(VolumeUnit::AcreFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialpint"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial pint"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL PINT"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperialpints"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("imperial pints"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("IMPERIAL PINTS"),
+        Some(VolumeUnit::ImperialPint)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("boardfoot"),
+        Some(VolumeUnit::BoardFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("board foot"),
+        Some(VolumeUnit::BoardFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("BOARD FOOT"),
+        Some(VolumeUnit::BoardFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("boardfeet"),
+        Some(VolumeUnit::BoardFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("board feet"),
+        Some(VolumeUnit::BoardFoot)
+    );
+    assert_eq!(
+        VolumeUnit::from_name("BOARD FEET"),
+        Some(VolumeUnit::BoardFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Volume::from_base(6.0);
     let b = Volume::from_base(2.0);

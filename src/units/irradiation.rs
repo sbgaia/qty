@@ -88,12 +88,41 @@ impl IrradiationUnit {
             Self::KilobtuPerSquareFoot => &["kBtu/ft²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "joulepersquaremeter" => Some(Self::JoulePerSquareMeter),
+            "joulespersquaremeter" => Some(Self::JoulePerSquareMeter),
+            "kilojoulepersquaremeter" => Some(Self::KilojoulePerSquareMeter),
+            "kilojoulespersquaremeter" => Some(Self::KilojoulePerSquareMeter),
+            "joulepersquarecentimeter" => Some(Self::JoulePerSquareCentimeter),
+            "joulespersquarecentimeter" => Some(Self::JoulePerSquareCentimeter),
+            "millijoulepersquarecentimeter" => Some(Self::MillijoulePerSquareCentimeter),
+            "millijoulespersquarecentimeter" => Some(Self::MillijoulePerSquareCentimeter),
+            "joulepersquaremillimeter" => Some(Self::JoulePerSquareMillimeter),
+            "joulespersquaremillimeter" => Some(Self::JoulePerSquareMillimeter),
+            "watthourpersquaremeter" => Some(Self::WattHourPerSquareMeter),
+            "watthourspersquaremeter" => Some(Self::WattHourPerSquareMeter),
+            "kilowatthourpersquaremeter" => Some(Self::KilowattHourPerSquareMeter),
+            "kilowatthourspersquaremeter" => Some(Self::KilowattHourPerSquareMeter),
+            "btupersquarefoot" => Some(Self::BtuPerSquareFoot),
+            "btuspersquarefoot" => Some(Self::BtuPerSquareFoot),
+            "kilobtupersquarefoot" => Some(Self::KilobtuPerSquareFoot),
+            "kilobtuspersquarefoot" => Some(Self::KilobtuPerSquareFoot),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for IrradiationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/m²" => Ok(Self::JoulePerSquareMeter),
@@ -105,7 +134,7 @@ impl core::str::FromStr for IrradiationUnit {
             "kWh/m²" => Ok(Self::KilowattHourPerSquareMeter),
             "Btu/ft²" => Ok(Self::BtuPerSquareFoot),
             "kBtu/ft²" => Ok(Self::KilobtuPerSquareFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

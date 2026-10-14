@@ -3163,6 +3163,1354 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        DensityUnit::from_name("grampercubicmillimeter"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per cubic millimeter"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER CUBIC MILLIMETER"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspercubicmillimeter"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per cubic millimeter"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER CUBIC MILLIMETER"),
+        Some(DensityUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogrampercubicmillimeter"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogram per cubic millimeter"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAM PER CUBIC MILLIMETER"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogramspercubicmillimeter"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilograms per cubic millimeter"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAMS PER CUBIC MILLIMETER"),
+        Some(DensityUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grampercubiccentimeter"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per cubic centimeter"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER CUBIC CENTIMETER"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspercubiccentimeter"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per cubic centimeter"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER CUBIC CENTIMETER"),
+        Some(DensityUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogrampercubiccentimeter"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogram per cubic centimeter"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAM PER CUBIC CENTIMETER"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogramspercubiccentimeter"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilograms per cubic centimeter"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAMS PER CUBIC CENTIMETER"),
+        Some(DensityUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grampercubicmeter"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per cubic meter"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER CUBIC METER"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspercubicmeter"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per cubic meter"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER CUBIC METER"),
+        Some(DensityUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogrampercubicmeter"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogram per cubic meter"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAM PER CUBIC METER"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogramspercubicmeter"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilograms per cubic meter"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAMS PER CUBIC METER"),
+        Some(DensityUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrampercubicmeter"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligram per cubic meter"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAM PER CUBIC METER"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramspercubicmeter"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrams per cubic meter"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAMS PER CUBIC METER"),
+        Some(DensityUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgrampercubicmeter"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgram per cubic meter"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAM PER CUBIC METER"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramspercubicmeter"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("micrograms per cubic meter"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAMS PER CUBIC METER"),
+        Some(DensityUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubicinch"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic inch"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC INCH"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubicinch"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic inch"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC INCH"),
+        Some(DensityUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundpercubicinch"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopound per cubic inch"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUND PER CUBIC INCH"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundspercubicinch"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopounds per cubic inch"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUNDS PER CUBIC INCH"),
+        Some(DensityUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubicfoot"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic foot"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC FOOT"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubicfoot"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic foot"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC FOOT"),
+        Some(DensityUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundpercubicfoot"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopound per cubic foot"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUND PER CUBIC FOOT"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundspercubicfoot"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopounds per cubic foot"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUNDS PER CUBIC FOOT"),
+        Some(DensityUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubicyard"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic yard"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC YARD"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubicyard"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic yard"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC YARD"),
+        Some(DensityUnit::PoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundpercubicyard"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopound per cubic yard"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUND PER CUBIC YARD"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopoundspercubicyard"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilopounds per cubic yard"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOPOUNDS PER CUBIC YARD"),
+        Some(DensityUnit::KilopoundPerCubicYard)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnepercubicmillimeter"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonne per cubic millimeter"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNE PER CUBIC MILLIMETER"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnespercubicmillimeter"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnes per cubic millimeter"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNES PER CUBIC MILLIMETER"),
+        Some(DensityUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnepercubiccentimeter"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonne per cubic centimeter"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNE PER CUBIC CENTIMETER"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnespercubiccentimeter"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnes per cubic centimeter"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNES PER CUBIC CENTIMETER"),
+        Some(DensityUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnepercubicmeter"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonne per cubic meter"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNE PER CUBIC METER"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnespercubicmeter"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnes per cubic meter"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNES PER CUBIC METER"),
+        Some(DensityUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugpercubicfoot"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slug per cubic foot"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUG PER CUBIC FOOT"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugspercubicfoot"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugs per cubic foot"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUGS PER CUBIC FOOT"),
+        Some(DensityUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramperliter"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per liter"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER LITER"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramsperliter"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per liter"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER LITER"),
+        Some(DensityUnit::GramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogramperliter"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogram per liter"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAM PER LITER"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogramsperliter"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtograms per liter"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAMS PER LITER"),
+        Some(DensityUnit::FemtogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogramperliter"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogram per liter"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAM PER LITER"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogramsperliter"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picograms per liter"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAMS PER LITER"),
+        Some(DensityUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogramperliter"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogram per liter"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAM PER LITER"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogramsperliter"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanograms per liter"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAMS PER LITER"),
+        Some(DensityUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramperliter"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgram per liter"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAM PER LITER"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramsperliter"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("micrograms per liter"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAMS PER LITER"),
+        Some(DensityUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramperliter"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligram per liter"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAM PER LITER"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramsperliter"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrams per liter"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAMS PER LITER"),
+        Some(DensityUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigramperliter"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigram per liter"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAM PER LITER"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigramsperliter"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigrams per liter"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAMS PER LITER"),
+        Some(DensityUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigramperliter"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigram per liter"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAM PER LITER"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigramsperliter"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigrams per liter"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAMS PER LITER"),
+        Some(DensityUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramperdeciliter"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per deciliter"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER DECILITER"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramsperdeciliter"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per deciliter"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER DECILITER"),
+        Some(DensityUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogramperdeciliter"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogram per deciliter"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAM PER DECILITER"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogramsperdeciliter"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtograms per deciliter"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAMS PER DECILITER"),
+        Some(DensityUnit::FemtogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogramperdeciliter"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogram per deciliter"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAM PER DECILITER"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogramsperdeciliter"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picograms per deciliter"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAMS PER DECILITER"),
+        Some(DensityUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogramperdeciliter"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogram per deciliter"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAM PER DECILITER"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogramsperdeciliter"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanograms per deciliter"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAMS PER DECILITER"),
+        Some(DensityUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramperdeciliter"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgram per deciliter"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAM PER DECILITER"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramsperdeciliter"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("micrograms per deciliter"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAMS PER DECILITER"),
+        Some(DensityUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramperdeciliter"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligram per deciliter"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAM PER DECILITER"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramsperdeciliter"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrams per deciliter"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAMS PER DECILITER"),
+        Some(DensityUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigramperdeciliter"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigram per deciliter"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAM PER DECILITER"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigramsperdeciliter"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigrams per deciliter"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAMS PER DECILITER"),
+        Some(DensityUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigramperdeciliter"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigram per deciliter"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAM PER DECILITER"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigramsperdeciliter"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigrams per deciliter"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAMS PER DECILITER"),
+        Some(DensityUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grampermilliliter"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per milliliter"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER MILLILITER"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspermilliliter"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per milliliter"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER MILLILITER"),
+        Some(DensityUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogrampermilliliter"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogram per milliliter"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAM PER MILLILITER"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtogramspermilliliter"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("femtograms per milliliter"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("FEMTOGRAMS PER MILLILITER"),
+        Some(DensityUnit::FemtogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogrampermilliliter"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogram per milliliter"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAM PER MILLILITER"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picogramspermilliliter"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("picograms per milliliter"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("PICOGRAMS PER MILLILITER"),
+        Some(DensityUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogrampermilliliter"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogram per milliliter"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAM PER MILLILITER"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanogramspermilliliter"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("nanograms per milliliter"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("NANOGRAMS PER MILLILITER"),
+        Some(DensityUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgrampermilliliter"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgram per milliliter"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAM PER MILLILITER"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("microgramspermilliliter"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("micrograms per milliliter"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MICROGRAMS PER MILLILITER"),
+        Some(DensityUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrampermilliliter"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligram per milliliter"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAM PER MILLILITER"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligramspermilliliter"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("milligrams per milliliter"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("MILLIGRAMS PER MILLILITER"),
+        Some(DensityUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigrampermilliliter"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigram per milliliter"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAM PER MILLILITER"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigramspermilliliter"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("centigrams per milliliter"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("CENTIGRAMS PER MILLILITER"),
+        Some(DensityUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigrampermilliliter"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigram per milliliter"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAM PER MILLILITER"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigramspermilliliter"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("decigrams per milliliter"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("DECIGRAMS PER MILLILITER"),
+        Some(DensityUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundperusgallon"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per us gallon"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER US GALLON"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundsperusgallon"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per us gallon"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER US GALLON"),
+        Some(DensityUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundperimperialgallon"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per imperial gallon"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER IMPERIAL GALLON"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundsperimperialgallon"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per imperial gallon"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER IMPERIAL GALLON"),
+        Some(DensityUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogramperliter"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogram per liter"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAM PER LITER"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilogramsperliter"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("kilograms per liter"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("KILOGRAMS PER LITER"),
+        Some(DensityUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnepercubicfoot"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonne per cubic foot"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNE PER CUBIC FOOT"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnespercubicfoot"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnes per cubic foot"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNES PER CUBIC FOOT"),
+        Some(DensityUnit::TonnePerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnepercubicinch"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonne per cubic inch"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNE PER CUBIC INCH"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnespercubicinch"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("tonnes per cubic inch"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("TONNES PER CUBIC INCH"),
+        Some(DensityUnit::TonnePerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grampercubicfoot"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per cubic foot"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER CUBIC FOOT"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspercubicfoot"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per cubic foot"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER CUBIC FOOT"),
+        Some(DensityUnit::GramPerCubicFoot)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grampercubicinch"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gram per cubic inch"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAM PER CUBIC INCH"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("gramspercubicinch"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("grams per cubic inch"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("GRAMS PER CUBIC INCH"),
+        Some(DensityUnit::GramPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubicmeter"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic meter"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC METER"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubicmeter"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic meter"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC METER"),
+        Some(DensityUnit::PoundPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubiccentimeter"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic centimeter"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC CENTIMETER"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubiccentimeter"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic centimeter"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC CENTIMETER"),
+        Some(DensityUnit::PoundPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundpercubicmillimeter"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pound per cubic millimeter"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUND PER CUBIC MILLIMETER"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("poundspercubicmillimeter"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("pounds per cubic millimeter"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("POUNDS PER CUBIC MILLIMETER"),
+        Some(DensityUnit::PoundPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugpercubicmeter"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slug per cubic meter"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUG PER CUBIC METER"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugspercubicmeter"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugs per cubic meter"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUGS PER CUBIC METER"),
+        Some(DensityUnit::SlugPerCubicMeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugpercubiccentimeter"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slug per cubic centimeter"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUG PER CUBIC CENTIMETER"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugspercubiccentimeter"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugs per cubic centimeter"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUGS PER CUBIC CENTIMETER"),
+        Some(DensityUnit::SlugPerCubicCentimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugpercubicmillimeter"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slug per cubic millimeter"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUG PER CUBIC MILLIMETER"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugspercubicmillimeter"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugs per cubic millimeter"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUGS PER CUBIC MILLIMETER"),
+        Some(DensityUnit::SlugPerCubicMillimeter)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugpercubicinch"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slug per cubic inch"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUG PER CUBIC INCH"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugspercubicinch"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("slugs per cubic inch"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+    assert_eq!(
+        DensityUnit::from_name("SLUGS PER CUBIC INCH"),
+        Some(DensityUnit::SlugPerCubicInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Density::from_base(6.0);
     let b = Density::from_base(2.0);

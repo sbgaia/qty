@@ -1250,6 +1250,490 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltpersecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volt per second"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLT PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltspersecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volts per second"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLTS PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltpersecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolt per second"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLT PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltspersecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolts per second"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLTS PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltpersecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolt per second"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLT PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltspersecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolts per second"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLTS PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltpersecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolt per second"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLT PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltspersecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolts per second"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLTS PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltpersecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolt per second"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLT PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltspersecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolts per second"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLTS PER SECOND"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerSecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltpermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volt per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLT PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltspermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volts per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLTS PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltpermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolt per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLT PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltspermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolts per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLTS PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltpermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolt per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLT PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltspermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolts per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLTS PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltpermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolt per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLT PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltspermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolts per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLTS PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltpermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolt per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLT PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltspermicrosecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolts per microsecond"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLTS PER MICROSECOND"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltperminute"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volt per minute"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLT PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltsperminute"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volts per minute"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLTS PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltperminute"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolt per minute"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLT PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltsperminute"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolts per minute"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLTS PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltperminute"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolt per minute"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLT PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltsperminute"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolts per minute"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLTS PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltperminute"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolt per minute"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLT PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltsperminute"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolts per minute"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLTS PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltperminute"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolt per minute"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLT PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltsperminute"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolts per minute"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLTS PER MINUTE"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerMinute)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltperhour"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volt per hour"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLT PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("voltsperhour"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("volts per hour"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("VOLTS PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::VoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltperhour"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolt per hour"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLT PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvoltsperhour"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("microvolts per hour"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MICROVOLTS PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MicrovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltperhour"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolt per hour"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLT PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivoltsperhour"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("millivolts per hour"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MILLIVOLTS PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MillivoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltperhour"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolt per hour"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLT PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovoltsperhour"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("kilovolts per hour"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("KILOVOLTS PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::KilovoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltperhour"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolt per hour"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLT PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavoltsperhour"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("megavolts per hour"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+    assert_eq!(
+        ElectricPotentialChangeRateUnit::from_name("MEGAVOLTS PER HOUR"),
+        Some(ElectricPotentialChangeRateUnit::MegavoltPerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricPotentialChangeRate::from_base(6.0);
     let b = ElectricPotentialChangeRate::from_base(2.0);

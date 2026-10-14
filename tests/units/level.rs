@@ -113,6 +113,22 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(LevelUnit::from_name("decibel"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("decibel"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("DECIBEL"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("decibels"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("decibels"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("DECIBELS"), Some(LevelUnit::Decibel));
+    assert_eq!(LevelUnit::from_name("neper"), Some(LevelUnit::Neper));
+    assert_eq!(LevelUnit::from_name("neper"), Some(LevelUnit::Neper));
+    assert_eq!(LevelUnit::from_name("NEPER"), Some(LevelUnit::Neper));
+    assert_eq!(LevelUnit::from_name("nepers"), Some(LevelUnit::Neper));
+    assert_eq!(LevelUnit::from_name("nepers"), Some(LevelUnit::Neper));
+    assert_eq!(LevelUnit::from_name("NEPERS"), Some(LevelUnit::Neper));
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Level::from_base(6.0);
     let b = Level::from_base(2.0);

@@ -165,12 +165,72 @@ impl PowerUnit {
             Self::TonOfRefrigeration => &["TR"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "watt" => Some(Self::Watt),
+            "watts" => Some(Self::Watt),
+            "femtowatt" => Some(Self::Femtowatt),
+            "femtowatts" => Some(Self::Femtowatt),
+            "picowatt" => Some(Self::Picowatt),
+            "picowatts" => Some(Self::Picowatt),
+            "nanowatt" => Some(Self::Nanowatt),
+            "nanowatts" => Some(Self::Nanowatt),
+            "microwatt" => Some(Self::Microwatt),
+            "microwatts" => Some(Self::Microwatt),
+            "milliwatt" => Some(Self::Milliwatt),
+            "milliwatts" => Some(Self::Milliwatt),
+            "deciwatt" => Some(Self::Deciwatt),
+            "deciwatts" => Some(Self::Deciwatt),
+            "decawatt" => Some(Self::Decawatt),
+            "decawatts" => Some(Self::Decawatt),
+            "kilowatt" => Some(Self::Kilowatt),
+            "kilowatts" => Some(Self::Kilowatt),
+            "megawatt" => Some(Self::Megawatt),
+            "megawatts" => Some(Self::Megawatt),
+            "gigawatt" => Some(Self::Gigawatt),
+            "gigawatts" => Some(Self::Gigawatt),
+            "terawatt" => Some(Self::Terawatt),
+            "terawatts" => Some(Self::Terawatt),
+            "petawatt" => Some(Self::Petawatt),
+            "petawatts" => Some(Self::Petawatt),
+            "mechanicalhorsepower" => Some(Self::MechanicalHorsepower),
+            "metrichorsepower" => Some(Self::MetricHorsepower),
+            "electricalhorsepower" => Some(Self::ElectricalHorsepower),
+            "boilerhorsepower" => Some(Self::BoilerHorsepower),
+            "hydraulichorsepower" => Some(Self::HydraulicHorsepower),
+            "britishthermalunitperhour" => Some(Self::BritishThermalUnitPerHour),
+            "britishthermalunitsperhour" => Some(Self::BritishThermalUnitPerHour),
+            "kilobritishthermalunitperhour" => Some(Self::KilobritishThermalUnitPerHour),
+            "kilobritishthermalunitsperhour" => Some(Self::KilobritishThermalUnitPerHour),
+            "megabritishthermalunitperhour" => Some(Self::MegabritishThermalUnitPerHour),
+            "megabritishthermalunitsperhour" => Some(Self::MegabritishThermalUnitPerHour),
+            "jouleperhour" => Some(Self::JoulePerHour),
+            "joulesperhour" => Some(Self::JoulePerHour),
+            "millijouleperhour" => Some(Self::MillijoulePerHour),
+            "millijoulesperhour" => Some(Self::MillijoulePerHour),
+            "kilojouleperhour" => Some(Self::KilojoulePerHour),
+            "kilojoulesperhour" => Some(Self::KilojoulePerHour),
+            "megajouleperhour" => Some(Self::MegajoulePerHour),
+            "megajoulesperhour" => Some(Self::MegajoulePerHour),
+            "gigajouleperhour" => Some(Self::GigajoulePerHour),
+            "gigajoulesperhour" => Some(Self::GigajoulePerHour),
+            "tonofrefrigeration" => Some(Self::TonOfRefrigeration),
+            "tonsofrefrigeration" => Some(Self::TonOfRefrigeration),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for PowerUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W" => Ok(Self::Watt),
@@ -201,7 +261,7 @@ impl core::str::FromStr for PowerUnit {
             "MJ/h" => Ok(Self::MegajoulePerHour),
             "GJ/h" => Ok(Self::GigajoulePerHour),
             "TR" => Ok(Self::TonOfRefrigeration),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -96,12 +96,45 @@ impl MolarityUnit {
             Self::PoundMolePerCubicFoot => &["lbmol/ft³"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "molepercubicmeter" => Some(Self::MolePerCubicMeter),
+            "molespercubicmeter" => Some(Self::MolePerCubicMeter),
+            "kilomolepercubicmeter" => Some(Self::KilomolePerCubicMeter),
+            "kilomolespercubicmeter" => Some(Self::KilomolePerCubicMeter),
+            "moleperliter" => Some(Self::MolePerLiter),
+            "molesperliter" => Some(Self::MolePerLiter),
+            "femtomoleperliter" => Some(Self::FemtomolePerLiter),
+            "femtomolesperliter" => Some(Self::FemtomolePerLiter),
+            "picomoleperliter" => Some(Self::PicomolePerLiter),
+            "picomolesperliter" => Some(Self::PicomolePerLiter),
+            "nanomoleperliter" => Some(Self::NanomolePerLiter),
+            "nanomolesperliter" => Some(Self::NanomolePerLiter),
+            "micromoleperliter" => Some(Self::MicromolePerLiter),
+            "micromolesperliter" => Some(Self::MicromolePerLiter),
+            "millimoleperliter" => Some(Self::MillimolePerLiter),
+            "millimolesperliter" => Some(Self::MillimolePerLiter),
+            "centimoleperliter" => Some(Self::CentimolePerLiter),
+            "centimolesperliter" => Some(Self::CentimolePerLiter),
+            "decimoleperliter" => Some(Self::DecimolePerLiter),
+            "decimolesperliter" => Some(Self::DecimolePerLiter),
+            "poundmolepercubicfoot" => Some(Self::PoundMolePerCubicFoot),
+            "poundmolespercubicfoot" => Some(Self::PoundMolePerCubicFoot),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolarityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/m³" => Ok(Self::MolePerCubicMeter),
@@ -116,7 +149,7 @@ impl core::str::FromStr for MolarityUnit {
             "cmol/l" => Ok(Self::CentimolePerLiter),
             "dmol/l" => Ok(Self::DecimolePerLiter),
             "lbmol/ft³" => Ok(Self::PoundMolePerCubicFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

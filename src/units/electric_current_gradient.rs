@@ -84,12 +84,37 @@ impl ElectricCurrentGradientUnit {
             Self::AmperePerNanosecond => &["A/ns"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "amperepersecond" => Some(Self::AmperePerSecond),
+            "amperespersecond" => Some(Self::AmperePerSecond),
+            "milliamperepersecond" => Some(Self::MilliamperePerSecond),
+            "milliamperespersecond" => Some(Self::MilliamperePerSecond),
+            "ampereperminute" => Some(Self::AmperePerMinute),
+            "amperesperminute" => Some(Self::AmperePerMinute),
+            "milliampereperminute" => Some(Self::MilliamperePerMinute),
+            "milliamperesperminute" => Some(Self::MilliamperePerMinute),
+            "amperepermillisecond" => Some(Self::AmperePerMillisecond),
+            "amperespermillisecond" => Some(Self::AmperePerMillisecond),
+            "amperepermicrosecond" => Some(Self::AmperePerMicrosecond),
+            "amperespermicrosecond" => Some(Self::AmperePerMicrosecond),
+            "amperepernanosecond" => Some(Self::AmperePerNanosecond),
+            "amperespernanosecond" => Some(Self::AmperePerNanosecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricCurrentGradientUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "A/s" => Ok(Self::AmperePerSecond),
@@ -99,7 +124,7 @@ impl core::str::FromStr for ElectricCurrentGradientUnit {
             "A/ms" => Ok(Self::AmperePerMillisecond),
             "A/μs" => Ok(Self::AmperePerMicrosecond),
             "A/ns" => Ok(Self::AmperePerNanosecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

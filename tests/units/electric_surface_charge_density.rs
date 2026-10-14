@@ -245,6 +245,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombpersquaremeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulomb per square meter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMB PER SQUARE METER"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombspersquaremeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombs per square meter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMBS PER SQUARE METER"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombpersquarecentimeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulomb per square centimeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMB PER SQUARE CENTIMETER"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombspersquarecentimeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombs per square centimeter"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMBS PER SQUARE CENTIMETER"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombpersquareinch"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulomb per square inch"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMB PER SQUARE INCH"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombspersquareinch"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("coulombs per square inch"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+    assert_eq!(
+        ElectricSurfaceChargeDensityUnit::from_name("COULOMBS PER SQUARE INCH"),
+        Some(ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricSurfaceChargeDensity::from_base(6.0);
     let b = ElectricSurfaceChargeDensity::from_base(2.0);

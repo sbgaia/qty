@@ -126,12 +126,54 @@ impl ForceUnit {
             Self::ShortTonForce => &["tf (short)", "t (US)f", "short tons-force"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "dyn" => Some(Self::Dyn),
+            "dyne" => Some(Self::Dyn),
+            "gramforce" => Some(Self::GramForce),
+            "gramsforce" => Some(Self::GramForce),
+            "kilogramforce" => Some(Self::KilogramForce),
+            "kilogramsforce" => Some(Self::KilogramForce),
+            "tonneforce" => Some(Self::TonneForce),
+            "tonnesforce" => Some(Self::TonneForce),
+            "newton" => Some(Self::Newton),
+            "newtons" => Some(Self::Newton),
+            "micronewton" => Some(Self::Micronewton),
+            "micronewtons" => Some(Self::Micronewton),
+            "millinewton" => Some(Self::Millinewton),
+            "millinewtons" => Some(Self::Millinewton),
+            "decanewton" => Some(Self::Decanewton),
+            "decanewtons" => Some(Self::Decanewton),
+            "kilonewton" => Some(Self::Kilonewton),
+            "kilonewtons" => Some(Self::Kilonewton),
+            "meganewton" => Some(Self::Meganewton),
+            "meganewtons" => Some(Self::Meganewton),
+            "kilopond" => Some(Self::Kilopond),
+            "kiloponds" => Some(Self::Kilopond),
+            "poundal" => Some(Self::Poundal),
+            "poundals" => Some(Self::Poundal),
+            "poundforce" => Some(Self::PoundForce),
+            "poundsforce" => Some(Self::PoundForce),
+            "kilopoundforce" => Some(Self::KilopoundForce),
+            "kilopoundsforce" => Some(Self::KilopoundForce),
+            "ounceforce" => Some(Self::OunceForce),
+            "shorttonforce" => Some(Self::ShortTonForce),
+            "shorttonsforce" => Some(Self::ShortTonForce),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ForceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "dyn" => Ok(Self::Dyn),
@@ -153,7 +195,7 @@ impl core::str::FromStr for ForceUnit {
             "tf (short)" => Ok(Self::ShortTonForce),
             "t (US)f" => Ok(Self::ShortTonForce),
             "short tons-force" => Ok(Self::ShortTonForce),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

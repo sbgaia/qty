@@ -136,12 +136,62 @@ impl VolumeConcentrationUnit {
             Self::PartPerTrillion => &["ppt"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "decimalfraction" => Some(Self::DecimalFraction),
+            "decimalfractions" => Some(Self::DecimalFraction),
+            "literperliter" => Some(Self::LiterPerLiter),
+            "litersperliter" => Some(Self::LiterPerLiter),
+            "picoliterperliter" => Some(Self::PicoliterPerLiter),
+            "picolitersperliter" => Some(Self::PicoliterPerLiter),
+            "nanoliterperliter" => Some(Self::NanoliterPerLiter),
+            "nanolitersperliter" => Some(Self::NanoliterPerLiter),
+            "microliterperliter" => Some(Self::MicroliterPerLiter),
+            "microlitersperliter" => Some(Self::MicroliterPerLiter),
+            "milliliterperliter" => Some(Self::MilliliterPerLiter),
+            "millilitersperliter" => Some(Self::MilliliterPerLiter),
+            "centiliterperliter" => Some(Self::CentiliterPerLiter),
+            "centilitersperliter" => Some(Self::CentiliterPerLiter),
+            "deciliterperliter" => Some(Self::DeciliterPerLiter),
+            "decilitersperliter" => Some(Self::DeciliterPerLiter),
+            "literpermilliliter" => Some(Self::LiterPerMilliliter),
+            "literspermilliliter" => Some(Self::LiterPerMilliliter),
+            "picoliterpermilliliter" => Some(Self::PicoliterPerMilliliter),
+            "picoliterspermilliliter" => Some(Self::PicoliterPerMilliliter),
+            "nanoliterpermilliliter" => Some(Self::NanoliterPerMilliliter),
+            "nanoliterspermilliliter" => Some(Self::NanoliterPerMilliliter),
+            "microliterpermilliliter" => Some(Self::MicroliterPerMilliliter),
+            "microliterspermilliliter" => Some(Self::MicroliterPerMilliliter),
+            "milliliterpermilliliter" => Some(Self::MilliliterPerMilliliter),
+            "milliliterspermilliliter" => Some(Self::MilliliterPerMilliliter),
+            "centiliterpermilliliter" => Some(Self::CentiliterPerMilliliter),
+            "centiliterspermilliliter" => Some(Self::CentiliterPerMilliliter),
+            "deciliterpermilliliter" => Some(Self::DeciliterPerMilliliter),
+            "deciliterspermilliliter" => Some(Self::DeciliterPerMilliliter),
+            "percent" => Some(Self::Percent),
+            "partperthousand" => Some(Self::PartPerThousand),
+            "partsperthousand" => Some(Self::PartPerThousand),
+            "partpermillion" => Some(Self::PartPerMillion),
+            "partspermillion" => Some(Self::PartPerMillion),
+            "partperbillion" => Some(Self::PartPerBillion),
+            "partsperbillion" => Some(Self::PartPerBillion),
+            "partpertrillion" => Some(Self::PartPerTrillion),
+            "partspertrillion" => Some(Self::PartPerTrillion),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for VolumeConcentrationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "l/l" => Ok(Self::LiterPerLiter),
@@ -164,7 +214,7 @@ impl core::str::FromStr for VolumeConcentrationUnit {
             "ppm" => Ok(Self::PartPerMillion),
             "ppb" => Ok(Self::PartPerBillion),
             "ppt" => Ok(Self::PartPerTrillion),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -511,6 +511,202 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RadiationExposureUnit::from_name("coulombperkilogram"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("coulomb per kilogram"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("COULOMB PER KILOGRAM"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("coulombsperkilogram"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("coulombs per kilogram"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("COULOMBS PER KILOGRAM"),
+        Some(RadiationExposureUnit::CoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("picocoulombperkilogram"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("picocoulomb per kilogram"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("PICOCOULOMB PER KILOGRAM"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("picocoulombsperkilogram"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("picocoulombs per kilogram"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("PICOCOULOMBS PER KILOGRAM"),
+        Some(RadiationExposureUnit::PicocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("nanocoulombperkilogram"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("nanocoulomb per kilogram"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("NANOCOULOMB PER KILOGRAM"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("nanocoulombsperkilogram"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("nanocoulombs per kilogram"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("NANOCOULOMBS PER KILOGRAM"),
+        Some(RadiationExposureUnit::NanocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microcoulombperkilogram"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microcoulomb per kilogram"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MICROCOULOMB PER KILOGRAM"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microcoulombsperkilogram"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microcoulombs per kilogram"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MICROCOULOMBS PER KILOGRAM"),
+        Some(RadiationExposureUnit::MicrocoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("millicoulombperkilogram"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("millicoulomb per kilogram"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MILLICOULOMB PER KILOGRAM"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("millicoulombsperkilogram"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("millicoulombs per kilogram"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MILLICOULOMBS PER KILOGRAM"),
+        Some(RadiationExposureUnit::MillicoulombPerKilogram)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("roentgen"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("roentgen"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("ROENTGEN"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("roentgens"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("roentgens"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("ROENTGENS"),
+        Some(RadiationExposureUnit::Roentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microroentgen"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microroentgen"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MICROROENTGEN"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microroentgens"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("microroentgens"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MICROROENTGENS"),
+        Some(RadiationExposureUnit::Microroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("milliroentgen"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("milliroentgen"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MILLIROENTGEN"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("milliroentgens"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("milliroentgens"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+    assert_eq!(
+        RadiationExposureUnit::from_name("MILLIROENTGENS"),
+        Some(RadiationExposureUnit::Milliroentgen)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RadiationExposure::from_base(6.0);
     let b = RadiationExposure::from_base(2.0);

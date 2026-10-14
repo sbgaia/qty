@@ -483,6 +483,178 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterkelvinperkilowatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter kelvin per kilowatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER KELVIN PER KILOWATT"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterkelvinsperkilowatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter kelvins per kilowatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER KELVINS PER KILOWATT"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterkelvinperwatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter kelvin per watt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER KELVIN PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterkelvinsperwatt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter kelvins per watt"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER KELVINS PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterdegreecelsiusperwatt"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter degree celsius per watt"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER DEGREE CELSIUS PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremeterdegreescelsiusperwatt"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square meter degrees celsius per watt"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE METER DEGREES CELSIUS PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squarecentimeterkelvinperwatt"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square centimeter kelvin per watt"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE CENTIMETER KELVIN PER WATT"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squarecentimeterkelvinsperwatt"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square centimeter kelvins per watt"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE CENTIMETER KELVINS PER WATT"),
+        Some(ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremillimeterkelvinperwatt"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square millimeter kelvin per watt"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE MILLIMETER KELVIN PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squaremillimeterkelvinsperwatt"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square millimeter kelvins per watt"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE MILLIMETER KELVINS PER WATT"),
+        Some(ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squarecentimeterhourdegreecelsiusperkilocalorie"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square centimeter hour degree celsius per kilocalorie"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE CENTIMETER HOUR DEGREE CELSIUS PER KILOCALORIE"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("squarecentimeterhourdegreescelsiusperkilocalorie"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("square centimeter hour degrees celsius per kilocalorie"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("SQUARE CENTIMETER HOUR DEGREES CELSIUS PER KILOCALORIE"),
+        Some(ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("hoursquarefeetdegreefahrenheitperbtu"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("hour square feet degree fahrenheit per btu"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("HOUR SQUARE FEET DEGREE FAHRENHEIT PER BTU"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("hoursquarefeetdegreesfahrenheitperbtu"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("hour square feet degrees fahrenheit per btu"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+    assert_eq!(
+        ThermalInsulanceUnit::from_name("HOUR SQUARE FEET DEGREES FAHRENHEIT PER BTU"),
+        Some(ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ThermalInsulance::from_base(6.0);
     let b = ThermalInsulance::from_base(2.0);

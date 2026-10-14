@@ -751,6 +751,298 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        EnergyDensityUnit::from_name("joulepercubicmeter"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("joule per cubic meter"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("JOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("joulespercubicmeter"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("joules per cubic meter"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("JOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::JoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilojoulepercubicmeter"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilojoule per cubic meter"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("KILOJOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilojoulespercubicmeter"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilojoules per cubic meter"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("KILOJOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::KilojoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megajoulepercubicmeter"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megajoule per cubic meter"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("MEGAJOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megajoulespercubicmeter"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megajoules per cubic meter"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("MEGAJOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::MegajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigajoulepercubicmeter"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigajoule per cubic meter"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("GIGAJOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigajoulespercubicmeter"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigajoules per cubic meter"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("GIGAJOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::GigajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terajoulepercubicmeter"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terajoule per cubic meter"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("TERAJOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terajoulespercubicmeter"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terajoules per cubic meter"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("TERAJOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::TerajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petajoulepercubicmeter"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petajoule per cubic meter"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("PETAJOULE PER CUBIC METER"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petajoulespercubicmeter"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petajoules per cubic meter"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("PETAJOULES PER CUBIC METER"),
+        Some(EnergyDensityUnit::PetajoulePerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("watthourpercubicmeter"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("watt hour per cubic meter"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("WATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("watthourspercubicmeter"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("watt hours per cubic meter"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("WATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::WattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilowatthourpercubicmeter"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilowatt hour per cubic meter"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("KILOWATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilowatthourspercubicmeter"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("kilowatt hours per cubic meter"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("KILOWATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::KilowattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megawatthourpercubicmeter"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megawatt hour per cubic meter"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("MEGAWATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megawatthourspercubicmeter"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("megawatt hours per cubic meter"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("MEGAWATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::MegawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigawatthourpercubicmeter"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigawatt hour per cubic meter"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("GIGAWATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigawatthourspercubicmeter"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("gigawatt hours per cubic meter"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("GIGAWATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::GigawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terawatthourpercubicmeter"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terawatt hour per cubic meter"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("TERAWATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terawatthourspercubicmeter"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("terawatt hours per cubic meter"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("TERAWATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::TerawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petawatthourpercubicmeter"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petawatt hour per cubic meter"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("PETAWATT HOUR PER CUBIC METER"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petawatthourspercubicmeter"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("petawatt hours per cubic meter"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+    assert_eq!(
+        EnergyDensityUnit::from_name("PETAWATT HOURS PER CUBIC METER"),
+        Some(EnergyDensityUnit::PetawattHourPerCubicMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = EnergyDensity::from_base(6.0);
     let b = EnergyDensity::from_base(2.0);

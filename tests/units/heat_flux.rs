@@ -1462,6 +1462,610 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        HeatFluxUnit::from_name("wattpersquaremeter"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watt per square meter"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATT PER SQUARE METER"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattspersquaremeter"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watts per square meter"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowattpersquaremeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowatt per square meter"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("NANOWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowattspersquaremeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowatts per square meter"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("NANOWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwattpersquaremeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwatt per square meter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MICROWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwattspersquaremeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwatts per square meter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MICROWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwattpersquaremeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwatt per square meter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MILLIWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwattspersquaremeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwatts per square meter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MILLIWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwattpersquaremeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwatt per square meter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CENTIWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwattspersquaremeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwatts per square meter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CENTIWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::CentiwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwattpersquaremeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwatt per square meter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("DECIWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwattspersquaremeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwatts per square meter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("DECIWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::DeciwattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowattpersquaremeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowatt per square meter"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOWATT PER SQUARE METER"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowattspersquaremeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowatts per square meter"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOWATTS PER SQUARE METER"),
+        Some(HeatFluxUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattpersquaremillimeter"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watt per square millimeter"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattspersquaremillimeter"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watts per square millimeter"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::WattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowattpersquaremillimeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowatt per square millimeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("NANOWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowattspersquaremillimeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("nanowatts per square millimeter"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("NANOWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::NanowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwattpersquaremillimeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwatt per square millimeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MICROWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwattspersquaremillimeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("microwatts per square millimeter"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MICROWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::MicrowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwattpersquaremillimeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwatt per square millimeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MILLIWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwattspersquaremillimeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("milliwatts per square millimeter"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("MILLIWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::MilliwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwattpersquaremillimeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwatt per square millimeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CENTIWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwattspersquaremillimeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("centiwatts per square millimeter"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CENTIWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::CentiwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwattpersquaremillimeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwatt per square millimeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("DECIWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwattspersquaremillimeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("deciwatts per square millimeter"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("DECIWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::DeciwattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowattpersquaremillimeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowatt per square millimeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOWATT PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowattspersquaremillimeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilowatts per square millimeter"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOWATTS PER SQUARE MILLIMETER"),
+        Some(HeatFluxUnit::KilowattPerSquareMillimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattpersquareinch"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watt per square inch"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATT PER SQUARE INCH"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattspersquareinch"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watts per square inch"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATTS PER SQUARE INCH"),
+        Some(HeatFluxUnit::WattPerSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattpersquarefoot"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watt per square foot"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATT PER SQUARE FOOT"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("wattspersquarefoot"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("watts per square foot"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("WATTS PER SQUARE FOOT"),
+        Some(HeatFluxUnit::WattPerSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btupersecondsquareinch"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btu per second square inch"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTU PER SECOND SQUARE INCH"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btuspersecondsquareinch"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btus per second square inch"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTUS PER SECOND SQUARE INCH"),
+        Some(HeatFluxUnit::BtuPerSecondSquareInch)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btupersecondsquarefoot"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btu per second square foot"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTU PER SECOND SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btuspersecondsquarefoot"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btus per second square foot"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTUS PER SECOND SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerSecondSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btuperminutesquarefoot"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btu per minute square foot"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTU PER MINUTE SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btusperminutesquarefoot"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btus per minute square foot"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTUS PER MINUTE SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerMinuteSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btuperhoursquarefoot"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btu per hour square foot"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTU PER HOUR SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btusperhoursquarefoot"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("btus per hour square foot"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("BTUS PER HOUR SQUARE FOOT"),
+        Some(HeatFluxUnit::BtuPerHourSquareFoot)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("caloriepersecondsquarecentimeter"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("calorie per second square centimeter"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CALORIE PER SECOND SQUARE CENTIMETER"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("caloriespersecondsquarecentimeter"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("calories per second square centimeter"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("CALORIES PER SECOND SQUARE CENTIMETER"),
+        Some(HeatFluxUnit::CaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocaloriepersecondsquarecentimeter"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocalorie per second square centimeter"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOCALORIE PER SECOND SQUARE CENTIMETER"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocaloriespersecondsquarecentimeter"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocalories per second square centimeter"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOCALORIES PER SECOND SQUARE CENTIMETER"),
+        Some(HeatFluxUnit::KilocaloriePerSecondSquareCentimeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocalorieperhoursquaremeter"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocalorie per hour square meter"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOCALORIE PER HOUR SQUARE METER"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocaloriesperhoursquaremeter"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("kilocalories per hour square meter"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("KILOCALORIES PER HOUR SQUARE METER"),
+        Some(HeatFluxUnit::KilocaloriePerHourSquareMeter)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("poundforceperfootsecond"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("pound force per foot second"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("POUND FORCE PER FOOT SECOND"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("poundsforceperfootsecond"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("pounds force per foot second"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("POUNDS FORCE PER FOOT SECOND"),
+        Some(HeatFluxUnit::PoundForcePerFootSecond)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("poundpersecondcubed"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("pound per second cubed"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("POUND PER SECOND CUBED"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("poundspersecondcubed"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("pounds per second cubed"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+    assert_eq!(
+        HeatFluxUnit::from_name("POUNDS PER SECOND CUBED"),
+        Some(HeatFluxUnit::PoundPerSecondCubed)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = HeatFlux::from_base(6.0);
     let b = HeatFlux::from_base(2.0);

@@ -286,6 +286,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("voltamperereactive"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("voltampere reactive"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("VOLTAMPERE REACTIVE"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("voltamperesreactive"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("voltamperes reactive"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("VOLTAMPERES REACTIVE"),
+        Some(ElectricReactivePowerUnit::VoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("kilovoltamperereactive"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("kilovoltampere reactive"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("KILOVOLTAMPERE REACTIVE"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("kilovoltamperesreactive"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("kilovoltamperes reactive"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("KILOVOLTAMPERES REACTIVE"),
+        Some(ElectricReactivePowerUnit::KilovoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("megavoltamperereactive"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("megavoltampere reactive"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("MEGAVOLTAMPERE REACTIVE"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("megavoltamperesreactive"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("megavoltamperes reactive"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("MEGAVOLTAMPERES REACTIVE"),
+        Some(ElectricReactivePowerUnit::MegavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("gigavoltamperereactive"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("gigavoltampere reactive"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("GIGAVOLTAMPERE REACTIVE"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("gigavoltamperesreactive"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("gigavoltamperes reactive"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+    assert_eq!(
+        ElectricReactivePowerUnit::from_name("GIGAVOLTAMPERES REACTIVE"),
+        Some(ElectricReactivePowerUnit::GigavoltampereReactive)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricReactivePower::from_base(6.0);
     let b = ElectricReactivePower::from_base(2.0);

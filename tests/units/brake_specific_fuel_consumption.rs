@@ -239,6 +239,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("gramperkilowatthour"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("gram per kilo watt hour"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("GRAM PER KILO WATT HOUR"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("gramsperkilowatthour"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("grams per kilo watt hour"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("GRAMS PER KILO WATT HOUR"),
+        Some(BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("kilogramperjoule"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("kilogram per joule"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("KILOGRAM PER JOULE"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("kilogramsperjoule"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("kilograms per joule"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("KILOGRAMS PER JOULE"),
+        Some(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("poundpermechanicalhorsepowerhour"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("pound per mechanical horsepower hour"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("POUND PER MECHANICAL HORSEPOWER HOUR"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("poundspermechanicalhorsepowerhour"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("pounds per mechanical horsepower hour"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+    assert_eq!(
+        BrakeSpecificFuelConsumptionUnit::from_name("POUNDS PER MECHANICAL HORSEPOWER HOUR"),
+        Some(BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = BrakeSpecificFuelConsumption::from_base(6.0);
     let b = BrakeSpecificFuelConsumption::from_base(2.0);

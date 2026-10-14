@@ -221,6 +221,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolarEntropyUnit::from_name("joulepermolekelvin"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("joule per mole kelvin"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("JOULE PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("joulespermolekelvin"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("joules per mole kelvin"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("JOULES PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::JoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("kilojoulepermolekelvin"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("kilojoule per mole kelvin"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("KILOJOULE PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("kilojoulespermolekelvin"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("kilojoules per mole kelvin"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("KILOJOULES PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::KilojoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("megajoulepermolekelvin"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("megajoule per mole kelvin"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("MEGAJOULE PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("megajoulespermolekelvin"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("megajoules per mole kelvin"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+    assert_eq!(
+        MolarEntropyUnit::from_name("MEGAJOULES PER MOLE KELVIN"),
+        Some(MolarEntropyUnit::MegajoulePerMoleKelvin)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MolarEntropy::from_base(6.0);
     let b = MolarEntropy::from_base(2.0);

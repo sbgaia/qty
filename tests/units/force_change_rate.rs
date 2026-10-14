@@ -920,6 +920,370 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtonperminute"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newton per minute"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NEWTON PER MINUTE"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtonsperminute"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtons per minute"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NEWTONS PER MINUTE"),
+        Some(ForceChangeRateUnit::NewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtonperminute"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewton per minute"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECANEWTON PER MINUTE"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtonsperminute"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtons per minute"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECANEWTONS PER MINUTE"),
+        Some(ForceChangeRateUnit::DecanewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtonperminute"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewton per minute"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILONEWTON PER MINUTE"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtonsperminute"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtons per minute"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILONEWTONS PER MINUTE"),
+        Some(ForceChangeRateUnit::KilonewtonPerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtonpersecond"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newton per second"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtonspersecond"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("newtons per second"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::NewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("nanonewtonpersecond"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("nanonewton per second"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NANONEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("nanonewtonspersecond"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("nanonewtons per second"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("NANONEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::NanonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("micronewtonpersecond"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("micronewton per second"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("MICRONEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("micronewtonspersecond"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("micronewtons per second"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("MICRONEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::MicronewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("millinewtonpersecond"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("millinewton per second"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("MILLINEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("millinewtonspersecond"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("millinewtons per second"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("MILLINEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::MillinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("centinewtonpersecond"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("centinewton per second"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("CENTINEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("centinewtonspersecond"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("centinewtons per second"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("CENTINEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::CentinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decinewtonpersecond"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decinewton per second"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECINEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decinewtonspersecond"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decinewtons per second"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECINEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::DecinewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtonpersecond"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewton per second"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECANEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtonspersecond"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("decanewtons per second"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("DECANEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::DecanewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtonpersecond"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewton per second"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILONEWTON PER SECOND"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtonspersecond"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilonewtons per second"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILONEWTONS PER SECOND"),
+        Some(ForceChangeRateUnit::KilonewtonPerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("poundforceperminute"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("pound force per minute"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("POUND FORCE PER MINUTE"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("poundsforceperminute"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("pounds force per minute"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("POUNDS FORCE PER MINUTE"),
+        Some(ForceChangeRateUnit::PoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopoundforceperminute"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopound force per minute"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILOPOUND FORCE PER MINUTE"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopoundsforceperminute"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopounds force per minute"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILOPOUNDS FORCE PER MINUTE"),
+        Some(ForceChangeRateUnit::KilopoundForcePerMinute)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("poundforcepersecond"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("pound force per second"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("POUND FORCE PER SECOND"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("poundsforcepersecond"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("pounds force per second"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("POUNDS FORCE PER SECOND"),
+        Some(ForceChangeRateUnit::PoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopoundforcepersecond"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopound force per second"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILOPOUND FORCE PER SECOND"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopoundsforcepersecond"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("kilopounds force per second"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+    assert_eq!(
+        ForceChangeRateUnit::from_name("KILOPOUNDS FORCE PER SECOND"),
+        Some(ForceChangeRateUnit::KilopoundForcePerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ForceChangeRate::from_base(6.0);
     let b = ForceChangeRate::from_base(2.0);

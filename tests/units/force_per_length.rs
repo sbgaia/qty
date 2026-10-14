@@ -2297,6 +2297,922 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonpermeter"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newton per meter"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTON PER METER"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonspermeter"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtons per meter"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTONS PER METER"),
+        Some(ForcePerLengthUnit::NewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonpermeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewton per meter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTON PER METER"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonspermeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtons per meter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTONS PER METER"),
+        Some(ForcePerLengthUnit::NanonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonpermeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewton per meter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTON PER METER"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonspermeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtons per meter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTONS PER METER"),
+        Some(ForcePerLengthUnit::MicronewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonpermeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewton per meter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTON PER METER"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonspermeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtons per meter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTONS PER METER"),
+        Some(ForcePerLengthUnit::MillinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonpermeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewton per meter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTON PER METER"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonspermeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtons per meter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTONS PER METER"),
+        Some(ForcePerLengthUnit::CentinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonpermeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewton per meter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTON PER METER"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonspermeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtons per meter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTONS PER METER"),
+        Some(ForcePerLengthUnit::DecinewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonpermeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewton per meter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTON PER METER"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonspermeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtons per meter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTONS PER METER"),
+        Some(ForcePerLengthUnit::DecanewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonpermeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewton per meter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTON PER METER"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonspermeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtons per meter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTONS PER METER"),
+        Some(ForcePerLengthUnit::KilonewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonpermeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewton per meter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTON PER METER"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonspermeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtons per meter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTONS PER METER"),
+        Some(ForcePerLengthUnit::MeganewtonPerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonpercentimeter"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newton per centimeter"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonspercentimeter"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtons per centimeter"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::NewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonpercentimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewton per centimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonspercentimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtons per centimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::NanonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonpercentimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewton per centimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonspercentimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtons per centimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MicronewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonpercentimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewton per centimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonspercentimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtons per centimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MillinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonpercentimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewton per centimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonspercentimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtons per centimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::CentinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonpercentimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewton per centimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonspercentimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtons per centimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::DecinewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonpercentimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewton per centimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonspercentimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtons per centimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::DecanewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonpercentimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewton per centimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonspercentimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtons per centimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::KilonewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonpercentimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewton per centimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTON PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonspercentimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtons per centimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTONS PER CENTIMETER"),
+        Some(ForcePerLengthUnit::MeganewtonPerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonpermillimeter"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newton per millimeter"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtonspermillimeter"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("newtons per millimeter"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::NewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonpermillimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewton per millimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtonspermillimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("nanonewtons per millimeter"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("NANONEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::NanonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonpermillimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewton per millimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtonspermillimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("micronewtons per millimeter"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MICRONEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MicronewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonpermillimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewton per millimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtonspermillimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("millinewtons per millimeter"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MILLINEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MillinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonpermillimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewton per millimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtonspermillimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("centinewtons per millimeter"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("CENTINEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::CentinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonpermillimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewton per millimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtonspermillimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decinewtons per millimeter"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECINEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::DecinewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonpermillimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewton per millimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtonspermillimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("decanewtons per millimeter"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("DECANEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::DecanewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonpermillimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewton per millimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtonspermillimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilonewtons per millimeter"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILONEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::KilonewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonpermillimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewton per millimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTON PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtonspermillimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("meganewtons per millimeter"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("MEGANEWTONS PER MILLIMETER"),
+        Some(ForcePerLengthUnit::MeganewtonPerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramforcepermeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogram force per meter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAM FORCE PER METER"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramsforcepermeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilograms force per meter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAMS FORCE PER METER"),
+        Some(ForcePerLengthUnit::KilogramForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramforcepercentimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogram force per centimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAM FORCE PER CENTIMETER"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramsforcepercentimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilograms force per centimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAMS FORCE PER CENTIMETER"),
+        Some(ForcePerLengthUnit::KilogramForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramforcepermillimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogram force per millimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAM FORCE PER MILLIMETER"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilogramsforcepermillimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilograms force per millimeter"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOGRAMS FORCE PER MILLIMETER"),
+        Some(ForcePerLengthUnit::KilogramForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonneforcepermeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonne force per meter"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNE FORCE PER METER"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnesforcepermeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnes force per meter"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNES FORCE PER METER"),
+        Some(ForcePerLengthUnit::TonneForcePerMeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonneforcepercentimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonne force per centimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNE FORCE PER CENTIMETER"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnesforcepercentimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnes force per centimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNES FORCE PER CENTIMETER"),
+        Some(ForcePerLengthUnit::TonneForcePerCentimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonneforcepermillimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonne force per millimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNE FORCE PER MILLIMETER"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnesforcepermillimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("tonnes force per millimeter"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("TONNES FORCE PER MILLIMETER"),
+        Some(ForcePerLengthUnit::TonneForcePerMillimeter)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundforceperfoot"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pound force per foot"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUND FORCE PER FOOT"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundsforceperfoot"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pounds force per foot"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUNDS FORCE PER FOOT"),
+        Some(ForcePerLengthUnit::PoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundforceperinch"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pound force per inch"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUND FORCE PER INCH"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundsforceperinch"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pounds force per inch"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUNDS FORCE PER INCH"),
+        Some(ForcePerLengthUnit::PoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundforceperyard"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pound force per yard"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUND FORCE PER YARD"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("poundsforceperyard"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("pounds force per yard"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("POUNDS FORCE PER YARD"),
+        Some(ForcePerLengthUnit::PoundForcePerYard)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopoundforceperfoot"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopound force per foot"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOPOUND FORCE PER FOOT"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopoundsforceperfoot"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopounds force per foot"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOPOUNDS FORCE PER FOOT"),
+        Some(ForcePerLengthUnit::KilopoundForcePerFoot)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopoundforceperinch"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopound force per inch"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOPOUND FORCE PER INCH"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopoundsforceperinch"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("kilopounds force per inch"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+    assert_eq!(
+        ForcePerLengthUnit::from_name("KILOPOUNDS FORCE PER INCH"),
+        Some(ForcePerLengthUnit::KilopoundForcePerInch)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ForcePerLength::from_base(6.0);
     let b = ForcePerLength::from_base(2.0);

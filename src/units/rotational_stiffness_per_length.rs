@@ -83,12 +83,37 @@ impl RotationalStiffnessPerLengthUnit {
             ],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonmeterperradianpermeter" => Some(Self::NewtonMeterPerRadianPerMeter),
+            "newtonmetersperradianpermeter" => Some(Self::NewtonMeterPerRadianPerMeter),
+            "kilonewtonmeterperradianpermeter" => Some(Self::KilonewtonMeterPerRadianPerMeter),
+            "kilonewtonmetersperradianpermeter" => Some(Self::KilonewtonMeterPerRadianPerMeter),
+            "meganewtonmeterperradianpermeter" => Some(Self::MeganewtonMeterPerRadianPerMeter),
+            "meganewtonmetersperradianpermeter" => Some(Self::MeganewtonMeterPerRadianPerMeter),
+            "poundforcefootperdegreesperfoot" => Some(Self::PoundForceFootPerDegreesPerFoot),
+            "poundforcefeetperdegreesperfeet" => Some(Self::PoundForceFootPerDegreesPerFoot),
+            "kilopoundforcefootperdegreesperfoot" => {
+                Some(Self::KilopoundForceFootPerDegreesPerFoot)
+            }
+            "kilopoundforcefeetperdegreesperfeet" => {
+                Some(Self::KilopoundForceFootPerDegreesPerFoot)
+            }
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RotationalStiffnessPerLengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N·m/rad/m" => Ok(Self::NewtonMeterPerRadianPerMeter),
@@ -102,7 +127,7 @@ impl core::str::FromStr for RotationalStiffnessPerLengthUnit {
             "kipf·ft/deg/ft" => Ok(Self::KilopoundForceFootPerDegreesPerFoot),
             "kip·ft/deg/ft" => Ok(Self::KilopoundForceFootPerDegreesPerFoot),
             "k·ft/deg/ft" => Ok(Self::KilopoundForceFootPerDegreesPerFoot),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

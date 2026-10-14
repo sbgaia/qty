@@ -104,12 +104,49 @@ impl RotationalSpeedUnit {
             Self::RevolutionPerMinute => &["rpm", "r/min"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "radianpersecond" => Some(Self::RadianPerSecond),
+            "radianspersecond" => Some(Self::RadianPerSecond),
+            "nanoradianpersecond" => Some(Self::NanoradianPerSecond),
+            "nanoradianspersecond" => Some(Self::NanoradianPerSecond),
+            "microradianpersecond" => Some(Self::MicroradianPerSecond),
+            "microradianspersecond" => Some(Self::MicroradianPerSecond),
+            "milliradianpersecond" => Some(Self::MilliradianPerSecond),
+            "milliradianspersecond" => Some(Self::MilliradianPerSecond),
+            "centiradianpersecond" => Some(Self::CentiradianPerSecond),
+            "centiradianspersecond" => Some(Self::CentiradianPerSecond),
+            "deciradianpersecond" => Some(Self::DeciradianPerSecond),
+            "deciradianspersecond" => Some(Self::DeciradianPerSecond),
+            "degreepersecond" => Some(Self::DegreePerSecond),
+            "degreespersecond" => Some(Self::DegreePerSecond),
+            "nanodegreepersecond" => Some(Self::NanodegreePerSecond),
+            "nanodegreespersecond" => Some(Self::NanodegreePerSecond),
+            "microdegreepersecond" => Some(Self::MicrodegreePerSecond),
+            "microdegreespersecond" => Some(Self::MicrodegreePerSecond),
+            "millidegreepersecond" => Some(Self::MillidegreePerSecond),
+            "millidegreespersecond" => Some(Self::MillidegreePerSecond),
+            "degreeperminute" => Some(Self::DegreePerMinute),
+            "degreesperminute" => Some(Self::DegreePerMinute),
+            "revolutionpersecond" => Some(Self::RevolutionPerSecond),
+            "revolutionspersecond" => Some(Self::RevolutionPerSecond),
+            "revolutionperminute" => Some(Self::RevolutionPerMinute),
+            "revolutionsperminute" => Some(Self::RevolutionPerMinute),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RotationalSpeedUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "rad/s" => Ok(Self::RadianPerSecond),
@@ -128,7 +165,7 @@ impl core::str::FromStr for RotationalSpeedUnit {
             "r/s" => Ok(Self::RevolutionPerSecond),
             "rpm" => Ok(Self::RevolutionPerMinute),
             "r/min" => Ok(Self::RevolutionPerMinute),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

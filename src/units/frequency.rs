@@ -101,12 +101,39 @@ impl FrequencyUnit {
             Self::PerSecond => &["s⁻¹"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "hertz" => Some(Self::Hertz),
+            "microhertz" => Some(Self::Microhertz),
+            "millihertz" => Some(Self::Millihertz),
+            "kilohertz" => Some(Self::Kilohertz),
+            "megahertz" => Some(Self::Megahertz),
+            "gigahertz" => Some(Self::Gigahertz),
+            "terahertz" => Some(Self::Terahertz),
+            "radianpersecond" => Some(Self::RadianPerSecond),
+            "radianspersecond" => Some(Self::RadianPerSecond),
+            "cycleperminute" => Some(Self::CyclePerMinute),
+            "cyclesperminute" => Some(Self::CyclePerMinute),
+            "cycleperhour" => Some(Self::CyclePerHour),
+            "cyclesperhour" => Some(Self::CyclePerHour),
+            "beatperminute" => Some(Self::BeatPerMinute),
+            "beatsperminute" => Some(Self::BeatPerMinute),
+            "persecond" => Some(Self::PerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for FrequencyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Hz" => Ok(Self::Hertz),
@@ -121,7 +148,7 @@ impl core::str::FromStr for FrequencyUnit {
             "cph" => Ok(Self::CyclePerHour),
             "bpm" => Ok(Self::BeatPerMinute),
             "s⁻¹" => Ok(Self::PerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

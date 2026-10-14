@@ -92,12 +92,57 @@ impl VolumetricHeatCapacityUnit {
             Self::BtuPerCubicFootDegreeFahrenheit => &["BTU/(ft³·°F)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "joulepercubicmeterkelvin" => Some(Self::JoulePerCubicMeterKelvin),
+            "joulespercubicmeterkelvin" => Some(Self::JoulePerCubicMeterKelvin),
+            "kilojoulepercubicmeterkelvin" => Some(Self::KilojoulePerCubicMeterKelvin),
+            "kilojoulespercubicmeterkelvin" => Some(Self::KilojoulePerCubicMeterKelvin),
+            "megajoulepercubicmeterkelvin" => Some(Self::MegajoulePerCubicMeterKelvin),
+            "megajoulespercubicmeterkelvin" => Some(Self::MegajoulePerCubicMeterKelvin),
+            "joulepercubicmeterdegreecelsius" => Some(Self::JoulePerCubicMeterDegreeCelsius),
+            "joulespercubicmeterdegreecelsius" => Some(Self::JoulePerCubicMeterDegreeCelsius),
+            "kilojoulepercubicmeterdegreecelsius" => {
+                Some(Self::KilojoulePerCubicMeterDegreeCelsius)
+            }
+            "kilojoulespercubicmeterdegreecelsius" => {
+                Some(Self::KilojoulePerCubicMeterDegreeCelsius)
+            }
+            "megajoulepercubicmeterdegreecelsius" => {
+                Some(Self::MegajoulePerCubicMeterDegreeCelsius)
+            }
+            "megajoulespercubicmeterdegreecelsius" => {
+                Some(Self::MegajoulePerCubicMeterDegreeCelsius)
+            }
+            "caloriepercubiccentimeterdegreecelsius" => {
+                Some(Self::CaloriePerCubicCentimeterDegreeCelsius)
+            }
+            "caloriespercubiccentimeterdegreecelsius" => {
+                Some(Self::CaloriePerCubicCentimeterDegreeCelsius)
+            }
+            "kilocaloriepercubiccentimeterdegreecelsius" => {
+                Some(Self::KilocaloriePerCubicCentimeterDegreeCelsius)
+            }
+            "kilocaloriespercubiccentimeterdegreecelsius" => {
+                Some(Self::KilocaloriePerCubicCentimeterDegreeCelsius)
+            }
+            "btupercubicfootdegreefahrenheit" => Some(Self::BtuPerCubicFootDegreeFahrenheit),
+            "btuspercubicfootdegreefahrenheit" => Some(Self::BtuPerCubicFootDegreeFahrenheit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for VolumetricHeatCapacityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/(m³·K)" => Ok(Self::JoulePerCubicMeterKelvin),
@@ -109,7 +154,7 @@ impl core::str::FromStr for VolumetricHeatCapacityUnit {
             "cal/(cm³·°C)" => Ok(Self::CaloriePerCubicCentimeterDegreeCelsius),
             "kcal/(cm³·°C)" => Ok(Self::KilocaloriePerCubicCentimeterDegreeCelsius),
             "BTU/(ft³·°F)" => Ok(Self::BtuPerCubicFootDegreeFahrenheit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

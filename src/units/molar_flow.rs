@@ -88,12 +88,41 @@ impl MolarFlowUnit {
             Self::PoundMolePerHour => &["lbmol/h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "molepersecond" => Some(Self::MolePerSecond),
+            "molespersecond" => Some(Self::MolePerSecond),
+            "kilomolepersecond" => Some(Self::KilomolePerSecond),
+            "kilomolespersecond" => Some(Self::KilomolePerSecond),
+            "moleperminute" => Some(Self::MolePerMinute),
+            "molesperminute" => Some(Self::MolePerMinute),
+            "kilomoleperminute" => Some(Self::KilomolePerMinute),
+            "kilomolesperminute" => Some(Self::KilomolePerMinute),
+            "moleperhour" => Some(Self::MolePerHour),
+            "molesperhour" => Some(Self::MolePerHour),
+            "kilomoleperhour" => Some(Self::KilomolePerHour),
+            "kilomolesperhour" => Some(Self::KilomolePerHour),
+            "poundmolepersecond" => Some(Self::PoundMolePerSecond),
+            "poundmolespersecond" => Some(Self::PoundMolePerSecond),
+            "poundmoleperminute" => Some(Self::PoundMolePerMinute),
+            "poundmolesperminute" => Some(Self::PoundMolePerMinute),
+            "poundmoleperhour" => Some(Self::PoundMolePerHour),
+            "poundmolesperhour" => Some(Self::PoundMolePerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MolarFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/s" => Ok(Self::MolePerSecond),
@@ -105,7 +134,7 @@ impl core::str::FromStr for MolarFlowUnit {
             "lbmol/s" => Ok(Self::PoundMolePerSecond),
             "lbmol/min" => Ok(Self::PoundMolePerMinute),
             "lbmol/h" => Ok(Self::PoundMolePerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -88,12 +88,41 @@ impl SpecificEntropyUnit {
             Self::BtuPerPoundFahrenheit => &["BTU/(lb·°F)", "BTU/(lbm·°F)"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "jouleperkilogramkelvin" => Some(Self::JoulePerKilogramKelvin),
+            "joulesperkilogramkelvin" => Some(Self::JoulePerKilogramKelvin),
+            "kilojouleperkilogramkelvin" => Some(Self::KilojoulePerKilogramKelvin),
+            "kilojoulesperkilogramkelvin" => Some(Self::KilojoulePerKilogramKelvin),
+            "megajouleperkilogramkelvin" => Some(Self::MegajoulePerKilogramKelvin),
+            "megajoulesperkilogramkelvin" => Some(Self::MegajoulePerKilogramKelvin),
+            "jouleperkilogramdegreecelsius" => Some(Self::JoulePerKilogramDegreeCelsius),
+            "joulesperkilogramdegreecelsius" => Some(Self::JoulePerKilogramDegreeCelsius),
+            "kilojouleperkilogramdegreecelsius" => Some(Self::KilojoulePerKilogramDegreeCelsius),
+            "kilojoulesperkilogramdegreecelsius" => Some(Self::KilojoulePerKilogramDegreeCelsius),
+            "megajouleperkilogramdegreecelsius" => Some(Self::MegajoulePerKilogramDegreeCelsius),
+            "megajoulesperkilogramdegreecelsius" => Some(Self::MegajoulePerKilogramDegreeCelsius),
+            "caloriepergramkelvin" => Some(Self::CaloriePerGramKelvin),
+            "caloriespergramkelvin" => Some(Self::CaloriePerGramKelvin),
+            "kilocaloriepergramkelvin" => Some(Self::KilocaloriePerGramKelvin),
+            "kilocaloriespergramkelvin" => Some(Self::KilocaloriePerGramKelvin),
+            "btuperpoundfahrenheit" => Some(Self::BtuPerPoundFahrenheit),
+            "btusperpoundfahrenheit" => Some(Self::BtuPerPoundFahrenheit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for SpecificEntropyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/kg·K" => Ok(Self::JoulePerKilogramKelvin),
@@ -106,7 +135,7 @@ impl core::str::FromStr for SpecificEntropyUnit {
             "kcal/g·K" => Ok(Self::KilocaloriePerGramKelvin),
             "BTU/(lb·°F)" => Ok(Self::BtuPerPoundFahrenheit),
             "BTU/(lbm·°F)" => Ok(Self::BtuPerPoundFahrenheit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

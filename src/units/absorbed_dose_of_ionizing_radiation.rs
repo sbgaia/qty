@@ -126,12 +126,57 @@ impl AbsorbedDoseOfIonizingRadiationUnit {
             Self::Megarad => &["Mrad"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "gray" => Some(Self::Gray),
+            "grays" => Some(Self::Gray),
+            "femtogray" => Some(Self::Femtogray),
+            "femtograys" => Some(Self::Femtogray),
+            "picogray" => Some(Self::Picogray),
+            "picograys" => Some(Self::Picogray),
+            "nanogray" => Some(Self::Nanogray),
+            "nanograys" => Some(Self::Nanogray),
+            "microgray" => Some(Self::Microgray),
+            "micrograys" => Some(Self::Microgray),
+            "milligray" => Some(Self::Milligray),
+            "milligrays" => Some(Self::Milligray),
+            "centigray" => Some(Self::Centigray),
+            "centigrays" => Some(Self::Centigray),
+            "decigray" => Some(Self::Decigray),
+            "decigrays" => Some(Self::Decigray),
+            "kilogray" => Some(Self::Kilogray),
+            "kilograys" => Some(Self::Kilogray),
+            "megagray" => Some(Self::Megagray),
+            "megagrays" => Some(Self::Megagray),
+            "gigagray" => Some(Self::Gigagray),
+            "gigagrays" => Some(Self::Gigagray),
+            "teragray" => Some(Self::Teragray),
+            "teragrays" => Some(Self::Teragray),
+            "petagray" => Some(Self::Petagray),
+            "petagrays" => Some(Self::Petagray),
+            "rad" => Some(Self::Rad),
+            "rads" => Some(Self::Rad),
+            "millirad" => Some(Self::Millirad),
+            "millirads" => Some(Self::Millirad),
+            "kilorad" => Some(Self::Kilorad),
+            "kilorads" => Some(Self::Kilorad),
+            "megarad" => Some(Self::Megarad),
+            "megarads" => Some(Self::Megarad),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AbsorbedDoseOfIonizingRadiationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Gy" => Ok(Self::Gray),
@@ -151,7 +196,7 @@ impl core::str::FromStr for AbsorbedDoseOfIonizingRadiationUnit {
             "mrad" => Ok(Self::Millirad),
             "krad" => Ok(Self::Kilorad),
             "Mrad" => Ok(Self::Megarad),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

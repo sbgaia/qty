@@ -624,6 +624,250 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        DynamicViscosityUnit::from_name("newtonsecondpermetersquared"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("newton second per meter squared"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("NEWTON SECOND PER METER SQUARED"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("newtonsecondspermetersquared"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("newton seconds per meter squared"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("NEWTON SECONDS PER METER SQUARED"),
+        Some(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pascalsecond"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pascal second"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("PASCAL SECOND"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pascalseconds"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pascal seconds"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("PASCAL SECONDS"),
+        Some(DynamicViscosityUnit::PascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("millipascalsecond"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("millipascal second"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("MILLIPASCAL SECOND"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("millipascalseconds"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("millipascal seconds"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("MILLIPASCAL SECONDS"),
+        Some(DynamicViscosityUnit::MillipascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("micropascalsecond"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("micropascal second"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("MICROPASCAL SECOND"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("micropascalseconds"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("micropascal seconds"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("MICROPASCAL SECONDS"),
+        Some(DynamicViscosityUnit::MicropascalSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poise"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poise"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POISE"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poise"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poise"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POISE"),
+        Some(DynamicViscosityUnit::Poise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("centipoise"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("centipoise"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("CENTIPOISE"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("centipoise"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("centipoise"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("CENTIPOISE"),
+        Some(DynamicViscosityUnit::Centipoise)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("reyn"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("reyn"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("REYN"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("reyns"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("reyns"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("REYNS"),
+        Some(DynamicViscosityUnit::Reyn)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundforcesecondpersquareinch"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pound force second per square inch"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUND FORCE SECOND PER SQUARE INCH"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundsforcesecondpersquareinch"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pounds force second per square inch"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUNDS FORCE SECOND PER SQUARE INCH"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareInch)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundforcesecondpersquarefoot"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pound force second per square foot"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUND FORCE SECOND PER SQUARE FOOT"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundsforcesecondpersquarefoot"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pounds force second per square foot"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUNDS FORCE SECOND PER SQUARE FOOT"),
+        Some(DynamicViscosityUnit::PoundForceSecondPerSquareFoot)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundperfootsecond"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pound per foot second"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUND PER FOOT SECOND"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("poundsperfootsecond"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("pounds per foot second"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+    assert_eq!(
+        DynamicViscosityUnit::from_name("POUNDS PER FOOT SECOND"),
+        Some(DynamicViscosityUnit::PoundPerFootSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = DynamicViscosity::from_base(6.0);
     let b = DynamicViscosity::from_base(2.0);

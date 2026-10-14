@@ -68,18 +68,35 @@ impl ElectricReactiveEnergyUnit {
             Self::MegavoltampereReactiveHour => &["Mvarh"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "voltamperereactivehour" => Some(Self::VoltampereReactiveHour),
+            "voltamperereactivehours" => Some(Self::VoltampereReactiveHour),
+            "kilovoltamperereactivehour" => Some(Self::KilovoltampereReactiveHour),
+            "kilovoltamperereactivehours" => Some(Self::KilovoltampereReactiveHour),
+            "megavoltamperereactivehour" => Some(Self::MegavoltampereReactiveHour),
+            "megavoltamperereactivehours" => Some(Self::MegavoltampereReactiveHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricReactiveEnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "varh" => Ok(Self::VoltampereReactiveHour),
             "kvarh" => Ok(Self::KilovoltampereReactiveHour),
             "Mvarh" => Ok(Self::MegavoltampereReactiveHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

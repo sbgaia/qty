@@ -750,6 +750,298 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MassFluxUnit::from_name("grampersecondpersquaremeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per second per square meter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER SECOND PER SQUARE METER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramspersecondpersquaremeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per second per square meter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER SECOND PER SQUARE METER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogrampersecondpersquaremeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per second per square meter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER SECOND PER SQUARE METER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramspersecondpersquaremeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per second per square meter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER SECOND PER SQUARE METER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grampersecondpersquarecentimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per second per square centimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER SECOND PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramspersecondpersquarecentimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per second per square centimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER SECOND PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogrampersecondpersquarecentimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per second per square centimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER SECOND PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramspersecondpersquarecentimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per second per square centimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER SECOND PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grampersecondpersquaremillimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per second per square millimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER SECOND PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramspersecondpersquaremillimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per second per square millimeter"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER SECOND PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::GramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogrampersecondpersquaremillimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per second per square millimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER SECOND PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramspersecondpersquaremillimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per second per square millimeter"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER SECOND PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::KilogramPerSecondPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramperhourpersquaremeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per hour per square meter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER HOUR PER SQUARE METER"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramsperhourpersquaremeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per hour per square meter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER HOUR PER SQUARE METER"),
+        Some(MassFluxUnit::GramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramperhourpersquaremeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per hour per square meter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER HOUR PER SQUARE METER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramsperhourpersquaremeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per hour per square meter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER HOUR PER SQUARE METER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramperhourpersquarecentimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per hour per square centimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER HOUR PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramsperhourpersquarecentimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per hour per square centimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER HOUR PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::GramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramperhourpersquarecentimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per hour per square centimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER HOUR PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramsperhourpersquarecentimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per hour per square centimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER HOUR PER SQUARE CENTIMETER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareCentimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramperhourpersquaremillimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gram per hour per square millimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAM PER HOUR PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("gramsperhourpersquaremillimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("grams per hour per square millimeter"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("GRAMS PER HOUR PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::GramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramperhourpersquaremillimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogram per hour per square millimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAM PER HOUR PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilogramsperhourpersquaremillimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("kilograms per hour per square millimeter"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+    assert_eq!(
+        MassFluxUnit::from_name("KILOGRAMS PER HOUR PER SQUARE MILLIMETER"),
+        Some(MassFluxUnit::KilogramPerHourPerSquareMillimeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MassFlux::from_base(6.0);
     let b = MassFlux::from_base(2.0);

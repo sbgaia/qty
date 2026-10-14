@@ -645,6 +645,274 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        JerkUnit::from_name("meterpersecondcubed"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("meter per second cubed"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("METER PER SECOND CUBED"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("meterspersecondcubed"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("meters per second cubed"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("METERS PER SECOND CUBED"),
+        Some(JerkUnit::MeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("nanometerpersecondcubed"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("nanometer per second cubed"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("NANOMETER PER SECOND CUBED"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("nanometerspersecondcubed"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("nanometers per second cubed"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("NANOMETERS PER SECOND CUBED"),
+        Some(JerkUnit::NanometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("micrometerpersecondcubed"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("micrometer per second cubed"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MICROMETER PER SECOND CUBED"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("micrometerspersecondcubed"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("micrometers per second cubed"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MICROMETERS PER SECOND CUBED"),
+        Some(JerkUnit::MicrometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millimeterpersecondcubed"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millimeter per second cubed"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MILLIMETER PER SECOND CUBED"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millimeterspersecondcubed"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millimeters per second cubed"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MILLIMETERS PER SECOND CUBED"),
+        Some(JerkUnit::MillimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("centimeterpersecondcubed"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("centimeter per second cubed"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("CENTIMETER PER SECOND CUBED"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("centimeterspersecondcubed"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("centimeters per second cubed"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("CENTIMETERS PER SECOND CUBED"),
+        Some(JerkUnit::CentimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("decimeterpersecondcubed"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("decimeter per second cubed"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("DECIMETER PER SECOND CUBED"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("decimeterspersecondcubed"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("decimeters per second cubed"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("DECIMETERS PER SECOND CUBED"),
+        Some(JerkUnit::DecimeterPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("kilometerpersecondcubed"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("kilometer per second cubed"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("KILOMETER PER SECOND CUBED"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("kilometerspersecondcubed"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("kilometers per second cubed"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("KILOMETERS PER SECOND CUBED"),
+        Some(JerkUnit::KilometerPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("inchpersecondcubed"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("inch per second cubed"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("INCH PER SECOND CUBED"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("inchespersecondcubed"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("inches per second cubed"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("INCHES PER SECOND CUBED"),
+        Some(JerkUnit::InchPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("footpersecondcubed"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("foot per second cubed"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("FOOT PER SECOND CUBED"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("feetpersecondcubed"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("feet per second cubed"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("FEET PER SECOND CUBED"),
+        Some(JerkUnit::FootPerSecondCubed)
+    );
+    assert_eq!(
+        JerkUnit::from_name("standardgravitiespersecond"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("standard gravities per second"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("STANDARD GRAVITIES PER SECOND"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("standardgravitiespersecond"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("standard gravities per second"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("STANDARD GRAVITIES PER SECOND"),
+        Some(JerkUnit::StandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millistandardgravitiespersecond"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millistandard gravities per second"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MILLISTANDARD GRAVITIES PER SECOND"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millistandardgravitiespersecond"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("millistandard gravities per second"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+    assert_eq!(
+        JerkUnit::from_name("MILLISTANDARD GRAVITIES PER SECOND"),
+        Some(JerkUnit::MillistandardGravitiesPerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Jerk::from_base(6.0);
     let b = Jerk::from_base(2.0);

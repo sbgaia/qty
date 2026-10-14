@@ -301,6 +301,106 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("radianpersecondsquared"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("radian per second squared"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("RADIAN PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("radianspersecondsquared"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("radians per second squared"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("RADIANS PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::RadianPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("degreepersecondsquared"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("degree per second squared"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("DEGREE PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("degreespersecondsquared"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("degrees per second squared"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("DEGREES PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::DegreePerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutionperminutepersecond"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolution per minute per second"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("REVOLUTION PER MINUTE PER SECOND"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutionsperminutepersecond"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutions per minute per second"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("REVOLUTIONS PER MINUTE PER SECOND"),
+        Some(RotationalAccelerationUnit::RevolutionPerMinutePerSecond)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutionpersecondsquared"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolution per second squared"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("REVOLUTION PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutionspersecondsquared"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("revolutions per second squared"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+    assert_eq!(
+        RotationalAccelerationUnit::from_name("REVOLUTIONS PER SECOND SQUARED"),
+        Some(RotationalAccelerationUnit::RevolutionPerSecondSquared)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = RotationalAcceleration::from_base(6.0);
     let b = RotationalAcceleration::from_base(2.0);

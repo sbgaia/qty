@@ -76,12 +76,35 @@ impl MagneticFieldUnit {
             Self::Milligauss => &["mG"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "tesla" => Some(Self::Tesla),
+            "teslas" => Some(Self::Tesla),
+            "nanotesla" => Some(Self::Nanotesla),
+            "nanoteslas" => Some(Self::Nanotesla),
+            "microtesla" => Some(Self::Microtesla),
+            "microteslas" => Some(Self::Microtesla),
+            "millitesla" => Some(Self::Millitesla),
+            "milliteslas" => Some(Self::Millitesla),
+            "gauss" => Some(Self::Gauss),
+            "gausses" => Some(Self::Gauss),
+            "milligauss" => Some(Self::Milligauss),
+            "milligausses" => Some(Self::Milligauss),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MagneticFieldUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "T" => Ok(Self::Tesla),
@@ -90,7 +113,7 @@ impl core::str::FromStr for MagneticFieldUnit {
             "mT" => Ok(Self::Millitesla),
             "G" => Ok(Self::Gauss),
             "mG" => Ok(Self::Milligauss),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

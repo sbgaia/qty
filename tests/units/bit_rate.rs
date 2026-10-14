@@ -2173,6 +2173,946 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        BitRateUnit::from_name("bitpersecond"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bit per second"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("BIT PER SECOND"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bitspersecond"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bits per second"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("BITS PER SECOND"),
+        Some(BitRateUnit::BitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobitpersecond"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobit per second"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOBIT PER SECOND"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobitspersecond"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobits per second"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOBITS PER SECOND"),
+        Some(BitRateUnit::KilobitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabitpersecond"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabit per second"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGABIT PER SECOND"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabitspersecond"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabits per second"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGABITS PER SECOND"),
+        Some(BitRateUnit::MegabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabitpersecond"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabit per second"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGABIT PER SECOND"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabitspersecond"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabits per second"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGABITS PER SECOND"),
+        Some(BitRateUnit::GigabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabitpersecond"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabit per second"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERABIT PER SECOND"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabitspersecond"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabits per second"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERABITS PER SECOND"),
+        Some(BitRateUnit::TerabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabitpersecond"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabit per second"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETABIT PER SECOND"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabitspersecond"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabits per second"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETABITS PER SECOND"),
+        Some(BitRateUnit::PetabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabitpersecond"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabit per second"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXABIT PER SECOND"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabitspersecond"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabits per second"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXABITS PER SECOND"),
+        Some(BitRateUnit::ExabitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibitpersecond"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibit per second"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIBIT PER SECOND"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibitspersecond"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibits per second"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIBITS PER SECOND"),
+        Some(BitRateUnit::KibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibitpersecond"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibit per second"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIBIT PER SECOND"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibitspersecond"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibits per second"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIBITS PER SECOND"),
+        Some(BitRateUnit::MebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibitpersecond"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibit per second"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIBIT PER SECOND"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibitspersecond"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibits per second"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIBITS PER SECOND"),
+        Some(BitRateUnit::GibibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibitpersecond"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibit per second"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIBIT PER SECOND"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibitspersecond"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibits per second"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIBITS PER SECOND"),
+        Some(BitRateUnit::TebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibitpersecond"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibit per second"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIBIT PER SECOND"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibitspersecond"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibits per second"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIBITS PER SECOND"),
+        Some(BitRateUnit::PebibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibitpersecond"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibit per second"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIBIT PER SECOND"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibitspersecond"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibits per second"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIBITS PER SECOND"),
+        Some(BitRateUnit::ExbibitPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bytepersecond"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("byte per second"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("BYTE PER SECOND"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bytespersecond"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("bytes per second"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("BYTES PER SECOND"),
+        Some(BitRateUnit::BytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobytepersecond"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobyte per second"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOBYTE PER SECOND"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobytespersecond"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilobytes per second"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOBYTES PER SECOND"),
+        Some(BitRateUnit::KilobytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabytepersecond"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabyte per second"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGABYTE PER SECOND"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabytespersecond"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megabytes per second"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGABYTES PER SECOND"),
+        Some(BitRateUnit::MegabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabytepersecond"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabyte per second"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGABYTE PER SECOND"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabytespersecond"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigabytes per second"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGABYTES PER SECOND"),
+        Some(BitRateUnit::GigabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabytepersecond"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabyte per second"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERABYTE PER SECOND"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabytespersecond"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("terabytes per second"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERABYTES PER SECOND"),
+        Some(BitRateUnit::TerabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabytepersecond"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabyte per second"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETABYTE PER SECOND"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabytespersecond"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petabytes per second"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETABYTES PER SECOND"),
+        Some(BitRateUnit::PetabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabytepersecond"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabyte per second"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXABYTE PER SECOND"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabytespersecond"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exabytes per second"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXABYTES PER SECOND"),
+        Some(BitRateUnit::ExabytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibytepersecond"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibyte per second"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIBYTE PER SECOND"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibytespersecond"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibibytes per second"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIBYTES PER SECOND"),
+        Some(BitRateUnit::KibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibytepersecond"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibyte per second"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIBYTE PER SECOND"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibytespersecond"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebibytes per second"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIBYTES PER SECOND"),
+        Some(BitRateUnit::MebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibytepersecond"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibyte per second"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIBYTE PER SECOND"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibytespersecond"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibibytes per second"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIBYTES PER SECOND"),
+        Some(BitRateUnit::GibibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibytepersecond"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibyte per second"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIBYTE PER SECOND"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibytespersecond"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebibytes per second"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIBYTES PER SECOND"),
+        Some(BitRateUnit::TebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibytepersecond"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibyte per second"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIBYTE PER SECOND"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibytespersecond"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebibytes per second"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIBYTES PER SECOND"),
+        Some(BitRateUnit::PebibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibytepersecond"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibyte per second"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIBYTE PER SECOND"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibytespersecond"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbibytes per second"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIBYTES PER SECOND"),
+        Some(BitRateUnit::ExbibytePerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("octetpersecond"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("octet per second"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("OCTET PER SECOND"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("octetspersecond"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("octets per second"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("OCTETS PER SECOND"),
+        Some(BitRateUnit::OctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilooctetpersecond"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilooctet per second"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOOCTET PER SECOND"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilooctetspersecond"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kilooctets per second"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KILOOCTETS PER SECOND"),
+        Some(BitRateUnit::KilooctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megaoctetpersecond"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megaoctet per second"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGAOCTET PER SECOND"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megaoctetspersecond"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("megaoctets per second"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEGAOCTETS PER SECOND"),
+        Some(BitRateUnit::MegaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigaoctetpersecond"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigaoctet per second"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGAOCTET PER SECOND"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigaoctetspersecond"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gigaoctets per second"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIGAOCTETS PER SECOND"),
+        Some(BitRateUnit::GigaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("teraoctetpersecond"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("teraoctet per second"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERAOCTET PER SECOND"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("teraoctetspersecond"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("teraoctets per second"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TERAOCTETS PER SECOND"),
+        Some(BitRateUnit::TeraoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petaoctetpersecond"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petaoctet per second"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETAOCTET PER SECOND"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petaoctetspersecond"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("petaoctets per second"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PETAOCTETS PER SECOND"),
+        Some(BitRateUnit::PetaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exaoctetpersecond"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exaoctet per second"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXAOCTET PER SECOND"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exaoctetspersecond"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exaoctets per second"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXAOCTETS PER SECOND"),
+        Some(BitRateUnit::ExaoctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibioctetpersecond"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibioctet per second"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIOCTET PER SECOND"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibioctetspersecond"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("kibioctets per second"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("KIBIOCTETS PER SECOND"),
+        Some(BitRateUnit::KibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebioctetpersecond"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebioctet per second"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIOCTET PER SECOND"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebioctetspersecond"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("mebioctets per second"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("MEBIOCTETS PER SECOND"),
+        Some(BitRateUnit::MebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibioctetpersecond"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibioctet per second"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIOCTET PER SECOND"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibioctetspersecond"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("gibioctets per second"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("GIBIOCTETS PER SECOND"),
+        Some(BitRateUnit::GibioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebioctetpersecond"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebioctet per second"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIOCTET PER SECOND"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebioctetspersecond"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("tebioctets per second"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("TEBIOCTETS PER SECOND"),
+        Some(BitRateUnit::TebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebioctetpersecond"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebioctet per second"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIOCTET PER SECOND"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebioctetspersecond"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("pebioctets per second"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("PEBIOCTETS PER SECOND"),
+        Some(BitRateUnit::PebioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbioctetpersecond"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbioctet per second"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIOCTET PER SECOND"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbioctetspersecond"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("exbioctets per second"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+    assert_eq!(
+        BitRateUnit::from_name("EXBIOCTETS PER SECOND"),
+        Some(BitRateUnit::ExbioctetPerSecond)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = BitRate::from_base(6.0);
     let b = BitRate::from_base(2.0);

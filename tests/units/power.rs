@@ -1250,6 +1250,478 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(PowerUnit::from_name("watt"), Some(PowerUnit::Watt));
+    assert_eq!(PowerUnit::from_name("watt"), Some(PowerUnit::Watt));
+    assert_eq!(PowerUnit::from_name("WATT"), Some(PowerUnit::Watt));
+    assert_eq!(PowerUnit::from_name("watts"), Some(PowerUnit::Watt));
+    assert_eq!(PowerUnit::from_name("watts"), Some(PowerUnit::Watt));
+    assert_eq!(PowerUnit::from_name("WATTS"), Some(PowerUnit::Watt));
+    assert_eq!(
+        PowerUnit::from_name("femtowatt"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("femtowatt"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("FEMTOWATT"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("femtowatts"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("femtowatts"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("FEMTOWATTS"),
+        Some(PowerUnit::Femtowatt)
+    );
+    assert_eq!(PowerUnit::from_name("picowatt"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("picowatt"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("PICOWATT"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("picowatts"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("picowatts"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("PICOWATTS"), Some(PowerUnit::Picowatt));
+    assert_eq!(PowerUnit::from_name("nanowatt"), Some(PowerUnit::Nanowatt));
+    assert_eq!(PowerUnit::from_name("nanowatt"), Some(PowerUnit::Nanowatt));
+    assert_eq!(PowerUnit::from_name("NANOWATT"), Some(PowerUnit::Nanowatt));
+    assert_eq!(PowerUnit::from_name("nanowatts"), Some(PowerUnit::Nanowatt));
+    assert_eq!(PowerUnit::from_name("nanowatts"), Some(PowerUnit::Nanowatt));
+    assert_eq!(PowerUnit::from_name("NANOWATTS"), Some(PowerUnit::Nanowatt));
+    assert_eq!(
+        PowerUnit::from_name("microwatt"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("microwatt"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MICROWATT"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("microwatts"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("microwatts"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MICROWATTS"),
+        Some(PowerUnit::Microwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("milliwatt"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("milliwatt"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MILLIWATT"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("milliwatts"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("milliwatts"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MILLIWATTS"),
+        Some(PowerUnit::Milliwatt)
+    );
+    assert_eq!(PowerUnit::from_name("deciwatt"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("deciwatt"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("DECIWATT"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("deciwatts"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("deciwatts"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("DECIWATTS"), Some(PowerUnit::Deciwatt));
+    assert_eq!(PowerUnit::from_name("decawatt"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("decawatt"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("DECAWATT"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("decawatts"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("decawatts"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("DECAWATTS"), Some(PowerUnit::Decawatt));
+    assert_eq!(PowerUnit::from_name("kilowatt"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("kilowatt"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("KILOWATT"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("kilowatts"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("kilowatts"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("KILOWATTS"), Some(PowerUnit::Kilowatt));
+    assert_eq!(PowerUnit::from_name("megawatt"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("megawatt"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("MEGAWATT"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("megawatts"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("megawatts"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("MEGAWATTS"), Some(PowerUnit::Megawatt));
+    assert_eq!(PowerUnit::from_name("gigawatt"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("gigawatt"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("GIGAWATT"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("gigawatts"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("gigawatts"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("GIGAWATTS"), Some(PowerUnit::Gigawatt));
+    assert_eq!(PowerUnit::from_name("terawatt"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("terawatt"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("TERAWATT"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("terawatts"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("terawatts"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("TERAWATTS"), Some(PowerUnit::Terawatt));
+    assert_eq!(PowerUnit::from_name("petawatt"), Some(PowerUnit::Petawatt));
+    assert_eq!(PowerUnit::from_name("petawatt"), Some(PowerUnit::Petawatt));
+    assert_eq!(PowerUnit::from_name("PETAWATT"), Some(PowerUnit::Petawatt));
+    assert_eq!(PowerUnit::from_name("petawatts"), Some(PowerUnit::Petawatt));
+    assert_eq!(PowerUnit::from_name("petawatts"), Some(PowerUnit::Petawatt));
+    assert_eq!(PowerUnit::from_name("PETAWATTS"), Some(PowerUnit::Petawatt));
+    assert_eq!(
+        PowerUnit::from_name("mechanicalhorsepower"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("mechanical horsepower"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MECHANICAL HORSEPOWER"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("mechanicalhorsepower"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("mechanical horsepower"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MECHANICAL HORSEPOWER"),
+        Some(PowerUnit::MechanicalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("metrichorsepower"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("metric horsepower"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("METRIC HORSEPOWER"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("metrichorsepower"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("metric horsepower"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("METRIC HORSEPOWER"),
+        Some(PowerUnit::MetricHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("electricalhorsepower"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("electrical horsepower"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("ELECTRICAL HORSEPOWER"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("electricalhorsepower"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("electrical horsepower"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("ELECTRICAL HORSEPOWER"),
+        Some(PowerUnit::ElectricalHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("boilerhorsepower"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("boiler horsepower"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("BOILER HORSEPOWER"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("boilerhorsepower"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("boiler horsepower"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("BOILER HORSEPOWER"),
+        Some(PowerUnit::BoilerHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("hydraulichorsepower"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("hydraulic horsepower"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("HYDRAULIC HORSEPOWER"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("hydraulichorsepower"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("hydraulic horsepower"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("HYDRAULIC HORSEPOWER"),
+        Some(PowerUnit::HydraulicHorsepower)
+    );
+    assert_eq!(
+        PowerUnit::from_name("britishthermalunitperhour"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("british thermal unit per hour"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("BRITISH THERMAL UNIT PER HOUR"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("britishthermalunitsperhour"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("british thermal units per hour"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("BRITISH THERMAL UNITS PER HOUR"),
+        Some(PowerUnit::BritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilobritishthermalunitperhour"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilobritish thermal unit per hour"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("KILOBRITISH THERMAL UNIT PER HOUR"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilobritishthermalunitsperhour"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilobritish thermal units per hour"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("KILOBRITISH THERMAL UNITS PER HOUR"),
+        Some(PowerUnit::KilobritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megabritishthermalunitperhour"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megabritish thermal unit per hour"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MEGABRITISH THERMAL UNIT PER HOUR"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megabritishthermalunitsperhour"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megabritish thermal units per hour"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MEGABRITISH THERMAL UNITS PER HOUR"),
+        Some(PowerUnit::MegabritishThermalUnitPerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("jouleperhour"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("joule per hour"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("JOULE PER HOUR"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("joulesperhour"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("joules per hour"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("JOULES PER HOUR"),
+        Some(PowerUnit::JoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("millijouleperhour"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("millijoule per hour"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MILLIJOULE PER HOUR"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("millijoulesperhour"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("millijoules per hour"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MILLIJOULES PER HOUR"),
+        Some(PowerUnit::MillijoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilojouleperhour"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilojoule per hour"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("KILOJOULE PER HOUR"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilojoulesperhour"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("kilojoules per hour"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("KILOJOULES PER HOUR"),
+        Some(PowerUnit::KilojoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megajouleperhour"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megajoule per hour"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MEGAJOULE PER HOUR"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megajoulesperhour"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("megajoules per hour"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("MEGAJOULES PER HOUR"),
+        Some(PowerUnit::MegajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("gigajouleperhour"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("gigajoule per hour"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("GIGAJOULE PER HOUR"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("gigajoulesperhour"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("gigajoules per hour"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("GIGAJOULES PER HOUR"),
+        Some(PowerUnit::GigajoulePerHour)
+    );
+    assert_eq!(
+        PowerUnit::from_name("tonofrefrigeration"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+    assert_eq!(
+        PowerUnit::from_name("ton of refrigeration"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+    assert_eq!(
+        PowerUnit::from_name("TON OF REFRIGERATION"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+    assert_eq!(
+        PowerUnit::from_name("tonsofrefrigeration"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+    assert_eq!(
+        PowerUnit::from_name("tons of refrigeration"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+    assert_eq!(
+        PowerUnit::from_name("TONS OF REFRIGERATION"),
+        Some(PowerUnit::TonOfRefrigeration)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Power::from_base(6.0);
     let b = Power::from_base(2.0);

@@ -112,12 +112,53 @@ impl ForceChangeRateUnit {
             Self::KilopoundForcePerSecond => &["klbf/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonperminute" => Some(Self::NewtonPerMinute),
+            "newtonsperminute" => Some(Self::NewtonPerMinute),
+            "decanewtonperminute" => Some(Self::DecanewtonPerMinute),
+            "decanewtonsperminute" => Some(Self::DecanewtonPerMinute),
+            "kilonewtonperminute" => Some(Self::KilonewtonPerMinute),
+            "kilonewtonsperminute" => Some(Self::KilonewtonPerMinute),
+            "newtonpersecond" => Some(Self::NewtonPerSecond),
+            "newtonspersecond" => Some(Self::NewtonPerSecond),
+            "nanonewtonpersecond" => Some(Self::NanonewtonPerSecond),
+            "nanonewtonspersecond" => Some(Self::NanonewtonPerSecond),
+            "micronewtonpersecond" => Some(Self::MicronewtonPerSecond),
+            "micronewtonspersecond" => Some(Self::MicronewtonPerSecond),
+            "millinewtonpersecond" => Some(Self::MillinewtonPerSecond),
+            "millinewtonspersecond" => Some(Self::MillinewtonPerSecond),
+            "centinewtonpersecond" => Some(Self::CentinewtonPerSecond),
+            "centinewtonspersecond" => Some(Self::CentinewtonPerSecond),
+            "decinewtonpersecond" => Some(Self::DecinewtonPerSecond),
+            "decinewtonspersecond" => Some(Self::DecinewtonPerSecond),
+            "decanewtonpersecond" => Some(Self::DecanewtonPerSecond),
+            "decanewtonspersecond" => Some(Self::DecanewtonPerSecond),
+            "kilonewtonpersecond" => Some(Self::KilonewtonPerSecond),
+            "kilonewtonspersecond" => Some(Self::KilonewtonPerSecond),
+            "poundforceperminute" => Some(Self::PoundForcePerMinute),
+            "poundsforceperminute" => Some(Self::PoundForcePerMinute),
+            "kilopoundforceperminute" => Some(Self::KilopoundForcePerMinute),
+            "kilopoundsforceperminute" => Some(Self::KilopoundForcePerMinute),
+            "poundforcepersecond" => Some(Self::PoundForcePerSecond),
+            "poundsforcepersecond" => Some(Self::PoundForcePerSecond),
+            "kilopoundforcepersecond" => Some(Self::KilopoundForcePerSecond),
+            "kilopoundsforcepersecond" => Some(Self::KilopoundForcePerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ForceChangeRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N/min" => Ok(Self::NewtonPerMinute),
@@ -135,7 +176,7 @@ impl core::str::FromStr for ForceChangeRateUnit {
             "klbf/min" => Ok(Self::KilopoundForcePerMinute),
             "lbf/s" => Ok(Self::PoundForcePerSecond),
             "klbf/s" => Ok(Self::KilopoundForcePerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -93,6 +93,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SolidAngleUnit::from_name("steradian"),
+        Some(SolidAngleUnit::Steradian)
+    );
+    assert_eq!(
+        SolidAngleUnit::from_name("steradian"),
+        Some(SolidAngleUnit::Steradian)
+    );
+    assert_eq!(
+        SolidAngleUnit::from_name("STERADIAN"),
+        Some(SolidAngleUnit::Steradian)
+    );
+    assert_eq!(
+        SolidAngleUnit::from_name("steradians"),
+        Some(SolidAngleUnit::Steradian)
+    );
+    assert_eq!(
+        SolidAngleUnit::from_name("steradians"),
+        Some(SolidAngleUnit::Steradian)
+    );
+    assert_eq!(
+        SolidAngleUnit::from_name("STERADIANS"),
+        Some(SolidAngleUnit::Steradian)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = SolidAngle::from_base(6.0);
     let b = SolidAngle::from_base(2.0);

@@ -105,6 +105,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        ElectricFieldUnit::from_name("voltpermeter"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+    assert_eq!(
+        ElectricFieldUnit::from_name("volt per meter"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+    assert_eq!(
+        ElectricFieldUnit::from_name("VOLT PER METER"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+    assert_eq!(
+        ElectricFieldUnit::from_name("voltspermeter"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+    assert_eq!(
+        ElectricFieldUnit::from_name("volts per meter"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+    assert_eq!(
+        ElectricFieldUnit::from_name("VOLTS PER METER"),
+        Some(ElectricFieldUnit::VoltPerMeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = ElectricField::from_base(6.0);
     let b = ElectricField::from_base(2.0);

@@ -108,12 +108,51 @@ impl ElectricResistivityUnit {
             Self::MegaohmCentimeter => &["MΩ·cm"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "ohmmeter" => Some(Self::OhmMeter),
+            "ohmmeters" => Some(Self::OhmMeter),
+            "picoohmmeter" => Some(Self::PicoohmMeter),
+            "picoohmmeters" => Some(Self::PicoohmMeter),
+            "nanoohmmeter" => Some(Self::NanoohmMeter),
+            "nanoohmmeters" => Some(Self::NanoohmMeter),
+            "microohmmeter" => Some(Self::MicroohmMeter),
+            "microohmmeters" => Some(Self::MicroohmMeter),
+            "milliohmmeter" => Some(Self::MilliohmMeter),
+            "milliohmmeters" => Some(Self::MilliohmMeter),
+            "kiloohmmeter" => Some(Self::KiloohmMeter),
+            "kiloohmmeters" => Some(Self::KiloohmMeter),
+            "megaohmmeter" => Some(Self::MegaohmMeter),
+            "megaohmmeters" => Some(Self::MegaohmMeter),
+            "ohmcentimeter" => Some(Self::OhmCentimeter),
+            "ohmscentimeter" => Some(Self::OhmCentimeter),
+            "picoohmcentimeter" => Some(Self::PicoohmCentimeter),
+            "picoohmscentimeter" => Some(Self::PicoohmCentimeter),
+            "nanoohmcentimeter" => Some(Self::NanoohmCentimeter),
+            "nanoohmscentimeter" => Some(Self::NanoohmCentimeter),
+            "microohmcentimeter" => Some(Self::MicroohmCentimeter),
+            "microohmscentimeter" => Some(Self::MicroohmCentimeter),
+            "milliohmcentimeter" => Some(Self::MilliohmCentimeter),
+            "milliohmscentimeter" => Some(Self::MilliohmCentimeter),
+            "kiloohmcentimeter" => Some(Self::KiloohmCentimeter),
+            "kiloohmscentimeter" => Some(Self::KiloohmCentimeter),
+            "megaohmcentimeter" => Some(Self::MegaohmCentimeter),
+            "megaohmscentimeter" => Some(Self::MegaohmCentimeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricResistivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Ω·m" => Ok(Self::OhmMeter),
@@ -130,7 +169,7 @@ impl core::str::FromStr for ElectricResistivityUnit {
             "mΩ·cm" => Ok(Self::MilliohmCentimeter),
             "kΩ·cm" => Ok(Self::KiloohmCentimeter),
             "MΩ·cm" => Ok(Self::MegaohmCentimeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

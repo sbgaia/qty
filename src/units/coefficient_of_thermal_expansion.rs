@@ -80,12 +80,29 @@ impl CoefficientOfThermalExpansionUnit {
             Self::PpmPerDegreeFahrenheit => &["ppm/°F"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "perkelvin" => Some(Self::PerKelvin),
+            "perdegreecelsius" => Some(Self::PerDegreeCelsius),
+            "perdegreefahrenheit" => Some(Self::PerDegreeFahrenheit),
+            "ppmperkelvin" => Some(Self::PpmPerKelvin),
+            "ppmperdegreecelsius" => Some(Self::PpmPerDegreeCelsius),
+            "ppmperdegreefahrenheit" => Some(Self::PpmPerDegreeFahrenheit),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "K⁻¹" => Ok(Self::PerKelvin),
@@ -94,7 +111,7 @@ impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
             "ppm/K" => Ok(Self::PpmPerKelvin),
             "ppm/°C" => Ok(Self::PpmPerDegreeCelsius),
             "ppm/°F" => Ok(Self::PpmPerDegreeFahrenheit),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

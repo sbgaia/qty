@@ -189,12 +189,82 @@ impl MassUnit {
             Self::Gigadalton => &["GDa"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "gram" => Some(Self::Gram),
+            "grams" => Some(Self::Gram),
+            "femtogram" => Some(Self::Femtogram),
+            "femtograms" => Some(Self::Femtogram),
+            "picogram" => Some(Self::Picogram),
+            "picograms" => Some(Self::Picogram),
+            "nanogram" => Some(Self::Nanogram),
+            "nanograms" => Some(Self::Nanogram),
+            "microgram" => Some(Self::Microgram),
+            "micrograms" => Some(Self::Microgram),
+            "milligram" => Some(Self::Milligram),
+            "milligrams" => Some(Self::Milligram),
+            "centigram" => Some(Self::Centigram),
+            "centigrams" => Some(Self::Centigram),
+            "decigram" => Some(Self::Decigram),
+            "decigrams" => Some(Self::Decigram),
+            "decagram" => Some(Self::Decagram),
+            "decagrams" => Some(Self::Decagram),
+            "hectogram" => Some(Self::Hectogram),
+            "hectograms" => Some(Self::Hectogram),
+            "kilogram" => Some(Self::Kilogram),
+            "kilograms" => Some(Self::Kilogram),
+            "tonne" => Some(Self::Tonne),
+            "tonnes" => Some(Self::Tonne),
+            "kilotonne" => Some(Self::Kilotonne),
+            "kilotonnes" => Some(Self::Kilotonne),
+            "megatonne" => Some(Self::Megatonne),
+            "megatonnes" => Some(Self::Megatonne),
+            "shortton" => Some(Self::ShortTon),
+            "shorttons" => Some(Self::ShortTon),
+            "longton" => Some(Self::LongTon),
+            "longtons" => Some(Self::LongTon),
+            "pound" => Some(Self::Pound),
+            "pounds" => Some(Self::Pound),
+            "kilopound" => Some(Self::Kilopound),
+            "kilopounds" => Some(Self::Kilopound),
+            "megapound" => Some(Self::Megapound),
+            "megapounds" => Some(Self::Megapound),
+            "ounce" => Some(Self::Ounce),
+            "ounces" => Some(Self::Ounce),
+            "slug" => Some(Self::Slug),
+            "slugs" => Some(Self::Slug),
+            "stone" => Some(Self::Stone),
+            "shorthundredweight" => Some(Self::ShortHundredweight),
+            "longhundredweight" => Some(Self::LongHundredweight),
+            "grain" => Some(Self::Grain),
+            "grains" => Some(Self::Grain),
+            "solarmass" => Some(Self::SolarMass),
+            "solarmasses" => Some(Self::SolarMass),
+            "earthmass" => Some(Self::EarthMass),
+            "earthmasses" => Some(Self::EarthMass),
+            "dalton" => Some(Self::Dalton),
+            "daltons" => Some(Self::Dalton),
+            "kilodalton" => Some(Self::Kilodalton),
+            "kilodaltons" => Some(Self::Kilodalton),
+            "megadalton" => Some(Self::Megadalton),
+            "megadaltons" => Some(Self::Megadalton),
+            "gigadalton" => Some(Self::Gigadalton),
+            "gigadaltons" => Some(Self::Gigadalton),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MassUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g" => Ok(Self::Gram),
@@ -233,7 +303,7 @@ impl core::str::FromStr for MassUnit {
             "kDa" => Ok(Self::Kilodalton),
             "MDa" => Ok(Self::Megadalton),
             "GDa" => Ok(Self::Gigadalton),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

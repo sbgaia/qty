@@ -57,17 +57,32 @@ impl ThermalResistanceUnit {
             Self::DegreeCelsiusPerWatt => &["°C/W"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "kelvinperwatt" => Some(Self::KelvinPerWatt),
+            "kelvinsperwatt" => Some(Self::KelvinPerWatt),
+            "degreecelsiusperwatt" => Some(Self::DegreeCelsiusPerWatt),
+            "degreescelsiusperwatt" => Some(Self::DegreeCelsiusPerWatt),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ThermalResistanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "K/W" => Ok(Self::KelvinPerWatt),
             "°C/W" => Ok(Self::DegreeCelsiusPerWatt),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

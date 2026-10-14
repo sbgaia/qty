@@ -225,6 +225,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicmeterperkilogram"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic meter per kilogram"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC METER PER KILOGRAM"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicmetersperkilogram"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic meters per kilogram"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC METERS PER KILOGRAM"),
+        Some(SpecificVolumeUnit::CubicMeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicmillimeterperkilogram"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic millimeter per kilogram"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC MILLIMETER PER KILOGRAM"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicmillimetersperkilogram"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic millimeters per kilogram"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC MILLIMETERS PER KILOGRAM"),
+        Some(SpecificVolumeUnit::CubicMillimeterPerKilogram)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicfootperpound"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic foot per pound"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC FOOT PER POUND"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubicfeetperpound"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("cubic feet per pound"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+    assert_eq!(
+        SpecificVolumeUnit::from_name("CUBIC FEET PER POUND"),
+        Some(SpecificVolumeUnit::CubicFootPerPound)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = SpecificVolume::from_base(6.0);
     let b = SpecificVolume::from_base(2.0);

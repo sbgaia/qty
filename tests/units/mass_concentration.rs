@@ -2896,6 +2896,1186 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MassConcentrationUnit::from_name("grampercubicmillimeter"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per cubic millimeter"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramspercubicmillimeter"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per cubic millimeter"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::GramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogrampercubicmillimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogram per cubic millimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAM PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogramspercubicmillimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilograms per cubic millimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAMS PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::KilogramPerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grampercubiccentimeter"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per cubic centimeter"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramspercubiccentimeter"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per cubic centimeter"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::GramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogrampercubiccentimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogram per cubic centimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAM PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogramspercubiccentimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilograms per cubic centimeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAMS PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::KilogramPerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grampercubicmeter"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per cubic meter"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER CUBIC METER"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramspercubicmeter"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per cubic meter"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER CUBIC METER"),
+        Some(MassConcentrationUnit::GramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogrampercubicmeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogram per cubic meter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAM PER CUBIC METER"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogramspercubicmeter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilograms per cubic meter"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAMS PER CUBIC METER"),
+        Some(MassConcentrationUnit::KilogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrampercubicmeter"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligram per cubic meter"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAM PER CUBIC METER"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramspercubicmeter"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrams per cubic meter"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAMS PER CUBIC METER"),
+        Some(MassConcentrationUnit::MilligramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgrampercubicmeter"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgram per cubic meter"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAM PER CUBIC METER"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramspercubicmeter"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("micrograms per cubic meter"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAMS PER CUBIC METER"),
+        Some(MassConcentrationUnit::MicrogramPerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grampermicroliter"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per microliter"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramspermicroliter"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per microliter"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::GramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogrampermicroliter"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogram per microliter"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramspermicroliter"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picograms per microliter"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::PicogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogrampermicroliter"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogram per microliter"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramspermicroliter"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanograms per microliter"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::NanogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgrampermicroliter"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgram per microliter"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramspermicroliter"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("micrograms per microliter"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::MicrogramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrampermicroliter"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligram per microliter"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramspermicroliter"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrams per microliter"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::MilligramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrampermicroliter"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigram per microliter"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramspermicroliter"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrams per microliter"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::CentigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrampermicroliter"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigram per microliter"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAM PER MICROLITER"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramspermicroliter"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrams per microliter"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAMS PER MICROLITER"),
+        Some(MassConcentrationUnit::DecigramPerMicroliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grampermilliliter"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per milliliter"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramspermilliliter"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per milliliter"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::GramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogrampermilliliter"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogram per milliliter"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramspermilliliter"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picograms per milliliter"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::PicogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogrampermilliliter"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogram per milliliter"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramspermilliliter"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanograms per milliliter"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::NanogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgrampermilliliter"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgram per milliliter"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramspermilliliter"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("micrograms per milliliter"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::MicrogramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrampermilliliter"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligram per milliliter"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramspermilliliter"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrams per milliliter"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::MilligramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrampermilliliter"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigram per milliliter"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramspermilliliter"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrams per milliliter"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::CentigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrampermilliliter"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigram per milliliter"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAM PER MILLILITER"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramspermilliliter"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrams per milliliter"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAMS PER MILLILITER"),
+        Some(MassConcentrationUnit::DecigramPerMilliliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramperdeciliter"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per deciliter"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER DECILITER"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramsperdeciliter"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per deciliter"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::GramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramperdeciliter"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogram per deciliter"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramsperdeciliter"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picograms per deciliter"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::PicogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramperdeciliter"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogram per deciliter"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramsperdeciliter"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanograms per deciliter"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::NanogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramperdeciliter"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgram per deciliter"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramsperdeciliter"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("micrograms per deciliter"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::MicrogramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramperdeciliter"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligram per deciliter"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramsperdeciliter"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrams per deciliter"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::MilligramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramperdeciliter"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigram per deciliter"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramsperdeciliter"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrams per deciliter"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::CentigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramperdeciliter"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigram per deciliter"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAM PER DECILITER"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramsperdeciliter"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrams per deciliter"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAMS PER DECILITER"),
+        Some(MassConcentrationUnit::DecigramPerDeciliter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramperliter"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gram per liter"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAM PER LITER"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("gramsperliter"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("grams per liter"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("GRAMS PER LITER"),
+        Some(MassConcentrationUnit::GramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramperliter"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogram per liter"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAM PER LITER"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picogramsperliter"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("picograms per liter"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("PICOGRAMS PER LITER"),
+        Some(MassConcentrationUnit::PicogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramperliter"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogram per liter"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAM PER LITER"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanogramsperliter"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("nanograms per liter"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("NANOGRAMS PER LITER"),
+        Some(MassConcentrationUnit::NanogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramperliter"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgram per liter"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAM PER LITER"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("microgramsperliter"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("micrograms per liter"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MICROGRAMS PER LITER"),
+        Some(MassConcentrationUnit::MicrogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramperliter"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligram per liter"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAM PER LITER"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligramsperliter"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("milligrams per liter"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("MILLIGRAMS PER LITER"),
+        Some(MassConcentrationUnit::MilligramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramperliter"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigram per liter"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAM PER LITER"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigramsperliter"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("centigrams per liter"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("CENTIGRAMS PER LITER"),
+        Some(MassConcentrationUnit::CentigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramperliter"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigram per liter"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAM PER LITER"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigramsperliter"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("decigrams per liter"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("DECIGRAMS PER LITER"),
+        Some(MassConcentrationUnit::DecigramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogramperliter"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogram per liter"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAM PER LITER"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilogramsperliter"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilograms per liter"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOGRAMS PER LITER"),
+        Some(MassConcentrationUnit::KilogramPerLiter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnepercubicmillimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonne per cubic millimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNE PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnespercubicmillimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnes per cubic millimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNES PER CUBIC MILLIMETER"),
+        Some(MassConcentrationUnit::TonnePerCubicMillimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnepercubiccentimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonne per cubic centimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNE PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnespercubiccentimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnes per cubic centimeter"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNES PER CUBIC CENTIMETER"),
+        Some(MassConcentrationUnit::TonnePerCubicCentimeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnepercubicmeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonne per cubic meter"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNE PER CUBIC METER"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnespercubicmeter"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("tonnes per cubic meter"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("TONNES PER CUBIC METER"),
+        Some(MassConcentrationUnit::TonnePerCubicMeter)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundpercubicinch"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pound per cubic inch"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUND PER CUBIC INCH"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundspercubicinch"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pounds per cubic inch"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUNDS PER CUBIC INCH"),
+        Some(MassConcentrationUnit::PoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopoundpercubicinch"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopound per cubic inch"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOPOUND PER CUBIC INCH"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopoundspercubicinch"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopounds per cubic inch"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOPOUNDS PER CUBIC INCH"),
+        Some(MassConcentrationUnit::KilopoundPerCubicInch)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundpercubicfoot"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pound per cubic foot"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUND PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundspercubicfoot"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pounds per cubic foot"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUNDS PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::PoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopoundpercubicfoot"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopound per cubic foot"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOPOUND PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopoundspercubicfoot"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("kilopounds per cubic foot"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("KILOPOUNDS PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::KilopoundPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("slugpercubicfoot"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("slug per cubic foot"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("SLUG PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("slugspercubicfoot"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("slugs per cubic foot"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("SLUGS PER CUBIC FOOT"),
+        Some(MassConcentrationUnit::SlugPerCubicFoot)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundperusgallon"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pound per us gallon"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUND PER US GALLON"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundsperusgallon"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pounds per us gallon"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUNDS PER US GALLON"),
+        Some(MassConcentrationUnit::PoundPerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounceperusgallon"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounce per us gallon"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("OUNCE PER US GALLON"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ouncesperusgallon"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounces per us gallon"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("OUNCES PER US GALLON"),
+        Some(MassConcentrationUnit::OuncePerUSGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounceperimperialgallon"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounce per imperial gallon"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("OUNCE PER IMPERIAL GALLON"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ouncesperimperialgallon"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("ounces per imperial gallon"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("OUNCES PER IMPERIAL GALLON"),
+        Some(MassConcentrationUnit::OuncePerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundperimperialgallon"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pound per imperial gallon"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUND PER IMPERIAL GALLON"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("poundsperimperialgallon"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("pounds per imperial gallon"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+    assert_eq!(
+        MassConcentrationUnit::from_name("POUNDS PER IMPERIAL GALLON"),
+        Some(MassConcentrationUnit::PoundPerImperialGallon)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MassConcentration::from_base(6.0);
     let b = MassConcentration::from_base(2.0);

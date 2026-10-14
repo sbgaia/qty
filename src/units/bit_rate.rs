@@ -208,12 +208,101 @@ impl BitRateUnit {
             Self::ExbioctetPerSecond => &["Eio/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "bitpersecond" => Some(Self::BitPerSecond),
+            "bitspersecond" => Some(Self::BitPerSecond),
+            "kilobitpersecond" => Some(Self::KilobitPerSecond),
+            "kilobitspersecond" => Some(Self::KilobitPerSecond),
+            "megabitpersecond" => Some(Self::MegabitPerSecond),
+            "megabitspersecond" => Some(Self::MegabitPerSecond),
+            "gigabitpersecond" => Some(Self::GigabitPerSecond),
+            "gigabitspersecond" => Some(Self::GigabitPerSecond),
+            "terabitpersecond" => Some(Self::TerabitPerSecond),
+            "terabitspersecond" => Some(Self::TerabitPerSecond),
+            "petabitpersecond" => Some(Self::PetabitPerSecond),
+            "petabitspersecond" => Some(Self::PetabitPerSecond),
+            "exabitpersecond" => Some(Self::ExabitPerSecond),
+            "exabitspersecond" => Some(Self::ExabitPerSecond),
+            "kibibitpersecond" => Some(Self::KibibitPerSecond),
+            "kibibitspersecond" => Some(Self::KibibitPerSecond),
+            "mebibitpersecond" => Some(Self::MebibitPerSecond),
+            "mebibitspersecond" => Some(Self::MebibitPerSecond),
+            "gibibitpersecond" => Some(Self::GibibitPerSecond),
+            "gibibitspersecond" => Some(Self::GibibitPerSecond),
+            "tebibitpersecond" => Some(Self::TebibitPerSecond),
+            "tebibitspersecond" => Some(Self::TebibitPerSecond),
+            "pebibitpersecond" => Some(Self::PebibitPerSecond),
+            "pebibitspersecond" => Some(Self::PebibitPerSecond),
+            "exbibitpersecond" => Some(Self::ExbibitPerSecond),
+            "exbibitspersecond" => Some(Self::ExbibitPerSecond),
+            "bytepersecond" => Some(Self::BytePerSecond),
+            "bytespersecond" => Some(Self::BytePerSecond),
+            "kilobytepersecond" => Some(Self::KilobytePerSecond),
+            "kilobytespersecond" => Some(Self::KilobytePerSecond),
+            "megabytepersecond" => Some(Self::MegabytePerSecond),
+            "megabytespersecond" => Some(Self::MegabytePerSecond),
+            "gigabytepersecond" => Some(Self::GigabytePerSecond),
+            "gigabytespersecond" => Some(Self::GigabytePerSecond),
+            "terabytepersecond" => Some(Self::TerabytePerSecond),
+            "terabytespersecond" => Some(Self::TerabytePerSecond),
+            "petabytepersecond" => Some(Self::PetabytePerSecond),
+            "petabytespersecond" => Some(Self::PetabytePerSecond),
+            "exabytepersecond" => Some(Self::ExabytePerSecond),
+            "exabytespersecond" => Some(Self::ExabytePerSecond),
+            "kibibytepersecond" => Some(Self::KibibytePerSecond),
+            "kibibytespersecond" => Some(Self::KibibytePerSecond),
+            "mebibytepersecond" => Some(Self::MebibytePerSecond),
+            "mebibytespersecond" => Some(Self::MebibytePerSecond),
+            "gibibytepersecond" => Some(Self::GibibytePerSecond),
+            "gibibytespersecond" => Some(Self::GibibytePerSecond),
+            "tebibytepersecond" => Some(Self::TebibytePerSecond),
+            "tebibytespersecond" => Some(Self::TebibytePerSecond),
+            "pebibytepersecond" => Some(Self::PebibytePerSecond),
+            "pebibytespersecond" => Some(Self::PebibytePerSecond),
+            "exbibytepersecond" => Some(Self::ExbibytePerSecond),
+            "exbibytespersecond" => Some(Self::ExbibytePerSecond),
+            "octetpersecond" => Some(Self::OctetPerSecond),
+            "octetspersecond" => Some(Self::OctetPerSecond),
+            "kilooctetpersecond" => Some(Self::KilooctetPerSecond),
+            "kilooctetspersecond" => Some(Self::KilooctetPerSecond),
+            "megaoctetpersecond" => Some(Self::MegaoctetPerSecond),
+            "megaoctetspersecond" => Some(Self::MegaoctetPerSecond),
+            "gigaoctetpersecond" => Some(Self::GigaoctetPerSecond),
+            "gigaoctetspersecond" => Some(Self::GigaoctetPerSecond),
+            "teraoctetpersecond" => Some(Self::TeraoctetPerSecond),
+            "teraoctetspersecond" => Some(Self::TeraoctetPerSecond),
+            "petaoctetpersecond" => Some(Self::PetaoctetPerSecond),
+            "petaoctetspersecond" => Some(Self::PetaoctetPerSecond),
+            "exaoctetpersecond" => Some(Self::ExaoctetPerSecond),
+            "exaoctetspersecond" => Some(Self::ExaoctetPerSecond),
+            "kibioctetpersecond" => Some(Self::KibioctetPerSecond),
+            "kibioctetspersecond" => Some(Self::KibioctetPerSecond),
+            "mebioctetpersecond" => Some(Self::MebioctetPerSecond),
+            "mebioctetspersecond" => Some(Self::MebioctetPerSecond),
+            "gibioctetpersecond" => Some(Self::GibioctetPerSecond),
+            "gibioctetspersecond" => Some(Self::GibioctetPerSecond),
+            "tebioctetpersecond" => Some(Self::TebioctetPerSecond),
+            "tebioctetspersecond" => Some(Self::TebioctetPerSecond),
+            "pebioctetpersecond" => Some(Self::PebioctetPerSecond),
+            "pebioctetspersecond" => Some(Self::PebioctetPerSecond),
+            "exbioctetpersecond" => Some(Self::ExbioctetPerSecond),
+            "exbioctetspersecond" => Some(Self::ExbioctetPerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for BitRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "bit/s" => Ok(Self::BitPerSecond),
@@ -256,7 +345,7 @@ impl core::str::FromStr for BitRateUnit {
             "Tio/s" => Ok(Self::TebioctetPerSecond),
             "Pio/s" => Ok(Self::PebioctetPerSecond),
             "Eio/s" => Ok(Self::ExbioctetPerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -76,12 +76,34 @@ impl RatioUnit {
             Self::PartPerTrillion => &["ppt"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "decimalfraction" => Some(Self::DecimalFraction),
+            "decimalfractions" => Some(Self::DecimalFraction),
+            "percent" => Some(Self::Percent),
+            "partperthousand" => Some(Self::PartPerThousand),
+            "partsperthousand" => Some(Self::PartPerThousand),
+            "partpermillion" => Some(Self::PartPerMillion),
+            "partspermillion" => Some(Self::PartPerMillion),
+            "partperbillion" => Some(Self::PartPerBillion),
+            "partsperbillion" => Some(Self::PartPerBillion),
+            "partpertrillion" => Some(Self::PartPerTrillion),
+            "partspertrillion" => Some(Self::PartPerTrillion),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RatioUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "%" => Ok(Self::Percent),
@@ -89,7 +111,7 @@ impl core::str::FromStr for RatioUnit {
             "ppm" => Ok(Self::PartPerMillion),
             "ppb" => Ok(Self::PartPerBillion),
             "ppt" => Ok(Self::PartPerTrillion),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

@@ -93,6 +93,34 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LuminousFluxUnit::from_name("lumen"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+    assert_eq!(
+        LuminousFluxUnit::from_name("lumen"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+    assert_eq!(
+        LuminousFluxUnit::from_name("LUMEN"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+    assert_eq!(
+        LuminousFluxUnit::from_name("lumens"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+    assert_eq!(
+        LuminousFluxUnit::from_name("lumens"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+    assert_eq!(
+        LuminousFluxUnit::from_name("LUMENS"),
+        Some(LuminousFluxUnit::Lumen)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = LuminousFlux::from_base(6.0);
     let b = LuminousFlux::from_base(2.0);

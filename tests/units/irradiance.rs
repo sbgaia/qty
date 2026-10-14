@@ -849,6 +849,346 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        IrradianceUnit::from_name("wattpersquaremeter"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("watt per square meter"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("WATT PER SQUARE METER"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("wattspersquaremeter"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("watts per square meter"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("WATTS PER SQUARE METER"),
+        Some(IrradianceUnit::WattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowattpersquaremeter"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowatt per square meter"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("PICOWATT PER SQUARE METER"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowattspersquaremeter"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowatts per square meter"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("PICOWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::PicowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowattpersquaremeter"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowatt per square meter"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("NANOWATT PER SQUARE METER"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowattspersquaremeter"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowatts per square meter"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("NANOWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::NanowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwattpersquaremeter"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwatt per square meter"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MICROWATT PER SQUARE METER"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwattspersquaremeter"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwatts per square meter"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MICROWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::MicrowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwattpersquaremeter"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwatt per square meter"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MILLIWATT PER SQUARE METER"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwattspersquaremeter"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwatts per square meter"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MILLIWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::MilliwattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowattpersquaremeter"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowatt per square meter"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("KILOWATT PER SQUARE METER"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowattspersquaremeter"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowatts per square meter"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("KILOWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::KilowattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawattpersquaremeter"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawatt per square meter"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MEGAWATT PER SQUARE METER"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawattspersquaremeter"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawatts per square meter"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MEGAWATTS PER SQUARE METER"),
+        Some(IrradianceUnit::MegawattPerSquareMeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("wattpersquarecentimeter"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("watt per square centimeter"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("WATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("wattspersquarecentimeter"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("watts per square centimeter"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("WATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::WattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowattpersquarecentimeter"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowatt per square centimeter"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("PICOWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowattspersquarecentimeter"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("picowatts per square centimeter"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("PICOWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::PicowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowattpersquarecentimeter"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowatt per square centimeter"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("NANOWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowattspersquarecentimeter"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("nanowatts per square centimeter"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("NANOWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::NanowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwattpersquarecentimeter"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwatt per square centimeter"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MICROWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwattspersquarecentimeter"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("microwatts per square centimeter"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MICROWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MicrowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwattpersquarecentimeter"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwatt per square centimeter"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MILLIWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwattspersquarecentimeter"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("milliwatts per square centimeter"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MILLIWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MilliwattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowattpersquarecentimeter"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowatt per square centimeter"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("KILOWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowattspersquarecentimeter"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("kilowatts per square centimeter"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("KILOWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::KilowattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawattpersquarecentimeter"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawatt per square centimeter"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MEGAWATT PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawattspersquarecentimeter"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("megawatts per square centimeter"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+    assert_eq!(
+        IrradianceUnit::from_name("MEGAWATTS PER SQUARE CENTIMETER"),
+        Some(IrradianceUnit::MegawattPerSquareCentimeter)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Irradiance::from_base(6.0);
     let b = Irradiance::from_base(2.0);

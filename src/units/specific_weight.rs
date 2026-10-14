@@ -120,12 +120,57 @@ impl SpecificWeightUnit {
             Self::TonneForcePerCubicMeter => &["tf/m³"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonpercubicmillimeter" => Some(Self::NewtonPerCubicMillimeter),
+            "newtonspercubicmillimeter" => Some(Self::NewtonPerCubicMillimeter),
+            "kilonewtonpercubicmillimeter" => Some(Self::KilonewtonPerCubicMillimeter),
+            "kilonewtonspercubicmillimeter" => Some(Self::KilonewtonPerCubicMillimeter),
+            "newtonpercubiccentimeter" => Some(Self::NewtonPerCubicCentimeter),
+            "newtonspercubiccentimeter" => Some(Self::NewtonPerCubicCentimeter),
+            "kilonewtonpercubiccentimeter" => Some(Self::KilonewtonPerCubicCentimeter),
+            "kilonewtonspercubiccentimeter" => Some(Self::KilonewtonPerCubicCentimeter),
+            "newtonpercubicmeter" => Some(Self::NewtonPerCubicMeter),
+            "newtonspercubicmeter" => Some(Self::NewtonPerCubicMeter),
+            "kilonewtonpercubicmeter" => Some(Self::KilonewtonPerCubicMeter),
+            "kilonewtonspercubicmeter" => Some(Self::KilonewtonPerCubicMeter),
+            "meganewtonpercubicmeter" => Some(Self::MeganewtonPerCubicMeter),
+            "meganewtonspercubicmeter" => Some(Self::MeganewtonPerCubicMeter),
+            "kilogramforcepercubicmillimeter" => Some(Self::KilogramForcePerCubicMillimeter),
+            "kilogramsforcepercubicmillimeter" => Some(Self::KilogramForcePerCubicMillimeter),
+            "kilogramforcepercubiccentimeter" => Some(Self::KilogramForcePerCubicCentimeter),
+            "kilogramsforcepercubiccentimeter" => Some(Self::KilogramForcePerCubicCentimeter),
+            "kilogramforcepercubicmeter" => Some(Self::KilogramForcePerCubicMeter),
+            "kilogramsforcepercubicmeter" => Some(Self::KilogramForcePerCubicMeter),
+            "poundforcepercubicinch" => Some(Self::PoundForcePerCubicInch),
+            "poundsforcepercubicinch" => Some(Self::PoundForcePerCubicInch),
+            "kilopoundforcepercubicinch" => Some(Self::KilopoundForcePerCubicInch),
+            "kilopoundsforcepercubicinch" => Some(Self::KilopoundForcePerCubicInch),
+            "poundforcepercubicfoot" => Some(Self::PoundForcePerCubicFoot),
+            "poundsforcepercubicfoot" => Some(Self::PoundForcePerCubicFoot),
+            "kilopoundforcepercubicfoot" => Some(Self::KilopoundForcePerCubicFoot),
+            "kilopoundsforcepercubicfoot" => Some(Self::KilopoundForcePerCubicFoot),
+            "tonneforcepercubicmillimeter" => Some(Self::TonneForcePerCubicMillimeter),
+            "tonnesforcepercubicmillimeter" => Some(Self::TonneForcePerCubicMillimeter),
+            "tonneforcepercubiccentimeter" => Some(Self::TonneForcePerCubicCentimeter),
+            "tonnesforcepercubiccentimeter" => Some(Self::TonneForcePerCubicCentimeter),
+            "tonneforcepercubicmeter" => Some(Self::TonneForcePerCubicMeter),
+            "tonnesforcepercubicmeter" => Some(Self::TonneForcePerCubicMeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for SpecificWeightUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N/mm³" => Ok(Self::NewtonPerCubicMillimeter),
@@ -145,7 +190,7 @@ impl core::str::FromStr for SpecificWeightUnit {
             "tf/mm³" => Ok(Self::TonneForcePerCubicMillimeter),
             "tf/cm³" => Ok(Self::TonneForcePerCubicCentimeter),
             "tf/m³" => Ok(Self::TonneForcePerCubicMeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

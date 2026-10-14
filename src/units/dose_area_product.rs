@@ -152,12 +152,73 @@ impl DoseAreaProductUnit {
             Self::DecigraySquareMicrometer => &["dGy·μm²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "graysquaremeter" => Some(Self::GraySquareMeter),
+            "graysquaremeters" => Some(Self::GraySquareMeter),
+            "micrograysquaremeter" => Some(Self::MicrograySquareMeter),
+            "micrograysquaremeters" => Some(Self::MicrograySquareMeter),
+            "milligraysquaremeter" => Some(Self::MilligraySquareMeter),
+            "milligraysquaremeters" => Some(Self::MilligraySquareMeter),
+            "centigraysquaremeter" => Some(Self::CentigraySquareMeter),
+            "centigraysquaremeters" => Some(Self::CentigraySquareMeter),
+            "decigraysquaremeter" => Some(Self::DecigraySquareMeter),
+            "decigraysquaremeters" => Some(Self::DecigraySquareMeter),
+            "graysquaredecimeter" => Some(Self::GraySquareDecimeter),
+            "graysquaredecimeters" => Some(Self::GraySquareDecimeter),
+            "micrograysquaredecimeter" => Some(Self::MicrograySquareDecimeter),
+            "micrograysquaredecimeters" => Some(Self::MicrograySquareDecimeter),
+            "milligraysquaredecimeter" => Some(Self::MilligraySquareDecimeter),
+            "milligraysquaredecimeters" => Some(Self::MilligraySquareDecimeter),
+            "centigraysquaredecimeter" => Some(Self::CentigraySquareDecimeter),
+            "centigraysquaredecimeters" => Some(Self::CentigraySquareDecimeter),
+            "decigraysquaredecimeter" => Some(Self::DecigraySquareDecimeter),
+            "decigraysquaredecimeters" => Some(Self::DecigraySquareDecimeter),
+            "graysquarecentimeter" => Some(Self::GraySquareCentimeter),
+            "graysquarecentimeters" => Some(Self::GraySquareCentimeter),
+            "micrograysquarecentimeter" => Some(Self::MicrograySquareCentimeter),
+            "micrograysquarecentimeters" => Some(Self::MicrograySquareCentimeter),
+            "milligraysquarecentimeter" => Some(Self::MilligraySquareCentimeter),
+            "milligraysquarecentimeters" => Some(Self::MilligraySquareCentimeter),
+            "centigraysquarecentimeter" => Some(Self::CentigraySquareCentimeter),
+            "centigraysquarecentimeters" => Some(Self::CentigraySquareCentimeter),
+            "decigraysquarecentimeter" => Some(Self::DecigraySquareCentimeter),
+            "decigraysquarecentimeters" => Some(Self::DecigraySquareCentimeter),
+            "graysquaremillimeter" => Some(Self::GraySquareMillimeter),
+            "graysquaremillimeters" => Some(Self::GraySquareMillimeter),
+            "micrograysquaremillimeter" => Some(Self::MicrograySquareMillimeter),
+            "micrograysquaremillimeters" => Some(Self::MicrograySquareMillimeter),
+            "milligraysquaremillimeter" => Some(Self::MilligraySquareMillimeter),
+            "milligraysquaremillimeters" => Some(Self::MilligraySquareMillimeter),
+            "centigraysquaremillimeter" => Some(Self::CentigraySquareMillimeter),
+            "centigraysquaremillimeters" => Some(Self::CentigraySquareMillimeter),
+            "decigraysquaremillimeter" => Some(Self::DecigraySquareMillimeter),
+            "decigraysquaremillimeters" => Some(Self::DecigraySquareMillimeter),
+            "graysquaremicrometer" => Some(Self::GraySquareMicrometer),
+            "graysquaremicrometers" => Some(Self::GraySquareMicrometer),
+            "micrograysquaremicrometer" => Some(Self::MicrograySquareMicrometer),
+            "micrograysquaremicrometers" => Some(Self::MicrograySquareMicrometer),
+            "milligraysquaremicrometer" => Some(Self::MilligraySquareMicrometer),
+            "milligraysquaremicrometers" => Some(Self::MilligraySquareMicrometer),
+            "centigraysquaremicrometer" => Some(Self::CentigraySquareMicrometer),
+            "centigraysquaremicrometers" => Some(Self::CentigraySquareMicrometer),
+            "decigraysquaremicrometer" => Some(Self::DecigraySquareMicrometer),
+            "decigraysquaremicrometers" => Some(Self::DecigraySquareMicrometer),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for DoseAreaProductUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Gy·m²" => Ok(Self::GraySquareMeter),
@@ -185,7 +246,7 @@ impl core::str::FromStr for DoseAreaProductUnit {
             "mGy·μm²" => Ok(Self::MilligraySquareMicrometer),
             "cGy·μm²" => Ok(Self::CentigraySquareMicrometer),
             "dGy·μm²" => Ok(Self::DecigraySquareMicrometer),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

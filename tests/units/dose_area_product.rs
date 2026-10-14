@@ -1500,6 +1500,610 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremeter"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square meter"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE METER"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremeters"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square meters"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE METERS"),
+        Some(DoseAreaProductUnit::GraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremeter"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square meter"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE METER"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremeters"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square meters"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE METERS"),
+        Some(DoseAreaProductUnit::MicrograySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremeter"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square meter"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE METER"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremeters"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square meters"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE METERS"),
+        Some(DoseAreaProductUnit::MilligraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremeter"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square meter"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE METER"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremeters"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square meters"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE METERS"),
+        Some(DoseAreaProductUnit::CentigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremeter"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square meter"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE METER"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremeters"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square meters"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE METERS"),
+        Some(DoseAreaProductUnit::DecigraySquareMeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaredecimeter"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square decimeter"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE DECIMETER"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaredecimeters"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square decimeters"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE DECIMETERS"),
+        Some(DoseAreaProductUnit::GraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaredecimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square decimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE DECIMETER"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaredecimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square decimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE DECIMETERS"),
+        Some(DoseAreaProductUnit::MicrograySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaredecimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square decimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE DECIMETER"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaredecimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square decimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE DECIMETERS"),
+        Some(DoseAreaProductUnit::MilligraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaredecimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square decimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE DECIMETER"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaredecimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square decimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE DECIMETERS"),
+        Some(DoseAreaProductUnit::CentigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaredecimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square decimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE DECIMETER"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaredecimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square decimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE DECIMETERS"),
+        Some(DoseAreaProductUnit::DecigraySquareDecimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquarecentimeter"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square centimeter"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE CENTIMETER"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquarecentimeters"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square centimeters"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE CENTIMETERS"),
+        Some(DoseAreaProductUnit::GraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquarecentimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square centimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE CENTIMETER"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquarecentimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square centimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE CENTIMETERS"),
+        Some(DoseAreaProductUnit::MicrograySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquarecentimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square centimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE CENTIMETER"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquarecentimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square centimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE CENTIMETERS"),
+        Some(DoseAreaProductUnit::MilligraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquarecentimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square centimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE CENTIMETER"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquarecentimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square centimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE CENTIMETERS"),
+        Some(DoseAreaProductUnit::CentigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquarecentimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square centimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE CENTIMETER"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquarecentimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square centimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE CENTIMETERS"),
+        Some(DoseAreaProductUnit::DecigraySquareCentimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremillimeter"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square millimeter"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE MILLIMETER"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremillimeters"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square millimeters"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE MILLIMETERS"),
+        Some(DoseAreaProductUnit::GraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremillimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square millimeter"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE MILLIMETER"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremillimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square millimeters"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE MILLIMETERS"),
+        Some(DoseAreaProductUnit::MicrograySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremillimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square millimeter"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE MILLIMETER"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremillimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square millimeters"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE MILLIMETERS"),
+        Some(DoseAreaProductUnit::MilligraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremillimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square millimeter"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE MILLIMETER"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremillimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square millimeters"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE MILLIMETERS"),
+        Some(DoseAreaProductUnit::CentigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremillimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square millimeter"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE MILLIMETER"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremillimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square millimeters"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE MILLIMETERS"),
+        Some(DoseAreaProductUnit::DecigraySquareMillimeter)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremicrometer"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square micrometer"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE MICROMETER"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("graysquaremicrometers"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("gray square micrometers"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("GRAY SQUARE MICROMETERS"),
+        Some(DoseAreaProductUnit::GraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremicrometer"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square micrometer"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE MICROMETER"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("micrograysquaremicrometers"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("microgray square micrometers"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MICROGRAY SQUARE MICROMETERS"),
+        Some(DoseAreaProductUnit::MicrograySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremicrometer"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square micrometer"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE MICROMETER"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligraysquaremicrometers"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("milligray square micrometers"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("MILLIGRAY SQUARE MICROMETERS"),
+        Some(DoseAreaProductUnit::MilligraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremicrometer"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square micrometer"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE MICROMETER"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigraysquaremicrometers"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("centigray square micrometers"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("CENTIGRAY SQUARE MICROMETERS"),
+        Some(DoseAreaProductUnit::CentigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremicrometer"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square micrometer"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE MICROMETER"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigraysquaremicrometers"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("decigray square micrometers"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+    assert_eq!(
+        DoseAreaProductUnit::from_name("DECIGRAY SQUARE MICROMETERS"),
+        Some(DoseAreaProductUnit::DecigraySquareMicrometer)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = DoseAreaProduct::from_base(6.0);
     let b = DoseAreaProduct::from_base(2.0);

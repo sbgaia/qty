@@ -96,12 +96,43 @@ impl RadiationEquivalentDoseRateUnit {
             Self::MilliroentgenEquivalentManPerHour => &["mrem/h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "sievertperhour" => Some(Self::SievertPerHour),
+            "sievertsperhour" => Some(Self::SievertPerHour),
+            "nanosievertperhour" => Some(Self::NanosievertPerHour),
+            "nanosievertsperhour" => Some(Self::NanosievertPerHour),
+            "microsievertperhour" => Some(Self::MicrosievertPerHour),
+            "microsievertsperhour" => Some(Self::MicrosievertPerHour),
+            "millisievertperhour" => Some(Self::MillisievertPerHour),
+            "millisievertsperhour" => Some(Self::MillisievertPerHour),
+            "sievertpersecond" => Some(Self::SievertPerSecond),
+            "sievertspersecond" => Some(Self::SievertPerSecond),
+            "nanosievertpersecond" => Some(Self::NanosievertPerSecond),
+            "nanosievertspersecond" => Some(Self::NanosievertPerSecond),
+            "microsievertpersecond" => Some(Self::MicrosievertPerSecond),
+            "microsievertspersecond" => Some(Self::MicrosievertPerSecond),
+            "millisievertpersecond" => Some(Self::MillisievertPerSecond),
+            "millisievertspersecond" => Some(Self::MillisievertPerSecond),
+            "roentgenequivalentmanperhour" => Some(Self::RoentgenEquivalentManPerHour),
+            "roentgensequivalentmanperhour" => Some(Self::RoentgenEquivalentManPerHour),
+            "milliroentgenequivalentmanperhour" => Some(Self::MilliroentgenEquivalentManPerHour),
+            "milliroentgensequivalentmanperhour" => Some(Self::MilliroentgenEquivalentManPerHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sv/h" => Ok(Self::SievertPerHour),
@@ -114,7 +145,7 @@ impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
             "mSv/s" => Ok(Self::MillisievertPerSecond),
             "rem/h" => Ok(Self::RoentgenEquivalentManPerHour),
             "mrem/h" => Ok(Self::MilliroentgenEquivalentManPerHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

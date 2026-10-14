@@ -402,6 +402,154 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("metertothesixth"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("meter to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("METER TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("meterstothesixth"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("meters to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("METERS TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("decimetertothesixth"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("decimeter to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("DECIMETER TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("decimeterstothesixth"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("decimeters to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("DECIMETERS TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::DecimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("centimetertothesixth"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("centimeter to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("CENTIMETER TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("centimeterstothesixth"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("centimeters to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("CENTIMETERS TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::CentimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("millimetertothesixth"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("millimeter to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("MILLIMETER TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("millimeterstothesixth"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("millimeters to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("MILLIMETERS TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::MillimeterToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("foottothesixth"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("foot to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("FOOT TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("feettothesixth"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("feet to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("FEET TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::FootToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("inchtothesixth"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("inch to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("INCH TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("inchestothesixth"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("inches to the sixth"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+    assert_eq!(
+        WarpingMomentOfInertiaUnit::from_name("INCHES TO THE SIXTH"),
+        Some(WarpingMomentOfInertiaUnit::InchToTheSixth)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = WarpingMomentOfInertia::from_base(6.0);
     let b = WarpingMomentOfInertia::from_base(2.0);

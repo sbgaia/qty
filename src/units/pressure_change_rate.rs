@@ -124,12 +124,75 @@ impl PressureChangeRateUnit {
             Self::MillibarPerMinute => &["mbar/min"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "pascalpersecond" => Some(Self::PascalPerSecond),
+            "pascalspersecond" => Some(Self::PascalPerSecond),
+            "kilopascalpersecond" => Some(Self::KilopascalPerSecond),
+            "kilopascalspersecond" => Some(Self::KilopascalPerSecond),
+            "megapascalpersecond" => Some(Self::MegapascalPerSecond),
+            "megapascalspersecond" => Some(Self::MegapascalPerSecond),
+            "pascalperminute" => Some(Self::PascalPerMinute),
+            "pascalsperminute" => Some(Self::PascalPerMinute),
+            "kilopascalperminute" => Some(Self::KilopascalPerMinute),
+            "kilopascalsperminute" => Some(Self::KilopascalPerMinute),
+            "megapascalperminute" => Some(Self::MegapascalPerMinute),
+            "megapascalsperminute" => Some(Self::MegapascalPerMinute),
+            "millimeterofmercurypersecond" => Some(Self::MillimeterOfMercuryPerSecond),
+            "millimetersofmercurypersecond" => Some(Self::MillimeterOfMercuryPerSecond),
+            "atmospherepersecond" => Some(Self::AtmospherePerSecond),
+            "atmospherespersecond" => Some(Self::AtmospherePerSecond),
+            "poundforcepersquareinchpersecond" => Some(Self::PoundForcePerSquareInchPerSecond),
+            "poundsforcepersquareinchpersecond" => Some(Self::PoundForcePerSquareInchPerSecond),
+            "kilopoundforcepersquareinchpersecond" => {
+                Some(Self::KilopoundForcePerSquareInchPerSecond)
+            }
+            "kilopoundsforcepersquareinchpersecond" => {
+                Some(Self::KilopoundForcePerSquareInchPerSecond)
+            }
+            "megapoundforcepersquareinchpersecond" => {
+                Some(Self::MegapoundForcePerSquareInchPerSecond)
+            }
+            "megapoundsforcepersquareinchpersecond" => {
+                Some(Self::MegapoundForcePerSquareInchPerSecond)
+            }
+            "poundforcepersquareinchperminute" => Some(Self::PoundForcePerSquareInchPerMinute),
+            "poundsforcepersquareinchperminute" => Some(Self::PoundForcePerSquareInchPerMinute),
+            "kilopoundforcepersquareinchperminute" => {
+                Some(Self::KilopoundForcePerSquareInchPerMinute)
+            }
+            "kilopoundsforcepersquareinchperminute" => {
+                Some(Self::KilopoundForcePerSquareInchPerMinute)
+            }
+            "megapoundforcepersquareinchperminute" => {
+                Some(Self::MegapoundForcePerSquareInchPerMinute)
+            }
+            "megapoundsforcepersquareinchperminute" => {
+                Some(Self::MegapoundForcePerSquareInchPerMinute)
+            }
+            "barpersecond" => Some(Self::BarPerSecond),
+            "barspersecond" => Some(Self::BarPerSecond),
+            "millibarpersecond" => Some(Self::MillibarPerSecond),
+            "millibarspersecond" => Some(Self::MillibarPerSecond),
+            "barperminute" => Some(Self::BarPerMinute),
+            "barsperminute" => Some(Self::BarPerMinute),
+            "millibarperminute" => Some(Self::MillibarPerMinute),
+            "millibarsperminute" => Some(Self::MillibarPerMinute),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for PressureChangeRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa/s" => Ok(Self::PascalPerSecond),
@@ -152,7 +215,7 @@ impl core::str::FromStr for PressureChangeRateUnit {
             "mbar/s" => Ok(Self::MillibarPerSecond),
             "bar/min" => Ok(Self::BarPerMinute),
             "mbar/min" => Ok(Self::MillibarPerMinute),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

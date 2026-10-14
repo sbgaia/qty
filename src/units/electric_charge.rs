@@ -96,12 +96,45 @@ impl ElectricChargeUnit {
             Self::MegaampereHour => &["MA-h"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "coulomb" => Some(Self::Coulomb),
+            "coulombs" => Some(Self::Coulomb),
+            "picocoulomb" => Some(Self::Picocoulomb),
+            "picocoulombs" => Some(Self::Picocoulomb),
+            "nanocoulomb" => Some(Self::Nanocoulomb),
+            "nanocoulombs" => Some(Self::Nanocoulomb),
+            "microcoulomb" => Some(Self::Microcoulomb),
+            "microcoulombs" => Some(Self::Microcoulomb),
+            "millicoulomb" => Some(Self::Millicoulomb),
+            "millicoulombs" => Some(Self::Millicoulomb),
+            "kilocoulomb" => Some(Self::Kilocoulomb),
+            "kilocoulombs" => Some(Self::Kilocoulomb),
+            "megacoulomb" => Some(Self::Megacoulomb),
+            "megacoulombs" => Some(Self::Megacoulomb),
+            "amperehour" => Some(Self::AmpereHour),
+            "amperehours" => Some(Self::AmpereHour),
+            "milliamperehour" => Some(Self::MilliampereHour),
+            "milliamperehours" => Some(Self::MilliampereHour),
+            "kiloamperehour" => Some(Self::KiloampereHour),
+            "kiloamperehours" => Some(Self::KiloampereHour),
+            "megaamperehour" => Some(Self::MegaampereHour),
+            "megaamperehours" => Some(Self::MegaampereHour),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ElectricChargeUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "C" => Ok(Self::Coulomb),
@@ -116,7 +149,7 @@ impl core::str::FromStr for ElectricChargeUnit {
             "mA-h" => Ok(Self::MilliampereHour),
             "kA-h" => Ok(Self::KiloampereHour),
             "MA-h" => Ok(Self::MegaampereHour),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

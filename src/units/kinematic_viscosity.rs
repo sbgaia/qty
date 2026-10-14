@@ -92,12 +92,34 @@ impl KinematicViscosityUnit {
             Self::SquareFootPerSecond => &["ft²/s"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "squaremeterpersecond" => Some(Self::SquareMeterPerSecond),
+            "squaremeterspersecond" => Some(Self::SquareMeterPerSecond),
+            "stokes" => Some(Self::Stokes),
+            "nanostokes" => Some(Self::Nanostokes),
+            "microstokes" => Some(Self::Microstokes),
+            "millistokes" => Some(Self::Millistokes),
+            "centistokes" => Some(Self::Centistokes),
+            "decistokes" => Some(Self::Decistokes),
+            "kilostokes" => Some(Self::Kilostokes),
+            "squarefootpersecond" => Some(Self::SquareFootPerSecond),
+            "squarefeetpersecond" => Some(Self::SquareFootPerSecond),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for KinematicViscosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m²/s" => Ok(Self::SquareMeterPerSecond),
@@ -109,7 +131,7 @@ impl core::str::FromStr for KinematicViscosityUnit {
             "dSt" => Ok(Self::Decistokes),
             "kSt" => Ok(Self::Kilostokes),
             "ft²/s" => Ok(Self::SquareFootPerSecond),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

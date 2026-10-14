@@ -215,6 +215,82 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        MolarEnergyUnit::from_name("joulepermole"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("joule per mole"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("JOULE PER MOLE"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("joulespermole"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("joules per mole"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("JOULES PER MOLE"),
+        Some(MolarEnergyUnit::JoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("kilojoulepermole"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("kilojoule per mole"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("KILOJOULE PER MOLE"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("kilojoulespermole"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("kilojoules per mole"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("KILOJOULES PER MOLE"),
+        Some(MolarEnergyUnit::KilojoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("megajoulepermole"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("megajoule per mole"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("MEGAJOULE PER MOLE"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("megajoulespermole"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("megajoules per mole"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+    assert_eq!(
+        MolarEnergyUnit::from_name("MEGAJOULES PER MOLE"),
+        Some(MolarEnergyUnit::MegajoulePerMole)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = MolarEnergy::from_base(6.0);
     let b = MolarEnergy::from_base(2.0);

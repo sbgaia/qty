@@ -1070,6 +1070,442 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(
+        LinearDensityUnit::from_name("grampermillimeter"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gram per millimeter"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAM PER MILLIMETER"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gramspermillimeter"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grams per millimeter"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAMS PER MILLIMETER"),
+        Some(LinearDensityUnit::GramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgrampermillimeter"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgram per millimeter"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAM PER MILLIMETER"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgramspermillimeter"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("micrograms per millimeter"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAMS PER MILLIMETER"),
+        Some(LinearDensityUnit::MicrogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrampermillimeter"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligram per millimeter"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAM PER MILLIMETER"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligramspermillimeter"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrams per millimeter"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAMS PER MILLIMETER"),
+        Some(LinearDensityUnit::MilligramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogrampermillimeter"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogram per millimeter"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAM PER MILLIMETER"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogramspermillimeter"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilograms per millimeter"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAMS PER MILLIMETER"),
+        Some(LinearDensityUnit::KilogramPerMillimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grampercentimeter"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gram per centimeter"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAM PER CENTIMETER"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gramspercentimeter"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grams per centimeter"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAMS PER CENTIMETER"),
+        Some(LinearDensityUnit::GramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgrampercentimeter"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgram per centimeter"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAM PER CENTIMETER"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgramspercentimeter"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("micrograms per centimeter"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAMS PER CENTIMETER"),
+        Some(LinearDensityUnit::MicrogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrampercentimeter"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligram per centimeter"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAM PER CENTIMETER"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligramspercentimeter"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrams per centimeter"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAMS PER CENTIMETER"),
+        Some(LinearDensityUnit::MilligramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogrampercentimeter"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogram per centimeter"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAM PER CENTIMETER"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogramspercentimeter"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilograms per centimeter"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAMS PER CENTIMETER"),
+        Some(LinearDensityUnit::KilogramPerCentimeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grampermeter"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gram per meter"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAM PER METER"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gramspermeter"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grams per meter"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAMS PER METER"),
+        Some(LinearDensityUnit::GramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgrampermeter"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgram per meter"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAM PER METER"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgramspermeter"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("micrograms per meter"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAMS PER METER"),
+        Some(LinearDensityUnit::MicrogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrampermeter"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligram per meter"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAM PER METER"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligramspermeter"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrams per meter"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAMS PER METER"),
+        Some(LinearDensityUnit::MilligramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogrampermeter"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogram per meter"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAM PER METER"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogramspermeter"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilograms per meter"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAMS PER METER"),
+        Some(LinearDensityUnit::KilogramPerMeter)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("poundperinch"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("pound per inch"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("POUND PER INCH"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("poundsperinch"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("pounds per inch"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("POUNDS PER INCH"),
+        Some(LinearDensityUnit::PoundPerInch)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("poundperfoot"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("pound per foot"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("POUND PER FOOT"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("poundsperfoot"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("pounds per foot"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("POUNDS PER FOOT"),
+        Some(LinearDensityUnit::PoundPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gramperfoot"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gram per foot"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAM PER FOOT"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("gramsperfoot"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("grams per foot"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("GRAMS PER FOOT"),
+        Some(LinearDensityUnit::GramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgramperfoot"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgram per foot"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAM PER FOOT"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("microgramsperfoot"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("micrograms per foot"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MICROGRAMS PER FOOT"),
+        Some(LinearDensityUnit::MicrogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligramperfoot"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligram per foot"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAM PER FOOT"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligramsperfoot"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("milligrams per foot"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("MILLIGRAMS PER FOOT"),
+        Some(LinearDensityUnit::MilligramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogramperfoot"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogram per foot"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAM PER FOOT"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilogramsperfoot"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("kilograms per foot"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+    assert_eq!(
+        LinearDensityUnit::from_name("KILOGRAMS PER FOOT"),
+        Some(LinearDensityUnit::KilogramPerFoot)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = LinearDensity::from_base(6.0);
     let b = LinearDensity::from_base(2.0);

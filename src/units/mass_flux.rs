@@ -100,12 +100,55 @@ impl MassFluxUnit {
             Self::KilogramPerHourPerSquareMillimeter => &["kg·h⁻¹·mm⁻²"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "grampersecondpersquaremeter" => Some(Self::GramPerSecondPerSquareMeter),
+            "gramspersecondpersquaremeter" => Some(Self::GramPerSecondPerSquareMeter),
+            "kilogrampersecondpersquaremeter" => Some(Self::KilogramPerSecondPerSquareMeter),
+            "kilogramspersecondpersquaremeter" => Some(Self::KilogramPerSecondPerSquareMeter),
+            "grampersecondpersquarecentimeter" => Some(Self::GramPerSecondPerSquareCentimeter),
+            "gramspersecondpersquarecentimeter" => Some(Self::GramPerSecondPerSquareCentimeter),
+            "kilogrampersecondpersquarecentimeter" => {
+                Some(Self::KilogramPerSecondPerSquareCentimeter)
+            }
+            "kilogramspersecondpersquarecentimeter" => {
+                Some(Self::KilogramPerSecondPerSquareCentimeter)
+            }
+            "grampersecondpersquaremillimeter" => Some(Self::GramPerSecondPerSquareMillimeter),
+            "gramspersecondpersquaremillimeter" => Some(Self::GramPerSecondPerSquareMillimeter),
+            "kilogrampersecondpersquaremillimeter" => {
+                Some(Self::KilogramPerSecondPerSquareMillimeter)
+            }
+            "kilogramspersecondpersquaremillimeter" => {
+                Some(Self::KilogramPerSecondPerSquareMillimeter)
+            }
+            "gramperhourpersquaremeter" => Some(Self::GramPerHourPerSquareMeter),
+            "gramsperhourpersquaremeter" => Some(Self::GramPerHourPerSquareMeter),
+            "kilogramperhourpersquaremeter" => Some(Self::KilogramPerHourPerSquareMeter),
+            "kilogramsperhourpersquaremeter" => Some(Self::KilogramPerHourPerSquareMeter),
+            "gramperhourpersquarecentimeter" => Some(Self::GramPerHourPerSquareCentimeter),
+            "gramsperhourpersquarecentimeter" => Some(Self::GramPerHourPerSquareCentimeter),
+            "kilogramperhourpersquarecentimeter" => Some(Self::KilogramPerHourPerSquareCentimeter),
+            "kilogramsperhourpersquarecentimeter" => Some(Self::KilogramPerHourPerSquareCentimeter),
+            "gramperhourpersquaremillimeter" => Some(Self::GramPerHourPerSquareMillimeter),
+            "gramsperhourpersquaremillimeter" => Some(Self::GramPerHourPerSquareMillimeter),
+            "kilogramperhourpersquaremillimeter" => Some(Self::KilogramPerHourPerSquareMillimeter),
+            "kilogramsperhourpersquaremillimeter" => Some(Self::KilogramPerHourPerSquareMillimeter),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for MassFluxUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g·s⁻¹·m⁻²" => Ok(Self::GramPerSecondPerSquareMeter),
@@ -120,7 +163,7 @@ impl core::str::FromStr for MassFluxUnit {
             "kg·h⁻¹·cm⁻²" => Ok(Self::KilogramPerHourPerSquareCentimeter),
             "g·h⁻¹·mm⁻²" => Ok(Self::GramPerHourPerSquareMillimeter),
             "kg·h⁻¹·mm⁻²" => Ok(Self::KilogramPerHourPerSquareMillimeter),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

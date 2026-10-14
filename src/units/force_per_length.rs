@@ -204,12 +204,99 @@ impl ForcePerLengthUnit {
             Self::KilopoundForcePerInch => &["kipf/in", "kip/in", "k/in"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "newtonpermeter" => Some(Self::NewtonPerMeter),
+            "newtonspermeter" => Some(Self::NewtonPerMeter),
+            "nanonewtonpermeter" => Some(Self::NanonewtonPerMeter),
+            "nanonewtonspermeter" => Some(Self::NanonewtonPerMeter),
+            "micronewtonpermeter" => Some(Self::MicronewtonPerMeter),
+            "micronewtonspermeter" => Some(Self::MicronewtonPerMeter),
+            "millinewtonpermeter" => Some(Self::MillinewtonPerMeter),
+            "millinewtonspermeter" => Some(Self::MillinewtonPerMeter),
+            "centinewtonpermeter" => Some(Self::CentinewtonPerMeter),
+            "centinewtonspermeter" => Some(Self::CentinewtonPerMeter),
+            "decinewtonpermeter" => Some(Self::DecinewtonPerMeter),
+            "decinewtonspermeter" => Some(Self::DecinewtonPerMeter),
+            "decanewtonpermeter" => Some(Self::DecanewtonPerMeter),
+            "decanewtonspermeter" => Some(Self::DecanewtonPerMeter),
+            "kilonewtonpermeter" => Some(Self::KilonewtonPerMeter),
+            "kilonewtonspermeter" => Some(Self::KilonewtonPerMeter),
+            "meganewtonpermeter" => Some(Self::MeganewtonPerMeter),
+            "meganewtonspermeter" => Some(Self::MeganewtonPerMeter),
+            "newtonpercentimeter" => Some(Self::NewtonPerCentimeter),
+            "newtonspercentimeter" => Some(Self::NewtonPerCentimeter),
+            "nanonewtonpercentimeter" => Some(Self::NanonewtonPerCentimeter),
+            "nanonewtonspercentimeter" => Some(Self::NanonewtonPerCentimeter),
+            "micronewtonpercentimeter" => Some(Self::MicronewtonPerCentimeter),
+            "micronewtonspercentimeter" => Some(Self::MicronewtonPerCentimeter),
+            "millinewtonpercentimeter" => Some(Self::MillinewtonPerCentimeter),
+            "millinewtonspercentimeter" => Some(Self::MillinewtonPerCentimeter),
+            "centinewtonpercentimeter" => Some(Self::CentinewtonPerCentimeter),
+            "centinewtonspercentimeter" => Some(Self::CentinewtonPerCentimeter),
+            "decinewtonpercentimeter" => Some(Self::DecinewtonPerCentimeter),
+            "decinewtonspercentimeter" => Some(Self::DecinewtonPerCentimeter),
+            "decanewtonpercentimeter" => Some(Self::DecanewtonPerCentimeter),
+            "decanewtonspercentimeter" => Some(Self::DecanewtonPerCentimeter),
+            "kilonewtonpercentimeter" => Some(Self::KilonewtonPerCentimeter),
+            "kilonewtonspercentimeter" => Some(Self::KilonewtonPerCentimeter),
+            "meganewtonpercentimeter" => Some(Self::MeganewtonPerCentimeter),
+            "meganewtonspercentimeter" => Some(Self::MeganewtonPerCentimeter),
+            "newtonpermillimeter" => Some(Self::NewtonPerMillimeter),
+            "newtonspermillimeter" => Some(Self::NewtonPerMillimeter),
+            "nanonewtonpermillimeter" => Some(Self::NanonewtonPerMillimeter),
+            "nanonewtonspermillimeter" => Some(Self::NanonewtonPerMillimeter),
+            "micronewtonpermillimeter" => Some(Self::MicronewtonPerMillimeter),
+            "micronewtonspermillimeter" => Some(Self::MicronewtonPerMillimeter),
+            "millinewtonpermillimeter" => Some(Self::MillinewtonPerMillimeter),
+            "millinewtonspermillimeter" => Some(Self::MillinewtonPerMillimeter),
+            "centinewtonpermillimeter" => Some(Self::CentinewtonPerMillimeter),
+            "centinewtonspermillimeter" => Some(Self::CentinewtonPerMillimeter),
+            "decinewtonpermillimeter" => Some(Self::DecinewtonPerMillimeter),
+            "decinewtonspermillimeter" => Some(Self::DecinewtonPerMillimeter),
+            "decanewtonpermillimeter" => Some(Self::DecanewtonPerMillimeter),
+            "decanewtonspermillimeter" => Some(Self::DecanewtonPerMillimeter),
+            "kilonewtonpermillimeter" => Some(Self::KilonewtonPerMillimeter),
+            "kilonewtonspermillimeter" => Some(Self::KilonewtonPerMillimeter),
+            "meganewtonpermillimeter" => Some(Self::MeganewtonPerMillimeter),
+            "meganewtonspermillimeter" => Some(Self::MeganewtonPerMillimeter),
+            "kilogramforcepermeter" => Some(Self::KilogramForcePerMeter),
+            "kilogramsforcepermeter" => Some(Self::KilogramForcePerMeter),
+            "kilogramforcepercentimeter" => Some(Self::KilogramForcePerCentimeter),
+            "kilogramsforcepercentimeter" => Some(Self::KilogramForcePerCentimeter),
+            "kilogramforcepermillimeter" => Some(Self::KilogramForcePerMillimeter),
+            "kilogramsforcepermillimeter" => Some(Self::KilogramForcePerMillimeter),
+            "tonneforcepermeter" => Some(Self::TonneForcePerMeter),
+            "tonnesforcepermeter" => Some(Self::TonneForcePerMeter),
+            "tonneforcepercentimeter" => Some(Self::TonneForcePerCentimeter),
+            "tonnesforcepercentimeter" => Some(Self::TonneForcePerCentimeter),
+            "tonneforcepermillimeter" => Some(Self::TonneForcePerMillimeter),
+            "tonnesforcepermillimeter" => Some(Self::TonneForcePerMillimeter),
+            "poundforceperfoot" => Some(Self::PoundForcePerFoot),
+            "poundsforceperfoot" => Some(Self::PoundForcePerFoot),
+            "poundforceperinch" => Some(Self::PoundForcePerInch),
+            "poundsforceperinch" => Some(Self::PoundForcePerInch),
+            "poundforceperyard" => Some(Self::PoundForcePerYard),
+            "poundsforceperyard" => Some(Self::PoundForcePerYard),
+            "kilopoundforceperfoot" => Some(Self::KilopoundForcePerFoot),
+            "kilopoundsforceperfoot" => Some(Self::KilopoundForcePerFoot),
+            "kilopoundforceperinch" => Some(Self::KilopoundForcePerInch),
+            "kilopoundsforceperinch" => Some(Self::KilopoundForcePerInch),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for ForcePerLengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N/m" => Ok(Self::NewtonPerMeter),
@@ -254,7 +341,7 @@ impl core::str::FromStr for ForcePerLengthUnit {
             "kipf/in" => Ok(Self::KilopoundForcePerInch),
             "kip/in" => Ok(Self::KilopoundForcePerInch),
             "k/in" => Ok(Self::KilopoundForcePerInch),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }

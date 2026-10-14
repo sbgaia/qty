@@ -1804,6 +1804,790 @@ fn parse_every_abbreviation() {
 }
 
 #[test]
+fn parse_every_name() {
+    assert_eq!(LengthUnit::from_name("meter"), Some(LengthUnit::Meter));
+    assert_eq!(LengthUnit::from_name("meter"), Some(LengthUnit::Meter));
+    assert_eq!(LengthUnit::from_name("METER"), Some(LengthUnit::Meter));
+    assert_eq!(LengthUnit::from_name("meters"), Some(LengthUnit::Meter));
+    assert_eq!(LengthUnit::from_name("meters"), Some(LengthUnit::Meter));
+    assert_eq!(LengthUnit::from_name("METERS"), Some(LengthUnit::Meter));
+    assert_eq!(
+        LengthUnit::from_name("femtometer"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("femtometer"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("FEMTOMETER"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("femtometers"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("femtometers"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("FEMTOMETERS"),
+        Some(LengthUnit::Femtometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("picometer"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("picometer"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PICOMETER"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("picometers"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("picometers"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PICOMETERS"),
+        Some(LengthUnit::Picometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nanometer"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nanometer"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("NANOMETER"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nanometers"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nanometers"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("NANOMETERS"),
+        Some(LengthUnit::Nanometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("micrometer"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("micrometer"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MICROMETER"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("micrometers"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("micrometers"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MICROMETERS"),
+        Some(LengthUnit::Micrometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("millimeter"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("millimeter"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MILLIMETER"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("millimeters"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("millimeters"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MILLIMETERS"),
+        Some(LengthUnit::Millimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("centimeter"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("centimeter"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("CENTIMETER"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("centimeters"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("centimeters"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("CENTIMETERS"),
+        Some(LengthUnit::Centimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decimeter"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decimeter"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DECIMETER"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decimeters"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decimeters"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DECIMETERS"),
+        Some(LengthUnit::Decimeter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decameter"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decameter"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DECAMETER"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decameters"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("decameters"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DECAMETERS"),
+        Some(LengthUnit::Decameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("hectometer"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("hectometer"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("HECTOMETER"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("hectometers"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("hectometers"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("HECTOMETERS"),
+        Some(LengthUnit::Hectometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilometer"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilometer"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOMETER"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilometers"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilometers"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOMETERS"),
+        Some(LengthUnit::Kilometer)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megameter"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megameter"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGAMETER"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megameters"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megameters"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGAMETERS"),
+        Some(LengthUnit::Megameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("gigameter"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("gigameter"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("GIGAMETER"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("gigameters"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("gigameters"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(
+        LengthUnit::from_name("GIGAMETERS"),
+        Some(LengthUnit::Gigameter)
+    );
+    assert_eq!(LengthUnit::from_name("mile"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("mile"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("MILE"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("miles"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("miles"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("MILES"), Some(LengthUnit::Mile));
+    assert_eq!(LengthUnit::from_name("yard"), Some(LengthUnit::Yard));
+    assert_eq!(LengthUnit::from_name("yard"), Some(LengthUnit::Yard));
+    assert_eq!(LengthUnit::from_name("YARD"), Some(LengthUnit::Yard));
+    assert_eq!(LengthUnit::from_name("yards"), Some(LengthUnit::Yard));
+    assert_eq!(LengthUnit::from_name("yards"), Some(LengthUnit::Yard));
+    assert_eq!(LengthUnit::from_name("YARDS"), Some(LengthUnit::Yard));
+    assert_eq!(
+        LengthUnit::from_name("kiloyard"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloyard"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOYARD"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloyards"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloyards"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOYARDS"),
+        Some(LengthUnit::Kiloyard)
+    );
+    assert_eq!(LengthUnit::from_name("foot"), Some(LengthUnit::Foot));
+    assert_eq!(LengthUnit::from_name("foot"), Some(LengthUnit::Foot));
+    assert_eq!(LengthUnit::from_name("FOOT"), Some(LengthUnit::Foot));
+    assert_eq!(LengthUnit::from_name("feet"), Some(LengthUnit::Foot));
+    assert_eq!(LengthUnit::from_name("feet"), Some(LengthUnit::Foot));
+    assert_eq!(LengthUnit::from_name("FEET"), Some(LengthUnit::Foot));
+    assert_eq!(
+        LengthUnit::from_name("kilofoot"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilofoot"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOFOOT"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilofeet"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilofeet"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOFEET"),
+        Some(LengthUnit::Kilofoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ussurveyfoot"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("us survey foot"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("US SURVEY FOOT"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ussurveyfeet"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("us survey feet"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(
+        LengthUnit::from_name("US SURVEY FEET"),
+        Some(LengthUnit::UsSurveyFoot)
+    );
+    assert_eq!(LengthUnit::from_name("inch"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("inch"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("INCH"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("inches"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("inches"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("INCHES"), Some(LengthUnit::Inch));
+    assert_eq!(LengthUnit::from_name("mil"), Some(LengthUnit::Mil));
+    assert_eq!(LengthUnit::from_name("mil"), Some(LengthUnit::Mil));
+    assert_eq!(LengthUnit::from_name("MIL"), Some(LengthUnit::Mil));
+    assert_eq!(LengthUnit::from_name("mils"), Some(LengthUnit::Mil));
+    assert_eq!(LengthUnit::from_name("mils"), Some(LengthUnit::Mil));
+    assert_eq!(LengthUnit::from_name("MILS"), Some(LengthUnit::Mil));
+    assert_eq!(
+        LengthUnit::from_name("nauticalmile"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nautical mile"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("NAUTICAL MILE"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nauticalmiles"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("nautical miles"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("NAUTICAL MILES"),
+        Some(LengthUnit::NauticalMile)
+    );
+    assert_eq!(LengthUnit::from_name("fathom"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("fathom"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("FATHOM"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("fathoms"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("fathoms"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("FATHOMS"), Some(LengthUnit::Fathom));
+    assert_eq!(LengthUnit::from_name("shackle"), Some(LengthUnit::Shackle));
+    assert_eq!(LengthUnit::from_name("shackle"), Some(LengthUnit::Shackle));
+    assert_eq!(LengthUnit::from_name("SHACKLE"), Some(LengthUnit::Shackle));
+    assert_eq!(LengthUnit::from_name("shackles"), Some(LengthUnit::Shackle));
+    assert_eq!(LengthUnit::from_name("shackles"), Some(LengthUnit::Shackle));
+    assert_eq!(LengthUnit::from_name("SHACKLES"), Some(LengthUnit::Shackle));
+    assert_eq!(
+        LengthUnit::from_name("microinch"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("microinch"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MICROINCH"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("microinches"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("microinches"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MICROINCHES"),
+        Some(LengthUnit::Microinch)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printerpoint"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printer point"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PRINTER POINT"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printerpoints"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printer points"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PRINTER POINTS"),
+        Some(LengthUnit::PrinterPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("dtppoint"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("dtp point"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DTP POINT"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("dtppoints"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("dtp points"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DTP POINTS"),
+        Some(LengthUnit::DtpPoint)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printerpica"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printer pica"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PRINTER PICA"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printerpicas"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("printer picas"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("PRINTER PICAS"),
+        Some(LengthUnit::PrinterPica)
+    );
+    assert_eq!(LengthUnit::from_name("dtppica"), Some(LengthUnit::DtpPica));
+    assert_eq!(LengthUnit::from_name("dtp pica"), Some(LengthUnit::DtpPica));
+    assert_eq!(LengthUnit::from_name("DTP PICA"), Some(LengthUnit::DtpPica));
+    assert_eq!(LengthUnit::from_name("dtppicas"), Some(LengthUnit::DtpPica));
+    assert_eq!(
+        LengthUnit::from_name("dtp picas"),
+        Some(LengthUnit::DtpPica)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DTP PICAS"),
+        Some(LengthUnit::DtpPica)
+    );
+    assert_eq!(LengthUnit::from_name("twip"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("twip"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("TWIP"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("twips"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("twips"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("TWIPS"), Some(LengthUnit::Twip));
+    assert_eq!(LengthUnit::from_name("hand"), Some(LengthUnit::Hand));
+    assert_eq!(LengthUnit::from_name("hand"), Some(LengthUnit::Hand));
+    assert_eq!(LengthUnit::from_name("HAND"), Some(LengthUnit::Hand));
+    assert_eq!(LengthUnit::from_name("hands"), Some(LengthUnit::Hand));
+    assert_eq!(LengthUnit::from_name("hands"), Some(LengthUnit::Hand));
+    assert_eq!(LengthUnit::from_name("HANDS"), Some(LengthUnit::Hand));
+    assert_eq!(
+        LengthUnit::from_name("astronomicalunit"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(
+        LengthUnit::from_name("astronomical unit"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ASTRONOMICAL UNIT"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(
+        LengthUnit::from_name("astronomicalunits"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(
+        LengthUnit::from_name("astronomical units"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ASTRONOMICAL UNITS"),
+        Some(LengthUnit::AstronomicalUnit)
+    );
+    assert_eq!(LengthUnit::from_name("parsec"), Some(LengthUnit::Parsec));
+    assert_eq!(LengthUnit::from_name("parsec"), Some(LengthUnit::Parsec));
+    assert_eq!(LengthUnit::from_name("PARSEC"), Some(LengthUnit::Parsec));
+    assert_eq!(LengthUnit::from_name("parsecs"), Some(LengthUnit::Parsec));
+    assert_eq!(LengthUnit::from_name("parsecs"), Some(LengthUnit::Parsec));
+    assert_eq!(LengthUnit::from_name("PARSECS"), Some(LengthUnit::Parsec));
+    assert_eq!(
+        LengthUnit::from_name("kiloparsec"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloparsec"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOPARSEC"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloparsecs"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kiloparsecs"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOPARSECS"),
+        Some(LengthUnit::Kiloparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megaparsec"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megaparsec"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGAPARSEC"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megaparsecs"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megaparsecs"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGAPARSECS"),
+        Some(LengthUnit::Megaparsec)
+    );
+    assert_eq!(
+        LengthUnit::from_name("lightyear"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("light year"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("LIGHT YEAR"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("lightyears"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("light years"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("LIGHT YEARS"),
+        Some(LengthUnit::LightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilolightyear"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilolight year"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOLIGHT YEAR"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilolightyears"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("kilolight years"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("KILOLIGHT YEARS"),
+        Some(LengthUnit::KilolightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megalightyear"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megalight year"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGALIGHT YEAR"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megalightyears"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("megalight years"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("MEGALIGHT YEARS"),
+        Some(LengthUnit::MegalightYear)
+    );
+    assert_eq!(
+        LengthUnit::from_name("solarradius"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(
+        LengthUnit::from_name("solar radius"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(
+        LengthUnit::from_name("SOLAR RADIUS"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(
+        LengthUnit::from_name("solarradiuses"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(
+        LengthUnit::from_name("solar radiuses"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(
+        LengthUnit::from_name("SOLAR RADIUSES"),
+        Some(LengthUnit::SolarRadius)
+    );
+    assert_eq!(LengthUnit::from_name("chain"), Some(LengthUnit::Chain));
+    assert_eq!(LengthUnit::from_name("chain"), Some(LengthUnit::Chain));
+    assert_eq!(LengthUnit::from_name("CHAIN"), Some(LengthUnit::Chain));
+    assert_eq!(LengthUnit::from_name("chains"), Some(LengthUnit::Chain));
+    assert_eq!(LengthUnit::from_name("chains"), Some(LengthUnit::Chain));
+    assert_eq!(LengthUnit::from_name("CHAINS"), Some(LengthUnit::Chain));
+    assert_eq!(
+        LengthUnit::from_name("angstrom"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("angstrom"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ANGSTROM"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("angstroms"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("angstroms"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("ANGSTROMS"),
+        Some(LengthUnit::Angstrom)
+    );
+    assert_eq!(
+        LengthUnit::from_name("datamile"),
+        Some(LengthUnit::DataMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("data mile"),
+        Some(LengthUnit::DataMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DATA MILE"),
+        Some(LengthUnit::DataMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("datamiles"),
+        Some(LengthUnit::DataMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("data miles"),
+        Some(LengthUnit::DataMile)
+    );
+    assert_eq!(
+        LengthUnit::from_name("DATA MILES"),
+        Some(LengthUnit::DataMile)
+    );
+}
+
+#[test]
 fn arithmetic_f64() {
     let a = Length::from_base(6.0);
     let b = Length::from_base(2.0);

@@ -294,11 +294,46 @@ fn parsing() {
         Ok(Length::from_meters(-2000.0))
     );
     assert_eq!("+.5 mi".parse::<Length<f32>>(), Ok(Length::from_miles(0.5)));
-    assert_eq!("5 parsecs".parse::<Length>(), Err(ParseError::UnknownUnit));
+    assert_eq!("5 furlongs".parse::<Length>(), Err(ParseError::UnknownUnit));
     assert_eq!("km".parse::<Length>(), Err(ParseError::InvalidNumber));
     assert_eq!("".parse::<Length>(), Err(ParseError::InvalidNumber));
     assert_eq!("km/h".parse::<SpeedUnit>(), Ok(SpeedUnit::KilometerPerHour));
     assert_eq!(ParseError::UnknownUnit.to_string(), "unknown unit");
+}
+
+#[test]
+fn parsing_unit_names() {
+    assert_eq!(
+        "5 kilometers".parse::<Length>(),
+        Ok(Length::from_kilometers(5.0))
+    );
+    assert_eq!(
+        "5 Kilometres".parse::<Length>(),
+        Ok(Length::from_kilometers(5.0))
+    );
+    assert_eq!("1 meter".parse::<Length>(), Ok(Length::from_meters(1.0)));
+    assert_eq!(
+        "2 square_meters".parse::<Area>(),
+        Ok(Area::from_square_meters(2.0))
+    );
+    assert_eq!(
+        "2 Square Metres".parse::<Area>(),
+        Ok(Area::from_square_meters(2.0))
+    );
+    assert_eq!("3 LITRES".parse::<Volume>(), Ok(Volume::from_liters(3.0)));
+    assert_eq!(
+        "10 degrees celsius".parse::<Temperature>(),
+        Ok(Temperature::from_degrees_celsius(10.0))
+    );
+    assert_eq!(
+        LengthUnit::from_name("nautical-mile"),
+        Some(LengthUnit::NauticalMile)
+    );
+    // Abbreviations stay exact: `mm` and `Mm` differ, and are matched first.
+    assert_eq!("mm".parse::<LengthUnit>(), Ok(LengthUnit::Millimeter));
+    assert_eq!("Mm".parse::<LengthUnit>(), Ok(LengthUnit::Megameter));
+    assert_eq!("MM".parse::<LengthUnit>(), Err(ParseError::UnknownUnit));
+    assert_eq!(LengthUnit::from_name("métre"), None); // not ASCII
 }
 
 #[test]

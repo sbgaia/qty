@@ -80,12 +80,35 @@ impl AreaMomentOfInertiaUnit {
             Self::InchToTheFourth => &["in⁴"],
         }
     }
+
+    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
+    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// `"Square Meter"`, `"square_meters"`.
+    pub fn from_name(name: &str) -> Option<Self> {
+        let mut buf = [0; 64];
+        match crate::normalize_unit_name(name, &mut buf)? {
+            "metertothefourth" => Some(Self::MeterToTheFourth),
+            "meterstothefourth" => Some(Self::MeterToTheFourth),
+            "decimetertothefourth" => Some(Self::DecimeterToTheFourth),
+            "decimeterstothefourth" => Some(Self::DecimeterToTheFourth),
+            "centimetertothefourth" => Some(Self::CentimeterToTheFourth),
+            "centimeterstothefourth" => Some(Self::CentimeterToTheFourth),
+            "millimetertothefourth" => Some(Self::MillimeterToTheFourth),
+            "millimeterstothefourth" => Some(Self::MillimeterToTheFourth),
+            "foottothefourth" => Some(Self::FootToTheFourth),
+            "feettothefourth" => Some(Self::FootToTheFourth),
+            "inchtothefourth" => Some(Self::InchToTheFourth),
+            "inchestothefourth" => Some(Self::InchToTheFourth),
+            _ => None,
+        }
+    }
 }
 
 impl core::str::FromStr for AreaMomentOfInertiaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation, e.g. `"km"`.
+    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
+    /// e.g. `"kilometers"`); see [`Self::from_name`].
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁴" => Ok(Self::MeterToTheFourth),
@@ -94,7 +117,7 @@ impl core::str::FromStr for AreaMomentOfInertiaUnit {
             "mm⁴" => Ok(Self::MillimeterToTheFourth),
             "ft⁴" => Ok(Self::FootToTheFourth),
             "in⁴" => Ok(Self::InchToTheFourth),
-            _ => Err(crate::ParseError::UnknownUnit),
+            _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
 }
