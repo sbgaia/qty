@@ -494,6 +494,30 @@ impl<T: Float> Duration<T> {
     }
 }
 
+impl Duration<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: DurationUnit) -> Self {
+        Self(match unit {
+            DurationUnit::Year365 => value * 3.1536e7,
+            DurationUnit::Month30 => value * 2592000.0,
+            DurationUnit::Week => value * 604800.0,
+            DurationUnit::Day => value * 86400.0,
+            DurationUnit::Hour => value * 3600.0,
+            DurationUnit::Minute => value * 60.0,
+            DurationUnit::Second => value,
+            DurationUnit::Picosecond => value / 1e12,
+            DurationUnit::Nanosecond => value / 1e9,
+            DurationUnit::Microsecond => value / 1000000.0,
+            DurationUnit::Millisecond => value / 1000.0,
+            DurationUnit::JulianYear => value * 3.15576e7,
+            DurationUnit::Sol => value * 88775.244,
+        })
+    }
+}
+
 fixed_base!(Duration, Second);
 
 /// Unit markers for counting [`Duration`] as an integer with [`Fixed`](crate::Fixed).

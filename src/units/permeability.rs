@@ -129,6 +129,18 @@ impl<T: Float> Permeability<T> {
     }
 }
 
+impl Permeability<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PermeabilityUnit) -> Self {
+        Self(match unit {
+            PermeabilityUnit::HenryPerMeter => value,
+        })
+    }
+}
+
 fixed_base!(Permeability, HenryPerMeter);
 
 /// Unit markers for counting [`Permeability`] as an integer with [`Fixed`](crate::Fixed).

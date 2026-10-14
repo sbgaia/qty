@@ -129,6 +129,18 @@ impl<T: Float> VitaminA<T> {
     }
 }
 
+impl VitaminA<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VitaminAUnit) -> Self {
+        Self(match unit {
+            VitaminAUnit::InternationalUnit => value,
+        })
+    }
+}
+
 fixed_base!(VitaminA, InternationalUnit);
 
 /// Unit markers for counting [`VitaminA`] as an integer with [`Fixed`](crate::Fixed).

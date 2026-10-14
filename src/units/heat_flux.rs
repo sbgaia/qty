@@ -802,6 +802,42 @@ impl<T: Float> HeatFlux<T> {
     }
 }
 
+impl HeatFlux<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: HeatFluxUnit) -> Self {
+        Self(match unit {
+            HeatFluxUnit::WattPerSquareMeter => value,
+            HeatFluxUnit::NanowattPerSquareMeter => value / 1e9,
+            HeatFluxUnit::MicrowattPerSquareMeter => value / 1000000.0,
+            HeatFluxUnit::MilliwattPerSquareMeter => value / 1000.0,
+            HeatFluxUnit::CentiwattPerSquareMeter => value / 100.0,
+            HeatFluxUnit::DeciwattPerSquareMeter => value / 10.0,
+            HeatFluxUnit::KilowattPerSquareMeter => value * 1000.0,
+            HeatFluxUnit::WattPerSquareMillimeter => value * 1000000.0,
+            HeatFluxUnit::NanowattPerSquareMillimeter => value / 1000.0,
+            HeatFluxUnit::MicrowattPerSquareMillimeter => value,
+            HeatFluxUnit::MilliwattPerSquareMillimeter => value * 1000.0,
+            HeatFluxUnit::CentiwattPerSquareMillimeter => value * 10000.0,
+            HeatFluxUnit::DeciwattPerSquareMillimeter => value * 100000.0,
+            HeatFluxUnit::KilowattPerSquareMillimeter => value * 1e9,
+            HeatFluxUnit::WattPerSquareInch => value * 1550.0031000062,
+            HeatFluxUnit::WattPerSquareFoot => value * 10.763910416709722,
+            HeatFluxUnit::BtuPerSecondSquareInch => value * 1635339.8422406844,
+            HeatFluxUnit::BtuPerSecondSquareFoot => value * 11356.526682226975,
+            HeatFluxUnit::BtuPerMinuteSquareFoot => value * 189.27544470378294,
+            HeatFluxUnit::BtuPerHourSquareFoot => value * 3.154590745063049,
+            HeatFluxUnit::CaloriePerSecondSquareCentimeter => value * 41840.0,
+            HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => value * 4.184e7,
+            HeatFluxUnit::KilocaloriePerHourSquareMeter => value * 1.1622222222222223,
+            HeatFluxUnit::PoundForcePerFootSecond => value * 14.593902937206364,
+            HeatFluxUnit::PoundPerSecondCubed => value * 0.45359237,
+        })
+    }
+}
+
 fixed_base!(HeatFlux, WattPerSquareMeter);
 
 /// Unit markers for counting [`HeatFlux`] as an integer with [`Fixed`](crate::Fixed).

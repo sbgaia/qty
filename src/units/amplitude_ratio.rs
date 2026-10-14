@@ -233,6 +233,21 @@ impl<T: Float> AmplitudeRatio<T> {
     }
 }
 
+impl AmplitudeRatio<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AmplitudeRatioUnit) -> Self {
+        Self(match unit {
+            AmplitudeRatioUnit::DecibelVolt => value,
+            AmplitudeRatioUnit::DecibelMicrovolt => value - 120.0,
+            AmplitudeRatioUnit::DecibelMillivolt => value - 60.0,
+            AmplitudeRatioUnit::DecibelUnloaded => value - 2.218487499,
+        })
+    }
+}
+
 fixed_base!(AmplitudeRatio, DecibelVolt);
 
 /// Unit markers for counting [`AmplitudeRatio`] as an integer with [`Fixed`](crate::Fixed).

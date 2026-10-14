@@ -194,6 +194,22 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
     }
 }
 
+impl BrakeSpecificFuelConsumption<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: BrakeSpecificFuelConsumptionUnit) -> Self {
+        Self(match unit {
+            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value / 3.6e9,
+            BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
+            BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
+                value * 1.6896594108226585e-7
+            }
+        })
+    }
+}
+
 fixed_base!(BrakeSpecificFuelConsumption, KilogramPerJoule);
 
 /// Unit markers for counting [`BrakeSpecificFuelConsumption`] as an integer with [`Fixed`](crate::Fixed).

@@ -641,6 +641,37 @@ impl<T: Float> VolumeConcentration<T> {
     }
 }
 
+impl VolumeConcentration<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VolumeConcentrationUnit) -> Self {
+        Self(match unit {
+            VolumeConcentrationUnit::DecimalFraction => value,
+            VolumeConcentrationUnit::LiterPerLiter => value,
+            VolumeConcentrationUnit::PicoliterPerLiter => value / 1e12,
+            VolumeConcentrationUnit::NanoliterPerLiter => value / 1e9,
+            VolumeConcentrationUnit::MicroliterPerLiter => value / 1000000.0,
+            VolumeConcentrationUnit::MilliliterPerLiter => value / 1000.0,
+            VolumeConcentrationUnit::CentiliterPerLiter => value / 100.0,
+            VolumeConcentrationUnit::DeciliterPerLiter => value / 10.0,
+            VolumeConcentrationUnit::LiterPerMilliliter => value * 1000.0,
+            VolumeConcentrationUnit::PicoliterPerMilliliter => value / 1e9,
+            VolumeConcentrationUnit::NanoliterPerMilliliter => value / 1000000.0,
+            VolumeConcentrationUnit::MicroliterPerMilliliter => value / 1000.0,
+            VolumeConcentrationUnit::MilliliterPerMilliliter => value,
+            VolumeConcentrationUnit::CentiliterPerMilliliter => value * 10.0,
+            VolumeConcentrationUnit::DeciliterPerMilliliter => value * 100.0,
+            VolumeConcentrationUnit::Percent => value / 100.0,
+            VolumeConcentrationUnit::PartPerThousand => value / 1000.0,
+            VolumeConcentrationUnit::PartPerMillion => value / 1000000.0,
+            VolumeConcentrationUnit::PartPerBillion => value / 1e9,
+            VolumeConcentrationUnit::PartPerTrillion => value / 1e12,
+        })
+    }
+}
+
 fixed_base!(VolumeConcentration, DecimalFraction);
 
 /// Unit markers for counting [`VolumeConcentration`] as an integer with [`Fixed`](crate::Fixed).

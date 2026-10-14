@@ -312,6 +312,24 @@ impl<T: Float> ElectricCurrentGradient<T> {
     }
 }
 
+impl ElectricCurrentGradient<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricCurrentGradientUnit) -> Self {
+        Self(match unit {
+            ElectricCurrentGradientUnit::AmperePerSecond => value,
+            ElectricCurrentGradientUnit::MilliamperePerSecond => value / 1000.0,
+            ElectricCurrentGradientUnit::AmperePerMinute => value / 60.0,
+            ElectricCurrentGradientUnit::MilliamperePerMinute => value / 60000.0,
+            ElectricCurrentGradientUnit::AmperePerMillisecond => value * 1000.0,
+            ElectricCurrentGradientUnit::AmperePerMicrosecond => value * 1000000.0,
+            ElectricCurrentGradientUnit::AmperePerNanosecond => value * 1e9,
+        })
+    }
+}
+
 fixed_base!(ElectricCurrentGradient, AmperePerSecond);
 
 /// Unit markers for counting [`ElectricCurrentGradient`] as an integer with [`Fixed`](crate::Fixed).

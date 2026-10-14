@@ -682,6 +682,41 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Acceleration; 14] = [
+        Acceleration::const_new(1234.5, AccelerationUnit::MeterPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::NanometerPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::MicrometerPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::MillimeterPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::CentimeterPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::DecimeterPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::KilometerPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::InchPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::FootPerSecondSquared),
+        Acceleration::const_new(1234.5, AccelerationUnit::KnotPerSecond),
+        Acceleration::const_new(1234.5, AccelerationUnit::KnotPerMinute),
+        Acceleration::const_new(1234.5, AccelerationUnit::KnotPerHour),
+        Acceleration::const_new(1234.5, AccelerationUnit::StandardGravity),
+        Acceleration::const_new(1234.5, AccelerationUnit::MillistandardGravity),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(AccelerationUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Acceleration::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in AccelerationUnit::ALL {
+            assert_eq!(
+                Acceleration::const_new(v, unit).as_base().to_bits(),
+                Acceleration::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Acceleration::from_base(v);

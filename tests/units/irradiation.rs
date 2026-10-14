@@ -447,6 +447,36 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Irradiation; 9] = [
+        Irradiation::const_new(1234.5, IrradiationUnit::JoulePerSquareMeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::KilojoulePerSquareMeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::JoulePerSquareCentimeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::MillijoulePerSquareCentimeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::JoulePerSquareMillimeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::WattHourPerSquareMeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::KilowattHourPerSquareMeter),
+        Irradiation::const_new(1234.5, IrradiationUnit::BtuPerSquareFoot),
+        Irradiation::const_new(1234.5, IrradiationUnit::KilobtuPerSquareFoot),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(IrradiationUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Irradiation::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in IrradiationUnit::ALL {
+            assert_eq!(
+                Irradiation::const_new(v, unit).as_base().to_bits(),
+                Irradiation::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Irradiation::from_base(v);

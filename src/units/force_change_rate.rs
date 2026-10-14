@@ -527,6 +527,32 @@ impl<T: Float> ForceChangeRate<T> {
     }
 }
 
+impl ForceChangeRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ForceChangeRateUnit) -> Self {
+        Self(match unit {
+            ForceChangeRateUnit::NewtonPerMinute => value / 60.0,
+            ForceChangeRateUnit::DecanewtonPerMinute => value / 6.0,
+            ForceChangeRateUnit::KilonewtonPerMinute => value * 16.666666666666668,
+            ForceChangeRateUnit::NewtonPerSecond => value,
+            ForceChangeRateUnit::NanonewtonPerSecond => value / 1e9,
+            ForceChangeRateUnit::MicronewtonPerSecond => value / 1000000.0,
+            ForceChangeRateUnit::MillinewtonPerSecond => value / 1000.0,
+            ForceChangeRateUnit::CentinewtonPerSecond => value / 100.0,
+            ForceChangeRateUnit::DecinewtonPerSecond => value / 10.0,
+            ForceChangeRateUnit::DecanewtonPerSecond => value * 10.0,
+            ForceChangeRateUnit::KilonewtonPerSecond => value * 1000.0,
+            ForceChangeRateUnit::PoundForcePerMinute => value * 0.07413702692100833,
+            ForceChangeRateUnit::KilopoundForcePerMinute => value * 74.13702692100833,
+            ForceChangeRateUnit::PoundForcePerSecond => value * 4.4482216152605,
+            ForceChangeRateUnit::KilopoundForcePerSecond => value * 4448.2216152605,
+        })
+    }
+}
+
 fixed_base!(ForceChangeRate, NewtonPerSecond);
 
 /// Unit markers for counting [`ForceChangeRate`] as an integer with [`Fixed`](crate::Fixed).

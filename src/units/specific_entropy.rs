@@ -368,6 +368,26 @@ impl<T: Float> SpecificEntropy<T> {
     }
 }
 
+impl SpecificEntropy<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SpecificEntropyUnit) -> Self {
+        Self(match unit {
+            SpecificEntropyUnit::JoulePerKilogramKelvin => value,
+            SpecificEntropyUnit::KilojoulePerKilogramKelvin => value * 1000.0,
+            SpecificEntropyUnit::MegajoulePerKilogramKelvin => value * 1000000.0,
+            SpecificEntropyUnit::JoulePerKilogramDegreeCelsius => value,
+            SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius => value * 1000.0,
+            SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => value * 1000000.0,
+            SpecificEntropyUnit::CaloriePerGramKelvin => value * 4184.0,
+            SpecificEntropyUnit::KilocaloriePerGramKelvin => value * 4184000.0,
+            SpecificEntropyUnit::BtuPerPoundFahrenheit => value * 4186.8,
+        })
+    }
+}
+
 fixed_base!(SpecificEntropy, JoulePerKilogramKelvin);
 
 /// Unit markers for counting [`SpecificEntropy`] as an integer with [`Fixed`](crate::Fixed).

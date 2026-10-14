@@ -155,6 +155,19 @@ impl<T: Float> Level<T> {
     }
 }
 
+impl Level<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LevelUnit) -> Self {
+        Self(match unit {
+            LevelUnit::Decibel => value,
+            LevelUnit::Neper => value * 8.685889687081618,
+        })
+    }
+}
+
 fixed_base!(Level, Decibel);
 
 /// Unit markers for counting [`Level`] as an integer with [`Fixed`](crate::Fixed).

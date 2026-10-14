@@ -186,6 +186,20 @@ impl<T: Float> SpecificVolume<T> {
     }
 }
 
+impl SpecificVolume<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SpecificVolumeUnit) -> Self {
+        Self(match unit {
+            SpecificVolumeUnit::CubicMeterPerKilogram => value,
+            SpecificVolumeUnit::CubicMillimeterPerKilogram => value / 1e9,
+            SpecificVolumeUnit::CubicFootPerPound => value * 0.06242796057614461,
+        })
+    }
+}
+
 fixed_base!(SpecificVolume, CubicMeterPerKilogram);
 
 /// Unit markers for counting [`SpecificVolume`] as an integer with [`Fixed`](crate::Fixed).

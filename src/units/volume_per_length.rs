@@ -351,6 +351,26 @@ impl<T: Float> VolumePerLength<T> {
     }
 }
 
+impl VolumePerLength<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VolumePerLengthUnit) -> Self {
+        Self(match unit {
+            VolumePerLengthUnit::CubicMeterPerMeter => value,
+            VolumePerLengthUnit::LiterPerMeter => value / 1000.0,
+            VolumePerLengthUnit::LiterPerKilometer => value / 1000000.0,
+            VolumePerLengthUnit::LiterPerMillimeter => value,
+            VolumePerLengthUnit::OilBarrelPerFoot => value * 0.52161186,
+            VolumePerLengthUnit::CubicYardPerFoot => value * 2.50838208,
+            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value * 2.50837706323584,
+            VolumePerLengthUnit::UsGallonPerMile => value * 2.3521458333333333e-6,
+            VolumePerLengthUnit::ImperialGallonPerMile => value * 2.8248093633182216e-6,
+        })
+    }
+}
+
 fixed_base!(VolumePerLength, CubicMeterPerMeter);
 
 /// Unit markers for counting [`VolumePerLength`] as an integer with [`Fixed`](crate::Fixed).

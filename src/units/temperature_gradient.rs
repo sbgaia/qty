@@ -214,6 +214,21 @@ impl<T: Float> TemperatureGradient<T> {
     }
 }
 
+impl TemperatureGradient<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TemperatureGradientUnit) -> Self {
+        Self(match unit {
+            TemperatureGradientUnit::KelvinPerMeter => value,
+            TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => value * 1.8226888305628464,
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / 1000.0,
+        })
+    }
+}
+
 fixed_base!(TemperatureGradient, KelvinPerMeter);
 
 /// Unit markers for counting [`TemperatureGradient`] as an integer with [`Fixed`](crate::Fixed).

@@ -122,6 +122,18 @@ impl<T: Float> RelativeHumidity<T> {
     }
 }
 
+impl RelativeHumidity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RelativeHumidityUnit) -> Self {
+        Self(match unit {
+            RelativeHumidityUnit::Percent => value,
+        })
+    }
+}
+
 fixed_base!(RelativeHumidity, Percent);
 
 /// Unit markers for counting [`RelativeHumidity`] as an integer with [`Fixed`](crate::Fixed).

@@ -212,6 +212,21 @@ impl<T: Float> FuelEfficiency<T> {
     }
 }
 
+impl FuelEfficiency<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: FuelEfficiencyUnit) -> Self {
+        Self(match unit {
+            FuelEfficiencyUnit::LiterPer100Kilometers => 100.0 / value,
+            FuelEfficiencyUnit::MilePerUsGallon => value * 0.425143707430272,
+            FuelEfficiencyUnit::MilePerUkGallon => value * 0.3540061899346471,
+            FuelEfficiencyUnit::KilometerPerLiter => value,
+        })
+    }
+}
+
 fixed_base!(FuelEfficiency, KilometerPerLiter);
 
 /// Unit markers for counting [`FuelEfficiency`] as an integer with [`Fixed`](crate::Fixed).

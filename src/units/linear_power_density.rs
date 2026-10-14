@@ -797,6 +797,42 @@ impl<T: Float> LinearPowerDensity<T> {
     }
 }
 
+impl LinearPowerDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LinearPowerDensityUnit) -> Self {
+        Self(match unit {
+            LinearPowerDensityUnit::WattPerMeter => value,
+            LinearPowerDensityUnit::MilliwattPerMeter => value / 1000.0,
+            LinearPowerDensityUnit::KilowattPerMeter => value * 1000.0,
+            LinearPowerDensityUnit::MegawattPerMeter => value * 1000000.0,
+            LinearPowerDensityUnit::GigawattPerMeter => value * 1e9,
+            LinearPowerDensityUnit::WattPerCentimeter => value * 100.0,
+            LinearPowerDensityUnit::MilliwattPerCentimeter => value / 10.0,
+            LinearPowerDensityUnit::KilowattPerCentimeter => value * 100000.0,
+            LinearPowerDensityUnit::MegawattPerCentimeter => value * 1e8,
+            LinearPowerDensityUnit::GigawattPerCentimeter => value * 1e11,
+            LinearPowerDensityUnit::WattPerMillimeter => value * 1000.0,
+            LinearPowerDensityUnit::MilliwattPerMillimeter => value,
+            LinearPowerDensityUnit::KilowattPerMillimeter => value * 1000000.0,
+            LinearPowerDensityUnit::MegawattPerMillimeter => value * 1e9,
+            LinearPowerDensityUnit::GigawattPerMillimeter => value * 1e12,
+            LinearPowerDensityUnit::WattPerInch => value * 39.37007874015748,
+            LinearPowerDensityUnit::MilliwattPerInch => value * 0.03937007874015748,
+            LinearPowerDensityUnit::KilowattPerInch => value * 39370.07874015748,
+            LinearPowerDensityUnit::MegawattPerInch => value * 3.937007874015748e7,
+            LinearPowerDensityUnit::GigawattPerInch => value * 3.937007874015748e10,
+            LinearPowerDensityUnit::WattPerFoot => value * 3.2808398950131235,
+            LinearPowerDensityUnit::MilliwattPerFoot => value * 0.0032808398950131233,
+            LinearPowerDensityUnit::KilowattPerFoot => value * 3280.839895013123,
+            LinearPowerDensityUnit::MegawattPerFoot => value * 3280839.8950131233,
+            LinearPowerDensityUnit::GigawattPerFoot => value * 3.2808398950131235e9,
+        })
+    }
+}
+
 fixed_base!(LinearPowerDensity, WattPerMeter);
 
 /// Unit markers for counting [`LinearPowerDensity`] as an integer with [`Fixed`](crate::Fixed).

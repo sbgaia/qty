@@ -1542,6 +1542,69 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Length; 42] = [
+        Length::const_new(1234.5, LengthUnit::Meter),
+        Length::const_new(1234.5, LengthUnit::Femtometer),
+        Length::const_new(1234.5, LengthUnit::Picometer),
+        Length::const_new(1234.5, LengthUnit::Nanometer),
+        Length::const_new(1234.5, LengthUnit::Micrometer),
+        Length::const_new(1234.5, LengthUnit::Millimeter),
+        Length::const_new(1234.5, LengthUnit::Centimeter),
+        Length::const_new(1234.5, LengthUnit::Decimeter),
+        Length::const_new(1234.5, LengthUnit::Decameter),
+        Length::const_new(1234.5, LengthUnit::Hectometer),
+        Length::const_new(1234.5, LengthUnit::Kilometer),
+        Length::const_new(1234.5, LengthUnit::Megameter),
+        Length::const_new(1234.5, LengthUnit::Gigameter),
+        Length::const_new(1234.5, LengthUnit::Mile),
+        Length::const_new(1234.5, LengthUnit::Yard),
+        Length::const_new(1234.5, LengthUnit::Kiloyard),
+        Length::const_new(1234.5, LengthUnit::Foot),
+        Length::const_new(1234.5, LengthUnit::Kilofoot),
+        Length::const_new(1234.5, LengthUnit::UsSurveyFoot),
+        Length::const_new(1234.5, LengthUnit::Inch),
+        Length::const_new(1234.5, LengthUnit::Mil),
+        Length::const_new(1234.5, LengthUnit::NauticalMile),
+        Length::const_new(1234.5, LengthUnit::Fathom),
+        Length::const_new(1234.5, LengthUnit::Shackle),
+        Length::const_new(1234.5, LengthUnit::Microinch),
+        Length::const_new(1234.5, LengthUnit::PrinterPoint),
+        Length::const_new(1234.5, LengthUnit::DtpPoint),
+        Length::const_new(1234.5, LengthUnit::PrinterPica),
+        Length::const_new(1234.5, LengthUnit::DtpPica),
+        Length::const_new(1234.5, LengthUnit::Twip),
+        Length::const_new(1234.5, LengthUnit::Hand),
+        Length::const_new(1234.5, LengthUnit::AstronomicalUnit),
+        Length::const_new(1234.5, LengthUnit::Parsec),
+        Length::const_new(1234.5, LengthUnit::Kiloparsec),
+        Length::const_new(1234.5, LengthUnit::Megaparsec),
+        Length::const_new(1234.5, LengthUnit::LightYear),
+        Length::const_new(1234.5, LengthUnit::KilolightYear),
+        Length::const_new(1234.5, LengthUnit::MegalightYear),
+        Length::const_new(1234.5, LengthUnit::SolarRadius),
+        Length::const_new(1234.5, LengthUnit::Chain),
+        Length::const_new(1234.5, LengthUnit::Angstrom),
+        Length::const_new(1234.5, LengthUnit::DataMile),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(LengthUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Length::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in LengthUnit::ALL {
+            assert_eq!(
+                Length::const_new(v, unit).as_base().to_bits(),
+                Length::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Length::from_base(v);

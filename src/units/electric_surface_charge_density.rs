@@ -197,6 +197,20 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
     }
 }
 
+impl ElectricSurfaceChargeDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricSurfaceChargeDensityUnit) -> Self {
+        Self(match unit {
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => value,
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => value * 10000.0,
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => value * 1550.0031000062,
+        })
+    }
+}
+
 fixed_base!(ElectricSurfaceChargeDensity, CoulombPerSquareMeter);
 
 /// Unit markers for counting [`ElectricSurfaceChargeDensity`] as an integer with [`Fixed`](crate::Fixed).

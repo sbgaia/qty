@@ -584,6 +584,34 @@ impl<T: Float> AmountOfSubstance<T> {
     }
 }
 
+impl AmountOfSubstance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AmountOfSubstanceUnit) -> Self {
+        Self(match unit {
+            AmountOfSubstanceUnit::Mole => value,
+            AmountOfSubstanceUnit::Femtomole => value / 1e15,
+            AmountOfSubstanceUnit::Picomole => value / 1e12,
+            AmountOfSubstanceUnit::Nanomole => value / 1e9,
+            AmountOfSubstanceUnit::Micromole => value / 1000000.0,
+            AmountOfSubstanceUnit::Millimole => value / 1000.0,
+            AmountOfSubstanceUnit::Centimole => value / 100.0,
+            AmountOfSubstanceUnit::Decimole => value / 10.0,
+            AmountOfSubstanceUnit::Kilomole => value * 1000.0,
+            AmountOfSubstanceUnit::Megamole => value * 1000000.0,
+            AmountOfSubstanceUnit::PoundMole => value * 453.59237,
+            AmountOfSubstanceUnit::NanopoundMole => value * 4.5359237e-7,
+            AmountOfSubstanceUnit::MicropoundMole => value * 0.00045359237,
+            AmountOfSubstanceUnit::MillipoundMole => value * 0.45359237,
+            AmountOfSubstanceUnit::CentipoundMole => value * 4.5359237,
+            AmountOfSubstanceUnit::DecipoundMole => value * 45.359237,
+            AmountOfSubstanceUnit::KilopoundMole => value * 453592.37,
+        })
+    }
+}
+
 fixed_base!(AmountOfSubstance, Mole);
 
 /// Unit markers for counting [`AmountOfSubstance`] as an integer with [`Fixed`](crate::Fixed).

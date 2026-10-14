@@ -274,6 +274,23 @@ impl<T: Float> WarpingMomentOfInertia<T> {
     }
 }
 
+impl WarpingMomentOfInertia<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: WarpingMomentOfInertiaUnit) -> Self {
+        Self(match unit {
+            WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value / 1000000.0,
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value / 1e12,
+            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value / 1e18,
+            WarpingMomentOfInertiaUnit::FootToTheSixth => value * 0.000801843800914862,
+            WarpingMomentOfInertiaUnit::InchToTheSixth => value * 2.68535866540096e-10,
+        })
+    }
+}
+
 fixed_base!(WarpingMomentOfInertia, MeterToTheSixth);
 
 /// Unit markers for counting [`WarpingMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).

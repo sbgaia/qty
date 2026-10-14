@@ -155,6 +155,19 @@ impl<T: Float> ThermalResistance<T> {
     }
 }
 
+impl ThermalResistance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ThermalResistanceUnit) -> Self {
+        Self(match unit {
+            ThermalResistanceUnit::KelvinPerWatt => value,
+            ThermalResistanceUnit::DegreeCelsiusPerWatt => value,
+        })
+    }
+}
+
 fixed_base!(ThermalResistance, KelvinPerWatt);
 
 /// Unit markers for counting [`ThermalResistance`] as an integer with [`Fixed`](crate::Fixed).

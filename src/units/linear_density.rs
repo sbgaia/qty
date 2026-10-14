@@ -607,6 +607,35 @@ impl<T: Float> LinearDensity<T> {
     }
 }
 
+impl LinearDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LinearDensityUnit) -> Self {
+        Self(match unit {
+            LinearDensityUnit::GramPerMillimeter => value,
+            LinearDensityUnit::MicrogramPerMillimeter => value / 1000000.0,
+            LinearDensityUnit::MilligramPerMillimeter => value / 1000.0,
+            LinearDensityUnit::KilogramPerMillimeter => value * 1000.0,
+            LinearDensityUnit::GramPerCentimeter => value / 10.0,
+            LinearDensityUnit::MicrogramPerCentimeter => value / 1e7,
+            LinearDensityUnit::MilligramPerCentimeter => value / 10000.0,
+            LinearDensityUnit::KilogramPerCentimeter => value * 100.0,
+            LinearDensityUnit::GramPerMeter => value / 1000.0,
+            LinearDensityUnit::MicrogramPerMeter => value / 1e9,
+            LinearDensityUnit::MilligramPerMeter => value / 1000000.0,
+            LinearDensityUnit::KilogramPerMeter => value,
+            LinearDensityUnit::PoundPerInch => value * 17.857967322834646,
+            LinearDensityUnit::PoundPerFoot => value * 1.4881639435695537,
+            LinearDensityUnit::GramPerFoot => value * 0.0032808398950131233,
+            LinearDensityUnit::MicrogramPerFoot => value / 3.048e8,
+            LinearDensityUnit::MilligramPerFoot => value / 304800.0,
+            LinearDensityUnit::KilogramPerFoot => value * 3.2808398950131235,
+        })
+    }
+}
+
 fixed_base!(LinearDensity, KilogramPerMeter);
 
 /// Unit markers for counting [`LinearDensity`] as an integer with [`Fixed`](crate::Fixed).

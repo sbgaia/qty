@@ -597,6 +597,39 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [MassFlux; 12] = [
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerSecondPerSquareMeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerSecondPerSquareMeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerSecondPerSquareCentimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerSecondPerSquareCentimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerSecondPerSquareMillimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerSecondPerSquareMillimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerHourPerSquareMeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerHourPerSquareMeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerHourPerSquareCentimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerHourPerSquareCentimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::GramPerHourPerSquareMillimeter),
+        MassFlux::const_new(1234.5, MassFluxUnit::KilogramPerHourPerSquareMillimeter),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(MassFluxUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            MassFlux::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in MassFluxUnit::ALL {
+            assert_eq!(
+                MassFlux::const_new(v, unit).as_base().to_bits(),
+                MassFlux::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = MassFlux::from_base(v);

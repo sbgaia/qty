@@ -587,6 +587,34 @@ impl<T: Float> SpecificWeight<T> {
     }
 }
 
+impl SpecificWeight<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SpecificWeightUnit) -> Self {
+        Self(match unit {
+            SpecificWeightUnit::NewtonPerCubicMillimeter => value * 1e9,
+            SpecificWeightUnit::KilonewtonPerCubicMillimeter => value * 1e12,
+            SpecificWeightUnit::NewtonPerCubicCentimeter => value * 1000000.0,
+            SpecificWeightUnit::KilonewtonPerCubicCentimeter => value * 1e9,
+            SpecificWeightUnit::NewtonPerCubicMeter => value,
+            SpecificWeightUnit::KilonewtonPerCubicMeter => value * 1000.0,
+            SpecificWeightUnit::MeganewtonPerCubicMeter => value * 1000000.0,
+            SpecificWeightUnit::KilogramForcePerCubicMillimeter => value * 9.80665e9,
+            SpecificWeightUnit::KilogramForcePerCubicCentimeter => value * 9806650.0,
+            SpecificWeightUnit::KilogramForcePerCubicMeter => value * 9.80665,
+            SpecificWeightUnit::PoundForcePerCubicInch => value * 271447.1375263134,
+            SpecificWeightUnit::KilopoundForcePerCubicInch => value * 2.714471375263134e8,
+            SpecificWeightUnit::PoundForcePerCubicFoot => value * 157.0874638462462,
+            SpecificWeightUnit::KilopoundForcePerCubicFoot => value * 157087.46384624622,
+            SpecificWeightUnit::TonneForcePerCubicMillimeter => value * 9.80665e12,
+            SpecificWeightUnit::TonneForcePerCubicCentimeter => value * 9.80665e9,
+            SpecificWeightUnit::TonneForcePerCubicMeter => value * 9806.65,
+        })
+    }
+}
+
 fixed_base!(SpecificWeight, NewtonPerCubicMeter);
 
 /// Unit markers for counting [`SpecificWeight`] as an integer with [`Fixed`](crate::Fixed).

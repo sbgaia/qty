@@ -2169,6 +2169,81 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Volume; 54] = [
+        Volume::const_new(1234.5, VolumeUnit::Liter),
+        Volume::const_new(1234.5, VolumeUnit::Nanoliter),
+        Volume::const_new(1234.5, VolumeUnit::Microliter),
+        Volume::const_new(1234.5, VolumeUnit::Milliliter),
+        Volume::const_new(1234.5, VolumeUnit::Centiliter),
+        Volume::const_new(1234.5, VolumeUnit::Deciliter),
+        Volume::const_new(1234.5, VolumeUnit::Decaliter),
+        Volume::const_new(1234.5, VolumeUnit::Hectoliter),
+        Volume::const_new(1234.5, VolumeUnit::Kiloliter),
+        Volume::const_new(1234.5, VolumeUnit::Megaliter),
+        Volume::const_new(1234.5, VolumeUnit::CubicMeter),
+        Volume::const_new(1234.5, VolumeUnit::ThousandCubicMeter),
+        Volume::const_new(1234.5, VolumeUnit::CubicKilometer),
+        Volume::const_new(1234.5, VolumeUnit::CubicHectometer),
+        Volume::const_new(1234.5, VolumeUnit::CubicDecimeter),
+        Volume::const_new(1234.5, VolumeUnit::CubicCentimeter),
+        Volume::const_new(1234.5, VolumeUnit::CubicMillimeter),
+        Volume::const_new(1234.5, VolumeUnit::CubicMicrometer),
+        Volume::const_new(1234.5, VolumeUnit::CubicMile),
+        Volume::const_new(1234.5, VolumeUnit::CubicYard),
+        Volume::const_new(1234.5, VolumeUnit::CubicFoot),
+        Volume::const_new(1234.5, VolumeUnit::HundredCubicFoot),
+        Volume::const_new(1234.5, VolumeUnit::ThousandCubicFoot),
+        Volume::const_new(1234.5, VolumeUnit::MillionCubicFoot),
+        Volume::const_new(1234.5, VolumeUnit::CubicInch),
+        Volume::const_new(1234.5, VolumeUnit::ImperialGallon),
+        Volume::const_new(1234.5, VolumeUnit::KiloimperialGallon),
+        Volume::const_new(1234.5, VolumeUnit::MegaimperialGallon),
+        Volume::const_new(1234.5, VolumeUnit::ImperialOunce),
+        Volume::const_new(1234.5, VolumeUnit::UsGallon),
+        Volume::const_new(1234.5, VolumeUnit::DecausGallon),
+        Volume::const_new(1234.5, VolumeUnit::DeciusGallon),
+        Volume::const_new(1234.5, VolumeUnit::HectousGallon),
+        Volume::const_new(1234.5, VolumeUnit::KilousGallon),
+        Volume::const_new(1234.5, VolumeUnit::MegausGallon),
+        Volume::const_new(1234.5, VolumeUnit::UsOunce),
+        Volume::const_new(1234.5, VolumeUnit::UsTablespoon),
+        Volume::const_new(1234.5, VolumeUnit::AuTablespoon),
+        Volume::const_new(1234.5, VolumeUnit::MetricTablespoon),
+        Volume::const_new(1234.5, VolumeUnit::UkTablespoon),
+        Volume::const_new(1234.5, VolumeUnit::MetricTeaspoon),
+        Volume::const_new(1234.5, VolumeUnit::UsTeaspoon),
+        Volume::const_new(1234.5, VolumeUnit::MetricCup),
+        Volume::const_new(1234.5, VolumeUnit::UsCustomaryCup),
+        Volume::const_new(1234.5, VolumeUnit::UsLegalCup),
+        Volume::const_new(1234.5, VolumeUnit::OilBarrel),
+        Volume::const_new(1234.5, VolumeUnit::UsBeerBarrel),
+        Volume::const_new(1234.5, VolumeUnit::ImperialBeerBarrel),
+        Volume::const_new(1234.5, VolumeUnit::UsQuart),
+        Volume::const_new(1234.5, VolumeUnit::ImperialQuart),
+        Volume::const_new(1234.5, VolumeUnit::UsPint),
+        Volume::const_new(1234.5, VolumeUnit::AcreFoot),
+        Volume::const_new(1234.5, VolumeUnit::ImperialPint),
+        Volume::const_new(1234.5, VolumeUnit::BoardFoot),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(VolumeUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Volume::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in VolumeUnit::ALL {
+            assert_eq!(
+                Volume::const_new(v, unit).as_base().to_bits(),
+                Volume::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Volume::from_base(v);

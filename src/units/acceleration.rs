@@ -488,6 +488,31 @@ impl<T: Float> Acceleration<T> {
     }
 }
 
+impl Acceleration<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AccelerationUnit) -> Self {
+        Self(match unit {
+            AccelerationUnit::MeterPerSecondSquared => value,
+            AccelerationUnit::NanometerPerSecondSquared => value / 1e9,
+            AccelerationUnit::MicrometerPerSecondSquared => value / 1000000.0,
+            AccelerationUnit::MillimeterPerSecondSquared => value / 1000.0,
+            AccelerationUnit::CentimeterPerSecondSquared => value / 100.0,
+            AccelerationUnit::DecimeterPerSecondSquared => value / 10.0,
+            AccelerationUnit::KilometerPerSecondSquared => value * 1000.0,
+            AccelerationUnit::InchPerSecondSquared => value * 0.0254,
+            AccelerationUnit::FootPerSecondSquared => value * 0.3048,
+            AccelerationUnit::KnotPerSecond => value * 0.5144444444444445,
+            AccelerationUnit::KnotPerMinute => value * 0.008574074074074074,
+            AccelerationUnit::KnotPerHour => value * 0.00014290123456790123,
+            AccelerationUnit::StandardGravity => value * 9.80665,
+            AccelerationUnit::MillistandardGravity => value * 0.00980665,
+        })
+    }
+}
+
 fixed_base!(Acceleration, MeterPerSecondSquared);
 
 /// Unit markers for counting [`Acceleration`] as an integer with [`Fixed`](crate::Fixed).

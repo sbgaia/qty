@@ -1418,6 +1418,60 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Speed; 33] = [
+        Speed::const_new(1234.5, SpeedUnit::MeterPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::NanometerPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::MicrometerPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::MillimeterPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::CentimeterPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::DecimeterPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::KilometerPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::MeterPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::NanometerPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::MicrometerPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::MillimeterPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::CentimeterPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::DecimeterPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::KilometerPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::MeterPerHour),
+        Speed::const_new(1234.5, SpeedUnit::MillimeterPerHour),
+        Speed::const_new(1234.5, SpeedUnit::CentimeterPerHour),
+        Speed::const_new(1234.5, SpeedUnit::KilometerPerHour),
+        Speed::const_new(1234.5, SpeedUnit::FootPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::FootPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::FootPerHour),
+        Speed::const_new(1234.5, SpeedUnit::UsSurveyFootPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::UsSurveyFootPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::UsSurveyFootPerHour),
+        Speed::const_new(1234.5, SpeedUnit::InchPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::InchPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::InchPerHour),
+        Speed::const_new(1234.5, SpeedUnit::YardPerSecond),
+        Speed::const_new(1234.5, SpeedUnit::YardPerMinute),
+        Speed::const_new(1234.5, SpeedUnit::YardPerHour),
+        Speed::const_new(1234.5, SpeedUnit::Knot),
+        Speed::const_new(1234.5, SpeedUnit::MilePerHour),
+        Speed::const_new(1234.5, SpeedUnit::Mach),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(SpeedUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Speed::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in SpeedUnit::ALL {
+            assert_eq!(
+                Speed::const_new(v, unit).as_base().to_bits(),
+                Speed::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Speed::from_base(v);

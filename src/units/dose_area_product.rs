@@ -795,6 +795,42 @@ impl<T: Float> DoseAreaProduct<T> {
     }
 }
 
+impl DoseAreaProduct<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: DoseAreaProductUnit) -> Self {
+        Self(match unit {
+            DoseAreaProductUnit::GraySquareMeter => value,
+            DoseAreaProductUnit::MicrograySquareMeter => value / 1000000.0,
+            DoseAreaProductUnit::MilligraySquareMeter => value / 1000.0,
+            DoseAreaProductUnit::CentigraySquareMeter => value / 100.0,
+            DoseAreaProductUnit::DecigraySquareMeter => value / 10.0,
+            DoseAreaProductUnit::GraySquareDecimeter => value / 100.0,
+            DoseAreaProductUnit::MicrograySquareDecimeter => value / 1e8,
+            DoseAreaProductUnit::MilligraySquareDecimeter => value / 100000.0,
+            DoseAreaProductUnit::CentigraySquareDecimeter => value / 10000.0,
+            DoseAreaProductUnit::DecigraySquareDecimeter => value / 1000.0,
+            DoseAreaProductUnit::GraySquareCentimeter => value / 10000.0,
+            DoseAreaProductUnit::MicrograySquareCentimeter => value / 1e10,
+            DoseAreaProductUnit::MilligraySquareCentimeter => value / 1e7,
+            DoseAreaProductUnit::CentigraySquareCentimeter => value / 1000000.0,
+            DoseAreaProductUnit::DecigraySquareCentimeter => value / 100000.0,
+            DoseAreaProductUnit::GraySquareMillimeter => value / 1000000.0,
+            DoseAreaProductUnit::MicrograySquareMillimeter => value / 1e12,
+            DoseAreaProductUnit::MilligraySquareMillimeter => value / 1e9,
+            DoseAreaProductUnit::CentigraySquareMillimeter => value / 1e8,
+            DoseAreaProductUnit::DecigraySquareMillimeter => value / 1e7,
+            DoseAreaProductUnit::GraySquareMicrometer => value / 1e12,
+            DoseAreaProductUnit::MicrograySquareMicrometer => value / 1e18,
+            DoseAreaProductUnit::MilligraySquareMicrometer => value / 1e15,
+            DoseAreaProductUnit::CentigraySquareMicrometer => value / 1e14,
+            DoseAreaProductUnit::DecigraySquareMicrometer => value / 1e13,
+        })
+    }
+}
+
 fixed_base!(DoseAreaProduct, GraySquareMeter);
 
 /// Unit markers for counting [`DoseAreaProduct`] as an integer with [`Fixed`](crate::Fixed).

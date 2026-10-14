@@ -129,6 +129,18 @@ impl<T: Float> ElectricField<T> {
     }
 }
 
+impl ElectricField<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricFieldUnit) -> Self {
+        Self(match unit {
+            ElectricFieldUnit::VoltPerMeter => value,
+        })
+    }
+}
+
 fixed_base!(ElectricField, VoltPerMeter);
 
 /// Unit markers for counting [`ElectricField`] as an integer with [`Fixed`](crate::Fixed).

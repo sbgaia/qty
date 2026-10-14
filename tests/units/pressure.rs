@@ -2191,6 +2191,77 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Pressure; 50] = [
+        Pressure::const_new(1234.5, PressureUnit::Pascal),
+        Pressure::const_new(1234.5, PressureUnit::Micropascal),
+        Pressure::const_new(1234.5, PressureUnit::Millipascal),
+        Pressure::const_new(1234.5, PressureUnit::Decapascal),
+        Pressure::const_new(1234.5, PressureUnit::Hectopascal),
+        Pressure::const_new(1234.5, PressureUnit::Kilopascal),
+        Pressure::const_new(1234.5, PressureUnit::Megapascal),
+        Pressure::const_new(1234.5, PressureUnit::Gigapascal),
+        Pressure::const_new(1234.5, PressureUnit::Atmosphere),
+        Pressure::const_new(1234.5, PressureUnit::Bar),
+        Pressure::const_new(1234.5, PressureUnit::Microbar),
+        Pressure::const_new(1234.5, PressureUnit::Millibar),
+        Pressure::const_new(1234.5, PressureUnit::Centibar),
+        Pressure::const_new(1234.5, PressureUnit::Decibar),
+        Pressure::const_new(1234.5, PressureUnit::Kilobar),
+        Pressure::const_new(1234.5, PressureUnit::Megabar),
+        Pressure::const_new(1234.5, PressureUnit::KilogramForcePerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::KilogramForcePerSquareCentimeter),
+        Pressure::const_new(1234.5, PressureUnit::KilogramForcePerSquareMillimeter),
+        Pressure::const_new(1234.5, PressureUnit::NewtonPerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::KilonewtonPerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::MeganewtonPerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::NewtonPerSquareCentimeter),
+        Pressure::const_new(1234.5, PressureUnit::KilonewtonPerSquareCentimeter),
+        Pressure::const_new(1234.5, PressureUnit::NewtonPerSquareMillimeter),
+        Pressure::const_new(1234.5, PressureUnit::KilonewtonPerSquareMillimeter),
+        Pressure::const_new(1234.5, PressureUnit::TechnicalAtmosphere),
+        Pressure::const_new(1234.5, PressureUnit::Torr),
+        Pressure::const_new(1234.5, PressureUnit::Millitorr),
+        Pressure::const_new(1234.5, PressureUnit::PoundForcePerSquareInch),
+        Pressure::const_new(1234.5, PressureUnit::KilopoundForcePerSquareInch),
+        Pressure::const_new(1234.5, PressureUnit::PoundForcePerSquareMil),
+        Pressure::const_new(1234.5, PressureUnit::KilopoundForcePerSquareMil),
+        Pressure::const_new(1234.5, PressureUnit::PoundForcePerSquareFoot),
+        Pressure::const_new(1234.5, PressureUnit::KilopoundForcePerSquareFoot),
+        Pressure::const_new(1234.5, PressureUnit::TonneForcePerSquareMillimeter),
+        Pressure::const_new(1234.5, PressureUnit::TonneForcePerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::MeterOfHead),
+        Pressure::const_new(1234.5, PressureUnit::TonneForcePerSquareCentimeter),
+        Pressure::const_new(1234.5, PressureUnit::FootOfHead),
+        Pressure::const_new(1234.5, PressureUnit::MillimeterOfMercury),
+        Pressure::const_new(1234.5, PressureUnit::InchOfMercury),
+        Pressure::const_new(1234.5, PressureUnit::DynePerSquareCentimeter),
+        Pressure::const_new(1234.5, PressureUnit::PoundPerInchSecondSquared),
+        Pressure::const_new(1234.5, PressureUnit::MeterOfWaterColumn),
+        Pressure::const_new(1234.5, PressureUnit::MillimeterOfWaterColumn),
+        Pressure::const_new(1234.5, PressureUnit::CentimeterOfWaterColumn),
+        Pressure::const_new(1234.5, PressureUnit::InchOfWaterColumn),
+        Pressure::const_new(1234.5, PressureUnit::MilligramForcePerSquareMeter),
+        Pressure::const_new(1234.5, PressureUnit::MilligramForcePerSquareFoot),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(PressureUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Pressure::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in PressureUnit::ALL {
+            assert_eq!(
+                Pressure::const_new(v, unit).as_base().to_bits(),
+                Pressure::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Pressure::from_base(v);

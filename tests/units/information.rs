@@ -1527,6 +1527,66 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Information; 39] = [
+        Information::const_new(1234.5, InformationUnit::Byte),
+        Information::const_new(1234.5, InformationUnit::Kilobyte),
+        Information::const_new(1234.5, InformationUnit::Megabyte),
+        Information::const_new(1234.5, InformationUnit::Gigabyte),
+        Information::const_new(1234.5, InformationUnit::Terabyte),
+        Information::const_new(1234.5, InformationUnit::Petabyte),
+        Information::const_new(1234.5, InformationUnit::Exabyte),
+        Information::const_new(1234.5, InformationUnit::Kibibyte),
+        Information::const_new(1234.5, InformationUnit::Mebibyte),
+        Information::const_new(1234.5, InformationUnit::Gibibyte),
+        Information::const_new(1234.5, InformationUnit::Tebibyte),
+        Information::const_new(1234.5, InformationUnit::Pebibyte),
+        Information::const_new(1234.5, InformationUnit::Exbibyte),
+        Information::const_new(1234.5, InformationUnit::Octet),
+        Information::const_new(1234.5, InformationUnit::Kilooctet),
+        Information::const_new(1234.5, InformationUnit::Megaoctet),
+        Information::const_new(1234.5, InformationUnit::Gigaoctet),
+        Information::const_new(1234.5, InformationUnit::Teraoctet),
+        Information::const_new(1234.5, InformationUnit::Petaoctet),
+        Information::const_new(1234.5, InformationUnit::Exaoctet),
+        Information::const_new(1234.5, InformationUnit::Kibioctet),
+        Information::const_new(1234.5, InformationUnit::Mebioctet),
+        Information::const_new(1234.5, InformationUnit::Gibioctet),
+        Information::const_new(1234.5, InformationUnit::Tebioctet),
+        Information::const_new(1234.5, InformationUnit::Pebioctet),
+        Information::const_new(1234.5, InformationUnit::Exbioctet),
+        Information::const_new(1234.5, InformationUnit::Bit),
+        Information::const_new(1234.5, InformationUnit::Kilobit),
+        Information::const_new(1234.5, InformationUnit::Megabit),
+        Information::const_new(1234.5, InformationUnit::Gigabit),
+        Information::const_new(1234.5, InformationUnit::Terabit),
+        Information::const_new(1234.5, InformationUnit::Petabit),
+        Information::const_new(1234.5, InformationUnit::Exabit),
+        Information::const_new(1234.5, InformationUnit::Kibibit),
+        Information::const_new(1234.5, InformationUnit::Mebibit),
+        Information::const_new(1234.5, InformationUnit::Gibibit),
+        Information::const_new(1234.5, InformationUnit::Tebibit),
+        Information::const_new(1234.5, InformationUnit::Pebibit),
+        Information::const_new(1234.5, InformationUnit::Exbibit),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(InformationUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Information::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in InformationUnit::ALL {
+            assert_eq!(
+                Information::const_new(v, unit).as_base().to_bits(),
+                Information::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Information::from_base(v);

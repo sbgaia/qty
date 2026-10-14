@@ -362,6 +362,26 @@ impl<T: Float> MolarFlow<T> {
     }
 }
 
+impl MolarFlow<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MolarFlowUnit) -> Self {
+        Self(match unit {
+            MolarFlowUnit::MolePerSecond => value,
+            MolarFlowUnit::KilomolePerSecond => value * 1000.0,
+            MolarFlowUnit::MolePerMinute => value / 60.0,
+            MolarFlowUnit::KilomolePerMinute => value * 16.666666666666668,
+            MolarFlowUnit::MolePerHour => value / 3600.0,
+            MolarFlowUnit::KilomolePerHour => value * 0.2777777777777778,
+            MolarFlowUnit::PoundMolePerSecond => value * 453.59237,
+            MolarFlowUnit::PoundMolePerMinute => value * 7.559872833333333,
+            MolarFlowUnit::PoundMolePerHour => value * 0.12599788055555555,
+        })
+    }
+}
+
 fixed_base!(MolarFlow, MolePerSecond);
 
 /// Unit markers for counting [`MolarFlow`] as an integer with [`Fixed`](crate::Fixed).

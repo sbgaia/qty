@@ -1177,6 +1177,56 @@ impl<T: Float> Information<T> {
     }
 }
 
+impl Information<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: InformationUnit) -> Self {
+        Self(match unit {
+            InformationUnit::Byte => value * 8.0,
+            InformationUnit::Kilobyte => value * 8000.0,
+            InformationUnit::Megabyte => value * 8000000.0,
+            InformationUnit::Gigabyte => value * 8e9,
+            InformationUnit::Terabyte => value * 8e12,
+            InformationUnit::Petabyte => value * 8e15,
+            InformationUnit::Exabyte => value * 8e18,
+            InformationUnit::Kibibyte => value * 8192.0,
+            InformationUnit::Mebibyte => value * 8388608.0,
+            InformationUnit::Gibibyte => value * 8.589934592e9,
+            InformationUnit::Tebibyte => value * 8.796093022208e12,
+            InformationUnit::Pebibyte => value * 9.007199254740992e15,
+            InformationUnit::Exbibyte => value * 9.223372036854776e18,
+            InformationUnit::Octet => value * 8.0,
+            InformationUnit::Kilooctet => value * 8000.0,
+            InformationUnit::Megaoctet => value * 8000000.0,
+            InformationUnit::Gigaoctet => value * 8e9,
+            InformationUnit::Teraoctet => value * 8e12,
+            InformationUnit::Petaoctet => value * 8e15,
+            InformationUnit::Exaoctet => value * 8e18,
+            InformationUnit::Kibioctet => value * 8192.0,
+            InformationUnit::Mebioctet => value * 8388608.0,
+            InformationUnit::Gibioctet => value * 8.589934592e9,
+            InformationUnit::Tebioctet => value * 8.796093022208e12,
+            InformationUnit::Pebioctet => value * 9.007199254740992e15,
+            InformationUnit::Exbioctet => value * 9.223372036854776e18,
+            InformationUnit::Bit => value,
+            InformationUnit::Kilobit => value * 1000.0,
+            InformationUnit::Megabit => value * 1000000.0,
+            InformationUnit::Gigabit => value * 1e9,
+            InformationUnit::Terabit => value * 1e12,
+            InformationUnit::Petabit => value * 1e15,
+            InformationUnit::Exabit => value * 1e18,
+            InformationUnit::Kibibit => value * 1024.0,
+            InformationUnit::Mebibit => value * 1048576.0,
+            InformationUnit::Gibibit => value * 1.073741824e9,
+            InformationUnit::Tebibit => value * 1.099511627776e12,
+            InformationUnit::Pebibit => value * 1.125899906842624e15,
+            InformationUnit::Exbibit => value * 1.152921504606847e18,
+        })
+    }
+}
+
 fixed_base!(Information, Bit);
 
 /// Unit markers for counting [`Information`] as an integer with [`Fixed`](crate::Fixed).

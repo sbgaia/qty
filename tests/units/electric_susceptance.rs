@@ -770,6 +770,45 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ElectricSusceptance; 16] = [
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Siemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Nanosiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Microsiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Millisiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Kilosiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Megasiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Gigasiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Terasiemens),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Mho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Nanomho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Micromho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Millimho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Kilomho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Megamho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Gigamho),
+        ElectricSusceptance::const_new(1234.5, ElectricSusceptanceUnit::Teramho),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ElectricSusceptanceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ElectricSusceptance::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ElectricSusceptanceUnit::ALL {
+            assert_eq!(
+                ElectricSusceptance::const_new(v, unit).as_base().to_bits(),
+                ElectricSusceptance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ElectricSusceptance::from_base(v);

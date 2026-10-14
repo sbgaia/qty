@@ -283,6 +283,23 @@ impl<T: Float> MagneticField<T> {
     }
 }
 
+impl MagneticField<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MagneticFieldUnit) -> Self {
+        Self(match unit {
+            MagneticFieldUnit::Tesla => value,
+            MagneticFieldUnit::Nanotesla => value / 1e9,
+            MagneticFieldUnit::Microtesla => value / 1000000.0,
+            MagneticFieldUnit::Millitesla => value / 1000.0,
+            MagneticFieldUnit::Gauss => value / 10000.0,
+            MagneticFieldUnit::Milligauss => value / 1e7,
+        })
+    }
+}
+
 fixed_base!(MagneticField, Tesla);
 
 /// Unit markers for counting [`MagneticField`] as an integer with [`Fixed`](crate::Fixed).

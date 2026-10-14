@@ -233,6 +233,21 @@ impl<T: Float> ElectricReactivePower<T> {
     }
 }
 
+impl ElectricReactivePower<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricReactivePowerUnit) -> Self {
+        Self(match unit {
+            ElectricReactivePowerUnit::VoltampereReactive => value,
+            ElectricReactivePowerUnit::KilovoltampereReactive => value * 1000.0,
+            ElectricReactivePowerUnit::MegavoltampereReactive => value * 1000000.0,
+            ElectricReactivePowerUnit::GigavoltampereReactive => value * 1e9,
+        })
+    }
+}
+
 fixed_base!(ElectricReactivePower, VoltampereReactive);
 
 /// Unit markers for counting [`ElectricReactivePower`] as an integer with [`Fixed`](crate::Fixed).

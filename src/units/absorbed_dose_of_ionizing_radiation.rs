@@ -593,6 +593,34 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     }
 }
 
+impl AbsorbedDoseOfIonizingRadiation<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AbsorbedDoseOfIonizingRadiationUnit) -> Self {
+        Self(match unit {
+            AbsorbedDoseOfIonizingRadiationUnit::Gray => value,
+            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => value / 1e15,
+            AbsorbedDoseOfIonizingRadiationUnit::Picogray => value / 1e12,
+            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => value / 1e9,
+            AbsorbedDoseOfIonizingRadiationUnit::Microgray => value / 1000000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Milligray => value / 1000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Centigray => value / 100.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Decigray => value / 10.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Kilogray => value * 1000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Megagray => value * 1000000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Gigagray => value * 1e9,
+            AbsorbedDoseOfIonizingRadiationUnit::Teragray => value * 1e12,
+            AbsorbedDoseOfIonizingRadiationUnit::Petagray => value * 1e15,
+            AbsorbedDoseOfIonizingRadiationUnit::Rad => value / 100.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Millirad => value / 100000.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value * 10.0,
+            AbsorbedDoseOfIonizingRadiationUnit::Megarad => value * 10000.0,
+        })
+    }
+}
+
 fixed_base!(AbsorbedDoseOfIonizingRadiation, Gray);
 
 /// Unit markers for counting [`AbsorbedDoseOfIonizingRadiation`] as an integer with [`Fixed`](crate::Fixed).

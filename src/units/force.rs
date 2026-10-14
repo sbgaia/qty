@@ -560,6 +560,33 @@ impl<T: Float> Force<T> {
     }
 }
 
+impl Force<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ForceUnit) -> Self {
+        Self(match unit {
+            ForceUnit::Dyn => value / 100000.0,
+            ForceUnit::GramForce => value * 0.00980665,
+            ForceUnit::KilogramForce => value * 9.80665,
+            ForceUnit::TonneForce => value * 9806.65,
+            ForceUnit::Newton => value,
+            ForceUnit::Micronewton => value / 1000000.0,
+            ForceUnit::Millinewton => value / 1000.0,
+            ForceUnit::Decanewton => value * 10.0,
+            ForceUnit::Kilonewton => value * 1000.0,
+            ForceUnit::Meganewton => value * 1000000.0,
+            ForceUnit::Kilopond => value * 9.80665,
+            ForceUnit::Poundal => value * 0.138254954376,
+            ForceUnit::PoundForce => value * 4.4482216152605,
+            ForceUnit::KilopoundForce => value * 4448.2216152605,
+            ForceUnit::OunceForce => value * 0.2780138509537812,
+            ForceUnit::ShortTonForce => value * 8896.443230521,
+        })
+    }
+}
+
 fixed_base!(Force, Newton);
 
 /// Unit markers for counting [`Force`] as an integer with [`Fixed`](crate::Fixed).

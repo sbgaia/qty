@@ -362,6 +362,26 @@ impl<T: Float> Irradiation<T> {
     }
 }
 
+impl Irradiation<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: IrradiationUnit) -> Self {
+        Self(match unit {
+            IrradiationUnit::JoulePerSquareMeter => value,
+            IrradiationUnit::KilojoulePerSquareMeter => value * 1000.0,
+            IrradiationUnit::JoulePerSquareCentimeter => value * 10000.0,
+            IrradiationUnit::MillijoulePerSquareCentimeter => value * 10.0,
+            IrradiationUnit::JoulePerSquareMillimeter => value * 1000000.0,
+            IrradiationUnit::WattHourPerSquareMeter => value * 3600.0,
+            IrradiationUnit::KilowattHourPerSquareMeter => value * 3600000.0,
+            IrradiationUnit::BtuPerSquareFoot => value * 11356.526682226975,
+            IrradiationUnit::KilobtuPerSquareFoot => value * 1.1356526682226976e7,
+        })
+    }
+}
+
 fixed_base!(Irradiation, JoulePerSquareMeter);
 
 /// Unit markers for counting [`Irradiation`] as an integer with [`Fixed`](crate::Fixed).

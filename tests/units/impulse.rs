@@ -605,6 +605,40 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Impulse; 13] = [
+        Impulse::const_new(1234.5, ImpulseUnit::KilogramMeterPerSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::NewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::NanonewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::MicronewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::MillinewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::CentinewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::DecinewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::DecanewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::KilonewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::MeganewtonSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::PoundFootPerSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::PoundForceSecond),
+        Impulse::const_new(1234.5, ImpulseUnit::SlugFootPerSecond),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ImpulseUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Impulse::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ImpulseUnit::ALL {
+            assert_eq!(
+                Impulse::const_new(v, unit).as_base().to_bits(),
+                Impulse::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Impulse::from_base(v);

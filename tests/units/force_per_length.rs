@@ -1810,6 +1810,65 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ForcePerLength; 38] = [
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NanonewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MicronewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MillinewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::CentinewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecinewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecanewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilonewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MeganewtonPerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NanonewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MicronewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MillinewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::CentinewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecinewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecanewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilonewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MeganewtonPerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::NanonewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MicronewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MillinewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::CentinewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecinewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::DecanewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilonewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::MeganewtonPerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilogramForcePerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilogramForcePerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilogramForcePerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::TonneForcePerMeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::TonneForcePerCentimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::TonneForcePerMillimeter),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::PoundForcePerFoot),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::PoundForcePerInch),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::PoundForcePerYard),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilopoundForcePerFoot),
+        ForcePerLength::const_new(1234.5, ForcePerLengthUnit::KilopoundForcePerInch),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ForcePerLengthUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ForcePerLength::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ForcePerLengthUnit::ALL {
+            assert_eq!(
+                ForcePerLength::const_new(v, unit).as_base().to_bits(),
+                ForcePerLength::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ForcePerLength::from_base(v);

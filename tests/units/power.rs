@@ -1058,6 +1058,54 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Power; 27] = [
+        Power::const_new(1234.5, PowerUnit::Watt),
+        Power::const_new(1234.5, PowerUnit::Femtowatt),
+        Power::const_new(1234.5, PowerUnit::Picowatt),
+        Power::const_new(1234.5, PowerUnit::Nanowatt),
+        Power::const_new(1234.5, PowerUnit::Microwatt),
+        Power::const_new(1234.5, PowerUnit::Milliwatt),
+        Power::const_new(1234.5, PowerUnit::Deciwatt),
+        Power::const_new(1234.5, PowerUnit::Decawatt),
+        Power::const_new(1234.5, PowerUnit::Kilowatt),
+        Power::const_new(1234.5, PowerUnit::Megawatt),
+        Power::const_new(1234.5, PowerUnit::Gigawatt),
+        Power::const_new(1234.5, PowerUnit::Terawatt),
+        Power::const_new(1234.5, PowerUnit::Petawatt),
+        Power::const_new(1234.5, PowerUnit::MechanicalHorsepower),
+        Power::const_new(1234.5, PowerUnit::MetricHorsepower),
+        Power::const_new(1234.5, PowerUnit::ElectricalHorsepower),
+        Power::const_new(1234.5, PowerUnit::BoilerHorsepower),
+        Power::const_new(1234.5, PowerUnit::HydraulicHorsepower),
+        Power::const_new(1234.5, PowerUnit::BritishThermalUnitPerHour),
+        Power::const_new(1234.5, PowerUnit::KilobritishThermalUnitPerHour),
+        Power::const_new(1234.5, PowerUnit::MegabritishThermalUnitPerHour),
+        Power::const_new(1234.5, PowerUnit::JoulePerHour),
+        Power::const_new(1234.5, PowerUnit::MillijoulePerHour),
+        Power::const_new(1234.5, PowerUnit::KilojoulePerHour),
+        Power::const_new(1234.5, PowerUnit::MegajoulePerHour),
+        Power::const_new(1234.5, PowerUnit::GigajoulePerHour),
+        Power::const_new(1234.5, PowerUnit::TonOfRefrigeration),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(PowerUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Power::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in PowerUnit::ALL {
+            assert_eq!(
+                Power::const_new(v, unit).as_base().to_bits(),
+                Power::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Power::from_base(v);

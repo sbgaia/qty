@@ -252,6 +252,22 @@ impl<T: Float> AreaDensity<T> {
     }
 }
 
+impl AreaDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AreaDensityUnit) -> Self {
+        Self(match unit {
+            AreaDensityUnit::KilogramPerSquareMeter => value,
+            AreaDensityUnit::GramPerSquareMeter => value / 1000.0,
+            AreaDensityUnit::MilligramPerSquareMeter => value / 1000000.0,
+            AreaDensityUnit::PoundPerSquareFoot => value * 4.88242763638305,
+            AreaDensityUnit::PoundPerThousandSquareFeet => value * 0.00488242763638305,
+        })
+    }
+}
+
 fixed_base!(AreaDensity, KilogramPerSquareMeter);
 
 /// Unit markers for counting [`AreaDensity`] as an integer with [`Fixed`](crate::Fixed).

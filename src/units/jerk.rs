@@ -403,6 +403,28 @@ impl<T: Float> Jerk<T> {
     }
 }
 
+impl Jerk<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: JerkUnit) -> Self {
+        Self(match unit {
+            JerkUnit::MeterPerSecondCubed => value,
+            JerkUnit::NanometerPerSecondCubed => value / 1e9,
+            JerkUnit::MicrometerPerSecondCubed => value / 1000000.0,
+            JerkUnit::MillimeterPerSecondCubed => value / 1000.0,
+            JerkUnit::CentimeterPerSecondCubed => value / 100.0,
+            JerkUnit::DecimeterPerSecondCubed => value / 10.0,
+            JerkUnit::KilometerPerSecondCubed => value * 1000.0,
+            JerkUnit::InchPerSecondCubed => value * 0.0254,
+            JerkUnit::FootPerSecondCubed => value * 0.3048,
+            JerkUnit::StandardGravitiesPerSecond => value * 9.80665,
+            JerkUnit::MillistandardGravitiesPerSecond => value * 0.00980665,
+        })
+    }
+}
+
 fixed_base!(Jerk, MeterPerSecondCubed);
 
 /// Unit markers for counting [`Jerk`] as an integer with [`Fixed`](crate::Fixed).

@@ -129,6 +129,18 @@ impl<T: Float> SolidAngle<T> {
     }
 }
 
+impl SolidAngle<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SolidAngleUnit) -> Self {
+        Self(match unit {
+            SolidAngleUnit::Steradian => value,
+        })
+    }
+}
+
 fixed_base!(SolidAngle, Steradian);
 
 /// Unit markers for counting [`SolidAngle`] as an integer with [`Fixed`](crate::Fixed).

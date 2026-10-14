@@ -259,6 +259,41 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [PorousMediumPermeability; 5] = [
+        PorousMediumPermeability::const_new(1234.5, PorousMediumPermeabilityUnit::Darcy),
+        PorousMediumPermeability::const_new(1234.5, PorousMediumPermeabilityUnit::Microdarcy),
+        PorousMediumPermeability::const_new(1234.5, PorousMediumPermeabilityUnit::Millidarcy),
+        PorousMediumPermeability::const_new(1234.5, PorousMediumPermeabilityUnit::SquareMeter),
+        PorousMediumPermeability::const_new(1234.5, PorousMediumPermeabilityUnit::SquareCentimeter),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME
+        .iter()
+        .zip(PorousMediumPermeabilityUnit::ALL)
+    {
+        assert_eq!(
+            q.as_base().to_bits(),
+            PorousMediumPermeability::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in PorousMediumPermeabilityUnit::ALL {
+            assert_eq!(
+                PorousMediumPermeability::const_new(v, unit)
+                    .as_base()
+                    .to_bits(),
+                PorousMediumPermeability::<f64>::new(v, unit)
+                    .as_base()
+                    .to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = PorousMediumPermeability::from_base(v);

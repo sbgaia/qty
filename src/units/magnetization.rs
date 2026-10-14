@@ -129,6 +129,18 @@ impl<T: Float> Magnetization<T> {
     }
 }
 
+impl Magnetization<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MagnetizationUnit) -> Self {
+        Self(match unit {
+            MagnetizationUnit::AmperePerMeter => value,
+        })
+    }
+}
+
 fixed_base!(Magnetization, AmperePerMeter);
 
 /// Unit markers for counting [`Magnetization`] as an integer with [`Fixed`](crate::Fixed).

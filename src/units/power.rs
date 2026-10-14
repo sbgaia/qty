@@ -828,6 +828,44 @@ impl<T: Float> Power<T> {
     }
 }
 
+impl Power<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PowerUnit) -> Self {
+        Self(match unit {
+            PowerUnit::Watt => value,
+            PowerUnit::Femtowatt => value / 1e15,
+            PowerUnit::Picowatt => value / 1e12,
+            PowerUnit::Nanowatt => value / 1e9,
+            PowerUnit::Microwatt => value / 1000000.0,
+            PowerUnit::Milliwatt => value / 1000.0,
+            PowerUnit::Deciwatt => value / 10.0,
+            PowerUnit::Decawatt => value * 10.0,
+            PowerUnit::Kilowatt => value * 1000.0,
+            PowerUnit::Megawatt => value * 1000000.0,
+            PowerUnit::Gigawatt => value * 1e9,
+            PowerUnit::Terawatt => value * 1e12,
+            PowerUnit::Petawatt => value * 1e15,
+            PowerUnit::MechanicalHorsepower => value * 745.699871515585,
+            PowerUnit::MetricHorsepower => value * 735.49875,
+            PowerUnit::ElectricalHorsepower => value * 746.0,
+            PowerUnit::BoilerHorsepower => value * 9812.5,
+            PowerUnit::HydraulicHorsepower => value * 745.6998715822702,
+            PowerUnit::BritishThermalUnitPerHour => value * 0.2930710701722222,
+            PowerUnit::KilobritishThermalUnitPerHour => value * 293.0710701722222,
+            PowerUnit::MegabritishThermalUnitPerHour => value * 293071.0701722222,
+            PowerUnit::JoulePerHour => value / 3600.0,
+            PowerUnit::MillijoulePerHour => value / 3600000.0,
+            PowerUnit::KilojoulePerHour => value * 0.2777777777777778,
+            PowerUnit::MegajoulePerHour => value * 277.77777777777777,
+            PowerUnit::GigajoulePerHour => value * 277777.77777777775,
+            PowerUnit::TonOfRefrigeration => value * 3516.853,
+        })
+    }
+}
+
 fixed_base!(Power, Watt);
 
 /// Unit markers for counting [`Power`] as an integer with [`Fixed`](crate::Fixed).

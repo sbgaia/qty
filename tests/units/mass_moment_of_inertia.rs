@@ -1363,6 +1363,57 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [MassMomentOfInertia; 28] = [
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::GramSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MilligramSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilogramSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::GramSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MilligramSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilogramSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::GramSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MilligramSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilogramSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::GramSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MilligramSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilogramSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::TonneSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilotonneSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MegatonneSquareMeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::TonneSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilotonneSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MegatonneSquareDecimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::TonneSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilotonneSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MegatonneSquareCentimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::TonneSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::KilotonneSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::MegatonneSquareMillimeter),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::PoundSquareFoot),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::PoundSquareInch),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::SlugSquareFoot),
+        MassMomentOfInertia::const_new(1234.5, MassMomentOfInertiaUnit::SlugSquareInch),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(MassMomentOfInertiaUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            MassMomentOfInertia::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in MassMomentOfInertiaUnit::ALL {
+            assert_eq!(
+                MassMomentOfInertia::const_new(v, unit).as_base().to_bits(),
+                MassMomentOfInertia::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = MassMomentOfInertia::from_base(v);

@@ -172,7 +172,11 @@
 //! ```rust
 //! use unitsnet_rs::*;
 //!
-//! const MARATHON: Length = Length::from_base(42_195.0);
+//! // `const_new` works in any unit, with the same result as `new`.
+//! const MARATHON: Length = Length::const_new(42.195, LengthUnit::Kilometer);
+//! const BOILING: Temperature = Temperature::const_new(100.0, TemperatureUnit::DegreeCelsius);
+//! assert_eq!(MARATHON, Length::from_meters(42_195.0));
+//! assert_eq!(BOILING, Temperature::from_degrees_celsius(100.0));
 //!
 //! let raw = [1.0, 2.0, 3.0];
 //! let typed: &[Length] = Length::from_base_slice(&raw);

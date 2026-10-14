@@ -197,6 +197,20 @@ impl<T: Float> ThermalConductivity<T> {
     }
 }
 
+impl ThermalConductivity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ThermalConductivityUnit) -> Self {
+        Self(match unit {
+            ThermalConductivityUnit::WattPerMeterKelvin => value,
+            ThermalConductivityUnit::BtuPerHourFootFahrenheit => value * 1.7307346663713912,
+            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => value * 74767.73758724409,
+        })
+    }
+}
+
 fixed_base!(ThermalConductivity, WattPerMeterKelvin);
 
 /// Unit markers for counting [`ThermalConductivity`] as an integer with [`Fixed`](crate::Fixed).

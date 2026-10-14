@@ -1619,6 +1619,71 @@ impl<T: Float> Volume<T> {
     }
 }
 
+impl Volume<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VolumeUnit) -> Self {
+        Self(match unit {
+            VolumeUnit::Liter => value / 1000.0,
+            VolumeUnit::Nanoliter => value / 1e12,
+            VolumeUnit::Microliter => value / 1e9,
+            VolumeUnit::Milliliter => value / 1000000.0,
+            VolumeUnit::Centiliter => value / 100000.0,
+            VolumeUnit::Deciliter => value / 10000.0,
+            VolumeUnit::Decaliter => value / 100.0,
+            VolumeUnit::Hectoliter => value / 10.0,
+            VolumeUnit::Kiloliter => value,
+            VolumeUnit::Megaliter => value * 1000.0,
+            VolumeUnit::CubicMeter => value,
+            VolumeUnit::ThousandCubicMeter => value * 1000.0,
+            VolumeUnit::CubicKilometer => value * 1e9,
+            VolumeUnit::CubicHectometer => value * 1000000.0,
+            VolumeUnit::CubicDecimeter => value / 1000.0,
+            VolumeUnit::CubicCentimeter => value / 1000000.0,
+            VolumeUnit::CubicMillimeter => value / 1e9,
+            VolumeUnit::CubicMicrometer => value / 1e18,
+            VolumeUnit::CubicMile => value * 4.1681818254405794e9,
+            VolumeUnit::CubicYard => value * 0.764554857984,
+            VolumeUnit::CubicFoot => value * 0.028316846592,
+            VolumeUnit::HundredCubicFoot => value * 2.8316846592,
+            VolumeUnit::ThousandCubicFoot => value * 28.316846592,
+            VolumeUnit::MillionCubicFoot => value * 28316.846592,
+            VolumeUnit::CubicInch => value * 1.6387064e-5,
+            VolumeUnit::ImperialGallon => value * 0.00454609,
+            VolumeUnit::KiloimperialGallon => value * 4.54609,
+            VolumeUnit::MegaimperialGallon => value * 4546.09,
+            VolumeUnit::ImperialOunce => value * 2.84130625e-5,
+            VolumeUnit::UsGallon => value * 0.003785411784,
+            VolumeUnit::DecausGallon => value * 0.03785411784,
+            VolumeUnit::DeciusGallon => value * 0.0003785411784,
+            VolumeUnit::HectousGallon => value * 0.3785411784,
+            VolumeUnit::KilousGallon => value * 3.785411784,
+            VolumeUnit::MegausGallon => value * 3785.411784,
+            VolumeUnit::UsOunce => value * 2.95735295625e-5,
+            VolumeUnit::UsTablespoon => value * 1.478676478125e-5,
+            VolumeUnit::AuTablespoon => value / 50000.0,
+            VolumeUnit::MetricTablespoon => value * 1.5e-5,
+            VolumeUnit::UkTablespoon => value * 1.5e-5,
+            VolumeUnit::MetricTeaspoon => value / 200000.0,
+            VolumeUnit::UsTeaspoon => value * 4.92892159375e-6,
+            VolumeUnit::MetricCup => value / 4000.0,
+            VolumeUnit::UsCustomaryCup => value * 0.0002365882365,
+            VolumeUnit::UsLegalCup => value * 0.00024,
+            VolumeUnit::OilBarrel => value * 0.158987294928,
+            VolumeUnit::UsBeerBarrel => value * 0.117347765304,
+            VolumeUnit::ImperialBeerBarrel => value * 0.16365924,
+            VolumeUnit::UsQuart => value * 0.000946352946,
+            VolumeUnit::ImperialQuart => value * 0.0011365225,
+            VolumeUnit::UsPint => value * 0.000473176473,
+            VolumeUnit::AcreFoot => value * 1233.48183754752,
+            VolumeUnit::ImperialPint => value * 0.00056826125,
+            VolumeUnit::BoardFoot => value * 0.002359737216,
+        })
+    }
+}
+
 fixed_base!(Volume, CubicMeter);
 
 /// Unit markers for counting [`Volume`] as an integer with [`Fixed`](crate::Fixed).

@@ -626,6 +626,40 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [RotationalSpeed; 13] = [
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::RadianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::NanoradianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::MicroradianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::MilliradianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::CentiradianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::DeciradianPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::DegreePerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::NanodegreePerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::MicrodegreePerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::MillidegreePerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::DegreePerMinute),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::RevolutionPerSecond),
+        RotationalSpeed::const_new(1234.5, RotationalSpeedUnit::RevolutionPerMinute),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(RotationalSpeedUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            RotationalSpeed::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in RotationalSpeedUnit::ALL {
+            assert_eq!(
+                RotationalSpeed::const_new(v, unit).as_base().to_bits(),
+                RotationalSpeed::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = RotationalSpeed::from_base(v);

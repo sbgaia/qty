@@ -1501,6 +1501,60 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [MassFlow; 33] = [
+        MassFlow::const_new(1234.5, MassFlowUnit::GramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::NanogramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::MicrogramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::MilligramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::CentigramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::DecigramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::DecagramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::HectogramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::KilogramPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::GramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::NanogramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::MicrogramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::MilligramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::CentigramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::DecigramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::DecagramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::HectogramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::KilogramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::MegagramPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::GramPerHour),
+        MassFlow::const_new(1234.5, MassFlowUnit::KilogramPerHour),
+        MassFlow::const_new(1234.5, MassFlowUnit::KilogramPerMinute),
+        MassFlow::const_new(1234.5, MassFlowUnit::TonnePerHour),
+        MassFlow::const_new(1234.5, MassFlowUnit::PoundPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::MegapoundPerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::PoundPerHour),
+        MassFlow::const_new(1234.5, MassFlowUnit::MegapoundPerHour),
+        MassFlow::const_new(1234.5, MassFlowUnit::PoundPerMinute),
+        MassFlow::const_new(1234.5, MassFlowUnit::MegapoundPerMinute),
+        MassFlow::const_new(1234.5, MassFlowUnit::PoundPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::MegapoundPerSecond),
+        MassFlow::const_new(1234.5, MassFlowUnit::TonnePerDay),
+        MassFlow::const_new(1234.5, MassFlowUnit::ShortTonPerHour),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(MassFlowUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            MassFlow::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in MassFlowUnit::ALL {
+            assert_eq!(
+                MassFlow::const_new(v, unit).as_base().to_bits(),
+                MassFlow::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = MassFlow::from_base(v);

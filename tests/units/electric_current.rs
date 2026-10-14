@@ -437,6 +437,36 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ElectricCurrent; 9] = [
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Ampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Femtoampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Picoampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Nanoampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Microampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Milliampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Centiampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Kiloampere),
+        ElectricCurrent::const_new(1234.5, ElectricCurrentUnit::Megaampere),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ElectricCurrentUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ElectricCurrent::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ElectricCurrentUnit::ALL {
+            assert_eq!(
+                ElectricCurrent::const_new(v, unit).as_base().to_bits(),
+                ElectricCurrent::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ElectricCurrent::from_base(v);

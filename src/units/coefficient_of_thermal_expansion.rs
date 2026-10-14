@@ -236,6 +236,23 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
     }
 }
 
+impl CoefficientOfThermalExpansion<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: CoefficientOfThermalExpansionUnit) -> Self {
+        Self(match unit {
+            CoefficientOfThermalExpansionUnit::PerKelvin => value,
+            CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
+            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value * 1.8,
+            CoefficientOfThermalExpansionUnit::PpmPerKelvin => value / 1000000.0,
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => value / 1000000.0,
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => value * 1.8e-6,
+        })
+    }
+}
+
 fixed_base!(CoefficientOfThermalExpansion, PerKelvin);
 
 /// Unit markers for counting [`CoefficientOfThermalExpansion`] as an integer with [`Fixed`](crate::Fixed).

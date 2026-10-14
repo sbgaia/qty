@@ -302,6 +302,26 @@ impl<T: Float> KinematicViscosity<T> {
     }
 }
 
+impl KinematicViscosity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: KinematicViscosityUnit) -> Self {
+        Self(match unit {
+            KinematicViscosityUnit::SquareMeterPerSecond => value,
+            KinematicViscosityUnit::Stokes => value / 10000.0,
+            KinematicViscosityUnit::Nanostokes => value / 1e13,
+            KinematicViscosityUnit::Microstokes => value / 1e10,
+            KinematicViscosityUnit::Millistokes => value / 1e7,
+            KinematicViscosityUnit::Centistokes => value / 1000000.0,
+            KinematicViscosityUnit::Decistokes => value / 100000.0,
+            KinematicViscosityUnit::Kilostokes => value / 10.0,
+            KinematicViscosityUnit::SquareFootPerSecond => value * 0.09290304,
+        })
+    }
+}
+
 fixed_base!(KinematicViscosity, SquareMeterPerSecond);
 
 /// Unit markers for counting [`KinematicViscosity`] as an integer with [`Fixed`](crate::Fixed).

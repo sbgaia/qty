@@ -313,6 +313,24 @@ impl<T: Float> ElectricCapacitance<T> {
     }
 }
 
+impl ElectricCapacitance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricCapacitanceUnit) -> Self {
+        Self(match unit {
+            ElectricCapacitanceUnit::Farad => value,
+            ElectricCapacitanceUnit::Picofarad => value / 1e12,
+            ElectricCapacitanceUnit::Nanofarad => value / 1e9,
+            ElectricCapacitanceUnit::Microfarad => value / 1000000.0,
+            ElectricCapacitanceUnit::Millifarad => value / 1000.0,
+            ElectricCapacitanceUnit::Kilofarad => value * 1000.0,
+            ElectricCapacitanceUnit::Megafarad => value * 1000000.0,
+        })
+    }
+}
+
 fixed_base!(ElectricCapacitance, Farad);
 
 /// Unit markers for counting [`ElectricCapacitance`] as an integer with [`Fixed`](crate::Fixed).

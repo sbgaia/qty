@@ -160,6 +160,19 @@ impl<T: Float> VolumeFlowPerArea<T> {
     }
 }
 
+impl VolumeFlowPerArea<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VolumeFlowPerAreaUnit) -> Self {
+        Self(match unit {
+            VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter => value,
+            VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot => value * 0.00508,
+        })
+    }
+}
+
 fixed_base!(VolumeFlowPerArea, CubicMeterPerSecondPerSquareMeter);
 
 /// Unit markers for counting [`VolumeFlowPerArea`] as an integer with [`Fixed`](crate::Fixed).

@@ -1368,6 +1368,63 @@ impl<T: Float> PowerDensity<T> {
     }
 }
 
+impl PowerDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PowerDensityUnit) -> Self {
+        Self(match unit {
+            PowerDensityUnit::WattPerCubicMeter => value,
+            PowerDensityUnit::PicowattPerCubicMeter => value / 1e12,
+            PowerDensityUnit::NanowattPerCubicMeter => value / 1e9,
+            PowerDensityUnit::MicrowattPerCubicMeter => value / 1000000.0,
+            PowerDensityUnit::MilliwattPerCubicMeter => value / 1000.0,
+            PowerDensityUnit::DeciwattPerCubicMeter => value / 10.0,
+            PowerDensityUnit::DecawattPerCubicMeter => value * 10.0,
+            PowerDensityUnit::KilowattPerCubicMeter => value * 1000.0,
+            PowerDensityUnit::MegawattPerCubicMeter => value * 1000000.0,
+            PowerDensityUnit::GigawattPerCubicMeter => value * 1e9,
+            PowerDensityUnit::TerawattPerCubicMeter => value * 1e12,
+            PowerDensityUnit::WattPerCubicInch => value * 61023.74409473228,
+            PowerDensityUnit::PicowattPerCubicInch => value / 1.6387064e7,
+            PowerDensityUnit::NanowattPerCubicInch => value * 6.1023744094732284e-5,
+            PowerDensityUnit::MicrowattPerCubicInch => value * 0.06102374409473228,
+            PowerDensityUnit::MilliwattPerCubicInch => value * 61.02374409473229,
+            PowerDensityUnit::DeciwattPerCubicInch => value * 6102.374409473228,
+            PowerDensityUnit::DecawattPerCubicInch => value * 610237.4409473229,
+            PowerDensityUnit::KilowattPerCubicInch => value * 6.1023744094732285e7,
+            PowerDensityUnit::MegawattPerCubicInch => value * 6.1023744094732285e10,
+            PowerDensityUnit::GigawattPerCubicInch => value * 6.102374409473228e13,
+            PowerDensityUnit::TerawattPerCubicInch => value * 6.102374409473228e16,
+            PowerDensityUnit::WattPerCubicFoot => value * 35.31466672148859,
+            PowerDensityUnit::PicowattPerCubicFoot => value / 2.8316846592e10,
+            PowerDensityUnit::NanowattPerCubicFoot => value * 3.531466672148859e-8,
+            PowerDensityUnit::MicrowattPerCubicFoot => value * 3.531466672148859e-5,
+            PowerDensityUnit::MilliwattPerCubicFoot => value * 0.03531466672148859,
+            PowerDensityUnit::DeciwattPerCubicFoot => value * 3.5314666721488592,
+            PowerDensityUnit::DecawattPerCubicFoot => value * 353.1466672148859,
+            PowerDensityUnit::KilowattPerCubicFoot => value * 35314.66672148859,
+            PowerDensityUnit::MegawattPerCubicFoot => value * 3.531466672148859e7,
+            PowerDensityUnit::GigawattPerCubicFoot => value * 3.5314666721488594e10,
+            PowerDensityUnit::TerawattPerCubicFoot => value * 3.531466672148859e13,
+            PowerDensityUnit::WattPerLiter => value * 1000.0,
+            PowerDensityUnit::PicowattPerLiter => value / 1e9,
+            PowerDensityUnit::NanowattPerLiter => value / 1000000.0,
+            PowerDensityUnit::MicrowattPerLiter => value / 1000.0,
+            PowerDensityUnit::MilliwattPerLiter => value,
+            PowerDensityUnit::DeciwattPerLiter => value * 100.0,
+            PowerDensityUnit::DecawattPerLiter => value * 10000.0,
+            PowerDensityUnit::KilowattPerLiter => value * 1000000.0,
+            PowerDensityUnit::MegawattPerLiter => value * 1e9,
+            PowerDensityUnit::GigawattPerLiter => value * 1e12,
+            PowerDensityUnit::TerawattPerLiter => value * 1e15,
+            PowerDensityUnit::BtuPerSecondCubicInch => value * 6.438345835593246e7,
+            PowerDensityUnit::BtuPerSecondCubicFoot => value * 37258.94580783128,
+        })
+    }
+}
+
 fixed_base!(PowerDensity, WattPerCubicMeter);
 
 /// Unit markers for counting [`PowerDensity`] as an integer with [`Fixed`](crate::Fixed).

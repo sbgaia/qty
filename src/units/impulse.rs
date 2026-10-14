@@ -474,6 +474,30 @@ impl<T: Float> Impulse<T> {
     }
 }
 
+impl Impulse<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ImpulseUnit) -> Self {
+        Self(match unit {
+            ImpulseUnit::KilogramMeterPerSecond => value,
+            ImpulseUnit::NewtonSecond => value,
+            ImpulseUnit::NanonewtonSecond => value / 1e9,
+            ImpulseUnit::MicronewtonSecond => value / 1000000.0,
+            ImpulseUnit::MillinewtonSecond => value / 1000.0,
+            ImpulseUnit::CentinewtonSecond => value / 100.0,
+            ImpulseUnit::DecinewtonSecond => value / 10.0,
+            ImpulseUnit::DecanewtonSecond => value * 10.0,
+            ImpulseUnit::KilonewtonSecond => value * 1000.0,
+            ImpulseUnit::MeganewtonSecond => value * 1000000.0,
+            ImpulseUnit::PoundFootPerSecond => value * 0.138254954376,
+            ImpulseUnit::PoundForceSecond => value * 4.4482216152605,
+            ImpulseUnit::SlugFootPerSecond => value * 4.4482216152605,
+        })
+    }
+}
+
 fixed_base!(Impulse, NewtonSecond);
 
 /// Unit markers for counting [`Impulse`] as an integer with [`Fixed`](crate::Fixed).

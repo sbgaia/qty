@@ -122,6 +122,18 @@ impl<T: Float> Turbidity<T> {
     }
 }
 
+impl Turbidity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TurbidityUnit) -> Self {
+        Self(match unit {
+            TurbidityUnit::NTU => value,
+        })
+    }
+}
+
 fixed_base!(Turbidity, NTU);
 
 /// Unit markers for counting [`Turbidity`] as an integer with [`Fixed`](crate::Fixed).

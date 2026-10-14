@@ -228,6 +228,23 @@ impl<T: Float> ElectricConductivity<T> {
     }
 }
 
+impl ElectricConductivity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricConductivityUnit) -> Self {
+        Self(match unit {
+            ElectricConductivityUnit::SiemensPerMeter => value,
+            ElectricConductivityUnit::SiemensPerInch => value * 39.37007874015748,
+            ElectricConductivityUnit::SiemensPerFoot => value * 3.2808398950131235,
+            ElectricConductivityUnit::SiemensPerCentimeter => value * 100.0,
+            ElectricConductivityUnit::MicrosiemensPerCentimeter => value / 10000.0,
+            ElectricConductivityUnit::MillisiemensPerCentimeter => value / 10.0,
+        })
+    }
+}
+
 fixed_base!(ElectricConductivity, SiemensPerMeter);
 
 /// Unit markers for counting [`ElectricConductivity`] as an integer with [`Fixed`](crate::Fixed).

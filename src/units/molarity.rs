@@ -417,6 +417,28 @@ impl<T: Float> Molarity<T> {
     }
 }
 
+impl Molarity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MolarityUnit) -> Self {
+        Self(match unit {
+            MolarityUnit::MolePerCubicMeter => value,
+            MolarityUnit::KilomolePerCubicMeter => value * 1000.0,
+            MolarityUnit::MolePerLiter => value * 1000.0,
+            MolarityUnit::FemtomolePerLiter => value / 1e12,
+            MolarityUnit::PicomolePerLiter => value / 1e9,
+            MolarityUnit::NanomolePerLiter => value / 1000000.0,
+            MolarityUnit::MicromolePerLiter => value / 1000.0,
+            MolarityUnit::MillimolePerLiter => value,
+            MolarityUnit::CentimolePerLiter => value * 10.0,
+            MolarityUnit::DecimolePerLiter => value * 100.0,
+            MolarityUnit::PoundMolePerCubicFoot => value * 16018.46337396014,
+        })
+    }
+}
+
 fixed_base!(Molarity, MolePerCubicMeter);
 
 /// Unit markers for counting [`Molarity`] as an integer with [`Fixed`](crate::Fixed).

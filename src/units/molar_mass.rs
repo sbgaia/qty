@@ -503,6 +503,31 @@ impl<T: Float> MolarMass<T> {
     }
 }
 
+impl MolarMass<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MolarMassUnit) -> Self {
+        Self(match unit {
+            MolarMassUnit::GramPerMole => value / 1000.0,
+            MolarMassUnit::NanogramPerMole => value / 1e12,
+            MolarMassUnit::MicrogramPerMole => value / 1e9,
+            MolarMassUnit::MilligramPerMole => value / 1000000.0,
+            MolarMassUnit::CentigramPerMole => value / 100000.0,
+            MolarMassUnit::DecigramPerMole => value / 10000.0,
+            MolarMassUnit::DecagramPerMole => value / 100.0,
+            MolarMassUnit::HectogramPerMole => value / 10.0,
+            MolarMassUnit::KilogramPerMole => value,
+            MolarMassUnit::KilogramPerKilomole => value / 1000.0,
+            MolarMassUnit::PoundPerMole => value * 0.45359237,
+            MolarMassUnit::KilopoundPerMole => value * 453.59237,
+            MolarMassUnit::MegapoundPerMole => value * 453592.37,
+            MolarMassUnit::PoundPerPoundMole => value / 1000.0,
+        })
+    }
+}
+
 fixed_base!(MolarMass, KilogramPerMole);
 
 /// Unit markers for counting [`MolarMass`] as an integer with [`Fixed`](crate::Fixed).

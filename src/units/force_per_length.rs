@@ -1153,6 +1153,55 @@ impl<T: Float> ForcePerLength<T> {
     }
 }
 
+impl ForcePerLength<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ForcePerLengthUnit) -> Self {
+        Self(match unit {
+            ForcePerLengthUnit::NewtonPerMeter => value,
+            ForcePerLengthUnit::NanonewtonPerMeter => value / 1e9,
+            ForcePerLengthUnit::MicronewtonPerMeter => value / 1000000.0,
+            ForcePerLengthUnit::MillinewtonPerMeter => value / 1000.0,
+            ForcePerLengthUnit::CentinewtonPerMeter => value / 100.0,
+            ForcePerLengthUnit::DecinewtonPerMeter => value / 10.0,
+            ForcePerLengthUnit::DecanewtonPerMeter => value * 10.0,
+            ForcePerLengthUnit::KilonewtonPerMeter => value * 1000.0,
+            ForcePerLengthUnit::MeganewtonPerMeter => value * 1000000.0,
+            ForcePerLengthUnit::NewtonPerCentimeter => value * 100.0,
+            ForcePerLengthUnit::NanonewtonPerCentimeter => value / 1e7,
+            ForcePerLengthUnit::MicronewtonPerCentimeter => value / 10000.0,
+            ForcePerLengthUnit::MillinewtonPerCentimeter => value / 10.0,
+            ForcePerLengthUnit::CentinewtonPerCentimeter => value,
+            ForcePerLengthUnit::DecinewtonPerCentimeter => value * 10.0,
+            ForcePerLengthUnit::DecanewtonPerCentimeter => value * 1000.0,
+            ForcePerLengthUnit::KilonewtonPerCentimeter => value * 100000.0,
+            ForcePerLengthUnit::MeganewtonPerCentimeter => value * 1e8,
+            ForcePerLengthUnit::NewtonPerMillimeter => value * 1000.0,
+            ForcePerLengthUnit::NanonewtonPerMillimeter => value / 1000000.0,
+            ForcePerLengthUnit::MicronewtonPerMillimeter => value / 1000.0,
+            ForcePerLengthUnit::MillinewtonPerMillimeter => value,
+            ForcePerLengthUnit::CentinewtonPerMillimeter => value * 10.0,
+            ForcePerLengthUnit::DecinewtonPerMillimeter => value * 100.0,
+            ForcePerLengthUnit::DecanewtonPerMillimeter => value * 10000.0,
+            ForcePerLengthUnit::KilonewtonPerMillimeter => value * 1000000.0,
+            ForcePerLengthUnit::MeganewtonPerMillimeter => value * 1e9,
+            ForcePerLengthUnit::KilogramForcePerMeter => value * 9.80665,
+            ForcePerLengthUnit::KilogramForcePerCentimeter => value * 980.665,
+            ForcePerLengthUnit::KilogramForcePerMillimeter => value * 9806.65,
+            ForcePerLengthUnit::TonneForcePerMeter => value * 9806.65,
+            ForcePerLengthUnit::TonneForcePerCentimeter => value * 980665.0,
+            ForcePerLengthUnit::TonneForcePerMillimeter => value * 9806650.0,
+            ForcePerLengthUnit::PoundForcePerFoot => value * 14.593902937206364,
+            ForcePerLengthUnit::PoundForcePerInch => value * 175.1268352464764,
+            ForcePerLengthUnit::PoundForcePerYard => value * 4.864634312402122,
+            ForcePerLengthUnit::KilopoundForcePerFoot => value * 14593.902937206365,
+            ForcePerLengthUnit::KilopoundForcePerInch => value * 175126.83524647637,
+        })
+    }
+}
+
 fixed_base!(ForcePerLength, NewtonPerMeter);
 
 /// Unit markers for counting [`ForcePerLength`] as an integer with [`Fixed`](crate::Fixed).

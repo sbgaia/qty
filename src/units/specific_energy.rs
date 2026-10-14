@@ -927,6 +927,47 @@ impl<T: Float> SpecificEnergy<T> {
     }
 }
 
+impl SpecificEnergy<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SpecificEnergyUnit) -> Self {
+        Self(match unit {
+            SpecificEnergyUnit::JoulePerKilogram => value,
+            SpecificEnergyUnit::KilojoulePerKilogram => value * 1000.0,
+            SpecificEnergyUnit::MegajoulePerKilogram => value * 1000000.0,
+            SpecificEnergyUnit::MegajoulePerTonne => value * 1000.0,
+            SpecificEnergyUnit::CaloriePerGram => value * 4184.0,
+            SpecificEnergyUnit::KilocaloriePerGram => value * 4184000.0,
+            SpecificEnergyUnit::WattHourPerKilogram => value * 3600.0,
+            SpecificEnergyUnit::KilowattHourPerKilogram => value * 3600000.0,
+            SpecificEnergyUnit::MegawattHourPerKilogram => value * 3.6e9,
+            SpecificEnergyUnit::GigawattHourPerKilogram => value * 3.6e12,
+            SpecificEnergyUnit::WattDayPerKilogram => value * 86400.0,
+            SpecificEnergyUnit::KilowattDayPerKilogram => value * 8.64e7,
+            SpecificEnergyUnit::MegawattDayPerKilogram => value * 8.64e10,
+            SpecificEnergyUnit::GigawattDayPerKilogram => value * 8.64e13,
+            SpecificEnergyUnit::TerawattDayPerKilogram => value * 8.64e16,
+            SpecificEnergyUnit::WattDayPerTonne => value * 86.4,
+            SpecificEnergyUnit::KilowattDayPerTonne => value * 86400.0,
+            SpecificEnergyUnit::MegawattDayPerTonne => value * 8.64e7,
+            SpecificEnergyUnit::GigawattDayPerTonne => value * 8.64e10,
+            SpecificEnergyUnit::TerawattDayPerTonne => value * 8.64e13,
+            SpecificEnergyUnit::WattDayPerShortTon => value * 95.23969726386711,
+            SpecificEnergyUnit::KilowattDayPerShortTon => value * 95239.69726386711,
+            SpecificEnergyUnit::MegawattDayPerShortTon => value * 9.523969726386711e7,
+            SpecificEnergyUnit::GigawattDayPerShortTon => value * 9.523969726386711e10,
+            SpecificEnergyUnit::TerawattDayPerShortTon => value * 9.523969726386711e13,
+            SpecificEnergyUnit::WattHourPerPound => value * 7936.64,
+            SpecificEnergyUnit::KilowattHourPerPound => value * 7936640.0,
+            SpecificEnergyUnit::MegawattHourPerPound => value * 7.93664e9,
+            SpecificEnergyUnit::GigawattHourPerPound => value * 7.93664e12,
+            SpecificEnergyUnit::BtuPerPound => value * 2326.0,
+        })
+    }
+}
+
 fixed_base!(SpecificEnergy, JoulePerKilogram);
 
 /// Unit markers for counting [`SpecificEnergy`] as an integer with [`Fixed`](crate::Fixed).

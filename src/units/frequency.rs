@@ -393,6 +393,29 @@ impl<T: Float> Frequency<T> {
     }
 }
 
+impl Frequency<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: FrequencyUnit) -> Self {
+        Self(match unit {
+            FrequencyUnit::Hertz => value,
+            FrequencyUnit::Microhertz => value / 1000000.0,
+            FrequencyUnit::Millihertz => value / 1000.0,
+            FrequencyUnit::Kilohertz => value * 1000.0,
+            FrequencyUnit::Megahertz => value * 1000000.0,
+            FrequencyUnit::Gigahertz => value * 1e9,
+            FrequencyUnit::Terahertz => value * 1e12,
+            FrequencyUnit::RadianPerSecond => value * 0.15915494309189535,
+            FrequencyUnit::CyclePerMinute => value / 60.0,
+            FrequencyUnit::CyclePerHour => value / 3600.0,
+            FrequencyUnit::BeatPerMinute => value / 60.0,
+            FrequencyUnit::PerSecond => value,
+        })
+    }
+}
+
 fixed_base!(Frequency, Hertz);
 
 /// Unit markers for counting [`Frequency`] as an integer with [`Fixed`](crate::Fixed).

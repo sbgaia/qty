@@ -1835,6 +1835,66 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [BitRate; 39] = [
+        BitRate::const_new(1234.5, BitRateUnit::BitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KilobitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MegabitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GigabitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TerabitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PetabitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExabitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KibibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MebibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GibibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TebibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PebibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExbibitPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::BytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KilobytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MegabytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GigabytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TerabytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PetabytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExabytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KibibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MebibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GibibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TebibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PebibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExbibytePerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::OctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KilooctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MegaoctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GigaoctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TeraoctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PetaoctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExaoctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::KibioctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::MebioctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::GibioctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::TebioctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::PebioctetPerSecond),
+        BitRate::const_new(1234.5, BitRateUnit::ExbioctetPerSecond),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(BitRateUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            BitRate::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in BitRateUnit::ALL {
+            assert_eq!(
+                BitRate::const_new(v, unit).as_base().to_bits(),
+                BitRate::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = BitRate::from_base(v);

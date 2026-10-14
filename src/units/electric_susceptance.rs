@@ -501,6 +501,33 @@ impl<T: Float> ElectricSusceptance<T> {
     }
 }
 
+impl ElectricSusceptance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricSusceptanceUnit) -> Self {
+        Self(match unit {
+            ElectricSusceptanceUnit::Siemens => value,
+            ElectricSusceptanceUnit::Nanosiemens => value / 1e9,
+            ElectricSusceptanceUnit::Microsiemens => value / 1000000.0,
+            ElectricSusceptanceUnit::Millisiemens => value / 1000.0,
+            ElectricSusceptanceUnit::Kilosiemens => value * 1000.0,
+            ElectricSusceptanceUnit::Megasiemens => value * 1000000.0,
+            ElectricSusceptanceUnit::Gigasiemens => value * 1e9,
+            ElectricSusceptanceUnit::Terasiemens => value * 1e12,
+            ElectricSusceptanceUnit::Mho => value,
+            ElectricSusceptanceUnit::Nanomho => value / 1e9,
+            ElectricSusceptanceUnit::Micromho => value / 1000000.0,
+            ElectricSusceptanceUnit::Millimho => value / 1000.0,
+            ElectricSusceptanceUnit::Kilomho => value * 1000.0,
+            ElectricSusceptanceUnit::Megamho => value * 1000000.0,
+            ElectricSusceptanceUnit::Gigamho => value * 1e9,
+            ElectricSusceptanceUnit::Teramho => value * 1e12,
+        })
+    }
+}
+
 fixed_base!(ElectricSusceptance, Siemens);
 
 /// Unit markers for counting [`ElectricSusceptance`] as an integer with [`Fixed`](crate::Fixed).

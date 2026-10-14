@@ -1284,6 +1284,59 @@ impl<T: Float> Length<T> {
     }
 }
 
+impl Length<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LengthUnit) -> Self {
+        Self(match unit {
+            LengthUnit::Meter => value,
+            LengthUnit::Femtometer => value / 1e15,
+            LengthUnit::Picometer => value / 1e12,
+            LengthUnit::Nanometer => value / 1e9,
+            LengthUnit::Micrometer => value / 1000000.0,
+            LengthUnit::Millimeter => value / 1000.0,
+            LengthUnit::Centimeter => value / 100.0,
+            LengthUnit::Decimeter => value / 10.0,
+            LengthUnit::Decameter => value * 10.0,
+            LengthUnit::Hectometer => value * 100.0,
+            LengthUnit::Kilometer => value * 1000.0,
+            LengthUnit::Megameter => value * 1000000.0,
+            LengthUnit::Gigameter => value * 1e9,
+            LengthUnit::Mile => value * 1609.344,
+            LengthUnit::Yard => value * 0.9144,
+            LengthUnit::Kiloyard => value * 914.4,
+            LengthUnit::Foot => value * 0.3048,
+            LengthUnit::Kilofoot => value * 304.8,
+            LengthUnit::UsSurveyFoot => value * 0.3048006096012192,
+            LengthUnit::Inch => value * 0.0254,
+            LengthUnit::Mil => value * 2.54e-5,
+            LengthUnit::NauticalMile => value * 1852.0,
+            LengthUnit::Fathom => value * 1.8288,
+            LengthUnit::Shackle => value * 27.432,
+            LengthUnit::Microinch => value * 2.54e-8,
+            LengthUnit::PrinterPoint => value * 0.00035145980351459805,
+            LengthUnit::DtpPoint => value * 0.00035277777777777776,
+            LengthUnit::PrinterPica => value * 0.004217517642175176,
+            LengthUnit::DtpPica => value * 0.004233333333333334,
+            LengthUnit::Twip => value * 1.763888888888889e-5,
+            LengthUnit::Hand => value * 0.1016,
+            LengthUnit::AstronomicalUnit => value * 1.495978707e11,
+            LengthUnit::Parsec => value * 3.08567758128e16,
+            LengthUnit::Kiloparsec => value * 3.08567758128e19,
+            LengthUnit::Megaparsec => value * 3.08567758128e22,
+            LengthUnit::LightYear => value * 9.46073047258e15,
+            LengthUnit::KilolightYear => value * 9.46073047258e18,
+            LengthUnit::MegalightYear => value * 9.46073047258e21,
+            LengthUnit::SolarRadius => value * 6.957e8,
+            LengthUnit::Chain => value * 20.1168,
+            LengthUnit::Angstrom => value / 1e10,
+            LengthUnit::DataMile => value * 1828.8,
+        })
+    }
+}
+
 fixed_base!(Length, Meter);
 
 /// Unit markers for counting [`Length`] as an integer with [`Fixed`](crate::Fixed).

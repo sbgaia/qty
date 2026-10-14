@@ -31,6 +31,8 @@ adheres to [Semantic Versioning](https://semver.org/).
   `hypot`, and trigonometry on `Angle` (`sin`, `cos`, `Angle::atan2(y, x)`, …).
 - **Ordering and keys:** `total_cmp` for sorting; `Ordered<Q>` makes float
   quantities usable as `HashMap`/`BTreeMap` keys.
+- `Quantity::const_new(value, unit)` for `f64`: `const` values in any unit,
+  bit-identical to `new`.
 - `to_f64()` / `to_f32()`, `cast()`, `const fn from_base/as_base`, zero-copy
   slice views, `+=`/`-=`/`*=`/`/=`/`%`, `Sum`, `abs/min/max`, `checked_*`.
 - **Cargo features:** `std` (default), `libm`, `serde`, `approx`,
@@ -38,7 +40,8 @@ adheres to [Semantic Versioning](https://semver.org/).
   `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
   `information`, `misc`; all enabled by the default `full`) — compiling only
   the core quantities takes about a fifth of the time.
-- CI (formatting, clippy, docs, tests in several feature sets, MSRV 1.81,
+- Minimum supported Rust version: 1.82.
+- CI (formatting, clippy, docs, tests in several feature sets, MSRV,
   `no_std`, feature groups alone, generated code up to date), a README and
   this changelog.
 

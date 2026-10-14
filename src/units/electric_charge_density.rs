@@ -133,6 +133,18 @@ impl<T: Float> ElectricChargeDensity<T> {
     }
 }
 
+impl ElectricChargeDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricChargeDensityUnit) -> Self {
+        Self(match unit {
+            ElectricChargeDensityUnit::CoulombPerCubicMeter => value,
+        })
+    }
+}
+
 fixed_base!(ElectricChargeDensity, CoulombPerCubicMeter);
 
 /// Unit markers for counting [`ElectricChargeDensity`] as an integer with [`Fixed`](crate::Fixed).

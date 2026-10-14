@@ -1178,6 +1178,56 @@ impl<T: Float> BitRate<T> {
     }
 }
 
+impl BitRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: BitRateUnit) -> Self {
+        Self(match unit {
+            BitRateUnit::BitPerSecond => value,
+            BitRateUnit::KilobitPerSecond => value * 1000.0,
+            BitRateUnit::MegabitPerSecond => value * 1000000.0,
+            BitRateUnit::GigabitPerSecond => value * 1e9,
+            BitRateUnit::TerabitPerSecond => value * 1e12,
+            BitRateUnit::PetabitPerSecond => value * 1e15,
+            BitRateUnit::ExabitPerSecond => value * 1e18,
+            BitRateUnit::KibibitPerSecond => value * 1024.0,
+            BitRateUnit::MebibitPerSecond => value * 1048576.0,
+            BitRateUnit::GibibitPerSecond => value * 1.073741824e9,
+            BitRateUnit::TebibitPerSecond => value * 1.099511627776e12,
+            BitRateUnit::PebibitPerSecond => value * 1.125899906842624e15,
+            BitRateUnit::ExbibitPerSecond => value * 1.152921504606847e18,
+            BitRateUnit::BytePerSecond => value * 8.0,
+            BitRateUnit::KilobytePerSecond => value * 8000.0,
+            BitRateUnit::MegabytePerSecond => value * 8000000.0,
+            BitRateUnit::GigabytePerSecond => value * 8e9,
+            BitRateUnit::TerabytePerSecond => value * 8e12,
+            BitRateUnit::PetabytePerSecond => value * 8e15,
+            BitRateUnit::ExabytePerSecond => value * 8e18,
+            BitRateUnit::KibibytePerSecond => value * 8192.0,
+            BitRateUnit::MebibytePerSecond => value * 8388608.0,
+            BitRateUnit::GibibytePerSecond => value * 8.589934592e9,
+            BitRateUnit::TebibytePerSecond => value * 8.796093022208e12,
+            BitRateUnit::PebibytePerSecond => value * 9.007199254740992e15,
+            BitRateUnit::ExbibytePerSecond => value * 9.223372036854776e18,
+            BitRateUnit::OctetPerSecond => value * 8.0,
+            BitRateUnit::KilooctetPerSecond => value * 8000.0,
+            BitRateUnit::MegaoctetPerSecond => value * 8000000.0,
+            BitRateUnit::GigaoctetPerSecond => value * 8e9,
+            BitRateUnit::TeraoctetPerSecond => value * 8e12,
+            BitRateUnit::PetaoctetPerSecond => value * 8e15,
+            BitRateUnit::ExaoctetPerSecond => value * 8e18,
+            BitRateUnit::KibioctetPerSecond => value * 8192.0,
+            BitRateUnit::MebioctetPerSecond => value * 8388608.0,
+            BitRateUnit::GibioctetPerSecond => value * 8.589934592e9,
+            BitRateUnit::TebioctetPerSecond => value * 8.796093022208e12,
+            BitRateUnit::PebioctetPerSecond => value * 9.007199254740992e15,
+            BitRateUnit::ExbioctetPerSecond => value * 9.223372036854776e18,
+        })
+    }
+}
+
 fixed_base!(BitRate, BitPerSecond);
 
 /// Unit markers for counting [`BitRate`] as an integer with [`Fixed`](crate::Fixed).

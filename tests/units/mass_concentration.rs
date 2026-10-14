@@ -2329,6 +2329,76 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [MassConcentration; 49] = [
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerCubicMillimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilogramPerCubicMillimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerCubicCentimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilogramPerCubicCentimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerCubicMeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilogramPerCubicMeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MilligramPerCubicMeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MicrogramPerCubicMeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PicogramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::NanogramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MicrogramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MilligramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::CentigramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::DecigramPerMicroliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PicogramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::NanogramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MicrogramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MilligramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::CentigramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::DecigramPerMilliliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PicogramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::NanogramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MicrogramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MilligramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::CentigramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::DecigramPerDeciliter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::GramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PicogramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::NanogramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MicrogramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::MilligramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::CentigramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::DecigramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilogramPerLiter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::TonnePerCubicMillimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::TonnePerCubicCentimeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::TonnePerCubicMeter),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PoundPerCubicInch),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilopoundPerCubicInch),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PoundPerCubicFoot),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::KilopoundPerCubicFoot),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::SlugPerCubicFoot),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PoundPerUSGallon),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::OuncePerUSGallon),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::OuncePerImperialGallon),
+        MassConcentration::const_new(1234.5, MassConcentrationUnit::PoundPerImperialGallon),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(MassConcentrationUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            MassConcentration::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in MassConcentrationUnit::ALL {
+            assert_eq!(
+                MassConcentration::const_new(v, unit).as_base().to_bits(),
+                MassConcentration::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = MassConcentration::from_base(v);

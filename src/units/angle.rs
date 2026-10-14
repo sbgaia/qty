@@ -533,6 +533,32 @@ impl<T: Float> Angle<T> {
     }
 }
 
+impl Angle<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AngleUnit) -> Self {
+        Self(match unit {
+            AngleUnit::Radian => value,
+            AngleUnit::Nanoradian => value / 1e9,
+            AngleUnit::Microradian => value / 1000000.0,
+            AngleUnit::Milliradian => value / 1000.0,
+            AngleUnit::Centiradian => value / 100.0,
+            AngleUnit::Deciradian => value / 10.0,
+            AngleUnit::Degree => value * 0.017453292519943295,
+            AngleUnit::Nanodegree => value * 1.7453292519943295e-11,
+            AngleUnit::Microdegree => value * 1.7453292519943295e-8,
+            AngleUnit::Millidegree => value * 1.7453292519943296e-5,
+            AngleUnit::Arcminute => value * 0.0002908882086657216,
+            AngleUnit::Arcsecond => value * 4.84813681109536e-6,
+            AngleUnit::Gradian => value * 0.015707963267948967,
+            AngleUnit::NatoMil => value * 0.0009817477042468104,
+            AngleUnit::Revolution => value * 6.283185307179586,
+        })
+    }
+}
+
 fixed_base!(Angle, Radian);
 
 /// Unit markers for counting [`Angle`] as an integer with [`Fixed`](crate::Fixed).

@@ -1034,6 +1034,58 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Mass; 31] = [
+        Mass::const_new(1234.5, MassUnit::Gram),
+        Mass::const_new(1234.5, MassUnit::Femtogram),
+        Mass::const_new(1234.5, MassUnit::Picogram),
+        Mass::const_new(1234.5, MassUnit::Nanogram),
+        Mass::const_new(1234.5, MassUnit::Microgram),
+        Mass::const_new(1234.5, MassUnit::Milligram),
+        Mass::const_new(1234.5, MassUnit::Centigram),
+        Mass::const_new(1234.5, MassUnit::Decigram),
+        Mass::const_new(1234.5, MassUnit::Decagram),
+        Mass::const_new(1234.5, MassUnit::Hectogram),
+        Mass::const_new(1234.5, MassUnit::Kilogram),
+        Mass::const_new(1234.5, MassUnit::Tonne),
+        Mass::const_new(1234.5, MassUnit::Kilotonne),
+        Mass::const_new(1234.5, MassUnit::Megatonne),
+        Mass::const_new(1234.5, MassUnit::ShortTon),
+        Mass::const_new(1234.5, MassUnit::LongTon),
+        Mass::const_new(1234.5, MassUnit::Pound),
+        Mass::const_new(1234.5, MassUnit::Kilopound),
+        Mass::const_new(1234.5, MassUnit::Megapound),
+        Mass::const_new(1234.5, MassUnit::Ounce),
+        Mass::const_new(1234.5, MassUnit::Slug),
+        Mass::const_new(1234.5, MassUnit::Stone),
+        Mass::const_new(1234.5, MassUnit::ShortHundredweight),
+        Mass::const_new(1234.5, MassUnit::LongHundredweight),
+        Mass::const_new(1234.5, MassUnit::Grain),
+        Mass::const_new(1234.5, MassUnit::SolarMass),
+        Mass::const_new(1234.5, MassUnit::EarthMass),
+        Mass::const_new(1234.5, MassUnit::Dalton),
+        Mass::const_new(1234.5, MassUnit::Kilodalton),
+        Mass::const_new(1234.5, MassUnit::Megadalton),
+        Mass::const_new(1234.5, MassUnit::Gigadalton),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(MassUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Mass::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in MassUnit::ALL {
+            assert_eq!(
+                Mass::const_new(v, unit).as_base().to_bits(),
+                Mass::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Mass::from_base(v);

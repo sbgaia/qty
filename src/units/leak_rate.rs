@@ -212,6 +212,21 @@ impl<T: Float> LeakRate<T> {
     }
 }
 
+impl LeakRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LeakRateUnit) -> Self {
+        Self(match unit {
+            LeakRateUnit::PascalCubicMeterPerSecond => value,
+            LeakRateUnit::MillibarLiterPerSecond => value / 10.0,
+            LeakRateUnit::TorrLiterPerSecond => value / 7.5,
+            LeakRateUnit::AtmCubicCentimeterPerSecond => value * 0.101325,
+        })
+    }
+}
+
 fixed_base!(LeakRate, PascalCubicMeterPerSecond);
 
 /// Unit markers for counting [`LeakRate`] as an integer with [`Fixed`](crate::Fixed).

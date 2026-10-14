@@ -864,6 +864,44 @@ impl<T: Float> Torque<T> {
     }
 }
 
+impl Torque<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TorqueUnit) -> Self {
+        Self(match unit {
+            TorqueUnit::NewtonMillimeter => value / 1000.0,
+            TorqueUnit::KilonewtonMillimeter => value,
+            TorqueUnit::MeganewtonMillimeter => value * 1000.0,
+            TorqueUnit::NewtonCentimeter => value / 100.0,
+            TorqueUnit::KilonewtonCentimeter => value * 10.0,
+            TorqueUnit::MeganewtonCentimeter => value * 10000.0,
+            TorqueUnit::NewtonMeter => value,
+            TorqueUnit::KilonewtonMeter => value * 1000.0,
+            TorqueUnit::MeganewtonMeter => value * 1000000.0,
+            TorqueUnit::OunceForceFoot => value * 0.08473862177071252,
+            TorqueUnit::OunceForceInch => value * 0.0070615518142260435,
+            TorqueUnit::PoundalFoot => value * 0.0421401100938048,
+            TorqueUnit::PoundForceInch => value * 0.1129848290276167,
+            TorqueUnit::KilopoundForceInch => value * 112.9848290276167,
+            TorqueUnit::MegapoundForceInch => value * 112984.8290276167,
+            TorqueUnit::PoundForceFoot => value * 1.3558179483314003,
+            TorqueUnit::KilopoundForceFoot => value * 1355.8179483314004,
+            TorqueUnit::MegapoundForceFoot => value * 1355817.9483314003,
+            TorqueUnit::GramForceMillimeter => value * 9.80665e-6,
+            TorqueUnit::GramForceCentimeter => value * 9.80665e-5,
+            TorqueUnit::GramForceMeter => value * 0.00980665,
+            TorqueUnit::KilogramForceMillimeter => value * 0.00980665,
+            TorqueUnit::KilogramForceCentimeter => value * 0.0980665,
+            TorqueUnit::KilogramForceMeter => value * 9.80665,
+            TorqueUnit::TonneForceMillimeter => value * 9.80665,
+            TorqueUnit::TonneForceCentimeter => value * 98.0665,
+            TorqueUnit::TonneForceMeter => value * 9806.65,
+        })
+    }
+}
+
 fixed_base!(Torque, NewtonMeter);
 
 /// Unit markers for counting [`Torque`] as an integer with [`Fixed`](crate::Fixed).

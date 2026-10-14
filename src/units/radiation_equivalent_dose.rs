@@ -292,6 +292,23 @@ impl<T: Float> RadiationEquivalentDose<T> {
     }
 }
 
+impl RadiationEquivalentDose<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RadiationEquivalentDoseUnit) -> Self {
+        Self(match unit {
+            RadiationEquivalentDoseUnit::Sievert => value,
+            RadiationEquivalentDoseUnit::Nanosievert => value / 1e9,
+            RadiationEquivalentDoseUnit::Microsievert => value / 1000000.0,
+            RadiationEquivalentDoseUnit::Millisievert => value / 1000.0,
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => value / 100.0,
+            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => value / 100000.0,
+        })
+    }
+}
+
 fixed_base!(RadiationEquivalentDose, Sievert);
 
 /// Unit markers for counting [`RadiationEquivalentDose`] as an integer with [`Fixed`](crate::Fixed).

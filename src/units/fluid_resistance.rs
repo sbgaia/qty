@@ -695,6 +695,36 @@ impl<T: Float> FluidResistance<T> {
     }
 }
 
+impl FluidResistance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: FluidResistanceUnit) -> Self {
+        Self(match unit {
+            FluidResistanceUnit::PascalSecondPerLiter => value * 1000.0,
+            FluidResistanceUnit::PascalMinutePerLiter => value * 60000.0,
+            FluidResistanceUnit::PascalSecondPerMilliliter => value * 1000000.0,
+            FluidResistanceUnit::PascalMinutePerMilliliter => value * 6e7,
+            FluidResistanceUnit::PascalSecondPerCubicMeter => value,
+            FluidResistanceUnit::MegapascalSecondPerCubicMeter => value * 1000000.0,
+            FluidResistanceUnit::PascalMinutePerCubicMeter => value * 60.0,
+            FluidResistanceUnit::PascalSecondPerCubicCentimeter => value * 1000000.0,
+            FluidResistanceUnit::PascalMinutePerCubicCentimeter => value * 6e7,
+            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => value * 100000.0,
+            FluidResistanceUnit::MillimeterMercurySecondPerLiter => value * 133322.368,
+            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => value * 7999342.08,
+            FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => value * 1.33322368e8,
+            FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter => value * 7.99934208e9,
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter => value * 1.33322368e8,
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter => value * 7.99934208e9,
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => value * 133.322368,
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => value * 7999.34208,
+            FluidResistanceUnit::WoodUnit => value * 7999342.08,
+        })
+    }
+}
+
 fixed_base!(FluidResistance, PascalSecondPerCubicMeter);
 
 /// Unit markers for counting [`FluidResistance`] as an integer with [`Fixed`](crate::Fixed).

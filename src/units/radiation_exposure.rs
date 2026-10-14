@@ -338,6 +338,25 @@ impl<T: Float> RadiationExposure<T> {
     }
 }
 
+impl RadiationExposure<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RadiationExposureUnit) -> Self {
+        Self(match unit {
+            RadiationExposureUnit::CoulombPerKilogram => value,
+            RadiationExposureUnit::PicocoulombPerKilogram => value / 1e12,
+            RadiationExposureUnit::NanocoulombPerKilogram => value / 1e9,
+            RadiationExposureUnit::MicrocoulombPerKilogram => value / 1000000.0,
+            RadiationExposureUnit::MillicoulombPerKilogram => value / 1000.0,
+            RadiationExposureUnit::Roentgen => value * 0.000258,
+            RadiationExposureUnit::Microroentgen => value * 2.58e-10,
+            RadiationExposureUnit::Milliroentgen => value * 2.58e-7,
+        })
+    }
+}
+
 fixed_base!(RadiationExposure, CoulombPerKilogram);
 
 /// Unit markers for counting [`RadiationExposure`] as an integer with [`Fixed`](crate::Fixed).

@@ -188,7 +188,7 @@ To move to newer upstream definitions, change `UNITSNET_REF` in
 
 ## Minimum supported Rust version
 
-1.81.
+1.82 (for float arithmetic in `const fn`).
 
 ## License
 

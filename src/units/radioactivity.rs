@@ -913,6 +913,46 @@ impl<T: Float> Radioactivity<T> {
     }
 }
 
+impl Radioactivity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RadioactivityUnit) -> Self {
+        Self(match unit {
+            RadioactivityUnit::Becquerel => value,
+            RadioactivityUnit::Picobecquerel => value / 1e12,
+            RadioactivityUnit::Nanobecquerel => value / 1e9,
+            RadioactivityUnit::Microbecquerel => value / 1000000.0,
+            RadioactivityUnit::Millibecquerel => value / 1000.0,
+            RadioactivityUnit::Kilobecquerel => value * 1000.0,
+            RadioactivityUnit::Megabecquerel => value * 1000000.0,
+            RadioactivityUnit::Gigabecquerel => value * 1e9,
+            RadioactivityUnit::Terabecquerel => value * 1e12,
+            RadioactivityUnit::Petabecquerel => value * 1e15,
+            RadioactivityUnit::Exabecquerel => value * 1e18,
+            RadioactivityUnit::Curie => value * 3.7e10,
+            RadioactivityUnit::Picocurie => value * 0.037,
+            RadioactivityUnit::Nanocurie => value * 37.0,
+            RadioactivityUnit::Microcurie => value * 37000.0,
+            RadioactivityUnit::Millicurie => value * 3.7e7,
+            RadioactivityUnit::Kilocurie => value * 3.7e13,
+            RadioactivityUnit::Megacurie => value * 3.7e16,
+            RadioactivityUnit::Gigacurie => value * 3.7e19,
+            RadioactivityUnit::Teracurie => value * 3.7e22,
+            RadioactivityUnit::Rutherford => value * 1000000.0,
+            RadioactivityUnit::Picorutherford => value / 1000000.0,
+            RadioactivityUnit::Nanorutherford => value / 1000.0,
+            RadioactivityUnit::Microrutherford => value,
+            RadioactivityUnit::Millirutherford => value * 1000.0,
+            RadioactivityUnit::Kilorutherford => value * 1e9,
+            RadioactivityUnit::Megarutherford => value * 1e12,
+            RadioactivityUnit::Gigarutherford => value * 1e15,
+            RadioactivityUnit::Terarutherford => value * 1e18,
+        })
+    }
+}
+
 fixed_base!(Radioactivity, Becquerel);
 
 /// Unit markers for counting [`Radioactivity`] as an integer with [`Fixed`](crate::Fixed).

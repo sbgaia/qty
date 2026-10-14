@@ -540,6 +540,38 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ReciprocalArea; 11] = [
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareMeter),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareKilometer),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareDecimeter),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareCentimeter),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareMillimeter),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareMicrometer),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareMile),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareYard),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareFoot),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseUsSurveySquareFoot),
+        ReciprocalArea::const_new(1234.5, ReciprocalAreaUnit::InverseSquareInch),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ReciprocalAreaUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ReciprocalArea::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ReciprocalAreaUnit::ALL {
+            assert_eq!(
+                ReciprocalArea::const_new(v, unit).as_base().to_bits(),
+                ReciprocalArea::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ReciprocalArea::from_base(v);

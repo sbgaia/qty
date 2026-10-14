@@ -1492,6 +1492,67 @@ impl<T: Float> Pressure<T> {
     }
 }
 
+impl Pressure<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PressureUnit) -> Self {
+        Self(match unit {
+            PressureUnit::Pascal => value,
+            PressureUnit::Micropascal => value / 1000000.0,
+            PressureUnit::Millipascal => value / 1000.0,
+            PressureUnit::Decapascal => value * 10.0,
+            PressureUnit::Hectopascal => value * 100.0,
+            PressureUnit::Kilopascal => value * 1000.0,
+            PressureUnit::Megapascal => value * 1000000.0,
+            PressureUnit::Gigapascal => value * 1e9,
+            PressureUnit::Atmosphere => value * 101325.0,
+            PressureUnit::Bar => value * 100000.0,
+            PressureUnit::Microbar => value / 10.0,
+            PressureUnit::Millibar => value * 100.0,
+            PressureUnit::Centibar => value * 1000.0,
+            PressureUnit::Decibar => value * 10000.0,
+            PressureUnit::Kilobar => value * 1e8,
+            PressureUnit::Megabar => value * 1e11,
+            PressureUnit::KilogramForcePerSquareMeter => value * 9.80665,
+            PressureUnit::KilogramForcePerSquareCentimeter => value * 98066.5,
+            PressureUnit::KilogramForcePerSquareMillimeter => value * 9806650.0,
+            PressureUnit::NewtonPerSquareMeter => value,
+            PressureUnit::KilonewtonPerSquareMeter => value * 1000.0,
+            PressureUnit::MeganewtonPerSquareMeter => value * 1000000.0,
+            PressureUnit::NewtonPerSquareCentimeter => value * 10000.0,
+            PressureUnit::KilonewtonPerSquareCentimeter => value * 1e7,
+            PressureUnit::NewtonPerSquareMillimeter => value * 1000000.0,
+            PressureUnit::KilonewtonPerSquareMillimeter => value * 1e9,
+            PressureUnit::TechnicalAtmosphere => value * 98066.5,
+            PressureUnit::Torr => value * 133.32236842105263,
+            PressureUnit::Millitorr => value * 0.13332236842105263,
+            PressureUnit::PoundForcePerSquareInch => value * 6894.757293168362,
+            PressureUnit::KilopoundForcePerSquareInch => value * 6894757.293168361,
+            PressureUnit::PoundForcePerSquareMil => value * 6.894757293168362e9,
+            PressureUnit::KilopoundForcePerSquareMil => value * 6.894757293168361e12,
+            PressureUnit::PoundForcePerSquareFoot => value * 47.880258980335846,
+            PressureUnit::KilopoundForcePerSquareFoot => value * 47880.25898033584,
+            PressureUnit::TonneForcePerSquareMillimeter => value * 9.80665e9,
+            PressureUnit::TonneForcePerSquareMeter => value * 9806.65,
+            PressureUnit::MeterOfHead => value * 9804.139432,
+            PressureUnit::TonneForcePerSquareCentimeter => value * 9.80665e7,
+            PressureUnit::FootOfHead => value * 2988.3016988736,
+            PressureUnit::MillimeterOfMercury => value * 133.322387415,
+            PressureUnit::InchOfMercury => value * 3386.388640341,
+            PressureUnit::DynePerSquareCentimeter => value / 10.0,
+            PressureUnit::PoundPerInchSecondSquared => value * 17.857966521592093,
+            PressureUnit::MeterOfWaterColumn => value * 9806.65,
+            PressureUnit::MillimeterOfWaterColumn => value * 9.80665,
+            PressureUnit::CentimeterOfWaterColumn => value * 98.0665,
+            PressureUnit::InchOfWaterColumn => value * 249.08891,
+            PressureUnit::MilligramForcePerSquareMeter => value * 9.80665e-6,
+            PressureUnit::MilligramForcePerSquareFoot => value * 0.0001055579020880264,
+        })
+    }
+}
+
 fixed_base!(Pressure, Pascal);
 
 /// Unit markers for counting [`Pressure`] as an integer with [`Fixed`](crate::Fixed).

@@ -411,6 +411,27 @@ impl<T: Float> Temperature<T> {
     }
 }
 
+impl Temperature<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TemperatureUnit) -> Self {
+        Self(match unit {
+            TemperatureUnit::Kelvin => value,
+            TemperatureUnit::DegreeCelsius => value + 273.15,
+            TemperatureUnit::MillidegreeCelsius => value / 1000.0 + 273.15,
+            TemperatureUnit::DegreeDelisle => value / -1.5 + 373.15,
+            TemperatureUnit::DegreeFahrenheit => value * 0.5555555555555556 + 255.37222222222223,
+            TemperatureUnit::DegreeNewton => value * 3.0303030303030303 + 273.15,
+            TemperatureUnit::DegreeRankine => value * 0.5555555555555556,
+            TemperatureUnit::DegreeReaumur => value * 1.25 + 273.15,
+            TemperatureUnit::DegreeRoemer => value * 1.9047619047619047 + 258.8642857142857,
+            TemperatureUnit::SolarTemperature => value * 5778.0,
+        })
+    }
+}
+
 fixed_base!(Temperature, Kelvin);
 
 /// Unit markers for counting [`Temperature`] as an integer with [`Fixed`](crate::Fixed).

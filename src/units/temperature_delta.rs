@@ -347,6 +347,26 @@ impl<T: Float> TemperatureDelta<T> {
     }
 }
 
+impl TemperatureDelta<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TemperatureDeltaUnit) -> Self {
+        Self(match unit {
+            TemperatureDeltaUnit::Kelvin => value,
+            TemperatureDeltaUnit::DegreeCelsius => value,
+            TemperatureDeltaUnit::MillidegreeCelsius => value / 1000.0,
+            TemperatureDeltaUnit::DegreeDelisle => value / -1.5,
+            TemperatureDeltaUnit::DegreeFahrenheit => value * 0.5555555555555556,
+            TemperatureDeltaUnit::DegreeNewton => value * 3.0303030303030303,
+            TemperatureDeltaUnit::DegreeRankine => value * 0.5555555555555556,
+            TemperatureDeltaUnit::DegreeReaumur => value * 1.25,
+            TemperatureDeltaUnit::DegreeRoemer => value * 1.9047619047619047,
+        })
+    }
+}
+
 fixed_base!(TemperatureDelta, Kelvin);
 
 /// Unit markers for counting [`TemperatureDelta`] as an integer with [`Fixed`](crate::Fixed).

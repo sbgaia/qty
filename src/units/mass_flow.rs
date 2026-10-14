@@ -1014,6 +1014,50 @@ impl<T: Float> MassFlow<T> {
     }
 }
 
+impl MassFlow<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassFlowUnit) -> Self {
+        Self(match unit {
+            MassFlowUnit::GramPerSecond => value,
+            MassFlowUnit::NanogramPerSecond => value / 1e9,
+            MassFlowUnit::MicrogramPerSecond => value / 1000000.0,
+            MassFlowUnit::MilligramPerSecond => value / 1000.0,
+            MassFlowUnit::CentigramPerSecond => value / 100.0,
+            MassFlowUnit::DecigramPerSecond => value / 10.0,
+            MassFlowUnit::DecagramPerSecond => value * 10.0,
+            MassFlowUnit::HectogramPerSecond => value * 100.0,
+            MassFlowUnit::KilogramPerSecond => value * 1000.0,
+            MassFlowUnit::GramPerDay => value / 86400.0,
+            MassFlowUnit::NanogramPerDay => value / 8.64e13,
+            MassFlowUnit::MicrogramPerDay => value / 8.64e10,
+            MassFlowUnit::MilligramPerDay => value / 8.64e7,
+            MassFlowUnit::CentigramPerDay => value / 8640000.0,
+            MassFlowUnit::DecigramPerDay => value / 864000.0,
+            MassFlowUnit::DecagramPerDay => value / 8640.0,
+            MassFlowUnit::HectogramPerDay => value / 864.0,
+            MassFlowUnit::KilogramPerDay => value * 0.011574074074074073,
+            MassFlowUnit::MegagramPerDay => value * 11.574074074074074,
+            MassFlowUnit::GramPerHour => value / 3600.0,
+            MassFlowUnit::KilogramPerHour => value * 0.2777777777777778,
+            MassFlowUnit::KilogramPerMinute => value * 16.666666666666668,
+            MassFlowUnit::TonnePerHour => value * 277.77777777777777,
+            MassFlowUnit::PoundPerDay => value * 0.005249911689814815,
+            MassFlowUnit::MegapoundPerDay => value * 5249.911689814815,
+            MassFlowUnit::PoundPerHour => value * 0.12599788055555555,
+            MassFlowUnit::MegapoundPerHour => value * 125997.88055555556,
+            MassFlowUnit::PoundPerMinute => value * 7.559872833333333,
+            MassFlowUnit::MegapoundPerMinute => value * 7559872.833333333,
+            MassFlowUnit::PoundPerSecond => value * 453.59237,
+            MassFlowUnit::MegapoundPerSecond => value * 4.5359237e8,
+            MassFlowUnit::TonnePerDay => value * 11.574074074074074,
+            MassFlowUnit::ShortTonPerHour => value * 251.9957611111111,
+        })
+    }
+}
+
 fixed_base!(MassFlow, GramPerSecond);
 
 /// Unit markers for counting [`MassFlow`] as an integer with [`Fixed`](crate::Fixed).

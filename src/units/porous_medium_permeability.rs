@@ -242,6 +242,22 @@ impl<T: Float> PorousMediumPermeability<T> {
     }
 }
 
+impl PorousMediumPermeability<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PorousMediumPermeabilityUnit) -> Self {
+        Self(match unit {
+            PorousMediumPermeabilityUnit::Darcy => value * 9.869233e-13,
+            PorousMediumPermeabilityUnit::Microdarcy => value * 9.869233e-19,
+            PorousMediumPermeabilityUnit::Millidarcy => value * 9.869233e-16,
+            PorousMediumPermeabilityUnit::SquareMeter => value,
+            PorousMediumPermeabilityUnit::SquareCentimeter => value / 10000.0,
+        })
+    }
+}
+
 fixed_base!(PorousMediumPermeability, SquareMeter);
 
 /// Unit markers for counting [`PorousMediumPermeability`] as an integer with [`Fixed`](crate::Fixed).

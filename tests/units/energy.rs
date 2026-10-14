@@ -1599,6 +1599,67 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Energy; 40] = [
+        Energy::const_new(1234.5, EnergyUnit::Joule),
+        Energy::const_new(1234.5, EnergyUnit::Nanojoule),
+        Energy::const_new(1234.5, EnergyUnit::Microjoule),
+        Energy::const_new(1234.5, EnergyUnit::Millijoule),
+        Energy::const_new(1234.5, EnergyUnit::Kilojoule),
+        Energy::const_new(1234.5, EnergyUnit::Megajoule),
+        Energy::const_new(1234.5, EnergyUnit::Gigajoule),
+        Energy::const_new(1234.5, EnergyUnit::Terajoule),
+        Energy::const_new(1234.5, EnergyUnit::Petajoule),
+        Energy::const_new(1234.5, EnergyUnit::Calorie),
+        Energy::const_new(1234.5, EnergyUnit::Kilocalorie),
+        Energy::const_new(1234.5, EnergyUnit::Megacalorie),
+        Energy::const_new(1234.5, EnergyUnit::BritishThermalUnit),
+        Energy::const_new(1234.5, EnergyUnit::KilobritishThermalUnit),
+        Energy::const_new(1234.5, EnergyUnit::MegabritishThermalUnit),
+        Energy::const_new(1234.5, EnergyUnit::GigabritishThermalUnit),
+        Energy::const_new(1234.5, EnergyUnit::ElectronVolt),
+        Energy::const_new(1234.5, EnergyUnit::KiloelectronVolt),
+        Energy::const_new(1234.5, EnergyUnit::MegaelectronVolt),
+        Energy::const_new(1234.5, EnergyUnit::GigaelectronVolt),
+        Energy::const_new(1234.5, EnergyUnit::TeraelectronVolt),
+        Energy::const_new(1234.5, EnergyUnit::FootPound),
+        Energy::const_new(1234.5, EnergyUnit::Erg),
+        Energy::const_new(1234.5, EnergyUnit::WattHour),
+        Energy::const_new(1234.5, EnergyUnit::KilowattHour),
+        Energy::const_new(1234.5, EnergyUnit::MegawattHour),
+        Energy::const_new(1234.5, EnergyUnit::GigawattHour),
+        Energy::const_new(1234.5, EnergyUnit::TerawattHour),
+        Energy::const_new(1234.5, EnergyUnit::WattDay),
+        Energy::const_new(1234.5, EnergyUnit::KilowattDay),
+        Energy::const_new(1234.5, EnergyUnit::MegawattDay),
+        Energy::const_new(1234.5, EnergyUnit::GigawattDay),
+        Energy::const_new(1234.5, EnergyUnit::TerawattDay),
+        Energy::const_new(1234.5, EnergyUnit::ThermEc),
+        Energy::const_new(1234.5, EnergyUnit::DecathermEc),
+        Energy::const_new(1234.5, EnergyUnit::ThermUs),
+        Energy::const_new(1234.5, EnergyUnit::DecathermUs),
+        Energy::const_new(1234.5, EnergyUnit::ThermImperial),
+        Energy::const_new(1234.5, EnergyUnit::DecathermImperial),
+        Energy::const_new(1234.5, EnergyUnit::HorsepowerHour),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(EnergyUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Energy::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in EnergyUnit::ALL {
+            assert_eq!(
+                Energy::const_new(v, unit).as_base().to_bits(),
+                Energy::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Energy::from_base(v);

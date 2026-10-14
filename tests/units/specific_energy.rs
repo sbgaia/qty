@@ -1432,6 +1432,57 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [SpecificEnergy; 30] = [
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::JoulePerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilojoulePerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegajoulePerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegajoulePerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::CaloriePerGram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilocaloriePerGram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::WattHourPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilowattHourPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegawattHourPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::GigawattHourPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::WattDayPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilowattDayPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegawattDayPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::GigawattDayPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::TerawattDayPerKilogram),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::WattDayPerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilowattDayPerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegawattDayPerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::GigawattDayPerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::TerawattDayPerTonne),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::WattDayPerShortTon),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilowattDayPerShortTon),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegawattDayPerShortTon),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::GigawattDayPerShortTon),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::TerawattDayPerShortTon),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::WattHourPerPound),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::KilowattHourPerPound),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::MegawattHourPerPound),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::GigawattHourPerPound),
+        SpecificEnergy::const_new(1234.5, SpecificEnergyUnit::BtuPerPound),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(SpecificEnergyUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            SpecificEnergy::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in SpecificEnergyUnit::ALL {
+            assert_eq!(
+                SpecificEnergy::const_new(v, unit).as_base().to_bits(),
+                SpecificEnergy::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = SpecificEnergy::from_base(v);

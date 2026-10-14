@@ -405,6 +405,28 @@ impl<T: Float> ReciprocalArea<T> {
     }
 }
 
+impl ReciprocalArea<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ReciprocalAreaUnit) -> Self {
+        Self(match unit {
+            ReciprocalAreaUnit::InverseSquareMeter => value,
+            ReciprocalAreaUnit::InverseSquareKilometer => value / 1000000.0,
+            ReciprocalAreaUnit::InverseSquareDecimeter => value * 100.0,
+            ReciprocalAreaUnit::InverseSquareCentimeter => value * 10000.0,
+            ReciprocalAreaUnit::InverseSquareMillimeter => value * 1000000.0,
+            ReciprocalAreaUnit::InverseSquareMicrometer => value * 1e12,
+            ReciprocalAreaUnit::InverseSquareMile => value * 3.8610215854244587e-7,
+            ReciprocalAreaUnit::InverseSquareYard => value * 1.1959900463010802,
+            ReciprocalAreaUnit::InverseSquareFoot => value * 10.763910416709722,
+            ReciprocalAreaUnit::InverseUsSurveySquareFoot => value * 10.763867361111112,
+            ReciprocalAreaUnit::InverseSquareInch => value * 1550.0031000062,
+        })
+    }
+}
+
 fixed_base!(ReciprocalArea, InverseSquareMeter);
 
 /// Unit markers for counting [`ReciprocalArea`] as an integer with [`Fixed`](crate::Fixed).

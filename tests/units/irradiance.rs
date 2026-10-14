@@ -686,6 +686,41 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Irradiance; 14] = [
+        Irradiance::const_new(1234.5, IrradianceUnit::WattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::PicowattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::NanowattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MicrowattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MilliwattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::KilowattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MegawattPerSquareMeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::WattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::PicowattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::NanowattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MicrowattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MilliwattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::KilowattPerSquareCentimeter),
+        Irradiance::const_new(1234.5, IrradianceUnit::MegawattPerSquareCentimeter),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(IrradianceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Irradiance::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in IrradianceUnit::ALL {
+            assert_eq!(
+                Irradiance::const_new(v, unit).as_base().to_bits(),
+                Irradiance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Irradiance::from_base(v);

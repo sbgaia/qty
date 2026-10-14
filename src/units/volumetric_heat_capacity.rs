@@ -415,6 +415,30 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     }
 }
 
+impl VolumetricHeatCapacity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: VolumetricHeatCapacityUnit) -> Self {
+        Self(match unit {
+            VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin => value,
+            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => value * 1000.0,
+            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin => value * 1000000.0,
+            VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius => value,
+            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius => value * 1000.0,
+            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius => value * 1000000.0,
+            VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius => value * 4184000.0,
+            VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius => {
+                value * 4.184e9
+            }
+            VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
+                value * 67066.10245409631
+            }
+        })
+    }
+}
+
 fixed_base!(VolumetricHeatCapacity, JoulePerCubicMeterKelvin);
 
 /// Unit markers for counting [`VolumetricHeatCapacity`] as an integer with [`Fixed`](crate::Fixed).

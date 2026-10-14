@@ -652,6 +652,43 @@ impl<T: Float> PressureChangeRate<T> {
     }
 }
 
+impl PressureChangeRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PressureChangeRateUnit) -> Self {
+        Self(match unit {
+            PressureChangeRateUnit::PascalPerSecond => value,
+            PressureChangeRateUnit::KilopascalPerSecond => value * 1000.0,
+            PressureChangeRateUnit::MegapascalPerSecond => value * 1000000.0,
+            PressureChangeRateUnit::PascalPerMinute => value / 60.0,
+            PressureChangeRateUnit::KilopascalPerMinute => value * 16.666666666666668,
+            PressureChangeRateUnit::MegapascalPerMinute => value * 16666.666666666668,
+            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => value * 133.322387415,
+            PressureChangeRateUnit::AtmospherePerSecond => value * 101325.0,
+            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => value * 6894.757293168362,
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
+                value * 6894757.293168361
+            }
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
+                value * 6.894757293168362e9
+            }
+            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => value * 114.91262155280602,
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
+                value * 114912.62155280603
+            }
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
+                value * 1.1491262155280602e8
+            }
+            PressureChangeRateUnit::BarPerSecond => value * 100000.0,
+            PressureChangeRateUnit::MillibarPerSecond => value * 100.0,
+            PressureChangeRateUnit::BarPerMinute => value * 1666.6666666666667,
+            PressureChangeRateUnit::MillibarPerMinute => value * 1.6666666666666667,
+        })
+    }
+}
+
 fixed_base!(PressureChangeRate, PascalPerSecond);
 
 /// Unit markers for counting [`PressureChangeRate`] as an integer with [`Fixed`](crate::Fixed).

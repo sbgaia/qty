@@ -958,6 +958,48 @@ impl<T: Float> Mass<T> {
     }
 }
 
+impl Mass<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassUnit) -> Self {
+        Self(match unit {
+            MassUnit::Gram => value / 1000.0,
+            MassUnit::Femtogram => value / 1e18,
+            MassUnit::Picogram => value / 1e15,
+            MassUnit::Nanogram => value / 1e12,
+            MassUnit::Microgram => value / 1e9,
+            MassUnit::Milligram => value / 1000000.0,
+            MassUnit::Centigram => value / 100000.0,
+            MassUnit::Decigram => value / 10000.0,
+            MassUnit::Decagram => value / 100.0,
+            MassUnit::Hectogram => value / 10.0,
+            MassUnit::Kilogram => value,
+            MassUnit::Tonne => value * 1000.0,
+            MassUnit::Kilotonne => value * 1000000.0,
+            MassUnit::Megatonne => value * 1e9,
+            MassUnit::ShortTon => value * 907.18474,
+            MassUnit::LongTon => value * 1016.0469088,
+            MassUnit::Pound => value * 0.45359237,
+            MassUnit::Kilopound => value * 453.59237,
+            MassUnit::Megapound => value * 453592.37,
+            MassUnit::Ounce => value * 0.028349523125,
+            MassUnit::Slug => value * 14.593902937206364,
+            MassUnit::Stone => value * 6.35029318,
+            MassUnit::ShortHundredweight => value * 45.359237,
+            MassUnit::LongHundredweight => value * 50.80234544,
+            MassUnit::Grain => value * 6.479891e-5,
+            MassUnit::SolarMass => value * 1.98947e30,
+            MassUnit::EarthMass => value * 5.9722e24,
+            MassUnit::Dalton => value * 1.6605390666e-27,
+            MassUnit::Kilodalton => value * 1.6605390666e-24,
+            MassUnit::Megadalton => value * 1.6605390666e-21,
+            MassUnit::Gigadalton => value * 1.6605390666e-18,
+        })
+    }
+}
+
 fixed_base!(Mass, Kilogram);
 
 /// Unit markers for counting [`Mass`] as an integer with [`Fixed`](crate::Fixed).

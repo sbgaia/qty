@@ -687,6 +687,37 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     }
 }
 
+impl ElectricPotentialChangeRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricPotentialChangeRateUnit) -> Self {
+        Self(match unit {
+            ElectricPotentialChangeRateUnit::VoltPerSecond => value,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value / 1000000.0,
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => value / 1000.0,
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond => value * 1000.0,
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond => value * 1000000.0,
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value * 1000000.0,
+            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => value,
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value * 1000.0,
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value * 1e9,
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value * 1e12,
+            ElectricPotentialChangeRateUnit::VoltPerMinute => value / 60.0,
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value / 6e7,
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => value / 60000.0,
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => value * 16.666666666666668,
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => value * 16666.666666666668,
+            ElectricPotentialChangeRateUnit::VoltPerHour => value / 3600.0,
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => value / 3.6e9,
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => value / 3600000.0,
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => value * 0.2777777777777778,
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => value * 277.77777777777777,
+        })
+    }
+}
+
 fixed_base!(ElectricPotentialChangeRate, VoltPerSecond);
 
 /// Unit markers for counting [`ElectricPotentialChangeRate`] as an integer with [`Fixed`](crate::Fixed).

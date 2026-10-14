@@ -129,6 +129,18 @@ impl<T: Float> MagneticFlux<T> {
     }
 }
 
+impl MagneticFlux<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MagneticFluxUnit) -> Self {
+        Self(match unit {
+            MagneticFluxUnit::Weber => value,
+        })
+    }
+}
+
 fixed_base!(MagneticFlux, Weber);
 
 /// Unit markers for counting [`MagneticFlux`] as an integer with [`Fixed`](crate::Fixed).

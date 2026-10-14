@@ -745,6 +745,41 @@ impl<T: Float> MassFraction<T> {
     }
 }
 
+impl MassFraction<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassFractionUnit) -> Self {
+        Self(match unit {
+            MassFractionUnit::DecimalFraction => value,
+            MassFractionUnit::GramPerGram => value,
+            MassFractionUnit::NanogramPerGram => value / 1e9,
+            MassFractionUnit::MicrogramPerGram => value / 1000000.0,
+            MassFractionUnit::MilligramPerGram => value / 1000.0,
+            MassFractionUnit::CentigramPerGram => value / 100.0,
+            MassFractionUnit::DecigramPerGram => value / 10.0,
+            MassFractionUnit::DecagramPerGram => value * 10.0,
+            MassFractionUnit::HectogramPerGram => value * 100.0,
+            MassFractionUnit::KilogramPerGram => value * 1000.0,
+            MassFractionUnit::GramPerKilogram => value / 1000.0,
+            MassFractionUnit::NanogramPerKilogram => value / 1e12,
+            MassFractionUnit::MicrogramPerKilogram => value / 1e9,
+            MassFractionUnit::MilligramPerKilogram => value / 1000000.0,
+            MassFractionUnit::CentigramPerKilogram => value / 100000.0,
+            MassFractionUnit::DecigramPerKilogram => value / 10000.0,
+            MassFractionUnit::DecagramPerKilogram => value / 100.0,
+            MassFractionUnit::HectogramPerKilogram => value / 10.0,
+            MassFractionUnit::KilogramPerKilogram => value,
+            MassFractionUnit::Percent => value / 100.0,
+            MassFractionUnit::PartPerThousand => value / 1000.0,
+            MassFractionUnit::PartPerMillion => value / 1000000.0,
+            MassFractionUnit::PartPerBillion => value / 1e9,
+            MassFractionUnit::PartPerTrillion => value / 1e12,
+        })
+    }
+}
+
 fixed_base!(MassFraction, DecimalFraction);
 
 /// Unit markers for counting [`MassFraction`] as an integer with [`Fixed`](crate::Fixed).

@@ -270,6 +270,23 @@ impl<T: Float> AreaMomentOfInertia<T> {
     }
 }
 
+impl AreaMomentOfInertia<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AreaMomentOfInertiaUnit) -> Self {
+        Self(match unit {
+            AreaMomentOfInertiaUnit::MeterToTheFourth => value,
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => value / 10000.0,
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => value / 1e8,
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => value / 1e12,
+            AreaMomentOfInertiaUnit::FootToTheFourth => value * 0.0086309748412416,
+            AreaMomentOfInertiaUnit::InchToTheFourth => value * 4.162314256e-7,
+        })
+    }
+}
+
 fixed_base!(AreaMomentOfInertia, MeterToTheFourth);
 
 /// Unit markers for counting [`AreaMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).

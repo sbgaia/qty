@@ -390,6 +390,27 @@ impl<T: Float> Luminance<T> {
     }
 }
 
+impl Luminance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LuminanceUnit) -> Self {
+        Self(match unit {
+            LuminanceUnit::CandelaPerSquareMeter => value,
+            LuminanceUnit::NanocandelaPerSquareMeter => value / 1e9,
+            LuminanceUnit::MicrocandelaPerSquareMeter => value / 1000000.0,
+            LuminanceUnit::MillicandelaPerSquareMeter => value / 1000.0,
+            LuminanceUnit::CenticandelaPerSquareMeter => value / 100.0,
+            LuminanceUnit::DecicandelaPerSquareMeter => value / 10.0,
+            LuminanceUnit::KilocandelaPerSquareMeter => value * 1000.0,
+            LuminanceUnit::CandelaPerSquareFoot => value * 10.763910416709722,
+            LuminanceUnit::CandelaPerSquareInch => value * 1550.0031000062,
+            LuminanceUnit::Nit => value,
+        })
+    }
+}
+
 fixed_base!(Luminance, CandelaPerSquareMeter);
 
 /// Unit markers for counting [`Luminance`] as an integer with [`Fixed`](crate::Fixed).

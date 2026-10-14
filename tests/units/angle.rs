@@ -561,6 +561,42 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Angle; 15] = [
+        Angle::const_new(1234.5, AngleUnit::Radian),
+        Angle::const_new(1234.5, AngleUnit::Nanoradian),
+        Angle::const_new(1234.5, AngleUnit::Microradian),
+        Angle::const_new(1234.5, AngleUnit::Milliradian),
+        Angle::const_new(1234.5, AngleUnit::Centiradian),
+        Angle::const_new(1234.5, AngleUnit::Deciradian),
+        Angle::const_new(1234.5, AngleUnit::Degree),
+        Angle::const_new(1234.5, AngleUnit::Nanodegree),
+        Angle::const_new(1234.5, AngleUnit::Microdegree),
+        Angle::const_new(1234.5, AngleUnit::Millidegree),
+        Angle::const_new(1234.5, AngleUnit::Arcminute),
+        Angle::const_new(1234.5, AngleUnit::Arcsecond),
+        Angle::const_new(1234.5, AngleUnit::Gradian),
+        Angle::const_new(1234.5, AngleUnit::NatoMil),
+        Angle::const_new(1234.5, AngleUnit::Revolution),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(AngleUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Angle::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in AngleUnit::ALL {
+            assert_eq!(
+                Angle::const_new(v, unit).as_base().to_bits(),
+                Angle::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Angle::from_base(v);

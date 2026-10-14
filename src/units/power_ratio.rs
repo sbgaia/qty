@@ -177,6 +177,19 @@ impl<T: Float> PowerRatio<T> {
     }
 }
 
+impl PowerRatio<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PowerRatioUnit) -> Self {
+        Self(match unit {
+            PowerRatioUnit::DecibelWatt => value,
+            PowerRatioUnit::DecibelMilliwatt => value - 30.0,
+        })
+    }
+}
+
 fixed_base!(PowerRatio, DecibelWatt);
 
 /// Unit markers for counting [`PowerRatio`] as an integer with [`Fixed`](crate::Fixed).

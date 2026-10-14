@@ -200,6 +200,20 @@ impl<T: Float> Molality<T> {
     }
 }
 
+impl Molality<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MolalityUnit) -> Self {
+        Self(match unit {
+            MolalityUnit::MolePerKilogram => value,
+            MolalityUnit::MillimolePerKilogram => value / 1000.0,
+            MolalityUnit::MolePerGram => value * 1000.0,
+        })
+    }
+}
+
 fixed_base!(Molality, MolePerKilogram);
 
 /// Unit markers for counting [`Molality`] as an integer with [`Fixed`](crate::Fixed).

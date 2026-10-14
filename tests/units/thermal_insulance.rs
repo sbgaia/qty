@@ -378,6 +378,43 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ThermalInsulance; 7] = [
+        ThermalInsulance::const_new(1234.5, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt),
+        ThermalInsulance::const_new(1234.5, ThermalInsulanceUnit::SquareMeterKelvinPerWatt),
+        ThermalInsulance::const_new(
+            1234.5,
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt,
+        ),
+        ThermalInsulance::const_new(1234.5, ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt),
+        ThermalInsulance::const_new(1234.5, ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt),
+        ThermalInsulance::const_new(
+            1234.5,
+            ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie,
+        ),
+        ThermalInsulance::const_new(
+            1234.5,
+            ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu,
+        ),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ThermalInsulanceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ThermalInsulance::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ThermalInsulanceUnit::ALL {
+            assert_eq!(
+                ThermalInsulance::const_new(v, unit).as_base().to_bits(),
+                ThermalInsulance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ThermalInsulance::from_base(v);

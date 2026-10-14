@@ -770,6 +770,45 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ElectricConductance; 16] = [
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Siemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Nanosiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Microsiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Millisiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Kilosiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Megasiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Gigasiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Terasiemens),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Mho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Nanomho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Micromho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Millimho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Kilomho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Megamho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Gigamho),
+        ElectricConductance::const_new(1234.5, ElectricConductanceUnit::Teramho),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ElectricConductanceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ElectricConductance::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ElectricConductanceUnit::ALL {
+            assert_eq!(
+                ElectricConductance::const_new(v, unit).as_base().to_bits(),
+                ElectricConductance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ElectricConductance::from_base(v);

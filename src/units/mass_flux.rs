@@ -461,6 +461,29 @@ impl<T: Float> MassFlux<T> {
     }
 }
 
+impl MassFlux<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassFluxUnit) -> Self {
+        Self(match unit {
+            MassFluxUnit::GramPerSecondPerSquareMeter => value / 1000.0,
+            MassFluxUnit::KilogramPerSecondPerSquareMeter => value,
+            MassFluxUnit::GramPerSecondPerSquareCentimeter => value * 10.0,
+            MassFluxUnit::KilogramPerSecondPerSquareCentimeter => value * 10000.0,
+            MassFluxUnit::GramPerSecondPerSquareMillimeter => value * 1000.0,
+            MassFluxUnit::KilogramPerSecondPerSquareMillimeter => value * 1000000.0,
+            MassFluxUnit::GramPerHourPerSquareMeter => value / 3600000.0,
+            MassFluxUnit::KilogramPerHourPerSquareMeter => value / 3600.0,
+            MassFluxUnit::GramPerHourPerSquareCentimeter => value / 360.0,
+            MassFluxUnit::KilogramPerHourPerSquareCentimeter => value * 2.7777777777777777,
+            MassFluxUnit::GramPerHourPerSquareMillimeter => value * 0.2777777777777778,
+            MassFluxUnit::KilogramPerHourPerSquareMillimeter => value * 277.77777777777777,
+        })
+    }
+}
+
 fixed_base!(MassFlux, KilogramPerSecondPerSquareMeter);
 
 /// Unit markers for counting [`MassFlux`] as an integer with [`Fixed`](crate::Fixed).

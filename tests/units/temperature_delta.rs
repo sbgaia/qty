@@ -438,6 +438,36 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [TemperatureDelta; 9] = [
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::Kelvin),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeCelsius),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::MillidegreeCelsius),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeDelisle),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeFahrenheit),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeNewton),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeRankine),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeReaumur),
+        TemperatureDelta::const_new(1234.5, TemperatureDeltaUnit::DegreeRoemer),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(TemperatureDeltaUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            TemperatureDelta::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in TemperatureDeltaUnit::ALL {
+            assert_eq!(
+                TemperatureDelta::const_new(v, unit).as_base().to_bits(),
+                TemperatureDelta::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = TemperatureDelta::from_base(v);

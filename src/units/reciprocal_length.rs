@@ -384,6 +384,27 @@ impl<T: Float> ReciprocalLength<T> {
     }
 }
 
+impl ReciprocalLength<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ReciprocalLengthUnit) -> Self {
+        Self(match unit {
+            ReciprocalLengthUnit::InverseMeter => value,
+            ReciprocalLengthUnit::InverseCentimeter => value * 100.0,
+            ReciprocalLengthUnit::InverseMillimeter => value * 1000.0,
+            ReciprocalLengthUnit::InverseMile => value * 0.0006213711922373339,
+            ReciprocalLengthUnit::InverseYard => value * 1.0936132983377078,
+            ReciprocalLengthUnit::InverseFoot => value * 3.2808398950131235,
+            ReciprocalLengthUnit::InverseUsSurveyFoot => value * 3.2808333333333333,
+            ReciprocalLengthUnit::InverseInch => value * 39.37007874015748,
+            ReciprocalLengthUnit::InverseMil => value * 39370.07874015748,
+            ReciprocalLengthUnit::InverseMicroinch => value * 3.937007874015748e7,
+        })
+    }
+}
+
 fixed_base!(ReciprocalLength, InverseMeter);
 
 /// Unit markers for counting [`ReciprocalLength`] as an integer with [`Fixed`](crate::Fixed).

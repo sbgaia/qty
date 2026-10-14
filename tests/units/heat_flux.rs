@@ -1203,6 +1203,52 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [HeatFlux; 25] = [
+        HeatFlux::const_new(1234.5, HeatFluxUnit::WattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::NanowattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::MicrowattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::MilliwattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::CentiwattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::DeciwattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::KilowattPerSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::WattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::NanowattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::MicrowattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::MilliwattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::CentiwattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::DeciwattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::KilowattPerSquareMillimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::WattPerSquareInch),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::WattPerSquareFoot),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::BtuPerSecondSquareInch),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::BtuPerSecondSquareFoot),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::BtuPerMinuteSquareFoot),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::BtuPerHourSquareFoot),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::CaloriePerSecondSquareCentimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::KilocaloriePerSecondSquareCentimeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::KilocaloriePerHourSquareMeter),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::PoundForcePerFootSecond),
+        HeatFlux::const_new(1234.5, HeatFluxUnit::PoundPerSecondCubed),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(HeatFluxUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            HeatFlux::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in HeatFluxUnit::ALL {
+            assert_eq!(
+                HeatFlux::const_new(v, unit).as_base().to_bits(),
+                HeatFlux::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = HeatFlux::from_base(v);

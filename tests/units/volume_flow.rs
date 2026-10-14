@@ -3680,6 +3680,105 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [VolumeFlow; 78] = [
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMeterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMeterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMeterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMeterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicFootPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicInchPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicFootPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicInchPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicFootPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicYardPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicYardPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicYardPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicYardPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MillionUsGallonPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UsGallonPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegausGallonPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::LiterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::NanoliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MicroliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MilliliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CentiliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DeciliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DecaliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::HectoliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::KiloliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaliterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::LiterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::NanoliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MicroliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MilliliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CentiliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DeciliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DecaliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::HectoliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::KiloliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaliterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::LiterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::NanoliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MicroliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MilliliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CentiliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DeciliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DecaliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::HectoliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::KiloliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaliterPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::LiterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::NanoliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MicroliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MilliliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CentiliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DeciliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::DecaliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::HectoliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::KiloliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaliterPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UsGallonPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UsGallonPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UkGallonPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaukGallonPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UkGallonPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UkGallonPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UkGallonPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::MegaukGallonPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::KilousGallonPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::UsGallonPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicDecimeterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::OilBarrelPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::OilBarrelPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::OilBarrelPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::OilBarrelPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMillimeterPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicMillimeterPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::AcreFootPerSecond),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::AcreFootPerMinute),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::AcreFootPerHour),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::AcreFootPerDay),
+        VolumeFlow::const_new(1234.5, VolumeFlowUnit::CubicCentimeterPerMinute),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(VolumeFlowUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            VolumeFlow::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in VolumeFlowUnit::ALL {
+            assert_eq!(
+                VolumeFlow::const_new(v, unit).as_base().to_bits(),
+                VolumeFlow::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = VolumeFlow::from_base(v);

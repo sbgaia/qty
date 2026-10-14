@@ -166,6 +166,36 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ElectricCurrentDensity; 3] = [
+        ElectricCurrentDensity::const_new(1234.5, ElectricCurrentDensityUnit::AmperePerSquareMeter),
+        ElectricCurrentDensity::const_new(1234.5, ElectricCurrentDensityUnit::AmperePerSquareInch),
+        ElectricCurrentDensity::const_new(1234.5, ElectricCurrentDensityUnit::AmperePerSquareFoot),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(ElectricCurrentDensityUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ElectricCurrentDensity::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ElectricCurrentDensityUnit::ALL {
+            assert_eq!(
+                ElectricCurrentDensity::const_new(v, unit)
+                    .as_base()
+                    .to_bits(),
+                ElectricCurrentDensity::<f64>::new(v, unit)
+                    .as_base()
+                    .to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ElectricCurrentDensity::from_base(v);

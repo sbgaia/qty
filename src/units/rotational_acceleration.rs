@@ -229,6 +229,21 @@ impl<T: Float> RotationalAcceleration<T> {
     }
 }
 
+impl RotationalAcceleration<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RotationalAccelerationUnit) -> Self {
+        Self(match unit {
+            RotationalAccelerationUnit::RadianPerSecondSquared => value,
+            RotationalAccelerationUnit::DegreePerSecondSquared => value * 0.017453292519943295,
+            RotationalAccelerationUnit::RevolutionPerMinutePerSecond => value * 0.10471975511965978,
+            RotationalAccelerationUnit::RevolutionPerSecondSquared => value * 6.283185307179586,
+        })
+    }
+}
+
 fixed_base!(RotationalAcceleration, RadianPerSecondSquared);
 
 /// Unit markers for counting [`RotationalAcceleration`] as an integer with [`Fixed`](crate::Fixed).

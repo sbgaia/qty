@@ -961,6 +961,67 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [FluidResistance; 19] = [
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalSecondPerLiter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalMinutePerLiter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalSecondPerMilliliter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalMinutePerMilliliter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalSecondPerCubicMeter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::MegapascalSecondPerCubicMeter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalMinutePerCubicMeter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalSecondPerCubicCentimeter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::PascalMinutePerCubicCentimeter),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth,
+        ),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::MillimeterMercurySecondPerLiter),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::MillimeterMercuryMinutePerLiter),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercurySecondPerMilliliter,
+        ),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter,
+        ),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter,
+        ),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter,
+        ),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter,
+        ),
+        FluidResistance::const_new(
+            1234.5,
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter,
+        ),
+        FluidResistance::const_new(1234.5, FluidResistanceUnit::WoodUnit),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(FluidResistanceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            FluidResistance::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in FluidResistanceUnit::ALL {
+            assert_eq!(
+                FluidResistance::const_new(v, unit).as_base().to_bits(),
+                FluidResistance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = FluidResistance::from_base(v);

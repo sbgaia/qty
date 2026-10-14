@@ -1333,6 +1333,56 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Radioactivity; 29] = [
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Becquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Picobecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Nanobecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Microbecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Millibecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Kilobecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Megabecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Gigabecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Terabecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Petabecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Exabecquerel),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Curie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Picocurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Nanocurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Microcurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Millicurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Kilocurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Megacurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Gigacurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Teracurie),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Rutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Picorutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Nanorutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Microrutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Millirutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Kilorutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Megarutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Gigarutherford),
+        Radioactivity::const_new(1234.5, RadioactivityUnit::Terarutherford),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(RadioactivityUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Radioactivity::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in RadioactivityUnit::ALL {
+            assert_eq!(
+                Radioactivity::const_new(v, unit).as_base().to_bits(),
+                Radioactivity::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Radioactivity::from_base(v);

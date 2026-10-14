@@ -422,6 +422,28 @@ impl<T: Float> ElectricCharge<T> {
     }
 }
 
+impl ElectricCharge<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricChargeUnit) -> Self {
+        Self(match unit {
+            ElectricChargeUnit::Coulomb => value,
+            ElectricChargeUnit::Picocoulomb => value / 1e12,
+            ElectricChargeUnit::Nanocoulomb => value / 1e9,
+            ElectricChargeUnit::Microcoulomb => value / 1000000.0,
+            ElectricChargeUnit::Millicoulomb => value / 1000.0,
+            ElectricChargeUnit::Kilocoulomb => value * 1000.0,
+            ElectricChargeUnit::Megacoulomb => value * 1000000.0,
+            ElectricChargeUnit::AmpereHour => value * 3600.0,
+            ElectricChargeUnit::MilliampereHour => value * 3.6,
+            ElectricChargeUnit::KiloampereHour => value * 3600000.0,
+            ElectricChargeUnit::MegaampereHour => value * 3.6e9,
+        })
+    }
+}
+
 fixed_base!(ElectricCharge, Coulomb);
 
 /// Unit markers for counting [`ElectricCharge`] as an integer with [`Fixed`](crate::Fixed).

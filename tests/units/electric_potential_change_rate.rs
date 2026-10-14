@@ -1002,6 +1002,116 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [ElectricPotentialChangeRate; 20] = [
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::VoltPerSecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::VoltPerMinute,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::VoltPerHour,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MillivoltPerHour,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::KilovoltPerHour,
+        ),
+        ElectricPotentialChangeRate::const_new(
+            1234.5,
+            ElectricPotentialChangeRateUnit::MegavoltPerHour,
+        ),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME
+        .iter()
+        .zip(ElectricPotentialChangeRateUnit::ALL)
+    {
+        assert_eq!(
+            q.as_base().to_bits(),
+            ElectricPotentialChangeRate::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in ElectricPotentialChangeRateUnit::ALL {
+            assert_eq!(
+                ElectricPotentialChangeRate::const_new(v, unit)
+                    .as_base()
+                    .to_bits(),
+                ElectricPotentialChangeRate::<f64>::new(v, unit)
+                    .as_base()
+                    .to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = ElectricPotentialChangeRate::from_base(v);

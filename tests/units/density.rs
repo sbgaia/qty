@@ -2645,6 +2645,83 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [Density; 56] = [
+        Density::const_new(1234.5, DensityUnit::GramPerCubicMillimeter),
+        Density::const_new(1234.5, DensityUnit::KilogramPerCubicMillimeter),
+        Density::const_new(1234.5, DensityUnit::GramPerCubicCentimeter),
+        Density::const_new(1234.5, DensityUnit::KilogramPerCubicCentimeter),
+        Density::const_new(1234.5, DensityUnit::GramPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::KilogramPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::MilligramPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::MicrogramPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicInch),
+        Density::const_new(1234.5, DensityUnit::KilopoundPerCubicInch),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicFoot),
+        Density::const_new(1234.5, DensityUnit::KilopoundPerCubicFoot),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicYard),
+        Density::const_new(1234.5, DensityUnit::KilopoundPerCubicYard),
+        Density::const_new(1234.5, DensityUnit::TonnePerCubicMillimeter),
+        Density::const_new(1234.5, DensityUnit::TonnePerCubicCentimeter),
+        Density::const_new(1234.5, DensityUnit::TonnePerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::SlugPerCubicFoot),
+        Density::const_new(1234.5, DensityUnit::GramPerLiter),
+        Density::const_new(1234.5, DensityUnit::FemtogramPerLiter),
+        Density::const_new(1234.5, DensityUnit::PicogramPerLiter),
+        Density::const_new(1234.5, DensityUnit::NanogramPerLiter),
+        Density::const_new(1234.5, DensityUnit::MicrogramPerLiter),
+        Density::const_new(1234.5, DensityUnit::MilligramPerLiter),
+        Density::const_new(1234.5, DensityUnit::CentigramPerLiter),
+        Density::const_new(1234.5, DensityUnit::DecigramPerLiter),
+        Density::const_new(1234.5, DensityUnit::GramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::FemtogramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::PicogramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::NanogramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::MicrogramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::MilligramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::CentigramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::DecigramPerDeciliter),
+        Density::const_new(1234.5, DensityUnit::GramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::FemtogramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::PicogramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::NanogramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::MicrogramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::MilligramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::CentigramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::DecigramPerMilliliter),
+        Density::const_new(1234.5, DensityUnit::PoundPerUSGallon),
+        Density::const_new(1234.5, DensityUnit::PoundPerImperialGallon),
+        Density::const_new(1234.5, DensityUnit::KilogramPerLiter),
+        Density::const_new(1234.5, DensityUnit::TonnePerCubicFoot),
+        Density::const_new(1234.5, DensityUnit::TonnePerCubicInch),
+        Density::const_new(1234.5, DensityUnit::GramPerCubicFoot),
+        Density::const_new(1234.5, DensityUnit::GramPerCubicInch),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicCentimeter),
+        Density::const_new(1234.5, DensityUnit::PoundPerCubicMillimeter),
+        Density::const_new(1234.5, DensityUnit::SlugPerCubicMeter),
+        Density::const_new(1234.5, DensityUnit::SlugPerCubicCentimeter),
+        Density::const_new(1234.5, DensityUnit::SlugPerCubicMillimeter),
+        Density::const_new(1234.5, DensityUnit::SlugPerCubicInch),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(DensityUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            Density::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in DensityUnit::ALL {
+            assert_eq!(
+                Density::const_new(v, unit).as_base().to_bits(),
+                Density::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = Density::from_base(v);

@@ -880,6 +880,45 @@ impl<T: Float> MassMomentOfInertia<T> {
     }
 }
 
+impl MassMomentOfInertia<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassMomentOfInertiaUnit) -> Self {
+        Self(match unit {
+            MassMomentOfInertiaUnit::GramSquareMeter => value / 1000.0,
+            MassMomentOfInertiaUnit::MilligramSquareMeter => value / 1000000.0,
+            MassMomentOfInertiaUnit::KilogramSquareMeter => value,
+            MassMomentOfInertiaUnit::GramSquareDecimeter => value / 100000.0,
+            MassMomentOfInertiaUnit::MilligramSquareDecimeter => value / 1e8,
+            MassMomentOfInertiaUnit::KilogramSquareDecimeter => value / 100.0,
+            MassMomentOfInertiaUnit::GramSquareCentimeter => value / 1e7,
+            MassMomentOfInertiaUnit::MilligramSquareCentimeter => value / 1e10,
+            MassMomentOfInertiaUnit::KilogramSquareCentimeter => value / 10000.0,
+            MassMomentOfInertiaUnit::GramSquareMillimeter => value / 1e9,
+            MassMomentOfInertiaUnit::MilligramSquareMillimeter => value / 1e12,
+            MassMomentOfInertiaUnit::KilogramSquareMillimeter => value / 1000000.0,
+            MassMomentOfInertiaUnit::TonneSquareMeter => value * 1000.0,
+            MassMomentOfInertiaUnit::KilotonneSquareMeter => value * 1000000.0,
+            MassMomentOfInertiaUnit::MegatonneSquareMeter => value * 1e9,
+            MassMomentOfInertiaUnit::TonneSquareDecimeter => value * 10.0,
+            MassMomentOfInertiaUnit::KilotonneSquareDecimeter => value * 10000.0,
+            MassMomentOfInertiaUnit::MegatonneSquareDecimeter => value * 1e7,
+            MassMomentOfInertiaUnit::TonneSquareCentimeter => value / 10.0,
+            MassMomentOfInertiaUnit::KilotonneSquareCentimeter => value * 100.0,
+            MassMomentOfInertiaUnit::MegatonneSquareCentimeter => value * 100000.0,
+            MassMomentOfInertiaUnit::TonneSquareMillimeter => value / 1000.0,
+            MassMomentOfInertiaUnit::KilotonneSquareMillimeter => value,
+            MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value * 1000.0,
+            MassMomentOfInertiaUnit::PoundSquareFoot => value * 0.0421401100938048,
+            MassMomentOfInertiaUnit::PoundSquareInch => value * 0.0002926396534292,
+            MassMomentOfInertiaUnit::SlugSquareFoot => value * 1.3558179483314003,
+            MassMomentOfInertiaUnit::SlugSquareInch => value * 0.009415402418968058,
+        })
+    }
+}
+
 fixed_base!(MassMomentOfInertia, KilogramSquareMeter);
 
 /// Unit markers for counting [`MassMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).

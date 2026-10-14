@@ -1681,6 +1681,117 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [RotationalStiffness; 34] = [
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::NewtonMeterPerRadian),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::KilonewtonMeterPerRadian),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::MeganewtonMeterPerRadian),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::PoundForceFootPerDegrees),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::KilopoundForceFootPerDegrees,
+        ),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::NewtonMillimeterPerDegree),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::NanonewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MicronewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MillinewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::CentinewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::DecinewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::DecanewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::KilonewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MeganewtonMillimeterPerDegree,
+        ),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::NewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::NanonewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::MicronewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::MillinewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::CentinewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::DecinewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::DecanewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::KilonewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::MeganewtonMeterPerDegree),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::NewtonMillimeterPerRadian),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::KilonewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian,
+        ),
+        RotationalStiffness::const_new(1234.5, RotationalStiffnessUnit::PoundForceFeetPerRadian),
+        RotationalStiffness::const_new(
+            1234.5,
+            RotationalStiffnessUnit::KilopoundForceFootPerRadian,
+        ),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(RotationalStiffnessUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            RotationalStiffness::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in RotationalStiffnessUnit::ALL {
+            assert_eq!(
+                RotationalStiffness::const_new(v, unit).as_base().to_bits(),
+                RotationalStiffness::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = RotationalStiffness::from_base(v);

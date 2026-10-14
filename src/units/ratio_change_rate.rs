@@ -159,6 +159,19 @@ impl<T: Float> RatioChangeRate<T> {
     }
 }
 
+impl RatioChangeRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RatioChangeRateUnit) -> Self {
+        Self(match unit {
+            RatioChangeRateUnit::PercentPerSecond => value / 100.0,
+            RatioChangeRateUnit::DecimalFractionPerSecond => value,
+        })
+    }
+}
+
 fixed_base!(RatioChangeRate, DecimalFractionPerSecond);
 
 /// Unit markers for counting [`RatioChangeRate`] as an integer with [`Fixed`](crate::Fixed).

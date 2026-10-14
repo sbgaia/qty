@@ -486,6 +486,31 @@ impl<T: Float> Area<T> {
     }
 }
 
+impl Area<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: AreaUnit) -> Self {
+        Self(match unit {
+            AreaUnit::SquareKilometer => value * 1000000.0,
+            AreaUnit::SquareMeter => value,
+            AreaUnit::SquareDecimeter => value / 100.0,
+            AreaUnit::SquareCentimeter => value / 10000.0,
+            AreaUnit::SquareMillimeter => value / 1000000.0,
+            AreaUnit::SquareMicrometer => value / 1e12,
+            AreaUnit::SquareMile => value * 2589988.110336,
+            AreaUnit::SquareYard => value * 0.83612736,
+            AreaUnit::SquareFoot => value * 0.09290304,
+            AreaUnit::UsSurveySquareFoot => value * 0.09290341161327484,
+            AreaUnit::SquareInch => value * 0.00064516,
+            AreaUnit::Acre => value * 4046.8564224,
+            AreaUnit::Hectare => value * 10000.0,
+            AreaUnit::SquareNauticalMile => value * 3429904.0,
+        })
+    }
+}
+
 fixed_base!(Area, SquareMeter);
 
 /// Unit markers for counting [`Area`] as an integer with [`Fixed`](crate::Fixed).

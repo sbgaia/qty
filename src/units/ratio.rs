@@ -258,6 +258,23 @@ impl<T: Float> Ratio<T> {
     }
 }
 
+impl Ratio<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RatioUnit) -> Self {
+        Self(match unit {
+            RatioUnit::DecimalFraction => value,
+            RatioUnit::Percent => value / 100.0,
+            RatioUnit::PartPerThousand => value / 1000.0,
+            RatioUnit::PartPerMillion => value / 1000000.0,
+            RatioUnit::PartPerBillion => value / 1e9,
+            RatioUnit::PartPerTrillion => value / 1e12,
+        })
+    }
+}
+
 fixed_base!(Ratio, DecimalFraction);
 
 /// Unit markers for counting [`Ratio`] as an integer with [`Fixed`](crate::Fixed).

@@ -1151,6 +1151,55 @@ impl<T: Float> RotationalStiffness<T> {
     }
 }
 
+impl RotationalStiffness<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: RotationalStiffnessUnit) -> Self {
+        Self(match unit {
+            RotationalStiffnessUnit::NewtonMeterPerRadian => value,
+            RotationalStiffnessUnit::KilonewtonMeterPerRadian => value * 1000.0,
+            RotationalStiffnessUnit::MeganewtonMeterPerRadian => value * 1000000.0,
+            RotationalStiffnessUnit::PoundForceFootPerDegrees => value * 77.68264622747556,
+            RotationalStiffnessUnit::KilopoundForceFootPerDegrees => value * 77682.64622747556,
+            RotationalStiffnessUnit::NewtonMillimeterPerDegree => value * 0.05729577951308232,
+            RotationalStiffnessUnit::NanonewtonMillimeterPerDegree => value * 5.729577951308232e-11,
+            RotationalStiffnessUnit::MicronewtonMillimeterPerDegree => value * 5.729577951308232e-8,
+            RotationalStiffnessUnit::MillinewtonMillimeterPerDegree => {
+                value * 5.7295779513082324e-5
+            }
+            RotationalStiffnessUnit::CentinewtonMillimeterPerDegree => {
+                value * 0.0005729577951308232
+            }
+            RotationalStiffnessUnit::DecinewtonMillimeterPerDegree => value * 0.005729577951308232,
+            RotationalStiffnessUnit::DecanewtonMillimeterPerDegree => value * 0.5729577951308232,
+            RotationalStiffnessUnit::KilonewtonMillimeterPerDegree => value * 57.29577951308232,
+            RotationalStiffnessUnit::MeganewtonMillimeterPerDegree => value * 57295.77951308232,
+            RotationalStiffnessUnit::NewtonMeterPerDegree => value * 57.29577951308232,
+            RotationalStiffnessUnit::NanonewtonMeterPerDegree => value * 5.729577951308232e-8,
+            RotationalStiffnessUnit::MicronewtonMeterPerDegree => value * 5.7295779513082324e-5,
+            RotationalStiffnessUnit::MillinewtonMeterPerDegree => value * 0.05729577951308232,
+            RotationalStiffnessUnit::CentinewtonMeterPerDegree => value * 0.5729577951308232,
+            RotationalStiffnessUnit::DecinewtonMeterPerDegree => value * 5.729577951308232,
+            RotationalStiffnessUnit::DecanewtonMeterPerDegree => value * 572.9577951308232,
+            RotationalStiffnessUnit::KilonewtonMeterPerDegree => value * 57295.77951308232,
+            RotationalStiffnessUnit::MeganewtonMeterPerDegree => value * 5.729577951308232e7,
+            RotationalStiffnessUnit::NewtonMillimeterPerRadian => value / 1000.0,
+            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => value / 1e12,
+            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => value / 1e9,
+            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => value / 1000000.0,
+            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => value / 100000.0,
+            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => value / 10000.0,
+            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => value / 100.0,
+            RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
+            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value * 1000.0,
+            RotationalStiffnessUnit::PoundForceFeetPerRadian => value * 1.3558179483314003,
+            RotationalStiffnessUnit::KilopoundForceFootPerRadian => value * 1355.8179483314004,
+        })
+    }
+}
+
 fixed_base!(RotationalStiffness, NewtonMeterPerRadian);
 
 /// Unit markers for counting [`RotationalStiffness`] as an integer with [`Fixed`](crate::Fixed).

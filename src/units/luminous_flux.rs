@@ -129,6 +129,18 @@ impl<T: Float> LuminousFlux<T> {
     }
 }
 
+impl LuminousFlux<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: LuminousFluxUnit) -> Self {
+        Self(match unit {
+            LuminousFluxUnit::Lumen => value,
+        })
+    }
+}
+
 fixed_base!(LuminousFlux, Lumen);
 
 /// Unit markers for counting [`LuminousFlux`] as an integer with [`Fixed`](crate::Fixed).

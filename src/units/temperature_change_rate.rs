@@ -599,6 +599,34 @@ impl<T: Float> TemperatureChangeRate<T> {
     }
 }
 
+impl TemperatureChangeRate<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: TemperatureChangeRateUnit) -> Self {
+        Self(match unit {
+            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value / 1e9,
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => value / 1000000.0,
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value / 1000.0,
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value / 100.0,
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value / 10.0,
+            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value * 10.0,
+            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value * 100.0,
+            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value * 1000.0,
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value / 60.0,
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => value / 60.0,
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value / 108.0,
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => value * 0.5555555555555556,
+            TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / 3600.0,
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => value / 3600.0,
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value / 6480.0,
+        })
+    }
+}
+
 fixed_base!(TemperatureChangeRate, DegreeCelsiusPerSecond);
 
 /// Unit markers for counting [`TemperatureChangeRate`] as an integer with [`Fixed`](crate::Fixed).

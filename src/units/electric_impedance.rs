@@ -341,6 +341,25 @@ impl<T: Float> ElectricImpedance<T> {
     }
 }
 
+impl ElectricImpedance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ElectricImpedanceUnit) -> Self {
+        Self(match unit {
+            ElectricImpedanceUnit::Ohm => value,
+            ElectricImpedanceUnit::Nanoohm => value / 1e9,
+            ElectricImpedanceUnit::Microohm => value / 1000000.0,
+            ElectricImpedanceUnit::Milliohm => value / 1000.0,
+            ElectricImpedanceUnit::Kiloohm => value * 1000.0,
+            ElectricImpedanceUnit::Megaohm => value * 1000000.0,
+            ElectricImpedanceUnit::Gigaohm => value * 1e9,
+            ElectricImpedanceUnit::Teraohm => value * 1e12,
+        })
+    }
+}
+
 fixed_base!(ElectricImpedance, Ohm);
 
 /// Unit markers for counting [`ElectricImpedance`] as an integer with [`Fixed`](crate::Fixed).

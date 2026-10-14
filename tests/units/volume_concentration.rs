@@ -968,6 +968,49 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [VolumeConcentration; 20] = [
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::DecimalFraction),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::LiterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PicoliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::NanoliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::MicroliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::MilliliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::CentiliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::DeciliterPerLiter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::LiterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PicoliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::NanoliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::MicroliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::MilliliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::CentiliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::DeciliterPerMilliliter),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::Percent),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PartPerThousand),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PartPerMillion),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PartPerBillion),
+        VolumeConcentration::const_new(1234.5, VolumeConcentrationUnit::PartPerTrillion),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(VolumeConcentrationUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            VolumeConcentration::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in VolumeConcentrationUnit::ALL {
+            assert_eq!(
+                VolumeConcentration::const_new(v, unit).as_base().to_bits(),
+                VolumeConcentration::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = VolumeConcentration::from_base(v);

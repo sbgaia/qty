@@ -907,6 +907,65 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [PressureChangeRate; 18] = [
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::PascalPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::KilopascalPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::MegapascalPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::PascalPerMinute),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::KilopascalPerMinute),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::MegapascalPerMinute),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::MillimeterOfMercuryPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::AtmospherePerSecond),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond,
+        ),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond,
+        ),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond,
+        ),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute,
+        ),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute,
+        ),
+        PressureChangeRate::const_new(
+            1234.5,
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute,
+        ),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::BarPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::MillibarPerSecond),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::BarPerMinute),
+        PressureChangeRate::const_new(1234.5, PressureChangeRateUnit::MillibarPerMinute),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(PressureChangeRateUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            PressureChangeRate::new(1234.5_f64, unit)
+                .as_base()
+                .to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in PressureChangeRateUnit::ALL {
+            assert_eq!(
+                PressureChangeRate::const_new(v, unit).as_base().to_bits(),
+                PressureChangeRate::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = PressureChangeRate::from_base(v);

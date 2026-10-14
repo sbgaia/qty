@@ -822,6 +822,60 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     }
 
     w!(out, "}}");
+    w!(out);
+    emit_const_new(qty, out);
+}
+
+/// `const_new()` for `f64` storage: the same conversion expressions as
+/// `new()`, with the constants as plain `f64` literals, so the results are
+/// bit-identical and usable in `const` items.
+fn emit_const_new(qty: &QuantityDef, out: &mut String) {
+    let name = &qty.name;
+    let enum_name = format!("{name}Unit");
+    w!(out, "impl {name}<f64> {{");
+    w!(
+        out,
+        "    /// Like [`new`](Self::new), but `const`: for constants in any unit."
+    );
+    w!(out, "    ///");
+    w!(
+        out,
+        "    /// The result is identical to `new(value, unit)`."
+    );
+    w!(out, "    #[inline]");
+    w!(
+        out,
+        "    pub const fn const_new(value: f64, unit: {enum_name}) -> Self {{"
+    );
+    w!(out, "        Self(match unit {{");
+    for unit in &qty.units {
+        w!(
+            out,
+            "            {}::{} => {},",
+            enum_name,
+            unit.singular,
+            strip_from_f64(&expr::emit(&unit.to_base, "value", Direction::ToBase))
+        );
+    }
+    w!(out, "        }})");
+    w!(out, "    }}");
+    w!(out, "}}");
+}
+
+/// `T::from_f64(LIT)` → `LIT`: the literals never contain parentheses.
+fn strip_from_f64(expr: &str) -> String {
+    const OPEN: &str = "T::from_f64(";
+    let mut out = String::with_capacity(expr.len());
+    let mut rest = expr;
+    while let Some(i) = rest.find(OPEN) {
+        out.push_str(&rest[..i]);
+        rest = &rest[i + OPEN.len()..];
+        let close = rest.find(')').expect("from_f64 literal is closed");
+        out.push_str(&rest[..close]);
+        rest = &rest[close + 1..];
+    }
+    out.push_str(rest);
+    out
 }
 
 /// `auto_unit()`: picks, among the SI-prefixed forms of the base unit in
@@ -1095,6 +1149,45 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
             unit.singular
         );
     }
+    w!(out, "}}");
+    w!(out);
+
+    // const_new: evaluated at compile time, identical to `new`.
+    w!(out, "#[test]");
+    w!(out, "fn const_new_matches_new() {{");
+    w!(
+        out,
+        "    const AT_COMPILE_TIME: [{name}; {}] = [",
+        qty.units.len()
+    );
+    for unit in &qty.units {
+        w!(
+            out,
+            "        {name}::const_new(1234.5, {enum_name}::{}),",
+            unit.singular
+        );
+    }
+    w!(out, "    ];");
+    w!(
+        out,
+        "    for (q, &unit) in AT_COMPILE_TIME.iter().zip({enum_name}::ALL) {{"
+    );
+    w!(
+        out,
+        "        assert_eq!(q.as_base().to_bits(), {name}::new(1234.5_f64, unit).as_base().to_bits(), \"{{unit:?}}\");"
+    );
+    w!(out, "    }}");
+    w!(
+        out,
+        "    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {{"
+    );
+    w!(out, "        for &unit in {enum_name}::ALL {{");
+    w!(
+        out,
+        "            assert_eq!({name}::const_new(v, unit).as_base().to_bits(), {name}::<f64>::new(v, unit).as_base().to_bits());"
+    );
+    w!(out, "        }}");
+    w!(out, "    }}");
     w!(out, "}}");
     w!(out);
 

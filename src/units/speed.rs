@@ -1013,6 +1013,50 @@ impl<T: Float> Speed<T> {
     }
 }
 
+impl Speed<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: SpeedUnit) -> Self {
+        Self(match unit {
+            SpeedUnit::MeterPerSecond => value,
+            SpeedUnit::NanometerPerSecond => value / 1e9,
+            SpeedUnit::MicrometerPerSecond => value / 1000000.0,
+            SpeedUnit::MillimeterPerSecond => value / 1000.0,
+            SpeedUnit::CentimeterPerSecond => value / 100.0,
+            SpeedUnit::DecimeterPerSecond => value / 10.0,
+            SpeedUnit::KilometerPerSecond => value * 1000.0,
+            SpeedUnit::MeterPerMinute => value / 60.0,
+            SpeedUnit::NanometerPerMinute => value / 6e10,
+            SpeedUnit::MicrometerPerMinute => value / 6e7,
+            SpeedUnit::MillimeterPerMinute => value / 60000.0,
+            SpeedUnit::CentimeterPerMinute => value / 6000.0,
+            SpeedUnit::DecimeterPerMinute => value / 600.0,
+            SpeedUnit::KilometerPerMinute => value * 16.666666666666668,
+            SpeedUnit::MeterPerHour => value / 3600.0,
+            SpeedUnit::MillimeterPerHour => value / 3600000.0,
+            SpeedUnit::CentimeterPerHour => value / 360000.0,
+            SpeedUnit::KilometerPerHour => value * 0.2777777777777778,
+            SpeedUnit::FootPerSecond => value * 0.3048,
+            SpeedUnit::FootPerMinute => value * 0.00508,
+            SpeedUnit::FootPerHour => value * 8.466666666666666e-5,
+            SpeedUnit::UsSurveyFootPerSecond => value * 0.3048006096012192,
+            SpeedUnit::UsSurveyFootPerMinute => value * 0.00508001016002032,
+            SpeedUnit::UsSurveyFootPerHour => value / 11811.0,
+            SpeedUnit::InchPerSecond => value * 0.0254,
+            SpeedUnit::InchPerMinute => value * 0.00042333333333333334,
+            SpeedUnit::InchPerHour => value * 7.055555555555556e-6,
+            SpeedUnit::YardPerSecond => value * 0.9144,
+            SpeedUnit::YardPerMinute => value * 0.01524,
+            SpeedUnit::YardPerHour => value * 0.000254,
+            SpeedUnit::Knot => value * 0.5144444444444445,
+            SpeedUnit::MilePerHour => value * 0.44704,
+            SpeedUnit::Mach => value * 340.29,
+        })
+    }
+}
+
 fixed_base!(Speed, MeterPerSecond);
 
 /// Unit markers for counting [`Speed`] as an integer with [`Fixed`](crate::Fixed).

@@ -313,6 +313,28 @@ impl<T: Float> ThermalInsulance<T> {
     }
 }
 
+impl ThermalInsulance<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: ThermalInsulanceUnit) -> Self {
+        Self(match unit {
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value * 1000.0,
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value * 1000.0,
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / 10.0,
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / 1000.0,
+            ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
+                value * 0.08604206500956023
+            }
+            ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
+                value * 176.11018368230583
+            }
+        })
+    }
+}
+
 fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
 
 /// Unit markers for counting [`ThermalInsulance`] as an integer with [`Fixed`](crate::Fixed).

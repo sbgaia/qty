@@ -445,6 +445,29 @@ impl<T: Float> EnergyDensity<T> {
     }
 }
 
+impl EnergyDensity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: EnergyDensityUnit) -> Self {
+        Self(match unit {
+            EnergyDensityUnit::JoulePerCubicMeter => value,
+            EnergyDensityUnit::KilojoulePerCubicMeter => value * 1000.0,
+            EnergyDensityUnit::MegajoulePerCubicMeter => value * 1000000.0,
+            EnergyDensityUnit::GigajoulePerCubicMeter => value * 1e9,
+            EnergyDensityUnit::TerajoulePerCubicMeter => value * 1e12,
+            EnergyDensityUnit::PetajoulePerCubicMeter => value * 1e15,
+            EnergyDensityUnit::WattHourPerCubicMeter => value * 3600.0,
+            EnergyDensityUnit::KilowattHourPerCubicMeter => value * 3600000.0,
+            EnergyDensityUnit::MegawattHourPerCubicMeter => value * 3.6e9,
+            EnergyDensityUnit::GigawattHourPerCubicMeter => value * 3.6e12,
+            EnergyDensityUnit::TerawattHourPerCubicMeter => value * 3.6e15,
+            EnergyDensityUnit::PetawattHourPerCubicMeter => value * 3.6e18,
+        })
+    }
+}
+
 fixed_base!(EnergyDensity, JoulePerCubicMeter);
 
 /// Unit markers for counting [`EnergyDensity`] as an integer with [`Fixed`](crate::Fixed).

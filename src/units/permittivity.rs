@@ -129,6 +129,18 @@ impl<T: Float> Permittivity<T> {
     }
 }
 
+impl Permittivity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: PermittivityUnit) -> Self {
+        Self(match unit {
+            PermittivityUnit::FaradPerMeter => value,
+        })
+    }
+}
+
 fixed_base!(Permittivity, FaradPerMeter);
 
 /// Unit markers for counting [`Permittivity`] as an integer with [`Fixed`](crate::Fixed).

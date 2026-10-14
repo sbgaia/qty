@@ -2184,6 +2184,73 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [PowerDensity; 46] = [
+        PowerDensity::const_new(1234.5, PowerDensityUnit::WattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::PicowattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::NanowattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MicrowattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MilliwattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DeciwattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DecawattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::KilowattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MegawattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::GigawattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::TerawattPerCubicMeter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::WattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::PicowattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::NanowattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MicrowattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MilliwattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DeciwattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DecawattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::KilowattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MegawattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::GigawattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::TerawattPerCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::WattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::PicowattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::NanowattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MicrowattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MilliwattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DeciwattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DecawattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::KilowattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MegawattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::GigawattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::TerawattPerCubicFoot),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::WattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::PicowattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::NanowattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MicrowattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MilliwattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DeciwattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::DecawattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::KilowattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::MegawattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::GigawattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::TerawattPerLiter),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::BtuPerSecondCubicInch),
+        PowerDensity::const_new(1234.5, PowerDensityUnit::BtuPerSecondCubicFoot),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(PowerDensityUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            PowerDensity::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in PowerDensityUnit::ALL {
+            assert_eq!(
+                PowerDensity::const_new(v, unit).as_base().to_bits(),
+                PowerDensity::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = PowerDensity::from_base(v);

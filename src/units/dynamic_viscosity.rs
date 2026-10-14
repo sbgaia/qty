@@ -373,6 +373,27 @@ impl<T: Float> DynamicViscosity<T> {
     }
 }
 
+impl DynamicViscosity<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: DynamicViscosityUnit) -> Self {
+        Self(match unit {
+            DynamicViscosityUnit::NewtonSecondPerMeterSquared => value,
+            DynamicViscosityUnit::PascalSecond => value,
+            DynamicViscosityUnit::MillipascalSecond => value / 1000.0,
+            DynamicViscosityUnit::MicropascalSecond => value / 1000000.0,
+            DynamicViscosityUnit::Poise => value / 10.0,
+            DynamicViscosityUnit::Centipoise => value / 1000.0,
+            DynamicViscosityUnit::Reyn => value * 6894.757293168362,
+            DynamicViscosityUnit::PoundForceSecondPerSquareInch => value * 6894.757293168362,
+            DynamicViscosityUnit::PoundForceSecondPerSquareFoot => value * 47.880258980335846,
+            DynamicViscosityUnit::PoundPerFootSecond => value * 1.4881639435695537,
+        })
+    }
+}
+
 fixed_base!(DynamicViscosity, NewtonSecondPerMeterSquared);
 
 /// Unit markers for counting [`DynamicViscosity`] as an integer with [`Fixed`](crate::Fixed).

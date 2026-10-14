@@ -326,6 +326,31 @@ impl<T: Float> HeatTransferCoefficient<T> {
     }
 }
 
+impl HeatTransferCoefficient<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: HeatTransferCoefficientUnit) -> Self {
+        Self(match unit {
+            HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
+            HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
+            HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
+                value * 5.678263341113488
+            }
+            HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
+                value * 2943611.716033232
+            }
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
+                value * 0.0011622222222222223
+            }
+            HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
+                value * 1.1622222222222223
+            }
+        })
+    }
+}
+
 fixed_base!(HeatTransferCoefficient, WattPerSquareMeterKelvin);
 
 /// Unit markers for counting [`HeatTransferCoefficient`] as an integer with [`Fixed`](crate::Fixed).

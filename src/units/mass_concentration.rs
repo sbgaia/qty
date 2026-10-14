@@ -1454,6 +1454,66 @@ impl<T: Float> MassConcentration<T> {
     }
 }
 
+impl MassConcentration<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: MassConcentrationUnit) -> Self {
+        Self(match unit {
+            MassConcentrationUnit::GramPerCubicMillimeter => value * 1000000.0,
+            MassConcentrationUnit::KilogramPerCubicMillimeter => value * 1e9,
+            MassConcentrationUnit::GramPerCubicCentimeter => value * 1000.0,
+            MassConcentrationUnit::KilogramPerCubicCentimeter => value * 1000000.0,
+            MassConcentrationUnit::GramPerCubicMeter => value / 1000.0,
+            MassConcentrationUnit::KilogramPerCubicMeter => value,
+            MassConcentrationUnit::MilligramPerCubicMeter => value / 1000000.0,
+            MassConcentrationUnit::MicrogramPerCubicMeter => value / 1e9,
+            MassConcentrationUnit::GramPerMicroliter => value * 1000000.0,
+            MassConcentrationUnit::PicogramPerMicroliter => value / 1000000.0,
+            MassConcentrationUnit::NanogramPerMicroliter => value / 1000.0,
+            MassConcentrationUnit::MicrogramPerMicroliter => value,
+            MassConcentrationUnit::MilligramPerMicroliter => value * 1000.0,
+            MassConcentrationUnit::CentigramPerMicroliter => value * 10000.0,
+            MassConcentrationUnit::DecigramPerMicroliter => value * 100000.0,
+            MassConcentrationUnit::GramPerMilliliter => value * 1000.0,
+            MassConcentrationUnit::PicogramPerMilliliter => value / 1e9,
+            MassConcentrationUnit::NanogramPerMilliliter => value / 1000000.0,
+            MassConcentrationUnit::MicrogramPerMilliliter => value / 1000.0,
+            MassConcentrationUnit::MilligramPerMilliliter => value,
+            MassConcentrationUnit::CentigramPerMilliliter => value * 10.0,
+            MassConcentrationUnit::DecigramPerMilliliter => value * 100.0,
+            MassConcentrationUnit::GramPerDeciliter => value * 10.0,
+            MassConcentrationUnit::PicogramPerDeciliter => value / 1e11,
+            MassConcentrationUnit::NanogramPerDeciliter => value / 1e8,
+            MassConcentrationUnit::MicrogramPerDeciliter => value / 100000.0,
+            MassConcentrationUnit::MilligramPerDeciliter => value / 100.0,
+            MassConcentrationUnit::CentigramPerDeciliter => value / 10.0,
+            MassConcentrationUnit::DecigramPerDeciliter => value,
+            MassConcentrationUnit::GramPerLiter => value,
+            MassConcentrationUnit::PicogramPerLiter => value / 1e12,
+            MassConcentrationUnit::NanogramPerLiter => value / 1e9,
+            MassConcentrationUnit::MicrogramPerLiter => value / 1000000.0,
+            MassConcentrationUnit::MilligramPerLiter => value / 1000.0,
+            MassConcentrationUnit::CentigramPerLiter => value / 100.0,
+            MassConcentrationUnit::DecigramPerLiter => value / 10.0,
+            MassConcentrationUnit::KilogramPerLiter => value * 1000.0,
+            MassConcentrationUnit::TonnePerCubicMillimeter => value * 1e12,
+            MassConcentrationUnit::TonnePerCubicCentimeter => value * 1e9,
+            MassConcentrationUnit::TonnePerCubicMeter => value * 1000.0,
+            MassConcentrationUnit::PoundPerCubicInch => value * 27679.90471020312,
+            MassConcentrationUnit::KilopoundPerCubicInch => value * 2.7679904710203122e7,
+            MassConcentrationUnit::PoundPerCubicFoot => value * 16.018463373960138,
+            MassConcentrationUnit::KilopoundPerCubicFoot => value * 16018.46337396014,
+            MassConcentrationUnit::SlugPerCubicFoot => value * 515.3788183931962,
+            MassConcentrationUnit::PoundPerUSGallon => value * 119.82642731689663,
+            MassConcentrationUnit::OuncePerUSGallon => value * 7.489151707306039,
+            MassConcentrationUnit::OuncePerImperialGallon => value * 6.236023291443856,
+            MassConcentrationUnit::PoundPerImperialGallon => value * 99.7763726631017,
+        })
+    }
+}
+
 fixed_base!(MassConcentration, KilogramPerCubicMeter);
 
 /// Unit markers for counting [`MassConcentration`] as an integer with [`Fixed`](crate::Fixed).

@@ -359,6 +359,26 @@ impl<T: Float> StandardVolumeFlow<T> {
     }
 }
 
+impl StandardVolumeFlow<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: StandardVolumeFlowUnit) -> Self {
+        Self(match unit {
+            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value / 60.0,
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => value / 3600.0,
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => value / 86400.0,
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value / 6e7,
+            StandardVolumeFlowUnit::StandardLiterPerMinute => value / 60000.0,
+            StandardVolumeFlowUnit::StandardCubicFootPerSecond => value * 0.028316846592,
+            StandardVolumeFlowUnit::StandardCubicFootPerMinute => value * 0.0004719474432,
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => value * 7.86579072e-6,
+        })
+    }
+}
+
 fixed_base!(StandardVolumeFlow, StandardCubicMeterPerSecond);
 
 /// Unit markers for counting [`StandardVolumeFlow`] as an integer with [`Fixed`](crate::Fixed).

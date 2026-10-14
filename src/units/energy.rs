@@ -1213,6 +1213,57 @@ impl<T: Float> Energy<T> {
     }
 }
 
+impl Energy<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: EnergyUnit) -> Self {
+        Self(match unit {
+            EnergyUnit::Joule => value,
+            EnergyUnit::Nanojoule => value / 1e9,
+            EnergyUnit::Microjoule => value / 1000000.0,
+            EnergyUnit::Millijoule => value / 1000.0,
+            EnergyUnit::Kilojoule => value * 1000.0,
+            EnergyUnit::Megajoule => value * 1000000.0,
+            EnergyUnit::Gigajoule => value * 1e9,
+            EnergyUnit::Terajoule => value * 1e12,
+            EnergyUnit::Petajoule => value * 1e15,
+            EnergyUnit::Calorie => value * 4.184,
+            EnergyUnit::Kilocalorie => value * 4184.0,
+            EnergyUnit::Megacalorie => value * 4184000.0,
+            EnergyUnit::BritishThermalUnit => value * 1055.05585262,
+            EnergyUnit::KilobritishThermalUnit => value * 1055055.85262,
+            EnergyUnit::MegabritishThermalUnit => value * 1.05505585262e9,
+            EnergyUnit::GigabritishThermalUnit => value * 1.05505585262e12,
+            EnergyUnit::ElectronVolt => value * 1.602176634e-19,
+            EnergyUnit::KiloelectronVolt => value * 1.602176634e-16,
+            EnergyUnit::MegaelectronVolt => value * 1.602176634e-13,
+            EnergyUnit::GigaelectronVolt => value * 1.602176634e-10,
+            EnergyUnit::TeraelectronVolt => value * 1.602176634e-7,
+            EnergyUnit::FootPound => value * 1.3558179483314003,
+            EnergyUnit::Erg => value / 1e7,
+            EnergyUnit::WattHour => value * 3600.0,
+            EnergyUnit::KilowattHour => value * 3600000.0,
+            EnergyUnit::MegawattHour => value * 3.6e9,
+            EnergyUnit::GigawattHour => value * 3.6e12,
+            EnergyUnit::TerawattHour => value * 3.6e15,
+            EnergyUnit::WattDay => value * 86400.0,
+            EnergyUnit::KilowattDay => value * 8.64e7,
+            EnergyUnit::MegawattDay => value * 8.64e10,
+            EnergyUnit::GigawattDay => value * 8.64e13,
+            EnergyUnit::TerawattDay => value * 8.64e16,
+            EnergyUnit::ThermEc => value * 1.05505585262e8,
+            EnergyUnit::DecathermEc => value * 1.05505585262e9,
+            EnergyUnit::ThermUs => value * 1.054804e8,
+            EnergyUnit::DecathermUs => value * 1.054804e9,
+            EnergyUnit::ThermImperial => value * 1.05505585257348e8,
+            EnergyUnit::DecathermImperial => value * 1.05505585257348e9,
+            EnergyUnit::HorsepowerHour => value * 2684519.537456106,
+        })
+    }
+}
+
 fixed_base!(Energy, Joule);
 
 /// Unit markers for counting [`Energy`] as an integer with [`Fixed`](crate::Fixed).

@@ -813,6 +813,44 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn const_new_matches_new() {
+    const AT_COMPILE_TIME: [AmountOfSubstance; 17] = [
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Mole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Femtomole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Picomole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Nanomole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Micromole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Millimole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Centimole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Decimole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Kilomole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::Megamole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::PoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::NanopoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::MicropoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::MillipoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::CentipoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::DecipoundMole),
+        AmountOfSubstance::const_new(1234.5, AmountOfSubstanceUnit::KilopoundMole),
+    ];
+    for (q, &unit) in AT_COMPILE_TIME.iter().zip(AmountOfSubstanceUnit::ALL) {
+        assert_eq!(
+            q.as_base().to_bits(),
+            AmountOfSubstance::new(1234.5_f64, unit).as_base().to_bits(),
+            "{unit:?}"
+        );
+    }
+    for v in [0.0, -0.0, 1e-300, -2.5, 3.0e8, f64::MAX] {
+        for &unit in AmountOfSubstanceUnit::ALL {
+            assert_eq!(
+                AmountOfSubstance::const_new(v, unit).as_base().to_bits(),
+                AmountOfSubstance::<f64>::new(v, unit).as_base().to_bits()
+            );
+        }
+    }
+}
+
+#[test]
 fn in_unit_and_auto_unit_round_trip() {
     for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
         let q = AmountOfSubstance::from_base(v);

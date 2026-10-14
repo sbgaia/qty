@@ -302,6 +302,24 @@ impl<T: Float> Compressibility<T> {
     }
 }
 
+impl Compressibility<f64> {
+    /// Like [`new`](Self::new), but `const`: for constants in any unit.
+    ///
+    /// The result is identical to `new(value, unit)`.
+    #[inline]
+    pub const fn const_new(value: f64, unit: CompressibilityUnit) -> Self {
+        Self(match unit {
+            CompressibilityUnit::InversePascal => value,
+            CompressibilityUnit::InverseKilopascal => value / 1000.0,
+            CompressibilityUnit::InverseMegapascal => value / 1000000.0,
+            CompressibilityUnit::InverseAtmosphere => value / 101325.0,
+            CompressibilityUnit::InverseMillibar => value / 100.0,
+            CompressibilityUnit::InverseBar => value / 100000.0,
+            CompressibilityUnit::InversePoundForcePerSquareInch => value * 0.0001450377377302092,
+        })
+    }
+}
+
 fixed_base!(Compressibility, InversePascal);
 
 /// Unit markers for counting [`Compressibility`] as an integer with [`Fixed`](crate::Fixed).
