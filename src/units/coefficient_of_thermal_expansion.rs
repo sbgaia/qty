@@ -240,7 +240,7 @@ fixed_base!(CoefficientOfThermalExpansion, PerKelvin);
 
 /// Unit markers for counting [`CoefficientOfThermalExpansion`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion). Affine units have no marker.
+/// Also available as [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion).
 pub mod unit {
     fixed_unit!(PerKelvin: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerKelvin, base PerKelvin, 1 / 1, pi^0, from_per_kelvin, as_per_kelvin, additive);
     fixed_unit!(PerDegreeCelsius: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerDegreeCelsius, base PerKelvin, 1 / 1, pi^0, from_per_degree_celsius, as_per_degree_celsius, additive);

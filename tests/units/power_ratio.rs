@@ -86,6 +86,8 @@ fn decibel_milliwatts() {
 fn fixed_units() {
     check_fixed::<unit::power_ratio::DecibelWatt>();
     check_fixed_rescale::<unit::power_ratio::DecibelWatt>();
+    check_fixed::<unit::power_ratio::DecibelMilliwatt>();
+    check_fixed_rescale::<unit::power_ratio::DecibelMilliwatt>();
 }
 
 #[test]

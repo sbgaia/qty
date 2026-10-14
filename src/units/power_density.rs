@@ -1372,7 +1372,7 @@ fixed_base!(PowerDensity, WattPerCubicMeter);
 
 /// Unit markers for counting [`PowerDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::power_density`](crate::unit::power_density). Affine units have no marker.
+/// Also available as [`unit::power_density`](crate::unit::power_density).
 pub mod unit {
     fixed_unit!(WattPerCubicMeter: PowerDensity, PowerDensityUnit::WattPerCubicMeter, base WattPerCubicMeter, 1 / 1, pi^0, from_watts_per_cubic_meter, as_watts_per_cubic_meter, additive);
     fixed_unit!(PicowattPerCubicMeter: PowerDensity, PowerDensityUnit::PicowattPerCubicMeter, base WattPerCubicMeter, 1 / 1000000000000, pi^0, from_picowatts_per_cubic_meter, as_picowatts_per_cubic_meter, additive);

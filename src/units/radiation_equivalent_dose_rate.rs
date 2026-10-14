@@ -414,7 +414,7 @@ fixed_base!(RadiationEquivalentDoseRate, SievertPerSecond);
 
 /// Unit markers for counting [`RadiationEquivalentDoseRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate). Affine units have no marker.
+/// Also available as [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate).
 pub mod unit {
     fixed_unit!(SievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerHour, base SievertPerSecond, 1 / 3600, pi^0, from_sieverts_per_hour, as_sieverts_per_hour, additive);
     fixed_unit!(NanosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerHour, base SievertPerSecond, 1 / 3600000000000, pi^0, from_nanosieverts_per_hour, as_nanosieverts_per_hour, additive);

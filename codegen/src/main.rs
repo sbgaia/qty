@@ -50,7 +50,7 @@ fn main() {
     let mut generated_modules: Vec<String> = Vec::new();
 
     for qty in &quantities {
-        let source = generator::generate(qty);
+        let source = generator::generate(qty, &quantities);
 
         let module_name = qty.name.to_snake_case();
         let out_path = out_dir.join(format!("{module_name}.rs"));

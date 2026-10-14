@@ -248,7 +248,7 @@ fixed_base!(SpecificFuelConsumption, GramPerKilonewtonSecond);
 
 /// Unit markers for counting [`SpecificFuelConsumption`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption). Affine units have no marker.
+/// Also available as [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption).
 pub mod unit {
     fixed_unit!(PoundMassPerPoundForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_pounds_mass_per_pound_force_hour, as_pounds_mass_per_pound_force_hour, additive);
     fixed_unit!(KilogramPerKilogramForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_kilograms_per_kilogram_force_hour, as_kilograms_per_kilogram_force_hour, additive);

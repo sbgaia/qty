@@ -200,7 +200,7 @@ fixed_base!(Illuminance, Lux);
 
 /// Unit markers for counting [`Illuminance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::illuminance`](crate::unit::illuminance). Affine units have no marker.
+/// Also available as [`unit::illuminance`](crate::unit::illuminance).
 pub mod unit {
     fixed_unit!(Lux: Illuminance, IlluminanceUnit::Lux, base Lux, 1 / 1, pi^0, from_lux, as_lux, additive);
     fixed_unit!(Millilux: Illuminance, IlluminanceUnit::Millilux, base Lux, 1 / 1000, pi^0, from_millilux, as_millilux, additive);

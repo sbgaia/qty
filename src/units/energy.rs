@@ -1217,7 +1217,7 @@ fixed_base!(Energy, Joule);
 
 /// Unit markers for counting [`Energy`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::energy`](crate::unit::energy). Affine units have no marker.
+/// Also available as [`unit::energy`](crate::unit::energy).
 pub mod unit {
     fixed_unit!(Joule: Energy, EnergyUnit::Joule, base Joule, 1 / 1, pi^0, from_joules, as_joules, additive);
     fixed_unit!(Nanojoule: Energy, EnergyUnit::Nanojoule, base Joule, 1 / 1000000000, pi^0, from_nanojoules, as_nanojoules, additive);

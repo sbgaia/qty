@@ -317,7 +317,7 @@ fixed_base!(ElectricCapacitance, Farad);
 
 /// Unit markers for counting [`ElectricCapacitance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_capacitance`](crate::unit::electric_capacitance). Affine units have no marker.
+/// Also available as [`unit::electric_capacitance`](crate::unit::electric_capacitance).
 pub mod unit {
     fixed_unit!(Farad: ElectricCapacitance, ElectricCapacitanceUnit::Farad, base Farad, 1 / 1, pi^0, from_farads, as_farads, additive);
     fixed_unit!(Picofarad: ElectricCapacitance, ElectricCapacitanceUnit::Picofarad, base Farad, 1 / 1000000000000, pi^0, from_picofarads, as_picofarads, additive);

@@ -287,7 +287,7 @@ fixed_base!(MagneticField, Tesla);
 
 /// Unit markers for counting [`MagneticField`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::magnetic_field`](crate::unit::magnetic_field). Affine units have no marker.
+/// Also available as [`unit::magnetic_field`](crate::unit::magnetic_field).
 pub mod unit {
     fixed_unit!(Tesla: MagneticField, MagneticFieldUnit::Tesla, base Tesla, 1 / 1, pi^0, from_teslas, as_teslas, additive);
     fixed_unit!(Nanotesla: MagneticField, MagneticFieldUnit::Nanotesla, base Tesla, 1 / 1000000000, pi^0, from_nanoteslas, as_nanoteslas, additive);

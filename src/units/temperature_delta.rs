@@ -351,7 +351,7 @@ fixed_base!(TemperatureDelta, Kelvin);
 
 /// Unit markers for counting [`TemperatureDelta`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature_delta`](crate::unit::temperature_delta). Affine units have no marker.
+/// Also available as [`unit::temperature_delta`](crate::unit::temperature_delta).
 pub mod unit {
     fixed_unit!(Kelvin: TemperatureDelta, TemperatureDeltaUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins, additive);
     fixed_unit!(DegreeCelsius: TemperatureDelta, TemperatureDeltaUnit::DegreeCelsius, base Kelvin, 1 / 1, pi^0, from_degrees_celsius, as_degrees_celsius, additive);

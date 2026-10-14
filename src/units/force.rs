@@ -564,7 +564,7 @@ fixed_base!(Force, Newton);
 
 /// Unit markers for counting [`Force`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::force`](crate::unit::force). Affine units have no marker.
+/// Also available as [`unit::force`](crate::unit::force).
 pub mod unit {
     fixed_unit!(Dyn: Force, ForceUnit::Dyn, base Newton, 1 / 100000, pi^0, from_dyne, as_dyne, additive);
     fixed_unit!(GramForce: Force, ForceUnit::GramForce, base Newton, 196133 / 20000000, pi^0, from_grams_force, as_grams_force, additive);

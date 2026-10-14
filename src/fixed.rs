@@ -324,6 +324,12 @@ pub trait FixedUnit: Copy + 'static {
     /// See [`NUM`](Self::NUM).
     const PI_POW: i32;
 
+    /// For affine units (°C, °F, dBµV, …): zero of this unit is
+    /// `OFFSET_NUM / OFFSET_DEN` base units, exactly. Zero for linear units.
+    const OFFSET_NUM: i128 = 0;
+    /// See [`OFFSET_NUM`](Self::OFFSET_NUM).
+    const OFFSET_DEN: u128 = 1;
+
     /// A float count of this unit as a quantity, e.g. `Length::from_millimeters`.
     fn to_quantity<F: Float>(count: F) -> Self::Quantity<F>;
 
@@ -335,6 +341,39 @@ pub trait FixedUnit: Copy + 'static {
 /// scaled: every unit except those of point-like quantities (absolute
 /// temperatures, where 20 °C + 20 °C is not 40 °C).
 pub trait AdditiveUnit: FixedUnit {}
+
+/// A [`FixedUnit`] of a point quantity (an absolute temperature, a decibel
+/// level): counts cannot be added, but their differences are counts of
+/// [`Delta`](Self::Delta), which can be added back.
+///
+/// ```rust
+/// use unitsnet_rs::*;
+/// use unitsnet_rs::unit::temperature::{DegreeCelsius, Kelvin, MillidegreeCelsius};
+/// use unitsnet_rs::unit::temperature_delta::MillidegreeCelsius as DeltaMilli;
+///
+/// let morning = Fixed::<MillidegreeCelsius>::new(12_500);
+/// let noon = Fixed::<MillidegreeCelsius>::new(20_250);
+/// let rise: Fixed<DeltaMilli> = noon - morning;
+/// assert_eq!(rise.count(), 7_750);
+/// assert_eq!(morning + rise, noon);
+///
+/// // Exact across scales: °C → m°C and K → m°C need no rounding.
+/// assert_eq!(Fixed::<DegreeCelsius>::new(20).to_unit::<MillidegreeCelsius>()?.count(), 20_000);
+/// assert_eq!(Fixed::<Kelvin>::new(300).to_unit::<MillidegreeCelsius>()?.count(), 26_850);
+/// // m°C → K is not: 273.15 K is not a whole number of kelvins.
+/// assert_eq!(
+///     Fixed::<MillidegreeCelsius>::new(0).to_unit_rounded::<Kelvin>(Rounding::NearestTiesEven)?.count(),
+///     273
+/// );
+/// // Comparisons across scales are exact.
+/// assert!(Fixed::<DegreeCelsius>::new(20) > Fixed::<Kelvin>::new(293));
+/// # Ok::<(), RoundError>(())
+/// ```
+pub trait PointUnit: FixedUnit {
+    /// The unit of the difference between two points, with the same scale
+    /// (°C → Δ°C, m°C → Δm°C, dBµV → dB).
+    type Delta: AdditiveUnit;
+}
 
 const fn gcd(mut a: u128, mut b: u128) -> u128 {
     while b != 0 {
@@ -368,24 +407,90 @@ impl<From: FixedUnit, To: FixedUnit> Ratio<From, To> {
     };
     const NUM: u128 = Self::PARTS.0;
     const DEN: u128 = Self::PARTS.1;
+    /// `(b_From − b_To) / a_To`: the offset, in units of `To`, added after
+    /// scaling. Zero unless an affine unit is involved.
+    const OFFSET: (i128, u128) = {
+        if From::OFFSET_NUM == 0 && To::OFFSET_NUM == 0 {
+            (0, 1)
+        } else {
+            assert!(
+                From::PI_POW == 0 && To::PI_POW == 0,
+                "affine units with a factor of π are not supported"
+            );
+            let diff = sub_i(
+                mul_i(From::OFFSET_NUM, to_i(To::OFFSET_DEN)),
+                mul_i(To::OFFSET_NUM, to_i(From::OFFSET_DEN)),
+            );
+            let num = mul_i(diff, to_i(To::DEN));
+            let den = mul_i(
+                mul_i(to_i(From::OFFSET_DEN), to_i(To::OFFSET_DEN)),
+                to_i(To::NUM),
+            );
+            let g = gcd(num.unsigned_abs(), den as u128) as i128;
+            (num / g, (den / g) as u128)
+        }
+    };
     const EXACT: () = assert!(
-        Self::DEN == 1,
+        Self::DEN == 1 && Self::OFFSET.1 == 1,
         "this unit conversion is not exact (the target unit does not divide the \
          source unit): for `+`/`-` put the finer unit on the left (`mm + m`), \
          for conversions use `to_unit_rounded` with a `Rounding` mode"
     );
 }
 
-/// `count · num / den`, rounded.
+const fn to_i(x: u128) -> i128 {
+    assert!(
+        x <= i128::MAX as u128,
+        "unit definition too large for integer conversion"
+    );
+    x as i128
+}
+
+const fn mul_i(a: i128, b: i128) -> i128 {
+    match a.checked_mul(b) {
+        Some(v) => v,
+        None => panic!("unit definitions too large for integer conversion"),
+    }
+}
+
+const fn sub_i(a: i128, b: i128) -> i128 {
+    match a.checked_sub(b) {
+        Some(v) => v,
+        None => panic!("unit definitions too large for integer conversion"),
+    }
+}
+
+/// `count · num / den + offset`, rounded once.
 #[inline]
-fn rescale(count: i128, num: u128, den: u128, mode: Rounding) -> Result<i128, RoundError> {
-    let num = i128::try_from(num).map_err(|_| RoundError::Overflow)?;
-    let den = i128::try_from(den).map_err(|_| RoundError::Overflow)?;
+fn rescale(
+    count: i128,
+    num: u128,
+    den: u128,
+    (off_num, off_den): (i128, u128),
+    mode: Rounding,
+) -> Result<i128, RoundError> {
+    let overflow = |_| RoundError::Overflow;
+    let num = i128::try_from(num).map_err(overflow)?;
+    let den = i128::try_from(den).map_err(overflow)?;
     let n = count.checked_mul(num).ok_or(RoundError::Overflow)?;
-    if den == 1 {
+    if off_num == 0 {
+        return if den == 1 {
+            Ok(n)
+        } else {
+            div_round(n, den, mode)
+        };
+    }
+    // (count·num·off_den + off_num·den) / (den·off_den)
+    let off_den = i128::try_from(off_den).map_err(overflow)?;
+    let n = n
+        .checked_mul(off_den)
+        .and_then(|n| n.checked_add(off_num.checked_mul(den)?))
+        .ok_or(RoundError::Overflow)?;
+    let d = den.checked_mul(off_den).ok_or(RoundError::Overflow)?;
+    if d == 1 {
         Ok(n)
     } else {
-        div_round(n, den, mode)
+        div_round(n, d, mode)
     }
 }
 
@@ -544,20 +649,21 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
             widen(self.count)?,
             Ratio::<U, V>::NUM,
             Ratio::<U, V>::DEN,
+            Ratio::<U, V>::OFFSET,
             mode,
         )?;
         narrow(n).map(Fixed::new)
-    }
-
-    /// Ratio of two values as a rounded integer.
-    #[inline]
-    pub fn ratio_rounded(self, other: Self, mode: Rounding) -> Result<I, RoundError> {
-        div_round(widen(self.count)?, widen(other.count)?, mode).and_then(narrow)
     }
 }
 
 /// Arithmetic helpers for units whose counts can be added.
 impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
+    /// Ratio of two values as a rounded integer.
+    #[inline]
+    pub fn ratio_rounded(self, other: Self, mode: Rounding) -> Result<I, RoundError> {
+        div_round(widen(self.count)?, widen(other.count)?, mode).and_then(narrow)
+    }
+
     /// Divides by an integer, rounding with `mode` (`/` truncates toward
     /// zero, like integer division).
     #[inline]
@@ -595,6 +701,21 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     #[inline]
     pub fn saturating_sub(self, other: Self) -> Self {
         Self::new(self.count.saturating_sub(other.count))
+    }
+}
+
+/// Points: subtracting a difference. (`point - delta` cannot be an operator:
+/// `point - point` already is, and Rust cannot tell the two apart by the
+/// kind of the right-hand side. `point + (-delta)` also works.)
+impl<P: PointUnit, I: Integer> Fixed<P, I> {
+    /// `self - delta`, where `delta` must convert exactly into
+    /// [`P::Delta`](PointUnit::Delta) (checked at compile time).
+    #[inline]
+    pub fn sub_delta<D: AdditiveUnit<Unit = <P::Delta as FixedUnit>::Unit>>(
+        self,
+        delta: Fixed<D, I>,
+    ) -> Self {
+        Self::new(self.count - delta.count_in::<P::Delta>())
     }
 }
 
@@ -697,22 +818,32 @@ fixed_unit_op!(Add add AddAssign add_assign +);
 fixed_unit_op!(Sub sub SubAssign sub_assign -);
 
 impl<V: FixedUnit, I: Integer> Fixed<V, I> {
-    /// The count expressed in `U`, which this unit must divide exactly
-    /// (checked at compile time). Overflow behaves like integer `*`.
+    /// The count expressed in `U`, which this unit must convert into
+    /// exactly (checked at compile time). Overflow behaves like integer `*`.
+    #[doc(hidden)]
     #[inline(always)]
-    fn count_in<U: FixedUnit<Unit = V::Unit>>(self) -> I {
+    pub fn count_in<U: FixedUnit<Unit = V::Unit>>(self) -> I {
         #[allow(clippy::let_unit_value)]
         let () = Ratio::<V, U>::EXACT;
-        if Ratio::<V, U>::NUM == 1 {
-            return self.count;
+        let scaled = if Ratio::<V, U>::NUM == 1 {
+            self.count
+        } else {
+            match i128::try_from(Ratio::<V, U>::NUM)
+                .ok()
+                .and_then(I::from_i128)
+            {
+                Some(k) => self.count * k,
+                // The factor alone exceeds `I`: only zero converts.
+                None if self.count == I::default() => self.count,
+                None => panic!("attempt to convert units with overflow"),
+            }
+        };
+        let offset = Ratio::<V, U>::OFFSET.0;
+        if offset == 0 {
+            return scaled;
         }
-        match i128::try_from(Ratio::<V, U>::NUM)
-            .ok()
-            .and_then(I::from_i128)
-        {
-            Some(k) => self.count * k,
-            // The factor alone exceeds `I`: only zero converts.
-            None if self.count == I::default() => self.count,
+        match I::from_i128(offset) {
+            Some(offset) => scaled + offset,
             None => panic!("attempt to convert units with overflow"),
         }
     }
@@ -722,6 +853,10 @@ impl<V: FixedUnit, I: Integer> Fixed<V, I> {
 #[inline(always)]
 fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I) -> Ordering {
     let (num, den) = (Ratio::<U, V>::NUM, Ratio::<U, V>::DEN);
+    let (off_num, off_den) = Ratio::<U, V>::OFFSET;
+    if off_num != 0 {
+        return cmp_affine(a, b, num, den, off_num, off_den);
+    }
     if num == 1 && den == 1 {
         return a.cmp(&b);
     }
@@ -749,6 +884,40 @@ fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I)
         (true, false) => Ordering::Less,
         (false, true) => Ordering::Greater,
     }
+}
+
+/// `a·num/den + off_num/off_den` vs `b`, i.e.
+/// `a·num·off_den + off_num·den` vs `b·den·off_den`. Exact in `i128`, which
+/// holds every realistic temperature or level; beyond that (counts near the
+/// limits of `i128`), compared through `f64`.
+#[cold]
+#[inline(never)]
+fn cmp_affine<I: Integer>(
+    a: I,
+    b: I,
+    num: u128,
+    den: u128,
+    off_num: i128,
+    off_den: u128,
+) -> Ordering {
+    let exact = (|| {
+        let (num, den, off_den) = (to_i128(num)?, to_i128(den)?, to_i128(off_den)?);
+        let lhs = a
+            .to_i128()?
+            .checked_mul(num)?
+            .checked_mul(off_den)?
+            .checked_add(off_num.checked_mul(den)?)?;
+        let rhs = b.to_i128()?.checked_mul(den)?.checked_mul(off_den)?;
+        Some(lhs.cmp(&rhs))
+    })();
+    exact.unwrap_or_else(|| {
+        let lhs = a.to_f64() * num as f64 / den as f64 + off_num as f64 / off_den as f64;
+        lhs.total_cmp(&b.to_f64())
+    })
+}
+
+fn to_i128(x: u128) -> Option<i128> {
+    i128::try_from(x).ok()
 }
 
 /// Full 256-bit product of two `u128`, as `(high, low)`.
@@ -793,7 +962,7 @@ impl<U: AdditiveUnit, I: ops::Neg<Output = I>> ops::Neg for Fixed<U, I> {
 }
 
 /// Dividing two values in the same unit gives a plain (truncated) integer.
-impl<U, I: ops::Div<Output = I>> ops::Div for Fixed<U, I> {
+impl<U: AdditiveUnit, I: ops::Div<Output = I>> ops::Div for Fixed<U, I> {
     type Output = I;
     #[inline(always)]
     fn div(self, rhs: Self) -> I {

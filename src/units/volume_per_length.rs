@@ -355,7 +355,7 @@ fixed_base!(VolumePerLength, CubicMeterPerMeter);
 
 /// Unit markers for counting [`VolumePerLength`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume_per_length`](crate::unit::volume_per_length). Affine units have no marker.
+/// Also available as [`unit::volume_per_length`](crate::unit::volume_per_length).
 pub mod unit {
     fixed_unit!(CubicMeterPerMeter: VolumePerLength, VolumePerLengthUnit::CubicMeterPerMeter, base CubicMeterPerMeter, 1 / 1, pi^0, from_cubic_meters_per_meter, as_cubic_meters_per_meter, additive);
     fixed_unit!(LiterPerMeter: VolumePerLength, VolumePerLengthUnit::LiterPerMeter, base CubicMeterPerMeter, 1 / 1000, pi^0, from_liters_per_meter, as_liters_per_meter, additive);

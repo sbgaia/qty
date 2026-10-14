@@ -237,7 +237,10 @@ fixed_base!(AmplitudeRatio, DecibelVolt);
 
 /// Unit markers for counting [`AmplitudeRatio`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::amplitude_ratio`](crate::unit::amplitude_ratio). Affine units have no marker.
+/// Also available as [`unit::amplitude_ratio`](crate::unit::amplitude_ratio).
 pub mod unit {
-    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts);
+    fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts, point crate::units::level::unit::Decibel);
+    fixed_unit!(DecibelMicrovolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelMicrovolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_microvolts, as_decibel_microvolts, offset(-120, 1), point crate::units::level::unit::Decibel);
+    fixed_unit!(DecibelMillivolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelMillivolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_millivolts, as_decibel_millivolts, offset(-60, 1), point crate::units::level::unit::Decibel);
+    fixed_unit!(DecibelUnloaded: AmplitudeRatio, AmplitudeRatioUnit::DecibelUnloaded, base DecibelVolt, 1 / 1, pi^0, from_decibels_unloaded, as_decibels_unloaded, offset(-2218487499, 1000000000), point crate::units::level::unit::Decibel);
 }

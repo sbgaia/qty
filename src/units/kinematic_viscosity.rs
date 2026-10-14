@@ -306,7 +306,7 @@ fixed_base!(KinematicViscosity, SquareMeterPerSecond);
 
 /// Unit markers for counting [`KinematicViscosity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity). Affine units have no marker.
+/// Also available as [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity).
 pub mod unit {
     fixed_unit!(SquareMeterPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareMeterPerSecond, base SquareMeterPerSecond, 1 / 1, pi^0, from_square_meters_per_second, as_square_meters_per_second, additive);
     fixed_unit!(Stokes: KinematicViscosity, KinematicViscosityUnit::Stokes, base SquareMeterPerSecond, 1 / 10000, pi^0, from_stokes, as_stokes, additive);

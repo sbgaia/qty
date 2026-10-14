@@ -656,7 +656,7 @@ fixed_base!(PressureChangeRate, PascalPerSecond);
 
 /// Unit markers for counting [`PressureChangeRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::pressure_change_rate`](crate::unit::pressure_change_rate). Affine units have no marker.
+/// Also available as [`unit::pressure_change_rate`](crate::unit::pressure_change_rate).
 pub mod unit {
     fixed_unit!(PascalPerSecond: PressureChangeRate, PressureChangeRateUnit::PascalPerSecond, base PascalPerSecond, 1 / 1, pi^0, from_pascals_per_second, as_pascals_per_second, additive);
     fixed_unit!(KilopascalPerSecond: PressureChangeRate, PressureChangeRateUnit::KilopascalPerSecond, base PascalPerSecond, 1000 / 1, pi^0, from_kilopascals_per_second, as_kilopascals_per_second, additive);

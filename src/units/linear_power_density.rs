@@ -801,7 +801,7 @@ fixed_base!(LinearPowerDensity, WattPerMeter);
 
 /// Unit markers for counting [`LinearPowerDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::linear_power_density`](crate::unit::linear_power_density). Affine units have no marker.
+/// Also available as [`unit::linear_power_density`](crate::unit::linear_power_density).
 pub mod unit {
     fixed_unit!(WattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::WattPerMeter, base WattPerMeter, 1 / 1, pi^0, from_watts_per_meter, as_watts_per_meter, additive);
     fixed_unit!(MilliwattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::MilliwattPerMeter, base WattPerMeter, 1 / 1000, pi^0, from_milliwatts_per_meter, as_milliwatts_per_meter, additive);

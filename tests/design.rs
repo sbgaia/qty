@@ -490,6 +490,109 @@ mod fixed {
     }
 
     #[test]
+    fn integer_temperatures_in_celsius() {
+        use unitsnet_rs::unit::temperature::{
+            DegreeCelsius, DegreeFahrenheit, Kelvin, MillidegreeCelsius,
+        };
+        use unitsnet_rs::unit::temperature_delta as delta;
+        type MilliC = Fixed<MillidegreeCelsius, i32>;
+
+        // A sensor reporting millidegrees Celsius.
+        let reading = MilliC::new(21_375);
+        assert_eq!(reading.to_f64(), Temperature::from_degrees_celsius(21.375));
+        assert_eq!(reading.to_string(), "21375 m°C");
+
+        // Exact conversions need no rounding mode.
+        assert_eq!(
+            Fixed::<DegreeCelsius, i32>::new(-40).to_unit::<MillidegreeCelsius>(),
+            Ok(MilliC::new(-40_000))
+        );
+        assert_eq!(
+            Fixed::<Kelvin, i32>::new(0).to_unit::<MillidegreeCelsius>(),
+            Ok(MilliC::new(-273_150))
+        );
+        // Lossy ones take a mode.
+        assert_eq!(
+            reading.to_unit_rounded::<DegreeCelsius>(Rounding::NearestTiesEven),
+            Ok(Fixed::new(21))
+        );
+        assert_eq!(
+            reading.to_unit_rounded::<Kelvin>(Rounding::Floor),
+            Ok(Fixed::new(294))
+        );
+        assert_eq!(
+            Fixed::<DegreeCelsius, i32>::new(100)
+                .to_unit_rounded::<DegreeFahrenheit>(Rounding::Exact),
+            Ok(Fixed::new(212))
+        );
+        assert_eq!(
+            Fixed::<DegreeCelsius, i32>::new(37)
+                .to_unit_rounded::<DegreeFahrenheit>(Rounding::Exact),
+            Err(RoundError::Inexact) // 98.6 °F
+        );
+
+        // Exact comparisons across scales: -40 °C is -40 °F.
+        assert_eq!(
+            Fixed::<DegreeCelsius>::new(-40),
+            Fixed::<DegreeFahrenheit>::new(-40)
+        );
+        assert!(Fixed::<DegreeCelsius>::new(20) > Fixed::<Kelvin>::new(293));
+        assert!(Fixed::<DegreeCelsius>::new(20) < Fixed::<Kelvin>::new(294));
+        assert!(reading < Fixed::<DegreeCelsius, i32>::new(22));
+
+        // Point arithmetic: differences are deltas; deltas move points.
+        let earlier = MilliC::new(19_000);
+        let rise: Fixed<delta::MillidegreeCelsius, i32> = reading - earlier;
+        assert_eq!(rise.count(), 2_375);
+        assert_eq!(earlier + rise, reading);
+        // A delta in a coarser unit converts exactly: +1 Δ°C = +1000 m°C.
+        assert_eq!(
+            earlier + Fixed::<delta::DegreeCelsius, i32>::new(1),
+            MilliC::new(20_000)
+        );
+        let mut t = earlier;
+        t += Fixed::<delta::Kelvin, i32>::new(2);
+        t -= Fixed::<delta::MillidegreeCelsius, i32>::new(500);
+        assert_eq!(t, MilliC::new(20_500));
+        assert_eq!(
+            t.sub_delta(Fixed::<delta::DegreeCelsius, i32>::new(1)),
+            MilliC::new(19_500)
+        );
+        // Differences across scales are exact too.
+        let d: Fixed<delta::MillidegreeCelsius, i32> =
+            reading - Fixed::<DegreeCelsius, i32>::new(20);
+        assert_eq!(d.count(), 1_375);
+
+        // From floats, with explicit rounding.
+        assert_eq!(
+            MilliC::round_from(
+                Temperature::from_degrees_celsius(21.2346),
+                Rounding::NearestTiesEven
+            ),
+            Ok(MilliC::new(21_235))
+        );
+    }
+
+    #[test]
+    fn integer_decibel_levels() {
+        use unitsnet_rs::unit::level::Decibel;
+        use unitsnet_rs::unit::power_ratio::{DecibelMilliwatt, DecibelWatt};
+        let tx = Fixed::<DecibelMilliwatt>::new(20);
+        let gain = Fixed::<Decibel>::new(6);
+        assert_eq!(tx + gain, Fixed::<DecibelMilliwatt>::new(26));
+        assert_eq!(
+            Fixed::<DecibelMilliwatt>::new(30),
+            Fixed::<DecibelWatt>::new(0)
+        );
+        assert_eq!(
+            Fixed::<DecibelWatt>::new(1).to_unit::<DecibelMilliwatt>(),
+            Ok(Fixed::new(31))
+        );
+        let margin: Fixed<Decibel> = tx - Fixed::<DecibelWatt>::new(-20);
+        assert_eq!(margin.count(), 10);
+    }
+
+    #[test]
     fn keys_in_hash_and_tree_collections() {
         let mut stock: HashMap<Fixed<Millimeter>, u32> = HashMap::new();
         *stock.entry(Millimeters::new(600)).or_default() += 2;

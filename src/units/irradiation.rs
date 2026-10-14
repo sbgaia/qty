@@ -366,7 +366,7 @@ fixed_base!(Irradiation, JoulePerSquareMeter);
 
 /// Unit markers for counting [`Irradiation`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::irradiation`](crate::unit::irradiation). Affine units have no marker.
+/// Also available as [`unit::irradiation`](crate::unit::irradiation).
 pub mod unit {
     fixed_unit!(JoulePerSquareMeter: Irradiation, IrradiationUnit::JoulePerSquareMeter, base JoulePerSquareMeter, 1 / 1, pi^0, from_joules_per_square_meter, as_joules_per_square_meter, additive);
     fixed_unit!(KilojoulePerSquareMeter: Irradiation, IrradiationUnit::KilojoulePerSquareMeter, base JoulePerSquareMeter, 1000 / 1, pi^0, from_kilojoules_per_square_meter, as_kilojoules_per_square_meter, additive);

@@ -190,7 +190,7 @@ fixed_base!(SpecificVolume, CubicMeterPerKilogram);
 
 /// Unit markers for counting [`SpecificVolume`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::specific_volume`](crate::unit::specific_volume). Affine units have no marker.
+/// Also available as [`unit::specific_volume`](crate::unit::specific_volume).
 pub mod unit {
     fixed_unit!(CubicMeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMeterPerKilogram, base CubicMeterPerKilogram, 1 / 1, pi^0, from_cubic_meters_per_kilogram, as_cubic_meters_per_kilogram, additive);
     fixed_unit!(CubicMillimeterPerKilogram: SpecificVolume, SpecificVolumeUnit::CubicMillimeterPerKilogram, base CubicMeterPerKilogram, 1 / 1000000000, pi^0, from_cubic_millimeters_per_kilogram, as_cubic_millimeters_per_kilogram, additive);

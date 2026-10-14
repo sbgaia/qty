@@ -159,7 +159,7 @@ fixed_base!(Level, Decibel);
 
 /// Unit markers for counting [`Level`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::level`](crate::unit::level). Affine units have no marker.
+/// Also available as [`unit::level`](crate::unit::level).
 pub mod unit {
     fixed_unit!(Decibel: Level, LevelUnit::Decibel, base Decibel, 1 / 1, pi^0, from_decibels, as_decibels, additive);
     fixed_unit!(Neper: Level, LevelUnit::Neper, base Decibel, 500000000 / 57564627, pi^0, from_nepers, as_nepers, additive);

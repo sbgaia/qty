@@ -1644,7 +1644,7 @@ fixed_base!(Density, KilogramPerCubicMeter);
 
 /// Unit markers for counting [`Density`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::density`](crate::unit::density). Affine units have no marker.
+/// Also available as [`unit::density`](crate::unit::density).
 pub mod unit {
     fixed_unit!(GramPerCubicMillimeter: Density, DensityUnit::GramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000 / 1, pi^0, from_grams_per_cubic_millimeter, as_grams_per_cubic_millimeter, additive);
     fixed_unit!(KilogramPerCubicMillimeter: Density, DensityUnit::KilogramPerCubicMillimeter, base KilogramPerCubicMeter, 1000000000 / 1, pi^0, from_kilograms_per_cubic_millimeter, as_kilograms_per_cubic_millimeter, additive);

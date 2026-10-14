@@ -421,7 +421,7 @@ fixed_base!(Molarity, MolePerCubicMeter);
 
 /// Unit markers for counting [`Molarity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molarity`](crate::unit::molarity). Affine units have no marker.
+/// Also available as [`unit::molarity`](crate::unit::molarity).
 pub mod unit {
     fixed_unit!(MolePerCubicMeter: Molarity, MolarityUnit::MolePerCubicMeter, base MolePerCubicMeter, 1 / 1, pi^0, from_moles_per_cubic_meter, as_moles_per_cubic_meter, additive);
     fixed_unit!(KilomolePerCubicMeter: Molarity, MolarityUnit::KilomolePerCubicMeter, base MolePerCubicMeter, 1000 / 1, pi^0, from_kilomoles_per_cubic_meter, as_kilomoles_per_cubic_meter, additive);

@@ -366,7 +366,7 @@ fixed_base!(MolarFlow, MolePerSecond);
 
 /// Unit markers for counting [`MolarFlow`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_flow`](crate::unit::molar_flow). Affine units have no marker.
+/// Also available as [`unit::molar_flow`](crate::unit::molar_flow).
 pub mod unit {
     fixed_unit!(MolePerSecond: MolarFlow, MolarFlowUnit::MolePerSecond, base MolePerSecond, 1 / 1, pi^0, from_moles_per_second, as_moles_per_second, additive);
     fixed_unit!(KilomolePerSecond: MolarFlow, MolarFlowUnit::KilomolePerSecond, base MolePerSecond, 1000 / 1, pi^0, from_kilomoles_per_second, as_kilomoles_per_second, additive);

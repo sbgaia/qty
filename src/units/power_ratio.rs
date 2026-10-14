@@ -181,7 +181,8 @@ fixed_base!(PowerRatio, DecibelWatt);
 
 /// Unit markers for counting [`PowerRatio`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::power_ratio`](crate::unit::power_ratio). Affine units have no marker.
+/// Also available as [`unit::power_ratio`](crate::unit::power_ratio).
 pub mod unit {
-    fixed_unit!(DecibelWatt: PowerRatio, PowerRatioUnit::DecibelWatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_watts, as_decibel_watts);
+    fixed_unit!(DecibelWatt: PowerRatio, PowerRatioUnit::DecibelWatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_watts, as_decibel_watts, point crate::units::level::unit::Decibel);
+    fixed_unit!(DecibelMilliwatt: PowerRatio, PowerRatioUnit::DecibelMilliwatt, base DecibelWatt, 1 / 1, pi^0, from_decibel_milliwatts, as_decibel_milliwatts, offset(-30, 1), point crate::units::level::unit::Decibel);
 }

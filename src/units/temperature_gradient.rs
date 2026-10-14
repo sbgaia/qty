@@ -218,7 +218,7 @@ fixed_base!(TemperatureGradient, KelvinPerMeter);
 
 /// Unit markers for counting [`TemperatureGradient`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature_gradient`](crate::unit::temperature_gradient). Affine units have no marker.
+/// Also available as [`unit::temperature_gradient`](crate::unit::temperature_gradient).
 pub mod unit {
     fixed_unit!(KelvinPerMeter: TemperatureGradient, TemperatureGradientUnit::KelvinPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_kelvins_per_meter, as_kelvins_per_meter, additive);
     fixed_unit!(DegreeCelsiusPerMeter: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_degrees_celsius_per_meter, as_degrees_celsius_per_meter, additive);

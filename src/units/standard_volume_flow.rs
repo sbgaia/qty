@@ -363,7 +363,7 @@ fixed_base!(StandardVolumeFlow, StandardCubicMeterPerSecond);
 
 /// Unit markers for counting [`StandardVolumeFlow`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::standard_volume_flow`](crate::unit::standard_volume_flow). Affine units have no marker.
+/// Also available as [`unit::standard_volume_flow`](crate::unit::standard_volume_flow).
 pub mod unit {
     fixed_unit!(StandardCubicMeterPerSecond: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerSecond, base StandardCubicMeterPerSecond, 1 / 1, pi^0, from_standard_cubic_meters_per_second, as_standard_cubic_meters_per_second, additive);
     fixed_unit!(StandardCubicMeterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerMinute, base StandardCubicMeterPerSecond, 1 / 60, pi^0, from_standard_cubic_meters_per_minute, as_standard_cubic_meters_per_minute, additive);

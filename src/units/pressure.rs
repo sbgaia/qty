@@ -1496,7 +1496,7 @@ fixed_base!(Pressure, Pascal);
 
 /// Unit markers for counting [`Pressure`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::pressure`](crate::unit::pressure). Affine units have no marker.
+/// Also available as [`unit::pressure`](crate::unit::pressure).
 pub mod unit {
     fixed_unit!(Pascal: Pressure, PressureUnit::Pascal, base Pascal, 1 / 1, pi^0, from_pascals, as_pascals, additive);
     fixed_unit!(Micropascal: Pressure, PressureUnit::Micropascal, base Pascal, 1 / 1000000, pi^0, from_micropascals, as_micropascals, additive);

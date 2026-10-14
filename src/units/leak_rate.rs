@@ -216,7 +216,7 @@ fixed_base!(LeakRate, PascalCubicMeterPerSecond);
 
 /// Unit markers for counting [`LeakRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::leak_rate`](crate::unit::leak_rate). Affine units have no marker.
+/// Also available as [`unit::leak_rate`](crate::unit::leak_rate).
 pub mod unit {
     fixed_unit!(PascalCubicMeterPerSecond: LeakRate, LeakRateUnit::PascalCubicMeterPerSecond, base PascalCubicMeterPerSecond, 1 / 1, pi^0, from_pascal_cubic_meters_per_second, as_pascal_cubic_meters_per_second, additive);
     fixed_unit!(MillibarLiterPerSecond: LeakRate, LeakRateUnit::MillibarLiterPerSecond, base PascalCubicMeterPerSecond, 1 / 10, pi^0, from_millibar_liters_per_second, as_millibar_liters_per_second, additive);

@@ -749,7 +749,7 @@ fixed_base!(MassFraction, DecimalFraction);
 
 /// Unit markers for counting [`MassFraction`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass_fraction`](crate::unit::mass_fraction). Affine units have no marker.
+/// Also available as [`unit::mass_fraction`](crate::unit::mass_fraction).
 pub mod unit {
     fixed_unit!(DecimalFraction: MassFraction, MassFractionUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(GramPerGram: MassFraction, MassFractionUnit::GramPerGram, base DecimalFraction, 1 / 1, pi^0, from_grams_per_gram, as_grams_per_gram, additive);

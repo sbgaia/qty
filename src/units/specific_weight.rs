@@ -591,7 +591,7 @@ fixed_base!(SpecificWeight, NewtonPerCubicMeter);
 
 /// Unit markers for counting [`SpecificWeight`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::specific_weight`](crate::unit::specific_weight). Affine units have no marker.
+/// Also available as [`unit::specific_weight`](crate::unit::specific_weight).
 pub mod unit {
     fixed_unit!(NewtonPerCubicMillimeter: SpecificWeight, SpecificWeightUnit::NewtonPerCubicMillimeter, base NewtonPerCubicMeter, 1000000000 / 1, pi^0, from_newtons_per_cubic_millimeter, as_newtons_per_cubic_millimeter, additive);
     fixed_unit!(KilonewtonPerCubicMillimeter: SpecificWeight, SpecificWeightUnit::KilonewtonPerCubicMillimeter, base NewtonPerCubicMeter, 1000000000000 / 1, pi^0, from_kilonewtons_per_cubic_millimeter, as_kilonewtons_per_cubic_millimeter, additive);

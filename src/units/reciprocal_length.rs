@@ -388,7 +388,7 @@ fixed_base!(ReciprocalLength, InverseMeter);
 
 /// Unit markers for counting [`ReciprocalLength`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::reciprocal_length`](crate::unit::reciprocal_length). Affine units have no marker.
+/// Also available as [`unit::reciprocal_length`](crate::unit::reciprocal_length).
 pub mod unit {
     fixed_unit!(InverseMeter: ReciprocalLength, ReciprocalLengthUnit::InverseMeter, base InverseMeter, 1 / 1, pi^0, from_inverse_meters, as_inverse_meters, additive);
     fixed_unit!(InverseCentimeter: ReciprocalLength, ReciprocalLengthUnit::InverseCentimeter, base InverseMeter, 100 / 1, pi^0, from_inverse_centimeters, as_inverse_centimeters, additive);

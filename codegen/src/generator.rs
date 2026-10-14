@@ -291,29 +291,72 @@ pub fn point_delta(name: &str) -> Option<&'static str> {
 }
 
 /// Generates a complete `.rs` source file for `qty` and returns it as a `String`.
-pub fn generate(qty: &QuantityDef) -> String {
+pub fn generate(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(64 * 1024);
 
     emit_header(qty, &mut out);
     emit_enum(qty, &mut out);
     emit_enum_impl(qty, &mut out);
     emit_struct_impl(qty, &mut out);
-    emit_fixed_units(qty, &mut out);
+    emit_fixed_units(qty, all, &mut out);
     out
 }
 
 /// The `Fixed` marker for `unit`, if it has one: linear units whose factor is
 /// an exact fraction (times a power of π) fitting in `u128`.
-pub fn fixed_parts(unit: &UnitDef) -> Option<(u128, u128, i32)> {
-    match &unit.to_base {
-        Form::Affine { a, b } if b.is_zero() => a.exact_parts(),
-        _ => None,
-    }
+/// The exact definition of a `Fixed` marker: one unit is
+/// `num / den · π^pi` base units, plus `offset` base units for affine units.
+pub struct FixedParts {
+    pub num: u128,
+    pub den: u128,
+    pub pi: i32,
+    pub offset: Option<(i128, u128)>,
+}
+
+/// The `Fixed` marker definition for `unit`, if it has one: linear units
+/// whose factor is an exact fraction (times a power of π) fitting in
+/// `u128`, and — for point quantities only — affine units with a positive
+/// exact factor and offset (°C, m°C, °F, dBµV, …).
+pub fn fixed_parts(qty: &QuantityDef, unit: &UnitDef) -> Option<FixedParts> {
+    let Form::Affine { a, b } = &unit.to_base else {
+        return None;
+    };
+    let (num, den, pi) = a.exact_parts()?;
+    let offset = if b.is_zero() {
+        None
+    } else if point_delta(&qty.name).is_some() && pi == 0 {
+        Some(b.exact_signed_parts()?)
+    } else {
+        return None;
+    };
+    Some(FixedParts {
+        num,
+        den,
+        pi,
+        offset,
+    })
+}
+
+/// For a unit of a point quantity, the delta quantity's unit with the same
+/// scale (°C → Δ°C, m°C → Δm°C), preferring the same name.
+fn delta_unit<'a>(unit: &UnitDef, delta: &'a QuantityDef) -> Option<&'a UnitDef> {
+    let Form::Affine { a, .. } = &unit.to_base else {
+        return None;
+    };
+    let same_scale =
+        |d: &&UnitDef| matches!(&d.to_base, Form::Affine { a: da, b } if b.is_zero() && da == a);
+    let candidates: Vec<&UnitDef> = delta.units.iter().filter(same_scale).collect();
+    candidates
+        .iter()
+        .find(|d| d.singular == unit.singular)
+        .or_else(|| candidates.first())
+        .copied()
+        .filter(|d| fixed_parts(delta, d).is_some())
 }
 
 // ── Fixed unit markers ────────────────────────────────────────────────────────
 
-fn emit_fixed_units(qty: &QuantityDef, out: &mut String) {
+fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     let name = &qty.name;
     w!(out);
     w!(out, "fixed_base!({}, {});", name, qty.base_unit);
@@ -326,22 +369,47 @@ fn emit_fixed_units(qty: &QuantityDef, out: &mut String) {
     w!(out, "///");
     w!(
         out,
-        "/// Also available as [`unit::{}`](crate::unit::{}). Affine units have no marker.",
+        "/// Also available as [`unit::{}`](crate::unit::{}).",
         name.to_snake_case(),
         name.to_snake_case()
     );
     w!(out, "pub mod unit {{");
+    let delta_qty = point_delta(name).map(|d| {
+        all.iter()
+            .find(|q| q.name == d)
+            .unwrap_or_else(|| panic!("delta quantity {d} not generated"))
+    });
     for unit in &qty.units {
-        let Some((num, den, pi)) = fixed_parts(unit) else {
+        let Some(FixedParts {
+            num,
+            den,
+            pi,
+            offset,
+        }) = fixed_parts(qty, unit)
+        else {
             continue;
         };
         let snake = unit.plural.to_snake_case();
+        let offset = offset
+            .map(|(n, d)| format!(", offset({n}, {d})"))
+            .unwrap_or_default();
+        // Amounts can be added; points take the matching delta unit.
+        let kind = match delta_qty {
+            None => ", additive".to_owned(),
+            Some(dq) => match delta_unit(unit, dq) {
+                Some(du) => format!(
+                    ", point crate::units::{}::unit::{}",
+                    dq.name.to_snake_case(),
+                    du.singular
+                ),
+                None => String::new(),
+            },
+        };
         w!(
             out,
-            "    fixed_unit!({s}: {name}, {name}Unit::{s}, base {base}, {num} / {den}, pi^{pi}, from_{snake}, as_{snake}{additive});",
+            "    fixed_unit!({s}: {name}, {name}Unit::{s}, base {base}, {num} / {den}, pi^{pi}, from_{snake}, as_{snake}{offset}{kind});",
             s = unit.singular,
             base = qty.base_unit,
-            additive = if point_delta(name).is_some() { "" } else { ", additive" },
         );
     }
     w!(out, "}}");
@@ -994,7 +1062,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     let markers: Vec<&UnitDef> = qty
         .units
         .iter()
-        .filter(|u| fixed_parts(u).is_some())
+        .filter(|u| fixed_parts(qty, u).is_some())
         .collect();
     if !markers.is_empty() {
         w!(out, "#[test]");
@@ -1002,7 +1070,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
         for unit in markers {
             let path = format!("unit::{}::{}", name.to_snake_case(), unit.singular);
             w!(out, "    check_fixed::<{path}>();");
-            if fixed_parts(unit).is_some_and(|(_, _, pi)| pi == 0) {
+            if fixed_parts(qty, unit).is_some_and(|p| p.pi == 0) {
                 w!(out, "    check_fixed_rescale::<{path}>();");
             }
         }

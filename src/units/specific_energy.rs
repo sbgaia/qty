@@ -931,7 +931,7 @@ fixed_base!(SpecificEnergy, JoulePerKilogram);
 
 /// Unit markers for counting [`SpecificEnergy`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::specific_energy`](crate::unit::specific_energy). Affine units have no marker.
+/// Also available as [`unit::specific_energy`](crate::unit::specific_energy).
 pub mod unit {
     fixed_unit!(JoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::JoulePerKilogram, base JoulePerKilogram, 1 / 1, pi^0, from_joules_per_kilogram, as_joules_per_kilogram, additive);
     fixed_unit!(KilojoulePerKilogram: SpecificEnergy, SpecificEnergyUnit::KilojoulePerKilogram, base JoulePerKilogram, 1000 / 1, pi^0, from_kilojoules_per_kilogram, as_kilojoules_per_kilogram, additive);

@@ -372,7 +372,7 @@ fixed_base!(ElectricCurrent, Ampere);
 
 /// Unit markers for counting [`ElectricCurrent`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_current`](crate::unit::electric_current). Affine units have no marker.
+/// Also available as [`unit::electric_current`](crate::unit::electric_current).
 pub mod unit {
     fixed_unit!(Ampere: ElectricCurrent, ElectricCurrentUnit::Ampere, base Ampere, 1 / 1, pi^0, from_amperes, as_amperes, additive);
     fixed_unit!(Femtoampere: ElectricCurrent, ElectricCurrentUnit::Femtoampere, base Ampere, 1 / 1000000000000000, pi^0, from_femtoamperes, as_femtoamperes, additive);

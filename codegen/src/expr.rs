@@ -99,6 +99,15 @@ impl Const {
         ))
     }
 
+    /// `(numerator, denominator)` of a constant without π, when its reduced
+    /// fraction fits in `i128` / `u128`. Used for affine offsets.
+    pub fn exact_signed_parts(&self) -> Option<(i128, u128)> {
+        if self.pi != 0 {
+            return None;
+        }
+        Some((self.r.numer().to_i128()?, self.r.denom().to_u128()?))
+    }
+
     pub fn from_f64_exact(v: f64) -> Self {
         Self {
             r: BigRational::from_float(v).expect("finite"),

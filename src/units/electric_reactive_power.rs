@@ -237,7 +237,7 @@ fixed_base!(ElectricReactivePower, VoltampereReactive);
 
 /// Unit markers for counting [`ElectricReactivePower`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_reactive_power`](crate::unit::electric_reactive_power). Affine units have no marker.
+/// Also available as [`unit::electric_reactive_power`](crate::unit::electric_reactive_power).
 pub mod unit {
     fixed_unit!(VoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::VoltampereReactive, base VoltampereReactive, 1 / 1, pi^0, from_voltamperes_reactive, as_voltamperes_reactive, additive);
     fixed_unit!(KilovoltampereReactive: ElectricReactivePower, ElectricReactivePowerUnit::KilovoltampereReactive, base VoltampereReactive, 1000 / 1, pi^0, from_kilovoltamperes_reactive, as_kilovoltamperes_reactive, additive);

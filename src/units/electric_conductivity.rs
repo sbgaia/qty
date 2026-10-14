@@ -232,7 +232,7 @@ fixed_base!(ElectricConductivity, SiemensPerMeter);
 
 /// Unit markers for counting [`ElectricConductivity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_conductivity`](crate::unit::electric_conductivity). Affine units have no marker.
+/// Also available as [`unit::electric_conductivity`](crate::unit::electric_conductivity).
 pub mod unit {
     fixed_unit!(SiemensPerMeter: ElectricConductivity, ElectricConductivityUnit::SiemensPerMeter, base SiemensPerMeter, 1 / 1, pi^0, from_siemens_per_meter, as_siemens_per_meter, additive);
     fixed_unit!(SiemensPerInch: ElectricConductivity, ElectricConductivityUnit::SiemensPerInch, base SiemensPerMeter, 5000 / 127, pi^0, from_siemens_per_inch, as_siemens_per_inch, additive);

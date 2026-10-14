@@ -274,7 +274,7 @@ fixed_base!(AreaMomentOfInertia, MeterToTheFourth);
 
 /// Unit markers for counting [`AreaMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::area_moment_of_inertia`](crate::unit::area_moment_of_inertia). Affine units have no marker.
+/// Also available as [`unit::area_moment_of_inertia`](crate::unit::area_moment_of_inertia).
 pub mod unit {
     fixed_unit!(MeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MeterToTheFourth, base MeterToTheFourth, 1 / 1, pi^0, from_meters_to_the_fourth, as_meters_to_the_fourth, additive);
     fixed_unit!(DecimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::DecimeterToTheFourth, base MeterToTheFourth, 1 / 10000, pi^0, from_decimeters_to_the_fourth, as_decimeters_to_the_fourth, additive);

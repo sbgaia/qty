@@ -498,7 +498,7 @@ fixed_base!(Duration, Second);
 
 /// Unit markers for counting [`Duration`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::duration`](crate::unit::duration). Affine units have no marker.
+/// Also available as [`unit::duration`](crate::unit::duration).
 pub mod unit {
     fixed_unit!(Year365: Duration, DurationUnit::Year365, base Second, 31536000 / 1, pi^0, from_years365, as_years365, additive);
     fixed_unit!(Month30: Duration, DurationUnit::Month30, base Second, 2592000 / 1, pi^0, from_months30, as_months30, additive);

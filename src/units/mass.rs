@@ -962,7 +962,7 @@ fixed_base!(Mass, Kilogram);
 
 /// Unit markers for counting [`Mass`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass`](crate::unit::mass). Affine units have no marker.
+/// Also available as [`unit::mass`](crate::unit::mass).
 pub mod unit {
     fixed_unit!(Gram: Mass, MassUnit::Gram, base Kilogram, 1 / 1000, pi^0, from_grams, as_grams, additive);
     fixed_unit!(Femtogram: Mass, MassUnit::Femtogram, base Kilogram, 1 / 1000000000000000000, pi^0, from_femtograms, as_femtograms, additive);

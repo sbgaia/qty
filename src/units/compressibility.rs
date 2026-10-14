@@ -306,7 +306,7 @@ fixed_base!(Compressibility, InversePascal);
 
 /// Unit markers for counting [`Compressibility`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::compressibility`](crate::unit::compressibility). Affine units have no marker.
+/// Also available as [`unit::compressibility`](crate::unit::compressibility).
 pub mod unit {
     fixed_unit!(InversePascal: Compressibility, CompressibilityUnit::InversePascal, base InversePascal, 1 / 1, pi^0, from_inverse_pascals, as_inverse_pascals, additive);
     fixed_unit!(InverseKilopascal: Compressibility, CompressibilityUnit::InverseKilopascal, base InversePascal, 1 / 1000, pi^0, from_inverse_kilopascals, as_inverse_kilopascals, additive);

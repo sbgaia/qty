@@ -397,7 +397,7 @@ fixed_base!(Frequency, Hertz);
 
 /// Unit markers for counting [`Frequency`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::frequency`](crate::unit::frequency). Affine units have no marker.
+/// Also available as [`unit::frequency`](crate::unit::frequency).
 pub mod unit {
     fixed_unit!(Hertz: Frequency, FrequencyUnit::Hertz, base Hertz, 1 / 1, pi^0, from_hertz, as_hertz, additive);
     fixed_unit!(Microhertz: Frequency, FrequencyUnit::Microhertz, base Hertz, 1 / 1000000, pi^0, from_microhertz, as_microhertz, additive);

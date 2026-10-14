@@ -377,7 +377,7 @@ fixed_base!(DynamicViscosity, NewtonSecondPerMeterSquared);
 
 /// Unit markers for counting [`DynamicViscosity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity). Affine units have no marker.
+/// Also available as [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity).
 pub mod unit {
     fixed_unit!(NewtonSecondPerMeterSquared: DynamicViscosity, DynamicViscosityUnit::NewtonSecondPerMeterSquared, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_newton_seconds_per_meter_squared, as_newton_seconds_per_meter_squared, additive);
     fixed_unit!(PascalSecond: DynamicViscosity, DynamicViscosityUnit::PascalSecond, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_pascal_seconds, as_pascal_seconds, additive);

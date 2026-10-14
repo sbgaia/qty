@@ -531,7 +531,7 @@ fixed_base!(ForceChangeRate, NewtonPerSecond);
 
 /// Unit markers for counting [`ForceChangeRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::force_change_rate`](crate::unit::force_change_rate). Affine units have no marker.
+/// Also available as [`unit::force_change_rate`](crate::unit::force_change_rate).
 pub mod unit {
     fixed_unit!(NewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::NewtonPerMinute, base NewtonPerSecond, 1 / 60, pi^0, from_newtons_per_minute, as_newtons_per_minute, additive);
     fixed_unit!(DecanewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerMinute, base NewtonPerSecond, 1 / 6, pi^0, from_decanewtons_per_minute, as_decanewtons_per_minute, additive);

@@ -133,7 +133,7 @@ fixed_base!(Permeability, HenryPerMeter);
 
 /// Unit markers for counting [`Permeability`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::permeability`](crate::unit::permeability). Affine units have no marker.
+/// Also available as [`unit::permeability`](crate::unit::permeability).
 pub mod unit {
     fixed_unit!(HenryPerMeter: Permeability, PermeabilityUnit::HenryPerMeter, base HenryPerMeter, 1 / 1, pi^0, from_henries_per_meter, as_henries_per_meter, additive);
 }

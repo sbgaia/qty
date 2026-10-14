@@ -485,7 +485,7 @@ fixed_base!(RotationalSpeed, RadianPerSecond);
 
 /// Unit markers for counting [`RotationalSpeed`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::rotational_speed`](crate::unit::rotational_speed). Affine units have no marker.
+/// Also available as [`unit::rotational_speed`](crate::unit::rotational_speed).
 pub mod unit {
     fixed_unit!(RadianPerSecond: RotationalSpeed, RotationalSpeedUnit::RadianPerSecond, base RadianPerSecond, 1 / 1, pi^0, from_radians_per_second, as_radians_per_second, additive);
     fixed_unit!(NanoradianPerSecond: RotationalSpeed, RotationalSpeedUnit::NanoradianPerSecond, base RadianPerSecond, 1 / 1000000000, pi^0, from_nanoradians_per_second, as_nanoradians_per_second, additive);

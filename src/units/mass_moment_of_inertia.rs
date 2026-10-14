@@ -884,7 +884,7 @@ fixed_base!(MassMomentOfInertia, KilogramSquareMeter);
 
 /// Unit markers for counting [`MassMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass_moment_of_inertia`](crate::unit::mass_moment_of_inertia). Affine units have no marker.
+/// Also available as [`unit::mass_moment_of_inertia`](crate::unit::mass_moment_of_inertia).
 pub mod unit {
     fixed_unit!(GramSquareMeter: MassMomentOfInertia, MassMomentOfInertiaUnit::GramSquareMeter, base KilogramSquareMeter, 1 / 1000, pi^0, from_gram_square_meters, as_gram_square_meters, additive);
     fixed_unit!(MilligramSquareMeter: MassMomentOfInertia, MassMomentOfInertiaUnit::MilligramSquareMeter, base KilogramSquareMeter, 1 / 1000000, pi^0, from_milligram_square_meters, as_milligram_square_meters, additive);

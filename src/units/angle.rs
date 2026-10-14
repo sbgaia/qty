@@ -537,7 +537,7 @@ fixed_base!(Angle, Radian);
 
 /// Unit markers for counting [`Angle`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::angle`](crate::unit::angle). Affine units have no marker.
+/// Also available as [`unit::angle`](crate::unit::angle).
 pub mod unit {
     fixed_unit!(Radian: Angle, AngleUnit::Radian, base Radian, 1 / 1, pi^0, from_radians, as_radians, additive);
     fixed_unit!(Nanoradian: Angle, AngleUnit::Nanoradian, base Radian, 1 / 1000000000, pi^0, from_nanoradians, as_nanoradians, additive);

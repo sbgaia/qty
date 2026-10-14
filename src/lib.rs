@@ -136,10 +136,12 @@
 //! ```
 //!
 //! Units are in [`unit`](mod@unit), one module per quantity (`unit::duration::Nanosecond`,
-//! `unit::mass::Gram`, …). Every linear unit has a marker; affine units such
-//! as °C do not. Markers of absolute temperatures (kelvin, °R) can be
-//! compared, converted and rounded but not added — they implement
-//! [`FixedUnit`] but not [`AdditiveUnit`]. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
+//! `unit::mass::Gram`, …). Every linear unit has a marker, and so do the
+//! affine units of point quantities: a temperature sensor reporting
+//! millidegrees Celsius is a `Fixed<unit::temperature::MillidegreeCelsius, i32>`.
+//! Point markers ([`PointUnit`]) convert and compare exactly across scales
+//! (20 °C = 20 000 m°C; 300 K = 26 850 m°C), and their differences are
+//! counts of the matching delta unit — see [`PointUnit`]. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
 //! unit, which also get the cross-quantity operators) convert into each other
 //! with `From`.
 //!
@@ -1187,7 +1189,7 @@ macro_rules! cross_recip {
     };
 }
 
-/// Declares the [`FixedUnit`] marker for one linear unit.
+/// Declares the [`FixedUnit`] marker for one unit.
 macro_rules! fixed_unit {
     // Units of ordinary quantities: counts can be added.
     ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
@@ -1195,13 +1197,59 @@ macro_rules! fixed_unit {
         fixed_unit!($M: $Q, $U::$V, base $B, $num / $den, pi^$pi, $from, $as);
         impl $crate::AdditiveUnit for $M {}
     };
+    // Units of point quantities: differences are counts of `$delta`.
     ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
-     $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident) => {
+     $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident
+     $(, offset($on:expr, $od:expr))?, point $delta:path) => {
+        fixed_unit!($M: $Q, $U::$V, base $B, $num / $den, pi^$pi, $from, $as $(, offset($on, $od))?);
+
+        impl $crate::PointUnit for $M {
+            type Delta = $delta;
+        }
+        /// `point - point` is a difference, in the delta unit of the same scale.
+        impl<V: $crate::PointUnit<Unit = super::$U>, I: $crate::Integer>
+            core::ops::Sub<$crate::Fixed<V, I>> for $crate::Fixed<$M, I>
+        {
+            type Output = $crate::Fixed<$delta, I>;
+            #[inline(always)]
+            fn sub(self, rhs: $crate::Fixed<V, I>) -> Self::Output {
+                $crate::Fixed::new(self.count() - rhs.count_in::<$M>())
+            }
+        }
+        impl<D: $crate::AdditiveUnit<Unit = <$delta as $crate::FixedUnit>::Unit>, I: $crate::Integer>
+            core::ops::Add<$crate::Fixed<D, I>> for $crate::Fixed<$M, I>
+        {
+            type Output = Self;
+            #[inline(always)]
+            fn add(self, rhs: $crate::Fixed<D, I>) -> Self {
+                $crate::Fixed::new(self.count() + rhs.count_in::<$delta>())
+            }
+        }
+        impl<D: $crate::AdditiveUnit<Unit = <$delta as $crate::FixedUnit>::Unit>, I: $crate::Integer>
+            core::ops::AddAssign<$crate::Fixed<D, I>> for $crate::Fixed<$M, I>
+        {
+            #[inline(always)]
+            fn add_assign(&mut self, rhs: $crate::Fixed<D, I>) {
+                *self = *self + rhs;
+            }
+        }
+        impl<D: $crate::AdditiveUnit<Unit = <$delta as $crate::FixedUnit>::Unit>, I: $crate::Integer>
+            core::ops::SubAssign<$crate::Fixed<D, I>> for $crate::Fixed<$M, I>
+        {
+            #[inline(always)]
+            fn sub_assign(&mut self, rhs: $crate::Fixed<D, I>) {
+                *self = self.sub_delta(rhs);
+            }
+        }
+    };
+    ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
+     $num:literal / $den:literal, pi^$pi:literal, $from:ident, $as:ident
+     $(, offset($on:expr, $od:expr))?) => {
         #[doc = concat!(
-                    "Marker for counting [`", stringify!($Q), "`](super::", stringify!($Q),
-                    ") in [`", stringify!($V), "`](super::", stringify!($U), "::", stringify!($V),
-                    ") with [`Fixed`](crate::Fixed)."
-                )]
+            "Marker for counting [`", stringify!($Q), "`](super::", stringify!($Q),
+            ") in [`", stringify!($V), "`](super::", stringify!($U), "::", stringify!($V),
+            ") with [`Fixed`](crate::Fixed)."
+        )]
         #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
         pub struct $M;
 
@@ -1215,6 +1263,10 @@ macro_rules! fixed_unit {
             const NUM: u128 = $num;
             const DEN: u128 = $den;
             const PI_POW: i32 = $pi;
+            $(
+                const OFFSET_NUM: i128 = $on;
+                const OFFSET_DEN: u128 = $od;
+            )?
             #[inline(always)]
             fn to_quantity<F: $crate::Float>(count: F) -> super::$Q<F> {
                 super::$Q::$from(count)
@@ -1256,7 +1308,9 @@ pub trait HasFixedBase {
 }
 
 mod fixed;
-pub use fixed::{AdditiveUnit, Fixed, FixedUnit, Integer, Ordered, RoundError, Rounding, ToFloat};
+pub use fixed::{
+    AdditiveUnit, Fixed, FixedUnit, Integer, Ordered, PointUnit, RoundError, Rounding, ToFloat,
+};
 
 // Generated quantity modules — re-exports each quantity and its unit enum.
 pub mod units;

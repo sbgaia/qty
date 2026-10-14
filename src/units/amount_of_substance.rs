@@ -588,7 +588,7 @@ fixed_base!(AmountOfSubstance, Mole);
 
 /// Unit markers for counting [`AmountOfSubstance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::amount_of_substance`](crate::unit::amount_of_substance). Affine units have no marker.
+/// Also available as [`unit::amount_of_substance`](crate::unit::amount_of_substance).
 pub mod unit {
     fixed_unit!(Mole: AmountOfSubstance, AmountOfSubstanceUnit::Mole, base Mole, 1 / 1, pi^0, from_moles, as_moles, additive);
     fixed_unit!(Femtomole: AmountOfSubstance, AmountOfSubstanceUnit::Femtomole, base Mole, 1 / 1000000000000000, pi^0, from_femtomoles, as_femtomoles, additive);

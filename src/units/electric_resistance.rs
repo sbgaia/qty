@@ -345,7 +345,7 @@ fixed_base!(ElectricResistance, Ohm);
 
 /// Unit markers for counting [`ElectricResistance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_resistance`](crate::unit::electric_resistance). Affine units have no marker.
+/// Also available as [`unit::electric_resistance`](crate::unit::electric_resistance).
 pub mod unit {
     fixed_unit!(Ohm: ElectricResistance, ElectricResistanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms, additive);
     fixed_unit!(Nanoohm: ElectricResistance, ElectricResistanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms, additive);

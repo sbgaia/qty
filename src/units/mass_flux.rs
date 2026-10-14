@@ -465,7 +465,7 @@ fixed_base!(MassFlux, KilogramPerSecondPerSquareMeter);
 
 /// Unit markers for counting [`MassFlux`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass_flux`](crate::unit::mass_flux). Affine units have no marker.
+/// Also available as [`unit::mass_flux`](crate::unit::mass_flux).
 pub mod unit {
     fixed_unit!(GramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1000, pi^0, from_grams_per_second_per_square_meter, as_grams_per_second_per_square_meter, additive);
     fixed_unit!(KilogramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_second_per_square_meter, as_kilograms_per_second_per_square_meter, additive);

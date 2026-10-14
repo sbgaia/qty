@@ -490,7 +490,7 @@ fixed_base!(Area, SquareMeter);
 
 /// Unit markers for counting [`Area`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::area`](crate::unit::area). Affine units have no marker.
+/// Also available as [`unit::area`](crate::unit::area).
 pub mod unit {
     fixed_unit!(SquareKilometer: Area, AreaUnit::SquareKilometer, base SquareMeter, 1000000 / 1, pi^0, from_square_kilometers, as_square_kilometers, additive);
     fixed_unit!(SquareMeter: Area, AreaUnit::SquareMeter, base SquareMeter, 1 / 1, pi^0, from_square_meters, as_square_meters, additive);

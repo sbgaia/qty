@@ -1018,7 +1018,7 @@ fixed_base!(MassFlow, GramPerSecond);
 
 /// Unit markers for counting [`MassFlow`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass_flow`](crate::unit::mass_flow). Affine units have no marker.
+/// Also available as [`unit::mass_flow`](crate::unit::mass_flow).
 pub mod unit {
     fixed_unit!(GramPerSecond: MassFlow, MassFlowUnit::GramPerSecond, base GramPerSecond, 1 / 1, pi^0, from_grams_per_second, as_grams_per_second, additive);
     fixed_unit!(NanogramPerSecond: MassFlow, MassFlowUnit::NanogramPerSecond, base GramPerSecond, 1 / 1000000000, pi^0, from_nanograms_per_second, as_nanograms_per_second, additive);

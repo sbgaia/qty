@@ -296,7 +296,7 @@ fixed_base!(RadiationEquivalentDose, Sievert);
 
 /// Unit markers for counting [`RadiationEquivalentDose`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radiation_equivalent_dose`](crate::unit::radiation_equivalent_dose). Affine units have no marker.
+/// Also available as [`unit::radiation_equivalent_dose`](crate::unit::radiation_equivalent_dose).
 pub mod unit {
     fixed_unit!(Sievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Sievert, base Sievert, 1 / 1, pi^0, from_sieverts, as_sieverts, additive);
     fixed_unit!(Nanosievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Nanosievert, base Sievert, 1 / 1000000000, pi^0, from_nanosieverts, as_nanosieverts, additive);

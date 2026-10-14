@@ -201,7 +201,7 @@ fixed_base!(ElectricSurfaceChargeDensity, CoulombPerSquareMeter);
 
 /// Unit markers for counting [`ElectricSurfaceChargeDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_surface_charge_density`](crate::unit::electric_surface_charge_density). Affine units have no marker.
+/// Also available as [`unit::electric_surface_charge_density`](crate::unit::electric_surface_charge_density).
 pub mod unit {
     fixed_unit!(CoulombPerSquareMeter: ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter, base CoulombPerSquareMeter, 1 / 1, pi^0, from_coulombs_per_square_meter, as_coulombs_per_square_meter, additive);
     fixed_unit!(CoulombPerSquareCentimeter: ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter, base CoulombPerSquareMeter, 10000 / 1, pi^0, from_coulombs_per_square_centimeter, as_coulombs_per_square_centimeter, additive);

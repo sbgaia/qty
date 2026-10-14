@@ -1182,7 +1182,7 @@ fixed_base!(BitRate, BitPerSecond);
 
 /// Unit markers for counting [`BitRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::bit_rate`](crate::unit::bit_rate). Affine units have no marker.
+/// Also available as [`unit::bit_rate`](crate::unit::bit_rate).
 pub mod unit {
     fixed_unit!(BitPerSecond: BitRate, BitRateUnit::BitPerSecond, base BitPerSecond, 1 / 1, pi^0, from_bits_per_second, as_bits_per_second, additive);
     fixed_unit!(KilobitPerSecond: BitRate, BitRateUnit::KilobitPerSecond, base BitPerSecond, 1000 / 1, pi^0, from_kilobits_per_second, as_kilobits_per_second, additive);

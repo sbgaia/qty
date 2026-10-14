@@ -449,7 +449,7 @@ fixed_base!(EnergyDensity, JoulePerCubicMeter);
 
 /// Unit markers for counting [`EnergyDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::energy_density`](crate::unit::energy_density). Affine units have no marker.
+/// Also available as [`unit::energy_density`](crate::unit::energy_density).
 pub mod unit {
     fixed_unit!(JoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::JoulePerCubicMeter, base JoulePerCubicMeter, 1 / 1, pi^0, from_joules_per_cubic_meter, as_joules_per_cubic_meter, additive);
     fixed_unit!(KilojoulePerCubicMeter: EnergyDensity, EnergyDensityUnit::KilojoulePerCubicMeter, base JoulePerCubicMeter, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter, as_kilojoules_per_cubic_meter, additive);

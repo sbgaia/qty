@@ -313,7 +313,7 @@ fixed_base!(Entropy, JoulePerKelvin);
 
 /// Unit markers for counting [`Entropy`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::entropy`](crate::unit::entropy). Affine units have no marker.
+/// Also available as [`unit::entropy`](crate::unit::entropy).
 pub mod unit {
     fixed_unit!(JoulePerKelvin: Entropy, EntropyUnit::JoulePerKelvin, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_kelvin, as_joules_per_kelvin, additive);
     fixed_unit!(KilojoulePerKelvin: Entropy, EntropyUnit::KilojoulePerKelvin, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_kelvin, as_kilojoules_per_kelvin, additive);

@@ -505,7 +505,7 @@ fixed_base!(ElectricConductance, Siemens);
 
 /// Unit markers for counting [`ElectricConductance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_conductance`](crate::unit::electric_conductance). Affine units have no marker.
+/// Also available as [`unit::electric_conductance`](crate::unit::electric_conductance).
 pub mod unit {
     fixed_unit!(Siemens: ElectricConductance, ElectricConductanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricConductance, ElectricConductanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

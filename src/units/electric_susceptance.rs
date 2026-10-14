@@ -505,7 +505,7 @@ fixed_base!(ElectricSusceptance, Siemens);
 
 /// Unit markers for counting [`ElectricSusceptance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_susceptance`](crate::unit::electric_susceptance). Affine units have no marker.
+/// Also available as [`unit::electric_susceptance`](crate::unit::electric_susceptance).
 pub mod unit {
     fixed_unit!(Siemens: ElectricSusceptance, ElectricSusceptanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricSusceptance, ElectricSusceptanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

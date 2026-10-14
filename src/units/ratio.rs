@@ -262,7 +262,7 @@ fixed_base!(Ratio, DecimalFraction);
 
 /// Unit markers for counting [`Ratio`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::ratio`](crate::unit::ratio). Affine units have no marker.
+/// Also available as [`unit::ratio`](crate::unit::ratio).
 pub mod unit {
     fixed_unit!(DecimalFraction: Ratio, RatioUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(Percent: Ratio, RatioUnit::Percent, base DecimalFraction, 1 / 100, pi^0, from_percent, as_percent, additive);

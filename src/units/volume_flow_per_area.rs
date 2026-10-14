@@ -164,7 +164,7 @@ fixed_base!(VolumeFlowPerArea, CubicMeterPerSecondPerSquareMeter);
 
 /// Unit markers for counting [`VolumeFlowPerArea`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume_flow_per_area`](crate::unit::volume_flow_per_area). Affine units have no marker.
+/// Also available as [`unit::volume_flow_per_area`](crate::unit::volume_flow_per_area).
 pub mod unit {
     fixed_unit!(CubicMeterPerSecondPerSquareMeter: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter, base CubicMeterPerSecondPerSquareMeter, 1 / 1, pi^0, from_cubic_meters_per_second_per_square_meter, as_cubic_meters_per_second_per_square_meter, additive);
     fixed_unit!(CubicFootPerMinutePerSquareFoot: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot, base CubicMeterPerSecondPerSquareMeter, 127 / 25000, pi^0, from_cubic_feet_per_minute_per_square_foot, as_cubic_feet_per_minute_per_square_foot, additive);

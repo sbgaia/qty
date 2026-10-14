@@ -126,7 +126,7 @@ fixed_base!(Turbidity, NTU);
 
 /// Unit markers for counting [`Turbidity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::turbidity`](crate::unit::turbidity). Affine units have no marker.
+/// Also available as [`unit::turbidity`](crate::unit::turbidity).
 pub mod unit {
     fixed_unit!(NTU: Turbidity, TurbidityUnit::NTU, base NTU, 1 / 1, pi^0, from_ntu, as_ntu, additive);
 }

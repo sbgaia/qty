@@ -394,7 +394,7 @@ fixed_base!(Luminance, CandelaPerSquareMeter);
 
 /// Unit markers for counting [`Luminance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::luminance`](crate::unit::luminance). Affine units have no marker.
+/// Also available as [`unit::luminance`](crate::unit::luminance).
 pub mod unit {
     fixed_unit!(CandelaPerSquareMeter: Luminance, LuminanceUnit::CandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1, pi^0, from_candelas_per_square_meter, as_candelas_per_square_meter, additive);
     fixed_unit!(NanocandelaPerSquareMeter: Luminance, LuminanceUnit::NanocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000000, pi^0, from_nanocandelas_per_square_meter, as_nanocandelas_per_square_meter, additive);

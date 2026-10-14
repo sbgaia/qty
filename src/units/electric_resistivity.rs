@@ -506,7 +506,7 @@ fixed_base!(ElectricResistivity, OhmMeter);
 
 /// Unit markers for counting [`ElectricResistivity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_resistivity`](crate::unit::electric_resistivity). Affine units have no marker.
+/// Also available as [`unit::electric_resistivity`](crate::unit::electric_resistivity).
 pub mod unit {
     fixed_unit!(OhmMeter: ElectricResistivity, ElectricResistivityUnit::OhmMeter, base OhmMeter, 1 / 1, pi^0, from_ohm_meters, as_ohm_meters, additive);
     fixed_unit!(PicoohmMeter: ElectricResistivity, ElectricResistivityUnit::PicoohmMeter, base OhmMeter, 1 / 1000000000000, pi^0, from_picoohm_meters, as_picoohm_meters, additive);

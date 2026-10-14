@@ -799,7 +799,7 @@ fixed_base!(DoseAreaProduct, GraySquareMeter);
 
 /// Unit markers for counting [`DoseAreaProduct`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::dose_area_product`](crate::unit::dose_area_product). Affine units have no marker.
+/// Also available as [`unit::dose_area_product`](crate::unit::dose_area_product).
 pub mod unit {
     fixed_unit!(GraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareMeter, base GraySquareMeter, 1 / 1, pi^0, from_gray_square_meters, as_gray_square_meters, additive);
     fixed_unit!(MicrograySquareMeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMeter, base GraySquareMeter, 1 / 1000000, pi^0, from_microgray_square_meters, as_microgray_square_meters, additive);

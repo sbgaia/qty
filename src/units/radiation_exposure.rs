@@ -342,7 +342,7 @@ fixed_base!(RadiationExposure, CoulombPerKilogram);
 
 /// Unit markers for counting [`RadiationExposure`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radiation_exposure`](crate::unit::radiation_exposure). Affine units have no marker.
+/// Also available as [`unit::radiation_exposure`](crate::unit::radiation_exposure).
 pub mod unit {
     fixed_unit!(CoulombPerKilogram: RadiationExposure, RadiationExposureUnit::CoulombPerKilogram, base CoulombPerKilogram, 1 / 1, pi^0, from_coulombs_per_kilogram, as_coulombs_per_kilogram, additive);
     fixed_unit!(PicocoulombPerKilogram: RadiationExposure, RadiationExposureUnit::PicocoulombPerKilogram, base CoulombPerKilogram, 1 / 1000000000000, pi^0, from_picocoulombs_per_kilogram, as_picocoulombs_per_kilogram, additive);

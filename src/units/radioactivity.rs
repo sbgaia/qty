@@ -917,7 +917,7 @@ fixed_base!(Radioactivity, Becquerel);
 
 /// Unit markers for counting [`Radioactivity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radioactivity`](crate::unit::radioactivity). Affine units have no marker.
+/// Also available as [`unit::radioactivity`](crate::unit::radioactivity).
 pub mod unit {
     fixed_unit!(Becquerel: Radioactivity, RadioactivityUnit::Becquerel, base Becquerel, 1 / 1, pi^0, from_becquerels, as_becquerels, additive);
     fixed_unit!(Picobecquerel: Radioactivity, RadioactivityUnit::Picobecquerel, base Becquerel, 1 / 1000000000000, pi^0, from_picobecquerels, as_picobecquerels, additive);

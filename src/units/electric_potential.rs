@@ -289,7 +289,7 @@ fixed_base!(ElectricPotential, Volt);
 
 /// Unit markers for counting [`ElectricPotential`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_potential`](crate::unit::electric_potential). Affine units have no marker.
+/// Also available as [`unit::electric_potential`](crate::unit::electric_potential).
 pub mod unit {
     fixed_unit!(Volt: ElectricPotential, ElectricPotentialUnit::Volt, base Volt, 1 / 1, pi^0, from_volts, as_volts, additive);
     fixed_unit!(Nanovolt: ElectricPotential, ElectricPotentialUnit::Nanovolt, base Volt, 1 / 1000000000, pi^0, from_nanovolts, as_nanovolts, additive);

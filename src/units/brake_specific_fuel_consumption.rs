@@ -198,7 +198,7 @@ fixed_base!(BrakeSpecificFuelConsumption, KilogramPerJoule);
 
 /// Unit markers for counting [`BrakeSpecificFuelConsumption`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::brake_specific_fuel_consumption`](crate::unit::brake_specific_fuel_consumption). Affine units have no marker.
+/// Also available as [`unit::brake_specific_fuel_consumption`](crate::unit::brake_specific_fuel_consumption).
 pub mod unit {
     fixed_unit!(GramPerKiloWattHour: BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour, base KilogramPerJoule, 1 / 3600000000, pi^0, from_grams_per_kilo_watt_hour, as_grams_per_kilo_watt_hour, additive);
     fixed_unit!(KilogramPerJoule: BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit::KilogramPerJoule, base KilogramPerJoule, 1 / 1, pi^0, from_kilograms_per_joule, as_kilograms_per_joule, additive);

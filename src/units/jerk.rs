@@ -407,7 +407,7 @@ fixed_base!(Jerk, MeterPerSecondCubed);
 
 /// Unit markers for counting [`Jerk`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::jerk`](crate::unit::jerk). Affine units have no marker.
+/// Also available as [`unit::jerk`](crate::unit::jerk).
 pub mod unit {
     fixed_unit!(MeterPerSecondCubed: Jerk, JerkUnit::MeterPerSecondCubed, base MeterPerSecondCubed, 1 / 1, pi^0, from_meters_per_second_cubed, as_meters_per_second_cubed, additive);
     fixed_unit!(NanometerPerSecondCubed: Jerk, JerkUnit::NanometerPerSecondCubed, base MeterPerSecondCubed, 1 / 1000000000, pi^0, from_nanometers_per_second_cubed, as_nanometers_per_second_cubed, additive);

@@ -1155,7 +1155,7 @@ fixed_base!(RotationalStiffness, NewtonMeterPerRadian);
 
 /// Unit markers for counting [`RotationalStiffness`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::rotational_stiffness`](crate::unit::rotational_stiffness). Affine units have no marker.
+/// Also available as [`unit::rotational_stiffness`](crate::unit::rotational_stiffness).
 pub mod unit {
     fixed_unit!(NewtonMeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::NewtonMeterPerRadian, base NewtonMeterPerRadian, 1 / 1, pi^0, from_newton_meters_per_radian, as_newton_meters_per_radian, additive);
     fixed_unit!(KilonewtonMeterPerRadian: RotationalStiffness, RotationalStiffnessUnit::KilonewtonMeterPerRadian, base NewtonMeterPerRadian, 1000 / 1, pi^0, from_kilonewton_meters_per_radian, as_kilonewton_meters_per_radian, additive);

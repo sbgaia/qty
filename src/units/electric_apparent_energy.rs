@@ -209,7 +209,7 @@ fixed_base!(ElectricApparentEnergy, VoltampereHour);
 
 /// Unit markers for counting [`ElectricApparentEnergy`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_apparent_energy`](crate::unit::electric_apparent_energy). Affine units have no marker.
+/// Also available as [`unit::electric_apparent_energy`](crate::unit::electric_apparent_energy).
 pub mod unit {
     fixed_unit!(VoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::VoltampereHour, base VoltampereHour, 1 / 1, pi^0, from_voltampere_hours, as_voltampere_hours, additive);
     fixed_unit!(KilovoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::KilovoltampereHour, base VoltampereHour, 1000 / 1, pi^0, from_kilovoltampere_hours, as_kilovoltampere_hours, additive);

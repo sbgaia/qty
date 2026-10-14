@@ -1017,7 +1017,7 @@ fixed_base!(Speed, MeterPerSecond);
 
 /// Unit markers for counting [`Speed`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::speed`](crate::unit::speed). Affine units have no marker.
+/// Also available as [`unit::speed`](crate::unit::speed).
 pub mod unit {
     fixed_unit!(MeterPerSecond: Speed, SpeedUnit::MeterPerSecond, base MeterPerSecond, 1 / 1, pi^0, from_meters_per_second, as_meters_per_second, additive);
     fixed_unit!(NanometerPerSecond: Speed, SpeedUnit::NanometerPerSecond, base MeterPerSecond, 1 / 1000000000, pi^0, from_nanometers_per_second, as_nanometers_per_second, additive);

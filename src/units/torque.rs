@@ -868,7 +868,7 @@ fixed_base!(Torque, NewtonMeter);
 
 /// Unit markers for counting [`Torque`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::torque`](crate::unit::torque). Affine units have no marker.
+/// Also available as [`unit::torque`](crate::unit::torque).
 pub mod unit {
     fixed_unit!(NewtonMillimeter: Torque, TorqueUnit::NewtonMillimeter, base NewtonMeter, 1 / 1000, pi^0, from_newton_millimeters, as_newton_millimeters, additive);
     fixed_unit!(KilonewtonMillimeter: Torque, TorqueUnit::KilonewtonMillimeter, base NewtonMeter, 1 / 1, pi^0, from_kilonewton_millimeters, as_kilonewton_millimeters, additive);

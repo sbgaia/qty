@@ -478,7 +478,7 @@ fixed_base!(Impulse, NewtonSecond);
 
 /// Unit markers for counting [`Impulse`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::impulse`](crate::unit::impulse). Affine units have no marker.
+/// Also available as [`unit::impulse`](crate::unit::impulse).
 pub mod unit {
     fixed_unit!(KilogramMeterPerSecond: Impulse, ImpulseUnit::KilogramMeterPerSecond, base NewtonSecond, 1 / 1, pi^0, from_kilogram_meters_per_second, as_kilogram_meters_per_second, additive);
     fixed_unit!(NewtonSecond: Impulse, ImpulseUnit::NewtonSecond, base NewtonSecond, 1 / 1, pi^0, from_newton_seconds, as_newton_seconds, additive);

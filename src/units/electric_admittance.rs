@@ -505,7 +505,7 @@ fixed_base!(ElectricAdmittance, Siemens);
 
 /// Unit markers for counting [`ElectricAdmittance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_admittance`](crate::unit::electric_admittance). Affine units have no marker.
+/// Also available as [`unit::electric_admittance`](crate::unit::electric_admittance).
 pub mod unit {
     fixed_unit!(Siemens: ElectricAdmittance, ElectricAdmittanceUnit::Siemens, base Siemens, 1 / 1, pi^0, from_siemens, as_siemens, additive);
     fixed_unit!(Nanosiemens: ElectricAdmittance, ElectricAdmittanceUnit::Nanosiemens, base Siemens, 1 / 1000000000, pi^0, from_nanosiemens, as_nanosiemens, additive);

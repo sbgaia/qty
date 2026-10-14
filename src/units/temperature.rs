@@ -415,9 +415,15 @@ fixed_base!(Temperature, Kelvin);
 
 /// Unit markers for counting [`Temperature`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature`](crate::unit::temperature). Affine units have no marker.
+/// Also available as [`unit::temperature`](crate::unit::temperature).
 pub mod unit {
-    fixed_unit!(Kelvin: Temperature, TemperatureUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins);
-    fixed_unit!(DegreeRankine: Temperature, TemperatureUnit::DegreeRankine, base Kelvin, 5 / 9, pi^0, from_degrees_rankine, as_degrees_rankine);
+    fixed_unit!(Kelvin: Temperature, TemperatureUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins, point crate::units::temperature_delta::unit::Kelvin);
+    fixed_unit!(DegreeCelsius: Temperature, TemperatureUnit::DegreeCelsius, base Kelvin, 1 / 1, pi^0, from_degrees_celsius, as_degrees_celsius, offset(5463, 20), point crate::units::temperature_delta::unit::DegreeCelsius);
+    fixed_unit!(MillidegreeCelsius: Temperature, TemperatureUnit::MillidegreeCelsius, base Kelvin, 1 / 1000, pi^0, from_millidegrees_celsius, as_millidegrees_celsius, offset(5463, 20), point crate::units::temperature_delta::unit::MillidegreeCelsius);
+    fixed_unit!(DegreeFahrenheit: Temperature, TemperatureUnit::DegreeFahrenheit, base Kelvin, 5 / 9, pi^0, from_degrees_fahrenheit, as_degrees_fahrenheit, offset(45967, 180), point crate::units::temperature_delta::unit::DegreeFahrenheit);
+    fixed_unit!(DegreeNewton: Temperature, TemperatureUnit::DegreeNewton, base Kelvin, 100 / 33, pi^0, from_degrees_newton, as_degrees_newton, offset(5463, 20), point crate::units::temperature_delta::unit::DegreeNewton);
+    fixed_unit!(DegreeRankine: Temperature, TemperatureUnit::DegreeRankine, base Kelvin, 5 / 9, pi^0, from_degrees_rankine, as_degrees_rankine, point crate::units::temperature_delta::unit::DegreeRankine);
+    fixed_unit!(DegreeReaumur: Temperature, TemperatureUnit::DegreeReaumur, base Kelvin, 5 / 4, pi^0, from_degrees_reaumur, as_degrees_reaumur, offset(5463, 20), point crate::units::temperature_delta::unit::DegreeReaumur);
+    fixed_unit!(DegreeRoemer: Temperature, TemperatureUnit::DegreeRoemer, base Kelvin, 40 / 21, pi^0, from_degrees_roemer, as_degrees_roemer, offset(36241, 140), point crate::units::temperature_delta::unit::DegreeRoemer);
     fixed_unit!(SolarTemperature: Temperature, TemperatureUnit::SolarTemperature, base Kelvin, 5778 / 1, pi^0, from_solar_temperatures, as_solar_temperatures);
 }

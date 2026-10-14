@@ -278,7 +278,7 @@ fixed_base!(WarpingMomentOfInertia, MeterToTheSixth);
 
 /// Unit markers for counting [`WarpingMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia). Affine units have no marker.
+/// Also available as [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia).
 pub mod unit {
     fixed_unit!(MeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MeterToTheSixth, base MeterToTheSixth, 1 / 1, pi^0, from_meters_to_the_sixth, as_meters_to_the_sixth, additive);
     fixed_unit!(DecimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::DecimeterToTheSixth, base MeterToTheSixth, 1 / 1000000, pi^0, from_decimeters_to_the_sixth, as_decimeters_to_the_sixth, additive);

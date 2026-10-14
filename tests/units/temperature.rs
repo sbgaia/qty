@@ -365,8 +365,20 @@ fn solar_temperatures() {
 fn fixed_units() {
     check_fixed::<unit::temperature::Kelvin>();
     check_fixed_rescale::<unit::temperature::Kelvin>();
+    check_fixed::<unit::temperature::DegreeCelsius>();
+    check_fixed_rescale::<unit::temperature::DegreeCelsius>();
+    check_fixed::<unit::temperature::MillidegreeCelsius>();
+    check_fixed_rescale::<unit::temperature::MillidegreeCelsius>();
+    check_fixed::<unit::temperature::DegreeFahrenheit>();
+    check_fixed_rescale::<unit::temperature::DegreeFahrenheit>();
+    check_fixed::<unit::temperature::DegreeNewton>();
+    check_fixed_rescale::<unit::temperature::DegreeNewton>();
     check_fixed::<unit::temperature::DegreeRankine>();
     check_fixed_rescale::<unit::temperature::DegreeRankine>();
+    check_fixed::<unit::temperature::DegreeReaumur>();
+    check_fixed_rescale::<unit::temperature::DegreeReaumur>();
+    check_fixed::<unit::temperature::DegreeRoemer>();
+    check_fixed_rescale::<unit::temperature::DegreeRoemer>();
     check_fixed::<unit::temperature::SolarTemperature>();
     check_fixed_rescale::<unit::temperature::SolarTemperature>();
 }

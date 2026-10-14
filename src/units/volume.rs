@@ -1623,7 +1623,7 @@ fixed_base!(Volume, CubicMeter);
 
 /// Unit markers for counting [`Volume`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume`](crate::unit::volume). Affine units have no marker.
+/// Also available as [`unit::volume`](crate::unit::volume).
 pub mod unit {
     fixed_unit!(Liter: Volume, VolumeUnit::Liter, base CubicMeter, 1 / 1000, pi^0, from_liters, as_liters, additive);
     fixed_unit!(Nanoliter: Volume, VolumeUnit::Nanoliter, base CubicMeter, 1 / 1000000000000, pi^0, from_nanoliters, as_nanoliters, additive);

@@ -511,7 +511,7 @@ fixed_base!(Luminosity, Watt);
 
 /// Unit markers for counting [`Luminosity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::luminosity`](crate::unit::luminosity). Affine units have no marker.
+/// Also available as [`unit::luminosity`](crate::unit::luminosity).
 pub mod unit {
     fixed_unit!(Watt: Luminosity, LuminosityUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
     fixed_unit!(Femtowatt: Luminosity, LuminosityUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);

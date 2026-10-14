@@ -256,7 +256,7 @@ fixed_base!(AreaDensity, KilogramPerSquareMeter);
 
 /// Unit markers for counting [`AreaDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::area_density`](crate::unit::area_density). Affine units have no marker.
+/// Also available as [`unit::area_density`](crate::unit::area_density).
 pub mod unit {
     fixed_unit!(KilogramPerSquareMeter: AreaDensity, AreaDensityUnit::KilogramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_square_meter, as_kilograms_per_square_meter, additive);
     fixed_unit!(GramPerSquareMeter: AreaDensity, AreaDensityUnit::GramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1000, pi^0, from_grams_per_square_meter, as_grams_per_square_meter, additive);

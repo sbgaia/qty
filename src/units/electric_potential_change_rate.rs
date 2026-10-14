@@ -691,7 +691,7 @@ fixed_base!(ElectricPotentialChangeRate, VoltPerSecond);
 
 /// Unit markers for counting [`ElectricPotentialChangeRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_potential_change_rate`](crate::unit::electric_potential_change_rate). Affine units have no marker.
+/// Also available as [`unit::electric_potential_change_rate`](crate::unit::electric_potential_change_rate).
 pub mod unit {
     fixed_unit!(VoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::VoltPerSecond, base VoltPerSecond, 1 / 1, pi^0, from_volts_per_second, as_volts_per_second, additive);
     fixed_unit!(MicrovoltPerSecond: ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit::MicrovoltPerSecond, base VoltPerSecond, 1 / 1000000, pi^0, from_microvolts_per_second, as_microvolts_per_second, additive);

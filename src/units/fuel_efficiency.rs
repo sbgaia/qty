@@ -216,7 +216,7 @@ fixed_base!(FuelEfficiency, KilometerPerLiter);
 
 /// Unit markers for counting [`FuelEfficiency`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::fuel_efficiency`](crate::unit::fuel_efficiency). Affine units have no marker.
+/// Also available as [`unit::fuel_efficiency`](crate::unit::fuel_efficiency).
 pub mod unit {
     fixed_unit!(MilePerUsGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUsGallon, base KilometerPerLiter, 48000 / 112903, pi^0, from_miles_per_us_gallon, as_miles_per_us_gallon, additive);
     fixed_unit!(MilePerUkGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUkGallon, base KilometerPerLiter, 804672 / 2273045, pi^0, from_miles_per_uk_gallon, as_miles_per_uk_gallon, additive);

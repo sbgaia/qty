@@ -699,7 +699,7 @@ fixed_base!(FluidResistance, PascalSecondPerCubicMeter);
 
 /// Unit markers for counting [`FluidResistance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::fluid_resistance`](crate::unit::fluid_resistance). Affine units have no marker.
+/// Also available as [`unit::fluid_resistance`](crate::unit::fluid_resistance).
 pub mod unit {
     fixed_unit!(PascalSecondPerLiter: FluidResistance, FluidResistanceUnit::PascalSecondPerLiter, base PascalSecondPerCubicMeter, 1000 / 1, pi^0, from_pascal_seconds_per_liter, as_pascal_seconds_per_liter, additive);
     fixed_unit!(PascalMinutePerLiter: FluidResistance, FluidResistanceUnit::PascalMinutePerLiter, base PascalSecondPerCubicMeter, 60000 / 1, pi^0, from_pascal_minutes_per_liter, as_pascal_minutes_per_liter, additive);

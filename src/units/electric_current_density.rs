@@ -199,7 +199,7 @@ fixed_base!(ElectricCurrentDensity, AmperePerSquareMeter);
 
 /// Unit markers for counting [`ElectricCurrentDensity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_current_density`](crate::unit::electric_current_density). Affine units have no marker.
+/// Also available as [`unit::electric_current_density`](crate::unit::electric_current_density).
 pub mod unit {
     fixed_unit!(AmperePerSquareMeter: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareMeter, base AmperePerSquareMeter, 1 / 1, pi^0, from_amperes_per_square_meter, as_amperes_per_square_meter, additive);
     fixed_unit!(AmperePerSquareInch: ElectricCurrentDensity, ElectricCurrentDensityUnit::AmperePerSquareInch, base AmperePerSquareMeter, 25000000 / 16129, pi^0, from_amperes_per_square_inch, as_amperes_per_square_inch, additive);

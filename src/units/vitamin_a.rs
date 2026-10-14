@@ -133,7 +133,7 @@ fixed_base!(VitaminA, InternationalUnit);
 
 /// Unit markers for counting [`VitaminA`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::vitamin_a`](crate::unit::vitamin_a). Affine units have no marker.
+/// Also available as [`unit::vitamin_a`](crate::unit::vitamin_a).
 pub mod unit {
     fixed_unit!(InternationalUnit: VitaminA, VitaminAUnit::InternationalUnit, base InternationalUnit, 1 / 1, pi^0, from_international_units, as_international_units, additive);
 }

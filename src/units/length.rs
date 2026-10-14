@@ -1288,7 +1288,7 @@ fixed_base!(Length, Meter);
 
 /// Unit markers for counting [`Length`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::length`](crate::unit::length). Affine units have no marker.
+/// Also available as [`unit::length`](crate::unit::length).
 pub mod unit {
     fixed_unit!(Meter: Length, LengthUnit::Meter, base Meter, 1 / 1, pi^0, from_meters, as_meters, additive);
     fixed_unit!(Femtometer: Length, LengthUnit::Femtometer, base Meter, 1 / 1000000000000000, pi^0, from_femtometers, as_femtometers, additive);

@@ -164,6 +164,12 @@ fn decibels_unloaded() {
 fn fixed_units() {
     check_fixed::<unit::amplitude_ratio::DecibelVolt>();
     check_fixed_rescale::<unit::amplitude_ratio::DecibelVolt>();
+    check_fixed::<unit::amplitude_ratio::DecibelMicrovolt>();
+    check_fixed_rescale::<unit::amplitude_ratio::DecibelMicrovolt>();
+    check_fixed::<unit::amplitude_ratio::DecibelMillivolt>();
+    check_fixed_rescale::<unit::amplitude_ratio::DecibelMillivolt>();
+    check_fixed::<unit::amplitude_ratio::DecibelUnloaded>();
+    check_fixed_rescale::<unit::amplitude_ratio::DecibelUnloaded>();
 }
 
 #[test]

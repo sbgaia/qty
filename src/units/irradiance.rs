@@ -506,7 +506,7 @@ fixed_base!(Irradiance, WattPerSquareMeter);
 
 /// Unit markers for counting [`Irradiance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::irradiance`](crate::unit::irradiance). Affine units have no marker.
+/// Also available as [`unit::irradiance`](crate::unit::irradiance).
 pub mod unit {
     fixed_unit!(WattPerSquareMeter: Irradiance, IrradianceUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter, additive);
     fixed_unit!(PicowattPerSquareMeter: Irradiance, IrradianceUnit::PicowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000000, pi^0, from_picowatts_per_square_meter, as_picowatts_per_square_meter, additive);

@@ -233,7 +233,7 @@ fixed_base!(RotationalAcceleration, RadianPerSecondSquared);
 
 /// Unit markers for counting [`RotationalAcceleration`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::rotational_acceleration`](crate::unit::rotational_acceleration). Affine units have no marker.
+/// Also available as [`unit::rotational_acceleration`](crate::unit::rotational_acceleration).
 pub mod unit {
     fixed_unit!(RadianPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RadianPerSecondSquared, base RadianPerSecondSquared, 1 / 1, pi^0, from_radians_per_second_squared, as_radians_per_second_squared, additive);
     fixed_unit!(DegreePerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::DegreePerSecondSquared, base RadianPerSecondSquared, 1 / 180, pi^1, from_degrees_per_second_squared, as_degrees_per_second_squared, additive);

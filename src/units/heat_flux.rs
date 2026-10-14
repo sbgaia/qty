@@ -806,7 +806,7 @@ fixed_base!(HeatFlux, WattPerSquareMeter);
 
 /// Unit markers for counting [`HeatFlux`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::heat_flux`](crate::unit::heat_flux). Affine units have no marker.
+/// Also available as [`unit::heat_flux`](crate::unit::heat_flux).
 pub mod unit {
     fixed_unit!(WattPerSquareMeter: HeatFlux, HeatFluxUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter, additive);
     fixed_unit!(NanowattPerSquareMeter: HeatFlux, HeatFluxUnit::NanowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000, pi^0, from_nanowatts_per_square_meter, as_nanowatts_per_square_meter, additive);

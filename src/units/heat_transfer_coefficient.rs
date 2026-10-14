@@ -330,7 +330,7 @@ fixed_base!(HeatTransferCoefficient, WattPerSquareMeterKelvin);
 
 /// Unit markers for counting [`HeatTransferCoefficient`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::heat_transfer_coefficient`](crate::unit::heat_transfer_coefficient). Affine units have no marker.
+/// Also available as [`unit::heat_transfer_coefficient`](crate::unit::heat_transfer_coefficient).
 pub mod unit {
     fixed_unit!(WattPerSquareMeterKelvin: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterKelvin, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_kelvin, as_watts_per_square_meter_kelvin, additive);
     fixed_unit!(WattPerSquareMeterCelsius: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterCelsius, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_celsius, as_watts_per_square_meter_celsius, additive);

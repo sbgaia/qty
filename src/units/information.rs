@@ -1181,7 +1181,7 @@ fixed_base!(Information, Bit);
 
 /// Unit markers for counting [`Information`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::information`](crate::unit::information). Affine units have no marker.
+/// Also available as [`unit::information`](crate::unit::information).
 pub mod unit {
     fixed_unit!(Byte: Information, InformationUnit::Byte, base Bit, 8 / 1, pi^0, from_bytes, as_bytes, additive);
     fixed_unit!(Kilobyte: Information, InformationUnit::Kilobyte, base Bit, 8000 / 1, pi^0, from_kilobytes, as_kilobytes, additive);

@@ -133,7 +133,7 @@ fixed_base!(ElectricField, VoltPerMeter);
 
 /// Unit markers for counting [`ElectricField`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_field`](crate::unit::electric_field). Affine units have no marker.
+/// Also available as [`unit::electric_field`](crate::unit::electric_field).
 pub mod unit {
     fixed_unit!(VoltPerMeter: ElectricField, ElectricFieldUnit::VoltPerMeter, base VoltPerMeter, 1 / 1, pi^0, from_volts_per_meter, as_volts_per_meter, additive);
 }

@@ -603,7 +603,7 @@ fixed_base!(TemperatureChangeRate, DegreeCelsiusPerSecond);
 
 /// Unit markers for counting [`TemperatureChangeRate`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature_change_rate`](crate::unit::temperature_change_rate). Affine units have no marker.
+/// Also available as [`unit::temperature_change_rate`](crate::unit::temperature_change_rate).
 pub mod unit {
     fixed_unit!(DegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::DegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1, pi^0, from_degrees_celsius_per_second, as_degrees_celsius_per_second, additive);
     fixed_unit!(NanodegreeCelsiusPerSecond: TemperatureChangeRate, TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond, base DegreeCelsiusPerSecond, 1 / 1000000000, pi^0, from_nanodegrees_celsius_per_second, as_nanodegrees_celsius_per_second, additive);

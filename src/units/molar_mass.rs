@@ -507,7 +507,7 @@ fixed_base!(MolarMass, KilogramPerMole);
 
 /// Unit markers for counting [`MolarMass`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_mass`](crate::unit::molar_mass). Affine units have no marker.
+/// Also available as [`unit::molar_mass`](crate::unit::molar_mass).
 pub mod unit {
     fixed_unit!(GramPerMole: MolarMass, MolarMassUnit::GramPerMole, base KilogramPerMole, 1 / 1000, pi^0, from_grams_per_mole, as_grams_per_mole, additive);
     fixed_unit!(NanogramPerMole: MolarMass, MolarMassUnit::NanogramPerMole, base KilogramPerMole, 1 / 1000000000000, pi^0, from_nanograms_per_mole, as_nanograms_per_mole, additive);

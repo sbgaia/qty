@@ -426,7 +426,7 @@ fixed_base!(ElectricCharge, Coulomb);
 
 /// Unit markers for counting [`ElectricCharge`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_charge`](crate::unit::electric_charge). Affine units have no marker.
+/// Also available as [`unit::electric_charge`](crate::unit::electric_charge).
 pub mod unit {
     fixed_unit!(Coulomb: ElectricCharge, ElectricChargeUnit::Coulomb, base Coulomb, 1 / 1, pi^0, from_coulombs, as_coulombs, additive);
     fixed_unit!(Picocoulomb: ElectricCharge, ElectricChargeUnit::Picocoulomb, base Coulomb, 1 / 1000000000000, pi^0, from_picocoulombs, as_picocoulombs, additive);

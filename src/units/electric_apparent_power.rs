@@ -289,7 +289,7 @@ fixed_base!(ElectricApparentPower, Voltampere);
 
 /// Unit markers for counting [`ElectricApparentPower`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_apparent_power`](crate::unit::electric_apparent_power). Affine units have no marker.
+/// Also available as [`unit::electric_apparent_power`](crate::unit::electric_apparent_power).
 pub mod unit {
     fixed_unit!(Voltampere: ElectricApparentPower, ElectricApparentPowerUnit::Voltampere, base Voltampere, 1 / 1, pi^0, from_voltamperes, as_voltamperes, additive);
     fixed_unit!(Microvoltampere: ElectricApparentPower, ElectricApparentPowerUnit::Microvoltampere, base Voltampere, 1 / 1000000, pi^0, from_microvoltamperes, as_microvoltamperes, additive);

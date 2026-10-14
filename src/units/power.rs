@@ -832,7 +832,7 @@ fixed_base!(Power, Watt);
 
 /// Unit markers for counting [`Power`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::power`](crate::unit::power). Affine units have no marker.
+/// Also available as [`unit::power`](crate::unit::power).
 pub mod unit {
     fixed_unit!(Watt: Power, PowerUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
     fixed_unit!(Femtowatt: Power, PowerUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);

@@ -345,7 +345,7 @@ fixed_base!(ElectricImpedance, Ohm);
 
 /// Unit markers for counting [`ElectricImpedance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_impedance`](crate::unit::electric_impedance). Affine units have no marker.
+/// Also available as [`unit::electric_impedance`](crate::unit::electric_impedance).
 pub mod unit {
     fixed_unit!(Ohm: ElectricImpedance, ElectricImpedanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms, additive);
     fixed_unit!(Nanoohm: ElectricImpedance, ElectricImpedanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms, additive);

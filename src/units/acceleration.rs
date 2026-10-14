@@ -492,7 +492,7 @@ fixed_base!(Acceleration, MeterPerSecondSquared);
 
 /// Unit markers for counting [`Acceleration`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::acceleration`](crate::unit::acceleration). Affine units have no marker.
+/// Also available as [`unit::acceleration`](crate::unit::acceleration).
 pub mod unit {
     fixed_unit!(MeterPerSecondSquared: Acceleration, AccelerationUnit::MeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1, pi^0, from_meters_per_second_squared, as_meters_per_second_squared, additive);
     fixed_unit!(NanometerPerSecondSquared: Acceleration, AccelerationUnit::NanometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000000, pi^0, from_nanometers_per_second_squared, as_nanometers_per_second_squared, additive);

@@ -317,7 +317,7 @@ fixed_base!(ThermalInsulance, SquareMeterKelvinPerKilowatt);
 
 /// Unit markers for counting [`ThermalInsulance`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::thermal_insulance`](crate::unit::thermal_insulance). Affine units have no marker.
+/// Also available as [`unit::thermal_insulance`](crate::unit::thermal_insulance).
 pub mod unit {
     fixed_unit!(SquareMeterKelvinPerKilowatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt, base SquareMeterKelvinPerKilowatt, 1 / 1, pi^0, from_square_meter_kelvins_per_kilowatt, as_square_meter_kelvins_per_kilowatt, additive);
     fixed_unit!(SquareMeterKelvinPerWatt: ThermalInsulance, ThermalInsulanceUnit::SquareMeterKelvinPerWatt, base SquareMeterKelvinPerKilowatt, 1000 / 1, pi^0, from_square_meter_kelvins_per_watt, as_square_meter_kelvins_per_watt, additive);

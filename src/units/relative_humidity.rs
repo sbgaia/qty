@@ -126,7 +126,7 @@ fixed_base!(RelativeHumidity, Percent);
 
 /// Unit markers for counting [`RelativeHumidity`] as an integer with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::relative_humidity`](crate::unit::relative_humidity). Affine units have no marker.
+/// Also available as [`unit::relative_humidity`](crate::unit::relative_humidity).
 pub mod unit {
     fixed_unit!(Percent: RelativeHumidity, RelativeHumidityUnit::Percent, base Percent, 1 / 1, pi^0, from_percent, as_percent, additive);
 }
