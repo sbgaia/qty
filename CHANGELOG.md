@@ -8,6 +8,10 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `Angle::wrap_unsigned` (`[0°, 360°)`) and `wrap_signed` (`(−180°, 180°]`),
+  exact range guarantees, no `std` needed; `clamp` and `lerp` on float
+  quantities (`lerp` works for temperatures too).
+
 - `serde_str`: `#[serde(with = "unitsnet_rs::serde_str")]` reads quantities,
   `Fixed` counts and unit enums as text in any unit or spelling (`"30 s"`,
   `"2 minutes"`) and writes the base unit at full precision, exactly

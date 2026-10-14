@@ -754,6 +754,34 @@ macro_rules! quantity_core {
                 Self(self.0.min(other.0))
             }
 
+            /// Restricts to `[min, max]`, like [`f64::clamp`]: NaN stays NaN.
+            ///
+            /// # Panics
+            ///
+            /// If `min > max`.
+            #[inline]
+            pub fn clamp(self, min: Self, max: Self) -> Self {
+                assert!(
+                    min.0.partial_cmp(&max.0) != Some(core::cmp::Ordering::Greater),
+                    "clamp: min > max"
+                );
+                if self.0 < min.0 {
+                    min
+                } else if self.0 > max.0 {
+                    max
+                } else {
+                    self
+                }
+            }
+
+            /// Linear interpolation: `self` at `t = 0`, `other` at `t = 1`
+            /// (to within rounding), extrapolating outside `[0, 1]`. Works
+            /// for points too: halfway between 10 °C and 20 °C is 15 °C.
+            #[inline]
+            pub fn lerp(self, other: Self, t: T) -> Self {
+                Self(self.0 + (other.0 - self.0) * t)
+            }
+
             /// IEEE 754 total order (like [`f64::total_cmp`]), for sorting:
             /// `values.sort_by(Length::total_cmp)`. For map keys, see
             /// [`Ordered`](crate::Ordered).
@@ -1388,6 +1416,8 @@ mod vector;
 pub use vector::{Vector2, Vector3};
 
 mod time;
+
+mod angle_wrap;
 
 #[cfg(feature = "serde")]
 #[cfg_attr(docsrs, doc(cfg(feature = "serde")))]

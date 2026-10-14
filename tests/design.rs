@@ -1267,3 +1267,81 @@ mod serde_text {
         assert_eq!(serde_json::to_string(&none).unwrap(), "{}");
     }
 }
+
+// ── Angle wrapping, clamp, lerp ───────────────────────────────────────────────
+
+mod wrapping {
+    use unitsnet_rs::*;
+
+    #[test]
+    fn angles_wrap_into_one_turn() {
+        use core::f64::consts::{PI, TAU};
+        for (input, unsigned, signed) in [
+            (0.0, 0.0, 0.0),
+            (PI, PI, PI),
+            (-PI, PI, PI),
+            (TAU, 0.0, 0.0),
+            (-TAU, 0.0, 0.0),
+            (3.0 * PI, PI, PI),
+            (-0.5, TAU - 0.5, -0.5),
+            (7.5, 7.5 - TAU, 7.5 - TAU),
+        ] {
+            let a = Angle::from_radians(input);
+            assert!(
+                (a.wrap_unsigned().as_base() - unsigned).abs() < 1e-12,
+                "{input}"
+            );
+            assert!(
+                (a.wrap_signed().as_base() - signed).abs() < 1e-12,
+                "{input}"
+            );
+        }
+        // Ranges hold even where rounding would push a value onto the bound.
+        for x in [
+            -1e-300,
+            -f64::EPSILON,
+            -1e-17,
+            1e300,
+            -1e300,
+            2.0 * TAU,
+            -3.0 * TAU,
+        ] {
+            let u = Angle::from_radians(x).wrap_unsigned().as_base();
+            assert!((0.0..TAU).contains(&u), "{x} -> {u}");
+            let s = Angle::from_radians(x).wrap_signed().as_base();
+            assert!(s > -PI && s <= PI, "{x} -> {s}");
+        }
+        assert!(Angle::from_radians(f64::INFINITY)
+            .wrap_signed()
+            .as_base()
+            .is_nan());
+        let a = Angle::from_degrees(-30.0f32).wrap_unsigned();
+        assert!((a.as_degrees() - 330.0).abs() < 1e-4);
+    }
+
+    #[test]
+    fn clamp_and_lerp() {
+        let (lo, hi) = (Length::from_meters(1.0), Length::from_meters(2.0));
+        assert_eq!(Length::from_meters(0.5).clamp(lo, hi), lo);
+        assert_eq!(
+            Length::from_meters(1.5).clamp(lo, hi),
+            Length::from_meters(1.5)
+        );
+        assert_eq!(Length::from_meters(9.0).clamp(lo, hi), hi);
+        assert!(Length::from_meters(f64::NAN)
+            .clamp(lo, hi)
+            .as_base()
+            .is_nan());
+        assert_eq!(lo.lerp(hi, 0.25), Length::from_meters(1.25));
+        assert_eq!(lo.lerp(hi, 2.0), Length::from_meters(3.0));
+        let mid = Temperature::from_degrees_celsius(10.0)
+            .lerp(Temperature::from_degrees_celsius(20.0), 0.5);
+        assert!(mid.approx_eq_rel(Temperature::from_degrees_celsius(15.0), 1e-12));
+    }
+
+    #[test]
+    #[should_panic(expected = "min > max")]
+    fn clamp_rejects_inverted_bounds() {
+        let _ = Length::from_meters(1.0).clamp(Length::from_meters(2.0), Length::from_meters(1.0));
+    }
+}
