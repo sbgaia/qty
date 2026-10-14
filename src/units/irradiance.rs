@@ -182,6 +182,34 @@ impl<T: Float> Irradiance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`pW/m²`, `nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`, `MW/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, IrradianceUnit> {
+        const SCALE: [(f64, IrradianceUnit); 7] = [
+            (1000000.0, IrradianceUnit::MegawattPerSquareMeter),
+            (1000.0, IrradianceUnit::KilowattPerSquareMeter),
+            (1.0, IrradianceUnit::WattPerSquareMeter),
+            (0.001, IrradianceUnit::MilliwattPerSquareMeter),
+            (1e-6, IrradianceUnit::MicrowattPerSquareMeter),
+            (1e-9, IrradianceUnit::NanowattPerSquareMeter),
+            (1e-12, IrradianceUnit::PicowattPerSquareMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(IrradianceUnit::WattPerSquareMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Irradiance`] from a value in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn from_watts_per_square_meter(value: T) -> Self {

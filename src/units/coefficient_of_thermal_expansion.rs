@@ -138,6 +138,14 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`K⁻¹`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, CoefficientOfThermalExpansionUnit> {
+        self.in_unit(CoefficientOfThermalExpansionUnit::PerKelvin)
+    }
+
     /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerKelvin (`K⁻¹`).
     #[inline]
     pub fn from_per_kelvin(value: T) -> Self {

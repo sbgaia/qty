@@ -105,6 +105,29 @@ impl<T: Float> Molality<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`mmol/kg`, `mol/kg`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MolalityUnit> {
+        const SCALE: [(f64, MolalityUnit); 2] = [
+            (1.0, MolalityUnit::MolePerKilogram),
+            (0.001, MolalityUnit::MillimolePerKilogram),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MolalityUnit::MolePerKilogram);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Molality`] from a value in MolesPerKilogram (`mol/kg`).
     #[inline]
     pub fn from_moles_per_kilogram(value: T) -> Self {

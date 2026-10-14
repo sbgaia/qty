@@ -122,6 +122,14 @@ impl<T: Float> PorousMediumPermeability<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PorousMediumPermeabilityUnit> {
+        self.in_unit(PorousMediumPermeabilityUnit::SquareMeter)
+    }
+
     /// Creates a [`PorousMediumPermeability`] from a value in Darcys (`D`).
     #[inline]
     pub fn from_darcys(value: T) -> Self {

@@ -89,6 +89,14 @@ impl<T: Float> LuminousFlux<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`lm`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LuminousFluxUnit> {
+        self.in_unit(LuminousFluxUnit::Lumen)
+    }
+
     /// Creates a [`LuminousFlux`] from a value in Lumens (`lm`).
     #[inline]
     pub fn from_lumens(value: T) -> Self {

@@ -147,6 +147,14 @@ impl<T: Float> TemperatureDelta<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`∆K`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, TemperatureDeltaUnit> {
+        self.in_unit(TemperatureDeltaUnit::Kelvin)
+    }
+
     /// Creates a [`TemperatureDelta`] from a value in Kelvins (`∆K`).
     #[inline]
     pub fn from_kelvins(value: T) -> Self {

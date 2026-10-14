@@ -231,6 +231,9 @@ pub trait Float:
 
     /// IEEE 754 total order, like [`f64::total_cmp`].
     fn total_cmp(&self, other: &Self) -> core::cmp::Ordering;
+
+    /// `true` unless the value is NaN or infinite.
+    fn is_finite(self) -> bool;
 }
 
 macro_rules! impl_float {
@@ -258,6 +261,10 @@ macro_rules! impl_float {
             fn total_cmp(&self, other: &Self) -> core::cmp::Ordering {
                 $t::total_cmp(self, other)
             }
+            #[inline(always)]
+            fn is_finite(self) -> bool {
+                $t::is_finite(self)
+            }
         }
     )*};
 }
@@ -275,7 +282,7 @@ pub trait Quantity: Copy {
     type Value: Copy;
 
     /// The enum listing every unit of this quantity.
-    type Unit: Copy + Eq + fmt::Debug + fmt::Display + 'static;
+    type Unit: UnitEnum;
 
     /// The unit in which values are stored.
     const BASE_UNIT: Self::Unit;
@@ -286,6 +293,56 @@ pub trait Quantity: Copy {
     /// Returns the value expressed in [`Self::BASE_UNIT`].
     fn as_base(self) -> Self::Value;
 }
+
+/// Implemented by every unit enum (`LengthUnit`, `MassUnit`, …).
+pub trait UnitEnum: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + 'static {
+    /// Every unit of the quantity.
+    const ALL: &'static [Self];
+
+    /// The primary abbreviation, e.g. `"km"`.
+    fn abbreviation(self) -> &'static str;
+}
+
+/// A value expressed in a given unit, as returned by `in_unit` and
+/// `auto_unit`. Formats as the number followed by the unit's abbreviation,
+/// applying format flags to the number:
+///
+/// ```rust
+/// use unitsnet_rs::*;
+///
+/// let d = Length::from_meters(1234.5);
+/// assert_eq!(d.in_unit(LengthUnit::Kilometer).to_string(), "1.2345 km");
+/// assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");
+/// assert_eq!(format!("{:.2}", Length::from_meters(0.0025).auto_unit()), "2.50 mm");
+///
+/// // The parts are available too.
+/// let InUnit { value, unit } = d.auto_unit();
+/// assert_eq!((value, unit), (1.2345, LengthUnit::Kilometer));
+/// ```
+#[derive(Debug, Clone, Copy, PartialEq, PartialOrd)]
+pub struct InUnit<T, U> {
+    /// The numeric value, expressed in `unit`.
+    pub value: T,
+    /// The unit `value` is expressed in.
+    pub unit: U,
+}
+
+macro_rules! in_unit_fmt {
+    ($($Trait:ident),*) => {$(
+        impl<T: fmt::$Trait, U: UnitEnum> fmt::$Trait for InUnit<T, U> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                fmt::$Trait::fmt(&self.value, f)?;
+                let abbr = self.unit.abbreviation();
+                if abbr.is_empty() {
+                    Ok(())
+                } else {
+                    write!(f, " {abbr}")
+                }
+            }
+        }
+    )*};
+}
+in_unit_fmt!(Display, LowerExp, UpperExp);
 
 // ── Approximate comparison ────────────────────────────────────────────────────
 
@@ -610,6 +667,26 @@ macro_rules! quantity_core {
         impl core::fmt::Display for $U {
             fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
                 f.pad(self.abbreviation())
+            }
+        }
+
+        impl $crate::UnitEnum for $U {
+            const ALL: &'static [Self] = $U::ALL;
+            #[inline(always)]
+            fn abbreviation(self) -> &'static str {
+                $U::abbreviation(self)
+            }
+        }
+
+        impl<T: $crate::Float> $Q<T> {
+            /// The value expressed in `unit`, for display or inspection:
+            /// `length.in_unit(LengthUnit::Kilometer)` formats as `"1.5 km"`.
+            #[inline]
+            pub fn in_unit(self, unit: $U) -> $crate::InUnit<T, $U> {
+                $crate::InUnit {
+                    value: self.convert_to(unit),
+                    unit,
+                }
             }
         }
 

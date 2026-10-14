@@ -95,6 +95,14 @@ impl<T: Float> ThermalResistance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`K/W`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ThermalResistanceUnit> {
+        self.in_unit(ThermalResistanceUnit::KelvinPerWatt)
+    }
+
     /// Creates a [`ThermalResistance`] from a value in KelvinsPerWatt (`K/W`).
     #[inline]
     pub fn from_kelvins_per_watt(value: T) -> Self {

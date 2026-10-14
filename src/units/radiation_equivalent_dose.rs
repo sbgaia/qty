@@ -135,6 +135,31 @@ impl<T: Float> RadiationEquivalentDose<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nSv`, `µSv`, `mSv`, `Sv`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, RadiationEquivalentDoseUnit> {
+        const SCALE: [(f64, RadiationEquivalentDoseUnit); 4] = [
+            (1.0, RadiationEquivalentDoseUnit::Sievert),
+            (0.001, RadiationEquivalentDoseUnit::Millisievert),
+            (1e-6, RadiationEquivalentDoseUnit::Microsievert),
+            (1e-9, RadiationEquivalentDoseUnit::Nanosievert),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(RadiationEquivalentDoseUnit::Sievert);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`RadiationEquivalentDose`] from a value in Sieverts (`Sv`).
     #[inline]
     pub fn from_sieverts(value: T) -> Self {

@@ -203,6 +203,35 @@ impl<T: Float> AmountOfSubstance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fmol`, `pmol`, `nmol`, `µmol`, `mmol`, `mol`, `kmol`, `Mmol`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AmountOfSubstanceUnit> {
+        const SCALE: [(f64, AmountOfSubstanceUnit); 8] = [
+            (1000000.0, AmountOfSubstanceUnit::Megamole),
+            (1000.0, AmountOfSubstanceUnit::Kilomole),
+            (1.0, AmountOfSubstanceUnit::Mole),
+            (0.001, AmountOfSubstanceUnit::Millimole),
+            (1e-6, AmountOfSubstanceUnit::Micromole),
+            (1e-9, AmountOfSubstanceUnit::Nanomole),
+            (1e-12, AmountOfSubstanceUnit::Picomole),
+            (1e-15, AmountOfSubstanceUnit::Femtomole),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(AmountOfSubstanceUnit::Mole);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`AmountOfSubstance`] from a value in Moles (`mol`).
     #[inline]
     pub fn from_moles(value: T) -> Self {

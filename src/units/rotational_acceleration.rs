@@ -129,6 +129,14 @@ impl<T: Float> RotationalAcceleration<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`rad/s²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, RotationalAccelerationUnit> {
+        self.in_unit(RotationalAccelerationUnit::RadianPerSecondSquared)
+    }
+
     /// Creates a [`RotationalAcceleration`] from a value in RadiansPerSecondSquared (`rad/s²`).
     #[inline]
     pub fn from_radians_per_second_squared(value: T) -> Self {

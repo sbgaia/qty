@@ -643,6 +643,14 @@ impl<T: Float> VolumeFlow<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m³/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowUnit> {
+        self.in_unit(VolumeFlowUnit::CubicMeterPerSecond)
+    }
+
     /// Creates a [`VolumeFlow`] from a value in CubicMetersPerSecond (`m³/s`).
     #[inline]
     pub fn from_cubic_meters_per_second(value: T) -> Self {

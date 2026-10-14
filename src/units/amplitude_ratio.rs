@@ -133,6 +133,14 @@ impl<T: Float> AmplitudeRatio<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`dBV`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AmplitudeRatioUnit> {
+        self.in_unit(AmplitudeRatioUnit::DecibelVolt)
+    }
+
     /// Creates a [`AmplitudeRatio`] from a value in DecibelVolts (`dBV`).
     #[inline]
     pub fn from_decibel_volts(value: T) -> Self {

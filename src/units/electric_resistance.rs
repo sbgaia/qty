@@ -140,6 +140,35 @@ impl<T: Float> ElectricResistance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricResistanceUnit> {
+        const SCALE: [(f64, ElectricResistanceUnit); 8] = [
+            (1e12, ElectricResistanceUnit::Teraohm),
+            (1e9, ElectricResistanceUnit::Gigaohm),
+            (1000000.0, ElectricResistanceUnit::Megaohm),
+            (1000.0, ElectricResistanceUnit::Kiloohm),
+            (1.0, ElectricResistanceUnit::Ohm),
+            (0.001, ElectricResistanceUnit::Milliohm),
+            (1e-6, ElectricResistanceUnit::Microohm),
+            (1e-9, ElectricResistanceUnit::Nanoohm),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricResistanceUnit::Ohm);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricResistance`] from a value in Ohms (`Ω`).
     #[inline]
     pub fn from_ohms(value: T) -> Self {

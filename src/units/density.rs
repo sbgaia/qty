@@ -483,6 +483,31 @@ impl<T: Float> Density<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`µg/m³`, `mg/m³`, `g/m³`, `kg/m³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, DensityUnit> {
+        const SCALE: [(f64, DensityUnit); 4] = [
+            (1.0, DensityUnit::KilogramPerCubicMeter),
+            (0.001, DensityUnit::GramPerCubicMeter),
+            (1e-6, DensityUnit::MilligramPerCubicMeter),
+            (1e-9, DensityUnit::MicrogramPerCubicMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(DensityUnit::KilogramPerCubicMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Density`] from a value in GramsPerCubicMillimeter (`g/mm³`).
     #[inline]
     pub fn from_grams_per_cubic_millimeter(value: T) -> Self {

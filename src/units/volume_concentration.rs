@@ -228,6 +228,14 @@ impl<T: Float> VolumeConcentration<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (``).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VolumeConcentrationUnit> {
+        self.in_unit(VolumeConcentrationUnit::DecimalFraction)
+    }
+
     /// Creates a [`VolumeConcentration`] from a value in DecimalFractions (``).
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {

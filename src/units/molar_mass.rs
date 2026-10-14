@@ -185,6 +185,32 @@ impl<T: Float> MolarMass<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`ng/mol`, `µg/mol`, `mg/mol`, `g/mol`, `kg/mol`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MolarMassUnit> {
+        const SCALE: [(f64, MolarMassUnit); 5] = [
+            (1.0, MolarMassUnit::KilogramPerMole),
+            (0.001, MolarMassUnit::GramPerMole),
+            (1e-6, MolarMassUnit::MilligramPerMole),
+            (1e-9, MolarMassUnit::MicrogramPerMole),
+            (1e-12, MolarMassUnit::NanogramPerMole),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MolarMassUnit::KilogramPerMole);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`MolarMass`] from a value in GramsPerMole (`g/mol`).
     #[inline]
     pub fn from_grams_per_mole(value: T) -> Self {

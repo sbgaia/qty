@@ -142,6 +142,14 @@ impl<T: Float> Compressibility<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`Pa⁻¹`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, CompressibilityUnit> {
+        self.in_unit(CompressibilityUnit::InversePascal)
+    }
+
     /// Creates a [`Compressibility`] from a value in InversePascals (`Pa⁻¹`).
     #[inline]
     pub fn from_inverse_pascals(value: T) -> Self {

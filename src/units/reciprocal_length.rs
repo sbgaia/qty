@@ -164,6 +164,14 @@ impl<T: Float> ReciprocalLength<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m⁻¹`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ReciprocalLengthUnit> {
+        self.in_unit(ReciprocalLengthUnit::InverseMeter)
+    }
+
     /// Creates a [`ReciprocalLength`] from a value in InverseMeters (`m⁻¹`).
     #[inline]
     pub fn from_inverse_meters(value: T) -> Self {

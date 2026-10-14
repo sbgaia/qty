@@ -256,6 +256,23 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn in_unit_and_auto_unit_round_trip() {
+    for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
+        let q = Ratio::from_base(v);
+        let auto = q.auto_unit();
+        assert_close(Ratio::new(auto.value, auto.unit).as_base(), v, F64_TOL);
+        for &unit in RatioUnit::ALL {
+            let shown = q.in_unit(unit);
+            assert_eq!((shown.value, shown.unit), (q.convert_to(unit), unit));
+        }
+    }
+    assert_eq!(
+        Ratio::from_base(0.0).auto_unit().unit,
+        RatioUnit::DecimalFraction
+    );
+}
+
+#[test]
 fn parse_every_abbreviation() {
     assert_eq!("%".parse::<RatioUnit>(), Ok(RatioUnit::Percent));
     assert_eq!(

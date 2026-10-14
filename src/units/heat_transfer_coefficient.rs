@@ -170,6 +170,14 @@ impl<T: Float> HeatTransferCoefficient<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`W/(m²·K)`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, HeatTransferCoefficientUnit> {
+        self.in_unit(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
+    }
+
     /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterKelvin (`W/(m²·K)`).
     #[inline]
     pub fn from_watts_per_square_meter_kelvin(value: T) -> Self {

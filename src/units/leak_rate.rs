@@ -112,6 +112,14 @@ impl<T: Float> LeakRate<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`Pa·m³/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LeakRateUnit> {
+        self.in_unit(LeakRateUnit::PascalCubicMeterPerSecond)
+    }
+
     /// Creates a [`LeakRate`] from a value in PascalCubicMetersPerSecond (`Pa·m³/s`).
     #[inline]
     pub fn from_pascal_cubic_meters_per_second(value: T) -> Self {

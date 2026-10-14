@@ -89,6 +89,14 @@ impl<T: Float> Permittivity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`F/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PermittivityUnit> {
+        self.in_unit(PermittivityUnit::FaradPerMeter)
+    }
+
     /// Creates a [`Permittivity`] from a value in FaradsPerMeter (`F/m`).
     #[inline]
     pub fn from_farads_per_meter(value: T) -> Self {

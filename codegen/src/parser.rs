@@ -198,6 +198,12 @@ pub struct UnitDef {
     pub all_abbreviations: Vec<String>,
     /// Optional doc comment for the enum variant.
     pub doc: Option<String>,
+    /// The upstream (unprefixed) unit this one was expanded from, e.g.
+    /// `Gram` for `Kilogram` and `Milligram`, and `Gram` for `Gram` itself.
+    pub family: String,
+    /// Power of ten of the SI prefix (`3` for kilo, `0` for the unprefixed
+    /// unit); `None` for binary prefixes (kibi, mebi, …).
+    pub decimal_exp: Option<i32>,
 }
 
 // ── Parser ────────────────────────────────────────────────────────────────────
@@ -235,6 +241,8 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
             abbreviation: abbreviation.clone(),
             all_abbreviations: abbreviations,
             doc: raw_unit.xml_doc_summary.clone(),
+            family: raw_unit.singular_name.clone(),
+            decimal_exp: Some(0),
         });
 
         // Prefix-expanded variants.
@@ -286,6 +294,11 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
                 abbreviation: prefixed_abbr.clone(),
                 all_abbreviations: vec![prefixed_abbr],
                 doc: None,
+                family: raw_unit.singular_name.clone(),
+                decimal_exp: prefix
+                    .factor
+                    .strip_prefix("1e")
+                    .map(|e| e.parse().expect("decimal prefix exponent")),
             });
         }
     }

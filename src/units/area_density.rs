@@ -132,6 +132,14 @@ impl<T: Float> AreaDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`kg/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AreaDensityUnit> {
+        self.in_unit(AreaDensityUnit::KilogramPerSquareMeter)
+    }
+
     /// Creates a [`AreaDensity`] from a value in KilogramsPerSquareMeter (`kg/m²`).
     #[inline]
     pub fn from_kilograms_per_square_meter(value: T) -> Self {

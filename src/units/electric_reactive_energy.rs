@@ -113,6 +113,36 @@ impl<T: Float> ElectricReactiveEnergy<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`varh`, `kvarh`, `Mvarh`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricReactiveEnergyUnit> {
+        const SCALE: [(f64, ElectricReactiveEnergyUnit); 3] = [
+            (
+                1000000.0,
+                ElectricReactiveEnergyUnit::MegavoltampereReactiveHour,
+            ),
+            (
+                1000.0,
+                ElectricReactiveEnergyUnit::KilovoltampereReactiveHour,
+            ),
+            (1.0, ElectricReactiveEnergyUnit::VoltampereReactiveHour),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricReactiveEnergyUnit::VoltampereReactiveHour);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricReactiveEnergy`] from a value in VoltampereReactiveHours (`varh`).
     #[inline]
     pub fn from_voltampere_reactive_hours(value: T) -> Self {

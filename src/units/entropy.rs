@@ -133,6 +133,30 @@ impl<T: Float> Entropy<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`J/K`, `kJ/K`, `MJ/K`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, EntropyUnit> {
+        const SCALE: [(f64, EntropyUnit); 3] = [
+            (1000000.0, EntropyUnit::MegajoulePerKelvin),
+            (1000.0, EntropyUnit::KilojoulePerKelvin),
+            (1.0, EntropyUnit::JoulePerKelvin),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(EntropyUnit::JoulePerKelvin);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Entropy`] from a value in JoulesPerKelvin (`J/K`).
     #[inline]
     pub fn from_joules_per_kelvin(value: T) -> Self {

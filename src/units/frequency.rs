@@ -169,6 +169,34 @@ impl<T: Float> Frequency<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`µHz`, `mHz`, `Hz`, `kHz`, `MHz`, `GHz`, `THz`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, FrequencyUnit> {
+        const SCALE: [(f64, FrequencyUnit); 7] = [
+            (1e12, FrequencyUnit::Terahertz),
+            (1e9, FrequencyUnit::Gigahertz),
+            (1000000.0, FrequencyUnit::Megahertz),
+            (1000.0, FrequencyUnit::Kilohertz),
+            (1.0, FrequencyUnit::Hertz),
+            (0.001, FrequencyUnit::Millihertz),
+            (1e-6, FrequencyUnit::Microhertz),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(FrequencyUnit::Hertz);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Frequency`] from a value in Hertz (`Hz`).
     #[inline]
     pub fn from_hertz(value: T) -> Self {

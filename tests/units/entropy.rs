@@ -346,6 +346,23 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn in_unit_and_auto_unit_round_trip() {
+    for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
+        let q = Entropy::from_base(v);
+        let auto = q.auto_unit();
+        assert_close(Entropy::new(auto.value, auto.unit).as_base(), v, F64_TOL);
+        for &unit in EntropyUnit::ALL {
+            let shown = q.in_unit(unit);
+            assert_eq!((shown.value, shown.unit), (q.convert_to(unit), unit));
+        }
+    }
+    assert_eq!(
+        Entropy::from_base(0.0).auto_unit().unit,
+        EntropyUnit::JoulePerKelvin
+    );
+}
+
+#[test]
 fn parse_every_abbreviation() {
     assert_eq!(
         "J/K".parse::<EntropyUnit>(),

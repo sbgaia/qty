@@ -89,6 +89,14 @@ impl<T: Float> Permeability<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`H/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PermeabilityUnit> {
+        self.in_unit(PermeabilityUnit::HenryPerMeter)
+    }
+
     /// Creates a [`Permeability`] from a value in HenriesPerMeter (`H/m`).
     #[inline]
     pub fn from_henries_per_meter(value: T) -> Self {

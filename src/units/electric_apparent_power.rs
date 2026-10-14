@@ -126,6 +126,33 @@ impl<T: Float> ElectricApparentPower<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`µVA`, `mVA`, `VA`, `kVA`, `MVA`, `GVA`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricApparentPowerUnit> {
+        const SCALE: [(f64, ElectricApparentPowerUnit); 6] = [
+            (1e9, ElectricApparentPowerUnit::Gigavoltampere),
+            (1000000.0, ElectricApparentPowerUnit::Megavoltampere),
+            (1000.0, ElectricApparentPowerUnit::Kilovoltampere),
+            (1.0, ElectricApparentPowerUnit::Voltampere),
+            (0.001, ElectricApparentPowerUnit::Millivoltampere),
+            (1e-6, ElectricApparentPowerUnit::Microvoltampere),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricApparentPowerUnit::Voltampere);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricApparentPower`] from a value in Voltamperes (`VA`).
     #[inline]
     pub fn from_voltamperes(value: T) -> Self {

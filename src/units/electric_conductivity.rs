@@ -130,6 +130,14 @@ impl<T: Float> ElectricConductivity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`S/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricConductivityUnit> {
+        self.in_unit(ElectricConductivityUnit::SiemensPerMeter)
+    }
+
     /// Creates a [`ElectricConductivity`] from a value in SiemensPerMeter (`S/m`).
     #[inline]
     pub fn from_siemens_per_meter(value: T) -> Self {

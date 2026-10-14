@@ -170,6 +170,27 @@ fn new_and_convert_to_match_named_methods() {
 }
 
 #[test]
+fn in_unit_and_auto_unit_round_trip() {
+    for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {
+        let q = ElectricReactiveEnergy::from_base(v);
+        let auto = q.auto_unit();
+        assert_close(
+            ElectricReactiveEnergy::new(auto.value, auto.unit).as_base(),
+            v,
+            F64_TOL,
+        );
+        for &unit in ElectricReactiveEnergyUnit::ALL {
+            let shown = q.in_unit(unit);
+            assert_eq!((shown.value, shown.unit), (q.convert_to(unit), unit));
+        }
+    }
+    assert_eq!(
+        ElectricReactiveEnergy::from_base(0.0).auto_unit().unit,
+        ElectricReactiveEnergyUnit::VoltampereReactiveHour
+    );
+}
+
+#[test]
 fn parse_every_abbreviation() {
     assert_eq!(
         "varh".parse::<ElectricReactiveEnergyUnit>(),

@@ -89,6 +89,14 @@ impl<T: Float> RelativeHumidity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`%RH`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, RelativeHumidityUnit> {
+        self.in_unit(RelativeHumidityUnit::Percent)
+    }
+
     /// Creates a [`RelativeHumidity`] from a value in Percent (`%RH`).
     #[inline]
     pub fn from_percent(value: T) -> Self {

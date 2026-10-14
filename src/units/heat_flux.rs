@@ -260,6 +260,32 @@ impl<T: Float> HeatFlux<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, HeatFluxUnit> {
+        const SCALE: [(f64, HeatFluxUnit); 5] = [
+            (1000.0, HeatFluxUnit::KilowattPerSquareMeter),
+            (1.0, HeatFluxUnit::WattPerSquareMeter),
+            (0.001, HeatFluxUnit::MilliwattPerSquareMeter),
+            (1e-6, HeatFluxUnit::MicrowattPerSquareMeter),
+            (1e-9, HeatFluxUnit::NanowattPerSquareMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(HeatFluxUnit::WattPerSquareMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`HeatFlux`] from a value in WattsPerSquareMeter (`W/m²`).
     #[inline]
     pub fn from_watts_per_square_meter(value: T) -> Self {

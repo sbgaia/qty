@@ -109,6 +109,30 @@ impl<T: Float> ElectricApparentEnergy<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`VAh`, `kVAh`, `MVAh`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricApparentEnergyUnit> {
+        const SCALE: [(f64, ElectricApparentEnergyUnit); 3] = [
+            (1000000.0, ElectricApparentEnergyUnit::MegavoltampereHour),
+            (1000.0, ElectricApparentEnergyUnit::KilovoltampereHour),
+            (1.0, ElectricApparentEnergyUnit::VoltampereHour),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricApparentEnergyUnit::VoltampereHour);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricApparentEnergy`] from a value in VoltampereHours (`VAh`).
     #[inline]
     pub fn from_voltampere_hours(value: T) -> Self {

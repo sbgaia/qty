@@ -114,6 +114,14 @@ impl<T: Float> TemperatureGradient<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`∆°K/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, TemperatureGradientUnit> {
+        self.in_unit(TemperatureGradientUnit::KelvinPerMeter)
+    }
+
     /// Creates a [`TemperatureGradient`] from a value in KelvinsPerMeter (`∆°K/m`).
     #[inline]
     pub fn from_kelvins_per_meter(value: T) -> Self {

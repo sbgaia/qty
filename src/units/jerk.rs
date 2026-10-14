@@ -159,6 +159,32 @@ impl<T: Float> Jerk<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nm/s³`, `µm/s³`, `mm/s³`, `m/s³`, `km/s³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, JerkUnit> {
+        const SCALE: [(f64, JerkUnit); 5] = [
+            (1000.0, JerkUnit::KilometerPerSecondCubed),
+            (1.0, JerkUnit::MeterPerSecondCubed),
+            (0.001, JerkUnit::MillimeterPerSecondCubed),
+            (1e-6, JerkUnit::MicrometerPerSecondCubed),
+            (1e-9, JerkUnit::NanometerPerSecondCubed),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(JerkUnit::MeterPerSecondCubed);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Jerk`] from a value in MetersPerSecondCubed (`m/s³`).
     #[inline]
     pub fn from_meters_per_second_cubed(value: T) -> Self {

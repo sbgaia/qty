@@ -184,6 +184,32 @@ impl<T: Float> Acceleration<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nm/s²`, `µm/s²`, `mm/s²`, `m/s²`, `km/s²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AccelerationUnit> {
+        const SCALE: [(f64, AccelerationUnit); 5] = [
+            (1000.0, AccelerationUnit::KilometerPerSecondSquared),
+            (1.0, AccelerationUnit::MeterPerSecondSquared),
+            (0.001, AccelerationUnit::MillimeterPerSecondSquared),
+            (1e-6, AccelerationUnit::MicrometerPerSecondSquared),
+            (1e-9, AccelerationUnit::NanometerPerSecondSquared),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(AccelerationUnit::MeterPerSecondSquared);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Acceleration`] from a value in MetersPerSecondSquared (`m/s²`).
     #[inline]
     pub fn from_meters_per_second_squared(value: T) -> Self {

@@ -354,6 +354,33 @@ impl<T: Float> ForcePerLength<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nN/m`, `µN/m`, `mN/m`, `N/m`, `kN/m`, `MN/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ForcePerLengthUnit> {
+        const SCALE: [(f64, ForcePerLengthUnit); 6] = [
+            (1000000.0, ForcePerLengthUnit::MeganewtonPerMeter),
+            (1000.0, ForcePerLengthUnit::KilonewtonPerMeter),
+            (1.0, ForcePerLengthUnit::NewtonPerMeter),
+            (0.001, ForcePerLengthUnit::MillinewtonPerMeter),
+            (1e-6, ForcePerLengthUnit::MicronewtonPerMeter),
+            (1e-9, ForcePerLengthUnit::NanonewtonPerMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ForcePerLengthUnit::NewtonPerMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerMeter (`N/m`).
     #[inline]
     pub fn from_newtons_per_meter(value: T) -> Self {

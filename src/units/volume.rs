@@ -519,6 +519,14 @@ impl<T: Float> Volume<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VolumeUnit> {
+        self.in_unit(VolumeUnit::CubicMeter)
+    }
+
     /// Creates a [`Volume`] from a value in Liters (`l`).
     #[inline]
     pub fn from_liters(value: T) -> Self {

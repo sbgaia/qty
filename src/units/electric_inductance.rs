@@ -119,6 +119,32 @@ impl<T: Float> ElectricInductance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`pH`, `nH`, `µH`, `mH`, `H`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricInductanceUnit> {
+        const SCALE: [(f64, ElectricInductanceUnit); 5] = [
+            (1.0, ElectricInductanceUnit::Henry),
+            (0.001, ElectricInductanceUnit::Millihenry),
+            (1e-6, ElectricInductanceUnit::Microhenry),
+            (1e-9, ElectricInductanceUnit::Nanohenry),
+            (1e-12, ElectricInductanceUnit::Picohenry),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricInductanceUnit::Henry);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricInductance`] from a value in Henries (`H`).
     #[inline]
     pub fn from_henries(value: T) -> Self {

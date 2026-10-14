@@ -151,6 +151,14 @@ impl<T: Float> VolumePerLength<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m³/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VolumePerLengthUnit> {
+        self.in_unit(VolumePerLengthUnit::CubicMeterPerMeter)
+    }
+
     /// Creates a [`VolumePerLength`] from a value in CubicMetersPerMeter (`m³/m`).
     #[inline]
     pub fn from_cubic_meters_per_meter(value: T) -> Self {

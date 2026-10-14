@@ -89,6 +89,14 @@ impl<T: Float> Turbidity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`NTU`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, TurbidityUnit> {
+        self.in_unit(TurbidityUnit::NTU)
+    }
+
     /// Creates a [`Turbidity`] from a value in NTU (`NTU`).
     #[inline]
     pub fn from_ntu(value: T) -> Self {

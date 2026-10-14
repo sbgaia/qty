@@ -152,6 +152,32 @@ impl<T: Float> Luminance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nCd/m²`, `µCd/m²`, `mCd/m²`, `Cd/m²`, `kCd/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LuminanceUnit> {
+        const SCALE: [(f64, LuminanceUnit); 5] = [
+            (1000.0, LuminanceUnit::KilocandelaPerSquareMeter),
+            (1.0, LuminanceUnit::CandelaPerSquareMeter),
+            (0.001, LuminanceUnit::MillicandelaPerSquareMeter),
+            (1e-6, LuminanceUnit::MicrocandelaPerSquareMeter),
+            (1e-9, LuminanceUnit::NanocandelaPerSquareMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(LuminanceUnit::CandelaPerSquareMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Luminance`] from a value in CandelasPerSquareMeter (`Cd/m²`).
     #[inline]
     pub fn from_candelas_per_square_meter(value: T) -> Self {

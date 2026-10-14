@@ -106,6 +106,14 @@ impl<T: Float> SpecificVolume<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m³/kg`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, SpecificVolumeUnit> {
+        self.in_unit(SpecificVolumeUnit::CubicMeterPerKilogram)
+    }
+
     /// Creates a [`SpecificVolume`] from a value in CubicMetersPerKilogram (`m³/kg`).
     #[inline]
     pub fn from_cubic_meters_per_kilogram(value: T) -> Self {

@@ -422,6 +422,8 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    }}");
     w!(out);
 
+    emit_auto_unit(qty, out);
+
     // Per-unit convenience constructors and accessors.
     for unit in &qty.units {
         let snake_plural = unit.plural.to_snake_case();
@@ -473,6 +475,96 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     }
 
     w!(out, "}}");
+}
+
+/// `auto_unit()`: picks, among the SI-prefixed forms of the base unit in
+/// steps of 1000 (m, km, mm, µm, …), the largest one not exceeding the value.
+fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
+    let enum_name = format!("{}Unit", qty.name);
+    let base = qty
+        .units
+        .iter()
+        .find(|u| u.singular == qty.base_unit)
+        .expect("base unit is listed");
+    let mut scale: Vec<(f64, &str)> = qty
+        .units
+        .iter()
+        .filter(|u| u.family == base.family && u.decimal_exp.is_some_and(|e| e % 3 == 0))
+        .filter_map(|u| match &u.to_base {
+            Form::Affine { a, b } if b.is_zero() => Some((a.to_f64(), u.singular.as_str())),
+            _ => None,
+        })
+        .collect();
+    scale.sort_by(|x, y| y.0.total_cmp(&x.0));
+    let names: Vec<String> = scale
+        .iter()
+        .map(|(_, u)| format!("{enum_name}::{u}"))
+        .collect();
+
+    w!(
+        out,
+        "    /// The value in the most readable SI-prefixed form of the base unit, in"
+    );
+    w!(
+        out,
+        "    /// steps of 1000: the largest unit not exceeding the value ({}).",
+        scale
+            .iter()
+            .rev()
+            .map(|(_, u)| {
+                let unit = qty.units.iter().find(|x| x.singular == *u).unwrap();
+                format!("`{}`", unit.abbreviation)
+            })
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
+    w!(
+        out,
+        "    /// Zero, NaN and infinities are shown in the base unit."
+    );
+    w!(out, "    #[inline]");
+    w!(
+        out,
+        "    pub fn auto_unit(self) -> crate::InUnit<T, {enum_name}> {{"
+    );
+    if scale.len() <= 1 {
+        w!(out, "        self.in_unit({enum_name}::{})", qty.base_unit);
+        w!(out, "    }}");
+        w!(out);
+        return;
+    }
+    w!(
+        out,
+        "        const SCALE: [(f64, {enum_name}); {}] = [{}];",
+        scale.len(),
+        scale
+            .iter()
+            .zip(&names)
+            .map(|((f, _), n)| format!("({}, {n})", crate::expr::f64_literal(*f)))
+            .collect::<Vec<_>>()
+            .join(", ")
+    );
+    w!(out, "        let magnitude = self.0.abs();");
+    w!(
+        out,
+        "        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {{"
+    );
+    w!(
+        out,
+        "            return self.in_unit({enum_name}::{});",
+        qty.base_unit
+    );
+    w!(out, "        }}");
+    w!(out, "        let mut unit = SCALE[SCALE.len() - 1].1;");
+    w!(out, "        for (factor, candidate) in SCALE {{");
+    w!(out, "            if magnitude >= T::from_f64(factor) {{");
+    w!(out, "                unit = candidate;");
+    w!(out, "                break;");
+    w!(out, "            }}");
+    w!(out, "        }}");
+    w!(out, "        self.in_unit(unit)");
+    w!(out, "    }}");
+    w!(out);
 }
 
 // ── Cross-type arithmetic ─────────────────────────────────────────────────────
@@ -635,6 +727,32 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
             unit.singular
         );
     }
+    w!(out, "}}");
+    w!(out);
+
+    // in_unit / auto_unit: the value and unit describe the same quantity.
+    w!(out, "#[test]");
+    w!(out, "fn in_unit_and_auto_unit_round_trip() {{");
+    w!(out, "    for v in [1e-9, 0.5, 1.0, 1234.5, 1e7, -3e4] {{");
+    w!(out, "        let q = {name}::from_base(v);");
+    w!(out, "        let auto = q.auto_unit();");
+    w!(
+        out,
+        "        assert_close({name}::new(auto.value, auto.unit).as_base(), v, F64_TOL);"
+    );
+    w!(out, "        for &unit in {enum_name}::ALL {{");
+    w!(out, "            let shown = q.in_unit(unit);");
+    w!(
+        out,
+        "            assert_eq!((shown.value, shown.unit), (q.convert_to(unit), unit));"
+    );
+    w!(out, "        }}");
+    w!(out, "    }}");
+    w!(
+        out,
+        "    assert_eq!({name}::from_base(0.0).auto_unit().unit, {enum_name}::{});",
+        qty.base_unit
+    );
     w!(out, "}}");
     w!(out);
 

@@ -100,6 +100,14 @@ impl<T: Float> VolumeFlowPerArea<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m³/(s·m²)`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowPerAreaUnit> {
+        self.in_unit(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
+    }
+
     /// Creates a [`VolumeFlowPerArea`] from a value in CubicMetersPerSecondPerSquareMeter (`m³/(s·m²)`).
     #[inline]
     pub fn from_cubic_meters_per_second_per_square_meter(value: T) -> Self {

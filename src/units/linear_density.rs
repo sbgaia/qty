@@ -210,6 +210,31 @@ impl<T: Float> LinearDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`µg/m`, `mg/m`, `g/m`, `kg/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LinearDensityUnit> {
+        const SCALE: [(f64, LinearDensityUnit); 4] = [
+            (1.0, LinearDensityUnit::KilogramPerMeter),
+            (0.001, LinearDensityUnit::GramPerMeter),
+            (1e-6, LinearDensityUnit::MilligramPerMeter),
+            (1e-9, LinearDensityUnit::MicrogramPerMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(LinearDensityUnit::KilogramPerMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`LinearDensity`] from a value in GramsPerMillimeter (`g/mm`).
     #[inline]
     pub fn from_grams_per_millimeter(value: T) -> Self {

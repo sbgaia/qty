@@ -112,6 +112,14 @@ impl<T: Float> FuelEfficiency<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`km/l`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, FuelEfficiencyUnit> {
+        self.in_unit(FuelEfficiencyUnit::KilometerPerLiter)
+    }
+
     /// Creates a [`FuelEfficiency`] from a value in LitersPer100Kilometers (`l/100km`).
     #[inline]
     pub fn from_liters_per100_kilometers(value: T) -> Self {

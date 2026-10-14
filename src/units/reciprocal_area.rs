@@ -165,6 +165,14 @@ impl<T: Float> ReciprocalArea<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m⁻²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ReciprocalAreaUnit> {
+        self.in_unit(ReciprocalAreaUnit::InverseSquareMeter)
+    }
+
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMeters (`m⁻²`).
     #[inline]
     pub fn from_inverse_square_meters(value: T) -> Self {

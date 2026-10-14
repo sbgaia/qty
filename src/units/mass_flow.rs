@@ -316,6 +316,32 @@ impl<T: Float> MassFlow<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`ng/s`, `µg/s`, `mg/s`, `g/s`, `kg/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MassFlowUnit> {
+        const SCALE: [(f64, MassFlowUnit); 5] = [
+            (1000.0, MassFlowUnit::KilogramPerSecond),
+            (1.0, MassFlowUnit::GramPerSecond),
+            (0.001, MassFlowUnit::MilligramPerSecond),
+            (1e-6, MassFlowUnit::MicrogramPerSecond),
+            (1e-9, MassFlowUnit::NanogramPerSecond),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MassFlowUnit::GramPerSecond);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`MassFlow`] from a value in GramsPerSecond (`g/s`).
     #[inline]
     pub fn from_grams_per_second(value: T) -> Self {

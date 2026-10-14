@@ -115,6 +115,14 @@ impl<T: Float> ElectricCurrentDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`A/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricCurrentDensityUnit> {
+        self.in_unit(ElectricCurrentDensityUnit::AmperePerSquareMeter)
+    }
+
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareMeter (`A/m²`).
     #[inline]
     pub fn from_amperes_per_square_meter(value: T) -> Self {

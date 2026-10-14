@@ -209,6 +209,38 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fGy`, `pGy`, `nGy`, `µGy`, `mGy`, `Gy`, `kGy`, `MGy`, `GGy`, `TGy`, `PGy`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AbsorbedDoseOfIonizingRadiationUnit> {
+        const SCALE: [(f64, AbsorbedDoseOfIonizingRadiationUnit); 11] = [
+            (1e15, AbsorbedDoseOfIonizingRadiationUnit::Petagray),
+            (1e12, AbsorbedDoseOfIonizingRadiationUnit::Teragray),
+            (1e9, AbsorbedDoseOfIonizingRadiationUnit::Gigagray),
+            (1000000.0, AbsorbedDoseOfIonizingRadiationUnit::Megagray),
+            (1000.0, AbsorbedDoseOfIonizingRadiationUnit::Kilogray),
+            (1.0, AbsorbedDoseOfIonizingRadiationUnit::Gray),
+            (0.001, AbsorbedDoseOfIonizingRadiationUnit::Milligray),
+            (1e-6, AbsorbedDoseOfIonizingRadiationUnit::Microgray),
+            (1e-9, AbsorbedDoseOfIonizingRadiationUnit::Nanogray),
+            (1e-12, AbsorbedDoseOfIonizingRadiationUnit::Picogray),
+            (1e-15, AbsorbedDoseOfIonizingRadiationUnit::Femtogray),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(AbsorbedDoseOfIonizingRadiationUnit::Gray);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Grays (`Gy`).
     #[inline]
     pub fn from_grays(value: T) -> Self {

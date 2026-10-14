@@ -167,6 +167,14 @@ impl<T: Float> DynamicViscosity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`Ns/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, DynamicViscosityUnit> {
+        self.in_unit(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
+    }
+
     /// Creates a [`DynamicViscosity`] from a value in NewtonSecondsPerMeterSquared (`Ns/m²`).
     #[inline]
     pub fn from_newton_seconds_per_meter_squared(value: T) -> Self {

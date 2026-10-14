@@ -140,6 +140,35 @@ impl<T: Float> ElectricReactance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricReactanceUnit> {
+        const SCALE: [(f64, ElectricReactanceUnit); 8] = [
+            (1e12, ElectricReactanceUnit::Teraohm),
+            (1e9, ElectricReactanceUnit::Gigaohm),
+            (1000000.0, ElectricReactanceUnit::Megaohm),
+            (1000.0, ElectricReactanceUnit::Kiloohm),
+            (1.0, ElectricReactanceUnit::Ohm),
+            (0.001, ElectricReactanceUnit::Milliohm),
+            (1e-6, ElectricReactanceUnit::Microohm),
+            (1e-9, ElectricReactanceUnit::Nanoohm),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricReactanceUnit::Ohm);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricReactance`] from a value in Ohms (`Ω`).
     #[inline]
     pub fn from_ohms(value: T) -> Self {

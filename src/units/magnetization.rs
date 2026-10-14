@@ -89,6 +89,14 @@ impl<T: Float> Magnetization<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`A/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MagnetizationUnit> {
+        self.in_unit(MagnetizationUnit::AmperePerMeter)
+    }
+
     /// Creates a [`Magnetization`] from a value in AmperesPerMeter (`A/m`).
     #[inline]
     pub fn from_amperes_per_meter(value: T) -> Self {

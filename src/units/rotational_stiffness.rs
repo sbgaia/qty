@@ -442,6 +442,30 @@ impl<T: Float> RotationalStiffness<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`N·m/rad`, `kN·m/rad`, `MN·m/rad`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, RotationalStiffnessUnit> {
+        const SCALE: [(f64, RotationalStiffnessUnit); 3] = [
+            (1000000.0, RotationalStiffnessUnit::MeganewtonMeterPerRadian),
+            (1000.0, RotationalStiffnessUnit::KilonewtonMeterPerRadian),
+            (1.0, RotationalStiffnessUnit::NewtonMeterPerRadian),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(RotationalStiffnessUnit::NewtonMeterPerRadian);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`RotationalStiffness`] from a value in NewtonMetersPerRadian (`N·m/rad`).
     #[inline]
     pub fn from_newton_meters_per_radian(value: T) -> Self {

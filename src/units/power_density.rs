@@ -406,6 +406,36 @@ impl<T: Float> PowerDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`pW/m³`, `nW/m³`, `µW/m³`, `mW/m³`, `W/m³`, `kW/m³`, `MW/m³`, `GW/m³`, `TW/m³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PowerDensityUnit> {
+        const SCALE: [(f64, PowerDensityUnit); 9] = [
+            (1e12, PowerDensityUnit::TerawattPerCubicMeter),
+            (1e9, PowerDensityUnit::GigawattPerCubicMeter),
+            (1000000.0, PowerDensityUnit::MegawattPerCubicMeter),
+            (1000.0, PowerDensityUnit::KilowattPerCubicMeter),
+            (1.0, PowerDensityUnit::WattPerCubicMeter),
+            (0.001, PowerDensityUnit::MilliwattPerCubicMeter),
+            (1e-6, PowerDensityUnit::MicrowattPerCubicMeter),
+            (1e-9, PowerDensityUnit::NanowattPerCubicMeter),
+            (1e-12, PowerDensityUnit::PicowattPerCubicMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(PowerDensityUnit::WattPerCubicMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`PowerDensity`] from a value in WattsPerCubicMeter (`W/m³`).
     #[inline]
     pub fn from_watts_per_cubic_meter(value: T) -> Self {

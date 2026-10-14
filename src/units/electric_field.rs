@@ -89,6 +89,14 @@ impl<T: Float> ElectricField<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`V/m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricFieldUnit> {
+        self.in_unit(ElectricFieldUnit::VoltPerMeter)
+    }
+
     /// Creates a [`ElectricField`] from a value in VoltsPerMeter (`V/m`).
     #[inline]
     pub fn from_volts_per_meter(value: T) -> Self {

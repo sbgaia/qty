@@ -134,6 +134,14 @@ impl<T: Float> WarpingMomentOfInertia<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m⁶`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, WarpingMomentOfInertiaUnit> {
+        self.in_unit(WarpingMomentOfInertiaUnit::MeterToTheSixth)
+    }
+
     /// Creates a [`WarpingMomentOfInertia`] from a value in MetersToTheSixth (`m⁶`).
     #[inline]
     pub fn from_meters_to_the_sixth(value: T) -> Self {

@@ -178,6 +178,29 @@ impl<T: Float> MassFlux<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`g·s⁻¹·m⁻²`, `kg·s⁻¹·m⁻²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MassFluxUnit> {
+        const SCALE: [(f64, MassFluxUnit); 2] = [
+            (1.0, MassFluxUnit::KilogramPerSecondPerSquareMeter),
+            (0.001, MassFluxUnit::GramPerSecondPerSquareMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MassFluxUnit::KilogramPerSecondPerSquareMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
     #[inline]
     pub fn from_grams_per_second_per_square_meter(value: T) -> Self {

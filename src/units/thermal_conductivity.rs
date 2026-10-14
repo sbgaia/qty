@@ -117,6 +117,14 @@ impl<T: Float> ThermalConductivity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`W/(m·K)`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ThermalConductivityUnit> {
+        self.in_unit(ThermalConductivityUnit::WattPerMeterKelvin)
+    }
+
     /// Creates a [`ThermalConductivity`] from a value in WattsPerMeterKelvin (`W/(m·K)`).
     #[inline]
     pub fn from_watts_per_meter_kelvin(value: T) -> Self {

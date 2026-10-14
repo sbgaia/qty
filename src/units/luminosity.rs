@@ -183,6 +183,38 @@ impl<T: Float> Luminosity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LuminosityUnit> {
+        const SCALE: [(f64, LuminosityUnit); 11] = [
+            (1e15, LuminosityUnit::Petawatt),
+            (1e12, LuminosityUnit::Terawatt),
+            (1e9, LuminosityUnit::Gigawatt),
+            (1000000.0, LuminosityUnit::Megawatt),
+            (1000.0, LuminosityUnit::Kilowatt),
+            (1.0, LuminosityUnit::Watt),
+            (0.001, LuminosityUnit::Milliwatt),
+            (1e-6, LuminosityUnit::Microwatt),
+            (1e-9, LuminosityUnit::Nanowatt),
+            (1e-12, LuminosityUnit::Picowatt),
+            (1e-15, LuminosityUnit::Femtowatt),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(LuminosityUnit::Watt);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Luminosity`] from a value in Watts (`W`).
     #[inline]
     pub fn from_watts(value: T) -> Self {

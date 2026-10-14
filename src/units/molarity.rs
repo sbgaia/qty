@@ -162,6 +162,29 @@ impl<T: Float> Molarity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`mol/m³`, `kmol/m³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MolarityUnit> {
+        const SCALE: [(f64, MolarityUnit); 2] = [
+            (1000.0, MolarityUnit::KilomolePerCubicMeter),
+            (1.0, MolarityUnit::MolePerCubicMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MolarityUnit::MolePerCubicMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Molarity`] from a value in MolesPerCubicMeter (`mol/m³`).
     #[inline]
     pub fn from_moles_per_cubic_meter(value: T) -> Self {

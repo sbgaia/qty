@@ -137,6 +137,29 @@ impl<T: Float> ElectricCurrentGradient<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`mA/s`, `A/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricCurrentGradientUnit> {
+        const SCALE: [(f64, ElectricCurrentGradientUnit); 2] = [
+            (1.0, ElectricCurrentGradientUnit::AmperePerSecond),
+            (0.001, ElectricCurrentGradientUnit::MilliamperePerSecond),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricCurrentGradientUnit::AmperePerSecond);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerSecond (`A/s`).
     #[inline]
     pub fn from_amperes_per_second(value: T) -> Self {

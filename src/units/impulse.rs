@@ -175,6 +175,33 @@ impl<T: Float> Impulse<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nN·s`, `µN·s`, `mN·s`, `N·s`, `kN·s`, `MN·s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ImpulseUnit> {
+        const SCALE: [(f64, ImpulseUnit); 6] = [
+            (1000000.0, ImpulseUnit::MeganewtonSecond),
+            (1000.0, ImpulseUnit::KilonewtonSecond),
+            (1.0, ImpulseUnit::NewtonSecond),
+            (0.001, ImpulseUnit::MillinewtonSecond),
+            (1e-6, ImpulseUnit::MicronewtonSecond),
+            (1e-9, ImpulseUnit::NanonewtonSecond),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ImpulseUnit::NewtonSecond);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Impulse`] from a value in KilogramMetersPerSecond (`kg·m/s`).
     #[inline]
     pub fn from_kilogram_meters_per_second(value: T) -> Self {

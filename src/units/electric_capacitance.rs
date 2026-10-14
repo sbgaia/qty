@@ -133,6 +133,34 @@ impl<T: Float> ElectricCapacitance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`pF`, `nF`, `µF`, `mF`, `F`, `kF`, `MF`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricCapacitanceUnit> {
+        const SCALE: [(f64, ElectricCapacitanceUnit); 7] = [
+            (1000000.0, ElectricCapacitanceUnit::Megafarad),
+            (1000.0, ElectricCapacitanceUnit::Kilofarad),
+            (1.0, ElectricCapacitanceUnit::Farad),
+            (0.001, ElectricCapacitanceUnit::Millifarad),
+            (1e-6, ElectricCapacitanceUnit::Microfarad),
+            (1e-9, ElectricCapacitanceUnit::Nanofarad),
+            (1e-12, ElectricCapacitanceUnit::Picofarad),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricCapacitanceUnit::Farad);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricCapacitance`] from a value in Farads (`F`).
     #[inline]
     pub fn from_farads(value: T) -> Self {

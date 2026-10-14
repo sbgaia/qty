@@ -99,6 +99,14 @@ impl<T: Float> RatioChangeRate<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, RatioChangeRateUnit> {
+        self.in_unit(RatioChangeRateUnit::DecimalFractionPerSecond)
+    }
+
     /// Creates a [`RatioChangeRate`] from a value in PercentsPerSecond (`%/s`).
     #[inline]
     pub fn from_percents_per_second(value: T) -> Self {

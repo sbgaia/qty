@@ -236,6 +236,56 @@ fn display_honours_format_flags() {
 }
 
 #[test]
+fn display_in_a_chosen_or_automatic_unit() {
+    let d = Length::from_meters(1234.5);
+    assert_eq!(d.in_unit(LengthUnit::Kilometer).to_string(), "1.2345 km");
+    assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");
+    assert_eq!(
+        format!("{:>8.2}", d.in_unit(LengthUnit::Mile)),
+        "    0.77 mi"
+    );
+    assert_eq!(
+        format!("{:e}", d.in_unit(LengthUnit::Millimeter)),
+        "1.2345e6 mm"
+    );
+
+    let auto = |m: f64| format!("{:.3}", Length::from_meters(m).auto_unit());
+    assert_eq!(auto(1234.5), "1.234 km");
+    assert_eq!(auto(0.0025), "2.500 mm");
+    assert_eq!(auto(-0.0025), "-2.500 mm");
+    assert_eq!(auto(3e-7), "300.000 nm");
+    assert_eq!(auto(1.0), "1.000 m");
+    assert_eq!(auto(999.0), "999.000 m");
+    assert_eq!(auto(0.0), "0.000 m");
+    assert_eq!(auto(5e12), "5000.000 Gm"); // beyond the largest prefix
+    assert_eq!(auto(f64::INFINITY), "inf m");
+    // Prefixes of a base unit that is itself prefixed: mass is in kg, the
+    // prefixes are on the gram.
+    assert_eq!(format!("{}", Mass::from_grams(2.5).auto_unit()), "2.5 g");
+    assert_eq!(
+        format!("{}", Mass::from_kilograms(80.0).auto_unit()),
+        "80 kg"
+    );
+    assert_eq!(
+        format!("{}", Duration::from_seconds(0.004).auto_unit()),
+        "4 ms"
+    );
+    // f32 storage.
+    assert_eq!(
+        format!("{}", Length::from_meters(1500.0_f32).auto_unit()),
+        "1.5 km"
+    );
+    // Generic code can read abbreviations through `UnitEnum`.
+    fn abbreviations<U: UnitEnum>() -> usize {
+        U::ALL
+            .iter()
+            .filter(|u| !u.abbreviation().is_empty())
+            .count()
+    }
+    assert_eq!(abbreviations::<LengthUnit>(), LengthUnit::ALL.len());
+}
+
+#[test]
 fn parsing() {
     assert_eq!("1.5 km".parse::<Length>(), Ok(Length::from_kilometers(1.5)));
     assert_eq!("1.5km".parse::<Length>(), Ok(Length::from_kilometers(1.5)));

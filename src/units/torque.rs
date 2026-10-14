@@ -288,6 +288,30 @@ impl<T: Float> Torque<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`N·m`, `kN·m`, `MN·m`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, TorqueUnit> {
+        const SCALE: [(f64, TorqueUnit); 3] = [
+            (1000000.0, TorqueUnit::MeganewtonMeter),
+            (1000.0, TorqueUnit::KilonewtonMeter),
+            (1.0, TorqueUnit::NewtonMeter),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(TorqueUnit::NewtonMeter);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Torque`] from a value in NewtonMillimeters (`N·mm`).
     #[inline]
     pub fn from_newton_millimeters(value: T) -> Self {

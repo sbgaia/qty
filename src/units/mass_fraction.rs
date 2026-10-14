@@ -252,6 +252,14 @@ impl<T: Float> MassFraction<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (``).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MassFractionUnit> {
+        self.in_unit(MassFractionUnit::DecimalFraction)
+    }
+
     /// Creates a [`MassFraction`] from a value in DecimalFractions (``).
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {

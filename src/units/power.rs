@@ -279,6 +279,38 @@ impl<T: Float> Power<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PowerUnit> {
+        const SCALE: [(f64, PowerUnit); 11] = [
+            (1e15, PowerUnit::Petawatt),
+            (1e12, PowerUnit::Terawatt),
+            (1e9, PowerUnit::Gigawatt),
+            (1000000.0, PowerUnit::Megawatt),
+            (1000.0, PowerUnit::Kilowatt),
+            (1.0, PowerUnit::Watt),
+            (0.001, PowerUnit::Milliwatt),
+            (1e-6, PowerUnit::Microwatt),
+            (1e-9, PowerUnit::Nanowatt),
+            (1e-12, PowerUnit::Picowatt),
+            (1e-15, PowerUnit::Femtowatt),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(PowerUnit::Watt);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Power`] from a value in Watts (`W`).
     #[inline]
     pub fn from_watts(value: T) -> Self {

@@ -87,6 +87,14 @@ impl<T: Float> Scalar<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (``).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ScalarUnit> {
+        self.in_unit(ScalarUnit::Amount)
+    }
+
     /// Creates a [`Scalar`] from a value in Amount (``).
     #[inline]
     pub fn from_amount(value: T) -> Self {

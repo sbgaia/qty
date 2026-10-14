@@ -93,6 +93,14 @@ impl<T: Float> ElectricChargeDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`C/m³`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricChargeDensityUnit> {
+        self.in_unit(ElectricChargeDensityUnit::CoulombPerCubicMeter)
+    }
+
     /// Creates a [`ElectricChargeDensity`] from a value in CoulombsPerCubicMeter (`C/m³`).
     #[inline]
     pub fn from_coulombs_per_cubic_meter(value: T) -> Self {

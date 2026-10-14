@@ -371,6 +371,36 @@ impl<T: Float> Energy<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nJ`, `µJ`, `mJ`, `J`, `kJ`, `MJ`, `GJ`, `TJ`, `PJ`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, EnergyUnit> {
+        const SCALE: [(f64, EnergyUnit); 9] = [
+            (1e15, EnergyUnit::Petajoule),
+            (1e12, EnergyUnit::Terajoule),
+            (1e9, EnergyUnit::Gigajoule),
+            (1000000.0, EnergyUnit::Megajoule),
+            (1000.0, EnergyUnit::Kilojoule),
+            (1.0, EnergyUnit::Joule),
+            (0.001, EnergyUnit::Millijoule),
+            (1e-6, EnergyUnit::Microjoule),
+            (1e-9, EnergyUnit::Nanojoule),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(EnergyUnit::Joule);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Energy`] from a value in Joules (`J`).
     #[inline]
     pub fn from_joules(value: T) -> Self {

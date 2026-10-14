@@ -186,6 +186,14 @@ impl<T: Float> Area<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AreaUnit> {
+        self.in_unit(AreaUnit::SquareMeter)
+    }
+
     /// Creates a [`Area`] from a value in SquareKilometers (`km²`).
     #[inline]
     pub fn from_square_kilometers(value: T) -> Self {

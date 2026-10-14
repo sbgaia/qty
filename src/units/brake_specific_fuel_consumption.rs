@@ -114,6 +114,14 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`kg/J`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, BrakeSpecificFuelConsumptionUnit> {
+        self.in_unit(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
+    }
+
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in GramsPerKiloWattHour (`g/kWh`).
     #[inline]
     pub fn from_grams_per_kilo_watt_hour(value: T) -> Self {

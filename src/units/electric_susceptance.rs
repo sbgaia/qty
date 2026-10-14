@@ -196,6 +196,35 @@ impl<T: Float> ElectricSusceptance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricSusceptanceUnit> {
+        const SCALE: [(f64, ElectricSusceptanceUnit); 8] = [
+            (1e12, ElectricSusceptanceUnit::Terasiemens),
+            (1e9, ElectricSusceptanceUnit::Gigasiemens),
+            (1000000.0, ElectricSusceptanceUnit::Megasiemens),
+            (1000.0, ElectricSusceptanceUnit::Kilosiemens),
+            (1.0, ElectricSusceptanceUnit::Siemens),
+            (0.001, ElectricSusceptanceUnit::Millisiemens),
+            (1e-6, ElectricSusceptanceUnit::Microsiemens),
+            (1e-9, ElectricSusceptanceUnit::Nanosiemens),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricSusceptanceUnit::Siemens);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricSusceptance`] from a value in Siemens (`S`).
     #[inline]
     pub fn from_siemens(value: T) -> Self {

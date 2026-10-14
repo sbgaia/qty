@@ -196,6 +196,32 @@ impl<T: Float> Duration<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`ps`, `ns`, `µs`, `ms`, `s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, DurationUnit> {
+        const SCALE: [(f64, DurationUnit); 5] = [
+            (1.0, DurationUnit::Second),
+            (0.001, DurationUnit::Millisecond),
+            (1e-6, DurationUnit::Microsecond),
+            (1e-9, DurationUnit::Nanosecond),
+            (1e-12, DurationUnit::Picosecond),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(DurationUnit::Second);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Duration`] from a value in Years365 (`yr`).
     #[inline]
     pub fn from_years365(value: T) -> Self {

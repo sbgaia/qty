@@ -319,6 +319,34 @@ impl<T: Float> Mass<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fg`, `pg`, `ng`, `µg`, `mg`, `g`, `kg`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MassUnit> {
+        const SCALE: [(f64, MassUnit); 7] = [
+            (1.0, MassUnit::Kilogram),
+            (0.001, MassUnit::Gram),
+            (1e-6, MassUnit::Milligram),
+            (1e-9, MassUnit::Microgram),
+            (1e-12, MassUnit::Nanogram),
+            (1e-15, MassUnit::Picogram),
+            (1e-18, MassUnit::Femtogram),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MassUnit::Kilogram);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Mass`] from a value in Grams (`g`).
     #[inline]
     pub fn from_grams(value: T) -> Self {

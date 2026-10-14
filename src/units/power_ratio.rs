@@ -117,6 +117,14 @@ impl<T: Float> PowerRatio<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`dBW`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, PowerRatioUnit> {
+        self.in_unit(PowerRatioUnit::DecibelWatt)
+    }
+
     /// Creates a [`PowerRatio`] from a value in DecibelWatts (`dBW`).
     #[inline]
     pub fn from_decibel_watts(value: T) -> Self {

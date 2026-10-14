@@ -89,6 +89,14 @@ impl<T: Float> LuminousIntensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`cd`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, LuminousIntensityUnit> {
+        self.in_unit(LuminousIntensityUnit::Candela)
+    }
+
     /// Creates a [`LuminousIntensity`] from a value in Candela (`cd`).
     #[inline]
     pub fn from_candela(value: T) -> Self {

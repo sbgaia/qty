@@ -126,6 +126,31 @@ impl<T: Float> MagneticField<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nT`, `µT`, `mT`, `T`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MagneticFieldUnit> {
+        const SCALE: [(f64, MagneticFieldUnit); 4] = [
+            (1.0, MagneticFieldUnit::Tesla),
+            (0.001, MagneticFieldUnit::Millitesla),
+            (1e-6, MagneticFieldUnit::Microtesla),
+            (1e-9, MagneticFieldUnit::Nanotesla),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(MagneticFieldUnit::Tesla);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`MagneticField`] from a value in Teslas (`T`).
     #[inline]
     pub fn from_teslas(value: T) -> Self {

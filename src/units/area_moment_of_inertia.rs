@@ -130,6 +130,14 @@ impl<T: Float> AreaMomentOfInertia<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m⁴`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, AreaMomentOfInertiaUnit> {
+        self.in_unit(AreaMomentOfInertiaUnit::MeterToTheFourth)
+    }
+
     /// Creates a [`AreaMomentOfInertia`] from a value in MetersToTheFourth (`m⁴`).
     #[inline]
     pub fn from_meters_to_the_fourth(value: T) -> Self {

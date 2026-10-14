@@ -358,6 +358,34 @@ impl<T: Float> BitRate<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`bit/s`, `kbit/s`, `Mbit/s`, `Gbit/s`, `Tbit/s`, `Pbit/s`, `Ebit/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, BitRateUnit> {
+        const SCALE: [(f64, BitRateUnit); 7] = [
+            (1e18, BitRateUnit::ExabitPerSecond),
+            (1e15, BitRateUnit::PetabitPerSecond),
+            (1e12, BitRateUnit::TerabitPerSecond),
+            (1e9, BitRateUnit::GigabitPerSecond),
+            (1000000.0, BitRateUnit::MegabitPerSecond),
+            (1000.0, BitRateUnit::KilobitPerSecond),
+            (1.0, BitRateUnit::BitPerSecond),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(BitRateUnit::BitPerSecond);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`BitRate`] from a value in BitsPerSecond (`bit/s`).
     #[inline]
     pub fn from_bits_per_second(value: T) -> Self {

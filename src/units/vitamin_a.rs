@@ -89,6 +89,14 @@ impl<T: Float> VitaminA<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`IU`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, VitaminAUnit> {
+        self.in_unit(VitaminAUnit::InternationalUnit)
+    }
+
     /// Creates a [`VitaminA`] from a value in InternationalUnits (`IU`).
     #[inline]
     pub fn from_international_units(value: T) -> Self {

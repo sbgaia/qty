@@ -147,6 +147,35 @@ impl<T: Float> ElectricCurrent<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`fA`, `pA`, `nA`, `µA`, `mA`, `A`, `kA`, `MA`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricCurrentUnit> {
+        const SCALE: [(f64, ElectricCurrentUnit); 8] = [
+            (1000000.0, ElectricCurrentUnit::Megaampere),
+            (1000.0, ElectricCurrentUnit::Kiloampere),
+            (1.0, ElectricCurrentUnit::Ampere),
+            (0.001, ElectricCurrentUnit::Milliampere),
+            (1e-6, ElectricCurrentUnit::Microampere),
+            (1e-9, ElectricCurrentUnit::Nanoampere),
+            (1e-12, ElectricCurrentUnit::Picoampere),
+            (1e-15, ElectricCurrentUnit::Femtoampere),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricCurrentUnit::Ampere);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricCurrent`] from a value in Amperes (`A`).
     #[inline]
     pub fn from_amperes(value: T) -> Self {

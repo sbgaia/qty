@@ -126,6 +126,33 @@ impl<T: Float> ElectricPotential<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`nV`, `µV`, `mV`, `V`, `kV`, `MV`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricPotentialUnit> {
+        const SCALE: [(f64, ElectricPotentialUnit); 6] = [
+            (1000000.0, ElectricPotentialUnit::Megavolt),
+            (1000.0, ElectricPotentialUnit::Kilovolt),
+            (1.0, ElectricPotentialUnit::Volt),
+            (0.001, ElectricPotentialUnit::Millivolt),
+            (1e-6, ElectricPotentialUnit::Microvolt),
+            (1e-9, ElectricPotentialUnit::Nanovolt),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricPotentialUnit::Volt);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricPotential`] from a value in Volts (`V`).
     #[inline]
     pub fn from_volts(value: T) -> Self {

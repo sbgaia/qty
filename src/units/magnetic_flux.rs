@@ -89,6 +89,14 @@ impl<T: Float> MagneticFlux<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`Wb`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, MagneticFluxUnit> {
+        self.in_unit(MagneticFluxUnit::Weber)
+    }
+
     /// Creates a [`MagneticFlux`] from a value in Webers (`Wb`).
     #[inline]
     pub fn from_webers(value: T) -> Self {

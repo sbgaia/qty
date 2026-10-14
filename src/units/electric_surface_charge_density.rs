@@ -117,6 +117,14 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`C/m²`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricSurfaceChargeDensityUnit> {
+        self.in_unit(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
+    }
+
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareMeter (`C/m²`).
     #[inline]
     pub fn from_coulombs_per_square_meter(value: T) -> Self {

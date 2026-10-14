@@ -145,6 +145,14 @@ impl<T: Float> ThermalInsulance<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m²K/kW`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ThermalInsulanceUnit> {
+        self.in_unit(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
+    }
+
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerKilowatt (`m²K/kW`).
     #[inline]
     pub fn from_square_meter_kelvins_per_kilowatt(value: T) -> Self {

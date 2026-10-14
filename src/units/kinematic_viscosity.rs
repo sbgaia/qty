@@ -151,6 +151,14 @@ impl<T: Float> KinematicViscosity<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`m²/s`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, KinematicViscosityUnit> {
+        self.in_unit(KinematicViscosityUnit::SquareMeterPerSecond)
+    }
+
     /// Creates a [`KinematicViscosity`] from a value in SquareMetersPerSecond (`m²/s`).
     #[inline]
     pub fn from_square_meters_per_second(value: T) -> Self {

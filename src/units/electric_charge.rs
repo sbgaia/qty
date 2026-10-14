@@ -162,6 +162,34 @@ impl<T: Float> ElectricCharge<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`pC`, `nC`, `µC`, `mC`, `C`, `kC`, `MC`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ElectricChargeUnit> {
+        const SCALE: [(f64, ElectricChargeUnit); 7] = [
+            (1000000.0, ElectricChargeUnit::Megacoulomb),
+            (1000.0, ElectricChargeUnit::Kilocoulomb),
+            (1.0, ElectricChargeUnit::Coulomb),
+            (0.001, ElectricChargeUnit::Millicoulomb),
+            (1e-6, ElectricChargeUnit::Microcoulomb),
+            (1e-9, ElectricChargeUnit::Nanocoulomb),
+            (1e-12, ElectricChargeUnit::Picocoulomb),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ElectricChargeUnit::Coulomb);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`ElectricCharge`] from a value in Coulombs (`C`).
     #[inline]
     pub fn from_coulombs(value: T) -> Self {

@@ -209,6 +209,32 @@ impl<T: Float> Force<T> {
         }
     }
 
+    /// The value in the most readable SI-prefixed form of the base unit, in
+    /// steps of 1000: the largest unit not exceeding the value (`µN`, `mN`, `N`, `kN`, `MN`).
+    /// Zero, NaN and infinities are shown in the base unit.
+    #[inline]
+    pub fn auto_unit(self) -> crate::InUnit<T, ForceUnit> {
+        const SCALE: [(f64, ForceUnit); 5] = [
+            (1000000.0, ForceUnit::Meganewton),
+            (1000.0, ForceUnit::Kilonewton),
+            (1.0, ForceUnit::Newton),
+            (0.001, ForceUnit::Millinewton),
+            (1e-6, ForceUnit::Micronewton),
+        ];
+        let magnitude = self.0.abs();
+        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
+            return self.in_unit(ForceUnit::Newton);
+        }
+        let mut unit = SCALE[SCALE.len() - 1].1;
+        for (factor, candidate) in SCALE {
+            if magnitude >= T::from_f64(factor) {
+                unit = candidate;
+                break;
+            }
+        }
+        self.in_unit(unit)
+    }
+
     /// Creates a [`Force`] from a value in Dyne (`dyn`).
     #[inline]
     pub fn from_dyne(value: T) -> Self {
