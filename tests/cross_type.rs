@@ -2,6 +2,7 @@
 
 use unitsnet_rs::*;
 
+#[cfg(feature = "radiation")]
 #[test]
 fn mul_absorbed_dose_of_ionizing_radiation_area() {
     let a = AbsorbedDoseOfIonizingRadiation::from_base(6.0);
@@ -15,6 +16,7 @@ fn mul_absorbed_dose_of_ionizing_radiation_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_acceleration_area_density() {
     let a = Acceleration::from_base(6.0);
@@ -28,6 +30,7 @@ fn mul_acceleration_area_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_acceleration_density() {
     let a = Acceleration::from_base(6.0);
@@ -54,6 +57,7 @@ fn mul_acceleration_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_acceleration_linear_density() {
     let a = Acceleration::from_base(6.0);
@@ -80,6 +84,7 @@ fn mul_acceleration_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_amount_of_substance_molar_energy() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -93,6 +98,7 @@ fn mul_amount_of_substance_molar_energy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_amount_of_substance_molar_mass() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -106,6 +112,7 @@ fn mul_amount_of_substance_molar_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_angle_rotational_stiffness() {
     let a = Angle::from_base(6.0);
@@ -119,6 +126,7 @@ fn mul_angle_rotational_stiffness() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn mul_area_absorbed_dose_of_ionizing_radiation() {
     let a = Area::from_base(6.0);
@@ -132,6 +140,7 @@ fn mul_area_absorbed_dose_of_ionizing_radiation() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_area() {
     let a = Area::from_base(6.0);
@@ -145,6 +154,7 @@ fn mul_area_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_area_density() {
     let a = Area::from_base(6.0);
@@ -158,6 +168,7 @@ fn mul_area_area_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_density() {
     let a = Area::from_base(6.0);
@@ -171,6 +182,7 @@ fn mul_area_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_area_electric_current_density() {
     let a = Area::from_base(6.0);
@@ -184,6 +196,7 @@ fn mul_area_electric_current_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_area_electric_surface_charge_density() {
     let a = Area::from_base(6.0);
@@ -197,6 +210,7 @@ fn mul_area_electric_surface_charge_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_force_per_length() {
     let a = Area::from_base(6.0);
@@ -210,6 +224,7 @@ fn mul_area_force_per_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_area_heat_flux() {
     let a = Area::from_base(6.0);
@@ -223,6 +238,7 @@ fn mul_area_heat_flux() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_area_illuminance() {
     let a = Area::from_base(6.0);
@@ -249,6 +265,7 @@ fn mul_area_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_area_luminance() {
     let a = Area::from_base(6.0);
@@ -262,6 +279,7 @@ fn mul_area_luminance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_area_magnetic_field() {
     let a = Area::from_base(6.0);
@@ -275,6 +293,7 @@ fn mul_area_magnetic_field() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_area_mass_flux() {
     let a = Area::from_base(6.0);
@@ -296,6 +315,7 @@ fn mul_area_pressure() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_reciprocal_length() {
     let a = Area::from_base(6.0);
@@ -309,6 +329,7 @@ fn mul_area_reciprocal_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_specific_weight() {
     let a = Area::from_base(6.0);
@@ -322,6 +343,7 @@ fn mul_area_specific_weight() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_area_speed() {
     let a = Area::from_base(6.0);
@@ -335,6 +357,7 @@ fn mul_area_speed() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_area_volume_flow_per_area() {
     let a = Area::from_base(6.0);
@@ -348,6 +371,7 @@ fn mul_area_volume_flow_per_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_density_acceleration() {
     let a = AreaDensity::from_base(6.0);
@@ -361,6 +385,7 @@ fn mul_area_density_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_density_area() {
     let a = AreaDensity::from_base(6.0);
@@ -374,6 +399,7 @@ fn mul_area_density_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_area_density_length() {
     let a = AreaDensity::from_base(6.0);
@@ -387,6 +413,7 @@ fn mul_area_density_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn mul_bit_rate_duration() {
     let a = BitRate::from_base(6.0);
@@ -400,6 +427,7 @@ fn mul_bit_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "fluids", feature = "misc"))]
 #[test]
 fn mul_brake_specific_fuel_consumption_power() {
     let a = BrakeSpecificFuelConsumption::from_base(6.0);
@@ -408,6 +436,7 @@ fn mul_brake_specific_fuel_consumption_power() {
     assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_coefficient_of_thermal_expansion_temperature_delta() {
     let a = CoefficientOfThermalExpansion::from_base(6.0);
@@ -421,6 +450,7 @@ fn mul_coefficient_of_thermal_expansion_temperature_delta() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_compressibility_pressure() {
     let a = Compressibility::from_base(6.0);
@@ -434,6 +464,7 @@ fn mul_compressibility_pressure() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_density_acceleration() {
     let a = Density::from_base(6.0);
@@ -447,6 +478,7 @@ fn mul_density_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_density_area() {
     let a = Density::from_base(6.0);
@@ -460,6 +492,7 @@ fn mul_density_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_density_kinematic_viscosity() {
     let a = Density::from_base(6.0);
@@ -473,6 +506,7 @@ fn mul_density_kinematic_viscosity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_density_length() {
     let a = Density::from_base(6.0);
@@ -486,6 +520,7 @@ fn mul_density_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_density_speed() {
     let a = Density::from_base(6.0);
@@ -512,6 +547,7 @@ fn mul_density_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_density_volume_concentration() {
     let a = Density::from_base(6.0);
@@ -525,6 +561,7 @@ fn mul_density_volume_concentration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_density_volume_flow() {
     let a = Density::from_base(6.0);
@@ -546,6 +583,7 @@ fn mul_duration_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn mul_duration_bit_rate() {
     let a = Duration::from_base(6.0);
@@ -559,6 +597,7 @@ fn mul_duration_bit_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_duration_electric_apparent_power() {
     let a = Duration::from_base(6.0);
@@ -567,6 +606,7 @@ fn mul_duration_electric_apparent_power() {
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_duration_electric_current() {
     let a = Duration::from_base(6.0);
@@ -580,6 +620,7 @@ fn mul_duration_electric_current() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_duration_electric_current_gradient() {
     let a = Duration::from_base(6.0);
@@ -593,6 +634,7 @@ fn mul_duration_electric_current_gradient() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_duration_electric_potential_change_rate() {
     let a = Duration::from_base(6.0);
@@ -606,6 +648,7 @@ fn mul_duration_electric_potential_change_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_duration_electric_reactive_power() {
     let a = Duration::from_base(6.0);
@@ -614,6 +657,7 @@ fn mul_duration_electric_reactive_power() {
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_force() {
     let a = Duration::from_base(6.0);
@@ -627,6 +671,7 @@ fn mul_duration_force() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_force_change_rate() {
     let a = Duration::from_base(6.0);
@@ -640,6 +685,7 @@ fn mul_duration_force_change_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_duration_irradiance() {
     let a = Duration::from_base(6.0);
@@ -653,6 +699,7 @@ fn mul_duration_irradiance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_jerk() {
     let a = Duration::from_base(6.0);
@@ -666,6 +713,7 @@ fn mul_duration_jerk() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_duration_kinematic_viscosity() {
     let a = Duration::from_base(6.0);
@@ -679,6 +727,7 @@ fn mul_duration_kinematic_viscosity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_duration_mass_flow() {
     let a = Duration::from_base(6.0);
@@ -687,6 +736,7 @@ fn mul_duration_mass_flow() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_duration_molar_flow() {
     let a = Duration::from_base(6.0);
@@ -713,6 +763,7 @@ fn mul_duration_power() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_pressure_change_rate() {
     let a = Duration::from_base(6.0);
@@ -726,6 +777,7 @@ fn mul_duration_pressure_change_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn mul_duration_radiation_equivalent_dose_rate() {
     let a = Duration::from_base(6.0);
@@ -739,6 +791,7 @@ fn mul_duration_radiation_equivalent_dose_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_ratio_change_rate() {
     let a = Duration::from_base(6.0);
@@ -752,6 +805,7 @@ fn mul_duration_ratio_change_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_rotational_acceleration() {
     let a = Duration::from_base(6.0);
@@ -765,6 +819,7 @@ fn mul_duration_rotational_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_duration_rotational_speed() {
     let a = Duration::from_base(6.0);
@@ -791,6 +846,7 @@ fn mul_duration_speed() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_duration_temperature_change_rate() {
     let a = Duration::from_base(6.0);
@@ -804,6 +860,7 @@ fn mul_duration_temperature_change_rate() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_duration_volume_flow() {
     let a = Duration::from_base(6.0);
@@ -817,6 +874,7 @@ fn mul_duration_volume_flow() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_apparent_power_duration() {
     let a = ElectricApparentPower::from_base(6.0);
@@ -825,6 +883,7 @@ fn mul_electric_apparent_power_duration() {
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_capacitance_electric_potential() {
     let a = ElectricCapacitance::from_base(6.0);
@@ -838,6 +897,7 @@ fn mul_electric_capacitance_electric_potential() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_charge_electric_potential() {
     let a = ElectricCharge::from_base(6.0);
@@ -851,6 +911,7 @@ fn mul_electric_charge_electric_potential() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_charge_density_volume() {
     let a = ElectricChargeDensity::from_base(6.0);
@@ -864,6 +925,7 @@ fn mul_electric_charge_density_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_conductance_electric_potential() {
     let a = ElectricConductance::from_base(6.0);
@@ -877,6 +939,7 @@ fn mul_electric_conductance_electric_potential() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_current_duration() {
     let a = ElectricCurrent::from_base(6.0);
@@ -890,6 +953,7 @@ fn mul_electric_current_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_current_electric_potential() {
     let a = ElectricCurrent::from_base(6.0);
@@ -903,6 +967,7 @@ fn mul_electric_current_electric_potential() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_current_electric_resistance() {
     let a = ElectricCurrent::from_base(6.0);
@@ -916,6 +981,7 @@ fn mul_electric_current_electric_resistance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_current_density_area() {
     let a = ElectricCurrentDensity::from_base(6.0);
@@ -929,6 +995,7 @@ fn mul_electric_current_density_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_current_gradient_duration() {
     let a = ElectricCurrentGradient::from_base(6.0);
@@ -942,6 +1009,7 @@ fn mul_electric_current_gradient_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_field_length() {
     let a = ElectricField::from_base(6.0);
@@ -955,6 +1023,7 @@ fn mul_electric_field_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_potential_electric_capacitance() {
     let a = ElectricPotential::from_base(6.0);
@@ -968,6 +1037,7 @@ fn mul_electric_potential_electric_capacitance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_potential_electric_charge() {
     let a = ElectricPotential::from_base(6.0);
@@ -981,6 +1051,7 @@ fn mul_electric_potential_electric_charge() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_potential_electric_conductance() {
     let a = ElectricPotential::from_base(6.0);
@@ -994,6 +1065,7 @@ fn mul_electric_potential_electric_conductance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_potential_electric_current() {
     let a = ElectricPotential::from_base(6.0);
@@ -1007,6 +1079,7 @@ fn mul_electric_potential_electric_current() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_potential_change_rate_duration() {
     let a = ElectricPotentialChangeRate::from_base(6.0);
@@ -1020,6 +1093,7 @@ fn mul_electric_potential_change_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_reactive_power_duration() {
     let a = ElectricReactivePower::from_base(6.0);
@@ -1028,6 +1102,7 @@ fn mul_electric_reactive_power_duration() {
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_resistance_electric_current() {
     let a = ElectricResistance::from_base(6.0);
@@ -1041,6 +1116,7 @@ fn mul_electric_resistance_electric_current() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_electric_surface_charge_density_area() {
     let a = ElectricSurfaceChargeDensity::from_base(6.0);
@@ -1067,6 +1143,7 @@ fn mul_energy_frequency() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_energy_density_volume() {
     let a = EnergyDensity::from_base(6.0);
@@ -1080,6 +1157,7 @@ fn mul_energy_density_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_entropy_temperature_delta() {
     let a = Entropy::from_base(6.0);
@@ -1093,6 +1171,7 @@ fn mul_entropy_temperature_delta() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_fluid_resistance_volume_flow() {
     let a = FluidResistance::from_base(6.0);
@@ -1106,6 +1185,7 @@ fn mul_fluid_resistance_volume_flow() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_duration() {
     let a = Force::from_base(6.0);
@@ -1119,6 +1199,7 @@ fn mul_force_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_length() {
     let a = Force::from_base(6.0);
@@ -1132,6 +1213,7 @@ fn mul_force_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_reciprocal_area() {
     let a = Force::from_base(6.0);
@@ -1145,6 +1227,7 @@ fn mul_force_reciprocal_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_reciprocal_length() {
     let a = Force::from_base(6.0);
@@ -1171,6 +1254,7 @@ fn mul_force_speed() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_change_rate_duration() {
     let a = ForceChangeRate::from_base(6.0);
@@ -1184,6 +1268,7 @@ fn mul_force_change_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_per_length_area() {
     let a = ForcePerLength::from_base(6.0);
@@ -1197,6 +1282,7 @@ fn mul_force_per_length_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_per_length_length() {
     let a = ForcePerLength::from_base(6.0);
@@ -1210,6 +1296,7 @@ fn mul_force_per_length_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_per_length_reciprocal_length() {
     let a = ForcePerLength::from_base(6.0);
@@ -1236,6 +1323,7 @@ fn mul_frequency_energy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn mul_frequency_information() {
     let a = Frequency::from_base(6.0);
@@ -1249,6 +1337,7 @@ fn mul_frequency_information() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_heat_flux_area() {
     let a = HeatFlux::from_base(6.0);
@@ -1262,6 +1351,7 @@ fn mul_heat_flux_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_heat_flux_thermal_insulance() {
     let a = HeatFlux::from_base(6.0);
@@ -1270,6 +1360,7 @@ fn mul_heat_flux_thermal_insulance() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_heat_transfer_coefficient_temperature_delta() {
     let a = HeatTransferCoefficient::from_base(6.0);
@@ -1283,6 +1374,7 @@ fn mul_heat_transfer_coefficient_temperature_delta() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_illuminance_area() {
     let a = Illuminance::from_base(6.0);
@@ -1296,6 +1388,7 @@ fn mul_illuminance_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn mul_information_frequency() {
     let a = Information::from_base(6.0);
@@ -1309,6 +1402,7 @@ fn mul_information_frequency() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_irradiance_duration() {
     let a = Irradiance::from_base(6.0);
@@ -1322,6 +1416,7 @@ fn mul_irradiance_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_jerk_duration() {
     let a = Jerk::from_base(6.0);
@@ -1335,6 +1430,7 @@ fn mul_jerk_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_kinematic_viscosity_density() {
     let a = KinematicViscosity::from_base(6.0);
@@ -1348,6 +1444,7 @@ fn mul_kinematic_viscosity_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_kinematic_viscosity_duration() {
     let a = KinematicViscosity::from_base(6.0);
@@ -1374,6 +1471,7 @@ fn mul_length_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_area_density() {
     let a = Length::from_base(6.0);
@@ -1387,6 +1485,7 @@ fn mul_length_area_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_density() {
     let a = Length::from_base(6.0);
@@ -1400,6 +1499,7 @@ fn mul_length_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_length_electric_field() {
     let a = Length::from_base(6.0);
@@ -1413,6 +1513,7 @@ fn mul_length_electric_field() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_force() {
     let a = Length::from_base(6.0);
@@ -1426,6 +1527,7 @@ fn mul_length_force() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_force_per_length() {
     let a = Length::from_base(6.0);
@@ -1452,6 +1554,7 @@ fn mul_length_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_linear_density() {
     let a = Length::from_base(6.0);
@@ -1465,6 +1568,7 @@ fn mul_length_linear_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_linear_power_density() {
     let a = Length::from_base(6.0);
@@ -1478,6 +1582,7 @@ fn mul_length_linear_power_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_pressure() {
     let a = Length::from_base(6.0);
@@ -1491,6 +1596,7 @@ fn mul_length_pressure() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_reciprocal_area() {
     let a = Length::from_base(6.0);
@@ -1504,6 +1610,7 @@ fn mul_length_reciprocal_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_rotational_stiffness_per_length() {
     let a = Length::from_base(6.0);
@@ -1517,6 +1624,7 @@ fn mul_length_rotational_stiffness_per_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_specific_weight() {
     let a = Length::from_base(6.0);
@@ -1530,6 +1638,7 @@ fn mul_length_specific_weight() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_length_speed() {
     let a = Length::from_base(6.0);
@@ -1543,6 +1652,7 @@ fn mul_length_speed() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_length_temperature_gradient() {
     let a = Length::from_base(6.0);
@@ -1556,6 +1666,7 @@ fn mul_length_temperature_gradient() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_volume() {
     let a = Length::from_base(6.0);
@@ -1569,6 +1680,7 @@ fn mul_length_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_volume_per_length() {
     let a = Length::from_base(6.0);
@@ -1582,6 +1694,7 @@ fn mul_length_volume_per_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_linear_density_acceleration() {
     let a = LinearDensity::from_base(6.0);
@@ -1595,6 +1708,7 @@ fn mul_linear_density_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_linear_density_length() {
     let a = LinearDensity::from_base(6.0);
@@ -1608,6 +1722,7 @@ fn mul_linear_density_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_linear_power_density_length() {
     let a = LinearPowerDensity::from_base(6.0);
@@ -1621,6 +1736,7 @@ fn mul_linear_power_density_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_luminance_area() {
     let a = Luminance::from_base(6.0);
@@ -1634,6 +1750,7 @@ fn mul_luminance_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_luminous_intensity_solid_angle() {
     let a = LuminousIntensity::from_base(6.0);
@@ -1647,6 +1764,7 @@ fn mul_luminous_intensity_solid_angle() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_magnetic_field_area() {
     let a = MagneticField::from_base(6.0);
@@ -1673,6 +1791,7 @@ fn mul_mass_acceleration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_mass_mass_fraction() {
     let a = Mass::from_base(6.0);
@@ -1686,6 +1805,7 @@ fn mul_mass_mass_fraction() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_mass_specific_energy() {
     let a = Mass::from_base(6.0);
@@ -1699,6 +1819,7 @@ fn mul_mass_specific_energy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_mass_specific_entropy() {
     let a = Mass::from_base(6.0);
@@ -1712,6 +1833,7 @@ fn mul_mass_specific_entropy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_mass_specific_volume() {
     let a = Mass::from_base(6.0);
@@ -1725,6 +1847,7 @@ fn mul_mass_specific_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_mass_concentration_volume() {
     let a = MassConcentration::from_base(6.0);
@@ -1738,6 +1861,7 @@ fn mul_mass_concentration_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_mass_flow_duration() {
     let a = MassFlow::from_base(6.0);
@@ -1746,6 +1870,7 @@ fn mul_mass_flow_duration() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(all(feature = "fluids", feature = "mechanics"))]
 #[test]
 fn mul_mass_flow_specific_energy() {
     let a = MassFlow::from_base(6.0);
@@ -1754,6 +1879,7 @@ fn mul_mass_flow_specific_energy() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_mass_flux_area() {
     let a = MassFlux::from_base(6.0);
@@ -1762,6 +1888,7 @@ fn mul_mass_flux_area() {
     assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_mass_fraction_mass() {
     let a = MassFraction::from_base(6.0);
@@ -1775,6 +1902,7 @@ fn mul_mass_fraction_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molar_energy_amount_of_substance() {
     let a = MolarEnergy::from_base(6.0);
@@ -1788,6 +1916,7 @@ fn mul_molar_energy_amount_of_substance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molar_flow_duration() {
     let a = MolarFlow::from_base(6.0);
@@ -1801,6 +1930,7 @@ fn mul_molar_flow_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn mul_molar_flow_molar_mass() {
     let a = MolarFlow::from_base(6.0);
@@ -1809,6 +1939,7 @@ fn mul_molar_flow_molar_mass() {
     assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molar_mass_amount_of_substance() {
     let a = MolarMass::from_base(6.0);
@@ -1822,6 +1953,7 @@ fn mul_molar_mass_amount_of_substance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn mul_molar_mass_molar_flow() {
     let a = MolarMass::from_base(6.0);
@@ -1830,6 +1962,7 @@ fn mul_molar_mass_molar_flow() {
     assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molar_mass_molarity() {
     let a = MolarMass::from_base(6.0);
@@ -1843,6 +1976,7 @@ fn mul_molar_mass_molarity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molarity_molar_mass() {
     let a = Molarity::from_base(6.0);
@@ -1856,6 +1990,7 @@ fn mul_molarity_molar_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molarity_volume() {
     let a = Molarity::from_base(6.0);
@@ -1869,6 +2004,7 @@ fn mul_molarity_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_molarity_volume_concentration() {
     let a = Molarity::from_base(6.0);
@@ -1882,6 +2018,7 @@ fn mul_molarity_volume_concentration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn mul_molarity_volume_flow() {
     let a = Molarity::from_base(6.0);
@@ -1895,6 +2032,7 @@ fn mul_molarity_volume_flow() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "fluids", feature = "misc"))]
 #[test]
 fn mul_power_brake_specific_fuel_consumption() {
     let a = Power::from_base(6.0);
@@ -1916,6 +2054,7 @@ fn mul_power_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_power_thermal_resistance() {
     let a = Power::from_base(6.0);
@@ -1929,6 +2068,7 @@ fn mul_power_thermal_resistance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_power_density_volume() {
     let a = PowerDensity::from_base(6.0);
@@ -1955,6 +2095,7 @@ fn mul_pressure_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_pressure_compressibility() {
     let a = Pressure::from_base(6.0);
@@ -1968,6 +2109,7 @@ fn mul_pressure_compressibility() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_pressure_length() {
     let a = Pressure::from_base(6.0);
@@ -1981,6 +2123,7 @@ fn mul_pressure_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_pressure_volume_flow() {
     let a = Pressure::from_base(6.0);
@@ -1994,6 +2137,7 @@ fn mul_pressure_volume_flow() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_pressure_change_rate_duration() {
     let a = PressureChangeRate::from_base(6.0);
@@ -2007,6 +2151,7 @@ fn mul_pressure_change_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn mul_radiation_equivalent_dose_rate_duration() {
     let a = RadiationEquivalentDoseRate::from_base(6.0);
@@ -2020,6 +2165,7 @@ fn mul_radiation_equivalent_dose_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_ratio_change_rate_duration() {
     let a = RatioChangeRate::from_base(6.0);
@@ -2033,6 +2179,7 @@ fn mul_ratio_change_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_area_force() {
     let a = ReciprocalArea::from_base(6.0);
@@ -2046,6 +2193,7 @@ fn mul_reciprocal_area_force() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_area_length() {
     let a = ReciprocalArea::from_base(6.0);
@@ -2059,6 +2207,7 @@ fn mul_reciprocal_area_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_area_volume() {
     let a = ReciprocalArea::from_base(6.0);
@@ -2072,6 +2221,7 @@ fn mul_reciprocal_area_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_length_area() {
     let a = ReciprocalLength::from_base(6.0);
@@ -2085,6 +2235,7 @@ fn mul_reciprocal_length_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_length_force() {
     let a = ReciprocalLength::from_base(6.0);
@@ -2098,6 +2249,7 @@ fn mul_reciprocal_length_force() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_length_force_per_length() {
     let a = ReciprocalLength::from_base(6.0);
@@ -2111,6 +2263,7 @@ fn mul_reciprocal_length_force_per_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_length_reciprocal_length() {
     let a = ReciprocalLength::from_base(6.0);
@@ -2124,6 +2277,7 @@ fn mul_reciprocal_length_reciprocal_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_reciprocal_length_volume() {
     let a = ReciprocalLength::from_base(6.0);
@@ -2137,6 +2291,7 @@ fn mul_reciprocal_length_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_rotational_acceleration_duration() {
     let a = RotationalAcceleration::from_base(6.0);
@@ -2150,6 +2305,7 @@ fn mul_rotational_acceleration_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_rotational_speed_duration() {
     let a = RotationalSpeed::from_base(6.0);
@@ -2163,6 +2319,7 @@ fn mul_rotational_speed_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_rotational_speed_torque() {
     let a = RotationalSpeed::from_base(6.0);
@@ -2176,6 +2333,7 @@ fn mul_rotational_speed_torque() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_rotational_stiffness_angle() {
     let a = RotationalStiffness::from_base(6.0);
@@ -2189,6 +2347,7 @@ fn mul_rotational_stiffness_angle() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_rotational_stiffness_per_length_length() {
     let a = RotationalStiffnessPerLength::from_base(6.0);
@@ -2202,6 +2361,7 @@ fn mul_rotational_stiffness_per_length_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn mul_solid_angle_luminous_intensity() {
     let a = SolidAngle::from_base(6.0);
@@ -2215,6 +2375,7 @@ fn mul_solid_angle_luminous_intensity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_specific_energy_mass() {
     let a = SpecificEnergy::from_base(6.0);
@@ -2228,6 +2389,7 @@ fn mul_specific_energy_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "fluids", feature = "mechanics"))]
 #[test]
 fn mul_specific_energy_mass_flow() {
     let a = SpecificEnergy::from_base(6.0);
@@ -2236,6 +2398,7 @@ fn mul_specific_energy_mass_flow() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_specific_entropy_mass() {
     let a = SpecificEntropy::from_base(6.0);
@@ -2249,6 +2412,7 @@ fn mul_specific_entropy_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn mul_specific_entropy_temperature_delta() {
     let a = SpecificEntropy::from_base(6.0);
@@ -2262,6 +2426,7 @@ fn mul_specific_entropy_temperature_delta() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_specific_volume_mass() {
     let a = SpecificVolume::from_base(6.0);
@@ -2275,6 +2440,7 @@ fn mul_specific_volume_mass() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_specific_weight_area() {
     let a = SpecificWeight::from_base(6.0);
@@ -2288,6 +2454,7 @@ fn mul_specific_weight_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_specific_weight_length() {
     let a = SpecificWeight::from_base(6.0);
@@ -2301,6 +2468,7 @@ fn mul_specific_weight_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_specific_weight_volume() {
     let a = SpecificWeight::from_base(6.0);
@@ -2314,6 +2482,7 @@ fn mul_specific_weight_volume() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_speed_area() {
     let a = Speed::from_base(6.0);
@@ -2327,6 +2496,7 @@ fn mul_speed_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_speed_density() {
     let a = Speed::from_base(6.0);
@@ -2366,6 +2536,7 @@ fn mul_speed_force() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_speed_length() {
     let a = Speed::from_base(6.0);
@@ -2379,6 +2550,7 @@ fn mul_speed_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_speed_speed() {
     let a = Speed::from_base(6.0);
@@ -2392,6 +2564,7 @@ fn mul_speed_speed() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_temperature_change_rate_duration() {
     let a = TemperatureChangeRate::from_base(6.0);
@@ -2405,6 +2578,7 @@ fn mul_temperature_change_rate_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_temperature_delta_coefficient_of_thermal_expansion() {
     let a = TemperatureDelta::from_base(6.0);
@@ -2418,6 +2592,7 @@ fn mul_temperature_delta_coefficient_of_thermal_expansion() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_temperature_delta_entropy() {
     let a = TemperatureDelta::from_base(6.0);
@@ -2431,6 +2606,7 @@ fn mul_temperature_delta_entropy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_temperature_delta_heat_transfer_coefficient() {
     let a = TemperatureDelta::from_base(6.0);
@@ -2444,6 +2620,7 @@ fn mul_temperature_delta_heat_transfer_coefficient() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn mul_temperature_delta_specific_entropy() {
     let a = TemperatureDelta::from_base(6.0);
@@ -2457,6 +2634,7 @@ fn mul_temperature_delta_specific_entropy() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn mul_temperature_delta_volumetric_heat_capacity() {
     let a = TemperatureDelta::from_base(6.0);
@@ -2470,6 +2648,7 @@ fn mul_temperature_delta_volumetric_heat_capacity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_temperature_gradient_length() {
     let a = TemperatureGradient::from_base(6.0);
@@ -2483,6 +2662,7 @@ fn mul_temperature_gradient_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_thermal_insulance_heat_flux() {
     let a = ThermalInsulance::from_base(6.0);
@@ -2491,6 +2671,7 @@ fn mul_thermal_insulance_heat_flux() {
     assert_eq!(c.as_base(), 12.0 * 0.001);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn mul_thermal_resistance_power() {
     let a = ThermalResistance::from_base(6.0);
@@ -2504,6 +2685,7 @@ fn mul_thermal_resistance_power() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_torque_rotational_speed() {
     let a = Torque::from_base(6.0);
@@ -2530,6 +2712,7 @@ fn mul_volume_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_volume_electric_charge_density() {
     let a = Volume::from_base(6.0);
@@ -2543,6 +2726,7 @@ fn mul_volume_electric_charge_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_energy_density() {
     let a = Volume::from_base(6.0);
@@ -2556,6 +2740,7 @@ fn mul_volume_energy_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_length() {
     let a = Volume::from_base(6.0);
@@ -2569,6 +2754,7 @@ fn mul_volume_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_volume_mass_concentration() {
     let a = Volume::from_base(6.0);
@@ -2582,6 +2768,7 @@ fn mul_volume_mass_concentration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_volume_molarity() {
     let a = Volume::from_base(6.0);
@@ -2595,6 +2782,7 @@ fn mul_volume_molarity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_power_density() {
     let a = Volume::from_base(6.0);
@@ -2608,6 +2796,7 @@ fn mul_volume_power_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_reciprocal_area() {
     let a = Volume::from_base(6.0);
@@ -2621,6 +2810,7 @@ fn mul_volume_reciprocal_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_reciprocal_length() {
     let a = Volume::from_base(6.0);
@@ -2634,6 +2824,7 @@ fn mul_volume_reciprocal_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_specific_weight() {
     let a = Volume::from_base(6.0);
@@ -2647,6 +2838,7 @@ fn mul_volume_specific_weight() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_volume_concentration_density() {
     let a = VolumeConcentration::from_base(6.0);
@@ -2660,6 +2852,7 @@ fn mul_volume_concentration_density() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn mul_volume_concentration_molarity() {
     let a = VolumeConcentration::from_base(6.0);
@@ -2673,6 +2866,7 @@ fn mul_volume_concentration_molarity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_volume_flow_density() {
     let a = VolumeFlow::from_base(6.0);
@@ -2681,6 +2875,7 @@ fn mul_volume_flow_density() {
     assert_eq!(c.as_base(), 12.0 * 1000.0);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_volume_flow_duration() {
     let a = VolumeFlow::from_base(6.0);
@@ -2694,6 +2889,7 @@ fn mul_volume_flow_duration() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_volume_flow_fluid_resistance() {
     let a = VolumeFlow::from_base(6.0);
@@ -2707,6 +2903,7 @@ fn mul_volume_flow_fluid_resistance() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn mul_volume_flow_molarity() {
     let a = VolumeFlow::from_base(6.0);
@@ -2720,6 +2917,7 @@ fn mul_volume_flow_molarity() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_volume_flow_pressure() {
     let a = VolumeFlow::from_base(6.0);
@@ -2733,6 +2931,7 @@ fn mul_volume_flow_pressure() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn mul_volume_flow_per_area_area() {
     let a = VolumeFlowPerArea::from_base(6.0);
@@ -2746,6 +2945,7 @@ fn mul_volume_flow_per_area_area() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_volume_per_length_length() {
     let a = VolumePerLength::from_base(6.0);
@@ -2759,6 +2959,7 @@ fn mul_volume_per_length_length() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn mul_volumetric_heat_capacity_temperature_delta() {
     let a = VolumetricHeatCapacity::from_base(6.0);
@@ -2772,6 +2973,7 @@ fn mul_volumetric_heat_capacity_temperature_delta() {
     assert_eq!(c.as_base(), 12);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_acceleration_duration() {
     let a = Acceleration::from_base(6.0);
@@ -2785,6 +2987,7 @@ fn div_acceleration_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_acceleration_jerk() {
     let a = Acceleration::from_base(6.0);
@@ -2798,6 +3001,7 @@ fn div_acceleration_jerk() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_amount_of_substance_duration() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -2811,6 +3015,7 @@ fn div_amount_of_substance_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_amount_of_substance_molar_flow() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -2824,6 +3029,7 @@ fn div_amount_of_substance_molar_flow() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_amount_of_substance_molarity() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -2837,6 +3043,7 @@ fn div_amount_of_substance_molarity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_amount_of_substance_volume() {
     let a = AmountOfSubstance::from_base(6.0);
@@ -2850,6 +3057,7 @@ fn div_amount_of_substance_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_angle_duration() {
     let a = Angle::from_base(6.0);
@@ -2863,6 +3071,7 @@ fn div_angle_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_angle_rotational_speed() {
     let a = Angle::from_base(6.0);
@@ -2889,6 +3098,7 @@ fn div_area_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_reciprocal_length() {
     let a = Area::from_base(6.0);
@@ -2902,6 +3112,7 @@ fn div_area_reciprocal_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_volume() {
     let a = Area::from_base(6.0);
@@ -2915,6 +3126,7 @@ fn div_area_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_density_density() {
     let a = AreaDensity::from_base(6.0);
@@ -2928,6 +3140,7 @@ fn div_area_density_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_density_length() {
     let a = AreaDensity::from_base(6.0);
@@ -2941,6 +3154,7 @@ fn div_area_density_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_moment_of_inertia_area() {
     let a = AreaMomentOfInertia::from_base(6.0);
@@ -2954,6 +3168,7 @@ fn div_area_moment_of_inertia_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_moment_of_inertia_length() {
     let a = AreaMomentOfInertia::from_base(6.0);
@@ -2967,6 +3182,7 @@ fn div_area_moment_of_inertia_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_area_moment_of_inertia_volume() {
     let a = AreaMomentOfInertia::from_base(6.0);
@@ -2980,6 +3196,7 @@ fn div_area_moment_of_inertia_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn div_bit_rate_frequency() {
     let a = BitRate::from_base(6.0);
@@ -2993,6 +3210,7 @@ fn div_bit_rate_frequency() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn div_bit_rate_information() {
     let a = BitRate::from_base(6.0);
@@ -3006,6 +3224,7 @@ fn div_bit_rate_information() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn div_dose_area_product_absorbed_dose_of_ionizing_radiation() {
     let a = DoseAreaProduct::from_base(6.0);
@@ -3019,6 +3238,7 @@ fn div_dose_area_product_absorbed_dose_of_ionizing_radiation() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn div_dose_area_product_area() {
     let a = DoseAreaProduct::from_base(6.0);
@@ -3032,6 +3252,7 @@ fn div_dose_area_product_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_dynamic_viscosity_density() {
     let a = DynamicViscosity::from_base(6.0);
@@ -3045,6 +3266,7 @@ fn div_dynamic_viscosity_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_dynamic_viscosity_kinematic_viscosity() {
     let a = DynamicViscosity::from_base(6.0);
@@ -3058,6 +3280,7 @@ fn div_dynamic_viscosity_kinematic_viscosity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_apparent_energy_duration() {
     let a = ElectricApparentEnergy::from_base(6.0);
@@ -3066,6 +3289,7 @@ fn div_electric_apparent_energy_duration() {
     assert_eq!(c.as_base(), 3.0 * 3600.0);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_apparent_energy_electric_apparent_power() {
     let a = ElectricApparentEnergy::from_base(6.0);
@@ -3074,6 +3298,7 @@ fn div_electric_apparent_energy_electric_apparent_power() {
     assert_eq!(c.as_base(), 3.0 * 3600.0);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_area() {
     let a = ElectricCharge::from_base(6.0);
@@ -3087,6 +3312,7 @@ fn div_electric_charge_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_duration() {
     let a = ElectricCharge::from_base(6.0);
@@ -3100,6 +3326,7 @@ fn div_electric_charge_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_electric_capacitance() {
     let a = ElectricCharge::from_base(6.0);
@@ -3113,6 +3340,7 @@ fn div_electric_charge_electric_capacitance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_electric_charge_density() {
     let a = ElectricCharge::from_base(6.0);
@@ -3126,6 +3354,7 @@ fn div_electric_charge_electric_charge_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_electric_current() {
     let a = ElectricCharge::from_base(6.0);
@@ -3139,6 +3368,7 @@ fn div_electric_charge_electric_current() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_electric_potential() {
     let a = ElectricCharge::from_base(6.0);
@@ -3152,6 +3382,7 @@ fn div_electric_charge_electric_potential() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_electric_surface_charge_density() {
     let a = ElectricCharge::from_base(6.0);
@@ -3165,6 +3396,7 @@ fn div_electric_charge_electric_surface_charge_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_charge_volume() {
     let a = ElectricCharge::from_base(6.0);
@@ -3178,6 +3410,7 @@ fn div_electric_charge_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_area() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3191,6 +3424,7 @@ fn div_electric_current_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_duration() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3204,6 +3438,7 @@ fn div_electric_current_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_electric_conductance() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3217,6 +3452,7 @@ fn div_electric_current_electric_conductance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_electric_current_density() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3230,6 +3466,7 @@ fn div_electric_current_electric_current_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_electric_current_gradient() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3243,6 +3480,7 @@ fn div_electric_current_electric_current_gradient() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_current_electric_potential() {
     let a = ElectricCurrent::from_base(6.0);
@@ -3256,6 +3494,7 @@ fn div_electric_current_electric_potential() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_duration() {
     let a = ElectricPotential::from_base(6.0);
@@ -3269,6 +3508,7 @@ fn div_electric_potential_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_electric_current() {
     let a = ElectricPotential::from_base(6.0);
@@ -3282,6 +3522,7 @@ fn div_electric_potential_electric_current() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_electric_field() {
     let a = ElectricPotential::from_base(6.0);
@@ -3295,6 +3536,7 @@ fn div_electric_potential_electric_field() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_electric_potential_change_rate() {
     let a = ElectricPotential::from_base(6.0);
@@ -3308,6 +3550,7 @@ fn div_electric_potential_electric_potential_change_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_electric_resistance() {
     let a = ElectricPotential::from_base(6.0);
@@ -3321,6 +3564,7 @@ fn div_electric_potential_electric_resistance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_potential_length() {
     let a = ElectricPotential::from_base(6.0);
@@ -3334,6 +3578,7 @@ fn div_electric_potential_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_reactive_energy_duration() {
     let a = ElectricReactiveEnergy::from_base(6.0);
@@ -3342,6 +3587,7 @@ fn div_electric_reactive_energy_duration() {
     assert_eq!(c.as_base(), 3.0 * 3600.0);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_electric_reactive_energy_electric_reactive_power() {
     let a = ElectricReactiveEnergy::from_base(6.0);
@@ -3350,6 +3596,7 @@ fn div_electric_reactive_energy_electric_reactive_power() {
     assert_eq!(c.as_base(), 3.0 * 3600.0);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_energy_amount_of_substance() {
     let a = Energy::from_base(6.0);
@@ -3376,6 +3623,7 @@ fn div_energy_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_energy_electric_charge() {
     let a = Energy::from_base(6.0);
@@ -3389,6 +3637,7 @@ fn div_energy_electric_charge() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_energy_electric_potential() {
     let a = Energy::from_base(6.0);
@@ -3402,6 +3651,7 @@ fn div_energy_electric_potential() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_energy_energy_density() {
     let a = Energy::from_base(6.0);
@@ -3415,6 +3665,7 @@ fn div_energy_energy_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_energy_entropy() {
     let a = Energy::from_base(6.0);
@@ -3428,6 +3679,7 @@ fn div_energy_entropy() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_energy_mass() {
     let a = Energy::from_base(6.0);
@@ -3441,6 +3693,7 @@ fn div_energy_mass() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_energy_molar_energy() {
     let a = Energy::from_base(6.0);
@@ -3467,6 +3720,7 @@ fn div_energy_power() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_energy_specific_energy() {
     let a = Energy::from_base(6.0);
@@ -3480,6 +3734,7 @@ fn div_energy_specific_energy() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_energy_temperature_delta() {
     let a = Energy::from_base(6.0);
@@ -3493,6 +3748,7 @@ fn div_energy_temperature_delta() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_energy_volume() {
     let a = Energy::from_base(6.0);
@@ -3506,6 +3762,7 @@ fn div_energy_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn div_energy_density_temperature_delta() {
     let a = EnergyDensity::from_base(6.0);
@@ -3519,6 +3776,7 @@ fn div_energy_density_temperature_delta() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn div_energy_density_volumetric_heat_capacity() {
     let a = EnergyDensity::from_base(6.0);
@@ -3532,6 +3790,7 @@ fn div_energy_density_volumetric_heat_capacity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_entropy_mass() {
     let a = Entropy::from_base(6.0);
@@ -3545,6 +3804,7 @@ fn div_entropy_mass() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_entropy_specific_entropy() {
     let a = Entropy::from_base(6.0);
@@ -3584,6 +3844,7 @@ fn div_force_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_duration() {
     let a = Force::from_base(6.0);
@@ -3597,6 +3858,7 @@ fn div_force_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_force_change_rate() {
     let a = Force::from_base(6.0);
@@ -3610,6 +3872,7 @@ fn div_force_force_change_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_force_per_length() {
     let a = Force::from_base(6.0);
@@ -3623,6 +3886,7 @@ fn div_force_force_per_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_length() {
     let a = Force::from_base(6.0);
@@ -3662,6 +3926,7 @@ fn div_force_pressure() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_specific_weight() {
     let a = Force::from_base(6.0);
@@ -3675,6 +3940,7 @@ fn div_force_specific_weight() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_volume() {
     let a = Force::from_base(6.0);
@@ -3688,6 +3954,7 @@ fn div_force_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_acceleration() {
     let a = ForcePerLength::from_base(6.0);
@@ -3701,6 +3968,7 @@ fn div_force_per_length_acceleration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_area() {
     let a = ForcePerLength::from_base(6.0);
@@ -3714,6 +3982,7 @@ fn div_force_per_length_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_force() {
     let a = ForcePerLength::from_base(6.0);
@@ -3727,6 +3996,7 @@ fn div_force_per_length_force() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_length() {
     let a = ForcePerLength::from_base(6.0);
@@ -3740,6 +4010,7 @@ fn div_force_per_length_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_linear_density() {
     let a = ForcePerLength::from_base(6.0);
@@ -3753,6 +4024,7 @@ fn div_force_per_length_linear_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_pressure() {
     let a = ForcePerLength::from_base(6.0);
@@ -3766,6 +4038,7 @@ fn div_force_per_length_pressure() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_reciprocal_length() {
     let a = ForcePerLength::from_base(6.0);
@@ -3779,6 +4052,7 @@ fn div_force_per_length_reciprocal_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_force_per_length_specific_weight() {
     let a = ForcePerLength::from_base(6.0);
@@ -3792,6 +4066,7 @@ fn div_force_per_length_specific_weight() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_heat_flux_heat_transfer_coefficient() {
     let a = HeatFlux::from_base(6.0);
@@ -3805,6 +4080,7 @@ fn div_heat_flux_heat_transfer_coefficient() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_heat_flux_temperature_delta() {
     let a = HeatFlux::from_base(6.0);
@@ -3818,6 +4094,7 @@ fn div_heat_flux_temperature_delta() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_impulse_duration() {
     let a = Impulse::from_base(6.0);
@@ -3831,6 +4108,7 @@ fn div_impulse_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_impulse_force() {
     let a = Impulse::from_base(6.0);
@@ -3844,6 +4122,7 @@ fn div_impulse_force() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn div_information_bit_rate() {
     let a = Information::from_base(6.0);
@@ -3857,6 +4136,7 @@ fn div_information_bit_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "information")]
 #[test]
 fn div_information_duration() {
     let a = Information::from_base(6.0);
@@ -3870,6 +4150,7 @@ fn div_information_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_irradiation_duration() {
     let a = Irradiation::from_base(6.0);
@@ -3883,6 +4164,7 @@ fn div_irradiation_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_irradiation_irradiance() {
     let a = Irradiation::from_base(6.0);
@@ -3896,6 +4178,7 @@ fn div_irradiation_irradiance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_kinematic_viscosity_length() {
     let a = KinematicViscosity::from_base(6.0);
@@ -3909,6 +4192,7 @@ fn div_kinematic_viscosity_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_kinematic_viscosity_speed() {
     let a = KinematicViscosity::from_base(6.0);
@@ -3922,6 +4206,7 @@ fn div_kinematic_viscosity_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_leak_rate_pressure() {
     let a = LeakRate::from_base(6.0);
@@ -3935,6 +4220,7 @@ fn div_leak_rate_pressure() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_leak_rate_volume_flow() {
     let a = LeakRate::from_base(6.0);
@@ -3948,6 +4234,7 @@ fn div_leak_rate_volume_flow() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_length_area() {
     let a = Length::from_base(6.0);
@@ -3974,6 +4261,7 @@ fn div_length_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_length_reciprocal_area() {
     let a = Length::from_base(6.0);
@@ -3987,6 +4275,7 @@ fn div_length_reciprocal_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_length_reciprocal_length() {
     let a = Length::from_base(6.0);
@@ -4013,6 +4302,7 @@ fn div_length_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_length_volume() {
     let a = Length::from_base(6.0);
@@ -4026,6 +4316,7 @@ fn div_length_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_linear_density_area() {
     let a = LinearDensity::from_base(6.0);
@@ -4039,6 +4330,7 @@ fn div_linear_density_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_linear_density_area_density() {
     let a = LinearDensity::from_base(6.0);
@@ -4052,6 +4344,7 @@ fn div_linear_density_area_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_linear_density_density() {
     let a = LinearDensity::from_base(6.0);
@@ -4065,6 +4358,7 @@ fn div_linear_density_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_linear_density_length() {
     let a = LinearDensity::from_base(6.0);
@@ -4078,6 +4372,7 @@ fn div_linear_density_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_flux_area() {
     let a = LuminousFlux::from_base(6.0);
@@ -4091,6 +4386,7 @@ fn div_luminous_flux_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_flux_illuminance() {
     let a = LuminousFlux::from_base(6.0);
@@ -4104,6 +4400,7 @@ fn div_luminous_flux_illuminance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_flux_luminous_intensity() {
     let a = LuminousFlux::from_base(6.0);
@@ -4117,6 +4414,7 @@ fn div_luminous_flux_luminous_intensity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_flux_solid_angle() {
     let a = LuminousFlux::from_base(6.0);
@@ -4130,6 +4428,7 @@ fn div_luminous_flux_solid_angle() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_intensity_area() {
     let a = LuminousIntensity::from_base(6.0);
@@ -4143,6 +4442,7 @@ fn div_luminous_intensity_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "light")]
 #[test]
 fn div_luminous_intensity_luminance() {
     let a = LuminousIntensity::from_base(6.0);
@@ -4156,6 +4456,7 @@ fn div_luminous_intensity_luminance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_magnetic_flux_area() {
     let a = MagneticFlux::from_base(6.0);
@@ -4169,6 +4470,7 @@ fn div_magnetic_flux_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_magnetic_flux_magnetic_field() {
     let a = MagneticFlux::from_base(6.0);
@@ -4182,6 +4484,7 @@ fn div_magnetic_flux_magnetic_field() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_amount_of_substance() {
     let a = Mass::from_base(6.0);
@@ -4195,6 +4498,7 @@ fn div_mass_amount_of_substance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_mass_area() {
     let a = Mass::from_base(6.0);
@@ -4208,6 +4512,7 @@ fn div_mass_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_mass_area_density() {
     let a = Mass::from_base(6.0);
@@ -4234,6 +4539,7 @@ fn div_mass_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_duration() {
     let a = Mass::from_base(6.0);
@@ -4242,6 +4548,7 @@ fn div_mass_duration() {
     assert_eq!(c.as_base(), 3.0 * 1000.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_mass_length() {
     let a = Mass::from_base(6.0);
@@ -4255,6 +4562,7 @@ fn div_mass_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_mass_linear_density() {
     let a = Mass::from_base(6.0);
@@ -4268,6 +4576,7 @@ fn div_mass_linear_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_mass_flow() {
     let a = Mass::from_base(6.0);
@@ -4276,6 +4585,7 @@ fn div_mass_mass_flow() {
     assert_eq!(c.as_base(), 3.0 * 1000.0);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_mass_fraction() {
     let a = Mass::from_base(6.0);
@@ -4289,6 +4599,7 @@ fn div_mass_mass_fraction() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_molar_mass() {
     let a = Mass::from_base(6.0);
@@ -4315,6 +4626,7 @@ fn div_mass_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_concentration_density() {
     let a = MassConcentration::from_base(6.0);
@@ -4328,6 +4640,7 @@ fn div_mass_concentration_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_concentration_molar_mass() {
     let a = MassConcentration::from_base(6.0);
@@ -4341,6 +4654,7 @@ fn div_mass_concentration_molar_mass() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_concentration_molarity() {
     let a = MassConcentration::from_base(6.0);
@@ -4354,6 +4668,7 @@ fn div_mass_concentration_molarity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_mass_concentration_volume_concentration() {
     let a = MassConcentration::from_base(6.0);
@@ -4367,6 +4682,7 @@ fn div_mass_concentration_volume_concentration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flow_area() {
     let a = MassFlow::from_base(6.0);
@@ -4375,6 +4691,7 @@ fn div_mass_flow_area() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(all(feature = "fluids", feature = "misc"))]
 #[test]
 fn div_mass_flow_brake_specific_fuel_consumption() {
     let a = MassFlow::from_base(6.0);
@@ -4383,6 +4700,7 @@ fn div_mass_flow_brake_specific_fuel_consumption() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flow_density() {
     let a = MassFlow::from_base(6.0);
@@ -4391,6 +4709,7 @@ fn div_mass_flow_density() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flow_mass_flux() {
     let a = MassFlow::from_base(6.0);
@@ -4399,6 +4718,7 @@ fn div_mass_flow_mass_flux() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn div_mass_flow_molar_flow() {
     let a = MassFlow::from_base(6.0);
@@ -4407,6 +4727,7 @@ fn div_mass_flow_molar_flow() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn div_mass_flow_molar_mass() {
     let a = MassFlow::from_base(6.0);
@@ -4415,6 +4736,7 @@ fn div_mass_flow_molar_mass() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(all(feature = "fluids", feature = "misc"))]
 #[test]
 fn div_mass_flow_power() {
     let a = MassFlow::from_base(6.0);
@@ -4423,6 +4745,7 @@ fn div_mass_flow_power() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flow_volume_flow() {
     let a = MassFlow::from_base(6.0);
@@ -4431,6 +4754,7 @@ fn div_mass_flow_volume_flow() {
     assert_eq!(c.as_base(), 3.0 * 0.001);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flux_density() {
     let a = MassFlux::from_base(6.0);
@@ -4444,6 +4768,7 @@ fn div_mass_flux_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_mass_flux_speed() {
     let a = MassFlux::from_base(6.0);
@@ -4457,6 +4782,7 @@ fn div_mass_flux_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn div_molar_flow_molarity() {
     let a = MolarFlow::from_base(6.0);
@@ -4470,6 +4796,7 @@ fn div_molar_flow_molarity() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "chemistry", feature = "fluids"))]
 #[test]
 fn div_molar_flow_volume_flow() {
     let a = MolarFlow::from_base(6.0);
@@ -4483,6 +4810,7 @@ fn div_molar_flow_volume_flow() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "chemistry")]
 #[test]
 fn div_molarity_volume_concentration() {
     let a = Molarity::from_base(6.0);
@@ -4496,6 +4824,7 @@ fn div_molarity_volume_concentration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_power_area() {
     let a = Power::from_base(6.0);
@@ -4509,6 +4838,7 @@ fn div_power_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_power_electric_current() {
     let a = Power::from_base(6.0);
@@ -4522,6 +4852,7 @@ fn div_power_electric_current() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn div_power_electric_potential() {
     let a = Power::from_base(6.0);
@@ -4574,6 +4905,7 @@ fn div_power_frequency() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_power_heat_flux() {
     let a = Power::from_base(6.0);
@@ -4587,6 +4919,7 @@ fn div_power_heat_flux() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_length() {
     let a = Power::from_base(6.0);
@@ -4600,6 +4933,7 @@ fn div_power_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_linear_power_density() {
     let a = Power::from_base(6.0);
@@ -4613,6 +4947,7 @@ fn div_power_linear_power_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "fluids", feature = "mechanics"))]
 #[test]
 fn div_power_mass_flow() {
     let a = Power::from_base(6.0);
@@ -4621,6 +4956,7 @@ fn div_power_mass_flow() {
     assert_eq!(c.as_base(), 3.0 * 1000.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_power_density() {
     let a = Power::from_base(6.0);
@@ -4634,6 +4970,7 @@ fn div_power_power_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_rotational_speed() {
     let a = Power::from_base(6.0);
@@ -4647,6 +4984,7 @@ fn div_power_rotational_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "fluids", feature = "mechanics"))]
 #[test]
 fn div_power_specific_energy() {
     let a = Power::from_base(6.0);
@@ -4668,6 +5006,7 @@ fn div_power_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_torque() {
     let a = Power::from_base(6.0);
@@ -4681,6 +5020,7 @@ fn div_power_torque() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_power_volume() {
     let a = Power::from_base(6.0);
@@ -4694,6 +5034,7 @@ fn div_power_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_acceleration() {
     let a = Pressure::from_base(6.0);
@@ -4707,6 +5048,7 @@ fn div_pressure_acceleration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_area_density() {
     let a = Pressure::from_base(6.0);
@@ -4720,6 +5062,7 @@ fn div_pressure_area_density() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_duration() {
     let a = Pressure::from_base(6.0);
@@ -4733,6 +5076,7 @@ fn div_pressure_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_pressure_fluid_resistance() {
     let a = Pressure::from_base(6.0);
@@ -4746,6 +5090,7 @@ fn div_pressure_fluid_resistance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_force() {
     let a = Pressure::from_base(6.0);
@@ -4759,6 +5104,7 @@ fn div_pressure_force() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_force_per_length() {
     let a = Pressure::from_base(6.0);
@@ -4772,6 +5118,7 @@ fn div_pressure_force_per_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_length() {
     let a = Pressure::from_base(6.0);
@@ -4785,6 +5132,7 @@ fn div_pressure_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_pressure_change_rate() {
     let a = Pressure::from_base(6.0);
@@ -4798,6 +5146,7 @@ fn div_pressure_pressure_change_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_reciprocal_area() {
     let a = Pressure::from_base(6.0);
@@ -4811,6 +5160,7 @@ fn div_pressure_reciprocal_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_reciprocal_length() {
     let a = Pressure::from_base(6.0);
@@ -4824,6 +5174,7 @@ fn div_pressure_reciprocal_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_pressure_specific_weight() {
     let a = Pressure::from_base(6.0);
@@ -4837,6 +5188,7 @@ fn div_pressure_specific_weight() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_pressure_volume_flow() {
     let a = Pressure::from_base(6.0);
@@ -4850,6 +5202,7 @@ fn div_pressure_volume_flow() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn div_radiation_equivalent_dose_duration() {
     let a = RadiationEquivalentDose::from_base(6.0);
@@ -4863,6 +5216,7 @@ fn div_radiation_equivalent_dose_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "radiation")]
 #[test]
 fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate() {
     let a = RadiationEquivalentDose::from_base(6.0);
@@ -4876,6 +5230,7 @@ fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_ratio_compressibility() {
     let a = Ratio::from_base(6.0);
@@ -4889,6 +5244,7 @@ fn div_ratio_compressibility() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_ratio_duration() {
     let a = Ratio::from_base(6.0);
@@ -4902,6 +5258,7 @@ fn div_ratio_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_ratio_pressure() {
     let a = Ratio::from_base(6.0);
@@ -4915,6 +5272,7 @@ fn div_ratio_pressure() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_ratio_ratio_change_rate() {
     let a = Ratio::from_base(6.0);
@@ -4928,6 +5286,7 @@ fn div_ratio_ratio_change_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_reciprocal_area_reciprocal_length() {
     let a = ReciprocalArea::from_base(6.0);
@@ -4941,6 +5300,7 @@ fn div_reciprocal_area_reciprocal_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_reciprocal_length_length() {
     let a = ReciprocalLength::from_base(6.0);
@@ -4954,6 +5314,7 @@ fn div_reciprocal_length_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_reciprocal_length_reciprocal_area() {
     let a = ReciprocalLength::from_base(6.0);
@@ -4967,6 +5328,7 @@ fn div_reciprocal_length_reciprocal_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_rotational_speed_duration() {
     let a = RotationalSpeed::from_base(6.0);
@@ -4980,6 +5342,7 @@ fn div_rotational_speed_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_rotational_speed_rotational_acceleration() {
     let a = RotationalSpeed::from_base(6.0);
@@ -4993,6 +5356,7 @@ fn div_rotational_speed_rotational_acceleration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_rotational_stiffness_length() {
     let a = RotationalStiffness::from_base(6.0);
@@ -5006,6 +5370,7 @@ fn div_rotational_stiffness_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_rotational_stiffness_rotational_stiffness_per_length() {
     let a = RotationalStiffness::from_base(6.0);
@@ -5019,6 +5384,7 @@ fn div_rotational_stiffness_rotational_stiffness_per_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn div_specific_energy_specific_entropy() {
     let a = SpecificEnergy::from_base(6.0);
@@ -5032,6 +5398,7 @@ fn div_specific_energy_specific_entropy() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_specific_energy_speed() {
     let a = SpecificEnergy::from_base(6.0);
@@ -5045,6 +5412,7 @@ fn div_specific_energy_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(all(feature = "mechanics", feature = "thermal"))]
 #[test]
 fn div_specific_energy_temperature_delta() {
     let a = SpecificEnergy::from_base(6.0);
@@ -5058,6 +5426,7 @@ fn div_specific_energy_temperature_delta() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_specific_weight_acceleration() {
     let a = SpecificWeight::from_base(6.0);
@@ -5071,6 +5440,7 @@ fn div_specific_weight_acceleration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_specific_weight_density() {
     let a = SpecificWeight::from_base(6.0);
@@ -5110,6 +5480,7 @@ fn div_speed_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_duration() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5123,6 +5494,7 @@ fn div_temperature_delta_duration() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_heat_flux() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5131,6 +5503,7 @@ fn div_temperature_delta_heat_flux() {
     assert_eq!(c.as_base(), 3.0 * 1000.0);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_length() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5144,6 +5517,7 @@ fn div_temperature_delta_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_power() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5157,6 +5531,7 @@ fn div_temperature_delta_power() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_temperature_change_rate() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5170,6 +5545,7 @@ fn div_temperature_delta_temperature_change_rate() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_temperature_gradient() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5183,6 +5559,7 @@ fn div_temperature_delta_temperature_gradient() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_thermal_insulance() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5191,6 +5568,7 @@ fn div_temperature_delta_thermal_insulance() {
     assert_eq!(c.as_base(), 3.0 * 1000.0);
 }
 
+#[cfg(feature = "thermal")]
 #[test]
 fn div_temperature_delta_thermal_resistance() {
     let a = TemperatureDelta::from_base(6.0);
@@ -5204,6 +5582,7 @@ fn div_temperature_delta_thermal_resistance() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_angle() {
     let a = Torque::from_base(6.0);
@@ -5217,6 +5596,7 @@ fn div_torque_angle() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_area() {
     let a = Torque::from_base(6.0);
@@ -5230,6 +5610,7 @@ fn div_torque_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_force() {
     let a = Torque::from_base(6.0);
@@ -5243,6 +5624,7 @@ fn div_torque_force() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_force_per_length() {
     let a = Torque::from_base(6.0);
@@ -5256,6 +5638,7 @@ fn div_torque_force_per_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_length() {
     let a = Torque::from_base(6.0);
@@ -5269,6 +5652,7 @@ fn div_torque_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_torque_rotational_stiffness() {
     let a = Torque::from_base(6.0);
@@ -5295,6 +5679,7 @@ fn div_volume_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_volume_duration() {
     let a = Volume::from_base(6.0);
@@ -5321,6 +5706,7 @@ fn div_volume_length() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_volume_mass() {
     let a = Volume::from_base(6.0);
@@ -5334,6 +5720,7 @@ fn div_volume_mass() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn div_volume_specific_volume() {
     let a = Volume::from_base(6.0);
@@ -5347,6 +5734,7 @@ fn div_volume_specific_volume() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_volume_volume_flow() {
     let a = Volume::from_base(6.0);
@@ -5360,6 +5748,7 @@ fn div_volume_volume_flow() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_volume_flow_area() {
     let a = VolumeFlow::from_base(6.0);
@@ -5373,6 +5762,7 @@ fn div_volume_flow_area() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "fluids")]
 #[test]
 fn div_volume_flow_speed() {
     let a = VolumeFlow::from_base(6.0);
@@ -5386,6 +5776,7 @@ fn div_volume_flow_speed() {
     assert_eq!(c.as_base(), 3);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_area_reciprocal_area() {
     let a = Area::from_base(6.0);
@@ -5394,6 +5785,7 @@ fn mul_scalar_area_reciprocal_area() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(all(feature = "mechanics", feature = "misc"))]
 #[test]
 fn mul_scalar_brake_specific_fuel_consumption_specific_energy() {
     let a = BrakeSpecificFuelConsumption::from_base(6.0);
@@ -5402,6 +5794,7 @@ fn mul_scalar_brake_specific_fuel_consumption_specific_energy() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_density_specific_volume() {
     let a = Density::from_base(6.0);
@@ -5418,6 +5811,7 @@ fn mul_scalar_duration_frequency() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_scalar_electric_conductivity_electric_resistivity() {
     let a = ElectricConductivity::from_base(6.0);
@@ -5426,6 +5820,7 @@ fn mul_scalar_electric_conductivity_electric_resistivity() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn mul_scalar_electric_resistivity_electric_conductivity() {
     let a = ElectricResistivity::from_base(6.0);
@@ -5442,6 +5837,7 @@ fn mul_scalar_frequency_duration() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_length_reciprocal_length() {
     let a = Length::from_base(6.0);
@@ -5450,6 +5846,7 @@ fn mul_scalar_length_reciprocal_length() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_reciprocal_area_area() {
     let a = ReciprocalArea::from_base(6.0);
@@ -5458,6 +5855,7 @@ fn mul_scalar_reciprocal_area_area() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_reciprocal_length_length() {
     let a = ReciprocalLength::from_base(6.0);
@@ -5466,6 +5864,7 @@ fn mul_scalar_reciprocal_length_length() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(all(feature = "mechanics", feature = "misc"))]
 #[test]
 fn mul_scalar_specific_energy_brake_specific_fuel_consumption() {
     let a = SpecificEnergy::from_base(6.0);
@@ -5474,6 +5873,7 @@ fn mul_scalar_specific_energy_brake_specific_fuel_consumption() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn mul_scalar_specific_volume_density() {
     let a = SpecificVolume::from_base(6.0);
@@ -5482,6 +5882,7 @@ fn mul_scalar_specific_volume_density() {
     assert_eq!(c, 12.0);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_area() {
     let b = Area::from_base(4.0);
@@ -5489,6 +5890,7 @@ fn recip_one_area() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(all(feature = "mechanics", feature = "misc"))]
 #[test]
 fn recip_one_brake_specific_fuel_consumption() {
     let b = BrakeSpecificFuelConsumption::from_base(4.0);
@@ -5496,6 +5898,7 @@ fn recip_one_brake_specific_fuel_consumption() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_density() {
     let b = Density::from_base(4.0);
@@ -5510,6 +5913,7 @@ fn recip_one_duration() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn recip_one_electric_conductivity() {
     let b = ElectricConductivity::from_base(4.0);
@@ -5517,6 +5921,7 @@ fn recip_one_electric_conductivity() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "electrical")]
 #[test]
 fn recip_one_electric_resistivity() {
     let b = ElectricResistivity::from_base(4.0);
@@ -5531,6 +5936,7 @@ fn recip_one_frequency() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_length() {
     let b = Length::from_base(4.0);
@@ -5538,6 +5944,7 @@ fn recip_one_length() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_reciprocal_area() {
     let b = ReciprocalArea::from_base(4.0);
@@ -5545,6 +5952,7 @@ fn recip_one_reciprocal_area() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_reciprocal_length() {
     let b = ReciprocalLength::from_base(4.0);
@@ -5552,6 +5960,7 @@ fn recip_one_reciprocal_length() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(all(feature = "mechanics", feature = "misc"))]
 #[test]
 fn recip_one_specific_energy() {
     let b = SpecificEnergy::from_base(4.0);
@@ -5559,6 +5968,7 @@ fn recip_one_specific_energy() {
     assert_eq!(c.as_base(), 0.25);
 }
 
+#[cfg(feature = "mechanics")]
 #[test]
 fn recip_one_specific_volume() {
     let b = SpecificVolume::from_base(4.0);
@@ -5575,6 +5985,7 @@ fn sqrt_area_() {
 }
 
 #[cfg(any(feature = "std", feature = "libm"))]
+#[cfg(feature = "mechanics")]
 #[test]
 fn sqrt_area_moment_of_inertia_() {
     let c = AreaMomentOfInertia::from_base(16.0 * 1.0);
@@ -5583,6 +5994,7 @@ fn sqrt_area_moment_of_inertia_() {
 }
 
 #[cfg(any(feature = "std", feature = "libm"))]
+#[cfg(feature = "mechanics")]
 #[test]
 fn sqrt_reciprocal_area_() {
     let c = ReciprocalArea::from_base(16.0 * 1.0);
@@ -5591,6 +6003,7 @@ fn sqrt_reciprocal_area_() {
 }
 
 #[cfg(any(feature = "std", feature = "libm"))]
+#[cfg(feature = "mechanics")]
 #[test]
 fn sqrt_specific_energy_() {
     let c = SpecificEnergy::from_base(16.0 * 1.0);

@@ -21,6 +21,224 @@ macro_rules! w {
     };
 }
 
+// ── Feature groups ────────────────────────────────────────────────────────────
+
+/// Quantities grouped into Cargo features, so that users who need a few
+/// quantities do not compile all of them. Quantities in no group are always
+/// compiled. The `full` feature (default) enables every group.
+pub const GROUPS: &[(&str, &[&str])] = &[
+    (
+        "mechanics",
+        &[
+            "AreaDensity",
+            "AreaMomentOfInertia",
+            "Compressibility",
+            "EnergyDensity",
+            "ForceChangeRate",
+            "ForcePerLength",
+            "Impulse",
+            "Jerk",
+            "LinearDensity",
+            "LinearPowerDensity",
+            "MassMomentOfInertia",
+            "PowerDensity",
+            "PressureChangeRate",
+            "RatioChangeRate",
+            "ReciprocalArea",
+            "ReciprocalLength",
+            "RotationalAcceleration",
+            "RotationalSpeed",
+            "RotationalStiffness",
+            "RotationalStiffnessPerLength",
+            "SpecificEnergy",
+            "SpecificVolume",
+            "SpecificWeight",
+            "Torque",
+            "VolumePerLength",
+            "WarpingMomentOfInertia",
+        ],
+    ),
+    (
+        "fluids",
+        &[
+            "DynamicViscosity",
+            "FluidResistance",
+            "KinematicViscosity",
+            "LeakRate",
+            "MassFlow",
+            "MassFlux",
+            "PorousMediumPermeability",
+            "StandardVolumeFlow",
+            "VolumeFlow",
+            "VolumeFlowPerArea",
+        ],
+    ),
+    (
+        "electrical",
+        &[
+            "AmplitudeRatio",
+            "ElectricAdmittance",
+            "ElectricApparentEnergy",
+            "ElectricApparentPower",
+            "ElectricCapacitance",
+            "ElectricCharge",
+            "ElectricChargeDensity",
+            "ElectricConductance",
+            "ElectricConductivity",
+            "ElectricCurrent",
+            "ElectricCurrentDensity",
+            "ElectricCurrentGradient",
+            "ElectricField",
+            "ElectricImpedance",
+            "ElectricInductance",
+            "ElectricPotential",
+            "ElectricPotentialChangeRate",
+            "ElectricReactance",
+            "ElectricReactiveEnergy",
+            "ElectricReactivePower",
+            "ElectricResistance",
+            "ElectricResistivity",
+            "ElectricSurfaceChargeDensity",
+            "ElectricSusceptance",
+            "Level",
+            "MagneticField",
+            "MagneticFlux",
+            "Magnetization",
+            "Permeability",
+            "Permittivity",
+            "PowerRatio",
+        ],
+    ),
+    (
+        "thermal",
+        &[
+            "CoefficientOfThermalExpansion",
+            "Entropy",
+            "HeatFlux",
+            "HeatTransferCoefficient",
+            "SpecificEntropy",
+            "TemperatureChangeRate",
+            "TemperatureGradient",
+            "ThermalConductivity",
+            "ThermalInsulance",
+            "ThermalResistance",
+            "VolumetricHeatCapacity",
+        ],
+    ),
+    (
+        "chemistry",
+        &[
+            "AmountOfSubstance",
+            "MassConcentration",
+            "MassFraction",
+            "Molality",
+            "MolarEnergy",
+            "MolarEntropy",
+            "MolarFlow",
+            "MolarMass",
+            "Molarity",
+            "VolumeConcentration",
+        ],
+    ),
+    (
+        "light",
+        &[
+            "Illuminance",
+            "Irradiance",
+            "Irradiation",
+            "Luminance",
+            "Luminosity",
+            "LuminousFlux",
+            "LuminousIntensity",
+            "SolidAngle",
+        ],
+    ),
+    (
+        "radiation",
+        &[
+            "AbsorbedDoseOfIonizingRadiation",
+            "DoseAreaProduct",
+            "RadiationEquivalentDose",
+            "RadiationEquivalentDoseRate",
+            "RadiationExposure",
+            "Radioactivity",
+        ],
+    ),
+    ("information", &["BitRate", "Information"]),
+    (
+        "misc",
+        &[
+            "BrakeSpecificFuelConsumption",
+            "FuelEfficiency",
+            "RelativeHumidity",
+            "SpecificFuelConsumption",
+            "Turbidity",
+            "VitaminA",
+        ],
+    ),
+];
+
+/// Quantities compiled whatever the features.
+pub const CORE: &[&str] = &[
+    "Acceleration",
+    "Angle",
+    "Area",
+    "Density",
+    "Duration",
+    "Energy",
+    "Force",
+    "Frequency",
+    "Length",
+    "Mass",
+    "Power",
+    "Pressure",
+    "Ratio",
+    "Scalar",
+    "Speed",
+    "Temperature",
+    "TemperatureDelta",
+    "Volume",
+];
+
+/// The feature group of a quantity; `None` for core quantities. Quantities
+/// added upstream and not yet classified land in `misc`.
+pub fn group(name: &str) -> Option<&'static str> {
+    if CORE.contains(&name) {
+        return None;
+    }
+    Some(
+        GROUPS
+            .iter()
+            .find(|(_, members)| members.contains(&name))
+            .map_or_else(
+                || {
+                    eprintln!("codegen: note: {name} is in no feature group; using `misc`");
+                    "misc"
+                },
+                |(g, _)| *g,
+            ),
+    )
+}
+
+/// `#[cfg(...)]` requiring the groups of all `quantities`, or `""` when they
+/// are all core.
+pub fn cfg_for(quantities: &[&str]) -> String {
+    let mut groups: Vec<&str> = quantities.iter().filter_map(|q| group(q)).collect();
+    groups.sort_unstable();
+    groups.dedup();
+    match groups.as_slice() {
+        [] => String::new(),
+        [g] => format!("#[cfg(feature = \"{g}\")]"),
+        gs => format!(
+            "#[cfg(all({}))]",
+            gs.iter()
+                .map(|g| format!("feature = \"{g}\""))
+                .collect::<Vec<_>>()
+                .join(", ")
+        ),
+    }
+}
+
 /// A quantity that is a point on a scale rather than an amount, and the
 /// quantity measuring the difference between two of its points. UnitsNet
 /// does not mark this in its definitions, so the list lives here.
@@ -719,6 +937,12 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
             CrossKind::Sqrt => format!("cross_sqrt!({} => {}{factor});", op.lhs, op.output),
             CrossKind::Cbrt => format!("cross_cbrt!({} => {}{factor});", op.lhs, op.output),
         };
+        let mut involved = vec![op.lhs.as_str(), op.rhs.as_str(), op.output.as_str()];
+        involved.retain(|q| !q.is_empty());
+        let cfg = cfg_for(&involved);
+        if !cfg.is_empty() {
+            w!(out, "{cfg}");
+        }
         w!(out, "{line}");
     }
 
@@ -743,6 +967,13 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     );
     w!(out, "// Quantity: {}", name);
     w!(out);
+    let mut involved = vec![name.as_str()];
+    if let Some(delta) = point_delta(name) {
+        involved.push(delta);
+    }
+    if let Some(cfg) = cfg_for(&involved).strip_prefix("#[") {
+        w!(out, "#![{}", cfg);
+    }
     w!(
         out,
         "#![allow(clippy::excessive_precision, clippy::unreadable_literal, clippy::double_parens, unused_parens)]"
@@ -1017,6 +1248,12 @@ pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
         let factor = op.factor.as_deref().unwrap_or("1.0");
         if matches!(op.kind, CrossKind::Sqrt | CrossKind::Cbrt) {
             w!(out, "#[cfg(any(feature = \"std\", feature = \"libm\"))]");
+        }
+        let mut involved = vec![op.lhs.as_str(), op.rhs.as_str(), op.output.as_str()];
+        involved.retain(|q| !q.is_empty());
+        let cfg = cfg_for(&involved);
+        if !cfg.is_empty() {
+            w!(out, "{cfg}");
         }
         w!(out, "#[test]");
         w!(out, "fn {}() {{", test_name);

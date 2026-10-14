@@ -12,8 +12,47 @@ license = "MIT OR Apache-2.0"
 keywords = ["units", "measurement", "physics", "conversion"]
 categories = ["science", "no-std", "no-std::no-alloc"]
 
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+
 [features]
-default = ["std"]
+default = ["std", "full"]
+
+## Every quantity. Disable default features and pick groups to compile only
+## what you use; the core quantities (length, mass, duration, speed, force,
+## energy, power, pressure, temperature, angle, …) are always available.
+full = [
+    "mechanics",
+    "fluids",
+    "electrical",
+    "thermal",
+    "chemistry",
+    "light",
+    "radiation",
+    "information",
+    "misc",
+]
+## Torque, jerk, impulse, rotational quantities, moments of inertia, densities
+## per length/area, specific energy and volume, …
+mechanics = []
+## Flows, fluxes, viscosities, fluid resistance, permeability, leak rate.
+fluids = []
+## Electric and magnetic quantities, and decibel levels (dBV, dBm, Level).
+electrical = []
+## Entropy, heat flux and transfer, thermal conductivity and resistance, …
+thermal = []
+## Amount of substance, molar quantities, concentrations and fractions.
+chemistry = []
+## Luminous and radiant quantities, solid angle.
+light = []
+## Ionizing radiation: absorbed and equivalent dose, exposure, activity.
+radiation = []
+## Information and bit rate.
+information = []
+## Fuel consumption and efficiency, humidity, turbidity, vitamin A.
+misc = []
+
 ## Math functions (`sqrt`, trigonometry, `hypot`, …) through the standard
 ## library. Disable default features for `no_std`.
 std = []

@@ -2,6 +2,9 @@
 //! layout, generic storage, operators, formatting, parsing and the
 //! cross-quantity relations whose base units are not coherent.
 
+// Uses quantities from every feature group.
+#![cfg(feature = "full")]
+
 use std::collections::HashSet;
 use std::mem::{align_of, size_of};
 

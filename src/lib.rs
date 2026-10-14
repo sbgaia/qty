@@ -185,6 +185,18 @@
 //!
 //! ## Cargo features
 //!
+//! * `full` (default) — every quantity. The core quantities (length, area,
+//!   volume, mass, duration, speed, acceleration, force, energy, power,
+//!   pressure, temperature, angle, frequency, density, ratio) are always
+//!   compiled; the others come in groups — `mechanics`, `fluids`,
+//!   `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
+//!   `information`, `misc` — and a relation between quantities exists when
+//!   all of their groups are enabled. Compiling the core alone takes about a
+//!   fifth of the time of `full`:
+//!
+//!   ```toml
+//!   unitsnet-rs = { version = "…", default-features = false, features = ["std", "electrical"] }
+//!   ```
 //! * `std` (default) — math functions: `Area::sqrt() → Length`,
 //!   `Volume::cbrt() → Length`, `hypot`, and trigonometry on [`Angle`]
 //!   (`sin`, `cos`, `Angle::atan2(y, x)`, …). The rest of the crate is
@@ -201,6 +213,7 @@
 
 #![no_std]
 #![warn(missing_debug_implementations)]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 #[cfg(feature = "std")]
 extern crate std;

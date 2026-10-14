@@ -2,131 +2,351 @@
 //! Unit markers for [`Fixed`](crate::Fixed) integer quantities, one module per
 //! quantity: `unit::length::Millimeter`, `unit::duration::Nanosecond`, …
 
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::absorbed_dose_of_ionizing_radiation::unit as absorbed_dose_of_ionizing_radiation;
 pub use crate::units::acceleration::unit as acceleration;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::amount_of_substance::unit as amount_of_substance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::amplitude_ratio::unit as amplitude_ratio;
 pub use crate::units::angle::unit as angle;
 pub use crate::units::area::unit as area;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::area_density::unit as area_density;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::area_moment_of_inertia::unit as area_moment_of_inertia;
+#[cfg(feature = "information")]
+#[cfg_attr(docsrs, doc(cfg(feature = "information")))]
 pub use crate::units::bit_rate::unit as bit_rate;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::brake_specific_fuel_consumption::unit as brake_specific_fuel_consumption;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::coefficient_of_thermal_expansion::unit as coefficient_of_thermal_expansion;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::compressibility::unit as compressibility;
 pub use crate::units::density::unit as density;
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::dose_area_product::unit as dose_area_product;
 pub use crate::units::duration::unit as duration;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::dynamic_viscosity::unit as dynamic_viscosity;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_admittance::unit as electric_admittance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_apparent_energy::unit as electric_apparent_energy;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_apparent_power::unit as electric_apparent_power;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_capacitance::unit as electric_capacitance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_charge::unit as electric_charge;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_charge_density::unit as electric_charge_density;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_conductance::unit as electric_conductance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_conductivity::unit as electric_conductivity;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_current::unit as electric_current;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_current_density::unit as electric_current_density;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_current_gradient::unit as electric_current_gradient;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_field::unit as electric_field;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_impedance::unit as electric_impedance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_inductance::unit as electric_inductance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_potential::unit as electric_potential;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_potential_change_rate::unit as electric_potential_change_rate;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_reactance::unit as electric_reactance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_reactive_energy::unit as electric_reactive_energy;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_reactive_power::unit as electric_reactive_power;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_resistance::unit as electric_resistance;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_resistivity::unit as electric_resistivity;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_surface_charge_density::unit as electric_surface_charge_density;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::electric_susceptance::unit as electric_susceptance;
 pub use crate::units::energy::unit as energy;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::energy_density::unit as energy_density;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::entropy::unit as entropy;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::fluid_resistance::unit as fluid_resistance;
 pub use crate::units::force::unit as force;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::force_change_rate::unit as force_change_rate;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::force_per_length::unit as force_per_length;
 pub use crate::units::frequency::unit as frequency;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::fuel_efficiency::unit as fuel_efficiency;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::heat_flux::unit as heat_flux;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::heat_transfer_coefficient::unit as heat_transfer_coefficient;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::illuminance::unit as illuminance;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::impulse::unit as impulse;
+#[cfg(feature = "information")]
+#[cfg_attr(docsrs, doc(cfg(feature = "information")))]
 pub use crate::units::information::unit as information;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::irradiance::unit as irradiance;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::irradiation::unit as irradiation;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::jerk::unit as jerk;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::kinematic_viscosity::unit as kinematic_viscosity;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::leak_rate::unit as leak_rate;
 pub use crate::units::length::unit as length;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::level::unit as level;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::linear_density::unit as linear_density;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::linear_power_density::unit as linear_power_density;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::luminance::unit as luminance;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::luminosity::unit as luminosity;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::luminous_flux::unit as luminous_flux;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::luminous_intensity::unit as luminous_intensity;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::magnetic_field::unit as magnetic_field;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::magnetic_flux::unit as magnetic_flux;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::magnetization::unit as magnetization;
 pub use crate::units::mass::unit as mass;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::mass_concentration::unit as mass_concentration;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::mass_flow::unit as mass_flow;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::mass_flux::unit as mass_flux;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::mass_fraction::unit as mass_fraction;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::mass_moment_of_inertia::unit as mass_moment_of_inertia;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molality::unit as molality;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molar_energy::unit as molar_energy;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molar_entropy::unit as molar_entropy;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molar_flow::unit as molar_flow;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molar_mass::unit as molar_mass;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::molarity::unit as molarity;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::permeability::unit as permeability;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::permittivity::unit as permittivity;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::porous_medium_permeability::unit as porous_medium_permeability;
 pub use crate::units::power::unit as power;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::power_density::unit as power_density;
+#[cfg(feature = "electrical")]
+#[cfg_attr(docsrs, doc(cfg(feature = "electrical")))]
 pub use crate::units::power_ratio::unit as power_ratio;
 pub use crate::units::pressure::unit as pressure;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::pressure_change_rate::unit as pressure_change_rate;
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::radiation_equivalent_dose::unit as radiation_equivalent_dose;
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::radiation_equivalent_dose_rate::unit as radiation_equivalent_dose_rate;
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::radiation_exposure::unit as radiation_exposure;
+#[cfg(feature = "radiation")]
+#[cfg_attr(docsrs, doc(cfg(feature = "radiation")))]
 pub use crate::units::radioactivity::unit as radioactivity;
 pub use crate::units::ratio::unit as ratio;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::ratio_change_rate::unit as ratio_change_rate;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::reciprocal_area::unit as reciprocal_area;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::reciprocal_length::unit as reciprocal_length;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::relative_humidity::unit as relative_humidity;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::rotational_acceleration::unit as rotational_acceleration;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::rotational_speed::unit as rotational_speed;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::rotational_stiffness::unit as rotational_stiffness;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::rotational_stiffness_per_length::unit as rotational_stiffness_per_length;
 pub use crate::units::scalar::unit as scalar;
+#[cfg(feature = "light")]
+#[cfg_attr(docsrs, doc(cfg(feature = "light")))]
 pub use crate::units::solid_angle::unit as solid_angle;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::specific_energy::unit as specific_energy;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::specific_entropy::unit as specific_entropy;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::specific_fuel_consumption::unit as specific_fuel_consumption;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::specific_volume::unit as specific_volume;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::specific_weight::unit as specific_weight;
 pub use crate::units::speed::unit as speed;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::standard_volume_flow::unit as standard_volume_flow;
 pub use crate::units::temperature::unit as temperature;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::temperature_change_rate::unit as temperature_change_rate;
 pub use crate::units::temperature_delta::unit as temperature_delta;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::temperature_gradient::unit as temperature_gradient;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::thermal_conductivity::unit as thermal_conductivity;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::thermal_insulance::unit as thermal_insulance;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::thermal_resistance::unit as thermal_resistance;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::torque::unit as torque;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::turbidity::unit as turbidity;
+#[cfg(feature = "misc")]
+#[cfg_attr(docsrs, doc(cfg(feature = "misc")))]
 pub use crate::units::vitamin_a::unit as vitamin_a;
 pub use crate::units::volume::unit as volume;
+#[cfg(feature = "chemistry")]
+#[cfg_attr(docsrs, doc(cfg(feature = "chemistry")))]
 pub use crate::units::volume_concentration::unit as volume_concentration;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::volume_flow::unit as volume_flow;
+#[cfg(feature = "fluids")]
+#[cfg_attr(docsrs, doc(cfg(feature = "fluids")))]
 pub use crate::units::volume_flow_per_area::unit as volume_flow_per_area;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::volume_per_length::unit as volume_per_length;
+#[cfg(feature = "thermal")]
+#[cfg_attr(docsrs, doc(cfg(feature = "thermal")))]
 pub use crate::units::volumetric_heat_capacity::unit as volumetric_heat_capacity;
+#[cfg(feature = "mechanics")]
+#[cfg_attr(docsrs, doc(cfg(feature = "mechanics")))]
 pub use crate::units::warping_moment_of_inertia::unit as warping_moment_of_inertia;
