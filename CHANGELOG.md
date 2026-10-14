@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `Fixed::display_in::<V>()`: a count shown exactly as a decimal in another
+  unit of the same quantity (1234 mm as `1.234 m`, 21 375 m°C as
+  `21.375 °C`), without floats; power-of-ten ratios only (checked when
+  compiled); precision rounds ties to even; width, alignment and `+` apply.
+
 - `Angle::wrap_unsigned` (`[0°, 360°)`) and `wrap_signed` (`(−180°, 180°]`),
   exact range guarantees, no `std` needed; `clamp` and `lerp` on float
   quantities (`lerp` works for temperatures too).

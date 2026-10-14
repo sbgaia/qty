@@ -1397,8 +1397,8 @@ pub trait HasFixedBase {
 
 mod fixed;
 pub use fixed::{
-    AdditiveUnit, Fixed, FixedUnit, Integer, Ordered, PointUnit, RoundError, Rounding, ToFloat,
-    UnitDiv, UnitMul,
+    AdditiveUnit, Decimal, Fixed, FixedUnit, Integer, Ordered, PointUnit, RoundError, Rounding,
+    ToFloat, UnitDiv, UnitMul,
 };
 
 // Generated quantity modules — re-exports each quantity and its unit enum.

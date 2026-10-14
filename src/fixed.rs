@@ -1213,6 +1213,178 @@ impl<U: FixedUnit, I: fmt::Display> fmt::Display for Fixed<U, I> {
     }
 }
 
+// ── Exact decimal display in another unit ─────────────────────────────────────
+
+/// `Some(k)` when `x == 10^k`.
+const fn pow10_exp(x: u128) -> Option<u32> {
+    let (mut v, mut k) = (x, 0);
+    while v > 1 {
+        if v % 10 != 0 {
+            return None;
+        }
+        v /= 10;
+        k += 1;
+    }
+    if v == 1 {
+        Some(k)
+    } else {
+        None
+    }
+}
+
+/// `count_V = count_U · 10^UP / 10^DOWN` (one of the two is zero).
+struct DecimalScale<U, V>(PhantomData<(U, V)>);
+
+impl<U: FixedUnit, V: FixedUnit> DecimalScale<U, V> {
+    const EXP: (u32, u32) = {
+        assert!(
+            Ratio::<U, V>::OFFSET.0 == 0,
+            "these units have different zero points (°C and K): \
+             convert with `to_unit_rounded` first"
+        );
+        match (pow10_exp(Ratio::<U, V>::NUM), pow10_exp(Ratio::<U, V>::DEN)) {
+            (Some(up), Some(down)) => (up, down),
+            _ => panic!(
+                "the ratio between these units is not a power of ten (mm and in): \
+                 use `to_unit_rounded`, or `to_f64().in_unit(...)` for an approximation"
+            ),
+        }
+    };
+}
+
+impl<U: FixedUnit, I: Integer> Fixed<U, I> {
+    /// Shows the count in another unit of the same quantity, as an exact
+    /// decimal: 1234 mm as `1.234 m`, 21 375 m°C as `21.375 °C`, 2 km as
+    /// `2000 m`. No float is involved.
+    ///
+    /// The ratio between the units must be a power of ten, which is checked
+    /// when the code is compiled. All decimals are shown by default (so the
+    /// resolution stays visible); a precision rounds to nearest, ties to
+    /// even, and width, alignment and `+` apply to the whole text.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    /// use unitsnet_rs::unit::length::{Kilometer, Meter, Millimeter};
+    /// use unitsnet_rs::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
+    ///
+    /// let d = Fixed::<Millimeter>::new(1230);
+    /// assert_eq!(d.display_in::<Meter>().to_string(), "1.230 m");
+    /// assert_eq!(format!("{:.1}", d.display_in::<Meter>()), "1.2 m");
+    /// assert_eq!(format!("{:>9}", d.display_in::<Meter>()), "  1.230 m");
+    /// assert_eq!(Fixed::<Millimeter>::new(-5).display_in::<Meter>().to_string(), "-0.005 m");
+    /// assert_eq!(Fixed::<Kilometer>::new(2).display_in::<Meter>().to_string(), "2000 m");
+    ///
+    /// let t = Fixed::<MillidegreeCelsius, i32>::new(21_375);
+    /// assert_eq!(t.display_in::<DegreeCelsius>().to_string(), "21.375 °C");
+    /// ```
+    #[inline]
+    pub fn display_in<V: FixedUnit<Unit = U::Unit>>(self) -> Decimal<V> {
+        let (up, down) = DecimalScale::<U, V>::EXP;
+        let (negative, magnitude) = self.count.sign_magnitude();
+        Decimal {
+            negative,
+            magnitude,
+            up,
+            down,
+            unit: PhantomData,
+        }
+    }
+}
+
+/// A [`Fixed`] count shown exactly in the unit `V`, as returned by
+/// [`Fixed::display_in`].
+#[derive(Clone, Copy)]
+pub struct Decimal<V> {
+    negative: bool,
+    magnitude: u128,
+    up: u32,
+    down: u32,
+    unit: PhantomData<V>,
+}
+
+impl<V: FixedUnit> fmt::Display for Decimal<V> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // value = magnitude · 10^up / 10^down, shown with `decimals` digits
+        // after the point.
+        let decimals = f.precision().unwrap_or(self.down as usize);
+        let (digits, fraction_digits) = if decimals < self.down as usize {
+            // Round to `decimals` digits: nearest, ties to even.
+            let p = 10u128.pow(self.down - decimals as u32);
+            let (q, r) = (self.magnitude / p, self.magnitude % p);
+            let up = r > p - r || (r == p - r && q % 2 == 1);
+            (q + u128::from(up), decimals as u32)
+        } else {
+            (self.magnitude, self.down)
+        };
+        let scale = 10u128.pow(fraction_digits);
+        let (int, frac) = (digits / scale, digits % scale);
+        // Trailing zeros of an up-scaled whole number (2 km → 2000 m), and
+        // zeros beyond the count's resolution.
+        let int_zeros = if int == 0 { 0 } else { self.up as usize };
+        let pad_zeros = decimals - fraction_digits as usize;
+        let sign = if self.negative && digits != 0 {
+            "-"
+        } else if f.sign_plus() {
+            "+"
+        } else {
+            ""
+        };
+        let abbreviation = V::ABBREVIATION;
+
+        let mut int_len = 1;
+        let mut rest = int;
+        while rest >= 10 {
+            rest /= 10;
+            int_len += 1;
+        }
+        let len = sign.len()
+            + int_len
+            + int_zeros
+            + if decimals > 0 { 1 + decimals } else { 0 }
+            + if abbreviation.is_empty() {
+                0
+            } else {
+                1 + abbreviation.chars().count()
+            };
+        let padding = f.width().map_or(0, |w| w.saturating_sub(len));
+        let (before, after) = match f.align() {
+            Some(fmt::Alignment::Left) => (0, padding),
+            Some(fmt::Alignment::Center) => (padding / 2, padding - padding / 2),
+            _ => (padding, 0),
+        };
+        let fill = f.fill();
+        for _ in 0..before {
+            f.write_fmt(format_args!("{fill}"))?;
+        }
+        write!(f, "{sign}{int}")?;
+        for _ in 0..int_zeros {
+            f.write_str("0")?;
+        }
+        if decimals > 0 {
+            f.write_str(".")?;
+            if fraction_digits > 0 {
+                write!(f, "{frac:0width$}", width = fraction_digits as usize)?;
+            }
+            for _ in 0..pad_zeros {
+                f.write_str("0")?;
+            }
+        }
+        if !abbreviation.is_empty() {
+            write!(f, " {abbreviation}")?;
+        }
+        for _ in 0..after {
+            f.write_fmt(format_args!("{fill}"))?;
+        }
+        Ok(())
+    }
+}
+
+impl<V: FixedUnit> fmt::Debug for Decimal<V> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(self, f)
+    }
+}
+
 impl<U: FixedUnit, I: fmt::Debug> fmt::Debug for Fixed<U, I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Debug::fmt(&self.count, f)?;

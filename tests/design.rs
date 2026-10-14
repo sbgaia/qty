@@ -1345,3 +1345,42 @@ mod wrapping {
         let _ = Length::from_meters(1.0).clamp(Length::from_meters(2.0), Length::from_meters(1.0));
     }
 }
+
+// ── Exact decimal display of Fixed ────────────────────────────────────────────
+
+#[test]
+fn decimal_display_flags() {
+    use unitsnet_rs::unit::length::{Meter, Millimeter};
+    let d = Fixed::<Millimeter>::new(1230).display_in::<Meter>();
+    assert_eq!(format!("[{d:<9}]"), "[1.230 m  ]");
+    assert_eq!(format!("[{d:^10}]"), "[ 1.230 m  ]");
+    assert_eq!(format!("[{d:*>9}]"), "[**1.230 m]");
+    assert_eq!(format!("{d:+}"), "+1.230 m");
+    assert_eq!(format!("{d:.5}"), "1.23000 m");
+    assert_eq!(format!("{d:.0}"), "1 m");
+    assert_eq!(
+        format!(
+            "{:.0}",
+            Fixed::<Millimeter>::new(-400).display_in::<Meter>()
+        ),
+        "0 m"
+    );
+    assert_eq!(
+        format!(
+            "{:.0}",
+            Fixed::<Millimeter>::new(2500).display_in::<Meter>()
+        ),
+        "2 m"
+    ); // ties to even
+    assert_eq!(format!("{:?}", d), "1.230 m");
+    let max = Fixed::<Millimeter, u128>::new(u128::MAX).display_in::<Meter>();
+    assert_eq!(
+        max.to_string(),
+        "340282366920938463463374607431768211.455 m"
+    );
+    let min = Fixed::<Millimeter, i128>::new(i128::MIN).display_in::<Meter>();
+    assert_eq!(
+        min.to_string(),
+        "-170141183460469231731687303715884105.728 m"
+    );
+}

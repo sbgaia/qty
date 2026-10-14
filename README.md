@@ -125,6 +125,9 @@ assert_eq!(speed.count(), 3_000);
 # Ok::<(), RoundError>(())
 ```
 
+Counts also display exactly in a coarser unit, without floats:
+`Millimeters::new(1230).display_in::<Meter>()` prints `1.230 m`.
+
 `Meters + Millimeters`, `Millimeters::to_unit::<Meter>()` and
 `mm.mul_to(mm, SquareMeter)` are compile-time errors (they would need
 rounding; the `_rounded` forms take a mode). Integer values are `Eq + Ord + Hash`, so they

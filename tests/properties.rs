@@ -247,6 +247,47 @@ proptest! {
         let _ = format!("{s} m").parse::<Length<f32>>();
     }
 
+    // ── Exact decimal display ──
+
+    #[test]
+    fn decimal_display_matches_exact_rationals(n in count(), precision in prop::option::of(0usize..10)) {
+        use unitsnet_rs::unit::length::{Kilometer, Micrometer};
+        // Reference: n · 10^-k, rounded to `p` decimals (ties to even), as text.
+        fn reference(n: i64, k: u32, precision: Option<usize>) -> String {
+            let p = precision.unwrap_or(k as usize) as u32;
+            let magnitude = i128::from(n).unsigned_abs();
+            let shown = if p < k {
+                let d = 10u128.pow(k - p);
+                let (q, r) = (magnitude / d, magnitude % d);
+                q + u128::from(2 * r > d || (2 * r == d && q % 2 == 1))
+            } else {
+                magnitude * 10u128.pow(p - k)
+            };
+            let sign = if n < 0 && shown != 0 { "-" } else { "" };
+            let scale = 10u128.pow(p);
+            if p == 0 {
+                format!("{sign}{shown} m")
+            } else {
+                format!("{sign}{}.{:0w$} m", shown / scale, shown % scale, w = p as usize)
+            }
+        }
+        let show = |d: unitsnet_rs::Decimal<Meter>| match precision {
+            Some(p) => format!("{d:.p$}"),
+            None => d.to_string(),
+        };
+        prop_assert_eq!(show(Fixed::<Millimeter>::new(n).display_in::<Meter>()), reference(n, 3, precision));
+        prop_assert_eq!(show(Fixed::<Micrometer>::new(n).display_in::<Meter>()), reference(n, 6, precision));
+        // Up-scaling: n km = n·1000 m, whatever the precision.
+        let km = Fixed::<Kilometer>::new(n).display_in::<Meter>();
+        let expected = match (n, precision) {
+            (0, Some(p)) if p > 0 => format!("0.{} m", "0".repeat(p)),
+            (_, Some(p)) if p > 0 => format!("{n}000.{} m", "0".repeat(p)),
+            (0, _) => "0 m".to_owned(),
+            _ => format!("{n}000 m"),
+        };
+        prop_assert_eq!(show(km), expected);
+    }
+
     // ── Uncertainty and vectors ──
 
     #[test]
