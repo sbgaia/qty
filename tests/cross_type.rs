@@ -5565,3 +5565,43 @@ fn recip_one_specific_volume() {
     let c: Density = 1.0 / b;
     assert_eq!(c.as_base(), 0.25);
 }
+
+#[cfg(any(feature = "std", feature = "libm"))]
+#[test]
+fn sqrt_area_() {
+    let c = Area::from_base(16.0 * 1.0);
+    let r: Length = c.sqrt();
+    assert!((r.as_base() - 4.0).abs() < 1e-12);
+}
+
+#[cfg(any(feature = "std", feature = "libm"))]
+#[test]
+fn sqrt_area_moment_of_inertia_() {
+    let c = AreaMomentOfInertia::from_base(16.0 * 1.0);
+    let r: Area = c.sqrt();
+    assert!((r.as_base() - 4.0).abs() < 1e-12);
+}
+
+#[cfg(any(feature = "std", feature = "libm"))]
+#[test]
+fn sqrt_reciprocal_area_() {
+    let c = ReciprocalArea::from_base(16.0 * 1.0);
+    let r: ReciprocalLength = c.sqrt();
+    assert!((r.as_base() - 4.0).abs() < 1e-12);
+}
+
+#[cfg(any(feature = "std", feature = "libm"))]
+#[test]
+fn sqrt_specific_energy_() {
+    let c = SpecificEnergy::from_base(16.0 * 1.0);
+    let r: Speed = c.sqrt();
+    assert!((r.as_base() - 4.0).abs() < 1e-12);
+}
+
+#[cfg(any(feature = "std", feature = "libm"))]
+#[test]
+fn cbrt_volume_() {
+    let c = Volume::from_base(64.0 * 1.0);
+    let r: Length = c.cbrt();
+    assert!((r.as_base() - 4.0).abs() < 1e-12);
+}

@@ -38,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        features: ["", "--all-features"]
+        features: ["", "--all-features", "--no-default-features --features libm"]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -65,7 +65,9 @@ jobs:
         with:
           targets: thumbv7em-none-eabihf
       - uses: Swatinem/rust-cache@v2
-      - run: cargo build -p unitsnet-rs --all-features --target thumbv7em-none-eabihf
+      # No `std` on this target: the math functions come from `libm`.
+      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm --target thumbv7em-none-eabihf
+      - run: cargo build -p unitsnet-rs --no-default-features --target thumbv7em-none-eabihf
 
   codegen:
     name: Generated code is up to date

@@ -632,3 +632,43 @@ mod fixed {
         assert_eq!(set.len(), 2);
     }
 }
+
+// ── Math ──────────────────────────────────────────────────────────────────────
+
+#[cfg(any(feature = "std", feature = "libm"))]
+mod math {
+    use unitsnet_rs::*;
+
+    #[test]
+    fn roots_follow_the_relations() {
+        let side: Length = Area::from_square_meters(16.0).sqrt();
+        assert_eq!(side, Length::from_meters(4.0));
+        let edge: Length = Volume::from_liters(1.0).cbrt();
+        assert!(edge.approx_eq_rel(Length::from_centimeters(10.0), 1e-15));
+        // v = sqrt(2·E/m): specific energy (J/kg) is a speed squared.
+        let v: Speed = (Energy::from_joules(100.0) * 2.0 / Mass::from_kilograms(2.0)).sqrt();
+        assert!(v.approx_eq_rel(Speed::from_meters_per_second(10.0), 1e-15));
+        // f32 storage.
+        assert_eq!(
+            Area::from_square_meters(9.0_f32).sqrt(),
+            Length::from_meters(3.0_f32)
+        );
+    }
+
+    #[test]
+    fn hypot_and_trigonometry() {
+        let (east, north) = (Length::from_meters(3.0), Length::from_meters(4.0));
+        assert_eq!(east.hypot(north), Length::from_meters(5.0));
+        let heading = Angle::atan2(north, east);
+        assert!((heading.as_degrees() - 53.13010235415598).abs() < 1e-12);
+        assert!((heading.cos() - 0.6).abs() < 1e-15);
+        let (s, c) = Angle::from_degrees(90.0).sin_cos();
+        assert!((s - 1.0).abs() < 1e-15 && c.abs() < 1e-15);
+        assert!(Angle::acos(0.0).approx_eq_rel(Angle::from_degrees(90.0), 1e-15));
+        assert!(Angle::atan(1.0).approx_eq_rel(Angle::from_degrees(45.0), 1e-15));
+        // Velocity components from a speed and a heading.
+        let v = Speed::from_meters_per_second(10.0);
+        let vx = v * Angle::from_degrees(60.0).cos();
+        assert!(vx.approx_eq_rel(Speed::from_meters_per_second(5.0), 1e-12));
+    }
+}

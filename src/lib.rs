@@ -59,7 +59,7 @@
 //! * **Bulk data without copies.** Because of `#[repr(transparent)]`, a
 //!   `&[f64]` of metres can be viewed as `&[Length]` and back for free, so
 //!   typed code can feed SIMD kernels or I/O buffers directly.
-//! * **`no_std`, no dependencies, no allocation** (serde is optional).
+//! * **`no_std`, no required dependencies, no allocation** (see the features below).
 //!
 //! ### Different numeric types
 //!
@@ -185,11 +185,19 @@
 //!
 //! ## Cargo features
 //!
+//! * `std` (default) — math functions: `Area::sqrt() → Length`,
+//!   `Volume::cbrt() → Length`, `hypot`, and trigonometry on [`Angle`]
+//!   (`sin`, `cos`, `Angle::atan2(y, x)`, …). The rest of the crate is
+//!   `no_std`: disable default features for embedded targets.
+//! * `libm` — the same math functions without `std`, through the `libm` crate.
 //! * `serde` — `Serialize`/`Deserialize` for every quantity (as its bare
 //!   base-unit number) and every unit enum.
 
 #![no_std]
 #![warn(missing_debug_implementations)]
+
+#[cfg(feature = "std")]
+extern crate std;
 
 use core::fmt;
 use core::ops::{Add, Div, Mul, Neg, Sub};
@@ -269,6 +277,59 @@ macro_rules! impl_float {
     )*};
 }
 impl_float!(f32: 1 << 31, f64: 1 << 63);
+
+/// Math functions on float storage, for `sqrt`, trigonometry and `hypot` on
+/// quantities. Available with the `std` feature (default) or, on `no_std`
+/// targets, the `libm` feature.
+#[cfg(any(feature = "std", feature = "libm"))]
+pub trait FloatMath: Float {
+    /// Square root.
+    fn sqrt(self) -> Self;
+    /// Cube root.
+    fn cbrt(self) -> Self;
+    /// Sine (radians).
+    fn sin(self) -> Self;
+    /// Cosine (radians).
+    fn cos(self) -> Self;
+    /// Tangent (radians).
+    fn tan(self) -> Self;
+    /// Arcsine, in radians.
+    fn asin(self) -> Self;
+    /// Arccosine, in radians.
+    fn acos(self) -> Self;
+    /// Arctangent, in radians.
+    fn atan(self) -> Self;
+    /// Four-quadrant arctangent of `self / other`, in radians.
+    fn atan2(self, other: Self) -> Self;
+    /// `sqrt(self² + other²)` without intermediate overflow.
+    fn hypot(self, other: Self) -> Self;
+}
+
+#[cfg(any(feature = "std", feature = "libm"))]
+macro_rules! impl_float_math {
+    ($t:ident, $($method:ident($($arg:ident),*) => $libm:ident),*) => {
+        impl FloatMath for $t {$(
+            #[inline(always)]
+            fn $method(self $(, $arg: Self)*) -> Self {
+                // `std` provides inherent methods; prefer them when present.
+                #[cfg(feature = "std")]
+                return $t::$method(self $(, $arg)*);
+                #[cfg(not(feature = "std"))]
+                return libm::$libm(self $(, $arg)*);
+            }
+        )*}
+    };
+}
+#[cfg(any(feature = "std", feature = "libm"))]
+impl_float_math!(f64,
+    sqrt() => sqrt, cbrt() => cbrt, sin() => sin, cos() => cos, tan() => tan,
+    asin() => asin, acos() => acos, atan() => atan,
+    atan2(other) => atan2, hypot(other) => hypot);
+#[cfg(any(feature = "std", feature = "libm"))]
+impl_float_math!(f32,
+    sqrt() => sqrtf, cbrt() => cbrtf, sin() => sinf, cos() => cosf, tan() => tanf,
+    asin() => asinf, acos() => acosf, atan() => atanf,
+    atan2(other) => atan2f, hypot(other) => hypotf);
 
 // ── Quantity trait ────────────────────────────────────────────────────────────
 
@@ -722,6 +783,16 @@ macro_rules! quantity_vector_ops {
             }
         }
 
+        #[cfg(any(feature = "std", feature = "libm"))]
+        impl<T: $crate::FloatMath> $Q<T> {
+            /// `sqrt(self² + other²)`: the magnitude of two perpendicular
+            /// components, without intermediate overflow.
+            #[inline]
+            pub fn hypot(self, other: Self) -> Self {
+                Self(self.0.hypot(other.0))
+            }
+        }
+
         // ── Arithmetic: same quantity ──
 
         impl<T: core::ops::Add<Output = T>> core::ops::Add for $Q<T> {
@@ -944,6 +1015,41 @@ macro_rules! cross_mul_scalar {
     };
 }
 
+/// `C.sqrt() = A` where `C = A * A` (e.g. `Area` → `Length`); `$k` relates
+/// the base units when they are not coherent.
+macro_rules! cross_sqrt {
+    ($C:ident => $A:ident) => {
+        cross_sqrt!(@impl $C => $A, sqrt, "square", |v| v);
+    };
+    ($C:ident => $A:ident; $k:literal) => {
+        cross_sqrt!(@impl $C => $A, sqrt, "square", |v| v / T::from_f64($k));
+    };
+    (@impl $C:ident => $A:ident, $method:ident, $what:literal, |$v:ident| $scaled:expr) => {
+        #[cfg(any(feature = "std", feature = "libm"))]
+        impl<T: $crate::FloatMath> $C<T> {
+            #[doc = concat!(
+                "The [`", stringify!($A), "`] whose ", $what, " is this [`",
+                stringify!($C), "`]."
+            )]
+            #[inline]
+            pub fn $method(self) -> $A<T> {
+                let $v = self.into_base();
+                $A::from_base(($scaled).$method())
+            }
+        }
+    };
+}
+
+/// `C.cbrt() = A` where `C = A * A * A` (e.g. `Volume` → `Length`).
+macro_rules! cross_cbrt {
+    ($C:ident => $A:ident) => {
+        cross_sqrt!(@impl $C => $A, cbrt, "cube", |v| v);
+    };
+    ($C:ident => $A:ident; $k:literal) => {
+        cross_sqrt!(@impl $C => $A, cbrt, "cube", |v| v / T::from_f64($k));
+    };
+}
+
 /// `1 / A = B` for `f64` storage, e.g. `1.0 / duration` is a `Frequency`.
 /// (`f32` is omitted for the inference reason given on `scalar_lhs_mul!`.)
 macro_rules! cross_recip {
@@ -1035,6 +1141,10 @@ pub use units::*;
 
 // Generated: `unit::<quantity>::<Unit>` markers for `Fixed`.
 pub mod unit;
+
+// Trigonometry on `Angle`.
+#[cfg(any(feature = "std", feature = "libm"))]
+mod math;
 
 // Generated cross-type arithmetic (Length / Duration = Speed, etc.).
 // These are pure `impl` blocks — no named items to re-export.

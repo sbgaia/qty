@@ -13,11 +13,18 @@ keywords = ["units", "measurement", "physics", "conversion"]
 categories = ["science", "no-std", "no-std::no-alloc"]
 
 [features]
+default = ["std"]
+## Math functions (`sqrt`, trigonometry, `hypot`, …) through the standard
+## library. Disable default features for `no_std`.
+std = []
+## The same math functions on `no_std` targets, through the `libm` crate.
+libm = ["dep:libm"]
 ## `Serialize`/`Deserialize` for every quantity (as its bare base-unit number)
 ## and every unit enum.
 serde = ["dep:serde"]
 
 [dependencies]
+libm = { version = "0.2", optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
 
 [dev-dependencies]

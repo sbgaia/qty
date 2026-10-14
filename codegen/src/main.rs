@@ -171,6 +171,8 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     let known: HashSet<&str> = quantities.iter().map(|q| q.name.as_str()).collect();
 
     let mut ops: Vec<CrossOp> = Vec::new();
+    // Every `C = A * B` relation, as `(A, B, C, k)`.
+    let mut products: Vec<(String, String, String, Const)> = Vec::new();
     let op = |kind, lhs: &str, rhs: &str, output: &str, factor: &Const| CrossOp {
         kind,
         lhs: lhs.to_owned(),
@@ -234,6 +236,8 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
             continue;
         }
 
+        products.push((a_qty.clone(), b_qty.clone(), out_qty.clone(), k.clone()));
+
         // A * B = C  and  B * A = C  (commutative; emit both).
         ops.push(op(CrossKind::Mul, &a_qty, &b_qty, &out_qty, &k));
         if a_qty != b_qty {
@@ -248,6 +252,31 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
             }
             if a_qty != b_qty && out_qty != a_qty {
                 ops.push(op(CrossKind::Div, &out_qty, &a_qty, &b_qty, &k_inv));
+            }
+        }
+    }
+
+    // Roots. `C = A * A` gives `C.sqrt() = A`, with `C_base = k · A_base²`.
+    // `C = A * B` with `A = B * B` gives `C.cbrt() = B`, `C_base = k_A · k · B_base³`.
+    let squares: Vec<(String, String, Const)> = products
+        .iter()
+        .filter(|(a, b, _, _)| a == b)
+        .map(|(a, _, c, k)| (c.clone(), a.clone(), k.clone()))
+        .collect();
+    for (c, a, k) in &squares {
+        ops.push(op(CrossKind::Sqrt, c, "", a, k));
+    }
+    for (a, b, c, k) in &products {
+        for (x, y) in [(a, b), (b, a)] {
+            if let Some((_, root, k_sq)) = squares.iter().find(|(sq, root, _)| sq == x && root == y)
+            {
+                ops.push(op(
+                    CrossKind::Cbrt,
+                    c,
+                    "",
+                    root,
+                    &(k_sq.clone() * k.clone()),
+                ));
             }
         }
     }

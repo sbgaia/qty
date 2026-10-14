@@ -580,6 +580,10 @@ pub enum CrossKind {
     MulScalar,
     /// `1 / rhs = output`, with a plain number on the left.
     Recip,
+    /// `lhs.sqrt() = output`, where `lhs = output * output`.
+    Sqrt,
+    /// `lhs.cbrt() = output`, where `lhs = output * output * output`.
+    Cbrt,
 }
 
 impl CrossKind {
@@ -589,6 +593,8 @@ impl CrossKind {
         match self {
             CrossKind::Mul | CrossKind::MulScalar => "*",
             CrossKind::Div | CrossKind::Recip => "/",
+            CrossKind::Sqrt => "sqrt",
+            CrossKind::Cbrt => "cbrt",
         }
     }
 }
@@ -649,6 +655,8 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
             ),
             CrossKind::MulScalar => format!("cross_mul_scalar!({} * {});", op.lhs, op.rhs),
             CrossKind::Recip => format!("cross_recip!({} => {});", op.rhs, op.output),
+            CrossKind::Sqrt => format!("cross_sqrt!({} => {}{factor});", op.lhs, op.output),
+            CrossKind::Cbrt => format!("cross_cbrt!({} => {}{factor});", op.lhs, op.output),
         };
         w!(out, "{line}");
     }
@@ -917,6 +925,9 @@ pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
             op.rhs.to_snake_case(),
         );
         let factor = op.factor.as_deref().unwrap_or("1.0");
+        if matches!(op.kind, CrossKind::Sqrt | CrossKind::Cbrt) {
+            w!(out, "#[cfg(any(feature = \"std\", feature = \"libm\"))]");
+        }
         w!(out, "#[test]");
         w!(out, "fn {}() {{", test_name);
         match op.kind {
@@ -950,6 +961,20 @@ pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
                 w!(out, "    let b = {}::from_base(2.0);", op.rhs);
                 w!(out, "    let c: f64 = a * b;");
                 w!(out, "    assert_eq!(c, 12.0);");
+            }
+            CrossKind::Sqrt | CrossKind::Cbrt => {
+                let (method, value, root) = if op.kind == CrossKind::Sqrt {
+                    ("sqrt", "16.0", "4.0")
+                } else {
+                    ("cbrt", "64.0", "4.0")
+                };
+                w!(
+                    out,
+                    "    let c = {}::from_base({value} * {factor});",
+                    op.lhs
+                );
+                w!(out, "    let r: {} = c.{method}();", op.output);
+                w!(out, "    assert!((r.as_base() - {root}).abs() < 1e-12);");
             }
             CrossKind::Recip => {
                 w!(out, "    let b = {}::from_base(4.0);", op.rhs);
