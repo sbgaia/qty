@@ -102,9 +102,11 @@ jobs:
           workspaces: fuzz
       - name: Fuzz
         working-directory: fuzz
+        # The prebuilt cargo-fuzz is a musl binary and would default to the
+        # musl target, which has no AddressSanitizer: name the target.
         run: |
           for target in parse fixed; do
-            cargo fuzz run "$target" -O -- -max_total_time=60
+            cargo fuzz run "$target" -O --target x86_64-unknown-linux-gnu -- -max_total_time=60
           done
 
   codegen:
