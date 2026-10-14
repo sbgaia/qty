@@ -222,7 +222,8 @@
 //!   `no_std`: disable default features for embedded targets.
 //! * `libm` — the same math functions without `std`, through the `libm` crate.
 //! * `serde` — `Serialize`/`Deserialize` for every quantity (as its bare
-//!   base-unit number) and every unit enum.
+//!   base-unit number) and every unit enum; the `serde_str` module reads and writes
+//!   text with units instead (`"30 s"`, `"2 minutes"`).
 //! * `approx` — `AbsDiffEq`/`RelativeEq`/`UlpsEq`, so `assert_relative_eq!`
 //!   works on quantities.
 //! * `num-traits` — `Zero` for amount quantities and [`Fixed`].
@@ -1387,6 +1388,10 @@ mod vector;
 pub use vector::{Vector2, Vector3};
 
 mod time;
+
+#[cfg(feature = "serde")]
+#[cfg_attr(docsrs, doc(cfg(feature = "serde")))]
+pub mod serde_str;
 
 #[cfg(any(feature = "std", feature = "libm"))]
 mod uncertain;

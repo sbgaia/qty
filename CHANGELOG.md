@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `serde_str`: `#[serde(with = "unitsnet_rs::serde_str")]` reads quantities,
+  `Fixed` counts and unit enums as text in any unit or spelling (`"30 s"`,
+  `"2 minutes"`) and writes the base unit at full precision, exactly
+  round-tripping; `serde_str::option` for optional fields.
+
 - 15 relations UnitsNet does not define yet, chosen by hand
   (`data/relations/ExtraRelations.json`, 60 operators): momentum
   (`Mass * Speed = Impulse`), `Φ = V·t`, `Φ = L·I`, `V = L·dI/dt`,

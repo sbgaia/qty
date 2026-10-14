@@ -1164,3 +1164,106 @@ mod std_time {
         );
     }
 }
+
+// ── serde as text ─────────────────────────────────────────────────────────────
+
+#[cfg(feature = "serde")]
+mod serde_text {
+    use serde::{Deserialize, Serialize};
+    use unitsnet_rs::*;
+
+    #[derive(Serialize, Deserialize, Debug, PartialEq)]
+    struct Wrap<Q: core::fmt::Display + core::str::FromStr<Err = ParseError>>(
+        #[serde(with = "unitsnet_rs::serde_str")] Q,
+    );
+
+    fn round_trip<Q>(q: Q) -> String
+    where
+        Q: core::fmt::Display
+            + core::str::FromStr<Err = ParseError>
+            + PartialEq
+            + core::fmt::Debug
+            + Copy,
+    {
+        let json = serde_json::to_string(&Wrap(q)).unwrap();
+        let back: Wrap<Q> = serde_json::from_str(&json).unwrap();
+        assert_eq!(back.0, q, "{json}");
+        json
+    }
+
+    #[test]
+    fn round_trips_are_exact() {
+        for v in [0.1, -2.5e-300, 1.0 / 3.0, f64::MAX, 6.02214076e23] {
+            let json = serde_json::to_string(&Wrap(Length::from_meters(v))).unwrap();
+            let back: Wrap<Length> = serde_json::from_str(&json).unwrap();
+            assert_eq!(back.0.as_base().to_bits(), v.to_bits(), "{json}");
+        }
+        let json = serde_json::to_string(&Wrap(Length::from_meters(0.1f32))).unwrap();
+        assert_eq!(json, r#""0.1 m""#);
+        assert_eq!(
+            serde_json::from_str::<Wrap<Length<f32>>>(&json).unwrap().0,
+            Length::from_meters(0.1f32)
+        );
+        assert_eq!(
+            round_trip(Temperature::from_kelvins(293.15)),
+            r#""293.15 K""#
+        );
+        assert_eq!(
+            round_trip(Fixed::<unit::length::Millimeter, i32>::new(-12)),
+            r#""-12 mm""#
+        );
+        assert_eq!(round_trip(LengthUnit::Kilometer), r#""km""#);
+    }
+
+    #[test]
+    fn reading_accepts_any_unit_and_names() {
+        let read = |s: &str| serde_json::from_str::<Wrap<Length>>(s).map(|w| w.0);
+        assert_eq!(read(r#""1.5 km""#).unwrap(), Length::from_meters(1500.0));
+        assert_eq!(
+            read(r#""2 Kilometres""#).unwrap(),
+            Length::from_meters(2000.0)
+        );
+        assert!(read(r#""2 kg""#)
+            .unwrap_err()
+            .to_string()
+            .contains("unknown unit"));
+        assert!(read(r#""abc m""#)
+            .unwrap_err()
+            .to_string()
+            .contains("invalid number"));
+        // Bare numbers are rejected: the unit must be explicit.
+        assert!(read("1.5")
+            .unwrap_err()
+            .to_string()
+            .contains("a number with a unit"));
+    }
+
+    #[derive(Serialize, Deserialize, Debug, PartialEq)]
+    struct Optional {
+        #[serde(
+            with = "unitsnet_rs::serde_str::option",
+            default,
+            skip_serializing_if = "Option::is_none"
+        )]
+        limit: Option<Speed>,
+    }
+
+    #[test]
+    fn optional_fields() {
+        let some: Optional = serde_json::from_str(r#"{"limit":"36 km/h"}"#).unwrap();
+        assert_eq!(some.limit, Some(Speed::from_meters_per_second(10.0)));
+        assert_eq!(
+            serde_json::to_string(&some).unwrap(),
+            r#"{"limit":"10 m/s"}"#
+        );
+        let none: Optional = serde_json::from_str("{}").unwrap();
+        assert_eq!(none.limit, None);
+        assert_eq!(
+            serde_json::from_str::<Optional>(r#"{"limit":null}"#)
+                .unwrap()
+                .limit,
+            None
+        );
+        assert_eq!(serde_json::to_string(&none).unwrap(), "{}");
+    }
+}
