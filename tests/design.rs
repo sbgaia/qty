@@ -1099,3 +1099,68 @@ mod vectors {
         assert_eq!(raw, [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]);
     }
 }
+
+// ── std::time::Duration interop ───────────────────────────────────────────────
+
+mod std_time {
+    use std::time::Duration as StdDuration;
+    use unitsnet_rs::unit::duration::Nanosecond;
+    use unitsnet_rs::*;
+
+    #[test]
+    fn floats() {
+        assert_eq!(
+            Duration::from(StdDuration::from_millis(250)),
+            Duration::from_seconds(0.25)
+        );
+        assert_eq!(
+            Duration::<f32>::from(StdDuration::from_secs(3)),
+            Duration::from_seconds(3.0f32)
+        );
+        assert_eq!(
+            StdDuration::try_from(Duration::from_hours(1.0)),
+            Ok(StdDuration::from_secs(3600))
+        );
+        assert_eq!(
+            StdDuration::try_from(Duration::from_nanoseconds(1.4)),
+            Ok(StdDuration::from_nanos(1))
+        );
+        assert!(StdDuration::try_from(Duration::from_seconds(-0.5)).is_err());
+        assert!(StdDuration::try_from(Duration::from_seconds(f64::NAN)).is_err());
+        assert!(StdDuration::try_from(Duration::from_seconds(1e30)).is_err());
+        assert!(StdDuration::try_from(Duration::from_seconds(2.0f32)).is_ok());
+    }
+
+    #[test]
+    fn integer_nanoseconds_are_exact() {
+        let d = StdDuration::new(1_234_567, 890_123_456);
+        let ns: Fixed<Nanosecond, i128> = d.try_into().unwrap();
+        assert_eq!(ns.count(), 1_234_567_890_123_456);
+        assert_eq!(StdDuration::try_from(ns), Ok(d));
+        // Extremes.
+        let max: Fixed<Nanosecond, i128> = StdDuration::MAX.try_into().unwrap();
+        assert_eq!(StdDuration::try_from(max), Ok(StdDuration::MAX));
+        assert_eq!(
+            StdDuration::try_from(max + Fixed::<Nanosecond, i128>::new(1)),
+            Err(RoundError::Overflow)
+        );
+        assert_eq!(
+            Fixed::<Nanosecond, i64>::try_from(StdDuration::MAX),
+            Err(RoundError::Overflow)
+        );
+        assert_eq!(
+            Fixed::<Nanosecond, u8>::try_from(StdDuration::from_nanos(255)).map(|f| f.count()),
+            Ok(255)
+        );
+        assert_eq!(
+            StdDuration::try_from(Fixed::<Nanosecond>::new(-1)),
+            Err(RoundError::Overflow)
+        );
+        // Other units convert through `to_unit`, exactly.
+        let ms = Fixed::<unit::duration::Millisecond>::new(1500);
+        assert_eq!(
+            StdDuration::try_from(ms.to_unit::<Nanosecond>().unwrap()),
+            Ok(StdDuration::from_millis(1500))
+        );
+    }
+}

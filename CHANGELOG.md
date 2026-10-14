@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Conversions with `std::time::Duration` (`core::time::Duration`):
+  `From` into `Duration<f64>`/`Duration<f32>`, `TryFrom` back (negative, NaN
+  or too large fail), and exact `TryFrom` both ways with
+  `Fixed<Nanosecond, I>`.
+
 - **Generic storage.** Quantities are `#[repr(transparent)]` wrappers generic
   over their number type: `Length<f64>` (default), `Length<f32>`, integers,
   or any type implementing `Float`. Arithmetic compiles to the same machine

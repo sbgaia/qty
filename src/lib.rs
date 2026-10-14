@@ -1386,6 +1386,8 @@ mod math;
 mod vector;
 pub use vector::{Vector2, Vector3};
 
+mod time;
+
 #[cfg(any(feature = "std", feature = "libm"))]
 mod uncertain;
 #[cfg(any(feature = "std", feature = "libm"))]
