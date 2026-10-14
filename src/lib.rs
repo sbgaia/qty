@@ -87,7 +87,7 @@
 //! by a `Duration` is a `Vector3<Speed>`, and dot and cross products follow
 //! the relations between quantities.
 //!
-//! [`Uncertain`] (value ± standard uncertainty) is a storage type too: a
+//! `Uncertain` (value ± standard uncertainty; with `std` or `libm`) is a storage type too: a
 //! `Length<Uncertain>` propagates its uncertainty through conversions,
 //! relations and math functions.
 //!

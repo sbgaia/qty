@@ -31,6 +31,8 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets --all-features
       - run: cargo doc --no-deps --all-features -p unitsnet-rs
+      # Links to feature-gated items must not break the docs without them.
+      - run: cargo doc --no-deps --no-default-features -p unitsnet-rs
 
   test:
     name: Test (${{ matrix.features }})

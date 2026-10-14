@@ -54,8 +54,8 @@ macro_rules! vector {
                 vector!(@sum $(self.$c * other.$c),+)
             }
 
-            /// The squared length, `self · self`: cheaper than
-            /// [`norm`](Self::norm), for comparisons.
+            /// The squared length, `self · self`: cheaper than `norm`, for
+            /// comparisons.
             #[inline]
             pub fn norm_squared<O>(self) -> O
             where
