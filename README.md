@@ -111,8 +111,23 @@ assert_eq!(Millimeters::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Me
 # Ok::<(), RoundError>(())
 ```
 
-`Meters + Millimeters` and `Millimeters::to_unit::<Meter>()` are compile-time
-errors (they would need rounding). Integer values are `Eq + Ord + Hash`, so they
+Physics works on counts too, with the result's unit named explicitly:
+
+```rust
+use unitsnet_rs::*;
+use unitsnet_rs::unit::{area::SquareMillimeter, length::Millimeter};
+use unitsnet_rs::unit::{duration::Millisecond, speed::MillimeterPerSecond};
+
+let side = Fixed::<Millimeter>::new(1_200);
+assert_eq!(side.mul_to(side, SquareMillimeter).count(), 1_440_000);
+let speed = side.div_to(Fixed::<Millisecond>::new(400), MillimeterPerSecond, Rounding::Exact)?;
+assert_eq!(speed.count(), 3_000);
+# Ok::<(), RoundError>(())
+```
+
+`Meters + Millimeters`, `Millimeters::to_unit::<Meter>()` and
+`mm.mul_to(mm, SquareMeter)` are compile-time errors (they would need
+rounding; the `_rounded` forms take a mode). Integer values are `Eq + Ord + Hash`, so they
 work as `HashMap`/`BTreeMap` keys.
 
 ## Temperatures and decibel levels are points

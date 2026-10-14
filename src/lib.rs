@@ -143,6 +143,11 @@
 //! # Ok::<(), RoundError>(())
 //! ```
 //!
+//! The relations between quantities work on counts too, exactly:
+//! `mm.mul_to(mm, SquareMillimeter)` is a `Fixed<SquareMillimeter>`, and
+//! [`div_to`](Fixed::div_to) divides with an explicit rounding mode (see
+//! [`mul_to`](Fixed::mul_to)).
+//!
 //! Units are in [`unit`](mod@unit), one module per quantity (`unit::duration::Nanosecond`,
 //! `unit::mass::Gram`, …). Every linear unit has a marker, and so do the
 //! affine units of point quantities: a temperature sensor reporting
@@ -1322,6 +1327,17 @@ macro_rules! fixed_unit {
     };
 }
 
+/// The relation between three quantities' unit enums, for `Fixed::mul_to`
+/// and `Fixed::div_to`.
+macro_rules! fixed_relation {
+    ($Tr:ident: $A:ident, $B:ident => $C:ident; $num:literal / $den:literal, pi^$pi:literal) => {
+        impl $crate::$Tr<$B> for $A {
+            type Output = $C;
+            const K: (u128, u128, i32) = ($num, $den, $pi);
+        }
+    };
+}
+
 /// Links a quantity with its base-unit marker: `Length<I>` and
 /// `Fixed<Meter, I>` are the same thing and convert freely.
 macro_rules! fixed_base {
@@ -1353,6 +1369,7 @@ pub trait HasFixedBase {
 mod fixed;
 pub use fixed::{
     AdditiveUnit, Fixed, FixedUnit, Integer, Ordered, PointUnit, RoundError, Rounding, ToFloat,
+    UnitDiv, UnitMul,
 };
 
 // Generated quantity modules — re-exports each quantity and its unit enum.

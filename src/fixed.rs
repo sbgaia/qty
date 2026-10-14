@@ -375,6 +375,98 @@ pub trait PointUnit: FixedUnit {
     type Delta: AdditiveUnit;
 }
 
+/// A relation `Self × Rhs = Output` between the unit enums of three
+/// quantities (`LengthUnit × LengthUnit = AreaUnit`), with the exact factor
+/// between their base units: `output = K · lhs · rhs`, `K = num / den · π^pi`.
+///
+/// Generated for every multiplication relation between quantities; used by
+/// [`Fixed::mul_to`].
+pub trait UnitMul<Rhs> {
+    /// The unit enum of the product's quantity.
+    type Output;
+    /// `(num, den, pi)`: see the trait documentation.
+    const K: (u128, u128, i32);
+}
+
+/// A relation `Self ÷ Rhs = Output` between the unit enums of three
+/// quantities (`LengthUnit ÷ DurationUnit = SpeedUnit`), with the exact
+/// factor between their base units: `output = K · lhs / rhs`.
+///
+/// Generated for every division relation between quantities; used by
+/// [`Fixed::div_to`].
+pub trait UnitDiv<Rhs> {
+    /// The unit enum of the quotient's quantity.
+    type Output;
+    /// `(num, den, pi)`: see [`UnitMul`].
+    const K: (u128, u128, i32);
+}
+
+/// `a/b · c/d`, reduced, at compile time.
+const fn frac_mul((a, b): (u128, u128), (c, d): (u128, u128)) -> (u128, u128) {
+    let (g1, g2) = (gcd(a, d), gcd(c, b));
+    match ((a / g1).checked_mul(c / g2), (b / g2).checked_mul(d / g1)) {
+        (Some(num), Some(den)) => (num, den),
+        _ => panic!("the ratio between these units is too large for integer arithmetic"),
+    }
+}
+
+/// The exact factor `R` in `count_V = R · count_U ⊙ count_W` for
+/// `U ⊙ W → V`, where `⊙` is `×` (`DIV = false`) or `÷` (`DIV = true`).
+struct RelationRatio<U, W, V, const DIV: bool>(PhantomData<(U, W, V)>);
+
+impl<U: FixedUnit, W: FixedUnit, V: FixedUnit, const DIV: bool> RelationRatio<U, W, V, DIV> {
+    const fn parts(k: (u128, u128, i32)) -> (u128, u128) {
+        // U · W^±1 · K / V, in base units.
+        let w_pi = if DIV { -W::PI_POW } else { W::PI_POW };
+        assert!(
+            U::PI_POW + w_pi + k.2 == V::PI_POW,
+            "the ratio between these units is irrational (involves π): \
+             compute through float quantities instead"
+        );
+        let w = if DIV {
+            (W::DEN, W::NUM)
+        } else {
+            (W::NUM, W::DEN)
+        };
+        let r = frac_mul((U::NUM, U::DEN), w);
+        let r = frac_mul(r, (k.0, k.1));
+        frac_mul(r, (V::DEN, V::NUM))
+    }
+}
+
+impl<U: FixedUnit, W: FixedUnit, V: FixedUnit> RelationRatio<U, W, V, false>
+where
+    U::Unit: UnitMul<W::Unit>,
+{
+    const PARTS: (u128, u128) = Self::parts(<U::Unit as UnitMul<W::Unit>>::K);
+    const EXACT: () = assert!(
+        Self::PARTS.1 == 1,
+        "this product is not a whole number of the target unit (mm · mm is \
+         not a whole number of m²): use `mul_to_rounded`, or a finer target unit"
+    );
+}
+
+impl<U: FixedUnit, W: FixedUnit, V: FixedUnit> RelationRatio<U, W, V, true>
+where
+    U::Unit: UnitDiv<W::Unit>,
+{
+    const PARTS: (u128, u128) = Self::parts(<U::Unit as UnitDiv<W::Unit>>::K);
+}
+
+/// `count · k` with the overflow behaviour of integer `*`.
+#[inline(always)]
+fn scale_count<I: Integer>(count: I, k: u128) -> I {
+    if k == 1 {
+        return count;
+    }
+    match i128::try_from(k).ok().and_then(I::from_i128) {
+        Some(k) => count * k,
+        // The factor alone exceeds `I`: only zero is representable.
+        None if count == I::default() => count,
+        None => panic!("attempt to multiply with overflow"),
+    }
+}
+
 const fn gcd(mut a: u128, mut b: u128) -> u128 {
     while b != 0 {
         let t = a % b;
@@ -689,6 +781,121 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     #[inline]
     pub fn checked_mul(self, factor: I) -> Option<Self> {
         self.count.checked_mul(factor).map(Self::new)
+    }
+
+    /// The product with a count of another quantity, as a count of the
+    /// related quantity in `unit` — exactly: `mm × mm → mm²`,
+    /// `N × m → N·m`, `km/h × h → km`.
+    ///
+    /// `unit` names the result's unit (the marker is a unit struct). The
+    /// conversion must be exact — for example `mm × mm` into `m²` is not —
+    /// which is checked when the code is compiled; for other units use
+    /// [`mul_to_rounded`](Self::mul_to_rounded). Overflow behaves like
+    /// integer `*`.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    /// use unitsnet_rs::unit::{area::SquareMillimeter, length::{Meter, Millimeter}};
+    /// use unitsnet_rs::unit::{duration::Hour, speed::KilometerPerHour, length::Kilometer};
+    ///
+    /// let width = Fixed::<Millimeter>::new(1_200);
+    /// let height = Fixed::<Millimeter>::new(800);
+    /// assert_eq!(width.mul_to(height, SquareMillimeter).count(), 960_000);
+    ///
+    /// // Mixed units, as long as the result is exact: m × mm = 1000 mm².
+    /// assert_eq!(Fixed::<Meter>::new(2).mul_to(height, SquareMillimeter).count(), 1_600_000);
+    ///
+    /// let distance = Fixed::<KilometerPerHour>::new(90).mul_to(Fixed::<Hour>::new(3), Kilometer);
+    /// assert_eq!(distance.count(), 270);
+    /// ```
+    #[inline]
+    pub fn mul_to<W, V>(self, rhs: Fixed<W, I>, unit: V) -> Fixed<V, I>
+    where
+        W: AdditiveUnit,
+        U::Unit: UnitMul<W::Unit>,
+        V: AdditiveUnit<Unit = <U::Unit as UnitMul<W::Unit>>::Output>,
+    {
+        let _ = unit;
+        #[allow(clippy::let_unit_value)]
+        let () = RelationRatio::<U, W, V, false>::EXACT;
+        Fixed::new(scale_count(
+            self.count * rhs.count,
+            RelationRatio::<U, W, V, false>::PARTS.0,
+        ))
+    }
+
+    /// The product with a count of another quantity, as a count of the
+    /// related quantity in `unit`, rounding with `mode`.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    /// use unitsnet_rs::unit::{area::SquareMeter, length::Millimeter};
+    ///
+    /// let side = Fixed::<Millimeter>::new(1_500);
+    /// assert_eq!(side.mul_to_rounded(side, SquareMeter, Rounding::NearestTiesEven), Ok(Fixed::new(2))); // 2.25 m²
+    /// assert_eq!(side.mul_to_rounded(side, SquareMeter, Rounding::Exact), Err(RoundError::Inexact));
+    /// ```
+    #[inline]
+    pub fn mul_to_rounded<W, V>(
+        self,
+        rhs: Fixed<W, I>,
+        unit: V,
+        mode: Rounding,
+    ) -> Result<Fixed<V, I>, RoundError>
+    where
+        W: AdditiveUnit,
+        U::Unit: UnitMul<W::Unit>,
+        V: AdditiveUnit<Unit = <U::Unit as UnitMul<W::Unit>>::Output>,
+    {
+        let _ = unit;
+        let (num, den) = RelationRatio::<U, W, V, false>::PARTS;
+        let product = widen(self.count)?
+            .checked_mul(widen(rhs.count)?)
+            .ok_or(RoundError::Overflow)?;
+        rescale(product, num, den, (0, 1), mode)
+            .and_then(narrow)
+            .map(Fixed::new)
+    }
+
+    /// The quotient by a count of another quantity, as a count of the
+    /// related quantity in `unit`, rounding with `mode`:
+    /// `mm ÷ ms → mm/s`, `J ÷ s → W`.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    /// use unitsnet_rs::unit::{duration::Millisecond, length::Millimeter, speed::MillimeterPerSecond};
+    ///
+    /// let travel = Fixed::<Millimeter>::new(250);
+    /// let time = Fixed::<Millisecond>::new(400);
+    /// // 250 mm / 0.4 s = 625 mm/s, exactly.
+    /// assert_eq!(travel.div_to(time, MillimeterPerSecond, Rounding::Exact), Ok(Fixed::new(625)));
+    /// assert_eq!(
+    ///     travel.div_to(Fixed::<Millisecond>::new(0), MillimeterPerSecond, Rounding::Floor),
+    ///     Err(RoundError::DivisionByZero)
+    /// );
+    /// ```
+    #[inline]
+    pub fn div_to<W, V>(
+        self,
+        rhs: Fixed<W, I>,
+        unit: V,
+        mode: Rounding,
+    ) -> Result<Fixed<V, I>, RoundError>
+    where
+        W: AdditiveUnit,
+        U::Unit: UnitDiv<W::Unit>,
+        V: AdditiveUnit<Unit = <U::Unit as UnitDiv<W::Unit>>::Output>,
+    {
+        let _ = unit;
+        let (num, den) = RelationRatio::<U, W, V, true>::PARTS;
+        let overflow = |_| RoundError::Overflow;
+        let n = widen(self.count)?
+            .checked_mul(i128::try_from(num).map_err(overflow)?)
+            .ok_or(RoundError::Overflow)?;
+        let d = widen(rhs.count)?
+            .checked_mul(i128::try_from(den).map_err(overflow)?)
+            .ok_or(RoundError::Overflow)?;
+        div_round(n, d, mode).and_then(narrow).map(Fixed::new)
     }
 
     /// `self + other`, clamped to the integer range.

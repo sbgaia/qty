@@ -1018,6 +1018,8 @@ pub struct CrossOp {
     /// Factor relating the base units, when they are not coherent. `None`
     /// means exactly 1, so the operator works for any storage type.
     pub factor: Option<String>,
+    /// The same factor, exactly: `output_base = k · lhs_base ⊙ rhs_base`.
+    pub k: crate::expr::Const,
 }
 
 /// Generates the complete `src/cross_type.rs` source from the supplied operations.
@@ -1066,6 +1068,25 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
             w!(out, "{cfg}");
         }
         w!(out, "{line}");
+        // The same relation between unit enums, with its exact factor, for
+        // `Fixed::mul_to` / `div_to`.
+        let relation = match op.kind {
+            CrossKind::Mul => Some("UnitMul"),
+            CrossKind::Div => Some("UnitDiv"),
+            _ => None,
+        };
+        if let (Some(relation), Some((num, den, pi))) = (relation, op.k.exact_parts()) {
+            if !cfg.is_empty() {
+                w!(out, "{cfg}");
+            }
+            w!(
+                out,
+                "fixed_relation!({relation}: {}Unit, {}Unit => {}Unit; {num} / {den}, pi^{pi});",
+                op.lhs,
+                op.rhs,
+                op.output
+            );
+        }
     }
 
     out
@@ -1384,7 +1405,7 @@ fn emit_unit_test(name: &str, unit: &UnitDef, out: &mut String) {
 /// Generates the content of `tests/cross_type.rs` — one test per cross-type op.
 ///
 /// Base-unit operands are small integers, so the expected results are exact.
-pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
+pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(32 * 1024);
 
     w!(
@@ -1394,6 +1415,43 @@ pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
     w!(out);
     w!(out, "use unitsnet_rs::*;");
     w!(out);
+    w!(
+        out,
+        "/// `Fixed::mul_to_rounded`/`div_to` (exact integer arithmetic) against the"
+    );
+    w!(
+        out,
+        "/// float operators: within half a unit, or an overflow where the result is huge."
+    );
+    w!(out, "#[allow(dead_code)]");
+    w!(
+        out,
+        "fn check_fixed_relation(fixed: Result<i64, RoundError>, float: f64) {{"
+    );
+    w!(out, "    match fixed {{");
+    w!(
+        out,
+        "        Ok(n) => assert!((n as f64 - float).abs() <= 0.5 + float.abs() * 1e-12, \"{{n}} vs {{float}}\"),"
+    );
+    w!(
+        out,
+        "        Err(RoundError::Overflow) => assert!(float.abs() >= 9.2e18, \"spurious overflow for {{float}}\"),"
+    );
+    w!(out, "        Err(e) => panic!(\"{{e:?}} for {{float}}\"),");
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+
+    // The marker of a quantity's base unit, for additive quantities.
+    let base_marker = |name: &str| -> Option<String> {
+        let qty = quantities.iter().find(|q| q.name == name)?;
+        if point_delta(name).is_some() {
+            return None;
+        }
+        let base = qty.units.iter().find(|u| u.singular == qty.base_unit)?;
+        let parts = fixed_parts(qty, base)?;
+        (parts.pi == 0).then(|| format!("unit::{}::{}", name.to_snake_case(), base.singular))
+    };
 
     for op in ops {
         let test_name = format!(
@@ -1442,6 +1500,39 @@ pub fn generate_cross_type_tests(ops: &[CrossOp]) -> String {
                         "    assert_eq!(c.as_base(), {});",
                         expected.trim_end_matches(".0")
                     );
+                }
+                // The same relation on `Fixed` counts of the base units.
+                let markers = (
+                    base_marker(&op.lhs),
+                    base_marker(&op.rhs),
+                    base_marker(&op.output),
+                );
+                let rational = op.k.exact_parts().is_some_and(|(_, _, pi)| pi == 0);
+                if let ((Some(ma), Some(mb), Some(mc)), true) = (markers, rational) {
+                    let method = if op.kind == CrossKind::Mul {
+                        "mul_to_rounded"
+                    } else {
+                        "div_to"
+                    };
+                    w!(
+                        out,
+                        "    for (x, y) in [(6_i64, 2_i64), (-1234, 567), (1, 1), (999_999, -3), (7, 1_000_000)] {{"
+                    );
+                    w!(
+                        out,
+                        "        let (a, b) = (Fixed::<{ma}>::new(x), Fixed::<{mb}>::new(y));"
+                    );
+                    w!(
+                        out,
+                        "        let fixed = a.{method}(b, {mc}, Rounding::NearestTiesEven).map(|c| c.count());"
+                    );
+                    w!(
+                        out,
+                        "        let float: {} = a.to_f64() {sym} b.to_f64();",
+                        op.output
+                    );
+                    w!(out, "        check_fixed_relation(fixed, float.as_base());");
+                    w!(out, "    }}");
                 }
             }
             CrossKind::MulScalar => {

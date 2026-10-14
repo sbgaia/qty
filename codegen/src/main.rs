@@ -113,7 +113,7 @@ fn main() {
     rustfmt(units_test_mod_path);
 
     let cross_test_path = Path::new("tests/cross_type.rs");
-    let cross_test_source = generate_cross_type_tests(&cross_ops);
+    let cross_test_source = generate_cross_type_tests(&cross_ops, &quantities);
     std::fs::write(cross_test_path, &cross_test_source)
         .unwrap_or_else(|e| panic!("write {}: {e}", cross_test_path.display()));
     rustfmt(cross_test_path);
@@ -179,6 +179,7 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
         rhs: rhs.to_owned(),
         output: output.to_owned(),
         factor: (!factor.is_one()).then(|| factor.to_string()),
+        k: factor.clone(),
     };
 
     for entry in &entries {

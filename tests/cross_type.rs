@@ -2,6 +2,22 @@
 
 use unitsnet_rs::*;
 
+/// `Fixed::mul_to_rounded`/`div_to` (exact integer arithmetic) against the
+/// float operators: within half a unit, or an overflow where the result is huge.
+#[allow(dead_code)]
+fn check_fixed_relation(fixed: Result<i64, RoundError>, float: f64) {
+    match fixed {
+        Ok(n) => assert!(
+            (n as f64 - float).abs() <= 0.5 + float.abs() * 1e-12,
+            "{n} vs {float}"
+        ),
+        Err(RoundError::Overflow) => {
+            assert!(float.abs() >= 9.2e18, "spurious overflow for {float}")
+        }
+        Err(e) => panic!("{e:?} for {float}"),
+    }
+}
+
 #[cfg(feature = "radiation")]
 #[test]
 fn mul_absorbed_dose_of_ionizing_radiation_area() {
@@ -14,6 +30,27 @@ fn mul_absorbed_dose_of_ionizing_radiation_area() {
     let b = Area::<i32>::from_base(2);
     let c: DoseAreaProduct<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::absorbed_dose_of_ionizing_radiation::Gray>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::dose_area_product::GraySquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: DoseAreaProduct = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -28,6 +65,23 @@ fn mul_acceleration_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -42,6 +96,27 @@ fn mul_acceleration_density() {
     let b = Density::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::specific_weight::NewtonPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificWeight = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -55,6 +130,23 @@ fn mul_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Speed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -69,6 +161,27 @@ fn mul_acceleration_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -82,6 +195,23 @@ fn mul_acceleration_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -96,6 +226,23 @@ fn mul_amount_of_substance_molar_energy() {
     let b = MolarEnergy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molar_energy::JoulePerMole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -110,6 +257,23 @@ fn mul_amount_of_substance_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -124,6 +288,23 @@ fn mul_angle_rotational_stiffness() {
     let b = RotationalStiffness::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::angle::Radian>::new(x),
+            Fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -138,6 +319,27 @@ fn mul_area_absorbed_dose_of_ionizing_radiation() {
     let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
     let c: DoseAreaProduct<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::absorbed_dose_of_ionizing_radiation::Gray>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::dose_area_product::GraySquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: DoseAreaProduct = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -152,6 +354,27 @@ fn mul_area_area() {
     let b = Area::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::area_moment_of_inertia::MeterToTheFourth,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaMomentOfInertia = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -166,6 +389,23 @@ fn mul_area_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -180,6 +420,27 @@ fn mul_area_density() {
     let b = Density::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -194,6 +455,23 @@ fn mul_area_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -208,6 +486,23 @@ fn mul_area_electric_surface_charge_density() {
     let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::electric_surface_charge_density::CoulombPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -222,6 +517,23 @@ fn mul_area_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -236,6 +548,23 @@ fn mul_area_heat_flux() {
     let b = HeatFlux::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -250,6 +579,23 @@ fn mul_area_illuminance() {
     let b = Illuminance::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::illuminance::Lux>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::luminous_flux::Lumen, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: LuminousFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -263,6 +609,23 @@ fn mul_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -277,6 +640,27 @@ fn mul_area_luminance() {
     let b = Luminance::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::luminance::CandelaPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::luminous_intensity::Candela,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LuminousIntensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -291,6 +675,23 @@ fn mul_area_magnetic_field() {
     let b = MagneticField::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::magnetic_field::Tesla>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -300,6 +701,23 @@ fn mul_area_mass_flux() {
     let b = MassFlux::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -313,6 +731,23 @@ fn mul_area_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -327,6 +762,23 @@ fn mul_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -341,6 +793,27 @@ fn mul_area_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -355,6 +828,27 @@ fn mul_area_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -369,6 +863,27 @@ fn mul_area_volume_flow_per_area() {
     let b = VolumeFlowPerArea::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::volume_flow_per_area::CubicMeterPerSecondPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -383,6 +898,23 @@ fn mul_area_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -397,6 +929,23 @@ fn mul_area_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -411,6 +960,27 @@ fn mul_area_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -425,6 +995,23 @@ fn mul_bit_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Information<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::bit_rate::BitPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::information::Bit, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Information = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "misc"))]
@@ -434,6 +1021,23 @@ fn mul_brake_specific_fuel_consumption_power() {
     let b = Power::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::brake_specific_fuel_consumption::KilogramPerJoule>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -448,6 +1052,23 @@ fn mul_coefficient_of_thermal_expansion_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::coefficient_of_thermal_expansion::PerKelvin>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -462,6 +1083,23 @@ fn mul_compressibility_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::compressibility::InversePascal>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -476,6 +1114,27 @@ fn mul_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::specific_weight::NewtonPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificWeight = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -490,6 +1149,27 @@ fn mul_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -504,6 +1184,27 @@ fn mul_density_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: DynamicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::dynamic_viscosity::NewtonSecondPerMeterSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: DynamicViscosity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -518,6 +1219,27 @@ fn mul_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::area_density::KilogramPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -532,6 +1254,27 @@ fn mul_density_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: MassFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_flux::KilogramPerSecondPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -545,6 +1288,23 @@ fn mul_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -559,6 +1319,27 @@ fn mul_density_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_concentration::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassConcentration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -568,6 +1349,23 @@ fn mul_density_volume_flow() {
     let b = VolumeFlow::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -581,6 +1379,23 @@ fn mul_duration_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Speed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -595,6 +1410,23 @@ fn mul_duration_bit_rate() {
     let b = BitRate::<i32>::from_base(2);
     let c: Information<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::bit_rate::BitPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::information::Bit, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Information = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -604,6 +1436,27 @@ fn mul_duration_electric_apparent_power() {
     let b = ElectricApparentPower::from_base(2.0);
     let c: ElectricApparentEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_apparent_power::Voltampere>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_apparent_energy::VoltampereHour,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricApparentEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -618,6 +1471,23 @@ fn mul_duration_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -632,6 +1502,23 @@ fn mul_duration_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -646,6 +1533,23 @@ fn mul_duration_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -655,6 +1559,27 @@ fn mul_duration_electric_reactive_power() {
     let b = ElectricReactivePower::from_base(2.0);
     let c: ElectricReactiveEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_reactive_power::VoltampereReactive>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_reactive_energy::VoltampereReactiveHour,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricReactiveEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -669,6 +1594,23 @@ fn mul_duration_force() {
     let b = Force::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::impulse::NewtonSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Impulse = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -683,6 +1625,23 @@ fn mul_duration_force_change_rate() {
     let b = ForceChangeRate::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::force_change_rate::NewtonPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -697,6 +1656,27 @@ fn mul_duration_irradiance() {
     let b = Irradiance::<i32>::from_base(2);
     let c: Irradiation<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::irradiance::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::irradiation::JoulePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Irradiation = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -711,6 +1691,27 @@ fn mul_duration_jerk() {
     let b = Jerk::<i32>::from_base(2);
     let c: Acceleration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::jerk::MeterPerSecondCubed>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -725,6 +1726,23 @@ fn mul_duration_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -734,6 +1752,23 @@ fn mul_duration_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Mass = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -748,6 +1783,27 @@ fn mul_duration_molar_flow() {
     let b = MolarFlow::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::molar_flow::MolePerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -761,6 +1817,23 @@ fn mul_duration_power() {
     let b = Power::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -775,6 +1848,23 @@ fn mul_duration_pressure_change_rate() {
     let b = PressureChangeRate::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::pressure_change_rate::PascalPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -789,6 +1879,27 @@ fn mul_duration_radiation_equivalent_dose_rate() {
     let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
     let c: RadiationEquivalentDose<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::radiation_equivalent_dose_rate::SievertPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::radiation_equivalent_dose::Sievert,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RadiationEquivalentDose = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -803,6 +1914,23 @@ fn mul_duration_ratio_change_rate() {
     let b = RatioChangeRate::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::ratio_change_rate::DecimalFractionPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -817,6 +1945,27 @@ fn mul_duration_rotational_acceleration() {
     let b = RotationalAcceleration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::rotational_acceleration::RadianPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::rotational_speed::RadianPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalSpeed = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -831,6 +1980,23 @@ fn mul_duration_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Angle<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::angle::Radian, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Angle = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -844,6 +2010,23 @@ fn mul_duration_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -858,6 +2041,27 @@ fn mul_duration_temperature_change_rate() {
     let b = TemperatureChangeRate::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::temperature_change_rate::DegreeCelsiusPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -872,6 +2076,23 @@ fn mul_duration_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -881,6 +2102,27 @@ fn mul_electric_apparent_power_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricApparentEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_apparent_power::Voltampere>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_apparent_energy::VoltampereHour,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricApparentEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -895,6 +2137,23 @@ fn mul_electric_capacitance_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_capacitance::Farad>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -909,6 +2168,23 @@ fn mul_electric_charge_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -923,6 +2199,23 @@ fn mul_electric_charge_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge_density::CoulombPerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -937,6 +2230,23 @@ fn mul_electric_conductance_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_conductance::Siemens>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -951,6 +2261,23 @@ fn mul_electric_current_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -965,6 +2292,23 @@ fn mul_electric_current_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -979,6 +2323,23 @@ fn mul_electric_current_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_resistance::Ohm>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -993,6 +2354,23 @@ fn mul_electric_current_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1007,6 +2385,23 @@ fn mul_electric_current_gradient_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1021,6 +2416,23 @@ fn mul_electric_field_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_field::VoltPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1035,6 +2447,23 @@ fn mul_electric_potential_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1049,6 +2478,23 @@ fn mul_electric_potential_electric_charge() {
     let b = ElectricCharge::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_charge::Coulomb>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1063,6 +2509,23 @@ fn mul_electric_potential_electric_conductance() {
     let b = ElectricConductance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_conductance::Siemens>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1077,6 +2540,23 @@ fn mul_electric_potential_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1091,6 +2571,23 @@ fn mul_electric_potential_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1100,6 +2597,27 @@ fn mul_electric_reactive_power_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricReactiveEnergy = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.0002777777777777778);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_reactive_power::VoltampereReactive>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_reactive_energy::VoltampereReactiveHour,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricReactiveEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1114,6 +2632,23 @@ fn mul_electric_resistance_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_resistance::Ohm>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1128,6 +2663,23 @@ fn mul_electric_surface_charge_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_surface_charge_density::CoulombPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1141,6 +2693,23 @@ fn mul_energy_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::frequency::Hertz>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1155,6 +2724,23 @@ fn mul_energy_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy_density::JoulePerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1169,6 +2755,23 @@ fn mul_entropy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::entropy::JoulePerKelvin>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1183,6 +2786,23 @@ fn mul_fluid_resistance_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::fluid_resistance::PascalSecondPerCubicMeter>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1197,6 +2817,23 @@ fn mul_force_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Impulse<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::impulse::NewtonSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Impulse = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1211,6 +2848,23 @@ fn mul_force_length() {
     let b = Length::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1225,6 +2879,23 @@ fn mul_force_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1239,6 +2910,27 @@ fn mul_force_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1252,6 +2944,23 @@ fn mul_force_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1266,6 +2975,23 @@ fn mul_force_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_change_rate::NewtonPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1280,6 +3006,23 @@ fn mul_force_per_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1294,6 +3037,23 @@ fn mul_force_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1308,6 +3068,23 @@ fn mul_force_per_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1321,6 +3098,23 @@ fn mul_frequency_energy() {
     let b = Energy::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::frequency::Hertz>::new(x),
+            Fixed::<unit::energy::Joule>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -1335,6 +3129,23 @@ fn mul_frequency_information() {
     let b = Information::<i32>::from_base(2);
     let c: BitRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::frequency::Hertz>::new(x),
+            Fixed::<unit::information::Bit>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::bit_rate::BitPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: BitRate = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1349,6 +3160,23 @@ fn mul_heat_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1358,6 +3186,27 @@ fn mul_heat_flux_thermal_insulance() {
     let b = ThermalInsulance::from_base(2.0);
     let c: TemperatureDelta = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(x),
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1372,6 +3221,27 @@ fn mul_heat_transfer_coefficient_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: HeatFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::heat_flux::WattPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -1386,6 +3256,23 @@ fn mul_illuminance_area() {
     let b = Area::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::illuminance::Lux>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::luminous_flux::Lumen, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: LuminousFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -1400,6 +3287,23 @@ fn mul_information_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: BitRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::information::Bit>::new(x),
+            Fixed::<unit::frequency::Hertz>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::bit_rate::BitPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: BitRate = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -1414,6 +3318,27 @@ fn mul_irradiance_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Irradiation<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::irradiance::WattPerSquareMeter>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::irradiation::JoulePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Irradiation = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1428,6 +3353,27 @@ fn mul_jerk_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Acceleration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::jerk::MeterPerSecondCubed>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1442,6 +3388,27 @@ fn mul_kinematic_viscosity_density() {
     let b = Density::<i32>::from_base(2);
     let c: DynamicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::dynamic_viscosity::NewtonSecondPerMeterSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: DynamicViscosity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1456,6 +3423,23 @@ fn mul_kinematic_viscosity_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1469,6 +3453,23 @@ fn mul_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1483,6 +3484,27 @@ fn mul_length_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: LinearDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1497,6 +3519,27 @@ fn mul_length_density() {
     let b = Density::<i32>::from_base(2);
     let c: AreaDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::area_density::KilogramPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1511,6 +3554,23 @@ fn mul_length_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::electric_field::VoltPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1525,6 +3585,23 @@ fn mul_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1539,6 +3616,23 @@ fn mul_length_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1552,6 +3646,23 @@ fn mul_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1566,6 +3677,23 @@ fn mul_length_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1580,6 +3708,23 @@ fn mul_length_linear_power_density() {
     let b = LinearPowerDensity::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::linear_power_density::WattPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1594,6 +3739,27 @@ fn mul_length_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1608,6 +3774,27 @@ fn mul_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1622,6 +3809,27 @@ fn mul_length_rotational_stiffness_per_length() {
     let b = RotationalStiffnessPerLength::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::rotational_stiffness::NewtonMeterPerRadian,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalStiffness = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1636,6 +3844,23 @@ fn mul_length_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1650,6 +3875,27 @@ fn mul_length_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::kinematic_viscosity::SquareMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: KinematicViscosity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1664,6 +3910,27 @@ fn mul_length_temperature_gradient() {
     let b = TemperatureGradient::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::temperature_gradient::KelvinPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1678,6 +3945,27 @@ fn mul_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::area_moment_of_inertia::MeterToTheFourth,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaMomentOfInertia = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1692,6 +3980,23 @@ fn mul_length_volume_per_length() {
     let b = VolumePerLength::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::volume_per_length::CubicMeterPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1706,6 +4011,27 @@ fn mul_linear_density_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1720,6 +4046,23 @@ fn mul_linear_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1734,6 +4077,23 @@ fn mul_linear_power_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_power_density::WattPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -1748,6 +4108,27 @@ fn mul_luminance_area() {
     let b = Area::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminance::CandelaPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::luminous_intensity::Candela,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LuminousIntensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -1762,6 +4143,23 @@ fn mul_luminous_intensity_solid_angle() {
     let b = SolidAngle::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_intensity::Candela>::new(x),
+            Fixed::<unit::solid_angle::Steradian>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::luminous_flux::Lumen, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: LuminousFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -1776,6 +4174,23 @@ fn mul_magnetic_field_area() {
     let b = Area::<i32>::from_base(2);
     let c: MagneticFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_field::Tesla>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -1789,6 +4204,23 @@ fn mul_mass_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1803,6 +4235,23 @@ fn mul_mass_mass_fraction() {
     let b = MassFraction::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::mass_fraction::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1817,6 +4266,23 @@ fn mul_mass_specific_energy() {
     let b = SpecificEnergy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -1831,6 +4297,23 @@ fn mul_mass_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::entropy::JoulePerKelvin, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Entropy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -1845,6 +4328,23 @@ fn mul_mass_specific_volume() {
     let b = SpecificVolume::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::specific_volume::CubicMeterPerKilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1859,6 +4359,23 @@ fn mul_mass_concentration_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1868,6 +4385,23 @@ fn mul_mass_flow_duration() {
     let b = Duration::from_base(2.0);
     let c: Mass = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "mechanics"))]
@@ -1877,6 +4411,23 @@ fn mul_mass_flow_specific_energy() {
     let b = SpecificEnergy::from_base(2.0);
     let c: Power = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -1886,6 +4437,23 @@ fn mul_mass_flux_area() {
     let b = Area::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1900,6 +4468,23 @@ fn mul_mass_fraction_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_fraction::DecimalFraction>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1914,6 +4499,23 @@ fn mul_molar_energy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_energy::JoulePerMole>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1928,6 +4530,27 @@ fn mul_molar_flow_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_flow::MolePerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -1937,6 +4560,23 @@ fn mul_molar_flow_molar_mass() {
     let b = MolarMass::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_flow::MolePerSecond>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1951,6 +4591,23 @@ fn mul_molar_mass_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -1960,6 +4617,23 @@ fn mul_molar_mass_molar_flow() {
     let b = MolarFlow::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(x),
+            Fixed::<unit::molar_flow::MolePerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1974,6 +4648,27 @@ fn mul_molar_mass_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_concentration::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassConcentration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -1988,6 +4683,27 @@ fn mul_molarity_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_concentration::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassConcentration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2002,6 +4718,27 @@ fn mul_molarity_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2016,6 +4753,27 @@ fn mul_molarity_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Molarity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(x),
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -2030,6 +4788,27 @@ fn mul_molarity_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: MolarFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::molar_flow::MolePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "misc"))]
@@ -2039,6 +4818,23 @@ fn mul_power_brake_specific_fuel_consumption() {
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::brake_specific_fuel_consumption::KilogramPerJoule>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -2052,6 +4848,23 @@ fn mul_power_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2066,6 +4879,27 @@ fn mul_power_thermal_resistance() {
     let b = ThermalResistance::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::thermal_resistance::KelvinPerWatt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2080,6 +4914,23 @@ fn mul_power_density_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power_density::WattPerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -2093,6 +4944,23 @@ fn mul_pressure_area() {
     let b = Area::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2107,6 +4975,23 @@ fn mul_pressure_compressibility() {
     let b = Compressibility::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::compressibility::InversePascal>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2121,6 +5006,27 @@ fn mul_pressure_length() {
     let b = Length::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2135,6 +5041,27 @@ fn mul_pressure_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: LeakRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::leak_rate::PascalCubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LeakRate = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2149,6 +5076,23 @@ fn mul_pressure_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure_change_rate::PascalPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -2163,6 +5107,27 @@ fn mul_radiation_equivalent_dose_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RadiationEquivalentDose<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::radiation_equivalent_dose_rate::SievertPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::radiation_equivalent_dose::Sievert,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RadiationEquivalentDose = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2177,6 +5142,23 @@ fn mul_ratio_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::ratio_change_rate::DecimalFractionPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2191,6 +5173,23 @@ fn mul_reciprocal_area_force() {
     let b = Force::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2205,6 +5204,27 @@ fn mul_reciprocal_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2219,6 +5239,23 @@ fn mul_reciprocal_area_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2233,6 +5270,23 @@ fn mul_reciprocal_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2247,6 +5301,27 @@ fn mul_reciprocal_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2261,6 +5336,23 @@ fn mul_reciprocal_length_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2275,6 +5367,27 @@ fn mul_reciprocal_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::reciprocal_area::InverseSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalArea = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2289,6 +5402,23 @@ fn mul_reciprocal_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2303,6 +5433,27 @@ fn mul_rotational_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_acceleration::RadianPerSecondSquared>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::rotational_speed::RadianPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalSpeed = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2317,6 +5468,23 @@ fn mul_rotational_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Angle<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::angle::Radian, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Angle = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2331,6 +5499,23 @@ fn mul_rotational_speed_torque() {
     let b = Torque::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(x),
+            Fixed::<unit::torque::NewtonMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2345,6 +5530,23 @@ fn mul_rotational_stiffness_angle() {
     let b = Angle::<i32>::from_base(2);
     let c: Torque<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>::new(x),
+            Fixed::<unit::angle::Radian>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2359,6 +5561,27 @@ fn mul_rotational_stiffness_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::rotational_stiffness::NewtonMeterPerRadian,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalStiffness = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -2373,6 +5596,23 @@ fn mul_solid_angle_luminous_intensity() {
     let b = LuminousIntensity::<i32>::from_base(2);
     let c: LuminousFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::solid_angle::Steradian>::new(x),
+            Fixed::<unit::luminous_intensity::Candela>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::luminous_flux::Lumen, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: LuminousFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2387,6 +5627,23 @@ fn mul_specific_energy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "mechanics"))]
@@ -2396,6 +5653,23 @@ fn mul_specific_energy_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Power = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
+            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2410,6 +5684,23 @@ fn mul_specific_entropy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Entropy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::entropy::JoulePerKelvin, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Entropy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -2424,6 +5715,27 @@ fn mul_specific_entropy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::specific_energy::JoulePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2438,6 +5750,23 @@ fn mul_specific_volume_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_volume::CubicMeterPerKilogram>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2452,6 +5781,27 @@ fn mul_specific_weight_area() {
     let b = Area::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2466,6 +5816,23 @@ fn mul_specific_weight_length() {
     let b = Length::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2480,6 +5847,23 @@ fn mul_specific_weight_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2494,6 +5878,27 @@ fn mul_speed_area() {
     let b = Area::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2508,6 +5913,27 @@ fn mul_speed_density() {
     let b = Density::<i32>::from_base(2);
     let c: MassFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_flux::KilogramPerSecondPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -2521,6 +5947,23 @@ fn mul_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -2534,6 +5977,23 @@ fn mul_speed_force() {
     let b = Force::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2548,6 +6008,27 @@ fn mul_speed_length() {
     let b = Length::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::kinematic_viscosity::SquareMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: KinematicViscosity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2562,6 +6043,27 @@ fn mul_speed_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::specific_energy::JoulePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2576,6 +6078,27 @@ fn mul_temperature_change_rate_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_change_rate::DegreeCelsiusPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2590,6 +6113,23 @@ fn mul_temperature_delta_coefficient_of_thermal_expansion() {
     let b = CoefficientOfThermalExpansion::<i32>::from_base(2);
     let c: Ratio<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::coefficient_of_thermal_expansion::PerKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::ratio::DecimalFraction, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Ratio = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2604,6 +6144,23 @@ fn mul_temperature_delta_entropy() {
     let b = Entropy::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::entropy::JoulePerKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2618,6 +6175,27 @@ fn mul_temperature_delta_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: HeatFlux<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::heat_flux::WattPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -2632,6 +6210,27 @@ fn mul_temperature_delta_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::specific_energy::JoulePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -2646,6 +6245,27 @@ fn mul_temperature_delta_volumetric_heat_capacity() {
     let b = VolumetricHeatCapacity::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::energy_density::JoulePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: EnergyDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2660,6 +6280,27 @@ fn mul_temperature_gradient_length() {
     let b = Length::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_gradient::KelvinPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2669,6 +6310,27 @@ fn mul_thermal_insulance_heat_flux() {
     let b = HeatFlux::from_base(2.0);
     let c: TemperatureDelta = a * b;
     assert_eq!(c.as_base(), 12.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(x),
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -2683,6 +6345,27 @@ fn mul_thermal_resistance_power() {
     let b = Power::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::thermal_resistance::KelvinPerWatt>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2697,6 +6380,23 @@ fn mul_torque_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -2710,6 +6410,23 @@ fn mul_volume_density() {
     let b = Density::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -2724,6 +6441,23 @@ fn mul_volume_electric_charge_density() {
     let b = ElectricChargeDensity::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::electric_charge_density::CoulombPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2738,6 +6472,23 @@ fn mul_volume_energy_density() {
     let b = EnergyDensity::<i32>::from_base(2);
     let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::energy_density::JoulePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2752,6 +6503,27 @@ fn mul_volume_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaMomentOfInertia<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::area_moment_of_inertia::MeterToTheFourth,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaMomentOfInertia = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2766,6 +6538,23 @@ fn mul_volume_mass_concentration() {
     let b = MassConcentration::<i32>::from_base(2);
     let c: Mass<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2780,6 +6569,27 @@ fn mul_volume_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2794,6 +6604,23 @@ fn mul_volume_power_density() {
     let b = PowerDensity::<i32>::from_base(2);
     let c: Power<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::power_density::WattPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2808,6 +6635,23 @@ fn mul_volume_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Length<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2822,6 +6666,23 @@ fn mul_volume_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Area<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2836,6 +6697,23 @@ fn mul_volume_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Force<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2850,6 +6728,27 @@ fn mul_volume_concentration_density() {
     let b = Density::<i32>::from_base(2);
     let c: MassConcentration<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::mass_concentration::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassConcentration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -2864,6 +6763,27 @@ fn mul_volume_concentration_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: Molarity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2873,6 +6793,23 @@ fn mul_volume_flow_density() {
     let b = Density::from_base(2.0);
     let c: MassFlow = a * b;
     assert_eq!(c.as_base(), 12.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2887,6 +6824,23 @@ fn mul_volume_flow_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2901,6 +6855,23 @@ fn mul_volume_flow_fluid_resistance() {
     let b = FluidResistance::<i32>::from_base(2);
     let c: Pressure<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::fluid_resistance::PascalSecondPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -2915,6 +6886,27 @@ fn mul_volume_flow_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MolarFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::molar_flow::MolePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2929,6 +6921,27 @@ fn mul_volume_flow_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: LeakRate<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::leak_rate::PascalCubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LeakRate = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -2943,6 +6956,27 @@ fn mul_volume_flow_per_area_area() {
     let b = Area::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow_per_area::CubicMeterPerSecondPerSquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2957,6 +6991,23 @@ fn mul_volume_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_per_length::CubicMeterPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -2971,6 +7022,27 @@ fn mul_volumetric_heat_capacity_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a * b;
     assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::energy_density::JoulePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: EnergyDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2985,6 +7057,27 @@ fn div_acceleration_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Jerk<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::jerk::MeterPerSecondCubed,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Jerk = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -2999,6 +7092,23 @@ fn div_acceleration_jerk() {
     let b = Jerk::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(x),
+            Fixed::<unit::jerk::MeterPerSecondCubed>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3013,6 +7123,27 @@ fn div_amount_of_substance_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: MolarFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_flow::MolePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3027,6 +7158,23 @@ fn div_amount_of_substance_molar_flow() {
     let b = MolarFlow::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molar_flow::MolePerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3041,6 +7189,23 @@ fn div_amount_of_substance_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3055,6 +7220,27 @@ fn div_amount_of_substance_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3069,6 +7255,27 @@ fn div_angle_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::angle::Radian>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::rotational_speed::RadianPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalSpeed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3083,6 +7290,23 @@ fn div_angle_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::angle::Radian>::new(x),
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3096,6 +7320,23 @@ fn div_area_length() {
     let b = Length::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3110,6 +7351,23 @@ fn div_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3124,6 +7382,27 @@ fn div_area_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area::SquareMeter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3138,6 +7417,23 @@ fn div_area_density_density() {
     let b = Density::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3152,6 +7448,27 @@ fn div_area_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3166,6 +7483,23 @@ fn div_area_moment_of_inertia_area() {
     let b = Area::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_moment_of_inertia::MeterToTheFourth>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3180,6 +7514,23 @@ fn div_area_moment_of_inertia_length() {
     let b = Length::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_moment_of_inertia::MeterToTheFourth>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3194,6 +7545,23 @@ fn div_area_moment_of_inertia_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::area_moment_of_inertia::MeterToTheFourth>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -3208,6 +7576,23 @@ fn div_bit_rate_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Information<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::bit_rate::BitPerSecond>::new(x),
+            Fixed::<unit::frequency::Hertz>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::information::Bit, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Information = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -3222,6 +7607,23 @@ fn div_bit_rate_information() {
     let b = Information::<i32>::from_base(2);
     let c: Frequency<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::bit_rate::BitPerSecond>::new(x),
+            Fixed::<unit::information::Bit>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::frequency::Hertz, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Frequency = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -3236,6 +7638,23 @@ fn div_dose_area_product_absorbed_dose_of_ionizing_radiation() {
     let b = AbsorbedDoseOfIonizingRadiation::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::dose_area_product::GraySquareMeter>::new(x),
+            Fixed::<unit::absorbed_dose_of_ionizing_radiation::Gray>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -3250,6 +7669,27 @@ fn div_dose_area_product_area() {
     let b = Area::<i32>::from_base(2);
     let c: AbsorbedDoseOfIonizingRadiation<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::dose_area_product::GraySquareMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::absorbed_dose_of_ionizing_radiation::Gray,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AbsorbedDoseOfIonizingRadiation = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -3264,6 +7704,27 @@ fn div_dynamic_viscosity_density() {
     let b = Density::<i32>::from_base(2);
     let c: KinematicViscosity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::dynamic_viscosity::NewtonSecondPerMeterSquared>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::kinematic_viscosity::SquareMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: KinematicViscosity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -3278,6 +7739,27 @@ fn div_dynamic_viscosity_kinematic_viscosity() {
     let b = KinematicViscosity::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::dynamic_viscosity::NewtonSecondPerMeterSquared>::new(x),
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3287,6 +7769,27 @@ fn div_electric_apparent_energy_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricApparentPower = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_apparent_energy::VoltampereHour>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_apparent_power::Voltampere,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricApparentPower = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3296,6 +7799,23 @@ fn div_electric_apparent_energy_electric_apparent_power() {
     let b = ElectricApparentPower::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_apparent_energy::VoltampereHour>::new(x),
+            Fixed::<unit::electric_apparent_power::Voltampere>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3310,6 +7830,27 @@ fn div_electric_charge_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricSurfaceChargeDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_surface_charge_density::CoulombPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricSurfaceChargeDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3324,6 +7865,23 @@ fn div_electric_charge_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3338,6 +7896,23 @@ fn div_electric_charge_electric_capacitance() {
     let b = ElectricCapacitance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3352,6 +7927,23 @@ fn div_electric_charge_electric_charge_density() {
     let b = ElectricChargeDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_charge_density::CoulombPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3366,6 +7958,23 @@ fn div_electric_charge_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3380,6 +7989,27 @@ fn div_electric_charge_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCapacitance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_capacitance::Farad,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCapacitance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3394,6 +8024,23 @@ fn div_electric_charge_electric_surface_charge_density() {
     let b = ElectricSurfaceChargeDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::electric_surface_charge_density::CoulombPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3408,6 +8055,27 @@ fn div_electric_charge_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ElectricChargeDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_charge::Coulomb>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_charge_density::CoulombPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricChargeDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3422,6 +8090,27 @@ fn div_electric_current_area() {
     let b = Area::<i32>::from_base(2);
     let c: ElectricCurrentDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_current_density::AmperePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3436,6 +8125,27 @@ fn div_electric_current_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricCurrentGradient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_current_gradient::AmperePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentGradient = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3450,6 +8160,23 @@ fn div_electric_current_electric_conductance() {
     let b = ElectricConductance::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_conductance::Siemens>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3464,6 +8191,23 @@ fn div_electric_current_electric_current_density() {
     let b = ElectricCurrentDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3478,6 +8222,23 @@ fn div_electric_current_electric_current_gradient() {
     let b = ElectricCurrentGradient::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3492,6 +8253,27 @@ fn div_electric_current_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricConductance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_conductance::Siemens,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricConductance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3506,6 +8288,27 @@ fn div_electric_potential_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ElectricPotentialChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_potential_change_rate::VoltPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricPotentialChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3520,6 +8323,23 @@ fn div_electric_potential_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_resistance::Ohm, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricResistance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3534,6 +8354,23 @@ fn div_electric_potential_electric_field() {
     let b = ElectricField::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_field::VoltPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3548,6 +8385,23 @@ fn div_electric_potential_electric_potential_change_rate() {
     let b = ElectricPotentialChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3562,6 +8416,23 @@ fn div_electric_potential_electric_resistance() {
     let b = ElectricResistance::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_resistance::Ohm>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3576,6 +8447,27 @@ fn div_electric_potential_length() {
     let b = Length::<i32>::from_base(2);
     let c: ElectricField<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_field::VoltPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricField = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3585,6 +8477,27 @@ fn div_electric_reactive_energy_duration() {
     let b = Duration::from_base(2.0);
     let c: ElectricReactivePower = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_reactive_energy::VoltampereReactiveHour>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_reactive_power::VoltampereReactive,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricReactivePower = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3594,6 +8507,23 @@ fn div_electric_reactive_energy_electric_reactive_power() {
     let b = ElectricReactivePower::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 3600.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_reactive_energy::VoltampereReactiveHour>::new(x),
+            Fixed::<unit::electric_reactive_power::VoltampereReactive>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3608,6 +8538,27 @@ fn div_energy_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: MolarEnergy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_energy::JoulePerMole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarEnergy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3621,6 +8572,23 @@ fn div_energy_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Power<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3635,6 +8603,23 @@ fn div_energy_electric_charge() {
     let b = ElectricCharge::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::electric_charge::Coulomb>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -3649,6 +8634,23 @@ fn div_energy_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCharge<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCharge = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3663,6 +8665,23 @@ fn div_energy_energy_density() {
     let b = EnergyDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::energy_density::JoulePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -3677,6 +8696,27 @@ fn div_energy_entropy() {
     let b = Entropy::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::entropy::JoulePerKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3691,6 +8731,27 @@ fn div_energy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificEnergy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_energy::JoulePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEnergy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -3705,6 +8766,27 @@ fn div_energy_molar_energy() {
     let b = MolarEnergy::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::molar_energy::JoulePerMole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3718,6 +8800,23 @@ fn div_energy_power() {
     let b = Power::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3732,6 +8831,23 @@ fn div_energy_specific_energy() {
     let b = SpecificEnergy::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -3746,6 +8862,23 @@ fn div_energy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: Entropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::entropy::JoulePerKelvin, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Entropy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3760,6 +8893,27 @@ fn div_energy_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: EnergyDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::energy_density::JoulePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: EnergyDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -3774,6 +8928,27 @@ fn div_energy_density_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: VolumetricHeatCapacity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy_density::JoulePerCubicMeter>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumetricHeatCapacity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -3788,6 +8963,27 @@ fn div_energy_density_volumetric_heat_capacity() {
     let b = VolumetricHeatCapacity::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy_density::JoulePerCubicMeter>::new(x),
+            Fixed::<unit::volumetric_heat_capacity::JoulePerCubicMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -3802,6 +8998,27 @@ fn div_entropy_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificEntropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::entropy::JoulePerKelvin>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_entropy::JoulePerKilogramKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEntropy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -3816,6 +9033,23 @@ fn div_entropy_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::entropy::JoulePerKelvin>::new(x),
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3829,6 +9063,23 @@ fn div_force_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3842,6 +9093,23 @@ fn div_force_area() {
     let b = Area::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3856,6 +9124,27 @@ fn div_force_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: ForceChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::force_change_rate::NewtonPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForceChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3870,6 +9159,23 @@ fn div_force_force_change_rate() {
     let b = ForceChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::force_change_rate::NewtonPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3884,6 +9190,23 @@ fn div_force_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3898,6 +9221,27 @@ fn div_force_length() {
     let b = Length::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3911,6 +9255,27 @@ fn div_force_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -3924,6 +9289,23 @@ fn div_force_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3938,6 +9320,23 @@ fn div_force_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3952,6 +9351,27 @@ fn div_force_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force::Newton>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_weight::NewtonPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificWeight = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3966,6 +9386,27 @@ fn div_force_per_length_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: LinearDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3980,6 +9421,27 @@ fn div_force_per_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_weight::NewtonPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificWeight = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -3994,6 +9456,27 @@ fn div_force_per_length_force() {
     let b = Force::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4008,6 +9491,23 @@ fn div_force_per_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4022,6 +9522,27 @@ fn div_force_per_length_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4036,6 +9557,23 @@ fn div_force_per_length_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4050,6 +9588,23 @@ fn div_force_per_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4064,6 +9619,23 @@ fn div_force_per_length_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -4078,6 +9650,27 @@ fn div_heat_flux_heat_transfer_coefficient() {
     let b = HeatTransferCoefficient::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(x),
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -4092,6 +9685,27 @@ fn div_heat_flux_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: HeatTransferCoefficient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::heat_transfer_coefficient::WattPerSquareMeterKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatTransferCoefficient = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4106,6 +9720,23 @@ fn div_impulse_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::impulse::NewtonSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4120,6 +9751,23 @@ fn div_impulse_force() {
     let b = Force::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::impulse::NewtonSecond>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -4134,6 +9782,23 @@ fn div_information_bit_rate() {
     let b = BitRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::information::Bit>::new(x),
+            Fixed::<unit::bit_rate::BitPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "information")]
@@ -4148,6 +9813,23 @@ fn div_information_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: BitRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::information::Bit>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::bit_rate::BitPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: BitRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4162,6 +9844,27 @@ fn div_irradiation_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Irradiance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::irradiation::JoulePerSquareMeter>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::irradiance::WattPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Irradiance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4176,6 +9879,23 @@ fn div_irradiation_irradiance() {
     let b = Irradiance::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::irradiation::JoulePerSquareMeter>::new(x),
+            Fixed::<unit::irradiance::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4190,6 +9910,23 @@ fn div_kinematic_viscosity_length() {
     let b = Length::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4204,6 +9941,23 @@ fn div_kinematic_viscosity_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::kinematic_viscosity::SquareMeterPerSecond>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4218,6 +9972,27 @@ fn div_leak_rate_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::leak_rate::PascalCubicMeterPerSecond>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4232,6 +10007,23 @@ fn div_leak_rate_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::leak_rate::PascalCubicMeterPerSecond>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4246,6 +10038,27 @@ fn div_length_area() {
     let b = Area::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4259,6 +10072,23 @@ fn div_length_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4273,6 +10103,23 @@ fn div_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4287,6 +10134,23 @@ fn div_length_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4300,6 +10164,23 @@ fn div_length_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4314,6 +10195,27 @@ fn div_length_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_area::InverseSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalArea = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4328,6 +10230,27 @@ fn div_linear_density_area() {
     let b = Area::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4342,6 +10265,23 @@ fn div_linear_density_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4356,6 +10296,23 @@ fn div_linear_density_density() {
     let b = Density::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4370,6 +10327,27 @@ fn div_linear_density_length() {
     let b = Length::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::area_density::KilogramPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4384,6 +10362,23 @@ fn div_luminous_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: Illuminance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_flux::Lumen>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::illuminance::Lux, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Illuminance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4398,6 +10393,23 @@ fn div_luminous_flux_illuminance() {
     let b = Illuminance::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_flux::Lumen>::new(x),
+            Fixed::<unit::illuminance::Lux>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4412,6 +10424,23 @@ fn div_luminous_flux_luminous_intensity() {
     let b = LuminousIntensity::<i32>::from_base(2);
     let c: SolidAngle<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_flux::Lumen>::new(x),
+            Fixed::<unit::luminous_intensity::Candela>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::solid_angle::Steradian, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: SolidAngle = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4426,6 +10455,27 @@ fn div_luminous_flux_solid_angle() {
     let b = SolidAngle::<i32>::from_base(2);
     let c: LuminousIntensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_flux::Lumen>::new(x),
+            Fixed::<unit::solid_angle::Steradian>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::luminous_intensity::Candela,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LuminousIntensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4440,6 +10490,27 @@ fn div_luminous_intensity_area() {
     let b = Area::<i32>::from_base(2);
     let c: Luminance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_intensity::Candela>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::luminance::CandelaPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Luminance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "light")]
@@ -4454,6 +10525,23 @@ fn div_luminous_intensity_luminance() {
     let b = Luminance::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::luminous_intensity::Candela>::new(x),
+            Fixed::<unit::luminance::CandelaPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -4468,6 +10556,23 @@ fn div_magnetic_flux_area() {
     let b = Area::<i32>::from_base(2);
     let c: MagneticField<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::magnetic_field::Tesla, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticField = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -4482,6 +10587,23 @@ fn div_magnetic_flux_magnetic_field() {
     let b = MagneticField::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::magnetic_field::Tesla>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4496,6 +10618,27 @@ fn div_mass_amount_of_substance() {
     let b = AmountOfSubstance::<i32>::from_base(2);
     let c: MolarMass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_mass::KilogramPerMole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarMass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4510,6 +10653,27 @@ fn div_mass_area() {
     let b = Area::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::area_density::KilogramPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4524,6 +10688,23 @@ fn div_mass_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4537,6 +10718,23 @@ fn div_mass_density() {
     let b = Density::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4546,6 +10744,23 @@ fn div_mass_duration() {
     let b = Duration::from_base(2.0);
     let c: MassFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4560,6 +10775,27 @@ fn div_mass_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::linear_density::KilogramPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4574,6 +10810,23 @@ fn div_mass_linear_density() {
     let b = LinearDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::linear_density::KilogramPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4583,6 +10836,23 @@ fn div_mass_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: Duration = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4597,6 +10867,23 @@ fn div_mass_mass_fraction() {
     let b = MassFraction::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::mass_fraction::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4611,6 +10898,27 @@ fn div_mass_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: AmountOfSubstance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4624,6 +10932,27 @@ fn div_mass_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4638,6 +10967,27 @@ fn div_mass_concentration_density() {
     let b = Density::<i32>::from_base(2);
     let c: VolumeConcentration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_concentration::DecimalFraction,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeConcentration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4652,6 +11002,27 @@ fn div_mass_concentration_molar_mass() {
     let b = MolarMass::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4666,6 +11037,27 @@ fn div_mass_concentration_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: MolarMass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_mass::KilogramPerMole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarMass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4680,6 +11072,27 @@ fn div_mass_concentration_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_concentration::KilogramPerCubicMeter>::new(x),
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4689,6 +11102,27 @@ fn div_mass_flow_area() {
     let b = Area::from_base(2.0);
     let c: MassFlux = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::mass_flux::KilogramPerSecondPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MassFlux = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "misc"))]
@@ -4698,6 +11132,23 @@ fn div_mass_flow_brake_specific_fuel_consumption() {
     let b = BrakeSpecificFuelConsumption::from_base(2.0);
     let c: Power = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::brake_specific_fuel_consumption::KilogramPerJoule>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4707,6 +11158,27 @@ fn div_mass_flow_density() {
     let b = Density::from_base(2.0);
     let c: VolumeFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4716,6 +11188,23 @@ fn div_mass_flow_mass_flux() {
     let b = MassFlux::from_base(2.0);
     let c: Area = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -4725,6 +11214,27 @@ fn div_mass_flow_molar_flow() {
     let b = MolarFlow::from_base(2.0);
     let c: MolarMass = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::molar_flow::MolePerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_mass::KilogramPerMole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarMass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -4734,6 +11244,27 @@ fn div_mass_flow_molar_mass() {
     let b = MolarMass::from_base(2.0);
     let c: MolarFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::molar_mass::KilogramPerMole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_flow::MolePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "misc"))]
@@ -4743,6 +11274,27 @@ fn div_mass_flow_power() {
     let b = Power::from_base(2.0);
     let c: BrakeSpecificFuelConsumption = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::brake_specific_fuel_consumption::KilogramPerJoule,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: BrakeSpecificFuelConsumption = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4752,6 +11304,27 @@ fn div_mass_flow_volume_flow() {
     let b = VolumeFlow::from_base(2.0);
     let c: Density = a / b;
     assert_eq!(c.as_base(), 3.0 * 0.001);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flow::GramPerSecond>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4766,6 +11339,23 @@ fn div_mass_flux_density() {
     let b = Density::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -4780,6 +11370,27 @@ fn div_mass_flux_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass_flux::KilogramPerSecondPerSquareMeter>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -4794,6 +11405,27 @@ fn div_molar_flow_molarity() {
     let b = Molarity::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_flow::MolePerSecond>::new(x),
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "chemistry", feature = "fluids"))]
@@ -4808,6 +11440,27 @@ fn div_molar_flow_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_flow::MolePerSecond>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "chemistry")]
@@ -4822,6 +11475,27 @@ fn div_molarity_volume_concentration() {
     let b = VolumeConcentration::<i32>::from_base(2);
     let c: Molarity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molarity::MolePerCubicMeter>::new(x),
+            Fixed::<unit::volume_concentration::DecimalFraction>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molarity::MolePerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molarity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -4836,6 +11510,27 @@ fn div_power_area() {
     let b = Area::<i32>::from_base(2);
     let c: HeatFlux<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::heat_flux::WattPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatFlux = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -4850,6 +11545,23 @@ fn div_power_electric_current() {
     let b = ElectricCurrent::<i32>::from_base(2);
     let c: ElectricPotential<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "electrical")]
@@ -4864,6 +11576,23 @@ fn div_power_electric_potential() {
     let b = ElectricPotential::<i32>::from_base(2);
     let c: ElectricCurrent<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4877,6 +11606,23 @@ fn div_power_energy() {
     let b = Energy::<i32>::from_base(2);
     let c: Frequency<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::energy::Joule>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::frequency::Hertz, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Frequency = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4890,6 +11636,23 @@ fn div_power_force() {
     let b = Force::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -4903,6 +11666,23 @@ fn div_power_frequency() {
     let b = Frequency::<i32>::from_base(2);
     let c: Energy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::frequency::Hertz>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::energy::Joule, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Energy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -4917,6 +11697,23 @@ fn div_power_heat_flux() {
     let b = HeatFlux::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4931,6 +11728,27 @@ fn div_power_length() {
     let b = Length::<i32>::from_base(2);
     let c: LinearPowerDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::linear_power_density::WattPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: LinearPowerDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4945,6 +11763,23 @@ fn div_power_linear_power_density() {
     let b = LinearPowerDensity::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::linear_power_density::WattPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "mechanics"))]
@@ -4954,6 +11789,27 @@ fn div_power_mass_flow() {
     let b = MassFlow::from_base(2.0);
     let c: SpecificEnergy = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::mass_flow::GramPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_energy::JoulePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEnergy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4968,6 +11824,23 @@ fn div_power_power_density() {
     let b = PowerDensity::<i32>::from_base(2);
     let c: Volume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::power_density::WattPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Volume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -4982,6 +11855,23 @@ fn div_power_rotational_speed() {
     let b = RotationalSpeed::<i32>::from_base(2);
     let c: Torque<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Torque = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "fluids", feature = "mechanics"))]
@@ -4991,6 +11881,23 @@ fn div_power_specific_energy() {
     let b = SpecificEnergy::from_base(2.0);
     let c: MassFlow = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass_flow::GramPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MassFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -5004,6 +11911,23 @@ fn div_power_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5018,6 +11942,27 @@ fn div_power_torque() {
     let b = Torque::<i32>::from_base(2);
     let c: RotationalSpeed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::torque::NewtonMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::rotational_speed::RadianPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalSpeed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5032,6 +11977,27 @@ fn div_power_volume() {
     let b = Volume::<i32>::from_base(2);
     let c: PowerDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::power::Watt>::new(x),
+            Fixed::<unit::volume::CubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::power_density::WattPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: PowerDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5046,6 +12012,27 @@ fn div_pressure_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: AreaDensity<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::area_density::KilogramPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AreaDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5060,6 +12047,27 @@ fn div_pressure_area_density() {
     let b = AreaDensity::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::area_density::KilogramPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5074,6 +12082,27 @@ fn div_pressure_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: PressureChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::pressure_change_rate::PascalPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: PressureChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5088,6 +12117,27 @@ fn div_pressure_fluid_resistance() {
     let b = FluidResistance::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::fluid_resistance::PascalSecondPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5102,6 +12152,27 @@ fn div_pressure_force() {
     let b = Force::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_area::InverseSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalArea = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5116,6 +12187,27 @@ fn div_pressure_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5130,6 +12222,27 @@ fn div_pressure_length() {
     let b = Length::<i32>::from_base(2);
     let c: SpecificWeight<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_weight::NewtonPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificWeight = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5144,6 +12257,23 @@ fn div_pressure_pressure_change_rate() {
     let b = PressureChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::pressure_change_rate::PascalPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5158,6 +12288,23 @@ fn div_pressure_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5172,6 +12319,27 @@ fn div_pressure_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5186,6 +12354,23 @@ fn div_pressure_specific_weight() {
     let b = SpecificWeight::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5200,6 +12385,27 @@ fn div_pressure_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: FluidResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::pressure::Pascal>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::fluid_resistance::PascalSecondPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: FluidResistance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -5214,6 +12420,27 @@ fn div_radiation_equivalent_dose_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RadiationEquivalentDoseRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::radiation_equivalent_dose::Sievert>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::radiation_equivalent_dose_rate::SievertPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RadiationEquivalentDoseRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "radiation")]
@@ -5228,6 +12455,23 @@ fn div_radiation_equivalent_dose_radiation_equivalent_dose_rate() {
     let b = RadiationEquivalentDoseRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::radiation_equivalent_dose::Sievert>::new(x),
+            Fixed::<unit::radiation_equivalent_dose_rate::SievertPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5242,6 +12486,23 @@ fn div_ratio_compressibility() {
     let b = Compressibility::<i32>::from_base(2);
     let c: Pressure<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::ratio::DecimalFraction>::new(x),
+            Fixed::<unit::compressibility::InversePascal>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::pressure::Pascal, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Pressure = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5256,6 +12517,27 @@ fn div_ratio_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RatioChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::ratio::DecimalFraction>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::ratio_change_rate::DecimalFractionPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RatioChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5270,6 +12552,27 @@ fn div_ratio_pressure() {
     let b = Pressure::<i32>::from_base(2);
     let c: Compressibility<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::ratio::DecimalFraction>::new(x),
+            Fixed::<unit::pressure::Pascal>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::compressibility::InversePascal,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Compressibility = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5284,6 +12587,23 @@ fn div_ratio_ratio_change_rate() {
     let b = RatioChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::ratio::DecimalFraction>::new(x),
+            Fixed::<unit::ratio_change_rate::DecimalFractionPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5298,6 +12618,27 @@ fn div_reciprocal_area_reciprocal_length() {
     let b = ReciprocalLength::<i32>::from_base(2);
     let c: ReciprocalLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(x),
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_length::InverseMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5312,6 +12653,27 @@ fn div_reciprocal_length_length() {
     let b = Length::<i32>::from_base(2);
     let c: ReciprocalArea<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::reciprocal_area::InverseSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ReciprocalArea = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5326,6 +12688,23 @@ fn div_reciprocal_length_reciprocal_area() {
     let b = ReciprocalArea::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::reciprocal_length::InverseMeter>::new(x),
+            Fixed::<unit::reciprocal_area::InverseSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5340,6 +12719,27 @@ fn div_rotational_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: RotationalAcceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::rotational_acceleration::RadianPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalAcceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5354,6 +12754,23 @@ fn div_rotational_speed_rotational_acceleration() {
     let b = RotationalAcceleration::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_speed::RadianPerSecond>::new(x),
+            Fixed::<unit::rotational_acceleration::RadianPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5368,6 +12785,27 @@ fn div_rotational_stiffness_length() {
     let b = Length::<i32>::from_base(2);
     let c: RotationalStiffnessPerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalStiffnessPerLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5382,6 +12820,23 @@ fn div_rotational_stiffness_rotational_stiffness_per_length() {
     let b = RotationalStiffnessPerLength::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>::new(x),
+            Fixed::<unit::rotational_stiffness_per_length::NewtonMeterPerRadianPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -5396,6 +12851,27 @@ fn div_specific_energy_specific_entropy() {
     let b = SpecificEntropy::<i32>::from_base(2);
     let c: TemperatureDelta<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
+            Fixed::<unit::specific_entropy::JoulePerKilogramKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_delta::Kelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureDelta = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5410,6 +12886,23 @@ fn div_specific_energy_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(all(feature = "mechanics", feature = "thermal"))]
@@ -5424,6 +12917,27 @@ fn div_specific_energy_temperature_delta() {
     let b = TemperatureDelta::<i32>::from_base(2);
     let c: SpecificEntropy<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_energy::JoulePerKilogram>::new(x),
+            Fixed::<unit::temperature_delta::Kelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_entropy::JoulePerKilogramKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificEntropy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5438,6 +12952,27 @@ fn div_specific_weight_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Density<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::density::KilogramPerCubicMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Density = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5452,6 +12987,27 @@ fn div_specific_weight_density() {
     let b = Density::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::specific_weight::NewtonPerCubicMeter>::new(x),
+            Fixed::<unit::density::KilogramPerCubicMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -5465,6 +13021,23 @@ fn div_speed_acceleration() {
     let b = Acceleration::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::acceleration::MeterPerSecondSquared>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -5478,6 +13051,27 @@ fn div_speed_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: Acceleration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::acceleration::MeterPerSecondSquared,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Acceleration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5492,6 +13086,27 @@ fn div_temperature_delta_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: TemperatureChangeRate<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_change_rate::DegreeCelsiusPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5501,6 +13116,27 @@ fn div_temperature_delta_heat_flux() {
     let b = HeatFlux::from_base(2.0);
     let c: ThermalInsulance = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::heat_flux::WattPerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::thermal_insulance::SquareMeterKelvinPerKilowatt,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ThermalInsulance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5515,6 +13151,27 @@ fn div_temperature_delta_length() {
     let b = Length::<i32>::from_base(2);
     let c: TemperatureGradient<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::temperature_gradient::KelvinPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: TemperatureGradient = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5529,6 +13186,27 @@ fn div_temperature_delta_power() {
     let b = Power::<i32>::from_base(2);
     let c: ThermalResistance<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::power::Watt>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::thermal_resistance::KelvinPerWatt,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ThermalResistance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5543,6 +13221,23 @@ fn div_temperature_delta_temperature_change_rate() {
     let b = TemperatureChangeRate::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::temperature_change_rate::DegreeCelsiusPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5557,6 +13252,23 @@ fn div_temperature_delta_temperature_gradient() {
     let b = TemperatureGradient::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::temperature_gradient::KelvinPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5566,6 +13278,27 @@ fn div_temperature_delta_thermal_insulance() {
     let b = ThermalInsulance::from_base(2.0);
     let c: HeatFlux = a / b;
     assert_eq!(c.as_base(), 3.0 * 1000.0);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::heat_flux::WattPerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatFlux = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "thermal")]
@@ -5580,6 +13313,23 @@ fn div_temperature_delta_thermal_resistance() {
     let b = ThermalResistance::<i32>::from_base(2);
     let c: Power<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::temperature_delta::Kelvin>::new(x),
+            Fixed::<unit::thermal_resistance::KelvinPerWatt>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::power::Watt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Power = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5594,6 +13344,27 @@ fn div_torque_angle() {
     let b = Angle::<i32>::from_base(2);
     let c: RotationalStiffness<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::angle::Radian>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::rotational_stiffness::NewtonMeterPerRadian,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: RotationalStiffness = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5608,6 +13379,27 @@ fn div_torque_area() {
     let b = Area::<i32>::from_base(2);
     let c: ForcePerLength<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::force_per_length::NewtonPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ForcePerLength = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5622,6 +13414,23 @@ fn div_torque_force() {
     let b = Force::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5636,6 +13445,23 @@ fn div_torque_force_per_length() {
     let b = ForcePerLength::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::force_per_length::NewtonPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5650,6 +13476,23 @@ fn div_torque_length() {
     let b = Length::<i32>::from_base(2);
     let c: Force<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5664,6 +13507,23 @@ fn div_torque_rotational_stiffness() {
     let b = RotationalStiffness::<i32>::from_base(2);
     let c: Angle<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::torque::NewtonMeter>::new(x),
+            Fixed::<unit::rotational_stiffness::NewtonMeterPerRadian>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::angle::Radian, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Angle = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -5677,6 +13537,23 @@ fn div_volume_area() {
     let b = Area::<i32>::from_base(2);
     let c: Length<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5691,6 +13568,27 @@ fn div_volume_duration() {
     let b = Duration::<i32>::from_base(2);
     let c: VolumeFlow<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::volume_flow::CubicMeterPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: VolumeFlow = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[test]
@@ -5704,6 +13602,23 @@ fn div_volume_length() {
     let b = Length::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5718,6 +13633,27 @@ fn div_volume_mass() {
     let b = Mass::<i32>::from_base(2);
     let c: SpecificVolume<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::specific_volume::CubicMeterPerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: SpecificVolume = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]
@@ -5732,6 +13668,23 @@ fn div_volume_specific_volume() {
     let b = SpecificVolume::<i32>::from_base(2);
     let c: Mass<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::specific_volume::CubicMeterPerKilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5746,6 +13699,23 @@ fn div_volume_volume_flow() {
     let b = VolumeFlow::<i32>::from_base(2);
     let c: Duration<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume::CubicMeter>::new(x),
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5760,6 +13730,23 @@ fn div_volume_flow_area() {
     let b = Area::<i32>::from_base(2);
     let c: Speed<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::area::SquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "fluids")]
@@ -5774,6 +13761,23 @@ fn div_volume_flow_speed() {
     let b = Speed::<i32>::from_base(2);
     let c: Area<i32> = a / b;
     assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::volume_flow::CubicMeterPerSecond>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::area::SquareMeter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Area = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
 }
 
 #[cfg(feature = "mechanics")]

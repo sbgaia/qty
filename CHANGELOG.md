@@ -18,6 +18,10 @@ adheres to [Semantic Versioning](https://semver.org/).
   lost (float → integer, fine → coarse unit, division). Markers for 1,700+
   units under `unit::<quantity>`, including affine units of point quantities
   (°C, m°C, °F, dBm, …).
+- **Physics on `Fixed`:** `mm.mul_to(mm, SquareMillimeter)`,
+  `km_per_h.mul_to(hours, Kilometer)` (exact, checked at compile time),
+  `mul_to_rounded` and `div_to` with a rounding mode, for every relation
+  between quantities, using exact factors between their base units.
 - **Points and deltas.** `Temperature`, `AmplitudeRatio` and `PowerRatio` are
   points on a scale: `t1 - t0` is a `TemperatureDelta` (or a `Level` in dB),
   `t + delta` is a temperature, and adding two points does not compile. The
