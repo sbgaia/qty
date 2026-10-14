@@ -23,7 +23,7 @@ adheres to [Semantic Versioning](https://semver.org/).
   round-tripping; `serde_str::option` for optional fields.
 
 - 15 relations UnitsNet does not define yet, chosen by hand
-  (`data/relations/ExtraRelations.json`, 60 operators): momentum
+  (`codegen/relations/ExtraRelations.json`, 60 operators): momentum
   (`Mass * Speed = Impulse`), `Φ = V·t`, `Φ = L·I`, `V = L·dI/dt`,
   `I = C·dV/dt`, `τ = R·C`, `J = σ·E`, `E = ρ·J`, `B = μ·H`, `I = H·l`,
   `C = ε·l`, `L = μ·l`, `n = m·b`, `S = n·S_m`, `k = h·l`. They are

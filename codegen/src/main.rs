@@ -157,7 +157,7 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
     // Relations added in this repository, after upstream's so that
     // upstream's win on any conflicting operator.
-    let extra = Path::new("data/relations/ExtraRelations.json");
+    let extra = Path::new("codegen/relations/ExtraRelations.json");
     let extra: Vec<String> = serde_json::from_str(
         &std::fs::read_to_string(extra)
             .unwrap_or_else(|e| panic!("failed to read {}: {e}", extra.display())),

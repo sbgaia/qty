@@ -1,0 +1,17 @@
+[
+  "AmountOfSubstance.Mole = Mass.Kilogram * Molality.MolePerKilogram",
+  "Duration.Second = ElectricResistance.Ohm * ElectricCapacitance.Farad",
+  "ElectricCapacitance.Farad = Permittivity.FaradPerMeter * Length.Meter",
+  "ElectricCurrent.Ampere = ElectricCapacitance.Farad * ElectricPotentialChangeRate.VoltPerSecond",
+  "ElectricCurrent.Ampere = Magnetization.AmperePerMeter * Length.Meter",
+  "ElectricCurrentDensity.AmperePerSquareMeter = ElectricConductivity.SiemensPerMeter * ElectricField.VoltPerMeter",
+  "ElectricField.VoltPerMeter = ElectricResistivity.OhmMeter * ElectricCurrentDensity.AmperePerSquareMeter",
+  "ElectricInductance.Henry = Permeability.HenryPerMeter * Length.Meter",
+  "ElectricPotential.Volt = ElectricInductance.Henry * ElectricCurrentGradient.AmperePerSecond",
+  "Entropy.JoulePerKelvin = AmountOfSubstance.Mole * MolarEntropy.JoulePerMoleKelvin",
+  "Impulse.NewtonSecond = Mass.Kilogram * Speed.MeterPerSecond",
+  "MagneticField.Tesla = Permeability.HenryPerMeter * Magnetization.AmperePerMeter",
+  "MagneticFlux.Weber = ElectricInductance.Henry * ElectricCurrent.Ampere",
+  "MagneticFlux.Weber = ElectricPotential.Volt * Duration.Second",
+  "ThermalConductivity.WattPerMeterKelvin = HeatTransferCoefficient.WattPerSquareMeterKelvin * Length.Meter"
+]
