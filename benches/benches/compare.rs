@@ -253,12 +253,12 @@ fn msr_chain(km: f64, m: f64) -> f64 {
 fn bench_construction(c: &mut Criterion) {
     let km = black_box(1.5_f64);
     let mut g = c.benchmark_group("construction_from_km");
-    g.bench_function("unitsnet-rs",    |b| b.iter(|| unitsnet_from_km(km)));
-    g.bench_function("uom",            |b| b.iter(|| uom_from_km(km)));
-    g.bench_function("simple-si-units",|b| b.iter(|| simple_from_km(km)));
-    g.bench_function("measurements",   |b| b.iter(|| meas_from_km(km)));
-    g.bench_function("ferrunitas",     |b| b.iter(|| ferr_from_km(km)));
-    g.bench_function("measures-rs",    |b| b.iter(|| msr_from_km(km)));
+    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_from_km(km)));
+    g.bench_function("uom", |b| b.iter(|| uom_from_km(km)));
+    g.bench_function("simple-si-units", |b| b.iter(|| simple_from_km(km)));
+    g.bench_function("measurements", |b| b.iter(|| meas_from_km(km)));
+    g.bench_function("ferrunitas", |b| b.iter(|| ferr_from_km(km)));
+    g.bench_function("measures-rs", |b| b.iter(|| msr_from_km(km)));
     g.finish();
 }
 
@@ -278,12 +278,12 @@ fn bench_conversion(c: &mut Criterion) {
     let fe = ferr_from_km(km);
     let mr = msr_from_km(km);
 
-    g.bench_function("unitsnet-rs",    |b| b.iter(|| unitsnet_to_m(black_box(u))));
-    g.bench_function("uom",            |b| b.iter(|| uom_to_m(black_box(q))));
-    g.bench_function("simple-si-units",|b| b.iter(|| simple_to_m(black_box(&s))));
-    g.bench_function("measurements",   |b| b.iter(|| meas_to_m(black_box(&me))));
-    g.bench_function("ferrunitas",     |b| b.iter(|| ferr_to_m(black_box(&fe))));
-    g.bench_function("measures-rs",    |b| b.iter(|| msr_to_m(black_box(mr))));
+    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_to_m(black_box(u))));
+    g.bench_function("uom", |b| b.iter(|| uom_to_m(black_box(q))));
+    g.bench_function("simple-si-units", |b| b.iter(|| simple_to_m(black_box(&s))));
+    g.bench_function("measurements", |b| b.iter(|| meas_to_m(black_box(&me))));
+    g.bench_function("ferrunitas", |b| b.iter(|| ferr_to_m(black_box(&fe))));
+    g.bench_function("measures-rs", |b| b.iter(|| msr_to_m(black_box(mr))));
     g.finish();
 }
 
@@ -295,19 +295,37 @@ fn bench_add(c: &mut Criterion) {
     let (km1, km2) = (1.5_f64, 2.3_f64);
     let mut g = c.benchmark_group("add_two_lengths");
 
-    let u_a = unitsnet_from_km(km1); let u_b = unitsnet_from_km(km2);
-    let q_a = uom_from_km(km1);     let q_b = uom_from_km(km2);
-    let s_a = simple_from_km(km1);  let s_b = simple_from_km(km2);
-    let m_a = meas_from_km(km1);    let m_b = meas_from_km(km2);
-    let f_a = ferr_from_km(km1);    let f_b = ferr_from_km(km2);
-    let r_a = msr_from_km(km1);     let r_b = msr_from_km(km2);
+    let u_a = unitsnet_from_km(km1);
+    let u_b = unitsnet_from_km(km2);
+    let q_a = uom_from_km(km1);
+    let q_b = uom_from_km(km2);
+    let s_a = simple_from_km(km1);
+    let s_b = simple_from_km(km2);
+    let m_a = meas_from_km(km1);
+    let m_b = meas_from_km(km2);
+    let f_a = ferr_from_km(km1);
+    let f_b = ferr_from_km(km2);
+    let r_a = msr_from_km(km1);
+    let r_b = msr_from_km(km2);
 
-    g.bench_function("unitsnet-rs",    |b| b.iter(|| unitsnet_add(black_box(u_a), black_box(u_b))));
-    g.bench_function("uom",            |b| b.iter(|| uom_add(black_box(q_a), black_box(q_b))));
-    g.bench_function("simple-si-units",|b| b.iter(|| simple_add(black_box(s_a), black_box(s_b))));
-    g.bench_function("measurements",   |b| b.iter(|| meas_add(black_box(m_a), black_box(m_b))));
-    g.bench_function("ferrunitas",     |b| b.iter(|| ferr_add(black_box(f_a), black_box(f_b))));
-    g.bench_function("measures-rs",    |b| b.iter(|| msr_add(black_box(r_a), black_box(r_b))));
+    g.bench_function("unitsnet-rs", |b| {
+        b.iter(|| unitsnet_add(black_box(u_a), black_box(u_b)))
+    });
+    g.bench_function("uom", |b| {
+        b.iter(|| uom_add(black_box(q_a), black_box(q_b)))
+    });
+    g.bench_function("simple-si-units", |b| {
+        b.iter(|| simple_add(black_box(s_a), black_box(s_b)))
+    });
+    g.bench_function("measurements", |b| {
+        b.iter(|| meas_add(black_box(m_a), black_box(m_b)))
+    });
+    g.bench_function("ferrunitas", |b| {
+        b.iter(|| ferr_add(black_box(f_a), black_box(f_b)))
+    });
+    g.bench_function("measures-rs", |b| {
+        b.iter(|| msr_add(black_box(r_a), black_box(r_b)))
+    });
     g.finish();
 }
 
@@ -320,12 +338,12 @@ fn bench_add(c: &mut Criterion) {
 fn bench_chain(c: &mut Criterion) {
     let (km, m) = (black_box(1.5_f64), black_box(300.0_f64));
     let mut g = c.benchmark_group("chain_construct_add_convert");
-    g.bench_function("unitsnet-rs",    |b| b.iter(|| unitsnet_chain(km, m)));
-    g.bench_function("uom",            |b| b.iter(|| uom_chain(km, m)));
-    g.bench_function("simple-si-units",|b| b.iter(|| simple_chain(km, m)));
-    g.bench_function("measurements",   |b| b.iter(|| meas_chain(km, m)));
-    g.bench_function("ferrunitas",     |b| b.iter(|| ferr_chain(km, m)));
-    g.bench_function("measures-rs",    |b| b.iter(|| msr_chain(km, m)));
+    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_chain(km, m)));
+    g.bench_function("uom", |b| b.iter(|| uom_chain(km, m)));
+    g.bench_function("simple-si-units", |b| b.iter(|| simple_chain(km, m)));
+    g.bench_function("measurements", |b| b.iter(|| meas_chain(km, m)));
+    g.bench_function("ferrunitas", |b| b.iter(|| ferr_chain(km, m)));
+    g.bench_function("measures-rs", |b| b.iter(|| msr_chain(km, m)));
     g.finish();
 }
 
@@ -346,7 +364,10 @@ fn raw_values() -> Vec<f64> {
 /// unit-free baseline.
 fn bench_sum(c: &mut Criterion) {
     let raw = raw_values();
-    let u: Vec<unitsnet_rs::Length> = raw.iter().map(|&m| unitsnet_rs::Length::from_meters(m)).collect();
+    let u: Vec<unitsnet_rs::Length> = raw
+        .iter()
+        .map(|&m| unitsnet_rs::Length::from_meters(m))
+        .collect();
     let q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
     let s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
     let me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
@@ -356,28 +377,50 @@ fn bench_sum(c: &mut Criterion) {
         b.iter(|| black_box(&raw).iter().fold(0.0, |acc, &x| acc + x))
     });
     g.bench_function("unitsnet-rs", |b| {
-        b.iter(|| black_box(&u).iter().fold(unitsnet_rs::Length::default(), |acc, &x| acc + x))
+        b.iter(|| {
+            black_box(&u)
+                .iter()
+                .fold(unitsnet_rs::Length::default(), |acc, &x| acc + x)
+        })
     });
     g.bench_function("uom", |b| {
-        b.iter(|| black_box(&q).iter().fold(UomLength::new::<uom_m>(0.0), |acc, &x| acc + x))
+        b.iter(|| {
+            black_box(&q)
+                .iter()
+                .fold(UomLength::new::<uom_m>(0.0), |acc, &x| acc + x)
+        })
     });
     g.bench_function("simple-si-units", |b| {
-        b.iter(|| black_box(&s).iter().fold(Distance::<f64>::from_m(0.0), |acc, &x| acc + x))
+        b.iter(|| {
+            black_box(&s)
+                .iter()
+                .fold(Distance::<f64>::from_m(0.0), |acc, &x| acc + x)
+        })
     });
     g.bench_function("measurements", |b| {
-        b.iter(|| black_box(&me).iter().fold(MeasLength::from_meters(0.0), |acc, &x| acc + x))
+        b.iter(|| {
+            black_box(&me)
+                .iter()
+                .fold(MeasLength::from_meters(0.0), |acc, &x| acc + x)
+        })
     });
     g.finish();
 }
 
 /// Benchmark 6 — scale `N` lengths in place by a plain number.
 ///
+/// Written as `*x = *x * k` because not every library implements `*=`.
+///
 /// Independent per-element work: any library whose wrapper is transparent to
 /// the optimiser gets the same SIMD loop as bare `f64`.
+#[allow(clippy::assign_op_pattern)]
 fn bench_scale(c: &mut Criterion) {
     let raw = raw_values();
     let mut r = raw.clone();
-    let mut u: Vec<unitsnet_rs::Length> = raw.iter().map(|&m| unitsnet_rs::Length::from_meters(m)).collect();
+    let mut u: Vec<unitsnet_rs::Length> = raw
+        .iter()
+        .map(|&m| unitsnet_rs::Length::from_meters(m))
+        .collect();
     let mut q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
     let mut s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
     let mut me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();

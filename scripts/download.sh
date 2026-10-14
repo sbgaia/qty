@@ -20,9 +20,16 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QUANTITIES_DIR="${REPO_ROOT}/data/quantities"
 RELATIONS_DIR="${REPO_ROOT}/data/relations"
-BASE_URL="https://raw.githubusercontent.com/angularsen/UnitsNet/master/Common/UnitDefinitions"
-API_URL="https://api.github.com/repos/angularsen/UnitsNet/contents/Common/UnitDefinitions"
-RELATIONS_URL="https://raw.githubusercontent.com/angularsen/UnitsNet/master/Common/UnitRelations.json"
+# The UnitsNet commit the generated code is built from. Pinned so that
+# regenerating is reproducible (and CI can check that the committed code is
+# up to date). To upgrade: set a new commit here, run
+# `./scripts/download.sh --current && cargo run -p codegen`, and review the diff.
+# Override for one run with `UNITSNET_REF=<commit-or-branch> ./scripts/download.sh`.
+UNITSNET_REF="${UNITSNET_REF:-3bf1ef4b3c4d82c05c7a2667b25e0867358f9a62}"
+
+BASE_URL="https://raw.githubusercontent.com/angularsen/UnitsNet/${UNITSNET_REF}/Common/UnitDefinitions"
+API_URL="https://api.github.com/repos/angularsen/UnitsNet/contents/Common/UnitDefinitions?ref=${UNITSNET_REF}"
+RELATIONS_URL="https://raw.githubusercontent.com/angularsen/UnitsNet/${UNITSNET_REF}/Common/UnitRelations.json"
 
 # The subset used by this project (kept in sync with codegen).
 DEFAULT_QUANTITIES=(
@@ -118,6 +125,7 @@ for qty in "${QUANTITIES[@]}"; do
 done
 
 echo ""
+echo "UnitsNet ref: ${UNITSNET_REF}"
 echo "Downloaded: ${ok}  Failed: ${fail}"
 
 if [[ $fail -gt 0 ]]; then
