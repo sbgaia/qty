@@ -245,6 +245,37 @@ fn mul_amount_of_substance_molar_energy() {
     }
 }
 
+#[cfg(all(feature = "chemistry", feature = "thermal"))]
+#[test]
+fn mul_amount_of_substance_molar_entropy() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = MolarEntropy::from_base(2.0);
+    let c: Entropy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = MolarEntropy::<i32>::from_base(2);
+    let c: Entropy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molar_entropy::JoulePerMoleKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::entropy::JoulePerKelvin, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Entropy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
 #[cfg(feature = "chemistry")]
 #[test]
 fn mul_amount_of_substance_molar_mass() {
@@ -1523,6 +1554,37 @@ fn mul_duration_electric_current_gradient() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_duration_electric_potential() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_duration_electric_potential_change_rate() {
     let a = Duration::from_base(6.0);
     let b = ElectricPotentialChangeRate::from_base(2.0);
@@ -2158,6 +2220,68 @@ fn mul_electric_capacitance_electric_potential() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_electric_capacitance_electric_potential_change_rate() {
+    let a = ElectricCapacitance::from_base(6.0);
+    let b = ElectricPotentialChangeRate::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCapacitance::<i32>::from_base(6);
+    let b = ElectricPotentialChangeRate::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_capacitance::Farad>::new(x),
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_capacitance_electric_resistance() {
+    let a = ElectricCapacitance::from_base(6.0);
+    let b = ElectricResistance::from_base(2.0);
+    let c: Duration = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCapacitance::<i32>::from_base(6);
+    let b = ElectricResistance::<i32>::from_base(2);
+    let c: Duration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_capacitance::Farad>::new(x),
+            Fixed::<unit::electric_resistance::Ohm>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_electric_charge_electric_potential() {
     let a = ElectricCharge::from_base(6.0);
     let b = ElectricPotential::from_base(2.0);
@@ -2251,6 +2375,41 @@ fn mul_electric_conductance_electric_potential() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_electric_conductivity_electric_field() {
+    let a = ElectricConductivity::from_base(6.0);
+    let b = ElectricField::from_base(2.0);
+    let c: ElectricCurrentDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricConductivity::<i32>::from_base(6);
+    let b = ElectricField::<i32>::from_base(2);
+    let c: ElectricCurrentDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_conductivity::SiemensPerMeter>::new(x),
+            Fixed::<unit::electric_field::VoltPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_current_density::AmperePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_electric_current_duration() {
     let a = ElectricCurrent::from_base(6.0);
     let b = Duration::from_base(2.0);
@@ -2276,6 +2435,37 @@ fn mul_electric_current_duration() {
             .mul_to_rounded(b, unit::electric_charge::Coulomb, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: ElectricCharge = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_current_electric_inductance() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricInductance::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricInductance::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_inductance::Henry>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -2375,6 +2565,41 @@ fn mul_electric_current_density_area() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_electric_current_density_electric_resistivity() {
+    let a = ElectricCurrentDensity::from_base(6.0);
+    let b = ElectricResistivity::from_base(2.0);
+    let c: ElectricField = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentDensity::<i32>::from_base(6);
+    let b = ElectricResistivity::<i32>::from_base(2);
+    let c: ElectricField<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(x),
+            Fixed::<unit::electric_resistivity::OhmMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_field::VoltPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricField = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_electric_current_gradient_duration() {
     let a = ElectricCurrentGradient::from_base(6.0);
     let b = Duration::from_base(2.0);
@@ -2406,6 +2631,72 @@ fn mul_electric_current_gradient_duration() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_electric_current_gradient_electric_inductance() {
+    let a = ElectricCurrentGradient::from_base(6.0);
+    let b = ElectricInductance::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentGradient::<i32>::from_base(6);
+    let b = ElectricInductance::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(x),
+            Fixed::<unit::electric_inductance::Henry>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_field_electric_conductivity() {
+    let a = ElectricField::from_base(6.0);
+    let b = ElectricConductivity::from_base(2.0);
+    let c: ElectricCurrentDensity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricField::<i32>::from_base(6);
+    let b = ElectricConductivity::<i32>::from_base(2);
+    let c: ElectricCurrentDensity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_field::VoltPerMeter>::new(x),
+            Fixed::<unit::electric_conductivity::SiemensPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_current_density::AmperePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentDensity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_electric_field_length() {
     let a = ElectricField::from_base(6.0);
     let b = Length::from_base(2.0);
@@ -2431,6 +2722,99 @@ fn mul_electric_field_length() {
             .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_inductance_electric_current() {
+    let a = ElectricInductance::from_base(6.0);
+    let b = ElectricCurrent::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricInductance::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_inductance::Henry>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_inductance_electric_current_gradient() {
+    let a = ElectricInductance::from_base(6.0);
+    let b = ElectricCurrentGradient::from_base(2.0);
+    let c: ElectricPotential = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricInductance::<i32>::from_base(6);
+    let b = ElectricCurrentGradient::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_inductance::Henry>::new(x),
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_potential_duration() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: MagneticFlux = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: MagneticFlux<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_flux::Weber, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticFlux = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -2592,6 +2976,37 @@ fn mul_electric_potential_change_rate_duration() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn mul_electric_potential_change_rate_electric_capacitance() {
+    let a = ElectricPotentialChangeRate::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotentialChangeRate::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn mul_electric_reactive_power_duration() {
     let a = ElectricReactivePower::from_base(6.0);
     let b = Duration::from_base(2.0);
@@ -2616,6 +3031,37 @@ fn mul_electric_reactive_power_duration() {
             )
             .map(|c| c.count());
         let float: ElectricReactiveEnergy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_resistance_electric_capacitance() {
+    let a = ElectricResistance::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: Duration = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricResistance::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: Duration<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_resistance::Ohm>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -2647,6 +3093,41 @@ fn mul_electric_resistance_electric_current() {
             .mul_to_rounded(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: ElectricPotential = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_electric_resistivity_electric_current_density() {
+    let a = ElectricResistivity::from_base(6.0);
+    let b = ElectricCurrentDensity::from_base(2.0);
+    let c: ElectricField = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricResistivity::<i32>::from_base(6);
+    let b = ElectricCurrentDensity::<i32>::from_base(2);
+    let c: ElectricField<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_resistivity::OhmMeter>::new(x),
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_field::VoltPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricField = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -3211,6 +3692,41 @@ fn mul_heat_flux_thermal_insulance() {
 
 #[cfg(feature = "thermal")]
 #[test]
+fn mul_heat_transfer_coefficient_length() {
+    let a = HeatTransferCoefficient::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ThermalConductivity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = HeatTransferCoefficient::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ThermalConductivity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::thermal_conductivity::WattPerMeterKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ThermalConductivity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "thermal")]
+#[test]
 fn mul_heat_transfer_coefficient_temperature_delta() {
     let a = HeatTransferCoefficient::from_base(6.0);
     let b = TemperatureDelta::from_base(2.0);
@@ -3635,6 +4151,41 @@ fn mul_length_force_per_length() {
     }
 }
 
+#[cfg(feature = "thermal")]
+#[test]
+fn mul_length_heat_transfer_coefficient() {
+    let a = Length::from_base(6.0);
+    let b = HeatTransferCoefficient::from_base(2.0);
+    let c: ThermalConductivity = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = HeatTransferCoefficient::<i32>::from_base(2);
+    let c: ThermalConductivity<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::thermal_conductivity::WattPerMeterKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ThermalConductivity = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
 #[test]
 fn mul_length_length() {
     let a = Length::from_base(6.0);
@@ -3723,6 +4274,107 @@ fn mul_length_linear_power_density() {
             .mul_to_rounded(b, unit::power::Watt, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Power = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_length_magnetization() {
+    let a = Length::from_base(6.0);
+    let b = Magnetization::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Magnetization::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::magnetization::AmperePerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_length_permeability() {
+    let a = Length::from_base(6.0);
+    let b = Permeability::from_base(2.0);
+    let c: ElectricInductance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Permeability::<i32>::from_base(2);
+    let c: ElectricInductance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::permeability::HenryPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_inductance::Henry,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricInductance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_length_permittivity() {
+    let a = Length::from_base(6.0);
+    let b = Permittivity::from_base(2.0);
+    let c: ElectricCapacitance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Length::<i32>::from_base(6);
+    let b = Permittivity::<i32>::from_base(2);
+    let c: ElectricCapacitance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::length::Meter>::new(x),
+            Fixed::<unit::permittivity::FaradPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_capacitance::Farad,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCapacitance = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -4193,6 +4845,68 @@ fn mul_magnetic_field_area() {
     }
 }
 
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_magnetization_length() {
+    let a = Magnetization::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ElectricCurrent = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Magnetization::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetization::AmperePerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_magnetization_permeability() {
+    let a = Magnetization::from_base(6.0);
+    let b = Permeability::from_base(2.0);
+    let c: MagneticField = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Magnetization::<i32>::from_base(6);
+    let b = Permeability::<i32>::from_base(2);
+    let c: MagneticField<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetization::AmperePerMeter>::new(x),
+            Fixed::<unit::permeability::HenryPerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_field::Tesla, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticField = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
 #[test]
 fn mul_mass_acceleration() {
     let a = Mass::from_base(6.0);
@@ -4250,6 +4964,41 @@ fn mul_mass_mass_fraction() {
             .mul_to_rounded(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Mass = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "chemistry")]
+#[test]
+fn mul_mass_molality() {
+    let a = Mass::from_base(6.0);
+    let b = Molality::from_base(2.0);
+    let c: AmountOfSubstance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Molality::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::molality::MolePerKilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -4343,6 +5092,37 @@ fn mul_mass_specific_volume() {
             .mul_to_rounded(b, unit::volume::CubicMeter, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Volume = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "mechanics")]
+#[test]
+fn mul_mass_speed() {
+    let a = Mass::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Impulse = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Mass::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Impulse<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::mass::Kilogram>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::impulse::NewtonSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Impulse = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -4489,6 +5269,41 @@ fn mul_mass_fraction_mass() {
 
 #[cfg(feature = "chemistry")]
 #[test]
+fn mul_molality_mass() {
+    let a = Molality::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: AmountOfSubstance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Molality::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molality::MolePerKilogram>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "chemistry")]
+#[test]
 fn mul_molar_energy_amount_of_substance() {
     let a = MolarEnergy::from_base(6.0);
     let b = AmountOfSubstance::from_base(2.0);
@@ -4514,6 +5329,37 @@ fn mul_molar_energy_amount_of_substance() {
             .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Energy = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(all(feature = "chemistry", feature = "thermal"))]
+#[test]
+fn mul_molar_entropy_amount_of_substance() {
+    let a = MolarEntropy::from_base(6.0);
+    let b = AmountOfSubstance::from_base(2.0);
+    let c: Entropy = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MolarEntropy::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: Entropy<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::molar_entropy::JoulePerMoleKelvin>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::entropy::JoulePerKelvin, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Entropy = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -4807,6 +5653,107 @@ fn mul_molarity_volume_flow() {
             )
             .map(|c| c.count());
         let float: MolarFlow = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_permeability_length() {
+    let a = Permeability::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ElectricInductance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Permeability::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ElectricInductance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::permeability::HenryPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_inductance::Henry,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricInductance = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_permeability_magnetization() {
+    let a = Permeability::from_base(6.0);
+    let b = Magnetization::from_base(2.0);
+    let c: MagneticField = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Permeability::<i32>::from_base(6);
+    let b = Magnetization::<i32>::from_base(2);
+    let c: MagneticField<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::permeability::HenryPerMeter>::new(x),
+            Fixed::<unit::magnetization::AmperePerMeter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::magnetic_field::Tesla, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: MagneticField = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn mul_permittivity_length() {
+    let a = Permittivity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: ElectricCapacitance = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Permittivity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: ElectricCapacitance<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::permittivity::FaradPerMeter>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(
+                b,
+                unit::electric_capacitance::Farad,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCapacitance = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -6033,6 +6980,37 @@ fn mul_speed_length() {
 
 #[cfg(feature = "mechanics")]
 #[test]
+fn mul_speed_mass() {
+    let a = Speed::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: Impulse = a * b;
+    assert_eq!(c.as_base(), 12.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Speed::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Impulse<i32> = a * b;
+    assert_eq!(c.as_base(), 12);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::speed::MeterPerSecond>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .mul_to_rounded(b, unit::impulse::NewtonSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Impulse = a.to_f64() * b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "mechanics")]
+#[test]
 fn mul_speed_speed() {
     let a = Speed::from_base(6.0);
     let b = Speed::from_base(2.0);
@@ -7148,6 +8126,72 @@ fn div_amount_of_substance_duration() {
 
 #[cfg(feature = "chemistry")]
 #[test]
+fn div_amount_of_substance_mass() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: Molality = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Molality<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molality::MolePerKilogram,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Molality = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "chemistry")]
+#[test]
+fn div_amount_of_substance_molality() {
+    let a = AmountOfSubstance::from_base(6.0);
+    let b = Molality::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = AmountOfSubstance::<i32>::from_base(6);
+    let b = Molality::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::amount_of_substance::Mole>::new(x),
+            Fixed::<unit::molality::MolePerKilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "chemistry")]
+#[test]
 fn div_amount_of_substance_molar_flow() {
     let a = AmountOfSubstance::from_base(6.0);
     let b = MolarFlow::from_base(2.0);
@@ -7692,6 +8736,72 @@ fn div_dose_area_product_area() {
     }
 }
 
+#[cfg(feature = "electrical")]
+#[test]
+fn div_duration_electric_capacitance() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: ElectricResistance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: ElectricResistance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_resistance::Ohm, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricResistance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_duration_electric_resistance() {
+    let a = Duration::from_base(6.0);
+    let b = ElectricResistance::from_base(2.0);
+    let c: ElectricCapacitance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Duration::<i32>::from_base(6);
+    let b = ElectricResistance::<i32>::from_base(2);
+    let c: ElectricCapacitance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::duration::Second>::new(x),
+            Fixed::<unit::electric_resistance::Ohm>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_capacitance::Farad,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCapacitance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
 #[cfg(feature = "fluids")]
 #[test]
 fn div_dynamic_viscosity_density() {
@@ -7814,6 +8924,72 @@ fn div_electric_apparent_energy_electric_apparent_power() {
             .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_capacitance_length() {
+    let a = ElectricCapacitance::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Permittivity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCapacitance::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Permittivity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_capacitance::Farad>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::permittivity::FaradPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Permittivity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_capacitance_permittivity() {
+    let a = ElectricCapacitance::from_base(6.0);
+    let b = Permittivity::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCapacitance::<i32>::from_base(6);
+    let b = Permittivity::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_capacitance::Farad>::new(x),
+            Fixed::<unit::permittivity::FaradPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -8150,6 +9326,41 @@ fn div_electric_current_duration() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn div_electric_current_electric_capacitance() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricCapacitance::from_base(2.0);
+    let c: ElectricPotentialChangeRate = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricCapacitance::<i32>::from_base(2);
+    let c: ElectricPotentialChangeRate<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_capacitance::Farad>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_potential_change_rate::VoltPerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricPotentialChangeRate = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn div_electric_current_electric_conductance() {
     let a = ElectricCurrent::from_base(6.0);
     let b = ElectricConductance::from_base(2.0);
@@ -8278,6 +9489,313 @@ fn div_electric_current_electric_potential() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn div_electric_current_electric_potential_change_rate() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = ElectricPotentialChangeRate::from_base(2.0);
+    let c: ElectricCapacitance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = ElectricPotentialChangeRate::<i32>::from_base(2);
+    let c: ElectricCapacitance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::electric_potential_change_rate::VoltPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_capacitance::Farad,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCapacitance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_current_length() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Magnetization = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Magnetization<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::magnetization::AmperePerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Magnetization = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_current_magnetization() {
+    let a = ElectricCurrent::from_base(6.0);
+    let b = Magnetization::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrent::<i32>::from_base(6);
+    let b = Magnetization::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current::Ampere>::new(x),
+            Fixed::<unit::magnetization::AmperePerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_current_density_electric_conductivity() {
+    let a = ElectricCurrentDensity::from_base(6.0);
+    let b = ElectricConductivity::from_base(2.0);
+    let c: ElectricField = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentDensity::<i32>::from_base(6);
+    let b = ElectricConductivity::<i32>::from_base(2);
+    let c: ElectricField<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(x),
+            Fixed::<unit::electric_conductivity::SiemensPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_field::VoltPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricField = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_current_density_electric_field() {
+    let a = ElectricCurrentDensity::from_base(6.0);
+    let b = ElectricField::from_base(2.0);
+    let c: ElectricConductivity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricCurrentDensity::<i32>::from_base(6);
+    let b = ElectricField::<i32>::from_base(2);
+    let c: ElectricConductivity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(x),
+            Fixed::<unit::electric_field::VoltPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_conductivity::SiemensPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricConductivity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_field_electric_current_density() {
+    let a = ElectricField::from_base(6.0);
+    let b = ElectricCurrentDensity::from_base(2.0);
+    let c: ElectricResistivity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricField::<i32>::from_base(6);
+    let b = ElectricCurrentDensity::<i32>::from_base(2);
+    let c: ElectricResistivity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_field::VoltPerMeter>::new(x),
+            Fixed::<unit::electric_current_density::AmperePerSquareMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_resistivity::OhmMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricResistivity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_field_electric_resistivity() {
+    let a = ElectricField::from_base(6.0);
+    let b = ElectricResistivity::from_base(2.0);
+    let c: ElectricCurrentDensity = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricField::<i32>::from_base(6);
+    let b = ElectricResistivity::<i32>::from_base(2);
+    let c: ElectricCurrentDensity<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_field::VoltPerMeter>::new(x),
+            Fixed::<unit::electric_resistivity::OhmMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_current_density::AmperePerSquareMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentDensity = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_inductance_length() {
+    let a = ElectricInductance::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Permeability = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricInductance::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Permeability<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_inductance::Henry>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::permeability::HenryPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Permeability = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_inductance_permeability() {
+    let a = ElectricInductance::from_base(6.0);
+    let b = Permeability::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricInductance::<i32>::from_base(6);
+    let b = Permeability::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_inductance::Henry>::new(x),
+            Fixed::<unit::permeability::HenryPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn div_electric_potential_duration() {
     let a = ElectricPotential::from_base(6.0);
     let b = Duration::from_base(2.0);
@@ -8344,6 +9862,41 @@ fn div_electric_potential_electric_current() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn div_electric_potential_electric_current_gradient() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricCurrentGradient::from_base(2.0);
+    let c: ElectricInductance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricCurrentGradient::<i32>::from_base(2);
+    let c: ElectricInductance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_current_gradient::AmperePerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_inductance::Henry,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricInductance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn div_electric_potential_electric_field() {
     let a = ElectricPotential::from_base(6.0);
     let b = ElectricField::from_base(2.0);
@@ -8369,6 +9922,41 @@ fn div_electric_potential_electric_field() {
             .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_electric_potential_electric_inductance() {
+    let a = ElectricPotential::from_base(6.0);
+    let b = ElectricInductance::from_base(2.0);
+    let c: ElectricCurrentGradient = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ElectricPotential::<i32>::from_base(6);
+    let b = ElectricInductance::<i32>::from_base(2);
+    let c: ElectricCurrentGradient<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::electric_potential::Volt>::new(x),
+            Fixed::<unit::electric_inductance::Henry>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_current_gradient::AmperePerSecond,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricCurrentGradient = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -8986,6 +10574,41 @@ fn div_energy_density_volumetric_heat_capacity() {
     }
 }
 
+#[cfg(all(feature = "chemistry", feature = "thermal"))]
+#[test]
+fn div_entropy_amount_of_substance() {
+    let a = Entropy::from_base(6.0);
+    let b = AmountOfSubstance::from_base(2.0);
+    let c: MolarEntropy = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Entropy::<i32>::from_base(6);
+    let b = AmountOfSubstance::<i32>::from_base(2);
+    let c: MolarEntropy<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::entropy::JoulePerKelvin>::new(x),
+            Fixed::<unit::amount_of_substance::Mole>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::molar_entropy::JoulePerMoleKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: MolarEntropy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
 #[cfg(feature = "thermal")]
 #[test]
 fn div_entropy_mass() {
@@ -9017,6 +10640,41 @@ fn div_entropy_mass() {
             )
             .map(|c| c.count());
         let float: SpecificEntropy = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(all(feature = "chemistry", feature = "thermal"))]
+#[test]
+fn div_entropy_molar_entropy() {
+    let a = Entropy::from_base(6.0);
+    let b = MolarEntropy::from_base(2.0);
+    let c: AmountOfSubstance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Entropy::<i32>::from_base(6);
+    let b = MolarEntropy::<i32>::from_base(2);
+    let c: AmountOfSubstance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::entropy::JoulePerKelvin>::new(x),
+            Fixed::<unit::molar_entropy::JoulePerMoleKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::amount_of_substance::Mole,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: AmountOfSubstance = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -9766,6 +11424,68 @@ fn div_impulse_force() {
             .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Duration = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "mechanics")]
+#[test]
+fn div_impulse_mass() {
+    let a = Impulse::from_base(6.0);
+    let b = Mass::from_base(2.0);
+    let c: Speed = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Impulse::<i32>::from_base(6);
+    let b = Mass::<i32>::from_base(2);
+    let c: Speed<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::impulse::NewtonSecond>::new(x),
+            Fixed::<unit::mass::Kilogram>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::speed::MeterPerSecond, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Speed = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "mechanics")]
+#[test]
+fn div_impulse_speed() {
+    let a = Impulse::from_base(6.0);
+    let b = Speed::from_base(2.0);
+    let c: Mass = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Impulse::<i32>::from_base(6);
+    let b = Speed::<i32>::from_base(2);
+    let c: Mass<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::impulse::NewtonSecond>::new(x),
+            Fixed::<unit::speed::MeterPerSecond>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::mass::Kilogram, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Mass = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -10546,6 +12266,76 @@ fn div_luminous_intensity_luminance() {
 
 #[cfg(feature = "electrical")]
 #[test]
+fn div_magnetic_field_magnetization() {
+    let a = MagneticField::from_base(6.0);
+    let b = Magnetization::from_base(2.0);
+    let c: Permeability = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticField::<i32>::from_base(6);
+    let b = Magnetization::<i32>::from_base(2);
+    let c: Permeability<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_field::Tesla>::new(x),
+            Fixed::<unit::magnetization::AmperePerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::permeability::HenryPerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Permeability = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_magnetic_field_permeability() {
+    let a = MagneticField::from_base(6.0);
+    let b = Permeability::from_base(2.0);
+    let c: Magnetization = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticField::<i32>::from_base(6);
+    let b = Permeability::<i32>::from_base(2);
+    let c: Magnetization<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_field::Tesla>::new(x),
+            Fixed::<unit::permeability::HenryPerMeter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::magnetization::AmperePerMeter,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: Magnetization = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
 fn div_magnetic_flux_area() {
     let a = MagneticFlux::from_base(6.0);
     let b = Area::from_base(2.0);
@@ -10571,6 +12361,134 @@ fn div_magnetic_flux_area() {
             .div_to(b, unit::magnetic_field::Tesla, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: MagneticField = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_magnetic_flux_duration() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = Duration::from_base(2.0);
+    let c: ElectricPotential = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = Duration::<i32>::from_base(2);
+    let c: ElectricPotential<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::duration::Second>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_potential::Volt, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricPotential = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_magnetic_flux_electric_current() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = ElectricCurrent::from_base(2.0);
+    let c: ElectricInductance = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = ElectricCurrent::<i32>::from_base(2);
+    let c: ElectricInductance<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::electric_current::Ampere>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::electric_inductance::Henry,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: ElectricInductance = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_magnetic_flux_electric_inductance() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = ElectricInductance::from_base(2.0);
+    let c: ElectricCurrent = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = ElectricInductance::<i32>::from_base(2);
+    let c: ElectricCurrent<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::electric_inductance::Henry>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::electric_current::Ampere, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: ElectricCurrent = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "electrical")]
+#[test]
+fn div_magnetic_flux_electric_potential() {
+    let a = MagneticFlux::from_base(6.0);
+    let b = ElectricPotential::from_base(2.0);
+    let c: Duration = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = MagneticFlux::<i32>::from_base(6);
+    let b = ElectricPotential::<i32>::from_base(2);
+    let c: Duration<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::magnetic_flux::Weber>::new(x),
+            Fixed::<unit::electric_potential::Volt>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::duration::Second, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Duration = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -13328,6 +15246,72 @@ fn div_temperature_delta_thermal_resistance() {
             .div_to(b, unit::power::Watt, Rounding::NearestTiesEven)
             .map(|c| c.count());
         let float: Power = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "thermal")]
+#[test]
+fn div_thermal_conductivity_heat_transfer_coefficient() {
+    let a = ThermalConductivity::from_base(6.0);
+    let b = HeatTransferCoefficient::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ThermalConductivity::<i32>::from_base(6);
+    let b = HeatTransferCoefficient::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::thermal_conductivity::WattPerMeterKelvin>::new(x),
+            Fixed::<unit::heat_transfer_coefficient::WattPerSquareMeterKelvin>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[cfg(feature = "thermal")]
+#[test]
+fn div_thermal_conductivity_length() {
+    let a = ThermalConductivity::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: HeatTransferCoefficient = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = ThermalConductivity::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: HeatTransferCoefficient<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::thermal_conductivity::WattPerMeterKelvin>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(
+                b,
+                unit::heat_transfer_coefficient::WattPerSquareMeterKelvin,
+                Rounding::NearestTiesEven,
+            )
+            .map(|c| c.count());
+        let float: HeatTransferCoefficient = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
