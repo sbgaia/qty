@@ -232,6 +232,14 @@ CI fails if the committed code differs from what the generator produces.
 To move to newer upstream definitions, change `UNITSNET_REF` in
 `scripts/download.sh` and review the regenerated diff.
 
+## Testing
+
+Besides the generated tests (every unit of every quantity against the
+upstream formulas, every relation in floats and in integers), property tests
+compare the integer arithmetic with exact rational arithmetic over the whole
+`i64` range, and two fuzz targets cover parsing and integer arithmetic (see
+`fuzz/README.md`).
+
 ## Minimum supported Rust version
 
 1.82 (for float arithmetic in `const fn`).

@@ -88,6 +88,25 @@ jobs:
             echo "::endgroup::"
           done
 
+  fuzz:
+    name: Fuzz (1 minute per target)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-fuzz
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: fuzz
+      - name: Fuzz
+        working-directory: fuzz
+        run: |
+          for target in parse fixed; do
+            cargo fuzz run "$target" -O -- -max_total_time=60
+          done
+
   codegen:
     name: Generated code is up to date
     runs-on: ubuntu-latest

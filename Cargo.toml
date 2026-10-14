@@ -1,5 +1,7 @@
 [workspace]
 members = [".", "codegen", "benches"]
+# Needs nightly and `cargo fuzz`; see fuzz/README.md.
+exclude = ["fuzz"]
 resolver = "2"
 
 [package]
@@ -85,4 +87,5 @@ num-traits = { version = "0.2", default-features = false, optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
 
 [dev-dependencies]
+proptest = { version = "1", default-features = false, features = ["std"] }
 serde_json = "1"

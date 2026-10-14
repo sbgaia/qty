@@ -53,6 +53,12 @@ adheres to [Semantic Versioning](https://semver.org/).
   `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
   `information`, `misc`; all enabled by the default `full`) — compiling only
   the core quantities takes about a fifth of the time.
+- Property tests (`tests/properties.rs`, proptest): `Fixed` conversions,
+  comparisons and physics against exact `i128` rational arithmetic over the
+  whole `i64` range (biased toward rounding ties), float rounding against
+  `f64`'s own, display/parse round trips, parsing arbitrary text, and
+  invariants of `Uncertain` and vectors. Fuzz targets (`fuzz/`, cargo-fuzz)
+  for parsing and integer arithmetic, run for a minute each in CI.
 - Minimum supported Rust version: 1.82.
 - CI (formatting, clippy, docs, tests in several feature sets, MSRV,
   `no_std`, feature groups alone, generated code up to date), a README and
