@@ -282,6 +282,8 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
         }
     }
 
+    check_dimensions(&ops, quantities);
+
     // Keep the first relation for each operator signature; later duplicates
     // would be conflicting impls.
     let mut seen = HashSet::new();
@@ -294,6 +296,63 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     });
 
     ops
+}
+
+/// Panics unless every operation is dimensionally consistent, using the
+/// upstream `BaseDimensions`: `[A] + [B] = [C]` for `A * B = C`, and so on.
+/// Guards against inconsistent upstream relations and mistakes in how they
+/// are expanded here (inferred divisions, roots).
+fn check_dimensions(ops: &[CrossOp], quantities: &[QuantityDef]) {
+    let dims = |name: &str| -> parser::Dimensions {
+        quantities
+            .iter()
+            .find(|q| q.name == name)
+            .unwrap_or_else(|| panic!("relation names unknown quantity {name}"))
+            .dimensions
+    };
+    let mut errors = Vec::new();
+    for op in ops {
+        let (expected, actual): (parser::Dimensions, parser::Dimensions) = match op.kind {
+            CrossKind::Mul => (
+                dims(&op.output),
+                dimension_sum(dims(&op.lhs), dims(&op.rhs), 1),
+            ),
+            CrossKind::Div => (
+                dims(&op.output),
+                dimension_sum(dims(&op.lhs), dims(&op.rhs), -1),
+            ),
+            CrossKind::MulScalar => ([0; 7], dimension_sum(dims(&op.lhs), dims(&op.rhs), 1)),
+            CrossKind::Recip => (dims(&op.output), dimension_sum([0; 7], dims(&op.rhs), -1)),
+            CrossKind::Sqrt => (
+                dims(&op.lhs),
+                dimension_sum(dims(&op.output), dims(&op.output), 1),
+            ),
+            CrossKind::Cbrt => {
+                let o = dims(&op.output);
+                (dims(&op.lhs), dimension_sum(dimension_sum(o, o, 1), o, 1))
+            }
+        };
+        if expected != actual {
+            errors.push(format!(
+                "{:?} {} {} {} = {}: dimensions {actual:?} vs {expected:?}",
+                op.kind,
+                op.lhs,
+                op.kind.symbol(),
+                op.rhs,
+                op.output
+            ));
+        }
+    }
+    assert!(
+        errors.is_empty(),
+        "dimensionally inconsistent relations:\n{}",
+        errors.join("\n")
+    );
+}
+
+/// `a + sign · b`, exponent by exponent.
+fn dimension_sum(a: parser::Dimensions, b: parser::Dimensions, sign: i32) -> parser::Dimensions {
+    std::array::from_fn(|i| a[i] + sign * b[i])
 }
 
 // ── Module file ───────────────────────────────────────────────────────────────
@@ -430,4 +489,75 @@ fn rustfmt(path: &Path) {
         .arg(path)
         .status()
         .ok();
+}
+
+#[cfg(test)]
+mod dimension_tests {
+    use super::*;
+
+    fn quantity(name: &str, dimensions: parser::Dimensions) -> QuantityDef {
+        QuantityDef {
+            name: name.to_owned(),
+            base_unit: String::new(),
+            doc: String::new(),
+            units: Vec::new(),
+            dimensions,
+        }
+    }
+
+    fn op(kind: CrossKind, lhs: &str, rhs: &str, output: &str) -> CrossOp {
+        CrossOp {
+            kind,
+            lhs: lhs.to_owned(),
+            rhs: rhs.to_owned(),
+            output: output.to_owned(),
+            factor: None,
+            k: Const::one(),
+        }
+    }
+
+    // L, M, T, …
+    fn quantities() -> Vec<QuantityDef> {
+        vec![
+            quantity("Length", [1, 0, 0, 0, 0, 0, 0]),
+            quantity("Area", [2, 0, 0, 0, 0, 0, 0]),
+            quantity("Volume", [3, 0, 0, 0, 0, 0, 0]),
+            quantity("Duration", [0, 0, 1, 0, 0, 0, 0]),
+            quantity("Frequency", [0, 0, -1, 0, 0, 0, 0]),
+            quantity("Speed", [1, 0, -1, 0, 0, 0, 0]),
+        ]
+    }
+
+    #[test]
+    fn consistent_relations_pass() {
+        check_dimensions(
+            &[
+                op(CrossKind::Mul, "Length", "Length", "Area"),
+                op(CrossKind::Div, "Length", "Duration", "Speed"),
+                op(CrossKind::MulScalar, "Duration", "Frequency", ""),
+                op(CrossKind::Recip, "", "Duration", "Frequency"),
+                op(CrossKind::Sqrt, "Area", "", "Length"),
+                op(CrossKind::Cbrt, "Volume", "", "Length"),
+            ],
+            &quantities(),
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Mul Length * Duration = Speed")]
+    fn inconsistent_product_fails() {
+        check_dimensions(
+            &[op(CrossKind::Mul, "Length", "Duration", "Speed")],
+            &quantities(),
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Sqrt Volume sqrt  = Length")]
+    fn inconsistent_root_fails() {
+        check_dimensions(
+            &[op(CrossKind::Sqrt, "Volume", "", "Length")],
+            &quantities(),
+        );
+    }
 }

@@ -65,6 +65,13 @@ adheres to [Semantic Versioning](https://semver.org/).
   units), instead of evaluating each upstream formula step by step.
 - Generated tests compare every unit against the upstream formula evaluated
   independently, in `f64` and `f32`.
+- The generator checks every relation it emits (including inferred
+  divisions and roots) against the upstream base dimensions, and fails on an
+  inconsistent one. All 120 upstream relations pass. Relations are not
+  derived from dimensions alone: 21 groups of quantities share dimensions
+  (energy and torque, frequency and rotational speed, …), and most
+  dimension-only matches are coincidences (volume × volume is not a warping
+  moment of inertia).
 - The UnitsNet definitions are pinned to a commit, so regenerating is
   reproducible (`scripts/download.sh`, `UNITSNET_REF`).
 - Unit enums are `#[non_exhaustive]`; parsing errors use one shared

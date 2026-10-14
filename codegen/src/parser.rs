@@ -138,6 +138,10 @@ pub struct RawQuantity {
     pub base_unit: String,
     #[serde(default)]
     pub xml_doc_summary: String,
+    /// Exponents of the SI base dimensions, e.g. `{"L": 1, "T": -1}`;
+    /// absent for dimensionless quantities.
+    #[serde(default)]
+    pub base_dimensions: std::collections::BTreeMap<String, i32>,
     pub units: Vec<RawUnit>,
 }
 
@@ -175,7 +179,17 @@ pub struct QuantityDef {
     pub doc: String,
     /// All unit variants, including prefix expansions.
     pub units: Vec<UnitDef>,
+    /// Exponents of the SI base dimensions, in the order of [`DIMENSIONS`].
+    pub dimensions: Dimensions,
 }
+
+/// The SI base dimensions, in the order used by [`Dimensions`]: length,
+/// mass, time, electric current, temperature, amount of substance,
+/// luminous intensity.
+pub const DIMENSIONS: [&str; 7] = ["L", "M", "T", "I", "Θ", "N", "J"];
+
+/// Exponents of the SI base dimensions.
+pub type Dimensions = [i32; 7];
 
 /// A single unit variant (possibly prefix-expanded).
 pub struct UnitDef {
@@ -303,11 +317,21 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
         }
     }
 
+    let mut dimensions = [0; 7];
+    for (symbol, exponent) in &raw.base_dimensions {
+        let i = DIMENSIONS
+            .iter()
+            .position(|d| d == symbol)
+            .unwrap_or_else(|| panic!("{}: unknown base dimension {symbol:?}", raw.name));
+        dimensions[i] = *exponent;
+    }
+
     QuantityDef {
         name: raw.name,
         base_unit: raw.base_unit,
         doc: raw.xml_doc_summary,
         units,
+        dimensions,
     }
 }
 
