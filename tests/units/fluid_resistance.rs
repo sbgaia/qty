@@ -786,6 +786,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<FluidResistance>(FluidResistance::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = FluidResistance::<f64>::INFO;
     assert_eq!(info.name, "FluidResistance");

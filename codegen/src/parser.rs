@@ -231,8 +231,9 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
     // Some upstream files contain trailing commas (valid JSON5, invalid JSON).
     // Strip them before handing to serde_json.
     let content = strip_trailing_commas(content);
-    let raw: RawQuantity = serde_json::from_str(&content)
+    let mut raw: RawQuantity = serde_json::from_str(&content)
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
+    apply_abbreviation_fixes(&mut raw);
 
     let mut units = Vec::new();
 
@@ -360,6 +361,50 @@ fn en_us_abbreviations(unit: &RawUnit) -> Vec<String> {
         .or_else(|| unit.localization.first())
         .map(|l| l.abbreviations.clone())
         .unwrap_or_default()
+}
+
+/// Corrections to upstream abbreviations: `(quantity, unit, wrong prefix of
+/// each abbreviation, correct prefix)`. Each was found by the generated test
+/// that parses every abbreviation as a unit expression and compares it with
+/// the unit's conversion.
+///
+/// - HeatTransferCoefficient `CaloriePerHourSquareMeterDegreeCelsius`
+///   converts as calories (`× 4.184 / 3600`) but is abbreviated `kcal/…`, so
+///   `"1 kcal/(h·m²·°C)"` parsed 1000× too small and its kilo variant got
+///   `kkcal/…`.
+const ABBREVIATION_FIXES: &[(&str, &str, &str, &str)] = &[(
+    "HeatTransferCoefficient",
+    "CaloriePerHourSquareMeterDegreeCelsius",
+    "kcal/",
+    "cal/",
+)];
+
+/// Applies [`ABBREVIATION_FIXES`]; panics when one no longer matches, so
+/// that it is removed once upstream is fixed.
+fn apply_abbreviation_fixes(raw: &mut RawQuantity) {
+    for &(quantity, unit, wrong, right) in ABBREVIATION_FIXES {
+        if raw.name != quantity {
+            continue;
+        }
+        let abbreviations = raw
+            .units
+            .iter_mut()
+            .filter(|u| u.singular_name == unit)
+            .flat_map(|u| u.localization.iter_mut())
+            .filter(|l| l.culture == "en-US")
+            .flat_map(|l| l.abbreviations.iter_mut());
+        let mut fixed = 0;
+        for abbreviation in abbreviations {
+            if let Some(rest) = abbreviation.strip_prefix(wrong) {
+                *abbreviation = format!("{right}{rest}");
+                fixed += 1;
+            }
+        }
+        assert!(
+            fixed > 0,
+            "abbreviation fix for {quantity}.{unit} no longer applies: remove it"
+        );
+    }
 }
 
 /// Removes trailing commas before `}` or `]` to accept JSON5-style upstream files.

@@ -1811,6 +1811,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<PowerDensity>(PowerDensity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = PowerDensity::<f64>::INFO;
     assert_eq!(info.name, "PowerDensity");

@@ -280,6 +280,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<HeatTransferCoefficient>(HeatTransferCoefficient::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = HeatTransferCoefficient::<f64>::INFO;
     assert_eq!(info.name, "HeatTransferCoefficient");
@@ -553,55 +558,55 @@ fn parse_every_abbreviation() {
         ))
     );
     assert_eq!(
+        "cal/(h·m²·°C)".parse::<HeatTransferCoefficientUnit>(),
+        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        format!("2.5 {}", "cal/(h·m²·°C)").parse::<HeatTransferCoefficient>(),
+        Ok(HeatTransferCoefficient::new(
+            2.5,
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
+        ))
+    );
+    assert_eq!(
+        "cal/(m²·h·°C)".parse::<HeatTransferCoefficientUnit>(),
+        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        format!("2.5 {}", "cal/(m²·h·°C)").parse::<HeatTransferCoefficient>(),
+        Ok(HeatTransferCoefficient::new(
+            2.5,
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
+        ))
+    );
+    assert_eq!(
+        "cal/(hr·m²·°C)".parse::<HeatTransferCoefficientUnit>(),
+        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        format!("2.5 {}", "cal/(hr·m²·°C)").parse::<HeatTransferCoefficient>(),
+        Ok(HeatTransferCoefficient::new(
+            2.5,
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
+        ))
+    );
+    assert_eq!(
+        "cal/(m²·hr·°C)".parse::<HeatTransferCoefficientUnit>(),
+        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
+    );
+    assert_eq!(
+        format!("2.5 {}", "cal/(m²·hr·°C)").parse::<HeatTransferCoefficient>(),
+        Ok(HeatTransferCoefficient::new(
+            2.5,
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
+        ))
+    );
+    assert_eq!(
         "kcal/(h·m²·°C)".parse::<HeatTransferCoefficientUnit>(),
-        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
-    );
-    assert_eq!(
-        format!("2.5 {}", "kcal/(h·m²·°C)").parse::<HeatTransferCoefficient>(),
-        Ok(HeatTransferCoefficient::new(
-            2.5,
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
-        ))
-    );
-    assert_eq!(
-        "kcal/(m²·h·°C)".parse::<HeatTransferCoefficientUnit>(),
-        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
-    );
-    assert_eq!(
-        format!("2.5 {}", "kcal/(m²·h·°C)").parse::<HeatTransferCoefficient>(),
-        Ok(HeatTransferCoefficient::new(
-            2.5,
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
-        ))
-    );
-    assert_eq!(
-        "kcal/(hr·m²·°C)".parse::<HeatTransferCoefficientUnit>(),
-        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
-    );
-    assert_eq!(
-        format!("2.5 {}", "kcal/(hr·m²·°C)").parse::<HeatTransferCoefficient>(),
-        Ok(HeatTransferCoefficient::new(
-            2.5,
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
-        ))
-    );
-    assert_eq!(
-        "kcal/(m²·hr·°C)".parse::<HeatTransferCoefficientUnit>(),
-        Ok(HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius)
-    );
-    assert_eq!(
-        format!("2.5 {}", "kcal/(m²·hr·°C)").parse::<HeatTransferCoefficient>(),
-        Ok(HeatTransferCoefficient::new(
-            2.5,
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius
-        ))
-    );
-    assert_eq!(
-        "kkcal/(h·m²·°C)".parse::<HeatTransferCoefficientUnit>(),
         Ok(HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius)
     );
     assert_eq!(
-        format!("2.5 {}", "kkcal/(h·m²·°C)").parse::<HeatTransferCoefficient>(),
+        format!("2.5 {}", "kcal/(h·m²·°C)").parse::<HeatTransferCoefficient>(),
         Ok(HeatTransferCoefficient::new(
             2.5,
             HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius

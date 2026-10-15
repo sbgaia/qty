@@ -356,6 +356,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<MolarFlow>(MolarFlow::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = MolarFlow::<f64>::INFO;
     assert_eq!(info.name, "MolarFlow");

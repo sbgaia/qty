@@ -135,6 +135,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<SpecificVolume>(SpecificVolume::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = SpecificVolume::<f64>::INFO;
     assert_eq!(info.name, "SpecificVolume");

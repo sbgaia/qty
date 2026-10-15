@@ -672,6 +672,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<AmountOfSubstance>(AmountOfSubstance::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = AmountOfSubstance::<f64>::INFO;
     assert_eq!(info.name, "AmountOfSubstance");

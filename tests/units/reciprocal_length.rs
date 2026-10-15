@@ -407,6 +407,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ReciprocalLength>(ReciprocalLength::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ReciprocalLength::<f64>::INFO;
     assert_eq!(info.name, "ReciprocalLength");

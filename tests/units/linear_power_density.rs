@@ -992,6 +992,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<LinearPowerDensity>(LinearPowerDensity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = LinearPowerDensity::<f64>::INFO;
     assert_eq!(info.name, "LinearPowerDensity");

@@ -387,6 +387,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Duration>(Duration::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Duration::<f64>::INFO;
     assert_eq!(info.name, "Duration");

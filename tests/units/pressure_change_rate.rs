@@ -739,6 +739,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<PressureChangeRate>(PressureChangeRate::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = PressureChangeRate::<f64>::INFO;
     assert_eq!(info.name, "PressureChangeRate");

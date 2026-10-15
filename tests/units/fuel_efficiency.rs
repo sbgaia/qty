@@ -171,6 +171,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<FuelEfficiency>(FuelEfficiency::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = FuelEfficiency::<f64>::INFO;
     assert_eq!(info.name, "FuelEfficiency");

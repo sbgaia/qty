@@ -1187,6 +1187,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<SpecificEnergy>(SpecificEnergy::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = SpecificEnergy::<f64>::INFO;
     assert_eq!(info.name, "SpecificEnergy");

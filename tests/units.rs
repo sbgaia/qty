@@ -67,6 +67,42 @@ fn assert_close(actual: f64, expected: f64, rel_tol: f64) {
     );
 }
 
+/// Every abbreviation of every unit that parses as a unit expression must
+/// mean the same as the generated conversion. Returns how many were checked.
+#[allow(dead_code)]
+fn check_unit_exprs<Q: unitsnet_rs::Quantity<Value = f64>>(new: fn(f64, Q::Unit) -> Q) -> usize {
+    use unitsnet_rs::{UnitEnum, UnitExpr};
+    let mut checked = 0;
+    for &unit in <Q::Unit as UnitEnum>::ALL {
+        if new(0.0, unit).as_base() != 0.0 {
+            continue; // affine (°C): expressions mean differences
+        }
+        let one = new(1.0, unit).as_base();
+        for abbreviation in unit.info().abbreviations {
+            let Some(factor) = UnitExpr::parse(abbreviation)
+                .ok()
+                .and_then(|e| e.factor_to_base::<Q>())
+            else {
+                continue;
+            };
+            // UnitsNet defines lb/(in·s²) through a rounded standard gravity
+            // (386.0886 in/s² instead of 386.088 582 677…): 4.5e-8 apart.
+            let tolerance = if *abbreviation == "lb/(in·s²)" {
+                1e-7
+            } else {
+                1e-12
+            };
+            assert!(
+                (factor - one).abs() <= tolerance * one.abs(),
+                "{} {:?} ({abbreviation:?}): expression {factor}, conversion {one}",
+                Q::INFO.name,
+                unit
+            );
+            checked += 1;
+        }
+    }
+    checked
+}
 #[path = "units/absorbed_dose_of_ionizing_radiation.rs"]
 mod absorbed_dose_of_ionizing_radiation;
 #[path = "units/acceleration.rs"]

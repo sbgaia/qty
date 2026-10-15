@@ -1120,6 +1120,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<MassMomentOfInertia>(MassMomentOfInertia::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = MassMomentOfInertia::<f64>::INFO;
     assert_eq!(info.name, "MassMomentOfInertia");

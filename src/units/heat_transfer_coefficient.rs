@@ -93,19 +93,19 @@ impl HeatTransferCoefficientUnit {
         crate::UnitInfo {
             singular: "CaloriePerHourSquareMeterDegreeCelsius",
             plural: "CaloriesPerHourSquareMeterDegreeCelsius",
-            abbreviation: "kcal/(h·m²·°C)",
+            abbreviation: "cal/(h·m²·°C)",
             abbreviations: &[
-                "kcal/(h·m²·°C)",
-                "kcal/(m²·h·°C)",
-                "kcal/(hr·m²·°C)",
-                "kcal/(m²·hr·°C)",
+                "cal/(h·m²·°C)",
+                "cal/(m²·h·°C)",
+                "cal/(hr·m²·°C)",
+                "cal/(m²·hr·°C)",
             ],
         },
         crate::UnitInfo {
             singular: "KilocaloriePerHourSquareMeterDegreeCelsius",
             plural: "KilocaloriesPerHourSquareMeterDegreeCelsius",
-            abbreviation: "kkcal/(h·m²·°C)",
-            abbreviations: &["kkcal/(h·m²·°C)"],
+            abbreviation: "kcal/(h·m²·°C)",
+            abbreviations: &["kcal/(h·m²·°C)"],
         },
     ];
 
@@ -132,8 +132,8 @@ impl HeatTransferCoefficientUnit {
             Self::WattPerSquareMeterCelsius => "W/(m²·°C)",
             Self::BtuPerHourSquareFootDegreeFahrenheit => "Btu/(h·ft²·°F)",
             Self::BtuPerSecondSquareInchDegreeFahrenheit => "Btu/(s·in²·°F)",
-            Self::CaloriePerHourSquareMeterDegreeCelsius => "kcal/(h·m²·°C)",
-            Self::KilocaloriePerHourSquareMeterDegreeCelsius => "kkcal/(h·m²·°C)",
+            Self::CaloriePerHourSquareMeterDegreeCelsius => "cal/(h·m²·°C)",
+            Self::KilocaloriePerHourSquareMeterDegreeCelsius => "kcal/(h·m²·°C)",
         }
     }
 
@@ -156,12 +156,12 @@ impl HeatTransferCoefficientUnit {
                 "Btu/(in^2*s*degF)",
             ],
             Self::CaloriePerHourSquareMeterDegreeCelsius => &[
-                "kcal/(h·m²·°C)",
-                "kcal/(m²·h·°C)",
-                "kcal/(hr·m²·°C)",
-                "kcal/(m²·hr·°C)",
+                "cal/(h·m²·°C)",
+                "cal/(m²·h·°C)",
+                "cal/(hr·m²·°C)",
+                "cal/(m²·hr·°C)",
             ],
-            Self::KilocaloriePerHourSquareMeterDegreeCelsius => &["kkcal/(h·m²·°C)"],
+            Self::KilocaloriePerHourSquareMeterDegreeCelsius => &["kcal/(h·m²·°C)"],
         }
     }
 
@@ -221,11 +221,11 @@ impl core::str::FromStr for HeatTransferCoefficientUnit {
             "Btu/(in²·s·°F)" => Ok(Self::BtuPerSecondSquareInchDegreeFahrenheit),
             "Btu/(s*in^2*degF)" => Ok(Self::BtuPerSecondSquareInchDegreeFahrenheit),
             "Btu/(in^2*s*degF)" => Ok(Self::BtuPerSecondSquareInchDegreeFahrenheit),
-            "kcal/(h·m²·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
-            "kcal/(m²·h·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
-            "kcal/(hr·m²·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
-            "kcal/(m²·hr·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
-            "kkcal/(h·m²·°C)" => Ok(Self::KilocaloriePerHourSquareMeterDegreeCelsius),
+            "cal/(h·m²·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
+            "cal/(m²·h·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
+            "cal/(hr·m²·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
+            "cal/(m²·hr·°C)" => Ok(Self::CaloriePerHourSquareMeterDegreeCelsius),
+            "kcal/(h·m²·°C)" => Ok(Self::KilocaloriePerHourSquareMeterDegreeCelsius),
             _ => Self::from_name(s).ok_or(crate::ParseError::UnknownUnit),
         }
     }
@@ -358,13 +358,13 @@ impl<T: Float> HeatTransferCoefficient<T> {
         self.as_btus_per_second_square_inch_degree_fahrenheit()
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in CaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
+    /// Creates a [`HeatTransferCoefficient`] from a value in CaloriesPerHourSquareMeterDegreeCelsius (`cal/(h·m²·°C)`).
     #[inline]
     pub fn from_calories_per_hour_square_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(0.0011622222222222223))
     }
 
-    /// Returns the value expressed in CaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
+    /// Returns the value expressed in CaloriesPerHourSquareMeterDegreeCelsius (`cal/(h·m²·°C)`).
     #[inline]
     pub fn as_calories_per_hour_square_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(0.0011622222222222223)
@@ -376,13 +376,13 @@ impl<T: Float> HeatTransferCoefficient<T> {
         self.as_calories_per_hour_square_meter_degree_celsius()
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in KilocaloriesPerHourSquareMeterDegreeCelsius (`kkcal/(h·m²·°C)`).
+    /// Creates a [`HeatTransferCoefficient`] from a value in KilocaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(1.1622222222222223))
     }
 
-    /// Returns the value expressed in KilocaloriesPerHourSquareMeterDegreeCelsius (`kkcal/(h·m²·°C)`).
+    /// Returns the value expressed in KilocaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1.1622222222222223)

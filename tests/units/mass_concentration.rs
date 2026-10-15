@@ -1930,6 +1930,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<MassConcentration>(MassConcentration::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = MassConcentration::<f64>::INFO;
     assert_eq!(info.name, "MassConcentration");

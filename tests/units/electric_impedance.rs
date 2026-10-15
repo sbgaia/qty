@@ -297,6 +297,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ElectricImpedance>(ElectricImpedance::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ElectricImpedance::<f64>::INFO;
     assert_eq!(info.name, "ElectricImpedance");

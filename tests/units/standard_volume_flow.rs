@@ -378,6 +378,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<StandardVolumeFlow>(StandardVolumeFlow::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = StandardVolumeFlow::<f64>::INFO;
     assert_eq!(info.name, "StandardVolumeFlow");

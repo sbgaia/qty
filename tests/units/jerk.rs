@@ -443,6 +443,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Jerk>(Jerk::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Jerk::<f64>::INFO;
     assert_eq!(info.name, "Jerk");

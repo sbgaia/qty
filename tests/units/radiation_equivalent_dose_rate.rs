@@ -420,6 +420,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<RadiationEquivalentDoseRate>(RadiationEquivalentDoseRate::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = RadiationEquivalentDoseRate::<f64>::INFO;
     assert_eq!(info.name, "RadiationEquivalentDoseRate");

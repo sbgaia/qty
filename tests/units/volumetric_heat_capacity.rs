@@ -398,6 +398,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<VolumetricHeatCapacity>(VolumetricHeatCapacity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = VolumetricHeatCapacity::<f64>::INFO;
     assert_eq!(info.name, "VolumetricHeatCapacity");

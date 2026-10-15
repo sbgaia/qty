@@ -126,6 +126,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Molality>(Molality::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Molality::<f64>::INFO;
     assert_eq!(info.name, "Molality");

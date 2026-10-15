@@ -286,6 +286,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ElectricCapacitance>(ElectricCapacitance::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ElectricCapacitance::<f64>::INFO;
     assert_eq!(info.name, "ElectricCapacitance");

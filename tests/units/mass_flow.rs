@@ -1232,6 +1232,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<MassFlow>(MassFlow::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = MassFlow::<f64>::INFO;
     assert_eq!(info.name, "MassFlow");

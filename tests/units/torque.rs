@@ -1006,6 +1006,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Torque>(Torque::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Torque::<f64>::INFO;
     assert_eq!(info.name, "Torque");

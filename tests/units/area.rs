@@ -446,6 +446,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Area>(Area::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Area::<f64>::INFO;
     assert_eq!(info.name, "Area");

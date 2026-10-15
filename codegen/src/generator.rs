@@ -1215,6 +1215,13 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
         w!(out);
     }
 
+    // Unit expressions agree with the conversions.
+    w!(out, "#[test]");
+    w!(out, "fn unit_expressions_agree() {{");
+    w!(out, "    super::check_unit_exprs::<{name}>({name}::new);");
+    w!(out, "}}");
+    w!(out);
+
     // Metadata matches the unit enum.
     w!(out, "#[test]");
     w!(out, "fn unit_metadata() {{");

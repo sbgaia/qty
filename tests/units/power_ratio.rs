@@ -91,6 +91,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<PowerRatio>(PowerRatio::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = PowerRatio::<f64>::INFO;
     assert_eq!(info.name, "PowerRatio");

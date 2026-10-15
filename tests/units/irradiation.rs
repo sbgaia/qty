@@ -370,6 +370,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Irradiation>(Irradiation::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Irradiation::<f64>::INFO;
     assert_eq!(info.name, "Irradiation");

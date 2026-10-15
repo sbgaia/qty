@@ -945,6 +945,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<MassFraction>(MassFraction::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = MassFraction::<f64>::INFO;
     assert_eq!(info.name, "MassFraction");

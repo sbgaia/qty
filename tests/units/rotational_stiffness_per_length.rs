@@ -232,6 +232,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<RotationalStiffnessPerLength>(RotationalStiffnessPerLength::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = RotationalStiffnessPerLength::<f64>::INFO;
     assert_eq!(info.name, "RotationalStiffnessPerLength");

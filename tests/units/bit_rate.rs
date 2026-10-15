@@ -1518,6 +1518,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<BitRate>(BitRate::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = BitRate::<f64>::INFO;
     assert_eq!(info.name, "BitRate");

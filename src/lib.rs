@@ -683,7 +683,7 @@ macro_rules! quantity_fmt {
 /// base-unit access, zero-copy slice views, arithmetic operators,
 /// [`Quantity`], `Display` and `FromStr`.
 macro_rules! quantity_core {
-    ($Q:ident, $U:ident, $base:ident) => {
+    ($Q:ident, $U:ident, $base:ident, point: $point:literal) => {
         impl<T> $Q<T> {
             /// Wraps a value expressed in the base unit. Free and `const`.
             #[inline(always)]
@@ -952,7 +952,10 @@ macro_rules! quantity_core {
             }
         }
 
-        /// Parses a number followed by a unit abbreviation, e.g. `"1.5 km"`.
+        /// Parses a number followed by a unit: an abbreviation (`"1.5 km"`),
+        /// a name (`"1.5 kilometres"`) or, for quantities other than points,
+        /// an expression with the same dimensions (`"1.5 km/s*s"`, see
+        /// [`UnitExpr`](crate::UnitExpr)).
         impl<T: $crate::Float + core::str::FromStr> core::str::FromStr for $Q<T> {
             type Err = $crate::ParseError;
             fn from_str(s: &str) -> Result<Self, $crate::ParseError> {
@@ -960,7 +963,17 @@ macro_rules! quantity_core {
                 let value: T = number
                     .parse()
                     .map_err(|_| $crate::ParseError::InvalidNumber)?;
-                Ok(Self::new(value, unit.parse()?))
+                match unit.parse::<$U>() {
+                    Ok(unit) => Ok(Self::new(value, unit)),
+                    Err(e) if $point => Err(e),
+                    Err(e) => {
+                        let factor = $crate::UnitExpr::parse(unit)
+                            .ok()
+                            .and_then(|expr| expr.factor_to_base::<Self>())
+                            .ok_or(e)?;
+                        Ok(Self::from_base(value * T::from_f64(factor)))
+                    }
+                }
             }
         }
     };
@@ -1109,7 +1122,7 @@ macro_rules! quantity_vector_ops {
 /// operators, [`Quantity`], `Display` and `FromStr`.
 macro_rules! quantity {
     ($Q:ident, $U:ident, $base:ident) => {
-        quantity_core!($Q, $U, $base);
+        quantity_core!($Q, $U, $base, point: false);
         quantity_vector_ops!($Q);
     };
 }
@@ -1124,7 +1137,7 @@ macro_rules! quantity {
 /// `point / point` remains: it is a ratio of absolute values.
 macro_rules! point_quantity {
     ($Q:ident, $U:ident, $base:ident, $D:ident) => {
-        quantity_core!($Q, $U, $base);
+        quantity_core!($Q, $U, $base, point: true);
 
         impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
             type Output = $D<T>;
@@ -1425,6 +1438,9 @@ mod math;
 
 mod info;
 pub use info::{Dimensions, QuantityInfo, UnitInfo};
+
+mod unit_expr;
+pub use unit_expr::UnitExpr;
 
 mod vector;
 pub use vector::{Vector2, Vector3};

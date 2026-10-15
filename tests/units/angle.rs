@@ -448,6 +448,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Angle>(Angle::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Angle::<f64>::INFO;
     assert_eq!(info.name, "Angle");

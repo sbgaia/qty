@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Unit expressions: quantities parse any equivalent spelling of their unit
+  (`"3 kg*m/s^2"` as a `Force`, `"2 kN/m²"`, `"60 rev/min"`), checked by
+  dimensions, with angles tracked so that `Hz` and `rad/s` stay apart
+  (`UnitExpr`). A generated test parses 637 UnitsNet abbreviations as
+  expressions and compares them with the conversions.
 - Metadata: `Quantity::INFO` (name, description, `Dimensions`, units) and
   `unit.info()` (names and abbreviations).
 - MIT license (`LICENSE`).
@@ -123,6 +128,9 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- `"1 kcal/(h·m²·°C)"` parsed 1000× too small: UnitsNet abbreviates its
+  calorie-based unit as `kcal/…` (and the kilo variant as `kkcal/…`); the
+  generator now corrects it.
 - Cross-quantity relations ignored that some UnitsNet base units are not
   coherent SI units: `MassFlow * Duration` returned a `Mass` 1000× too large
   (MassFlow is stored in g/s), and volt-ampere-hour energies were off by

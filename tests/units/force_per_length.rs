@@ -1501,6 +1501,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ForcePerLength>(ForcePerLength::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ForcePerLength::<f64>::INFO;
     assert_eq!(info.name, "ForcePerLength");

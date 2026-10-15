@@ -2192,6 +2192,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Density>(Density::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Density::<f64>::INFO;
     assert_eq!(info.name, "Density");

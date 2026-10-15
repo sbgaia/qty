@@ -208,6 +208,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ElectricInductance>(ElectricInductance::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ElectricInductance::<f64>::INFO;
     assert_eq!(info.name, "ElectricInductance");

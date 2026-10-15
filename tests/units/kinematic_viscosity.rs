@@ -364,6 +364,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<KinematicViscosity>(KinematicViscosity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = KinematicViscosity::<f64>::INFO;
     assert_eq!(info.name, "KinematicViscosity");

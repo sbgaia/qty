@@ -442,6 +442,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Molarity>(Molarity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Molarity::<f64>::INFO;
     assert_eq!(info.name, "Molarity");

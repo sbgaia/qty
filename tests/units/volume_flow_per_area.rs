@@ -101,6 +101,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<VolumeFlowPerArea>(VolumeFlowPerArea::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = VolumeFlowPerArea::<f64>::INFO;
     assert_eq!(info.name, "VolumeFlowPerArea");

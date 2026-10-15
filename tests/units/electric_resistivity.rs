@@ -563,6 +563,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ElectricResistivity>(ElectricResistivity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ElectricResistivity::<f64>::INFO;
     assert_eq!(info.name, "ElectricResistivity");

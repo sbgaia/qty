@@ -853,6 +853,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Mass>(Mass::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Mass::<f64>::INFO;
     assert_eq!(info.name, "Mass");

@@ -375,6 +375,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<SpecificEntropy>(SpecificEntropy::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = SpecificEntropy::<f64>::INFO;
     assert_eq!(info.name, "SpecificEntropy");

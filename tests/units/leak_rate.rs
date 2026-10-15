@@ -174,6 +174,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<LeakRate>(LeakRate::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = LeakRate::<f64>::INFO;
     assert_eq!(info.name, "LeakRate");

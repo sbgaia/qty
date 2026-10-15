@@ -43,6 +43,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Scalar>(Scalar::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Scalar::<f64>::INFO;
     assert_eq!(info.name, "Scalar");

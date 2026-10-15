@@ -1096,6 +1096,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Radioactivity>(Radioactivity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Radioactivity::<f64>::INFO;
     assert_eq!(info.name, "Radioactivity");

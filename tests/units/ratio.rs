@@ -206,6 +206,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Ratio>(Ratio::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Ratio::<f64>::INFO;
     assert_eq!(info.name, "Ratio");

@@ -168,6 +168,10 @@ assert_eq!(warmer.count(), 22_375);
 ```rust
 use unitsnet_rs::*;
 
+// Any equivalent spelling of the unit, checked by dimensions.
+assert_eq!("3 kg*m/s^2".parse::<Force>(), Ok(Force::from_newtons(3.0)));
+assert_eq!(Force::<f64>::INFO.dimensions.to_string(), "L·M·T⁻²");
+
 let d = Length::from_meters(1234.5);
 assert_eq!(d.to_string(), "1234.5 m");
 assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");

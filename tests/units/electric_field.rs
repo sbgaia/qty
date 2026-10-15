@@ -56,6 +56,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<ElectricField>(ElectricField::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = ElectricField::<f64>::INFO;
     assert_eq!(info.name, "ElectricField");

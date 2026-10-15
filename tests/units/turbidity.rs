@@ -44,6 +44,11 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_expressions_agree() {
+    super::check_unit_exprs::<Turbidity>(Turbidity::new);
+}
+
+#[test]
 fn unit_metadata() {
     let info = Turbidity::<f64>::INFO;
     assert_eq!(info.name, "Turbidity");
