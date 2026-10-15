@@ -61,6 +61,78 @@ impl StandardVolumeFlowUnit {
         Self::StandardCubicFootPerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "StandardCubicMeterPerSecond",
+            plural: "StandardCubicMetersPerSecond",
+            abbreviation: "Sm³/s",
+            abbreviations: &["Sm³/s"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicMeterPerMinute",
+            plural: "StandardCubicMetersPerMinute",
+            abbreviation: "Sm³/min",
+            abbreviations: &["Sm³/min"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicMeterPerHour",
+            plural: "StandardCubicMetersPerHour",
+            abbreviation: "Sm³/h",
+            abbreviations: &["Sm³/h"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicMeterPerDay",
+            plural: "StandardCubicMetersPerDay",
+            abbreviation: "Sm³/d",
+            abbreviations: &["Sm³/d"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicCentimeterPerMinute",
+            plural: "StandardCubicCentimetersPerMinute",
+            abbreviation: "sccm",
+            abbreviations: &["sccm"],
+        },
+        crate::UnitInfo {
+            singular: "StandardLiterPerMinute",
+            plural: "StandardLitersPerMinute",
+            abbreviation: "slm",
+            abbreviations: &["slm"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicFootPerSecond",
+            plural: "StandardCubicFeetPerSecond",
+            abbreviation: "Sft³/s",
+            abbreviations: &["Sft³/s"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicFootPerMinute",
+            plural: "StandardCubicFeetPerMinute",
+            abbreviation: "scfm",
+            abbreviations: &["scfm"],
+        },
+        crate::UnitInfo {
+            singular: "StandardCubicFootPerHour",
+            plural: "StandardCubicFeetPerHour",
+            abbreviation: "scfh",
+            abbreviations: &["scfh"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`StandardVolumeFlow`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "StandardVolumeFlow",
+        description: "The molar flow rate of a gas corrected to standardized conditions of temperature and pressure thus representing a fixed number of moles of gas regardless of composition and actual flow conditions.",
+        dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

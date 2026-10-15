@@ -69,6 +69,108 @@ impl MolarMassUnit {
         Self::PoundPerPoundMole,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerMole",
+            plural: "GramsPerMole",
+            abbreviation: "g/mol",
+            abbreviations: &["g/mol"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerMole",
+            plural: "NanogramsPerMole",
+            abbreviation: "ng/mol",
+            abbreviations: &["ng/mol"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerMole",
+            plural: "MicrogramsPerMole",
+            abbreviation: "µg/mol",
+            abbreviations: &["µg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerMole",
+            plural: "MilligramsPerMole",
+            abbreviation: "mg/mol",
+            abbreviations: &["mg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerMole",
+            plural: "CentigramsPerMole",
+            abbreviation: "cg/mol",
+            abbreviations: &["cg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerMole",
+            plural: "DecigramsPerMole",
+            abbreviation: "dg/mol",
+            abbreviations: &["dg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "DecagramPerMole",
+            plural: "DecagramsPerMole",
+            abbreviation: "dag/mol",
+            abbreviations: &["dag/mol"],
+        },
+        crate::UnitInfo {
+            singular: "HectogramPerMole",
+            plural: "HectogramsPerMole",
+            abbreviation: "hg/mol",
+            abbreviations: &["hg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerMole",
+            plural: "KilogramsPerMole",
+            abbreviation: "kg/mol",
+            abbreviations: &["kg/mol"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerKilomole",
+            plural: "KilogramsPerKilomole",
+            abbreviation: "kg/kmol",
+            abbreviations: &["kg/kmol"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerMole",
+            plural: "PoundsPerMole",
+            abbreviation: "lb/mol",
+            abbreviations: &["lb/mol"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundPerMole",
+            plural: "KilopoundsPerMole",
+            abbreviation: "klb/mol",
+            abbreviations: &["klb/mol"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundPerMole",
+            plural: "MegapoundsPerMole",
+            abbreviation: "Mlb/mol",
+            abbreviations: &["Mlb/mol"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerPoundMole",
+            plural: "PoundsPerPoundMole",
+            abbreviation: "lb/lbmol",
+            abbreviations: &["lb/lbmol", "lbm/lbmol"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MolarMass`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MolarMass",
+        description: "In chemistry, the molar mass M is a physical property defined as the mass of a given substance (chemical element or chemical compound) divided by the amount of substance.",
+        dimensions: crate::Dimensions::new(0, 1, 0, 0, 0, -1, 0),
+        base_unit: &Self::INFOS[8],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -148,6 +148,324 @@ impl PressureUnit {
         Self::MilligramForcePerSquareFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Pascal",
+            plural: "Pascals",
+            abbreviation: "Pa",
+            abbreviations: &["Pa"],
+        },
+        crate::UnitInfo {
+            singular: "Micropascal",
+            plural: "Micropascals",
+            abbreviation: "µPa",
+            abbreviations: &["µPa"],
+        },
+        crate::UnitInfo {
+            singular: "Millipascal",
+            plural: "Millipascals",
+            abbreviation: "mPa",
+            abbreviations: &["mPa"],
+        },
+        crate::UnitInfo {
+            singular: "Decapascal",
+            plural: "Decapascals",
+            abbreviation: "daPa",
+            abbreviations: &["daPa"],
+        },
+        crate::UnitInfo {
+            singular: "Hectopascal",
+            plural: "Hectopascals",
+            abbreviation: "hPa",
+            abbreviations: &["hPa"],
+        },
+        crate::UnitInfo {
+            singular: "Kilopascal",
+            plural: "Kilopascals",
+            abbreviation: "kPa",
+            abbreviations: &["kPa"],
+        },
+        crate::UnitInfo {
+            singular: "Megapascal",
+            plural: "Megapascals",
+            abbreviation: "MPa",
+            abbreviations: &["MPa"],
+        },
+        crate::UnitInfo {
+            singular: "Gigapascal",
+            plural: "Gigapascals",
+            abbreviation: "GPa",
+            abbreviations: &["GPa"],
+        },
+        crate::UnitInfo {
+            singular: "Atmosphere",
+            plural: "Atmospheres",
+            abbreviation: "atm",
+            abbreviations: &["atm"],
+        },
+        crate::UnitInfo {
+            singular: "Bar",
+            plural: "Bars",
+            abbreviation: "bar",
+            abbreviations: &["bar"],
+        },
+        crate::UnitInfo {
+            singular: "Microbar",
+            plural: "Microbars",
+            abbreviation: "µbar",
+            abbreviations: &["µbar"],
+        },
+        crate::UnitInfo {
+            singular: "Millibar",
+            plural: "Millibars",
+            abbreviation: "mbar",
+            abbreviations: &["mbar"],
+        },
+        crate::UnitInfo {
+            singular: "Centibar",
+            plural: "Centibars",
+            abbreviation: "cbar",
+            abbreviations: &["cbar"],
+        },
+        crate::UnitInfo {
+            singular: "Decibar",
+            plural: "Decibars",
+            abbreviation: "dbar",
+            abbreviations: &["dbar"],
+        },
+        crate::UnitInfo {
+            singular: "Kilobar",
+            plural: "Kilobars",
+            abbreviation: "kbar",
+            abbreviations: &["kbar"],
+        },
+        crate::UnitInfo {
+            singular: "Megabar",
+            plural: "Megabars",
+            abbreviation: "Mbar",
+            abbreviations: &["Mbar"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerSquareMeter",
+            plural: "KilogramsForcePerSquareMeter",
+            abbreviation: "kgf/m²",
+            abbreviations: &["kgf/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerSquareCentimeter",
+            plural: "KilogramsForcePerSquareCentimeter",
+            abbreviation: "kgf/cm²",
+            abbreviations: &["kgf/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerSquareMillimeter",
+            plural: "KilogramsForcePerSquareMillimeter",
+            abbreviation: "kgf/mm²",
+            abbreviations: &["kgf/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerSquareMeter",
+            plural: "NewtonsPerSquareMeter",
+            abbreviation: "N/m²",
+            abbreviations: &["N/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerSquareMeter",
+            plural: "KilonewtonsPerSquareMeter",
+            abbreviation: "kN/m²",
+            abbreviations: &["kN/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonPerSquareMeter",
+            plural: "MeganewtonsPerSquareMeter",
+            abbreviation: "MN/m²",
+            abbreviations: &["MN/m²"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerSquareCentimeter",
+            plural: "NewtonsPerSquareCentimeter",
+            abbreviation: "N/cm²",
+            abbreviations: &["N/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerSquareCentimeter",
+            plural: "KilonewtonsPerSquareCentimeter",
+            abbreviation: "kN/cm²",
+            abbreviations: &["kN/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerSquareMillimeter",
+            plural: "NewtonsPerSquareMillimeter",
+            abbreviation: "N/mm²",
+            abbreviations: &["N/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerSquareMillimeter",
+            plural: "KilonewtonsPerSquareMillimeter",
+            abbreviation: "kN/mm²",
+            abbreviations: &["kN/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "TechnicalAtmosphere",
+            plural: "TechnicalAtmospheres",
+            abbreviation: "at",
+            abbreviations: &["at"],
+        },
+        crate::UnitInfo {
+            singular: "Torr",
+            plural: "Torrs",
+            abbreviation: "torr",
+            abbreviations: &["torr"],
+        },
+        crate::UnitInfo {
+            singular: "Millitorr",
+            plural: "Millitorrs",
+            abbreviation: "mtorr",
+            abbreviations: &["mtorr"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSquareInch",
+            plural: "PoundsForcePerSquareInch",
+            abbreviation: "psi",
+            abbreviations: &["psi", "lb/in²"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSquareInch",
+            plural: "KilopoundsForcePerSquareInch",
+            abbreviation: "kpsi",
+            abbreviations: &["kpsi"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSquareMil",
+            plural: "PoundsForcePerSquareMil",
+            abbreviation: "lb/mil²",
+            abbreviations: &["lb/mil²", "lbs/mil²"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSquareMil",
+            plural: "KilopoundsForcePerSquareMil",
+            abbreviation: "klb/mil²",
+            abbreviations: &["klb/mil²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSquareFoot",
+            plural: "PoundsForcePerSquareFoot",
+            abbreviation: "lb/ft²",
+            abbreviations: &["lb/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSquareFoot",
+            plural: "KilopoundsForcePerSquareFoot",
+            abbreviation: "klb/ft²",
+            abbreviations: &["klb/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerSquareMillimeter",
+            plural: "TonnesForcePerSquareMillimeter",
+            abbreviation: "tf/mm²",
+            abbreviations: &["tf/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerSquareMeter",
+            plural: "TonnesForcePerSquareMeter",
+            abbreviation: "tf/m²",
+            abbreviations: &["tf/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MeterOfHead",
+            plural: "MetersOfHead",
+            abbreviation: "m of head",
+            abbreviations: &["m of head"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerSquareCentimeter",
+            plural: "TonnesForcePerSquareCentimeter",
+            abbreviation: "tf/cm²",
+            abbreviations: &["tf/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "FootOfHead",
+            plural: "FeetOfHead",
+            abbreviation: "ft of head",
+            abbreviations: &["ft of head"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterOfMercury",
+            plural: "MillimetersOfMercury",
+            abbreviation: "mmHg",
+            abbreviations: &["mmHg"],
+        },
+        crate::UnitInfo {
+            singular: "InchOfMercury",
+            plural: "InchesOfMercury",
+            abbreviation: "inHg",
+            abbreviations: &["inHg"],
+        },
+        crate::UnitInfo {
+            singular: "DynePerSquareCentimeter",
+            plural: "DynesPerSquareCentimeter",
+            abbreviation: "dyn/cm²",
+            abbreviations: &["dyn/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerInchSecondSquared",
+            plural: "PoundsPerInchSecondSquared",
+            abbreviation: "lbm/(in·s²)",
+            abbreviations: &["lbm/(in·s²)", "lb/(in·s²)"],
+        },
+        crate::UnitInfo {
+            singular: "MeterOfWaterColumn",
+            plural: "MetersOfWaterColumn",
+            abbreviation: "mH₂O",
+            abbreviations: &["mH₂O", "mH2O", "m wc", "m wg"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterOfWaterColumn",
+            plural: "MillimetersOfWaterColumn",
+            abbreviation: "mmH₂O",
+            abbreviations: &["mmH₂O"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterOfWaterColumn",
+            plural: "CentimetersOfWaterColumn",
+            abbreviation: "cmH₂O",
+            abbreviations: &["cmH₂O"],
+        },
+        crate::UnitInfo {
+            singular: "InchOfWaterColumn",
+            plural: "InchesOfWaterColumn",
+            abbreviation: "inH2O",
+            abbreviations: &["inH2O", "inch wc", "wc"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramForcePerSquareMeter",
+            plural: "MilligramsForcePerSquareMeter",
+            abbreviation: "mgf/m²",
+            abbreviations: &["mgf/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramForcePerSquareFoot",
+            plural: "MilligramsForcePerSquareFoot",
+            abbreviation: "mgf/ft²",
+            abbreviations: &["mgf/ft²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Pressure`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Pressure",
+        description: "Pressure (symbol: P or p) is the ratio of force to the area over which that force is distributed. Pressure is force per unit area applied in a direction perpendicular to the surface of an object. Gauge pressure (also spelled gage pressure)[a] is the pressure relative to the local atmospheric or ambient pressure. Pressure is measured in any unit of force divided by any unit of area. The SI unit of pressure is the newton per square metre, which is called the pascal (Pa) after the seventeenth-century philosopher and scientist Blaise Pascal. A pressure of 1 Pa is small; it approximately equals the pressure exerted by a dollar bill resting flat on a table. Everyday pressures are often stated in kilopascals (1 kPa = 1000 Pa).",
+        dimensions: crate::Dimensions::new(-1, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

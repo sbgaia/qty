@@ -106,6 +106,222 @@ impl SpeedUnit {
         Self::Mach,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MeterPerSecond",
+            plural: "MetersPerSecond",
+            abbreviation: "m/s",
+            abbreviations: &["m/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanometerPerSecond",
+            plural: "NanometersPerSecond",
+            abbreviation: "nm/s",
+            abbreviations: &["nm/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrometerPerSecond",
+            plural: "MicrometersPerSecond",
+            abbreviation: "µm/s",
+            abbreviations: &["µm/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterPerSecond",
+            plural: "MillimetersPerSecond",
+            abbreviation: "mm/s",
+            abbreviations: &["mm/s"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterPerSecond",
+            plural: "CentimetersPerSecond",
+            abbreviation: "cm/s",
+            abbreviations: &["cm/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterPerSecond",
+            plural: "DecimetersPerSecond",
+            abbreviation: "dm/s",
+            abbreviations: &["dm/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerSecond",
+            plural: "KilometersPerSecond",
+            abbreviation: "km/s",
+            abbreviations: &["km/s"],
+        },
+        crate::UnitInfo {
+            singular: "MeterPerMinute",
+            plural: "MetersPerMinute",
+            abbreviation: "m/min",
+            abbreviations: &["m/min"],
+        },
+        crate::UnitInfo {
+            singular: "NanometerPerMinute",
+            plural: "NanometersPerMinute",
+            abbreviation: "nm/min",
+            abbreviations: &["nm/min"],
+        },
+        crate::UnitInfo {
+            singular: "MicrometerPerMinute",
+            plural: "MicrometersPerMinute",
+            abbreviation: "µm/min",
+            abbreviations: &["µm/min"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterPerMinute",
+            plural: "MillimetersPerMinute",
+            abbreviation: "mm/min",
+            abbreviations: &["mm/min"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterPerMinute",
+            plural: "CentimetersPerMinute",
+            abbreviation: "cm/min",
+            abbreviations: &["cm/min"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterPerMinute",
+            plural: "DecimetersPerMinute",
+            abbreviation: "dm/min",
+            abbreviations: &["dm/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerMinute",
+            plural: "KilometersPerMinute",
+            abbreviation: "km/min",
+            abbreviations: &["km/min"],
+        },
+        crate::UnitInfo {
+            singular: "MeterPerHour",
+            plural: "MetersPerHour",
+            abbreviation: "m/h",
+            abbreviations: &["m/h"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterPerHour",
+            plural: "MillimetersPerHour",
+            abbreviation: "mm/h",
+            abbreviations: &["mm/h"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterPerHour",
+            plural: "CentimetersPerHour",
+            abbreviation: "cm/h",
+            abbreviations: &["cm/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerHour",
+            plural: "KilometersPerHour",
+            abbreviation: "km/h",
+            abbreviations: &["km/h"],
+        },
+        crate::UnitInfo {
+            singular: "FootPerSecond",
+            plural: "FeetPerSecond",
+            abbreviation: "ft/s",
+            abbreviations: &["ft/s"],
+        },
+        crate::UnitInfo {
+            singular: "FootPerMinute",
+            plural: "FeetPerMinute",
+            abbreviation: "ft/min",
+            abbreviations: &["ft/min"],
+        },
+        crate::UnitInfo {
+            singular: "FootPerHour",
+            plural: "FeetPerHour",
+            abbreviation: "ft/h",
+            abbreviations: &["ft/h"],
+        },
+        crate::UnitInfo {
+            singular: "UsSurveyFootPerSecond",
+            plural: "UsSurveyFeetPerSecond",
+            abbreviation: "ftUS/s",
+            abbreviations: &["ftUS/s"],
+        },
+        crate::UnitInfo {
+            singular: "UsSurveyFootPerMinute",
+            plural: "UsSurveyFeetPerMinute",
+            abbreviation: "ftUS/min",
+            abbreviations: &["ftUS/min"],
+        },
+        crate::UnitInfo {
+            singular: "UsSurveyFootPerHour",
+            plural: "UsSurveyFeetPerHour",
+            abbreviation: "ftUS/h",
+            abbreviations: &["ftUS/h"],
+        },
+        crate::UnitInfo {
+            singular: "InchPerSecond",
+            plural: "InchesPerSecond",
+            abbreviation: "in/s",
+            abbreviations: &["in/s"],
+        },
+        crate::UnitInfo {
+            singular: "InchPerMinute",
+            plural: "InchesPerMinute",
+            abbreviation: "in/min",
+            abbreviations: &["in/min"],
+        },
+        crate::UnitInfo {
+            singular: "InchPerHour",
+            plural: "InchesPerHour",
+            abbreviation: "in/h",
+            abbreviations: &["in/h"],
+        },
+        crate::UnitInfo {
+            singular: "YardPerSecond",
+            plural: "YardsPerSecond",
+            abbreviation: "yd/s",
+            abbreviations: &["yd/s"],
+        },
+        crate::UnitInfo {
+            singular: "YardPerMinute",
+            plural: "YardsPerMinute",
+            abbreviation: "yd/min",
+            abbreviations: &["yd/min"],
+        },
+        crate::UnitInfo {
+            singular: "YardPerHour",
+            plural: "YardsPerHour",
+            abbreviation: "yd/h",
+            abbreviations: &["yd/h"],
+        },
+        crate::UnitInfo {
+            singular: "Knot",
+            plural: "Knots",
+            abbreviation: "kn",
+            abbreviations: &["kn", "kt", "knot", "knots"],
+        },
+        crate::UnitInfo {
+            singular: "MilePerHour",
+            plural: "MilesPerHour",
+            abbreviation: "mph",
+            abbreviations: &["mph"],
+        },
+        crate::UnitInfo {
+            singular: "Mach",
+            plural: "Mach",
+            abbreviation: "M",
+            abbreviations: &["M", "Ma", "MN", "MACH"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Speed`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Speed",
+        description: "In everyday use and in kinematics, the speed of an object is the magnitude of its velocity (the rate of change of its position); it is thus a scalar quantity.[1] The average speed of an object in an interval of time is the distance travelled by the object divided by the duration of the interval;[2] the instantaneous speed is the limit of the average speed as the duration of the time interval approaches zero.",
+        dimensions: crate::Dimensions::new(1, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -55,6 +55,61 @@ impl WarpingMomentOfInertiaUnit {
         Self::InchToTheSixth,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MeterToTheSixth",
+            plural: "MetersToTheSixth",
+            abbreviation: "m⁶",
+            abbreviations: &["m⁶"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterToTheSixth",
+            plural: "DecimetersToTheSixth",
+            abbreviation: "dm⁶",
+            abbreviations: &["dm⁶"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterToTheSixth",
+            plural: "CentimetersToTheSixth",
+            abbreviation: "cm⁶",
+            abbreviations: &["cm⁶"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterToTheSixth",
+            plural: "MillimetersToTheSixth",
+            abbreviation: "mm⁶",
+            abbreviations: &["mm⁶"],
+        },
+        crate::UnitInfo {
+            singular: "FootToTheSixth",
+            plural: "FeetToTheSixth",
+            abbreviation: "ft⁶",
+            abbreviations: &["ft⁶"],
+        },
+        crate::UnitInfo {
+            singular: "InchToTheSixth",
+            plural: "InchesToTheSixth",
+            abbreviation: "in⁶",
+            abbreviations: &["in⁶"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`WarpingMomentOfInertia`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "WarpingMomentOfInertia",
+        description:
+            "A geometric property of an area that is used to determine the warping stress.",
+        dimensions: crate::Dimensions::new(6, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

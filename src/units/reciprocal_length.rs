@@ -59,6 +59,84 @@ impl ReciprocalLengthUnit {
         Self::InverseMicroinch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "InverseMeter",
+            plural: "InverseMeters",
+            abbreviation: "m⁻¹",
+            abbreviations: &["m⁻¹", "1/m"],
+        },
+        crate::UnitInfo {
+            singular: "InverseCentimeter",
+            plural: "InverseCentimeters",
+            abbreviation: "cm⁻¹",
+            abbreviations: &["cm⁻¹", "1/cm"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMillimeter",
+            plural: "InverseMillimeters",
+            abbreviation: "mm⁻¹",
+            abbreviations: &["mm⁻¹", "1/mm"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMile",
+            plural: "InverseMiles",
+            abbreviation: "mi⁻¹",
+            abbreviations: &["mi⁻¹", "1/mi"],
+        },
+        crate::UnitInfo {
+            singular: "InverseYard",
+            plural: "InverseYards",
+            abbreviation: "yd⁻¹",
+            abbreviations: &["yd⁻¹", "1/yd"],
+        },
+        crate::UnitInfo {
+            singular: "InverseFoot",
+            plural: "InverseFeet",
+            abbreviation: "ft⁻¹",
+            abbreviations: &["ft⁻¹", "1/ft"],
+        },
+        crate::UnitInfo {
+            singular: "InverseUsSurveyFoot",
+            plural: "InverseUsSurveyFeet",
+            abbreviation: "ftUS⁻¹",
+            abbreviations: &["ftUS⁻¹", "1/ftUS"],
+        },
+        crate::UnitInfo {
+            singular: "InverseInch",
+            plural: "InverseInches",
+            abbreviation: "in⁻¹",
+            abbreviations: &["in⁻¹", "1/in"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMil",
+            plural: "InverseMils",
+            abbreviation: "mil⁻¹",
+            abbreviations: &["mil⁻¹", "1/mil"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMicroinch",
+            plural: "InverseMicroinches",
+            abbreviation: "µin⁻¹",
+            abbreviations: &["µin⁻¹", "1/µin"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ReciprocalLength`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ReciprocalLength",
+        description: "Reciprocal (Inverse) Length is used in various fields of science and mathematics. It is defined as the inverse value of a length unit.",
+        dimensions: crate::Dimensions::new(-1, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

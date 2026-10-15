@@ -141,6 +141,276 @@ impl LengthUnit {
         Self::DataMile,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Meter",
+            plural: "Meters",
+            abbreviation: "m",
+            abbreviations: &["m"],
+        },
+        crate::UnitInfo {
+            singular: "Femtometer",
+            plural: "Femtometers",
+            abbreviation: "fm",
+            abbreviations: &["fm"],
+        },
+        crate::UnitInfo {
+            singular: "Picometer",
+            plural: "Picometers",
+            abbreviation: "pm",
+            abbreviations: &["pm"],
+        },
+        crate::UnitInfo {
+            singular: "Nanometer",
+            plural: "Nanometers",
+            abbreviation: "nm",
+            abbreviations: &["nm"],
+        },
+        crate::UnitInfo {
+            singular: "Micrometer",
+            plural: "Micrometers",
+            abbreviation: "µm",
+            abbreviations: &["µm"],
+        },
+        crate::UnitInfo {
+            singular: "Millimeter",
+            plural: "Millimeters",
+            abbreviation: "mm",
+            abbreviations: &["mm"],
+        },
+        crate::UnitInfo {
+            singular: "Centimeter",
+            plural: "Centimeters",
+            abbreviation: "cm",
+            abbreviations: &["cm"],
+        },
+        crate::UnitInfo {
+            singular: "Decimeter",
+            plural: "Decimeters",
+            abbreviation: "dm",
+            abbreviations: &["dm"],
+        },
+        crate::UnitInfo {
+            singular: "Decameter",
+            plural: "Decameters",
+            abbreviation: "dam",
+            abbreviations: &["dam"],
+        },
+        crate::UnitInfo {
+            singular: "Hectometer",
+            plural: "Hectometers",
+            abbreviation: "hm",
+            abbreviations: &["hm"],
+        },
+        crate::UnitInfo {
+            singular: "Kilometer",
+            plural: "Kilometers",
+            abbreviation: "km",
+            abbreviations: &["km"],
+        },
+        crate::UnitInfo {
+            singular: "Megameter",
+            plural: "Megameters",
+            abbreviation: "Mm",
+            abbreviations: &["Mm"],
+        },
+        crate::UnitInfo {
+            singular: "Gigameter",
+            plural: "Gigameters",
+            abbreviation: "Gm",
+            abbreviations: &["Gm"],
+        },
+        crate::UnitInfo {
+            singular: "Mile",
+            plural: "Miles",
+            abbreviation: "mi",
+            abbreviations: &["mi"],
+        },
+        crate::UnitInfo {
+            singular: "Yard",
+            plural: "Yards",
+            abbreviation: "yd",
+            abbreviations: &["yd"],
+        },
+        crate::UnitInfo {
+            singular: "Kiloyard",
+            plural: "Kiloyards",
+            abbreviation: "kyd",
+            abbreviations: &["kyd"],
+        },
+        crate::UnitInfo {
+            singular: "Foot",
+            plural: "Feet",
+            abbreviation: "ft",
+            abbreviations: &["ft", "'", "′"],
+        },
+        crate::UnitInfo {
+            singular: "Kilofoot",
+            plural: "Kilofeet",
+            abbreviation: "kft",
+            abbreviations: &["kft"],
+        },
+        crate::UnitInfo {
+            singular: "UsSurveyFoot",
+            plural: "UsSurveyFeet",
+            abbreviation: "ftUS",
+            abbreviations: &["ftUS"],
+        },
+        crate::UnitInfo {
+            singular: "Inch",
+            plural: "Inches",
+            abbreviation: "in",
+            abbreviations: &["in", "\\\"", "″"],
+        },
+        crate::UnitInfo {
+            singular: "Mil",
+            plural: "Mils",
+            abbreviation: "mil",
+            abbreviations: &["mil"],
+        },
+        crate::UnitInfo {
+            singular: "NauticalMile",
+            plural: "NauticalMiles",
+            abbreviation: "NM",
+            abbreviations: &["NM", "nmi"],
+        },
+        crate::UnitInfo {
+            singular: "Fathom",
+            plural: "Fathoms",
+            abbreviation: "fathom",
+            abbreviations: &["fathom"],
+        },
+        crate::UnitInfo {
+            singular: "Shackle",
+            plural: "Shackles",
+            abbreviation: "shackle",
+            abbreviations: &["shackle"],
+        },
+        crate::UnitInfo {
+            singular: "Microinch",
+            plural: "Microinches",
+            abbreviation: "µin",
+            abbreviations: &["µin"],
+        },
+        crate::UnitInfo {
+            singular: "PrinterPoint",
+            plural: "PrinterPoints",
+            abbreviation: "pt",
+            abbreviations: &["pt"],
+        },
+        crate::UnitInfo {
+            singular: "DtpPoint",
+            plural: "DtpPoints",
+            abbreviation: "pt",
+            abbreviations: &["pt"],
+        },
+        crate::UnitInfo {
+            singular: "PrinterPica",
+            plural: "PrinterPicas",
+            abbreviation: "pica",
+            abbreviations: &["pica"],
+        },
+        crate::UnitInfo {
+            singular: "DtpPica",
+            plural: "DtpPicas",
+            abbreviation: "pica",
+            abbreviations: &["pica"],
+        },
+        crate::UnitInfo {
+            singular: "Twip",
+            plural: "Twips",
+            abbreviation: "twip",
+            abbreviations: &["twip"],
+        },
+        crate::UnitInfo {
+            singular: "Hand",
+            plural: "Hands",
+            abbreviation: "h",
+            abbreviations: &["h", "hh"],
+        },
+        crate::UnitInfo {
+            singular: "AstronomicalUnit",
+            plural: "AstronomicalUnits",
+            abbreviation: "au",
+            abbreviations: &["au", "ua"],
+        },
+        crate::UnitInfo {
+            singular: "Parsec",
+            plural: "Parsecs",
+            abbreviation: "pc",
+            abbreviations: &["pc"],
+        },
+        crate::UnitInfo {
+            singular: "Kiloparsec",
+            plural: "Kiloparsecs",
+            abbreviation: "kpc",
+            abbreviations: &["kpc"],
+        },
+        crate::UnitInfo {
+            singular: "Megaparsec",
+            plural: "Megaparsecs",
+            abbreviation: "Mpc",
+            abbreviations: &["Mpc"],
+        },
+        crate::UnitInfo {
+            singular: "LightYear",
+            plural: "LightYears",
+            abbreviation: "ly",
+            abbreviations: &["ly"],
+        },
+        crate::UnitInfo {
+            singular: "KilolightYear",
+            plural: "KilolightYears",
+            abbreviation: "kly",
+            abbreviations: &["kly"],
+        },
+        crate::UnitInfo {
+            singular: "MegalightYear",
+            plural: "MegalightYears",
+            abbreviation: "Mly",
+            abbreviations: &["Mly"],
+        },
+        crate::UnitInfo {
+            singular: "SolarRadius",
+            plural: "SolarRadiuses",
+            abbreviation: "R⊙",
+            abbreviations: &["R⊙"],
+        },
+        crate::UnitInfo {
+            singular: "Chain",
+            plural: "Chains",
+            abbreviation: "ch",
+            abbreviations: &["ch"],
+        },
+        crate::UnitInfo {
+            singular: "Angstrom",
+            plural: "Angstroms",
+            abbreviation: "Å",
+            abbreviations: &["Å", "A"],
+        },
+        crate::UnitInfo {
+            singular: "DataMile",
+            plural: "DataMiles",
+            abbreviation: "DM",
+            abbreviations: &["DM"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Length`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Length",
+        description: "Many different units of length have been used around the world. The main units in modern use are U.S. customary units in the United States and the Metric system elsewhere. British Imperial units are still used for some purposes in the United Kingdom and some other countries. The metric system is sub-divided into SI and non-SI units.",
+        dimensions: crate::Dimensions::new(1, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

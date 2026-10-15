@@ -39,6 +39,28 @@ impl RelativeHumidityUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::Percent];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "Percent",
+        plural: "Percent",
+        abbreviation: "%RH",
+        abbreviations: &["%RH"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RelativeHumidity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RelativeHumidity",
+        description: "Relative humidity is a ratio of the actual water vapor present in the air to the maximum water vapor in the air at the given temperature.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -39,6 +39,28 @@ impl ScalarUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::Amount];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "Amount",
+        plural: "Amount",
+        abbreviation: "",
+        abbreviations: &[""],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Scalar`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Scalar",
+        description: "A way of representing a number of items.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

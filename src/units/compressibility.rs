@@ -51,6 +51,66 @@ impl CompressibilityUnit {
         Self::InversePoundForcePerSquareInch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "InversePascal",
+            plural: "InversePascals",
+            abbreviation: "Pa⁻¹",
+            abbreviations: &["Pa⁻¹", "1/Pa"],
+        },
+        crate::UnitInfo {
+            singular: "InverseKilopascal",
+            plural: "InverseKilopascals",
+            abbreviation: "kPa⁻¹",
+            abbreviations: &["kPa⁻¹", "1/kPa"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMegapascal",
+            plural: "InverseMegapascals",
+            abbreviation: "MPa⁻¹",
+            abbreviations: &["MPa⁻¹", "1/MPa"],
+        },
+        crate::UnitInfo {
+            singular: "InverseAtmosphere",
+            plural: "InverseAtmospheres",
+            abbreviation: "atm⁻¹",
+            abbreviations: &["atm⁻¹", "1/atm"],
+        },
+        crate::UnitInfo {
+            singular: "InverseMillibar",
+            plural: "InverseMillibars",
+            abbreviation: "mbar⁻¹",
+            abbreviations: &["mbar⁻¹", "1/mbar"],
+        },
+        crate::UnitInfo {
+            singular: "InverseBar",
+            plural: "InverseBars",
+            abbreviation: "bar⁻¹",
+            abbreviations: &["bar⁻¹", "1/bar"],
+        },
+        crate::UnitInfo {
+            singular: "InversePoundForcePerSquareInch",
+            plural: "InversePoundsForcePerSquareInch",
+            abbreviation: "psi⁻¹",
+            abbreviations: &["psi⁻¹", "1/psi"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Compressibility`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Compressibility",
+        description: "",
+        dimensions: crate::Dimensions::new(1, -1, 2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

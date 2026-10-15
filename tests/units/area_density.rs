@@ -213,6 +213,23 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_metadata() {
+    let info = AreaDensity::<f64>::INFO;
+    assert_eq!(info.name, "AreaDensity");
+    assert_eq!(info.units.len(), AreaDensityUnit::ALL.len());
+    for (&unit, unit_info) in AreaDensityUnit::ALL.iter().zip(info.units) {
+        assert_eq!(unit.info(), unit_info);
+        assert_eq!(format!("{unit:?}"), unit_info.singular);
+        assert_eq!(unit.abbreviation(), unit_info.abbreviation);
+        assert_eq!(unit.all_abbreviations(), unit_info.abbreviations);
+    }
+    assert_eq!(
+        info.base_unit,
+        AreaDensityUnit::KilogramPerSquareMeter.info()
+    );
+}
+
+#[test]
 fn new_and_convert_to_match_named_methods() {
     let v = 1234.5;
     assert_eq!(

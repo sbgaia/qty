@@ -55,6 +55,75 @@ impl HeatTransferCoefficientUnit {
         Self::KilocaloriePerHourSquareMeterDegreeCelsius,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "WattPerSquareMeterKelvin",
+            plural: "WattsPerSquareMeterKelvin",
+            abbreviation: "W/(m²·K)",
+            abbreviations: &["W/(m²·K)"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerSquareMeterCelsius",
+            plural: "WattsPerSquareMeterCelsius",
+            abbreviation: "W/(m²·°C)",
+            abbreviations: &["W/(m²·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerHourSquareFootDegreeFahrenheit",
+            plural: "BtusPerHourSquareFootDegreeFahrenheit",
+            abbreviation: "Btu/(h·ft²·°F)",
+            abbreviations: &[
+                "Btu/(h·ft²·°F)",
+                "Btu/(ft²·h·°F)",
+                "Btu/(hr·ft²·°F)",
+                "Btu/(ft²·hr·°F)",
+            ],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSecondSquareInchDegreeFahrenheit",
+            plural: "BtusPerSecondSquareInchDegreeFahrenheit",
+            abbreviation: "Btu/(s·in²·°F)",
+            abbreviations: &[
+                "Btu/(s·in²·°F)",
+                "Btu/(in²·s·°F)",
+                "Btu/(s*in^2*degF)",
+                "Btu/(in^2*s*degF)",
+            ],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerHourSquareMeterDegreeCelsius",
+            plural: "CaloriesPerHourSquareMeterDegreeCelsius",
+            abbreviation: "kcal/(h·m²·°C)",
+            abbreviations: &[
+                "kcal/(h·m²·°C)",
+                "kcal/(m²·h·°C)",
+                "kcal/(hr·m²·°C)",
+                "kcal/(m²·hr·°C)",
+            ],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerHourSquareMeterDegreeCelsius",
+            plural: "KilocaloriesPerHourSquareMeterDegreeCelsius",
+            abbreviation: "kkcal/(h·m²·°C)",
+            abbreviations: &["kkcal/(h·m²·°C)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`HeatTransferCoefficient`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "HeatTransferCoefficient",
+        description: "The heat transfer coefficient or film coefficient, or film effectiveness, in thermodynamics and in mechanics is the proportionality constant between the heat flux and the thermodynamic driving force for the flow of heat (i.e., the temperature difference, ΔT)",
+        dimensions: crate::Dimensions::new(0, 1, -3, 0, -1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -50,6 +50,42 @@ impl BrakeSpecificFuelConsumptionUnit {
         Self::PoundPerMechanicalHorsepowerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerKiloWattHour",
+            plural: "GramsPerKiloWattHour",
+            abbreviation: "g/kWh",
+            abbreviations: &["g/kWh"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerJoule",
+            plural: "KilogramsPerJoule",
+            abbreviation: "kg/J",
+            abbreviations: &["kg/J"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerMechanicalHorsepowerHour",
+            plural: "PoundsPerMechanicalHorsepowerHour",
+            abbreviation: "lb/hph",
+            abbreviations: &["lb/hph"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`BrakeSpecificFuelConsumption`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "BrakeSpecificFuelConsumption",
+        description: "Brake specific fuel consumption (BSFC) is a measure of the fuel efficiency of any prime mover that burns fuel and produces rotational, or shaft, power. It is typically used for comparing the efficiency of internal combustion engines with a shaft output.",
+        dimensions: crate::Dimensions::new(-2, 0, 2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[1],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

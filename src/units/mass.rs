@@ -114,6 +114,210 @@ impl MassUnit {
         Self::Gigadalton,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Gram",
+            plural: "Grams",
+            abbreviation: "g",
+            abbreviations: &["g"],
+        },
+        crate::UnitInfo {
+            singular: "Femtogram",
+            plural: "Femtograms",
+            abbreviation: "fg",
+            abbreviations: &["fg"],
+        },
+        crate::UnitInfo {
+            singular: "Picogram",
+            plural: "Picograms",
+            abbreviation: "pg",
+            abbreviations: &["pg"],
+        },
+        crate::UnitInfo {
+            singular: "Nanogram",
+            plural: "Nanograms",
+            abbreviation: "ng",
+            abbreviations: &["ng"],
+        },
+        crate::UnitInfo {
+            singular: "Microgram",
+            plural: "Micrograms",
+            abbreviation: "µg",
+            abbreviations: &["µg"],
+        },
+        crate::UnitInfo {
+            singular: "Milligram",
+            plural: "Milligrams",
+            abbreviation: "mg",
+            abbreviations: &["mg"],
+        },
+        crate::UnitInfo {
+            singular: "Centigram",
+            plural: "Centigrams",
+            abbreviation: "cg",
+            abbreviations: &["cg"],
+        },
+        crate::UnitInfo {
+            singular: "Decigram",
+            plural: "Decigrams",
+            abbreviation: "dg",
+            abbreviations: &["dg"],
+        },
+        crate::UnitInfo {
+            singular: "Decagram",
+            plural: "Decagrams",
+            abbreviation: "dag",
+            abbreviations: &["dag"],
+        },
+        crate::UnitInfo {
+            singular: "Hectogram",
+            plural: "Hectograms",
+            abbreviation: "hg",
+            abbreviations: &["hg"],
+        },
+        crate::UnitInfo {
+            singular: "Kilogram",
+            plural: "Kilograms",
+            abbreviation: "kg",
+            abbreviations: &["kg"],
+        },
+        crate::UnitInfo {
+            singular: "Tonne",
+            plural: "Tonnes",
+            abbreviation: "t",
+            abbreviations: &["t"],
+        },
+        crate::UnitInfo {
+            singular: "Kilotonne",
+            plural: "Kilotonnes",
+            abbreviation: "kt",
+            abbreviations: &["kt"],
+        },
+        crate::UnitInfo {
+            singular: "Megatonne",
+            plural: "Megatonnes",
+            abbreviation: "Mt",
+            abbreviations: &["Mt"],
+        },
+        crate::UnitInfo {
+            singular: "ShortTon",
+            plural: "ShortTons",
+            abbreviation: "t (short)",
+            abbreviations: &["t (short)", "short tn", "ST"],
+        },
+        crate::UnitInfo {
+            singular: "LongTon",
+            plural: "LongTons",
+            abbreviation: "long tn",
+            abbreviations: &["long tn"],
+        },
+        crate::UnitInfo {
+            singular: "Pound",
+            plural: "Pounds",
+            abbreviation: "lb",
+            abbreviations: &["lb", "lbs", "lbm"],
+        },
+        crate::UnitInfo {
+            singular: "Kilopound",
+            plural: "Kilopounds",
+            abbreviation: "klb",
+            abbreviations: &["klb"],
+        },
+        crate::UnitInfo {
+            singular: "Megapound",
+            plural: "Megapounds",
+            abbreviation: "Mlb",
+            abbreviations: &["Mlb"],
+        },
+        crate::UnitInfo {
+            singular: "Ounce",
+            plural: "Ounces",
+            abbreviation: "oz",
+            abbreviations: &["oz"],
+        },
+        crate::UnitInfo {
+            singular: "Slug",
+            plural: "Slugs",
+            abbreviation: "slug",
+            abbreviations: &["slug"],
+        },
+        crate::UnitInfo {
+            singular: "Stone",
+            plural: "Stone",
+            abbreviation: "st",
+            abbreviations: &["st"],
+        },
+        crate::UnitInfo {
+            singular: "ShortHundredweight",
+            plural: "ShortHundredweight",
+            abbreviation: "cwt",
+            abbreviations: &["cwt"],
+        },
+        crate::UnitInfo {
+            singular: "LongHundredweight",
+            plural: "LongHundredweight",
+            abbreviation: "cwt",
+            abbreviations: &["cwt"],
+        },
+        crate::UnitInfo {
+            singular: "Grain",
+            plural: "Grains",
+            abbreviation: "gr",
+            abbreviations: &["gr"],
+        },
+        crate::UnitInfo {
+            singular: "SolarMass",
+            plural: "SolarMasses",
+            abbreviation: "M☉",
+            abbreviations: &["M☉", "M⊙"],
+        },
+        crate::UnitInfo {
+            singular: "EarthMass",
+            plural: "EarthMasses",
+            abbreviation: "em",
+            abbreviations: &["em"],
+        },
+        crate::UnitInfo {
+            singular: "Dalton",
+            plural: "Daltons",
+            abbreviation: "Da",
+            abbreviations: &["Da", "u"],
+        },
+        crate::UnitInfo {
+            singular: "Kilodalton",
+            plural: "Kilodaltons",
+            abbreviation: "kDa",
+            abbreviations: &["kDa"],
+        },
+        crate::UnitInfo {
+            singular: "Megadalton",
+            plural: "Megadaltons",
+            abbreviation: "MDa",
+            abbreviations: &["MDa"],
+        },
+        crate::UnitInfo {
+            singular: "Gigadalton",
+            plural: "Gigadaltons",
+            abbreviation: "GDa",
+            abbreviations: &["GDa"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Mass`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Mass",
+        description: "In physics, mass (from Greek μᾶζα \"barley cake, lump [of dough]\") is a property of a physical system or body, giving rise to the phenomena of the body's resistance to being accelerated by a force and the strength of its mutual gravitational attraction with other bodies. Instruments such as mass balances or scales use those phenomena to measure mass. The SI unit of mass is the kilogram (kg).",
+        dimensions: crate::Dimensions::new(0, 1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[10],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

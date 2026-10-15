@@ -81,6 +81,138 @@ impl FluidResistanceUnit {
         Self::WoodUnit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PascalSecondPerLiter",
+            plural: "PascalSecondsPerLiter",
+            abbreviation: "Pa·s/l",
+            abbreviations: &["Pa·s/l"],
+        },
+        crate::UnitInfo {
+            singular: "PascalMinutePerLiter",
+            plural: "PascalMinutesPerLiter",
+            abbreviation: "Pa·min/l",
+            abbreviations: &["Pa·min/l"],
+        },
+        crate::UnitInfo {
+            singular: "PascalSecondPerMilliliter",
+            plural: "PascalSecondsPerMilliliter",
+            abbreviation: "Pa·s/ml",
+            abbreviations: &["Pa·s/ml"],
+        },
+        crate::UnitInfo {
+            singular: "PascalMinutePerMilliliter",
+            plural: "PascalMinutesPerMilliliter",
+            abbreviation: "Pa·min/ml",
+            abbreviations: &["Pa·min/ml"],
+        },
+        crate::UnitInfo {
+            singular: "PascalSecondPerCubicMeter",
+            plural: "PascalSecondsPerCubicMeter",
+            abbreviation: "Pa·s/m³",
+            abbreviations: &["Pa·s/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MegapascalSecondPerCubicMeter",
+            plural: "MegapascalSecondsPerCubicMeter",
+            abbreviation: "MPa·s/m³",
+            abbreviations: &["MPa·s/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PascalMinutePerCubicMeter",
+            plural: "PascalMinutesPerCubicMeter",
+            abbreviation: "Pa·min/m³",
+            abbreviations: &["Pa·min/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PascalSecondPerCubicCentimeter",
+            plural: "PascalSecondsPerCubicCentimeter",
+            abbreviation: "Pa·s/cm³",
+            abbreviations: &["Pa·s/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "PascalMinutePerCubicCentimeter",
+            plural: "PascalMinutesPerCubicCentimeter",
+            abbreviation: "Pa·min/cm³",
+            abbreviations: &["Pa·min/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "DyneSecondPerCentimeterToTheFifth",
+            plural: "DyneSecondsPerCentimeterToTheFifth",
+            abbreviation: "dyn·s/cm⁵",
+            abbreviations: &["dyn·s/cm⁵", "dyn·s·cm⁻⁵"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercurySecondPerLiter",
+            plural: "MillimeterMercurySecondsPerLiter",
+            abbreviation: "mmHg·s/l",
+            abbreviations: &["mmHg·s/l"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercuryMinutePerLiter",
+            plural: "MillimeterMercuryMinutesPerLiter",
+            abbreviation: "mmHg·min/l",
+            abbreviations: &["mmHg·min/l"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercurySecondPerMilliliter",
+            plural: "MillimeterMercurySecondsPerMilliliter",
+            abbreviation: "mmHg·s/ml",
+            abbreviations: &["mmHg·s/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercuryMinutePerMilliliter",
+            plural: "MillimeterMercuryMinutesPerMilliliter",
+            abbreviation: "mmHg·min/ml",
+            abbreviations: &["mmHg·min/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercurySecondPerCubicCentimeter",
+            plural: "MillimeterMercurySecondsPerCubicCentimeter",
+            abbreviation: "mmHg·s/cm³",
+            abbreviations: &["mmHg·s/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercuryMinutePerCubicCentimeter",
+            plural: "MillimeterMercuryMinutesPerCubicCentimeter",
+            abbreviation: "mmHg·min/cm³",
+            abbreviations: &["mmHg·min/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercurySecondPerCubicMeter",
+            plural: "MillimeterMercurySecondsPerCubicMeter",
+            abbreviation: "mmHg·s/m³",
+            abbreviations: &["mmHg·s/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterMercuryMinutePerCubicMeter",
+            plural: "MillimeterMercuryMinutesPerCubicMeter",
+            abbreviation: "mmHg·min/m³",
+            abbreviations: &["mmHg·min/m³"],
+        },
+        crate::UnitInfo {
+            singular: "WoodUnit",
+            plural: "WoodUnits",
+            abbreviation: "WU",
+            abbreviations: &["WU", "HRU"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`FluidResistance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "FluidResistance",
+        description: "Fluid Resistance is a force acting opposite to the relative motion of any object moving with respect to a surrounding fluid. Fluid Resistance is sometimes referred to as drag or fluid friction.",
+        dimensions: crate::Dimensions::new(-4, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[4],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

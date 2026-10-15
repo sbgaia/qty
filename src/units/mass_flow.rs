@@ -105,6 +105,222 @@ impl MassFlowUnit {
         Self::ShortTonPerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerSecond",
+            plural: "GramsPerSecond",
+            abbreviation: "g/s",
+            abbreviations: &["g/s", "g/S"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerSecond",
+            plural: "NanogramsPerSecond",
+            abbreviation: "ng/s",
+            abbreviations: &["ng/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerSecond",
+            plural: "MicrogramsPerSecond",
+            abbreviation: "µg/s",
+            abbreviations: &["µg/s"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerSecond",
+            plural: "MilligramsPerSecond",
+            abbreviation: "mg/s",
+            abbreviations: &["mg/s"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerSecond",
+            plural: "CentigramsPerSecond",
+            abbreviation: "cg/s",
+            abbreviations: &["cg/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerSecond",
+            plural: "DecigramsPerSecond",
+            abbreviation: "dg/s",
+            abbreviations: &["dg/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecagramPerSecond",
+            plural: "DecagramsPerSecond",
+            abbreviation: "dag/s",
+            abbreviations: &["dag/s"],
+        },
+        crate::UnitInfo {
+            singular: "HectogramPerSecond",
+            plural: "HectogramsPerSecond",
+            abbreviation: "hg/s",
+            abbreviations: &["hg/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerSecond",
+            plural: "KilogramsPerSecond",
+            abbreviation: "kg/s",
+            abbreviations: &["kg/s"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerDay",
+            plural: "GramsPerDay",
+            abbreviation: "g/d",
+            abbreviations: &["g/d"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerDay",
+            plural: "NanogramsPerDay",
+            abbreviation: "ng/d",
+            abbreviations: &["ng/d"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerDay",
+            plural: "MicrogramsPerDay",
+            abbreviation: "µg/d",
+            abbreviations: &["µg/d"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerDay",
+            plural: "MilligramsPerDay",
+            abbreviation: "mg/d",
+            abbreviations: &["mg/d"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerDay",
+            plural: "CentigramsPerDay",
+            abbreviation: "cg/d",
+            abbreviations: &["cg/d"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerDay",
+            plural: "DecigramsPerDay",
+            abbreviation: "dg/d",
+            abbreviations: &["dg/d"],
+        },
+        crate::UnitInfo {
+            singular: "DecagramPerDay",
+            plural: "DecagramsPerDay",
+            abbreviation: "dag/d",
+            abbreviations: &["dag/d"],
+        },
+        crate::UnitInfo {
+            singular: "HectogramPerDay",
+            plural: "HectogramsPerDay",
+            abbreviation: "hg/d",
+            abbreviations: &["hg/d"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerDay",
+            plural: "KilogramsPerDay",
+            abbreviation: "kg/d",
+            abbreviations: &["kg/d"],
+        },
+        crate::UnitInfo {
+            singular: "MegagramPerDay",
+            plural: "MegagramsPerDay",
+            abbreviation: "Mg/d",
+            abbreviations: &["Mg/d"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerHour",
+            plural: "GramsPerHour",
+            abbreviation: "g/h",
+            abbreviations: &["g/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerHour",
+            plural: "KilogramsPerHour",
+            abbreviation: "kg/h",
+            abbreviations: &["kg/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerMinute",
+            plural: "KilogramsPerMinute",
+            abbreviation: "kg/min",
+            abbreviations: &["kg/min"],
+        },
+        crate::UnitInfo {
+            singular: "TonnePerHour",
+            plural: "TonnesPerHour",
+            abbreviation: "t/h",
+            abbreviations: &["t/h"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerDay",
+            plural: "PoundsPerDay",
+            abbreviation: "lb/d",
+            abbreviations: &["lb/d"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundPerDay",
+            plural: "MegapoundsPerDay",
+            abbreviation: "Mlb/d",
+            abbreviations: &["Mlb/d"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerHour",
+            plural: "PoundsPerHour",
+            abbreviation: "lb/h",
+            abbreviations: &["lb/h"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundPerHour",
+            plural: "MegapoundsPerHour",
+            abbreviation: "Mlb/h",
+            abbreviations: &["Mlb/h"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerMinute",
+            plural: "PoundsPerMinute",
+            abbreviation: "lb/min",
+            abbreviations: &["lb/min"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundPerMinute",
+            plural: "MegapoundsPerMinute",
+            abbreviation: "Mlb/min",
+            abbreviations: &["Mlb/min"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerSecond",
+            plural: "PoundsPerSecond",
+            abbreviation: "lb/s",
+            abbreviations: &["lb/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundPerSecond",
+            plural: "MegapoundsPerSecond",
+            abbreviation: "Mlb/s",
+            abbreviations: &["Mlb/s"],
+        },
+        crate::UnitInfo {
+            singular: "TonnePerDay",
+            plural: "TonnesPerDay",
+            abbreviation: "t/d",
+            abbreviations: &["t/d"],
+        },
+        crate::UnitInfo {
+            singular: "ShortTonPerHour",
+            plural: "ShortTonsPerHour",
+            abbreviation: "short tn/h",
+            abbreviations: &["short tn/h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MassFlow`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MassFlow",
+        description: "Mass flow is the ratio of the mass change to the time during which the change occurred (value of mass changes per unit time).",
+        dimensions: crate::Dimensions::new(0, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

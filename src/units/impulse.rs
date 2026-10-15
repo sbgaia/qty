@@ -65,6 +65,102 @@ impl ImpulseUnit {
         Self::SlugFootPerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "KilogramMeterPerSecond",
+            plural: "KilogramMetersPerSecond",
+            abbreviation: "kg·m/s",
+            abbreviations: &["kg·m/s"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonSecond",
+            plural: "NewtonSeconds",
+            abbreviation: "N·s",
+            abbreviations: &["N·s"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonSecond",
+            plural: "NanonewtonSeconds",
+            abbreviation: "nN·s",
+            abbreviations: &["nN·s"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonSecond",
+            plural: "MicronewtonSeconds",
+            abbreviation: "µN·s",
+            abbreviations: &["µN·s"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonSecond",
+            plural: "MillinewtonSeconds",
+            abbreviation: "mN·s",
+            abbreviations: &["mN·s"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonSecond",
+            plural: "CentinewtonSeconds",
+            abbreviation: "cN·s",
+            abbreviations: &["cN·s"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonSecond",
+            plural: "DecinewtonSeconds",
+            abbreviation: "dN·s",
+            abbreviations: &["dN·s"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonSecond",
+            plural: "DecanewtonSeconds",
+            abbreviation: "daN·s",
+            abbreviations: &["daN·s"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonSecond",
+            plural: "KilonewtonSeconds",
+            abbreviation: "kN·s",
+            abbreviations: &["kN·s"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonSecond",
+            plural: "MeganewtonSeconds",
+            abbreviation: "MN·s",
+            abbreviations: &["MN·s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundFootPerSecond",
+            plural: "PoundFeetPerSecond",
+            abbreviation: "lb·ft/s",
+            abbreviations: &["lb·ft/s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceSecond",
+            plural: "PoundForceSeconds",
+            abbreviation: "lbf·s",
+            abbreviations: &["lbf·s"],
+        },
+        crate::UnitInfo {
+            singular: "SlugFootPerSecond",
+            plural: "SlugFeetPerSecond",
+            abbreviation: "slug·ft/s",
+            abbreviations: &["slug·ft/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Impulse`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Impulse",
+        description: "In classical mechanics, impulse is the integral of a force, F, over the time interval, t, for which it acts. Impulse applied to an object produces an equivalent vector change in its linear momentum, also in the resultant direction.",
+        dimensions: crate::Dimensions::new(1, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[1],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

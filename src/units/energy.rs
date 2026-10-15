@@ -126,6 +126,264 @@ impl EnergyUnit {
         Self::HorsepowerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Joule",
+            plural: "Joules",
+            abbreviation: "J",
+            abbreviations: &["J"],
+        },
+        crate::UnitInfo {
+            singular: "Nanojoule",
+            plural: "Nanojoules",
+            abbreviation: "nJ",
+            abbreviations: &["nJ"],
+        },
+        crate::UnitInfo {
+            singular: "Microjoule",
+            plural: "Microjoules",
+            abbreviation: "µJ",
+            abbreviations: &["µJ"],
+        },
+        crate::UnitInfo {
+            singular: "Millijoule",
+            plural: "Millijoules",
+            abbreviation: "mJ",
+            abbreviations: &["mJ"],
+        },
+        crate::UnitInfo {
+            singular: "Kilojoule",
+            plural: "Kilojoules",
+            abbreviation: "kJ",
+            abbreviations: &["kJ"],
+        },
+        crate::UnitInfo {
+            singular: "Megajoule",
+            plural: "Megajoules",
+            abbreviation: "MJ",
+            abbreviations: &["MJ"],
+        },
+        crate::UnitInfo {
+            singular: "Gigajoule",
+            plural: "Gigajoules",
+            abbreviation: "GJ",
+            abbreviations: &["GJ"],
+        },
+        crate::UnitInfo {
+            singular: "Terajoule",
+            plural: "Terajoules",
+            abbreviation: "TJ",
+            abbreviations: &["TJ"],
+        },
+        crate::UnitInfo {
+            singular: "Petajoule",
+            plural: "Petajoules",
+            abbreviation: "PJ",
+            abbreviations: &["PJ"],
+        },
+        crate::UnitInfo {
+            singular: "Calorie",
+            plural: "Calories",
+            abbreviation: "cal",
+            abbreviations: &["cal"],
+        },
+        crate::UnitInfo {
+            singular: "Kilocalorie",
+            plural: "Kilocalories",
+            abbreviation: "kcal",
+            abbreviations: &["kcal"],
+        },
+        crate::UnitInfo {
+            singular: "Megacalorie",
+            plural: "Megacalories",
+            abbreviation: "Mcal",
+            abbreviations: &["Mcal"],
+        },
+        crate::UnitInfo {
+            singular: "BritishThermalUnit",
+            plural: "BritishThermalUnits",
+            abbreviation: "BTU",
+            abbreviations: &["BTU"],
+        },
+        crate::UnitInfo {
+            singular: "KilobritishThermalUnit",
+            plural: "KilobritishThermalUnits",
+            abbreviation: "kBTU",
+            abbreviations: &["kBTU"],
+        },
+        crate::UnitInfo {
+            singular: "MegabritishThermalUnit",
+            plural: "MegabritishThermalUnits",
+            abbreviation: "MBTU",
+            abbreviations: &["MBTU"],
+        },
+        crate::UnitInfo {
+            singular: "GigabritishThermalUnit",
+            plural: "GigabritishThermalUnits",
+            abbreviation: "GBTU",
+            abbreviations: &["GBTU"],
+        },
+        crate::UnitInfo {
+            singular: "ElectronVolt",
+            plural: "ElectronVolts",
+            abbreviation: "eV",
+            abbreviations: &["eV"],
+        },
+        crate::UnitInfo {
+            singular: "KiloelectronVolt",
+            plural: "KiloelectronVolts",
+            abbreviation: "keV",
+            abbreviations: &["keV"],
+        },
+        crate::UnitInfo {
+            singular: "MegaelectronVolt",
+            plural: "MegaelectronVolts",
+            abbreviation: "MeV",
+            abbreviations: &["MeV"],
+        },
+        crate::UnitInfo {
+            singular: "GigaelectronVolt",
+            plural: "GigaelectronVolts",
+            abbreviation: "GeV",
+            abbreviations: &["GeV"],
+        },
+        crate::UnitInfo {
+            singular: "TeraelectronVolt",
+            plural: "TeraelectronVolts",
+            abbreviation: "TeV",
+            abbreviations: &["TeV"],
+        },
+        crate::UnitInfo {
+            singular: "FootPound",
+            plural: "FootPounds",
+            abbreviation: "ft·lb",
+            abbreviations: &["ft·lb"],
+        },
+        crate::UnitInfo {
+            singular: "Erg",
+            plural: "Ergs",
+            abbreviation: "erg",
+            abbreviations: &["erg"],
+        },
+        crate::UnitInfo {
+            singular: "WattHour",
+            plural: "WattHours",
+            abbreviation: "Wh",
+            abbreviations: &["Wh"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattHour",
+            plural: "KilowattHours",
+            abbreviation: "kWh",
+            abbreviations: &["kWh"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattHour",
+            plural: "MegawattHours",
+            abbreviation: "MWh",
+            abbreviations: &["MWh"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattHour",
+            plural: "GigawattHours",
+            abbreviation: "GWh",
+            abbreviations: &["GWh"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattHour",
+            plural: "TerawattHours",
+            abbreviation: "TWh",
+            abbreviations: &["TWh"],
+        },
+        crate::UnitInfo {
+            singular: "WattDay",
+            plural: "WattDays",
+            abbreviation: "Wd",
+            abbreviations: &["Wd"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattDay",
+            plural: "KilowattDays",
+            abbreviation: "kWd",
+            abbreviations: &["kWd"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattDay",
+            plural: "MegawattDays",
+            abbreviation: "MWd",
+            abbreviations: &["MWd"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattDay",
+            plural: "GigawattDays",
+            abbreviation: "GWd",
+            abbreviations: &["GWd"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattDay",
+            plural: "TerawattDays",
+            abbreviation: "TWd",
+            abbreviations: &["TWd"],
+        },
+        crate::UnitInfo {
+            singular: "ThermEc",
+            plural: "ThermsEc",
+            abbreviation: "th (E.C.)",
+            abbreviations: &["th (E.C.)"],
+        },
+        crate::UnitInfo {
+            singular: "DecathermEc",
+            plural: "DecathermsEc",
+            abbreviation: "dath (E.C.)",
+            abbreviations: &["dath (E.C.)"],
+        },
+        crate::UnitInfo {
+            singular: "ThermUs",
+            plural: "ThermsUs",
+            abbreviation: "th (U.S.)",
+            abbreviations: &["th (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "DecathermUs",
+            plural: "DecathermsUs",
+            abbreviation: "dath (U.S.)",
+            abbreviations: &["dath (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "ThermImperial",
+            plural: "ThermsImperial",
+            abbreviation: "th (imp.)",
+            abbreviations: &["th (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "DecathermImperial",
+            plural: "DecathermsImperial",
+            abbreviation: "dath (imp.)",
+            abbreviations: &["dath (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "HorsepowerHour",
+            plural: "HorsepowerHours",
+            abbreviation: "hp·h",
+            abbreviations: &["hp·h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Energy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Energy",
+        description: "The joule, symbol J, is a derived unit of energy, work, or amount of heat in the International System of Units. It is equal to the energy transferred (or work done) when applying a force of one newton through a distance of one metre (1 newton metre or N·m), or in passing an electric current of one ampere through a resistance of one ohm for one second. Many other units of energy are included. Please do not confuse this definition of the calorie with the one colloquially used by the food industry, the large calorie, which is equivalent to 1 kcal. Thermochemical definition of the calorie is used. For BTU, the IT definition is used.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

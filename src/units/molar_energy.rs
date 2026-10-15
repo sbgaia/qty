@@ -45,6 +45,42 @@ impl MolarEnergyUnit {
         Self::MegajoulePerMole,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerMole",
+            plural: "JoulesPerMole",
+            abbreviation: "J/mol",
+            abbreviations: &["J/mol"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerMole",
+            plural: "KilojoulesPerMole",
+            abbreviation: "kJ/mol",
+            abbreviations: &["kJ/mol"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerMole",
+            plural: "MegajoulesPerMole",
+            abbreviation: "MJ/mol",
+            abbreviations: &["MJ/mol"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MolarEnergy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MolarEnergy",
+        description: "Molar energy is the amount of energy stored in 1 mole of a substance.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, -1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

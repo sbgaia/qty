@@ -545,6 +545,68 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    ];");
     w!(out);
 
+    // Metadata: one `UnitInfo` per unit, in the order of `ALL` (and of the
+    // enum's discriminants, so `info()` is an index).
+    w!(out, "    const INFOS: &'static [crate::UnitInfo] = &[");
+    for unit in &qty.units {
+        let abbrs: Vec<String> = unit
+            .all_abbreviations
+            .iter()
+            .map(|a| rust_str_literal(a))
+            .collect();
+        w!(
+            out,
+            "        crate::UnitInfo {{ singular: {}, plural: {}, abbreviation: {}, abbreviations: &[{}] }},",
+            rust_str_literal(&unit.singular),
+            rust_str_literal(&unit.plural),
+            rust_str_literal(&unit.abbreviation),
+            abbrs.join(", ")
+        );
+    }
+    w!(out, "    ];");
+    w!(out);
+    w!(out, "    /// Names and abbreviations of this unit.");
+    w!(out, "    #[inline]");
+    w!(
+        out,
+        "    pub const fn info(self) -> &'static crate::UnitInfo {{"
+    );
+    w!(out, "        &Self::INFOS[self as usize]");
+    w!(out, "    }}");
+    w!(out);
+    let base_index = qty
+        .units
+        .iter()
+        .position(|u| u.singular == qty.base_unit)
+        .expect("base unit is listed");
+    let d = qty.dimensions;
+    w!(
+        out,
+        "    /// Name, description, dimensions and units of [`{}`].",
+        qty.name
+    );
+    w!(
+        out,
+        "    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {{"
+    );
+    w!(out, "        name: {},", rust_str_literal(&qty.name));
+    w!(out, "        description: {},", rust_str_literal(&qty.doc));
+    w!(
+        out,
+        "        dimensions: crate::Dimensions::new({}, {}, {}, {}, {}, {}, {}),",
+        d[0],
+        d[1],
+        d[2],
+        d[3],
+        d[4],
+        d[5],
+        d[6]
+    );
+    w!(out, "        base_unit: &Self::INFOS[{base_index}],");
+    w!(out, "        units: Self::INFOS,");
+    w!(out, "    }};");
+    w!(out);
+
     // abbreviation()
     w!(
         out,
@@ -1152,6 +1214,45 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
         w!(out, "}}");
         w!(out);
     }
+
+    // Metadata matches the unit enum.
+    w!(out, "#[test]");
+    w!(out, "fn unit_metadata() {{");
+    w!(out, "    let info = {name}::<f64>::INFO;");
+    w!(
+        out,
+        "    assert_eq!(info.name, {});",
+        rust_str_literal(name)
+    );
+    w!(
+        out,
+        "    assert_eq!(info.units.len(), {enum_name}::ALL.len());"
+    );
+    w!(
+        out,
+        "    for (&unit, unit_info) in {enum_name}::ALL.iter().zip(info.units) {{"
+    );
+    w!(out, "        assert_eq!(unit.info(), unit_info);");
+    w!(
+        out,
+        "        assert_eq!(format!(\"{{unit:?}}\"), unit_info.singular);"
+    );
+    w!(
+        out,
+        "        assert_eq!(unit.abbreviation(), unit_info.abbreviation);"
+    );
+    w!(
+        out,
+        "        assert_eq!(unit.all_abbreviations(), unit_info.abbreviations);"
+    );
+    w!(out, "    }}");
+    w!(
+        out,
+        "    assert_eq!(info.base_unit, {enum_name}::{}.info());",
+        qty.base_unit
+    );
+    w!(out, "}}");
+    w!(out);
 
     // `new` / `convert_to` agree with the per-unit methods.
     w!(out, "#[test]");

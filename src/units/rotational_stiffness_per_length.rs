@@ -53,6 +53,61 @@ impl RotationalStiffnessPerLengthUnit {
         Self::KilopoundForceFootPerDegreesPerFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonMeterPerRadianPerMeter",
+            plural: "NewtonMetersPerRadianPerMeter",
+            abbreviation: "N·m/rad/m",
+            abbreviations: &["N·m/rad/m", "Nm/rad/m"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMeterPerRadianPerMeter",
+            plural: "KilonewtonMetersPerRadianPerMeter",
+            abbreviation: "kN·m/rad/m",
+            abbreviations: &["kN·m/rad/m"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMeterPerRadianPerMeter",
+            plural: "MeganewtonMetersPerRadianPerMeter",
+            abbreviation: "MN·m/rad/m",
+            abbreviations: &["MN·m/rad/m"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceFootPerDegreesPerFoot",
+            plural: "PoundForceFeetPerDegreesPerFeet",
+            abbreviation: "lbf·ft/deg/ft",
+            abbreviations: &["lbf·ft/deg/ft"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForceFootPerDegreesPerFoot",
+            plural: "KilopoundForceFeetPerDegreesPerFeet",
+            abbreviation: "kipf·ft/°/ft",
+            abbreviations: &[
+                "kipf·ft/°/ft",
+                "kip·ft/°/ft",
+                "k·ft/°/ft",
+                "kipf·ft/deg/ft",
+                "kip·ft/deg/ft",
+                "k·ft/deg/ft",
+            ],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RotationalStiffnessPerLength`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RotationalStiffnessPerLength",
+        description: "https://en.wikipedia.org/wiki/Stiffness#Rotational_stiffness",
+        dimensions: crate::Dimensions::new(1, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

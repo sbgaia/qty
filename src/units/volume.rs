@@ -177,6 +177,350 @@ impl VolumeUnit {
         Self::BoardFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Liter",
+            plural: "Liters",
+            abbreviation: "l",
+            abbreviations: &["l"],
+        },
+        crate::UnitInfo {
+            singular: "Nanoliter",
+            plural: "Nanoliters",
+            abbreviation: "nl",
+            abbreviations: &["nl"],
+        },
+        crate::UnitInfo {
+            singular: "Microliter",
+            plural: "Microliters",
+            abbreviation: "µl",
+            abbreviations: &["µl"],
+        },
+        crate::UnitInfo {
+            singular: "Milliliter",
+            plural: "Milliliters",
+            abbreviation: "ml",
+            abbreviations: &["ml"],
+        },
+        crate::UnitInfo {
+            singular: "Centiliter",
+            plural: "Centiliters",
+            abbreviation: "cl",
+            abbreviations: &["cl"],
+        },
+        crate::UnitInfo {
+            singular: "Deciliter",
+            plural: "Deciliters",
+            abbreviation: "dl",
+            abbreviations: &["dl"],
+        },
+        crate::UnitInfo {
+            singular: "Decaliter",
+            plural: "Decaliters",
+            abbreviation: "dal",
+            abbreviations: &["dal"],
+        },
+        crate::UnitInfo {
+            singular: "Hectoliter",
+            plural: "Hectoliters",
+            abbreviation: "hl",
+            abbreviations: &["hl"],
+        },
+        crate::UnitInfo {
+            singular: "Kiloliter",
+            plural: "Kiloliters",
+            abbreviation: "kl",
+            abbreviations: &["kl"],
+        },
+        crate::UnitInfo {
+            singular: "Megaliter",
+            plural: "Megaliters",
+            abbreviation: "Ml",
+            abbreviations: &["Ml"],
+        },
+        crate::UnitInfo {
+            singular: "CubicMeter",
+            plural: "CubicMeters",
+            abbreviation: "m³",
+            abbreviations: &["m³"],
+        },
+        crate::UnitInfo {
+            singular: "ThousandCubicMeter",
+            plural: "ThousandCubicMeters",
+            abbreviation: "10³·m³",
+            abbreviations: &["10³·m³", "kcm", "Kcm"],
+        },
+        crate::UnitInfo {
+            singular: "CubicKilometer",
+            plural: "CubicKilometers",
+            abbreviation: "km³",
+            abbreviations: &["km³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicHectometer",
+            plural: "CubicHectometers",
+            abbreviation: "hm³",
+            abbreviations: &["hm³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicDecimeter",
+            plural: "CubicDecimeters",
+            abbreviation: "dm³",
+            abbreviations: &["dm³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicCentimeter",
+            plural: "CubicCentimeters",
+            abbreviation: "cm³",
+            abbreviations: &["cm³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicMillimeter",
+            plural: "CubicMillimeters",
+            abbreviation: "mm³",
+            abbreviations: &["mm³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicMicrometer",
+            plural: "CubicMicrometers",
+            abbreviation: "µm³",
+            abbreviations: &["µm³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicMile",
+            plural: "CubicMiles",
+            abbreviation: "mi³",
+            abbreviations: &["mi³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicYard",
+            plural: "CubicYards",
+            abbreviation: "yd³",
+            abbreviations: &["yd³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicFoot",
+            plural: "CubicFeet",
+            abbreviation: "ft³",
+            abbreviations: &["ft³"],
+        },
+        crate::UnitInfo {
+            singular: "HundredCubicFoot",
+            plural: "HundredCubicFeet",
+            abbreviation: "Ccf",
+            abbreviations: &["Ccf", "hft³"],
+        },
+        crate::UnitInfo {
+            singular: "ThousandCubicFoot",
+            plural: "ThousandCubicFeet",
+            abbreviation: "Mcf",
+            abbreviations: &["Mcf", "kcf", "kft³"],
+        },
+        crate::UnitInfo {
+            singular: "MillionCubicFoot",
+            plural: "MillionCubicFeet",
+            abbreviation: "MMcf",
+            abbreviations: &["MMcf", "Mft³"],
+        },
+        crate::UnitInfo {
+            singular: "CubicInch",
+            plural: "CubicInches",
+            abbreviation: "in³",
+            abbreviations: &["in³"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialGallon",
+            plural: "ImperialGallons",
+            abbreviation: "gal (imp.)",
+            abbreviations: &["gal (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "KiloimperialGallon",
+            plural: "KiloimperialGallons",
+            abbreviation: "kgal (imp.)",
+            abbreviations: &["kgal (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "MegaimperialGallon",
+            plural: "MegaimperialGallons",
+            abbreviation: "Mgal (imp.)",
+            abbreviations: &["Mgal (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialOunce",
+            plural: "ImperialOunces",
+            abbreviation: "oz (imp.)",
+            abbreviations: &["oz (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "UsGallon",
+            plural: "UsGallons",
+            abbreviation: "gal (U.S.)",
+            abbreviations: &["gal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "DecausGallon",
+            plural: "DecausGallons",
+            abbreviation: "dagal (U.S.)",
+            abbreviations: &["dagal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "DeciusGallon",
+            plural: "DeciusGallons",
+            abbreviation: "dgal (U.S.)",
+            abbreviations: &["dgal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "HectousGallon",
+            plural: "HectousGallons",
+            abbreviation: "hgal (U.S.)",
+            abbreviations: &["hgal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "KilousGallon",
+            plural: "KilousGallons",
+            abbreviation: "kgal (U.S.)",
+            abbreviations: &["kgal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "MegausGallon",
+            plural: "MegausGallons",
+            abbreviation: "Mgal (U.S.)",
+            abbreviations: &["Mgal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "UsOunce",
+            plural: "UsOunces",
+            abbreviation: "oz (U.S.)",
+            abbreviations: &["oz (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "UsTablespoon",
+            plural: "UsTablespoons",
+            abbreviation: "tablespoon (U.S.)",
+            abbreviations: &["tablespoon (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "AuTablespoon",
+            plural: "AuTablespoons",
+            abbreviation: "tablespoon (A.U.)",
+            abbreviations: &["tablespoon (A.U.)"],
+        },
+        crate::UnitInfo {
+            singular: "MetricTablespoon",
+            plural: "MetricTablespoons",
+            abbreviation: "tablespoon",
+            abbreviations: &["tablespoon", "tbsp", "tbsp.", "tblsp", "tblsp."],
+        },
+        crate::UnitInfo {
+            singular: "UkTablespoon",
+            plural: "UkTablespoons",
+            abbreviation: "tablespoon (U.K.)",
+            abbreviations: &["tablespoon (U.K.)"],
+        },
+        crate::UnitInfo {
+            singular: "MetricTeaspoon",
+            plural: "MetricTeaspoons",
+            abbreviation: "tsp",
+            abbreviations: &[
+                "tsp", "t", "ts", "tspn", "t.", "ts.", "tsp.", "tspn.", "teaspoon",
+            ],
+        },
+        crate::UnitInfo {
+            singular: "UsTeaspoon",
+            plural: "UsTeaspoons",
+            abbreviation: "teaspoon (U.S.)",
+            abbreviations: &["teaspoon (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "MetricCup",
+            plural: "MetricCups",
+            abbreviation: "metric cup",
+            abbreviations: &["metric cup"],
+        },
+        crate::UnitInfo {
+            singular: "UsCustomaryCup",
+            plural: "UsCustomaryCups",
+            abbreviation: "cup (U.S. customary)",
+            abbreviations: &["cup (U.S. customary)"],
+        },
+        crate::UnitInfo {
+            singular: "UsLegalCup",
+            plural: "UsLegalCups",
+            abbreviation: "cup (U.S.)",
+            abbreviations: &["cup (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "OilBarrel",
+            plural: "OilBarrels",
+            abbreviation: "bbl",
+            abbreviations: &["bbl"],
+        },
+        crate::UnitInfo {
+            singular: "UsBeerBarrel",
+            plural: "UsBeerBarrels",
+            abbreviation: "bl (U.S.)",
+            abbreviations: &["bl (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialBeerBarrel",
+            plural: "ImperialBeerBarrels",
+            abbreviation: "bl (imp.)",
+            abbreviations: &["bl (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "UsQuart",
+            plural: "UsQuarts",
+            abbreviation: "qt (U.S.)",
+            abbreviations: &["qt (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialQuart",
+            plural: "ImperialQuarts",
+            abbreviation: "qt (imp.)",
+            abbreviations: &["qt (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "UsPint",
+            plural: "UsPints",
+            abbreviation: "pt (U.S.)",
+            abbreviations: &["pt (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "AcreFoot",
+            plural: "AcreFeet",
+            abbreviation: "ac-ft",
+            abbreviations: &["ac-ft", "acre-foot", "acre-feet"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialPint",
+            plural: "ImperialPints",
+            abbreviation: "pt (imp.)",
+            abbreviations: &["pt (imp.)", "UK pt", "pt", "p"],
+        },
+        crate::UnitInfo {
+            singular: "BoardFoot",
+            plural: "BoardFeet",
+            abbreviation: "bf",
+            abbreviations: &["bf", "board foot", "board feet"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Volume`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Volume",
+        description: "Volume is the quantity of three-dimensional space enclosed by some closed boundary, for example, the space that a substance (solid, liquid, gas, or plasma) or shape occupies or contains.[1] Volume is often quantified numerically using the SI derived unit, the cubic metre. The volume of a container is generally understood to be the capacity of the container, i. e. the amount of fluid (gas or liquid) that the container could hold, rather than the amount of space the container itself displaces.",
+        dimensions: crate::Dimensions::new(3, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[10],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

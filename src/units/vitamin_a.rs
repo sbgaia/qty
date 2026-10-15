@@ -39,6 +39,28 @@ impl VitaminAUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::InternationalUnit];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "InternationalUnit",
+        plural: "InternationalUnits",
+        abbreviation: "IU",
+        abbreviations: &["IU"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`VitaminA`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "VitaminA",
+        description: "Vitamin A: 1 IU is the biological equivalent of 0.3 µg retinol, or of 0.6 µg beta-carotene.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

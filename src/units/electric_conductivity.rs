@@ -55,6 +55,60 @@ impl ElectricConductivityUnit {
         Self::MillisiemensPerCentimeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "SiemensPerMeter",
+            plural: "SiemensPerMeter",
+            abbreviation: "S/m",
+            abbreviations: &["S/m"],
+        },
+        crate::UnitInfo {
+            singular: "SiemensPerInch",
+            plural: "SiemensPerInch",
+            abbreviation: "S/in",
+            abbreviations: &["S/in"],
+        },
+        crate::UnitInfo {
+            singular: "SiemensPerFoot",
+            plural: "SiemensPerFoot",
+            abbreviation: "S/ft",
+            abbreviations: &["S/ft"],
+        },
+        crate::UnitInfo {
+            singular: "SiemensPerCentimeter",
+            plural: "SiemensPerCentimeter",
+            abbreviation: "S/cm",
+            abbreviations: &["S/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MicrosiemensPerCentimeter",
+            plural: "MicrosiemensPerCentimeter",
+            abbreviation: "µS/cm",
+            abbreviations: &["µS/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MillisiemensPerCentimeter",
+            plural: "MillisiemensPerCentimeter",
+            abbreviation: "mS/cm",
+            abbreviations: &["mS/cm"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricConductivity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricConductivity",
+        description: "Electrical conductivity or specific conductance is the reciprocal of electrical resistivity, and measures a material's ability to conduct an electric current.",
+        dimensions: crate::Dimensions::new(-3, -1, 3, 2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

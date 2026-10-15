@@ -57,6 +57,84 @@ impl LuminanceUnit {
         Self::Nit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CandelaPerSquareMeter",
+            plural: "CandelasPerSquareMeter",
+            abbreviation: "Cd/m²",
+            abbreviations: &["Cd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "NanocandelaPerSquareMeter",
+            plural: "NanocandelasPerSquareMeter",
+            abbreviation: "nCd/m²",
+            abbreviations: &["nCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrocandelaPerSquareMeter",
+            plural: "MicrocandelasPerSquareMeter",
+            abbreviation: "µCd/m²",
+            abbreviations: &["µCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MillicandelaPerSquareMeter",
+            plural: "MillicandelasPerSquareMeter",
+            abbreviation: "mCd/m²",
+            abbreviations: &["mCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "CenticandelaPerSquareMeter",
+            plural: "CenticandelasPerSquareMeter",
+            abbreviation: "cCd/m²",
+            abbreviations: &["cCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "DecicandelaPerSquareMeter",
+            plural: "DecicandelasPerSquareMeter",
+            abbreviation: "dCd/m²",
+            abbreviations: &["dCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilocandelaPerSquareMeter",
+            plural: "KilocandelasPerSquareMeter",
+            abbreviation: "kCd/m²",
+            abbreviations: &["kCd/m²"],
+        },
+        crate::UnitInfo {
+            singular: "CandelaPerSquareFoot",
+            plural: "CandelasPerSquareFoot",
+            abbreviation: "Cd/ft²",
+            abbreviations: &["Cd/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "CandelaPerSquareInch",
+            plural: "CandelasPerSquareInch",
+            abbreviation: "Cd/in²",
+            abbreviations: &["Cd/in²"],
+        },
+        crate::UnitInfo {
+            singular: "Nit",
+            plural: "Nits",
+            abbreviation: "nt",
+            abbreviations: &["nt"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Luminance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Luminance",
+        description: "",
+        dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 1),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

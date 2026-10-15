@@ -69,6 +69,108 @@ impl AccelerationUnit {
         Self::MillistandardGravity,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MeterPerSecondSquared",
+            plural: "MetersPerSecondSquared",
+            abbreviation: "m/s²",
+            abbreviations: &["m/s²"],
+        },
+        crate::UnitInfo {
+            singular: "NanometerPerSecondSquared",
+            plural: "NanometersPerSecondSquared",
+            abbreviation: "nm/s²",
+            abbreviations: &["nm/s²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrometerPerSecondSquared",
+            plural: "MicrometersPerSecondSquared",
+            abbreviation: "µm/s²",
+            abbreviations: &["µm/s²"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterPerSecondSquared",
+            plural: "MillimetersPerSecondSquared",
+            abbreviation: "mm/s²",
+            abbreviations: &["mm/s²"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterPerSecondSquared",
+            plural: "CentimetersPerSecondSquared",
+            abbreviation: "cm/s²",
+            abbreviations: &["cm/s²"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterPerSecondSquared",
+            plural: "DecimetersPerSecondSquared",
+            abbreviation: "dm/s²",
+            abbreviations: &["dm/s²"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerSecondSquared",
+            plural: "KilometersPerSecondSquared",
+            abbreviation: "km/s²",
+            abbreviations: &["km/s²"],
+        },
+        crate::UnitInfo {
+            singular: "InchPerSecondSquared",
+            plural: "InchesPerSecondSquared",
+            abbreviation: "in/s²",
+            abbreviations: &["in/s²"],
+        },
+        crate::UnitInfo {
+            singular: "FootPerSecondSquared",
+            plural: "FeetPerSecondSquared",
+            abbreviation: "ft/s²",
+            abbreviations: &["ft/s²"],
+        },
+        crate::UnitInfo {
+            singular: "KnotPerSecond",
+            plural: "KnotsPerSecond",
+            abbreviation: "kn/s",
+            abbreviations: &["kn/s"],
+        },
+        crate::UnitInfo {
+            singular: "KnotPerMinute",
+            plural: "KnotsPerMinute",
+            abbreviation: "kn/min",
+            abbreviations: &["kn/min"],
+        },
+        crate::UnitInfo {
+            singular: "KnotPerHour",
+            plural: "KnotsPerHour",
+            abbreviation: "kn/h",
+            abbreviations: &["kn/h"],
+        },
+        crate::UnitInfo {
+            singular: "StandardGravity",
+            plural: "StandardGravity",
+            abbreviation: "g",
+            abbreviations: &["g"],
+        },
+        crate::UnitInfo {
+            singular: "MillistandardGravity",
+            plural: "MillistandardGravity",
+            abbreviation: "mg",
+            abbreviations: &["mg"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Acceleration`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Acceleration",
+        description: "Acceleration, in physics, is the rate at which the velocity of an object changes over time. An object's acceleration is the net result of any and all forces acting on the object, as described by Newton's Second Law. The SI unit for acceleration is the Meter per second squared (m/s²). Accelerations are vector quantities (they have magnitude and direction) and add according to the parallelogram law. As a vector, the calculated net force is equal to the product of the object's mass (a scalar quantity) and the acceleration.",
+        dimensions: crate::Dimensions::new(1, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

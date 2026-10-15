@@ -117,6 +117,258 @@ impl BitRateUnit {
         Self::ExbioctetPerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "BitPerSecond",
+            plural: "BitsPerSecond",
+            abbreviation: "bit/s",
+            abbreviations: &["bit/s", "bps"],
+        },
+        crate::UnitInfo {
+            singular: "KilobitPerSecond",
+            plural: "KilobitsPerSecond",
+            abbreviation: "kbit/s",
+            abbreviations: &["kbit/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegabitPerSecond",
+            plural: "MegabitsPerSecond",
+            abbreviation: "Mbit/s",
+            abbreviations: &["Mbit/s"],
+        },
+        crate::UnitInfo {
+            singular: "GigabitPerSecond",
+            plural: "GigabitsPerSecond",
+            abbreviation: "Gbit/s",
+            abbreviations: &["Gbit/s"],
+        },
+        crate::UnitInfo {
+            singular: "TerabitPerSecond",
+            plural: "TerabitsPerSecond",
+            abbreviation: "Tbit/s",
+            abbreviations: &["Tbit/s"],
+        },
+        crate::UnitInfo {
+            singular: "PetabitPerSecond",
+            plural: "PetabitsPerSecond",
+            abbreviation: "Pbit/s",
+            abbreviations: &["Pbit/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExabitPerSecond",
+            plural: "ExabitsPerSecond",
+            abbreviation: "Ebit/s",
+            abbreviations: &["Ebit/s"],
+        },
+        crate::UnitInfo {
+            singular: "KibibitPerSecond",
+            plural: "KibibitsPerSecond",
+            abbreviation: "Kibit/s",
+            abbreviations: &["Kibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "MebibitPerSecond",
+            plural: "MebibitsPerSecond",
+            abbreviation: "Mibit/s",
+            abbreviations: &["Mibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "GibibitPerSecond",
+            plural: "GibibitsPerSecond",
+            abbreviation: "Gibit/s",
+            abbreviations: &["Gibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "TebibitPerSecond",
+            plural: "TebibitsPerSecond",
+            abbreviation: "Tibit/s",
+            abbreviations: &["Tibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "PebibitPerSecond",
+            plural: "PebibitsPerSecond",
+            abbreviation: "Pibit/s",
+            abbreviations: &["Pibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExbibitPerSecond",
+            plural: "ExbibitsPerSecond",
+            abbreviation: "Eibit/s",
+            abbreviations: &["Eibit/s"],
+        },
+        crate::UnitInfo {
+            singular: "BytePerSecond",
+            plural: "BytesPerSecond",
+            abbreviation: "B/s",
+            abbreviations: &["B/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilobytePerSecond",
+            plural: "KilobytesPerSecond",
+            abbreviation: "kB/s",
+            abbreviations: &["kB/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegabytePerSecond",
+            plural: "MegabytesPerSecond",
+            abbreviation: "MB/s",
+            abbreviations: &["MB/s"],
+        },
+        crate::UnitInfo {
+            singular: "GigabytePerSecond",
+            plural: "GigabytesPerSecond",
+            abbreviation: "GB/s",
+            abbreviations: &["GB/s"],
+        },
+        crate::UnitInfo {
+            singular: "TerabytePerSecond",
+            plural: "TerabytesPerSecond",
+            abbreviation: "TB/s",
+            abbreviations: &["TB/s"],
+        },
+        crate::UnitInfo {
+            singular: "PetabytePerSecond",
+            plural: "PetabytesPerSecond",
+            abbreviation: "PB/s",
+            abbreviations: &["PB/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExabytePerSecond",
+            plural: "ExabytesPerSecond",
+            abbreviation: "EB/s",
+            abbreviations: &["EB/s"],
+        },
+        crate::UnitInfo {
+            singular: "KibibytePerSecond",
+            plural: "KibibytesPerSecond",
+            abbreviation: "KiB/s",
+            abbreviations: &["KiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "MebibytePerSecond",
+            plural: "MebibytesPerSecond",
+            abbreviation: "MiB/s",
+            abbreviations: &["MiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "GibibytePerSecond",
+            plural: "GibibytesPerSecond",
+            abbreviation: "GiB/s",
+            abbreviations: &["GiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "TebibytePerSecond",
+            plural: "TebibytesPerSecond",
+            abbreviation: "TiB/s",
+            abbreviations: &["TiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "PebibytePerSecond",
+            plural: "PebibytesPerSecond",
+            abbreviation: "PiB/s",
+            abbreviations: &["PiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExbibytePerSecond",
+            plural: "ExbibytesPerSecond",
+            abbreviation: "EiB/s",
+            abbreviations: &["EiB/s"],
+        },
+        crate::UnitInfo {
+            singular: "OctetPerSecond",
+            plural: "OctetsPerSecond",
+            abbreviation: "o/s",
+            abbreviations: &["o/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilooctetPerSecond",
+            plural: "KilooctetsPerSecond",
+            abbreviation: "ko/s",
+            abbreviations: &["ko/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegaoctetPerSecond",
+            plural: "MegaoctetsPerSecond",
+            abbreviation: "Mo/s",
+            abbreviations: &["Mo/s"],
+        },
+        crate::UnitInfo {
+            singular: "GigaoctetPerSecond",
+            plural: "GigaoctetsPerSecond",
+            abbreviation: "Go/s",
+            abbreviations: &["Go/s"],
+        },
+        crate::UnitInfo {
+            singular: "TeraoctetPerSecond",
+            plural: "TeraoctetsPerSecond",
+            abbreviation: "To/s",
+            abbreviations: &["To/s"],
+        },
+        crate::UnitInfo {
+            singular: "PetaoctetPerSecond",
+            plural: "PetaoctetsPerSecond",
+            abbreviation: "Po/s",
+            abbreviations: &["Po/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExaoctetPerSecond",
+            plural: "ExaoctetsPerSecond",
+            abbreviation: "Eo/s",
+            abbreviations: &["Eo/s"],
+        },
+        crate::UnitInfo {
+            singular: "KibioctetPerSecond",
+            plural: "KibioctetsPerSecond",
+            abbreviation: "Kio/s",
+            abbreviations: &["Kio/s"],
+        },
+        crate::UnitInfo {
+            singular: "MebioctetPerSecond",
+            plural: "MebioctetsPerSecond",
+            abbreviation: "Mio/s",
+            abbreviations: &["Mio/s"],
+        },
+        crate::UnitInfo {
+            singular: "GibioctetPerSecond",
+            plural: "GibioctetsPerSecond",
+            abbreviation: "Gio/s",
+            abbreviations: &["Gio/s"],
+        },
+        crate::UnitInfo {
+            singular: "TebioctetPerSecond",
+            plural: "TebioctetsPerSecond",
+            abbreviation: "Tio/s",
+            abbreviations: &["Tio/s"],
+        },
+        crate::UnitInfo {
+            singular: "PebioctetPerSecond",
+            plural: "PebioctetsPerSecond",
+            abbreviation: "Pio/s",
+            abbreviations: &["Pio/s"],
+        },
+        crate::UnitInfo {
+            singular: "ExbioctetPerSecond",
+            plural: "ExbioctetsPerSecond",
+            abbreviation: "Eio/s",
+            abbreviations: &["Eio/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`BitRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "BitRate",
+        description: "In telecommunications and computing, bit rate is the number of bits that are conveyed or processed per unit of time.",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

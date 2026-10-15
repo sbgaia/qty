@@ -51,6 +51,60 @@ impl RatioUnit {
         Self::PartPerTrillion,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DecimalFraction",
+            plural: "DecimalFractions",
+            abbreviation: "",
+            abbreviations: &[""],
+        },
+        crate::UnitInfo {
+            singular: "Percent",
+            plural: "Percent",
+            abbreviation: "%",
+            abbreviations: &["%"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerThousand",
+            plural: "PartsPerThousand",
+            abbreviation: "‰",
+            abbreviations: &["‰"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerMillion",
+            plural: "PartsPerMillion",
+            abbreviation: "ppm",
+            abbreviations: &["ppm"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerBillion",
+            plural: "PartsPerBillion",
+            abbreviation: "ppb",
+            abbreviations: &["ppb"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerTrillion",
+            plural: "PartsPerTrillion",
+            abbreviation: "ppt",
+            abbreviations: &["ppt"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Ratio`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Ratio",
+        description: "In mathematics, a ratio is a relationship between two numbers of the same kind (e.g., objects, persons, students, spoonfuls, units of whatever identical dimension), usually expressed as \"a to b\" or a:b, sometimes expressed arithmetically as a dimensionless quotient of the two that explicitly indicates how many times the first number contains the second (not necessarily an integer).",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

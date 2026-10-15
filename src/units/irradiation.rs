@@ -57,6 +57,78 @@ impl IrradiationUnit {
         Self::KilobtuPerSquareFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerSquareMeter",
+            plural: "JoulesPerSquareMeter",
+            abbreviation: "J/m²",
+            abbreviations: &["J/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerSquareMeter",
+            plural: "KilojoulesPerSquareMeter",
+            abbreviation: "kJ/m²",
+            abbreviations: &["kJ/m²"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerSquareCentimeter",
+            plural: "JoulesPerSquareCentimeter",
+            abbreviation: "J/cm²",
+            abbreviations: &["J/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MillijoulePerSquareCentimeter",
+            plural: "MillijoulesPerSquareCentimeter",
+            abbreviation: "mJ/cm²",
+            abbreviations: &["mJ/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerSquareMillimeter",
+            plural: "JoulesPerSquareMillimeter",
+            abbreviation: "J/mm²",
+            abbreviations: &["J/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "WattHourPerSquareMeter",
+            plural: "WattHoursPerSquareMeter",
+            abbreviation: "Wh/m²",
+            abbreviations: &["Wh/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattHourPerSquareMeter",
+            plural: "KilowattHoursPerSquareMeter",
+            abbreviation: "kWh/m²",
+            abbreviations: &["kWh/m²"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSquareFoot",
+            plural: "BtusPerSquareFoot",
+            abbreviation: "Btu/ft²",
+            abbreviations: &["Btu/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "KilobtuPerSquareFoot",
+            plural: "KilobtusPerSquareFoot",
+            abbreviation: "kBtu/ft²",
+            abbreviations: &["kBtu/ft²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Irradiation`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Irradiation",
+        description: "Irradiation is the process by which an object is exposed to radiation. The exposure can originate from various sources, including natural sources.",
+        dimensions: crate::Dimensions::new(0, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -71,6 +71,108 @@ impl AreaUnit {
         Self::SquareNauticalMile,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "SquareKilometer",
+            plural: "SquareKilometers",
+            abbreviation: "km²",
+            abbreviations: &["km²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMeter",
+            plural: "SquareMeters",
+            abbreviation: "m²",
+            abbreviations: &["m²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareDecimeter",
+            plural: "SquareDecimeters",
+            abbreviation: "dm²",
+            abbreviations: &["dm²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareCentimeter",
+            plural: "SquareCentimeters",
+            abbreviation: "cm²",
+            abbreviations: &["cm²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMillimeter",
+            plural: "SquareMillimeters",
+            abbreviation: "mm²",
+            abbreviations: &["mm²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMicrometer",
+            plural: "SquareMicrometers",
+            abbreviation: "µm²",
+            abbreviations: &["µm²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMile",
+            plural: "SquareMiles",
+            abbreviation: "mi²",
+            abbreviations: &["mi²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareYard",
+            plural: "SquareYards",
+            abbreviation: "yd²",
+            abbreviations: &["yd²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareFoot",
+            plural: "SquareFeet",
+            abbreviation: "ft²",
+            abbreviations: &["ft²"],
+        },
+        crate::UnitInfo {
+            singular: "UsSurveySquareFoot",
+            plural: "UsSurveySquareFeet",
+            abbreviation: "ft² (US)",
+            abbreviations: &["ft² (US)"],
+        },
+        crate::UnitInfo {
+            singular: "SquareInch",
+            plural: "SquareInches",
+            abbreviation: "in²",
+            abbreviations: &["in²"],
+        },
+        crate::UnitInfo {
+            singular: "Acre",
+            plural: "Acres",
+            abbreviation: "ac",
+            abbreviations: &["ac"],
+        },
+        crate::UnitInfo {
+            singular: "Hectare",
+            plural: "Hectares",
+            abbreviation: "ha",
+            abbreviations: &["ha"],
+        },
+        crate::UnitInfo {
+            singular: "SquareNauticalMile",
+            plural: "SquareNauticalMiles",
+            abbreviation: "nmi²",
+            abbreviations: &["nmi²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Area`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Area",
+        description: "Area is a quantity that expresses the extent of a two-dimensional surface or shape, or planar lamina, in the plane. Area can be understood as the amount of material with a given thickness that would be necessary to fashion a model of the shape, or the amount of paint necessary to cover the surface with a single coat.[1] It is the two-dimensional analog of the length of a curve (a one-dimensional concept) or the volume of a solid (a three-dimensional concept).",
+        dimensions: crate::Dimensions::new(2, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[1],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

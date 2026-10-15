@@ -47,6 +47,48 @@ impl FuelEfficiencyUnit {
         Self::KilometerPerLiter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "LiterPer100Kilometers",
+            plural: "LitersPer100Kilometers",
+            abbreviation: "l/100km",
+            abbreviations: &["l/100km"],
+        },
+        crate::UnitInfo {
+            singular: "MilePerUsGallon",
+            plural: "MilesPerUsGallon",
+            abbreviation: "mpg (U.S.)",
+            abbreviations: &["mpg (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "MilePerUkGallon",
+            plural: "MilesPerUkGallon",
+            abbreviation: "mpg (imp.)",
+            abbreviations: &["mpg (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerLiter",
+            plural: "KilometersPerLiter",
+            abbreviation: "km/l",
+            abbreviations: &["km/l"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`FuelEfficiency`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "FuelEfficiency",
+        description: "In the context of transport, fuel economy is the energy efficiency of a particular vehicle, given as a ratio of distance traveled per unit of fuel consumed. In most countries, using the metric system, fuel economy is stated as \"fuel consumption\" in liters per 100 kilometers (L/100 km) or kilometers per liter (km/L or kmpl). In countries using non-metric system, fuel economy is expressed in miles per gallon (mpg) (imperial galon or US galon).",
+        dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[3],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

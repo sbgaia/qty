@@ -67,6 +67,108 @@ impl ElectricResistivityUnit {
         Self::MegaohmCentimeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "OhmMeter",
+            plural: "OhmMeters",
+            abbreviation: "Ω·m",
+            abbreviations: &["Ω·m"],
+        },
+        crate::UnitInfo {
+            singular: "PicoohmMeter",
+            plural: "PicoohmMeters",
+            abbreviation: "pΩ·m",
+            abbreviations: &["pΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "NanoohmMeter",
+            plural: "NanoohmMeters",
+            abbreviation: "nΩ·m",
+            abbreviations: &["nΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "MicroohmMeter",
+            plural: "MicroohmMeters",
+            abbreviation: "µΩ·m",
+            abbreviations: &["µΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "MilliohmMeter",
+            plural: "MilliohmMeters",
+            abbreviation: "mΩ·m",
+            abbreviations: &["mΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "KiloohmMeter",
+            plural: "KiloohmMeters",
+            abbreviation: "kΩ·m",
+            abbreviations: &["kΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "MegaohmMeter",
+            plural: "MegaohmMeters",
+            abbreviation: "MΩ·m",
+            abbreviations: &["MΩ·m"],
+        },
+        crate::UnitInfo {
+            singular: "OhmCentimeter",
+            plural: "OhmsCentimeter",
+            abbreviation: "Ω·cm",
+            abbreviations: &["Ω·cm"],
+        },
+        crate::UnitInfo {
+            singular: "PicoohmCentimeter",
+            plural: "PicoohmsCentimeter",
+            abbreviation: "pΩ·cm",
+            abbreviations: &["pΩ·cm"],
+        },
+        crate::UnitInfo {
+            singular: "NanoohmCentimeter",
+            plural: "NanoohmsCentimeter",
+            abbreviation: "nΩ·cm",
+            abbreviations: &["nΩ·cm"],
+        },
+        crate::UnitInfo {
+            singular: "MicroohmCentimeter",
+            plural: "MicroohmsCentimeter",
+            abbreviation: "µΩ·cm",
+            abbreviations: &["µΩ·cm"],
+        },
+        crate::UnitInfo {
+            singular: "MilliohmCentimeter",
+            plural: "MilliohmsCentimeter",
+            abbreviation: "mΩ·cm",
+            abbreviations: &["mΩ·cm"],
+        },
+        crate::UnitInfo {
+            singular: "KiloohmCentimeter",
+            plural: "KiloohmsCentimeter",
+            abbreviation: "kΩ·cm",
+            abbreviations: &["kΩ·cm"],
+        },
+        crate::UnitInfo {
+            singular: "MegaohmCentimeter",
+            plural: "MegaohmsCentimeter",
+            abbreviation: "MΩ·cm",
+            abbreviations: &["MΩ·cm"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricResistivity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricResistivity",
+        description: "Electrical resistivity (also known as resistivity, specific electrical resistance, or volume resistivity) is a fundamental property that quantifies how strongly a given material opposes the flow of electric current.",
+        dimensions: crate::Dimensions::new(3, 1, -3, -2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

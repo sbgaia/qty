@@ -65,6 +65,102 @@ impl RotationalSpeedUnit {
         Self::RevolutionPerMinute,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "RadianPerSecond",
+            plural: "RadiansPerSecond",
+            abbreviation: "rad/s",
+            abbreviations: &["rad/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanoradianPerSecond",
+            plural: "NanoradiansPerSecond",
+            abbreviation: "nrad/s",
+            abbreviations: &["nrad/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicroradianPerSecond",
+            plural: "MicroradiansPerSecond",
+            abbreviation: "µrad/s",
+            abbreviations: &["µrad/s"],
+        },
+        crate::UnitInfo {
+            singular: "MilliradianPerSecond",
+            plural: "MilliradiansPerSecond",
+            abbreviation: "mrad/s",
+            abbreviations: &["mrad/s"],
+        },
+        crate::UnitInfo {
+            singular: "CentiradianPerSecond",
+            plural: "CentiradiansPerSecond",
+            abbreviation: "crad/s",
+            abbreviations: &["crad/s"],
+        },
+        crate::UnitInfo {
+            singular: "DeciradianPerSecond",
+            plural: "DeciradiansPerSecond",
+            abbreviation: "drad/s",
+            abbreviations: &["drad/s"],
+        },
+        crate::UnitInfo {
+            singular: "DegreePerSecond",
+            plural: "DegreesPerSecond",
+            abbreviation: "°/s",
+            abbreviations: &["°/s", "deg/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanodegreePerSecond",
+            plural: "NanodegreesPerSecond",
+            abbreviation: "n°/s",
+            abbreviations: &["n°/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrodegreePerSecond",
+            plural: "MicrodegreesPerSecond",
+            abbreviation: "µ°/s",
+            abbreviations: &["µ°/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillidegreePerSecond",
+            plural: "MillidegreesPerSecond",
+            abbreviation: "m°/s",
+            abbreviations: &["m°/s"],
+        },
+        crate::UnitInfo {
+            singular: "DegreePerMinute",
+            plural: "DegreesPerMinute",
+            abbreviation: "°/min",
+            abbreviations: &["°/min", "deg/min"],
+        },
+        crate::UnitInfo {
+            singular: "RevolutionPerSecond",
+            plural: "RevolutionsPerSecond",
+            abbreviation: "r/s",
+            abbreviations: &["r/s"],
+        },
+        crate::UnitInfo {
+            singular: "RevolutionPerMinute",
+            plural: "RevolutionsPerMinute",
+            abbreviation: "rpm",
+            abbreviations: &["rpm", "r/min"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RotationalSpeed`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RotationalSpeed",
+        description: "Rotational speed (sometimes called speed of revolution) is the number of complete rotations, revolutions, cycles, or turns per time unit. Rotational speed is a cyclic frequency, measured in radians per second or in hertz in the SI System by scientists, or in revolutions per minute (rpm or min-1) or revolutions per second in everyday life. The symbol for rotational speed is ω (the Greek lowercase letter \"omega\").",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

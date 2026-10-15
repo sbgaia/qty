@@ -8,6 +8,8 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Metadata: `Quantity::INFO` (name, description, `Dimensions`, units) and
+  `unit.info()` (names and abbreviations).
 - MIT license (`LICENSE`).
 - Release automation: pushing a `vX.Y.Z` tag publishes to crates.io and
   creates a GitHub release from the changelog (`RELEASING.md`); a CI job

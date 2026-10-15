@@ -117,6 +117,258 @@ impl InformationUnit {
         Self::Exbibit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Byte",
+            plural: "Bytes",
+            abbreviation: "B",
+            abbreviations: &["B"],
+        },
+        crate::UnitInfo {
+            singular: "Kilobyte",
+            plural: "Kilobytes",
+            abbreviation: "kB",
+            abbreviations: &["kB"],
+        },
+        crate::UnitInfo {
+            singular: "Megabyte",
+            plural: "Megabytes",
+            abbreviation: "MB",
+            abbreviations: &["MB"],
+        },
+        crate::UnitInfo {
+            singular: "Gigabyte",
+            plural: "Gigabytes",
+            abbreviation: "GB",
+            abbreviations: &["GB"],
+        },
+        crate::UnitInfo {
+            singular: "Terabyte",
+            plural: "Terabytes",
+            abbreviation: "TB",
+            abbreviations: &["TB"],
+        },
+        crate::UnitInfo {
+            singular: "Petabyte",
+            plural: "Petabytes",
+            abbreviation: "PB",
+            abbreviations: &["PB"],
+        },
+        crate::UnitInfo {
+            singular: "Exabyte",
+            plural: "Exabytes",
+            abbreviation: "EB",
+            abbreviations: &["EB"],
+        },
+        crate::UnitInfo {
+            singular: "Kibibyte",
+            plural: "Kibibytes",
+            abbreviation: "KiB",
+            abbreviations: &["KiB"],
+        },
+        crate::UnitInfo {
+            singular: "Mebibyte",
+            plural: "Mebibytes",
+            abbreviation: "MiB",
+            abbreviations: &["MiB"],
+        },
+        crate::UnitInfo {
+            singular: "Gibibyte",
+            plural: "Gibibytes",
+            abbreviation: "GiB",
+            abbreviations: &["GiB"],
+        },
+        crate::UnitInfo {
+            singular: "Tebibyte",
+            plural: "Tebibytes",
+            abbreviation: "TiB",
+            abbreviations: &["TiB"],
+        },
+        crate::UnitInfo {
+            singular: "Pebibyte",
+            plural: "Pebibytes",
+            abbreviation: "PiB",
+            abbreviations: &["PiB"],
+        },
+        crate::UnitInfo {
+            singular: "Exbibyte",
+            plural: "Exbibytes",
+            abbreviation: "EiB",
+            abbreviations: &["EiB"],
+        },
+        crate::UnitInfo {
+            singular: "Octet",
+            plural: "Octets",
+            abbreviation: "o",
+            abbreviations: &["o"],
+        },
+        crate::UnitInfo {
+            singular: "Kilooctet",
+            plural: "Kilooctets",
+            abbreviation: "ko",
+            abbreviations: &["ko"],
+        },
+        crate::UnitInfo {
+            singular: "Megaoctet",
+            plural: "Megaoctets",
+            abbreviation: "Mo",
+            abbreviations: &["Mo"],
+        },
+        crate::UnitInfo {
+            singular: "Gigaoctet",
+            plural: "Gigaoctets",
+            abbreviation: "Go",
+            abbreviations: &["Go"],
+        },
+        crate::UnitInfo {
+            singular: "Teraoctet",
+            plural: "Teraoctets",
+            abbreviation: "To",
+            abbreviations: &["To"],
+        },
+        crate::UnitInfo {
+            singular: "Petaoctet",
+            plural: "Petaoctets",
+            abbreviation: "Po",
+            abbreviations: &["Po"],
+        },
+        crate::UnitInfo {
+            singular: "Exaoctet",
+            plural: "Exaoctets",
+            abbreviation: "Eo",
+            abbreviations: &["Eo"],
+        },
+        crate::UnitInfo {
+            singular: "Kibioctet",
+            plural: "Kibioctets",
+            abbreviation: "Kio",
+            abbreviations: &["Kio"],
+        },
+        crate::UnitInfo {
+            singular: "Mebioctet",
+            plural: "Mebioctets",
+            abbreviation: "Mio",
+            abbreviations: &["Mio"],
+        },
+        crate::UnitInfo {
+            singular: "Gibioctet",
+            plural: "Gibioctets",
+            abbreviation: "Gio",
+            abbreviations: &["Gio"],
+        },
+        crate::UnitInfo {
+            singular: "Tebioctet",
+            plural: "Tebioctets",
+            abbreviation: "Tio",
+            abbreviations: &["Tio"],
+        },
+        crate::UnitInfo {
+            singular: "Pebioctet",
+            plural: "Pebioctets",
+            abbreviation: "Pio",
+            abbreviations: &["Pio"],
+        },
+        crate::UnitInfo {
+            singular: "Exbioctet",
+            plural: "Exbioctets",
+            abbreviation: "Eio",
+            abbreviations: &["Eio"],
+        },
+        crate::UnitInfo {
+            singular: "Bit",
+            plural: "Bits",
+            abbreviation: "b",
+            abbreviations: &["b"],
+        },
+        crate::UnitInfo {
+            singular: "Kilobit",
+            plural: "Kilobits",
+            abbreviation: "kb",
+            abbreviations: &["kb"],
+        },
+        crate::UnitInfo {
+            singular: "Megabit",
+            plural: "Megabits",
+            abbreviation: "Mb",
+            abbreviations: &["Mb"],
+        },
+        crate::UnitInfo {
+            singular: "Gigabit",
+            plural: "Gigabits",
+            abbreviation: "Gb",
+            abbreviations: &["Gb"],
+        },
+        crate::UnitInfo {
+            singular: "Terabit",
+            plural: "Terabits",
+            abbreviation: "Tb",
+            abbreviations: &["Tb"],
+        },
+        crate::UnitInfo {
+            singular: "Petabit",
+            plural: "Petabits",
+            abbreviation: "Pb",
+            abbreviations: &["Pb"],
+        },
+        crate::UnitInfo {
+            singular: "Exabit",
+            plural: "Exabits",
+            abbreviation: "Eb",
+            abbreviations: &["Eb"],
+        },
+        crate::UnitInfo {
+            singular: "Kibibit",
+            plural: "Kibibits",
+            abbreviation: "Kib",
+            abbreviations: &["Kib"],
+        },
+        crate::UnitInfo {
+            singular: "Mebibit",
+            plural: "Mebibits",
+            abbreviation: "Mib",
+            abbreviations: &["Mib"],
+        },
+        crate::UnitInfo {
+            singular: "Gibibit",
+            plural: "Gibibits",
+            abbreviation: "Gib",
+            abbreviations: &["Gib"],
+        },
+        crate::UnitInfo {
+            singular: "Tebibit",
+            plural: "Tebibits",
+            abbreviation: "Tib",
+            abbreviations: &["Tib"],
+        },
+        crate::UnitInfo {
+            singular: "Pebibit",
+            plural: "Pebibits",
+            abbreviation: "Pib",
+            abbreviations: &["Pib"],
+        },
+        crate::UnitInfo {
+            singular: "Exbibit",
+            plural: "Exbibits",
+            abbreviation: "Eib",
+            abbreviations: &["Eib"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Information`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Information",
+        description: "In computing and telecommunications, a unit of information is the capacity of some standard data storage system or communication channel, used to measure the capacities of other systems and channels. In information theory, units of information are also used to measure the information contents or entropy of random variables.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[26],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

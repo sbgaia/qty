@@ -68,6 +68,108 @@ impl LuminosityUnit {
         Self::SolarLuminosity,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Watt",
+            plural: "Watts",
+            abbreviation: "W",
+            abbreviations: &["W"],
+        },
+        crate::UnitInfo {
+            singular: "Femtowatt",
+            plural: "Femtowatts",
+            abbreviation: "fW",
+            abbreviations: &["fW"],
+        },
+        crate::UnitInfo {
+            singular: "Picowatt",
+            plural: "Picowatts",
+            abbreviation: "pW",
+            abbreviations: &["pW"],
+        },
+        crate::UnitInfo {
+            singular: "Nanowatt",
+            plural: "Nanowatts",
+            abbreviation: "nW",
+            abbreviations: &["nW"],
+        },
+        crate::UnitInfo {
+            singular: "Microwatt",
+            plural: "Microwatts",
+            abbreviation: "µW",
+            abbreviations: &["µW"],
+        },
+        crate::UnitInfo {
+            singular: "Milliwatt",
+            plural: "Milliwatts",
+            abbreviation: "mW",
+            abbreviations: &["mW"],
+        },
+        crate::UnitInfo {
+            singular: "Deciwatt",
+            plural: "Deciwatts",
+            abbreviation: "dW",
+            abbreviations: &["dW"],
+        },
+        crate::UnitInfo {
+            singular: "Decawatt",
+            plural: "Decawatts",
+            abbreviation: "daW",
+            abbreviations: &["daW"],
+        },
+        crate::UnitInfo {
+            singular: "Kilowatt",
+            plural: "Kilowatts",
+            abbreviation: "kW",
+            abbreviations: &["kW"],
+        },
+        crate::UnitInfo {
+            singular: "Megawatt",
+            plural: "Megawatts",
+            abbreviation: "MW",
+            abbreviations: &["MW"],
+        },
+        crate::UnitInfo {
+            singular: "Gigawatt",
+            plural: "Gigawatts",
+            abbreviation: "GW",
+            abbreviations: &["GW"],
+        },
+        crate::UnitInfo {
+            singular: "Terawatt",
+            plural: "Terawatts",
+            abbreviation: "TW",
+            abbreviations: &["TW"],
+        },
+        crate::UnitInfo {
+            singular: "Petawatt",
+            plural: "Petawatts",
+            abbreviation: "PW",
+            abbreviations: &["PW"],
+        },
+        crate::UnitInfo {
+            singular: "SolarLuminosity",
+            plural: "SolarLuminosities",
+            abbreviation: "L⊙",
+            abbreviations: &["L⊙"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Luminosity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Luminosity",
+        description: "Luminosity is an absolute measure of radiated electromagnetic power (light), the radiant power emitted by a light-emitting object.",
+        dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

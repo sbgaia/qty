@@ -51,6 +51,60 @@ impl ElectricPotentialUnit {
         Self::Megavolt,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Volt",
+            plural: "Volts",
+            abbreviation: "V",
+            abbreviations: &["V"],
+        },
+        crate::UnitInfo {
+            singular: "Nanovolt",
+            plural: "Nanovolts",
+            abbreviation: "nV",
+            abbreviations: &["nV"],
+        },
+        crate::UnitInfo {
+            singular: "Microvolt",
+            plural: "Microvolts",
+            abbreviation: "µV",
+            abbreviations: &["µV"],
+        },
+        crate::UnitInfo {
+            singular: "Millivolt",
+            plural: "Millivolts",
+            abbreviation: "mV",
+            abbreviations: &["mV"],
+        },
+        crate::UnitInfo {
+            singular: "Kilovolt",
+            plural: "Kilovolts",
+            abbreviation: "kV",
+            abbreviations: &["kV"],
+        },
+        crate::UnitInfo {
+            singular: "Megavolt",
+            plural: "Megavolts",
+            abbreviation: "MV",
+            abbreviations: &["MV"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricPotential`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricPotential",
+        description: "In classical electromagnetism, the electric potential (a scalar quantity denoted by Φ, ΦE or V and also called the electric field potential or the electrostatic potential) at a point is the amount of electric potential energy that a unitary point charge would have when located at that point.",
+        dimensions: crate::Dimensions::new(2, 1, -3, -1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

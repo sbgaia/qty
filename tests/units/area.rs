@@ -446,6 +446,20 @@ fn fixed_units() {
 }
 
 #[test]
+fn unit_metadata() {
+    let info = Area::<f64>::INFO;
+    assert_eq!(info.name, "Area");
+    assert_eq!(info.units.len(), AreaUnit::ALL.len());
+    for (&unit, unit_info) in AreaUnit::ALL.iter().zip(info.units) {
+        assert_eq!(unit.info(), unit_info);
+        assert_eq!(format!("{unit:?}"), unit_info.singular);
+        assert_eq!(unit.abbreviation(), unit_info.abbreviation);
+        assert_eq!(unit.all_abbreviations(), unit_info.abbreviations);
+    }
+    assert_eq!(info.base_unit, AreaUnit::SquareMeter.info());
+}
+
+#[test]
 fn new_and_convert_to_match_named_methods() {
     let v = 1234.5;
     assert_eq!(

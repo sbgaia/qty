@@ -71,6 +71,120 @@ impl ElectricAdmittanceUnit {
         Self::Teramho,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Siemens",
+            plural: "Siemens",
+            abbreviation: "S",
+            abbreviations: &["S"],
+        },
+        crate::UnitInfo {
+            singular: "Nanosiemens",
+            plural: "Nanosiemens",
+            abbreviation: "nS",
+            abbreviations: &["nS"],
+        },
+        crate::UnitInfo {
+            singular: "Microsiemens",
+            plural: "Microsiemens",
+            abbreviation: "µS",
+            abbreviations: &["µS"],
+        },
+        crate::UnitInfo {
+            singular: "Millisiemens",
+            plural: "Millisiemens",
+            abbreviation: "mS",
+            abbreviations: &["mS"],
+        },
+        crate::UnitInfo {
+            singular: "Kilosiemens",
+            plural: "Kilosiemens",
+            abbreviation: "kS",
+            abbreviations: &["kS"],
+        },
+        crate::UnitInfo {
+            singular: "Megasiemens",
+            plural: "Megasiemens",
+            abbreviation: "MS",
+            abbreviations: &["MS"],
+        },
+        crate::UnitInfo {
+            singular: "Gigasiemens",
+            plural: "Gigasiemens",
+            abbreviation: "GS",
+            abbreviations: &["GS"],
+        },
+        crate::UnitInfo {
+            singular: "Terasiemens",
+            plural: "Terasiemens",
+            abbreviation: "TS",
+            abbreviations: &["TS"],
+        },
+        crate::UnitInfo {
+            singular: "Mho",
+            plural: "Mhos",
+            abbreviation: "℧",
+            abbreviations: &["℧"],
+        },
+        crate::UnitInfo {
+            singular: "Nanomho",
+            plural: "Nanomhos",
+            abbreviation: "n℧",
+            abbreviations: &["n℧"],
+        },
+        crate::UnitInfo {
+            singular: "Micromho",
+            plural: "Micromhos",
+            abbreviation: "µ℧",
+            abbreviations: &["µ℧"],
+        },
+        crate::UnitInfo {
+            singular: "Millimho",
+            plural: "Millimhos",
+            abbreviation: "m℧",
+            abbreviations: &["m℧"],
+        },
+        crate::UnitInfo {
+            singular: "Kilomho",
+            plural: "Kilomhos",
+            abbreviation: "k℧",
+            abbreviations: &["k℧"],
+        },
+        crate::UnitInfo {
+            singular: "Megamho",
+            plural: "Megamhos",
+            abbreviation: "M℧",
+            abbreviations: &["M℧"],
+        },
+        crate::UnitInfo {
+            singular: "Gigamho",
+            plural: "Gigamhos",
+            abbreviation: "G℧",
+            abbreviations: &["G℧"],
+        },
+        crate::UnitInfo {
+            singular: "Teramho",
+            plural: "Teramhos",
+            abbreviation: "T℧",
+            abbreviations: &["T℧"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricAdmittance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricAdmittance",
+        description: "Electric admittance is a measure of how easily a circuit or device will allow a current to flow by the combined effect of conductance and susceptance in a circuit. It is defined as the inverse of impedance. The SI unit of admittance is the siemens (symbol S).",
+        dimensions: crate::Dimensions::new(-2, -1, 3, 2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

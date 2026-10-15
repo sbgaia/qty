@@ -39,6 +39,28 @@ impl PermittivityUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::FaradPerMeter];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "FaradPerMeter",
+        plural: "FaradsPerMeter",
+        abbreviation: "F/m",
+        abbreviations: &["F/m"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Permittivity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Permittivity",
+        description: "In electromagnetism, permittivity is the measure of resistance that is encountered when forming an electric field in a particular medium.",
+        dimensions: crate::Dimensions::new(-3, -1, 4, 2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

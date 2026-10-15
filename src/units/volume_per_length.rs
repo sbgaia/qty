@@ -57,6 +57,79 @@ impl VolumePerLengthUnit {
         Self::ImperialGallonPerMile,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CubicMeterPerMeter",
+            plural: "CubicMetersPerMeter",
+            abbreviation: "m³/m",
+            abbreviations: &["m³/m"],
+        },
+        crate::UnitInfo {
+            singular: "LiterPerMeter",
+            plural: "LitersPerMeter",
+            abbreviation: "l/m",
+            abbreviations: &["l/m"],
+        },
+        crate::UnitInfo {
+            singular: "LiterPerKilometer",
+            plural: "LitersPerKilometer",
+            abbreviation: "l/km",
+            abbreviations: &["l/km"],
+        },
+        crate::UnitInfo {
+            singular: "LiterPerMillimeter",
+            plural: "LitersPerMillimeter",
+            abbreviation: "l/mm",
+            abbreviations: &["l/mm"],
+        },
+        crate::UnitInfo {
+            singular: "OilBarrelPerFoot",
+            plural: "OilBarrelsPerFoot",
+            abbreviation: "bbl/ft",
+            abbreviations: &["bbl/ft"],
+        },
+        crate::UnitInfo {
+            singular: "CubicYardPerFoot",
+            plural: "CubicYardsPerFoot",
+            abbreviation: "yd³/ft",
+            abbreviations: &["yd³/ft"],
+        },
+        crate::UnitInfo {
+            singular: "CubicYardPerUsSurveyFoot",
+            plural: "CubicYardsPerUsSurveyFoot",
+            abbreviation: "yd³/ftUS",
+            abbreviations: &["yd³/ftUS"],
+        },
+        crate::UnitInfo {
+            singular: "UsGallonPerMile",
+            plural: "UsGallonsPerMile",
+            abbreviation: "gal (U.S.)/mi",
+            abbreviations: &["gal (U.S.)/mi"],
+        },
+        crate::UnitInfo {
+            singular: "ImperialGallonPerMile",
+            plural: "ImperialGallonsPerMile",
+            abbreviation: "gal (imp.)/mi",
+            abbreviations: &["gal (imp.)/mi"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`VolumePerLength`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "VolumePerLength",
+        description:
+            "Volume, typically of fluid, that a container can hold within a unit of length.",
+        dimensions: crate::Dimensions::new(2, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

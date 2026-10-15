@@ -55,6 +55,72 @@ impl ElectricResistanceUnit {
         Self::Teraohm,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Ohm",
+            plural: "Ohms",
+            abbreviation: "Ω",
+            abbreviations: &["Ω"],
+        },
+        crate::UnitInfo {
+            singular: "Nanoohm",
+            plural: "Nanoohms",
+            abbreviation: "nΩ",
+            abbreviations: &["nΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Microohm",
+            plural: "Microohms",
+            abbreviation: "µΩ",
+            abbreviations: &["µΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Milliohm",
+            plural: "Milliohms",
+            abbreviation: "mΩ",
+            abbreviations: &["mΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Kiloohm",
+            plural: "Kiloohms",
+            abbreviation: "kΩ",
+            abbreviations: &["kΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Megaohm",
+            plural: "Megaohms",
+            abbreviation: "MΩ",
+            abbreviations: &["MΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Gigaohm",
+            plural: "Gigaohms",
+            abbreviation: "GΩ",
+            abbreviations: &["GΩ"],
+        },
+        crate::UnitInfo {
+            singular: "Teraohm",
+            plural: "Teraohms",
+            abbreviation: "TΩ",
+            abbreviations: &["TΩ"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricResistance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricResistance",
+        description: "The electrical resistance of an object is a measure of its opposition to the flow of electric current. Along with reactance, it is one of two elements of impedance. Its reciprocal quantity is electrical conductance.",
+        dimensions: crate::Dimensions::new(2, 1, -3, -2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

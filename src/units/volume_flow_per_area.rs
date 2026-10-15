@@ -45,6 +45,36 @@ impl VolumeFlowPerAreaUnit {
         Self::CubicFootPerMinutePerSquareFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CubicMeterPerSecondPerSquareMeter",
+            plural: "CubicMetersPerSecondPerSquareMeter",
+            abbreviation: "m³/(s·m²)",
+            abbreviations: &["m³/(s·m²)"],
+        },
+        crate::UnitInfo {
+            singular: "CubicFootPerMinutePerSquareFoot",
+            plural: "CubicFeetPerMinutePerSquareFoot",
+            abbreviation: "CFM/ft²",
+            abbreviations: &["CFM/ft²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`VolumeFlowPerArea`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "VolumeFlowPerArea",
+        description: "",
+        dimensions: crate::Dimensions::new(1, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

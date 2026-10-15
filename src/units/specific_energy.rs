@@ -99,6 +99,204 @@ impl SpecificEnergyUnit {
         Self::BtuPerPound,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerKilogram",
+            plural: "JoulesPerKilogram",
+            abbreviation: "J/kg",
+            abbreviations: &["J/kg"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerKilogram",
+            plural: "KilojoulesPerKilogram",
+            abbreviation: "kJ/kg",
+            abbreviations: &["kJ/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerKilogram",
+            plural: "MegajoulesPerKilogram",
+            abbreviation: "MJ/kg",
+            abbreviations: &["MJ/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerTonne",
+            plural: "MegajoulesPerTonne",
+            abbreviation: "MJ/t",
+            abbreviations: &["MJ/t"],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerGram",
+            plural: "CaloriesPerGram",
+            abbreviation: "cal/g",
+            abbreviations: &["cal/g"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerGram",
+            plural: "KilocaloriesPerGram",
+            abbreviation: "kcal/g",
+            abbreviations: &["kcal/g"],
+        },
+        crate::UnitInfo {
+            singular: "WattHourPerKilogram",
+            plural: "WattHoursPerKilogram",
+            abbreviation: "Wh/kg",
+            abbreviations: &["Wh/kg"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattHourPerKilogram",
+            plural: "KilowattHoursPerKilogram",
+            abbreviation: "kWh/kg",
+            abbreviations: &["kWh/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattHourPerKilogram",
+            plural: "MegawattHoursPerKilogram",
+            abbreviation: "MWh/kg",
+            abbreviations: &["MWh/kg"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattHourPerKilogram",
+            plural: "GigawattHoursPerKilogram",
+            abbreviation: "GWh/kg",
+            abbreviations: &["GWh/kg"],
+        },
+        crate::UnitInfo {
+            singular: "WattDayPerKilogram",
+            plural: "WattDaysPerKilogram",
+            abbreviation: "Wd/kg",
+            abbreviations: &["Wd/kg"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattDayPerKilogram",
+            plural: "KilowattDaysPerKilogram",
+            abbreviation: "kWd/kg",
+            abbreviations: &["kWd/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattDayPerKilogram",
+            plural: "MegawattDaysPerKilogram",
+            abbreviation: "MWd/kg",
+            abbreviations: &["MWd/kg"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattDayPerKilogram",
+            plural: "GigawattDaysPerKilogram",
+            abbreviation: "GWd/kg",
+            abbreviations: &["GWd/kg"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattDayPerKilogram",
+            plural: "TerawattDaysPerKilogram",
+            abbreviation: "TWd/kg",
+            abbreviations: &["TWd/kg"],
+        },
+        crate::UnitInfo {
+            singular: "WattDayPerTonne",
+            plural: "WattDaysPerTonne",
+            abbreviation: "Wd/t",
+            abbreviations: &["Wd/t"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattDayPerTonne",
+            plural: "KilowattDaysPerTonne",
+            abbreviation: "kWd/t",
+            abbreviations: &["kWd/t"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattDayPerTonne",
+            plural: "MegawattDaysPerTonne",
+            abbreviation: "MWd/t",
+            abbreviations: &["MWd/t"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattDayPerTonne",
+            plural: "GigawattDaysPerTonne",
+            abbreviation: "GWd/t",
+            abbreviations: &["GWd/t"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattDayPerTonne",
+            plural: "TerawattDaysPerTonne",
+            abbreviation: "TWd/t",
+            abbreviations: &["TWd/t"],
+        },
+        crate::UnitInfo {
+            singular: "WattDayPerShortTon",
+            plural: "WattDaysPerShortTon",
+            abbreviation: "Wd/ST",
+            abbreviations: &["Wd/ST"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattDayPerShortTon",
+            plural: "KilowattDaysPerShortTon",
+            abbreviation: "kWd/ST",
+            abbreviations: &["kWd/ST"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattDayPerShortTon",
+            plural: "MegawattDaysPerShortTon",
+            abbreviation: "MWd/ST",
+            abbreviations: &["MWd/ST"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattDayPerShortTon",
+            plural: "GigawattDaysPerShortTon",
+            abbreviation: "GWd/ST",
+            abbreviations: &["GWd/ST"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattDayPerShortTon",
+            plural: "TerawattDaysPerShortTon",
+            abbreviation: "TWd/ST",
+            abbreviations: &["TWd/ST"],
+        },
+        crate::UnitInfo {
+            singular: "WattHourPerPound",
+            plural: "WattHoursPerPound",
+            abbreviation: "Wh/lbs",
+            abbreviations: &["Wh/lbs"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattHourPerPound",
+            plural: "KilowattHoursPerPound",
+            abbreviation: "kWh/lbs",
+            abbreviations: &["kWh/lbs"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattHourPerPound",
+            plural: "MegawattHoursPerPound",
+            abbreviation: "MWh/lbs",
+            abbreviations: &["MWh/lbs"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattHourPerPound",
+            plural: "GigawattHoursPerPound",
+            abbreviation: "GWh/lbs",
+            abbreviations: &["GWh/lbs"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerPound",
+            plural: "BtuPerPound",
+            abbreviation: "btu/lb",
+            abbreviations: &["btu/lb"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`SpecificEnergy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "SpecificEnergy",
+        description: "The SpecificEnergy",
+        dimensions: crate::Dimensions::new(2, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

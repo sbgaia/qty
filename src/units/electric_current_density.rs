@@ -49,6 +49,42 @@ impl ElectricCurrentDensityUnit {
         Self::AmperePerSquareFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "AmperePerSquareMeter",
+            plural: "AmperesPerSquareMeter",
+            abbreviation: "A/m²",
+            abbreviations: &["A/m²"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerSquareInch",
+            plural: "AmperesPerSquareInch",
+            abbreviation: "A/in²",
+            abbreviations: &["A/in²"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerSquareFoot",
+            plural: "AmperesPerSquareFoot",
+            abbreviation: "A/ft²",
+            abbreviations: &["A/ft²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricCurrentDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricCurrentDensity",
+        description: "In electromagnetism, current density is the electric current per unit area of cross section.",
+        dimensions: crate::Dimensions::new(-2, 0, 0, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -39,6 +39,28 @@ impl LuminousFluxUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::Lumen];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "Lumen",
+        plural: "Lumens",
+        abbreviation: "lm",
+        abbreviations: &["lm"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`LuminousFlux`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "LuminousFlux",
+        description: "In photometry, luminous flux or luminous power is the measure of the perceived power of light.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 1),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

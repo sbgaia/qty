@@ -79,6 +79,126 @@ impl AbsorbedDoseOfIonizingRadiationUnit {
         Self::Megarad,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Gray",
+            plural: "Grays",
+            abbreviation: "Gy",
+            abbreviations: &["Gy"],
+        },
+        crate::UnitInfo {
+            singular: "Femtogray",
+            plural: "Femtograys",
+            abbreviation: "fGy",
+            abbreviations: &["fGy"],
+        },
+        crate::UnitInfo {
+            singular: "Picogray",
+            plural: "Picograys",
+            abbreviation: "pGy",
+            abbreviations: &["pGy"],
+        },
+        crate::UnitInfo {
+            singular: "Nanogray",
+            plural: "Nanograys",
+            abbreviation: "nGy",
+            abbreviations: &["nGy"],
+        },
+        crate::UnitInfo {
+            singular: "Microgray",
+            plural: "Micrograys",
+            abbreviation: "µGy",
+            abbreviations: &["µGy"],
+        },
+        crate::UnitInfo {
+            singular: "Milligray",
+            plural: "Milligrays",
+            abbreviation: "mGy",
+            abbreviations: &["mGy"],
+        },
+        crate::UnitInfo {
+            singular: "Centigray",
+            plural: "Centigrays",
+            abbreviation: "cGy",
+            abbreviations: &["cGy"],
+        },
+        crate::UnitInfo {
+            singular: "Decigray",
+            plural: "Decigrays",
+            abbreviation: "dGy",
+            abbreviations: &["dGy"],
+        },
+        crate::UnitInfo {
+            singular: "Kilogray",
+            plural: "Kilograys",
+            abbreviation: "kGy",
+            abbreviations: &["kGy"],
+        },
+        crate::UnitInfo {
+            singular: "Megagray",
+            plural: "Megagrays",
+            abbreviation: "MGy",
+            abbreviations: &["MGy"],
+        },
+        crate::UnitInfo {
+            singular: "Gigagray",
+            plural: "Gigagrays",
+            abbreviation: "GGy",
+            abbreviations: &["GGy"],
+        },
+        crate::UnitInfo {
+            singular: "Teragray",
+            plural: "Teragrays",
+            abbreviation: "TGy",
+            abbreviations: &["TGy"],
+        },
+        crate::UnitInfo {
+            singular: "Petagray",
+            plural: "Petagrays",
+            abbreviation: "PGy",
+            abbreviations: &["PGy"],
+        },
+        crate::UnitInfo {
+            singular: "Rad",
+            plural: "Rads",
+            abbreviation: "rad",
+            abbreviations: &["rad"],
+        },
+        crate::UnitInfo {
+            singular: "Millirad",
+            plural: "Millirads",
+            abbreviation: "mrad",
+            abbreviations: &["mrad"],
+        },
+        crate::UnitInfo {
+            singular: "Kilorad",
+            plural: "Kilorads",
+            abbreviation: "krad",
+            abbreviations: &["krad"],
+        },
+        crate::UnitInfo {
+            singular: "Megarad",
+            plural: "Megarads",
+            abbreviation: "Mrad",
+            abbreviations: &["Mrad"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`AbsorbedDoseOfIonizingRadiation`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "AbsorbedDoseOfIonizingRadiation",
+        description: "Absorbed dose is a dose quantity which is the measure of the energy deposited in matter by ionizing radiation per unit mass.",
+        dimensions: crate::Dimensions::new(2, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

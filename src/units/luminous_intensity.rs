@@ -39,6 +39,28 @@ impl LuminousIntensityUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::Candela];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "Candela",
+        plural: "Candela",
+        abbreviation: "cd",
+        abbreviations: &["cd"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`LuminousIntensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "LuminousIntensity",
+        description: "In photometry, luminous intensity is a measure of the wavelength-weighted power emitted by a light source in a particular direction per unit solid angle, based on the luminosity function, a standardized model of the sensitivity of the human eye.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 1),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

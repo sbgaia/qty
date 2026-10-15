@@ -65,6 +65,102 @@ impl DurationUnit {
         Self::Sol,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Year365",
+            plural: "Years365",
+            abbreviation: "yr",
+            abbreviations: &["yr", "year", "years"],
+        },
+        crate::UnitInfo {
+            singular: "Month30",
+            plural: "Months30",
+            abbreviation: "mo",
+            abbreviations: &["mo", "month", "months"],
+        },
+        crate::UnitInfo {
+            singular: "Week",
+            plural: "Weeks",
+            abbreviation: "wk",
+            abbreviations: &["wk", "week", "weeks"],
+        },
+        crate::UnitInfo {
+            singular: "Day",
+            plural: "Days",
+            abbreviation: "d",
+            abbreviations: &["d", "day", "days"],
+        },
+        crate::UnitInfo {
+            singular: "Hour",
+            plural: "Hours",
+            abbreviation: "h",
+            abbreviations: &["h", "hr", "hrs", "hour", "hours"],
+        },
+        crate::UnitInfo {
+            singular: "Minute",
+            plural: "Minutes",
+            abbreviation: "m",
+            abbreviations: &["m", "min", "minute", "minutes"],
+        },
+        crate::UnitInfo {
+            singular: "Second",
+            plural: "Seconds",
+            abbreviation: "s",
+            abbreviations: &["s", "sec", "secs", "second", "seconds"],
+        },
+        crate::UnitInfo {
+            singular: "Picosecond",
+            plural: "Picoseconds",
+            abbreviation: "ps",
+            abbreviations: &["ps"],
+        },
+        crate::UnitInfo {
+            singular: "Nanosecond",
+            plural: "Nanoseconds",
+            abbreviation: "ns",
+            abbreviations: &["ns"],
+        },
+        crate::UnitInfo {
+            singular: "Microsecond",
+            plural: "Microseconds",
+            abbreviation: "µs",
+            abbreviations: &["µs"],
+        },
+        crate::UnitInfo {
+            singular: "Millisecond",
+            plural: "Milliseconds",
+            abbreviation: "ms",
+            abbreviations: &["ms"],
+        },
+        crate::UnitInfo {
+            singular: "JulianYear",
+            plural: "JulianYears",
+            abbreviation: "jyr",
+            abbreviations: &["jyr", "jyear", "jyears"],
+        },
+        crate::UnitInfo {
+            singular: "Sol",
+            plural: "Sols",
+            abbreviation: "sol",
+            abbreviations: &["sol"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Duration`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Duration",
+        description: "Time is a dimension in which events can be ordered from the past through the present into the future, and also the measure of durations of events and the intervals between them.",
+        dimensions: crate::Dimensions::new(0, 0, 1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[6],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -63,6 +63,84 @@ impl RadiationEquivalentDoseRateUnit {
         Self::MilliroentgenEquivalentManPerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "SievertPerHour",
+            plural: "SievertsPerHour",
+            abbreviation: "Sv/h",
+            abbreviations: &["Sv/h"],
+        },
+        crate::UnitInfo {
+            singular: "NanosievertPerHour",
+            plural: "NanosievertsPerHour",
+            abbreviation: "nSv/h",
+            abbreviations: &["nSv/h"],
+        },
+        crate::UnitInfo {
+            singular: "MicrosievertPerHour",
+            plural: "MicrosievertsPerHour",
+            abbreviation: "µSv/h",
+            abbreviations: &["µSv/h"],
+        },
+        crate::UnitInfo {
+            singular: "MillisievertPerHour",
+            plural: "MillisievertsPerHour",
+            abbreviation: "mSv/h",
+            abbreviations: &["mSv/h"],
+        },
+        crate::UnitInfo {
+            singular: "SievertPerSecond",
+            plural: "SievertsPerSecond",
+            abbreviation: "Sv/s",
+            abbreviations: &["Sv/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanosievertPerSecond",
+            plural: "NanosievertsPerSecond",
+            abbreviation: "nSv/s",
+            abbreviations: &["nSv/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrosievertPerSecond",
+            plural: "MicrosievertsPerSecond",
+            abbreviation: "µSv/s",
+            abbreviations: &["µSv/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillisievertPerSecond",
+            plural: "MillisievertsPerSecond",
+            abbreviation: "mSv/s",
+            abbreviations: &["mSv/s"],
+        },
+        crate::UnitInfo {
+            singular: "RoentgenEquivalentManPerHour",
+            plural: "RoentgensEquivalentManPerHour",
+            abbreviation: "rem/h",
+            abbreviations: &["rem/h"],
+        },
+        crate::UnitInfo {
+            singular: "MilliroentgenEquivalentManPerHour",
+            plural: "MilliroentgensEquivalentManPerHour",
+            abbreviation: "mrem/h",
+            abbreviations: &["mrem/h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RadiationEquivalentDoseRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RadiationEquivalentDoseRate",
+        description: "A dose rate is quantity of radiation absorbed or delivered per unit time.",
+        dimensions: crate::Dimensions::new(2, 0, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[4],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

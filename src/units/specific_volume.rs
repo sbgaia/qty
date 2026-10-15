@@ -46,6 +46,42 @@ impl SpecificVolumeUnit {
         Self::CubicFootPerPound,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CubicMeterPerKilogram",
+            plural: "CubicMetersPerKilogram",
+            abbreviation: "m³/kg",
+            abbreviations: &["m³/kg"],
+        },
+        crate::UnitInfo {
+            singular: "CubicMillimeterPerKilogram",
+            plural: "CubicMillimetersPerKilogram",
+            abbreviation: "mm³/kg",
+            abbreviations: &["mm³/kg"],
+        },
+        crate::UnitInfo {
+            singular: "CubicFootPerPound",
+            plural: "CubicFeetPerPound",
+            abbreviation: "ft³/lb",
+            abbreviations: &["ft³/lb"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`SpecificVolume`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "SpecificVolume",
+        description: "In thermodynamics, the specific volume of a substance is the ratio of the substance's volume to its mass. It is the reciprocal of density and an intrinsic property of matter as well.",
+        dimensions: crate::Dimensions::new(3, -1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

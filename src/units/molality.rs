@@ -45,6 +45,42 @@ impl MolalityUnit {
         Self::MolePerGram,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MolePerKilogram",
+            plural: "MolesPerKilogram",
+            abbreviation: "mol/kg",
+            abbreviations: &["mol/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MillimolePerKilogram",
+            plural: "MillimolesPerKilogram",
+            abbreviation: "mmol/kg",
+            abbreviations: &["mmol/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MolePerGram",
+            plural: "MolesPerGram",
+            abbreviation: "mol/g",
+            abbreviations: &["mol/g"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Molality`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Molality",
+        description: "Molality is a measure of the amount of solute in a solution relative to a given mass of solvent.",
+        dimensions: crate::Dimensions::new(0, -1, 0, 0, 0, 1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

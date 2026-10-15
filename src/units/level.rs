@@ -40,6 +40,36 @@ impl LevelUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::Decibel, Self::Neper];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Decibel",
+            plural: "Decibels",
+            abbreviation: "dB",
+            abbreviations: &["dB"],
+        },
+        crate::UnitInfo {
+            singular: "Neper",
+            plural: "Nepers",
+            abbreviation: "Np",
+            abbreviations: &["Np"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Level`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Level",
+        description: "Level is the logarithm of the ratio of a quantity Q to a reference value of that quantity, Q₀, expressed in dimensionless units.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

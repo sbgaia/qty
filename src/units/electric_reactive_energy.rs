@@ -49,6 +49,42 @@ impl ElectricReactiveEnergyUnit {
         Self::MegavoltampereReactiveHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "VoltampereReactiveHour",
+            plural: "VoltampereReactiveHours",
+            abbreviation: "varh",
+            abbreviations: &["varh"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltampereReactiveHour",
+            plural: "KilovoltampereReactiveHours",
+            abbreviation: "kvarh",
+            abbreviations: &["kvarh"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltampereReactiveHour",
+            plural: "MegavoltampereReactiveHours",
+            abbreviation: "Mvarh",
+            abbreviations: &["Mvarh"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricReactiveEnergy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricReactiveEnergy",
+        description: "The volt-ampere reactive hour (expressed as varh) is the reactive power of one Volt-ampere reactive produced in one hour.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

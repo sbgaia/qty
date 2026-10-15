@@ -51,6 +51,48 @@ impl SpecificFuelConsumptionUnit {
         Self::KilogramPerKilonewtonSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PoundMassPerPoundForceHour",
+            plural: "PoundsMassPerPoundForceHour",
+            abbreviation: "lb/(lbf·h)",
+            abbreviations: &["lb/(lbf·h)"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerKilogramForceHour",
+            plural: "KilogramsPerKilogramForceHour",
+            abbreviation: "kg/(kgf·h)",
+            abbreviations: &["kg/(kgf·h)"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerKilonewtonSecond",
+            plural: "GramsPerKilonewtonSecond",
+            abbreviation: "g/(kN·s)",
+            abbreviations: &["g/(kN·s)"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerKilonewtonSecond",
+            plural: "KilogramsPerKilonewtonSecond",
+            abbreviation: "kg/(kN·s)",
+            abbreviations: &["kg/(kN·s)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`SpecificFuelConsumption`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "SpecificFuelConsumption",
+        description: "SFC is the fuel efficiency of an engine design with respect to thrust output",
+        dimensions: crate::Dimensions::new(-1, 0, 1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[2],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

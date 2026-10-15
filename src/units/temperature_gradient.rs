@@ -45,6 +45,48 @@ impl TemperatureGradientUnit {
         Self::DegreeCelsiusPerKilometer,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "KelvinPerMeter",
+            plural: "KelvinsPerMeter",
+            abbreviation: "∆°K/m",
+            abbreviations: &["∆°K/m"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerMeter",
+            plural: "DegreesCelsiusPerMeter",
+            abbreviation: "∆°C/m",
+            abbreviations: &["∆°C/m"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeFahrenheitPerFoot",
+            plural: "DegreesFahrenheitPerFoot",
+            abbreviation: "∆°F/ft",
+            abbreviations: &["∆°F/ft"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerKilometer",
+            plural: "DegreesCelsiusPerKilometer",
+            abbreviation: "∆°C/km",
+            abbreviations: &["∆°C/km"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`TemperatureGradient`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "TemperatureGradient",
+        description: "",
+        dimensions: crate::Dimensions::new(-1, 0, 0, 0, 1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

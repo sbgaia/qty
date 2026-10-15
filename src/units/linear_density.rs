@@ -75,6 +75,132 @@ impl LinearDensityUnit {
         Self::KilogramPerFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerMillimeter",
+            plural: "GramsPerMillimeter",
+            abbreviation: "g/mm",
+            abbreviations: &["g/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerMillimeter",
+            plural: "MicrogramsPerMillimeter",
+            abbreviation: "µg/mm",
+            abbreviations: &["µg/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerMillimeter",
+            plural: "MilligramsPerMillimeter",
+            abbreviation: "mg/mm",
+            abbreviations: &["mg/mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerMillimeter",
+            plural: "KilogramsPerMillimeter",
+            abbreviation: "kg/mm",
+            abbreviations: &["kg/mm"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerCentimeter",
+            plural: "GramsPerCentimeter",
+            abbreviation: "g/cm",
+            abbreviations: &["g/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerCentimeter",
+            plural: "MicrogramsPerCentimeter",
+            abbreviation: "µg/cm",
+            abbreviations: &["µg/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerCentimeter",
+            plural: "MilligramsPerCentimeter",
+            abbreviation: "mg/cm",
+            abbreviations: &["mg/cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerCentimeter",
+            plural: "KilogramsPerCentimeter",
+            abbreviation: "kg/cm",
+            abbreviations: &["kg/cm"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerMeter",
+            plural: "GramsPerMeter",
+            abbreviation: "g/m",
+            abbreviations: &["g/m"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerMeter",
+            plural: "MicrogramsPerMeter",
+            abbreviation: "µg/m",
+            abbreviations: &["µg/m"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerMeter",
+            plural: "MilligramsPerMeter",
+            abbreviation: "mg/m",
+            abbreviations: &["mg/m"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerMeter",
+            plural: "KilogramsPerMeter",
+            abbreviation: "kg/m",
+            abbreviations: &["kg/m"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerInch",
+            plural: "PoundsPerInch",
+            abbreviation: "lb/in",
+            abbreviations: &["lb/in"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerFoot",
+            plural: "PoundsPerFoot",
+            abbreviation: "lb/ft",
+            abbreviations: &["lb/ft"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerFoot",
+            plural: "GramsPerFoot",
+            abbreviation: "g/ft",
+            abbreviations: &["g/ft"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerFoot",
+            plural: "MicrogramsPerFoot",
+            abbreviation: "µg/ft",
+            abbreviations: &["µg/ft"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerFoot",
+            plural: "MilligramsPerFoot",
+            abbreviation: "mg/ft",
+            abbreviations: &["mg/ft"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerFoot",
+            plural: "KilogramsPerFoot",
+            abbreviation: "kg/ft",
+            abbreviations: &["kg/ft"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`LinearDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "LinearDensity",
+        description: "The Linear Density, or more precisely, the linear mass density, of a substance is its mass per unit length.  The term linear density is most often used when describing the characteristics of one-dimensional objects, although linear density can also be used to describe the density of a three-dimensional quantity along one particular dimension.",
+        dimensions: crate::Dimensions::new(-1, 1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[11],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

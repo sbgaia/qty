@@ -63,6 +63,84 @@ impl DynamicViscosityUnit {
         Self::PoundPerFootSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonSecondPerMeterSquared",
+            plural: "NewtonSecondsPerMeterSquared",
+            abbreviation: "Ns/m²",
+            abbreviations: &["Ns/m²"],
+        },
+        crate::UnitInfo {
+            singular: "PascalSecond",
+            plural: "PascalSeconds",
+            abbreviation: "Pa·s",
+            abbreviations: &["Pa·s", "PaS"],
+        },
+        crate::UnitInfo {
+            singular: "MillipascalSecond",
+            plural: "MillipascalSeconds",
+            abbreviation: "mPa·s",
+            abbreviations: &["mPa·s"],
+        },
+        crate::UnitInfo {
+            singular: "MicropascalSecond",
+            plural: "MicropascalSeconds",
+            abbreviation: "µPa·s",
+            abbreviations: &["µPa·s"],
+        },
+        crate::UnitInfo {
+            singular: "Poise",
+            plural: "Poise",
+            abbreviation: "P",
+            abbreviations: &["P"],
+        },
+        crate::UnitInfo {
+            singular: "Centipoise",
+            plural: "Centipoise",
+            abbreviation: "cP",
+            abbreviations: &["cP"],
+        },
+        crate::UnitInfo {
+            singular: "Reyn",
+            plural: "Reyns",
+            abbreviation: "reyn",
+            abbreviations: &["reyn"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceSecondPerSquareInch",
+            plural: "PoundsForceSecondPerSquareInch",
+            abbreviation: "lbf·s/in²",
+            abbreviations: &["lbf·s/in²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceSecondPerSquareFoot",
+            plural: "PoundsForceSecondPerSquareFoot",
+            abbreviation: "lbf·s/ft²",
+            abbreviations: &["lbf·s/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerFootSecond",
+            plural: "PoundsPerFootSecond",
+            abbreviation: "lb/(ft·s)",
+            abbreviations: &["lb/(ft·s)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`DynamicViscosity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "DynamicViscosity",
+        description: "The dynamic (shear) viscosity of a fluid expresses its resistance to shearing flows, where adjacent layers move parallel to each other with different speeds",
+        dimensions: crate::Dimensions::new(-1, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -61,6 +61,96 @@ impl EnergyDensityUnit {
         Self::PetawattHourPerCubicMeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerCubicMeter",
+            plural: "JoulesPerCubicMeter",
+            abbreviation: "J/m³",
+            abbreviations: &["J/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerCubicMeter",
+            plural: "KilojoulesPerCubicMeter",
+            abbreviation: "kJ/m³",
+            abbreviations: &["kJ/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerCubicMeter",
+            plural: "MegajoulesPerCubicMeter",
+            abbreviation: "MJ/m³",
+            abbreviations: &["MJ/m³"],
+        },
+        crate::UnitInfo {
+            singular: "GigajoulePerCubicMeter",
+            plural: "GigajoulesPerCubicMeter",
+            abbreviation: "GJ/m³",
+            abbreviations: &["GJ/m³"],
+        },
+        crate::UnitInfo {
+            singular: "TerajoulePerCubicMeter",
+            plural: "TerajoulesPerCubicMeter",
+            abbreviation: "TJ/m³",
+            abbreviations: &["TJ/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PetajoulePerCubicMeter",
+            plural: "PetajoulesPerCubicMeter",
+            abbreviation: "PJ/m³",
+            abbreviations: &["PJ/m³"],
+        },
+        crate::UnitInfo {
+            singular: "WattHourPerCubicMeter",
+            plural: "WattHoursPerCubicMeter",
+            abbreviation: "Wh/m³",
+            abbreviations: &["Wh/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattHourPerCubicMeter",
+            plural: "KilowattHoursPerCubicMeter",
+            abbreviation: "kWh/m³",
+            abbreviations: &["kWh/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattHourPerCubicMeter",
+            plural: "MegawattHoursPerCubicMeter",
+            abbreviation: "MWh/m³",
+            abbreviations: &["MWh/m³"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattHourPerCubicMeter",
+            plural: "GigawattHoursPerCubicMeter",
+            abbreviation: "GWh/m³",
+            abbreviations: &["GWh/m³"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattHourPerCubicMeter",
+            plural: "TerawattHoursPerCubicMeter",
+            abbreviation: "TWh/m³",
+            abbreviations: &["TWh/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PetawattHourPerCubicMeter",
+            plural: "PetawattHoursPerCubicMeter",
+            abbreviation: "PWh/m³",
+            abbreviations: &["PWh/m³"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`EnergyDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "EnergyDensity",
+        description: "",
+        dimensions: crate::Dimensions::new(-1, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

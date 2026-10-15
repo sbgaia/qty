@@ -89,6 +89,174 @@ impl DoseAreaProductUnit {
         Self::DecigraySquareMicrometer,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GraySquareMeter",
+            plural: "GraySquareMeters",
+            abbreviation: "Gy·m²",
+            abbreviations: &["Gy·m²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrograySquareMeter",
+            plural: "MicrograySquareMeters",
+            abbreviation: "µGy·m²",
+            abbreviations: &["µGy·m²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligraySquareMeter",
+            plural: "MilligraySquareMeters",
+            abbreviation: "mGy·m²",
+            abbreviations: &["mGy·m²"],
+        },
+        crate::UnitInfo {
+            singular: "CentigraySquareMeter",
+            plural: "CentigraySquareMeters",
+            abbreviation: "cGy·m²",
+            abbreviations: &["cGy·m²"],
+        },
+        crate::UnitInfo {
+            singular: "DecigraySquareMeter",
+            plural: "DecigraySquareMeters",
+            abbreviation: "dGy·m²",
+            abbreviations: &["dGy·m²"],
+        },
+        crate::UnitInfo {
+            singular: "GraySquareDecimeter",
+            plural: "GraySquareDecimeters",
+            abbreviation: "Gy·dm²",
+            abbreviations: &["Gy·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrograySquareDecimeter",
+            plural: "MicrograySquareDecimeters",
+            abbreviation: "µGy·dm²",
+            abbreviations: &["µGy·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligraySquareDecimeter",
+            plural: "MilligraySquareDecimeters",
+            abbreviation: "mGy·dm²",
+            abbreviations: &["mGy·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "CentigraySquareDecimeter",
+            plural: "CentigraySquareDecimeters",
+            abbreviation: "cGy·dm²",
+            abbreviations: &["cGy·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "DecigraySquareDecimeter",
+            plural: "DecigraySquareDecimeters",
+            abbreviation: "dGy·dm²",
+            abbreviations: &["dGy·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "GraySquareCentimeter",
+            plural: "GraySquareCentimeters",
+            abbreviation: "Gy·cm²",
+            abbreviations: &["Gy·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrograySquareCentimeter",
+            plural: "MicrograySquareCentimeters",
+            abbreviation: "µGy·cm²",
+            abbreviations: &["µGy·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligraySquareCentimeter",
+            plural: "MilligraySquareCentimeters",
+            abbreviation: "mGy·cm²",
+            abbreviations: &["mGy·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "CentigraySquareCentimeter",
+            plural: "CentigraySquareCentimeters",
+            abbreviation: "cGy·cm²",
+            abbreviations: &["cGy·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "DecigraySquareCentimeter",
+            plural: "DecigraySquareCentimeters",
+            abbreviation: "dGy·cm²",
+            abbreviations: &["dGy·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "GraySquareMillimeter",
+            plural: "GraySquareMillimeters",
+            abbreviation: "Gy·mm²",
+            abbreviations: &["Gy·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrograySquareMillimeter",
+            plural: "MicrograySquareMillimeters",
+            abbreviation: "µGy·mm²",
+            abbreviations: &["µGy·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligraySquareMillimeter",
+            plural: "MilligraySquareMillimeters",
+            abbreviation: "mGy·mm²",
+            abbreviations: &["mGy·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "CentigraySquareMillimeter",
+            plural: "CentigraySquareMillimeters",
+            abbreviation: "cGy·mm²",
+            abbreviations: &["cGy·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "DecigraySquareMillimeter",
+            plural: "DecigraySquareMillimeters",
+            abbreviation: "dGy·mm²",
+            abbreviations: &["dGy·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "GraySquareMicrometer",
+            plural: "GraySquareMicrometers",
+            abbreviation: "Gy·μm²",
+            abbreviations: &["Gy·μm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrograySquareMicrometer",
+            plural: "MicrograySquareMicrometers",
+            abbreviation: "µGy·μm²",
+            abbreviations: &["µGy·μm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligraySquareMicrometer",
+            plural: "MilligraySquareMicrometers",
+            abbreviation: "mGy·μm²",
+            abbreviations: &["mGy·μm²"],
+        },
+        crate::UnitInfo {
+            singular: "CentigraySquareMicrometer",
+            plural: "CentigraySquareMicrometers",
+            abbreviation: "cGy·μm²",
+            abbreviations: &["cGy·μm²"],
+        },
+        crate::UnitInfo {
+            singular: "DecigraySquareMicrometer",
+            plural: "DecigraySquareMicrometers",
+            abbreviation: "dGy·μm²",
+            abbreviations: &["dGy·μm²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`DoseAreaProduct`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "DoseAreaProduct",
+        description: "It is defined as the absorbed dose multiplied by the area irradiated.",
+        dimensions: crate::Dimensions::new(4, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

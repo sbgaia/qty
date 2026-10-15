@@ -51,6 +51,48 @@ impl ElectricReactivePowerUnit {
         Self::GigavoltampereReactive,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "VoltampereReactive",
+            plural: "VoltamperesReactive",
+            abbreviation: "var",
+            abbreviations: &["var"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltampereReactive",
+            plural: "KilovoltamperesReactive",
+            abbreviation: "kvar",
+            abbreviations: &["kvar"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltampereReactive",
+            plural: "MegavoltamperesReactive",
+            abbreviation: "Mvar",
+            abbreviations: &["Mvar"],
+        },
+        crate::UnitInfo {
+            singular: "GigavoltampereReactive",
+            plural: "GigavoltamperesReactive",
+            abbreviation: "Gvar",
+            abbreviations: &["Gvar"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricReactivePower`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricReactivePower",
+        description: "In electric power transmission and distribution, volt-ampere reactive (var) is a unit of measurement of reactive power. Reactive power exists in an AC circuit when the current and voltage are not in phase.",
+        dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

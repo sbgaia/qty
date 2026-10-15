@@ -98,6 +98,186 @@ impl PowerUnit {
         Self::TonOfRefrigeration,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Watt",
+            plural: "Watts",
+            abbreviation: "W",
+            abbreviations: &["W"],
+        },
+        crate::UnitInfo {
+            singular: "Femtowatt",
+            plural: "Femtowatts",
+            abbreviation: "fW",
+            abbreviations: &["fW"],
+        },
+        crate::UnitInfo {
+            singular: "Picowatt",
+            plural: "Picowatts",
+            abbreviation: "pW",
+            abbreviations: &["pW"],
+        },
+        crate::UnitInfo {
+            singular: "Nanowatt",
+            plural: "Nanowatts",
+            abbreviation: "nW",
+            abbreviations: &["nW"],
+        },
+        crate::UnitInfo {
+            singular: "Microwatt",
+            plural: "Microwatts",
+            abbreviation: "µW",
+            abbreviations: &["µW"],
+        },
+        crate::UnitInfo {
+            singular: "Milliwatt",
+            plural: "Milliwatts",
+            abbreviation: "mW",
+            abbreviations: &["mW"],
+        },
+        crate::UnitInfo {
+            singular: "Deciwatt",
+            plural: "Deciwatts",
+            abbreviation: "dW",
+            abbreviations: &["dW"],
+        },
+        crate::UnitInfo {
+            singular: "Decawatt",
+            plural: "Decawatts",
+            abbreviation: "daW",
+            abbreviations: &["daW"],
+        },
+        crate::UnitInfo {
+            singular: "Kilowatt",
+            plural: "Kilowatts",
+            abbreviation: "kW",
+            abbreviations: &["kW"],
+        },
+        crate::UnitInfo {
+            singular: "Megawatt",
+            plural: "Megawatts",
+            abbreviation: "MW",
+            abbreviations: &["MW"],
+        },
+        crate::UnitInfo {
+            singular: "Gigawatt",
+            plural: "Gigawatts",
+            abbreviation: "GW",
+            abbreviations: &["GW"],
+        },
+        crate::UnitInfo {
+            singular: "Terawatt",
+            plural: "Terawatts",
+            abbreviation: "TW",
+            abbreviations: &["TW"],
+        },
+        crate::UnitInfo {
+            singular: "Petawatt",
+            plural: "Petawatts",
+            abbreviation: "PW",
+            abbreviations: &["PW"],
+        },
+        crate::UnitInfo {
+            singular: "MechanicalHorsepower",
+            plural: "MechanicalHorsepower",
+            abbreviation: "hp(I)",
+            abbreviations: &["hp(I)"],
+        },
+        crate::UnitInfo {
+            singular: "MetricHorsepower",
+            plural: "MetricHorsepower",
+            abbreviation: "hp(M)",
+            abbreviations: &["hp(M)"],
+        },
+        crate::UnitInfo {
+            singular: "ElectricalHorsepower",
+            plural: "ElectricalHorsepower",
+            abbreviation: "hp(E)",
+            abbreviations: &["hp(E)"],
+        },
+        crate::UnitInfo {
+            singular: "BoilerHorsepower",
+            plural: "BoilerHorsepower",
+            abbreviation: "hp(S)",
+            abbreviations: &["hp(S)"],
+        },
+        crate::UnitInfo {
+            singular: "HydraulicHorsepower",
+            plural: "HydraulicHorsepower",
+            abbreviation: "hp(H)",
+            abbreviations: &["hp(H)"],
+        },
+        crate::UnitInfo {
+            singular: "BritishThermalUnitPerHour",
+            plural: "BritishThermalUnitsPerHour",
+            abbreviation: "Btu/h",
+            abbreviations: &["Btu/h", "Btu/hr"],
+        },
+        crate::UnitInfo {
+            singular: "KilobritishThermalUnitPerHour",
+            plural: "KilobritishThermalUnitsPerHour",
+            abbreviation: "kBtu/h",
+            abbreviations: &["kBtu/h"],
+        },
+        crate::UnitInfo {
+            singular: "MegabritishThermalUnitPerHour",
+            plural: "MegabritishThermalUnitsPerHour",
+            abbreviation: "MBtu/h",
+            abbreviations: &["MBtu/h"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerHour",
+            plural: "JoulesPerHour",
+            abbreviation: "J/h",
+            abbreviations: &["J/h"],
+        },
+        crate::UnitInfo {
+            singular: "MillijoulePerHour",
+            plural: "MillijoulesPerHour",
+            abbreviation: "mJ/h",
+            abbreviations: &["mJ/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerHour",
+            plural: "KilojoulesPerHour",
+            abbreviation: "kJ/h",
+            abbreviations: &["kJ/h"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerHour",
+            plural: "MegajoulesPerHour",
+            abbreviation: "MJ/h",
+            abbreviations: &["MJ/h"],
+        },
+        crate::UnitInfo {
+            singular: "GigajoulePerHour",
+            plural: "GigajoulesPerHour",
+            abbreviation: "GJ/h",
+            abbreviations: &["GJ/h"],
+        },
+        crate::UnitInfo {
+            singular: "TonOfRefrigeration",
+            plural: "TonsOfRefrigeration",
+            abbreviation: "TR",
+            abbreviations: &["TR"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Power`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Power",
+        description: "In physics, power is the rate of doing work. It is equivalent to an amount of energy consumed per unit time.",
+        dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

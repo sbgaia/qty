@@ -57,6 +57,78 @@ impl ElectricCurrentUnit {
         Self::Megaampere,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Ampere",
+            plural: "Amperes",
+            abbreviation: "A",
+            abbreviations: &["A"],
+        },
+        crate::UnitInfo {
+            singular: "Femtoampere",
+            plural: "Femtoamperes",
+            abbreviation: "fA",
+            abbreviations: &["fA"],
+        },
+        crate::UnitInfo {
+            singular: "Picoampere",
+            plural: "Picoamperes",
+            abbreviation: "pA",
+            abbreviations: &["pA"],
+        },
+        crate::UnitInfo {
+            singular: "Nanoampere",
+            plural: "Nanoamperes",
+            abbreviation: "nA",
+            abbreviations: &["nA"],
+        },
+        crate::UnitInfo {
+            singular: "Microampere",
+            plural: "Microamperes",
+            abbreviation: "µA",
+            abbreviations: &["µA"],
+        },
+        crate::UnitInfo {
+            singular: "Milliampere",
+            plural: "Milliamperes",
+            abbreviation: "mA",
+            abbreviations: &["mA"],
+        },
+        crate::UnitInfo {
+            singular: "Centiampere",
+            plural: "Centiamperes",
+            abbreviation: "cA",
+            abbreviations: &["cA"],
+        },
+        crate::UnitInfo {
+            singular: "Kiloampere",
+            plural: "Kiloamperes",
+            abbreviation: "kA",
+            abbreviations: &["kA"],
+        },
+        crate::UnitInfo {
+            singular: "Megaampere",
+            plural: "Megaamperes",
+            abbreviation: "MA",
+            abbreviations: &["MA"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricCurrent`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricCurrent",
+        description: "An electric current is a flow of electric charge. In electric circuits this charge is often carried by moving electrons in a wire. It can also be carried by ions in an electrolyte, or by both ions and electrons such as in a plasma.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

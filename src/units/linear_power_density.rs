@@ -89,6 +89,174 @@ impl LinearPowerDensityUnit {
         Self::GigawattPerFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "WattPerMeter",
+            plural: "WattsPerMeter",
+            abbreviation: "W/m",
+            abbreviations: &["W/m"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerMeter",
+            plural: "MilliwattsPerMeter",
+            abbreviation: "mW/m",
+            abbreviations: &["mW/m"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerMeter",
+            plural: "KilowattsPerMeter",
+            abbreviation: "kW/m",
+            abbreviations: &["kW/m"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerMeter",
+            plural: "MegawattsPerMeter",
+            abbreviation: "MW/m",
+            abbreviations: &["MW/m"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerMeter",
+            plural: "GigawattsPerMeter",
+            abbreviation: "GW/m",
+            abbreviations: &["GW/m"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerCentimeter",
+            plural: "WattsPerCentimeter",
+            abbreviation: "W/cm",
+            abbreviations: &["W/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerCentimeter",
+            plural: "MilliwattsPerCentimeter",
+            abbreviation: "mW/cm",
+            abbreviations: &["mW/cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerCentimeter",
+            plural: "KilowattsPerCentimeter",
+            abbreviation: "kW/cm",
+            abbreviations: &["kW/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerCentimeter",
+            plural: "MegawattsPerCentimeter",
+            abbreviation: "MW/cm",
+            abbreviations: &["MW/cm"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerCentimeter",
+            plural: "GigawattsPerCentimeter",
+            abbreviation: "GW/cm",
+            abbreviations: &["GW/cm"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerMillimeter",
+            plural: "WattsPerMillimeter",
+            abbreviation: "W/mm",
+            abbreviations: &["W/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerMillimeter",
+            plural: "MilliwattsPerMillimeter",
+            abbreviation: "mW/mm",
+            abbreviations: &["mW/mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerMillimeter",
+            plural: "KilowattsPerMillimeter",
+            abbreviation: "kW/mm",
+            abbreviations: &["kW/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerMillimeter",
+            plural: "MegawattsPerMillimeter",
+            abbreviation: "MW/mm",
+            abbreviations: &["MW/mm"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerMillimeter",
+            plural: "GigawattsPerMillimeter",
+            abbreviation: "GW/mm",
+            abbreviations: &["GW/mm"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerInch",
+            plural: "WattsPerInch",
+            abbreviation: "W/in",
+            abbreviations: &["W/in"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerInch",
+            plural: "MilliwattsPerInch",
+            abbreviation: "mW/in",
+            abbreviations: &["mW/in"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerInch",
+            plural: "KilowattsPerInch",
+            abbreviation: "kW/in",
+            abbreviations: &["kW/in"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerInch",
+            plural: "MegawattsPerInch",
+            abbreviation: "MW/in",
+            abbreviations: &["MW/in"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerInch",
+            plural: "GigawattsPerInch",
+            abbreviation: "GW/in",
+            abbreviations: &["GW/in"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerFoot",
+            plural: "WattsPerFoot",
+            abbreviation: "W/ft",
+            abbreviations: &["W/ft"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerFoot",
+            plural: "MilliwattsPerFoot",
+            abbreviation: "mW/ft",
+            abbreviations: &["mW/ft"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerFoot",
+            plural: "KilowattsPerFoot",
+            abbreviation: "kW/ft",
+            abbreviations: &["kW/ft"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerFoot",
+            plural: "MegawattsPerFoot",
+            abbreviation: "MW/ft",
+            abbreviations: &["MW/ft"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerFoot",
+            plural: "GigawattsPerFoot",
+            abbreviation: "GW/ft",
+            abbreviations: &["GW/ft"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`LinearPowerDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "LinearPowerDensity",
+        description: "The Linear Power Density of a substance is its power per unit length.  The term linear density is most often used when describing the characteristics of one-dimensional objects, although linear density can also be used to describe the density of a three-dimensional quantity along one particular dimension.",
+        dimensions: crate::Dimensions::new(1, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

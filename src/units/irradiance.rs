@@ -67,6 +67,108 @@ impl IrradianceUnit {
         Self::MegawattPerSquareCentimeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "WattPerSquareMeter",
+            plural: "WattsPerSquareMeter",
+            abbreviation: "W/m²",
+            abbreviations: &["W/m²"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerSquareMeter",
+            plural: "PicowattsPerSquareMeter",
+            abbreviation: "pW/m²",
+            abbreviations: &["pW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerSquareMeter",
+            plural: "NanowattsPerSquareMeter",
+            abbreviation: "nW/m²",
+            abbreviations: &["nW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerSquareMeter",
+            plural: "MicrowattsPerSquareMeter",
+            abbreviation: "µW/m²",
+            abbreviations: &["µW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerSquareMeter",
+            plural: "MilliwattsPerSquareMeter",
+            abbreviation: "mW/m²",
+            abbreviations: &["mW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerSquareMeter",
+            plural: "KilowattsPerSquareMeter",
+            abbreviation: "kW/m²",
+            abbreviations: &["kW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerSquareMeter",
+            plural: "MegawattsPerSquareMeter",
+            abbreviation: "MW/m²",
+            abbreviations: &["MW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerSquareCentimeter",
+            plural: "WattsPerSquareCentimeter",
+            abbreviation: "W/cm²",
+            abbreviations: &["W/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerSquareCentimeter",
+            plural: "PicowattsPerSquareCentimeter",
+            abbreviation: "pW/cm²",
+            abbreviations: &["pW/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerSquareCentimeter",
+            plural: "NanowattsPerSquareCentimeter",
+            abbreviation: "nW/cm²",
+            abbreviations: &["nW/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerSquareCentimeter",
+            plural: "MicrowattsPerSquareCentimeter",
+            abbreviation: "µW/cm²",
+            abbreviations: &["µW/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerSquareCentimeter",
+            plural: "MilliwattsPerSquareCentimeter",
+            abbreviation: "mW/cm²",
+            abbreviations: &["mW/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerSquareCentimeter",
+            plural: "KilowattsPerSquareCentimeter",
+            abbreviation: "kW/cm²",
+            abbreviations: &["kW/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerSquareCentimeter",
+            plural: "MegawattsPerSquareCentimeter",
+            abbreviation: "MW/cm²",
+            abbreviations: &["MW/cm²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Irradiance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Irradiance",
+        description: "Irradiance is the intensity of ultraviolet (UV) or visible light incident on a surface.",
+        dimensions: crate::Dimensions::new(0, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

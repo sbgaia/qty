@@ -39,6 +39,28 @@ impl TurbidityUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::NTU];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "NTU",
+        plural: "NTU",
+        abbreviation: "NTU",
+        abbreviations: &["NTU"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Turbidity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Turbidity",
+        description: "Turbidity is the cloudiness or haziness of a fluid caused by large numbers of individual particles that are generally invisible to the naked eye, similar to smoke in air. The measurement of turbidity is a key test of water quality.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

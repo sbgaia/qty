@@ -51,6 +51,48 @@ impl RotationalAccelerationUnit {
         Self::RevolutionPerSecondSquared,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "RadianPerSecondSquared",
+            plural: "RadiansPerSecondSquared",
+            abbreviation: "rad/s²",
+            abbreviations: &["rad/s²"],
+        },
+        crate::UnitInfo {
+            singular: "DegreePerSecondSquared",
+            plural: "DegreesPerSecondSquared",
+            abbreviation: "°/s²",
+            abbreviations: &["°/s²", "deg/s²"],
+        },
+        crate::UnitInfo {
+            singular: "RevolutionPerMinutePerSecond",
+            plural: "RevolutionsPerMinutePerSecond",
+            abbreviation: "rpm/s",
+            abbreviations: &["rpm/s"],
+        },
+        crate::UnitInfo {
+            singular: "RevolutionPerSecondSquared",
+            plural: "RevolutionsPerSecondSquared",
+            abbreviation: "r/s²",
+            abbreviations: &["r/s²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RotationalAcceleration`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RotationalAcceleration",
+        description: "Angular acceleration is the rate of change of rotational speed.",
+        dimensions: crate::Dimensions::new(0, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

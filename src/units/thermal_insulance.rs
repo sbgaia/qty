@@ -57,6 +57,66 @@ impl ThermalInsulanceUnit {
         Self::HourSquareFeetDegreeFahrenheitPerBtu,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "SquareMeterKelvinPerKilowatt",
+            plural: "SquareMeterKelvinsPerKilowatt",
+            abbreviation: "m²K/kW",
+            abbreviations: &["m²K/kW"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMeterKelvinPerWatt",
+            plural: "SquareMeterKelvinsPerWatt",
+            abbreviation: "m²K/W",
+            abbreviations: &["m²K/W"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMeterDegreeCelsiusPerWatt",
+            plural: "SquareMeterDegreesCelsiusPerWatt",
+            abbreviation: "m²°C/W",
+            abbreviations: &["m²°C/W"],
+        },
+        crate::UnitInfo {
+            singular: "SquareCentimeterKelvinPerWatt",
+            plural: "SquareCentimeterKelvinsPerWatt",
+            abbreviation: "cm²K/W",
+            abbreviations: &["cm²K/W"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMillimeterKelvinPerWatt",
+            plural: "SquareMillimeterKelvinsPerWatt",
+            abbreviation: "mm²K/W",
+            abbreviations: &["mm²K/W"],
+        },
+        crate::UnitInfo {
+            singular: "SquareCentimeterHourDegreeCelsiusPerKilocalorie",
+            plural: "SquareCentimeterHourDegreesCelsiusPerKilocalorie",
+            abbreviation: "cm²Hr°C/kcal",
+            abbreviations: &["cm²Hr°C/kcal"],
+        },
+        crate::UnitInfo {
+            singular: "HourSquareFeetDegreeFahrenheitPerBtu",
+            plural: "HourSquareFeetDegreesFahrenheitPerBtu",
+            abbreviation: "Hrft²°F/Btu",
+            abbreviations: &["Hrft²°F/Btu"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ThermalInsulance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ThermalInsulance",
+        description: "Thermal insulance (R-value) is a measure of a material's resistance to the heat current. It quantifies how effectively a material can resist the transfer of heat through conduction, convection, and radiation. It has the units square metre kelvins per watt (m2⋅K/W) in SI units or square foot degree Fahrenheit–hours per British thermal unit (ft2⋅°F⋅h/Btu) in imperial units. The higher the thermal insulance, the better a material insulates against heat transfer. It is commonly used in construction to assess the insulation properties of materials such as walls, roofs, and insulation products.",
+        dimensions: crate::Dimensions::new(0, -1, 3, 0, 1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

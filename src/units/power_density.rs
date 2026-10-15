@@ -131,6 +131,300 @@ impl PowerDensityUnit {
         Self::BtuPerSecondCubicFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "WattPerCubicMeter",
+            plural: "WattsPerCubicMeter",
+            abbreviation: "W/m³",
+            abbreviations: &["W/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerCubicMeter",
+            plural: "PicowattsPerCubicMeter",
+            abbreviation: "pW/m³",
+            abbreviations: &["pW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerCubicMeter",
+            plural: "NanowattsPerCubicMeter",
+            abbreviation: "nW/m³",
+            abbreviations: &["nW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerCubicMeter",
+            plural: "MicrowattsPerCubicMeter",
+            abbreviation: "µW/m³",
+            abbreviations: &["µW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerCubicMeter",
+            plural: "MilliwattsPerCubicMeter",
+            abbreviation: "mW/m³",
+            abbreviations: &["mW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerCubicMeter",
+            plural: "DeciwattsPerCubicMeter",
+            abbreviation: "dW/m³",
+            abbreviations: &["dW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "DecawattPerCubicMeter",
+            plural: "DecawattsPerCubicMeter",
+            abbreviation: "daW/m³",
+            abbreviations: &["daW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerCubicMeter",
+            plural: "KilowattsPerCubicMeter",
+            abbreviation: "kW/m³",
+            abbreviations: &["kW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerCubicMeter",
+            plural: "MegawattsPerCubicMeter",
+            abbreviation: "MW/m³",
+            abbreviations: &["MW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerCubicMeter",
+            plural: "GigawattsPerCubicMeter",
+            abbreviation: "GW/m³",
+            abbreviations: &["GW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattPerCubicMeter",
+            plural: "TerawattsPerCubicMeter",
+            abbreviation: "TW/m³",
+            abbreviations: &["TW/m³"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerCubicInch",
+            plural: "WattsPerCubicInch",
+            abbreviation: "W/in³",
+            abbreviations: &["W/in³"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerCubicInch",
+            plural: "PicowattsPerCubicInch",
+            abbreviation: "pW/in³",
+            abbreviations: &["pW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerCubicInch",
+            plural: "NanowattsPerCubicInch",
+            abbreviation: "nW/in³",
+            abbreviations: &["nW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerCubicInch",
+            plural: "MicrowattsPerCubicInch",
+            abbreviation: "µW/in³",
+            abbreviations: &["µW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerCubicInch",
+            plural: "MilliwattsPerCubicInch",
+            abbreviation: "mW/in³",
+            abbreviations: &["mW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerCubicInch",
+            plural: "DeciwattsPerCubicInch",
+            abbreviation: "dW/in³",
+            abbreviations: &["dW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "DecawattPerCubicInch",
+            plural: "DecawattsPerCubicInch",
+            abbreviation: "daW/in³",
+            abbreviations: &["daW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerCubicInch",
+            plural: "KilowattsPerCubicInch",
+            abbreviation: "kW/in³",
+            abbreviations: &["kW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerCubicInch",
+            plural: "MegawattsPerCubicInch",
+            abbreviation: "MW/in³",
+            abbreviations: &["MW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerCubicInch",
+            plural: "GigawattsPerCubicInch",
+            abbreviation: "GW/in³",
+            abbreviations: &["GW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattPerCubicInch",
+            plural: "TerawattsPerCubicInch",
+            abbreviation: "TW/in³",
+            abbreviations: &["TW/in³"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerCubicFoot",
+            plural: "WattsPerCubicFoot",
+            abbreviation: "W/ft³",
+            abbreviations: &["W/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerCubicFoot",
+            plural: "PicowattsPerCubicFoot",
+            abbreviation: "pW/ft³",
+            abbreviations: &["pW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerCubicFoot",
+            plural: "NanowattsPerCubicFoot",
+            abbreviation: "nW/ft³",
+            abbreviations: &["nW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerCubicFoot",
+            plural: "MicrowattsPerCubicFoot",
+            abbreviation: "µW/ft³",
+            abbreviations: &["µW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerCubicFoot",
+            plural: "MilliwattsPerCubicFoot",
+            abbreviation: "mW/ft³",
+            abbreviations: &["mW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerCubicFoot",
+            plural: "DeciwattsPerCubicFoot",
+            abbreviation: "dW/ft³",
+            abbreviations: &["dW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "DecawattPerCubicFoot",
+            plural: "DecawattsPerCubicFoot",
+            abbreviation: "daW/ft³",
+            abbreviations: &["daW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerCubicFoot",
+            plural: "KilowattsPerCubicFoot",
+            abbreviation: "kW/ft³",
+            abbreviations: &["kW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerCubicFoot",
+            plural: "MegawattsPerCubicFoot",
+            abbreviation: "MW/ft³",
+            abbreviations: &["MW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerCubicFoot",
+            plural: "GigawattsPerCubicFoot",
+            abbreviation: "GW/ft³",
+            abbreviations: &["GW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattPerCubicFoot",
+            plural: "TerawattsPerCubicFoot",
+            abbreviation: "TW/ft³",
+            abbreviations: &["TW/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerLiter",
+            plural: "WattsPerLiter",
+            abbreviation: "W/l",
+            abbreviations: &["W/l"],
+        },
+        crate::UnitInfo {
+            singular: "PicowattPerLiter",
+            plural: "PicowattsPerLiter",
+            abbreviation: "pW/l",
+            abbreviations: &["pW/l"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerLiter",
+            plural: "NanowattsPerLiter",
+            abbreviation: "nW/l",
+            abbreviations: &["nW/l"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerLiter",
+            plural: "MicrowattsPerLiter",
+            abbreviation: "µW/l",
+            abbreviations: &["µW/l"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerLiter",
+            plural: "MilliwattsPerLiter",
+            abbreviation: "mW/l",
+            abbreviations: &["mW/l"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerLiter",
+            plural: "DeciwattsPerLiter",
+            abbreviation: "dW/l",
+            abbreviations: &["dW/l"],
+        },
+        crate::UnitInfo {
+            singular: "DecawattPerLiter",
+            plural: "DecawattsPerLiter",
+            abbreviation: "daW/l",
+            abbreviations: &["daW/l"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerLiter",
+            plural: "KilowattsPerLiter",
+            abbreviation: "kW/l",
+            abbreviations: &["kW/l"],
+        },
+        crate::UnitInfo {
+            singular: "MegawattPerLiter",
+            plural: "MegawattsPerLiter",
+            abbreviation: "MW/l",
+            abbreviations: &["MW/l"],
+        },
+        crate::UnitInfo {
+            singular: "GigawattPerLiter",
+            plural: "GigawattsPerLiter",
+            abbreviation: "GW/l",
+            abbreviations: &["GW/l"],
+        },
+        crate::UnitInfo {
+            singular: "TerawattPerLiter",
+            plural: "TerawattsPerLiter",
+            abbreviation: "TW/l",
+            abbreviations: &["TW/l"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSecondCubicInch",
+            plural: "BtusPerSecondCubicInch",
+            abbreviation: "BTU/(s·in³)",
+            abbreviations: &["BTU/(s·in³)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSecondCubicFoot",
+            plural: "BtusPerSecondCubicFoot",
+            abbreviation: "BTU/(s·ft³)",
+            abbreviations: &["BTU/(s·ft³)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`PowerDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "PowerDensity",
+        description: "The amount of power in a volume.",
+        dimensions: crate::Dimensions::new(-1, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

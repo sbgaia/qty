@@ -53,6 +53,66 @@ impl EntropyUnit {
         Self::KilojoulePerDegreeCelsius,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerKelvin",
+            plural: "JoulesPerKelvin",
+            abbreviation: "J/K",
+            abbreviations: &["J/K"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerKelvin",
+            plural: "KilojoulesPerKelvin",
+            abbreviation: "kJ/K",
+            abbreviations: &["kJ/K"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerKelvin",
+            plural: "MegajoulesPerKelvin",
+            abbreviation: "MJ/K",
+            abbreviations: &["MJ/K"],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerKelvin",
+            plural: "CaloriesPerKelvin",
+            abbreviation: "cal/K",
+            abbreviations: &["cal/K"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerKelvin",
+            plural: "KilocaloriesPerKelvin",
+            abbreviation: "kcal/K",
+            abbreviations: &["kcal/K"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerDegreeCelsius",
+            plural: "JoulesPerDegreeCelsius",
+            abbreviation: "J/°C",
+            abbreviations: &["J/°C"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerDegreeCelsius",
+            plural: "KilojoulesPerDegreeCelsius",
+            abbreviation: "kJ/°C",
+            abbreviations: &["kJ/°C"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Entropy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Entropy",
+        description: "Entropy is an important concept in the branch of science known as thermodynamics. The idea of \"irreversibility\" is central to the understanding of entropy.  It is often said that entropy is an expression of the disorder, or randomness of a system, or of our lack of information about it. Entropy is an extensive property. It has the dimension of energy divided by temperature, which has a unit of joules per kelvin (J/K) in the International System of Units",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, -1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

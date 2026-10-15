@@ -59,6 +59,90 @@ impl JerkUnit {
         Self::MillistandardGravitiesPerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MeterPerSecondCubed",
+            plural: "MetersPerSecondCubed",
+            abbreviation: "m/s³",
+            abbreviations: &["m/s³"],
+        },
+        crate::UnitInfo {
+            singular: "NanometerPerSecondCubed",
+            plural: "NanometersPerSecondCubed",
+            abbreviation: "nm/s³",
+            abbreviations: &["nm/s³"],
+        },
+        crate::UnitInfo {
+            singular: "MicrometerPerSecondCubed",
+            plural: "MicrometersPerSecondCubed",
+            abbreviation: "µm/s³",
+            abbreviations: &["µm/s³"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterPerSecondCubed",
+            plural: "MillimetersPerSecondCubed",
+            abbreviation: "mm/s³",
+            abbreviations: &["mm/s³"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterPerSecondCubed",
+            plural: "CentimetersPerSecondCubed",
+            abbreviation: "cm/s³",
+            abbreviations: &["cm/s³"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterPerSecondCubed",
+            plural: "DecimetersPerSecondCubed",
+            abbreviation: "dm/s³",
+            abbreviations: &["dm/s³"],
+        },
+        crate::UnitInfo {
+            singular: "KilometerPerSecondCubed",
+            plural: "KilometersPerSecondCubed",
+            abbreviation: "km/s³",
+            abbreviations: &["km/s³"],
+        },
+        crate::UnitInfo {
+            singular: "InchPerSecondCubed",
+            plural: "InchesPerSecondCubed",
+            abbreviation: "in/s³",
+            abbreviations: &["in/s³"],
+        },
+        crate::UnitInfo {
+            singular: "FootPerSecondCubed",
+            plural: "FeetPerSecondCubed",
+            abbreviation: "ft/s³",
+            abbreviations: &["ft/s³"],
+        },
+        crate::UnitInfo {
+            singular: "StandardGravitiesPerSecond",
+            plural: "StandardGravitiesPerSecond",
+            abbreviation: "g/s",
+            abbreviations: &["g/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillistandardGravitiesPerSecond",
+            plural: "MillistandardGravitiesPerSecond",
+            abbreviation: "mg/s",
+            abbreviations: &["mg/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Jerk`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Jerk",
+        description: "",
+        dimensions: crate::Dimensions::new(1, 0, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

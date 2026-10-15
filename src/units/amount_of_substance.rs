@@ -73,6 +73,126 @@ impl AmountOfSubstanceUnit {
         Self::KilopoundMole,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Mole",
+            plural: "Moles",
+            abbreviation: "mol",
+            abbreviations: &["mol"],
+        },
+        crate::UnitInfo {
+            singular: "Femtomole",
+            plural: "Femtomoles",
+            abbreviation: "fmol",
+            abbreviations: &["fmol"],
+        },
+        crate::UnitInfo {
+            singular: "Picomole",
+            plural: "Picomoles",
+            abbreviation: "pmol",
+            abbreviations: &["pmol"],
+        },
+        crate::UnitInfo {
+            singular: "Nanomole",
+            plural: "Nanomoles",
+            abbreviation: "nmol",
+            abbreviations: &["nmol"],
+        },
+        crate::UnitInfo {
+            singular: "Micromole",
+            plural: "Micromoles",
+            abbreviation: "µmol",
+            abbreviations: &["µmol"],
+        },
+        crate::UnitInfo {
+            singular: "Millimole",
+            plural: "Millimoles",
+            abbreviation: "mmol",
+            abbreviations: &["mmol"],
+        },
+        crate::UnitInfo {
+            singular: "Centimole",
+            plural: "Centimoles",
+            abbreviation: "cmol",
+            abbreviations: &["cmol"],
+        },
+        crate::UnitInfo {
+            singular: "Decimole",
+            plural: "Decimoles",
+            abbreviation: "dmol",
+            abbreviations: &["dmol"],
+        },
+        crate::UnitInfo {
+            singular: "Kilomole",
+            plural: "Kilomoles",
+            abbreviation: "kmol",
+            abbreviations: &["kmol"],
+        },
+        crate::UnitInfo {
+            singular: "Megamole",
+            plural: "Megamoles",
+            abbreviation: "Mmol",
+            abbreviations: &["Mmol"],
+        },
+        crate::UnitInfo {
+            singular: "PoundMole",
+            plural: "PoundMoles",
+            abbreviation: "lbmol",
+            abbreviations: &["lbmol"],
+        },
+        crate::UnitInfo {
+            singular: "NanopoundMole",
+            plural: "NanopoundMoles",
+            abbreviation: "nlbmol",
+            abbreviations: &["nlbmol"],
+        },
+        crate::UnitInfo {
+            singular: "MicropoundMole",
+            plural: "MicropoundMoles",
+            abbreviation: "µlbmol",
+            abbreviations: &["µlbmol"],
+        },
+        crate::UnitInfo {
+            singular: "MillipoundMole",
+            plural: "MillipoundMoles",
+            abbreviation: "mlbmol",
+            abbreviations: &["mlbmol"],
+        },
+        crate::UnitInfo {
+            singular: "CentipoundMole",
+            plural: "CentipoundMoles",
+            abbreviation: "clbmol",
+            abbreviations: &["clbmol"],
+        },
+        crate::UnitInfo {
+            singular: "DecipoundMole",
+            plural: "DecipoundMoles",
+            abbreviation: "dlbmol",
+            abbreviations: &["dlbmol"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundMole",
+            plural: "KilopoundMoles",
+            abbreviation: "klbmol",
+            abbreviations: &["klbmol"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`AmountOfSubstance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "AmountOfSubstance",
+        description: "Mole is the amount of substance containing Avagadro's Number (6.02 x 10 ^ 23) of real particles such as molecules,atoms, ions or radicals.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

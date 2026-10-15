@@ -40,6 +40,36 @@ impl ThermalResistanceUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::KelvinPerWatt, Self::DegreeCelsiusPerWatt];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "KelvinPerWatt",
+            plural: "KelvinsPerWatt",
+            abbreviation: "K/W",
+            abbreviations: &["K/W"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerWatt",
+            plural: "DegreesCelsiusPerWatt",
+            abbreviation: "°C/W",
+            abbreviations: &["°C/W"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ThermalResistance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ThermalResistance",
+        description: "Thermal resistance (R) measures the opposition to the heat current in a material or system. It is measured in units of kelvins per watt (K/W) and indicates how much temperature difference (in kelvins) is required to transfer a unit of heat current (in watts) through the material or object. It is essential to optimize the building insulation, evaluate the efficiency of electronic devices, and enhance the performance of heat sinks in various applications.",
+        dimensions: crate::Dimensions::new(-2, -1, 3, 0, 1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

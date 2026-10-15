@@ -69,6 +69,114 @@ impl ForceChangeRateUnit {
         Self::KilopoundForcePerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonPerMinute",
+            plural: "NewtonsPerMinute",
+            abbreviation: "N/min",
+            abbreviations: &["N/min"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonPerMinute",
+            plural: "DecanewtonsPerMinute",
+            abbreviation: "daN/min",
+            abbreviations: &["daN/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerMinute",
+            plural: "KilonewtonsPerMinute",
+            abbreviation: "kN/min",
+            abbreviations: &["kN/min"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerSecond",
+            plural: "NewtonsPerSecond",
+            abbreviation: "N/s",
+            abbreviations: &["N/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonPerSecond",
+            plural: "NanonewtonsPerSecond",
+            abbreviation: "nN/s",
+            abbreviations: &["nN/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonPerSecond",
+            plural: "MicronewtonsPerSecond",
+            abbreviation: "µN/s",
+            abbreviations: &["µN/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonPerSecond",
+            plural: "MillinewtonsPerSecond",
+            abbreviation: "mN/s",
+            abbreviations: &["mN/s"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonPerSecond",
+            plural: "CentinewtonsPerSecond",
+            abbreviation: "cN/s",
+            abbreviations: &["cN/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonPerSecond",
+            plural: "DecinewtonsPerSecond",
+            abbreviation: "dN/s",
+            abbreviations: &["dN/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonPerSecond",
+            plural: "DecanewtonsPerSecond",
+            abbreviation: "daN/s",
+            abbreviations: &["daN/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerSecond",
+            plural: "KilonewtonsPerSecond",
+            abbreviation: "kN/s",
+            abbreviations: &["kN/s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerMinute",
+            plural: "PoundsForcePerMinute",
+            abbreviation: "lbf/min",
+            abbreviations: &["lbf/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerMinute",
+            plural: "KilopoundsForcePerMinute",
+            abbreviation: "klbf/min",
+            abbreviations: &["klbf/min"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSecond",
+            plural: "PoundsForcePerSecond",
+            abbreviation: "lbf/s",
+            abbreviations: &["lbf/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSecond",
+            plural: "KilopoundsForcePerSecond",
+            abbreviation: "klbf/s",
+            abbreviations: &["klbf/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ForceChangeRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ForceChangeRate",
+        description: "Force change rate is the ratio of the force change to the time during which the change occurred (value of force changes per unit time).",
+        dimensions: crate::Dimensions::new(1, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[3],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

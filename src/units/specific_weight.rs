@@ -73,6 +73,126 @@ impl SpecificWeightUnit {
         Self::TonneForcePerCubicMeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonPerCubicMillimeter",
+            plural: "NewtonsPerCubicMillimeter",
+            abbreviation: "N/mm³",
+            abbreviations: &["N/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerCubicMillimeter",
+            plural: "KilonewtonsPerCubicMillimeter",
+            abbreviation: "kN/mm³",
+            abbreviations: &["kN/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerCubicCentimeter",
+            plural: "NewtonsPerCubicCentimeter",
+            abbreviation: "N/cm³",
+            abbreviations: &["N/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerCubicCentimeter",
+            plural: "KilonewtonsPerCubicCentimeter",
+            abbreviation: "kN/cm³",
+            abbreviations: &["kN/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerCubicMeter",
+            plural: "NewtonsPerCubicMeter",
+            abbreviation: "N/m³",
+            abbreviations: &["N/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerCubicMeter",
+            plural: "KilonewtonsPerCubicMeter",
+            abbreviation: "kN/m³",
+            abbreviations: &["kN/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonPerCubicMeter",
+            plural: "MeganewtonsPerCubicMeter",
+            abbreviation: "MN/m³",
+            abbreviations: &["MN/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerCubicMillimeter",
+            plural: "KilogramsForcePerCubicMillimeter",
+            abbreviation: "kgf/mm³",
+            abbreviations: &["kgf/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerCubicCentimeter",
+            plural: "KilogramsForcePerCubicCentimeter",
+            abbreviation: "kgf/cm³",
+            abbreviations: &["kgf/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerCubicMeter",
+            plural: "KilogramsForcePerCubicMeter",
+            abbreviation: "kgf/m³",
+            abbreviations: &["kgf/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerCubicInch",
+            plural: "PoundsForcePerCubicInch",
+            abbreviation: "lbf/in³",
+            abbreviations: &["lbf/in³"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerCubicInch",
+            plural: "KilopoundsForcePerCubicInch",
+            abbreviation: "klbf/in³",
+            abbreviations: &["klbf/in³"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerCubicFoot",
+            plural: "PoundsForcePerCubicFoot",
+            abbreviation: "lbf/ft³",
+            abbreviations: &["lbf/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerCubicFoot",
+            plural: "KilopoundsForcePerCubicFoot",
+            abbreviation: "klbf/ft³",
+            abbreviations: &["klbf/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerCubicMillimeter",
+            plural: "TonnesForcePerCubicMillimeter",
+            abbreviation: "tf/mm³",
+            abbreviations: &["tf/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerCubicCentimeter",
+            plural: "TonnesForcePerCubicCentimeter",
+            abbreviation: "tf/cm³",
+            abbreviations: &["tf/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerCubicMeter",
+            plural: "TonnesForcePerCubicMeter",
+            abbreviation: "tf/m³",
+            abbreviations: &["tf/m³"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`SpecificWeight`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "SpecificWeight",
+        description: "The SpecificWeight, or more precisely, the volumetric weight density, of a substance is its weight per unit volume.",
+        dimensions: crate::Dimensions::new(-2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[4],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

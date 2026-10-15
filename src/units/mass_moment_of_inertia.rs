@@ -99,6 +99,193 @@ impl MassMomentOfInertiaUnit {
         Self::SlugSquareInch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramSquareMeter",
+            plural: "GramSquareMeters",
+            abbreviation: "g·m²",
+            abbreviations: &["g·m²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramSquareMeter",
+            plural: "MilligramSquareMeters",
+            abbreviation: "mg·m²",
+            abbreviations: &["mg·m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramSquareMeter",
+            plural: "KilogramSquareMeters",
+            abbreviation: "kg·m²",
+            abbreviations: &["kg·m²"],
+        },
+        crate::UnitInfo {
+            singular: "GramSquareDecimeter",
+            plural: "GramSquareDecimeters",
+            abbreviation: "g·dm²",
+            abbreviations: &["g·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramSquareDecimeter",
+            plural: "MilligramSquareDecimeters",
+            abbreviation: "mg·dm²",
+            abbreviations: &["mg·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramSquareDecimeter",
+            plural: "KilogramSquareDecimeters",
+            abbreviation: "kg·dm²",
+            abbreviations: &["kg·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "GramSquareCentimeter",
+            plural: "GramSquareCentimeters",
+            abbreviation: "g·cm²",
+            abbreviations: &["g·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramSquareCentimeter",
+            plural: "MilligramSquareCentimeters",
+            abbreviation: "mg·cm²",
+            abbreviations: &["mg·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramSquareCentimeter",
+            plural: "KilogramSquareCentimeters",
+            abbreviation: "kg·cm²",
+            abbreviations: &["kg·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "GramSquareMillimeter",
+            plural: "GramSquareMillimeters",
+            abbreviation: "g·mm²",
+            abbreviations: &["g·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramSquareMillimeter",
+            plural: "MilligramSquareMillimeters",
+            abbreviation: "mg·mm²",
+            abbreviations: &["mg·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramSquareMillimeter",
+            plural: "KilogramSquareMillimeters",
+            abbreviation: "kg·mm²",
+            abbreviations: &["kg·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneSquareMeter",
+            plural: "TonneSquareMeters",
+            abbreviation: "t·m²",
+            abbreviations: &["t·m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilotonneSquareMeter",
+            plural: "KilotonneSquareMeters",
+            abbreviation: "kt·m²",
+            abbreviations: &["kt·m²"],
+        },
+        crate::UnitInfo {
+            singular: "MegatonneSquareMeter",
+            plural: "MegatonneSquareMeters",
+            abbreviation: "Mt·m²",
+            abbreviations: &["Mt·m²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneSquareDecimeter",
+            plural: "TonneSquareDecimeters",
+            abbreviation: "t·dm²",
+            abbreviations: &["t·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilotonneSquareDecimeter",
+            plural: "KilotonneSquareDecimeters",
+            abbreviation: "kt·dm²",
+            abbreviations: &["kt·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "MegatonneSquareDecimeter",
+            plural: "MegatonneSquareDecimeters",
+            abbreviation: "Mt·dm²",
+            abbreviations: &["Mt·dm²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneSquareCentimeter",
+            plural: "TonneSquareCentimeters",
+            abbreviation: "t·cm²",
+            abbreviations: &["t·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilotonneSquareCentimeter",
+            plural: "KilotonneSquareCentimeters",
+            abbreviation: "kt·cm²",
+            abbreviations: &["kt·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "MegatonneSquareCentimeter",
+            plural: "MegatonneSquareCentimeters",
+            abbreviation: "Mt·cm²",
+            abbreviations: &["Mt·cm²"],
+        },
+        crate::UnitInfo {
+            singular: "TonneSquareMillimeter",
+            plural: "TonneSquareMillimeters",
+            abbreviation: "t·mm²",
+            abbreviations: &["t·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilotonneSquareMillimeter",
+            plural: "KilotonneSquareMillimeters",
+            abbreviation: "kt·mm²",
+            abbreviations: &["kt·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MegatonneSquareMillimeter",
+            plural: "MegatonneSquareMillimeters",
+            abbreviation: "Mt·mm²",
+            abbreviations: &["Mt·mm²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundSquareFoot",
+            plural: "PoundSquareFeet",
+            abbreviation: "lb·ft²",
+            abbreviations: &["lb·ft²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundSquareInch",
+            plural: "PoundSquareInches",
+            abbreviation: "lb·in²",
+            abbreviations: &["lb·in²"],
+        },
+        crate::UnitInfo {
+            singular: "SlugSquareFoot",
+            plural: "SlugSquareFeet",
+            abbreviation: "slug·ft²",
+            abbreviations: &["slug·ft²"],
+        },
+        crate::UnitInfo {
+            singular: "SlugSquareInch",
+            plural: "SlugSquareInches",
+            abbreviation: "slug·in²",
+            abbreviations: &["slug·in²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MassMomentOfInertia`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MassMomentOfInertia",
+        description:
+            "A property of body reflects how its mass is distributed with regard to an axis.",
+        dimensions: crate::Dimensions::new(2, 1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[2],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

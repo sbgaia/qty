@@ -87,6 +87,168 @@ impl MassFractionUnit {
         Self::PartPerTrillion,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DecimalFraction",
+            plural: "DecimalFractions",
+            abbreviation: "",
+            abbreviations: &[""],
+        },
+        crate::UnitInfo {
+            singular: "GramPerGram",
+            plural: "GramsPerGram",
+            abbreviation: "g/g",
+            abbreviations: &["g/g"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerGram",
+            plural: "NanogramsPerGram",
+            abbreviation: "ng/g",
+            abbreviations: &["ng/g"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerGram",
+            plural: "MicrogramsPerGram",
+            abbreviation: "µg/g",
+            abbreviations: &["µg/g"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerGram",
+            plural: "MilligramsPerGram",
+            abbreviation: "mg/g",
+            abbreviations: &["mg/g"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerGram",
+            plural: "CentigramsPerGram",
+            abbreviation: "cg/g",
+            abbreviations: &["cg/g"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerGram",
+            plural: "DecigramsPerGram",
+            abbreviation: "dg/g",
+            abbreviations: &["dg/g"],
+        },
+        crate::UnitInfo {
+            singular: "DecagramPerGram",
+            plural: "DecagramsPerGram",
+            abbreviation: "dag/g",
+            abbreviations: &["dag/g"],
+        },
+        crate::UnitInfo {
+            singular: "HectogramPerGram",
+            plural: "HectogramsPerGram",
+            abbreviation: "hg/g",
+            abbreviations: &["hg/g"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerGram",
+            plural: "KilogramsPerGram",
+            abbreviation: "kg/g",
+            abbreviations: &["kg/g"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerKilogram",
+            plural: "GramsPerKilogram",
+            abbreviation: "g/kg",
+            abbreviations: &["g/kg"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerKilogram",
+            plural: "NanogramsPerKilogram",
+            abbreviation: "ng/kg",
+            abbreviations: &["ng/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerKilogram",
+            plural: "MicrogramsPerKilogram",
+            abbreviation: "µg/kg",
+            abbreviations: &["µg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerKilogram",
+            plural: "MilligramsPerKilogram",
+            abbreviation: "mg/kg",
+            abbreviations: &["mg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerKilogram",
+            plural: "CentigramsPerKilogram",
+            abbreviation: "cg/kg",
+            abbreviations: &["cg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerKilogram",
+            plural: "DecigramsPerKilogram",
+            abbreviation: "dg/kg",
+            abbreviations: &["dg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "DecagramPerKilogram",
+            plural: "DecagramsPerKilogram",
+            abbreviation: "dag/kg",
+            abbreviations: &["dag/kg"],
+        },
+        crate::UnitInfo {
+            singular: "HectogramPerKilogram",
+            plural: "HectogramsPerKilogram",
+            abbreviation: "hg/kg",
+            abbreviations: &["hg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerKilogram",
+            plural: "KilogramsPerKilogram",
+            abbreviation: "kg/kg",
+            abbreviations: &["kg/kg"],
+        },
+        crate::UnitInfo {
+            singular: "Percent",
+            plural: "Percent",
+            abbreviation: "%",
+            abbreviations: &["%", "% (w/w)"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerThousand",
+            plural: "PartsPerThousand",
+            abbreviation: "‰",
+            abbreviations: &["‰"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerMillion",
+            plural: "PartsPerMillion",
+            abbreviation: "ppm",
+            abbreviations: &["ppm"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerBillion",
+            plural: "PartsPerBillion",
+            abbreviation: "ppb",
+            abbreviations: &["ppb"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerTrillion",
+            plural: "PartsPerTrillion",
+            abbreviation: "ppt",
+            abbreviations: &["ppt"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MassFraction`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MassFraction",
+        description: "The mass fraction is defined as the mass of a constituent divided by the total mass of the mixture.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

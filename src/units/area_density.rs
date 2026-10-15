@@ -50,6 +50,54 @@ impl AreaDensityUnit {
         Self::PoundPerThousandSquareFeet,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "KilogramPerSquareMeter",
+            plural: "KilogramsPerSquareMeter",
+            abbreviation: "kg/m²",
+            abbreviations: &["kg/m²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerSquareMeter",
+            plural: "GramsPerSquareMeter",
+            abbreviation: "g/m²",
+            abbreviations: &["g/m²", "gsm"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerSquareMeter",
+            plural: "MilligramsPerSquareMeter",
+            abbreviation: "mg/m²",
+            abbreviations: &["mg/m²"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerSquareFoot",
+            plural: "PoundsPerSquareFoot",
+            abbreviation: "lb/ft²",
+            abbreviations: &["lb/ft²", "lbs/ft²", "lb/SF", "lbs/SF"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerThousandSquareFeet",
+            plural: "PoundsPerThousandSquareFeet",
+            abbreviation: "lb/MSF",
+            abbreviations: &["lb/MSF", "lbs/MSF", "lb/1000ft²", "lbs/1000ft²", "lbm/MSF"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`AreaDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "AreaDensity",
+        description: "The area density of a two-dimensional object is calculated as the mass per unit area. For paper this is also called grammage.",
+        dimensions: crate::Dimensions::new(-2, 1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -99,6 +99,198 @@ impl RadioactivityUnit {
         Self::Terarutherford,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Becquerel",
+            plural: "Becquerels",
+            abbreviation: "Bq",
+            abbreviations: &["Bq"],
+        },
+        crate::UnitInfo {
+            singular: "Picobecquerel",
+            plural: "Picobecquerels",
+            abbreviation: "pBq",
+            abbreviations: &["pBq"],
+        },
+        crate::UnitInfo {
+            singular: "Nanobecquerel",
+            plural: "Nanobecquerels",
+            abbreviation: "nBq",
+            abbreviations: &["nBq"],
+        },
+        crate::UnitInfo {
+            singular: "Microbecquerel",
+            plural: "Microbecquerels",
+            abbreviation: "µBq",
+            abbreviations: &["µBq"],
+        },
+        crate::UnitInfo {
+            singular: "Millibecquerel",
+            plural: "Millibecquerels",
+            abbreviation: "mBq",
+            abbreviations: &["mBq"],
+        },
+        crate::UnitInfo {
+            singular: "Kilobecquerel",
+            plural: "Kilobecquerels",
+            abbreviation: "kBq",
+            abbreviations: &["kBq"],
+        },
+        crate::UnitInfo {
+            singular: "Megabecquerel",
+            plural: "Megabecquerels",
+            abbreviation: "MBq",
+            abbreviations: &["MBq"],
+        },
+        crate::UnitInfo {
+            singular: "Gigabecquerel",
+            plural: "Gigabecquerels",
+            abbreviation: "GBq",
+            abbreviations: &["GBq"],
+        },
+        crate::UnitInfo {
+            singular: "Terabecquerel",
+            plural: "Terabecquerels",
+            abbreviation: "TBq",
+            abbreviations: &["TBq"],
+        },
+        crate::UnitInfo {
+            singular: "Petabecquerel",
+            plural: "Petabecquerels",
+            abbreviation: "PBq",
+            abbreviations: &["PBq"],
+        },
+        crate::UnitInfo {
+            singular: "Exabecquerel",
+            plural: "Exabecquerels",
+            abbreviation: "EBq",
+            abbreviations: &["EBq"],
+        },
+        crate::UnitInfo {
+            singular: "Curie",
+            plural: "Curies",
+            abbreviation: "Ci",
+            abbreviations: &["Ci"],
+        },
+        crate::UnitInfo {
+            singular: "Picocurie",
+            plural: "Picocuries",
+            abbreviation: "pCi",
+            abbreviations: &["pCi"],
+        },
+        crate::UnitInfo {
+            singular: "Nanocurie",
+            plural: "Nanocuries",
+            abbreviation: "nCi",
+            abbreviations: &["nCi"],
+        },
+        crate::UnitInfo {
+            singular: "Microcurie",
+            plural: "Microcuries",
+            abbreviation: "µCi",
+            abbreviations: &["µCi"],
+        },
+        crate::UnitInfo {
+            singular: "Millicurie",
+            plural: "Millicuries",
+            abbreviation: "mCi",
+            abbreviations: &["mCi"],
+        },
+        crate::UnitInfo {
+            singular: "Kilocurie",
+            plural: "Kilocuries",
+            abbreviation: "kCi",
+            abbreviations: &["kCi"],
+        },
+        crate::UnitInfo {
+            singular: "Megacurie",
+            plural: "Megacuries",
+            abbreviation: "MCi",
+            abbreviations: &["MCi"],
+        },
+        crate::UnitInfo {
+            singular: "Gigacurie",
+            plural: "Gigacuries",
+            abbreviation: "GCi",
+            abbreviations: &["GCi"],
+        },
+        crate::UnitInfo {
+            singular: "Teracurie",
+            plural: "Teracuries",
+            abbreviation: "TCi",
+            abbreviations: &["TCi"],
+        },
+        crate::UnitInfo {
+            singular: "Rutherford",
+            plural: "Rutherfords",
+            abbreviation: "Rd",
+            abbreviations: &["Rd"],
+        },
+        crate::UnitInfo {
+            singular: "Picorutherford",
+            plural: "Picorutherfords",
+            abbreviation: "pRd",
+            abbreviations: &["pRd"],
+        },
+        crate::UnitInfo {
+            singular: "Nanorutherford",
+            plural: "Nanorutherfords",
+            abbreviation: "nRd",
+            abbreviations: &["nRd"],
+        },
+        crate::UnitInfo {
+            singular: "Microrutherford",
+            plural: "Microrutherfords",
+            abbreviation: "µRd",
+            abbreviations: &["µRd"],
+        },
+        crate::UnitInfo {
+            singular: "Millirutherford",
+            plural: "Millirutherfords",
+            abbreviation: "mRd",
+            abbreviations: &["mRd"],
+        },
+        crate::UnitInfo {
+            singular: "Kilorutherford",
+            plural: "Kilorutherfords",
+            abbreviation: "kRd",
+            abbreviations: &["kRd"],
+        },
+        crate::UnitInfo {
+            singular: "Megarutherford",
+            plural: "Megarutherfords",
+            abbreviation: "MRd",
+            abbreviations: &["MRd"],
+        },
+        crate::UnitInfo {
+            singular: "Gigarutherford",
+            plural: "Gigarutherfords",
+            abbreviation: "GRd",
+            abbreviations: &["GRd"],
+        },
+        crate::UnitInfo {
+            singular: "Terarutherford",
+            plural: "Terarutherfords",
+            abbreviation: "TRd",
+            abbreviations: &["TRd"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Radioactivity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Radioactivity",
+        description: "Amount of ionizing radiation released when an element spontaneously emits energy as a result of the radioactive decay of an unstable atom per unit time.",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

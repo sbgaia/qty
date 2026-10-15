@@ -61,6 +61,78 @@ impl KinematicViscosityUnit {
         Self::SquareFootPerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "SquareMeterPerSecond",
+            plural: "SquareMetersPerSecond",
+            abbreviation: "m²/s",
+            abbreviations: &["m²/s"],
+        },
+        crate::UnitInfo {
+            singular: "Stokes",
+            plural: "Stokes",
+            abbreviation: "St",
+            abbreviations: &["St"],
+        },
+        crate::UnitInfo {
+            singular: "Nanostokes",
+            plural: "Nanostokes",
+            abbreviation: "nSt",
+            abbreviations: &["nSt"],
+        },
+        crate::UnitInfo {
+            singular: "Microstokes",
+            plural: "Microstokes",
+            abbreviation: "µSt",
+            abbreviations: &["µSt"],
+        },
+        crate::UnitInfo {
+            singular: "Millistokes",
+            plural: "Millistokes",
+            abbreviation: "mSt",
+            abbreviations: &["mSt"],
+        },
+        crate::UnitInfo {
+            singular: "Centistokes",
+            plural: "Centistokes",
+            abbreviation: "cSt",
+            abbreviations: &["cSt"],
+        },
+        crate::UnitInfo {
+            singular: "Decistokes",
+            plural: "Decistokes",
+            abbreviation: "dSt",
+            abbreviations: &["dSt"],
+        },
+        crate::UnitInfo {
+            singular: "Kilostokes",
+            plural: "Kilostokes",
+            abbreviation: "kSt",
+            abbreviations: &["kSt"],
+        },
+        crate::UnitInfo {
+            singular: "SquareFootPerSecond",
+            plural: "SquareFeetPerSecond",
+            abbreviation: "ft²/s",
+            abbreviations: &["ft²/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`KinematicViscosity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "KinematicViscosity",
+        description: "The viscosity of a fluid is a measure of its resistance to gradual deformation by shear stress or tensile stress.",
+        dimensions: crate::Dimensions::new(2, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

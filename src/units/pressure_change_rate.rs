@@ -75,6 +75,132 @@ impl PressureChangeRateUnit {
         Self::MillibarPerMinute,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PascalPerSecond",
+            plural: "PascalsPerSecond",
+            abbreviation: "Pa/s",
+            abbreviations: &["Pa/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilopascalPerSecond",
+            plural: "KilopascalsPerSecond",
+            abbreviation: "kPa/s",
+            abbreviations: &["kPa/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegapascalPerSecond",
+            plural: "MegapascalsPerSecond",
+            abbreviation: "MPa/s",
+            abbreviations: &["MPa/s"],
+        },
+        crate::UnitInfo {
+            singular: "PascalPerMinute",
+            plural: "PascalsPerMinute",
+            abbreviation: "Pa/min",
+            abbreviations: &["Pa/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilopascalPerMinute",
+            plural: "KilopascalsPerMinute",
+            abbreviation: "kPa/min",
+            abbreviations: &["kPa/min"],
+        },
+        crate::UnitInfo {
+            singular: "MegapascalPerMinute",
+            plural: "MegapascalsPerMinute",
+            abbreviation: "MPa/min",
+            abbreviations: &["MPa/min"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterOfMercuryPerSecond",
+            plural: "MillimetersOfMercuryPerSecond",
+            abbreviation: "mmHg/s",
+            abbreviations: &["mmHg/s"],
+        },
+        crate::UnitInfo {
+            singular: "AtmospherePerSecond",
+            plural: "AtmospheresPerSecond",
+            abbreviation: "atm/s",
+            abbreviations: &["atm/s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSquareInchPerSecond",
+            plural: "PoundsForcePerSquareInchPerSecond",
+            abbreviation: "psi/s",
+            abbreviations: &["psi/s", "lb/in²/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSquareInchPerSecond",
+            plural: "KilopoundsForcePerSquareInchPerSecond",
+            abbreviation: "kpsi/s",
+            abbreviations: &["kpsi/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundForcePerSquareInchPerSecond",
+            plural: "MegapoundsForcePerSquareInchPerSecond",
+            abbreviation: "Mpsi/s",
+            abbreviations: &["Mpsi/s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerSquareInchPerMinute",
+            plural: "PoundsForcePerSquareInchPerMinute",
+            abbreviation: "psi/min",
+            abbreviations: &["psi/min", "lb/in²/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerSquareInchPerMinute",
+            plural: "KilopoundsForcePerSquareInchPerMinute",
+            abbreviation: "kpsi/min",
+            abbreviations: &["kpsi/min"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundForcePerSquareInchPerMinute",
+            plural: "MegapoundsForcePerSquareInchPerMinute",
+            abbreviation: "Mpsi/min",
+            abbreviations: &["Mpsi/min"],
+        },
+        crate::UnitInfo {
+            singular: "BarPerSecond",
+            plural: "BarsPerSecond",
+            abbreviation: "bar/s",
+            abbreviations: &["bar/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillibarPerSecond",
+            plural: "MillibarsPerSecond",
+            abbreviation: "mbar/s",
+            abbreviations: &["mbar/s"],
+        },
+        crate::UnitInfo {
+            singular: "BarPerMinute",
+            plural: "BarsPerMinute",
+            abbreviation: "bar/min",
+            abbreviations: &["bar/min"],
+        },
+        crate::UnitInfo {
+            singular: "MillibarPerMinute",
+            plural: "MillibarsPerMinute",
+            abbreviation: "mbar/min",
+            abbreviations: &["mbar/min"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`PressureChangeRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "PressureChangeRate",
+        description: "Pressure change rate is the ratio of the pressure change to the time during which the change occurred (value of pressure changes per unit time).",
+        dimensions: crate::Dimensions::new(-1, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

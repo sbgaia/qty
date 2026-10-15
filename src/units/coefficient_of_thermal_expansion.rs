@@ -55,6 +55,60 @@ impl CoefficientOfThermalExpansionUnit {
         Self::PpmPerDegreeFahrenheit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PerKelvin",
+            plural: "PerKelvin",
+            abbreviation: "K⁻¹",
+            abbreviations: &["K⁻¹"],
+        },
+        crate::UnitInfo {
+            singular: "PerDegreeCelsius",
+            plural: "PerDegreeCelsius",
+            abbreviation: "°C⁻¹",
+            abbreviations: &["°C⁻¹"],
+        },
+        crate::UnitInfo {
+            singular: "PerDegreeFahrenheit",
+            plural: "PerDegreeFahrenheit",
+            abbreviation: "°F⁻¹",
+            abbreviations: &["°F⁻¹"],
+        },
+        crate::UnitInfo {
+            singular: "PpmPerKelvin",
+            plural: "PpmPerKelvin",
+            abbreviation: "ppm/K",
+            abbreviations: &["ppm/K"],
+        },
+        crate::UnitInfo {
+            singular: "PpmPerDegreeCelsius",
+            plural: "PpmPerDegreeCelsius",
+            abbreviation: "ppm/°C",
+            abbreviations: &["ppm/°C"],
+        },
+        crate::UnitInfo {
+            singular: "PpmPerDegreeFahrenheit",
+            plural: "PpmPerDegreeFahrenheit",
+            abbreviation: "ppm/°F",
+            abbreviations: &["ppm/°F"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`CoefficientOfThermalExpansion`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "CoefficientOfThermalExpansion",
+        description: "A unit that represents a fractional change in size in response to a change in temperature.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, -1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

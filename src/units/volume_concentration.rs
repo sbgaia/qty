@@ -83,6 +83,144 @@ impl VolumeConcentrationUnit {
         Self::PartPerTrillion,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DecimalFraction",
+            plural: "DecimalFractions",
+            abbreviation: "",
+            abbreviations: &[""],
+        },
+        crate::UnitInfo {
+            singular: "LiterPerLiter",
+            plural: "LitersPerLiter",
+            abbreviation: "l/l",
+            abbreviations: &["l/l"],
+        },
+        crate::UnitInfo {
+            singular: "PicoliterPerLiter",
+            plural: "PicolitersPerLiter",
+            abbreviation: "pl/l",
+            abbreviations: &["pl/l"],
+        },
+        crate::UnitInfo {
+            singular: "NanoliterPerLiter",
+            plural: "NanolitersPerLiter",
+            abbreviation: "nl/l",
+            abbreviations: &["nl/l"],
+        },
+        crate::UnitInfo {
+            singular: "MicroliterPerLiter",
+            plural: "MicrolitersPerLiter",
+            abbreviation: "µl/l",
+            abbreviations: &["µl/l"],
+        },
+        crate::UnitInfo {
+            singular: "MilliliterPerLiter",
+            plural: "MillilitersPerLiter",
+            abbreviation: "ml/l",
+            abbreviations: &["ml/l"],
+        },
+        crate::UnitInfo {
+            singular: "CentiliterPerLiter",
+            plural: "CentilitersPerLiter",
+            abbreviation: "cl/l",
+            abbreviations: &["cl/l"],
+        },
+        crate::UnitInfo {
+            singular: "DeciliterPerLiter",
+            plural: "DecilitersPerLiter",
+            abbreviation: "dl/l",
+            abbreviations: &["dl/l"],
+        },
+        crate::UnitInfo {
+            singular: "LiterPerMilliliter",
+            plural: "LitersPerMilliliter",
+            abbreviation: "l/ml",
+            abbreviations: &["l/ml"],
+        },
+        crate::UnitInfo {
+            singular: "PicoliterPerMilliliter",
+            plural: "PicolitersPerMilliliter",
+            abbreviation: "pl/ml",
+            abbreviations: &["pl/ml"],
+        },
+        crate::UnitInfo {
+            singular: "NanoliterPerMilliliter",
+            plural: "NanolitersPerMilliliter",
+            abbreviation: "nl/ml",
+            abbreviations: &["nl/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MicroliterPerMilliliter",
+            plural: "MicrolitersPerMilliliter",
+            abbreviation: "µl/ml",
+            abbreviations: &["µl/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MilliliterPerMilliliter",
+            plural: "MillilitersPerMilliliter",
+            abbreviation: "ml/ml",
+            abbreviations: &["ml/ml"],
+        },
+        crate::UnitInfo {
+            singular: "CentiliterPerMilliliter",
+            plural: "CentilitersPerMilliliter",
+            abbreviation: "cl/ml",
+            abbreviations: &["cl/ml"],
+        },
+        crate::UnitInfo {
+            singular: "DeciliterPerMilliliter",
+            plural: "DecilitersPerMilliliter",
+            abbreviation: "dl/ml",
+            abbreviations: &["dl/ml"],
+        },
+        crate::UnitInfo {
+            singular: "Percent",
+            plural: "Percent",
+            abbreviation: "%",
+            abbreviations: &["%", "% (v/v)"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerThousand",
+            plural: "PartsPerThousand",
+            abbreviation: "‰",
+            abbreviations: &["‰"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerMillion",
+            plural: "PartsPerMillion",
+            abbreviation: "ppm",
+            abbreviations: &["ppm"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerBillion",
+            plural: "PartsPerBillion",
+            abbreviation: "ppb",
+            abbreviations: &["ppb"],
+        },
+        crate::UnitInfo {
+            singular: "PartPerTrillion",
+            plural: "PartsPerTrillion",
+            abbreviation: "ppt",
+            abbreviations: &["ppt"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`VolumeConcentration`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "VolumeConcentration",
+        description: "The volume concentration (not to be confused with volume fraction) is defined as the volume of a constituent divided by the total volume of the mixture.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

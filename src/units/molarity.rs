@@ -61,6 +61,90 @@ impl MolarityUnit {
         Self::PoundMolePerCubicFoot,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MolePerCubicMeter",
+            plural: "MolesPerCubicMeter",
+            abbreviation: "mol/m³",
+            abbreviations: &["mol/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilomolePerCubicMeter",
+            plural: "KilomolesPerCubicMeter",
+            abbreviation: "kmol/m³",
+            abbreviations: &["kmol/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MolePerLiter",
+            plural: "MolesPerLiter",
+            abbreviation: "mol/l",
+            abbreviations: &["mol/l", "M"],
+        },
+        crate::UnitInfo {
+            singular: "FemtomolePerLiter",
+            plural: "FemtomolesPerLiter",
+            abbreviation: "fmol/l",
+            abbreviations: &["fmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "PicomolePerLiter",
+            plural: "PicomolesPerLiter",
+            abbreviation: "pmol/l",
+            abbreviations: &["pmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "NanomolePerLiter",
+            plural: "NanomolesPerLiter",
+            abbreviation: "nmol/l",
+            abbreviations: &["nmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "MicromolePerLiter",
+            plural: "MicromolesPerLiter",
+            abbreviation: "µmol/l",
+            abbreviations: &["µmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "MillimolePerLiter",
+            plural: "MillimolesPerLiter",
+            abbreviation: "mmol/l",
+            abbreviations: &["mmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "CentimolePerLiter",
+            plural: "CentimolesPerLiter",
+            abbreviation: "cmol/l",
+            abbreviations: &["cmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "DecimolePerLiter",
+            plural: "DecimolesPerLiter",
+            abbreviation: "dmol/l",
+            abbreviations: &["dmol/l"],
+        },
+        crate::UnitInfo {
+            singular: "PoundMolePerCubicFoot",
+            plural: "PoundMolesPerCubicFoot",
+            abbreviation: "lbmol/ft³",
+            abbreviations: &["lbmol/ft³"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Molarity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Molarity",
+        description: "Molar concentration, also called molarity, amount concentration or substance concentration, is a measure of the concentration of a solute in a solution, or of any chemical species, in terms of amount of substance in a given volume.",
+        dimensions: crate::Dimensions::new(-3, 0, 0, 0, 0, 1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

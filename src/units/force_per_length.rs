@@ -115,6 +115,252 @@ impl ForcePerLengthUnit {
         Self::KilopoundForcePerInch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonPerMeter",
+            plural: "NewtonsPerMeter",
+            abbreviation: "N/m",
+            abbreviations: &["N/m"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonPerMeter",
+            plural: "NanonewtonsPerMeter",
+            abbreviation: "nN/m",
+            abbreviations: &["nN/m"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonPerMeter",
+            plural: "MicronewtonsPerMeter",
+            abbreviation: "µN/m",
+            abbreviations: &["µN/m"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonPerMeter",
+            plural: "MillinewtonsPerMeter",
+            abbreviation: "mN/m",
+            abbreviations: &["mN/m"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonPerMeter",
+            plural: "CentinewtonsPerMeter",
+            abbreviation: "cN/m",
+            abbreviations: &["cN/m"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonPerMeter",
+            plural: "DecinewtonsPerMeter",
+            abbreviation: "dN/m",
+            abbreviations: &["dN/m"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonPerMeter",
+            plural: "DecanewtonsPerMeter",
+            abbreviation: "daN/m",
+            abbreviations: &["daN/m"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerMeter",
+            plural: "KilonewtonsPerMeter",
+            abbreviation: "kN/m",
+            abbreviations: &["kN/m"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonPerMeter",
+            plural: "MeganewtonsPerMeter",
+            abbreviation: "MN/m",
+            abbreviations: &["MN/m"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerCentimeter",
+            plural: "NewtonsPerCentimeter",
+            abbreviation: "N/cm",
+            abbreviations: &["N/cm"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonPerCentimeter",
+            plural: "NanonewtonsPerCentimeter",
+            abbreviation: "nN/cm",
+            abbreviations: &["nN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonPerCentimeter",
+            plural: "MicronewtonsPerCentimeter",
+            abbreviation: "µN/cm",
+            abbreviations: &["µN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonPerCentimeter",
+            plural: "MillinewtonsPerCentimeter",
+            abbreviation: "mN/cm",
+            abbreviations: &["mN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonPerCentimeter",
+            plural: "CentinewtonsPerCentimeter",
+            abbreviation: "cN/cm",
+            abbreviations: &["cN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonPerCentimeter",
+            plural: "DecinewtonsPerCentimeter",
+            abbreviation: "dN/cm",
+            abbreviations: &["dN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonPerCentimeter",
+            plural: "DecanewtonsPerCentimeter",
+            abbreviation: "daN/cm",
+            abbreviations: &["daN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerCentimeter",
+            plural: "KilonewtonsPerCentimeter",
+            abbreviation: "kN/cm",
+            abbreviations: &["kN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonPerCentimeter",
+            plural: "MeganewtonsPerCentimeter",
+            abbreviation: "MN/cm",
+            abbreviations: &["MN/cm"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonPerMillimeter",
+            plural: "NewtonsPerMillimeter",
+            abbreviation: "N/mm",
+            abbreviations: &["N/mm"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonPerMillimeter",
+            plural: "NanonewtonsPerMillimeter",
+            abbreviation: "nN/mm",
+            abbreviations: &["nN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonPerMillimeter",
+            plural: "MicronewtonsPerMillimeter",
+            abbreviation: "µN/mm",
+            abbreviations: &["µN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonPerMillimeter",
+            plural: "MillinewtonsPerMillimeter",
+            abbreviation: "mN/mm",
+            abbreviations: &["mN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonPerMillimeter",
+            plural: "CentinewtonsPerMillimeter",
+            abbreviation: "cN/mm",
+            abbreviations: &["cN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonPerMillimeter",
+            plural: "DecinewtonsPerMillimeter",
+            abbreviation: "dN/mm",
+            abbreviations: &["dN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonPerMillimeter",
+            plural: "DecanewtonsPerMillimeter",
+            abbreviation: "daN/mm",
+            abbreviations: &["daN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonPerMillimeter",
+            plural: "KilonewtonsPerMillimeter",
+            abbreviation: "kN/mm",
+            abbreviations: &["kN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonPerMillimeter",
+            plural: "MeganewtonsPerMillimeter",
+            abbreviation: "MN/mm",
+            abbreviations: &["MN/mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerMeter",
+            plural: "KilogramsForcePerMeter",
+            abbreviation: "kgf/m",
+            abbreviations: &["kgf/m"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerCentimeter",
+            plural: "KilogramsForcePerCentimeter",
+            abbreviation: "kgf/cm",
+            abbreviations: &["kgf/cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForcePerMillimeter",
+            plural: "KilogramsForcePerMillimeter",
+            abbreviation: "kgf/mm",
+            abbreviations: &["kgf/mm"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerMeter",
+            plural: "TonnesForcePerMeter",
+            abbreviation: "tf/m",
+            abbreviations: &["tf/m"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerCentimeter",
+            plural: "TonnesForcePerCentimeter",
+            abbreviation: "tf/cm",
+            abbreviations: &["tf/cm"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForcePerMillimeter",
+            plural: "TonnesForcePerMillimeter",
+            abbreviation: "tf/mm",
+            abbreviations: &["tf/mm"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerFoot",
+            plural: "PoundsForcePerFoot",
+            abbreviation: "lbf/ft",
+            abbreviations: &["lbf/ft"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerInch",
+            plural: "PoundsForcePerInch",
+            abbreviation: "lbf/in",
+            abbreviations: &["lbf/in"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerYard",
+            plural: "PoundsForcePerYard",
+            abbreviation: "lbf/yd",
+            abbreviations: &["lbf/yd"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerFoot",
+            plural: "KilopoundsForcePerFoot",
+            abbreviation: "kipf/ft",
+            abbreviations: &["kipf/ft", "kip/ft", "k/ft"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForcePerInch",
+            plural: "KilopoundsForcePerInch",
+            abbreviation: "kipf/in",
+            abbreviations: &["kipf/in", "kip/in", "k/in"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ForcePerLength`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ForcePerLength",
+        description: "The magnitude of force per unit length.",
+        dimensions: crate::Dimensions::new(0, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

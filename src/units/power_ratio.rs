@@ -61,6 +61,36 @@ impl PowerRatioUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::DecibelWatt, Self::DecibelMilliwatt];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DecibelWatt",
+            plural: "DecibelWatts",
+            abbreviation: "dBW",
+            abbreviations: &["dBW"],
+        },
+        crate::UnitInfo {
+            singular: "DecibelMilliwatt",
+            plural: "DecibelMilliwatts",
+            abbreviation: "dBmW",
+            abbreviations: &["dBmW", "dBm"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`PowerRatio`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "PowerRatio",
+        description: "The strength of a signal expressed in decibels (dB) relative to one watt.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

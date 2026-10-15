@@ -69,6 +69,114 @@ impl AngleUnit {
         Self::Revolution,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Radian",
+            plural: "Radians",
+            abbreviation: "rad",
+            abbreviations: &["rad"],
+        },
+        crate::UnitInfo {
+            singular: "Nanoradian",
+            plural: "Nanoradians",
+            abbreviation: "nrad",
+            abbreviations: &["nrad"],
+        },
+        crate::UnitInfo {
+            singular: "Microradian",
+            plural: "Microradians",
+            abbreviation: "µrad",
+            abbreviations: &["µrad"],
+        },
+        crate::UnitInfo {
+            singular: "Milliradian",
+            plural: "Milliradians",
+            abbreviation: "mrad",
+            abbreviations: &["mrad"],
+        },
+        crate::UnitInfo {
+            singular: "Centiradian",
+            plural: "Centiradians",
+            abbreviation: "crad",
+            abbreviations: &["crad"],
+        },
+        crate::UnitInfo {
+            singular: "Deciradian",
+            plural: "Deciradians",
+            abbreviation: "drad",
+            abbreviations: &["drad"],
+        },
+        crate::UnitInfo {
+            singular: "Degree",
+            plural: "Degrees",
+            abbreviation: "°",
+            abbreviations: &["°", "deg"],
+        },
+        crate::UnitInfo {
+            singular: "Nanodegree",
+            plural: "Nanodegrees",
+            abbreviation: "n°",
+            abbreviations: &["n°"],
+        },
+        crate::UnitInfo {
+            singular: "Microdegree",
+            plural: "Microdegrees",
+            abbreviation: "µ°",
+            abbreviations: &["µ°"],
+        },
+        crate::UnitInfo {
+            singular: "Millidegree",
+            plural: "Millidegrees",
+            abbreviation: "m°",
+            abbreviations: &["m°"],
+        },
+        crate::UnitInfo {
+            singular: "Arcminute",
+            plural: "Arcminutes",
+            abbreviation: "'",
+            abbreviations: &["'", "arcmin", "amin", "min"],
+        },
+        crate::UnitInfo {
+            singular: "Arcsecond",
+            plural: "Arcseconds",
+            abbreviation: "″",
+            abbreviations: &["″", "arcsec", "asec", "sec"],
+        },
+        crate::UnitInfo {
+            singular: "Gradian",
+            plural: "Gradians",
+            abbreviation: "g",
+            abbreviations: &["g"],
+        },
+        crate::UnitInfo {
+            singular: "NatoMil",
+            plural: "NatoMils",
+            abbreviation: "mil",
+            abbreviations: &["mil"],
+        },
+        crate::UnitInfo {
+            singular: "Revolution",
+            plural: "Revolutions",
+            abbreviation: "r",
+            abbreviations: &["r"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Angle`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Angle",
+        description: "In geometry, an angle is the figure formed by two rays, called the sides of the angle, sharing a common endpoint, called the vertex of the angle.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

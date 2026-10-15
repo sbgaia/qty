@@ -55,6 +55,72 @@ impl RadiationExposureUnit {
         Self::Milliroentgen,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CoulombPerKilogram",
+            plural: "CoulombsPerKilogram",
+            abbreviation: "C/kg",
+            abbreviations: &["C/kg"],
+        },
+        crate::UnitInfo {
+            singular: "PicocoulombPerKilogram",
+            plural: "PicocoulombsPerKilogram",
+            abbreviation: "pC/kg",
+            abbreviations: &["pC/kg"],
+        },
+        crate::UnitInfo {
+            singular: "NanocoulombPerKilogram",
+            plural: "NanocoulombsPerKilogram",
+            abbreviation: "nC/kg",
+            abbreviations: &["nC/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MicrocoulombPerKilogram",
+            plural: "MicrocoulombsPerKilogram",
+            abbreviation: "µC/kg",
+            abbreviations: &["µC/kg"],
+        },
+        crate::UnitInfo {
+            singular: "MillicoulombPerKilogram",
+            plural: "MillicoulombsPerKilogram",
+            abbreviation: "mC/kg",
+            abbreviations: &["mC/kg"],
+        },
+        crate::UnitInfo {
+            singular: "Roentgen",
+            plural: "Roentgens",
+            abbreviation: "R",
+            abbreviations: &["R"],
+        },
+        crate::UnitInfo {
+            singular: "Microroentgen",
+            plural: "Microroentgens",
+            abbreviation: "µR",
+            abbreviations: &["µR"],
+        },
+        crate::UnitInfo {
+            singular: "Milliroentgen",
+            plural: "Milliroentgens",
+            abbreviation: "mR",
+            abbreviations: &["mR"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RadiationExposure`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RadiationExposure",
+        description: "Radiation exposure is a measure of the ionization of air due to ionizing radiation from photons.",
+        dimensions: crate::Dimensions::new(0, -1, 1, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

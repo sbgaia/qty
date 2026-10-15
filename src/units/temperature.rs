@@ -80,6 +80,84 @@ impl TemperatureUnit {
         Self::SolarTemperature,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Kelvin",
+            plural: "Kelvins",
+            abbreviation: "K",
+            abbreviations: &["K"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsius",
+            plural: "DegreesCelsius",
+            abbreviation: "°C",
+            abbreviations: &["°C"],
+        },
+        crate::UnitInfo {
+            singular: "MillidegreeCelsius",
+            plural: "MillidegreesCelsius",
+            abbreviation: "m°C",
+            abbreviations: &["m°C"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeDelisle",
+            plural: "DegreesDelisle",
+            abbreviation: "°De",
+            abbreviations: &["°De"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeFahrenheit",
+            plural: "DegreesFahrenheit",
+            abbreviation: "°F",
+            abbreviations: &["°F"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeNewton",
+            plural: "DegreesNewton",
+            abbreviation: "°N",
+            abbreviations: &["°N"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeRankine",
+            plural: "DegreesRankine",
+            abbreviation: "°R",
+            abbreviations: &["°R"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeReaumur",
+            plural: "DegreesReaumur",
+            abbreviation: "°Ré",
+            abbreviations: &["°Ré"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeRoemer",
+            plural: "DegreesRoemer",
+            abbreviation: "°Rø",
+            abbreviations: &["°Rø"],
+        },
+        crate::UnitInfo {
+            singular: "SolarTemperature",
+            plural: "SolarTemperatures",
+            abbreviation: "T⊙",
+            abbreviations: &["T⊙"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Temperature`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Temperature",
+        description: "A temperature is a numerical measure of hot or cold. Its measurement is by detection of heat radiation or particle velocity or kinetic energy, or by the bulk behavior of a thermometric material. It may be calibrated in any of various temperature scales, Celsius, Fahrenheit, Kelvin, etc. The fundamental physical definition of temperature is provided by thermodynamics.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

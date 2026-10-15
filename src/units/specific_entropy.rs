@@ -57,6 +57,78 @@ impl SpecificEntropyUnit {
         Self::BtuPerPoundFahrenheit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerKilogramKelvin",
+            plural: "JoulesPerKilogramKelvin",
+            abbreviation: "J/kg·K",
+            abbreviations: &["J/kg·K"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerKilogramKelvin",
+            plural: "KilojoulesPerKilogramKelvin",
+            abbreviation: "kJ/kg·K",
+            abbreviations: &["kJ/kg·K"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerKilogramKelvin",
+            plural: "MegajoulesPerKilogramKelvin",
+            abbreviation: "MJ/kg·K",
+            abbreviations: &["MJ/kg·K"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerKilogramDegreeCelsius",
+            plural: "JoulesPerKilogramDegreeCelsius",
+            abbreviation: "J/kg·°C",
+            abbreviations: &["J/kg·°C"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerKilogramDegreeCelsius",
+            plural: "KilojoulesPerKilogramDegreeCelsius",
+            abbreviation: "kJ/kg·°C",
+            abbreviations: &["kJ/kg·°C"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerKilogramDegreeCelsius",
+            plural: "MegajoulesPerKilogramDegreeCelsius",
+            abbreviation: "MJ/kg·°C",
+            abbreviations: &["MJ/kg·°C"],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerGramKelvin",
+            plural: "CaloriesPerGramKelvin",
+            abbreviation: "cal/g·K",
+            abbreviations: &["cal/g·K"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerGramKelvin",
+            plural: "KilocaloriesPerGramKelvin",
+            abbreviation: "kcal/g·K",
+            abbreviations: &["kcal/g·K"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerPoundFahrenheit",
+            plural: "BtusPerPoundFahrenheit",
+            abbreviation: "BTU/(lb·°F)",
+            abbreviations: &["BTU/(lb·°F)", "BTU/(lbm·°F)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`SpecificEntropy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "SpecificEntropy",
+        description: "Specific entropy is an amount of energy required to raise temperature of a substance by 1 Kelvin per unit mass.",
+        dimensions: crate::Dimensions::new(2, 0, -2, 0, -1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -93,6 +93,186 @@ impl TorqueUnit {
         Self::TonneForceMeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonMillimeter",
+            plural: "NewtonMillimeters",
+            abbreviation: "N·mm",
+            abbreviations: &["N·mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMillimeter",
+            plural: "KilonewtonMillimeters",
+            abbreviation: "kN·mm",
+            abbreviations: &["kN·mm"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMillimeter",
+            plural: "MeganewtonMillimeters",
+            abbreviation: "MN·mm",
+            abbreviations: &["MN·mm"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonCentimeter",
+            plural: "NewtonCentimeters",
+            abbreviation: "N·cm",
+            abbreviations: &["N·cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonCentimeter",
+            plural: "KilonewtonCentimeters",
+            abbreviation: "kN·cm",
+            abbreviations: &["kN·cm"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonCentimeter",
+            plural: "MeganewtonCentimeters",
+            abbreviation: "MN·cm",
+            abbreviations: &["MN·cm"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonMeter",
+            plural: "NewtonMeters",
+            abbreviation: "N·m",
+            abbreviations: &["N·m"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMeter",
+            plural: "KilonewtonMeters",
+            abbreviation: "kN·m",
+            abbreviations: &["kN·m"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMeter",
+            plural: "MeganewtonMeters",
+            abbreviation: "MN·m",
+            abbreviations: &["MN·m"],
+        },
+        crate::UnitInfo {
+            singular: "OunceForceFoot",
+            plural: "OunceForceFeet",
+            abbreviation: "ozf·ft",
+            abbreviations: &["ozf·ft", "oz·ft", "ozf-ft", "oz-ft"],
+        },
+        crate::UnitInfo {
+            singular: "OunceForceInch",
+            plural: "OunceForceInches",
+            abbreviation: "ozf·in",
+            abbreviations: &["ozf·in", "oz·in", "ozf-in", "oz-in", "in-oz"],
+        },
+        crate::UnitInfo {
+            singular: "PoundalFoot",
+            plural: "PoundalFeet",
+            abbreviation: "pdl·ft",
+            abbreviations: &["pdl·ft"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceInch",
+            plural: "PoundForceInches",
+            abbreviation: "lbf·in",
+            abbreviations: &["lbf·in", "lb·in", "lbf-in", "lb-in", "in-lb"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForceInch",
+            plural: "KilopoundForceInches",
+            abbreviation: "klbf·in",
+            abbreviations: &["klbf·in"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundForceInch",
+            plural: "MegapoundForceInches",
+            abbreviation: "Mlbf·in",
+            abbreviations: &["Mlbf·in"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceFoot",
+            plural: "PoundForceFeet",
+            abbreviation: "lbf·ft",
+            abbreviations: &["lbf·ft", "lb·ft", "lbf-ft", "lb-ft", "ft-lb"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForceFoot",
+            plural: "KilopoundForceFeet",
+            abbreviation: "klbf·ft",
+            abbreviations: &["klbf·ft"],
+        },
+        crate::UnitInfo {
+            singular: "MegapoundForceFoot",
+            plural: "MegapoundForceFeet",
+            abbreviation: "Mlbf·ft",
+            abbreviations: &["Mlbf·ft"],
+        },
+        crate::UnitInfo {
+            singular: "GramForceMillimeter",
+            plural: "GramForceMillimeters",
+            abbreviation: "gf·mm",
+            abbreviations: &["gf·mm"],
+        },
+        crate::UnitInfo {
+            singular: "GramForceCentimeter",
+            plural: "GramForceCentimeters",
+            abbreviation: "gf·cm",
+            abbreviations: &["gf·cm"],
+        },
+        crate::UnitInfo {
+            singular: "GramForceMeter",
+            plural: "GramForceMeters",
+            abbreviation: "gf·m",
+            abbreviations: &["gf·m"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForceMillimeter",
+            plural: "KilogramForceMillimeters",
+            abbreviation: "kgf·mm",
+            abbreviations: &["kgf·mm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForceCentimeter",
+            plural: "KilogramForceCentimeters",
+            abbreviation: "kgf·cm",
+            abbreviations: &["kgf·cm"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForceMeter",
+            plural: "KilogramForceMeters",
+            abbreviation: "kgf·m",
+            abbreviations: &["kgf·m"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForceMillimeter",
+            plural: "TonneForceMillimeters",
+            abbreviation: "tf·mm",
+            abbreviations: &["tf·mm"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForceCentimeter",
+            plural: "TonneForceCentimeters",
+            abbreviation: "tf·cm",
+            abbreviations: &["tf·cm"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForceMeter",
+            plural: "TonneForceMeters",
+            abbreviation: "tf·m",
+            abbreviations: &["tf·m"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Torque`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Torque",
+        description: "Torque, moment or moment of force (see the terminology below), is the tendency of a force to rotate an object about an axis,[1] fulcrum, or pivot. Just as a force is a push or a pull, a torque can be thought of as a twist to an object. Mathematically, torque is defined as the cross product of the lever-arm distance and force, which tends to produce rotation. Loosely speaking, torque is a measure of the turning force on an object such as a bolt or a flywheel. For example, pushing or pulling the handle of a wrench connected to a nut or bolt produces a torque (turning force) that loosens or tightens the nut or bolt.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[6],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

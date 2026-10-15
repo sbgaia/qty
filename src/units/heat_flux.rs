@@ -89,6 +89,174 @@ impl HeatFluxUnit {
         Self::PoundPerSecondCubed,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "WattPerSquareMeter",
+            plural: "WattsPerSquareMeter",
+            abbreviation: "W/m²",
+            abbreviations: &["W/m²"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerSquareMeter",
+            plural: "NanowattsPerSquareMeter",
+            abbreviation: "nW/m²",
+            abbreviations: &["nW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerSquareMeter",
+            plural: "MicrowattsPerSquareMeter",
+            abbreviation: "µW/m²",
+            abbreviations: &["µW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerSquareMeter",
+            plural: "MilliwattsPerSquareMeter",
+            abbreviation: "mW/m²",
+            abbreviations: &["mW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "CentiwattPerSquareMeter",
+            plural: "CentiwattsPerSquareMeter",
+            abbreviation: "cW/m²",
+            abbreviations: &["cW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerSquareMeter",
+            plural: "DeciwattsPerSquareMeter",
+            abbreviation: "dW/m²",
+            abbreviations: &["dW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerSquareMeter",
+            plural: "KilowattsPerSquareMeter",
+            abbreviation: "kW/m²",
+            abbreviations: &["kW/m²"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerSquareMillimeter",
+            plural: "WattsPerSquareMillimeter",
+            abbreviation: "W/mm²",
+            abbreviations: &["W/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "NanowattPerSquareMillimeter",
+            plural: "NanowattsPerSquareMillimeter",
+            abbreviation: "nW/mm²",
+            abbreviations: &["nW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MicrowattPerSquareMillimeter",
+            plural: "MicrowattsPerSquareMillimeter",
+            abbreviation: "µW/mm²",
+            abbreviations: &["µW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "MilliwattPerSquareMillimeter",
+            plural: "MilliwattsPerSquareMillimeter",
+            abbreviation: "mW/mm²",
+            abbreviations: &["mW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "CentiwattPerSquareMillimeter",
+            plural: "CentiwattsPerSquareMillimeter",
+            abbreviation: "cW/mm²",
+            abbreviations: &["cW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "DeciwattPerSquareMillimeter",
+            plural: "DeciwattsPerSquareMillimeter",
+            abbreviation: "dW/mm²",
+            abbreviations: &["dW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "KilowattPerSquareMillimeter",
+            plural: "KilowattsPerSquareMillimeter",
+            abbreviation: "kW/mm²",
+            abbreviations: &["kW/mm²"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerSquareInch",
+            plural: "WattsPerSquareInch",
+            abbreviation: "W/in²",
+            abbreviations: &["W/in²"],
+        },
+        crate::UnitInfo {
+            singular: "WattPerSquareFoot",
+            plural: "WattsPerSquareFoot",
+            abbreviation: "W/ft²",
+            abbreviations: &["W/ft²"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSecondSquareInch",
+            plural: "BtusPerSecondSquareInch",
+            abbreviation: "BTU/(s·in²)",
+            abbreviations: &["BTU/(s·in²)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerSecondSquareFoot",
+            plural: "BtusPerSecondSquareFoot",
+            abbreviation: "BTU/(s·ft²)",
+            abbreviations: &["BTU/(s·ft²)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerMinuteSquareFoot",
+            plural: "BtusPerMinuteSquareFoot",
+            abbreviation: "BTU/(min·ft²)",
+            abbreviations: &["BTU/(min·ft²)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerHourSquareFoot",
+            plural: "BtusPerHourSquareFoot",
+            abbreviation: "BTU/(h·ft²)",
+            abbreviations: &["BTU/(h·ft²)"],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerSecondSquareCentimeter",
+            plural: "CaloriesPerSecondSquareCentimeter",
+            abbreviation: "cal/(s·cm²)",
+            abbreviations: &["cal/(s·cm²)"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerSecondSquareCentimeter",
+            plural: "KilocaloriesPerSecondSquareCentimeter",
+            abbreviation: "kcal/(s·cm²)",
+            abbreviations: &["kcal/(s·cm²)"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerHourSquareMeter",
+            plural: "KilocaloriesPerHourSquareMeter",
+            abbreviation: "kcal/(h·m²)",
+            abbreviations: &["kcal/(h·m²)"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForcePerFootSecond",
+            plural: "PoundsForcePerFootSecond",
+            abbreviation: "lbf/(ft·s)",
+            abbreviations: &["lbf/(ft·s)"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerSecondCubed",
+            plural: "PoundsPerSecondCubed",
+            abbreviation: "lb/s³",
+            abbreviations: &["lb/s³", "lbm/s³"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`HeatFlux`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "HeatFlux",
+        description: "Heat flux is the flow of energy per unit of area per unit of time",
+        dimensions: crate::Dimensions::new(0, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

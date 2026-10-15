@@ -61,6 +61,78 @@ impl VolumetricHeatCapacityUnit {
         Self::BtuPerCubicFootDegreeFahrenheit,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerCubicMeterKelvin",
+            plural: "JoulesPerCubicMeterKelvin",
+            abbreviation: "J/(m³·K)",
+            abbreviations: &["J/(m³·K)"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerCubicMeterKelvin",
+            plural: "KilojoulesPerCubicMeterKelvin",
+            abbreviation: "kJ/(m³·K)",
+            abbreviations: &["kJ/(m³·K)"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerCubicMeterKelvin",
+            plural: "MegajoulesPerCubicMeterKelvin",
+            abbreviation: "MJ/(m³·K)",
+            abbreviations: &["MJ/(m³·K)"],
+        },
+        crate::UnitInfo {
+            singular: "JoulePerCubicMeterDegreeCelsius",
+            plural: "JoulesPerCubicMeterDegreeCelsius",
+            abbreviation: "J/(m³·°C)",
+            abbreviations: &["J/(m³·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerCubicMeterDegreeCelsius",
+            plural: "KilojoulesPerCubicMeterDegreeCelsius",
+            abbreviation: "kJ/(m³·°C)",
+            abbreviations: &["kJ/(m³·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerCubicMeterDegreeCelsius",
+            plural: "MegajoulesPerCubicMeterDegreeCelsius",
+            abbreviation: "MJ/(m³·°C)",
+            abbreviations: &["MJ/(m³·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "CaloriePerCubicCentimeterDegreeCelsius",
+            plural: "CaloriesPerCubicCentimeterDegreeCelsius",
+            abbreviation: "cal/(cm³·°C)",
+            abbreviations: &["cal/(cm³·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "KilocaloriePerCubicCentimeterDegreeCelsius",
+            plural: "KilocaloriesPerCubicCentimeterDegreeCelsius",
+            abbreviation: "kcal/(cm³·°C)",
+            abbreviations: &["kcal/(cm³·°C)"],
+        },
+        crate::UnitInfo {
+            singular: "BtuPerCubicFootDegreeFahrenheit",
+            plural: "BtusPerCubicFootDegreeFahrenheit",
+            abbreviation: "BTU/(ft³·°F)",
+            abbreviations: &["BTU/(ft³·°F)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`VolumetricHeatCapacity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "VolumetricHeatCapacity",
+        description: "The volumetric heat capacity is the amount of energy that must be added, in the form of heat, to one unit of volume of the material in order to cause an increase of one unit in its temperature.",
+        dimensions: crate::Dimensions::new(-1, 1, -2, 0, -1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

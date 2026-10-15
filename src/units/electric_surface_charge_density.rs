@@ -49,6 +49,42 @@ impl ElectricSurfaceChargeDensityUnit {
         Self::CoulombPerSquareInch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "CoulombPerSquareMeter",
+            plural: "CoulombsPerSquareMeter",
+            abbreviation: "C/m²",
+            abbreviations: &["C/m²"],
+        },
+        crate::UnitInfo {
+            singular: "CoulombPerSquareCentimeter",
+            plural: "CoulombsPerSquareCentimeter",
+            abbreviation: "C/cm²",
+            abbreviations: &["C/cm²"],
+        },
+        crate::UnitInfo {
+            singular: "CoulombPerSquareInch",
+            plural: "CoulombsPerSquareInch",
+            abbreviation: "C/in²",
+            abbreviations: &["C/in²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricSurfaceChargeDensity`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricSurfaceChargeDensity",
+        description: "In electromagnetism, surface charge density is a measure of the amount of electric charge per surface area.",
+        dimensions: crate::Dimensions::new(-2, 0, 1, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

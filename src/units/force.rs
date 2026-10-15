@@ -81,6 +81,120 @@ impl ForceUnit {
         Self::ShortTonForce,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Dyn",
+            plural: "Dyne",
+            abbreviation: "dyn",
+            abbreviations: &["dyn"],
+        },
+        crate::UnitInfo {
+            singular: "GramForce",
+            plural: "GramsForce",
+            abbreviation: "gf",
+            abbreviations: &["gf"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramForce",
+            plural: "KilogramsForce",
+            abbreviation: "kgf",
+            abbreviations: &["kgf"],
+        },
+        crate::UnitInfo {
+            singular: "TonneForce",
+            plural: "TonnesForce",
+            abbreviation: "tf",
+            abbreviations: &["tf", "Ton"],
+        },
+        crate::UnitInfo {
+            singular: "Newton",
+            plural: "Newtons",
+            abbreviation: "N",
+            abbreviations: &["N"],
+        },
+        crate::UnitInfo {
+            singular: "Micronewton",
+            plural: "Micronewtons",
+            abbreviation: "µN",
+            abbreviations: &["µN"],
+        },
+        crate::UnitInfo {
+            singular: "Millinewton",
+            plural: "Millinewtons",
+            abbreviation: "mN",
+            abbreviations: &["mN"],
+        },
+        crate::UnitInfo {
+            singular: "Decanewton",
+            plural: "Decanewtons",
+            abbreviation: "daN",
+            abbreviations: &["daN"],
+        },
+        crate::UnitInfo {
+            singular: "Kilonewton",
+            plural: "Kilonewtons",
+            abbreviation: "kN",
+            abbreviations: &["kN"],
+        },
+        crate::UnitInfo {
+            singular: "Meganewton",
+            plural: "Meganewtons",
+            abbreviation: "MN",
+            abbreviations: &["MN"],
+        },
+        crate::UnitInfo {
+            singular: "Kilopond",
+            plural: "Kiloponds",
+            abbreviation: "kp",
+            abbreviations: &["kp"],
+        },
+        crate::UnitInfo {
+            singular: "Poundal",
+            plural: "Poundals",
+            abbreviation: "pdl",
+            abbreviations: &["pdl"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForce",
+            plural: "PoundsForce",
+            abbreviation: "lbf",
+            abbreviations: &["lbf"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForce",
+            plural: "KilopoundsForce",
+            abbreviation: "klbf",
+            abbreviations: &["klbf"],
+        },
+        crate::UnitInfo {
+            singular: "OunceForce",
+            plural: "OunceForce",
+            abbreviation: "ozf",
+            abbreviations: &["ozf"],
+        },
+        crate::UnitInfo {
+            singular: "ShortTonForce",
+            plural: "ShortTonsForce",
+            abbreviation: "tf (short)",
+            abbreviations: &["tf (short)", "t (US)f", "short tons-force"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Force`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Force",
+        description: "In physics, a force is any influence that causes an object to undergo a certain change, either concerning its movement, direction, or geometrical construction. In other words, a force can cause an object with mass to change its velocity (which includes to begin moving from a state of rest), i.e., to accelerate, or a flexible object to deform, or both. Force can also be described by intuitive concepts such as a push or a pull. A force has both magnitude and direction, making it a vector quantity. It is measured in the SI unit of newtons and represented by the symbol F.",
+        dimensions: crate::Dimensions::new(1, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[4],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

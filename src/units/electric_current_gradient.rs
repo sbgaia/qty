@@ -57,6 +57,67 @@ impl ElectricCurrentGradientUnit {
         Self::AmperePerNanosecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "AmperePerSecond",
+            plural: "AmperesPerSecond",
+            abbreviation: "A/s",
+            abbreviations: &["A/s"],
+        },
+        crate::UnitInfo {
+            singular: "MilliamperePerSecond",
+            plural: "MilliamperesPerSecond",
+            abbreviation: "mA/s",
+            abbreviations: &["mA/s"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerMinute",
+            plural: "AmperesPerMinute",
+            abbreviation: "A/min",
+            abbreviations: &["A/min"],
+        },
+        crate::UnitInfo {
+            singular: "MilliamperePerMinute",
+            plural: "MilliamperesPerMinute",
+            abbreviation: "mA/min",
+            abbreviations: &["mA/min"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerMillisecond",
+            plural: "AmperesPerMillisecond",
+            abbreviation: "A/ms",
+            abbreviations: &["A/ms"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerMicrosecond",
+            plural: "AmperesPerMicrosecond",
+            abbreviation: "A/μs",
+            abbreviations: &["A/μs"],
+        },
+        crate::UnitInfo {
+            singular: "AmperePerNanosecond",
+            plural: "AmperesPerNanosecond",
+            abbreviation: "A/ns",
+            abbreviations: &["A/ns"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricCurrentGradient`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricCurrentGradient",
+        description:
+            "In electromagnetism, the current gradient describes how the current changes in time.",
+        dimensions: crate::Dimensions::new(0, 0, -1, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

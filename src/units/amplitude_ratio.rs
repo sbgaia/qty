@@ -68,6 +68,49 @@ impl AmplitudeRatioUnit {
         Self::DecibelUnloaded,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DecibelVolt",
+            plural: "DecibelVolts",
+            abbreviation: "dBV",
+            abbreviations: &["dBV"],
+        },
+        crate::UnitInfo {
+            singular: "DecibelMicrovolt",
+            plural: "DecibelMicrovolts",
+            abbreviation: "dBµV",
+            abbreviations: &["dBµV"],
+        },
+        crate::UnitInfo {
+            singular: "DecibelMillivolt",
+            plural: "DecibelMillivolts",
+            abbreviation: "dBmV",
+            abbreviations: &["dBmV"],
+        },
+        crate::UnitInfo {
+            singular: "DecibelUnloaded",
+            plural: "DecibelsUnloaded",
+            abbreviation: "dBu",
+            abbreviations: &["dBu"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`AmplitudeRatio`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "AmplitudeRatio",
+        description:
+            "The strength of a signal expressed in decibels (dB) relative to one volt RMS.",
+        dimensions: crate::Dimensions::new(0, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -64,6 +64,96 @@ impl FrequencyUnit {
         Self::PerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Hertz",
+            plural: "Hertz",
+            abbreviation: "Hz",
+            abbreviations: &["Hz"],
+        },
+        crate::UnitInfo {
+            singular: "Microhertz",
+            plural: "Microhertz",
+            abbreviation: "µHz",
+            abbreviations: &["µHz"],
+        },
+        crate::UnitInfo {
+            singular: "Millihertz",
+            plural: "Millihertz",
+            abbreviation: "mHz",
+            abbreviations: &["mHz"],
+        },
+        crate::UnitInfo {
+            singular: "Kilohertz",
+            plural: "Kilohertz",
+            abbreviation: "kHz",
+            abbreviations: &["kHz"],
+        },
+        crate::UnitInfo {
+            singular: "Megahertz",
+            plural: "Megahertz",
+            abbreviation: "MHz",
+            abbreviations: &["MHz"],
+        },
+        crate::UnitInfo {
+            singular: "Gigahertz",
+            plural: "Gigahertz",
+            abbreviation: "GHz",
+            abbreviations: &["GHz"],
+        },
+        crate::UnitInfo {
+            singular: "Terahertz",
+            plural: "Terahertz",
+            abbreviation: "THz",
+            abbreviations: &["THz"],
+        },
+        crate::UnitInfo {
+            singular: "RadianPerSecond",
+            plural: "RadiansPerSecond",
+            abbreviation: "rad/s",
+            abbreviations: &["rad/s"],
+        },
+        crate::UnitInfo {
+            singular: "CyclePerMinute",
+            plural: "CyclesPerMinute",
+            abbreviation: "cpm",
+            abbreviations: &["cpm"],
+        },
+        crate::UnitInfo {
+            singular: "CyclePerHour",
+            plural: "CyclesPerHour",
+            abbreviation: "cph",
+            abbreviations: &["cph"],
+        },
+        crate::UnitInfo {
+            singular: "BeatPerMinute",
+            plural: "BeatsPerMinute",
+            abbreviation: "bpm",
+            abbreviations: &["bpm"],
+        },
+        crate::UnitInfo {
+            singular: "PerSecond",
+            plural: "PerSecond",
+            abbreviation: "s⁻¹",
+            abbreviations: &["s⁻¹"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`Frequency`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "Frequency",
+        description: "The number of occurrences of a repeating event per unit time.",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

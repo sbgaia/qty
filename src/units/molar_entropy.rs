@@ -45,6 +45,42 @@ impl MolarEntropyUnit {
         Self::MegajoulePerMoleKelvin,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "JoulePerMoleKelvin",
+            plural: "JoulesPerMoleKelvin",
+            abbreviation: "J/(mol·K)",
+            abbreviations: &["J/(mol·K)"],
+        },
+        crate::UnitInfo {
+            singular: "KilojoulePerMoleKelvin",
+            plural: "KilojoulesPerMoleKelvin",
+            abbreviation: "kJ/(mol·K)",
+            abbreviations: &["kJ/(mol·K)"],
+        },
+        crate::UnitInfo {
+            singular: "MegajoulePerMoleKelvin",
+            plural: "MegajoulesPerMoleKelvin",
+            abbreviation: "MJ/(mol·K)",
+            abbreviations: &["MJ/(mol·K)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MolarEntropy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MolarEntropy",
+        description: "Molar entropy is amount of energy required to increase temperature of 1 mole substance by 1 Kelvin.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, -1, -1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

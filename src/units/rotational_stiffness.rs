@@ -111,6 +111,235 @@ impl RotationalStiffnessUnit {
         Self::KilopoundForceFootPerRadian,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "NewtonMeterPerRadian",
+            plural: "NewtonMetersPerRadian",
+            abbreviation: "N·m/rad",
+            abbreviations: &["N·m/rad", "Nm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMeterPerRadian",
+            plural: "KilonewtonMetersPerRadian",
+            abbreviation: "kN·m/rad",
+            abbreviations: &["kN·m/rad"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMeterPerRadian",
+            plural: "MeganewtonMetersPerRadian",
+            abbreviation: "MN·m/rad",
+            abbreviations: &["MN·m/rad"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceFootPerDegrees",
+            plural: "PoundForceFeetPerDegrees",
+            abbreviation: "lbf·ft/deg",
+            abbreviations: &["lbf·ft/deg"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForceFootPerDegrees",
+            plural: "KilopoundForceFeetPerDegrees",
+            abbreviation: "kipf·ft/°",
+            abbreviations: &[
+                "kipf·ft/°",
+                "kip·ft/°g",
+                "k·ft/°",
+                "kipf·ft/deg",
+                "kip·ft/deg",
+                "k·ft/deg",
+            ],
+        },
+        crate::UnitInfo {
+            singular: "NewtonMillimeterPerDegree",
+            plural: "NewtonMillimetersPerDegree",
+            abbreviation: "N·mm/deg",
+            abbreviations: &["N·mm/deg", "Nmm/deg", "N·mm/°", "Nmm/°"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonMillimeterPerDegree",
+            plural: "NanonewtonMillimetersPerDegree",
+            abbreviation: "nN·mm/deg",
+            abbreviations: &["nN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonMillimeterPerDegree",
+            plural: "MicronewtonMillimetersPerDegree",
+            abbreviation: "µN·mm/deg",
+            abbreviations: &["µN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonMillimeterPerDegree",
+            plural: "MillinewtonMillimetersPerDegree",
+            abbreviation: "mN·mm/deg",
+            abbreviations: &["mN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonMillimeterPerDegree",
+            plural: "CentinewtonMillimetersPerDegree",
+            abbreviation: "cN·mm/deg",
+            abbreviations: &["cN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonMillimeterPerDegree",
+            plural: "DecinewtonMillimetersPerDegree",
+            abbreviation: "dN·mm/deg",
+            abbreviations: &["dN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonMillimeterPerDegree",
+            plural: "DecanewtonMillimetersPerDegree",
+            abbreviation: "daN·mm/deg",
+            abbreviations: &["daN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMillimeterPerDegree",
+            plural: "KilonewtonMillimetersPerDegree",
+            abbreviation: "kN·mm/deg",
+            abbreviations: &["kN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMillimeterPerDegree",
+            plural: "MeganewtonMillimetersPerDegree",
+            abbreviation: "MN·mm/deg",
+            abbreviations: &["MN·mm/deg"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonMeterPerDegree",
+            plural: "NewtonMetersPerDegree",
+            abbreviation: "N·m/deg",
+            abbreviations: &["N·m/deg", "Nm/deg", "N·m/°", "Nm/°"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonMeterPerDegree",
+            plural: "NanonewtonMetersPerDegree",
+            abbreviation: "nN·m/deg",
+            abbreviations: &["nN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonMeterPerDegree",
+            plural: "MicronewtonMetersPerDegree",
+            abbreviation: "µN·m/deg",
+            abbreviations: &["µN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonMeterPerDegree",
+            plural: "MillinewtonMetersPerDegree",
+            abbreviation: "mN·m/deg",
+            abbreviations: &["mN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonMeterPerDegree",
+            plural: "CentinewtonMetersPerDegree",
+            abbreviation: "cN·m/deg",
+            abbreviations: &["cN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonMeterPerDegree",
+            plural: "DecinewtonMetersPerDegree",
+            abbreviation: "dN·m/deg",
+            abbreviations: &["dN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonMeterPerDegree",
+            plural: "DecanewtonMetersPerDegree",
+            abbreviation: "daN·m/deg",
+            abbreviations: &["daN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMeterPerDegree",
+            plural: "KilonewtonMetersPerDegree",
+            abbreviation: "kN·m/deg",
+            abbreviations: &["kN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMeterPerDegree",
+            plural: "MeganewtonMetersPerDegree",
+            abbreviation: "MN·m/deg",
+            abbreviations: &["MN·m/deg"],
+        },
+        crate::UnitInfo {
+            singular: "NewtonMillimeterPerRadian",
+            plural: "NewtonMillimetersPerRadian",
+            abbreviation: "N·mm/rad",
+            abbreviations: &["N·mm/rad", "Nmm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "NanonewtonMillimeterPerRadian",
+            plural: "NanonewtonMillimetersPerRadian",
+            abbreviation: "nN·mm/rad",
+            abbreviations: &["nN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "MicronewtonMillimeterPerRadian",
+            plural: "MicronewtonMillimetersPerRadian",
+            abbreviation: "µN·mm/rad",
+            abbreviations: &["µN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "MillinewtonMillimeterPerRadian",
+            plural: "MillinewtonMillimetersPerRadian",
+            abbreviation: "mN·mm/rad",
+            abbreviations: &["mN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "CentinewtonMillimeterPerRadian",
+            plural: "CentinewtonMillimetersPerRadian",
+            abbreviation: "cN·mm/rad",
+            abbreviations: &["cN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "DecinewtonMillimeterPerRadian",
+            plural: "DecinewtonMillimetersPerRadian",
+            abbreviation: "dN·mm/rad",
+            abbreviations: &["dN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "DecanewtonMillimeterPerRadian",
+            plural: "DecanewtonMillimetersPerRadian",
+            abbreviation: "daN·mm/rad",
+            abbreviations: &["daN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "KilonewtonMillimeterPerRadian",
+            plural: "KilonewtonMillimetersPerRadian",
+            abbreviation: "kN·mm/rad",
+            abbreviations: &["kN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "MeganewtonMillimeterPerRadian",
+            plural: "MeganewtonMillimetersPerRadian",
+            abbreviation: "MN·mm/rad",
+            abbreviations: &["MN·mm/rad"],
+        },
+        crate::UnitInfo {
+            singular: "PoundForceFeetPerRadian",
+            plural: "PoundForceFeetPerRadian",
+            abbreviation: "lbf·ft/rad",
+            abbreviations: &["lbf·ft/rad"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundForceFootPerRadian",
+            plural: "KilopoundForceFeetPerRadian",
+            abbreviation: "kipf·ft/rad",
+            abbreviations: &["kipf·ft/rad", "kip·ft/rad", "k·ft/rad"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RotationalStiffness`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RotationalStiffness",
+        description: "https://en.wikipedia.org/wiki/Stiffness#Rotational_stiffness",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -56,6 +56,60 @@ impl RadiationEquivalentDoseUnit {
         Self::MilliroentgenEquivalentMan,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Sievert",
+            plural: "Sieverts",
+            abbreviation: "Sv",
+            abbreviations: &["Sv"],
+        },
+        crate::UnitInfo {
+            singular: "Nanosievert",
+            plural: "Nanosieverts",
+            abbreviation: "nSv",
+            abbreviations: &["nSv"],
+        },
+        crate::UnitInfo {
+            singular: "Microsievert",
+            plural: "Microsieverts",
+            abbreviation: "µSv",
+            abbreviations: &["µSv"],
+        },
+        crate::UnitInfo {
+            singular: "Millisievert",
+            plural: "Millisieverts",
+            abbreviation: "mSv",
+            abbreviations: &["mSv"],
+        },
+        crate::UnitInfo {
+            singular: "RoentgenEquivalentMan",
+            plural: "RoentgensEquivalentMan",
+            abbreviation: "rem",
+            abbreviations: &["rem"],
+        },
+        crate::UnitInfo {
+            singular: "MilliroentgenEquivalentMan",
+            plural: "MilliroentgensEquivalentMan",
+            abbreviation: "mrem",
+            abbreviations: &["mrem"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RadiationEquivalentDose`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RadiationEquivalentDose",
+        description: "Equivalent dose is a dose quantity representing the stochastic health effects of low levels of ionizing radiation on the human body which represents the probability of radiation-induced cancer and genetic damage.",
+        dimensions: crate::Dimensions::new(2, 0, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

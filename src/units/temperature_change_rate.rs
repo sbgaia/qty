@@ -77,6 +77,126 @@ impl TemperatureChangeRateUnit {
         Self::DegreeFahrenheitPerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerSecond",
+            plural: "DegreesCelsiusPerSecond",
+            abbreviation: "°C/s",
+            abbreviations: &["°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "NanodegreeCelsiusPerSecond",
+            plural: "NanodegreesCelsiusPerSecond",
+            abbreviation: "n°C/s",
+            abbreviations: &["n°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrodegreeCelsiusPerSecond",
+            plural: "MicrodegreesCelsiusPerSecond",
+            abbreviation: "µ°C/s",
+            abbreviations: &["µ°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillidegreeCelsiusPerSecond",
+            plural: "MillidegreesCelsiusPerSecond",
+            abbreviation: "m°C/s",
+            abbreviations: &["m°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "CentidegreeCelsiusPerSecond",
+            plural: "CentidegreesCelsiusPerSecond",
+            abbreviation: "c°C/s",
+            abbreviations: &["c°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecidegreeCelsiusPerSecond",
+            plural: "DecidegreesCelsiusPerSecond",
+            abbreviation: "d°C/s",
+            abbreviations: &["d°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecadegreeCelsiusPerSecond",
+            plural: "DecadegreesCelsiusPerSecond",
+            abbreviation: "da°C/s",
+            abbreviations: &["da°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "HectodegreeCelsiusPerSecond",
+            plural: "HectodegreesCelsiusPerSecond",
+            abbreviation: "h°C/s",
+            abbreviations: &["h°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilodegreeCelsiusPerSecond",
+            plural: "KilodegreesCelsiusPerSecond",
+            abbreviation: "k°C/s",
+            abbreviations: &["k°C/s"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerMinute",
+            plural: "DegreesCelsiusPerMinute",
+            abbreviation: "°C/min",
+            abbreviations: &["°C/min"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeKelvinPerMinute",
+            plural: "DegreesKelvinPerMinute",
+            abbreviation: "K/min",
+            abbreviations: &["K/min"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeFahrenheitPerMinute",
+            plural: "DegreesFahrenheitPerMinute",
+            abbreviation: "°F/min",
+            abbreviations: &["°F/min"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeFahrenheitPerSecond",
+            plural: "DegreesFahrenheitPerSecond",
+            abbreviation: "°F/s",
+            abbreviations: &["°F/s"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeKelvinPerSecond",
+            plural: "DegreesKelvinPerSecond",
+            abbreviation: "K/s",
+            abbreviations: &["K/s"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeCelsiusPerHour",
+            plural: "DegreesCelsiusPerHour",
+            abbreviation: "°C/h",
+            abbreviations: &["°C/h"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeKelvinPerHour",
+            plural: "DegreesKelvinPerHour",
+            abbreviation: "K/h",
+            abbreviations: &["K/h"],
+        },
+        crate::UnitInfo {
+            singular: "DegreeFahrenheitPerHour",
+            plural: "DegreesFahrenheitPerHour",
+            abbreviation: "°F/h",
+            abbreviations: &["°F/h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`TemperatureChangeRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "TemperatureChangeRate",
+        description: "Temperature change rate is the ratio of the temperature change to the time during which the change occurred (value of temperature changes per unit time).",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 1, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

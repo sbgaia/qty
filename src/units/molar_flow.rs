@@ -57,6 +57,78 @@ impl MolarFlowUnit {
         Self::PoundMolePerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MolePerSecond",
+            plural: "MolesPerSecond",
+            abbreviation: "mol/s",
+            abbreviations: &["mol/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilomolePerSecond",
+            plural: "KilomolesPerSecond",
+            abbreviation: "kmol/s",
+            abbreviations: &["kmol/s"],
+        },
+        crate::UnitInfo {
+            singular: "MolePerMinute",
+            plural: "MolesPerMinute",
+            abbreviation: "mol/min",
+            abbreviations: &["mol/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilomolePerMinute",
+            plural: "KilomolesPerMinute",
+            abbreviation: "kmol/min",
+            abbreviations: &["kmol/min"],
+        },
+        crate::UnitInfo {
+            singular: "MolePerHour",
+            plural: "MolesPerHour",
+            abbreviation: "mol/h",
+            abbreviations: &["mol/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilomolePerHour",
+            plural: "KilomolesPerHour",
+            abbreviation: "kmol/h",
+            abbreviations: &["kmol/h"],
+        },
+        crate::UnitInfo {
+            singular: "PoundMolePerSecond",
+            plural: "PoundMolesPerSecond",
+            abbreviation: "lbmol/s",
+            abbreviations: &["lbmol/s"],
+        },
+        crate::UnitInfo {
+            singular: "PoundMolePerMinute",
+            plural: "PoundMolesPerMinute",
+            abbreviation: "lbmol/min",
+            abbreviations: &["lbmol/min"],
+        },
+        crate::UnitInfo {
+            singular: "PoundMolePerHour",
+            plural: "PoundMolesPerHour",
+            abbreviation: "lbmol/h",
+            abbreviations: &["lbmol/h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MolarFlow`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MolarFlow",
+        description: "Molar flow is the ratio of the amount of substance change to the time during which the change occurred (value of amount of substance changes per unit time).",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 1, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

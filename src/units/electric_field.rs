@@ -39,6 +39,28 @@ impl ElectricFieldUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::VoltPerMeter];
 
+    const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
+        singular: "VoltPerMeter",
+        plural: "VoltsPerMeter",
+        abbreviation: "V/m",
+        abbreviations: &["V/m"],
+    }];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricField`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricField",
+        description: "An electric field is a force field that surrounds electric charges that attracts or repels other electric charges.",
+        dimensions: crate::Dimensions::new(1, 1, -3, -1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -49,6 +49,42 @@ impl ElectricApparentEnergyUnit {
         Self::MegavoltampereHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "VoltampereHour",
+            plural: "VoltampereHours",
+            abbreviation: "VAh",
+            abbreviations: &["VAh"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltampereHour",
+            plural: "KilovoltampereHours",
+            abbreviation: "kVAh",
+            abbreviations: &["kVAh"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltampereHour",
+            plural: "MegavoltampereHours",
+            abbreviation: "MVAh",
+            abbreviations: &["MVAh"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricApparentEnergy`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricApparentEnergy",
+        description: "A unit for expressing the integral of apparent power over time, equal to the product of 1 volt-ampere and 1 hour, or to 3600 joules.",
+        dimensions: crate::Dimensions::new(2, 1, -2, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

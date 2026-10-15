@@ -52,6 +52,54 @@ impl PorousMediumPermeabilityUnit {
         Self::SquareCentimeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Darcy",
+            plural: "Darcys",
+            abbreviation: "D",
+            abbreviations: &["D"],
+        },
+        crate::UnitInfo {
+            singular: "Microdarcy",
+            plural: "Microdarcys",
+            abbreviation: "µD",
+            abbreviations: &["µD"],
+        },
+        crate::UnitInfo {
+            singular: "Millidarcy",
+            plural: "Millidarcys",
+            abbreviation: "mD",
+            abbreviations: &["mD"],
+        },
+        crate::UnitInfo {
+            singular: "SquareMeter",
+            plural: "SquareMeters",
+            abbreviation: "m²",
+            abbreviations: &["m²"],
+        },
+        crate::UnitInfo {
+            singular: "SquareCentimeter",
+            plural: "SquareCentimeters",
+            abbreviation: "cm²",
+            abbreviations: &["cm²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`PorousMediumPermeability`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "PorousMediumPermeability",
+        description: "",
+        dimensions: crate::Dimensions::new(2, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[3],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

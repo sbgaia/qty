@@ -51,6 +51,60 @@ impl ElectricApparentPowerUnit {
         Self::Gigavoltampere,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Voltampere",
+            plural: "Voltamperes",
+            abbreviation: "VA",
+            abbreviations: &["VA"],
+        },
+        crate::UnitInfo {
+            singular: "Microvoltampere",
+            plural: "Microvoltamperes",
+            abbreviation: "µVA",
+            abbreviations: &["µVA"],
+        },
+        crate::UnitInfo {
+            singular: "Millivoltampere",
+            plural: "Millivoltamperes",
+            abbreviation: "mVA",
+            abbreviations: &["mVA"],
+        },
+        crate::UnitInfo {
+            singular: "Kilovoltampere",
+            plural: "Kilovoltamperes",
+            abbreviation: "kVA",
+            abbreviations: &["kVA"],
+        },
+        crate::UnitInfo {
+            singular: "Megavoltampere",
+            plural: "Megavoltamperes",
+            abbreviation: "MVA",
+            abbreviations: &["MVA"],
+        },
+        crate::UnitInfo {
+            singular: "Gigavoltampere",
+            plural: "Gigavoltamperes",
+            abbreviation: "GVA",
+            abbreviations: &["GVA"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricApparentPower`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricApparentPower",
+        description: "Power engineers measure apparent power as the magnitude of the vector sum of active and reactive power. It is the product of the root mean square voltage (in volts) and the root mean square current (in amperes).",
+        dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

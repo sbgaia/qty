@@ -387,6 +387,9 @@ pub trait Quantity: Copy {
     /// The unit in which values are stored.
     const BASE_UNIT: Self::Unit;
 
+    /// Name, description, dimensions and units of the quantity.
+    const INFO: QuantityInfo;
+
     /// Wraps a value expressed in [`Self::BASE_UNIT`].
     fn from_base(value: Self::Value) -> Self;
 
@@ -401,6 +404,9 @@ pub trait UnitEnum: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + '
 
     /// The primary abbreviation, e.g. `"km"`.
     fn abbreviation(self) -> &'static str;
+
+    /// Names and abbreviations.
+    fn info(self) -> &'static UnitInfo;
 }
 
 /// A value expressed in a given unit, as returned by `in_unit` and
@@ -823,6 +829,7 @@ macro_rules! quantity_core {
             type Value = T;
             type Unit = $U;
             const BASE_UNIT: $U = $U::$base;
+            const INFO: $crate::QuantityInfo = $U::QUANTITY;
             #[inline(always)]
             fn from_base(value: T) -> Self {
                 Self(value)
@@ -926,6 +933,10 @@ macro_rules! quantity_core {
             #[inline(always)]
             fn abbreviation(self) -> &'static str {
                 $U::abbreviation(self)
+            }
+            #[inline(always)]
+            fn info(self) -> &'static $crate::UnitInfo {
+                $U::info(self)
             }
         }
 
@@ -1411,6 +1422,9 @@ pub mod unit;
 // Trigonometry on `Angle`.
 #[cfg(any(feature = "std", feature = "libm"))]
 mod math;
+
+mod info;
+pub use info::{Dimensions, QuantityInfo, UnitInfo};
 
 mod vector;
 pub use vector::{Vector2, Vector3};

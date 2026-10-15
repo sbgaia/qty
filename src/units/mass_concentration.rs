@@ -141,6 +141,318 @@ impl MassConcentrationUnit {
         Self::PoundPerImperialGallon,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerCubicMillimeter",
+            plural: "GramsPerCubicMillimeter",
+            abbreviation: "g/mm³",
+            abbreviations: &["g/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerCubicMillimeter",
+            plural: "KilogramsPerCubicMillimeter",
+            abbreviation: "kg/mm³",
+            abbreviations: &["kg/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerCubicCentimeter",
+            plural: "GramsPerCubicCentimeter",
+            abbreviation: "g/cm³",
+            abbreviations: &["g/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerCubicCentimeter",
+            plural: "KilogramsPerCubicCentimeter",
+            abbreviation: "kg/cm³",
+            abbreviations: &["kg/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerCubicMeter",
+            plural: "GramsPerCubicMeter",
+            abbreviation: "g/m³",
+            abbreviations: &["g/m³"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerCubicMeter",
+            plural: "KilogramsPerCubicMeter",
+            abbreviation: "kg/m³",
+            abbreviations: &["kg/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerCubicMeter",
+            plural: "MilligramsPerCubicMeter",
+            abbreviation: "mg/m³",
+            abbreviations: &["mg/m³"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerCubicMeter",
+            plural: "MicrogramsPerCubicMeter",
+            abbreviation: "µg/m³",
+            abbreviations: &["µg/m³"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerMicroliter",
+            plural: "GramsPerMicroliter",
+            abbreviation: "g/μl",
+            abbreviations: &["g/μl"],
+        },
+        crate::UnitInfo {
+            singular: "PicogramPerMicroliter",
+            plural: "PicogramsPerMicroliter",
+            abbreviation: "pg/μl",
+            abbreviations: &["pg/μl"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerMicroliter",
+            plural: "NanogramsPerMicroliter",
+            abbreviation: "ng/μl",
+            abbreviations: &["ng/μl"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerMicroliter",
+            plural: "MicrogramsPerMicroliter",
+            abbreviation: "µg/μl",
+            abbreviations: &["µg/μl"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerMicroliter",
+            plural: "MilligramsPerMicroliter",
+            abbreviation: "mg/μl",
+            abbreviations: &["mg/μl"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerMicroliter",
+            plural: "CentigramsPerMicroliter",
+            abbreviation: "cg/μl",
+            abbreviations: &["cg/μl"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerMicroliter",
+            plural: "DecigramsPerMicroliter",
+            abbreviation: "dg/μl",
+            abbreviations: &["dg/μl"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerMilliliter",
+            plural: "GramsPerMilliliter",
+            abbreviation: "g/ml",
+            abbreviations: &["g/ml"],
+        },
+        crate::UnitInfo {
+            singular: "PicogramPerMilliliter",
+            plural: "PicogramsPerMilliliter",
+            abbreviation: "pg/ml",
+            abbreviations: &["pg/ml"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerMilliliter",
+            plural: "NanogramsPerMilliliter",
+            abbreviation: "ng/ml",
+            abbreviations: &["ng/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerMilliliter",
+            plural: "MicrogramsPerMilliliter",
+            abbreviation: "µg/ml",
+            abbreviations: &["µg/ml"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerMilliliter",
+            plural: "MilligramsPerMilliliter",
+            abbreviation: "mg/ml",
+            abbreviations: &["mg/ml"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerMilliliter",
+            plural: "CentigramsPerMilliliter",
+            abbreviation: "cg/ml",
+            abbreviations: &["cg/ml"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerMilliliter",
+            plural: "DecigramsPerMilliliter",
+            abbreviation: "dg/ml",
+            abbreviations: &["dg/ml"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerDeciliter",
+            plural: "GramsPerDeciliter",
+            abbreviation: "g/dl",
+            abbreviations: &["g/dl"],
+        },
+        crate::UnitInfo {
+            singular: "PicogramPerDeciliter",
+            plural: "PicogramsPerDeciliter",
+            abbreviation: "pg/dl",
+            abbreviations: &["pg/dl"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerDeciliter",
+            plural: "NanogramsPerDeciliter",
+            abbreviation: "ng/dl",
+            abbreviations: &["ng/dl"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerDeciliter",
+            plural: "MicrogramsPerDeciliter",
+            abbreviation: "µg/dl",
+            abbreviations: &["µg/dl"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerDeciliter",
+            plural: "MilligramsPerDeciliter",
+            abbreviation: "mg/dl",
+            abbreviations: &["mg/dl"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerDeciliter",
+            plural: "CentigramsPerDeciliter",
+            abbreviation: "cg/dl",
+            abbreviations: &["cg/dl"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerDeciliter",
+            plural: "DecigramsPerDeciliter",
+            abbreviation: "dg/dl",
+            abbreviations: &["dg/dl"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerLiter",
+            plural: "GramsPerLiter",
+            abbreviation: "g/l",
+            abbreviations: &["g/l"],
+        },
+        crate::UnitInfo {
+            singular: "PicogramPerLiter",
+            plural: "PicogramsPerLiter",
+            abbreviation: "pg/l",
+            abbreviations: &["pg/l"],
+        },
+        crate::UnitInfo {
+            singular: "NanogramPerLiter",
+            plural: "NanogramsPerLiter",
+            abbreviation: "ng/l",
+            abbreviations: &["ng/l"],
+        },
+        crate::UnitInfo {
+            singular: "MicrogramPerLiter",
+            plural: "MicrogramsPerLiter",
+            abbreviation: "µg/l",
+            abbreviations: &["µg/l"],
+        },
+        crate::UnitInfo {
+            singular: "MilligramPerLiter",
+            plural: "MilligramsPerLiter",
+            abbreviation: "mg/l",
+            abbreviations: &["mg/l"],
+        },
+        crate::UnitInfo {
+            singular: "CentigramPerLiter",
+            plural: "CentigramsPerLiter",
+            abbreviation: "cg/l",
+            abbreviations: &["cg/l"],
+        },
+        crate::UnitInfo {
+            singular: "DecigramPerLiter",
+            plural: "DecigramsPerLiter",
+            abbreviation: "dg/l",
+            abbreviations: &["dg/l"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerLiter",
+            plural: "KilogramsPerLiter",
+            abbreviation: "kg/l",
+            abbreviations: &["kg/l"],
+        },
+        crate::UnitInfo {
+            singular: "TonnePerCubicMillimeter",
+            plural: "TonnesPerCubicMillimeter",
+            abbreviation: "t/mm³",
+            abbreviations: &["t/mm³"],
+        },
+        crate::UnitInfo {
+            singular: "TonnePerCubicCentimeter",
+            plural: "TonnesPerCubicCentimeter",
+            abbreviation: "t/cm³",
+            abbreviations: &["t/cm³"],
+        },
+        crate::UnitInfo {
+            singular: "TonnePerCubicMeter",
+            plural: "TonnesPerCubicMeter",
+            abbreviation: "t/m³",
+            abbreviations: &["t/m³"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerCubicInch",
+            plural: "PoundsPerCubicInch",
+            abbreviation: "lb/in³",
+            abbreviations: &["lb/in³"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundPerCubicInch",
+            plural: "KilopoundsPerCubicInch",
+            abbreviation: "klb/in³",
+            abbreviations: &["klb/in³"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerCubicFoot",
+            plural: "PoundsPerCubicFoot",
+            abbreviation: "lb/ft³",
+            abbreviations: &["lb/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "KilopoundPerCubicFoot",
+            plural: "KilopoundsPerCubicFoot",
+            abbreviation: "klb/ft³",
+            abbreviations: &["klb/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "SlugPerCubicFoot",
+            plural: "SlugsPerCubicFoot",
+            abbreviation: "slug/ft³",
+            abbreviations: &["slug/ft³"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerUSGallon",
+            plural: "PoundsPerUSGallon",
+            abbreviation: "ppg (U.S.)",
+            abbreviations: &["ppg (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "OuncePerUSGallon",
+            plural: "OuncesPerUSGallon",
+            abbreviation: "oz/gal (U.S.)",
+            abbreviations: &["oz/gal (U.S.)"],
+        },
+        crate::UnitInfo {
+            singular: "OuncePerImperialGallon",
+            plural: "OuncesPerImperialGallon",
+            abbreviation: "oz/gal (imp.)",
+            abbreviations: &["oz/gal (imp.)"],
+        },
+        crate::UnitInfo {
+            singular: "PoundPerImperialGallon",
+            plural: "PoundsPerImperialGallon",
+            abbreviation: "ppg (imp.)",
+            abbreviations: &["ppg (imp.)"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MassConcentration`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MassConcentration",
+        description: "In chemistry, the mass concentration ρi (or γi) is defined as the mass of a constituent mi divided by the volume of the mixture V",
+        dimensions: crate::Dimensions::new(-3, 1, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[5],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

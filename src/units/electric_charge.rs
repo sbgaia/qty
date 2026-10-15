@@ -61,6 +61,90 @@ impl ElectricChargeUnit {
         Self::MegaampereHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Coulomb",
+            plural: "Coulombs",
+            abbreviation: "C",
+            abbreviations: &["C"],
+        },
+        crate::UnitInfo {
+            singular: "Picocoulomb",
+            plural: "Picocoulombs",
+            abbreviation: "pC",
+            abbreviations: &["pC"],
+        },
+        crate::UnitInfo {
+            singular: "Nanocoulomb",
+            plural: "Nanocoulombs",
+            abbreviation: "nC",
+            abbreviations: &["nC"],
+        },
+        crate::UnitInfo {
+            singular: "Microcoulomb",
+            plural: "Microcoulombs",
+            abbreviation: "µC",
+            abbreviations: &["µC"],
+        },
+        crate::UnitInfo {
+            singular: "Millicoulomb",
+            plural: "Millicoulombs",
+            abbreviation: "mC",
+            abbreviations: &["mC"],
+        },
+        crate::UnitInfo {
+            singular: "Kilocoulomb",
+            plural: "Kilocoulombs",
+            abbreviation: "kC",
+            abbreviations: &["kC"],
+        },
+        crate::UnitInfo {
+            singular: "Megacoulomb",
+            plural: "Megacoulombs",
+            abbreviation: "MC",
+            abbreviations: &["MC"],
+        },
+        crate::UnitInfo {
+            singular: "AmpereHour",
+            plural: "AmpereHours",
+            abbreviation: "A-h",
+            abbreviations: &["A-h", "Ah"],
+        },
+        crate::UnitInfo {
+            singular: "MilliampereHour",
+            plural: "MilliampereHours",
+            abbreviation: "mA-h",
+            abbreviations: &["mA-h"],
+        },
+        crate::UnitInfo {
+            singular: "KiloampereHour",
+            plural: "KiloampereHours",
+            abbreviation: "kA-h",
+            abbreviations: &["kA-h"],
+        },
+        crate::UnitInfo {
+            singular: "MegaampereHour",
+            plural: "MegaampereHours",
+            abbreviation: "MA-h",
+            abbreviations: &["MA-h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricCharge`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricCharge",
+        description: "Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field.",
+        dimensions: crate::Dimensions::new(0, 0, 1, 1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

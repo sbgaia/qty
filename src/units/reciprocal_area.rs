@@ -61,6 +61,90 @@ impl ReciprocalAreaUnit {
         Self::InverseSquareInch,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "InverseSquareMeter",
+            plural: "InverseSquareMeters",
+            abbreviation: "m⁻²",
+            abbreviations: &["m⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareKilometer",
+            plural: "InverseSquareKilometers",
+            abbreviation: "km⁻²",
+            abbreviations: &["km⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareDecimeter",
+            plural: "InverseSquareDecimeters",
+            abbreviation: "dm⁻²",
+            abbreviations: &["dm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareCentimeter",
+            plural: "InverseSquareCentimeters",
+            abbreviation: "cm⁻²",
+            abbreviations: &["cm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareMillimeter",
+            plural: "InverseSquareMillimeters",
+            abbreviation: "mm⁻²",
+            abbreviations: &["mm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareMicrometer",
+            plural: "InverseSquareMicrometers",
+            abbreviation: "µm⁻²",
+            abbreviations: &["µm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareMile",
+            plural: "InverseSquareMiles",
+            abbreviation: "mi⁻²",
+            abbreviations: &["mi⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareYard",
+            plural: "InverseSquareYards",
+            abbreviation: "yd⁻²",
+            abbreviations: &["yd⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareFoot",
+            plural: "InverseSquareFeet",
+            abbreviation: "ft⁻²",
+            abbreviations: &["ft⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "InverseUsSurveySquareFoot",
+            plural: "InverseUsSurveySquareFeet",
+            abbreviation: "ft⁻² (US)",
+            abbreviations: &["ft⁻² (US)"],
+        },
+        crate::UnitInfo {
+            singular: "InverseSquareInch",
+            plural: "InverseSquareInches",
+            abbreviation: "in⁻²",
+            abbreviations: &["in⁻²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ReciprocalArea`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ReciprocalArea",
+        description: "Reciprocal area (Inverse-square) quantity is used to specify a physical quantity inversely proportional to the square of the distance.",
+        dimensions: crate::Dimensions::new(-2, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

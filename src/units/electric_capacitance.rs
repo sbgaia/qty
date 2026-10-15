@@ -53,6 +53,67 @@ impl ElectricCapacitanceUnit {
         Self::Megafarad,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Farad",
+            plural: "Farads",
+            abbreviation: "F",
+            abbreviations: &["F"],
+        },
+        crate::UnitInfo {
+            singular: "Picofarad",
+            plural: "Picofarads",
+            abbreviation: "pF",
+            abbreviations: &["pF"],
+        },
+        crate::UnitInfo {
+            singular: "Nanofarad",
+            plural: "Nanofarads",
+            abbreviation: "nF",
+            abbreviations: &["nF"],
+        },
+        crate::UnitInfo {
+            singular: "Microfarad",
+            plural: "Microfarads",
+            abbreviation: "µF",
+            abbreviations: &["µF"],
+        },
+        crate::UnitInfo {
+            singular: "Millifarad",
+            plural: "Millifarads",
+            abbreviation: "mF",
+            abbreviations: &["mF"],
+        },
+        crate::UnitInfo {
+            singular: "Kilofarad",
+            plural: "Kilofarads",
+            abbreviation: "kF",
+            abbreviations: &["kF"],
+        },
+        crate::UnitInfo {
+            singular: "Megafarad",
+            plural: "Megafarads",
+            abbreviation: "MF",
+            abbreviations: &["MF"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricCapacitance`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricCapacitance",
+        description:
+            "Capacitance is the capacity of a material object or device to store electric charge.",
+        dimensions: crate::Dimensions::new(-2, -1, 4, 2, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

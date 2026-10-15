@@ -44,6 +44,36 @@ impl RatioChangeRateUnit {
     /// Every unit variant for this quantity.
     pub const ALL: &'static [Self] = &[Self::PercentPerSecond, Self::DecimalFractionPerSecond];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PercentPerSecond",
+            plural: "PercentsPerSecond",
+            abbreviation: "%/s",
+            abbreviations: &["%/s"],
+        },
+        crate::UnitInfo {
+            singular: "DecimalFractionPerSecond",
+            plural: "DecimalFractionsPerSecond",
+            abbreviation: "/s",
+            abbreviations: &["/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`RatioChangeRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "RatioChangeRate",
+        description: "The change in ratio per unit of time.",
+        dimensions: crate::Dimensions::new(0, 0, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[1],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

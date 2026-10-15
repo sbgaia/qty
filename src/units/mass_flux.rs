@@ -63,6 +63,96 @@ impl MassFluxUnit {
         Self::KilogramPerHourPerSquareMillimeter,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "GramPerSecondPerSquareMeter",
+            plural: "GramsPerSecondPerSquareMeter",
+            abbreviation: "g·s⁻¹·m⁻²",
+            abbreviations: &["g·s⁻¹·m⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerSecondPerSquareMeter",
+            plural: "KilogramsPerSecondPerSquareMeter",
+            abbreviation: "kg·s⁻¹·m⁻²",
+            abbreviations: &["kg·s⁻¹·m⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerSecondPerSquareCentimeter",
+            plural: "GramsPerSecondPerSquareCentimeter",
+            abbreviation: "g·s⁻¹·cm⁻²",
+            abbreviations: &["g·s⁻¹·cm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerSecondPerSquareCentimeter",
+            plural: "KilogramsPerSecondPerSquareCentimeter",
+            abbreviation: "kg·s⁻¹·cm⁻²",
+            abbreviations: &["kg·s⁻¹·cm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerSecondPerSquareMillimeter",
+            plural: "GramsPerSecondPerSquareMillimeter",
+            abbreviation: "g·s⁻¹·mm⁻²",
+            abbreviations: &["g·s⁻¹·mm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerSecondPerSquareMillimeter",
+            plural: "KilogramsPerSecondPerSquareMillimeter",
+            abbreviation: "kg·s⁻¹·mm⁻²",
+            abbreviations: &["kg·s⁻¹·mm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerHourPerSquareMeter",
+            plural: "GramsPerHourPerSquareMeter",
+            abbreviation: "g·h⁻¹·m⁻²",
+            abbreviations: &["g·h⁻¹·m⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerHourPerSquareMeter",
+            plural: "KilogramsPerHourPerSquareMeter",
+            abbreviation: "kg·h⁻¹·m⁻²",
+            abbreviations: &["kg·h⁻¹·m⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerHourPerSquareCentimeter",
+            plural: "GramsPerHourPerSquareCentimeter",
+            abbreviation: "g·h⁻¹·cm⁻²",
+            abbreviations: &["g·h⁻¹·cm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerHourPerSquareCentimeter",
+            plural: "KilogramsPerHourPerSquareCentimeter",
+            abbreviation: "kg·h⁻¹·cm⁻²",
+            abbreviations: &["kg·h⁻¹·cm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "GramPerHourPerSquareMillimeter",
+            plural: "GramsPerHourPerSquareMillimeter",
+            abbreviation: "g·h⁻¹·mm⁻²",
+            abbreviations: &["g·h⁻¹·mm⁻²"],
+        },
+        crate::UnitInfo {
+            singular: "KilogramPerHourPerSquareMillimeter",
+            plural: "KilogramsPerHourPerSquareMillimeter",
+            abbreviation: "kg·h⁻¹·mm⁻²",
+            abbreviations: &["kg·h⁻¹·mm⁻²"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MassFlux`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MassFlux",
+        description: "Mass flux is the mass flow rate per unit area.",
+        dimensions: crate::Dimensions::new(-2, 1, -1, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[1],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

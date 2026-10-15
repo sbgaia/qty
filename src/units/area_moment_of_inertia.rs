@@ -55,6 +55,60 @@ impl AreaMomentOfInertiaUnit {
         Self::InchToTheFourth,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "MeterToTheFourth",
+            plural: "MetersToTheFourth",
+            abbreviation: "m⁴",
+            abbreviations: &["m⁴"],
+        },
+        crate::UnitInfo {
+            singular: "DecimeterToTheFourth",
+            plural: "DecimetersToTheFourth",
+            abbreviation: "dm⁴",
+            abbreviations: &["dm⁴"],
+        },
+        crate::UnitInfo {
+            singular: "CentimeterToTheFourth",
+            plural: "CentimetersToTheFourth",
+            abbreviation: "cm⁴",
+            abbreviations: &["cm⁴"],
+        },
+        crate::UnitInfo {
+            singular: "MillimeterToTheFourth",
+            plural: "MillimetersToTheFourth",
+            abbreviation: "mm⁴",
+            abbreviations: &["mm⁴"],
+        },
+        crate::UnitInfo {
+            singular: "FootToTheFourth",
+            plural: "FeetToTheFourth",
+            abbreviation: "ft⁴",
+            abbreviations: &["ft⁴"],
+        },
+        crate::UnitInfo {
+            singular: "InchToTheFourth",
+            plural: "InchesToTheFourth",
+            abbreviation: "in⁴",
+            abbreviations: &["in⁴"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`AreaMomentOfInertia`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "AreaMomentOfInertia",
+        description: "A geometric property of an area that reflects how its points are distributed with regard to an axis.",
+        dimensions: crate::Dimensions::new(4, 0, 0, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

@@ -83,6 +83,144 @@ impl ElectricPotentialChangeRateUnit {
         Self::MegavoltPerHour,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "VoltPerSecond",
+            plural: "VoltsPerSecond",
+            abbreviation: "V/s",
+            abbreviations: &["V/s"],
+        },
+        crate::UnitInfo {
+            singular: "MicrovoltPerSecond",
+            plural: "MicrovoltsPerSecond",
+            abbreviation: "µV/s",
+            abbreviations: &["µV/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillivoltPerSecond",
+            plural: "MillivoltsPerSecond",
+            abbreviation: "mV/s",
+            abbreviations: &["mV/s"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltPerSecond",
+            plural: "KilovoltsPerSecond",
+            abbreviation: "kV/s",
+            abbreviations: &["kV/s"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltPerSecond",
+            plural: "MegavoltsPerSecond",
+            abbreviation: "MV/s",
+            abbreviations: &["MV/s"],
+        },
+        crate::UnitInfo {
+            singular: "VoltPerMicrosecond",
+            plural: "VoltsPerMicrosecond",
+            abbreviation: "V/μs",
+            abbreviations: &["V/μs"],
+        },
+        crate::UnitInfo {
+            singular: "MicrovoltPerMicrosecond",
+            plural: "MicrovoltsPerMicrosecond",
+            abbreviation: "µV/μs",
+            abbreviations: &["µV/μs"],
+        },
+        crate::UnitInfo {
+            singular: "MillivoltPerMicrosecond",
+            plural: "MillivoltsPerMicrosecond",
+            abbreviation: "mV/μs",
+            abbreviations: &["mV/μs"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltPerMicrosecond",
+            plural: "KilovoltsPerMicrosecond",
+            abbreviation: "kV/μs",
+            abbreviations: &["kV/μs"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltPerMicrosecond",
+            plural: "MegavoltsPerMicrosecond",
+            abbreviation: "MV/μs",
+            abbreviations: &["MV/μs"],
+        },
+        crate::UnitInfo {
+            singular: "VoltPerMinute",
+            plural: "VoltsPerMinute",
+            abbreviation: "V/min",
+            abbreviations: &["V/min"],
+        },
+        crate::UnitInfo {
+            singular: "MicrovoltPerMinute",
+            plural: "MicrovoltsPerMinute",
+            abbreviation: "µV/min",
+            abbreviations: &["µV/min"],
+        },
+        crate::UnitInfo {
+            singular: "MillivoltPerMinute",
+            plural: "MillivoltsPerMinute",
+            abbreviation: "mV/min",
+            abbreviations: &["mV/min"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltPerMinute",
+            plural: "KilovoltsPerMinute",
+            abbreviation: "kV/min",
+            abbreviations: &["kV/min"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltPerMinute",
+            plural: "MegavoltsPerMinute",
+            abbreviation: "MV/min",
+            abbreviations: &["MV/min"],
+        },
+        crate::UnitInfo {
+            singular: "VoltPerHour",
+            plural: "VoltsPerHour",
+            abbreviation: "V/h",
+            abbreviations: &["V/h"],
+        },
+        crate::UnitInfo {
+            singular: "MicrovoltPerHour",
+            plural: "MicrovoltsPerHour",
+            abbreviation: "µV/h",
+            abbreviations: &["µV/h"],
+        },
+        crate::UnitInfo {
+            singular: "MillivoltPerHour",
+            plural: "MillivoltsPerHour",
+            abbreviation: "mV/h",
+            abbreviations: &["mV/h"],
+        },
+        crate::UnitInfo {
+            singular: "KilovoltPerHour",
+            plural: "KilovoltsPerHour",
+            abbreviation: "kV/h",
+            abbreviations: &["kV/h"],
+        },
+        crate::UnitInfo {
+            singular: "MegavoltPerHour",
+            plural: "MegavoltsPerHour",
+            abbreviation: "MV/h",
+            abbreviations: &["MV/h"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`ElectricPotentialChangeRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "ElectricPotentialChangeRate",
+        description: "ElectricPotential change rate is the ratio of the electric potential change to the time during which the change occurred (value of electric potential changes per unit time).",
+        dimensions: crate::Dimensions::new(2, 1, -4, -1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

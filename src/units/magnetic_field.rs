@@ -51,6 +51,60 @@ impl MagneticFieldUnit {
         Self::Milligauss,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "Tesla",
+            plural: "Teslas",
+            abbreviation: "T",
+            abbreviations: &["T"],
+        },
+        crate::UnitInfo {
+            singular: "Nanotesla",
+            plural: "Nanoteslas",
+            abbreviation: "nT",
+            abbreviations: &["nT"],
+        },
+        crate::UnitInfo {
+            singular: "Microtesla",
+            plural: "Microteslas",
+            abbreviation: "µT",
+            abbreviations: &["µT"],
+        },
+        crate::UnitInfo {
+            singular: "Millitesla",
+            plural: "Milliteslas",
+            abbreviation: "mT",
+            abbreviations: &["mT"],
+        },
+        crate::UnitInfo {
+            singular: "Gauss",
+            plural: "Gausses",
+            abbreviation: "G",
+            abbreviations: &["G"],
+        },
+        crate::UnitInfo {
+            singular: "Milligauss",
+            plural: "Milligausses",
+            abbreviation: "mG",
+            abbreviations: &["mG"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`MagneticField`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "MagneticField",
+        description: "A magnetic field is a force field that is created by moving electric charges (electric currents) and magnetic dipoles, and exerts a force on other nearby moving charges and magnetic dipoles.",
+        dimensions: crate::Dimensions::new(0, 1, -2, -1, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {

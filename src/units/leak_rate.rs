@@ -47,6 +47,48 @@ impl LeakRateUnit {
         Self::AtmCubicCentimeterPerSecond,
     ];
 
+    const INFOS: &'static [crate::UnitInfo] = &[
+        crate::UnitInfo {
+            singular: "PascalCubicMeterPerSecond",
+            plural: "PascalCubicMetersPerSecond",
+            abbreviation: "Pa·m³/s",
+            abbreviations: &["Pa·m³/s"],
+        },
+        crate::UnitInfo {
+            singular: "MillibarLiterPerSecond",
+            plural: "MillibarLitersPerSecond",
+            abbreviation: "mbar·l/s",
+            abbreviations: &["mbar·l/s"],
+        },
+        crate::UnitInfo {
+            singular: "TorrLiterPerSecond",
+            plural: "TorrLitersPerSecond",
+            abbreviation: "Torr·l/s",
+            abbreviations: &["Torr·l/s"],
+        },
+        crate::UnitInfo {
+            singular: "AtmCubicCentimeterPerSecond",
+            plural: "AtmCubicCentimetersPerSecond",
+            abbreviation: "atm·cm³/s",
+            abbreviations: &["atm·cm³/s"],
+        },
+    ];
+
+    /// Names and abbreviations of this unit.
+    #[inline]
+    pub const fn info(self) -> &'static crate::UnitInfo {
+        &Self::INFOS[self as usize]
+    }
+
+    /// Name, description, dimensions and units of [`LeakRate`].
+    pub const QUANTITY: crate::QuantityInfo = crate::QuantityInfo {
+        name: "LeakRate",
+        description: "A leakage rate of QL = 1 Pa-m³/s is given when the pressure in a closed, evacuated container with a volume of 1 m³ rises by 1 Pa per second or when the pressure in the container drops by 1 Pa in the event of overpressure.",
+        dimensions: crate::Dimensions::new(2, 1, -3, 0, 0, 0, 0),
+        base_unit: &Self::INFOS[0],
+        units: Self::INFOS,
+    };
+
     /// Returns the primary display abbreviation for this unit.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
