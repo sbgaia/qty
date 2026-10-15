@@ -21,12 +21,9 @@ fn main() -> Result<(), RoundError> {
     // Temperatures are points: their difference is a change, not a temperature.
     let spread: Change = max - min;
 
-    // Points cannot be summed (20 °C + 20 °C is not 40 °C), so the mean is the
-    // first reading plus the mean change from it, rounded explicitly.
-    let first = readings[0];
-    let total_change: Change = readings.iter().map(|&r| r - first).sum();
-    let mean_change = total_change.div_rounded(readings.len() as i32, Rounding::NearestTiesEven)?;
-    let mean = first + mean_change;
+    // Points cannot be summed (20 °C + 20 °C is not 40 °C), but they have a
+    // mean; integer means are rounded explicitly.
+    let mean = Fixed::mean(readings.iter().copied(), Rounding::NearestTiesEven)?;
 
     // Exact decimal display in °C, no floats involved.
     println!("readings: {}", readings.len());

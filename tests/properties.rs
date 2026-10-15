@@ -313,6 +313,41 @@ proptest! {
         // Triangle inequality.
         prop_assert!((u + v).norm().as_base() <= (u.norm() + v.norm()).as_base() * (1.0 + 1e-15));
     }
+
+    #[test]
+    fn fixed_means_match_exact_rationals(counts in prop::collection::vec(count(), 0..8), mode in rounding()) {
+        let values = counts.iter().map(|&c| Fixed::<MillidegreeCelsius, i64>::new(c));
+        let sum: i128 = counts.iter().map(|&c| i128::from(c)).sum();
+        let expected = reference(sum, counts.len() as i128, mode);
+        prop_assert_eq!(Fixed::mean(values, mode).map(|m| m.count()), expected);
+    }
+
+    #[test]
+    fn float_means_of_points_shift_with_them(a in -1e3f64..1e3, b in -1e3f64..1e3, c in -1e3f64..1e3) {
+        let t = |v: f64| Temperature::from_degrees_celsius(v);
+        let mean = Temperature::mean([t(a), t(b), t(c)]).unwrap();
+        let expected = (a + b + c) / 3.0;
+        prop_assert!((mean.as_degrees_celsius() - expected).abs() <= 1e-9);
+    }
+
+    #[test]
+    fn significant_digits_match_scientific_formatting(
+        v in prop::num::f64::NORMAL | prop::num::f64::SUBNORMAL | prop::num::f64::ZERO,
+        digits in 1usize..=17,
+    ) {
+        let shown = Length::from_meters(v).in_unit(LengthUnit::Meter).significant(digits).to_string();
+        let number = shown.strip_suffix(" m").unwrap();
+        let reference = format!("{:.*e}", digits - 1, v);
+        // Same value as the correctly rounded scientific form.
+        prop_assert_eq!(number.parse::<f64>().unwrap(), reference.parse::<f64>().unwrap());
+        // And exactly `digits` significant digits.
+        let mantissa: String = number.split('e').next().unwrap().chars().filter(char::is_ascii_digit).collect();
+        let significant = mantissa.trim_start_matches('0');
+        if v != 0.0 {
+            prop_assert!(significant.len() >= digits, "{} has fewer than {} digits", number, digits);
+            prop_assert!(significant.trim_end_matches('0').len() <= digits);
+        }
+    }
 }
 
 /// Helpers to show and rebuild a quantity in a unit, generically.

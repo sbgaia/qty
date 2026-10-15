@@ -8,6 +8,13 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Presentation: `auto_unit_in` picks the largest unit from a list
+  (`LengthUnit::IMPERIAL`, `MassUnit::US`, `MassUnit::IMPERIAL`,
+  `VolumeUnit::US_LIQUID`, or your own); `significant(n)` shows a value
+  with `n` significant digits (`1.23 kN`), without allocating.
+- Means: `Q::mean` for float quantities, points included (the mean of 20 °C
+  and 30 °C is 25 °C), and `Fixed::mean`, summed exactly in `i128` and
+  rounded once.
 - Integrations, each behind a feature of the same name: `glam` and
   `nalgebra` (vectors to and from `Vector2`/`Vector3`), `chrono` and
   `time` (durations, exactly through `Fixed<Nanosecond>`, negative ones

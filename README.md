@@ -181,6 +181,9 @@ let warmer = reading + Fixed::<delta::DegreeCelsius, i32>::new(1); // +1000 m°C
 assert_eq!(warmer.count(), 22_375);
 ```
 
+Means work for points too: `Temperature::mean` of 20 °C and 30 °C is 25 °C,
+and `Fixed::mean` sums exactly and rounds once, in the mode you choose.
+
 ## Display and parsing
 
 ```rust
@@ -194,6 +197,10 @@ let d = Length::from_meters(1234.5);
 assert_eq!(d.to_string(), "1234.5 m");
 assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");
 assert_eq!(format!("{}", Length::from_meters(0.0025).auto_unit()), "2.5 mm");
+// Significant digits, and units chosen from a list of your own.
+assert_eq!(Force::from_newtons(1234.5).auto_unit().significant(3).to_string(), "1.23 kN");
+let walk = Length::from_meters(2500.0).auto_unit_in(LengthUnit::IMPERIAL);
+assert_eq!(format!("{walk:.2}"), "1.55 mi");
 
 assert_eq!("5 km".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
 assert_eq!("5 Kilometres".parse::<Length>(), Ok(Length::from_kilometers(5.0)));

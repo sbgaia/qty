@@ -798,6 +798,25 @@ macro_rules! quantity_core {
                 }
             }
 
+            /// The mean of `values`, or `None` if there are none. Computed as
+            /// the first value plus the mean difference from it, so it also
+            /// works for points: the mean of 20 °C and 30 °C is 25 °C.
+            ///
+            /// With `Uncertain` storage the first value
+            /// enters every difference, which overstates the uncertainty;
+            /// sum and divide instead.
+            pub fn mean<I: IntoIterator<Item = Self>>(values: I) -> Option<Self> {
+                let mut values = values.into_iter();
+                let first = values.next()?.0;
+                let mut sum = T::from_f64(0.0);
+                let mut n = 1_u32;
+                for q in values {
+                    sum = sum + (q.0 - first);
+                    n += 1;
+                }
+                Some(Self(first + sum / T::from_f64(f64::from(n))))
+            }
+
             /// Linear interpolation: `self` at `t = 0`, `other` at `t = 1`
             /// (to within rounding), extrapolating outside `[0, 1]`. Works
             /// for points too: halfway between 10 °C and 20 °C is 15 °C.
@@ -1006,6 +1025,29 @@ macro_rules! quantity_core {
                     value: self.convert_to(unit),
                     unit,
                 }
+            }
+
+            /// The value in the largest of `units` that does not exceed it
+            /// (the smallest of them for smaller values), like
+            /// [`auto_unit`](Self::auto_unit) over a unit list of your
+            /// choice: `length.auto_unit_in(LengthUnit::IMPERIAL)`. Meant
+            /// for linear units; with an empty list, the base unit.
+            pub fn auto_unit_in(self, units: &[$U]) -> $crate::InUnit<T, $U> {
+                let magnitude = self.0.abs();
+                let one = |unit: $U| Self::new(T::from_f64(1.0), unit).0.abs();
+                let mut best: Option<($U, T)> = None;
+                let mut smallest: Option<($U, T)> = None;
+                for &unit in units {
+                    let size = one(unit);
+                    if smallest.map_or(true, |(_, s)| size < s) {
+                        smallest = Some((unit, size));
+                    }
+                    if size <= magnitude && best.map_or(true, |(_, b)| size > b) {
+                        best = Some((unit, size));
+                    }
+                }
+                let unit = best.or(smallest).map_or($U::$base, |(unit, _)| unit);
+                self.in_unit(unit)
             }
         }
 
@@ -1511,6 +1553,9 @@ pub use vector::{Vector2, Vector3};
 mod time;
 
 mod interop;
+
+mod format;
+pub use format::{Significant, SignificantFloat};
 
 mod angle_wrap;
 

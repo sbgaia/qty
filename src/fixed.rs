@@ -1253,6 +1253,40 @@ impl<U: FixedUnit, V: FixedUnit> DecimalScale<U, V> {
 }
 
 impl<U: FixedUnit, I: Integer> Fixed<U, I> {
+    /// The mean of `values`, rounded with `mode` (exactly: the sum is
+    /// taken in `i128`). Works for points too, such as temperatures, since
+    /// all values are in the same unit. [`RoundError::DivisionByZero`] if
+    /// there are no values; [`RoundError::Overflow`] if the sum leaves
+    /// `i128` or the mean leaves `I`.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    /// use unitsnet_rs::unit::temperature::MillidegreeCelsius;
+    ///
+    /// let readings = [21_375, 21_500, 22_125].map(Fixed::<MillidegreeCelsius, i32>::new);
+    /// let mean = Fixed::mean(readings, Rounding::NearestTiesEven)?;
+    /// assert_eq!(mean.count(), 21_667); // 21 666.67, rounded
+    /// # Ok::<(), RoundError>(())
+    /// ```
+    pub fn mean<It: IntoIterator<Item = Self>>(
+        values: It,
+        mode: Rounding,
+    ) -> Result<Self, RoundError> {
+        let (mut sum, mut n) = (0_i128, 0_i128);
+        for v in values {
+            sum = sum
+                .checked_add(widen(v.count)?)
+                .ok_or(RoundError::Overflow)?;
+            n += 1;
+        }
+        if n == 0 {
+            return Err(RoundError::DivisionByZero);
+        }
+        div_round(sum, n, mode).and_then(narrow).map(Self::new)
+    }
+}
+
+impl<U: FixedUnit, I: Integer> Fixed<U, I> {
     /// Shows the count in another unit of the same quantity, as an exact
     /// decimal: 1234 mm as `1.234 m`, 21 375 m°C as `21.375 °C`, 2 km as
     /// `2000 m`. No float is involved.

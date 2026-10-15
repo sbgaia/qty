@@ -1668,3 +1668,106 @@ fn json_schemas() {
     assert!(names.iter().any(|n| n == "Kilometer"));
     assert_eq!(names.len(), LengthUnit::ALL.len());
 }
+
+mod presentation {
+    use unitsnet_rs::*;
+
+    #[test]
+    fn auto_unit_over_a_unit_list() {
+        let shown = |m: f64| {
+            Length::from_meters(m)
+                .auto_unit_in(LengthUnit::IMPERIAL)
+                .unit
+        };
+        assert_eq!(shown(1609.344), LengthUnit::Mile);
+        assert_eq!(shown(1609.0), LengthUnit::Yard);
+        assert_eq!(shown(0.5), LengthUnit::Foot);
+        assert_eq!(shown(-0.5), LengthUnit::Foot);
+        // Below every unit: the smallest.
+        assert_eq!(shown(0.01), LengthUnit::Inch);
+        assert_eq!(shown(0.0), LengthUnit::Inch);
+        // No units: the base unit.
+        assert_eq!(
+            Length::from_meters(5.0).auto_unit_in(&[]).unit,
+            LengthUnit::Meter
+        );
+        let q = Mass::from_kilograms(80.0).auto_unit_in(MassUnit::IMPERIAL);
+        assert_eq!(q.unit, MassUnit::Stone);
+        assert_eq!(format!("{:.1}", q), "12.6 st");
+        let cup = Volume::from_liters(0.25).auto_unit_in(VolumeUnit::US_LIQUID);
+        assert_eq!(cup.unit, VolumeUnit::UsCustomaryCup);
+    }
+
+    #[test]
+    fn significant_digits() {
+        let m = |v: f64, d: usize| {
+            Length::from_meters(v)
+                .in_unit(LengthUnit::Meter)
+                .significant(d)
+                .to_string()
+        };
+        assert_eq!(m(0.0, 3), "0.00 m");
+        assert_eq!(m(-0.0, 3), "0.00 m");
+        assert_eq!(m(1.0, 1), "1 m");
+        assert_eq!(m(1.0, 4), "1.000 m");
+        assert_eq!(m(-1234.5, 2), "-1200 m");
+        assert_eq!(m(999.96, 4), "1000 m");
+        assert_eq!(m(999.96, 5), "999.96 m");
+        assert_eq!(m(1.25e-7, 2), "1.2e-7 m");
+        assert_eq!(m(1e21, 2), "1.0e21 m");
+        assert_eq!(m(f64::NAN, 3), "NaN m");
+        assert_eq!(m(f64::NEG_INFINITY, 3), "-inf m");
+        // Digits are clamped to what the type holds.
+        assert_eq!(m(0.1, 0), "0.1 m");
+        assert_eq!(m(0.1, 40), "0.10000000000000001 m");
+        let f = Length::<f32>::from_meters(0.1).in_unit(LengthUnit::Meter);
+        assert_eq!(f.significant(40).to_string(), "0.100000001 m");
+        // Formatter flags apply to the whole text.
+        let s = Force::from_newtons(1234.5).auto_unit().significant(3);
+        assert_eq!(format!("{s:+}"), "+1.23 kN");
+        assert_eq!(format!("{s:<9}|"), "1.23 kN  |");
+        assert_eq!(format!("{s:*^11}"), "**1.23 kN**");
+        // Dimensionless units have no abbreviation to separate.
+        let r = Ratio::from_decimal_fractions(0.123_456).in_unit(RatioUnit::DecimalFraction);
+        assert_eq!(r.significant(2).to_string(), "0.12");
+    }
+
+    #[test]
+    fn means() {
+        let t = Temperature::from_degrees_celsius;
+        let mean = Temperature::mean([t(20.0), t(30.0)]).unwrap();
+        assert!((mean.as_degrees_celsius() - 25.0).abs() < 1e-12);
+        let f = Temperature::from_degrees_fahrenheit;
+        let mean = Temperature::mean([f(50.0), f(70.0)]).unwrap();
+        assert!((mean.as_degrees_fahrenheit() - 60.0).abs() < 1e-9);
+        assert_eq!(Temperature::<f64>::mean([]), None);
+        let lengths = [1.0, 2.0, 6.0].map(Length::from_meters);
+        assert_eq!(Length::mean(lengths), Some(Length::from_meters(3.0)));
+
+        use unitsnet_rs::unit::temperature::MillidegreeCelsius;
+        type Reading = Fixed<MillidegreeCelsius, i32>;
+        let r = [2, -1].map(Reading::new);
+        assert_eq!(Fixed::mean(r, Rounding::TowardZero).unwrap().count(), 0);
+        assert_eq!(Fixed::mean(r, Rounding::Floor).unwrap().count(), 0);
+        assert_eq!(Fixed::mean(r, Rounding::Ceil).unwrap().count(), 1);
+        assert_eq!(
+            Fixed::mean(r, Rounding::NearestTiesEven).unwrap().count(),
+            0
+        );
+        assert_eq!(
+            Fixed::mean(r, Rounding::NearestTiesAway).unwrap().count(),
+            1
+        );
+        assert_eq!(Fixed::mean(r, Rounding::Exact), Err(RoundError::Inexact));
+        assert_eq!(
+            Fixed::mean(core::iter::empty::<Reading>(), Rounding::Floor),
+            Err(RoundError::DivisionByZero)
+        );
+        // The sum is exact even when it leaves `i32`.
+        let big = [i32::MAX, i32::MAX - 2].map(Reading::new);
+        assert_eq!(
+            Fixed::mean(big, Rounding::Floor).unwrap().count(),
+            i32::MAX - 1
+        );
+    }
+}
