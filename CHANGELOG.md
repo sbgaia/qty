@@ -13,28 +13,23 @@ adheres to [Semantic Versioning](https://semver.org/).
   unit of the same quantity (1234 mm as `1.234 m`, 21 375 m°C as
   `21.375 °C`), without floats; power-of-ten ratios only (checked when
   compiled); precision rounds ties to even; width, alignment and `+` apply.
-
 - `Angle::wrap_unsigned` (`[0°, 360°)`) and `wrap_signed` (`(−180°, 180°]`),
   exact range guarantees, no `std` needed; `clamp` and `lerp` on float
   quantities (`lerp` works for temperatures too).
-
 - `serde_str`: `#[serde(with = "unitsnet_rs::serde_str")]` reads quantities,
   `Fixed` counts and unit enums as text in any unit or spelling (`"30 s"`,
   `"2 minutes"`) and writes the base unit at full precision, exactly
   round-tripping; `serde_str::option` for optional fields.
-
 - 15 relations UnitsNet does not define yet, chosen by hand
   (`codegen/relations/ExtraRelations.json`, 60 operators): momentum
   (`Mass * Speed = Impulse`), `Φ = V·t`, `Φ = L·I`, `V = L·dI/dt`,
   `I = C·dV/dt`, `τ = R·C`, `J = σ·E`, `E = ρ·J`, `B = μ·H`, `I = H·l`,
   `C = ε·l`, `L = μ·l`, `n = m·b`, `S = n·S_m`, `k = h·l`. They are
   dimension-checked like UnitsNet's.
-
 - Conversions with `std::time::Duration` (`core::time::Duration`):
   `From` into `Duration<f64>`/`Duration<f32>`, `TryFrom` back (negative, NaN
   or too large fail), and exact `TryFrom` both ways with
   `Fixed<Nanosecond, I>`.
-
 - **Generic storage.** Quantities are `#[repr(transparent)]` wrappers generic
   over their number type: `Length<f64>` (default), `Length<f32>`, integers,
   or any type implementing `Float`. Arithmetic compiles to the same machine
