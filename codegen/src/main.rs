@@ -81,6 +81,13 @@ fn main() {
 
     // Read curated cross-type relationships from UnitRelations.json.
     let cross_ops = parse_relations(&quantities);
+    let any_source = generator::generate_any(&quantities, &cross_ops);
+    let any_path = Path::new("src/any.rs");
+    std::fs::write(any_path, any_source)
+        .unwrap_or_else(|e| panic!("write {}: {e}", any_path.display()));
+    rustfmt(any_path);
+    println!("codegen: wrote src/any.rs");
+
     let cross_source = generator::generate_cross_type(&cross_ops);
     let cross_path = Path::new("src/cross_type.rs");
     std::fs::write(cross_path, &cross_source)
@@ -489,7 +496,7 @@ fn assert_close(actual: f64, expected: f64, rel_tol: f64) {
 /// mean the same as the generated conversion. Returns how many were checked.
 #[allow(dead_code)]
 fn check_unit_exprs<Q: unitsnet_rs::Quantity<Value = f64>>(new: fn(f64, Q::Unit) -> Q) -> usize {
-    use unitsnet_rs::{UnitEnum, UnitExpr};
+    use unitsnet_rs::{Unit, UnitEnum, UnitExpr};
     let mut checked = 0;
     for &unit in <Q::Unit as UnitEnum>::ALL {
         if new(0.0, unit).as_base() != 0.0 {

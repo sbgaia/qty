@@ -230,6 +230,9 @@
 //! * `bytemuck` — `Pod`, `Zeroable` and `TransparentWrapper`, for zero-copy
 //!   casts between quantity buffers and bytes (GPU uploads, file I/O).
 //! * `defmt` — `defmt::Format`, for logging on embedded targets.
+//! * `dynamic` — the `any` module: quantities whose kind is known only at runtime
+//!   (`AnyQuantity`, `AnyUnit`, `QuantityKind`), parsed from text like
+//!   `"1.5 km"`, with runtime-checked arithmetic.
 
 #![no_std]
 #![warn(missing_debug_implementations)]
@@ -398,10 +401,14 @@ pub trait Quantity: Copy {
 }
 
 /// Implemented by every unit enum (`LengthUnit`, `MassUnit`, …).
-pub trait UnitEnum: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + 'static {
+pub trait UnitEnum: Unit {
     /// Every unit of the quantity.
     const ALL: &'static [Self];
+}
 
+/// A unit: its abbreviation and names. Implemented by every unit enum and,
+/// with the `dynamic` feature, by `AnyUnit`.
+pub trait Unit: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + 'static {
     /// The primary abbreviation, e.g. `"km"`.
     fn abbreviation(self) -> &'static str;
 
@@ -435,7 +442,7 @@ pub struct InUnit<T, U> {
 
 macro_rules! in_unit_fmt {
     ($($Trait:ident),*) => {$(
-        impl<T: fmt::$Trait, U: UnitEnum> fmt::$Trait for InUnit<T, U> {
+        impl<T: fmt::$Trait, U: Unit> fmt::$Trait for InUnit<T, U> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 fmt::$Trait::fmt(&self.value, f)?;
                 let abbr = self.unit.abbreviation();
@@ -528,11 +535,15 @@ where
 
 /// Error returned when parsing a quantity or a unit from a string fails.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[non_exhaustive]
 pub enum ParseError {
     /// The numeric part is missing or malformed.
     InvalidNumber,
     /// The unit abbreviation is not recognised for this quantity.
     UnknownUnit,
+    /// The unit belongs to several quantities (`"m"`: metre or minute), so
+    /// the kind cannot be told (runtime quantities, `dynamic` feature).
+    Ambiguous,
 }
 
 impl fmt::Display for ParseError {
@@ -540,6 +551,7 @@ impl fmt::Display for ParseError {
         f.write_str(match self {
             ParseError::InvalidNumber => "invalid number",
             ParseError::UnknownUnit => "unknown unit",
+            ParseError::Ambiguous => "unit used by several quantities",
         })
     }
 }
@@ -930,6 +942,8 @@ macro_rules! quantity_core {
 
         impl $crate::UnitEnum for $U {
             const ALL: &'static [Self] = $U::ALL;
+        }
+        impl $crate::Unit for $U {
             #[inline(always)]
             fn abbreviation(self) -> &'static str {
                 $U::abbreviation(self)
@@ -1441,6 +1455,12 @@ pub use info::{Dimensions, QuantityInfo, UnitInfo};
 
 mod unit_expr;
 pub use unit_expr::UnitExpr;
+
+#[cfg(feature = "dynamic")]
+#[cfg_attr(docsrs, doc(cfg(feature = "dynamic")))]
+pub mod any;
+#[cfg(feature = "dynamic")]
+pub use any::{AnyQuantity, AnyUnit, KindMismatch, QuantityKind};
 
 mod vector;
 pub use vector::{Vector2, Vector3};

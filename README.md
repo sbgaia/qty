@@ -55,6 +55,24 @@ let lengths: &[Length] = Length::from_base_slice(&raw);
 assert_eq!(lengths.iter().sum::<Length>(), Length::from_meters(6.0));
 ```
 
+## Quantities known only at runtime
+
+With the `dynamic` feature, `AnyQuantity` holds a quantity of any kind, for
+configuration values, file columns or units picked in a user interface:
+
+```rust,ignore
+use unitsnet_rs::*;
+
+let q: AnyQuantity = "1.5 km".parse()?;           // the unit decides the kind
+assert_eq!(q.kind(), QuantityKind::Length);
+let v = q.checked_div("60 s".parse()?).unwrap();  // relations, checked at runtime
+assert_eq!(v.kind(), QuantityKind::Speed);
+let length: Length = q.try_into().unwrap();       // back to the typed world
+```
+
+Units used by several quantities (`"m"`: metre or minute) are reported as
+ambiguous; `AnyQuantity::parse_as(text, kind)` resolves them.
+
 ## Vectors
 
 `Vector2<Q>` and `Vector3<Q>` hold any quantity, and the physics carries over:

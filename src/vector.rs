@@ -5,7 +5,7 @@ use core::ops;
 
 #[cfg(any(feature = "std", feature = "libm"))]
 use crate::{Angle, Float, FloatMath};
-use crate::{Quantity, UnitEnum};
+use crate::{Quantity, Unit};
 
 macro_rules! vector {
     ($(#[$doc:meta])* $V:ident, $n:literal: $($c:ident),+) => {

@@ -8,6 +8,17 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Runtime quantities (`dynamic` feature): `AnyQuantity`, `AnyUnit` and
+  `QuantityKind` for data whose kind is known only at runtime. Parsing
+  without a type (`"1.5 km"` is a length; units shared by several
+  quantities give `ParseError::Ambiguous`, with `parse_as` and
+  `candidates` to resolve them), conversion, `auto_unit`, and arithmetic
+  checked at runtime with the same relations as the typed quantities
+  (points included); `From`/`TryFrom` with the typed quantities; serde.
+- `Unit` trait (abbreviation and metadata), now the supertrait of
+  `UnitEnum`: generic code calling `abbreviation()` through a `UnitEnum`
+  bound needs `Unit` in scope (`use unitsnet_rs::*` includes it).
+  `ParseError` is `#[non_exhaustive]`.
 - Unit expressions: quantities parse any equivalent spelling of their unit
   (`"3 kg*m/s^2"` as a `Force`, `"2 kN/m²"`, `"60 rev/min"`), checked by
   dimensions, with angles tracked so that `Hz` and `rad/s` stay apart

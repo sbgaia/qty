@@ -71,7 +71,7 @@ jobs:
           targets: thumbv7em-none-eabihf
       - uses: Swatinem/rust-cache@v2
       # No `std` on this target: the math functions come from `libm`.
-      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm,approx,num-traits,bytemuck,defmt --target thumbv7em-none-eabihf
+      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm,approx,num-traits,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
       - run: cargo build -p unitsnet-rs --no-default-features --target thumbv7em-none-eabihf
 
   feature-groups:
@@ -83,13 +83,14 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       # Core quantities only, with tests.
       - run: cargo test -p unitsnet-rs --no-default-features --features std
+      - run: cargo test -p unitsnet-rs --no-default-features --features "std dynamic"
       # Each group on its own: catches cross-quantity relations that are not
       # gated on every group they involve.
       - name: Each group alone
         run: |
           for group in mechanics fluids electrical thermal chemistry light radiation information misc; do
             echo "::group::$group"
-            cargo check -p unitsnet-rs --all-targets --no-default-features --features "std $group"
+            cargo check -p unitsnet-rs --all-targets --no-default-features --features "std dynamic $group"
             echo "::endgroup::"
           done
 

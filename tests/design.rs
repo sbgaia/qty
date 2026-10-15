@@ -1384,3 +1384,159 @@ fn decimal_display_flags() {
         "-170141183460469231731687303715884105.728 m"
     );
 }
+
+// ── Runtime quantities ────────────────────────────────────────────────────────
+
+#[cfg(feature = "dynamic")]
+mod runtime {
+    use unitsnet_rs::*;
+
+    #[test]
+    fn every_unit_round_trips() {
+        let mut units = 0;
+        for kind in QuantityKind::all() {
+            let info = kind.info();
+            assert_eq!(kind.to_string(), info.name);
+            assert_eq!(info.name.to_lowercase().parse::<QuantityKind>(), Ok(kind));
+            assert_eq!(kind.base_unit().info(), info.base_unit);
+            for unit_info in info.units {
+                let unit = AnyUnit::parse_in(kind, unit_info.abbreviation)
+                    .or_else(|_| AnyUnit::parse_in(kind, unit_info.singular))
+                    .unwrap();
+                assert_eq!(unit.kind(), kind);
+                let q = AnyQuantity::new(1.5, unit);
+                assert_eq!(q.kind(), kind);
+                let back = q.convert_to(unit).unwrap();
+                // Affine units near their zero point lose digits to
+                // cancellation: 1.5 m°C is 273.1515 K and back.
+                assert!((back - 1.5).abs() <= 1e-9, "{kind} {unit:?}: {back}");
+                units += 1;
+            }
+        }
+        assert_eq!(QuantityKind::all().count(), 128);
+        assert!(units > 1700, "{units}");
+    }
+
+    #[test]
+    fn conversions_with_typed_quantities() {
+        let q = AnyQuantity::from(Length::from_kilometers(2.0));
+        assert_eq!(Length::try_from(q), Ok(Length::from_meters(2000.0)));
+        assert_eq!(
+            Mass::try_from(q),
+            Err(KindMismatch {
+                expected: QuantityKind::Mass,
+                found: QuantityKind::Length
+            })
+        );
+        assert_eq!(
+            q.convert_to(AnyUnit::Mass(MassUnit::Gram))
+                .unwrap_err()
+                .to_string(),
+            "expected a Length, found a Mass"
+        );
+        assert_eq!(
+            q.in_unit(LengthUnit::Kilometer.into()).unwrap().to_string(),
+            "2 km"
+        );
+        assert_eq!(q.auto_unit().to_string(), "2 km");
+        assert_eq!(q.to_string(), "2000 m");
+        assert_eq!(q.base_unit(), AnyUnit::Length(LengthUnit::Meter));
+        assert_eq!(q.dimensions(), Length::<f64>::INFO.dimensions);
+    }
+
+    #[test]
+    fn runtime_arithmetic_follows_the_relations() {
+        let l: AnyQuantity = Length::from_meters(6.0).into();
+        let t: AnyQuantity = Duration::from_seconds(2.0).into();
+        assert_eq!(
+            l.checked_mul(l),
+            Some(Area::from_square_meters(36.0).into())
+        );
+        assert_eq!(
+            l.checked_div(t),
+            Some(Speed::from_meters_per_second(3.0).into())
+        );
+        assert_eq!(l.checked_add(l), Some(Length::from_meters(12.0).into()));
+        assert_eq!(l.checked_add(t), None);
+        assert_eq!(l.checked_scale(0.5), Some(Length::from_meters(3.0).into()));
+        assert!(l < Length::from_meters(7.0).into());
+        assert_eq!(l.partial_cmp(&t), None);
+        // Points: differences and moves, but no sums or scaling.
+        let t0: AnyQuantity = Temperature::from_degrees_celsius(20.0).into();
+        let t1: AnyQuantity = Temperature::from_degrees_celsius(25.0).into();
+        let rise = t1.checked_sub(t0).unwrap();
+        assert_eq!(rise.kind(), QuantityKind::TemperatureDelta);
+        assert!((rise.as_base() - 5.0).abs() < 1e-12);
+        assert_eq!(t0.checked_add(rise), Some(t1));
+        assert_eq!(t0.checked_add(t1), None);
+        assert_eq!(t0.checked_scale(2.0), None);
+    }
+
+    #[test]
+    fn parsing() {
+        let q: AnyQuantity = "1.5 km".parse().unwrap();
+        assert_eq!(q, Length::from_kilometers(1.5).into());
+        assert_eq!(
+            "2 kilograms".parse::<AnyQuantity>(),
+            Ok(Mass::from_kilograms(2.0).into())
+        );
+        // Listed units win over expressions: "N·m" is listed for torque.
+        assert_eq!(
+            "2 N·m".parse::<AnyQuantity>().map(|q| q.kind()),
+            Ok(QuantityKind::Torque)
+        );
+        // An expression fits one kind…
+        assert_eq!(
+            "3 kg*m/s^2".parse::<AnyQuantity>(),
+            Ok(Force::from_newtons(3.0).into())
+        );
+        // …or several (energy and torque share dimensions).
+        assert_eq!(
+            "3 kg*m^2/s^2".parse::<AnyQuantity>(),
+            Err(ParseError::Ambiguous)
+        );
+        let kinds: Vec<_> = AnyQuantity::candidates("3 kg*m^2/s^2")
+            .map(|q| q.kind())
+            .collect();
+        assert!(kinds.contains(&QuantityKind::Energy) && kinds.contains(&QuantityKind::Torque));
+        // Shared abbreviations.
+        assert_eq!("5 m".parse::<AnyQuantity>(), Err(ParseError::Ambiguous));
+        assert_eq!(
+            AnyQuantity::parse_as("5 m", QuantityKind::Length),
+            Ok(Length::from_meters(5.0).into())
+        );
+        let units: Vec<_> = AnyUnit::candidates("m").collect();
+        assert!(units.contains(&AnyUnit::Length(LengthUnit::Meter)));
+        assert!(units.contains(&AnyUnit::Duration(DurationUnit::Minute)));
+        // Errors.
+        assert_eq!(
+            "x km".parse::<AnyQuantity>(),
+            Err(ParseError::InvalidNumber)
+        );
+        assert_eq!(
+            "1 parsec-ish".parse::<AnyQuantity>(),
+            Err(ParseError::UnknownUnit)
+        );
+        assert_eq!(
+            "nonsense".parse::<QuantityKind>(),
+            Err(ParseError::UnknownUnit)
+        );
+    }
+
+    #[cfg(feature = "serde")]
+    #[test]
+    fn serde_round_trip() {
+        let q: AnyQuantity = Pressure::from_bars(2.0).into();
+        let json = serde_json::to_string(&q).unwrap();
+        assert_eq!(json, r#"{"Pressure":200000.0}"#);
+        assert_eq!(serde_json::from_str::<AnyQuantity>(&json).unwrap(), q);
+        let unit = AnyUnit::Speed(SpeedUnit::KilometerPerHour);
+        let json = serde_json::to_string(&unit).unwrap();
+        assert_eq!(json, r#"{"Speed":"KilometerPerHour"}"#);
+        assert_eq!(serde_json::from_str::<AnyUnit>(&json).unwrap(), unit);
+        assert_eq!(
+            serde_json::to_string(&QuantityKind::Mass).unwrap(),
+            r#""Mass""#
+        );
+    }
+}

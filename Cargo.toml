@@ -77,6 +77,9 @@ num-traits = ["dep:num-traits"]
 bytemuck = ["dep:bytemuck"]
 ## `defmt::Format`, for logging on embedded targets.
 defmt = ["dep:defmt"]
+## Quantities whose kind is known only at runtime: `AnyQuantity`, `AnyUnit`,
+## `QuantityKind` (adds about 15 % to the crate's compile time).
+dynamic = []
 
 [dependencies]
 approx = { version = "0.5", default-features = false, optional = true }
