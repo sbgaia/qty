@@ -1,0 +1,41 @@
+# Every Monday: if UnitsNet has new commits, moves the pin, regenerates the
+# code, runs the tests and opens (or updates) a pull request with a summary.
+#
+# Pull requests opened with the default GITHUB_TOKEN do not trigger other
+# workflows, so CI does not run on them until someone pushes to the branch.
+# To run CI automatically, add a fine-grained token with contents and
+# pull-requests write access as the secret UNITSNET_UPDATE_TOKEN. Without it,
+# enable "Allow GitHub Actions to create and approve pull requests" in the
+# repository settings (Actions → General).
+name: UnitsNet update
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Update and regenerate
+        id: update
+        run: ./scripts/update-unitsnet.sh > "$RUNNER_TEMP/summary.md" && cat "$RUNNER_TEMP/summary.md"
+      - if: steps.update.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.UNITSNET_UPDATE_TOKEN || github.token }}
+          branch: unitsnet-update
+          delete-branch: true
+          commit-message: "chore: update UnitsNet definitions to ${{ steps.update.outputs.short }}"
+          title: "Update UnitsNet definitions to ${{ steps.update.outputs.short }}"
+          body-path: ${{ runner.temp }}/summary.md
