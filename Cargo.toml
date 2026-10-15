@@ -86,6 +86,15 @@ libm = { version = "0.2", optional = true }
 num-traits = { version = "0.2", default-features = false, optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
 
+# Examples that need more than the default core quantities.
+[[example]]
+name = "projectile"
+required-features = ["std", "mechanics"]
+
+[[example]]
+name = "config"
+required-features = ["serde"]
+
 [dev-dependencies]
 proptest = { version = "1", default-features = false, features = ["std"] }
 serde_json = "1"

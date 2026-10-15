@@ -9,6 +9,8 @@ adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - MIT license (`LICENSE`).
+- Runnable examples (`examples/`): integer sensor readings, a projectile with
+  vectors, a configuration file with units; CI runs them.
 - `Fixed::display_in::<V>()`: a count shown exactly as a decimal in another
   unit of the same quantity (1234 mm as `1.234 m`, 21 375 m°C as
   `21.375 °C`), without floats; power-of-ten ratios only (checked when

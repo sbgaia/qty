@@ -235,6 +235,17 @@ CI fails if the committed code differs from what the generator produces.
 To move to newer upstream definitions, change `UNITSNET_REF` in
 `scripts/download.sh` and review the regenerated diff.
 
+## Examples
+
+Runnable programs in [`examples/`](examples), each checking its own results:
+
+- `sensor` — integer temperature readings in m°C: exact min, max and mean,
+  shown as decimals in °C (`cargo run --example sensor`).
+- `projectile` — a 2D trajectory with vectors of quantities, compared with the
+  closed-form range (`cargo run --example projectile`).
+- `config` — a configuration file with units (`"1.5 minutes"`, `"60 km/h"`),
+  read with `serde_str` (`cargo run --example config --features serde`).
+
 ## Testing
 
 Besides the generated tests (every unit of every quantity against the

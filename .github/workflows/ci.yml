@@ -46,6 +46,9 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo test -p unitsnet-rs -p codegen ${{ matrix.features }}
+      # The examples check their own results.
+      - if: matrix.features == '--all-features'
+        run: for example in sensor projectile config; do cargo run --all-features --example "$example"; done
 
   msrv:
     name: MSRV (1.82)
