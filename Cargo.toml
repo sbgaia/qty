@@ -10,12 +10,12 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.82"
 description = "Zero-overhead, strongly-typed physical quantities and unit conversions, generated from UnitsNet"
-license = "MIT OR Apache-2.0"
+license = "MIT"
 repository = "https://github.com/sbgaia/unitsnet-rs"
 documentation = "https://docs.rs/unitsnet-rs"
 readme = "README.md"
 # The generator, its data, benchmarks and CI are not needed by users.
-include = ["src/**/*.rs", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE*"]
+include = ["src/**/*.rs", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
 keywords = ["units", "measurement", "physics", "conversion", "no-std"]
 categories = ["science", "no-std", "no-std::no-alloc"]
 

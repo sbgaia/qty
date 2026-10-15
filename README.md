@@ -249,4 +249,8 @@ compare the integer arithmetic with exact rational arithmetic over the whole
 
 ## License
 
-MIT OR Apache-2.0.
+MIT — see [`LICENSE`](LICENSE).
+
+The unit definitions and their descriptions come from
+[UnitsNet](https://github.com/angularsen/UnitsNet) by Andreas Gullberg Larsen
+and contributors, under the MIT No Attribution license.
