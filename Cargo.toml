@@ -77,6 +77,16 @@ num-traits = ["dep:num-traits"]
 bytemuck = ["dep:bytemuck"]
 ## `defmt::Format`, for logging on embedded targets.
 defmt = ["dep:defmt"]
+## Conversions between `Vector2`/`Vector3` and `glam` vectors.
+glam = ["dep:glam"]
+## Conversions between `Vector2`/`Vector3` and `nalgebra` vectors.
+nalgebra = ["dep:nalgebra"]
+## Conversions between `Duration` and `chrono::TimeDelta`.
+chrono = ["dep:chrono"]
+## Conversions between `Duration` and `time::Duration`.
+time = ["dep:time"]
+## JSON schemas (`schemars::JsonSchema`) for quantities and unit enums.
+schemars = ["dep:schemars", "std"]
 ## Quantities whose kind is known only at runtime: `AnyQuantity`, `AnyUnit`,
 ## `QuantityKind` (adds about 15 % to the crate's compile time).
 dynamic = []
@@ -85,6 +95,11 @@ dynamic = []
 approx = { version = "0.5", default-features = false, optional = true }
 bytemuck = { version = "1", default-features = false, optional = true }
 defmt = { version = "0.3", optional = true }
+chrono = { version = "0.4.35", default-features = false, optional = true }
+glam = { version = "0.30", default-features = false, features = ["libm"], optional = true }
+nalgebra = { version = "0.33", default-features = false, optional = true }
+schemars = { version = "1", default-features = false, features = ["std"], optional = true }
+time = { version = "0.3", default-features = false, optional = true }
 libm = { version = "0.2", optional = true }
 num-traits = { version = "0.2", default-features = false, optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
@@ -99,5 +114,6 @@ name = "config"
 required-features = ["serde"]
 
 [dev-dependencies]
+schemars = { version = "1", default-features = false, features = ["derive", "std"] }
 proptest = { version = "1", default-features = false, features = ["std"] }
 serde_json = "1"

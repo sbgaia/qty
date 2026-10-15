@@ -1540,3 +1540,131 @@ mod runtime {
         );
     }
 }
+
+// ── Integrations ──────────────────────────────────────────────────────────────
+
+#[cfg(feature = "chrono")]
+#[test]
+fn chrono_time_delta() {
+    use chrono::TimeDelta;
+    use unitsnet_rs::unit::duration::Nanosecond;
+    assert_eq!(
+        Duration::from(TimeDelta::milliseconds(1500)),
+        Duration::from_seconds(1.5)
+    );
+    assert_eq!(
+        Duration::from(TimeDelta::milliseconds(-1500)),
+        Duration::from_seconds(-1.5)
+    );
+    assert_eq!(
+        TimeDelta::try_from(Duration::from_seconds(-1.25)),
+        Ok(TimeDelta::milliseconds(-1250))
+    );
+    assert_eq!(
+        TimeDelta::try_from(Duration::from_nanoseconds(0.6)),
+        Ok(TimeDelta::nanoseconds(1))
+    );
+    assert_eq!(
+        TimeDelta::try_from(Duration::from_seconds(f64::NAN)),
+        Err(RoundError::NotFinite)
+    );
+    assert_eq!(
+        TimeDelta::try_from(Duration::from_seconds(1e18)),
+        Err(RoundError::Overflow)
+    );
+    // Exact integer nanoseconds, negative included.
+    let d = TimeDelta::nanoseconds(-1_234_567_890_123);
+    let ns: Fixed<Nanosecond, i64> = d.try_into().unwrap();
+    assert_eq!(ns.count(), -1_234_567_890_123);
+    assert_eq!(TimeDelta::try_from(ns), Ok(d));
+    let max: Fixed<Nanosecond, i128> = TimeDelta::MAX.try_into().unwrap();
+    assert_eq!(TimeDelta::try_from(max), Ok(TimeDelta::MAX));
+    assert_eq!(
+        TimeDelta::try_from(max + Fixed::<Nanosecond, i128>::new(1)),
+        Err(RoundError::Overflow)
+    );
+}
+
+#[cfg(feature = "time")]
+#[test]
+fn time_duration() {
+    use unitsnet_rs::unit::duration::Nanosecond;
+    assert_eq!(
+        Duration::from(time::Duration::milliseconds(-250)),
+        Duration::from_seconds(-0.25)
+    );
+    assert_eq!(
+        time::Duration::try_from(Duration::from_seconds(-1.25)),
+        Ok(time::Duration::milliseconds(-1250))
+    );
+    assert_eq!(
+        time::Duration::try_from(Duration::from_seconds(f64::INFINITY)),
+        Err(RoundError::NotFinite)
+    );
+    let d = time::Duration::new(-12, -345_678_901);
+    let ns: Fixed<Nanosecond, i64> = d.try_into().unwrap();
+    assert_eq!(ns.count(), -12_345_678_901);
+    assert_eq!(time::Duration::try_from(ns), Ok(d));
+    let max: Fixed<Nanosecond, i128> = time::Duration::MAX.try_into().unwrap();
+    assert_eq!(time::Duration::try_from(max), Ok(time::Duration::MAX));
+    assert_eq!(
+        time::Duration::try_from(max + Fixed::<Nanosecond, i128>::new(1)),
+        Err(RoundError::Overflow)
+    );
+    assert_eq!(
+        Fixed::<Nanosecond, i64>::try_from(time::Duration::MAX),
+        Err(RoundError::Overflow)
+    );
+}
+
+#[cfg(feature = "glam")]
+#[test]
+fn glam_vectors() {
+    let v: Vector3<Length> = glam::DVec3::new(1.0, 2.0, 3.0).into();
+    assert_eq!(v, Vector3::from_base([1.0, 2.0, 3.0]));
+    assert_eq!(glam::DVec3::from(v), glam::DVec3::new(1.0, 2.0, 3.0));
+    let w: Vector2<Speed<f32>> = glam::Vec2::new(0.5, -1.0).into();
+    assert_eq!(glam::Vec2::from(w), glam::Vec2::new(0.5, -1.0));
+}
+
+#[cfg(feature = "nalgebra")]
+#[test]
+fn nalgebra_vectors() {
+    let v: Vector3<Force> = nalgebra::Vector3::new(1.0, 2.0, 3.0).into();
+    assert_eq!(v, Vector3::from_base([1.0, 2.0, 3.0]));
+    assert_eq!(
+        nalgebra::Vector3::from(v),
+        nalgebra::Vector3::new(1.0, 2.0, 3.0)
+    );
+    let w: Vector2<Length<f32>> = nalgebra::Vector2::new(4.0f32, 5.0).into();
+    assert_eq!(
+        nalgebra::Vector2::from(w),
+        nalgebra::Vector2::new(4.0f32, 5.0)
+    );
+}
+
+#[cfg(all(feature = "schemars", feature = "serde"))]
+#[test]
+fn json_schemas() {
+    #[derive(schemars::JsonSchema)]
+    #[allow(dead_code)]
+    struct Config {
+        distance: Length,
+        unit: LengthUnit,
+        #[schemars(schema_with = "unitsnet_rs::serde_str::schema::<Duration>")]
+        timeout: Duration,
+    }
+    let schema = serde_json::to_value(schemars::schema_for!(Config)).unwrap();
+    let props = &schema["properties"];
+    assert_eq!(props["distance"]["type"], "number");
+    assert_eq!(props["distance"]["description"], "Length in Meters (m)");
+    assert_eq!(props["timeout"]["type"], "string");
+    assert_eq!(
+        props["timeout"]["description"],
+        "A number and a unit of Duration, such as \"1.5 s\""
+    );
+    let unit = serde_json::to_value(schemars::schema_for!(LengthUnit)).unwrap();
+    let names = unit["enum"].as_array().unwrap();
+    assert!(names.iter().any(|n| n == "Kilometer"));
+    assert_eq!(names.len(), LengthUnit::ALL.len());
+}

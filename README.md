@@ -230,6 +230,10 @@ by_length.insert(Ordered(Length::from_meters(2.0)), "two"); // float keys
 | `num-traits` | | `Zero` |
 | `bytemuck` | | `Pod`/`Zeroable`/`TransparentWrapper` for zero-copy byte casts |
 | `defmt` | | `defmt::Format` for embedded logging |
+| `dynamic` | | Runtime quantities: `AnyQuantity`, `AnyUnit`, `QuantityKind` |
+| `glam`, `nalgebra` | | Conversions with their vectors |
+| `chrono`, `time` | | Conversions with their durations |
+| `schemars` | | JSON schemas for quantities, unit enums and `serde_str` fields |
 
 The 18 core quantities (length, area, volume, mass, duration, speed,
 acceleration, force, energy, power, pressure, temperature, angle, frequency,

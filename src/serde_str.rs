@@ -85,6 +85,19 @@ impl<Q: FromStr<Err = ParseError>> Visitor<'_> for TextVisitor<Q> {
     }
 }
 
+/// A JSON schema for text fields of quantity `Q`, for
+/// `#[schemars(schema_with = "unitsnet_rs::serde_str::schema::<Length>")]`
+/// next to `#[serde(with = "unitsnet_rs::serde_str")]`.
+#[cfg(feature = "schemars")]
+pub fn schema<Q: crate::Quantity>(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+    let description = std::format!(
+        "A number and a unit of {}, such as \"1.5 {}\"",
+        Q::INFO.name,
+        Q::INFO.base_unit.abbreviation
+    );
+    schemars::json_schema!({ "type": "string", "description": description })
+}
+
 /// The same for `Option<…>` fields: `None` is `null` (or a missing field,
 /// with `#[serde(default)]`).
 pub mod option {

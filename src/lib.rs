@@ -230,6 +230,12 @@
 //! * `bytemuck` — `Pod`, `Zeroable` and `TransparentWrapper`, for zero-copy
 //!   casts between quantity buffers and bytes (GPU uploads, file I/O).
 //! * `defmt` — `defmt::Format`, for logging on embedded targets.
+//! * `glam`, `nalgebra` — conversions between [`Vector2`]/[`Vector3`] and
+//!   their vectors (`DVec3`, `nalgebra::Vector3<f64>`, … in base units).
+//! * `chrono`, `time` — conversions between [`Duration`] (and
+//!   `Fixed<Nanosecond>`, exactly) and their durations.
+//! * `schemars` — JSON schemas for quantities and unit enums, and
+//!   `serde_str::schema` for text fields.
 //! * `dynamic` — the `any` module: quantities whose kind is known only at runtime
 //!   (`AnyQuantity`, `AnyUnit`, `QuantityKind`), parsed from text like
 //!   `"1.5 km"`, with runtime-checked arithmetic.
@@ -933,6 +939,43 @@ macro_rules! quantity_core {
                 defmt::write!(f, "{} {=str}", self.0, $U::$base.abbreviation());
             }
         }
+        #[cfg(feature = "schemars")]
+        impl<T: schemars::JsonSchema> schemars::JsonSchema for $Q<T> {
+            fn inline_schema() -> bool {
+                true
+            }
+            fn schema_name() -> std::borrow::Cow<'static, str> {
+                std::format!("{}_{}", stringify!($Q), T::schema_name()).into()
+            }
+            /// The storage type's schema (a number for floats), described
+            /// with the base unit.
+            fn json_schema(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
+                let mut schema = T::json_schema(generator);
+                schema.insert(
+                    "description".into(),
+                    std::format!(
+                        "{} in {} ({})",
+                        stringify!($Q),
+                        $U::$base.info().plural,
+                        $U::$base.abbreviation()
+                    )
+                    .into(),
+                );
+                schema
+            }
+        }
+        #[cfg(feature = "schemars")]
+        impl schemars::JsonSchema for $U {
+            fn schema_name() -> std::borrow::Cow<'static, str> {
+                stringify!($U).into()
+            }
+            /// The variant names, as serde writes them.
+            fn json_schema(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
+                let names: std::vec::Vec<&str> = $U::ALL.iter().map(|u| u.info().singular).collect();
+                schemars::json_schema!({ "type": "string", "enum": names })
+            }
+        }
+
         #[cfg(feature = "defmt")]
         impl defmt::Format for $U {
             fn format(&self, f: defmt::Formatter<'_>) {
@@ -1466,6 +1509,8 @@ mod vector;
 pub use vector::{Vector2, Vector3};
 
 mod time;
+
+mod interop;
 
 mod angle_wrap;
 

@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Integrations, each behind a feature of the same name: `glam` and
+  `nalgebra` (vectors to and from `Vector2`/`Vector3`), `chrono` and
+  `time` (durations, exactly through `Fixed<Nanosecond>`, negative ones
+  included), `schemars` (JSON schemas for quantities and unit enums, and
+  `serde_str::schema` for text fields).
 - Runtime quantities (`dynamic` feature): `AnyQuantity`, `AnyUnit` and
   `QuantityKind` for data whose kind is known only at runtime. Parsing
   without a type (`"1.5 km"` is a length; units shared by several
