@@ -1,0 +1,37 @@
+# Publishes to crates.io and creates a GitHub release when a version tag is
+# pushed (`git tag v0.1.0 && git push origin v0.1.0`). See RELEASING.md.
+#
+# Needs the repository secret CARGO_REGISTRY_TOKEN: a crates.io API token
+# with the "publish-new" and "publish-update" scopes.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: Publish ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Check the tag, version and changelog agree
+        run: ./scripts/release-check.sh "$GITHUB_REF_NAME" > release-notes.md
+
+      - name: Publish to crates.io
+        run: cargo publish -p unitsnet-rs
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+
+      - name: Create the GitHub release
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}

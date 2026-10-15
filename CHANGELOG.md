@@ -9,6 +9,10 @@ adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - MIT license (`LICENSE`).
+- Release automation: pushing a `vX.Y.Z` tag publishes to crates.io and
+  creates a GitHub release from the changelog (`RELEASING.md`); a CI job
+  checks semver against the latest published version; a weekly workflow
+  opens a pull request when UnitsNet changes.
 - Runnable examples (`examples/`): integer sensor readings, a projectile with
   vectors, a configuration file with units; CI runs them.
 - `Fixed::display_in::<V>()`: a count shown exactly as a decimal in another

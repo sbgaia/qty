@@ -114,6 +114,29 @@ jobs:
             cargo fuzz run "$target" -O --target x86_64-unknown-linux-gnu -- -max_total_time=60
           done
 
+  semver:
+    name: Semver (against the latest release)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-semver-checks
+      - uses: Swatinem/rust-cache@v2
+      # Fails on a breaking change whose version was not bumped. Skips until
+      # the crate is first published.
+      - name: Check
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" \
+            -A "unitsnet-rs CI (https://github.com/sbgaia/unitsnet-rs)" \
+            https://crates.io/api/v1/crates/unitsnet-rs)
+          if [ "$status" = 404 ]; then
+            echo "::notice::unitsnet-rs is not on crates.io yet: nothing to compare with."
+          else
+            cargo semver-checks -p unitsnet-rs
+          fi
+
   codegen:
     name: Generated code is up to date
     runs-on: ubuntu-latest
