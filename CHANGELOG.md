@@ -1,174 +1,42 @@
 # Changelog
 
-All notable changes to this project are documented here. The format follows
-[Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
-adheres to [Semantic Versioning](https://semver.org/).
+All notable changes are recorded here. The format follows
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions
+follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Added
+The first release.
 
-- Generic conversions: `Quantity::new(value, unit)` and
-  `Quantity::convert_to(unit)` for code written over `Q: Quantity`.
-- On quantities: `is_nan`, `is_finite`, `signum`, `copysign`, `Length::ZERO`
-  (for `f64` storage), `round_in`/`floor_in`/`ceil_in` (round to a whole
-  number of a unit, points included), and `squared()`/`cubed()` as the
-  inverses of `sqrt()`/`cbrt()` (`Length` → `Area`, `Volume`; `Speed` →
-  `SpecificEnergy`).
-- `Fixed`: `abs`, `checked_abs`, `checked_neg`, `signum`.
-- `Vector2`/`Vector3::lerp`.
-- Presentation: `auto_unit_in` picks the largest unit from a list
-  (`LengthUnit::IMPERIAL`, `MassUnit::US`, `MassUnit::IMPERIAL`,
-  `VolumeUnit::US_LIQUID`, or your own); `significant(n)` shows a value
-  with `n` significant digits (`1.23 kN`), without allocating.
-- Means: `Q::mean` for float quantities, points included (the mean of 20 °C
-  and 30 °C is 25 °C), and `Fixed::mean`, summed exactly in `i128` and
-  rounded once.
-- Integrations, each behind a feature of the same name: `chrono` and
-  `time` (durations, exactly through `Fixed<Nanosecond>`, negative ones
-  included), `schemars` (JSON schemas for quantities and unit enums, and
-  `serde_str::schema` for text fields).
-- Runtime quantities (`dynamic` feature): `AnyQuantity`, `AnyUnit` and
-  `QuantityKind` for data whose kind is known only at runtime. Parsing
-  without a type (`"1.5 km"` is a length; units shared by several
-  quantities give `ParseError::Ambiguous`, with `parse_as` and
-  `candidates` to resolve them), conversion, `auto_unit`, and arithmetic
-  checked at runtime with the same relations as the typed quantities
-  (points included); `From`/`TryFrom` with the typed quantities; serde.
-- `Unit` trait (abbreviation and metadata), now the supertrait of
-  `UnitEnum`: generic code calling `abbreviation()` through a `UnitEnum`
-  bound needs `Unit` in scope (`use qty::*` includes it).
-  `ParseError` is `#[non_exhaustive]`.
-- Unit expressions: quantities parse any equivalent spelling of their unit
-  (`"3 kg*m/s^2"` as a `Force`, `"2 kN/m²"`, `"60 rev/min"`), checked by
-  dimensions, with angles tracked so that `Hz` and `rad/s` stay apart
-  (`UnitExpr`). A generated test parses 637 UnitsNet abbreviations as
-  expressions and compares them with the conversions.
-- Metadata: `Quantity::INFO` (name, description, `Dimensions`, units) and
-  `unit.info()` (names and abbreviations).
-- MIT license (`LICENSE`).
-- Release automation: pushing a `vX.Y.Z` tag publishes to crates.io and
-  creates a GitHub release from the changelog (`RELEASING.md`); a CI job
-  checks semver against the latest published version; a weekly workflow
-  opens a pull request when UnitsNet changes.
-- Runnable examples (`examples/`): integer sensor readings, a projectile with
-  vectors, a configuration file with units; CI runs them.
-- `Fixed::display_in::<V>()`: a count shown exactly as a decimal in another
-  unit of the same quantity (1234 mm as `1.234 m`, 21 375 m°C as
-  `21.375 °C`), without floats; power-of-ten ratios only (checked when
-  compiled); precision rounds ties to even; width, alignment and `+` apply.
-- `Angle::wrap_unsigned` (`[0°, 360°)`) and `wrap_signed` (`(−180°, 180°]`),
-  exact range guarantees, no `std` needed; `clamp` and `lerp` on float
-  quantities (`lerp` works for temperatures too).
-- `serde_str`: `#[serde(with = "qty::serde_str")]` reads quantities,
-  `Fixed` counts and unit enums as text in any unit or spelling (`"30 s"`,
-  `"2 minutes"`) and writes the base unit at full precision, exactly
-  round-tripping; `serde_str::option` for optional fields.
-- 15 relations UnitsNet does not define yet, chosen by hand
-  (`codegen/relations/ExtraRelations.json`, 60 operators): momentum
-  (`Mass * Speed = Impulse`), `Φ = V·t`, `Φ = L·I`, `V = L·dI/dt`,
-  `I = C·dV/dt`, `τ = R·C`, `J = σ·E`, `E = ρ·J`, `B = μ·H`, `I = H·l`,
-  `C = ε·l`, `L = μ·l`, `n = m·b`, `S = n·S_m`, `k = h·l`. They are
-  dimension-checked like UnitsNet's.
-- Conversions with `std::time::Duration` (`core::time::Duration`):
-  `From` into `Duration<f64>`/`Duration<f32>`, `TryFrom` back (negative, NaN
-  or too large fail), and exact `TryFrom` both ways with
-  `Fixed<Nanosecond, I>`.
-- **Generic storage.** Quantities are `#[repr(transparent)]` wrappers generic
-  over their number type: `Length<f64>` (default), `Length<f32>`, integers,
-  or any type implementing `Float`. Arithmetic compiles to the same machine
-  code as the bare numbers.
-- **`Fixed<U, I>`**: integers counted in a chosen unit (`Fixed<Millimeter>`),
-  with exact cross-unit arithmetic where it is lossless (`mm + m`), exact
-  comparisons across units, and explicit `Rounding` wherever precision would be
-  lost (float → integer, fine → coarse unit, division). Markers for 1,700+
-  units under `unit::<quantity>`, including affine units of point quantities
-  (°C, m°C, °F, dBm, …).
-- **Physics on `Fixed`:** `mm.mul_to(mm, SquareMillimeter)`,
-  `km_per_h.mul_to(hours, Kilometer)` (exact, checked at compile time),
-  `mul_to_rounded` and `div_to` with a rounding mode, for every relation
-  between quantities, using exact factors between their base units.
-- **Points and deltas.** `Temperature`, `AmplitudeRatio` and `PowerRatio` are
-  points on a scale: `t1 - t0` is a `TemperatureDelta` (or a `Level` in dB),
-  `t + delta` is a temperature, and adding two points does not compile. The
-  same rules apply to their `Fixed` forms (`PointUnit`).
-- **Display in a unit:** `q.in_unit(unit)` and `q.auto_unit()` (SI prefix in
-  steps of 1000), honouring format flags; `UnitEnum` trait for generic code.
-- **Parsing unit names:** `"5 kilometres"`, `"2 square_meters"`, case
-  insensitive; abbreviations stay exact (`mm` ≠ `Mm`).
-- **Math** (`std` feature, or `libm` on `no_std`): `Area::sqrt() → Length`,
-  `Volume::cbrt() → Length` and other roots derived from the relations,
-  `hypot`, and trigonometry on `Angle` (`sin`, `cos`, `Angle::atan2(y, x)`, …).
-- **Ordering and keys:** `total_cmp` for sorting; `Ordered<Q>` makes float
-  quantities usable as `HashMap`/`BTreeMap` keys.
-- **Vectors:** `Vector2<Q>` and `Vector3<Q>` of any quantity, with the
-  physics carried over (`Vector3<Length> / Duration = Vector3<Speed>`,
-  `Mass * Vector3<Acceleration> = Vector3<Force>`), `dot`/`cross`/`perp_dot`
-  typed by the relations, overflow-free `norm`, `direction`,
-  `angle_between`, polar coordinates, `Display`, `serde` and `bytemuck`.
-- **Uncertainty propagation:** `Uncertain<F>` (value ± standard uncertainty)
-  is a storage type, so `Length<Uncertain>` propagates σ through
-  conversions, relations, sums and math functions (first order, independent
-  operands).
-- `Quantity::const_new(value, unit)` for `f64`: `const` values in any unit,
-  bit-identical to `new`.
-- `to_f64()` / `to_f32()`, `cast()`, `const fn from_base/as_base`, zero-copy
-  slice views, `+=`/`-=`/`*=`/`/=`/`%`, `Sum`, `abs/min/max`, `checked_*`.
-- **Cargo features:** `std` (default), `libm`, `serde`, `approx`,
-  `bytemuck`, `defmt`, and quantity groups (`mechanics`,
-  `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
-  `information`, `misc`; all enabled by the default `full`) — compiling only
-  the core quantities takes about a fifth of the time.
-- Property tests (`tests/properties.rs`, proptest): `Fixed` conversions,
-  comparisons and physics against exact `i128` rational arithmetic over the
-  whole `i64` range (biased toward rounding ties), float rounding against
-  `f64`'s own, display/parse round trips, parsing arbitrary text, and
-  invariants of `Uncertain` and vectors. Fuzz targets (`fuzz/`, cargo-fuzz)
-  for parsing and integer arithmetic, run for a minute each in CI.
+- 128 quantities and about 1,700 units, generated from the
+  [UnitsNet](https://github.com/angularsen/UnitsNet) definitions. Each
+  quantity wraps one number in its base unit and is generic over the number
+  type: `f64` by default, `f32`, integers, or your own `Float` type.
+- Arithmetic between quantities (`Length / Duration` is a `Speed`) for
+  UnitsNet's relations and 15 more, all checked against the base
+  dimensions when the code is generated.
+- Conversions reduced to one constant per unit, correctly rounded where the
+  factor is exact.
+- Temperatures and decibel levels are points: their difference is a delta,
+  and adding two of them does not compile.
+- `Fixed<U, I>`, integers counted in a chosen unit: exact arithmetic and
+  comparisons across units, explicit `Rounding` where precision would be
+  lost, physics between counts (`mul_to`, `div_to`), exact decimal display
+  and means.
+- Display in any unit, with SI prefixes (`auto_unit`), from a list of units
+  (`auto_unit_in`) or with significant digits; parsing of abbreviations,
+  unit names and unit expressions (`"3 kg*m/s^2"`).
+- Math: roots and powers between quantities, `hypot`, trigonometry on
+  `Angle`, angle wrapping, rounding to a unit, `clamp`, `lerp` and `mean`.
+- `Vector2` and `Vector3` of quantities, and `Uncertain` for propagating
+  measurement uncertainty.
+- Runtime quantities with the `dynamic` feature: `AnyQuantity`, `AnyUnit`
+  and `QuantityKind`.
+- Names, abbreviations and dimensions of every quantity and unit.
+- `no_std` without allocation. Optional features for `serde` (as numbers, or
+  as text through `serde_str`), `approx`, `bytemuck`, `defmt`, `chrono`,
+  `time` and `schemars`, and quantity groups to cut compile time.
 - Minimum supported Rust version: 1.82.
-- CI (formatting, clippy, docs, tests in several feature sets, MSRV,
-  `no_std`, feature groups alone, generated code up to date), a README and
-  this changelog.
 
-### Changed
-
-- `FloatMath` requires `round`, `floor` and `ceil`; `Float` gains `is_nan`
-  and `is_sign_negative`, with default implementations.
-- Conversions are folded at code-generation time into a single correctly
-  rounded constant (one multiplication or division; two operations for affine
-  units), instead of evaluating each upstream formula step by step.
-- Generated tests compare every unit against the upstream formula evaluated
-  independently, in `f64` and `f32`.
-- The generator checks every relation it emits (including inferred
-  divisions and roots) against the upstream base dimensions, and fails on an
-  inconsistent one. All 120 upstream relations pass. Relations are not
-  derived from dimensions alone: 21 groups of quantities share dimensions
-  (energy and torque, frequency and rotational speed, …), and most
-  dimension-only matches are coincidences (volume × volume is not a warping
-  moment of inertia).
-- The UnitsNet definitions are pinned to a commit, so regenerating is
-  reproducible (`scripts/download.sh`, `UNITSNET_REF`).
-- Unit enums are `#[non_exhaustive]`; parsing errors use one shared
-  `ParseError` and do not allocate.
-
-### Removed
-
-- The singular accessor aliases (`as_meter`, `as_kilogram`, …: 1645
-  methods, 29% of the generated ones): use the plural names (`as_meters`).
-- The `f32` Cargo feature and the `Num` alias: use `Length<f32>` instead.
-- `scalar * quantity` for `f32` (write `quantity * scalar`), so that `f64`
-  code needs no type annotations.
-- Addition, negation and scaling of `Temperature`, `AmplitudeRatio` and
-  `PowerRatio` (see *Points and deltas*).
-
-### Fixed
-
-- `"1 kcal/(h·m²·°C)"` parsed 1000× too small: UnitsNet abbreviates its
-  calorie-based unit as `kcal/…` (and the kilo variant as `kkcal/…`); the
-  generator now corrects it.
-- Cross-quantity relations ignored that some UnitsNet base units are not
-  coherent SI units: `MassFlow * Duration` returned a `Mass` 1000× too large
-  (MassFlow is stored in g/s), and volt-ampere-hour energies were off by
-  3600×. Relation factors are now computed exactly.
-- Adding two temperatures returned nonsense (20 °C + 20 °C = 313 °C); it is now
-  a compile error.
+One UnitsNet abbreviation is corrected: the calorie-based heat transfer
+coefficient was labelled `kcal/(h·m²·°C)`, which read 1000 times too large.
