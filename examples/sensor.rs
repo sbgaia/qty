@@ -2,9 +2,9 @@
 //!
 //! Run with `cargo run --example sensor`.
 
-use unitsnet_rs::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
-use unitsnet_rs::unit::temperature_delta;
-use unitsnet_rs::*;
+use qty::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
+use qty::unit::temperature_delta;
+use qty::*;
 
 /// A reading in millidegrees Celsius, the sensor's native integer format.
 type Reading = Fixed<MillidegreeCelsius, i32>;

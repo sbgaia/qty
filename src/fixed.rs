@@ -347,9 +347,9 @@ pub trait AdditiveUnit: FixedUnit {}
 /// [`Delta`](Self::Delta), which can be added back.
 ///
 /// ```rust
-/// use unitsnet_rs::*;
-/// use unitsnet_rs::unit::temperature::{DegreeCelsius, Kelvin, MillidegreeCelsius};
-/// use unitsnet_rs::unit::temperature_delta::MillidegreeCelsius as DeltaMilli;
+/// use qty::*;
+/// use qty::unit::temperature::{DegreeCelsius, Kelvin, MillidegreeCelsius};
+/// use qty::unit::temperature_delta::MillidegreeCelsius as DeltaMilli;
 ///
 /// let morning = Fixed::<MillidegreeCelsius>::new(12_500);
 /// let noon = Fixed::<MillidegreeCelsius>::new(20_250);
@@ -604,8 +604,8 @@ fn rescale(
 ///   in release); `checked_*` / `saturating_*` variants are provided.
 ///
 /// ```rust
-/// use unitsnet_rs::*;
-/// use unitsnet_rs::unit::length::{Meter, Millimeter};
+/// use qty::*;
+/// use qty::unit::length::{Meter, Millimeter};
 ///
 /// // Type aliases keep literals short.
 /// type Millimeters = Fixed<Millimeter>;
@@ -794,9 +794,9 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     /// integer `*`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
-    /// use unitsnet_rs::unit::{area::SquareMillimeter, length::{Meter, Millimeter}};
-    /// use unitsnet_rs::unit::{duration::Hour, speed::KilometerPerHour, length::Kilometer};
+    /// use qty::*;
+    /// use qty::unit::{area::SquareMillimeter, length::{Meter, Millimeter}};
+    /// use qty::unit::{duration::Hour, speed::KilometerPerHour, length::Kilometer};
     ///
     /// let width = Fixed::<Millimeter>::new(1_200);
     /// let height = Fixed::<Millimeter>::new(800);
@@ -828,8 +828,8 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     /// related quantity in `unit`, rounding with `mode`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
-    /// use unitsnet_rs::unit::{area::SquareMeter, length::Millimeter};
+    /// use qty::*;
+    /// use qty::unit::{area::SquareMeter, length::Millimeter};
     ///
     /// let side = Fixed::<Millimeter>::new(1_500);
     /// assert_eq!(side.mul_to_rounded(side, SquareMeter, Rounding::NearestTiesEven), Ok(Fixed::new(2))); // 2.25 m²
@@ -862,8 +862,8 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     /// `mm ÷ ms → mm/s`, `J ÷ s → W`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
-    /// use unitsnet_rs::unit::{duration::Millisecond, length::Millimeter, speed::MillimeterPerSecond};
+    /// use qty::*;
+    /// use qty::unit::{duration::Millisecond, length::Millimeter, speed::MillimeterPerSecond};
     ///
     /// let travel = Fixed::<Millimeter>::new(250);
     /// let time = Fixed::<Millisecond>::new(400);
@@ -1305,8 +1305,8 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
     /// `i128` or the mean leaves `I`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
-    /// use unitsnet_rs::unit::temperature::MillidegreeCelsius;
+    /// use qty::*;
+    /// use qty::unit::temperature::MillidegreeCelsius;
     ///
     /// let readings = [21_375, 21_500, 22_125].map(Fixed::<MillidegreeCelsius, i32>::new);
     /// let mean = Fixed::mean(readings, Rounding::NearestTiesEven)?;
@@ -1342,9 +1342,9 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
     /// even, and width, alignment and `+` apply to the whole text.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
-    /// use unitsnet_rs::unit::length::{Kilometer, Meter, Millimeter};
-    /// use unitsnet_rs::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
+    /// use qty::*;
+    /// use qty::unit::length::{Kilometer, Meter, Millimeter};
+    /// use qty::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
     ///
     /// let d = Fixed::<Millimeter>::new(1230);
     /// assert_eq!(d.display_in::<Meter>().to_string(), "1.230 m");
@@ -1531,7 +1531,7 @@ impl<'de, U, I: serde::Deserialize<'de>> serde::Deserialize<'de> for Fixed<U, I>
 ///
 /// ```rust
 /// use std::collections::BTreeMap;
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let mut by_length = BTreeMap::new();
 /// by_length.insert(Ordered(Length::from_meters(2.0)), "b");

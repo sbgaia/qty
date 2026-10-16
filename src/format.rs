@@ -65,7 +65,7 @@ impl<T: SignificantFloat, U: Unit> InUnit<T, U> {
     /// prefixes.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// let f = Force::from_newtons(1234.5);
     /// assert_eq!(f.auto_unit().significant(3).to_string(), "1.23 kN");

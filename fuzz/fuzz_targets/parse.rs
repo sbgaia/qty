@@ -3,7 +3,7 @@
 #![no_main]
 
 use libfuzzer_sys::fuzz_target;
-use unitsnet_rs::*;
+use qty::*;
 
 fn round_trip<Q>(s: &str)
 where

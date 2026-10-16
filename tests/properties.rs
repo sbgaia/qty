@@ -4,7 +4,7 @@
 use std::cmp::Ordering;
 
 use proptest::prelude::*;
-use unitsnet_rs::unit::{
+use qty::unit::{
     area::SquareMeter,
     duration::Millisecond,
     length::{Inch, Meter, Millimeter},
@@ -12,7 +12,7 @@ use unitsnet_rs::unit::{
     temperature::{DegreeCelsius, DegreeFahrenheit, Kelvin, MillidegreeCelsius},
     temperature_delta,
 };
-use unitsnet_rs::*;
+use qty::*;
 
 fn rounding() -> impl Strategy<Value = Rounding> {
     prop_oneof![
@@ -251,7 +251,7 @@ proptest! {
 
     #[test]
     fn decimal_display_matches_exact_rationals(n in count(), precision in prop::option::of(0usize..10)) {
-        use unitsnet_rs::unit::length::{Kilometer, Micrometer};
+        use qty::unit::length::{Kilometer, Micrometer};
         // Reference: n · 10^-k, rounded to `p` decimals (ties to even), as text.
         fn reference(n: i64, k: u32, precision: Option<usize>) -> String {
             let p = precision.unwrap_or(k as usize) as u32;
@@ -271,7 +271,7 @@ proptest! {
                 format!("{sign}{}.{:0w$} m", shown / scale, shown % scale, w = p as usize)
             }
         }
-        let show = |d: unitsnet_rs::Decimal<Meter>| match precision {
+        let show = |d: qty::Decimal<Meter>| match precision {
             Some(p) => format!("{d:.p$}"),
             None => d.to_string(),
         };

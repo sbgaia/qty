@@ -74,7 +74,7 @@ impl AnyQuantity {
     /// the unit as an expression ([`UnitExpr`]).
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// // "m" is a metre and a minute.
     /// let kinds: Vec<QuantityKind> = AnyQuantity::candidates("5 m").map(|q| q.kind()).collect();

@@ -27,7 +27,7 @@ jobs:
         run: ./scripts/release-check.sh "$GITHUB_REF_NAME" > release-notes.md
 
       - name: Publish to crates.io
-        run: cargo publish -p unitsnet-rs
+        run: cargo publish -p qty
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 

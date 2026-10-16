@@ -8,7 +8,7 @@
 use std::collections::HashSet;
 use std::mem::{align_of, size_of};
 
-use unitsnet_rs::*;
+use qty::*;
 
 // ── Layout ────────────────────────────────────────────────────────────────────
 
@@ -415,9 +415,9 @@ fn serde_is_transparent() {
 mod fixed {
     use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 
-    use unitsnet_rs::unit::duration::{Microsecond, Millisecond, Second};
-    use unitsnet_rs::unit::length::{Inch, Meter, Millimeter};
-    use unitsnet_rs::*;
+    use qty::unit::duration::{Microsecond, Millisecond, Second};
+    use qty::unit::length::{Inch, Meter, Millimeter};
+    use qty::*;
 
     type Millimeters = Fixed<Millimeter>;
     type Meters = Fixed<Meter>;
@@ -491,10 +491,8 @@ mod fixed {
 
     #[test]
     fn integer_temperatures_in_celsius() {
-        use unitsnet_rs::unit::temperature::{
-            DegreeCelsius, DegreeFahrenheit, Kelvin, MillidegreeCelsius,
-        };
-        use unitsnet_rs::unit::temperature_delta as delta;
+        use qty::unit::temperature::{DegreeCelsius, DegreeFahrenheit, Kelvin, MillidegreeCelsius};
+        use qty::unit::temperature_delta as delta;
         type MilliC = Fixed<MillidegreeCelsius, i32>;
 
         // A sensor reporting millidegrees Celsius.
@@ -575,8 +573,8 @@ mod fixed {
 
     #[test]
     fn integer_decibel_levels() {
-        use unitsnet_rs::unit::level::Decibel;
-        use unitsnet_rs::unit::power_ratio::{DecibelMilliwatt, DecibelWatt};
+        use qty::unit::level::Decibel;
+        use qty::unit::power_ratio::{DecibelMilliwatt, DecibelWatt};
         let tx = Fixed::<DecibelMilliwatt>::new(20);
         let gain = Fixed::<Decibel>::new(6);
         assert_eq!(tx + gain, Fixed::<DecibelMilliwatt>::new(26));
@@ -778,7 +776,7 @@ mod fixed {
 
 #[cfg(any(feature = "std", feature = "libm"))]
 mod math {
-    use unitsnet_rs::*;
+    use qty::*;
 
     #[test]
     fn roots_follow_the_relations() {
@@ -830,7 +828,7 @@ fn approx_assertions() {
 #[cfg(feature = "bytemuck")]
 #[test]
 fn bytemuck_casts() {
-    use unitsnet_rs::unit::length::Millimeter;
+    use qty::unit::length::Millimeter;
     let lengths = [Length::from_meters(1.0), Length::from_meters(2.5)];
     let bytes: &[u8] = bytemuck::cast_slice(&lengths);
     assert_eq!(bytes.len(), 16);
@@ -849,13 +847,13 @@ fn defmt_format_is_implemented() {
     fn is_format<T: defmt::Format>() {}
     is_format::<Length>();
     is_format::<LengthUnit>();
-    is_format::<Fixed<unitsnet_rs::unit::length::Millimeter>>();
+    is_format::<Fixed<qty::unit::length::Millimeter>>();
 }
 
 // ── Uncertainty propagation ──────────────────────────────────────────────────
 
 mod uncertain {
-    use unitsnet_rs::*;
+    use qty::*;
 
     fn u(value: f64, sigma: f64) -> Uncertain {
         Uncertain::new(value, sigma)
@@ -967,7 +965,7 @@ mod uncertain {
 // ── Vectors ───────────────────────────────────────────────────────────────────
 
 mod vectors {
-    use unitsnet_rs::*;
+    use qty::*;
 
     fn m(x: f64, y: f64, z: f64) -> Vector3<Length> {
         Vector3::from_base([x, y, z])
@@ -1084,9 +1082,9 @@ mod vectors {
 // ── std::time::Duration interop ───────────────────────────────────────────────
 
 mod std_time {
+    use qty::unit::duration::Nanosecond;
+    use qty::*;
     use std::time::Duration as StdDuration;
-    use unitsnet_rs::unit::duration::Nanosecond;
-    use unitsnet_rs::*;
 
     #[test]
     fn floats() {
@@ -1150,12 +1148,12 @@ mod std_time {
 
 #[cfg(feature = "serde")]
 mod serde_text {
+    use qty::*;
     use serde::{Deserialize, Serialize};
-    use unitsnet_rs::*;
 
     #[derive(Serialize, Deserialize, Debug, PartialEq)]
     struct Wrap<Q: core::fmt::Display + core::str::FromStr<Err = ParseError>>(
-        #[serde(with = "unitsnet_rs::serde_str")] Q,
+        #[serde(with = "qty::serde_str")] Q,
     );
 
     fn round_trip<Q>(q: Q) -> String
@@ -1222,7 +1220,7 @@ mod serde_text {
     #[derive(Serialize, Deserialize, Debug, PartialEq)]
     struct Optional {
         #[serde(
-            with = "unitsnet_rs::serde_str::option",
+            with = "qty::serde_str::option",
             default,
             skip_serializing_if = "Option::is_none"
         )]
@@ -1252,7 +1250,7 @@ mod serde_text {
 // ── Angle wrapping, clamp, lerp ───────────────────────────────────────────────
 
 mod wrapping {
-    use unitsnet_rs::*;
+    use qty::*;
 
     #[test]
     fn angles_wrap_into_one_turn() {
@@ -1331,7 +1329,7 @@ mod wrapping {
 
 #[test]
 fn decimal_display_flags() {
-    use unitsnet_rs::unit::length::{Meter, Millimeter};
+    use qty::unit::length::{Meter, Millimeter};
     let d = Fixed::<Millimeter>::new(1230).display_in::<Meter>();
     assert_eq!(format!("[{d:<9}]"), "[1.230 m  ]");
     assert_eq!(format!("[{d:^10}]"), "[ 1.230 m  ]");
@@ -1370,7 +1368,7 @@ fn decimal_display_flags() {
 
 #[cfg(feature = "dynamic")]
 mod runtime {
-    use unitsnet_rs::*;
+    use qty::*;
 
     #[test]
     fn every_unit_round_trips() {
@@ -1528,7 +1526,7 @@ mod runtime {
 #[test]
 fn chrono_time_delta() {
     use chrono::TimeDelta;
-    use unitsnet_rs::unit::duration::Nanosecond;
+    use qty::unit::duration::Nanosecond;
     assert_eq!(
         Duration::from(TimeDelta::milliseconds(1500)),
         Duration::from_seconds(1.5)
@@ -1569,7 +1567,7 @@ fn chrono_time_delta() {
 #[cfg(feature = "time")]
 #[test]
 fn time_duration() {
-    use unitsnet_rs::unit::duration::Nanosecond;
+    use qty::unit::duration::Nanosecond;
     assert_eq!(
         Duration::from(time::Duration::milliseconds(-250)),
         Duration::from_seconds(-0.25)
@@ -1606,7 +1604,7 @@ fn json_schemas() {
     struct Config {
         distance: Length,
         unit: LengthUnit,
-        #[schemars(schema_with = "unitsnet_rs::serde_str::schema::<Duration>")]
+        #[schemars(schema_with = "qty::serde_str::schema::<Duration>")]
         timeout: Duration,
     }
     let schema = serde_json::to_value(schemars::schema_for!(Config)).unwrap();
@@ -1625,7 +1623,7 @@ fn json_schemas() {
 }
 
 mod presentation {
-    use unitsnet_rs::*;
+    use qty::*;
 
     #[test]
     fn auto_unit_over_a_unit_list() {
@@ -1699,7 +1697,7 @@ mod presentation {
         let lengths = [1.0, 2.0, 6.0].map(Length::from_meters);
         assert_eq!(Length::mean(lengths), Some(Length::from_meters(3.0)));
 
-        use unitsnet_rs::unit::temperature::MillidegreeCelsius;
+        use qty::unit::temperature::MillidegreeCelsius;
         type Reading = Fixed<MillidegreeCelsius, i32>;
         let r = [2, -1].map(Reading::new);
         assert_eq!(Fixed::mean(r, Rounding::TowardZero).unwrap().count(), 0);
@@ -1728,8 +1726,8 @@ mod presentation {
 }
 
 mod polish {
-    use unitsnet_rs::unit::length::Millimeter;
-    use unitsnet_rs::*;
+    use qty::unit::length::Millimeter;
+    use qty::*;
 
     #[test]
     fn generic_conversions_through_the_trait() {

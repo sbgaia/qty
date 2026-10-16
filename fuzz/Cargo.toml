@@ -1,5 +1,5 @@
 [package]
-name = "unitsnet-rs-fuzz"
+name = "qty-fuzz"
 version = "0.0.0"
 publish = false
 edition = "2021"
@@ -9,7 +9,7 @@ cargo-fuzz = true
 
 [dependencies]
 libfuzzer-sys = "0.4"
-unitsnet-rs = { path = "..", features = ["full"] }
+qty = { path = "..", features = ["full"] }
 
 # Not part of the main workspace: needs nightly and `cargo fuzz`.
 [workspace]

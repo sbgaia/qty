@@ -6,7 +6,7 @@ use crate::{Angle, FloatMath, Quantity};
 /// feature.
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let a = Angle::from_degrees(30.0);
 /// assert!((a.sin() - 0.5).abs() < 1e-15);

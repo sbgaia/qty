@@ -9,7 +9,7 @@
 )]
 
 use super::{assert_close, check_fixed, check_fixed_rescale, F32_TOL, F64_TOL, ROUND_TRIP_TOL};
-use unitsnet_rs::*;
+use qty::*;
 
 #[test]
 fn amount() {

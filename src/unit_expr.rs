@@ -12,7 +12,7 @@ use crate::{Dimensions, ParseError, Quantity};
 /// their listed abbreviations or names, so any equivalent spelling works:
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let f: Force = "3 kg*m/s^2".parse()?;
 /// assert_eq!(f, Force::from_newtons(3.0));

@@ -2,8 +2,8 @@
 //! [`core::time::Duration`] (also `std::time::Duration`).
 //!
 //! ```rust
-//! use unitsnet_rs::*;
-//! use unitsnet_rs::unit::duration::Nanosecond;
+//! use qty::*;
+//! use qty::unit::duration::Nanosecond;
 //!
 //! // From std: e.g. `Instant::elapsed()`.
 //! let elapsed = std::time::Duration::from_millis(1500);

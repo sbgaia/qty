@@ -294,7 +294,7 @@ vector! {
     /// product of a force and a displacement is an energy.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// let displacement = Vector3::new(
     ///     Length::from_meters(3.0),
@@ -362,7 +362,7 @@ where
     /// A vector from its length and its angle from the x axis.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// let v = Vector2::from_polar(Speed::from_meters_per_second(2.0), Angle::from_degrees(90.0));
     /// assert!(v.x.approx_eq_abs(Speed::from_base(0.0), 1e-15));

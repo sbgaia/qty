@@ -1,6 +1,6 @@
 //! (De)serialize quantities as text with a unit, such as `"30 s"` or
 //! `"1.5 km"`, for configuration files and other human-edited data. Use it
-//! with `#[serde(with = "unitsnet_rs::serde_str")]`.
+//! with `#[serde(with = "qty::serde_str")]`.
 //!
 //! Plain `serde` stores a quantity as its bare base-unit number (`30.0`),
 //! which is compact but leaves the unit implicit. With this module:
@@ -16,16 +16,16 @@
 //!
 //! ```rust
 //! use serde::{Deserialize, Serialize};
-//! use unitsnet_rs::*;
-//! use unitsnet_rs::unit::length::Millimeter;
+//! use qty::*;
+//! use qty::unit::length::Millimeter;
 //!
 //! #[derive(Serialize, Deserialize, Debug, PartialEq)]
 //! struct Config {
-//!     #[serde(with = "unitsnet_rs::serde_str")]
+//!     #[serde(with = "qty::serde_str")]
 //!     timeout: Duration,
-//!     #[serde(with = "unitsnet_rs::serde_str")]
+//!     #[serde(with = "qty::serde_str")]
 //!     gap: Fixed<Millimeter>,
-//!     #[serde(with = "unitsnet_rs::serde_str::option", default)]
+//!     #[serde(with = "qty::serde_str::option", default)]
 //!     max_speed: Option<Speed>,
 //! }
 //!
@@ -86,8 +86,8 @@ impl<Q: FromStr<Err = ParseError>> Visitor<'_> for TextVisitor<Q> {
 }
 
 /// A JSON schema for text fields of quantity `Q`, for
-/// `#[schemars(schema_with = "unitsnet_rs::serde_str::schema::<Length>")]`
-/// next to `#[serde(with = "unitsnet_rs::serde_str")]`.
+/// `#[schemars(schema_with = "qty::serde_str::schema::<Length>")]`
+/// next to `#[serde(with = "qty::serde_str")]`.
 #[cfg(feature = "schemars")]
 pub fn schema<Q: crate::Quantity>(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
     let description = std::format!(

@@ -1,4 +1,4 @@
-//! Benchmark comparing `unitsnet-rs` against popular Rust unit-conversion
+//! Benchmark comparing `qty` against popular Rust unit-conversion
 //! libraries across six representative operations:
 //!
 //! 1. **`construction_from_km`** — build a `Length` value from a kilometres
@@ -18,7 +18,7 @@
 //! # Running
 //!
 //! ```bash
-//! cargo bench -p unitsnet-benches
+//! cargo bench -p qty-benches
 //! # HTML report: target/criterion/report/index.html
 //! ```
 //!
@@ -26,7 +26,7 @@
 //!
 //! | Library        | Storage strategy | Construction cost | Conversion cost |
 //! |----------------|-----------------|-------------------|-----------------|
-//! | unitsnet-rs    | SI base (metres) | 1 multiply        | read (free)     |
+//! | qty    | SI base (metres) | 1 multiply        | read (free)     |
 //! | uom            | SI base          | 1 multiply        | read (free)     |
 //! | simple-si-units| SI base          | 1 multiply        | read (free)     |
 //! | measurements   | SI base          | 1 multiply        | read (free)     |
@@ -38,28 +38,28 @@
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-// ─── unitsnet-rs ──────────────────────────────────────────────────────────────
+// ─── qty ──────────────────────────────────────────────────────────────
 // Stores every value in the SI base unit (metres).  `from_kilometers` multiplies
 // by 1 000 at construction; `as_meters` is a plain field read.
 
 #[inline(always)]
-fn unitsnet_from_km(km: f64) -> unitsnet_rs::Length {
-    unitsnet_rs::Length::from_kilometers(km)
+fn qty_from_km(km: f64) -> qty::Length {
+    qty::Length::from_kilometers(km)
 }
 
 #[inline(always)]
-fn unitsnet_to_m(l: unitsnet_rs::Length) -> f64 {
+fn qty_to_m(l: qty::Length) -> f64 {
     l.as_meters()
 }
 
 #[inline(always)]
-fn unitsnet_add(a: unitsnet_rs::Length, b: unitsnet_rs::Length) -> unitsnet_rs::Length {
+fn qty_add(a: qty::Length, b: qty::Length) -> qty::Length {
     a + b
 }
 
 #[inline(always)]
-fn unitsnet_chain(km: f64, m: f64) -> f64 {
-    (unitsnet_rs::Length::from_kilometers(km) + unitsnet_rs::Length::from_meters(m)).as_meters()
+fn qty_chain(km: f64, m: f64) -> f64 {
+    (qty::Length::from_kilometers(km) + qty::Length::from_meters(m)).as_meters()
 }
 
 // ─── uom ─────────────────────────────────────────────────────────────────────
@@ -246,14 +246,14 @@ fn msr_chain(km: f64, m: f64) -> f64 {
 
 /// Benchmark 1 — construct a `Length` from a kilometres value.
 ///
-/// Libraries that convert to SI base at construction (`unitsnet-rs`, `uom`,
+/// Libraries that convert to SI base at construction (`qty`, `uom`,
 /// `simple-si-units`, `measurements`) perform one f64 multiplication here.
 /// Libraries that defer conversion (`ferrunitas`, `measures-rs`) perform only
 /// a struct wrap — expect them to be faster in this group.
 fn bench_construction(c: &mut Criterion) {
     let km = black_box(1.5_f64);
     let mut g = c.benchmark_group("construction_from_km");
-    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_from_km(km)));
+    g.bench_function("qty", |b| b.iter(|| qty_from_km(km)));
     g.bench_function("uom", |b| b.iter(|| uom_from_km(km)));
     g.bench_function("simple-si-units", |b| b.iter(|| simple_from_km(km)));
     g.bench_function("measurements", |b| b.iter(|| meas_from_km(km)));
@@ -271,14 +271,14 @@ fn bench_conversion(c: &mut Criterion) {
     let km = 1.5_f64;
     let mut g = c.benchmark_group("convert_km_to_m");
     // Pre-build outside the timed loop; pass by reference where the API requires it.
-    let u = unitsnet_from_km(km);
+    let u = qty_from_km(km);
     let q = uom_from_km(km);
     let s = simple_from_km(km);
     let me = meas_from_km(km);
     let fe = ferr_from_km(km);
     let mr = msr_from_km(km);
 
-    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_to_m(black_box(u))));
+    g.bench_function("qty", |b| b.iter(|| qty_to_m(black_box(u))));
     g.bench_function("uom", |b| b.iter(|| uom_to_m(black_box(q))));
     g.bench_function("simple-si-units", |b| b.iter(|| simple_to_m(black_box(&s))));
     g.bench_function("measurements", |b| b.iter(|| meas_to_m(black_box(&me))));
@@ -295,8 +295,8 @@ fn bench_add(c: &mut Criterion) {
     let (km1, km2) = (1.5_f64, 2.3_f64);
     let mut g = c.benchmark_group("add_two_lengths");
 
-    let u_a = unitsnet_from_km(km1);
-    let u_b = unitsnet_from_km(km2);
+    let u_a = qty_from_km(km1);
+    let u_b = qty_from_km(km2);
     let q_a = uom_from_km(km1);
     let q_b = uom_from_km(km2);
     let s_a = simple_from_km(km1);
@@ -308,8 +308,8 @@ fn bench_add(c: &mut Criterion) {
     let r_a = msr_from_km(km1);
     let r_b = msr_from_km(km2);
 
-    g.bench_function("unitsnet-rs", |b| {
-        b.iter(|| unitsnet_add(black_box(u_a), black_box(u_b)))
+    g.bench_function("qty", |b| {
+        b.iter(|| qty_add(black_box(u_a), black_box(u_b)))
     });
     g.bench_function("uom", |b| {
         b.iter(|| uom_add(black_box(q_a), black_box(q_b)))
@@ -338,7 +338,7 @@ fn bench_add(c: &mut Criterion) {
 fn bench_chain(c: &mut Criterion) {
     let (km, m) = (black_box(1.5_f64), black_box(300.0_f64));
     let mut g = c.benchmark_group("chain_construct_add_convert");
-    g.bench_function("unitsnet-rs", |b| b.iter(|| unitsnet_chain(km, m)));
+    g.bench_function("qty", |b| b.iter(|| qty_chain(km, m)));
     g.bench_function("uom", |b| b.iter(|| uom_chain(km, m)));
     g.bench_function("simple-si-units", |b| b.iter(|| simple_chain(km, m)));
     g.bench_function("measurements", |b| b.iter(|| meas_chain(km, m)));
@@ -364,10 +364,7 @@ fn raw_values() -> Vec<f64> {
 /// unit-free baseline.
 fn bench_sum(c: &mut Criterion) {
     let raw = raw_values();
-    let u: Vec<unitsnet_rs::Length> = raw
-        .iter()
-        .map(|&m| unitsnet_rs::Length::from_meters(m))
-        .collect();
+    let u: Vec<qty::Length> = raw.iter().map(|&m| qty::Length::from_meters(m)).collect();
     let q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
     let s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
     let me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
@@ -376,11 +373,11 @@ fn bench_sum(c: &mut Criterion) {
     g.bench_function("f64 (no units)", |b| {
         b.iter(|| black_box(&raw).iter().fold(0.0, |acc, &x| acc + x))
     });
-    g.bench_function("unitsnet-rs", |b| {
+    g.bench_function("qty", |b| {
         b.iter(|| {
             black_box(&u)
                 .iter()
-                .fold(unitsnet_rs::Length::default(), |acc, &x| acc + x)
+                .fold(qty::Length::default(), |acc, &x| acc + x)
         })
     });
     g.bench_function("uom", |b| {
@@ -417,10 +414,7 @@ fn bench_sum(c: &mut Criterion) {
 fn bench_scale(c: &mut Criterion) {
     let raw = raw_values();
     let mut r = raw.clone();
-    let mut u: Vec<unitsnet_rs::Length> = raw
-        .iter()
-        .map(|&m| unitsnet_rs::Length::from_meters(m))
-        .collect();
+    let mut u: Vec<qty::Length> = raw.iter().map(|&m| qty::Length::from_meters(m)).collect();
     let mut q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
     let mut s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
     let mut me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
@@ -432,7 +426,7 @@ fn bench_scale(c: &mut Criterion) {
     g.bench_function("f64 (no units)", |b| {
         b.iter(|| black_box(&mut r).iter_mut().for_each(|x| *x = *x * k))
     });
-    g.bench_function("unitsnet-rs", |b| {
+    g.bench_function("qty", |b| {
         b.iter(|| black_box(&mut u).iter_mut().for_each(|x| *x = *x * k))
     });
     g.bench_function("uom", |b| {

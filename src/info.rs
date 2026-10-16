@@ -10,7 +10,7 @@ use core::ops::{Div, Mul};
 /// angles) have all exponents zero.
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let speed = Speed::<f64>::INFO.dimensions;
 /// assert_eq!(speed, Length::<f64>::INFO.dimensions / Duration::<f64>::INFO.dimensions);
@@ -180,7 +180,7 @@ pub struct UnitInfo {
 /// [`Quantity::INFO`](crate::Quantity::INFO).
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let info = Length::<f64>::INFO;
 /// assert_eq!(info.name, "Length");

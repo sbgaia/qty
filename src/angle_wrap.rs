@@ -7,7 +7,7 @@ impl<T: Float + core::ops::Rem<Output = T>> Angle<T> {
     /// The same direction as an angle in `[0°, 360°)`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// assert!((Angle::from_degrees(-90.0).wrap_unsigned().as_degrees() - 270.0).abs() < 1e-12);
     /// assert!((Angle::from_degrees(725.0).wrap_unsigned().as_degrees() - 5.0).abs() < 1e-12);
@@ -27,7 +27,7 @@ impl<T: Float + core::ops::Rem<Output = T>> Angle<T> {
     /// difference between two headings.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// let turn = Angle::from_degrees(10.0) - Angle::from_degrees(350.0);
     /// assert!((turn.wrap_signed().as_degrees() - 20.0).abs() < 1e-12);

@@ -1,13 +1,13 @@
-# unitsnet-rs
+# qty
 
-[![CI](https://github.com/sbgaia/unitsnet-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/sbgaia/unitsnet-rs/actions/workflows/ci.yml)
+[![CI](https://github.com/sbgaia/qty/actions/workflows/ci.yml/badge.svg)](https://github.com/sbgaia/qty/actions/workflows/ci.yml)
 
 Strongly-typed physical quantities for Rust — 128 quantities and over 1,700
 units generated from the [UnitsNet](https://github.com/angularsen/UnitsNet)
 definitions — with **no runtime overhead** over the numbers they wrap.
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 let distance = Length::from_kilometers(10.0);
 let time = Duration::from_minutes(30.0);
@@ -39,7 +39,7 @@ assert_eq!(format!("{:.1}", speed.in_unit(SpeedUnit::MilePerHour)), "12.4 mph");
 ## Numeric types
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 // f32: half the memory.
 let l: Length<f32> = Length::from_feet(3.0);
@@ -61,7 +61,7 @@ With the `dynamic` feature, `AnyQuantity` holds a quantity of any kind, for
 configuration values, file columns or units picked in a user interface:
 
 ```rust,ignore
-use unitsnet_rs::*;
+use qty::*;
 
 let q: AnyQuantity = "1.5 km".parse()?;           // the unit decides the kind
 assert_eq!(q.kind(), QuantityKind::Length);
@@ -78,7 +78,7 @@ ambiguous; `AnyQuantity::parse_as(text, kind)` resolves them.
 `Vector2<Q>` and `Vector3<Q>` hold any quantity, and the physics carries over:
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 let displacement = Vector3::<Length>::from_base([3.0, 4.0, 0.0]);
 let velocity: Vector3<Speed> = displacement / Duration::from_seconds(2.0);
@@ -96,7 +96,7 @@ can hold one; conversions, relations and math functions propagate it (to
 first order, for independent inputs):
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 let distance = Length::from_meters(Uncertain::new(100.0, 0.5));
 let time = Duration::from_seconds(Uncertain::new(9.58, 0.01));
@@ -110,8 +110,8 @@ assert_eq!(format!("{:.1}", speed.in_unit(SpeedUnit::KilometerPerHour)), "37.6 �
 just work; anything that would lose precision asks for a `Rounding` mode.
 
 ```rust
-use unitsnet_rs::*;
-use unitsnet_rs::unit::length::{Meter, Millimeter};
+use qty::*;
+use qty::unit::length::{Meter, Millimeter};
 
 type Millimeters = Fixed<Millimeter>;
 type Meters = Fixed<Meter>;
@@ -132,9 +132,9 @@ assert_eq!(Millimeters::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Me
 Physics works on counts too, with the result's unit named explicitly:
 
 ```rust
-use unitsnet_rs::*;
-use unitsnet_rs::unit::{area::SquareMillimeter, length::Millimeter};
-use unitsnet_rs::unit::{duration::Millisecond, speed::MillimeterPerSecond};
+use qty::*;
+use qty::unit::{area::SquareMillimeter, length::Millimeter};
+use qty::unit::{duration::Millisecond, speed::MillimeterPerSecond};
 
 let side = Fixed::<Millimeter>::new(1_200);
 assert_eq!(side.mul_to(side, SquareMillimeter).count(), 1_440_000);
@@ -157,7 +157,7 @@ A temperature is a point on a scale, not an amount. Differences between
 points are deltas, which you can add back:
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 let morning = Temperature::from_degrees_celsius(12.0);
 let noon = Temperature::from_degrees_celsius(20.0);
@@ -171,9 +171,9 @@ The same holds for integer temperatures and for decibel levels (dBm, dBV),
 whose differences are a `Level` in dB:
 
 ```rust
-use unitsnet_rs::*;
-use unitsnet_rs::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
-use unitsnet_rs::unit::temperature_delta as delta;
+use qty::*;
+use qty::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
+use qty::unit::temperature_delta as delta;
 
 let reading = Fixed::<MillidegreeCelsius, i32>::new(21_375); // 21.375 °C
 assert!(reading > Fixed::<DegreeCelsius, i32>::new(21)); // exact across scales
@@ -187,7 +187,7 @@ and `Fixed::mean` sums exactly and rounds once, in the mode you choose.
 ## Display and parsing
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 // Any equivalent spelling of the unit, checked by dimensions.
 assert_eq!("3 kg*m/s^2".parse::<Force>(), Ok(Force::from_newtons(3.0)));
@@ -210,7 +210,7 @@ assert_eq!("5 Kilometres".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
 
 ```rust
 use std::collections::BTreeMap;
-use unitsnet_rs::*;
+use qty::*;
 
 let side: Length = Area::from_square_meters(16.0).sqrt();
 assert_eq!(side, Length::from_meters(4.0));
@@ -250,7 +250,7 @@ of the time of `full`:
 
 ```toml
 [dependencies]
-unitsnet-rs = { version = "0.1", default-features = false, features = ["std", "electrical"] }
+qty = { version = "0.1", default-features = false, features = ["std", "electrical"] }
 ```
 
 For `no_std`, use `default-features = false` (add `libm` for math).

@@ -30,9 +30,9 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets --all-features
-      - run: cargo doc --no-deps --all-features -p unitsnet-rs
+      - run: cargo doc --no-deps --all-features -p qty
       # Links to feature-gated items must not break the docs without them.
-      - run: cargo doc --no-deps --no-default-features -p unitsnet-rs
+      - run: cargo doc --no-deps --no-default-features -p qty
 
   test:
     name: Test (${{ matrix.features }})
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test -p unitsnet-rs -p codegen ${{ matrix.features }}
+      - run: cargo test -p qty -p codegen ${{ matrix.features }}
       # The examples check their own results.
       - if: matrix.features == '--all-features'
         run: for example in sensor projectile config; do cargo run --all-features --example "$example"; done
@@ -59,7 +59,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       # The library and its tests; codegen and benches are dev tools that may
       # need a newer toolchain.
-      - run: cargo test -p unitsnet-rs --all-features --lib --test design --test cross_type
+      - run: cargo test -p qty --all-features --lib --test design --test cross_type
 
   no-std:
     name: no_std (thumbv7em-none-eabihf)
@@ -71,8 +71,8 @@ jobs:
           targets: thumbv7em-none-eabihf
       - uses: Swatinem/rust-cache@v2
       # No `std` on this target: the math functions come from `libm`.
-      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm,approx,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
-      - run: cargo build -p unitsnet-rs --no-default-features --target thumbv7em-none-eabihf
+      - run: cargo build -p qty --no-default-features --features serde,libm,approx,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
+      - run: cargo build -p qty --no-default-features --target thumbv7em-none-eabihf
 
   feature-groups:
     name: Feature groups build alone
@@ -82,15 +82,15 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # Core quantities only, with tests.
-      - run: cargo test -p unitsnet-rs --no-default-features --features std
-      - run: cargo test -p unitsnet-rs --no-default-features --features "std dynamic"
+      - run: cargo test -p qty --no-default-features --features std
+      - run: cargo test -p qty --no-default-features --features "std dynamic"
       # Each group on its own: catches cross-quantity relations that are not
       # gated on every group they involve.
       - name: Each group alone
         run: |
           for group in mechanics fluids electrical thermal chemistry light radiation information misc; do
             echo "::group::$group"
-            cargo check -p unitsnet-rs --all-targets --no-default-features --features "std dynamic $group"
+            cargo check -p qty --all-targets --no-default-features --features "std dynamic $group"
             echo "::endgroup::"
           done
 
@@ -130,12 +130,12 @@ jobs:
       - name: Check
         run: |
           status=$(curl -s -o /dev/null -w "%{http_code}" \
-            -A "unitsnet-rs CI (https://github.com/sbgaia/unitsnet-rs)" \
-            https://crates.io/api/v1/crates/unitsnet-rs)
+            -A "qty CI (https://github.com/sbgaia/qty)" \
+            https://crates.io/api/v1/crates/qty)
           if [ "$status" = 404 ]; then
-            echo "::notice::unitsnet-rs is not on crates.io yet: nothing to compare with."
+            echo "::notice::qty is not on crates.io yet: nothing to compare with."
           else
-            cargo semver-checks -p unitsnet-rs
+            cargo semver-checks -p qty
           fi
 
   codegen:
@@ -169,4 +169,4 @@ jobs:
       - uses: actions/checkout@v5
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - run: cargo bench -p unitsnet-benches --no-run
+      - run: cargo bench -p qty-benches --no-run

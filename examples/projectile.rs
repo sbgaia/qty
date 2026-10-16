@@ -3,7 +3,7 @@
 //!
 //! Run with `cargo run --example projectile`.
 
-use unitsnet_rs::*;
+use qty::*;
 
 fn main() {
     let launch_speed = Speed::from_kilometers_per_hour(90.0);

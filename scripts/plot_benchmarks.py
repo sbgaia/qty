@@ -36,7 +36,7 @@ GROUPS: list[tuple[str, str]] = [
     ("scale_10k_lengths", "Scale 10k lengths in place"),
 ]
 
-# Colour for unitsnet-rs, the unit-free baseline, and everything else
+# Colour for qty, the unit-free baseline, and everything else
 HIGHLIGHT_COLOR = "#2563eb"  # blue-600
 BASELINE_NAME = "f64 (no units)"
 BASELINE_COLOR = "#334155"  # slate-700
@@ -112,7 +112,7 @@ def build_figure(results: dict[str, dict[str, float]]) -> Figure:
         values = [val for _, val in sorted_items]
         colors = [
             HIGHLIGHT_COLOR
-            if n == "unitsnet-rs"
+            if n == "qty"
             else BASELINE_COLOR
             if n == BASELINE_NAME
             else DEFAULT_COLOR
@@ -170,7 +170,7 @@ def build_figure(results: dict[str, dict[str, float]]) -> Figure:
 def main() -> None:
     if not CRITERION_DIR.is_dir():
         print(
-            f"Error: {CRITERION_DIR} not found. Run `cargo bench -p unitsnet-benches` first.",
+            f"Error: {CRITERION_DIR} not found. Run `cargo bench -p qty-benches` first.",
             file=sys.stderr,
         )
         sys.exit(1)

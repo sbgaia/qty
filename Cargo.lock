@@ -529,6 +529,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "qty"
+version = "0.1.0"
+dependencies = [
+ "approx",
+ "bytemuck",
+ "chrono",
+ "defmt",
+ "libm",
+ "proptest",
+ "schemars",
+ "serde",
+ "serde_json",
+ "time",
+]
+
+[[package]]
+name = "qty-benches"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "ferrunitas",
+ "measurements",
+ "measures-rs",
+ "qty",
+ "simple-si-units",
+ "uom",
+]
+
+[[package]]
 name = "quote"
 version = "1.0.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -875,35 +904,6 @@ name = "unicode-xid"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
-
-[[package]]
-name = "unitsnet-benches"
-version = "0.1.0"
-dependencies = [
- "criterion",
- "ferrunitas",
- "measurements",
- "measures-rs",
- "simple-si-units",
- "unitsnet-rs",
- "uom",
-]
-
-[[package]]
-name = "unitsnet-rs"
-version = "0.1.0"
-dependencies = [
- "approx",
- "bytemuck",
- "chrono",
- "defmt",
- "libm",
- "proptest",
- "schemars",
- "serde",
- "serde_json",
- "time",
-]
 
 [[package]]
 name = "uom"

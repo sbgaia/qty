@@ -37,7 +37,7 @@ adheres to [Semantic Versioning](https://semver.org/).
   (points included); `From`/`TryFrom` with the typed quantities; serde.
 - `Unit` trait (abbreviation and metadata), now the supertrait of
   `UnitEnum`: generic code calling `abbreviation()` through a `UnitEnum`
-  bound needs `Unit` in scope (`use unitsnet_rs::*` includes it).
+  bound needs `Unit` in scope (`use qty::*` includes it).
   `ParseError` is `#[non_exhaustive]`.
 - Unit expressions: quantities parse any equivalent spelling of their unit
   (`"3 kg*m/s^2"` as a `Force`, `"2 kN/m²"`, `"60 rev/min"`), checked by
@@ -60,7 +60,7 @@ adheres to [Semantic Versioning](https://semver.org/).
 - `Angle::wrap_unsigned` (`[0°, 360°)`) and `wrap_signed` (`(−180°, 180°]`),
   exact range guarantees, no `std` needed; `clamp` and `lerp` on float
   quantities (`lerp` works for temperatures too).
-- `serde_str`: `#[serde(with = "unitsnet_rs::serde_str")]` reads quantities,
+- `serde_str`: `#[serde(with = "qty::serde_str")]` reads quantities,
   `Fixed` counts and unit enums as text in any unit or spelling (`"30 s"`,
   `"2 minutes"`) and writes the base unit at full precision, exactly
   round-tripping; `serde_str::option` for optional fields.

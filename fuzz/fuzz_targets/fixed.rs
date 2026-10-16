@@ -5,14 +5,14 @@
 use core::cmp::Ordering;
 
 use libfuzzer_sys::fuzz_target;
-use unitsnet_rs::unit::{
+use qty::unit::{
     area::SquareMeter,
     duration::Millisecond,
     length::{Inch, Meter, Millimeter},
     speed::MeterPerSecond,
     temperature::{DegreeCelsius, DegreeFahrenheit, Kelvin, MillidegreeCelsius},
 };
-use unitsnet_rs::*;
+use qty::*;
 
 const MODES: [Rounding; 7] = [
     Rounding::Floor,

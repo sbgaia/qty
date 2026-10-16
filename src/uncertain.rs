@@ -14,7 +14,7 @@ use crate::{Float, FloatMath, ToFloat};
 /// math functions, and the uncertainty follows each operation.
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let distance = Length::from_meters(Uncertain::new(100.0, 0.5));
 /// let time = Duration::from_seconds(Uncertain::new(9.58, 0.01));

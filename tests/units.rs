@@ -10,8 +10,8 @@ const F32_TOL: f64 = 1e-6;
 
 /// Checks a `Fixed` unit marker: the float bridge, and that exact integer
 /// rescaling to and from the base unit agrees with float arithmetic.
-fn check_fixed<U: unitsnet_rs::FixedUnit>() {
-    use unitsnet_rs::{Fixed, Rounding};
+fn check_fixed<U: qty::FixedUnit>() {
+    use qty::{Fixed, Rounding};
     let f = Fixed::<U>::new(7);
     assert_eq!(f.to_f64(), U::to_quantity(7.0_f64));
     assert_eq!(
@@ -28,8 +28,8 @@ fn check_fixed<U: unitsnet_rs::FixedUnit>() {
 /// Checks that exact integer rescaling between a `Fixed` unit and its base
 /// unit agrees with float arithmetic. (Not for units related to the base by
 /// a power of π: that ratio is irrational and refused at compile time.)
-fn check_fixed_rescale<U: unitsnet_rs::FixedUnit>() {
-    use unitsnet_rs::{Fixed, Quantity, RoundError, Rounding};
+fn check_fixed_rescale<U: qty::FixedUnit>() {
+    use qty::{Fixed, Quantity, RoundError, Rounding};
     let f = Fixed::<U>::new(7);
 
     // Integer rescaling is exact; compare with floats where those are
@@ -70,8 +70,8 @@ fn assert_close(actual: f64, expected: f64, rel_tol: f64) {
 /// Every abbreviation of every unit that parses as a unit expression must
 /// mean the same as the generated conversion. Returns how many were checked.
 #[allow(dead_code)]
-fn check_unit_exprs<Q: unitsnet_rs::Quantity<Value = f64>>(new: fn(f64, Q::Unit) -> Q) -> usize {
-    use unitsnet_rs::{Unit, UnitEnum, UnitExpr};
+fn check_unit_exprs<Q: qty::Quantity<Value = f64>>(new: fn(f64, Q::Unit) -> Q) -> usize {
+    use qty::{Unit, UnitEnum, UnitExpr};
     let mut checked = 0;
     for &unit in <Q::Unit as UnitEnum>::ALL {
         if new(0.0, unit).as_base() != 0.0 {

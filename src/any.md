@@ -4,7 +4,7 @@ quantity of any kind (with `f64` storage), [`AnyUnit`] a unit of any kind and
 [`QuantityKind`] the kind itself.
 
 ```rust
-use unitsnet_rs::*;
+use qty::*;
 
 // The unit decides the kind.
 let q: AnyQuantity = "1.5 km".parse()?;

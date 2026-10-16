@@ -59,7 +59,7 @@ fi
 
 echo "Changed files: $(git status --porcelain -- src tests | wc -l)."
 echo
-if cargo test -q -p unitsnet-rs --all-features > "$log" 2>&1; then
+if cargo test -q -p qty --all-features > "$log" 2>&1; then
   echo "\`cargo test --all-features\` passes."
 else
   echo "**\`cargo test --all-features\` fails:**"

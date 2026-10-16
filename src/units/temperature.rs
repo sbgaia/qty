@@ -20,7 +20,7 @@ use crate::TemperatureDelta;
 /// difference is a [`TemperatureDelta`], which can be added back:
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let morning = Temperature::from_degrees_celsius(12.0);
 /// let noon = Temperature::from_degrees_celsius(20.0);
@@ -30,7 +30,7 @@ use crate::TemperatureDelta;
 /// ```
 ///
 /// ```compile_fail
-/// use unitsnet_rs::*;
+/// use qty::*;
 /// let t = Temperature::from_degrees_celsius(20.0);
 /// let _ = t + t; // error: add a TemperatureDelta instead
 /// ```

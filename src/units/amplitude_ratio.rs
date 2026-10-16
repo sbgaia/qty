@@ -20,7 +20,7 @@ use crate::Level;
 /// difference is a [`Level`], which can be added back:
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let morning = AmplitudeRatio::from_decibel_volts(12.0);
 /// let noon = AmplitudeRatio::from_decibel_volts(20.0);
@@ -30,7 +30,7 @@ use crate::Level;
 /// ```
 ///
 /// ```compile_fail
-/// use unitsnet_rs::*;
+/// use qty::*;
 /// let t = AmplitudeRatio::from_decibel_volts(20.0);
 /// let _ = t + t; // error: add a Level instead
 /// ```

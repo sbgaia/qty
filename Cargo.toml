@@ -5,18 +5,18 @@ exclude = ["fuzz"]
 resolver = "2"
 
 [package]
-name = "unitsnet-rs"
+name = "qty"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.82"
 description = "Zero-overhead, strongly-typed physical quantities and unit conversions, generated from UnitsNet"
 license = "MIT"
-repository = "https://github.com/sbgaia/unitsnet-rs"
-documentation = "https://docs.rs/unitsnet-rs"
+repository = "https://github.com/sbgaia/qty"
+documentation = "https://docs.rs/qty"
 readme = "README.md"
 # The generator, its data, benchmarks and CI are not needed by users.
 include = ["src/**/*.rs", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
-keywords = ["units", "measurement", "physics", "conversion", "no-std"]
+keywords = ["units", "measurement", "physics", "conversion", "unitsnet"]
 categories = ["science", "no-std", "no-std::no-alloc"]
 
 [package.metadata.docs.rs]

@@ -2,18 +2,18 @@
 //!
 //! Run with `cargo run --example config --features serde`.
 
+use qty::*;
 use serde::Deserialize;
-use unitsnet_rs::*;
 
 #[derive(Debug, Deserialize)]
 struct Config {
     /// Any unit and spelling: "30 s", "0.5 min", "2 minutes".
-    #[serde(with = "unitsnet_rs::serde_str")]
+    #[serde(with = "qty::serde_str")]
     timeout: Duration,
-    #[serde(with = "unitsnet_rs::serde_str")]
+    #[serde(with = "qty::serde_str")]
     max_speed: Speed,
     /// Optional; missing means no limit.
-    #[serde(with = "unitsnet_rs::serde_str::option", default)]
+    #[serde(with = "qty::serde_str::option", default)]
     max_load: Option<Mass>,
 }
 

@@ -1,4 +1,4 @@
-//! # unitsnet-rs
+//! # qty
 //!
 //! Strongly-typed physical quantities and unit conversions, generated from
 //! [UnitsNet](https://github.com/angularsen/UnitsNet) definition files, with
@@ -7,7 +7,7 @@
 //! ## Quick start
 //!
 //! ```rust
-//! use unitsnet_rs::*;
+//! use qty::*;
 //!
 //! let dist = Length::from_kilometers(10.0);
 //! let time = Duration::from_hours(0.5);
@@ -29,7 +29,7 @@
 //! see [`Quantity::BASE_UNIT`]), generic over the numeric storage type:
 //!
 //! ```rust
-//! # use unitsnet_rs::*;
+//! # use qty::*;
 //! assert_eq!(core::mem::size_of::<Length>(), 8);        // Length<f64>
 //! assert_eq!(core::mem::size_of::<Length<f32>>(), 4);
 //! assert_eq!(core::mem::size_of::<Length<i32>>(), 4);
@@ -64,7 +64,7 @@
 //! ### Different numeric types
 //!
 //! ```rust
-//! use unitsnet_rs::*;
+//! use qty::*;
 //!
 //! // f32 storage: half the memory, ~7 significant digits.
 //! let l: Length<f32> = Length::from_feet(3.0);
@@ -109,8 +109,8 @@
 //!
 //! ```rust
 //! use std::collections::HashMap;
-//! use unitsnet_rs::*;
-//! use unitsnet_rs::unit::length::{Meter, Millimeter};
+//! use qty::*;
+//! use qty::unit::length::{Meter, Millimeter};
 //!
 //! // Type aliases keep literals short.
 //! type Millimeters = Fixed<Millimeter>;
@@ -168,7 +168,7 @@
 //!
 //! ```rust
 //! use std::collections::BTreeMap;
-//! use unitsnet_rs::*;
+//! use qty::*;
 //!
 //! let mut v = vec![Length::from_meters(2.0), Length::from_inches(1.0)];
 //! v.sort_by(Length::total_cmp);
@@ -183,7 +183,7 @@
 //! ### Zero-copy slices and `const` values
 //!
 //! ```rust
-//! use unitsnet_rs::*;
+//! use qty::*;
 //!
 //! // `const_new` works in any unit, with the same result as `new`.
 //! const MARATHON: Length = Length::const_new(42.195, LengthUnit::Kilometer);
@@ -214,7 +214,7 @@
 //!   fifth of the time of `full`:
 //!
 //!   ```toml
-//!   unitsnet-rs = { version = "…", default-features = false, features = ["std", "electrical"] }
+//!   qty = { version = "…", default-features = false, features = ["std", "electrical"] }
 //!   ```
 //! * `std` (default) — math functions: `Area::sqrt() → Length`,
 //!   `Volume::cbrt() → Length`, `hypot`, and trigonometry on [`Angle`]
@@ -437,7 +437,7 @@ pub trait Quantity: Copy {
     /// A quantity from a value in `unit`, like the inherent `new`.
     ///
     /// ```rust
-    /// use unitsnet_rs::*;
+    /// use qty::*;
     ///
     /// fn in_kilo<Q: Quantity<Value = f64>>(value: f64, kilo: Q::Unit, base: Q::Unit) -> f64 {
     ///     Q::new(value, kilo).convert_to(base)
@@ -475,7 +475,7 @@ pub trait Unit: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + 'stat
 /// applying format flags to the number:
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let d = Length::from_meters(1234.5);
 /// assert_eq!(d.in_unit(LengthUnit::Kilometer).to_string(), "1.2345 km");
@@ -531,7 +531,7 @@ in_unit_fmt!(Display, LowerExp, UpperExp);
 /// # Examples
 ///
 /// ```rust
-/// use unitsnet_rs::*;
+/// use qty::*;
 ///
 /// let a = Length::from_meters(1.0);
 /// let b = Length::from_centimeters(100.0);
