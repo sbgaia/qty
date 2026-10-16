@@ -237,11 +237,9 @@ by_length.insert(Ordered(Length::from_meters(2.0)), "two"); // float keys
 | `mechanics`, `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`, `information`, `misc` | via `full` | The quantities of that group |
 | `serde` | | `Serialize`/`Deserialize` |
 | `approx` | | `assert_relative_eq!` and friends on quantities |
-| `num-traits` | | `Zero` |
 | `bytemuck` | | `Pod`/`Zeroable`/`TransparentWrapper` for zero-copy byte casts |
 | `defmt` | | `defmt::Format` for embedded logging |
 | `dynamic` | | Runtime quantities: `AnyQuantity`, `AnyUnit`, `QuantityKind` |
-| `glam`, `nalgebra` | | Conversions with their vectors |
 | `chrono`, `time` | | Conversions with their durations |
 | `schemars` | | JSON schemas for quantities, unit enums and `serde_str` fields |
 

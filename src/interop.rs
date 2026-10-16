@@ -1,7 +1,7 @@
 //! Conversions with other crates, each behind a feature of the same name.
 
 #[allow(unused_imports)]
-use crate::{Duration, Fixed, Quantity, RoundError, Vector2, Vector3};
+use crate::{Duration, Fixed, Quantity, RoundError};
 
 /// `secs + nanos·10⁻⁹` for a float number of seconds, with `0 ≤ nanos < 10⁹`
 /// rounded to the nearest nanosecond; `None` if not finite or beyond `i64`
@@ -129,62 +129,4 @@ mod time_impls {
             Ok(time::Duration::new(secs, nanos as i32))
         }
     }
-}
-
-// ── glam ──────────────────────────────────────────────────────────────────────
-
-#[cfg(feature = "glam")]
-macro_rules! glam_vectors {
-    ($($V:ident $G:ty, $t:ty;)*) => {$(
-        /// Components in the base unit.
-        impl<Q: Quantity<Value = $t>> From<$G> for $V<Q> {
-            #[inline]
-            fn from(v: $G) -> Self {
-                $V::from_base(v.to_array())
-            }
-        }
-        /// Components in the base unit.
-        impl<Q: Quantity<Value = $t>> From<$V<Q>> for $G {
-            #[inline]
-            fn from(v: $V<Q>) -> Self {
-                <$G>::from_array(v.as_base())
-            }
-        }
-    )*};
-}
-#[cfg(feature = "glam")]
-glam_vectors! {
-    Vector2 glam::DVec2, f64;
-    Vector3 glam::DVec3, f64;
-    Vector2 glam::Vec2, f32;
-    Vector3 glam::Vec3, f32;
-}
-
-// ── nalgebra ──────────────────────────────────────────────────────────────────
-
-#[cfg(feature = "nalgebra")]
-macro_rules! nalgebra_vectors {
-    ($($V:ident $N:ident, $t:ty;)*) => {$(
-        /// Components in the base unit.
-        impl<Q: Quantity<Value = $t>> From<nalgebra::$N<$t>> for $V<Q> {
-            #[inline]
-            fn from(v: nalgebra::$N<$t>) -> Self {
-                $V::from_base(v.into())
-            }
-        }
-        /// Components in the base unit.
-        impl<Q: Quantity<Value = $t>> From<$V<Q>> for nalgebra::$N<$t> {
-            #[inline]
-            fn from(v: $V<Q>) -> Self {
-                v.as_base().into()
-            }
-        }
-    )*};
-}
-#[cfg(feature = "nalgebra")]
-nalgebra_vectors! {
-    Vector2 Vector2, f64;
-    Vector3 Vector3, f64;
-    Vector2 Vector2, f32;
-    Vector3 Vector3, f32;
 }

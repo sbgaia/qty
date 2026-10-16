@@ -24,8 +24,7 @@ adheres to [Semantic Versioning](https://semver.org/).
 - Means: `Q::mean` for float quantities, points included (the mean of 20 °C
   and 30 °C is 25 °C), and `Fixed::mean`, summed exactly in `i128` and
   rounded once.
-- Integrations, each behind a feature of the same name: `glam` and
-  `nalgebra` (vectors to and from `Vector2`/`Vector3`), `chrono` and
+- Integrations, each behind a feature of the same name: `chrono` and
   `time` (durations, exactly through `Fixed<Nanosecond>`, negative ones
   included), `schemars` (JSON schemas for quantities and unit enums, and
   `serde_str::schema` for text fields).
@@ -116,7 +115,7 @@ adheres to [Semantic Versioning](https://semver.org/).
 - `to_f64()` / `to_f32()`, `cast()`, `const fn from_base/as_base`, zero-copy
   slice views, `+=`/`-=`/`*=`/`/=`/`%`, `Sum`, `abs/min/max`, `checked_*`.
 - **Cargo features:** `std` (default), `libm`, `serde`, `approx`,
-  `num-traits`, `bytemuck`, `defmt`, and quantity groups (`mechanics`,
+  `bytemuck`, `defmt`, and quantity groups (`mechanics`,
   `fluids`, `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
   `information`, `misc`; all enabled by the default `full`) — compiling only
   the core quantities takes about a fifth of the time.

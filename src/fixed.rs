@@ -1495,18 +1495,6 @@ unsafe impl<U: 'static, I: bytemuck::Pod> bytemuck::Pod for Fixed<U, I> {}
 #[cfg(feature = "bytemuck")]
 unsafe impl<U, I> bytemuck::TransparentWrapper<I> for Fixed<U, I> {}
 
-#[cfg(feature = "num-traits")]
-impl<U: AdditiveUnit, I: Integer + num_traits::Zero> num_traits::Zero for Fixed<U, I> {
-    #[inline]
-    fn zero() -> Self {
-        Self::new(I::zero())
-    }
-    #[inline]
-    fn is_zero(&self) -> bool {
-        self.count.is_zero()
-    }
-}
-
 #[cfg(feature = "defmt")]
 impl<U: FixedUnit, I: defmt::Format> defmt::Format for Fixed<U, I> {
     fn format(&self, f: defmt::Formatter<'_>) {

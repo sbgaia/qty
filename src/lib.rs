@@ -226,12 +226,9 @@
 //!   text with units instead (`"30 s"`, `"2 minutes"`).
 //! * `approx` — `AbsDiffEq`/`RelativeEq`/`UlpsEq`, so `assert_relative_eq!`
 //!   works on quantities.
-//! * `num-traits` — `Zero` for amount quantities and [`Fixed`].
 //! * `bytemuck` — `Pod`, `Zeroable` and `TransparentWrapper`, for zero-copy
 //!   casts between quantity buffers and bytes (GPU uploads, file I/O).
 //! * `defmt` — `defmt::Format`, for logging on embedded targets.
-//! * `glam`, `nalgebra` — conversions between [`Vector2`]/[`Vector3`] and
-//!   their vectors (`DVec3`, `nalgebra::Vector3<f64>`, … in base units).
 //! * `chrono`, `time` — conversions between [`Duration`] (and
 //!   `Fixed<Nanosecond>`, exactly) and their durations.
 //! * `schemars` — JSON schemas for quantities and unit enums, and
@@ -1227,18 +1224,6 @@ macro_rules! quantity_vector_ops {
             /// `const_new`: with an `f32` constant too, `Length::ZERO`
             /// would be ambiguous. Other storage types have `default()`.
             pub const ZERO: Self = Self(0.0);
-        }
-
-        #[cfg(feature = "num-traits")]
-        impl<T: num_traits::Zero> num_traits::Zero for $Q<T> {
-            #[inline]
-            fn zero() -> Self {
-                Self(T::zero())
-            }
-            #[inline]
-            fn is_zero(&self) -> bool {
-                self.0.is_zero()
-            }
         }
 
         #[cfg(any(feature = "std", feature = "libm"))]

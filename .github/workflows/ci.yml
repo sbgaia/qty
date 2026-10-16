@@ -71,7 +71,7 @@ jobs:
           targets: thumbv7em-none-eabihf
       - uses: Swatinem/rust-cache@v2
       # No `std` on this target: the math functions come from `libm`.
-      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm,approx,num-traits,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
+      - run: cargo build -p unitsnet-rs --no-default-features --features serde,libm,approx,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
       - run: cargo build -p unitsnet-rs --no-default-features --target thumbv7em-none-eabihf
 
   feature-groups:

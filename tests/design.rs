@@ -842,25 +842,6 @@ fn bytemuck_casts() {
     assert_eq!(counts[1].count(), 8);
 }
 
-#[cfg(feature = "num-traits")]
-#[test]
-fn num_traits_zero() {
-    use num_traits::Zero;
-    use unitsnet_rs::unit::length::Millimeter;
-    fn total<Q: Zero + Copy>(items: &[Q]) -> Q {
-        items.iter().fold(Q::zero(), |acc, &x| acc + x)
-    }
-    assert_eq!(
-        total(&[Length::from_meters(1.0), Length::from_meters(2.0)]),
-        Length::from_meters(3.0)
-    );
-    assert!(Fixed::<Millimeter>::zero().is_zero());
-    assert_eq!(
-        total(&[Fixed::<Millimeter>::new(4), Fixed::new(5)]),
-        Fixed::<Millimeter>::new(9)
-    );
-}
-
 #[cfg(feature = "defmt")]
 #[test]
 fn defmt_format_is_implemented() {
@@ -1614,32 +1595,6 @@ fn time_duration() {
     assert_eq!(
         Fixed::<Nanosecond, i64>::try_from(time::Duration::MAX),
         Err(RoundError::Overflow)
-    );
-}
-
-#[cfg(feature = "glam")]
-#[test]
-fn glam_vectors() {
-    let v: Vector3<Length> = glam::DVec3::new(1.0, 2.0, 3.0).into();
-    assert_eq!(v, Vector3::from_base([1.0, 2.0, 3.0]));
-    assert_eq!(glam::DVec3::from(v), glam::DVec3::new(1.0, 2.0, 3.0));
-    let w: Vector2<Speed<f32>> = glam::Vec2::new(0.5, -1.0).into();
-    assert_eq!(glam::Vec2::from(w), glam::Vec2::new(0.5, -1.0));
-}
-
-#[cfg(feature = "nalgebra")]
-#[test]
-fn nalgebra_vectors() {
-    let v: Vector3<Force> = nalgebra::Vector3::new(1.0, 2.0, 3.0).into();
-    assert_eq!(v, Vector3::from_base([1.0, 2.0, 3.0]));
-    assert_eq!(
-        nalgebra::Vector3::from(v),
-        nalgebra::Vector3::new(1.0, 2.0, 3.0)
-    );
-    let w: Vector2<Length<f32>> = nalgebra::Vector2::new(4.0f32, 5.0).into();
-    assert_eq!(
-        nalgebra::Vector2::from(w),
-        nalgebra::Vector2::new(4.0f32, 5.0)
     );
 }
 
