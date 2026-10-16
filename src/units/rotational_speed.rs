@@ -354,12 +354,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_radians_per_second`].
-    #[inline]
-    pub fn as_radian_per_second(self) -> T {
-        self.as_radians_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in NanoradiansPerSecond (`nrad/s`).
     #[inline]
     pub fn from_nanoradians_per_second(value: T) -> Self {
@@ -370,12 +364,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_nanoradians_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoradians_per_second`].
-    #[inline]
-    pub fn as_nanoradian_per_second(self) -> T {
-        self.as_nanoradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MicroradiansPerSecond (`µrad/s`).
@@ -390,12 +378,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microradians_per_second`].
-    #[inline]
-    pub fn as_microradian_per_second(self) -> T {
-        self.as_microradians_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in MilliradiansPerSecond (`mrad/s`).
     #[inline]
     pub fn from_milliradians_per_second(value: T) -> Self {
@@ -406,12 +388,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_milliradians_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliradians_per_second`].
-    #[inline]
-    pub fn as_milliradian_per_second(self) -> T {
-        self.as_milliradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in CentiradiansPerSecond (`crad/s`).
@@ -426,12 +402,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centiradians_per_second`].
-    #[inline]
-    pub fn as_centiradian_per_second(self) -> T {
-        self.as_centiradians_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in DeciradiansPerSecond (`drad/s`).
     #[inline]
     pub fn from_deciradians_per_second(value: T) -> Self {
@@ -442,12 +412,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_deciradians_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_deciradians_per_second`].
-    #[inline]
-    pub fn as_deciradian_per_second(self) -> T {
-        self.as_deciradians_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in DegreesPerSecond (`°/s`).
@@ -462,12 +426,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 / T::from_f64(0.017453292519943295)
     }
 
-    /// Alias for [`Self::as_degrees_per_second`].
-    #[inline]
-    pub fn as_degree_per_second(self) -> T {
-        self.as_degrees_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in NanodegreesPerSecond (`n°/s`).
     #[inline]
     pub fn from_nanodegrees_per_second(value: T) -> Self {
@@ -478,12 +436,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_nanodegrees_per_second(self) -> T {
         self.0 / T::from_f64(1.7453292519943295e-11)
-    }
-
-    /// Alias for [`Self::as_nanodegrees_per_second`].
-    #[inline]
-    pub fn as_nanodegree_per_second(self) -> T {
-        self.as_nanodegrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in MicrodegreesPerSecond (`µ°/s`).
@@ -498,12 +450,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 / T::from_f64(1.7453292519943295e-8)
     }
 
-    /// Alias for [`Self::as_microdegrees_per_second`].
-    #[inline]
-    pub fn as_microdegree_per_second(self) -> T {
-        self.as_microdegrees_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in MillidegreesPerSecond (`m°/s`).
     #[inline]
     pub fn from_millidegrees_per_second(value: T) -> Self {
@@ -514,12 +460,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_millidegrees_per_second(self) -> T {
         self.0 / T::from_f64(1.7453292519943296e-5)
-    }
-
-    /// Alias for [`Self::as_millidegrees_per_second`].
-    #[inline]
-    pub fn as_millidegree_per_second(self) -> T {
-        self.as_millidegrees_per_second()
     }
 
     /// Creates a [`RotationalSpeed`] from a value in DegreesPerMinute (`°/min`).
@@ -534,12 +474,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 / T::from_f64(0.0002908882086657216)
     }
 
-    /// Alias for [`Self::as_degrees_per_minute`].
-    #[inline]
-    pub fn as_degree_per_minute(self) -> T {
-        self.as_degrees_per_minute()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in RevolutionsPerSecond (`r/s`).
     #[inline]
     pub fn from_revolutions_per_second(value: T) -> Self {
@@ -552,12 +486,6 @@ impl<T: Float> RotationalSpeed<T> {
         self.0 / T::from_f64(6.283185307179586)
     }
 
-    /// Alias for [`Self::as_revolutions_per_second`].
-    #[inline]
-    pub fn as_revolution_per_second(self) -> T {
-        self.as_revolutions_per_second()
-    }
-
     /// Creates a [`RotationalSpeed`] from a value in RevolutionsPerMinute (`rpm`).
     #[inline]
     pub fn from_revolutions_per_minute(value: T) -> Self {
@@ -568,12 +496,6 @@ impl<T: Float> RotationalSpeed<T> {
     #[inline]
     pub fn as_revolutions_per_minute(self) -> T {
         self.0 / T::from_f64(0.10471975511965978)
-    }
-
-    /// Alias for [`Self::as_revolutions_per_minute`].
-    #[inline]
-    pub fn as_revolution_per_minute(self) -> T {
-        self.as_revolutions_per_minute()
     }
 }
 

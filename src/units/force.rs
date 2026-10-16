@@ -403,12 +403,6 @@ impl<T: Float> Force<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_dyne`].
-    #[inline]
-    pub fn as_dyn(self) -> T {
-        self.as_dyne()
-    }
-
     /// Creates a [`Force`] from a value in GramsForce (`gf`).
     #[inline]
     pub fn from_grams_force(value: T) -> Self {
@@ -419,12 +413,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_grams_force(self) -> T {
         self.0 / T::from_f64(0.00980665)
-    }
-
-    /// Alias for [`Self::as_grams_force`].
-    #[inline]
-    pub fn as_gram_force(self) -> T {
-        self.as_grams_force()
     }
 
     /// Creates a [`Force`] from a value in KilogramsForce (`kgf`).
@@ -439,12 +427,6 @@ impl<T: Float> Force<T> {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Alias for [`Self::as_kilograms_force`].
-    #[inline]
-    pub fn as_kilogram_force(self) -> T {
-        self.as_kilograms_force()
-    }
-
     /// Creates a [`Force`] from a value in TonnesForce (`tf`).
     #[inline]
     pub fn from_tonnes_force(value: T) -> Self {
@@ -455,12 +437,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_tonnes_force(self) -> T {
         self.0 / T::from_f64(9806.65)
-    }
-
-    /// Alias for [`Self::as_tonnes_force`].
-    #[inline]
-    pub fn as_tonne_force(self) -> T {
-        self.as_tonnes_force()
     }
 
     /// Creates a [`Force`] from a value in Newtons (`N`).
@@ -475,12 +451,6 @@ impl<T: Float> Force<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newtons`].
-    #[inline]
-    pub fn as_newton(self) -> T {
-        self.as_newtons()
-    }
-
     /// Creates a [`Force`] from a value in Micronewtons (`µN`).
     #[inline]
     pub fn from_micronewtons(value: T) -> Self {
@@ -491,12 +461,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_micronewtons(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micronewtons`].
-    #[inline]
-    pub fn as_micronewton(self) -> T {
-        self.as_micronewtons()
     }
 
     /// Creates a [`Force`] from a value in Millinewtons (`mN`).
@@ -511,12 +475,6 @@ impl<T: Float> Force<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millinewtons`].
-    #[inline]
-    pub fn as_millinewton(self) -> T {
-        self.as_millinewtons()
-    }
-
     /// Creates a [`Force`] from a value in Decanewtons (`daN`).
     #[inline]
     pub fn from_decanewtons(value: T) -> Self {
@@ -527,12 +485,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_decanewtons(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decanewtons`].
-    #[inline]
-    pub fn as_decanewton(self) -> T {
-        self.as_decanewtons()
     }
 
     /// Creates a [`Force`] from a value in Kilonewtons (`kN`).
@@ -547,12 +499,6 @@ impl<T: Float> Force<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilonewtons`].
-    #[inline]
-    pub fn as_kilonewton(self) -> T {
-        self.as_kilonewtons()
-    }
-
     /// Creates a [`Force`] from a value in Meganewtons (`MN`).
     #[inline]
     pub fn from_meganewtons(value: T) -> Self {
@@ -563,12 +509,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_meganewtons(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_meganewtons`].
-    #[inline]
-    pub fn as_meganewton(self) -> T {
-        self.as_meganewtons()
     }
 
     /// Creates a [`Force`] from a value in Kiloponds (`kp`).
@@ -583,12 +523,6 @@ impl<T: Float> Force<T> {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Alias for [`Self::as_kiloponds`].
-    #[inline]
-    pub fn as_kilopond(self) -> T {
-        self.as_kiloponds()
-    }
-
     /// Creates a [`Force`] from a value in Poundals (`pdl`).
     #[inline]
     pub fn from_poundals(value: T) -> Self {
@@ -599,12 +533,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_poundals(self) -> T {
         self.0 / T::from_f64(0.138254954376)
-    }
-
-    /// Alias for [`Self::as_poundals`].
-    #[inline]
-    pub fn as_poundal(self) -> T {
-        self.as_poundals()
     }
 
     /// Creates a [`Force`] from a value in PoundsForce (`lbf`).
@@ -619,12 +547,6 @@ impl<T: Float> Force<T> {
         self.0 / T::from_f64(4.4482216152605)
     }
 
-    /// Alias for [`Self::as_pounds_force`].
-    #[inline]
-    pub fn as_pound_force(self) -> T {
-        self.as_pounds_force()
-    }
-
     /// Creates a [`Force`] from a value in KilopoundsForce (`klbf`).
     #[inline]
     pub fn from_kilopounds_force(value: T) -> Self {
@@ -635,12 +557,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_kilopounds_force(self) -> T {
         self.0 / T::from_f64(4448.2216152605)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force`].
-    #[inline]
-    pub fn as_kilopound_force(self) -> T {
-        self.as_kilopounds_force()
     }
 
     /// Creates a [`Force`] from a value in OunceForce (`ozf`).
@@ -665,12 +581,6 @@ impl<T: Float> Force<T> {
     #[inline]
     pub fn as_short_tons_force(self) -> T {
         self.0 / T::from_f64(8896.443230521)
-    }
-
-    /// Alias for [`Self::as_short_tons_force`].
-    #[inline]
-    pub fn as_short_ton_force(self) -> T {
-        self.as_short_tons_force()
     }
 }
 

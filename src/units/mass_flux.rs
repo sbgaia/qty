@@ -346,12 +346,6 @@ impl<T: Float> MassFlux<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_second_per_square_meter`].
-    #[inline]
-    pub fn as_gram_per_second_per_square_meter(self) -> T {
-        self.as_grams_per_second_per_square_meter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_meter(value: T) -> Self {
@@ -362,12 +356,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_second_per_square_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilograms_per_second_per_square_meter`].
-    #[inline]
-    pub fn as_kilogram_per_second_per_square_meter(self) -> T {
-        self.as_kilograms_per_second_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
@@ -382,12 +370,6 @@ impl<T: Float> MassFlux<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_grams_per_second_per_square_centimeter`].
-    #[inline]
-    pub fn as_gram_per_second_per_square_centimeter(self) -> T {
-        self.as_grams_per_second_per_square_centimeter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_centimeter(value: T) -> Self {
@@ -398,12 +380,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_second_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_second_per_square_centimeter`].
-    #[inline]
-    pub fn as_kilogram_per_second_per_square_centimeter(self) -> T {
-        self.as_kilograms_per_second_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
@@ -418,12 +394,6 @@ impl<T: Float> MassFlux<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_second_per_square_millimeter`].
-    #[inline]
-    pub fn as_gram_per_second_per_square_millimeter(self) -> T {
-        self.as_grams_per_second_per_square_millimeter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
     #[inline]
     pub fn from_kilograms_per_second_per_square_millimeter(value: T) -> Self {
@@ -434,12 +404,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_second_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_second_per_square_millimeter`].
-    #[inline]
-    pub fn as_kilogram_per_second_per_square_millimeter(self) -> T {
-        self.as_kilograms_per_second_per_square_millimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
@@ -454,12 +418,6 @@ impl<T: Float> MassFlux<T> {
         self.0 * T::from_f64(3600000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_hour_per_square_meter`].
-    #[inline]
-    pub fn as_gram_per_hour_per_square_meter(self) -> T {
-        self.as_grams_per_hour_per_square_meter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_meter(value: T) -> Self {
@@ -470,12 +428,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_hour_per_square_meter(self) -> T {
         self.0 * T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_hour_per_square_meter`].
-    #[inline]
-    pub fn as_kilogram_per_hour_per_square_meter(self) -> T {
-        self.as_kilograms_per_hour_per_square_meter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
@@ -490,12 +442,6 @@ impl<T: Float> MassFlux<T> {
         self.0 * T::from_f64(360.0)
     }
 
-    /// Alias for [`Self::as_grams_per_hour_per_square_centimeter`].
-    #[inline]
-    pub fn as_gram_per_hour_per_square_centimeter(self) -> T {
-        self.as_grams_per_hour_per_square_centimeter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_centimeter(value: T) -> Self {
@@ -506,12 +452,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_hour_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(2.7777777777777777)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_hour_per_square_centimeter`].
-    #[inline]
-    pub fn as_kilogram_per_hour_per_square_centimeter(self) -> T {
-        self.as_kilograms_per_hour_per_square_centimeter()
     }
 
     /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
@@ -526,12 +466,6 @@ impl<T: Float> MassFlux<T> {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Alias for [`Self::as_grams_per_hour_per_square_millimeter`].
-    #[inline]
-    pub fn as_gram_per_hour_per_square_millimeter(self) -> T {
-        self.as_grams_per_hour_per_square_millimeter()
-    }
-
     /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
     #[inline]
     pub fn from_kilograms_per_hour_per_square_millimeter(value: T) -> Self {
@@ -542,12 +476,6 @@ impl<T: Float> MassFlux<T> {
     #[inline]
     pub fn as_kilograms_per_hour_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(277.77777777777777)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_hour_per_square_millimeter`].
-    #[inline]
-    pub fn as_kilogram_per_hour_per_square_millimeter(self) -> T {
-        self.as_kilograms_per_hour_per_square_millimeter()
     }
 }
 

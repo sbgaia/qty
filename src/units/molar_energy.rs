@@ -194,12 +194,6 @@ impl<T: Float> MolarEnergy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_mole`].
-    #[inline]
-    pub fn as_joule_per_mole(self) -> T {
-        self.as_joules_per_mole()
-    }
-
     /// Creates a [`MolarEnergy`] from a value in KilojoulesPerMole (`kJ/mol`).
     #[inline]
     pub fn from_kilojoules_per_mole(value: T) -> Self {
@@ -212,12 +206,6 @@ impl<T: Float> MolarEnergy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilojoules_per_mole`].
-    #[inline]
-    pub fn as_kilojoule_per_mole(self) -> T {
-        self.as_kilojoules_per_mole()
-    }
-
     /// Creates a [`MolarEnergy`] from a value in MegajoulesPerMole (`MJ/mol`).
     #[inline]
     pub fn from_megajoules_per_mole(value: T) -> Self {
@@ -228,12 +216,6 @@ impl<T: Float> MolarEnergy<T> {
     #[inline]
     pub fn as_megajoules_per_mole(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megajoules_per_mole`].
-    #[inline]
-    pub fn as_megajoule_per_mole(self) -> T {
-        self.as_megajoules_per_mole()
     }
 }
 

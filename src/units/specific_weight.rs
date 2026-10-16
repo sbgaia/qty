@@ -412,12 +412,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_newtons_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_newton_per_cubic_millimeter(self) -> T {
-        self.as_newtons_per_cubic_millimeter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicMillimeter (`kN/mm³`).
     #[inline]
     pub fn from_kilonewtons_per_cubic_millimeter(value: T) -> Self {
@@ -428,12 +422,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilonewtons_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_cubic_millimeter(self) -> T {
-        self.as_kilonewtons_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in NewtonsPerCubicCentimeter (`N/cm³`).
@@ -448,12 +436,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_newtons_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_newton_per_cubic_centimeter(self) -> T {
-        self.as_newtons_per_cubic_centimeter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicCentimeter (`kN/cm³`).
     #[inline]
     pub fn from_kilonewtons_per_cubic_centimeter(value: T) -> Self {
@@ -464,12 +446,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilonewtons_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_cubic_centimeter(self) -> T {
-        self.as_kilonewtons_per_cubic_centimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in NewtonsPerCubicMeter (`N/m³`).
@@ -484,12 +460,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newtons_per_cubic_meter`].
-    #[inline]
-    pub fn as_newton_per_cubic_meter(self) -> T {
-        self.as_newtons_per_cubic_meter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilonewtonsPerCubicMeter (`kN/m³`).
     #[inline]
     pub fn from_kilonewtons_per_cubic_meter(value: T) -> Self {
@@ -500,12 +470,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilonewtons_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilonewton_per_cubic_meter(self) -> T {
-        self.as_kilonewtons_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in MeganewtonsPerCubicMeter (`MN/m³`).
@@ -520,12 +484,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_meganewtons_per_cubic_meter`].
-    #[inline]
-    pub fn as_meganewton_per_cubic_meter(self) -> T {
-        self.as_meganewtons_per_cubic_meter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicMillimeter (`kgf/mm³`).
     #[inline]
     pub fn from_kilograms_force_per_cubic_millimeter(value: T) -> Self {
@@ -536,12 +494,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilograms_force_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(9.80665e9)
-    }
-
-    /// Alias for [`Self::as_kilograms_force_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_cubic_millimeter(self) -> T {
-        self.as_kilograms_force_per_cubic_millimeter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicCentimeter (`kgf/cm³`).
@@ -556,12 +508,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(9806650.0)
     }
 
-    /// Alias for [`Self::as_kilograms_force_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_cubic_centimeter(self) -> T {
-        self.as_kilograms_force_per_cubic_centimeter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilogramsForcePerCubicMeter (`kgf/m³`).
     #[inline]
     pub fn from_kilograms_force_per_cubic_meter(value: T) -> Self {
@@ -572,12 +518,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilograms_force_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(9.80665)
-    }
-
-    /// Alias for [`Self::as_kilograms_force_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilogram_force_per_cubic_meter(self) -> T {
-        self.as_kilograms_force_per_cubic_meter()
     }
 
     /// Creates a [`SpecificWeight`] from a value in PoundsForcePerCubicInch (`lbf/in³`).
@@ -592,12 +532,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(271447.1375263134)
     }
 
-    /// Alias for [`Self::as_pounds_force_per_cubic_inch`].
-    #[inline]
-    pub fn as_pound_force_per_cubic_inch(self) -> T {
-        self.as_pounds_force_per_cubic_inch()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilopoundsForcePerCubicInch (`klbf/in³`).
     #[inline]
     pub fn from_kilopounds_force_per_cubic_inch(value: T) -> Self {
@@ -608,12 +542,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilopounds_force_per_cubic_inch(self) -> T {
         self.0 / T::from_f64(2.714471375263134e8)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force_per_cubic_inch`].
-    #[inline]
-    pub fn as_kilopound_force_per_cubic_inch(self) -> T {
-        self.as_kilopounds_force_per_cubic_inch()
     }
 
     /// Creates a [`SpecificWeight`] from a value in PoundsForcePerCubicFoot (`lbf/ft³`).
@@ -628,12 +556,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(157.0874638462462)
     }
 
-    /// Alias for [`Self::as_pounds_force_per_cubic_foot`].
-    #[inline]
-    pub fn as_pound_force_per_cubic_foot(self) -> T {
-        self.as_pounds_force_per_cubic_foot()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in KilopoundsForcePerCubicFoot (`klbf/ft³`).
     #[inline]
     pub fn from_kilopounds_force_per_cubic_foot(value: T) -> Self {
@@ -644,12 +566,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_kilopounds_force_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(157087.46384624622)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force_per_cubic_foot`].
-    #[inline]
-    pub fn as_kilopound_force_per_cubic_foot(self) -> T {
-        self.as_kilopounds_force_per_cubic_foot()
     }
 
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicMillimeter (`tf/mm³`).
@@ -664,12 +580,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(9.80665e12)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_cubic_millimeter(self) -> T {
-        self.as_tonnes_force_per_cubic_millimeter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicCentimeter (`tf/cm³`).
     #[inline]
     pub fn from_tonnes_force_per_cubic_centimeter(value: T) -> Self {
@@ -682,12 +592,6 @@ impl<T: Float> SpecificWeight<T> {
         self.0 / T::from_f64(9.80665e9)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_cubic_centimeter(self) -> T {
-        self.as_tonnes_force_per_cubic_centimeter()
-    }
-
     /// Creates a [`SpecificWeight`] from a value in TonnesForcePerCubicMeter (`tf/m³`).
     #[inline]
     pub fn from_tonnes_force_per_cubic_meter(value: T) -> Self {
@@ -698,12 +602,6 @@ impl<T: Float> SpecificWeight<T> {
     #[inline]
     pub fn as_tonnes_force_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(9806.65)
-    }
-
-    /// Alias for [`Self::as_tonnes_force_per_cubic_meter`].
-    #[inline]
-    pub fn as_tonne_force_per_cubic_meter(self) -> T {
-        self.as_tonnes_force_per_cubic_meter()
     }
 }
 

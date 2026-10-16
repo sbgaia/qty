@@ -143,12 +143,6 @@ impl<T: Float> Permittivity<T> {
     pub fn as_farads_per_meter(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_farads_per_meter`].
-    #[inline]
-    pub fn as_farad_per_meter(self) -> T {
-        self.as_farads_per_meter()
-    }
 }
 
 impl Permittivity<f64> {

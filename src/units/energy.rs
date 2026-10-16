@@ -762,12 +762,6 @@ impl<T: Float> Energy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules`].
-    #[inline]
-    pub fn as_joule(self) -> T {
-        self.as_joules()
-    }
-
     /// Creates a [`Energy`] from a value in Nanojoules (`nJ`).
     #[inline]
     pub fn from_nanojoules(value: T) -> Self {
@@ -778,12 +772,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_nanojoules(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanojoules`].
-    #[inline]
-    pub fn as_nanojoule(self) -> T {
-        self.as_nanojoules()
     }
 
     /// Creates a [`Energy`] from a value in Microjoules (`µJ`).
@@ -798,12 +786,6 @@ impl<T: Float> Energy<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microjoules`].
-    #[inline]
-    pub fn as_microjoule(self) -> T {
-        self.as_microjoules()
-    }
-
     /// Creates a [`Energy`] from a value in Millijoules (`mJ`).
     #[inline]
     pub fn from_millijoules(value: T) -> Self {
@@ -814,12 +796,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_millijoules(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millijoules`].
-    #[inline]
-    pub fn as_millijoule(self) -> T {
-        self.as_millijoules()
     }
 
     /// Creates a [`Energy`] from a value in Kilojoules (`kJ`).
@@ -834,12 +810,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilojoules`].
-    #[inline]
-    pub fn as_kilojoule(self) -> T {
-        self.as_kilojoules()
-    }
-
     /// Creates a [`Energy`] from a value in Megajoules (`MJ`).
     #[inline]
     pub fn from_megajoules(value: T) -> Self {
@@ -850,12 +820,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_megajoules(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megajoules`].
-    #[inline]
-    pub fn as_megajoule(self) -> T {
-        self.as_megajoules()
     }
 
     /// Creates a [`Energy`] from a value in Gigajoules (`GJ`).
@@ -870,12 +834,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigajoules`].
-    #[inline]
-    pub fn as_gigajoule(self) -> T {
-        self.as_gigajoules()
-    }
-
     /// Creates a [`Energy`] from a value in Terajoules (`TJ`).
     #[inline]
     pub fn from_terajoules(value: T) -> Self {
@@ -886,12 +844,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_terajoules(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_terajoules`].
-    #[inline]
-    pub fn as_terajoule(self) -> T {
-        self.as_terajoules()
     }
 
     /// Creates a [`Energy`] from a value in Petajoules (`PJ`).
@@ -906,12 +858,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Alias for [`Self::as_petajoules`].
-    #[inline]
-    pub fn as_petajoule(self) -> T {
-        self.as_petajoules()
-    }
-
     /// Creates a [`Energy`] from a value in Calories (`cal`).
     #[inline]
     pub fn from_calories(value: T) -> Self {
@@ -922,12 +868,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_calories(self) -> T {
         self.0 / T::from_f64(4.184)
-    }
-
-    /// Alias for [`Self::as_calories`].
-    #[inline]
-    pub fn as_calorie(self) -> T {
-        self.as_calories()
     }
 
     /// Creates a [`Energy`] from a value in Kilocalories (`kcal`).
@@ -942,12 +882,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(4184.0)
     }
 
-    /// Alias for [`Self::as_kilocalories`].
-    #[inline]
-    pub fn as_kilocalorie(self) -> T {
-        self.as_kilocalories()
-    }
-
     /// Creates a [`Energy`] from a value in Megacalories (`Mcal`).
     #[inline]
     pub fn from_megacalories(value: T) -> Self {
@@ -958,12 +892,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_megacalories(self) -> T {
         self.0 / T::from_f64(4184000.0)
-    }
-
-    /// Alias for [`Self::as_megacalories`].
-    #[inline]
-    pub fn as_megacalorie(self) -> T {
-        self.as_megacalories()
     }
 
     /// Creates a [`Energy`] from a value in BritishThermalUnits (`BTU`).
@@ -978,12 +906,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1055.05585262)
     }
 
-    /// Alias for [`Self::as_british_thermal_units`].
-    #[inline]
-    pub fn as_british_thermal_unit(self) -> T {
-        self.as_british_thermal_units()
-    }
-
     /// Creates a [`Energy`] from a value in KilobritishThermalUnits (`kBTU`).
     #[inline]
     pub fn from_kilobritish_thermal_units(value: T) -> Self {
@@ -994,12 +916,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_kilobritish_thermal_units(self) -> T {
         self.0 / T::from_f64(1055055.85262)
-    }
-
-    /// Alias for [`Self::as_kilobritish_thermal_units`].
-    #[inline]
-    pub fn as_kilobritish_thermal_unit(self) -> T {
-        self.as_kilobritish_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in MegabritishThermalUnits (`MBTU`).
@@ -1014,12 +930,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.05505585262e9)
     }
 
-    /// Alias for [`Self::as_megabritish_thermal_units`].
-    #[inline]
-    pub fn as_megabritish_thermal_unit(self) -> T {
-        self.as_megabritish_thermal_units()
-    }
-
     /// Creates a [`Energy`] from a value in GigabritishThermalUnits (`GBTU`).
     #[inline]
     pub fn from_gigabritish_thermal_units(value: T) -> Self {
@@ -1030,12 +940,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_gigabritish_thermal_units(self) -> T {
         self.0 / T::from_f64(1.05505585262e12)
-    }
-
-    /// Alias for [`Self::as_gigabritish_thermal_units`].
-    #[inline]
-    pub fn as_gigabritish_thermal_unit(self) -> T {
-        self.as_gigabritish_thermal_units()
     }
 
     /// Creates a [`Energy`] from a value in ElectronVolts (`eV`).
@@ -1050,12 +954,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.602176634e-19)
     }
 
-    /// Alias for [`Self::as_electron_volts`].
-    #[inline]
-    pub fn as_electron_volt(self) -> T {
-        self.as_electron_volts()
-    }
-
     /// Creates a [`Energy`] from a value in KiloelectronVolts (`keV`).
     #[inline]
     pub fn from_kiloelectron_volts(value: T) -> Self {
@@ -1066,12 +964,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_kiloelectron_volts(self) -> T {
         self.0 / T::from_f64(1.602176634e-16)
-    }
-
-    /// Alias for [`Self::as_kiloelectron_volts`].
-    #[inline]
-    pub fn as_kiloelectron_volt(self) -> T {
-        self.as_kiloelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in MegaelectronVolts (`MeV`).
@@ -1086,12 +978,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.602176634e-13)
     }
 
-    /// Alias for [`Self::as_megaelectron_volts`].
-    #[inline]
-    pub fn as_megaelectron_volt(self) -> T {
-        self.as_megaelectron_volts()
-    }
-
     /// Creates a [`Energy`] from a value in GigaelectronVolts (`GeV`).
     #[inline]
     pub fn from_gigaelectron_volts(value: T) -> Self {
@@ -1102,12 +988,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_gigaelectron_volts(self) -> T {
         self.0 / T::from_f64(1.602176634e-10)
-    }
-
-    /// Alias for [`Self::as_gigaelectron_volts`].
-    #[inline]
-    pub fn as_gigaelectron_volt(self) -> T {
-        self.as_gigaelectron_volts()
     }
 
     /// Creates a [`Energy`] from a value in TeraelectronVolts (`TeV`).
@@ -1122,12 +1002,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.602176634e-7)
     }
 
-    /// Alias for [`Self::as_teraelectron_volts`].
-    #[inline]
-    pub fn as_teraelectron_volt(self) -> T {
-        self.as_teraelectron_volts()
-    }
-
     /// Creates a [`Energy`] from a value in FootPounds (`ft·lb`).
     #[inline]
     pub fn from_foot_pounds(value: T) -> Self {
@@ -1138,12 +1012,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_foot_pounds(self) -> T {
         self.0 / T::from_f64(1.3558179483314003)
-    }
-
-    /// Alias for [`Self::as_foot_pounds`].
-    #[inline]
-    pub fn as_foot_pound(self) -> T {
-        self.as_foot_pounds()
     }
 
     /// Creates a [`Energy`] from a value in Ergs (`erg`).
@@ -1158,12 +1026,6 @@ impl<T: Float> Energy<T> {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Alias for [`Self::as_ergs`].
-    #[inline]
-    pub fn as_erg(self) -> T {
-        self.as_ergs()
-    }
-
     /// Creates a [`Energy`] from a value in WattHours (`Wh`).
     #[inline]
     pub fn from_watt_hours(value: T) -> Self {
@@ -1174,12 +1036,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_watt_hours(self) -> T {
         self.0 / T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_watt_hours`].
-    #[inline]
-    pub fn as_watt_hour(self) -> T {
-        self.as_watt_hours()
     }
 
     /// Creates a [`Energy`] from a value in KilowattHours (`kWh`).
@@ -1194,12 +1050,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(3600000.0)
     }
 
-    /// Alias for [`Self::as_kilowatt_hours`].
-    #[inline]
-    pub fn as_kilowatt_hour(self) -> T {
-        self.as_kilowatt_hours()
-    }
-
     /// Creates a [`Energy`] from a value in MegawattHours (`MWh`).
     #[inline]
     pub fn from_megawatt_hours(value: T) -> Self {
@@ -1210,12 +1060,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_megawatt_hours(self) -> T {
         self.0 / T::from_f64(3.6e9)
-    }
-
-    /// Alias for [`Self::as_megawatt_hours`].
-    #[inline]
-    pub fn as_megawatt_hour(self) -> T {
-        self.as_megawatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in GigawattHours (`GWh`).
@@ -1230,12 +1074,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(3.6e12)
     }
 
-    /// Alias for [`Self::as_gigawatt_hours`].
-    #[inline]
-    pub fn as_gigawatt_hour(self) -> T {
-        self.as_gigawatt_hours()
-    }
-
     /// Creates a [`Energy`] from a value in TerawattHours (`TWh`).
     #[inline]
     pub fn from_terawatt_hours(value: T) -> Self {
@@ -1246,12 +1084,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_terawatt_hours(self) -> T {
         self.0 / T::from_f64(3.6e15)
-    }
-
-    /// Alias for [`Self::as_terawatt_hours`].
-    #[inline]
-    pub fn as_terawatt_hour(self) -> T {
-        self.as_terawatt_hours()
     }
 
     /// Creates a [`Energy`] from a value in WattDays (`Wd`).
@@ -1266,12 +1098,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(86400.0)
     }
 
-    /// Alias for [`Self::as_watt_days`].
-    #[inline]
-    pub fn as_watt_day(self) -> T {
-        self.as_watt_days()
-    }
-
     /// Creates a [`Energy`] from a value in KilowattDays (`kWd`).
     #[inline]
     pub fn from_kilowatt_days(value: T) -> Self {
@@ -1282,12 +1108,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_kilowatt_days(self) -> T {
         self.0 / T::from_f64(8.64e7)
-    }
-
-    /// Alias for [`Self::as_kilowatt_days`].
-    #[inline]
-    pub fn as_kilowatt_day(self) -> T {
-        self.as_kilowatt_days()
     }
 
     /// Creates a [`Energy`] from a value in MegawattDays (`MWd`).
@@ -1302,12 +1122,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(8.64e10)
     }
 
-    /// Alias for [`Self::as_megawatt_days`].
-    #[inline]
-    pub fn as_megawatt_day(self) -> T {
-        self.as_megawatt_days()
-    }
-
     /// Creates a [`Energy`] from a value in GigawattDays (`GWd`).
     #[inline]
     pub fn from_gigawatt_days(value: T) -> Self {
@@ -1318,12 +1132,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_gigawatt_days(self) -> T {
         self.0 / T::from_f64(8.64e13)
-    }
-
-    /// Alias for [`Self::as_gigawatt_days`].
-    #[inline]
-    pub fn as_gigawatt_day(self) -> T {
-        self.as_gigawatt_days()
     }
 
     /// Creates a [`Energy`] from a value in TerawattDays (`TWd`).
@@ -1338,12 +1146,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(8.64e16)
     }
 
-    /// Alias for [`Self::as_terawatt_days`].
-    #[inline]
-    pub fn as_terawatt_day(self) -> T {
-        self.as_terawatt_days()
-    }
-
     /// Creates a [`Energy`] from a value in ThermsEc (`th (E.C.)`).
     #[inline]
     pub fn from_therms_ec(value: T) -> Self {
@@ -1354,12 +1156,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_therms_ec(self) -> T {
         self.0 / T::from_f64(1.05505585262e8)
-    }
-
-    /// Alias for [`Self::as_therms_ec`].
-    #[inline]
-    pub fn as_therm_ec(self) -> T {
-        self.as_therms_ec()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsEc (`dath (E.C.)`).
@@ -1374,12 +1170,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.05505585262e9)
     }
 
-    /// Alias for [`Self::as_decatherms_ec`].
-    #[inline]
-    pub fn as_decatherm_ec(self) -> T {
-        self.as_decatherms_ec()
-    }
-
     /// Creates a [`Energy`] from a value in ThermsUs (`th (U.S.)`).
     #[inline]
     pub fn from_therms_us(value: T) -> Self {
@@ -1390,12 +1180,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_therms_us(self) -> T {
         self.0 / T::from_f64(1.054804e8)
-    }
-
-    /// Alias for [`Self::as_therms_us`].
-    #[inline]
-    pub fn as_therm_us(self) -> T {
-        self.as_therms_us()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsUs (`dath (U.S.)`).
@@ -1410,12 +1194,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.054804e9)
     }
 
-    /// Alias for [`Self::as_decatherms_us`].
-    #[inline]
-    pub fn as_decatherm_us(self) -> T {
-        self.as_decatherms_us()
-    }
-
     /// Creates a [`Energy`] from a value in ThermsImperial (`th (imp.)`).
     #[inline]
     pub fn from_therms_imperial(value: T) -> Self {
@@ -1426,12 +1204,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_therms_imperial(self) -> T {
         self.0 / T::from_f64(1.05505585257348e8)
-    }
-
-    /// Alias for [`Self::as_therms_imperial`].
-    #[inline]
-    pub fn as_therm_imperial(self) -> T {
-        self.as_therms_imperial()
     }
 
     /// Creates a [`Energy`] from a value in DecathermsImperial (`dath (imp.)`).
@@ -1446,12 +1218,6 @@ impl<T: Float> Energy<T> {
         self.0 / T::from_f64(1.05505585257348e9)
     }
 
-    /// Alias for [`Self::as_decatherms_imperial`].
-    #[inline]
-    pub fn as_decatherm_imperial(self) -> T {
-        self.as_decatherms_imperial()
-    }
-
     /// Creates a [`Energy`] from a value in HorsepowerHours (`hp·h`).
     #[inline]
     pub fn from_horsepower_hours(value: T) -> Self {
@@ -1462,12 +1228,6 @@ impl<T: Float> Energy<T> {
     #[inline]
     pub fn as_horsepower_hours(self) -> T {
         self.0 / T::from_f64(2684519.537456106)
-    }
-
-    /// Alias for [`Self::as_horsepower_hours`].
-    #[inline]
-    pub fn as_horsepower_hour(self) -> T {
-        self.as_horsepower_hours()
     }
 }
 

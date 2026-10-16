@@ -283,12 +283,6 @@ impl<T: Float> MolarFlow<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_moles_per_second`].
-    #[inline]
-    pub fn as_mole_per_second(self) -> T {
-        self.as_moles_per_second()
-    }
-
     /// Creates a [`MolarFlow`] from a value in KilomolesPerSecond (`kmol/s`).
     #[inline]
     pub fn from_kilomoles_per_second(value: T) -> Self {
@@ -299,12 +293,6 @@ impl<T: Float> MolarFlow<T> {
     #[inline]
     pub fn as_kilomoles_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilomoles_per_second`].
-    #[inline]
-    pub fn as_kilomole_per_second(self) -> T {
-        self.as_kilomoles_per_second()
     }
 
     /// Creates a [`MolarFlow`] from a value in MolesPerMinute (`mol/min`).
@@ -319,12 +307,6 @@ impl<T: Float> MolarFlow<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_moles_per_minute`].
-    #[inline]
-    pub fn as_mole_per_minute(self) -> T {
-        self.as_moles_per_minute()
-    }
-
     /// Creates a [`MolarFlow`] from a value in KilomolesPerMinute (`kmol/min`).
     #[inline]
     pub fn from_kilomoles_per_minute(value: T) -> Self {
@@ -335,12 +317,6 @@ impl<T: Float> MolarFlow<T> {
     #[inline]
     pub fn as_kilomoles_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
-    }
-
-    /// Alias for [`Self::as_kilomoles_per_minute`].
-    #[inline]
-    pub fn as_kilomole_per_minute(self) -> T {
-        self.as_kilomoles_per_minute()
     }
 
     /// Creates a [`MolarFlow`] from a value in MolesPerHour (`mol/h`).
@@ -355,12 +331,6 @@ impl<T: Float> MolarFlow<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_moles_per_hour`].
-    #[inline]
-    pub fn as_mole_per_hour(self) -> T {
-        self.as_moles_per_hour()
-    }
-
     /// Creates a [`MolarFlow`] from a value in KilomolesPerHour (`kmol/h`).
     #[inline]
     pub fn from_kilomoles_per_hour(value: T) -> Self {
@@ -371,12 +341,6 @@ impl<T: Float> MolarFlow<T> {
     #[inline]
     pub fn as_kilomoles_per_hour(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
-    }
-
-    /// Alias for [`Self::as_kilomoles_per_hour`].
-    #[inline]
-    pub fn as_kilomole_per_hour(self) -> T {
-        self.as_kilomoles_per_hour()
     }
 
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerSecond (`lbmol/s`).
@@ -391,12 +355,6 @@ impl<T: Float> MolarFlow<T> {
         self.0 / T::from_f64(453.59237)
     }
 
-    /// Alias for [`Self::as_pound_moles_per_second`].
-    #[inline]
-    pub fn as_pound_mole_per_second(self) -> T {
-        self.as_pound_moles_per_second()
-    }
-
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerMinute (`lbmol/min`).
     #[inline]
     pub fn from_pound_moles_per_minute(value: T) -> Self {
@@ -409,12 +367,6 @@ impl<T: Float> MolarFlow<T> {
         self.0 / T::from_f64(7.559872833333333)
     }
 
-    /// Alias for [`Self::as_pound_moles_per_minute`].
-    #[inline]
-    pub fn as_pound_mole_per_minute(self) -> T {
-        self.as_pound_moles_per_minute()
-    }
-
     /// Creates a [`MolarFlow`] from a value in PoundMolesPerHour (`lbmol/h`).
     #[inline]
     pub fn from_pound_moles_per_hour(value: T) -> Self {
@@ -425,12 +377,6 @@ impl<T: Float> MolarFlow<T> {
     #[inline]
     pub fn as_pound_moles_per_hour(self) -> T {
         self.0 / T::from_f64(0.12599788055555555)
-    }
-
-    /// Alias for [`Self::as_pound_moles_per_hour`].
-    #[inline]
-    pub fn as_pound_mole_per_hour(self) -> T {
-        self.as_pound_moles_per_hour()
     }
 }
 

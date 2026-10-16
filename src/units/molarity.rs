@@ -314,12 +314,6 @@ impl<T: Float> Molarity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_moles_per_cubic_meter`].
-    #[inline]
-    pub fn as_mole_per_cubic_meter(self) -> T {
-        self.as_moles_per_cubic_meter()
-    }
-
     /// Creates a [`Molarity`] from a value in KilomolesPerCubicMeter (`kmol/m³`).
     #[inline]
     pub fn from_kilomoles_per_cubic_meter(value: T) -> Self {
@@ -330,12 +324,6 @@ impl<T: Float> Molarity<T> {
     #[inline]
     pub fn as_kilomoles_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilomoles_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilomole_per_cubic_meter(self) -> T {
-        self.as_kilomoles_per_cubic_meter()
     }
 
     /// Creates a [`Molarity`] from a value in MolesPerLiter (`mol/l`).
@@ -350,12 +338,6 @@ impl<T: Float> Molarity<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_moles_per_liter`].
-    #[inline]
-    pub fn as_mole_per_liter(self) -> T {
-        self.as_moles_per_liter()
-    }
-
     /// Creates a [`Molarity`] from a value in FemtomolesPerLiter (`fmol/l`).
     #[inline]
     pub fn from_femtomoles_per_liter(value: T) -> Self {
@@ -366,12 +348,6 @@ impl<T: Float> Molarity<T> {
     #[inline]
     pub fn as_femtomoles_per_liter(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_femtomoles_per_liter`].
-    #[inline]
-    pub fn as_femtomole_per_liter(self) -> T {
-        self.as_femtomoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in PicomolesPerLiter (`pmol/l`).
@@ -386,12 +362,6 @@ impl<T: Float> Molarity<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_picomoles_per_liter`].
-    #[inline]
-    pub fn as_picomole_per_liter(self) -> T {
-        self.as_picomoles_per_liter()
-    }
-
     /// Creates a [`Molarity`] from a value in NanomolesPerLiter (`nmol/l`).
     #[inline]
     pub fn from_nanomoles_per_liter(value: T) -> Self {
@@ -402,12 +372,6 @@ impl<T: Float> Molarity<T> {
     #[inline]
     pub fn as_nanomoles_per_liter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_nanomoles_per_liter`].
-    #[inline]
-    pub fn as_nanomole_per_liter(self) -> T {
-        self.as_nanomoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in MicromolesPerLiter (`µmol/l`).
@@ -422,12 +386,6 @@ impl<T: Float> Molarity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_micromoles_per_liter`].
-    #[inline]
-    pub fn as_micromole_per_liter(self) -> T {
-        self.as_micromoles_per_liter()
-    }
-
     /// Creates a [`Molarity`] from a value in MillimolesPerLiter (`mmol/l`).
     #[inline]
     pub fn from_millimoles_per_liter(value: T) -> Self {
@@ -438,12 +396,6 @@ impl<T: Float> Molarity<T> {
     #[inline]
     pub fn as_millimoles_per_liter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_millimoles_per_liter`].
-    #[inline]
-    pub fn as_millimole_per_liter(self) -> T {
-        self.as_millimoles_per_liter()
     }
 
     /// Creates a [`Molarity`] from a value in CentimolesPerLiter (`cmol/l`).
@@ -458,12 +410,6 @@ impl<T: Float> Molarity<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centimoles_per_liter`].
-    #[inline]
-    pub fn as_centimole_per_liter(self) -> T {
-        self.as_centimoles_per_liter()
-    }
-
     /// Creates a [`Molarity`] from a value in DecimolesPerLiter (`dmol/l`).
     #[inline]
     pub fn from_decimoles_per_liter(value: T) -> Self {
@@ -476,12 +422,6 @@ impl<T: Float> Molarity<T> {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decimoles_per_liter`].
-    #[inline]
-    pub fn as_decimole_per_liter(self) -> T {
-        self.as_decimoles_per_liter()
-    }
-
     /// Creates a [`Molarity`] from a value in PoundMolesPerCubicFoot (`lbmol/ft³`).
     #[inline]
     pub fn from_pound_moles_per_cubic_foot(value: T) -> Self {
@@ -492,12 +432,6 @@ impl<T: Float> Molarity<T> {
     #[inline]
     pub fn as_pound_moles_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(16018.46337396014)
-    }
-
-    /// Alias for [`Self::as_pound_moles_per_cubic_foot`].
-    #[inline]
-    pub fn as_pound_mole_per_cubic_foot(self) -> T {
-        self.as_pound_moles_per_cubic_foot()
     }
 }
 

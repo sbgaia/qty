@@ -293,12 +293,6 @@ impl<T: Float> ReciprocalLength<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_inverse_meters`].
-    #[inline]
-    pub fn as_inverse_meter(self) -> T {
-        self.as_inverse_meters()
-    }
-
     /// Creates a [`ReciprocalLength`] from a value in InverseCentimeters (`cm⁻¹`).
     #[inline]
     pub fn from_inverse_centimeters(value: T) -> Self {
@@ -309,12 +303,6 @@ impl<T: Float> ReciprocalLength<T> {
     #[inline]
     pub fn as_inverse_centimeters(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_inverse_centimeters`].
-    #[inline]
-    pub fn as_inverse_centimeter(self) -> T {
-        self.as_inverse_centimeters()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMillimeters (`mm⁻¹`).
@@ -329,12 +317,6 @@ impl<T: Float> ReciprocalLength<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_inverse_millimeters`].
-    #[inline]
-    pub fn as_inverse_millimeter(self) -> T {
-        self.as_inverse_millimeters()
-    }
-
     /// Creates a [`ReciprocalLength`] from a value in InverseMiles (`mi⁻¹`).
     #[inline]
     pub fn from_inverse_miles(value: T) -> Self {
@@ -345,12 +327,6 @@ impl<T: Float> ReciprocalLength<T> {
     #[inline]
     pub fn as_inverse_miles(self) -> T {
         self.0 / T::from_f64(0.0006213711922373339)
-    }
-
-    /// Alias for [`Self::as_inverse_miles`].
-    #[inline]
-    pub fn as_inverse_mile(self) -> T {
-        self.as_inverse_miles()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseYards (`yd⁻¹`).
@@ -365,12 +341,6 @@ impl<T: Float> ReciprocalLength<T> {
         self.0 / T::from_f64(1.0936132983377078)
     }
 
-    /// Alias for [`Self::as_inverse_yards`].
-    #[inline]
-    pub fn as_inverse_yard(self) -> T {
-        self.as_inverse_yards()
-    }
-
     /// Creates a [`ReciprocalLength`] from a value in InverseFeet (`ft⁻¹`).
     #[inline]
     pub fn from_inverse_feet(value: T) -> Self {
@@ -381,12 +351,6 @@ impl<T: Float> ReciprocalLength<T> {
     #[inline]
     pub fn as_inverse_feet(self) -> T {
         self.0 / T::from_f64(3.2808398950131235)
-    }
-
-    /// Alias for [`Self::as_inverse_feet`].
-    #[inline]
-    pub fn as_inverse_foot(self) -> T {
-        self.as_inverse_feet()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseUsSurveyFeet (`ftUS⁻¹`).
@@ -401,12 +365,6 @@ impl<T: Float> ReciprocalLength<T> {
         self.0 / T::from_f64(3.2808333333333333)
     }
 
-    /// Alias for [`Self::as_inverse_us_survey_feet`].
-    #[inline]
-    pub fn as_inverse_us_survey_foot(self) -> T {
-        self.as_inverse_us_survey_feet()
-    }
-
     /// Creates a [`ReciprocalLength`] from a value in InverseInches (`in⁻¹`).
     #[inline]
     pub fn from_inverse_inches(value: T) -> Self {
@@ -417,12 +375,6 @@ impl<T: Float> ReciprocalLength<T> {
     #[inline]
     pub fn as_inverse_inches(self) -> T {
         self.0 / T::from_f64(39.37007874015748)
-    }
-
-    /// Alias for [`Self::as_inverse_inches`].
-    #[inline]
-    pub fn as_inverse_inch(self) -> T {
-        self.as_inverse_inches()
     }
 
     /// Creates a [`ReciprocalLength`] from a value in InverseMils (`mil⁻¹`).
@@ -437,12 +389,6 @@ impl<T: Float> ReciprocalLength<T> {
         self.0 / T::from_f64(39370.07874015748)
     }
 
-    /// Alias for [`Self::as_inverse_mils`].
-    #[inline]
-    pub fn as_inverse_mil(self) -> T {
-        self.as_inverse_mils()
-    }
-
     /// Creates a [`ReciprocalLength`] from a value in InverseMicroinches (`µin⁻¹`).
     #[inline]
     pub fn from_inverse_microinches(value: T) -> Self {
@@ -453,12 +399,6 @@ impl<T: Float> ReciprocalLength<T> {
     #[inline]
     pub fn as_inverse_microinches(self) -> T {
         self.0 / T::from_f64(3.937007874015748e7)
-    }
-
-    /// Alias for [`Self::as_inverse_microinches`].
-    #[inline]
-    pub fn as_inverse_microinch(self) -> T {
-        self.as_inverse_microinches()
     }
 }
 

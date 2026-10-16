@@ -225,12 +225,6 @@ impl<T: Float> SpecificFuelConsumption<T> {
         self.0 / T::from_f64(28.325450360498007)
     }
 
-    /// Alias for [`Self::as_pounds_mass_per_pound_force_hour`].
-    #[inline]
-    pub fn as_pound_mass_per_pound_force_hour(self) -> T {
-        self.as_pounds_mass_per_pound_force_hour()
-    }
-
     /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilogramForceHour (`kg/(kgf·h)`).
     #[inline]
     pub fn from_kilograms_per_kilogram_force_hour(value: T) -> Self {
@@ -241,12 +235,6 @@ impl<T: Float> SpecificFuelConsumption<T> {
     #[inline]
     pub fn as_kilograms_per_kilogram_force_hour(self) -> T {
         self.0 / T::from_f64(28.325450360498007)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_kilogram_force_hour`].
-    #[inline]
-    pub fn as_kilogram_per_kilogram_force_hour(self) -> T {
-        self.as_kilograms_per_kilogram_force_hour()
     }
 
     /// Creates a [`SpecificFuelConsumption`] from a value in GramsPerKilonewtonSecond (`g/(kN·s)`).
@@ -261,12 +249,6 @@ impl<T: Float> SpecificFuelConsumption<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_grams_per_kilonewton_second`].
-    #[inline]
-    pub fn as_gram_per_kilonewton_second(self) -> T {
-        self.as_grams_per_kilonewton_second()
-    }
-
     /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilonewtonSecond (`kg/(kN·s)`).
     #[inline]
     pub fn from_kilograms_per_kilonewton_second(value: T) -> Self {
@@ -277,12 +259,6 @@ impl<T: Float> SpecificFuelConsumption<T> {
     #[inline]
     pub fn as_kilograms_per_kilonewton_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_kilonewton_second`].
-    #[inline]
-    pub fn as_kilogram_per_kilonewton_second(self) -> T {
-        self.as_kilograms_per_kilonewton_second()
     }
 }
 

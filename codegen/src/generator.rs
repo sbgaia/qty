@@ -836,7 +836,6 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     // Per-unit convenience constructors and accessors.
     for unit in &qty.units {
         let snake_plural = unit.plural.to_snake_case();
-        let snake_singular = unit.singular.to_snake_case();
         let abbr = &unit.abbreviation;
 
         w!(
@@ -871,15 +870,6 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         );
         w!(out, "    }}");
 
-        // Emit singular alias only when it differs from the plural form.
-        if snake_singular != snake_plural {
-            w!(out);
-            w!(out, "    /// Alias for [`Self::as_{}`].", snake_plural);
-            w!(out, "    #[inline]");
-            w!(out, "    pub fn as_{}(self) -> T {{", snake_singular);
-            w!(out, "        self.as_{}()", snake_plural);
-            w!(out, "    }}");
-        }
         w!(out);
     }
 

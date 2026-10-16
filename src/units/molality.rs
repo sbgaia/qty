@@ -193,12 +193,6 @@ impl<T: Float> Molality<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_moles_per_kilogram`].
-    #[inline]
-    pub fn as_mole_per_kilogram(self) -> T {
-        self.as_moles_per_kilogram()
-    }
-
     /// Creates a [`Molality`] from a value in MillimolesPerKilogram (`mmol/kg`).
     #[inline]
     pub fn from_millimoles_per_kilogram(value: T) -> Self {
@@ -211,12 +205,6 @@ impl<T: Float> Molality<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millimoles_per_kilogram`].
-    #[inline]
-    pub fn as_millimole_per_kilogram(self) -> T {
-        self.as_millimoles_per_kilogram()
-    }
-
     /// Creates a [`Molality`] from a value in MolesPerGram (`mol/g`).
     #[inline]
     pub fn from_moles_per_gram(value: T) -> Self {
@@ -227,12 +215,6 @@ impl<T: Float> Molality<T> {
     #[inline]
     pub fn as_moles_per_gram(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_moles_per_gram`].
-    #[inline]
-    pub fn as_mole_per_gram(self) -> T {
-        self.as_moles_per_gram()
     }
 }
 

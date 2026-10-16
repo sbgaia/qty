@@ -363,12 +363,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_ohm_meters`].
-    #[inline]
-    pub fn as_ohm_meter(self) -> T {
-        self.as_ohm_meters()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in PicoohmMeters (`pΩ·m`).
     #[inline]
     pub fn from_picoohm_meters(value: T) -> Self {
@@ -379,12 +373,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_picoohm_meters(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picoohm_meters`].
-    #[inline]
-    pub fn as_picoohm_meter(self) -> T {
-        self.as_picoohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in NanoohmMeters (`nΩ·m`).
@@ -399,12 +387,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanoohm_meters`].
-    #[inline]
-    pub fn as_nanoohm_meter(self) -> T {
-        self.as_nanoohm_meters()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in MicroohmMeters (`µΩ·m`).
     #[inline]
     pub fn from_microohm_meters(value: T) -> Self {
@@ -415,12 +397,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_microohm_meters(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microohm_meters`].
-    #[inline]
-    pub fn as_microohm_meter(self) -> T {
-        self.as_microohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MilliohmMeters (`mΩ·m`).
@@ -435,12 +411,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milliohm_meters`].
-    #[inline]
-    pub fn as_milliohm_meter(self) -> T {
-        self.as_milliohm_meters()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in KiloohmMeters (`kΩ·m`).
     #[inline]
     pub fn from_kiloohm_meters(value: T) -> Self {
@@ -451,12 +421,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_kiloohm_meters(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kiloohm_meters`].
-    #[inline]
-    pub fn as_kiloohm_meter(self) -> T {
-        self.as_kiloohm_meters()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MegaohmMeters (`MΩ·m`).
@@ -471,12 +435,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megaohm_meters`].
-    #[inline]
-    pub fn as_megaohm_meter(self) -> T {
-        self.as_megaohm_meters()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in OhmsCentimeter (`Ω·cm`).
     #[inline]
     pub fn from_ohms_centimeter(value: T) -> Self {
@@ -487,12 +445,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_ohms_centimeter(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_ohms_centimeter`].
-    #[inline]
-    pub fn as_ohm_centimeter(self) -> T {
-        self.as_ohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in PicoohmsCentimeter (`pΩ·cm`).
@@ -507,12 +459,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 * T::from_f64(1e14)
     }
 
-    /// Alias for [`Self::as_picoohms_centimeter`].
-    #[inline]
-    pub fn as_picoohm_centimeter(self) -> T {
-        self.as_picoohms_centimeter()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in NanoohmsCentimeter (`nΩ·cm`).
     #[inline]
     pub fn from_nanoohms_centimeter(value: T) -> Self {
@@ -523,12 +469,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_nanoohms_centimeter(self) -> T {
         self.0 * T::from_f64(1e11)
-    }
-
-    /// Alias for [`Self::as_nanoohms_centimeter`].
-    #[inline]
-    pub fn as_nanoohm_centimeter(self) -> T {
-        self.as_nanoohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in MicroohmsCentimeter (`µΩ·cm`).
@@ -543,12 +483,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_microohms_centimeter`].
-    #[inline]
-    pub fn as_microohm_centimeter(self) -> T {
-        self.as_microohms_centimeter()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in MilliohmsCentimeter (`mΩ·cm`).
     #[inline]
     pub fn from_milliohms_centimeter(value: T) -> Self {
@@ -559,12 +493,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_milliohms_centimeter(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_milliohms_centimeter`].
-    #[inline]
-    pub fn as_milliohm_centimeter(self) -> T {
-        self.as_milliohms_centimeter()
     }
 
     /// Creates a [`ElectricResistivity`] from a value in KiloohmsCentimeter (`kΩ·cm`).
@@ -579,12 +507,6 @@ impl<T: Float> ElectricResistivity<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_kiloohms_centimeter`].
-    #[inline]
-    pub fn as_kiloohm_centimeter(self) -> T {
-        self.as_kiloohms_centimeter()
-    }
-
     /// Creates a [`ElectricResistivity`] from a value in MegaohmsCentimeter (`MΩ·cm`).
     #[inline]
     pub fn from_megaohms_centimeter(value: T) -> Self {
@@ -595,12 +517,6 @@ impl<T: Float> ElectricResistivity<T> {
     #[inline]
     pub fn as_megaohms_centimeter(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_megaohms_centimeter`].
-    #[inline]
-    pub fn as_megaohm_centimeter(self) -> T {
-        self.as_megaohms_centimeter()
     }
 }
 

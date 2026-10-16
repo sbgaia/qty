@@ -409,12 +409,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_moles`].
-    #[inline]
-    pub fn as_mole(self) -> T {
-        self.as_moles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in Femtomoles (`fmol`).
     #[inline]
     pub fn from_femtomoles(value: T) -> Self {
@@ -425,12 +419,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_femtomoles(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtomoles`].
-    #[inline]
-    pub fn as_femtomole(self) -> T {
-        self.as_femtomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Picomoles (`pmol`).
@@ -445,12 +433,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picomoles`].
-    #[inline]
-    pub fn as_picomole(self) -> T {
-        self.as_picomoles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in Nanomoles (`nmol`).
     #[inline]
     pub fn from_nanomoles(value: T) -> Self {
@@ -461,12 +443,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_nanomoles(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanomoles`].
-    #[inline]
-    pub fn as_nanomole(self) -> T {
-        self.as_nanomoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Micromoles (`µmol`).
@@ -481,12 +457,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micromoles`].
-    #[inline]
-    pub fn as_micromole(self) -> T {
-        self.as_micromoles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in Millimoles (`mmol`).
     #[inline]
     pub fn from_millimoles(value: T) -> Self {
@@ -497,12 +467,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_millimoles(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimoles`].
-    #[inline]
-    pub fn as_millimole(self) -> T {
-        self.as_millimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Centimoles (`cmol`).
@@ -517,12 +481,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centimoles`].
-    #[inline]
-    pub fn as_centimole(self) -> T {
-        self.as_centimoles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in Decimoles (`dmol`).
     #[inline]
     pub fn from_decimoles(value: T) -> Self {
@@ -533,12 +491,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_decimoles(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decimoles`].
-    #[inline]
-    pub fn as_decimole(self) -> T {
-        self.as_decimoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in Kilomoles (`kmol`).
@@ -553,12 +505,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilomoles`].
-    #[inline]
-    pub fn as_kilomole(self) -> T {
-        self.as_kilomoles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in Megamoles (`Mmol`).
     #[inline]
     pub fn from_megamoles(value: T) -> Self {
@@ -569,12 +515,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_megamoles(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megamoles`].
-    #[inline]
-    pub fn as_megamole(self) -> T {
-        self.as_megamoles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in PoundMoles (`lbmol`).
@@ -589,12 +529,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 / T::from_f64(453.59237)
     }
 
-    /// Alias for [`Self::as_pound_moles`].
-    #[inline]
-    pub fn as_pound_mole(self) -> T {
-        self.as_pound_moles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in NanopoundMoles (`nlbmol`).
     #[inline]
     pub fn from_nanopound_moles(value: T) -> Self {
@@ -605,12 +539,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_nanopound_moles(self) -> T {
         self.0 / T::from_f64(4.5359237e-7)
-    }
-
-    /// Alias for [`Self::as_nanopound_moles`].
-    #[inline]
-    pub fn as_nanopound_mole(self) -> T {
-        self.as_nanopound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in MicropoundMoles (`µlbmol`).
@@ -625,12 +553,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 / T::from_f64(0.00045359237)
     }
 
-    /// Alias for [`Self::as_micropound_moles`].
-    #[inline]
-    pub fn as_micropound_mole(self) -> T {
-        self.as_micropound_moles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in MillipoundMoles (`mlbmol`).
     #[inline]
     pub fn from_millipound_moles(value: T) -> Self {
@@ -641,12 +563,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_millipound_moles(self) -> T {
         self.0 / T::from_f64(0.45359237)
-    }
-
-    /// Alias for [`Self::as_millipound_moles`].
-    #[inline]
-    pub fn as_millipound_mole(self) -> T {
-        self.as_millipound_moles()
     }
 
     /// Creates a [`AmountOfSubstance`] from a value in CentipoundMoles (`clbmol`).
@@ -661,12 +577,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 / T::from_f64(4.5359237)
     }
 
-    /// Alias for [`Self::as_centipound_moles`].
-    #[inline]
-    pub fn as_centipound_mole(self) -> T {
-        self.as_centipound_moles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in DecipoundMoles (`dlbmol`).
     #[inline]
     pub fn from_decipound_moles(value: T) -> Self {
@@ -679,12 +589,6 @@ impl<T: Float> AmountOfSubstance<T> {
         self.0 / T::from_f64(45.359237)
     }
 
-    /// Alias for [`Self::as_decipound_moles`].
-    #[inline]
-    pub fn as_decipound_mole(self) -> T {
-        self.as_decipound_moles()
-    }
-
     /// Creates a [`AmountOfSubstance`] from a value in KilopoundMoles (`klbmol`).
     #[inline]
     pub fn from_kilopound_moles(value: T) -> Self {
@@ -695,12 +599,6 @@ impl<T: Float> AmountOfSubstance<T> {
     #[inline]
     pub fn as_kilopound_moles(self) -> T {
         self.0 / T::from_f64(453592.37)
-    }
-
-    /// Alias for [`Self::as_kilopound_moles`].
-    #[inline]
-    pub fn as_kilopound_mole(self) -> T {
-        self.as_kilopound_moles()
     }
 }
 

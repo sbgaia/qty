@@ -319,12 +319,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_coulombs`].
-    #[inline]
-    pub fn as_coulomb(self) -> T {
-        self.as_coulombs()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in Picocoulombs (`pC`).
     #[inline]
     pub fn from_picocoulombs(value: T) -> Self {
@@ -335,12 +329,6 @@ impl<T: Float> ElectricCharge<T> {
     #[inline]
     pub fn as_picocoulombs(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picocoulombs`].
-    #[inline]
-    pub fn as_picocoulomb(self) -> T {
-        self.as_picocoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Nanocoulombs (`nC`).
@@ -355,12 +343,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanocoulombs`].
-    #[inline]
-    pub fn as_nanocoulomb(self) -> T {
-        self.as_nanocoulombs()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in Microcoulombs (`µC`).
     #[inline]
     pub fn from_microcoulombs(value: T) -> Self {
@@ -371,12 +353,6 @@ impl<T: Float> ElectricCharge<T> {
     #[inline]
     pub fn as_microcoulombs(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microcoulombs`].
-    #[inline]
-    pub fn as_microcoulomb(self) -> T {
-        self.as_microcoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Millicoulombs (`mC`).
@@ -391,12 +367,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millicoulombs`].
-    #[inline]
-    pub fn as_millicoulomb(self) -> T {
-        self.as_millicoulombs()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in Kilocoulombs (`kC`).
     #[inline]
     pub fn from_kilocoulombs(value: T) -> Self {
@@ -407,12 +377,6 @@ impl<T: Float> ElectricCharge<T> {
     #[inline]
     pub fn as_kilocoulombs(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilocoulombs`].
-    #[inline]
-    pub fn as_kilocoulomb(self) -> T {
-        self.as_kilocoulombs()
     }
 
     /// Creates a [`ElectricCharge`] from a value in Megacoulombs (`MC`).
@@ -427,12 +391,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megacoulombs`].
-    #[inline]
-    pub fn as_megacoulomb(self) -> T {
-        self.as_megacoulombs()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in AmpereHours (`A-h`).
     #[inline]
     pub fn from_ampere_hours(value: T) -> Self {
@@ -443,12 +401,6 @@ impl<T: Float> ElectricCharge<T> {
     #[inline]
     pub fn as_ampere_hours(self) -> T {
         self.0 / T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_ampere_hours`].
-    #[inline]
-    pub fn as_ampere_hour(self) -> T {
-        self.as_ampere_hours()
     }
 
     /// Creates a [`ElectricCharge`] from a value in MilliampereHours (`mA-h`).
@@ -463,12 +415,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0 / T::from_f64(3.6)
     }
 
-    /// Alias for [`Self::as_milliampere_hours`].
-    #[inline]
-    pub fn as_milliampere_hour(self) -> T {
-        self.as_milliampere_hours()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in KiloampereHours (`kA-h`).
     #[inline]
     pub fn from_kiloampere_hours(value: T) -> Self {
@@ -481,12 +427,6 @@ impl<T: Float> ElectricCharge<T> {
         self.0 / T::from_f64(3600000.0)
     }
 
-    /// Alias for [`Self::as_kiloampere_hours`].
-    #[inline]
-    pub fn as_kiloampere_hour(self) -> T {
-        self.as_kiloampere_hours()
-    }
-
     /// Creates a [`ElectricCharge`] from a value in MegaampereHours (`MA-h`).
     #[inline]
     pub fn from_megaampere_hours(value: T) -> Self {
@@ -497,12 +437,6 @@ impl<T: Float> ElectricCharge<T> {
     #[inline]
     pub fn as_megaampere_hours(self) -> T {
         self.0 / T::from_f64(3.6e9)
-    }
-
-    /// Alias for [`Self::as_megaampere_hours`].
-    #[inline]
-    pub fn as_megaampere_hour(self) -> T {
-        self.as_megaampere_hours()
     }
 }
 

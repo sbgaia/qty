@@ -258,12 +258,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_amperes_per_second`].
-    #[inline]
-    pub fn as_ampere_per_second(self) -> T {
-        self.as_amperes_per_second()
-    }
-
     /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerSecond (`mA/s`).
     #[inline]
     pub fn from_milliamperes_per_second(value: T) -> Self {
@@ -274,12 +268,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
     #[inline]
     pub fn as_milliamperes_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliamperes_per_second`].
-    #[inline]
-    pub fn as_milliampere_per_second(self) -> T {
-        self.as_milliamperes_per_second()
     }
 
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMinute (`A/min`).
@@ -294,12 +282,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_amperes_per_minute`].
-    #[inline]
-    pub fn as_ampere_per_minute(self) -> T {
-        self.as_amperes_per_minute()
-    }
-
     /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerMinute (`mA/min`).
     #[inline]
     pub fn from_milliamperes_per_minute(value: T) -> Self {
@@ -310,12 +292,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
     #[inline]
     pub fn as_milliamperes_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
-    }
-
-    /// Alias for [`Self::as_milliamperes_per_minute`].
-    #[inline]
-    pub fn as_milliampere_per_minute(self) -> T {
-        self.as_milliamperes_per_minute()
     }
 
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMillisecond (`A/ms`).
@@ -330,12 +306,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_amperes_per_millisecond`].
-    #[inline]
-    pub fn as_ampere_per_millisecond(self) -> T {
-        self.as_amperes_per_millisecond()
-    }
-
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMicrosecond (`A/μs`).
     #[inline]
     pub fn from_amperes_per_microsecond(value: T) -> Self {
@@ -348,12 +318,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_amperes_per_microsecond`].
-    #[inline]
-    pub fn as_ampere_per_microsecond(self) -> T {
-        self.as_amperes_per_microsecond()
-    }
-
     /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerNanosecond (`A/ns`).
     #[inline]
     pub fn from_amperes_per_nanosecond(value: T) -> Self {
@@ -364,12 +328,6 @@ impl<T: Float> ElectricCurrentGradient<T> {
     #[inline]
     pub fn as_amperes_per_nanosecond(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_amperes_per_nanosecond`].
-    #[inline]
-    pub fn as_ampere_per_nanosecond(self) -> T {
-        self.as_amperes_per_nanosecond()
     }
 }
 

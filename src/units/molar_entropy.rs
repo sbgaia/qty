@@ -194,12 +194,6 @@ impl<T: Float> MolarEntropy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_mole_kelvin`].
-    #[inline]
-    pub fn as_joule_per_mole_kelvin(self) -> T {
-        self.as_joules_per_mole_kelvin()
-    }
-
     /// Creates a [`MolarEntropy`] from a value in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
     #[inline]
     pub fn from_kilojoules_per_mole_kelvin(value: T) -> Self {
@@ -212,12 +206,6 @@ impl<T: Float> MolarEntropy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilojoules_per_mole_kelvin`].
-    #[inline]
-    pub fn as_kilojoule_per_mole_kelvin(self) -> T {
-        self.as_kilojoules_per_mole_kelvin()
-    }
-
     /// Creates a [`MolarEntropy`] from a value in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
     #[inline]
     pub fn from_megajoules_per_mole_kelvin(value: T) -> Self {
@@ -228,12 +216,6 @@ impl<T: Float> MolarEntropy<T> {
     #[inline]
     pub fn as_megajoules_per_mole_kelvin(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megajoules_per_mole_kelvin`].
-    #[inline]
-    pub fn as_megajoule_per_mole_kelvin(self) -> T {
-        self.as_megajoules_per_mole_kelvin()
     }
 }
 

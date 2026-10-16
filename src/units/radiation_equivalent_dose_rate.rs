@@ -319,12 +319,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_sieverts_per_hour`].
-    #[inline]
-    pub fn as_sievert_per_hour(self) -> T {
-        self.as_sieverts_per_hour()
-    }
-
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerHour (`nSv/h`).
     #[inline]
     pub fn from_nanosieverts_per_hour(value: T) -> Self {
@@ -335,12 +329,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
     #[inline]
     pub fn as_nanosieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e12)
-    }
-
-    /// Alias for [`Self::as_nanosieverts_per_hour`].
-    #[inline]
-    pub fn as_nanosievert_per_hour(self) -> T {
-        self.as_nanosieverts_per_hour()
     }
 
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerHour (`µSv/h`).
@@ -355,12 +343,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Alias for [`Self::as_microsieverts_per_hour`].
-    #[inline]
-    pub fn as_microsievert_per_hour(self) -> T {
-        self.as_microsieverts_per_hour()
-    }
-
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerHour (`mSv/h`).
     #[inline]
     pub fn from_millisieverts_per_hour(value: T) -> Self {
@@ -371,12 +353,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
     #[inline]
     pub fn as_millisieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3600000.0)
-    }
-
-    /// Alias for [`Self::as_millisieverts_per_hour`].
-    #[inline]
-    pub fn as_millisievert_per_hour(self) -> T {
-        self.as_millisieverts_per_hour()
     }
 
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in SievertsPerSecond (`Sv/s`).
@@ -391,12 +367,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_sieverts_per_second`].
-    #[inline]
-    pub fn as_sievert_per_second(self) -> T {
-        self.as_sieverts_per_second()
-    }
-
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerSecond (`nSv/s`).
     #[inline]
     pub fn from_nanosieverts_per_second(value: T) -> Self {
@@ -407,12 +377,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
     #[inline]
     pub fn as_nanosieverts_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanosieverts_per_second`].
-    #[inline]
-    pub fn as_nanosievert_per_second(self) -> T {
-        self.as_nanosieverts_per_second()
     }
 
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerSecond (`µSv/s`).
@@ -427,12 +391,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microsieverts_per_second`].
-    #[inline]
-    pub fn as_microsievert_per_second(self) -> T {
-        self.as_microsieverts_per_second()
-    }
-
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerSecond (`mSv/s`).
     #[inline]
     pub fn from_millisieverts_per_second(value: T) -> Self {
@@ -443,12 +401,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
     #[inline]
     pub fn as_millisieverts_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millisieverts_per_second`].
-    #[inline]
-    pub fn as_millisievert_per_second(self) -> T {
-        self.as_millisieverts_per_second()
     }
 
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in RoentgensEquivalentManPerHour (`rem/h`).
@@ -463,12 +415,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.0 * T::from_f64(360000.0)
     }
 
-    /// Alias for [`Self::as_roentgens_equivalent_man_per_hour`].
-    #[inline]
-    pub fn as_roentgen_equivalent_man_per_hour(self) -> T {
-        self.as_roentgens_equivalent_man_per_hour()
-    }
-
     /// Creates a [`RadiationEquivalentDoseRate`] from a value in MilliroentgensEquivalentManPerHour (`mrem/h`).
     #[inline]
     pub fn from_milliroentgens_equivalent_man_per_hour(value: T) -> Self {
@@ -479,12 +425,6 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
     #[inline]
     pub fn as_milliroentgens_equivalent_man_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e8)
-    }
-
-    /// Alias for [`Self::as_milliroentgens_equivalent_man_per_hour`].
-    #[inline]
-    pub fn as_milliroentgen_equivalent_man_per_hour(self) -> T {
-        self.as_milliroentgens_equivalent_man_per_hour()
     }
 }
 

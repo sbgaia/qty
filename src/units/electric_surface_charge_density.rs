@@ -190,12 +190,6 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_coulombs_per_square_meter`].
-    #[inline]
-    pub fn as_coulomb_per_square_meter(self) -> T {
-        self.as_coulombs_per_square_meter()
-    }
-
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareCentimeter (`C/cm²`).
     #[inline]
     pub fn from_coulombs_per_square_centimeter(value: T) -> Self {
@@ -208,12 +202,6 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_coulombs_per_square_centimeter`].
-    #[inline]
-    pub fn as_coulomb_per_square_centimeter(self) -> T {
-        self.as_coulombs_per_square_centimeter()
-    }
-
     /// Creates a [`ElectricSurfaceChargeDensity`] from a value in CoulombsPerSquareInch (`C/in²`).
     #[inline]
     pub fn from_coulombs_per_square_inch(value: T) -> Self {
@@ -224,12 +212,6 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
     #[inline]
     pub fn as_coulombs_per_square_inch(self) -> T {
         self.0 / T::from_f64(1550.0031000062)
-    }
-
-    /// Alias for [`Self::as_coulombs_per_square_inch`].
-    #[inline]
-    pub fn as_coulomb_per_square_inch(self) -> T {
-        self.as_coulombs_per_square_inch()
     }
 }
 

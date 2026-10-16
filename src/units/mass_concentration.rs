@@ -895,12 +895,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_gram_per_cubic_millimeter(self) -> T {
-        self.as_grams_per_cubic_millimeter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
     pub fn from_kilograms_per_cubic_millimeter(value: T) -> Self {
@@ -911,12 +905,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_millimeter(self) -> T {
-        self.as_kilograms_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicCentimeter (`g/cm³`).
@@ -931,12 +919,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_gram_per_cubic_centimeter(self) -> T {
-        self.as_grams_per_cubic_centimeter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
     pub fn from_kilograms_per_cubic_centimeter(value: T) -> Self {
@@ -947,12 +929,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_centimeter(self) -> T {
-        self.as_kilograms_per_cubic_centimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerCubicMeter (`g/m³`).
@@ -967,12 +943,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_meter`].
-    #[inline]
-    pub fn as_gram_per_cubic_meter(self) -> T {
-        self.as_grams_per_cubic_meter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
     pub fn from_kilograms_per_cubic_meter(value: T) -> Self {
@@ -983,12 +953,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_meter(self) -> T {
-        self.as_kilograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerCubicMeter (`mg/m³`).
@@ -1003,12 +967,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_cubic_meter`].
-    #[inline]
-    pub fn as_milligram_per_cubic_meter(self) -> T {
-        self.as_milligrams_per_cubic_meter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
     pub fn from_micrograms_per_cubic_meter(value: T) -> Self {
@@ -1019,12 +977,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_micrograms_per_cubic_meter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_cubic_meter`].
-    #[inline]
-    pub fn as_microgram_per_cubic_meter(self) -> T {
-        self.as_micrograms_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerMicroliter (`g/μl`).
@@ -1039,12 +991,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_microliter`].
-    #[inline]
-    pub fn as_gram_per_microliter(self) -> T {
-        self.as_grams_per_microliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMicroliter (`pg/μl`).
     #[inline]
     pub fn from_picograms_per_microliter(value: T) -> Self {
@@ -1055,12 +1001,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_picograms_per_microliter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_picograms_per_microliter`].
-    #[inline]
-    pub fn as_picogram_per_microliter(self) -> T {
-        self.as_picograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMicroliter (`ng/μl`).
@@ -1075,12 +1015,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_nanograms_per_microliter`].
-    #[inline]
-    pub fn as_nanogram_per_microliter(self) -> T {
-        self.as_nanograms_per_microliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMicroliter (`µg/μl`).
     #[inline]
     pub fn from_micrograms_per_microliter(value: T) -> Self {
@@ -1091,12 +1025,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_micrograms_per_microliter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_micrograms_per_microliter`].
-    #[inline]
-    pub fn as_microgram_per_microliter(self) -> T {
-        self.as_micrograms_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMicroliter (`mg/μl`).
@@ -1111,12 +1039,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_microliter`].
-    #[inline]
-    pub fn as_milligram_per_microliter(self) -> T {
-        self.as_milligrams_per_microliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMicroliter (`cg/μl`).
     #[inline]
     pub fn from_centigrams_per_microliter(value: T) -> Self {
@@ -1127,12 +1049,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_centigrams_per_microliter(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_centigrams_per_microliter`].
-    #[inline]
-    pub fn as_centigram_per_microliter(self) -> T {
-        self.as_centigrams_per_microliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMicroliter (`dg/μl`).
@@ -1147,12 +1063,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_decigrams_per_microliter`].
-    #[inline]
-    pub fn as_decigram_per_microliter(self) -> T {
-        self.as_decigrams_per_microliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in GramsPerMilliliter (`g/ml`).
     #[inline]
     pub fn from_grams_per_milliliter(value: T) -> Self {
@@ -1163,12 +1073,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_grams_per_milliliter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_grams_per_milliliter`].
-    #[inline]
-    pub fn as_gram_per_milliliter(self) -> T {
-        self.as_grams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerMilliliter (`pg/ml`).
@@ -1183,12 +1087,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_picograms_per_milliliter`].
-    #[inline]
-    pub fn as_picogram_per_milliliter(self) -> T {
-        self.as_picograms_per_milliliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
     pub fn from_nanograms_per_milliliter(value: T) -> Self {
@@ -1199,12 +1097,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_nanograms_per_milliliter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_milliliter`].
-    #[inline]
-    pub fn as_nanogram_per_milliliter(self) -> T {
-        self.as_nanograms_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerMilliliter (`µg/ml`).
@@ -1219,12 +1111,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_milliliter`].
-    #[inline]
-    pub fn as_microgram_per_milliliter(self) -> T {
-        self.as_micrograms_per_milliliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
     pub fn from_milligrams_per_milliliter(value: T) -> Self {
@@ -1235,12 +1121,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_milligrams_per_milliliter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_milligrams_per_milliliter`].
-    #[inline]
-    pub fn as_milligram_per_milliliter(self) -> T {
-        self.as_milligrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerMilliliter (`cg/ml`).
@@ -1255,12 +1135,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_milliliter`].
-    #[inline]
-    pub fn as_centigram_per_milliliter(self) -> T {
-        self.as_centigrams_per_milliliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
     pub fn from_decigrams_per_milliliter(value: T) -> Self {
@@ -1271,12 +1145,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_decigrams_per_milliliter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_milliliter`].
-    #[inline]
-    pub fn as_decigram_per_milliliter(self) -> T {
-        self.as_decigrams_per_milliliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in GramsPerDeciliter (`g/dl`).
@@ -1291,12 +1159,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_grams_per_deciliter`].
-    #[inline]
-    pub fn as_gram_per_deciliter(self) -> T {
-        self.as_grams_per_deciliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in PicogramsPerDeciliter (`pg/dl`).
     #[inline]
     pub fn from_picograms_per_deciliter(value: T) -> Self {
@@ -1307,12 +1169,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_picograms_per_deciliter(self) -> T {
         self.0 * T::from_f64(1e11)
-    }
-
-    /// Alias for [`Self::as_picograms_per_deciliter`].
-    #[inline]
-    pub fn as_picogram_per_deciliter(self) -> T {
-        self.as_picograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in NanogramsPerDeciliter (`ng/dl`).
@@ -1327,12 +1183,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_nanograms_per_deciliter`].
-    #[inline]
-    pub fn as_nanogram_per_deciliter(self) -> T {
-        self.as_nanograms_per_deciliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerDeciliter (`µg/dl`).
     #[inline]
     pub fn from_micrograms_per_deciliter(value: T) -> Self {
@@ -1343,12 +1193,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_micrograms_per_deciliter(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_deciliter`].
-    #[inline]
-    pub fn as_microgram_per_deciliter(self) -> T {
-        self.as_micrograms_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MilligramsPerDeciliter (`mg/dl`).
@@ -1363,12 +1207,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_deciliter`].
-    #[inline]
-    pub fn as_milligram_per_deciliter(self) -> T {
-        self.as_milligrams_per_deciliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in CentigramsPerDeciliter (`cg/dl`).
     #[inline]
     pub fn from_centigrams_per_deciliter(value: T) -> Self {
@@ -1379,12 +1217,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_centigrams_per_deciliter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_centigrams_per_deciliter`].
-    #[inline]
-    pub fn as_centigram_per_deciliter(self) -> T {
-        self.as_centigrams_per_deciliter()
     }
 
     /// Creates a [`MassConcentration`] from a value in DecigramsPerDeciliter (`dg/dl`).
@@ -1399,12 +1231,6 @@ impl<T: Float> MassConcentration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decigrams_per_deciliter`].
-    #[inline]
-    pub fn as_decigram_per_deciliter(self) -> T {
-        self.as_decigrams_per_deciliter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in GramsPerLiter (`g/l`).
     #[inline]
     pub fn from_grams_per_liter(value: T) -> Self {
@@ -1415,12 +1241,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_grams_per_liter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_grams_per_liter`].
-    #[inline]
-    pub fn as_gram_per_liter(self) -> T {
-        self.as_grams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PicogramsPerLiter (`pg/l`).
@@ -1435,12 +1255,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picograms_per_liter`].
-    #[inline]
-    pub fn as_picogram_per_liter(self) -> T {
-        self.as_picograms_per_liter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in NanogramsPerLiter (`ng/l`).
     #[inline]
     pub fn from_nanograms_per_liter(value: T) -> Self {
@@ -1451,12 +1265,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_nanograms_per_liter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_liter`].
-    #[inline]
-    pub fn as_nanogram_per_liter(self) -> T {
-        self.as_nanograms_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in MicrogramsPerLiter (`µg/l`).
@@ -1471,12 +1279,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_liter`].
-    #[inline]
-    pub fn as_microgram_per_liter(self) -> T {
-        self.as_micrograms_per_liter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in MilligramsPerLiter (`mg/l`).
     #[inline]
     pub fn from_milligrams_per_liter(value: T) -> Self {
@@ -1487,12 +1289,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_milligrams_per_liter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_liter`].
-    #[inline]
-    pub fn as_milligram_per_liter(self) -> T {
-        self.as_milligrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in CentigramsPerLiter (`cg/l`).
@@ -1507,12 +1303,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_liter`].
-    #[inline]
-    pub fn as_centigram_per_liter(self) -> T {
-        self.as_centigrams_per_liter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in DecigramsPerLiter (`dg/l`).
     #[inline]
     pub fn from_decigrams_per_liter(value: T) -> Self {
@@ -1523,12 +1313,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_decigrams_per_liter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_liter`].
-    #[inline]
-    pub fn as_decigram_per_liter(self) -> T {
-        self.as_decigrams_per_liter()
     }
 
     /// Creates a [`MassConcentration`] from a value in KilogramsPerLiter (`kg/l`).
@@ -1543,12 +1327,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilograms_per_liter`].
-    #[inline]
-    pub fn as_kilogram_per_liter(self) -> T {
-        self.as_kilograms_per_liter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMillimeter (`t/mm³`).
     #[inline]
     pub fn from_tonnes_per_cubic_millimeter(value: T) -> Self {
@@ -1559,12 +1337,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_tonnes_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_tonnes_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_millimeter(self) -> T {
-        self.as_tonnes_per_cubic_millimeter()
     }
 
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicCentimeter (`t/cm³`).
@@ -1579,12 +1351,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_tonnes_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_centimeter(self) -> T {
-        self.as_tonnes_per_cubic_centimeter()
-    }
-
     /// Creates a [`MassConcentration`] from a value in TonnesPerCubicMeter (`t/m³`).
     #[inline]
     pub fn from_tonnes_per_cubic_meter(value: T) -> Self {
@@ -1595,12 +1361,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_tonnes_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_tonnes_per_cubic_meter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_meter(self) -> T {
-        self.as_tonnes_per_cubic_meter()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicInch (`lb/in³`).
@@ -1615,12 +1375,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(27679.90471020312)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_inch`].
-    #[inline]
-    pub fn as_pound_per_cubic_inch(self) -> T {
-        self.as_pounds_per_cubic_inch()
-    }
-
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
     pub fn from_kilopounds_per_cubic_inch(value: T) -> Self {
@@ -1631,12 +1385,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_kilopounds_per_cubic_inch(self) -> T {
         self.0 / T::from_f64(2.7679904710203122e7)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_cubic_inch`].
-    #[inline]
-    pub fn as_kilopound_per_cubic_inch(self) -> T {
-        self.as_kilopounds_per_cubic_inch()
     }
 
     /// Creates a [`MassConcentration`] from a value in PoundsPerCubicFoot (`lb/ft³`).
@@ -1651,12 +1399,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(16.018463373960138)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_foot`].
-    #[inline]
-    pub fn as_pound_per_cubic_foot(self) -> T {
-        self.as_pounds_per_cubic_foot()
-    }
-
     /// Creates a [`MassConcentration`] from a value in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
     pub fn from_kilopounds_per_cubic_foot(value: T) -> Self {
@@ -1667,12 +1409,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_kilopounds_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(16018.46337396014)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_cubic_foot`].
-    #[inline]
-    pub fn as_kilopound_per_cubic_foot(self) -> T {
-        self.as_kilopounds_per_cubic_foot()
     }
 
     /// Creates a [`MassConcentration`] from a value in SlugsPerCubicFoot (`slug/ft³`).
@@ -1687,12 +1423,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(515.3788183931962)
     }
 
-    /// Alias for [`Self::as_slugs_per_cubic_foot`].
-    #[inline]
-    pub fn as_slug_per_cubic_foot(self) -> T {
-        self.as_slugs_per_cubic_foot()
-    }
-
     /// Creates a [`MassConcentration`] from a value in PoundsPerUSGallon (`ppg (U.S.)`).
     #[inline]
     pub fn from_pounds_per_us_gallon(value: T) -> Self {
@@ -1703,12 +1433,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_pounds_per_us_gallon(self) -> T {
         self.0 / T::from_f64(119.82642731689663)
-    }
-
-    /// Alias for [`Self::as_pounds_per_us_gallon`].
-    #[inline]
-    pub fn as_pound_per_us_gallon(self) -> T {
-        self.as_pounds_per_us_gallon()
     }
 
     /// Creates a [`MassConcentration`] from a value in OuncesPerUSGallon (`oz/gal (U.S.)`).
@@ -1723,12 +1447,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(7.489151707306039)
     }
 
-    /// Alias for [`Self::as_ounces_per_us_gallon`].
-    #[inline]
-    pub fn as_ounce_per_us_gallon(self) -> T {
-        self.as_ounces_per_us_gallon()
-    }
-
     /// Creates a [`MassConcentration`] from a value in OuncesPerImperialGallon (`oz/gal (imp.)`).
     #[inline]
     pub fn from_ounces_per_imperial_gallon(value: T) -> Self {
@@ -1741,12 +1459,6 @@ impl<T: Float> MassConcentration<T> {
         self.0 / T::from_f64(6.236023291443856)
     }
 
-    /// Alias for [`Self::as_ounces_per_imperial_gallon`].
-    #[inline]
-    pub fn as_ounce_per_imperial_gallon(self) -> T {
-        self.as_ounces_per_imperial_gallon()
-    }
-
     /// Creates a [`MassConcentration`] from a value in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
     pub fn from_pounds_per_imperial_gallon(value: T) -> Self {
@@ -1757,12 +1469,6 @@ impl<T: Float> MassConcentration<T> {
     #[inline]
     pub fn as_pounds_per_imperial_gallon(self) -> T {
         self.0 / T::from_f64(99.7763726631017)
-    }
-
-    /// Alias for [`Self::as_pounds_per_imperial_gallon`].
-    #[inline]
-    pub fn as_pound_per_imperial_gallon(self) -> T {
-        self.as_pounds_per_imperial_gallon()
     }
 }
 

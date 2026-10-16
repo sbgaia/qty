@@ -268,12 +268,6 @@ impl<T: Float> TemperatureDelta<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kelvins`].
-    #[inline]
-    pub fn as_kelvin(self) -> T {
-        self.as_kelvins()
-    }
-
     /// Creates a [`TemperatureDelta`] from a value in DegreesCelsius (`∆°C`).
     #[inline]
     pub fn from_degrees_celsius(value: T) -> Self {
@@ -284,12 +278,6 @@ impl<T: Float> TemperatureDelta<T> {
     #[inline]
     pub fn as_degrees_celsius(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_degrees_celsius`].
-    #[inline]
-    pub fn as_degree_celsius(self) -> T {
-        self.as_degrees_celsius()
     }
 
     /// Creates a [`TemperatureDelta`] from a value in MillidegreesCelsius (`m∆°C`).
@@ -304,12 +292,6 @@ impl<T: Float> TemperatureDelta<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millidegrees_celsius`].
-    #[inline]
-    pub fn as_millidegree_celsius(self) -> T {
-        self.as_millidegrees_celsius()
-    }
-
     /// Creates a [`TemperatureDelta`] from a value in DegreesDelisle (`∆°De`).
     #[inline]
     pub fn from_degrees_delisle(value: T) -> Self {
@@ -320,12 +302,6 @@ impl<T: Float> TemperatureDelta<T> {
     #[inline]
     pub fn as_degrees_delisle(self) -> T {
         self.0 * T::from_f64(-1.5)
-    }
-
-    /// Alias for [`Self::as_degrees_delisle`].
-    #[inline]
-    pub fn as_degree_delisle(self) -> T {
-        self.as_degrees_delisle()
     }
 
     /// Creates a [`TemperatureDelta`] from a value in DegreesFahrenheit (`∆°F`).
@@ -340,12 +316,6 @@ impl<T: Float> TemperatureDelta<T> {
         self.0 / T::from_f64(0.5555555555555556)
     }
 
-    /// Alias for [`Self::as_degrees_fahrenheit`].
-    #[inline]
-    pub fn as_degree_fahrenheit(self) -> T {
-        self.as_degrees_fahrenheit()
-    }
-
     /// Creates a [`TemperatureDelta`] from a value in DegreesNewton (`∆°N`).
     #[inline]
     pub fn from_degrees_newton(value: T) -> Self {
@@ -356,12 +326,6 @@ impl<T: Float> TemperatureDelta<T> {
     #[inline]
     pub fn as_degrees_newton(self) -> T {
         self.0 / T::from_f64(3.0303030303030303)
-    }
-
-    /// Alias for [`Self::as_degrees_newton`].
-    #[inline]
-    pub fn as_degree_newton(self) -> T {
-        self.as_degrees_newton()
     }
 
     /// Creates a [`TemperatureDelta`] from a value in DegreesRankine (`∆°R`).
@@ -376,12 +340,6 @@ impl<T: Float> TemperatureDelta<T> {
         self.0 / T::from_f64(0.5555555555555556)
     }
 
-    /// Alias for [`Self::as_degrees_rankine`].
-    #[inline]
-    pub fn as_degree_rankine(self) -> T {
-        self.as_degrees_rankine()
-    }
-
     /// Creates a [`TemperatureDelta`] from a value in DegreesReaumur (`∆°Ré`).
     #[inline]
     pub fn from_degrees_reaumur(value: T) -> Self {
@@ -394,12 +352,6 @@ impl<T: Float> TemperatureDelta<T> {
         self.0 / T::from_f64(1.25)
     }
 
-    /// Alias for [`Self::as_degrees_reaumur`].
-    #[inline]
-    pub fn as_degree_reaumur(self) -> T {
-        self.as_degrees_reaumur()
-    }
-
     /// Creates a [`TemperatureDelta`] from a value in DegreesRoemer (`∆°Rø`).
     #[inline]
     pub fn from_degrees_roemer(value: T) -> Self {
@@ -410,12 +362,6 @@ impl<T: Float> TemperatureDelta<T> {
     #[inline]
     pub fn as_degrees_roemer(self) -> T {
         self.0 / T::from_f64(1.9047619047619047)
-    }
-
-    /// Alias for [`Self::as_degrees_roemer`].
-    #[inline]
-    pub fn as_degree_roemer(self) -> T {
-        self.as_degrees_roemer()
     }
 }
 

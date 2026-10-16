@@ -211,12 +211,6 @@ impl<T: Float> PorousMediumPermeability<T> {
         self.0 / T::from_f64(9.869233e-13)
     }
 
-    /// Alias for [`Self::as_darcys`].
-    #[inline]
-    pub fn as_darcy(self) -> T {
-        self.as_darcys()
-    }
-
     /// Creates a [`PorousMediumPermeability`] from a value in Microdarcys (`µD`).
     #[inline]
     pub fn from_microdarcys(value: T) -> Self {
@@ -227,12 +221,6 @@ impl<T: Float> PorousMediumPermeability<T> {
     #[inline]
     pub fn as_microdarcys(self) -> T {
         self.0 / T::from_f64(9.869233e-19)
-    }
-
-    /// Alias for [`Self::as_microdarcys`].
-    #[inline]
-    pub fn as_microdarcy(self) -> T {
-        self.as_microdarcys()
     }
 
     /// Creates a [`PorousMediumPermeability`] from a value in Millidarcys (`mD`).
@@ -247,12 +235,6 @@ impl<T: Float> PorousMediumPermeability<T> {
         self.0 / T::from_f64(9.869233e-16)
     }
 
-    /// Alias for [`Self::as_millidarcys`].
-    #[inline]
-    pub fn as_millidarcy(self) -> T {
-        self.as_millidarcys()
-    }
-
     /// Creates a [`PorousMediumPermeability`] from a value in SquareMeters (`m²`).
     #[inline]
     pub fn from_square_meters(value: T) -> Self {
@@ -265,12 +247,6 @@ impl<T: Float> PorousMediumPermeability<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_square_meters`].
-    #[inline]
-    pub fn as_square_meter(self) -> T {
-        self.as_square_meters()
-    }
-
     /// Creates a [`PorousMediumPermeability`] from a value in SquareCentimeters (`cm²`).
     #[inline]
     pub fn from_square_centimeters(value: T) -> Self {
@@ -281,12 +257,6 @@ impl<T: Float> PorousMediumPermeability<T> {
     #[inline]
     pub fn as_square_centimeters(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_square_centimeters`].
-    #[inline]
-    pub fn as_square_centimeter(self) -> T {
-        self.as_square_centimeters()
     }
 }
 

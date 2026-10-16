@@ -208,12 +208,6 @@ impl<T: Float> ElectricReactiveEnergy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_voltampere_reactive_hours`].
-    #[inline]
-    pub fn as_voltampere_reactive_hour(self) -> T {
-        self.as_voltampere_reactive_hours()
-    }
-
     /// Creates a [`ElectricReactiveEnergy`] from a value in KilovoltampereReactiveHours (`kvarh`).
     #[inline]
     pub fn from_kilovoltampere_reactive_hours(value: T) -> Self {
@@ -226,12 +220,6 @@ impl<T: Float> ElectricReactiveEnergy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilovoltampere_reactive_hours`].
-    #[inline]
-    pub fn as_kilovoltampere_reactive_hour(self) -> T {
-        self.as_kilovoltampere_reactive_hours()
-    }
-
     /// Creates a [`ElectricReactiveEnergy`] from a value in MegavoltampereReactiveHours (`Mvarh`).
     #[inline]
     pub fn from_megavoltampere_reactive_hours(value: T) -> Self {
@@ -242,12 +230,6 @@ impl<T: Float> ElectricReactiveEnergy<T> {
     #[inline]
     pub fn as_megavoltampere_reactive_hours(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megavoltampere_reactive_hours`].
-    #[inline]
-    pub fn as_megavoltampere_reactive_hour(self) -> T {
-        self.as_megavoltampere_reactive_hours()
     }
 }
 

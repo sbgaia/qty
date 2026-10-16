@@ -809,12 +809,6 @@ impl<T: Float> Length<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters`].
-    #[inline]
-    pub fn as_meter(self) -> T {
-        self.as_meters()
-    }
-
     /// Creates a [`Length`] from a value in Femtometers (`fm`).
     #[inline]
     pub fn from_femtometers(value: T) -> Self {
@@ -825,12 +819,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_femtometers(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtometers`].
-    #[inline]
-    pub fn as_femtometer(self) -> T {
-        self.as_femtometers()
     }
 
     /// Creates a [`Length`] from a value in Picometers (`pm`).
@@ -845,12 +833,6 @@ impl<T: Float> Length<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picometers`].
-    #[inline]
-    pub fn as_picometer(self) -> T {
-        self.as_picometers()
-    }
-
     /// Creates a [`Length`] from a value in Nanometers (`nm`).
     #[inline]
     pub fn from_nanometers(value: T) -> Self {
@@ -861,12 +843,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_nanometers(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanometers`].
-    #[inline]
-    pub fn as_nanometer(self) -> T {
-        self.as_nanometers()
     }
 
     /// Creates a [`Length`] from a value in Micrometers (`µm`).
@@ -881,12 +857,6 @@ impl<T: Float> Length<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrometers`].
-    #[inline]
-    pub fn as_micrometer(self) -> T {
-        self.as_micrometers()
-    }
-
     /// Creates a [`Length`] from a value in Millimeters (`mm`).
     #[inline]
     pub fn from_millimeters(value: T) -> Self {
@@ -897,12 +867,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_millimeters(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimeters`].
-    #[inline]
-    pub fn as_millimeter(self) -> T {
-        self.as_millimeters()
     }
 
     /// Creates a [`Length`] from a value in Centimeters (`cm`).
@@ -917,12 +881,6 @@ impl<T: Float> Length<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centimeters`].
-    #[inline]
-    pub fn as_centimeter(self) -> T {
-        self.as_centimeters()
-    }
-
     /// Creates a [`Length`] from a value in Decimeters (`dm`).
     #[inline]
     pub fn from_decimeters(value: T) -> Self {
@@ -933,12 +891,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_decimeters(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decimeters`].
-    #[inline]
-    pub fn as_decimeter(self) -> T {
-        self.as_decimeters()
     }
 
     /// Creates a [`Length`] from a value in Decameters (`dam`).
@@ -953,12 +905,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decameters`].
-    #[inline]
-    pub fn as_decameter(self) -> T {
-        self.as_decameters()
-    }
-
     /// Creates a [`Length`] from a value in Hectometers (`hm`).
     #[inline]
     pub fn from_hectometers(value: T) -> Self {
@@ -969,12 +915,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_hectometers(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_hectometers`].
-    #[inline]
-    pub fn as_hectometer(self) -> T {
-        self.as_hectometers()
     }
 
     /// Creates a [`Length`] from a value in Kilometers (`km`).
@@ -989,12 +929,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilometers`].
-    #[inline]
-    pub fn as_kilometer(self) -> T {
-        self.as_kilometers()
-    }
-
     /// Creates a [`Length`] from a value in Megameters (`Mm`).
     #[inline]
     pub fn from_megameters(value: T) -> Self {
@@ -1005,12 +939,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_megameters(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megameters`].
-    #[inline]
-    pub fn as_megameter(self) -> T {
-        self.as_megameters()
     }
 
     /// Creates a [`Length`] from a value in Gigameters (`Gm`).
@@ -1025,12 +953,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigameters`].
-    #[inline]
-    pub fn as_gigameter(self) -> T {
-        self.as_gigameters()
-    }
-
     /// Creates a [`Length`] from a value in Miles (`mi`).
     #[inline]
     pub fn from_miles(value: T) -> Self {
@@ -1041,12 +963,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_miles(self) -> T {
         self.0 / T::from_f64(1609.344)
-    }
-
-    /// Alias for [`Self::as_miles`].
-    #[inline]
-    pub fn as_mile(self) -> T {
-        self.as_miles()
     }
 
     /// Creates a [`Length`] from a value in Yards (`yd`).
@@ -1061,12 +977,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.9144)
     }
 
-    /// Alias for [`Self::as_yards`].
-    #[inline]
-    pub fn as_yard(self) -> T {
-        self.as_yards()
-    }
-
     /// Creates a [`Length`] from a value in Kiloyards (`kyd`).
     #[inline]
     pub fn from_kiloyards(value: T) -> Self {
@@ -1077,12 +987,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_kiloyards(self) -> T {
         self.0 / T::from_f64(914.4)
-    }
-
-    /// Alias for [`Self::as_kiloyards`].
-    #[inline]
-    pub fn as_kiloyard(self) -> T {
-        self.as_kiloyards()
     }
 
     /// Creates a [`Length`] from a value in Feet (`ft`).
@@ -1097,12 +1001,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Alias for [`Self::as_feet`].
-    #[inline]
-    pub fn as_foot(self) -> T {
-        self.as_feet()
-    }
-
     /// Creates a [`Length`] from a value in Kilofeet (`kft`).
     #[inline]
     pub fn from_kilofeet(value: T) -> Self {
@@ -1113,12 +1011,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_kilofeet(self) -> T {
         self.0 / T::from_f64(304.8)
-    }
-
-    /// Alias for [`Self::as_kilofeet`].
-    #[inline]
-    pub fn as_kilofoot(self) -> T {
-        self.as_kilofeet()
     }
 
     /// Creates a [`Length`] from a value in UsSurveyFeet (`ftUS`).
@@ -1133,12 +1025,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.3048006096012192)
     }
 
-    /// Alias for [`Self::as_us_survey_feet`].
-    #[inline]
-    pub fn as_us_survey_foot(self) -> T {
-        self.as_us_survey_feet()
-    }
-
     /// Creates a [`Length`] from a value in Inches (`in`).
     #[inline]
     pub fn from_inches(value: T) -> Self {
@@ -1149,12 +1035,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_inches(self) -> T {
         self.0 / T::from_f64(0.0254)
-    }
-
-    /// Alias for [`Self::as_inches`].
-    #[inline]
-    pub fn as_inch(self) -> T {
-        self.as_inches()
     }
 
     /// Creates a [`Length`] from a value in Mils (`mil`).
@@ -1169,12 +1049,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(2.54e-5)
     }
 
-    /// Alias for [`Self::as_mils`].
-    #[inline]
-    pub fn as_mil(self) -> T {
-        self.as_mils()
-    }
-
     /// Creates a [`Length`] from a value in NauticalMiles (`NM`).
     #[inline]
     pub fn from_nautical_miles(value: T) -> Self {
@@ -1185,12 +1059,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_nautical_miles(self) -> T {
         self.0 / T::from_f64(1852.0)
-    }
-
-    /// Alias for [`Self::as_nautical_miles`].
-    #[inline]
-    pub fn as_nautical_mile(self) -> T {
-        self.as_nautical_miles()
     }
 
     /// Creates a [`Length`] from a value in Fathoms (`fathom`).
@@ -1205,12 +1073,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(1.8288)
     }
 
-    /// Alias for [`Self::as_fathoms`].
-    #[inline]
-    pub fn as_fathom(self) -> T {
-        self.as_fathoms()
-    }
-
     /// Creates a [`Length`] from a value in Shackles (`shackle`).
     #[inline]
     pub fn from_shackles(value: T) -> Self {
@@ -1221,12 +1083,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_shackles(self) -> T {
         self.0 / T::from_f64(27.432)
-    }
-
-    /// Alias for [`Self::as_shackles`].
-    #[inline]
-    pub fn as_shackle(self) -> T {
-        self.as_shackles()
     }
 
     /// Creates a [`Length`] from a value in Microinches (`µin`).
@@ -1241,12 +1097,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(2.54e-8)
     }
 
-    /// Alias for [`Self::as_microinches`].
-    #[inline]
-    pub fn as_microinch(self) -> T {
-        self.as_microinches()
-    }
-
     /// Creates a [`Length`] from a value in PrinterPoints (`pt`).
     #[inline]
     pub fn from_printer_points(value: T) -> Self {
@@ -1257,12 +1107,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_printer_points(self) -> T {
         self.0 / T::from_f64(0.00035145980351459805)
-    }
-
-    /// Alias for [`Self::as_printer_points`].
-    #[inline]
-    pub fn as_printer_point(self) -> T {
-        self.as_printer_points()
     }
 
     /// Creates a [`Length`] from a value in DtpPoints (`pt`).
@@ -1277,12 +1121,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.00035277777777777776)
     }
 
-    /// Alias for [`Self::as_dtp_points`].
-    #[inline]
-    pub fn as_dtp_point(self) -> T {
-        self.as_dtp_points()
-    }
-
     /// Creates a [`Length`] from a value in PrinterPicas (`pica`).
     #[inline]
     pub fn from_printer_picas(value: T) -> Self {
@@ -1293,12 +1131,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_printer_picas(self) -> T {
         self.0 / T::from_f64(0.004217517642175176)
-    }
-
-    /// Alias for [`Self::as_printer_picas`].
-    #[inline]
-    pub fn as_printer_pica(self) -> T {
-        self.as_printer_picas()
     }
 
     /// Creates a [`Length`] from a value in DtpPicas (`pica`).
@@ -1313,12 +1145,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.004233333333333334)
     }
 
-    /// Alias for [`Self::as_dtp_picas`].
-    #[inline]
-    pub fn as_dtp_pica(self) -> T {
-        self.as_dtp_picas()
-    }
-
     /// Creates a [`Length`] from a value in Twips (`twip`).
     #[inline]
     pub fn from_twips(value: T) -> Self {
@@ -1329,12 +1155,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_twips(self) -> T {
         self.0 / T::from_f64(1.763888888888889e-5)
-    }
-
-    /// Alias for [`Self::as_twips`].
-    #[inline]
-    pub fn as_twip(self) -> T {
-        self.as_twips()
     }
 
     /// Creates a [`Length`] from a value in Hands (`h`).
@@ -1349,12 +1169,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(0.1016)
     }
 
-    /// Alias for [`Self::as_hands`].
-    #[inline]
-    pub fn as_hand(self) -> T {
-        self.as_hands()
-    }
-
     /// Creates a [`Length`] from a value in AstronomicalUnits (`au`).
     #[inline]
     pub fn from_astronomical_units(value: T) -> Self {
@@ -1365,12 +1179,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_astronomical_units(self) -> T {
         self.0 / T::from_f64(1.495978707e11)
-    }
-
-    /// Alias for [`Self::as_astronomical_units`].
-    #[inline]
-    pub fn as_astronomical_unit(self) -> T {
-        self.as_astronomical_units()
     }
 
     /// Creates a [`Length`] from a value in Parsecs (`pc`).
@@ -1385,12 +1193,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(3.08567758128e16)
     }
 
-    /// Alias for [`Self::as_parsecs`].
-    #[inline]
-    pub fn as_parsec(self) -> T {
-        self.as_parsecs()
-    }
-
     /// Creates a [`Length`] from a value in Kiloparsecs (`kpc`).
     #[inline]
     pub fn from_kiloparsecs(value: T) -> Self {
@@ -1401,12 +1203,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_kiloparsecs(self) -> T {
         self.0 / T::from_f64(3.08567758128e19)
-    }
-
-    /// Alias for [`Self::as_kiloparsecs`].
-    #[inline]
-    pub fn as_kiloparsec(self) -> T {
-        self.as_kiloparsecs()
     }
 
     /// Creates a [`Length`] from a value in Megaparsecs (`Mpc`).
@@ -1421,12 +1217,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(3.08567758128e22)
     }
 
-    /// Alias for [`Self::as_megaparsecs`].
-    #[inline]
-    pub fn as_megaparsec(self) -> T {
-        self.as_megaparsecs()
-    }
-
     /// Creates a [`Length`] from a value in LightYears (`ly`).
     #[inline]
     pub fn from_light_years(value: T) -> Self {
@@ -1437,12 +1227,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_light_years(self) -> T {
         self.0 / T::from_f64(9.46073047258e15)
-    }
-
-    /// Alias for [`Self::as_light_years`].
-    #[inline]
-    pub fn as_light_year(self) -> T {
-        self.as_light_years()
     }
 
     /// Creates a [`Length`] from a value in KilolightYears (`kly`).
@@ -1457,12 +1241,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(9.46073047258e18)
     }
 
-    /// Alias for [`Self::as_kilolight_years`].
-    #[inline]
-    pub fn as_kilolight_year(self) -> T {
-        self.as_kilolight_years()
-    }
-
     /// Creates a [`Length`] from a value in MegalightYears (`Mly`).
     #[inline]
     pub fn from_megalight_years(value: T) -> Self {
@@ -1473,12 +1251,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_megalight_years(self) -> T {
         self.0 / T::from_f64(9.46073047258e21)
-    }
-
-    /// Alias for [`Self::as_megalight_years`].
-    #[inline]
-    pub fn as_megalight_year(self) -> T {
-        self.as_megalight_years()
     }
 
     /// Creates a [`Length`] from a value in SolarRadiuses (`R⊙`).
@@ -1493,12 +1265,6 @@ impl<T: Float> Length<T> {
         self.0 / T::from_f64(6.957e8)
     }
 
-    /// Alias for [`Self::as_solar_radiuses`].
-    #[inline]
-    pub fn as_solar_radius(self) -> T {
-        self.as_solar_radiuses()
-    }
-
     /// Creates a [`Length`] from a value in Chains (`ch`).
     #[inline]
     pub fn from_chains(value: T) -> Self {
@@ -1509,12 +1275,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_chains(self) -> T {
         self.0 / T::from_f64(20.1168)
-    }
-
-    /// Alias for [`Self::as_chains`].
-    #[inline]
-    pub fn as_chain(self) -> T {
-        self.as_chains()
     }
 
     /// Creates a [`Length`] from a value in Angstroms (`Å`).
@@ -1529,12 +1289,6 @@ impl<T: Float> Length<T> {
         self.0 * T::from_f64(1e10)
     }
 
-    /// Alias for [`Self::as_angstroms`].
-    #[inline]
-    pub fn as_angstrom(self) -> T {
-        self.as_angstroms()
-    }
-
     /// Creates a [`Length`] from a value in DataMiles (`DM`).
     #[inline]
     pub fn from_data_miles(value: T) -> Self {
@@ -1545,12 +1299,6 @@ impl<T: Float> Length<T> {
     #[inline]
     pub fn as_data_miles(self) -> T {
         self.0 / T::from_f64(1828.8)
-    }
-
-    /// Alias for [`Self::as_data_miles`].
-    #[inline]
-    pub fn as_data_mile(self) -> T {
-        self.as_data_miles()
     }
 }
 

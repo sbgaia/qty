@@ -165,12 +165,6 @@ impl<T: Float> VolumeFlowPerArea<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_cubic_meters_per_second_per_square_meter`].
-    #[inline]
-    pub fn as_cubic_meter_per_second_per_square_meter(self) -> T {
-        self.as_cubic_meters_per_second_per_square_meter()
-    }
-
     /// Creates a [`VolumeFlowPerArea`] from a value in CubicFeetPerMinutePerSquareFoot (`CFM/ft²`).
     #[inline]
     pub fn from_cubic_feet_per_minute_per_square_foot(value: T) -> Self {
@@ -181,12 +175,6 @@ impl<T: Float> VolumeFlowPerArea<T> {
     #[inline]
     pub fn as_cubic_feet_per_minute_per_square_foot(self) -> T {
         self.0 / T::from_f64(0.00508)
-    }
-
-    /// Alias for [`Self::as_cubic_feet_per_minute_per_square_foot`].
-    #[inline]
-    pub fn as_cubic_foot_per_minute_per_square_foot(self) -> T {
-        self.as_cubic_feet_per_minute_per_square_foot()
     }
 }
 

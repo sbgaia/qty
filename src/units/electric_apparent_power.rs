@@ -242,12 +242,6 @@ impl<T: Float> ElectricApparentPower<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_voltamperes`].
-    #[inline]
-    pub fn as_voltampere(self) -> T {
-        self.as_voltamperes()
-    }
-
     /// Creates a [`ElectricApparentPower`] from a value in Microvoltamperes (`µVA`).
     #[inline]
     pub fn from_microvoltamperes(value: T) -> Self {
@@ -258,12 +252,6 @@ impl<T: Float> ElectricApparentPower<T> {
     #[inline]
     pub fn as_microvoltamperes(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microvoltamperes`].
-    #[inline]
-    pub fn as_microvoltampere(self) -> T {
-        self.as_microvoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Millivoltamperes (`mVA`).
@@ -278,12 +266,6 @@ impl<T: Float> ElectricApparentPower<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millivoltamperes`].
-    #[inline]
-    pub fn as_millivoltampere(self) -> T {
-        self.as_millivoltamperes()
-    }
-
     /// Creates a [`ElectricApparentPower`] from a value in Kilovoltamperes (`kVA`).
     #[inline]
     pub fn from_kilovoltamperes(value: T) -> Self {
@@ -294,12 +276,6 @@ impl<T: Float> ElectricApparentPower<T> {
     #[inline]
     pub fn as_kilovoltamperes(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilovoltamperes`].
-    #[inline]
-    pub fn as_kilovoltampere(self) -> T {
-        self.as_kilovoltamperes()
     }
 
     /// Creates a [`ElectricApparentPower`] from a value in Megavoltamperes (`MVA`).
@@ -314,12 +290,6 @@ impl<T: Float> ElectricApparentPower<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megavoltamperes`].
-    #[inline]
-    pub fn as_megavoltampere(self) -> T {
-        self.as_megavoltamperes()
-    }
-
     /// Creates a [`ElectricApparentPower`] from a value in Gigavoltamperes (`GVA`).
     #[inline]
     pub fn from_gigavoltamperes(value: T) -> Self {
@@ -330,12 +300,6 @@ impl<T: Float> ElectricApparentPower<T> {
     #[inline]
     pub fn as_gigavoltamperes(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigavoltamperes`].
-    #[inline]
-    pub fn as_gigavoltampere(self) -> T {
-        self.as_gigavoltamperes()
     }
 }
 

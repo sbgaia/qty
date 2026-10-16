@@ -336,12 +336,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_cubic_meter_kelvin`].
-    #[inline]
-    pub fn as_joule_per_cubic_meter_kelvin(self) -> T {
-        self.as_joules_per_cubic_meter_kelvin()
-    }
-
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterKelvin (`kJ/(m³·K)`).
     #[inline]
     pub fn from_kilojoules_per_cubic_meter_kelvin(value: T) -> Self {
@@ -352,12 +346,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_cubic_meter_kelvin`].
-    #[inline]
-    pub fn as_kilojoule_per_cubic_meter_kelvin(self) -> T {
-        self.as_kilojoules_per_cubic_meter_kelvin()
     }
 
     /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterKelvin (`MJ/(m³·K)`).
@@ -372,12 +360,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megajoules_per_cubic_meter_kelvin`].
-    #[inline]
-    pub fn as_megajoule_per_cubic_meter_kelvin(self) -> T {
-        self.as_megajoules_per_cubic_meter_kelvin()
-    }
-
     /// Creates a [`VolumetricHeatCapacity`] from a value in JoulesPerCubicMeterDegreeCelsius (`J/(m³·°C)`).
     #[inline]
     pub fn from_joules_per_cubic_meter_degree_celsius(value: T) -> Self {
@@ -388,12 +370,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     #[inline]
     pub fn as_joules_per_cubic_meter_degree_celsius(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_joules_per_cubic_meter_degree_celsius`].
-    #[inline]
-    pub fn as_joule_per_cubic_meter_degree_celsius(self) -> T {
-        self.as_joules_per_cubic_meter_degree_celsius()
     }
 
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterDegreeCelsius (`kJ/(m³·°C)`).
@@ -408,12 +384,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilojoules_per_cubic_meter_degree_celsius`].
-    #[inline]
-    pub fn as_kilojoule_per_cubic_meter_degree_celsius(self) -> T {
-        self.as_kilojoules_per_cubic_meter_degree_celsius()
-    }
-
     /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterDegreeCelsius (`MJ/(m³·°C)`).
     #[inline]
     pub fn from_megajoules_per_cubic_meter_degree_celsius(value: T) -> Self {
@@ -424,12 +394,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     #[inline]
     pub fn as_megajoules_per_cubic_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megajoules_per_cubic_meter_degree_celsius`].
-    #[inline]
-    pub fn as_megajoule_per_cubic_meter_degree_celsius(self) -> T {
-        self.as_megajoules_per_cubic_meter_degree_celsius()
     }
 
     /// Creates a [`VolumetricHeatCapacity`] from a value in CaloriesPerCubicCentimeterDegreeCelsius (`cal/(cm³·°C)`).
@@ -444,12 +408,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.0 / T::from_f64(4184000.0)
     }
 
-    /// Alias for [`Self::as_calories_per_cubic_centimeter_degree_celsius`].
-    #[inline]
-    pub fn as_calorie_per_cubic_centimeter_degree_celsius(self) -> T {
-        self.as_calories_per_cubic_centimeter_degree_celsius()
-    }
-
     /// Creates a [`VolumetricHeatCapacity`] from a value in KilocaloriesPerCubicCentimeterDegreeCelsius (`kcal/(cm³·°C)`).
     #[inline]
     pub fn from_kilocalories_per_cubic_centimeter_degree_celsius(value: T) -> Self {
@@ -462,12 +420,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.0 / T::from_f64(4.184e9)
     }
 
-    /// Alias for [`Self::as_kilocalories_per_cubic_centimeter_degree_celsius`].
-    #[inline]
-    pub fn as_kilocalorie_per_cubic_centimeter_degree_celsius(self) -> T {
-        self.as_kilocalories_per_cubic_centimeter_degree_celsius()
-    }
-
     /// Creates a [`VolumetricHeatCapacity`] from a value in BtusPerCubicFootDegreeFahrenheit (`BTU/(ft³·°F)`).
     #[inline]
     pub fn from_btus_per_cubic_foot_degree_fahrenheit(value: T) -> Self {
@@ -478,12 +430,6 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     #[inline]
     pub fn as_btus_per_cubic_foot_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(67066.10245409631)
-    }
-
-    /// Alias for [`Self::as_btus_per_cubic_foot_degree_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_cubic_foot_degree_fahrenheit(self) -> T {
-        self.as_btus_per_cubic_foot_degree_fahrenheit()
     }
 }
 

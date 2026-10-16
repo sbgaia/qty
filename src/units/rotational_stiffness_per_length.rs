@@ -277,12 +277,6 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newton_meters_per_radian_per_meter`].
-    #[inline]
-    pub fn as_newton_meter_per_radian_per_meter(self) -> T {
-        self.as_newton_meters_per_radian_per_meter()
-    }
-
     /// Creates a [`RotationalStiffnessPerLength`] from a value in KilonewtonMetersPerRadianPerMeter (`kN·m/rad/m`).
     #[inline]
     pub fn from_kilonewton_meters_per_radian_per_meter(value: T) -> Self {
@@ -293,12 +287,6 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
     #[inline]
     pub fn as_kilonewton_meters_per_radian_per_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewton_meters_per_radian_per_meter`].
-    #[inline]
-    pub fn as_kilonewton_meter_per_radian_per_meter(self) -> T {
-        self.as_kilonewton_meters_per_radian_per_meter()
     }
 
     /// Creates a [`RotationalStiffnessPerLength`] from a value in MeganewtonMetersPerRadianPerMeter (`MN·m/rad/m`).
@@ -313,12 +301,6 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_meganewton_meters_per_radian_per_meter`].
-    #[inline]
-    pub fn as_meganewton_meter_per_radian_per_meter(self) -> T {
-        self.as_meganewton_meters_per_radian_per_meter()
-    }
-
     /// Creates a [`RotationalStiffnessPerLength`] from a value in PoundForceFeetPerDegreesPerFeet (`lbf·ft/deg/ft`).
     #[inline]
     pub fn from_pound_force_feet_per_degrees_per_feet(value: T) -> Self {
@@ -331,12 +313,6 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
         self.0 / T::from_f64(254.86432489329252)
     }
 
-    /// Alias for [`Self::as_pound_force_feet_per_degrees_per_feet`].
-    #[inline]
-    pub fn as_pound_force_foot_per_degrees_per_foot(self) -> T {
-        self.as_pound_force_feet_per_degrees_per_feet()
-    }
-
     /// Creates a [`RotationalStiffnessPerLength`] from a value in KilopoundForceFeetPerDegreesPerFeet (`kipf·ft/°/ft`).
     #[inline]
     pub fn from_kilopound_force_feet_per_degrees_per_feet(value: T) -> Self {
@@ -347,12 +323,6 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
     #[inline]
     pub fn as_kilopound_force_feet_per_degrees_per_feet(self) -> T {
         self.0 / T::from_f64(254864.3248932925)
-    }
-
-    /// Alias for [`Self::as_kilopound_force_feet_per_degrees_per_feet`].
-    #[inline]
-    pub fn as_kilopound_force_foot_per_degrees_per_foot(self) -> T {
-        self.as_kilopound_force_feet_per_degrees_per_feet()
     }
 }
 

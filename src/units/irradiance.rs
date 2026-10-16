@@ -363,12 +363,6 @@ impl<T: Float> Irradiance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_watts_per_square_meter`].
-    #[inline]
-    pub fn as_watt_per_square_meter(self) -> T {
-        self.as_watts_per_square_meter()
-    }
-
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareMeter (`pW/m²`).
     #[inline]
     pub fn from_picowatts_per_square_meter(value: T) -> Self {
@@ -379,12 +373,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_picowatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picowatts_per_square_meter`].
-    #[inline]
-    pub fn as_picowatt_per_square_meter(self) -> T {
-        self.as_picowatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareMeter (`nW/m²`).
@@ -399,12 +387,6 @@ impl<T: Float> Irradiance<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanowatts_per_square_meter`].
-    #[inline]
-    pub fn as_nanowatt_per_square_meter(self) -> T {
-        self.as_nanowatts_per_square_meter()
-    }
-
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareMeter (`µW/m²`).
     #[inline]
     pub fn from_microwatts_per_square_meter(value: T) -> Self {
@@ -415,12 +397,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_microwatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microwatts_per_square_meter`].
-    #[inline]
-    pub fn as_microwatt_per_square_meter(self) -> T {
-        self.as_microwatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareMeter (`mW/m²`).
@@ -435,12 +411,6 @@ impl<T: Float> Irradiance<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milliwatts_per_square_meter`].
-    #[inline]
-    pub fn as_milliwatt_per_square_meter(self) -> T {
-        self.as_milliwatts_per_square_meter()
-    }
-
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareMeter (`kW/m²`).
     #[inline]
     pub fn from_kilowatts_per_square_meter(value: T) -> Self {
@@ -451,12 +421,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilowatts_per_square_meter`].
-    #[inline]
-    pub fn as_kilowatt_per_square_meter(self) -> T {
-        self.as_kilowatts_per_square_meter()
     }
 
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareMeter (`MW/m²`).
@@ -471,12 +435,6 @@ impl<T: Float> Irradiance<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megawatts_per_square_meter`].
-    #[inline]
-    pub fn as_megawatt_per_square_meter(self) -> T {
-        self.as_megawatts_per_square_meter()
-    }
-
     /// Creates a [`Irradiance`] from a value in WattsPerSquareCentimeter (`W/cm²`).
     #[inline]
     pub fn from_watts_per_square_centimeter(value: T) -> Self {
@@ -487,12 +445,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_watts_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_watts_per_square_centimeter`].
-    #[inline]
-    pub fn as_watt_per_square_centimeter(self) -> T {
-        self.as_watts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in PicowattsPerSquareCentimeter (`pW/cm²`).
@@ -507,12 +459,6 @@ impl<T: Float> Irradiance<T> {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_picowatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_picowatt_per_square_centimeter(self) -> T {
-        self.as_picowatts_per_square_centimeter()
-    }
-
     /// Creates a [`Irradiance`] from a value in NanowattsPerSquareCentimeter (`nW/cm²`).
     #[inline]
     pub fn from_nanowatts_per_square_centimeter(value: T) -> Self {
@@ -523,12 +469,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_nanowatts_per_square_centimeter(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_nanowatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_nanowatt_per_square_centimeter(self) -> T {
-        self.as_nanowatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in MicrowattsPerSquareCentimeter (`µW/cm²`).
@@ -543,12 +483,6 @@ impl<T: Float> Irradiance<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_microwatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_microwatt_per_square_centimeter(self) -> T {
-        self.as_microwatts_per_square_centimeter()
-    }
-
     /// Creates a [`Irradiance`] from a value in MilliwattsPerSquareCentimeter (`mW/cm²`).
     #[inline]
     pub fn from_milliwatts_per_square_centimeter(value: T) -> Self {
@@ -559,12 +493,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_milliwatts_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_milliwatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_milliwatt_per_square_centimeter(self) -> T {
-        self.as_milliwatts_per_square_centimeter()
     }
 
     /// Creates a [`Irradiance`] from a value in KilowattsPerSquareCentimeter (`kW/cm²`).
@@ -579,12 +507,6 @@ impl<T: Float> Irradiance<T> {
         self.0 / T::from_f64(1e7)
     }
 
-    /// Alias for [`Self::as_kilowatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_kilowatt_per_square_centimeter(self) -> T {
-        self.as_kilowatts_per_square_centimeter()
-    }
-
     /// Creates a [`Irradiance`] from a value in MegawattsPerSquareCentimeter (`MW/cm²`).
     #[inline]
     pub fn from_megawatts_per_square_centimeter(value: T) -> Self {
@@ -595,12 +517,6 @@ impl<T: Float> Irradiance<T> {
     #[inline]
     pub fn as_megawatts_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(1e10)
-    }
-
-    /// Alias for [`Self::as_megawatts_per_square_centimeter`].
-    #[inline]
-    pub fn as_megawatt_per_square_centimeter(self) -> T {
-        self.as_megawatts_per_square_centimeter()
     }
 }
 

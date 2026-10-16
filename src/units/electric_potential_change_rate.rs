@@ -476,12 +476,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_volts_per_second`].
-    #[inline]
-    pub fn as_volt_per_second(self) -> T {
-        self.as_volts_per_second()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerSecond (`µV/s`).
     #[inline]
     pub fn from_microvolts_per_second(value: T) -> Self {
@@ -492,12 +486,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_microvolts_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microvolts_per_second`].
-    #[inline]
-    pub fn as_microvolt_per_second(self) -> T {
-        self.as_microvolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerSecond (`mV/s`).
@@ -512,12 +500,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millivolts_per_second`].
-    #[inline]
-    pub fn as_millivolt_per_second(self) -> T {
-        self.as_millivolts_per_second()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerSecond (`kV/s`).
     #[inline]
     pub fn from_kilovolts_per_second(value: T) -> Self {
@@ -528,12 +510,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_kilovolts_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilovolts_per_second`].
-    #[inline]
-    pub fn as_kilovolt_per_second(self) -> T {
-        self.as_kilovolts_per_second()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerSecond (`MV/s`).
@@ -548,12 +524,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megavolts_per_second`].
-    #[inline]
-    pub fn as_megavolt_per_second(self) -> T {
-        self.as_megavolts_per_second()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMicrosecond (`V/μs`).
     #[inline]
     pub fn from_volts_per_microsecond(value: T) -> Self {
@@ -564,12 +534,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_volts_per_microsecond(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_volts_per_microsecond`].
-    #[inline]
-    pub fn as_volt_per_microsecond(self) -> T {
-        self.as_volts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMicrosecond (`µV/μs`).
@@ -584,12 +548,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_microvolts_per_microsecond`].
-    #[inline]
-    pub fn as_microvolt_per_microsecond(self) -> T {
-        self.as_microvolts_per_microsecond()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMicrosecond (`mV/μs`).
     #[inline]
     pub fn from_millivolts_per_microsecond(value: T) -> Self {
@@ -600,12 +558,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_millivolts_per_microsecond(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millivolts_per_microsecond`].
-    #[inline]
-    pub fn as_millivolt_per_microsecond(self) -> T {
-        self.as_millivolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMicrosecond (`kV/μs`).
@@ -620,12 +572,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_kilovolts_per_microsecond`].
-    #[inline]
-    pub fn as_kilovolt_per_microsecond(self) -> T {
-        self.as_kilovolts_per_microsecond()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMicrosecond (`MV/μs`).
     #[inline]
     pub fn from_megavolts_per_microsecond(value: T) -> Self {
@@ -636,12 +582,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_megavolts_per_microsecond(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_megavolts_per_microsecond`].
-    #[inline]
-    pub fn as_megavolt_per_microsecond(self) -> T {
-        self.as_megavolts_per_microsecond()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerMinute (`V/min`).
@@ -656,12 +596,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_volts_per_minute`].
-    #[inline]
-    pub fn as_volt_per_minute(self) -> T {
-        self.as_volts_per_minute()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerMinute (`µV/min`).
     #[inline]
     pub fn from_microvolts_per_minute(value: T) -> Self {
@@ -672,12 +606,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_microvolts_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
-    }
-
-    /// Alias for [`Self::as_microvolts_per_minute`].
-    #[inline]
-    pub fn as_microvolt_per_minute(self) -> T {
-        self.as_microvolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerMinute (`mV/min`).
@@ -692,12 +620,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Alias for [`Self::as_millivolts_per_minute`].
-    #[inline]
-    pub fn as_millivolt_per_minute(self) -> T {
-        self.as_millivolts_per_minute()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerMinute (`kV/min`).
     #[inline]
     pub fn from_kilovolts_per_minute(value: T) -> Self {
@@ -708,12 +630,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_kilovolts_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
-    }
-
-    /// Alias for [`Self::as_kilovolts_per_minute`].
-    #[inline]
-    pub fn as_kilovolt_per_minute(self) -> T {
-        self.as_kilovolts_per_minute()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerMinute (`MV/min`).
@@ -728,12 +644,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 / T::from_f64(16666.666666666668)
     }
 
-    /// Alias for [`Self::as_megavolts_per_minute`].
-    #[inline]
-    pub fn as_megavolt_per_minute(self) -> T {
-        self.as_megavolts_per_minute()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in VoltsPerHour (`V/h`).
     #[inline]
     pub fn from_volts_per_hour(value: T) -> Self {
@@ -744,12 +654,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_volts_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_volts_per_hour`].
-    #[inline]
-    pub fn as_volt_per_hour(self) -> T {
-        self.as_volts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MicrovoltsPerHour (`µV/h`).
@@ -764,12 +668,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Alias for [`Self::as_microvolts_per_hour`].
-    #[inline]
-    pub fn as_microvolt_per_hour(self) -> T {
-        self.as_microvolts_per_hour()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MillivoltsPerHour (`mV/h`).
     #[inline]
     pub fn from_millivolts_per_hour(value: T) -> Self {
@@ -780,12 +678,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_millivolts_per_hour(self) -> T {
         self.0 * T::from_f64(3600000.0)
-    }
-
-    /// Alias for [`Self::as_millivolts_per_hour`].
-    #[inline]
-    pub fn as_millivolt_per_hour(self) -> T {
-        self.as_millivolts_per_hour()
     }
 
     /// Creates a [`ElectricPotentialChangeRate`] from a value in KilovoltsPerHour (`kV/h`).
@@ -800,12 +692,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Alias for [`Self::as_kilovolts_per_hour`].
-    #[inline]
-    pub fn as_kilovolt_per_hour(self) -> T {
-        self.as_kilovolts_per_hour()
-    }
-
     /// Creates a [`ElectricPotentialChangeRate`] from a value in MegavoltsPerHour (`MV/h`).
     #[inline]
     pub fn from_megavolts_per_hour(value: T) -> Self {
@@ -816,12 +702,6 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     #[inline]
     pub fn as_megavolts_per_hour(self) -> T {
         self.0 / T::from_f64(277.77777777777777)
-    }
-
-    /// Alias for [`Self::as_megavolts_per_hour`].
-    #[inline]
-    pub fn as_megavolt_per_hour(self) -> T {
-        self.as_megavolts_per_hour()
     }
 }
 

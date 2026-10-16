@@ -492,12 +492,6 @@ impl<T: Float> MassFraction<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decimal_fractions`].
-    #[inline]
-    pub fn as_decimal_fraction(self) -> T {
-        self.as_decimal_fractions()
-    }
-
     /// Creates a [`MassFraction`] from a value in GramsPerGram (`g/g`).
     #[inline]
     pub fn from_grams_per_gram(value: T) -> Self {
@@ -508,12 +502,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_grams_per_gram(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_grams_per_gram`].
-    #[inline]
-    pub fn as_gram_per_gram(self) -> T {
-        self.as_grams_per_gram()
     }
 
     /// Creates a [`MassFraction`] from a value in NanogramsPerGram (`ng/g`).
@@ -528,12 +516,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanograms_per_gram`].
-    #[inline]
-    pub fn as_nanogram_per_gram(self) -> T {
-        self.as_nanograms_per_gram()
-    }
-
     /// Creates a [`MassFraction`] from a value in MicrogramsPerGram (`µg/g`).
     #[inline]
     pub fn from_micrograms_per_gram(value: T) -> Self {
@@ -544,12 +526,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_micrograms_per_gram(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_gram`].
-    #[inline]
-    pub fn as_microgram_per_gram(self) -> T {
-        self.as_micrograms_per_gram()
     }
 
     /// Creates a [`MassFraction`] from a value in MilligramsPerGram (`mg/g`).
@@ -564,12 +540,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_gram`].
-    #[inline]
-    pub fn as_milligram_per_gram(self) -> T {
-        self.as_milligrams_per_gram()
-    }
-
     /// Creates a [`MassFraction`] from a value in CentigramsPerGram (`cg/g`).
     #[inline]
     pub fn from_centigrams_per_gram(value: T) -> Self {
@@ -580,12 +550,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_centigrams_per_gram(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_centigrams_per_gram`].
-    #[inline]
-    pub fn as_centigram_per_gram(self) -> T {
-        self.as_centigrams_per_gram()
     }
 
     /// Creates a [`MassFraction`] from a value in DecigramsPerGram (`dg/g`).
@@ -600,12 +564,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decigrams_per_gram`].
-    #[inline]
-    pub fn as_decigram_per_gram(self) -> T {
-        self.as_decigrams_per_gram()
-    }
-
     /// Creates a [`MassFraction`] from a value in DecagramsPerGram (`dag/g`).
     #[inline]
     pub fn from_decagrams_per_gram(value: T) -> Self {
@@ -616,12 +574,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_decagrams_per_gram(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decagrams_per_gram`].
-    #[inline]
-    pub fn as_decagram_per_gram(self) -> T {
-        self.as_decagrams_per_gram()
     }
 
     /// Creates a [`MassFraction`] from a value in HectogramsPerGram (`hg/g`).
@@ -636,12 +588,6 @@ impl<T: Float> MassFraction<T> {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_hectograms_per_gram`].
-    #[inline]
-    pub fn as_hectogram_per_gram(self) -> T {
-        self.as_hectograms_per_gram()
-    }
-
     /// Creates a [`MassFraction`] from a value in KilogramsPerGram (`kg/g`).
     #[inline]
     pub fn from_kilograms_per_gram(value: T) -> Self {
@@ -652,12 +598,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_kilograms_per_gram(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_gram`].
-    #[inline]
-    pub fn as_kilogram_per_gram(self) -> T {
-        self.as_kilograms_per_gram()
     }
 
     /// Creates a [`MassFraction`] from a value in GramsPerKilogram (`g/kg`).
@@ -672,12 +612,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_kilogram`].
-    #[inline]
-    pub fn as_gram_per_kilogram(self) -> T {
-        self.as_grams_per_kilogram()
-    }
-
     /// Creates a [`MassFraction`] from a value in NanogramsPerKilogram (`ng/kg`).
     #[inline]
     pub fn from_nanograms_per_kilogram(value: T) -> Self {
@@ -688,12 +622,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_nanograms_per_kilogram(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_kilogram`].
-    #[inline]
-    pub fn as_nanogram_per_kilogram(self) -> T {
-        self.as_nanograms_per_kilogram()
     }
 
     /// Creates a [`MassFraction`] from a value in MicrogramsPerKilogram (`µg/kg`).
@@ -708,12 +636,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_micrograms_per_kilogram`].
-    #[inline]
-    pub fn as_microgram_per_kilogram(self) -> T {
-        self.as_micrograms_per_kilogram()
-    }
-
     /// Creates a [`MassFraction`] from a value in MilligramsPerKilogram (`mg/kg`).
     #[inline]
     pub fn from_milligrams_per_kilogram(value: T) -> Self {
@@ -724,12 +646,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_milligrams_per_kilogram(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_kilogram`].
-    #[inline]
-    pub fn as_milligram_per_kilogram(self) -> T {
-        self.as_milligrams_per_kilogram()
     }
 
     /// Creates a [`MassFraction`] from a value in CentigramsPerKilogram (`cg/kg`).
@@ -744,12 +660,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_kilogram`].
-    #[inline]
-    pub fn as_centigram_per_kilogram(self) -> T {
-        self.as_centigrams_per_kilogram()
-    }
-
     /// Creates a [`MassFraction`] from a value in DecigramsPerKilogram (`dg/kg`).
     #[inline]
     pub fn from_decigrams_per_kilogram(value: T) -> Self {
@@ -760,12 +670,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_decigrams_per_kilogram(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_kilogram`].
-    #[inline]
-    pub fn as_decigram_per_kilogram(self) -> T {
-        self.as_decigrams_per_kilogram()
     }
 
     /// Creates a [`MassFraction`] from a value in DecagramsPerKilogram (`dag/kg`).
@@ -780,12 +684,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decagrams_per_kilogram`].
-    #[inline]
-    pub fn as_decagram_per_kilogram(self) -> T {
-        self.as_decagrams_per_kilogram()
-    }
-
     /// Creates a [`MassFraction`] from a value in HectogramsPerKilogram (`hg/kg`).
     #[inline]
     pub fn from_hectograms_per_kilogram(value: T) -> Self {
@@ -798,12 +696,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_hectograms_per_kilogram`].
-    #[inline]
-    pub fn as_hectogram_per_kilogram(self) -> T {
-        self.as_hectograms_per_kilogram()
-    }
-
     /// Creates a [`MassFraction`] from a value in KilogramsPerKilogram (`kg/kg`).
     #[inline]
     pub fn from_kilograms_per_kilogram(value: T) -> Self {
@@ -814,12 +706,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_kilograms_per_kilogram(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilograms_per_kilogram`].
-    #[inline]
-    pub fn as_kilogram_per_kilogram(self) -> T {
-        self.as_kilograms_per_kilogram()
     }
 
     /// Creates a [`MassFraction`] from a value in Percent (`%`).
@@ -846,12 +732,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_parts_per_thousand`].
-    #[inline]
-    pub fn as_part_per_thousand(self) -> T {
-        self.as_parts_per_thousand()
-    }
-
     /// Creates a [`MassFraction`] from a value in PartsPerMillion (`ppm`).
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
@@ -862,12 +742,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_parts_per_million(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_parts_per_million`].
-    #[inline]
-    pub fn as_part_per_million(self) -> T {
-        self.as_parts_per_million()
     }
 
     /// Creates a [`MassFraction`] from a value in PartsPerBillion (`ppb`).
@@ -882,12 +756,6 @@ impl<T: Float> MassFraction<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_parts_per_billion`].
-    #[inline]
-    pub fn as_part_per_billion(self) -> T {
-        self.as_parts_per_billion()
-    }
-
     /// Creates a [`MassFraction`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
@@ -898,12 +766,6 @@ impl<T: Float> MassFraction<T> {
     #[inline]
     pub fn as_parts_per_trillion(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_parts_per_trillion`].
-    #[inline]
-    pub fn as_part_per_trillion(self) -> T {
-        self.as_parts_per_trillion()
     }
 }
 

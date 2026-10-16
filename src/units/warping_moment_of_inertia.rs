@@ -232,12 +232,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters_to_the_sixth`].
-    #[inline]
-    pub fn as_meter_to_the_sixth(self) -> T {
-        self.as_meters_to_the_sixth()
-    }
-
     /// Creates a [`WarpingMomentOfInertia`] from a value in DecimetersToTheSixth (`dm⁶`).
     #[inline]
     pub fn from_decimeters_to_the_sixth(value: T) -> Self {
@@ -248,12 +242,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
     #[inline]
     pub fn as_decimeters_to_the_sixth(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_decimeters_to_the_sixth`].
-    #[inline]
-    pub fn as_decimeter_to_the_sixth(self) -> T {
-        self.as_decimeters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in CentimetersToTheSixth (`cm⁶`).
@@ -268,12 +256,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_centimeters_to_the_sixth`].
-    #[inline]
-    pub fn as_centimeter_to_the_sixth(self) -> T {
-        self.as_centimeters_to_the_sixth()
-    }
-
     /// Creates a [`WarpingMomentOfInertia`] from a value in MillimetersToTheSixth (`mm⁶`).
     #[inline]
     pub fn from_millimeters_to_the_sixth(value: T) -> Self {
@@ -284,12 +266,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
     #[inline]
     pub fn as_millimeters_to_the_sixth(self) -> T {
         self.0 * T::from_f64(1e18)
-    }
-
-    /// Alias for [`Self::as_millimeters_to_the_sixth`].
-    #[inline]
-    pub fn as_millimeter_to_the_sixth(self) -> T {
-        self.as_millimeters_to_the_sixth()
     }
 
     /// Creates a [`WarpingMomentOfInertia`] from a value in FeetToTheSixth (`ft⁶`).
@@ -304,12 +280,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
         self.0 / T::from_f64(0.000801843800914862)
     }
 
-    /// Alias for [`Self::as_feet_to_the_sixth`].
-    #[inline]
-    pub fn as_foot_to_the_sixth(self) -> T {
-        self.as_feet_to_the_sixth()
-    }
-
     /// Creates a [`WarpingMomentOfInertia`] from a value in InchesToTheSixth (`in⁶`).
     #[inline]
     pub fn from_inches_to_the_sixth(value: T) -> Self {
@@ -320,12 +290,6 @@ impl<T: Float> WarpingMomentOfInertia<T> {
     #[inline]
     pub fn as_inches_to_the_sixth(self) -> T {
         self.0 / T::from_f64(2.68535866540096e-10)
-    }
-
-    /// Alias for [`Self::as_inches_to_the_sixth`].
-    #[inline]
-    pub fn as_inch_to_the_sixth(self) -> T {
-        self.as_inches_to_the_sixth()
     }
 }
 

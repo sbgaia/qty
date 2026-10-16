@@ -147,12 +147,6 @@ impl<T: Float> ElectricChargeDensity<T> {
     pub fn as_coulombs_per_cubic_meter(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_coulombs_per_cubic_meter`].
-    #[inline]
-    pub fn as_coulomb_per_cubic_meter(self) -> T {
-        self.as_coulombs_per_cubic_meter()
-    }
 }
 
 impl ElectricChargeDensity<f64> {

@@ -299,12 +299,6 @@ impl<T: Float> Luminance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_candelas_per_square_meter`].
-    #[inline]
-    pub fn as_candela_per_square_meter(self) -> T {
-        self.as_candelas_per_square_meter()
-    }
-
     /// Creates a [`Luminance`] from a value in NanocandelasPerSquareMeter (`nCd/m²`).
     #[inline]
     pub fn from_nanocandelas_per_square_meter(value: T) -> Self {
@@ -315,12 +309,6 @@ impl<T: Float> Luminance<T> {
     #[inline]
     pub fn as_nanocandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanocandelas_per_square_meter`].
-    #[inline]
-    pub fn as_nanocandela_per_square_meter(self) -> T {
-        self.as_nanocandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in MicrocandelasPerSquareMeter (`µCd/m²`).
@@ -335,12 +323,6 @@ impl<T: Float> Luminance<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microcandelas_per_square_meter`].
-    #[inline]
-    pub fn as_microcandela_per_square_meter(self) -> T {
-        self.as_microcandelas_per_square_meter()
-    }
-
     /// Creates a [`Luminance`] from a value in MillicandelasPerSquareMeter (`mCd/m²`).
     #[inline]
     pub fn from_millicandelas_per_square_meter(value: T) -> Self {
@@ -351,12 +333,6 @@ impl<T: Float> Luminance<T> {
     #[inline]
     pub fn as_millicandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millicandelas_per_square_meter`].
-    #[inline]
-    pub fn as_millicandela_per_square_meter(self) -> T {
-        self.as_millicandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in CenticandelasPerSquareMeter (`cCd/m²`).
@@ -371,12 +347,6 @@ impl<T: Float> Luminance<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centicandelas_per_square_meter`].
-    #[inline]
-    pub fn as_centicandela_per_square_meter(self) -> T {
-        self.as_centicandelas_per_square_meter()
-    }
-
     /// Creates a [`Luminance`] from a value in DecicandelasPerSquareMeter (`dCd/m²`).
     #[inline]
     pub fn from_decicandelas_per_square_meter(value: T) -> Self {
@@ -387,12 +357,6 @@ impl<T: Float> Luminance<T> {
     #[inline]
     pub fn as_decicandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decicandelas_per_square_meter`].
-    #[inline]
-    pub fn as_decicandela_per_square_meter(self) -> T {
-        self.as_decicandelas_per_square_meter()
     }
 
     /// Creates a [`Luminance`] from a value in KilocandelasPerSquareMeter (`kCd/m²`).
@@ -407,12 +371,6 @@ impl<T: Float> Luminance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilocandelas_per_square_meter`].
-    #[inline]
-    pub fn as_kilocandela_per_square_meter(self) -> T {
-        self.as_kilocandelas_per_square_meter()
-    }
-
     /// Creates a [`Luminance`] from a value in CandelasPerSquareFoot (`Cd/ft²`).
     #[inline]
     pub fn from_candelas_per_square_foot(value: T) -> Self {
@@ -423,12 +381,6 @@ impl<T: Float> Luminance<T> {
     #[inline]
     pub fn as_candelas_per_square_foot(self) -> T {
         self.0 / T::from_f64(10.763910416709722)
-    }
-
-    /// Alias for [`Self::as_candelas_per_square_foot`].
-    #[inline]
-    pub fn as_candela_per_square_foot(self) -> T {
-        self.as_candelas_per_square_foot()
     }
 
     /// Creates a [`Luminance`] from a value in CandelasPerSquareInch (`Cd/in²`).
@@ -443,12 +395,6 @@ impl<T: Float> Luminance<T> {
         self.0 / T::from_f64(1550.0031000062)
     }
 
-    /// Alias for [`Self::as_candelas_per_square_inch`].
-    #[inline]
-    pub fn as_candela_per_square_inch(self) -> T {
-        self.as_candelas_per_square_inch()
-    }
-
     /// Creates a [`Luminance`] from a value in Nits (`nt`).
     #[inline]
     pub fn from_nits(value: T) -> Self {
@@ -459,12 +405,6 @@ impl<T: Float> Luminance<T> {
     #[inline]
     pub fn as_nits(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_nits`].
-    #[inline]
-    pub fn as_nit(self) -> T {
-        self.as_nits()
     }
 }
 

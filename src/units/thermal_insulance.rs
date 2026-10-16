@@ -258,12 +258,6 @@ impl<T: Float> ThermalInsulance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_square_meter_kelvins_per_kilowatt`].
-    #[inline]
-    pub fn as_square_meter_kelvin_per_kilowatt(self) -> T {
-        self.as_square_meter_kelvins_per_kilowatt()
-    }
-
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterKelvinsPerWatt (`m²K/W`).
     #[inline]
     pub fn from_square_meter_kelvins_per_watt(value: T) -> Self {
@@ -274,12 +268,6 @@ impl<T: Float> ThermalInsulance<T> {
     #[inline]
     pub fn as_square_meter_kelvins_per_watt(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_square_meter_kelvins_per_watt`].
-    #[inline]
-    pub fn as_square_meter_kelvin_per_watt(self) -> T {
-        self.as_square_meter_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMeterDegreesCelsiusPerWatt (`m²°C/W`).
@@ -294,12 +282,6 @@ impl<T: Float> ThermalInsulance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_square_meter_degrees_celsius_per_watt`].
-    #[inline]
-    pub fn as_square_meter_degree_celsius_per_watt(self) -> T {
-        self.as_square_meter_degrees_celsius_per_watt()
-    }
-
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterKelvinsPerWatt (`cm²K/W`).
     #[inline]
     pub fn from_square_centimeter_kelvins_per_watt(value: T) -> Self {
@@ -310,12 +292,6 @@ impl<T: Float> ThermalInsulance<T> {
     #[inline]
     pub fn as_square_centimeter_kelvins_per_watt(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_square_centimeter_kelvins_per_watt`].
-    #[inline]
-    pub fn as_square_centimeter_kelvin_per_watt(self) -> T {
-        self.as_square_centimeter_kelvins_per_watt()
     }
 
     /// Creates a [`ThermalInsulance`] from a value in SquareMillimeterKelvinsPerWatt (`mm²K/W`).
@@ -330,12 +306,6 @@ impl<T: Float> ThermalInsulance<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_square_millimeter_kelvins_per_watt`].
-    #[inline]
-    pub fn as_square_millimeter_kelvin_per_watt(self) -> T {
-        self.as_square_millimeter_kelvins_per_watt()
-    }
-
     /// Creates a [`ThermalInsulance`] from a value in SquareCentimeterHourDegreesCelsiusPerKilocalorie (`cm²Hr°C/kcal`).
     #[inline]
     pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: T) -> Self {
@@ -348,12 +318,6 @@ impl<T: Float> ThermalInsulance<T> {
         self.0 / T::from_f64(0.08604206500956023)
     }
 
-    /// Alias for [`Self::as_square_centimeter_hour_degrees_celsius_per_kilocalorie`].
-    #[inline]
-    pub fn as_square_centimeter_hour_degree_celsius_per_kilocalorie(self) -> T {
-        self.as_square_centimeter_hour_degrees_celsius_per_kilocalorie()
-    }
-
     /// Creates a [`ThermalInsulance`] from a value in HourSquareFeetDegreesFahrenheitPerBtu (`Hrft²°F/Btu`).
     #[inline]
     pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: T) -> Self {
@@ -364,12 +328,6 @@ impl<T: Float> ThermalInsulance<T> {
     #[inline]
     pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> T {
         self.0 / T::from_f64(176.11018368230583)
-    }
-
-    /// Alias for [`Self::as_hour_square_feet_degrees_fahrenheit_per_btu`].
-    #[inline]
-    pub fn as_hour_square_feet_degree_fahrenheit_per_btu(self) -> T {
-        self.as_hour_square_feet_degrees_fahrenheit_per_btu()
     }
 }
 

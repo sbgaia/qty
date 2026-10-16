@@ -274,12 +274,6 @@ impl<T: Float> ElectricResistance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_ohms`].
-    #[inline]
-    pub fn as_ohm(self) -> T {
-        self.as_ohms()
-    }
-
     /// Creates a [`ElectricResistance`] from a value in Nanoohms (`nΩ`).
     #[inline]
     pub fn from_nanoohms(value: T) -> Self {
@@ -290,12 +284,6 @@ impl<T: Float> ElectricResistance<T> {
     #[inline]
     pub fn as_nanoohms(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoohms`].
-    #[inline]
-    pub fn as_nanoohm(self) -> T {
-        self.as_nanoohms()
     }
 
     /// Creates a [`ElectricResistance`] from a value in Microohms (`µΩ`).
@@ -310,12 +298,6 @@ impl<T: Float> ElectricResistance<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microohms`].
-    #[inline]
-    pub fn as_microohm(self) -> T {
-        self.as_microohms()
-    }
-
     /// Creates a [`ElectricResistance`] from a value in Milliohms (`mΩ`).
     #[inline]
     pub fn from_milliohms(value: T) -> Self {
@@ -326,12 +308,6 @@ impl<T: Float> ElectricResistance<T> {
     #[inline]
     pub fn as_milliohms(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliohms`].
-    #[inline]
-    pub fn as_milliohm(self) -> T {
-        self.as_milliohms()
     }
 
     /// Creates a [`ElectricResistance`] from a value in Kiloohms (`kΩ`).
@@ -346,12 +322,6 @@ impl<T: Float> ElectricResistance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kiloohms`].
-    #[inline]
-    pub fn as_kiloohm(self) -> T {
-        self.as_kiloohms()
-    }
-
     /// Creates a [`ElectricResistance`] from a value in Megaohms (`MΩ`).
     #[inline]
     pub fn from_megaohms(value: T) -> Self {
@@ -362,12 +332,6 @@ impl<T: Float> ElectricResistance<T> {
     #[inline]
     pub fn as_megaohms(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megaohms`].
-    #[inline]
-    pub fn as_megaohm(self) -> T {
-        self.as_megaohms()
     }
 
     /// Creates a [`ElectricResistance`] from a value in Gigaohms (`GΩ`).
@@ -382,12 +346,6 @@ impl<T: Float> ElectricResistance<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigaohms`].
-    #[inline]
-    pub fn as_gigaohm(self) -> T {
-        self.as_gigaohms()
-    }
-
     /// Creates a [`ElectricResistance`] from a value in Teraohms (`TΩ`).
     #[inline]
     pub fn from_teraohms(value: T) -> Self {
@@ -398,12 +356,6 @@ impl<T: Float> ElectricResistance<T> {
     #[inline]
     pub fn as_teraohms(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_teraohms`].
-    #[inline]
-    pub fn as_teraohm(self) -> T {
-        self.as_teraohms()
     }
 }
 

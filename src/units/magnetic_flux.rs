@@ -143,12 +143,6 @@ impl<T: Float> MagneticFlux<T> {
     pub fn as_webers(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_webers`].
-    #[inline]
-    pub fn as_weber(self) -> T {
-        self.as_webers()
-    }
 }
 
 impl MagneticFlux<f64> {

@@ -726,12 +726,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newtons_per_meter`].
-    #[inline]
-    pub fn as_newton_per_meter(self) -> T {
-        self.as_newtons_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerMeter (`nN/m`).
     #[inline]
     pub fn from_nanonewtons_per_meter(value: T) -> Self {
@@ -742,12 +736,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_nanonewtons_per_meter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanonewtons_per_meter`].
-    #[inline]
-    pub fn as_nanonewton_per_meter(self) -> T {
-        self.as_nanonewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerMeter (`µN/m`).
@@ -762,12 +750,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micronewtons_per_meter`].
-    #[inline]
-    pub fn as_micronewton_per_meter(self) -> T {
-        self.as_micronewtons_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerMeter (`mN/m`).
     #[inline]
     pub fn from_millinewtons_per_meter(value: T) -> Self {
@@ -778,12 +760,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_millinewtons_per_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millinewtons_per_meter`].
-    #[inline]
-    pub fn as_millinewton_per_meter(self) -> T {
-        self.as_millinewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerMeter (`cN/m`).
@@ -798,12 +774,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centinewtons_per_meter`].
-    #[inline]
-    pub fn as_centinewton_per_meter(self) -> T {
-        self.as_centinewtons_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerMeter (`dN/m`).
     #[inline]
     pub fn from_decinewtons_per_meter(value: T) -> Self {
@@ -814,12 +784,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_decinewtons_per_meter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decinewtons_per_meter`].
-    #[inline]
-    pub fn as_decinewton_per_meter(self) -> T {
-        self.as_decinewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerMeter (`daN/m`).
@@ -834,12 +798,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decanewtons_per_meter`].
-    #[inline]
-    pub fn as_decanewton_per_meter(self) -> T {
-        self.as_decanewtons_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerMeter (`kN/m`).
     #[inline]
     pub fn from_kilonewtons_per_meter(value: T) -> Self {
@@ -850,12 +808,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_kilonewtons_per_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_meter`].
-    #[inline]
-    pub fn as_kilonewton_per_meter(self) -> T {
-        self.as_kilonewtons_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerMeter (`MN/m`).
@@ -870,12 +822,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_meganewtons_per_meter`].
-    #[inline]
-    pub fn as_meganewton_per_meter(self) -> T {
-        self.as_meganewtons_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerCentimeter (`N/cm`).
     #[inline]
     pub fn from_newtons_per_centimeter(value: T) -> Self {
@@ -886,12 +832,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_newtons_per_centimeter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_newtons_per_centimeter`].
-    #[inline]
-    pub fn as_newton_per_centimeter(self) -> T {
-        self.as_newtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerCentimeter (`nN/cm`).
@@ -906,12 +846,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Alias for [`Self::as_nanonewtons_per_centimeter`].
-    #[inline]
-    pub fn as_nanonewton_per_centimeter(self) -> T {
-        self.as_nanonewtons_per_centimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerCentimeter (`µN/cm`).
     #[inline]
     pub fn from_micronewtons_per_centimeter(value: T) -> Self {
@@ -922,12 +856,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_micronewtons_per_centimeter(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_micronewtons_per_centimeter`].
-    #[inline]
-    pub fn as_micronewton_per_centimeter(self) -> T {
-        self.as_micronewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerCentimeter (`mN/cm`).
@@ -942,12 +870,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_millinewtons_per_centimeter`].
-    #[inline]
-    pub fn as_millinewton_per_centimeter(self) -> T {
-        self.as_millinewtons_per_centimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerCentimeter (`cN/cm`).
     #[inline]
     pub fn from_centinewtons_per_centimeter(value: T) -> Self {
@@ -958,12 +880,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_centinewtons_per_centimeter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_centinewtons_per_centimeter`].
-    #[inline]
-    pub fn as_centinewton_per_centimeter(self) -> T {
-        self.as_centinewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerCentimeter (`dN/cm`).
@@ -978,12 +894,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decinewtons_per_centimeter`].
-    #[inline]
-    pub fn as_decinewton_per_centimeter(self) -> T {
-        self.as_decinewtons_per_centimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerCentimeter (`daN/cm`).
     #[inline]
     pub fn from_decanewtons_per_centimeter(value: T) -> Self {
@@ -994,12 +904,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_decanewtons_per_centimeter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_decanewtons_per_centimeter`].
-    #[inline]
-    pub fn as_decanewton_per_centimeter(self) -> T {
-        self.as_decanewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerCentimeter (`kN/cm`).
@@ -1014,12 +918,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_kilonewtons_per_centimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_centimeter(self) -> T {
-        self.as_kilonewtons_per_centimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerCentimeter (`MN/cm`).
     #[inline]
     pub fn from_meganewtons_per_centimeter(value: T) -> Self {
@@ -1030,12 +928,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_meganewtons_per_centimeter(self) -> T {
         self.0 / T::from_f64(1e8)
-    }
-
-    /// Alias for [`Self::as_meganewtons_per_centimeter`].
-    #[inline]
-    pub fn as_meganewton_per_centimeter(self) -> T {
-        self.as_meganewtons_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in NewtonsPerMillimeter (`N/mm`).
@@ -1050,12 +942,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_newtons_per_millimeter`].
-    #[inline]
-    pub fn as_newton_per_millimeter(self) -> T {
-        self.as_newtons_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in NanonewtonsPerMillimeter (`nN/mm`).
     #[inline]
     pub fn from_nanonewtons_per_millimeter(value: T) -> Self {
@@ -1066,12 +952,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_nanonewtons_per_millimeter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_nanonewtons_per_millimeter`].
-    #[inline]
-    pub fn as_nanonewton_per_millimeter(self) -> T {
-        self.as_nanonewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MicronewtonsPerMillimeter (`µN/mm`).
@@ -1086,12 +966,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_micronewtons_per_millimeter`].
-    #[inline]
-    pub fn as_micronewton_per_millimeter(self) -> T {
-        self.as_micronewtons_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in MillinewtonsPerMillimeter (`mN/mm`).
     #[inline]
     pub fn from_millinewtons_per_millimeter(value: T) -> Self {
@@ -1102,12 +976,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_millinewtons_per_millimeter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_millinewtons_per_millimeter`].
-    #[inline]
-    pub fn as_millinewton_per_millimeter(self) -> T {
-        self.as_millinewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in CentinewtonsPerMillimeter (`cN/mm`).
@@ -1122,12 +990,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centinewtons_per_millimeter`].
-    #[inline]
-    pub fn as_centinewton_per_millimeter(self) -> T {
-        self.as_centinewtons_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in DecinewtonsPerMillimeter (`dN/mm`).
     #[inline]
     pub fn from_decinewtons_per_millimeter(value: T) -> Self {
@@ -1138,12 +1000,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_decinewtons_per_millimeter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_decinewtons_per_millimeter`].
-    #[inline]
-    pub fn as_decinewton_per_millimeter(self) -> T {
-        self.as_decinewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in DecanewtonsPerMillimeter (`daN/mm`).
@@ -1158,12 +1014,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_decanewtons_per_millimeter`].
-    #[inline]
-    pub fn as_decanewton_per_millimeter(self) -> T {
-        self.as_decanewtons_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in KilonewtonsPerMillimeter (`kN/mm`).
     #[inline]
     pub fn from_kilonewtons_per_millimeter(value: T) -> Self {
@@ -1174,12 +1024,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_kilonewtons_per_millimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_millimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_millimeter(self) -> T {
-        self.as_kilonewtons_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in MeganewtonsPerMillimeter (`MN/mm`).
@@ -1194,12 +1038,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_meganewtons_per_millimeter`].
-    #[inline]
-    pub fn as_meganewton_per_millimeter(self) -> T {
-        self.as_meganewtons_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerMeter (`kgf/m`).
     #[inline]
     pub fn from_kilograms_force_per_meter(value: T) -> Self {
@@ -1210,12 +1048,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_kilograms_force_per_meter(self) -> T {
         self.0 / T::from_f64(9.80665)
-    }
-
-    /// Alias for [`Self::as_kilograms_force_per_meter`].
-    #[inline]
-    pub fn as_kilogram_force_per_meter(self) -> T {
-        self.as_kilograms_force_per_meter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerCentimeter (`kgf/cm`).
@@ -1230,12 +1062,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(980.665)
     }
 
-    /// Alias for [`Self::as_kilograms_force_per_centimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_centimeter(self) -> T {
-        self.as_kilograms_force_per_centimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in KilogramsForcePerMillimeter (`kgf/mm`).
     #[inline]
     pub fn from_kilograms_force_per_millimeter(value: T) -> Self {
@@ -1246,12 +1072,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_kilograms_force_per_millimeter(self) -> T {
         self.0 / T::from_f64(9806.65)
-    }
-
-    /// Alias for [`Self::as_kilograms_force_per_millimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_millimeter(self) -> T {
-        self.as_kilograms_force_per_millimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerMeter (`tf/m`).
@@ -1266,12 +1086,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(9806.65)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_meter`].
-    #[inline]
-    pub fn as_tonne_force_per_meter(self) -> T {
-        self.as_tonnes_force_per_meter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerCentimeter (`tf/cm`).
     #[inline]
     pub fn from_tonnes_force_per_centimeter(value: T) -> Self {
@@ -1282,12 +1096,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_tonnes_force_per_centimeter(self) -> T {
         self.0 / T::from_f64(980665.0)
-    }
-
-    /// Alias for [`Self::as_tonnes_force_per_centimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_centimeter(self) -> T {
-        self.as_tonnes_force_per_centimeter()
     }
 
     /// Creates a [`ForcePerLength`] from a value in TonnesForcePerMillimeter (`tf/mm`).
@@ -1302,12 +1110,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(9806650.0)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_millimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_millimeter(self) -> T {
-        self.as_tonnes_force_per_millimeter()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerFoot (`lbf/ft`).
     #[inline]
     pub fn from_pounds_force_per_foot(value: T) -> Self {
@@ -1318,12 +1120,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_pounds_force_per_foot(self) -> T {
         self.0 / T::from_f64(14.593902937206364)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_foot`].
-    #[inline]
-    pub fn as_pound_force_per_foot(self) -> T {
-        self.as_pounds_force_per_foot()
     }
 
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerInch (`lbf/in`).
@@ -1338,12 +1134,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(175.1268352464764)
     }
 
-    /// Alias for [`Self::as_pounds_force_per_inch`].
-    #[inline]
-    pub fn as_pound_force_per_inch(self) -> T {
-        self.as_pounds_force_per_inch()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in PoundsForcePerYard (`lbf/yd`).
     #[inline]
     pub fn from_pounds_force_per_yard(value: T) -> Self {
@@ -1354,12 +1144,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_pounds_force_per_yard(self) -> T {
         self.0 / T::from_f64(4.864634312402122)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_yard`].
-    #[inline]
-    pub fn as_pound_force_per_yard(self) -> T {
-        self.as_pounds_force_per_yard()
     }
 
     /// Creates a [`ForcePerLength`] from a value in KilopoundsForcePerFoot (`kipf/ft`).
@@ -1374,12 +1158,6 @@ impl<T: Float> ForcePerLength<T> {
         self.0 / T::from_f64(14593.902937206365)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_foot`].
-    #[inline]
-    pub fn as_kilopound_force_per_foot(self) -> T {
-        self.as_kilopounds_force_per_foot()
-    }
-
     /// Creates a [`ForcePerLength`] from a value in KilopoundsForcePerInch (`kipf/in`).
     #[inline]
     pub fn from_kilopounds_force_per_inch(value: T) -> Self {
@@ -1390,12 +1168,6 @@ impl<T: Float> ForcePerLength<T> {
     #[inline]
     pub fn as_kilopounds_force_per_inch(self) -> T {
         self.0 / T::from_f64(175126.83524647637)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force_per_inch`].
-    #[inline]
-    pub fn as_kilopound_force_per_inch(self) -> T {
-        self.as_kilopounds_force_per_inch()
     }
 }
 

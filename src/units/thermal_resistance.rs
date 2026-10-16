@@ -160,12 +160,6 @@ impl<T: Float> ThermalResistance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kelvins_per_watt`].
-    #[inline]
-    pub fn as_kelvin_per_watt(self) -> T {
-        self.as_kelvins_per_watt()
-    }
-
     /// Creates a [`ThermalResistance`] from a value in DegreesCelsiusPerWatt (`°C/W`).
     #[inline]
     pub fn from_degrees_celsius_per_watt(value: T) -> Self {
@@ -176,12 +170,6 @@ impl<T: Float> ThermalResistance<T> {
     #[inline]
     pub fn as_degrees_celsius_per_watt(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_degrees_celsius_per_watt`].
-    #[inline]
-    pub fn as_degree_celsius_per_watt(self) -> T {
-        self.as_degrees_celsius_per_watt()
     }
 }
 

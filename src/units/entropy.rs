@@ -254,12 +254,6 @@ impl<T: Float> Entropy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_kelvin`].
-    #[inline]
-    pub fn as_joule_per_kelvin(self) -> T {
-        self.as_joules_per_kelvin()
-    }
-
     /// Creates a [`Entropy`] from a value in KilojoulesPerKelvin (`kJ/K`).
     #[inline]
     pub fn from_kilojoules_per_kelvin(value: T) -> Self {
@@ -270,12 +264,6 @@ impl<T: Float> Entropy<T> {
     #[inline]
     pub fn as_kilojoules_per_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_kelvin`].
-    #[inline]
-    pub fn as_kilojoule_per_kelvin(self) -> T {
-        self.as_kilojoules_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in MegajoulesPerKelvin (`MJ/K`).
@@ -290,12 +278,6 @@ impl<T: Float> Entropy<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megajoules_per_kelvin`].
-    #[inline]
-    pub fn as_megajoule_per_kelvin(self) -> T {
-        self.as_megajoules_per_kelvin()
-    }
-
     /// Creates a [`Entropy`] from a value in CaloriesPerKelvin (`cal/K`).
     #[inline]
     pub fn from_calories_per_kelvin(value: T) -> Self {
@@ -306,12 +288,6 @@ impl<T: Float> Entropy<T> {
     #[inline]
     pub fn as_calories_per_kelvin(self) -> T {
         self.0 / T::from_f64(4.184)
-    }
-
-    /// Alias for [`Self::as_calories_per_kelvin`].
-    #[inline]
-    pub fn as_calorie_per_kelvin(self) -> T {
-        self.as_calories_per_kelvin()
     }
 
     /// Creates a [`Entropy`] from a value in KilocaloriesPerKelvin (`kcal/K`).
@@ -326,12 +302,6 @@ impl<T: Float> Entropy<T> {
         self.0 / T::from_f64(4184.0)
     }
 
-    /// Alias for [`Self::as_kilocalories_per_kelvin`].
-    #[inline]
-    pub fn as_kilocalorie_per_kelvin(self) -> T {
-        self.as_kilocalories_per_kelvin()
-    }
-
     /// Creates a [`Entropy`] from a value in JoulesPerDegreeCelsius (`J/°C`).
     #[inline]
     pub fn from_joules_per_degree_celsius(value: T) -> Self {
@@ -344,12 +314,6 @@ impl<T: Float> Entropy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_degree_celsius`].
-    #[inline]
-    pub fn as_joule_per_degree_celsius(self) -> T {
-        self.as_joules_per_degree_celsius()
-    }
-
     /// Creates a [`Entropy`] from a value in KilojoulesPerDegreeCelsius (`kJ/°C`).
     #[inline]
     pub fn from_kilojoules_per_degree_celsius(value: T) -> Self {
@@ -360,12 +324,6 @@ impl<T: Float> Entropy<T> {
     #[inline]
     pub fn as_kilojoules_per_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_degree_celsius`].
-    #[inline]
-    pub fn as_kilojoule_per_degree_celsius(self) -> T {
-        self.as_kilojoules_per_degree_celsius()
     }
 }
 

@@ -738,12 +738,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(0.125)
     }
 
-    /// Alias for [`Self::as_bytes`].
-    #[inline]
-    pub fn as_byte(self) -> T {
-        self.as_bytes()
-    }
-
     /// Creates a [`Information`] from a value in Kilobytes (`kB`).
     #[inline]
     pub fn from_kilobytes(value: T) -> Self {
@@ -754,12 +748,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_kilobytes(self) -> T {
         self.0 / T::from_f64(8000.0)
-    }
-
-    /// Alias for [`Self::as_kilobytes`].
-    #[inline]
-    pub fn as_kilobyte(self) -> T {
-        self.as_kilobytes()
     }
 
     /// Creates a [`Information`] from a value in Megabytes (`MB`).
@@ -774,12 +762,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8000000.0)
     }
 
-    /// Alias for [`Self::as_megabytes`].
-    #[inline]
-    pub fn as_megabyte(self) -> T {
-        self.as_megabytes()
-    }
-
     /// Creates a [`Information`] from a value in Gigabytes (`GB`).
     #[inline]
     pub fn from_gigabytes(value: T) -> Self {
@@ -790,12 +772,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_gigabytes(self) -> T {
         self.0 / T::from_f64(8e9)
-    }
-
-    /// Alias for [`Self::as_gigabytes`].
-    #[inline]
-    pub fn as_gigabyte(self) -> T {
-        self.as_gigabytes()
     }
 
     /// Creates a [`Information`] from a value in Terabytes (`TB`).
@@ -810,12 +786,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8e12)
     }
 
-    /// Alias for [`Self::as_terabytes`].
-    #[inline]
-    pub fn as_terabyte(self) -> T {
-        self.as_terabytes()
-    }
-
     /// Creates a [`Information`] from a value in Petabytes (`PB`).
     #[inline]
     pub fn from_petabytes(value: T) -> Self {
@@ -826,12 +796,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_petabytes(self) -> T {
         self.0 / T::from_f64(8e15)
-    }
-
-    /// Alias for [`Self::as_petabytes`].
-    #[inline]
-    pub fn as_petabyte(self) -> T {
-        self.as_petabytes()
     }
 
     /// Creates a [`Information`] from a value in Exabytes (`EB`).
@@ -846,12 +810,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8e18)
     }
 
-    /// Alias for [`Self::as_exabytes`].
-    #[inline]
-    pub fn as_exabyte(self) -> T {
-        self.as_exabytes()
-    }
-
     /// Creates a [`Information`] from a value in Kibibytes (`KiB`).
     #[inline]
     pub fn from_kibibytes(value: T) -> Self {
@@ -862,12 +820,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_kibibytes(self) -> T {
         self.0 * T::from_f64(0.0001220703125)
-    }
-
-    /// Alias for [`Self::as_kibibytes`].
-    #[inline]
-    pub fn as_kibibyte(self) -> T {
-        self.as_kibibytes()
     }
 
     /// Creates a [`Information`] from a value in Mebibytes (`MiB`).
@@ -882,12 +834,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
-    /// Alias for [`Self::as_mebibytes`].
-    #[inline]
-    pub fn as_mebibyte(self) -> T {
-        self.as_mebibytes()
-    }
-
     /// Creates a [`Information`] from a value in Gibibytes (`GiB`).
     #[inline]
     pub fn from_gibibytes(value: T) -> Self {
@@ -898,12 +844,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_gibibytes(self) -> T {
         self.0 * T::from_f64(1.1641532182693481e-10)
-    }
-
-    /// Alias for [`Self::as_gibibytes`].
-    #[inline]
-    pub fn as_gibibyte(self) -> T {
-        self.as_gibibytes()
     }
 
     /// Creates a [`Information`] from a value in Tebibytes (`TiB`).
@@ -918,12 +858,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
-    /// Alias for [`Self::as_tebibytes`].
-    #[inline]
-    pub fn as_tebibyte(self) -> T {
-        self.as_tebibytes()
-    }
-
     /// Creates a [`Information`] from a value in Pebibytes (`PiB`).
     #[inline]
     pub fn from_pebibytes(value: T) -> Self {
@@ -934,12 +868,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_pebibytes(self) -> T {
         self.0 * T::from_f64(1.1102230246251565e-16)
-    }
-
-    /// Alias for [`Self::as_pebibytes`].
-    #[inline]
-    pub fn as_pebibyte(self) -> T {
-        self.as_pebibytes()
     }
 
     /// Creates a [`Information`] from a value in Exbibytes (`EiB`).
@@ -954,12 +882,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(1.0842021724855044e-19)
     }
 
-    /// Alias for [`Self::as_exbibytes`].
-    #[inline]
-    pub fn as_exbibyte(self) -> T {
-        self.as_exbibytes()
-    }
-
     /// Creates a [`Information`] from a value in Octets (`o`).
     #[inline]
     pub fn from_octets(value: T) -> Self {
@@ -970,12 +892,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_octets(self) -> T {
         self.0 * T::from_f64(0.125)
-    }
-
-    /// Alias for [`Self::as_octets`].
-    #[inline]
-    pub fn as_octet(self) -> T {
-        self.as_octets()
     }
 
     /// Creates a [`Information`] from a value in Kilooctets (`ko`).
@@ -990,12 +906,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8000.0)
     }
 
-    /// Alias for [`Self::as_kilooctets`].
-    #[inline]
-    pub fn as_kilooctet(self) -> T {
-        self.as_kilooctets()
-    }
-
     /// Creates a [`Information`] from a value in Megaoctets (`Mo`).
     #[inline]
     pub fn from_megaoctets(value: T) -> Self {
@@ -1006,12 +916,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_megaoctets(self) -> T {
         self.0 / T::from_f64(8000000.0)
-    }
-
-    /// Alias for [`Self::as_megaoctets`].
-    #[inline]
-    pub fn as_megaoctet(self) -> T {
-        self.as_megaoctets()
     }
 
     /// Creates a [`Information`] from a value in Gigaoctets (`Go`).
@@ -1026,12 +930,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8e9)
     }
 
-    /// Alias for [`Self::as_gigaoctets`].
-    #[inline]
-    pub fn as_gigaoctet(self) -> T {
-        self.as_gigaoctets()
-    }
-
     /// Creates a [`Information`] from a value in Teraoctets (`To`).
     #[inline]
     pub fn from_teraoctets(value: T) -> Self {
@@ -1042,12 +940,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_teraoctets(self) -> T {
         self.0 / T::from_f64(8e12)
-    }
-
-    /// Alias for [`Self::as_teraoctets`].
-    #[inline]
-    pub fn as_teraoctet(self) -> T {
-        self.as_teraoctets()
     }
 
     /// Creates a [`Information`] from a value in Petaoctets (`Po`).
@@ -1062,12 +954,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(8e15)
     }
 
-    /// Alias for [`Self::as_petaoctets`].
-    #[inline]
-    pub fn as_petaoctet(self) -> T {
-        self.as_petaoctets()
-    }
-
     /// Creates a [`Information`] from a value in Exaoctets (`Eo`).
     #[inline]
     pub fn from_exaoctets(value: T) -> Self {
@@ -1078,12 +964,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_exaoctets(self) -> T {
         self.0 / T::from_f64(8e18)
-    }
-
-    /// Alias for [`Self::as_exaoctets`].
-    #[inline]
-    pub fn as_exaoctet(self) -> T {
-        self.as_exaoctets()
     }
 
     /// Creates a [`Information`] from a value in Kibioctets (`Kio`).
@@ -1098,12 +978,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(0.0001220703125)
     }
 
-    /// Alias for [`Self::as_kibioctets`].
-    #[inline]
-    pub fn as_kibioctet(self) -> T {
-        self.as_kibioctets()
-    }
-
     /// Creates a [`Information`] from a value in Mebioctets (`Mio`).
     #[inline]
     pub fn from_mebioctets(value: T) -> Self {
@@ -1114,12 +988,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_mebioctets(self) -> T {
         self.0 * T::from_f64(1.1920928955078125e-7)
-    }
-
-    /// Alias for [`Self::as_mebioctets`].
-    #[inline]
-    pub fn as_mebioctet(self) -> T {
-        self.as_mebioctets()
     }
 
     /// Creates a [`Information`] from a value in Gibioctets (`Gio`).
@@ -1134,12 +1002,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
-    /// Alias for [`Self::as_gibioctets`].
-    #[inline]
-    pub fn as_gibioctet(self) -> T {
-        self.as_gibioctets()
-    }
-
     /// Creates a [`Information`] from a value in Tebioctets (`Tio`).
     #[inline]
     pub fn from_tebioctets(value: T) -> Self {
@@ -1150,12 +1012,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_tebioctets(self) -> T {
         self.0 * T::from_f64(1.1368683772161603e-13)
-    }
-
-    /// Alias for [`Self::as_tebioctets`].
-    #[inline]
-    pub fn as_tebioctet(self) -> T {
-        self.as_tebioctets()
     }
 
     /// Creates a [`Information`] from a value in Pebioctets (`Pio`).
@@ -1170,12 +1026,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
-    /// Alias for [`Self::as_pebioctets`].
-    #[inline]
-    pub fn as_pebioctet(self) -> T {
-        self.as_pebioctets()
-    }
-
     /// Creates a [`Information`] from a value in Exbioctets (`Eio`).
     #[inline]
     pub fn from_exbioctets(value: T) -> Self {
@@ -1186,12 +1036,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_exbioctets(self) -> T {
         self.0 * T::from_f64(1.0842021724855044e-19)
-    }
-
-    /// Alias for [`Self::as_exbioctets`].
-    #[inline]
-    pub fn as_exbioctet(self) -> T {
-        self.as_exbioctets()
     }
 
     /// Creates a [`Information`] from a value in Bits (`b`).
@@ -1206,12 +1050,6 @@ impl<T: Float> Information<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_bits`].
-    #[inline]
-    pub fn as_bit(self) -> T {
-        self.as_bits()
-    }
-
     /// Creates a [`Information`] from a value in Kilobits (`kb`).
     #[inline]
     pub fn from_kilobits(value: T) -> Self {
@@ -1222,12 +1060,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_kilobits(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilobits`].
-    #[inline]
-    pub fn as_kilobit(self) -> T {
-        self.as_kilobits()
     }
 
     /// Creates a [`Information`] from a value in Megabits (`Mb`).
@@ -1242,12 +1074,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megabits`].
-    #[inline]
-    pub fn as_megabit(self) -> T {
-        self.as_megabits()
-    }
-
     /// Creates a [`Information`] from a value in Gigabits (`Gb`).
     #[inline]
     pub fn from_gigabits(value: T) -> Self {
@@ -1258,12 +1084,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_gigabits(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigabits`].
-    #[inline]
-    pub fn as_gigabit(self) -> T {
-        self.as_gigabits()
     }
 
     /// Creates a [`Information`] from a value in Terabits (`Tb`).
@@ -1278,12 +1098,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_terabits`].
-    #[inline]
-    pub fn as_terabit(self) -> T {
-        self.as_terabits()
-    }
-
     /// Creates a [`Information`] from a value in Petabits (`Pb`).
     #[inline]
     pub fn from_petabits(value: T) -> Self {
@@ -1294,12 +1108,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_petabits(self) -> T {
         self.0 / T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_petabits`].
-    #[inline]
-    pub fn as_petabit(self) -> T {
-        self.as_petabits()
     }
 
     /// Creates a [`Information`] from a value in Exabits (`Eb`).
@@ -1314,12 +1122,6 @@ impl<T: Float> Information<T> {
         self.0 / T::from_f64(1e18)
     }
 
-    /// Alias for [`Self::as_exabits`].
-    #[inline]
-    pub fn as_exabit(self) -> T {
-        self.as_exabits()
-    }
-
     /// Creates a [`Information`] from a value in Kibibits (`Kib`).
     #[inline]
     pub fn from_kibibits(value: T) -> Self {
@@ -1330,12 +1132,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_kibibits(self) -> T {
         self.0 * T::from_f64(0.0009765625)
-    }
-
-    /// Alias for [`Self::as_kibibits`].
-    #[inline]
-    pub fn as_kibibit(self) -> T {
-        self.as_kibibits()
     }
 
     /// Creates a [`Information`] from a value in Mebibits (`Mib`).
@@ -1350,12 +1146,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(9.5367431640625e-7)
     }
 
-    /// Alias for [`Self::as_mebibits`].
-    #[inline]
-    pub fn as_mebibit(self) -> T {
-        self.as_mebibits()
-    }
-
     /// Creates a [`Information`] from a value in Gibibits (`Gib`).
     #[inline]
     pub fn from_gibibits(value: T) -> Self {
@@ -1366,12 +1156,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_gibibits(self) -> T {
         self.0 * T::from_f64(9.313225746154785e-10)
-    }
-
-    /// Alias for [`Self::as_gibibits`].
-    #[inline]
-    pub fn as_gibibit(self) -> T {
-        self.as_gibibits()
     }
 
     /// Creates a [`Information`] from a value in Tebibits (`Tib`).
@@ -1386,12 +1170,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(9.094947017729282e-13)
     }
 
-    /// Alias for [`Self::as_tebibits`].
-    #[inline]
-    pub fn as_tebibit(self) -> T {
-        self.as_tebibits()
-    }
-
     /// Creates a [`Information`] from a value in Pebibits (`Pib`).
     #[inline]
     pub fn from_pebibits(value: T) -> Self {
@@ -1404,12 +1182,6 @@ impl<T: Float> Information<T> {
         self.0 * T::from_f64(8.881784197001252e-16)
     }
 
-    /// Alias for [`Self::as_pebibits`].
-    #[inline]
-    pub fn as_pebibit(self) -> T {
-        self.as_pebibits()
-    }
-
     /// Creates a [`Information`] from a value in Exbibits (`Eib`).
     #[inline]
     pub fn from_exbibits(value: T) -> Self {
@@ -1420,12 +1192,6 @@ impl<T: Float> Information<T> {
     #[inline]
     pub fn as_exbibits(self) -> T {
         self.0 * T::from_f64(8.673617379884035e-19)
-    }
-
-    /// Alias for [`Self::as_exbibits`].
-    #[inline]
-    pub fn as_exbibit(self) -> T {
-        self.as_exbibits()
     }
 }
 

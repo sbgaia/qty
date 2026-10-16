@@ -1316,12 +1316,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_cubic_meters_per_second`].
-    #[inline]
-    pub fn as_cubic_meter_per_second(self) -> T {
-        self.as_cubic_meters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicMetersPerMinute (`m³/min`).
     #[inline]
     pub fn from_cubic_meters_per_minute(value: T) -> Self {
@@ -1332,12 +1326,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_meters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_cubic_meters_per_minute`].
-    #[inline]
-    pub fn as_cubic_meter_per_minute(self) -> T {
-        self.as_cubic_meters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicMetersPerHour (`m³/h`).
@@ -1352,12 +1340,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_cubic_meters_per_hour`].
-    #[inline]
-    pub fn as_cubic_meter_per_hour(self) -> T {
-        self.as_cubic_meters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicMetersPerDay (`m³/d`).
     #[inline]
     pub fn from_cubic_meters_per_day(value: T) -> Self {
@@ -1368,12 +1350,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_meters_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
-    }
-
-    /// Alias for [`Self::as_cubic_meters_per_day`].
-    #[inline]
-    pub fn as_cubic_meter_per_day(self) -> T {
-        self.as_cubic_meters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicFeetPerSecond (`ft³/s`).
@@ -1388,12 +1364,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.028316846592)
     }
 
-    /// Alias for [`Self::as_cubic_feet_per_second`].
-    #[inline]
-    pub fn as_cubic_foot_per_second(self) -> T {
-        self.as_cubic_feet_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicInchesPerSecond (`in³/s`).
     #[inline]
     pub fn from_cubic_inches_per_second(value: T) -> Self {
@@ -1404,12 +1374,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_inches_per_second(self) -> T {
         self.0 / T::from_f64(1.6387064e-5)
-    }
-
-    /// Alias for [`Self::as_cubic_inches_per_second`].
-    #[inline]
-    pub fn as_cubic_inch_per_second(self) -> T {
-        self.as_cubic_inches_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicFeetPerMinute (`ft³/min`).
@@ -1424,12 +1388,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.0004719474432)
     }
 
-    /// Alias for [`Self::as_cubic_feet_per_minute`].
-    #[inline]
-    pub fn as_cubic_foot_per_minute(self) -> T {
-        self.as_cubic_feet_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicInchesPerMinute (`in³/min`).
     #[inline]
     pub fn from_cubic_inches_per_minute(value: T) -> Self {
@@ -1440,12 +1398,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_inches_per_minute(self) -> T {
         self.0 / T::from_f64(2.7311773333333333e-7)
-    }
-
-    /// Alias for [`Self::as_cubic_inches_per_minute`].
-    #[inline]
-    pub fn as_cubic_inch_per_minute(self) -> T {
-        self.as_cubic_inches_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicFeetPerHour (`ft³/h`).
@@ -1460,12 +1412,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(7.86579072e-6)
     }
 
-    /// Alias for [`Self::as_cubic_feet_per_hour`].
-    #[inline]
-    pub fn as_cubic_foot_per_hour(self) -> T {
-        self.as_cubic_feet_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicYardsPerSecond (`yd³/s`).
     #[inline]
     pub fn from_cubic_yards_per_second(value: T) -> Self {
@@ -1476,12 +1422,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_yards_per_second(self) -> T {
         self.0 / T::from_f64(0.764554857984)
-    }
-
-    /// Alias for [`Self::as_cubic_yards_per_second`].
-    #[inline]
-    pub fn as_cubic_yard_per_second(self) -> T {
-        self.as_cubic_yards_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicYardsPerMinute (`yd³/min`).
@@ -1496,12 +1436,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.0127425809664)
     }
 
-    /// Alias for [`Self::as_cubic_yards_per_minute`].
-    #[inline]
-    pub fn as_cubic_yard_per_minute(self) -> T {
-        self.as_cubic_yards_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicYardsPerHour (`yd³/h`).
     #[inline]
     pub fn from_cubic_yards_per_hour(value: T) -> Self {
@@ -1512,12 +1446,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_yards_per_hour(self) -> T {
         self.0 / T::from_f64(0.00021237634944)
-    }
-
-    /// Alias for [`Self::as_cubic_yards_per_hour`].
-    #[inline]
-    pub fn as_cubic_yard_per_hour(self) -> T {
-        self.as_cubic_yards_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicYardsPerDay (`cy/day`).
@@ -1532,12 +1460,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(8.84901456e-6)
     }
 
-    /// Alias for [`Self::as_cubic_yards_per_day`].
-    #[inline]
-    pub fn as_cubic_yard_per_day(self) -> T {
-        self.as_cubic_yards_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MillionUsGallonsPerDay (`MGD`).
     #[inline]
     pub fn from_million_us_gallons_per_day(value: T) -> Self {
@@ -1548,12 +1470,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_million_us_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.04381263638888889)
-    }
-
-    /// Alias for [`Self::as_million_us_gallons_per_day`].
-    #[inline]
-    pub fn as_million_us_gallon_per_day(self) -> T {
-        self.as_million_us_gallons_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in UsGallonsPerDay (`gpd`).
@@ -1568,12 +1484,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(4.3812636388888886e-8)
     }
 
-    /// Alias for [`Self::as_us_gallons_per_day`].
-    #[inline]
-    pub fn as_us_gallon_per_day(self) -> T {
-        self.as_us_gallons_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegausGallonsPerDay (`Mgpd`).
     #[inline]
     pub fn from_megaus_gallons_per_day(value: T) -> Self {
@@ -1584,12 +1494,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megaus_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.04381263638888889)
-    }
-
-    /// Alias for [`Self::as_megaus_gallons_per_day`].
-    #[inline]
-    pub fn as_megaus_gallon_per_day(self) -> T {
-        self.as_megaus_gallons_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in LitersPerSecond (`l/s`).
@@ -1604,12 +1508,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_liters_per_second`].
-    #[inline]
-    pub fn as_liter_per_second(self) -> T {
-        self.as_liters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in NanolitersPerSecond (`nl/s`).
     #[inline]
     pub fn from_nanoliters_per_second(value: T) -> Self {
@@ -1620,12 +1518,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_nanoliters_per_second(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_nanoliters_per_second`].
-    #[inline]
-    pub fn as_nanoliter_per_second(self) -> T {
-        self.as_nanoliters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in MicrolitersPerSecond (`µl/s`).
@@ -1640,12 +1532,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_microliters_per_second`].
-    #[inline]
-    pub fn as_microliter_per_second(self) -> T {
-        self.as_microliters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MillilitersPerSecond (`ml/s`).
     #[inline]
     pub fn from_milliliters_per_second(value: T) -> Self {
@@ -1656,12 +1542,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_milliliters_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milliliters_per_second`].
-    #[inline]
-    pub fn as_milliliter_per_second(self) -> T {
-        self.as_milliliters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CentilitersPerSecond (`cl/s`).
@@ -1676,12 +1556,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_centiliters_per_second`].
-    #[inline]
-    pub fn as_centiliter_per_second(self) -> T {
-        self.as_centiliters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in DecilitersPerSecond (`dl/s`).
     #[inline]
     pub fn from_deciliters_per_second(value: T) -> Self {
@@ -1692,12 +1566,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_deciliters_per_second(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_second`].
-    #[inline]
-    pub fn as_deciliter_per_second(self) -> T {
-        self.as_deciliters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in DecalitersPerSecond (`dal/s`).
@@ -1712,12 +1580,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decaliters_per_second`].
-    #[inline]
-    pub fn as_decaliter_per_second(self) -> T {
-        self.as_decaliters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in HectolitersPerSecond (`hl/s`).
     #[inline]
     pub fn from_hectoliters_per_second(value: T) -> Self {
@@ -1728,12 +1590,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_hectoliters_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_hectoliters_per_second`].
-    #[inline]
-    pub fn as_hectoliter_per_second(self) -> T {
-        self.as_hectoliters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in KilolitersPerSecond (`kl/s`).
@@ -1748,12 +1604,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kiloliters_per_second`].
-    #[inline]
-    pub fn as_kiloliter_per_second(self) -> T {
-        self.as_kiloliters_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegalitersPerSecond (`Ml/s`).
     #[inline]
     pub fn from_megaliters_per_second(value: T) -> Self {
@@ -1764,12 +1614,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megaliters_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_megaliters_per_second`].
-    #[inline]
-    pub fn as_megaliter_per_second(self) -> T {
-        self.as_megaliters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in LitersPerMinute (`l/min`).
@@ -1784,12 +1628,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Alias for [`Self::as_liters_per_minute`].
-    #[inline]
-    pub fn as_liter_per_minute(self) -> T {
-        self.as_liters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in NanolitersPerMinute (`nl/min`).
     #[inline]
     pub fn from_nanoliters_per_minute(value: T) -> Self {
@@ -1800,12 +1638,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_nanoliters_per_minute(self) -> T {
         self.0 * T::from_f64(6e13)
-    }
-
-    /// Alias for [`Self::as_nanoliters_per_minute`].
-    #[inline]
-    pub fn as_nanoliter_per_minute(self) -> T {
-        self.as_nanoliters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in MicrolitersPerMinute (`µl/min`).
@@ -1820,12 +1652,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(6e10)
     }
 
-    /// Alias for [`Self::as_microliters_per_minute`].
-    #[inline]
-    pub fn as_microliter_per_minute(self) -> T {
-        self.as_microliters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MillilitersPerMinute (`ml/min`).
     #[inline]
     pub fn from_milliliters_per_minute(value: T) -> Self {
@@ -1836,12 +1662,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_milliliters_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
-    }
-
-    /// Alias for [`Self::as_milliliters_per_minute`].
-    #[inline]
-    pub fn as_milliliter_per_minute(self) -> T {
-        self.as_milliliters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CentilitersPerMinute (`cl/min`).
@@ -1856,12 +1676,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(6000000.0)
     }
 
-    /// Alias for [`Self::as_centiliters_per_minute`].
-    #[inline]
-    pub fn as_centiliter_per_minute(self) -> T {
-        self.as_centiliters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in DecilitersPerMinute (`dl/min`).
     #[inline]
     pub fn from_deciliters_per_minute(value: T) -> Self {
@@ -1872,12 +1686,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_deciliters_per_minute(self) -> T {
         self.0 * T::from_f64(600000.0)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_minute`].
-    #[inline]
-    pub fn as_deciliter_per_minute(self) -> T {
-        self.as_deciliters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in DecalitersPerMinute (`dal/min`).
@@ -1892,12 +1700,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(6000.0)
     }
 
-    /// Alias for [`Self::as_decaliters_per_minute`].
-    #[inline]
-    pub fn as_decaliter_per_minute(self) -> T {
-        self.as_decaliters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in HectolitersPerMinute (`hl/min`).
     #[inline]
     pub fn from_hectoliters_per_minute(value: T) -> Self {
@@ -1908,12 +1710,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_hectoliters_per_minute(self) -> T {
         self.0 * T::from_f64(600.0)
-    }
-
-    /// Alias for [`Self::as_hectoliters_per_minute`].
-    #[inline]
-    pub fn as_hectoliter_per_minute(self) -> T {
-        self.as_hectoliters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in KilolitersPerMinute (`kl/min`).
@@ -1928,12 +1724,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_kiloliters_per_minute`].
-    #[inline]
-    pub fn as_kiloliter_per_minute(self) -> T {
-        self.as_kiloliters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegalitersPerMinute (`Ml/min`).
     #[inline]
     pub fn from_megaliters_per_minute(value: T) -> Self {
@@ -1944,12 +1734,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megaliters_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
-    }
-
-    /// Alias for [`Self::as_megaliters_per_minute`].
-    #[inline]
-    pub fn as_megaliter_per_minute(self) -> T {
-        self.as_megaliters_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in LitersPerHour (`l/h`).
@@ -1964,12 +1748,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(3600000.0)
     }
 
-    /// Alias for [`Self::as_liters_per_hour`].
-    #[inline]
-    pub fn as_liter_per_hour(self) -> T {
-        self.as_liters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in NanolitersPerHour (`nl/h`).
     #[inline]
     pub fn from_nanoliters_per_hour(value: T) -> Self {
@@ -1980,12 +1758,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_nanoliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e15)
-    }
-
-    /// Alias for [`Self::as_nanoliters_per_hour`].
-    #[inline]
-    pub fn as_nanoliter_per_hour(self) -> T {
-        self.as_nanoliters_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in MicrolitersPerHour (`µl/h`).
@@ -2000,12 +1772,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(3.6e12)
     }
 
-    /// Alias for [`Self::as_microliters_per_hour`].
-    #[inline]
-    pub fn as_microliter_per_hour(self) -> T {
-        self.as_microliters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MillilitersPerHour (`ml/h`).
     #[inline]
     pub fn from_milliliters_per_hour(value: T) -> Self {
@@ -2016,12 +1782,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_milliliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e9)
-    }
-
-    /// Alias for [`Self::as_milliliters_per_hour`].
-    #[inline]
-    pub fn as_milliliter_per_hour(self) -> T {
-        self.as_milliliters_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CentilitersPerHour (`cl/h`).
@@ -2036,12 +1796,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(3.6e8)
     }
 
-    /// Alias for [`Self::as_centiliters_per_hour`].
-    #[inline]
-    pub fn as_centiliter_per_hour(self) -> T {
-        self.as_centiliters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in DecilitersPerHour (`dl/h`).
     #[inline]
     pub fn from_deciliters_per_hour(value: T) -> Self {
@@ -2052,12 +1806,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_deciliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e7)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_hour`].
-    #[inline]
-    pub fn as_deciliter_per_hour(self) -> T {
-        self.as_deciliters_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in DecalitersPerHour (`dal/h`).
@@ -2072,12 +1820,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(360000.0)
     }
 
-    /// Alias for [`Self::as_decaliters_per_hour`].
-    #[inline]
-    pub fn as_decaliter_per_hour(self) -> T {
-        self.as_decaliters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in HectolitersPerHour (`hl/h`).
     #[inline]
     pub fn from_hectoliters_per_hour(value: T) -> Self {
@@ -2088,12 +1830,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_hectoliters_per_hour(self) -> T {
         self.0 * T::from_f64(36000.0)
-    }
-
-    /// Alias for [`Self::as_hectoliters_per_hour`].
-    #[inline]
-    pub fn as_hectoliter_per_hour(self) -> T {
-        self.as_hectoliters_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in KilolitersPerHour (`kl/h`).
@@ -2108,12 +1844,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_kiloliters_per_hour`].
-    #[inline]
-    pub fn as_kiloliter_per_hour(self) -> T {
-        self.as_kiloliters_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegalitersPerHour (`Ml/h`).
     #[inline]
     pub fn from_megaliters_per_hour(value: T) -> Self {
@@ -2124,12 +1854,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megaliters_per_hour(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
-    }
-
-    /// Alias for [`Self::as_megaliters_per_hour`].
-    #[inline]
-    pub fn as_megaliter_per_hour(self) -> T {
-        self.as_megaliters_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in LitersPerDay (`l/day`).
@@ -2144,12 +1868,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(8.64e7)
     }
 
-    /// Alias for [`Self::as_liters_per_day`].
-    #[inline]
-    pub fn as_liter_per_day(self) -> T {
-        self.as_liters_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in NanolitersPerDay (`nl/day`).
     #[inline]
     pub fn from_nanoliters_per_day(value: T) -> Self {
@@ -2160,12 +1878,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_nanoliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e16)
-    }
-
-    /// Alias for [`Self::as_nanoliters_per_day`].
-    #[inline]
-    pub fn as_nanoliter_per_day(self) -> T {
-        self.as_nanoliters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in MicrolitersPerDay (`µl/day`).
@@ -2180,12 +1892,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(8.64e13)
     }
 
-    /// Alias for [`Self::as_microliters_per_day`].
-    #[inline]
-    pub fn as_microliter_per_day(self) -> T {
-        self.as_microliters_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MillilitersPerDay (`ml/day`).
     #[inline]
     pub fn from_milliliters_per_day(value: T) -> Self {
@@ -2196,12 +1902,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_milliliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e10)
-    }
-
-    /// Alias for [`Self::as_milliliters_per_day`].
-    #[inline]
-    pub fn as_milliliter_per_day(self) -> T {
-        self.as_milliliters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CentilitersPerDay (`cl/day`).
@@ -2216,12 +1916,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(8.64e9)
     }
 
-    /// Alias for [`Self::as_centiliters_per_day`].
-    #[inline]
-    pub fn as_centiliter_per_day(self) -> T {
-        self.as_centiliters_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in DecilitersPerDay (`dl/day`).
     #[inline]
     pub fn from_deciliters_per_day(value: T) -> Self {
@@ -2232,12 +1926,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_deciliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e8)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_day`].
-    #[inline]
-    pub fn as_deciliter_per_day(self) -> T {
-        self.as_deciliters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in DecalitersPerDay (`dal/day`).
@@ -2252,12 +1940,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(8640000.0)
     }
 
-    /// Alias for [`Self::as_decaliters_per_day`].
-    #[inline]
-    pub fn as_decaliter_per_day(self) -> T {
-        self.as_decaliters_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in HectolitersPerDay (`hl/day`).
     #[inline]
     pub fn from_hectoliters_per_day(value: T) -> Self {
@@ -2268,12 +1950,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_hectoliters_per_day(self) -> T {
         self.0 * T::from_f64(864000.0)
-    }
-
-    /// Alias for [`Self::as_hectoliters_per_day`].
-    #[inline]
-    pub fn as_hectoliter_per_day(self) -> T {
-        self.as_hectoliters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in KilolitersPerDay (`kl/day`).
@@ -2288,12 +1964,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(86400.0)
     }
 
-    /// Alias for [`Self::as_kiloliters_per_day`].
-    #[inline]
-    pub fn as_kiloliter_per_day(self) -> T {
-        self.as_kiloliters_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegalitersPerDay (`Ml/day`).
     #[inline]
     pub fn from_megaliters_per_day(value: T) -> Self {
@@ -2304,12 +1974,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megaliters_per_day(self) -> T {
         self.0 / T::from_f64(0.011574074074074073)
-    }
-
-    /// Alias for [`Self::as_megaliters_per_day`].
-    #[inline]
-    pub fn as_megaliter_per_day(self) -> T {
-        self.as_megaliters_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in UsGallonsPerSecond (`gal (U.S.)/s`).
@@ -2324,12 +1988,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.003785411784)
     }
 
-    /// Alias for [`Self::as_us_gallons_per_second`].
-    #[inline]
-    pub fn as_us_gallon_per_second(self) -> T {
-        self.as_us_gallons_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in UsGallonsPerMinute (`gal (U.S.)/min`).
     #[inline]
     pub fn from_us_gallons_per_minute(value: T) -> Self {
@@ -2340,12 +1998,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_us_gallons_per_minute(self) -> T {
         self.0 / T::from_f64(6.30901964e-5)
-    }
-
-    /// Alias for [`Self::as_us_gallons_per_minute`].
-    #[inline]
-    pub fn as_us_gallon_per_minute(self) -> T {
-        self.as_us_gallons_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in UkGallonsPerDay (`gal (U. K.)/d`).
@@ -2360,12 +2012,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(5.2616782407407406e-8)
     }
 
-    /// Alias for [`Self::as_uk_gallons_per_day`].
-    #[inline]
-    pub fn as_uk_gallon_per_day(self) -> T {
-        self.as_uk_gallons_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegaukGallonsPerDay (`Mgal (U. K.)/d`).
     #[inline]
     pub fn from_megauk_gallons_per_day(value: T) -> Self {
@@ -2376,12 +2022,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megauk_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.05261678240740741)
-    }
-
-    /// Alias for [`Self::as_megauk_gallons_per_day`].
-    #[inline]
-    pub fn as_megauk_gallon_per_day(self) -> T {
-        self.as_megauk_gallons_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in UkGallonsPerHour (`gal (imp.)/h`).
@@ -2396,12 +2036,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(1.2628027777777779e-6)
     }
 
-    /// Alias for [`Self::as_uk_gallons_per_hour`].
-    #[inline]
-    pub fn as_uk_gallon_per_hour(self) -> T {
-        self.as_uk_gallons_per_hour()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in UkGallonsPerMinute (`gal (imp.)/min`).
     #[inline]
     pub fn from_uk_gallons_per_minute(value: T) -> Self {
@@ -2412,12 +2046,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_uk_gallons_per_minute(self) -> T {
         self.0 / T::from_f64(7.576816666666667e-5)
-    }
-
-    /// Alias for [`Self::as_uk_gallons_per_minute`].
-    #[inline]
-    pub fn as_uk_gallon_per_minute(self) -> T {
-        self.as_uk_gallons_per_minute()
     }
 
     /// Creates a [`VolumeFlow`] from a value in UkGallonsPerSecond (`gal (imp.)/s`).
@@ -2432,12 +2060,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.00454609)
     }
 
-    /// Alias for [`Self::as_uk_gallons_per_second`].
-    #[inline]
-    pub fn as_uk_gallon_per_second(self) -> T {
-        self.as_uk_gallons_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in MegaukGallonsPerSecond (`Mgal (imp.)/s`).
     #[inline]
     pub fn from_megauk_gallons_per_second(value: T) -> Self {
@@ -2448,12 +2070,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_megauk_gallons_per_second(self) -> T {
         self.0 / T::from_f64(4546.09)
-    }
-
-    /// Alias for [`Self::as_megauk_gallons_per_second`].
-    #[inline]
-    pub fn as_megauk_gallon_per_second(self) -> T {
-        self.as_megauk_gallons_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in KilousGallonsPerMinute (`kgal (U.S.)/min`).
@@ -2468,12 +2084,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.0630901964)
     }
 
-    /// Alias for [`Self::as_kilous_gallons_per_minute`].
-    #[inline]
-    pub fn as_kilous_gallon_per_minute(self) -> T {
-        self.as_kilous_gallons_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in UsGallonsPerHour (`gal (U.S.)/h`).
     #[inline]
     pub fn from_us_gallons_per_hour(value: T) -> Self {
@@ -2484,12 +2094,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_us_gallons_per_hour(self) -> T {
         self.0 / T::from_f64(1.0515032733333334e-6)
-    }
-
-    /// Alias for [`Self::as_us_gallons_per_hour`].
-    #[inline]
-    pub fn as_us_gallon_per_hour(self) -> T {
-        self.as_us_gallons_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicDecimetersPerMinute (`dm³/min`).
@@ -2504,12 +2108,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Alias for [`Self::as_cubic_decimeters_per_minute`].
-    #[inline]
-    pub fn as_cubic_decimeter_per_minute(self) -> T {
-        self.as_cubic_decimeters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerDay (`bbl/d`).
     #[inline]
     pub fn from_oil_barrels_per_day(value: T) -> Self {
@@ -2520,12 +2118,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_oil_barrels_per_day(self) -> T {
         self.0 / T::from_f64(1.8401307283333333e-6)
-    }
-
-    /// Alias for [`Self::as_oil_barrels_per_day`].
-    #[inline]
-    pub fn as_oil_barrel_per_day(self) -> T {
-        self.as_oil_barrels_per_day()
     }
 
     /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerMinute (`bbl/min`).
@@ -2540,12 +2132,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.0026497882488)
     }
 
-    /// Alias for [`Self::as_oil_barrels_per_minute`].
-    #[inline]
-    pub fn as_oil_barrel_per_minute(self) -> T {
-        self.as_oil_barrels_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerHour (`bbl/hr`).
     #[inline]
     pub fn from_oil_barrels_per_hour(value: T) -> Self {
@@ -2556,12 +2142,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_oil_barrels_per_hour(self) -> T {
         self.0 / T::from_f64(4.416313748e-5)
-    }
-
-    /// Alias for [`Self::as_oil_barrels_per_hour`].
-    #[inline]
-    pub fn as_oil_barrel_per_hour(self) -> T {
-        self.as_oil_barrels_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerSecond (`bbl/s`).
@@ -2576,12 +2156,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.158987294928)
     }
 
-    /// Alias for [`Self::as_oil_barrels_per_second`].
-    #[inline]
-    pub fn as_oil_barrel_per_second(self) -> T {
-        self.as_oil_barrels_per_second()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicMillimetersPerSecond (`mm³/s`).
     #[inline]
     pub fn from_cubic_millimeters_per_second(value: T) -> Self {
@@ -2592,12 +2166,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_millimeters_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_cubic_millimeters_per_second`].
-    #[inline]
-    pub fn as_cubic_millimeter_per_second(self) -> T {
-        self.as_cubic_millimeters_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in CubicMillimetersPerMinute (`mm³/min`).
@@ -2612,12 +2180,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 * T::from_f64(6e10)
     }
 
-    /// Alias for [`Self::as_cubic_millimeters_per_minute`].
-    #[inline]
-    pub fn as_cubic_millimeter_per_minute(self) -> T {
-        self.as_cubic_millimeters_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in AcreFeetPerSecond (`af/s`).
     #[inline]
     pub fn from_acre_feet_per_second(value: T) -> Self {
@@ -2628,12 +2190,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_acre_feet_per_second(self) -> T {
         self.0 / T::from_f64(1233.48183754752)
-    }
-
-    /// Alias for [`Self::as_acre_feet_per_second`].
-    #[inline]
-    pub fn as_acre_foot_per_second(self) -> T {
-        self.as_acre_feet_per_second()
     }
 
     /// Creates a [`VolumeFlow`] from a value in AcreFeetPerMinute (`af/m`).
@@ -2648,12 +2204,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(20.558030625792)
     }
 
-    /// Alias for [`Self::as_acre_feet_per_minute`].
-    #[inline]
-    pub fn as_acre_foot_per_minute(self) -> T {
-        self.as_acre_feet_per_minute()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in AcreFeetPerHour (`af/h`).
     #[inline]
     pub fn from_acre_feet_per_hour(value: T) -> Self {
@@ -2664,12 +2214,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_acre_feet_per_hour(self) -> T {
         self.0 / T::from_f64(0.3426338437632)
-    }
-
-    /// Alias for [`Self::as_acre_feet_per_hour`].
-    #[inline]
-    pub fn as_acre_foot_per_hour(self) -> T {
-        self.as_acre_feet_per_hour()
     }
 
     /// Creates a [`VolumeFlow`] from a value in AcreFeetPerDay (`af/d`).
@@ -2684,12 +2228,6 @@ impl<T: Float> VolumeFlow<T> {
         self.0 / T::from_f64(0.0142764101568)
     }
 
-    /// Alias for [`Self::as_acre_feet_per_day`].
-    #[inline]
-    pub fn as_acre_foot_per_day(self) -> T {
-        self.as_acre_feet_per_day()
-    }
-
     /// Creates a [`VolumeFlow`] from a value in CubicCentimetersPerMinute (`cm³/min`).
     #[inline]
     pub fn from_cubic_centimeters_per_minute(value: T) -> Self {
@@ -2700,12 +2238,6 @@ impl<T: Float> VolumeFlow<T> {
     #[inline]
     pub fn as_cubic_centimeters_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
-    }
-
-    /// Alias for [`Self::as_cubic_centimeters_per_minute`].
-    #[inline]
-    pub fn as_cubic_centimeter_per_minute(self) -> T {
-        self.as_cubic_centimeters_per_minute()
     }
 }
 

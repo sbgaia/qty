@@ -195,12 +195,6 @@ impl<T: Float> TemperatureGradient<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kelvins_per_meter`].
-    #[inline]
-    pub fn as_kelvin_per_meter(self) -> T {
-        self.as_kelvins_per_meter()
-    }
-
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerMeter (`∆°C/m`).
     #[inline]
     pub fn from_degrees_celsius_per_meter(value: T) -> Self {
@@ -211,12 +205,6 @@ impl<T: Float> TemperatureGradient<T> {
     #[inline]
     pub fn as_degrees_celsius_per_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_degrees_celsius_per_meter`].
-    #[inline]
-    pub fn as_degree_celsius_per_meter(self) -> T {
-        self.as_degrees_celsius_per_meter()
     }
 
     /// Creates a [`TemperatureGradient`] from a value in DegreesFahrenheitPerFoot (`∆°F/ft`).
@@ -231,12 +219,6 @@ impl<T: Float> TemperatureGradient<T> {
         self.0 / T::from_f64(1.8226888305628464)
     }
 
-    /// Alias for [`Self::as_degrees_fahrenheit_per_foot`].
-    #[inline]
-    pub fn as_degree_fahrenheit_per_foot(self) -> T {
-        self.as_degrees_fahrenheit_per_foot()
-    }
-
     /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerKilometer (`∆°C/km`).
     #[inline]
     pub fn from_degrees_celsius_per_kilometer(value: T) -> Self {
@@ -247,12 +229,6 @@ impl<T: Float> TemperatureGradient<T> {
     #[inline]
     pub fn as_degrees_celsius_per_kilometer(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_degrees_celsius_per_kilometer`].
-    #[inline]
-    pub fn as_degree_celsius_per_kilometer(self) -> T {
-        self.as_degrees_celsius_per_kilometer()
     }
 }
 

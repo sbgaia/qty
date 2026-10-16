@@ -193,12 +193,6 @@ impl<T: Float> LeakRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_pascal_cubic_meters_per_second`].
-    #[inline]
-    pub fn as_pascal_cubic_meter_per_second(self) -> T {
-        self.as_pascal_cubic_meters_per_second()
-    }
-
     /// Creates a [`LeakRate`] from a value in MillibarLitersPerSecond (`mbar·l/s`).
     #[inline]
     pub fn from_millibar_liters_per_second(value: T) -> Self {
@@ -209,12 +203,6 @@ impl<T: Float> LeakRate<T> {
     #[inline]
     pub fn as_millibar_liters_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_millibar_liters_per_second`].
-    #[inline]
-    pub fn as_millibar_liter_per_second(self) -> T {
-        self.as_millibar_liters_per_second()
     }
 
     /// Creates a [`LeakRate`] from a value in TorrLitersPerSecond (`Torr·l/s`).
@@ -229,12 +217,6 @@ impl<T: Float> LeakRate<T> {
         self.0 * T::from_f64(7.5)
     }
 
-    /// Alias for [`Self::as_torr_liters_per_second`].
-    #[inline]
-    pub fn as_torr_liter_per_second(self) -> T {
-        self.as_torr_liters_per_second()
-    }
-
     /// Creates a [`LeakRate`] from a value in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
     #[inline]
     pub fn from_atm_cubic_centimeters_per_second(value: T) -> Self {
@@ -245,12 +227,6 @@ impl<T: Float> LeakRate<T> {
     #[inline]
     pub fn as_atm_cubic_centimeters_per_second(self) -> T {
         self.0 / T::from_f64(0.101325)
-    }
-
-    /// Alias for [`Self::as_atm_cubic_centimeters_per_second`].
-    #[inline]
-    pub fn as_atm_cubic_centimeter_per_second(self) -> T {
-        self.as_atm_cubic_centimeters_per_second()
     }
 }
 

@@ -198,12 +198,6 @@ impl<T: Float> ElectricApparentEnergy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_voltampere_hours`].
-    #[inline]
-    pub fn as_voltampere_hour(self) -> T {
-        self.as_voltampere_hours()
-    }
-
     /// Creates a [`ElectricApparentEnergy`] from a value in KilovoltampereHours (`kVAh`).
     #[inline]
     pub fn from_kilovoltampere_hours(value: T) -> Self {
@@ -216,12 +210,6 @@ impl<T: Float> ElectricApparentEnergy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilovoltampere_hours`].
-    #[inline]
-    pub fn as_kilovoltampere_hour(self) -> T {
-        self.as_kilovoltampere_hours()
-    }
-
     /// Creates a [`ElectricApparentEnergy`] from a value in MegavoltampereHours (`MVAh`).
     #[inline]
     pub fn from_megavoltampere_hours(value: T) -> Self {
@@ -232,12 +220,6 @@ impl<T: Float> ElectricApparentEnergy<T> {
     #[inline]
     pub fn as_megavoltampere_hours(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megavoltampere_hours`].
-    #[inline]
-    pub fn as_megavoltampere_hour(self) -> T {
-        self.as_megavoltampere_hours()
     }
 }
 

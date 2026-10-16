@@ -187,12 +187,6 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Alias for [`Self::as_grams_per_kilo_watt_hour`].
-    #[inline]
-    pub fn as_gram_per_kilo_watt_hour(self) -> T {
-        self.as_grams_per_kilo_watt_hour()
-    }
-
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in KilogramsPerJoule (`kg/J`).
     #[inline]
     pub fn from_kilograms_per_joule(value: T) -> Self {
@@ -205,12 +199,6 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilograms_per_joule`].
-    #[inline]
-    pub fn as_kilogram_per_joule(self) -> T {
-        self.as_kilograms_per_joule()
-    }
-
     /// Creates a [`BrakeSpecificFuelConsumption`] from a value in PoundsPerMechanicalHorsepowerHour (`lb/hph`).
     #[inline]
     pub fn from_pounds_per_mechanical_horsepower_hour(value: T) -> Self {
@@ -221,12 +209,6 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
     #[inline]
     pub fn as_pounds_per_mechanical_horsepower_hour(self) -> T {
         self.0 / T::from_f64(1.6896594108226585e-7)
-    }
-
-    /// Alias for [`Self::as_pounds_per_mechanical_horsepower_hour`].
-    #[inline]
-    pub fn as_pound_per_mechanical_horsepower_hour(self) -> T {
-        self.as_pounds_per_mechanical_horsepower_hour()
     }
 }
 

@@ -368,12 +368,6 @@ impl<T: Float> Luminosity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_watts`].
-    #[inline]
-    pub fn as_watt(self) -> T {
-        self.as_watts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Femtowatts (`fW`).
     #[inline]
     pub fn from_femtowatts(value: T) -> Self {
@@ -384,12 +378,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_femtowatts(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtowatts`].
-    #[inline]
-    pub fn as_femtowatt(self) -> T {
-        self.as_femtowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Picowatts (`pW`).
@@ -404,12 +392,6 @@ impl<T: Float> Luminosity<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picowatts`].
-    #[inline]
-    pub fn as_picowatt(self) -> T {
-        self.as_picowatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Nanowatts (`nW`).
     #[inline]
     pub fn from_nanowatts(value: T) -> Self {
@@ -420,12 +402,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_nanowatts(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanowatts`].
-    #[inline]
-    pub fn as_nanowatt(self) -> T {
-        self.as_nanowatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Microwatts (`µW`).
@@ -440,12 +416,6 @@ impl<T: Float> Luminosity<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microwatts`].
-    #[inline]
-    pub fn as_microwatt(self) -> T {
-        self.as_microwatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Milliwatts (`mW`).
     #[inline]
     pub fn from_milliwatts(value: T) -> Self {
@@ -456,12 +426,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_milliwatts(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliwatts`].
-    #[inline]
-    pub fn as_milliwatt(self) -> T {
-        self.as_milliwatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Deciwatts (`dW`).
@@ -476,12 +440,6 @@ impl<T: Float> Luminosity<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_deciwatts`].
-    #[inline]
-    pub fn as_deciwatt(self) -> T {
-        self.as_deciwatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Decawatts (`daW`).
     #[inline]
     pub fn from_decawatts(value: T) -> Self {
@@ -492,12 +450,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_decawatts(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decawatts`].
-    #[inline]
-    pub fn as_decawatt(self) -> T {
-        self.as_decawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Kilowatts (`kW`).
@@ -512,12 +464,6 @@ impl<T: Float> Luminosity<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilowatts`].
-    #[inline]
-    pub fn as_kilowatt(self) -> T {
-        self.as_kilowatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Megawatts (`MW`).
     #[inline]
     pub fn from_megawatts(value: T) -> Self {
@@ -528,12 +474,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_megawatts(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megawatts`].
-    #[inline]
-    pub fn as_megawatt(self) -> T {
-        self.as_megawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Gigawatts (`GW`).
@@ -548,12 +488,6 @@ impl<T: Float> Luminosity<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigawatts`].
-    #[inline]
-    pub fn as_gigawatt(self) -> T {
-        self.as_gigawatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in Terawatts (`TW`).
     #[inline]
     pub fn from_terawatts(value: T) -> Self {
@@ -564,12 +498,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_terawatts(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_terawatts`].
-    #[inline]
-    pub fn as_terawatt(self) -> T {
-        self.as_terawatts()
     }
 
     /// Creates a [`Luminosity`] from a value in Petawatts (`PW`).
@@ -584,12 +512,6 @@ impl<T: Float> Luminosity<T> {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Alias for [`Self::as_petawatts`].
-    #[inline]
-    pub fn as_petawatt(self) -> T {
-        self.as_petawatts()
-    }
-
     /// Creates a [`Luminosity`] from a value in SolarLuminosities (`L⊙`).
     #[inline]
     pub fn from_solar_luminosities(value: T) -> Self {
@@ -600,12 +522,6 @@ impl<T: Float> Luminosity<T> {
     #[inline]
     pub fn as_solar_luminosities(self) -> T {
         self.0 / T::from_f64(3.828e26)
-    }
-
-    /// Alias for [`Self::as_solar_luminosities`].
-    #[inline]
-    pub fn as_solar_luminosity(self) -> T {
-        self.as_solar_luminosities()
     }
 }
 

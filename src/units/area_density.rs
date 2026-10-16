@@ -221,12 +221,6 @@ impl<T: Float> AreaDensity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilograms_per_square_meter`].
-    #[inline]
-    pub fn as_kilogram_per_square_meter(self) -> T {
-        self.as_kilograms_per_square_meter()
-    }
-
     /// Creates a [`AreaDensity`] from a value in GramsPerSquareMeter (`g/m²`).
     #[inline]
     pub fn from_grams_per_square_meter(value: T) -> Self {
@@ -237,12 +231,6 @@ impl<T: Float> AreaDensity<T> {
     #[inline]
     pub fn as_grams_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_grams_per_square_meter`].
-    #[inline]
-    pub fn as_gram_per_square_meter(self) -> T {
-        self.as_grams_per_square_meter()
     }
 
     /// Creates a [`AreaDensity`] from a value in MilligramsPerSquareMeter (`mg/m²`).
@@ -257,12 +245,6 @@ impl<T: Float> AreaDensity<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_square_meter`].
-    #[inline]
-    pub fn as_milligram_per_square_meter(self) -> T {
-        self.as_milligrams_per_square_meter()
-    }
-
     /// Creates a [`AreaDensity`] from a value in PoundsPerSquareFoot (`lb/ft²`).
     #[inline]
     pub fn from_pounds_per_square_foot(value: T) -> Self {
@@ -275,12 +257,6 @@ impl<T: Float> AreaDensity<T> {
         self.0 / T::from_f64(4.88242763638305)
     }
 
-    /// Alias for [`Self::as_pounds_per_square_foot`].
-    #[inline]
-    pub fn as_pound_per_square_foot(self) -> T {
-        self.as_pounds_per_square_foot()
-    }
-
     /// Creates a [`AreaDensity`] from a value in PoundsPerThousandSquareFeet (`lb/MSF`).
     #[inline]
     pub fn from_pounds_per_thousand_square_feet(value: T) -> Self {
@@ -291,12 +267,6 @@ impl<T: Float> AreaDensity<T> {
     #[inline]
     pub fn as_pounds_per_thousand_square_feet(self) -> T {
         self.0 / T::from_f64(0.00488242763638305)
-    }
-
-    /// Alias for [`Self::as_pounds_per_thousand_square_feet`].
-    #[inline]
-    pub fn as_pound_per_thousand_square_feet(self) -> T {
-        self.as_pounds_per_thousand_square_feet()
     }
 }
 

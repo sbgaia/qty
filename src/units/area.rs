@@ -347,12 +347,6 @@ impl<T: Float> Area<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_square_kilometers`].
-    #[inline]
-    pub fn as_square_kilometer(self) -> T {
-        self.as_square_kilometers()
-    }
-
     /// Creates a [`Area`] from a value in SquareMeters (`m²`).
     #[inline]
     pub fn from_square_meters(value: T) -> Self {
@@ -363,12 +357,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_square_meters(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_square_meters`].
-    #[inline]
-    pub fn as_square_meter(self) -> T {
-        self.as_square_meters()
     }
 
     /// Creates a [`Area`] from a value in SquareDecimeters (`dm²`).
@@ -383,12 +371,6 @@ impl<T: Float> Area<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_square_decimeters`].
-    #[inline]
-    pub fn as_square_decimeter(self) -> T {
-        self.as_square_decimeters()
-    }
-
     /// Creates a [`Area`] from a value in SquareCentimeters (`cm²`).
     #[inline]
     pub fn from_square_centimeters(value: T) -> Self {
@@ -399,12 +381,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_square_centimeters(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_square_centimeters`].
-    #[inline]
-    pub fn as_square_centimeter(self) -> T {
-        self.as_square_centimeters()
     }
 
     /// Creates a [`Area`] from a value in SquareMillimeters (`mm²`).
@@ -419,12 +395,6 @@ impl<T: Float> Area<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_square_millimeters`].
-    #[inline]
-    pub fn as_square_millimeter(self) -> T {
-        self.as_square_millimeters()
-    }
-
     /// Creates a [`Area`] from a value in SquareMicrometers (`µm²`).
     #[inline]
     pub fn from_square_micrometers(value: T) -> Self {
@@ -435,12 +405,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_square_micrometers`].
-    #[inline]
-    pub fn as_square_micrometer(self) -> T {
-        self.as_square_micrometers()
     }
 
     /// Creates a [`Area`] from a value in SquareMiles (`mi²`).
@@ -455,12 +419,6 @@ impl<T: Float> Area<T> {
         self.0 / T::from_f64(2589988.110336)
     }
 
-    /// Alias for [`Self::as_square_miles`].
-    #[inline]
-    pub fn as_square_mile(self) -> T {
-        self.as_square_miles()
-    }
-
     /// Creates a [`Area`] from a value in SquareYards (`yd²`).
     #[inline]
     pub fn from_square_yards(value: T) -> Self {
@@ -471,12 +429,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_square_yards(self) -> T {
         self.0 / T::from_f64(0.83612736)
-    }
-
-    /// Alias for [`Self::as_square_yards`].
-    #[inline]
-    pub fn as_square_yard(self) -> T {
-        self.as_square_yards()
     }
 
     /// Creates a [`Area`] from a value in SquareFeet (`ft²`).
@@ -491,12 +443,6 @@ impl<T: Float> Area<T> {
         self.0 / T::from_f64(0.09290304)
     }
 
-    /// Alias for [`Self::as_square_feet`].
-    #[inline]
-    pub fn as_square_foot(self) -> T {
-        self.as_square_feet()
-    }
-
     /// Creates a [`Area`] from a value in UsSurveySquareFeet (`ft² (US)`).
     #[inline]
     pub fn from_us_survey_square_feet(value: T) -> Self {
@@ -507,12 +453,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_us_survey_square_feet(self) -> T {
         self.0 / T::from_f64(0.09290341161327484)
-    }
-
-    /// Alias for [`Self::as_us_survey_square_feet`].
-    #[inline]
-    pub fn as_us_survey_square_foot(self) -> T {
-        self.as_us_survey_square_feet()
     }
 
     /// Creates a [`Area`] from a value in SquareInches (`in²`).
@@ -527,12 +467,6 @@ impl<T: Float> Area<T> {
         self.0 / T::from_f64(0.00064516)
     }
 
-    /// Alias for [`Self::as_square_inches`].
-    #[inline]
-    pub fn as_square_inch(self) -> T {
-        self.as_square_inches()
-    }
-
     /// Creates a [`Area`] from a value in Acres (`ac`).
     #[inline]
     pub fn from_acres(value: T) -> Self {
@@ -543,12 +477,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_acres(self) -> T {
         self.0 / T::from_f64(4046.8564224)
-    }
-
-    /// Alias for [`Self::as_acres`].
-    #[inline]
-    pub fn as_acre(self) -> T {
-        self.as_acres()
     }
 
     /// Creates a [`Area`] from a value in Hectares (`ha`).
@@ -563,12 +491,6 @@ impl<T: Float> Area<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_hectares`].
-    #[inline]
-    pub fn as_hectare(self) -> T {
-        self.as_hectares()
-    }
-
     /// Creates a [`Area`] from a value in SquareNauticalMiles (`nmi²`).
     #[inline]
     pub fn from_square_nautical_miles(value: T) -> Self {
@@ -579,12 +501,6 @@ impl<T: Float> Area<T> {
     #[inline]
     pub fn as_square_nautical_miles(self) -> T {
         self.0 / T::from_f64(3429904.0)
-    }
-
-    /// Alias for [`Self::as_square_nautical_miles`].
-    #[inline]
-    pub fn as_square_nautical_mile(self) -> T {
-        self.as_square_nautical_miles()
     }
 }
 

@@ -179,12 +179,6 @@ impl<T: Float> SpecificVolume<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_cubic_meters_per_kilogram`].
-    #[inline]
-    pub fn as_cubic_meter_per_kilogram(self) -> T {
-        self.as_cubic_meters_per_kilogram()
-    }
-
     /// Creates a [`SpecificVolume`] from a value in CubicMillimetersPerKilogram (`mm³/kg`).
     #[inline]
     pub fn from_cubic_millimeters_per_kilogram(value: T) -> Self {
@@ -197,12 +191,6 @@ impl<T: Float> SpecificVolume<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_cubic_millimeters_per_kilogram`].
-    #[inline]
-    pub fn as_cubic_millimeter_per_kilogram(self) -> T {
-        self.as_cubic_millimeters_per_kilogram()
-    }
-
     /// Creates a [`SpecificVolume`] from a value in CubicFeetPerPound (`ft³/lb`).
     #[inline]
     pub fn from_cubic_feet_per_pound(value: T) -> Self {
@@ -213,12 +201,6 @@ impl<T: Float> SpecificVolume<T> {
     #[inline]
     pub fn as_cubic_feet_per_pound(self) -> T {
         self.0 / T::from_f64(0.06242796057614461)
-    }
-
-    /// Alias for [`Self::as_cubic_feet_per_pound`].
-    #[inline]
-    pub fn as_cubic_foot_per_pound(self) -> T {
-        self.as_cubic_feet_per_pound()
     }
 }
 

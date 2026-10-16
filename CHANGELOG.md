@@ -143,6 +143,8 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
+- The singular accessor aliases (`as_meter`, `as_kilogram`, …: 1645
+  methods, 29% of the generated ones): use the plural names (`as_meters`).
 - The `f32` Cargo feature and the `Num` alias: use `Length<f32>` instead.
 - `scalar * quantity` for `f32` (write `quantity * scalar`), so that `f64`
   code needs no type annotations.

@@ -424,12 +424,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_degrees_celsius_per_second`].
-    #[inline]
-    pub fn as_degree_celsius_per_second(self) -> T {
-        self.as_degrees_celsius_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in NanodegreesCelsiusPerSecond (`n°C/s`).
     #[inline]
     pub fn from_nanodegrees_celsius_per_second(value: T) -> Self {
@@ -440,12 +434,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_nanodegrees_celsius_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanodegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_nanodegree_celsius_per_second(self) -> T {
-        self.as_nanodegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in MicrodegreesCelsiusPerSecond (`µ°C/s`).
@@ -460,12 +448,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microdegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_microdegree_celsius_per_second(self) -> T {
-        self.as_microdegrees_celsius_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in MillidegreesCelsiusPerSecond (`m°C/s`).
     #[inline]
     pub fn from_millidegrees_celsius_per_second(value: T) -> Self {
@@ -476,12 +458,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_millidegrees_celsius_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millidegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_millidegree_celsius_per_second(self) -> T {
-        self.as_millidegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in CentidegreesCelsiusPerSecond (`c°C/s`).
@@ -496,12 +472,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centidegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_centidegree_celsius_per_second(self) -> T {
-        self.as_centidegrees_celsius_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DecidegreesCelsiusPerSecond (`d°C/s`).
     #[inline]
     pub fn from_decidegrees_celsius_per_second(value: T) -> Self {
@@ -512,12 +482,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_decidegrees_celsius_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decidegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_decidegree_celsius_per_second(self) -> T {
-        self.as_decidegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DecadegreesCelsiusPerSecond (`da°C/s`).
@@ -532,12 +496,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decadegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_decadegree_celsius_per_second(self) -> T {
-        self.as_decadegrees_celsius_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in HectodegreesCelsiusPerSecond (`h°C/s`).
     #[inline]
     pub fn from_hectodegrees_celsius_per_second(value: T) -> Self {
@@ -548,12 +506,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_hectodegrees_celsius_per_second(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_hectodegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_hectodegree_celsius_per_second(self) -> T {
-        self.as_hectodegrees_celsius_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in KilodegreesCelsiusPerSecond (`k°C/s`).
@@ -568,12 +520,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilodegrees_celsius_per_second`].
-    #[inline]
-    pub fn as_kilodegree_celsius_per_second(self) -> T {
-        self.as_kilodegrees_celsius_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesCelsiusPerMinute (`°C/min`).
     #[inline]
     pub fn from_degrees_celsius_per_minute(value: T) -> Self {
@@ -584,12 +530,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_degrees_celsius_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_degrees_celsius_per_minute`].
-    #[inline]
-    pub fn as_degree_celsius_per_minute(self) -> T {
-        self.as_degrees_celsius_per_minute()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerMinute (`K/min`).
@@ -604,12 +544,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_degrees_kelvin_per_minute`].
-    #[inline]
-    pub fn as_degree_kelvin_per_minute(self) -> T {
-        self.as_degrees_kelvin_per_minute()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerMinute (`°F/min`).
     #[inline]
     pub fn from_degrees_fahrenheit_per_minute(value: T) -> Self {
@@ -620,12 +554,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_degrees_fahrenheit_per_minute(self) -> T {
         self.0 * T::from_f64(108.0)
-    }
-
-    /// Alias for [`Self::as_degrees_fahrenheit_per_minute`].
-    #[inline]
-    pub fn as_degree_fahrenheit_per_minute(self) -> T {
-        self.as_degrees_fahrenheit_per_minute()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerSecond (`°F/s`).
@@ -640,12 +568,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 / T::from_f64(0.5555555555555556)
     }
 
-    /// Alias for [`Self::as_degrees_fahrenheit_per_second`].
-    #[inline]
-    pub fn as_degree_fahrenheit_per_second(self) -> T {
-        self.as_degrees_fahrenheit_per_second()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerSecond (`K/s`).
     #[inline]
     pub fn from_degrees_kelvin_per_second(value: T) -> Self {
@@ -656,12 +578,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_degrees_kelvin_per_second(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_degrees_kelvin_per_second`].
-    #[inline]
-    pub fn as_degree_kelvin_per_second(self) -> T {
-        self.as_degrees_kelvin_per_second()
     }
 
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesCelsiusPerHour (`°C/h`).
@@ -676,12 +592,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_degrees_celsius_per_hour`].
-    #[inline]
-    pub fn as_degree_celsius_per_hour(self) -> T {
-        self.as_degrees_celsius_per_hour()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesKelvinPerHour (`K/h`).
     #[inline]
     pub fn from_degrees_kelvin_per_hour(value: T) -> Self {
@@ -694,12 +604,6 @@ impl<T: Float> TemperatureChangeRate<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_degrees_kelvin_per_hour`].
-    #[inline]
-    pub fn as_degree_kelvin_per_hour(self) -> T {
-        self.as_degrees_kelvin_per_hour()
-    }
-
     /// Creates a [`TemperatureChangeRate`] from a value in DegreesFahrenheitPerHour (`°F/h`).
     #[inline]
     pub fn from_degrees_fahrenheit_per_hour(value: T) -> Self {
@@ -710,12 +614,6 @@ impl<T: Float> TemperatureChangeRate<T> {
     #[inline]
     pub fn as_degrees_fahrenheit_per_hour(self) -> T {
         self.0 * T::from_f64(6480.0)
-    }
-
-    /// Alias for [`Self::as_degrees_fahrenheit_per_hour`].
-    #[inline]
-    pub fn as_degree_fahrenheit_per_hour(self) -> T {
-        self.as_degrees_fahrenheit_per_hour()
     }
 }
 

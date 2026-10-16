@@ -259,12 +259,6 @@ impl<T: Float> ElectricCapacitance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_farads`].
-    #[inline]
-    pub fn as_farad(self) -> T {
-        self.as_farads()
-    }
-
     /// Creates a [`ElectricCapacitance`] from a value in Picofarads (`pF`).
     #[inline]
     pub fn from_picofarads(value: T) -> Self {
@@ -275,12 +269,6 @@ impl<T: Float> ElectricCapacitance<T> {
     #[inline]
     pub fn as_picofarads(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picofarads`].
-    #[inline]
-    pub fn as_picofarad(self) -> T {
-        self.as_picofarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Nanofarads (`nF`).
@@ -295,12 +283,6 @@ impl<T: Float> ElectricCapacitance<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanofarads`].
-    #[inline]
-    pub fn as_nanofarad(self) -> T {
-        self.as_nanofarads()
-    }
-
     /// Creates a [`ElectricCapacitance`] from a value in Microfarads (`µF`).
     #[inline]
     pub fn from_microfarads(value: T) -> Self {
@@ -311,12 +293,6 @@ impl<T: Float> ElectricCapacitance<T> {
     #[inline]
     pub fn as_microfarads(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microfarads`].
-    #[inline]
-    pub fn as_microfarad(self) -> T {
-        self.as_microfarads()
     }
 
     /// Creates a [`ElectricCapacitance`] from a value in Millifarads (`mF`).
@@ -331,12 +307,6 @@ impl<T: Float> ElectricCapacitance<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millifarads`].
-    #[inline]
-    pub fn as_millifarad(self) -> T {
-        self.as_millifarads()
-    }
-
     /// Creates a [`ElectricCapacitance`] from a value in Kilofarads (`kF`).
     #[inline]
     pub fn from_kilofarads(value: T) -> Self {
@@ -349,12 +319,6 @@ impl<T: Float> ElectricCapacitance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilofarads`].
-    #[inline]
-    pub fn as_kilofarad(self) -> T {
-        self.as_kilofarads()
-    }
-
     /// Creates a [`ElectricCapacitance`] from a value in Megafarads (`MF`).
     #[inline]
     pub fn from_megafarads(value: T) -> Self {
@@ -365,12 +329,6 @@ impl<T: Float> ElectricCapacitance<T> {
     #[inline]
     pub fn as_megafarads(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megafarads`].
-    #[inline]
-    pub fn as_megafarad(self) -> T {
-        self.as_megafarads()
     }
 }
 

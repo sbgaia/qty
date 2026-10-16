@@ -647,12 +647,6 @@ impl<T: Float> MassFlow<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_grams_per_second`].
-    #[inline]
-    pub fn as_gram_per_second(self) -> T {
-        self.as_grams_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in NanogramsPerSecond (`ng/s`).
     #[inline]
     pub fn from_nanograms_per_second(value: T) -> Self {
@@ -663,12 +657,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_nanograms_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_second`].
-    #[inline]
-    pub fn as_nanogram_per_second(self) -> T {
-        self.as_nanograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in MicrogramsPerSecond (`µg/s`).
@@ -683,12 +671,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_second`].
-    #[inline]
-    pub fn as_microgram_per_second(self) -> T {
-        self.as_micrograms_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in MilligramsPerSecond (`mg/s`).
     #[inline]
     pub fn from_milligrams_per_second(value: T) -> Self {
@@ -699,12 +681,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_milligrams_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_second`].
-    #[inline]
-    pub fn as_milligram_per_second(self) -> T {
-        self.as_milligrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in CentigramsPerSecond (`cg/s`).
@@ -719,12 +695,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_second`].
-    #[inline]
-    pub fn as_centigram_per_second(self) -> T {
-        self.as_centigrams_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in DecigramsPerSecond (`dg/s`).
     #[inline]
     pub fn from_decigrams_per_second(value: T) -> Self {
@@ -735,12 +705,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_decigrams_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_second`].
-    #[inline]
-    pub fn as_decigram_per_second(self) -> T {
-        self.as_decigrams_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in DecagramsPerSecond (`dag/s`).
@@ -755,12 +719,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decagrams_per_second`].
-    #[inline]
-    pub fn as_decagram_per_second(self) -> T {
-        self.as_decagrams_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in HectogramsPerSecond (`hg/s`).
     #[inline]
     pub fn from_hectograms_per_second(value: T) -> Self {
@@ -771,12 +729,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_hectograms_per_second(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_hectograms_per_second`].
-    #[inline]
-    pub fn as_hectogram_per_second(self) -> T {
-        self.as_hectograms_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerSecond (`kg/s`).
@@ -791,12 +743,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilograms_per_second`].
-    #[inline]
-    pub fn as_kilogram_per_second(self) -> T {
-        self.as_kilograms_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in GramsPerDay (`g/d`).
     #[inline]
     pub fn from_grams_per_day(value: T) -> Self {
@@ -807,12 +753,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_grams_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
-    }
-
-    /// Alias for [`Self::as_grams_per_day`].
-    #[inline]
-    pub fn as_gram_per_day(self) -> T {
-        self.as_grams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in NanogramsPerDay (`ng/d`).
@@ -827,12 +767,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(8.64e13)
     }
 
-    /// Alias for [`Self::as_nanograms_per_day`].
-    #[inline]
-    pub fn as_nanogram_per_day(self) -> T {
-        self.as_nanograms_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in MicrogramsPerDay (`µg/d`).
     #[inline]
     pub fn from_micrograms_per_day(value: T) -> Self {
@@ -843,12 +777,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_micrograms_per_day(self) -> T {
         self.0 * T::from_f64(8.64e10)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_day`].
-    #[inline]
-    pub fn as_microgram_per_day(self) -> T {
-        self.as_micrograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MilligramsPerDay (`mg/d`).
@@ -863,12 +791,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(8.64e7)
     }
 
-    /// Alias for [`Self::as_milligrams_per_day`].
-    #[inline]
-    pub fn as_milligram_per_day(self) -> T {
-        self.as_milligrams_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in CentigramsPerDay (`cg/d`).
     #[inline]
     pub fn from_centigrams_per_day(value: T) -> Self {
@@ -879,12 +801,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_centigrams_per_day(self) -> T {
         self.0 * T::from_f64(8640000.0)
-    }
-
-    /// Alias for [`Self::as_centigrams_per_day`].
-    #[inline]
-    pub fn as_centigram_per_day(self) -> T {
-        self.as_centigrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in DecigramsPerDay (`dg/d`).
@@ -899,12 +815,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(864000.0)
     }
 
-    /// Alias for [`Self::as_decigrams_per_day`].
-    #[inline]
-    pub fn as_decigram_per_day(self) -> T {
-        self.as_decigrams_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in DecagramsPerDay (`dag/d`).
     #[inline]
     pub fn from_decagrams_per_day(value: T) -> Self {
@@ -915,12 +825,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_decagrams_per_day(self) -> T {
         self.0 * T::from_f64(8640.0)
-    }
-
-    /// Alias for [`Self::as_decagrams_per_day`].
-    #[inline]
-    pub fn as_decagram_per_day(self) -> T {
-        self.as_decagrams_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in HectogramsPerDay (`hg/d`).
@@ -935,12 +839,6 @@ impl<T: Float> MassFlow<T> {
         self.0 * T::from_f64(864.0)
     }
 
-    /// Alias for [`Self::as_hectograms_per_day`].
-    #[inline]
-    pub fn as_hectogram_per_day(self) -> T {
-        self.as_hectograms_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in KilogramsPerDay (`kg/d`).
     #[inline]
     pub fn from_kilograms_per_day(value: T) -> Self {
@@ -951,12 +849,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_kilograms_per_day(self) -> T {
         self.0 / T::from_f64(0.011574074074074073)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_day`].
-    #[inline]
-    pub fn as_kilogram_per_day(self) -> T {
-        self.as_kilograms_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MegagramsPerDay (`Mg/d`).
@@ -971,12 +863,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(11.574074074074074)
     }
 
-    /// Alias for [`Self::as_megagrams_per_day`].
-    #[inline]
-    pub fn as_megagram_per_day(self) -> T {
-        self.as_megagrams_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in GramsPerHour (`g/h`).
     #[inline]
     pub fn from_grams_per_hour(value: T) -> Self {
@@ -987,12 +873,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_grams_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_grams_per_hour`].
-    #[inline]
-    pub fn as_gram_per_hour(self) -> T {
-        self.as_grams_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in KilogramsPerHour (`kg/h`).
@@ -1007,12 +887,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Alias for [`Self::as_kilograms_per_hour`].
-    #[inline]
-    pub fn as_kilogram_per_hour(self) -> T {
-        self.as_kilograms_per_hour()
-    }
-
     /// Creates a [`MassFlow`] from a value in KilogramsPerMinute (`kg/min`).
     #[inline]
     pub fn from_kilograms_per_minute(value: T) -> Self {
@@ -1023,12 +897,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_kilograms_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_minute`].
-    #[inline]
-    pub fn as_kilogram_per_minute(self) -> T {
-        self.as_kilograms_per_minute()
     }
 
     /// Creates a [`MassFlow`] from a value in TonnesPerHour (`t/h`).
@@ -1043,12 +911,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(277.77777777777777)
     }
 
-    /// Alias for [`Self::as_tonnes_per_hour`].
-    #[inline]
-    pub fn as_tonne_per_hour(self) -> T {
-        self.as_tonnes_per_hour()
-    }
-
     /// Creates a [`MassFlow`] from a value in PoundsPerDay (`lb/d`).
     #[inline]
     pub fn from_pounds_per_day(value: T) -> Self {
@@ -1059,12 +921,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_pounds_per_day(self) -> T {
         self.0 / T::from_f64(0.005249911689814815)
-    }
-
-    /// Alias for [`Self::as_pounds_per_day`].
-    #[inline]
-    pub fn as_pound_per_day(self) -> T {
-        self.as_pounds_per_day()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerDay (`Mlb/d`).
@@ -1079,12 +935,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(5249.911689814815)
     }
 
-    /// Alias for [`Self::as_megapounds_per_day`].
-    #[inline]
-    pub fn as_megapound_per_day(self) -> T {
-        self.as_megapounds_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in PoundsPerHour (`lb/h`).
     #[inline]
     pub fn from_pounds_per_hour(value: T) -> Self {
@@ -1095,12 +945,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_pounds_per_hour(self) -> T {
         self.0 / T::from_f64(0.12599788055555555)
-    }
-
-    /// Alias for [`Self::as_pounds_per_hour`].
-    #[inline]
-    pub fn as_pound_per_hour(self) -> T {
-        self.as_pounds_per_hour()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerHour (`Mlb/h`).
@@ -1115,12 +959,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(125997.88055555556)
     }
 
-    /// Alias for [`Self::as_megapounds_per_hour`].
-    #[inline]
-    pub fn as_megapound_per_hour(self) -> T {
-        self.as_megapounds_per_hour()
-    }
-
     /// Creates a [`MassFlow`] from a value in PoundsPerMinute (`lb/min`).
     #[inline]
     pub fn from_pounds_per_minute(value: T) -> Self {
@@ -1131,12 +969,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_pounds_per_minute(self) -> T {
         self.0 / T::from_f64(7.559872833333333)
-    }
-
-    /// Alias for [`Self::as_pounds_per_minute`].
-    #[inline]
-    pub fn as_pound_per_minute(self) -> T {
-        self.as_pounds_per_minute()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerMinute (`Mlb/min`).
@@ -1151,12 +983,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(7559872.833333333)
     }
 
-    /// Alias for [`Self::as_megapounds_per_minute`].
-    #[inline]
-    pub fn as_megapound_per_minute(self) -> T {
-        self.as_megapounds_per_minute()
-    }
-
     /// Creates a [`MassFlow`] from a value in PoundsPerSecond (`lb/s`).
     #[inline]
     pub fn from_pounds_per_second(value: T) -> Self {
@@ -1167,12 +993,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_pounds_per_second(self) -> T {
         self.0 / T::from_f64(453.59237)
-    }
-
-    /// Alias for [`Self::as_pounds_per_second`].
-    #[inline]
-    pub fn as_pound_per_second(self) -> T {
-        self.as_pounds_per_second()
     }
 
     /// Creates a [`MassFlow`] from a value in MegapoundsPerSecond (`Mlb/s`).
@@ -1187,12 +1007,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(4.5359237e8)
     }
 
-    /// Alias for [`Self::as_megapounds_per_second`].
-    #[inline]
-    pub fn as_megapound_per_second(self) -> T {
-        self.as_megapounds_per_second()
-    }
-
     /// Creates a [`MassFlow`] from a value in TonnesPerDay (`t/d`).
     #[inline]
     pub fn from_tonnes_per_day(value: T) -> Self {
@@ -1205,12 +1019,6 @@ impl<T: Float> MassFlow<T> {
         self.0 / T::from_f64(11.574074074074074)
     }
 
-    /// Alias for [`Self::as_tonnes_per_day`].
-    #[inline]
-    pub fn as_tonne_per_day(self) -> T {
-        self.as_tonnes_per_day()
-    }
-
     /// Creates a [`MassFlow`] from a value in ShortTonsPerHour (`short tn/h`).
     #[inline]
     pub fn from_short_tons_per_hour(value: T) -> Self {
@@ -1221,12 +1029,6 @@ impl<T: Float> MassFlow<T> {
     #[inline]
     pub fn as_short_tons_per_hour(self) -> T {
         self.0 / T::from_f64(251.9957611111111)
-    }
-
-    /// Alias for [`Self::as_short_tons_per_hour`].
-    #[inline]
-    pub fn as_short_ton_per_hour(self) -> T {
-        self.as_short_tons_per_hour()
     }
 }
 

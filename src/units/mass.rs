@@ -633,12 +633,6 @@ impl<T: Float> Mass<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams`].
-    #[inline]
-    pub fn as_gram(self) -> T {
-        self.as_grams()
-    }
-
     /// Creates a [`Mass`] from a value in Femtograms (`fg`).
     #[inline]
     pub fn from_femtograms(value: T) -> Self {
@@ -649,12 +643,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_femtograms(self) -> T {
         self.0 * T::from_f64(1e18)
-    }
-
-    /// Alias for [`Self::as_femtograms`].
-    #[inline]
-    pub fn as_femtogram(self) -> T {
-        self.as_femtograms()
     }
 
     /// Creates a [`Mass`] from a value in Picograms (`pg`).
@@ -669,12 +657,6 @@ impl<T: Float> Mass<T> {
         self.0 * T::from_f64(1e15)
     }
 
-    /// Alias for [`Self::as_picograms`].
-    #[inline]
-    pub fn as_picogram(self) -> T {
-        self.as_picograms()
-    }
-
     /// Creates a [`Mass`] from a value in Nanograms (`ng`).
     #[inline]
     pub fn from_nanograms(value: T) -> Self {
@@ -685,12 +667,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_nanograms(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_nanograms`].
-    #[inline]
-    pub fn as_nanogram(self) -> T {
-        self.as_nanograms()
     }
 
     /// Creates a [`Mass`] from a value in Micrograms (`µg`).
@@ -705,12 +681,6 @@ impl<T: Float> Mass<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_micrograms`].
-    #[inline]
-    pub fn as_microgram(self) -> T {
-        self.as_micrograms()
-    }
-
     /// Creates a [`Mass`] from a value in Milligrams (`mg`).
     #[inline]
     pub fn from_milligrams(value: T) -> Self {
@@ -721,12 +691,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_milligrams(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams`].
-    #[inline]
-    pub fn as_milligram(self) -> T {
-        self.as_milligrams()
     }
 
     /// Creates a [`Mass`] from a value in Centigrams (`cg`).
@@ -741,12 +705,6 @@ impl<T: Float> Mass<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_centigrams`].
-    #[inline]
-    pub fn as_centigram(self) -> T {
-        self.as_centigrams()
-    }
-
     /// Creates a [`Mass`] from a value in Decigrams (`dg`).
     #[inline]
     pub fn from_decigrams(value: T) -> Self {
@@ -757,12 +715,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_decigrams(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_decigrams`].
-    #[inline]
-    pub fn as_decigram(self) -> T {
-        self.as_decigrams()
     }
 
     /// Creates a [`Mass`] from a value in Decagrams (`dag`).
@@ -777,12 +729,6 @@ impl<T: Float> Mass<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decagrams`].
-    #[inline]
-    pub fn as_decagram(self) -> T {
-        self.as_decagrams()
-    }
-
     /// Creates a [`Mass`] from a value in Hectograms (`hg`).
     #[inline]
     pub fn from_hectograms(value: T) -> Self {
@@ -793,12 +739,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_hectograms(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_hectograms`].
-    #[inline]
-    pub fn as_hectogram(self) -> T {
-        self.as_hectograms()
     }
 
     /// Creates a [`Mass`] from a value in Kilograms (`kg`).
@@ -813,12 +753,6 @@ impl<T: Float> Mass<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilograms`].
-    #[inline]
-    pub fn as_kilogram(self) -> T {
-        self.as_kilograms()
-    }
-
     /// Creates a [`Mass`] from a value in Tonnes (`t`).
     #[inline]
     pub fn from_tonnes(value: T) -> Self {
@@ -829,12 +763,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_tonnes(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_tonnes`].
-    #[inline]
-    pub fn as_tonne(self) -> T {
-        self.as_tonnes()
     }
 
     /// Creates a [`Mass`] from a value in Kilotonnes (`kt`).
@@ -849,12 +777,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_kilotonnes`].
-    #[inline]
-    pub fn as_kilotonne(self) -> T {
-        self.as_kilotonnes()
-    }
-
     /// Creates a [`Mass`] from a value in Megatonnes (`Mt`).
     #[inline]
     pub fn from_megatonnes(value: T) -> Self {
@@ -865,12 +787,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_megatonnes(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_megatonnes`].
-    #[inline]
-    pub fn as_megatonne(self) -> T {
-        self.as_megatonnes()
     }
 
     /// Creates a [`Mass`] from a value in ShortTons (`t (short)`).
@@ -885,12 +801,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(907.18474)
     }
 
-    /// Alias for [`Self::as_short_tons`].
-    #[inline]
-    pub fn as_short_ton(self) -> T {
-        self.as_short_tons()
-    }
-
     /// Creates a [`Mass`] from a value in LongTons (`long tn`).
     #[inline]
     pub fn from_long_tons(value: T) -> Self {
@@ -901,12 +811,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_long_tons(self) -> T {
         self.0 / T::from_f64(1016.0469088)
-    }
-
-    /// Alias for [`Self::as_long_tons`].
-    #[inline]
-    pub fn as_long_ton(self) -> T {
-        self.as_long_tons()
     }
 
     /// Creates a [`Mass`] from a value in Pounds (`lb`).
@@ -921,12 +825,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(0.45359237)
     }
 
-    /// Alias for [`Self::as_pounds`].
-    #[inline]
-    pub fn as_pound(self) -> T {
-        self.as_pounds()
-    }
-
     /// Creates a [`Mass`] from a value in Kilopounds (`klb`).
     #[inline]
     pub fn from_kilopounds(value: T) -> Self {
@@ -937,12 +835,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_kilopounds(self) -> T {
         self.0 / T::from_f64(453.59237)
-    }
-
-    /// Alias for [`Self::as_kilopounds`].
-    #[inline]
-    pub fn as_kilopound(self) -> T {
-        self.as_kilopounds()
     }
 
     /// Creates a [`Mass`] from a value in Megapounds (`Mlb`).
@@ -957,12 +849,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(453592.37)
     }
 
-    /// Alias for [`Self::as_megapounds`].
-    #[inline]
-    pub fn as_megapound(self) -> T {
-        self.as_megapounds()
-    }
-
     /// Creates a [`Mass`] from a value in Ounces (`oz`).
     #[inline]
     pub fn from_ounces(value: T) -> Self {
@@ -975,12 +861,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(0.028349523125)
     }
 
-    /// Alias for [`Self::as_ounces`].
-    #[inline]
-    pub fn as_ounce(self) -> T {
-        self.as_ounces()
-    }
-
     /// Creates a [`Mass`] from a value in Slugs (`slug`).
     #[inline]
     pub fn from_slugs(value: T) -> Self {
@@ -991,12 +871,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_slugs(self) -> T {
         self.0 / T::from_f64(14.593902937206364)
-    }
-
-    /// Alias for [`Self::as_slugs`].
-    #[inline]
-    pub fn as_slug(self) -> T {
-        self.as_slugs()
     }
 
     /// Creates a [`Mass`] from a value in Stone (`st`).
@@ -1047,12 +921,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(6.479891e-5)
     }
 
-    /// Alias for [`Self::as_grains`].
-    #[inline]
-    pub fn as_grain(self) -> T {
-        self.as_grains()
-    }
-
     /// Creates a [`Mass`] from a value in SolarMasses (`M☉`).
     #[inline]
     pub fn from_solar_masses(value: T) -> Self {
@@ -1063,12 +931,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_solar_masses(self) -> T {
         self.0 / T::from_f64(1.98947e30)
-    }
-
-    /// Alias for [`Self::as_solar_masses`].
-    #[inline]
-    pub fn as_solar_mass(self) -> T {
-        self.as_solar_masses()
     }
 
     /// Creates a [`Mass`] from a value in EarthMasses (`em`).
@@ -1083,12 +945,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(5.9722e24)
     }
 
-    /// Alias for [`Self::as_earth_masses`].
-    #[inline]
-    pub fn as_earth_mass(self) -> T {
-        self.as_earth_masses()
-    }
-
     /// Creates a [`Mass`] from a value in Daltons (`Da`).
     #[inline]
     pub fn from_daltons(value: T) -> Self {
@@ -1099,12 +955,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_daltons(self) -> T {
         self.0 / T::from_f64(1.6605390666e-27)
-    }
-
-    /// Alias for [`Self::as_daltons`].
-    #[inline]
-    pub fn as_dalton(self) -> T {
-        self.as_daltons()
     }
 
     /// Creates a [`Mass`] from a value in Kilodaltons (`kDa`).
@@ -1119,12 +969,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(1.6605390666e-24)
     }
 
-    /// Alias for [`Self::as_kilodaltons`].
-    #[inline]
-    pub fn as_kilodalton(self) -> T {
-        self.as_kilodaltons()
-    }
-
     /// Creates a [`Mass`] from a value in Megadaltons (`MDa`).
     #[inline]
     pub fn from_megadaltons(value: T) -> Self {
@@ -1137,12 +981,6 @@ impl<T: Float> Mass<T> {
         self.0 / T::from_f64(1.6605390666e-21)
     }
 
-    /// Alias for [`Self::as_megadaltons`].
-    #[inline]
-    pub fn as_megadalton(self) -> T {
-        self.as_megadaltons()
-    }
-
     /// Creates a [`Mass`] from a value in Gigadaltons (`GDa`).
     #[inline]
     pub fn from_gigadaltons(value: T) -> Self {
@@ -1153,12 +991,6 @@ impl<T: Float> Mass<T> {
     #[inline]
     pub fn as_gigadaltons(self) -> T {
         self.0 / T::from_f64(1.6605390666e-18)
-    }
-
-    /// Alias for [`Self::as_gigadaltons`].
-    #[inline]
-    pub fn as_gigadalton(self) -> T {
-        self.as_gigadaltons()
     }
 }
 

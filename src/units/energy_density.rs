@@ -330,12 +330,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_cubic_meter`].
-    #[inline]
-    pub fn as_joule_per_cubic_meter(self) -> T {
-        self.as_joules_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in KilojoulesPerCubicMeter (`kJ/m³`).
     #[inline]
     pub fn from_kilojoules_per_cubic_meter(value: T) -> Self {
@@ -346,12 +340,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_kilojoules_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilojoule_per_cubic_meter(self) -> T {
-        self.as_kilojoules_per_cubic_meter()
     }
 
     /// Creates a [`EnergyDensity`] from a value in MegajoulesPerCubicMeter (`MJ/m³`).
@@ -366,12 +354,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megajoules_per_cubic_meter`].
-    #[inline]
-    pub fn as_megajoule_per_cubic_meter(self) -> T {
-        self.as_megajoules_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in GigajoulesPerCubicMeter (`GJ/m³`).
     #[inline]
     pub fn from_gigajoules_per_cubic_meter(value: T) -> Self {
@@ -382,12 +364,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_gigajoules_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigajoules_per_cubic_meter`].
-    #[inline]
-    pub fn as_gigajoule_per_cubic_meter(self) -> T {
-        self.as_gigajoules_per_cubic_meter()
     }
 
     /// Creates a [`EnergyDensity`] from a value in TerajoulesPerCubicMeter (`TJ/m³`).
@@ -402,12 +378,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_terajoules_per_cubic_meter`].
-    #[inline]
-    pub fn as_terajoule_per_cubic_meter(self) -> T {
-        self.as_terajoules_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in PetajoulesPerCubicMeter (`PJ/m³`).
     #[inline]
     pub fn from_petajoules_per_cubic_meter(value: T) -> Self {
@@ -418,12 +388,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_petajoules_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_petajoules_per_cubic_meter`].
-    #[inline]
-    pub fn as_petajoule_per_cubic_meter(self) -> T {
-        self.as_petajoules_per_cubic_meter()
     }
 
     /// Creates a [`EnergyDensity`] from a value in WattHoursPerCubicMeter (`Wh/m³`).
@@ -438,12 +402,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0 / T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_watt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_watt_hour_per_cubic_meter(self) -> T {
-        self.as_watt_hours_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in KilowattHoursPerCubicMeter (`kWh/m³`).
     #[inline]
     pub fn from_kilowatt_hours_per_cubic_meter(value: T) -> Self {
@@ -454,12 +412,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_kilowatt_hours_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(3600000.0)
-    }
-
-    /// Alias for [`Self::as_kilowatt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilowatt_hour_per_cubic_meter(self) -> T {
-        self.as_kilowatt_hours_per_cubic_meter()
     }
 
     /// Creates a [`EnergyDensity`] from a value in MegawattHoursPerCubicMeter (`MWh/m³`).
@@ -474,12 +426,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0 / T::from_f64(3.6e9)
     }
 
-    /// Alias for [`Self::as_megawatt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_megawatt_hour_per_cubic_meter(self) -> T {
-        self.as_megawatt_hours_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in GigawattHoursPerCubicMeter (`GWh/m³`).
     #[inline]
     pub fn from_gigawatt_hours_per_cubic_meter(value: T) -> Self {
@@ -490,12 +436,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_gigawatt_hours_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(3.6e12)
-    }
-
-    /// Alias for [`Self::as_gigawatt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_gigawatt_hour_per_cubic_meter(self) -> T {
-        self.as_gigawatt_hours_per_cubic_meter()
     }
 
     /// Creates a [`EnergyDensity`] from a value in TerawattHoursPerCubicMeter (`TWh/m³`).
@@ -510,12 +450,6 @@ impl<T: Float> EnergyDensity<T> {
         self.0 / T::from_f64(3.6e15)
     }
 
-    /// Alias for [`Self::as_terawatt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_terawatt_hour_per_cubic_meter(self) -> T {
-        self.as_terawatt_hours_per_cubic_meter()
-    }
-
     /// Creates a [`EnergyDensity`] from a value in PetawattHoursPerCubicMeter (`PWh/m³`).
     #[inline]
     pub fn from_petawatt_hours_per_cubic_meter(value: T) -> Self {
@@ -526,12 +460,6 @@ impl<T: Float> EnergyDensity<T> {
     #[inline]
     pub fn as_petawatt_hours_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(3.6e18)
-    }
-
-    /// Alias for [`Self::as_petawatt_hours_per_cubic_meter`].
-    #[inline]
-    pub fn as_petawatt_hour_per_cubic_meter(self) -> T {
-        self.as_petawatt_hours_per_cubic_meter()
     }
 }
 

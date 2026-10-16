@@ -143,12 +143,6 @@ impl<T: Float> ElectricField<T> {
     pub fn as_volts_per_meter(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_volts_per_meter`].
-    #[inline]
-    pub fn as_volt_per_meter(self) -> T {
-        self.as_volts_per_meter()
-    }
 }
 
 impl ElectricField<f64> {

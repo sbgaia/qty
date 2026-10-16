@@ -249,12 +249,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_sieverts`].
-    #[inline]
-    pub fn as_sievert(self) -> T {
-        self.as_sieverts()
-    }
-
     /// Creates a [`RadiationEquivalentDose`] from a value in Nanosieverts (`nSv`).
     #[inline]
     pub fn from_nanosieverts(value: T) -> Self {
@@ -265,12 +259,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
     #[inline]
     pub fn as_nanosieverts(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanosieverts`].
-    #[inline]
-    pub fn as_nanosievert(self) -> T {
-        self.as_nanosieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in Microsieverts (`µSv`).
@@ -285,12 +273,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microsieverts`].
-    #[inline]
-    pub fn as_microsievert(self) -> T {
-        self.as_microsieverts()
-    }
-
     /// Creates a [`RadiationEquivalentDose`] from a value in Millisieverts (`mSv`).
     #[inline]
     pub fn from_millisieverts(value: T) -> Self {
@@ -301,12 +283,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
     #[inline]
     pub fn as_millisieverts(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millisieverts`].
-    #[inline]
-    pub fn as_millisievert(self) -> T {
-        self.as_millisieverts()
     }
 
     /// Creates a [`RadiationEquivalentDose`] from a value in RoentgensEquivalentMan (`rem`).
@@ -321,12 +297,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_roentgens_equivalent_man`].
-    #[inline]
-    pub fn as_roentgen_equivalent_man(self) -> T {
-        self.as_roentgens_equivalent_man()
-    }
-
     /// Creates a [`RadiationEquivalentDose`] from a value in MilliroentgensEquivalentMan (`mrem`).
     #[inline]
     pub fn from_milliroentgens_equivalent_man(value: T) -> Self {
@@ -337,12 +307,6 @@ impl<T: Float> RadiationEquivalentDose<T> {
     #[inline]
     pub fn as_milliroentgens_equivalent_man(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_milliroentgens_equivalent_man`].
-    #[inline]
-    pub fn as_milliroentgen_equivalent_man(self) -> T {
-        self.as_milliroentgens_equivalent_man()
     }
 }
 

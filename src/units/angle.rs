@@ -382,12 +382,6 @@ impl<T: Float> Angle<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_radians`].
-    #[inline]
-    pub fn as_radian(self) -> T {
-        self.as_radians()
-    }
-
     /// Creates a [`Angle`] from a value in Nanoradians (`nrad`).
     #[inline]
     pub fn from_nanoradians(value: T) -> Self {
@@ -398,12 +392,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_nanoradians(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoradians`].
-    #[inline]
-    pub fn as_nanoradian(self) -> T {
-        self.as_nanoradians()
     }
 
     /// Creates a [`Angle`] from a value in Microradians (`µrad`).
@@ -418,12 +406,6 @@ impl<T: Float> Angle<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microradians`].
-    #[inline]
-    pub fn as_microradian(self) -> T {
-        self.as_microradians()
-    }
-
     /// Creates a [`Angle`] from a value in Milliradians (`mrad`).
     #[inline]
     pub fn from_milliradians(value: T) -> Self {
@@ -434,12 +416,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_milliradians(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliradians`].
-    #[inline]
-    pub fn as_milliradian(self) -> T {
-        self.as_milliradians()
     }
 
     /// Creates a [`Angle`] from a value in Centiradians (`crad`).
@@ -454,12 +430,6 @@ impl<T: Float> Angle<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centiradians`].
-    #[inline]
-    pub fn as_centiradian(self) -> T {
-        self.as_centiradians()
-    }
-
     /// Creates a [`Angle`] from a value in Deciradians (`drad`).
     #[inline]
     pub fn from_deciradians(value: T) -> Self {
@@ -470,12 +440,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_deciradians(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_deciradians`].
-    #[inline]
-    pub fn as_deciradian(self) -> T {
-        self.as_deciradians()
     }
 
     /// Creates a [`Angle`] from a value in Degrees (`°`).
@@ -490,12 +454,6 @@ impl<T: Float> Angle<T> {
         self.0 / T::from_f64(0.017453292519943295)
     }
 
-    /// Alias for [`Self::as_degrees`].
-    #[inline]
-    pub fn as_degree(self) -> T {
-        self.as_degrees()
-    }
-
     /// Creates a [`Angle`] from a value in Nanodegrees (`n°`).
     #[inline]
     pub fn from_nanodegrees(value: T) -> Self {
@@ -506,12 +464,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_nanodegrees(self) -> T {
         self.0 / T::from_f64(1.7453292519943295e-11)
-    }
-
-    /// Alias for [`Self::as_nanodegrees`].
-    #[inline]
-    pub fn as_nanodegree(self) -> T {
-        self.as_nanodegrees()
     }
 
     /// Creates a [`Angle`] from a value in Microdegrees (`µ°`).
@@ -526,12 +478,6 @@ impl<T: Float> Angle<T> {
         self.0 / T::from_f64(1.7453292519943295e-8)
     }
 
-    /// Alias for [`Self::as_microdegrees`].
-    #[inline]
-    pub fn as_microdegree(self) -> T {
-        self.as_microdegrees()
-    }
-
     /// Creates a [`Angle`] from a value in Millidegrees (`m°`).
     #[inline]
     pub fn from_millidegrees(value: T) -> Self {
@@ -542,12 +488,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_millidegrees(self) -> T {
         self.0 / T::from_f64(1.7453292519943296e-5)
-    }
-
-    /// Alias for [`Self::as_millidegrees`].
-    #[inline]
-    pub fn as_millidegree(self) -> T {
-        self.as_millidegrees()
     }
 
     /// Creates a [`Angle`] from a value in Arcminutes (`'`).
@@ -562,12 +502,6 @@ impl<T: Float> Angle<T> {
         self.0 / T::from_f64(0.0002908882086657216)
     }
 
-    /// Alias for [`Self::as_arcminutes`].
-    #[inline]
-    pub fn as_arcminute(self) -> T {
-        self.as_arcminutes()
-    }
-
     /// Creates a [`Angle`] from a value in Arcseconds (`″`).
     #[inline]
     pub fn from_arcseconds(value: T) -> Self {
@@ -578,12 +512,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_arcseconds(self) -> T {
         self.0 / T::from_f64(4.84813681109536e-6)
-    }
-
-    /// Alias for [`Self::as_arcseconds`].
-    #[inline]
-    pub fn as_arcsecond(self) -> T {
-        self.as_arcseconds()
     }
 
     /// Creates a [`Angle`] from a value in Gradians (`g`).
@@ -598,12 +526,6 @@ impl<T: Float> Angle<T> {
         self.0 / T::from_f64(0.015707963267948967)
     }
 
-    /// Alias for [`Self::as_gradians`].
-    #[inline]
-    pub fn as_gradian(self) -> T {
-        self.as_gradians()
-    }
-
     /// Creates a [`Angle`] from a value in NatoMils (`mil`).
     #[inline]
     pub fn from_nato_mils(value: T) -> Self {
@@ -616,12 +538,6 @@ impl<T: Float> Angle<T> {
         self.0 / T::from_f64(0.0009817477042468104)
     }
 
-    /// Alias for [`Self::as_nato_mils`].
-    #[inline]
-    pub fn as_nato_mil(self) -> T {
-        self.as_nato_mils()
-    }
-
     /// Creates a [`Angle`] from a value in Revolutions (`r`).
     #[inline]
     pub fn from_revolutions(value: T) -> Self {
@@ -632,12 +548,6 @@ impl<T: Float> Angle<T> {
     #[inline]
     pub fn as_revolutions(self) -> T {
         self.0 / T::from_f64(6.283185307179586)
-    }
-
-    /// Alias for [`Self::as_revolutions`].
-    #[inline]
-    pub fn as_revolution(self) -> T {
-        self.as_revolutions()
     }
 }
 

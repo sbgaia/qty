@@ -193,12 +193,6 @@ impl<T: Float> FuelEfficiency<T> {
         T::from_f64(100.0) / self.0
     }
 
-    /// Alias for [`Self::as_liters_per100_kilometers`].
-    #[inline]
-    pub fn as_liter_per100_kilometers(self) -> T {
-        self.as_liters_per100_kilometers()
-    }
-
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUsGallon (`mpg (U.S.)`).
     #[inline]
     pub fn from_miles_per_us_gallon(value: T) -> Self {
@@ -209,12 +203,6 @@ impl<T: Float> FuelEfficiency<T> {
     #[inline]
     pub fn as_miles_per_us_gallon(self) -> T {
         self.0 / T::from_f64(0.425143707430272)
-    }
-
-    /// Alias for [`Self::as_miles_per_us_gallon`].
-    #[inline]
-    pub fn as_mile_per_us_gallon(self) -> T {
-        self.as_miles_per_us_gallon()
     }
 
     /// Creates a [`FuelEfficiency`] from a value in MilesPerUkGallon (`mpg (imp.)`).
@@ -229,12 +217,6 @@ impl<T: Float> FuelEfficiency<T> {
         self.0 / T::from_f64(0.3540061899346471)
     }
 
-    /// Alias for [`Self::as_miles_per_uk_gallon`].
-    #[inline]
-    pub fn as_mile_per_uk_gallon(self) -> T {
-        self.as_miles_per_uk_gallon()
-    }
-
     /// Creates a [`FuelEfficiency`] from a value in KilometersPerLiter (`km/l`).
     #[inline]
     pub fn from_kilometers_per_liter(value: T) -> Self {
@@ -245,12 +227,6 @@ impl<T: Float> FuelEfficiency<T> {
     #[inline]
     pub fn as_kilometers_per_liter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilometers_per_liter`].
-    #[inline]
-    pub fn as_kilometer_per_liter(self) -> T {
-        self.as_kilometers_per_liter()
     }
 }
 

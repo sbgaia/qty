@@ -436,12 +436,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decimal_fractions`].
-    #[inline]
-    pub fn as_decimal_fraction(self) -> T {
-        self.as_decimal_fractions()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in LitersPerLiter (`l/l`).
     #[inline]
     pub fn from_liters_per_liter(value: T) -> Self {
@@ -452,12 +446,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_liters_per_liter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_liters_per_liter`].
-    #[inline]
-    pub fn as_liter_per_liter(self) -> T {
-        self.as_liters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PicolitersPerLiter (`pl/l`).
@@ -472,12 +460,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picoliters_per_liter`].
-    #[inline]
-    pub fn as_picoliter_per_liter(self) -> T {
-        self.as_picoliters_per_liter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in NanolitersPerLiter (`nl/l`).
     #[inline]
     pub fn from_nanoliters_per_liter(value: T) -> Self {
@@ -488,12 +470,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_nanoliters_per_liter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoliters_per_liter`].
-    #[inline]
-    pub fn as_nanoliter_per_liter(self) -> T {
-        self.as_nanoliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerLiter (`µl/l`).
@@ -508,12 +484,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microliters_per_liter`].
-    #[inline]
-    pub fn as_microliter_per_liter(self) -> T {
-        self.as_microliters_per_liter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in MillilitersPerLiter (`ml/l`).
     #[inline]
     pub fn from_milliliters_per_liter(value: T) -> Self {
@@ -524,12 +494,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_milliliters_per_liter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliliters_per_liter`].
-    #[inline]
-    pub fn as_milliliter_per_liter(self) -> T {
-        self.as_milliliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in CentilitersPerLiter (`cl/l`).
@@ -544,12 +508,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centiliters_per_liter`].
-    #[inline]
-    pub fn as_centiliter_per_liter(self) -> T {
-        self.as_centiliters_per_liter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in DecilitersPerLiter (`dl/l`).
     #[inline]
     pub fn from_deciliters_per_liter(value: T) -> Self {
@@ -560,12 +518,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_deciliters_per_liter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_liter`].
-    #[inline]
-    pub fn as_deciliter_per_liter(self) -> T {
-        self.as_deciliters_per_liter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in LitersPerMilliliter (`l/ml`).
@@ -580,12 +532,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_liters_per_milliliter`].
-    #[inline]
-    pub fn as_liter_per_milliliter(self) -> T {
-        self.as_liters_per_milliliter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in PicolitersPerMilliliter (`pl/ml`).
     #[inline]
     pub fn from_picoliters_per_milliliter(value: T) -> Self {
@@ -596,12 +542,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_picoliters_per_milliliter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_picoliters_per_milliliter`].
-    #[inline]
-    pub fn as_picoliter_per_milliliter(self) -> T {
-        self.as_picoliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in NanolitersPerMilliliter (`nl/ml`).
@@ -616,12 +556,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_nanoliters_per_milliliter`].
-    #[inline]
-    pub fn as_nanoliter_per_milliliter(self) -> T {
-        self.as_nanoliters_per_milliliter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerMilliliter (`µl/ml`).
     #[inline]
     pub fn from_microliters_per_milliliter(value: T) -> Self {
@@ -632,12 +566,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_microliters_per_milliliter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_microliters_per_milliliter`].
-    #[inline]
-    pub fn as_microliter_per_milliliter(self) -> T {
-        self.as_microliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in MillilitersPerMilliliter (`ml/ml`).
@@ -652,12 +580,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_milliliters_per_milliliter`].
-    #[inline]
-    pub fn as_milliliter_per_milliliter(self) -> T {
-        self.as_milliliters_per_milliliter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in CentilitersPerMilliliter (`cl/ml`).
     #[inline]
     pub fn from_centiliters_per_milliliter(value: T) -> Self {
@@ -670,12 +592,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centiliters_per_milliliter`].
-    #[inline]
-    pub fn as_centiliter_per_milliliter(self) -> T {
-        self.as_centiliters_per_milliliter()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in DecilitersPerMilliliter (`dl/ml`).
     #[inline]
     pub fn from_deciliters_per_milliliter(value: T) -> Self {
@@ -686,12 +602,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_deciliters_per_milliliter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_deciliters_per_milliliter`].
-    #[inline]
-    pub fn as_deciliter_per_milliliter(self) -> T {
-        self.as_deciliters_per_milliliter()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in Percent (`%`).
@@ -718,12 +628,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_parts_per_thousand`].
-    #[inline]
-    pub fn as_part_per_thousand(self) -> T {
-        self.as_parts_per_thousand()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in PartsPerMillion (`ppm`).
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
@@ -734,12 +638,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_parts_per_million(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_parts_per_million`].
-    #[inline]
-    pub fn as_part_per_million(self) -> T {
-        self.as_parts_per_million()
     }
 
     /// Creates a [`VolumeConcentration`] from a value in PartsPerBillion (`ppb`).
@@ -754,12 +652,6 @@ impl<T: Float> VolumeConcentration<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_parts_per_billion`].
-    #[inline]
-    pub fn as_part_per_billion(self) -> T {
-        self.as_parts_per_billion()
-    }
-
     /// Creates a [`VolumeConcentration`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
@@ -770,12 +662,6 @@ impl<T: Float> VolumeConcentration<T> {
     #[inline]
     pub fn as_parts_per_trillion(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_parts_per_trillion`].
-    #[inline]
-    pub fn as_part_per_trillion(self) -> T {
-        self.as_parts_per_trillion()
     }
 }
 

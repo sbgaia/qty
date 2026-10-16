@@ -574,12 +574,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_gram_square_meters`].
-    #[inline]
-    pub fn as_gram_square_meter(self) -> T {
-        self.as_gram_square_meters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareMeters (`mg·m²`).
     #[inline]
     pub fn from_milligram_square_meters(value: T) -> Self {
@@ -590,12 +584,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_milligram_square_meters(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milligram_square_meters`].
-    #[inline]
-    pub fn as_milligram_square_meter(self) -> T {
-        self.as_milligram_square_meters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareMeters (`kg·m²`).
@@ -610,12 +598,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilogram_square_meters`].
-    #[inline]
-    pub fn as_kilogram_square_meter(self) -> T {
-        self.as_kilogram_square_meters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareDecimeters (`g·dm²`).
     #[inline]
     pub fn from_gram_square_decimeters(value: T) -> Self {
@@ -626,12 +608,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_gram_square_decimeters(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_gram_square_decimeters`].
-    #[inline]
-    pub fn as_gram_square_decimeter(self) -> T {
-        self.as_gram_square_decimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareDecimeters (`mg·dm²`).
@@ -646,12 +622,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_milligram_square_decimeters`].
-    #[inline]
-    pub fn as_milligram_square_decimeter(self) -> T {
-        self.as_milligram_square_decimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareDecimeters (`kg·dm²`).
     #[inline]
     pub fn from_kilogram_square_decimeters(value: T) -> Self {
@@ -662,12 +632,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_kilogram_square_decimeters(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_kilogram_square_decimeters`].
-    #[inline]
-    pub fn as_kilogram_square_decimeter(self) -> T {
-        self.as_kilogram_square_decimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareCentimeters (`g·cm²`).
@@ -682,12 +646,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Alias for [`Self::as_gram_square_centimeters`].
-    #[inline]
-    pub fn as_gram_square_centimeter(self) -> T {
-        self.as_gram_square_centimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareCentimeters (`mg·cm²`).
     #[inline]
     pub fn from_milligram_square_centimeters(value: T) -> Self {
@@ -698,12 +656,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_milligram_square_centimeters(self) -> T {
         self.0 * T::from_f64(1e10)
-    }
-
-    /// Alias for [`Self::as_milligram_square_centimeters`].
-    #[inline]
-    pub fn as_milligram_square_centimeter(self) -> T {
-        self.as_milligram_square_centimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareCentimeters (`kg·cm²`).
@@ -718,12 +670,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_kilogram_square_centimeters`].
-    #[inline]
-    pub fn as_kilogram_square_centimeter(self) -> T {
-        self.as_kilogram_square_centimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in GramSquareMillimeters (`g·mm²`).
     #[inline]
     pub fn from_gram_square_millimeters(value: T) -> Self {
@@ -734,12 +680,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_gram_square_millimeters(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gram_square_millimeters`].
-    #[inline]
-    pub fn as_gram_square_millimeter(self) -> T {
-        self.as_gram_square_millimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in MilligramSquareMillimeters (`mg·mm²`).
@@ -754,12 +694,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_milligram_square_millimeters`].
-    #[inline]
-    pub fn as_milligram_square_millimeter(self) -> T {
-        self.as_milligram_square_millimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in KilogramSquareMillimeters (`kg·mm²`).
     #[inline]
     pub fn from_kilogram_square_millimeters(value: T) -> Self {
@@ -770,12 +704,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_kilogram_square_millimeters(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilogram_square_millimeters`].
-    #[inline]
-    pub fn as_kilogram_square_millimeter(self) -> T {
-        self.as_kilogram_square_millimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareMeters (`t·m²`).
@@ -790,12 +718,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_tonne_square_meters`].
-    #[inline]
-    pub fn as_tonne_square_meter(self) -> T {
-        self.as_tonne_square_meters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareMeters (`kt·m²`).
     #[inline]
     pub fn from_kilotonne_square_meters(value: T) -> Self {
@@ -806,12 +728,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_kilotonne_square_meters(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilotonne_square_meters`].
-    #[inline]
-    pub fn as_kilotonne_square_meter(self) -> T {
-        self.as_kilotonne_square_meters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareMeters (`Mt·m²`).
@@ -826,12 +742,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_megatonne_square_meters`].
-    #[inline]
-    pub fn as_megatonne_square_meter(self) -> T {
-        self.as_megatonne_square_meters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareDecimeters (`t·dm²`).
     #[inline]
     pub fn from_tonne_square_decimeters(value: T) -> Self {
@@ -842,12 +752,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_tonne_square_decimeters(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_tonne_square_decimeters`].
-    #[inline]
-    pub fn as_tonne_square_decimeter(self) -> T {
-        self.as_tonne_square_decimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareDecimeters (`kt·dm²`).
@@ -862,12 +766,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_kilotonne_square_decimeters`].
-    #[inline]
-    pub fn as_kilotonne_square_decimeter(self) -> T {
-        self.as_kilotonne_square_decimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareDecimeters (`Mt·dm²`).
     #[inline]
     pub fn from_megatonne_square_decimeters(value: T) -> Self {
@@ -878,12 +776,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_megatonne_square_decimeters(self) -> T {
         self.0 / T::from_f64(1e7)
-    }
-
-    /// Alias for [`Self::as_megatonne_square_decimeters`].
-    #[inline]
-    pub fn as_megatonne_square_decimeter(self) -> T {
-        self.as_megatonne_square_decimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareCentimeters (`t·cm²`).
@@ -898,12 +790,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_tonne_square_centimeters`].
-    #[inline]
-    pub fn as_tonne_square_centimeter(self) -> T {
-        self.as_tonne_square_centimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareCentimeters (`kt·cm²`).
     #[inline]
     pub fn from_kilotonne_square_centimeters(value: T) -> Self {
@@ -914,12 +800,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_kilotonne_square_centimeters(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_kilotonne_square_centimeters`].
-    #[inline]
-    pub fn as_kilotonne_square_centimeter(self) -> T {
-        self.as_kilotonne_square_centimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareCentimeters (`Mt·cm²`).
@@ -934,12 +814,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_megatonne_square_centimeters`].
-    #[inline]
-    pub fn as_megatonne_square_centimeter(self) -> T {
-        self.as_megatonne_square_centimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in TonneSquareMillimeters (`t·mm²`).
     #[inline]
     pub fn from_tonne_square_millimeters(value: T) -> Self {
@@ -950,12 +824,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_tonne_square_millimeters(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_tonne_square_millimeters`].
-    #[inline]
-    pub fn as_tonne_square_millimeter(self) -> T {
-        self.as_tonne_square_millimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in KilotonneSquareMillimeters (`kt·mm²`).
@@ -970,12 +838,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilotonne_square_millimeters`].
-    #[inline]
-    pub fn as_kilotonne_square_millimeter(self) -> T {
-        self.as_kilotonne_square_millimeters()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in MegatonneSquareMillimeters (`Mt·mm²`).
     #[inline]
     pub fn from_megatonne_square_millimeters(value: T) -> Self {
@@ -986,12 +848,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_megatonne_square_millimeters(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_megatonne_square_millimeters`].
-    #[inline]
-    pub fn as_megatonne_square_millimeter(self) -> T {
-        self.as_megatonne_square_millimeters()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in PoundSquareFeet (`lb·ft²`).
@@ -1006,12 +862,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(0.0421401100938048)
     }
 
-    /// Alias for [`Self::as_pound_square_feet`].
-    #[inline]
-    pub fn as_pound_square_foot(self) -> T {
-        self.as_pound_square_feet()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in PoundSquareInches (`lb·in²`).
     #[inline]
     pub fn from_pound_square_inches(value: T) -> Self {
@@ -1022,12 +872,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_pound_square_inches(self) -> T {
         self.0 / T::from_f64(0.0002926396534292)
-    }
-
-    /// Alias for [`Self::as_pound_square_inches`].
-    #[inline]
-    pub fn as_pound_square_inch(self) -> T {
-        self.as_pound_square_inches()
     }
 
     /// Creates a [`MassMomentOfInertia`] from a value in SlugSquareFeet (`slug·ft²`).
@@ -1042,12 +886,6 @@ impl<T: Float> MassMomentOfInertia<T> {
         self.0 / T::from_f64(1.3558179483314003)
     }
 
-    /// Alias for [`Self::as_slug_square_feet`].
-    #[inline]
-    pub fn as_slug_square_foot(self) -> T {
-        self.as_slug_square_feet()
-    }
-
     /// Creates a [`MassMomentOfInertia`] from a value in SlugSquareInches (`slug·in²`).
     #[inline]
     pub fn from_slug_square_inches(value: T) -> Self {
@@ -1058,12 +896,6 @@ impl<T: Float> MassMomentOfInertia<T> {
     #[inline]
     pub fn as_slug_square_inches(self) -> T {
         self.0 / T::from_f64(0.009415402418968058)
-    }
-
-    /// Alias for [`Self::as_slug_square_inches`].
-    #[inline]
-    pub fn as_slug_square_inch(self) -> T {
-        self.as_slug_square_inches()
     }
 }
 

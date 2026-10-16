@@ -188,12 +188,6 @@ impl<T: Float> ElectricCurrentDensity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_amperes_per_square_meter`].
-    #[inline]
-    pub fn as_ampere_per_square_meter(self) -> T {
-        self.as_amperes_per_square_meter()
-    }
-
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareInch (`A/in²`).
     #[inline]
     pub fn from_amperes_per_square_inch(value: T) -> Self {
@@ -206,12 +200,6 @@ impl<T: Float> ElectricCurrentDensity<T> {
         self.0 / T::from_f64(1550.0031000062)
     }
 
-    /// Alias for [`Self::as_amperes_per_square_inch`].
-    #[inline]
-    pub fn as_ampere_per_square_inch(self) -> T {
-        self.as_amperes_per_square_inch()
-    }
-
     /// Creates a [`ElectricCurrentDensity`] from a value in AmperesPerSquareFoot (`A/ft²`).
     #[inline]
     pub fn from_amperes_per_square_foot(value: T) -> Self {
@@ -222,12 +210,6 @@ impl<T: Float> ElectricCurrentDensity<T> {
     #[inline]
     pub fn as_amperes_per_square_foot(self) -> T {
         self.0 / T::from_f64(10.763910416709722)
-    }
-
-    /// Alias for [`Self::as_amperes_per_square_foot`].
-    #[inline]
-    pub fn as_ampere_per_square_foot(self) -> T {
-        self.as_amperes_per_square_foot()
     }
 }
 

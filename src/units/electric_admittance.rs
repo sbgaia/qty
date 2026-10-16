@@ -482,12 +482,6 @@ impl<T: Float> ElectricAdmittance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_mhos`].
-    #[inline]
-    pub fn as_mho(self) -> T {
-        self.as_mhos()
-    }
-
     /// Creates a [`ElectricAdmittance`] from a value in Nanomhos (`n℧`).
     #[inline]
     pub fn from_nanomhos(value: T) -> Self {
@@ -498,12 +492,6 @@ impl<T: Float> ElectricAdmittance<T> {
     #[inline]
     pub fn as_nanomhos(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanomhos`].
-    #[inline]
-    pub fn as_nanomho(self) -> T {
-        self.as_nanomhos()
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Micromhos (`µ℧`).
@@ -518,12 +506,6 @@ impl<T: Float> ElectricAdmittance<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micromhos`].
-    #[inline]
-    pub fn as_micromho(self) -> T {
-        self.as_micromhos()
-    }
-
     /// Creates a [`ElectricAdmittance`] from a value in Millimhos (`m℧`).
     #[inline]
     pub fn from_millimhos(value: T) -> Self {
@@ -534,12 +516,6 @@ impl<T: Float> ElectricAdmittance<T> {
     #[inline]
     pub fn as_millimhos(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimhos`].
-    #[inline]
-    pub fn as_millimho(self) -> T {
-        self.as_millimhos()
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Kilomhos (`k℧`).
@@ -554,12 +530,6 @@ impl<T: Float> ElectricAdmittance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilomhos`].
-    #[inline]
-    pub fn as_kilomho(self) -> T {
-        self.as_kilomhos()
-    }
-
     /// Creates a [`ElectricAdmittance`] from a value in Megamhos (`M℧`).
     #[inline]
     pub fn from_megamhos(value: T) -> Self {
@@ -570,12 +540,6 @@ impl<T: Float> ElectricAdmittance<T> {
     #[inline]
     pub fn as_megamhos(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megamhos`].
-    #[inline]
-    pub fn as_megamho(self) -> T {
-        self.as_megamhos()
     }
 
     /// Creates a [`ElectricAdmittance`] from a value in Gigamhos (`G℧`).
@@ -590,12 +554,6 @@ impl<T: Float> ElectricAdmittance<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigamhos`].
-    #[inline]
-    pub fn as_gigamho(self) -> T {
-        self.as_gigamhos()
-    }
-
     /// Creates a [`ElectricAdmittance`] from a value in Teramhos (`T℧`).
     #[inline]
     pub fn from_teramhos(value: T) -> Self {
@@ -606,12 +564,6 @@ impl<T: Float> ElectricAdmittance<T> {
     #[inline]
     pub fn as_teramhos(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_teramhos`].
-    #[inline]
-    pub fn as_teramho(self) -> T {
-        self.as_teramhos()
     }
 }
 

@@ -227,12 +227,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters_to_the_fourth`].
-    #[inline]
-    pub fn as_meter_to_the_fourth(self) -> T {
-        self.as_meters_to_the_fourth()
-    }
-
     /// Creates a [`AreaMomentOfInertia`] from a value in DecimetersToTheFourth (`dm⁴`).
     #[inline]
     pub fn from_decimeters_to_the_fourth(value: T) -> Self {
@@ -243,12 +237,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
     #[inline]
     pub fn as_decimeters_to_the_fourth(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_decimeters_to_the_fourth`].
-    #[inline]
-    pub fn as_decimeter_to_the_fourth(self) -> T {
-        self.as_decimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in CentimetersToTheFourth (`cm⁴`).
@@ -263,12 +251,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_centimeters_to_the_fourth`].
-    #[inline]
-    pub fn as_centimeter_to_the_fourth(self) -> T {
-        self.as_centimeters_to_the_fourth()
-    }
-
     /// Creates a [`AreaMomentOfInertia`] from a value in MillimetersToTheFourth (`mm⁴`).
     #[inline]
     pub fn from_millimeters_to_the_fourth(value: T) -> Self {
@@ -279,12 +261,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
     #[inline]
     pub fn as_millimeters_to_the_fourth(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_millimeters_to_the_fourth`].
-    #[inline]
-    pub fn as_millimeter_to_the_fourth(self) -> T {
-        self.as_millimeters_to_the_fourth()
     }
 
     /// Creates a [`AreaMomentOfInertia`] from a value in FeetToTheFourth (`ft⁴`).
@@ -299,12 +275,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
         self.0 / T::from_f64(0.0086309748412416)
     }
 
-    /// Alias for [`Self::as_feet_to_the_fourth`].
-    #[inline]
-    pub fn as_foot_to_the_fourth(self) -> T {
-        self.as_feet_to_the_fourth()
-    }
-
     /// Creates a [`AreaMomentOfInertia`] from a value in InchesToTheFourth (`in⁴`).
     #[inline]
     pub fn from_inches_to_the_fourth(value: T) -> Self {
@@ -315,12 +285,6 @@ impl<T: Float> AreaMomentOfInertia<T> {
     #[inline]
     pub fn as_inches_to_the_fourth(self) -> T {
         self.0 / T::from_f64(4.162314256e-7)
-    }
-
-    /// Alias for [`Self::as_inches_to_the_fourth`].
-    #[inline]
-    pub fn as_inch_to_the_fourth(self) -> T {
-        self.as_inches_to_the_fourth()
     }
 }
 

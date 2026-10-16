@@ -143,12 +143,6 @@ impl<T: Float> SolidAngle<T> {
     pub fn as_steradians(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_steradians`].
-    #[inline]
-    pub fn as_steradian(self) -> T {
-        self.as_steradians()
-    }
 }
 
 impl SolidAngle<f64> {

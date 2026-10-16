@@ -242,12 +242,6 @@ impl<T: Float> ElectricPotential<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_volts`].
-    #[inline]
-    pub fn as_volt(self) -> T {
-        self.as_volts()
-    }
-
     /// Creates a [`ElectricPotential`] from a value in Nanovolts (`nV`).
     #[inline]
     pub fn from_nanovolts(value: T) -> Self {
@@ -258,12 +252,6 @@ impl<T: Float> ElectricPotential<T> {
     #[inline]
     pub fn as_nanovolts(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanovolts`].
-    #[inline]
-    pub fn as_nanovolt(self) -> T {
-        self.as_nanovolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Microvolts (`µV`).
@@ -278,12 +266,6 @@ impl<T: Float> ElectricPotential<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microvolts`].
-    #[inline]
-    pub fn as_microvolt(self) -> T {
-        self.as_microvolts()
-    }
-
     /// Creates a [`ElectricPotential`] from a value in Millivolts (`mV`).
     #[inline]
     pub fn from_millivolts(value: T) -> Self {
@@ -294,12 +276,6 @@ impl<T: Float> ElectricPotential<T> {
     #[inline]
     pub fn as_millivolts(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millivolts`].
-    #[inline]
-    pub fn as_millivolt(self) -> T {
-        self.as_millivolts()
     }
 
     /// Creates a [`ElectricPotential`] from a value in Kilovolts (`kV`).
@@ -314,12 +290,6 @@ impl<T: Float> ElectricPotential<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilovolts`].
-    #[inline]
-    pub fn as_kilovolt(self) -> T {
-        self.as_kilovolts()
-    }
-
     /// Creates a [`ElectricPotential`] from a value in Megavolts (`MV`).
     #[inline]
     pub fn from_megavolts(value: T) -> Self {
@@ -330,12 +300,6 @@ impl<T: Float> ElectricPotential<T> {
     #[inline]
     pub fn as_megavolts(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megavolts`].
-    #[inline]
-    pub fn as_megavolt(self) -> T {
-        self.as_megavolts()
     }
 }
 

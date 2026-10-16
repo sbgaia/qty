@@ -215,12 +215,6 @@ impl<T: Float> AmplitudeRatio<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decibel_volts`].
-    #[inline]
-    pub fn as_decibel_volt(self) -> T {
-        self.as_decibel_volts()
-    }
-
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMicrovolts (`dBµV`).
     #[inline]
     pub fn from_decibel_microvolts(value: T) -> Self {
@@ -231,12 +225,6 @@ impl<T: Float> AmplitudeRatio<T> {
     #[inline]
     pub fn as_decibel_microvolts(self) -> T {
         self.0 + T::from_f64(120.0)
-    }
-
-    /// Alias for [`Self::as_decibel_microvolts`].
-    #[inline]
-    pub fn as_decibel_microvolt(self) -> T {
-        self.as_decibel_microvolts()
     }
 
     /// Creates a [`AmplitudeRatio`] from a value in DecibelMillivolts (`dBmV`).
@@ -251,12 +239,6 @@ impl<T: Float> AmplitudeRatio<T> {
         self.0 + T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_decibel_millivolts`].
-    #[inline]
-    pub fn as_decibel_millivolt(self) -> T {
-        self.as_decibel_millivolts()
-    }
-
     /// Creates a [`AmplitudeRatio`] from a value in DecibelsUnloaded (`dBu`).
     #[inline]
     pub fn from_decibels_unloaded(value: T) -> Self {
@@ -267,12 +249,6 @@ impl<T: Float> AmplitudeRatio<T> {
     #[inline]
     pub fn as_decibels_unloaded(self) -> T {
         self.0 + T::from_f64(2.218487499)
-    }
-
-    /// Alias for [`Self::as_decibels_unloaded`].
-    #[inline]
-    pub fn as_decibel_unloaded(self) -> T {
-        self.as_decibels_unloaded()
     }
 }
 

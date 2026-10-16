@@ -367,12 +367,6 @@ impl<T: Float> Duration<T> {
         self.0 / T::from_f64(3.1536e7)
     }
 
-    /// Alias for [`Self::as_years365`].
-    #[inline]
-    pub fn as_year365(self) -> T {
-        self.as_years365()
-    }
-
     /// Creates a [`Duration`] from a value in Months30 (`mo`).
     #[inline]
     pub fn from_months30(value: T) -> Self {
@@ -383,12 +377,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_months30(self) -> T {
         self.0 / T::from_f64(2592000.0)
-    }
-
-    /// Alias for [`Self::as_months30`].
-    #[inline]
-    pub fn as_month30(self) -> T {
-        self.as_months30()
     }
 
     /// Creates a [`Duration`] from a value in Weeks (`wk`).
@@ -403,12 +391,6 @@ impl<T: Float> Duration<T> {
         self.0 / T::from_f64(604800.0)
     }
 
-    /// Alias for [`Self::as_weeks`].
-    #[inline]
-    pub fn as_week(self) -> T {
-        self.as_weeks()
-    }
-
     /// Creates a [`Duration`] from a value in Days (`d`).
     #[inline]
     pub fn from_days(value: T) -> Self {
@@ -419,12 +401,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_days(self) -> T {
         self.0 / T::from_f64(86400.0)
-    }
-
-    /// Alias for [`Self::as_days`].
-    #[inline]
-    pub fn as_day(self) -> T {
-        self.as_days()
     }
 
     /// Creates a [`Duration`] from a value in Hours (`h`).
@@ -439,12 +415,6 @@ impl<T: Float> Duration<T> {
         self.0 / T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_hours`].
-    #[inline]
-    pub fn as_hour(self) -> T {
-        self.as_hours()
-    }
-
     /// Creates a [`Duration`] from a value in Minutes (`m`).
     #[inline]
     pub fn from_minutes(value: T) -> Self {
@@ -455,12 +425,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_minutes(self) -> T {
         self.0 / T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_minutes`].
-    #[inline]
-    pub fn as_minute(self) -> T {
-        self.as_minutes()
     }
 
     /// Creates a [`Duration`] from a value in Seconds (`s`).
@@ -475,12 +439,6 @@ impl<T: Float> Duration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_seconds`].
-    #[inline]
-    pub fn as_second(self) -> T {
-        self.as_seconds()
-    }
-
     /// Creates a [`Duration`] from a value in Picoseconds (`ps`).
     #[inline]
     pub fn from_picoseconds(value: T) -> Self {
@@ -491,12 +449,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_picoseconds(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picoseconds`].
-    #[inline]
-    pub fn as_picosecond(self) -> T {
-        self.as_picoseconds()
     }
 
     /// Creates a [`Duration`] from a value in Nanoseconds (`ns`).
@@ -511,12 +463,6 @@ impl<T: Float> Duration<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanoseconds`].
-    #[inline]
-    pub fn as_nanosecond(self) -> T {
-        self.as_nanoseconds()
-    }
-
     /// Creates a [`Duration`] from a value in Microseconds (`µs`).
     #[inline]
     pub fn from_microseconds(value: T) -> Self {
@@ -527,12 +473,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_microseconds(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microseconds`].
-    #[inline]
-    pub fn as_microsecond(self) -> T {
-        self.as_microseconds()
     }
 
     /// Creates a [`Duration`] from a value in Milliseconds (`ms`).
@@ -547,12 +487,6 @@ impl<T: Float> Duration<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milliseconds`].
-    #[inline]
-    pub fn as_millisecond(self) -> T {
-        self.as_milliseconds()
-    }
-
     /// Creates a [`Duration`] from a value in JulianYears (`jyr`).
     #[inline]
     pub fn from_julian_years(value: T) -> Self {
@@ -565,12 +499,6 @@ impl<T: Float> Duration<T> {
         self.0 / T::from_f64(3.15576e7)
     }
 
-    /// Alias for [`Self::as_julian_years`].
-    #[inline]
-    pub fn as_julian_year(self) -> T {
-        self.as_julian_years()
-    }
-
     /// Creates a [`Duration`] from a value in Sols (`sol`).
     #[inline]
     pub fn from_sols(value: T) -> Self {
@@ -581,12 +509,6 @@ impl<T: Float> Duration<T> {
     #[inline]
     pub fn as_sols(self) -> T {
         self.0 / T::from_f64(88775.244)
-    }
-
-    /// Alias for [`Self::as_sols`].
-    #[inline]
-    pub fn as_sol(self) -> T {
-        self.as_sols()
     }
 }
 

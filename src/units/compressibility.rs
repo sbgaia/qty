@@ -247,12 +247,6 @@ impl<T: Float> Compressibility<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_inverse_pascals`].
-    #[inline]
-    pub fn as_inverse_pascal(self) -> T {
-        self.as_inverse_pascals()
-    }
-
     /// Creates a [`Compressibility`] from a value in InverseKilopascals (`kPa⁻¹`).
     #[inline]
     pub fn from_inverse_kilopascals(value: T) -> Self {
@@ -263,12 +257,6 @@ impl<T: Float> Compressibility<T> {
     #[inline]
     pub fn as_inverse_kilopascals(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_inverse_kilopascals`].
-    #[inline]
-    pub fn as_inverse_kilopascal(self) -> T {
-        self.as_inverse_kilopascals()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMegapascals (`MPa⁻¹`).
@@ -283,12 +271,6 @@ impl<T: Float> Compressibility<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_inverse_megapascals`].
-    #[inline]
-    pub fn as_inverse_megapascal(self) -> T {
-        self.as_inverse_megapascals()
-    }
-
     /// Creates a [`Compressibility`] from a value in InverseAtmospheres (`atm⁻¹`).
     #[inline]
     pub fn from_inverse_atmospheres(value: T) -> Self {
@@ -299,12 +281,6 @@ impl<T: Float> Compressibility<T> {
     #[inline]
     pub fn as_inverse_atmospheres(self) -> T {
         self.0 * T::from_f64(101325.0)
-    }
-
-    /// Alias for [`Self::as_inverse_atmospheres`].
-    #[inline]
-    pub fn as_inverse_atmosphere(self) -> T {
-        self.as_inverse_atmospheres()
     }
 
     /// Creates a [`Compressibility`] from a value in InverseMillibars (`mbar⁻¹`).
@@ -319,12 +295,6 @@ impl<T: Float> Compressibility<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_inverse_millibars`].
-    #[inline]
-    pub fn as_inverse_millibar(self) -> T {
-        self.as_inverse_millibars()
-    }
-
     /// Creates a [`Compressibility`] from a value in InverseBars (`bar⁻¹`).
     #[inline]
     pub fn from_inverse_bars(value: T) -> Self {
@@ -337,12 +307,6 @@ impl<T: Float> Compressibility<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_inverse_bars`].
-    #[inline]
-    pub fn as_inverse_bar(self) -> T {
-        self.as_inverse_bars()
-    }
-
     /// Creates a [`Compressibility`] from a value in InversePoundsForcePerSquareInch (`psi⁻¹`).
     #[inline]
     pub fn from_inverse_pounds_force_per_square_inch(value: T) -> Self {
@@ -353,12 +317,6 @@ impl<T: Float> Compressibility<T> {
     #[inline]
     pub fn as_inverse_pounds_force_per_square_inch(self) -> T {
         self.0 / T::from_f64(0.0001450377377302092)
-    }
-
-    /// Alias for [`Self::as_inverse_pounds_force_per_square_inch`].
-    #[inline]
-    pub fn as_inverse_pound_force_per_square_inch(self) -> T {
-        self.as_inverse_pounds_force_per_square_inch()
     }
 }
 

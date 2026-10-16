@@ -240,12 +240,6 @@ impl<T: Float> MagneticField<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_teslas`].
-    #[inline]
-    pub fn as_tesla(self) -> T {
-        self.as_teslas()
-    }
-
     /// Creates a [`MagneticField`] from a value in Nanoteslas (`nT`).
     #[inline]
     pub fn from_nanoteslas(value: T) -> Self {
@@ -256,12 +250,6 @@ impl<T: Float> MagneticField<T> {
     #[inline]
     pub fn as_nanoteslas(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoteslas`].
-    #[inline]
-    pub fn as_nanotesla(self) -> T {
-        self.as_nanoteslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Microteslas (`µT`).
@@ -276,12 +264,6 @@ impl<T: Float> MagneticField<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microteslas`].
-    #[inline]
-    pub fn as_microtesla(self) -> T {
-        self.as_microteslas()
-    }
-
     /// Creates a [`MagneticField`] from a value in Milliteslas (`mT`).
     #[inline]
     pub fn from_milliteslas(value: T) -> Self {
@@ -292,12 +274,6 @@ impl<T: Float> MagneticField<T> {
     #[inline]
     pub fn as_milliteslas(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliteslas`].
-    #[inline]
-    pub fn as_millitesla(self) -> T {
-        self.as_milliteslas()
     }
 
     /// Creates a [`MagneticField`] from a value in Gausses (`G`).
@@ -312,12 +288,6 @@ impl<T: Float> MagneticField<T> {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_gausses`].
-    #[inline]
-    pub fn as_gauss(self) -> T {
-        self.as_gausses()
-    }
-
     /// Creates a [`MagneticField`] from a value in Milligausses (`mG`).
     #[inline]
     pub fn from_milligausses(value: T) -> Self {
@@ -328,12 +298,6 @@ impl<T: Float> MagneticField<T> {
     #[inline]
     pub fn as_milligausses(self) -> T {
         self.0 * T::from_f64(1e7)
-    }
-
-    /// Alias for [`Self::as_milligausses`].
-    #[inline]
-    pub fn as_milligauss(self) -> T {
-        self.as_milligausses()
     }
 }
 

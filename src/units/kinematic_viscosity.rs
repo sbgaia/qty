@@ -265,12 +265,6 @@ impl<T: Float> KinematicViscosity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_square_meters_per_second`].
-    #[inline]
-    pub fn as_square_meter_per_second(self) -> T {
-        self.as_square_meters_per_second()
-    }
-
     /// Creates a [`KinematicViscosity`] from a value in Stokes (`St`).
     #[inline]
     pub fn from_stokes(value: T) -> Self {
@@ -365,12 +359,6 @@ impl<T: Float> KinematicViscosity<T> {
     #[inline]
     pub fn as_square_feet_per_second(self) -> T {
         self.0 / T::from_f64(0.09290304)
-    }
-
-    /// Alias for [`Self::as_square_feet_per_second`].
-    #[inline]
-    pub fn as_square_foot_per_second(self) -> T {
-        self.as_square_feet_per_second()
     }
 }
 

@@ -190,12 +190,6 @@ impl<T: Float> ThermalConductivity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_watts_per_meter_kelvin`].
-    #[inline]
-    pub fn as_watt_per_meter_kelvin(self) -> T {
-        self.as_watts_per_meter_kelvin()
-    }
-
     /// Creates a [`ThermalConductivity`] from a value in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
     #[inline]
     pub fn from_btus_per_hour_foot_fahrenheit(value: T) -> Self {
@@ -208,12 +202,6 @@ impl<T: Float> ThermalConductivity<T> {
         self.0 / T::from_f64(1.7307346663713912)
     }
 
-    /// Alias for [`Self::as_btus_per_hour_foot_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_hour_foot_fahrenheit(self) -> T {
-        self.as_btus_per_hour_foot_fahrenheit()
-    }
-
     /// Creates a [`ThermalConductivity`] from a value in BtusPerSecondInchFahrenheit (`BTU/(s·in·°F)`).
     #[inline]
     pub fn from_btus_per_second_inch_fahrenheit(value: T) -> Self {
@@ -224,12 +212,6 @@ impl<T: Float> ThermalConductivity<T> {
     #[inline]
     pub fn as_btus_per_second_inch_fahrenheit(self) -> T {
         self.0 / T::from_f64(74767.73758724409)
-    }
-
-    /// Alias for [`Self::as_btus_per_second_inch_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_second_inch_fahrenheit(self) -> T {
-        self.as_btus_per_second_inch_fahrenheit()
     }
 }
 

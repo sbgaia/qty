@@ -271,12 +271,6 @@ impl<T: Float> RadiationExposure<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_coulombs_per_kilogram`].
-    #[inline]
-    pub fn as_coulomb_per_kilogram(self) -> T {
-        self.as_coulombs_per_kilogram()
-    }
-
     /// Creates a [`RadiationExposure`] from a value in PicocoulombsPerKilogram (`pC/kg`).
     #[inline]
     pub fn from_picocoulombs_per_kilogram(value: T) -> Self {
@@ -287,12 +281,6 @@ impl<T: Float> RadiationExposure<T> {
     #[inline]
     pub fn as_picocoulombs_per_kilogram(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picocoulombs_per_kilogram`].
-    #[inline]
-    pub fn as_picocoulomb_per_kilogram(self) -> T {
-        self.as_picocoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in NanocoulombsPerKilogram (`nC/kg`).
@@ -307,12 +295,6 @@ impl<T: Float> RadiationExposure<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanocoulombs_per_kilogram`].
-    #[inline]
-    pub fn as_nanocoulomb_per_kilogram(self) -> T {
-        self.as_nanocoulombs_per_kilogram()
-    }
-
     /// Creates a [`RadiationExposure`] from a value in MicrocoulombsPerKilogram (`µC/kg`).
     #[inline]
     pub fn from_microcoulombs_per_kilogram(value: T) -> Self {
@@ -323,12 +305,6 @@ impl<T: Float> RadiationExposure<T> {
     #[inline]
     pub fn as_microcoulombs_per_kilogram(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microcoulombs_per_kilogram`].
-    #[inline]
-    pub fn as_microcoulomb_per_kilogram(self) -> T {
-        self.as_microcoulombs_per_kilogram()
     }
 
     /// Creates a [`RadiationExposure`] from a value in MillicoulombsPerKilogram (`mC/kg`).
@@ -343,12 +319,6 @@ impl<T: Float> RadiationExposure<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millicoulombs_per_kilogram`].
-    #[inline]
-    pub fn as_millicoulomb_per_kilogram(self) -> T {
-        self.as_millicoulombs_per_kilogram()
-    }
-
     /// Creates a [`RadiationExposure`] from a value in Roentgens (`R`).
     #[inline]
     pub fn from_roentgens(value: T) -> Self {
@@ -359,12 +329,6 @@ impl<T: Float> RadiationExposure<T> {
     #[inline]
     pub fn as_roentgens(self) -> T {
         self.0 / T::from_f64(0.000258)
-    }
-
-    /// Alias for [`Self::as_roentgens`].
-    #[inline]
-    pub fn as_roentgen(self) -> T {
-        self.as_roentgens()
     }
 
     /// Creates a [`RadiationExposure`] from a value in Microroentgens (`µR`).
@@ -379,12 +343,6 @@ impl<T: Float> RadiationExposure<T> {
         self.0 / T::from_f64(2.58e-10)
     }
 
-    /// Alias for [`Self::as_microroentgens`].
-    #[inline]
-    pub fn as_microroentgen(self) -> T {
-        self.as_microroentgens()
-    }
-
     /// Creates a [`RadiationExposure`] from a value in Milliroentgens (`mR`).
     #[inline]
     pub fn from_milliroentgens(value: T) -> Self {
@@ -395,12 +353,6 @@ impl<T: Float> RadiationExposure<T> {
     #[inline]
     pub fn as_milliroentgens(self) -> T {
         self.0 / T::from_f64(2.58e-7)
-    }
-
-    /// Alias for [`Self::as_milliroentgens`].
-    #[inline]
-    pub fn as_milliroentgen(self) -> T {
-        self.as_milliroentgens()
     }
 }
 

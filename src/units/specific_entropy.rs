@@ -289,12 +289,6 @@ impl<T: Float> SpecificEntropy<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_kilogram_kelvin`].
-    #[inline]
-    pub fn as_joule_per_kilogram_kelvin(self) -> T {
-        self.as_joules_per_kilogram_kelvin()
-    }
-
     /// Creates a [`SpecificEntropy`] from a value in KilojoulesPerKilogramKelvin (`kJ/kg·K`).
     #[inline]
     pub fn from_kilojoules_per_kilogram_kelvin(value: T) -> Self {
@@ -305,12 +299,6 @@ impl<T: Float> SpecificEntropy<T> {
     #[inline]
     pub fn as_kilojoules_per_kilogram_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_kilogram_kelvin`].
-    #[inline]
-    pub fn as_kilojoule_per_kilogram_kelvin(self) -> T {
-        self.as_kilojoules_per_kilogram_kelvin()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in MegajoulesPerKilogramKelvin (`MJ/kg·K`).
@@ -325,12 +313,6 @@ impl<T: Float> SpecificEntropy<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megajoules_per_kilogram_kelvin`].
-    #[inline]
-    pub fn as_megajoule_per_kilogram_kelvin(self) -> T {
-        self.as_megajoules_per_kilogram_kelvin()
-    }
-
     /// Creates a [`SpecificEntropy`] from a value in JoulesPerKilogramDegreeCelsius (`J/kg·°C`).
     #[inline]
     pub fn from_joules_per_kilogram_degree_celsius(value: T) -> Self {
@@ -341,12 +323,6 @@ impl<T: Float> SpecificEntropy<T> {
     #[inline]
     pub fn as_joules_per_kilogram_degree_celsius(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_joules_per_kilogram_degree_celsius`].
-    #[inline]
-    pub fn as_joule_per_kilogram_degree_celsius(self) -> T {
-        self.as_joules_per_kilogram_degree_celsius()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in KilojoulesPerKilogramDegreeCelsius (`kJ/kg·°C`).
@@ -361,12 +337,6 @@ impl<T: Float> SpecificEntropy<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilojoules_per_kilogram_degree_celsius`].
-    #[inline]
-    pub fn as_kilojoule_per_kilogram_degree_celsius(self) -> T {
-        self.as_kilojoules_per_kilogram_degree_celsius()
-    }
-
     /// Creates a [`SpecificEntropy`] from a value in MegajoulesPerKilogramDegreeCelsius (`MJ/kg·°C`).
     #[inline]
     pub fn from_megajoules_per_kilogram_degree_celsius(value: T) -> Self {
@@ -377,12 +347,6 @@ impl<T: Float> SpecificEntropy<T> {
     #[inline]
     pub fn as_megajoules_per_kilogram_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megajoules_per_kilogram_degree_celsius`].
-    #[inline]
-    pub fn as_megajoule_per_kilogram_degree_celsius(self) -> T {
-        self.as_megajoules_per_kilogram_degree_celsius()
     }
 
     /// Creates a [`SpecificEntropy`] from a value in CaloriesPerGramKelvin (`cal/g·K`).
@@ -397,12 +361,6 @@ impl<T: Float> SpecificEntropy<T> {
         self.0 / T::from_f64(4184.0)
     }
 
-    /// Alias for [`Self::as_calories_per_gram_kelvin`].
-    #[inline]
-    pub fn as_calorie_per_gram_kelvin(self) -> T {
-        self.as_calories_per_gram_kelvin()
-    }
-
     /// Creates a [`SpecificEntropy`] from a value in KilocaloriesPerGramKelvin (`kcal/g·K`).
     #[inline]
     pub fn from_kilocalories_per_gram_kelvin(value: T) -> Self {
@@ -415,12 +373,6 @@ impl<T: Float> SpecificEntropy<T> {
         self.0 / T::from_f64(4184000.0)
     }
 
-    /// Alias for [`Self::as_kilocalories_per_gram_kelvin`].
-    #[inline]
-    pub fn as_kilocalorie_per_gram_kelvin(self) -> T {
-        self.as_kilocalories_per_gram_kelvin()
-    }
-
     /// Creates a [`SpecificEntropy`] from a value in BtusPerPoundFahrenheit (`BTU/(lb·°F)`).
     #[inline]
     pub fn from_btus_per_pound_fahrenheit(value: T) -> Self {
@@ -431,12 +383,6 @@ impl<T: Float> SpecificEntropy<T> {
     #[inline]
     pub fn as_btus_per_pound_fahrenheit(self) -> T {
         self.0 / T::from_f64(4186.8)
-    }
-
-    /// Alias for [`Self::as_btus_per_pound_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_pound_fahrenheit(self) -> T {
-        self.as_btus_per_pound_fahrenheit()
     }
 }
 

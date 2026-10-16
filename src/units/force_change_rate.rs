@@ -376,12 +376,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_newtons_per_minute`].
-    #[inline]
-    pub fn as_newton_per_minute(self) -> T {
-        self.as_newtons_per_minute()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in DecanewtonsPerMinute (`daN/min`).
     #[inline]
     pub fn from_decanewtons_per_minute(value: T) -> Self {
@@ -392,12 +386,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_decanewtons_per_minute(self) -> T {
         self.0 * T::from_f64(6.0)
-    }
-
-    /// Alias for [`Self::as_decanewtons_per_minute`].
-    #[inline]
-    pub fn as_decanewton_per_minute(self) -> T {
-        self.as_decanewtons_per_minute()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in KilonewtonsPerMinute (`kN/min`).
@@ -412,12 +400,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 / T::from_f64(16.666666666666668)
     }
 
-    /// Alias for [`Self::as_kilonewtons_per_minute`].
-    #[inline]
-    pub fn as_kilonewton_per_minute(self) -> T {
-        self.as_kilonewtons_per_minute()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in NewtonsPerSecond (`N/s`).
     #[inline]
     pub fn from_newtons_per_second(value: T) -> Self {
@@ -428,12 +410,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_newtons_per_second(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_newtons_per_second`].
-    #[inline]
-    pub fn as_newton_per_second(self) -> T {
-        self.as_newtons_per_second()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in NanonewtonsPerSecond (`nN/s`).
@@ -448,12 +424,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanonewtons_per_second`].
-    #[inline]
-    pub fn as_nanonewton_per_second(self) -> T {
-        self.as_nanonewtons_per_second()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in MicronewtonsPerSecond (`µN/s`).
     #[inline]
     pub fn from_micronewtons_per_second(value: T) -> Self {
@@ -464,12 +434,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_micronewtons_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micronewtons_per_second`].
-    #[inline]
-    pub fn as_micronewton_per_second(self) -> T {
-        self.as_micronewtons_per_second()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in MillinewtonsPerSecond (`mN/s`).
@@ -484,12 +448,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millinewtons_per_second`].
-    #[inline]
-    pub fn as_millinewton_per_second(self) -> T {
-        self.as_millinewtons_per_second()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in CentinewtonsPerSecond (`cN/s`).
     #[inline]
     pub fn from_centinewtons_per_second(value: T) -> Self {
@@ -500,12 +458,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_centinewtons_per_second(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_centinewtons_per_second`].
-    #[inline]
-    pub fn as_centinewton_per_second(self) -> T {
-        self.as_centinewtons_per_second()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in DecinewtonsPerSecond (`dN/s`).
@@ -520,12 +472,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decinewtons_per_second`].
-    #[inline]
-    pub fn as_decinewton_per_second(self) -> T {
-        self.as_decinewtons_per_second()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in DecanewtonsPerSecond (`daN/s`).
     #[inline]
     pub fn from_decanewtons_per_second(value: T) -> Self {
@@ -536,12 +482,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_decanewtons_per_second(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decanewtons_per_second`].
-    #[inline]
-    pub fn as_decanewton_per_second(self) -> T {
-        self.as_decanewtons_per_second()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in KilonewtonsPerSecond (`kN/s`).
@@ -556,12 +496,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilonewtons_per_second`].
-    #[inline]
-    pub fn as_kilonewton_per_second(self) -> T {
-        self.as_kilonewtons_per_second()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in PoundsForcePerMinute (`lbf/min`).
     #[inline]
     pub fn from_pounds_force_per_minute(value: T) -> Self {
@@ -572,12 +506,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_pounds_force_per_minute(self) -> T {
         self.0 / T::from_f64(0.07413702692100833)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_minute`].
-    #[inline]
-    pub fn as_pound_force_per_minute(self) -> T {
-        self.as_pounds_force_per_minute()
     }
 
     /// Creates a [`ForceChangeRate`] from a value in KilopoundsForcePerMinute (`klbf/min`).
@@ -592,12 +520,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 / T::from_f64(74.13702692100833)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_minute`].
-    #[inline]
-    pub fn as_kilopound_force_per_minute(self) -> T {
-        self.as_kilopounds_force_per_minute()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in PoundsForcePerSecond (`lbf/s`).
     #[inline]
     pub fn from_pounds_force_per_second(value: T) -> Self {
@@ -610,12 +532,6 @@ impl<T: Float> ForceChangeRate<T> {
         self.0 / T::from_f64(4.4482216152605)
     }
 
-    /// Alias for [`Self::as_pounds_force_per_second`].
-    #[inline]
-    pub fn as_pound_force_per_second(self) -> T {
-        self.as_pounds_force_per_second()
-    }
-
     /// Creates a [`ForceChangeRate`] from a value in KilopoundsForcePerSecond (`klbf/s`).
     #[inline]
     pub fn from_kilopounds_force_per_second(value: T) -> Self {
@@ -626,12 +542,6 @@ impl<T: Float> ForceChangeRate<T> {
     #[inline]
     pub fn as_kilopounds_force_per_second(self) -> T {
         self.0 / T::from_f64(4448.2216152605)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force_per_second`].
-    #[inline]
-    pub fn as_kilopound_force_per_second(self) -> T {
-        self.as_kilopounds_force_per_second()
     }
 }
 

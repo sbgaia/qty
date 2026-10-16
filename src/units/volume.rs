@@ -1002,12 +1002,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_liters`].
-    #[inline]
-    pub fn as_liter(self) -> T {
-        self.as_liters()
-    }
-
     /// Creates a [`Volume`] from a value in Nanoliters (`nl`).
     #[inline]
     pub fn from_nanoliters(value: T) -> Self {
@@ -1018,12 +1012,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_nanoliters(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_nanoliters`].
-    #[inline]
-    pub fn as_nanoliter(self) -> T {
-        self.as_nanoliters()
     }
 
     /// Creates a [`Volume`] from a value in Microliters (`µl`).
@@ -1038,12 +1026,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_microliters`].
-    #[inline]
-    pub fn as_microliter(self) -> T {
-        self.as_microliters()
-    }
-
     /// Creates a [`Volume`] from a value in Milliliters (`ml`).
     #[inline]
     pub fn from_milliliters(value: T) -> Self {
@@ -1054,12 +1036,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_milliliters(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milliliters`].
-    #[inline]
-    pub fn as_milliliter(self) -> T {
-        self.as_milliliters()
     }
 
     /// Creates a [`Volume`] from a value in Centiliters (`cl`).
@@ -1074,12 +1050,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_centiliters`].
-    #[inline]
-    pub fn as_centiliter(self) -> T {
-        self.as_centiliters()
-    }
-
     /// Creates a [`Volume`] from a value in Deciliters (`dl`).
     #[inline]
     pub fn from_deciliters(value: T) -> Self {
@@ -1090,12 +1060,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_deciliters(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_deciliters`].
-    #[inline]
-    pub fn as_deciliter(self) -> T {
-        self.as_deciliters()
     }
 
     /// Creates a [`Volume`] from a value in Decaliters (`dal`).
@@ -1110,12 +1074,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decaliters`].
-    #[inline]
-    pub fn as_decaliter(self) -> T {
-        self.as_decaliters()
-    }
-
     /// Creates a [`Volume`] from a value in Hectoliters (`hl`).
     #[inline]
     pub fn from_hectoliters(value: T) -> Self {
@@ -1126,12 +1084,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_hectoliters(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_hectoliters`].
-    #[inline]
-    pub fn as_hectoliter(self) -> T {
-        self.as_hectoliters()
     }
 
     /// Creates a [`Volume`] from a value in Kiloliters (`kl`).
@@ -1146,12 +1098,6 @@ impl<T: Float> Volume<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kiloliters`].
-    #[inline]
-    pub fn as_kiloliter(self) -> T {
-        self.as_kiloliters()
-    }
-
     /// Creates a [`Volume`] from a value in Megaliters (`Ml`).
     #[inline]
     pub fn from_megaliters(value: T) -> Self {
@@ -1162,12 +1108,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_megaliters(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_megaliters`].
-    #[inline]
-    pub fn as_megaliter(self) -> T {
-        self.as_megaliters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMeters (`m³`).
@@ -1182,12 +1122,6 @@ impl<T: Float> Volume<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_cubic_meters`].
-    #[inline]
-    pub fn as_cubic_meter(self) -> T {
-        self.as_cubic_meters()
-    }
-
     /// Creates a [`Volume`] from a value in ThousandCubicMeters (`10³·m³`).
     #[inline]
     pub fn from_thousand_cubic_meters(value: T) -> Self {
@@ -1198,12 +1132,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_thousand_cubic_meters(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_thousand_cubic_meters`].
-    #[inline]
-    pub fn as_thousand_cubic_meter(self) -> T {
-        self.as_thousand_cubic_meters()
     }
 
     /// Creates a [`Volume`] from a value in CubicKilometers (`km³`).
@@ -1218,12 +1146,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_cubic_kilometers`].
-    #[inline]
-    pub fn as_cubic_kilometer(self) -> T {
-        self.as_cubic_kilometers()
-    }
-
     /// Creates a [`Volume`] from a value in CubicHectometers (`hm³`).
     #[inline]
     pub fn from_cubic_hectometers(value: T) -> Self {
@@ -1234,12 +1156,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_cubic_hectometers(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_cubic_hectometers`].
-    #[inline]
-    pub fn as_cubic_hectometer(self) -> T {
-        self.as_cubic_hectometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicDecimeters (`dm³`).
@@ -1254,12 +1170,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_cubic_decimeters`].
-    #[inline]
-    pub fn as_cubic_decimeter(self) -> T {
-        self.as_cubic_decimeters()
-    }
-
     /// Creates a [`Volume`] from a value in CubicCentimeters (`cm³`).
     #[inline]
     pub fn from_cubic_centimeters(value: T) -> Self {
@@ -1270,12 +1180,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_cubic_centimeters(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_cubic_centimeters`].
-    #[inline]
-    pub fn as_cubic_centimeter(self) -> T {
-        self.as_cubic_centimeters()
     }
 
     /// Creates a [`Volume`] from a value in CubicMillimeters (`mm³`).
@@ -1290,12 +1194,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_cubic_millimeters`].
-    #[inline]
-    pub fn as_cubic_millimeter(self) -> T {
-        self.as_cubic_millimeters()
-    }
-
     /// Creates a [`Volume`] from a value in CubicMicrometers (`µm³`).
     #[inline]
     pub fn from_cubic_micrometers(value: T) -> Self {
@@ -1306,12 +1204,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_cubic_micrometers(self) -> T {
         self.0 * T::from_f64(1e18)
-    }
-
-    /// Alias for [`Self::as_cubic_micrometers`].
-    #[inline]
-    pub fn as_cubic_micrometer(self) -> T {
-        self.as_cubic_micrometers()
     }
 
     /// Creates a [`Volume`] from a value in CubicMiles (`mi³`).
@@ -1326,12 +1218,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(4.1681818254405794e9)
     }
 
-    /// Alias for [`Self::as_cubic_miles`].
-    #[inline]
-    pub fn as_cubic_mile(self) -> T {
-        self.as_cubic_miles()
-    }
-
     /// Creates a [`Volume`] from a value in CubicYards (`yd³`).
     #[inline]
     pub fn from_cubic_yards(value: T) -> Self {
@@ -1342,12 +1228,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_cubic_yards(self) -> T {
         self.0 / T::from_f64(0.764554857984)
-    }
-
-    /// Alias for [`Self::as_cubic_yards`].
-    #[inline]
-    pub fn as_cubic_yard(self) -> T {
-        self.as_cubic_yards()
     }
 
     /// Creates a [`Volume`] from a value in CubicFeet (`ft³`).
@@ -1362,12 +1242,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.028316846592)
     }
 
-    /// Alias for [`Self::as_cubic_feet`].
-    #[inline]
-    pub fn as_cubic_foot(self) -> T {
-        self.as_cubic_feet()
-    }
-
     /// Creates a [`Volume`] from a value in HundredCubicFeet (`Ccf`).
     #[inline]
     pub fn from_hundred_cubic_feet(value: T) -> Self {
@@ -1378,12 +1252,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_hundred_cubic_feet(self) -> T {
         self.0 / T::from_f64(2.8316846592)
-    }
-
-    /// Alias for [`Self::as_hundred_cubic_feet`].
-    #[inline]
-    pub fn as_hundred_cubic_foot(self) -> T {
-        self.as_hundred_cubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in ThousandCubicFeet (`Mcf`).
@@ -1398,12 +1266,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(28.316846592)
     }
 
-    /// Alias for [`Self::as_thousand_cubic_feet`].
-    #[inline]
-    pub fn as_thousand_cubic_foot(self) -> T {
-        self.as_thousand_cubic_feet()
-    }
-
     /// Creates a [`Volume`] from a value in MillionCubicFeet (`MMcf`).
     #[inline]
     pub fn from_million_cubic_feet(value: T) -> Self {
@@ -1414,12 +1276,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_million_cubic_feet(self) -> T {
         self.0 / T::from_f64(28316.846592)
-    }
-
-    /// Alias for [`Self::as_million_cubic_feet`].
-    #[inline]
-    pub fn as_million_cubic_foot(self) -> T {
-        self.as_million_cubic_feet()
     }
 
     /// Creates a [`Volume`] from a value in CubicInches (`in³`).
@@ -1434,12 +1290,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(1.6387064e-5)
     }
 
-    /// Alias for [`Self::as_cubic_inches`].
-    #[inline]
-    pub fn as_cubic_inch(self) -> T {
-        self.as_cubic_inches()
-    }
-
     /// Creates a [`Volume`] from a value in ImperialGallons (`gal (imp.)`).
     #[inline]
     pub fn from_imperial_gallons(value: T) -> Self {
@@ -1450,12 +1300,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_imperial_gallons(self) -> T {
         self.0 / T::from_f64(0.00454609)
-    }
-
-    /// Alias for [`Self::as_imperial_gallons`].
-    #[inline]
-    pub fn as_imperial_gallon(self) -> T {
-        self.as_imperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in KiloimperialGallons (`kgal (imp.)`).
@@ -1470,12 +1314,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(4.54609)
     }
 
-    /// Alias for [`Self::as_kiloimperial_gallons`].
-    #[inline]
-    pub fn as_kiloimperial_gallon(self) -> T {
-        self.as_kiloimperial_gallons()
-    }
-
     /// Creates a [`Volume`] from a value in MegaimperialGallons (`Mgal (imp.)`).
     #[inline]
     pub fn from_megaimperial_gallons(value: T) -> Self {
@@ -1486,12 +1324,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_megaimperial_gallons(self) -> T {
         self.0 / T::from_f64(4546.09)
-    }
-
-    /// Alias for [`Self::as_megaimperial_gallons`].
-    #[inline]
-    pub fn as_megaimperial_gallon(self) -> T {
-        self.as_megaimperial_gallons()
     }
 
     /// Creates a [`Volume`] from a value in ImperialOunces (`oz (imp.)`).
@@ -1506,12 +1338,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(2.84130625e-5)
     }
 
-    /// Alias for [`Self::as_imperial_ounces`].
-    #[inline]
-    pub fn as_imperial_ounce(self) -> T {
-        self.as_imperial_ounces()
-    }
-
     /// Creates a [`Volume`] from a value in UsGallons (`gal (U.S.)`).
     #[inline]
     pub fn from_us_gallons(value: T) -> Self {
@@ -1522,12 +1348,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_us_gallons(self) -> T {
         self.0 / T::from_f64(0.003785411784)
-    }
-
-    /// Alias for [`Self::as_us_gallons`].
-    #[inline]
-    pub fn as_us_gallon(self) -> T {
-        self.as_us_gallons()
     }
 
     /// Creates a [`Volume`] from a value in DecausGallons (`dagal (U.S.)`).
@@ -1542,12 +1362,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.03785411784)
     }
 
-    /// Alias for [`Self::as_decaus_gallons`].
-    #[inline]
-    pub fn as_decaus_gallon(self) -> T {
-        self.as_decaus_gallons()
-    }
-
     /// Creates a [`Volume`] from a value in DeciusGallons (`dgal (U.S.)`).
     #[inline]
     pub fn from_decius_gallons(value: T) -> Self {
@@ -1558,12 +1372,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_decius_gallons(self) -> T {
         self.0 / T::from_f64(0.0003785411784)
-    }
-
-    /// Alias for [`Self::as_decius_gallons`].
-    #[inline]
-    pub fn as_decius_gallon(self) -> T {
-        self.as_decius_gallons()
     }
 
     /// Creates a [`Volume`] from a value in HectousGallons (`hgal (U.S.)`).
@@ -1578,12 +1386,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.3785411784)
     }
 
-    /// Alias for [`Self::as_hectous_gallons`].
-    #[inline]
-    pub fn as_hectous_gallon(self) -> T {
-        self.as_hectous_gallons()
-    }
-
     /// Creates a [`Volume`] from a value in KilousGallons (`kgal (U.S.)`).
     #[inline]
     pub fn from_kilous_gallons(value: T) -> Self {
@@ -1594,12 +1396,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_kilous_gallons(self) -> T {
         self.0 / T::from_f64(3.785411784)
-    }
-
-    /// Alias for [`Self::as_kilous_gallons`].
-    #[inline]
-    pub fn as_kilous_gallon(self) -> T {
-        self.as_kilous_gallons()
     }
 
     /// Creates a [`Volume`] from a value in MegausGallons (`Mgal (U.S.)`).
@@ -1614,12 +1410,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(3785.411784)
     }
 
-    /// Alias for [`Self::as_megaus_gallons`].
-    #[inline]
-    pub fn as_megaus_gallon(self) -> T {
-        self.as_megaus_gallons()
-    }
-
     /// Creates a [`Volume`] from a value in UsOunces (`oz (U.S.)`).
     #[inline]
     pub fn from_us_ounces(value: T) -> Self {
@@ -1630,12 +1420,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_us_ounces(self) -> T {
         self.0 / T::from_f64(2.95735295625e-5)
-    }
-
-    /// Alias for [`Self::as_us_ounces`].
-    #[inline]
-    pub fn as_us_ounce(self) -> T {
-        self.as_us_ounces()
     }
 
     /// Creates a [`Volume`] from a value in UsTablespoons (`tablespoon (U.S.)`).
@@ -1650,12 +1434,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(1.478676478125e-5)
     }
 
-    /// Alias for [`Self::as_us_tablespoons`].
-    #[inline]
-    pub fn as_us_tablespoon(self) -> T {
-        self.as_us_tablespoons()
-    }
-
     /// Creates a [`Volume`] from a value in AuTablespoons (`tablespoon (A.U.)`).
     #[inline]
     pub fn from_au_tablespoons(value: T) -> Self {
@@ -1666,12 +1444,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_au_tablespoons(self) -> T {
         self.0 * T::from_f64(50000.0)
-    }
-
-    /// Alias for [`Self::as_au_tablespoons`].
-    #[inline]
-    pub fn as_au_tablespoon(self) -> T {
-        self.as_au_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTablespoons (`tablespoon`).
@@ -1686,12 +1458,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(1.5e-5)
     }
 
-    /// Alias for [`Self::as_metric_tablespoons`].
-    #[inline]
-    pub fn as_metric_tablespoon(self) -> T {
-        self.as_metric_tablespoons()
-    }
-
     /// Creates a [`Volume`] from a value in UkTablespoons (`tablespoon (U.K.)`).
     #[inline]
     pub fn from_uk_tablespoons(value: T) -> Self {
@@ -1702,12 +1468,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_uk_tablespoons(self) -> T {
         self.0 / T::from_f64(1.5e-5)
-    }
-
-    /// Alias for [`Self::as_uk_tablespoons`].
-    #[inline]
-    pub fn as_uk_tablespoon(self) -> T {
-        self.as_uk_tablespoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricTeaspoons (`tsp`).
@@ -1722,12 +1482,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(200000.0)
     }
 
-    /// Alias for [`Self::as_metric_teaspoons`].
-    #[inline]
-    pub fn as_metric_teaspoon(self) -> T {
-        self.as_metric_teaspoons()
-    }
-
     /// Creates a [`Volume`] from a value in UsTeaspoons (`teaspoon (U.S.)`).
     #[inline]
     pub fn from_us_teaspoons(value: T) -> Self {
@@ -1738,12 +1492,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_us_teaspoons(self) -> T {
         self.0 / T::from_f64(4.92892159375e-6)
-    }
-
-    /// Alias for [`Self::as_us_teaspoons`].
-    #[inline]
-    pub fn as_us_teaspoon(self) -> T {
-        self.as_us_teaspoons()
     }
 
     /// Creates a [`Volume`] from a value in MetricCups (`metric cup`).
@@ -1758,12 +1506,6 @@ impl<T: Float> Volume<T> {
         self.0 * T::from_f64(4000.0)
     }
 
-    /// Alias for [`Self::as_metric_cups`].
-    #[inline]
-    pub fn as_metric_cup(self) -> T {
-        self.as_metric_cups()
-    }
-
     /// Creates a [`Volume`] from a value in UsCustomaryCups (`cup (U.S. customary)`).
     #[inline]
     pub fn from_us_customary_cups(value: T) -> Self {
@@ -1774,12 +1516,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_us_customary_cups(self) -> T {
         self.0 / T::from_f64(0.0002365882365)
-    }
-
-    /// Alias for [`Self::as_us_customary_cups`].
-    #[inline]
-    pub fn as_us_customary_cup(self) -> T {
-        self.as_us_customary_cups()
     }
 
     /// Creates a [`Volume`] from a value in UsLegalCups (`cup (U.S.)`).
@@ -1794,12 +1530,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.00024)
     }
 
-    /// Alias for [`Self::as_us_legal_cups`].
-    #[inline]
-    pub fn as_us_legal_cup(self) -> T {
-        self.as_us_legal_cups()
-    }
-
     /// Creates a [`Volume`] from a value in OilBarrels (`bbl`).
     #[inline]
     pub fn from_oil_barrels(value: T) -> Self {
@@ -1810,12 +1540,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_oil_barrels(self) -> T {
         self.0 / T::from_f64(0.158987294928)
-    }
-
-    /// Alias for [`Self::as_oil_barrels`].
-    #[inline]
-    pub fn as_oil_barrel(self) -> T {
-        self.as_oil_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsBeerBarrels (`bl (U.S.)`).
@@ -1830,12 +1554,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.117347765304)
     }
 
-    /// Alias for [`Self::as_us_beer_barrels`].
-    #[inline]
-    pub fn as_us_beer_barrel(self) -> T {
-        self.as_us_beer_barrels()
-    }
-
     /// Creates a [`Volume`] from a value in ImperialBeerBarrels (`bl (imp.)`).
     #[inline]
     pub fn from_imperial_beer_barrels(value: T) -> Self {
@@ -1846,12 +1564,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_imperial_beer_barrels(self) -> T {
         self.0 / T::from_f64(0.16365924)
-    }
-
-    /// Alias for [`Self::as_imperial_beer_barrels`].
-    #[inline]
-    pub fn as_imperial_beer_barrel(self) -> T {
-        self.as_imperial_beer_barrels()
     }
 
     /// Creates a [`Volume`] from a value in UsQuarts (`qt (U.S.)`).
@@ -1866,12 +1578,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.000946352946)
     }
 
-    /// Alias for [`Self::as_us_quarts`].
-    #[inline]
-    pub fn as_us_quart(self) -> T {
-        self.as_us_quarts()
-    }
-
     /// Creates a [`Volume`] from a value in ImperialQuarts (`qt (imp.)`).
     #[inline]
     pub fn from_imperial_quarts(value: T) -> Self {
@@ -1882,12 +1588,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_imperial_quarts(self) -> T {
         self.0 / T::from_f64(0.0011365225)
-    }
-
-    /// Alias for [`Self::as_imperial_quarts`].
-    #[inline]
-    pub fn as_imperial_quart(self) -> T {
-        self.as_imperial_quarts()
     }
 
     /// Creates a [`Volume`] from a value in UsPints (`pt (U.S.)`).
@@ -1902,12 +1602,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.000473176473)
     }
 
-    /// Alias for [`Self::as_us_pints`].
-    #[inline]
-    pub fn as_us_pint(self) -> T {
-        self.as_us_pints()
-    }
-
     /// Creates a [`Volume`] from a value in AcreFeet (`ac-ft`).
     #[inline]
     pub fn from_acre_feet(value: T) -> Self {
@@ -1918,12 +1612,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_acre_feet(self) -> T {
         self.0 / T::from_f64(1233.48183754752)
-    }
-
-    /// Alias for [`Self::as_acre_feet`].
-    #[inline]
-    pub fn as_acre_foot(self) -> T {
-        self.as_acre_feet()
     }
 
     /// Creates a [`Volume`] from a value in ImperialPints (`pt (imp.)`).
@@ -1938,12 +1626,6 @@ impl<T: Float> Volume<T> {
         self.0 / T::from_f64(0.00056826125)
     }
 
-    /// Alias for [`Self::as_imperial_pints`].
-    #[inline]
-    pub fn as_imperial_pint(self) -> T {
-        self.as_imperial_pints()
-    }
-
     /// Creates a [`Volume`] from a value in BoardFeet (`bf`).
     #[inline]
     pub fn from_board_feet(value: T) -> Self {
@@ -1954,12 +1636,6 @@ impl<T: Float> Volume<T> {
     #[inline]
     pub fn as_board_feet(self) -> T {
         self.0 / T::from_f64(0.002359737216)
-    }
-
-    /// Alias for [`Self::as_board_feet`].
-    #[inline]
-    pub fn as_board_foot(self) -> T {
-        self.as_board_feet()
     }
 }
 

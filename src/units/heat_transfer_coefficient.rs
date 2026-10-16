@@ -298,12 +298,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_watts_per_square_meter_kelvin`].
-    #[inline]
-    pub fn as_watt_per_square_meter_kelvin(self) -> T {
-        self.as_watts_per_square_meter_kelvin()
-    }
-
     /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterCelsius (`W/(m²·°C)`).
     #[inline]
     pub fn from_watts_per_square_meter_celsius(value: T) -> Self {
@@ -314,12 +308,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
     #[inline]
     pub fn as_watts_per_square_meter_celsius(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_watts_per_square_meter_celsius`].
-    #[inline]
-    pub fn as_watt_per_square_meter_celsius(self) -> T {
-        self.as_watts_per_square_meter_celsius()
     }
 
     /// Creates a [`HeatTransferCoefficient`] from a value in BtusPerHourSquareFootDegreeFahrenheit (`Btu/(h·ft²·°F)`).
@@ -334,12 +322,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
         self.0 / T::from_f64(5.678263341113488)
     }
 
-    /// Alias for [`Self::as_btus_per_hour_square_foot_degree_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_hour_square_foot_degree_fahrenheit(self) -> T {
-        self.as_btus_per_hour_square_foot_degree_fahrenheit()
-    }
-
     /// Creates a [`HeatTransferCoefficient`] from a value in BtusPerSecondSquareInchDegreeFahrenheit (`Btu/(s·in²·°F)`).
     #[inline]
     pub fn from_btus_per_second_square_inch_degree_fahrenheit(value: T) -> Self {
@@ -350,12 +332,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
     #[inline]
     pub fn as_btus_per_second_square_inch_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(2943611.716033232)
-    }
-
-    /// Alias for [`Self::as_btus_per_second_square_inch_degree_fahrenheit`].
-    #[inline]
-    pub fn as_btu_per_second_square_inch_degree_fahrenheit(self) -> T {
-        self.as_btus_per_second_square_inch_degree_fahrenheit()
     }
 
     /// Creates a [`HeatTransferCoefficient`] from a value in CaloriesPerHourSquareMeterDegreeCelsius (`cal/(h·m²·°C)`).
@@ -370,12 +346,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
         self.0 / T::from_f64(0.0011622222222222223)
     }
 
-    /// Alias for [`Self::as_calories_per_hour_square_meter_degree_celsius`].
-    #[inline]
-    pub fn as_calorie_per_hour_square_meter_degree_celsius(self) -> T {
-        self.as_calories_per_hour_square_meter_degree_celsius()
-    }
-
     /// Creates a [`HeatTransferCoefficient`] from a value in KilocaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter_degree_celsius(value: T) -> Self {
@@ -386,12 +356,6 @@ impl<T: Float> HeatTransferCoefficient<T> {
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1.1622222222222223)
-    }
-
-    /// Alias for [`Self::as_kilocalories_per_hour_square_meter_degree_celsius`].
-    #[inline]
-    pub fn as_kilocalorie_per_hour_square_meter_degree_celsius(self) -> T {
-        self.as_kilocalories_per_hour_square_meter_degree_celsius()
     }
 }
 

@@ -420,12 +420,6 @@ impl<T: Float> LinearDensity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_grams_per_millimeter`].
-    #[inline]
-    pub fn as_gram_per_millimeter(self) -> T {
-        self.as_grams_per_millimeter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerMillimeter (`µg/mm`).
     #[inline]
     pub fn from_micrograms_per_millimeter(value: T) -> Self {
@@ -436,12 +430,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_micrograms_per_millimeter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_millimeter`].
-    #[inline]
-    pub fn as_microgram_per_millimeter(self) -> T {
-        self.as_micrograms_per_millimeter()
     }
 
     /// Creates a [`LinearDensity`] from a value in MilligramsPerMillimeter (`mg/mm`).
@@ -456,12 +444,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_millimeter`].
-    #[inline]
-    pub fn as_milligram_per_millimeter(self) -> T {
-        self.as_milligrams_per_millimeter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in KilogramsPerMillimeter (`kg/mm`).
     #[inline]
     pub fn from_kilograms_per_millimeter(value: T) -> Self {
@@ -472,12 +454,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_kilograms_per_millimeter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_millimeter`].
-    #[inline]
-    pub fn as_kilogram_per_millimeter(self) -> T {
-        self.as_kilograms_per_millimeter()
     }
 
     /// Creates a [`LinearDensity`] from a value in GramsPerCentimeter (`g/cm`).
@@ -492,12 +468,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_grams_per_centimeter`].
-    #[inline]
-    pub fn as_gram_per_centimeter(self) -> T {
-        self.as_grams_per_centimeter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerCentimeter (`µg/cm`).
     #[inline]
     pub fn from_micrograms_per_centimeter(value: T) -> Self {
@@ -508,12 +478,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_micrograms_per_centimeter(self) -> T {
         self.0 * T::from_f64(1e7)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_centimeter`].
-    #[inline]
-    pub fn as_microgram_per_centimeter(self) -> T {
-        self.as_micrograms_per_centimeter()
     }
 
     /// Creates a [`LinearDensity`] from a value in MilligramsPerCentimeter (`mg/cm`).
@@ -528,12 +492,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_centimeter`].
-    #[inline]
-    pub fn as_milligram_per_centimeter(self) -> T {
-        self.as_milligrams_per_centimeter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in KilogramsPerCentimeter (`kg/cm`).
     #[inline]
     pub fn from_kilograms_per_centimeter(value: T) -> Self {
@@ -544,12 +502,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_kilograms_per_centimeter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_centimeter`].
-    #[inline]
-    pub fn as_kilogram_per_centimeter(self) -> T {
-        self.as_kilograms_per_centimeter()
     }
 
     /// Creates a [`LinearDensity`] from a value in GramsPerMeter (`g/m`).
@@ -564,12 +516,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_meter`].
-    #[inline]
-    pub fn as_gram_per_meter(self) -> T {
-        self.as_grams_per_meter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerMeter (`µg/m`).
     #[inline]
     pub fn from_micrograms_per_meter(value: T) -> Self {
@@ -580,12 +526,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_micrograms_per_meter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_meter`].
-    #[inline]
-    pub fn as_microgram_per_meter(self) -> T {
-        self.as_micrograms_per_meter()
     }
 
     /// Creates a [`LinearDensity`] from a value in MilligramsPerMeter (`mg/m`).
@@ -600,12 +540,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_meter`].
-    #[inline]
-    pub fn as_milligram_per_meter(self) -> T {
-        self.as_milligrams_per_meter()
-    }
-
     /// Creates a [`LinearDensity`] from a value in KilogramsPerMeter (`kg/m`).
     #[inline]
     pub fn from_kilograms_per_meter(value: T) -> Self {
@@ -616,12 +550,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_kilograms_per_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilograms_per_meter`].
-    #[inline]
-    pub fn as_kilogram_per_meter(self) -> T {
-        self.as_kilograms_per_meter()
     }
 
     /// Creates a [`LinearDensity`] from a value in PoundsPerInch (`lb/in`).
@@ -636,12 +564,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 / T::from_f64(17.857967322834646)
     }
 
-    /// Alias for [`Self::as_pounds_per_inch`].
-    #[inline]
-    pub fn as_pound_per_inch(self) -> T {
-        self.as_pounds_per_inch()
-    }
-
     /// Creates a [`LinearDensity`] from a value in PoundsPerFoot (`lb/ft`).
     #[inline]
     pub fn from_pounds_per_foot(value: T) -> Self {
@@ -652,12 +574,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_pounds_per_foot(self) -> T {
         self.0 / T::from_f64(1.4881639435695537)
-    }
-
-    /// Alias for [`Self::as_pounds_per_foot`].
-    #[inline]
-    pub fn as_pound_per_foot(self) -> T {
-        self.as_pounds_per_foot()
     }
 
     /// Creates a [`LinearDensity`] from a value in GramsPerFoot (`g/ft`).
@@ -672,12 +588,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 / T::from_f64(0.0032808398950131233)
     }
 
-    /// Alias for [`Self::as_grams_per_foot`].
-    #[inline]
-    pub fn as_gram_per_foot(self) -> T {
-        self.as_grams_per_foot()
-    }
-
     /// Creates a [`LinearDensity`] from a value in MicrogramsPerFoot (`µg/ft`).
     #[inline]
     pub fn from_micrograms_per_foot(value: T) -> Self {
@@ -688,12 +598,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_micrograms_per_foot(self) -> T {
         self.0 * T::from_f64(3.048e8)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_foot`].
-    #[inline]
-    pub fn as_microgram_per_foot(self) -> T {
-        self.as_micrograms_per_foot()
     }
 
     /// Creates a [`LinearDensity`] from a value in MilligramsPerFoot (`mg/ft`).
@@ -708,12 +612,6 @@ impl<T: Float> LinearDensity<T> {
         self.0 * T::from_f64(304800.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_foot`].
-    #[inline]
-    pub fn as_milligram_per_foot(self) -> T {
-        self.as_milligrams_per_foot()
-    }
-
     /// Creates a [`LinearDensity`] from a value in KilogramsPerFoot (`kg/ft`).
     #[inline]
     pub fn from_kilograms_per_foot(value: T) -> Self {
@@ -724,12 +622,6 @@ impl<T: Float> LinearDensity<T> {
     #[inline]
     pub fn as_kilograms_per_foot(self) -> T {
         self.0 / T::from_f64(3.2808398950131235)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_foot`].
-    #[inline]
-    pub fn as_kilogram_per_foot(self) -> T {
-        self.as_kilograms_per_foot()
     }
 }
 

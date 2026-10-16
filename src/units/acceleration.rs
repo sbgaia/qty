@@ -361,12 +361,6 @@ impl<T: Float> Acceleration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters_per_second_squared`].
-    #[inline]
-    pub fn as_meter_per_second_squared(self) -> T {
-        self.as_meters_per_second_squared()
-    }
-
     /// Creates a [`Acceleration`] from a value in NanometersPerSecondSquared (`nm/s²`).
     #[inline]
     pub fn from_nanometers_per_second_squared(value: T) -> Self {
@@ -377,12 +371,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_nanometers_per_second_squared(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanometers_per_second_squared`].
-    #[inline]
-    pub fn as_nanometer_per_second_squared(self) -> T {
-        self.as_nanometers_per_second_squared()
     }
 
     /// Creates a [`Acceleration`] from a value in MicrometersPerSecondSquared (`µm/s²`).
@@ -397,12 +385,6 @@ impl<T: Float> Acceleration<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrometers_per_second_squared`].
-    #[inline]
-    pub fn as_micrometer_per_second_squared(self) -> T {
-        self.as_micrometers_per_second_squared()
-    }
-
     /// Creates a [`Acceleration`] from a value in MillimetersPerSecondSquared (`mm/s²`).
     #[inline]
     pub fn from_millimeters_per_second_squared(value: T) -> Self {
@@ -413,12 +395,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_millimeters_per_second_squared(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimeters_per_second_squared`].
-    #[inline]
-    pub fn as_millimeter_per_second_squared(self) -> T {
-        self.as_millimeters_per_second_squared()
     }
 
     /// Creates a [`Acceleration`] from a value in CentimetersPerSecondSquared (`cm/s²`).
@@ -433,12 +409,6 @@ impl<T: Float> Acceleration<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centimeters_per_second_squared`].
-    #[inline]
-    pub fn as_centimeter_per_second_squared(self) -> T {
-        self.as_centimeters_per_second_squared()
-    }
-
     /// Creates a [`Acceleration`] from a value in DecimetersPerSecondSquared (`dm/s²`).
     #[inline]
     pub fn from_decimeters_per_second_squared(value: T) -> Self {
@@ -449,12 +419,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_decimeters_per_second_squared(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decimeters_per_second_squared`].
-    #[inline]
-    pub fn as_decimeter_per_second_squared(self) -> T {
-        self.as_decimeters_per_second_squared()
     }
 
     /// Creates a [`Acceleration`] from a value in KilometersPerSecondSquared (`km/s²`).
@@ -469,12 +433,6 @@ impl<T: Float> Acceleration<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilometers_per_second_squared`].
-    #[inline]
-    pub fn as_kilometer_per_second_squared(self) -> T {
-        self.as_kilometers_per_second_squared()
-    }
-
     /// Creates a [`Acceleration`] from a value in InchesPerSecondSquared (`in/s²`).
     #[inline]
     pub fn from_inches_per_second_squared(value: T) -> Self {
@@ -485,12 +443,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_inches_per_second_squared(self) -> T {
         self.0 / T::from_f64(0.0254)
-    }
-
-    /// Alias for [`Self::as_inches_per_second_squared`].
-    #[inline]
-    pub fn as_inch_per_second_squared(self) -> T {
-        self.as_inches_per_second_squared()
     }
 
     /// Creates a [`Acceleration`] from a value in FeetPerSecondSquared (`ft/s²`).
@@ -505,12 +457,6 @@ impl<T: Float> Acceleration<T> {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Alias for [`Self::as_feet_per_second_squared`].
-    #[inline]
-    pub fn as_foot_per_second_squared(self) -> T {
-        self.as_feet_per_second_squared()
-    }
-
     /// Creates a [`Acceleration`] from a value in KnotsPerSecond (`kn/s`).
     #[inline]
     pub fn from_knots_per_second(value: T) -> Self {
@@ -521,12 +467,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_knots_per_second(self) -> T {
         self.0 / T::from_f64(0.5144444444444445)
-    }
-
-    /// Alias for [`Self::as_knots_per_second`].
-    #[inline]
-    pub fn as_knot_per_second(self) -> T {
-        self.as_knots_per_second()
     }
 
     /// Creates a [`Acceleration`] from a value in KnotsPerMinute (`kn/min`).
@@ -541,12 +481,6 @@ impl<T: Float> Acceleration<T> {
         self.0 / T::from_f64(0.008574074074074074)
     }
 
-    /// Alias for [`Self::as_knots_per_minute`].
-    #[inline]
-    pub fn as_knot_per_minute(self) -> T {
-        self.as_knots_per_minute()
-    }
-
     /// Creates a [`Acceleration`] from a value in KnotsPerHour (`kn/h`).
     #[inline]
     pub fn from_knots_per_hour(value: T) -> Self {
@@ -557,12 +491,6 @@ impl<T: Float> Acceleration<T> {
     #[inline]
     pub fn as_knots_per_hour(self) -> T {
         self.0 / T::from_f64(0.00014290123456790123)
-    }
-
-    /// Alias for [`Self::as_knots_per_hour`].
-    #[inline]
-    pub fn as_knot_per_hour(self) -> T {
-        self.as_knots_per_hour()
     }
 
     /// Creates a [`Acceleration`] from a value in StandardGravity (`g`).

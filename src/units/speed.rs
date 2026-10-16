@@ -652,12 +652,6 @@ impl<T: Float> Speed<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters_per_second`].
-    #[inline]
-    pub fn as_meter_per_second(self) -> T {
-        self.as_meters_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in NanometersPerSecond (`nm/s`).
     #[inline]
     pub fn from_nanometers_per_second(value: T) -> Self {
@@ -668,12 +662,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_nanometers_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanometers_per_second`].
-    #[inline]
-    pub fn as_nanometer_per_second(self) -> T {
-        self.as_nanometers_per_second()
     }
 
     /// Creates a [`Speed`] from a value in MicrometersPerSecond (`µm/s`).
@@ -688,12 +676,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrometers_per_second`].
-    #[inline]
-    pub fn as_micrometer_per_second(self) -> T {
-        self.as_micrometers_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in MillimetersPerSecond (`mm/s`).
     #[inline]
     pub fn from_millimeters_per_second(value: T) -> Self {
@@ -704,12 +686,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_millimeters_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimeters_per_second`].
-    #[inline]
-    pub fn as_millimeter_per_second(self) -> T {
-        self.as_millimeters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in CentimetersPerSecond (`cm/s`).
@@ -724,12 +700,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centimeters_per_second`].
-    #[inline]
-    pub fn as_centimeter_per_second(self) -> T {
-        self.as_centimeters_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in DecimetersPerSecond (`dm/s`).
     #[inline]
     pub fn from_decimeters_per_second(value: T) -> Self {
@@ -740,12 +710,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_decimeters_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decimeters_per_second`].
-    #[inline]
-    pub fn as_decimeter_per_second(self) -> T {
-        self.as_decimeters_per_second()
     }
 
     /// Creates a [`Speed`] from a value in KilometersPerSecond (`km/s`).
@@ -760,12 +724,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilometers_per_second`].
-    #[inline]
-    pub fn as_kilometer_per_second(self) -> T {
-        self.as_kilometers_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in MetersPerMinute (`m/min`).
     #[inline]
     pub fn from_meters_per_minute(value: T) -> Self {
@@ -776,12 +734,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_meters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_meters_per_minute`].
-    #[inline]
-    pub fn as_meter_per_minute(self) -> T {
-        self.as_meters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in NanometersPerMinute (`nm/min`).
@@ -796,12 +748,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(6e10)
     }
 
-    /// Alias for [`Self::as_nanometers_per_minute`].
-    #[inline]
-    pub fn as_nanometer_per_minute(self) -> T {
-        self.as_nanometers_per_minute()
-    }
-
     /// Creates a [`Speed`] from a value in MicrometersPerMinute (`µm/min`).
     #[inline]
     pub fn from_micrometers_per_minute(value: T) -> Self {
@@ -812,12 +758,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_micrometers_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
-    }
-
-    /// Alias for [`Self::as_micrometers_per_minute`].
-    #[inline]
-    pub fn as_micrometer_per_minute(self) -> T {
-        self.as_micrometers_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in MillimetersPerMinute (`mm/min`).
@@ -832,12 +772,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Alias for [`Self::as_millimeters_per_minute`].
-    #[inline]
-    pub fn as_millimeter_per_minute(self) -> T {
-        self.as_millimeters_per_minute()
-    }
-
     /// Creates a [`Speed`] from a value in CentimetersPerMinute (`cm/min`).
     #[inline]
     pub fn from_centimeters_per_minute(value: T) -> Self {
@@ -848,12 +782,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_centimeters_per_minute(self) -> T {
         self.0 * T::from_f64(6000.0)
-    }
-
-    /// Alias for [`Self::as_centimeters_per_minute`].
-    #[inline]
-    pub fn as_centimeter_per_minute(self) -> T {
-        self.as_centimeters_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in DecimetersPerMinute (`dm/min`).
@@ -868,12 +796,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(600.0)
     }
 
-    /// Alias for [`Self::as_decimeters_per_minute`].
-    #[inline]
-    pub fn as_decimeter_per_minute(self) -> T {
-        self.as_decimeters_per_minute()
-    }
-
     /// Creates a [`Speed`] from a value in KilometersPerMinute (`km/min`).
     #[inline]
     pub fn from_kilometers_per_minute(value: T) -> Self {
@@ -884,12 +806,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_kilometers_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
-    }
-
-    /// Alias for [`Self::as_kilometers_per_minute`].
-    #[inline]
-    pub fn as_kilometer_per_minute(self) -> T {
-        self.as_kilometers_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in MetersPerHour (`m/h`).
@@ -904,12 +820,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_meters_per_hour`].
-    #[inline]
-    pub fn as_meter_per_hour(self) -> T {
-        self.as_meters_per_hour()
-    }
-
     /// Creates a [`Speed`] from a value in MillimetersPerHour (`mm/h`).
     #[inline]
     pub fn from_millimeters_per_hour(value: T) -> Self {
@@ -920,12 +830,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_millimeters_per_hour(self) -> T {
         self.0 * T::from_f64(3600000.0)
-    }
-
-    /// Alias for [`Self::as_millimeters_per_hour`].
-    #[inline]
-    pub fn as_millimeter_per_hour(self) -> T {
-        self.as_millimeters_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in CentimetersPerHour (`cm/h`).
@@ -940,12 +844,6 @@ impl<T: Float> Speed<T> {
         self.0 * T::from_f64(360000.0)
     }
 
-    /// Alias for [`Self::as_centimeters_per_hour`].
-    #[inline]
-    pub fn as_centimeter_per_hour(self) -> T {
-        self.as_centimeters_per_hour()
-    }
-
     /// Creates a [`Speed`] from a value in KilometersPerHour (`km/h`).
     #[inline]
     pub fn from_kilometers_per_hour(value: T) -> Self {
@@ -956,12 +854,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_kilometers_per_hour(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
-    }
-
-    /// Alias for [`Self::as_kilometers_per_hour`].
-    #[inline]
-    pub fn as_kilometer_per_hour(self) -> T {
-        self.as_kilometers_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in FeetPerSecond (`ft/s`).
@@ -976,12 +868,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Alias for [`Self::as_feet_per_second`].
-    #[inline]
-    pub fn as_foot_per_second(self) -> T {
-        self.as_feet_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in FeetPerMinute (`ft/min`).
     #[inline]
     pub fn from_feet_per_minute(value: T) -> Self {
@@ -992,12 +878,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_feet_per_minute(self) -> T {
         self.0 / T::from_f64(0.00508)
-    }
-
-    /// Alias for [`Self::as_feet_per_minute`].
-    #[inline]
-    pub fn as_foot_per_minute(self) -> T {
-        self.as_feet_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in FeetPerHour (`ft/h`).
@@ -1012,12 +892,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(8.466666666666666e-5)
     }
 
-    /// Alias for [`Self::as_feet_per_hour`].
-    #[inline]
-    pub fn as_foot_per_hour(self) -> T {
-        self.as_feet_per_hour()
-    }
-
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerSecond (`ftUS/s`).
     #[inline]
     pub fn from_us_survey_feet_per_second(value: T) -> Self {
@@ -1028,12 +902,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_us_survey_feet_per_second(self) -> T {
         self.0 / T::from_f64(0.3048006096012192)
-    }
-
-    /// Alias for [`Self::as_us_survey_feet_per_second`].
-    #[inline]
-    pub fn as_us_survey_foot_per_second(self) -> T {
-        self.as_us_survey_feet_per_second()
     }
 
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerMinute (`ftUS/min`).
@@ -1048,12 +916,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(0.00508001016002032)
     }
 
-    /// Alias for [`Self::as_us_survey_feet_per_minute`].
-    #[inline]
-    pub fn as_us_survey_foot_per_minute(self) -> T {
-        self.as_us_survey_feet_per_minute()
-    }
-
     /// Creates a [`Speed`] from a value in UsSurveyFeetPerHour (`ftUS/h`).
     #[inline]
     pub fn from_us_survey_feet_per_hour(value: T) -> Self {
@@ -1064,12 +926,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_us_survey_feet_per_hour(self) -> T {
         self.0 * T::from_f64(11811.0)
-    }
-
-    /// Alias for [`Self::as_us_survey_feet_per_hour`].
-    #[inline]
-    pub fn as_us_survey_foot_per_hour(self) -> T {
-        self.as_us_survey_feet_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in InchesPerSecond (`in/s`).
@@ -1084,12 +940,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(0.0254)
     }
 
-    /// Alias for [`Self::as_inches_per_second`].
-    #[inline]
-    pub fn as_inch_per_second(self) -> T {
-        self.as_inches_per_second()
-    }
-
     /// Creates a [`Speed`] from a value in InchesPerMinute (`in/min`).
     #[inline]
     pub fn from_inches_per_minute(value: T) -> Self {
@@ -1100,12 +950,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_inches_per_minute(self) -> T {
         self.0 / T::from_f64(0.00042333333333333334)
-    }
-
-    /// Alias for [`Self::as_inches_per_minute`].
-    #[inline]
-    pub fn as_inch_per_minute(self) -> T {
-        self.as_inches_per_minute()
     }
 
     /// Creates a [`Speed`] from a value in InchesPerHour (`in/h`).
@@ -1120,12 +964,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(7.055555555555556e-6)
     }
 
-    /// Alias for [`Self::as_inches_per_hour`].
-    #[inline]
-    pub fn as_inch_per_hour(self) -> T {
-        self.as_inches_per_hour()
-    }
-
     /// Creates a [`Speed`] from a value in YardsPerSecond (`yd/s`).
     #[inline]
     pub fn from_yards_per_second(value: T) -> Self {
@@ -1136,12 +974,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_yards_per_second(self) -> T {
         self.0 / T::from_f64(0.9144)
-    }
-
-    /// Alias for [`Self::as_yards_per_second`].
-    #[inline]
-    pub fn as_yard_per_second(self) -> T {
-        self.as_yards_per_second()
     }
 
     /// Creates a [`Speed`] from a value in YardsPerMinute (`yd/min`).
@@ -1156,12 +988,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(0.01524)
     }
 
-    /// Alias for [`Self::as_yards_per_minute`].
-    #[inline]
-    pub fn as_yard_per_minute(self) -> T {
-        self.as_yards_per_minute()
-    }
-
     /// Creates a [`Speed`] from a value in YardsPerHour (`yd/h`).
     #[inline]
     pub fn from_yards_per_hour(value: T) -> Self {
@@ -1172,12 +998,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_yards_per_hour(self) -> T {
         self.0 / T::from_f64(0.000254)
-    }
-
-    /// Alias for [`Self::as_yards_per_hour`].
-    #[inline]
-    pub fn as_yard_per_hour(self) -> T {
-        self.as_yards_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in Knots (`kn`).
@@ -1192,12 +1012,6 @@ impl<T: Float> Speed<T> {
         self.0 / T::from_f64(0.5144444444444445)
     }
 
-    /// Alias for [`Self::as_knots`].
-    #[inline]
-    pub fn as_knot(self) -> T {
-        self.as_knots()
-    }
-
     /// Creates a [`Speed`] from a value in MilesPerHour (`mph`).
     #[inline]
     pub fn from_miles_per_hour(value: T) -> Self {
@@ -1208,12 +1022,6 @@ impl<T: Float> Speed<T> {
     #[inline]
     pub fn as_miles_per_hour(self) -> T {
         self.0 / T::from_f64(0.44704)
-    }
-
-    /// Alias for [`Self::as_miles_per_hour`].
-    #[inline]
-    pub fn as_mile_per_hour(self) -> T {
-        self.as_miles_per_hour()
     }
 
     /// Creates a [`Speed`] from a value in Mach (`M`).

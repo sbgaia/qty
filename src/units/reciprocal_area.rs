@@ -302,12 +302,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_inverse_square_meters`].
-    #[inline]
-    pub fn as_inverse_square_meter(self) -> T {
-        self.as_inverse_square_meters()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareKilometers (`km⁻²`).
     #[inline]
     pub fn from_inverse_square_kilometers(value: T) -> Self {
@@ -318,12 +312,6 @@ impl<T: Float> ReciprocalArea<T> {
     #[inline]
     pub fn as_inverse_square_kilometers(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_inverse_square_kilometers`].
-    #[inline]
-    pub fn as_inverse_square_kilometer(self) -> T {
-        self.as_inverse_square_kilometers()
     }
 
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareDecimeters (`dm⁻²`).
@@ -338,12 +326,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_inverse_square_decimeters`].
-    #[inline]
-    pub fn as_inverse_square_decimeter(self) -> T {
-        self.as_inverse_square_decimeters()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareCentimeters (`cm⁻²`).
     #[inline]
     pub fn from_inverse_square_centimeters(value: T) -> Self {
@@ -354,12 +336,6 @@ impl<T: Float> ReciprocalArea<T> {
     #[inline]
     pub fn as_inverse_square_centimeters(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_inverse_square_centimeters`].
-    #[inline]
-    pub fn as_inverse_square_centimeter(self) -> T {
-        self.as_inverse_square_centimeters()
     }
 
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMillimeters (`mm⁻²`).
@@ -374,12 +350,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_inverse_square_millimeters`].
-    #[inline]
-    pub fn as_inverse_square_millimeter(self) -> T {
-        self.as_inverse_square_millimeters()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMicrometers (`µm⁻²`).
     #[inline]
     pub fn from_inverse_square_micrometers(value: T) -> Self {
@@ -390,12 +360,6 @@ impl<T: Float> ReciprocalArea<T> {
     #[inline]
     pub fn as_inverse_square_micrometers(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_inverse_square_micrometers`].
-    #[inline]
-    pub fn as_inverse_square_micrometer(self) -> T {
-        self.as_inverse_square_micrometers()
     }
 
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareMiles (`mi⁻²`).
@@ -410,12 +374,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0 / T::from_f64(3.8610215854244587e-7)
     }
 
-    /// Alias for [`Self::as_inverse_square_miles`].
-    #[inline]
-    pub fn as_inverse_square_mile(self) -> T {
-        self.as_inverse_square_miles()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareYards (`yd⁻²`).
     #[inline]
     pub fn from_inverse_square_yards(value: T) -> Self {
@@ -426,12 +384,6 @@ impl<T: Float> ReciprocalArea<T> {
     #[inline]
     pub fn as_inverse_square_yards(self) -> T {
         self.0 / T::from_f64(1.1959900463010802)
-    }
-
-    /// Alias for [`Self::as_inverse_square_yards`].
-    #[inline]
-    pub fn as_inverse_square_yard(self) -> T {
-        self.as_inverse_square_yards()
     }
 
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareFeet (`ft⁻²`).
@@ -446,12 +398,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0 / T::from_f64(10.763910416709722)
     }
 
-    /// Alias for [`Self::as_inverse_square_feet`].
-    #[inline]
-    pub fn as_inverse_square_foot(self) -> T {
-        self.as_inverse_square_feet()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseUsSurveySquareFeet (`ft⁻² (US)`).
     #[inline]
     pub fn from_inverse_us_survey_square_feet(value: T) -> Self {
@@ -464,12 +410,6 @@ impl<T: Float> ReciprocalArea<T> {
         self.0 / T::from_f64(10.763867361111112)
     }
 
-    /// Alias for [`Self::as_inverse_us_survey_square_feet`].
-    #[inline]
-    pub fn as_inverse_us_survey_square_foot(self) -> T {
-        self.as_inverse_us_survey_square_feet()
-    }
-
     /// Creates a [`ReciprocalArea`] from a value in InverseSquareInches (`in⁻²`).
     #[inline]
     pub fn from_inverse_square_inches(value: T) -> Self {
@@ -480,12 +420,6 @@ impl<T: Float> ReciprocalArea<T> {
     #[inline]
     pub fn as_inverse_square_inches(self) -> T {
         self.0 / T::from_f64(1550.0031000062)
-    }
-
-    /// Alias for [`Self::as_inverse_square_inches`].
-    #[inline]
-    pub fn as_inverse_square_inch(self) -> T {
-        self.as_inverse_square_inches()
     }
 }
 

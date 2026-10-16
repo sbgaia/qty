@@ -364,12 +364,6 @@ impl<T: Float> MolarMass<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_mole`].
-    #[inline]
-    pub fn as_gram_per_mole(self) -> T {
-        self.as_grams_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in NanogramsPerMole (`ng/mol`).
     #[inline]
     pub fn from_nanograms_per_mole(value: T) -> Self {
@@ -380,12 +374,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_nanograms_per_mole(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_mole`].
-    #[inline]
-    pub fn as_nanogram_per_mole(self) -> T {
-        self.as_nanograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in MicrogramsPerMole (`µg/mol`).
@@ -400,12 +388,6 @@ impl<T: Float> MolarMass<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_micrograms_per_mole`].
-    #[inline]
-    pub fn as_microgram_per_mole(self) -> T {
-        self.as_micrograms_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in MilligramsPerMole (`mg/mol`).
     #[inline]
     pub fn from_milligrams_per_mole(value: T) -> Self {
@@ -416,12 +398,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_milligrams_per_mole(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_mole`].
-    #[inline]
-    pub fn as_milligram_per_mole(self) -> T {
-        self.as_milligrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in CentigramsPerMole (`cg/mol`).
@@ -436,12 +412,6 @@ impl<T: Float> MolarMass<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_mole`].
-    #[inline]
-    pub fn as_centigram_per_mole(self) -> T {
-        self.as_centigrams_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in DecigramsPerMole (`dg/mol`).
     #[inline]
     pub fn from_decigrams_per_mole(value: T) -> Self {
@@ -452,12 +422,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_decigrams_per_mole(self) -> T {
         self.0 * T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_mole`].
-    #[inline]
-    pub fn as_decigram_per_mole(self) -> T {
-        self.as_decigrams_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in DecagramsPerMole (`dag/mol`).
@@ -472,12 +436,6 @@ impl<T: Float> MolarMass<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_decagrams_per_mole`].
-    #[inline]
-    pub fn as_decagram_per_mole(self) -> T {
-        self.as_decagrams_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in HectogramsPerMole (`hg/mol`).
     #[inline]
     pub fn from_hectograms_per_mole(value: T) -> Self {
@@ -488,12 +446,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_hectograms_per_mole(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_hectograms_per_mole`].
-    #[inline]
-    pub fn as_hectogram_per_mole(self) -> T {
-        self.as_hectograms_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in KilogramsPerMole (`kg/mol`).
@@ -508,12 +460,6 @@ impl<T: Float> MolarMass<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilograms_per_mole`].
-    #[inline]
-    pub fn as_kilogram_per_mole(self) -> T {
-        self.as_kilograms_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in KilogramsPerKilomole (`kg/kmol`).
     #[inline]
     pub fn from_kilograms_per_kilomole(value: T) -> Self {
@@ -524,12 +470,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_kilograms_per_kilomole(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_kilomole`].
-    #[inline]
-    pub fn as_kilogram_per_kilomole(self) -> T {
-        self.as_kilograms_per_kilomole()
     }
 
     /// Creates a [`MolarMass`] from a value in PoundsPerMole (`lb/mol`).
@@ -544,12 +484,6 @@ impl<T: Float> MolarMass<T> {
         self.0 / T::from_f64(0.45359237)
     }
 
-    /// Alias for [`Self::as_pounds_per_mole`].
-    #[inline]
-    pub fn as_pound_per_mole(self) -> T {
-        self.as_pounds_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in KilopoundsPerMole (`klb/mol`).
     #[inline]
     pub fn from_kilopounds_per_mole(value: T) -> Self {
@@ -560,12 +494,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_kilopounds_per_mole(self) -> T {
         self.0 / T::from_f64(453.59237)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_mole`].
-    #[inline]
-    pub fn as_kilopound_per_mole(self) -> T {
-        self.as_kilopounds_per_mole()
     }
 
     /// Creates a [`MolarMass`] from a value in MegapoundsPerMole (`Mlb/mol`).
@@ -580,12 +508,6 @@ impl<T: Float> MolarMass<T> {
         self.0 / T::from_f64(453592.37)
     }
 
-    /// Alias for [`Self::as_megapounds_per_mole`].
-    #[inline]
-    pub fn as_megapound_per_mole(self) -> T {
-        self.as_megapounds_per_mole()
-    }
-
     /// Creates a [`MolarMass`] from a value in PoundsPerPoundMole (`lb/lbmol`).
     #[inline]
     pub fn from_pounds_per_pound_mole(value: T) -> Self {
@@ -596,12 +518,6 @@ impl<T: Float> MolarMass<T> {
     #[inline]
     pub fn as_pounds_per_pound_mole(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_pounds_per_pound_mole`].
-    #[inline]
-    pub fn as_pound_per_pound_mole(self) -> T {
-        self.as_pounds_per_pound_mole()
     }
 }
 

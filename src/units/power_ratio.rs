@@ -182,12 +182,6 @@ impl<T: Float> PowerRatio<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decibel_watts`].
-    #[inline]
-    pub fn as_decibel_watt(self) -> T {
-        self.as_decibel_watts()
-    }
-
     /// Creates a [`PowerRatio`] from a value in DecibelMilliwatts (`dBmW`).
     #[inline]
     pub fn from_decibel_milliwatts(value: T) -> Self {
@@ -198,12 +192,6 @@ impl<T: Float> PowerRatio<T> {
     #[inline]
     pub fn as_decibel_milliwatts(self) -> T {
         self.0 + T::from_f64(30.0)
-    }
-
-    /// Alias for [`Self::as_decibel_milliwatts`].
-    #[inline]
-    pub fn as_decibel_milliwatt(self) -> T {
-        self.as_decibel_milliwatts()
     }
 }
 

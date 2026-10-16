@@ -418,12 +418,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_grays`].
-    #[inline]
-    pub fn as_gray(self) -> T {
-        self.as_grays()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Femtograys (`fGy`).
     #[inline]
     pub fn from_femtograys(value: T) -> Self {
@@ -434,12 +428,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_femtograys(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtograys`].
-    #[inline]
-    pub fn as_femtogray(self) -> T {
-        self.as_femtograys()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Picograys (`pGy`).
@@ -454,12 +442,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picograys`].
-    #[inline]
-    pub fn as_picogray(self) -> T {
-        self.as_picograys()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Nanograys (`nGy`).
     #[inline]
     pub fn from_nanograys(value: T) -> Self {
@@ -470,12 +452,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_nanograys(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanograys`].
-    #[inline]
-    pub fn as_nanogray(self) -> T {
-        self.as_nanograys()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Micrograys (`µGy`).
@@ -490,12 +466,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrograys`].
-    #[inline]
-    pub fn as_microgray(self) -> T {
-        self.as_micrograys()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Milligrays (`mGy`).
     #[inline]
     pub fn from_milligrays(value: T) -> Self {
@@ -506,12 +476,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_milligrays(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milligrays`].
-    #[inline]
-    pub fn as_milligray(self) -> T {
-        self.as_milligrays()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Centigrays (`cGy`).
@@ -526,12 +490,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centigrays`].
-    #[inline]
-    pub fn as_centigray(self) -> T {
-        self.as_centigrays()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Decigrays (`dGy`).
     #[inline]
     pub fn from_decigrays(value: T) -> Self {
@@ -542,12 +500,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_decigrays(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decigrays`].
-    #[inline]
-    pub fn as_decigray(self) -> T {
-        self.as_decigrays()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Kilograys (`kGy`).
@@ -562,12 +514,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilograys`].
-    #[inline]
-    pub fn as_kilogray(self) -> T {
-        self.as_kilograys()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Megagrays (`MGy`).
     #[inline]
     pub fn from_megagrays(value: T) -> Self {
@@ -578,12 +524,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_megagrays(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megagrays`].
-    #[inline]
-    pub fn as_megagray(self) -> T {
-        self.as_megagrays()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Gigagrays (`GGy`).
@@ -598,12 +538,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_gigagrays`].
-    #[inline]
-    pub fn as_gigagray(self) -> T {
-        self.as_gigagrays()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Teragrays (`TGy`).
     #[inline]
     pub fn from_teragrays(value: T) -> Self {
@@ -614,12 +548,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_teragrays(self) -> T {
         self.0 / T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_teragrays`].
-    #[inline]
-    pub fn as_teragray(self) -> T {
-        self.as_teragrays()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Petagrays (`PGy`).
@@ -634,12 +562,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Alias for [`Self::as_petagrays`].
-    #[inline]
-    pub fn as_petagray(self) -> T {
-        self.as_petagrays()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Rads (`rad`).
     #[inline]
     pub fn from_rads(value: T) -> Self {
@@ -650,12 +572,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_rads(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_rads`].
-    #[inline]
-    pub fn as_rad(self) -> T {
-        self.as_rads()
     }
 
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Millirads (`mrad`).
@@ -670,12 +586,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_millirads`].
-    #[inline]
-    pub fn as_millirad(self) -> T {
-        self.as_millirads()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Kilorads (`krad`).
     #[inline]
     pub fn from_kilorads(value: T) -> Self {
@@ -688,12 +598,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_kilorads`].
-    #[inline]
-    pub fn as_kilorad(self) -> T {
-        self.as_kilorads()
-    }
-
     /// Creates a [`AbsorbedDoseOfIonizingRadiation`] from a value in Megarads (`Mrad`).
     #[inline]
     pub fn from_megarads(value: T) -> Self {
@@ -704,12 +608,6 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     #[inline]
     pub fn as_megarads(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_megarads`].
-    #[inline]
-    pub fn as_megarad(self) -> T {
-        self.as_megarads()
     }
 }
 

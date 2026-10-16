@@ -143,12 +143,6 @@ impl<T: Float> VitaminA<T> {
     pub fn as_international_units(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_international_units`].
-    #[inline]
-    pub fn as_international_unit(self) -> T {
-        self.as_international_units()
-    }
 }
 
 impl VitaminA<f64> {

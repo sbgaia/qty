@@ -289,12 +289,6 @@ impl<T: Float> ElectricCurrent<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_amperes`].
-    #[inline]
-    pub fn as_ampere(self) -> T {
-        self.as_amperes()
-    }
-
     /// Creates a [`ElectricCurrent`] from a value in Femtoamperes (`fA`).
     #[inline]
     pub fn from_femtoamperes(value: T) -> Self {
@@ -305,12 +299,6 @@ impl<T: Float> ElectricCurrent<T> {
     #[inline]
     pub fn as_femtoamperes(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtoamperes`].
-    #[inline]
-    pub fn as_femtoampere(self) -> T {
-        self.as_femtoamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Picoamperes (`pA`).
@@ -325,12 +313,6 @@ impl<T: Float> ElectricCurrent<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picoamperes`].
-    #[inline]
-    pub fn as_picoampere(self) -> T {
-        self.as_picoamperes()
-    }
-
     /// Creates a [`ElectricCurrent`] from a value in Nanoamperes (`nA`).
     #[inline]
     pub fn from_nanoamperes(value: T) -> Self {
@@ -341,12 +323,6 @@ impl<T: Float> ElectricCurrent<T> {
     #[inline]
     pub fn as_nanoamperes(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanoamperes`].
-    #[inline]
-    pub fn as_nanoampere(self) -> T {
-        self.as_nanoamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Microamperes (`µA`).
@@ -361,12 +337,6 @@ impl<T: Float> ElectricCurrent<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microamperes`].
-    #[inline]
-    pub fn as_microampere(self) -> T {
-        self.as_microamperes()
-    }
-
     /// Creates a [`ElectricCurrent`] from a value in Milliamperes (`mA`).
     #[inline]
     pub fn from_milliamperes(value: T) -> Self {
@@ -377,12 +347,6 @@ impl<T: Float> ElectricCurrent<T> {
     #[inline]
     pub fn as_milliamperes(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milliamperes`].
-    #[inline]
-    pub fn as_milliampere(self) -> T {
-        self.as_milliamperes()
     }
 
     /// Creates a [`ElectricCurrent`] from a value in Centiamperes (`cA`).
@@ -397,12 +361,6 @@ impl<T: Float> ElectricCurrent<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centiamperes`].
-    #[inline]
-    pub fn as_centiampere(self) -> T {
-        self.as_centiamperes()
-    }
-
     /// Creates a [`ElectricCurrent`] from a value in Kiloamperes (`kA`).
     #[inline]
     pub fn from_kiloamperes(value: T) -> Self {
@@ -415,12 +373,6 @@ impl<T: Float> ElectricCurrent<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kiloamperes`].
-    #[inline]
-    pub fn as_kiloampere(self) -> T {
-        self.as_kiloamperes()
-    }
-
     /// Creates a [`ElectricCurrent`] from a value in Megaamperes (`MA`).
     #[inline]
     pub fn from_megaamperes(value: T) -> Self {
@@ -431,12 +383,6 @@ impl<T: Float> ElectricCurrent<T> {
     #[inline]
     pub fn as_megaamperes(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megaamperes`].
-    #[inline]
-    pub fn as_megaampere(self) -> T {
-        self.as_megaamperes()
     }
 }
 

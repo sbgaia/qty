@@ -160,12 +160,6 @@ impl<T: Float> Level<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decibels`].
-    #[inline]
-    pub fn as_decibel(self) -> T {
-        self.as_decibels()
-    }
-
     /// Creates a [`Level`] from a value in Nepers (`Np`).
     #[inline]
     pub fn from_nepers(value: T) -> Self {
@@ -176,12 +170,6 @@ impl<T: Float> Level<T> {
     #[inline]
     pub fn as_nepers(self) -> T {
         self.0 / T::from_f64(8.685889687081618)
-    }
-
-    /// Alias for [`Self::as_nepers`].
-    #[inline]
-    pub fn as_neper(self) -> T {
-        self.as_nepers()
     }
 }
 

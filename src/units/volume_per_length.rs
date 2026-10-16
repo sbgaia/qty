@@ -273,12 +273,6 @@ impl<T: Float> VolumePerLength<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_cubic_meters_per_meter`].
-    #[inline]
-    pub fn as_cubic_meter_per_meter(self) -> T {
-        self.as_cubic_meters_per_meter()
-    }
-
     /// Creates a [`VolumePerLength`] from a value in LitersPerMeter (`l/m`).
     #[inline]
     pub fn from_liters_per_meter(value: T) -> Self {
@@ -289,12 +283,6 @@ impl<T: Float> VolumePerLength<T> {
     #[inline]
     pub fn as_liters_per_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_liters_per_meter`].
-    #[inline]
-    pub fn as_liter_per_meter(self) -> T {
-        self.as_liters_per_meter()
     }
 
     /// Creates a [`VolumePerLength`] from a value in LitersPerKilometer (`l/km`).
@@ -309,12 +297,6 @@ impl<T: Float> VolumePerLength<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_liters_per_kilometer`].
-    #[inline]
-    pub fn as_liter_per_kilometer(self) -> T {
-        self.as_liters_per_kilometer()
-    }
-
     /// Creates a [`VolumePerLength`] from a value in LitersPerMillimeter (`l/mm`).
     #[inline]
     pub fn from_liters_per_millimeter(value: T) -> Self {
@@ -325,12 +307,6 @@ impl<T: Float> VolumePerLength<T> {
     #[inline]
     pub fn as_liters_per_millimeter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_liters_per_millimeter`].
-    #[inline]
-    pub fn as_liter_per_millimeter(self) -> T {
-        self.as_liters_per_millimeter()
     }
 
     /// Creates a [`VolumePerLength`] from a value in OilBarrelsPerFoot (`bbl/ft`).
@@ -345,12 +321,6 @@ impl<T: Float> VolumePerLength<T> {
         self.0 / T::from_f64(0.52161186)
     }
 
-    /// Alias for [`Self::as_oil_barrels_per_foot`].
-    #[inline]
-    pub fn as_oil_barrel_per_foot(self) -> T {
-        self.as_oil_barrels_per_foot()
-    }
-
     /// Creates a [`VolumePerLength`] from a value in CubicYardsPerFoot (`yd³/ft`).
     #[inline]
     pub fn from_cubic_yards_per_foot(value: T) -> Self {
@@ -361,12 +331,6 @@ impl<T: Float> VolumePerLength<T> {
     #[inline]
     pub fn as_cubic_yards_per_foot(self) -> T {
         self.0 / T::from_f64(2.50838208)
-    }
-
-    /// Alias for [`Self::as_cubic_yards_per_foot`].
-    #[inline]
-    pub fn as_cubic_yard_per_foot(self) -> T {
-        self.as_cubic_yards_per_foot()
     }
 
     /// Creates a [`VolumePerLength`] from a value in CubicYardsPerUsSurveyFoot (`yd³/ftUS`).
@@ -381,12 +345,6 @@ impl<T: Float> VolumePerLength<T> {
         self.0 / T::from_f64(2.50837706323584)
     }
 
-    /// Alias for [`Self::as_cubic_yards_per_us_survey_foot`].
-    #[inline]
-    pub fn as_cubic_yard_per_us_survey_foot(self) -> T {
-        self.as_cubic_yards_per_us_survey_foot()
-    }
-
     /// Creates a [`VolumePerLength`] from a value in UsGallonsPerMile (`gal (U.S.)/mi`).
     #[inline]
     pub fn from_us_gallons_per_mile(value: T) -> Self {
@@ -399,12 +357,6 @@ impl<T: Float> VolumePerLength<T> {
         self.0 / T::from_f64(2.3521458333333333e-6)
     }
 
-    /// Alias for [`Self::as_us_gallons_per_mile`].
-    #[inline]
-    pub fn as_us_gallon_per_mile(self) -> T {
-        self.as_us_gallons_per_mile()
-    }
-
     /// Creates a [`VolumePerLength`] from a value in ImperialGallonsPerMile (`gal (imp.)/mi`).
     #[inline]
     pub fn from_imperial_gallons_per_mile(value: T) -> Self {
@@ -415,12 +367,6 @@ impl<T: Float> VolumePerLength<T> {
     #[inline]
     pub fn as_imperial_gallons_per_mile(self) -> T {
         self.0 / T::from_f64(2.8248093633182216e-6)
-    }
-
-    /// Alias for [`Self::as_imperial_gallons_per_mile`].
-    #[inline]
-    pub fn as_imperial_gallon_per_mile(self) -> T {
-        self.as_imperial_gallons_per_mile()
     }
 }
 

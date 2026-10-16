@@ -283,12 +283,6 @@ impl<T: Float> Irradiation<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_joules_per_square_meter`].
-    #[inline]
-    pub fn as_joule_per_square_meter(self) -> T {
-        self.as_joules_per_square_meter()
-    }
-
     /// Creates a [`Irradiation`] from a value in KilojoulesPerSquareMeter (`kJ/m²`).
     #[inline]
     pub fn from_kilojoules_per_square_meter(value: T) -> Self {
@@ -299,12 +293,6 @@ impl<T: Float> Irradiation<T> {
     #[inline]
     pub fn as_kilojoules_per_square_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilojoules_per_square_meter`].
-    #[inline]
-    pub fn as_kilojoule_per_square_meter(self) -> T {
-        self.as_kilojoules_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in JoulesPerSquareCentimeter (`J/cm²`).
@@ -319,12 +307,6 @@ impl<T: Float> Irradiation<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_joules_per_square_centimeter`].
-    #[inline]
-    pub fn as_joule_per_square_centimeter(self) -> T {
-        self.as_joules_per_square_centimeter()
-    }
-
     /// Creates a [`Irradiation`] from a value in MillijoulesPerSquareCentimeter (`mJ/cm²`).
     #[inline]
     pub fn from_millijoules_per_square_centimeter(value: T) -> Self {
@@ -335,12 +317,6 @@ impl<T: Float> Irradiation<T> {
     #[inline]
     pub fn as_millijoules_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_millijoules_per_square_centimeter`].
-    #[inline]
-    pub fn as_millijoule_per_square_centimeter(self) -> T {
-        self.as_millijoules_per_square_centimeter()
     }
 
     /// Creates a [`Irradiation`] from a value in JoulesPerSquareMillimeter (`J/mm²`).
@@ -355,12 +331,6 @@ impl<T: Float> Irradiation<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_joules_per_square_millimeter`].
-    #[inline]
-    pub fn as_joule_per_square_millimeter(self) -> T {
-        self.as_joules_per_square_millimeter()
-    }
-
     /// Creates a [`Irradiation`] from a value in WattHoursPerSquareMeter (`Wh/m²`).
     #[inline]
     pub fn from_watt_hours_per_square_meter(value: T) -> Self {
@@ -371,12 +341,6 @@ impl<T: Float> Irradiation<T> {
     #[inline]
     pub fn as_watt_hours_per_square_meter(self) -> T {
         self.0 / T::from_f64(3600.0)
-    }
-
-    /// Alias for [`Self::as_watt_hours_per_square_meter`].
-    #[inline]
-    pub fn as_watt_hour_per_square_meter(self) -> T {
-        self.as_watt_hours_per_square_meter()
     }
 
     /// Creates a [`Irradiation`] from a value in KilowattHoursPerSquareMeter (`kWh/m²`).
@@ -391,12 +355,6 @@ impl<T: Float> Irradiation<T> {
         self.0 / T::from_f64(3600000.0)
     }
 
-    /// Alias for [`Self::as_kilowatt_hours_per_square_meter`].
-    #[inline]
-    pub fn as_kilowatt_hour_per_square_meter(self) -> T {
-        self.as_kilowatt_hours_per_square_meter()
-    }
-
     /// Creates a [`Irradiation`] from a value in BtusPerSquareFoot (`Btu/ft²`).
     #[inline]
     pub fn from_btus_per_square_foot(value: T) -> Self {
@@ -409,12 +367,6 @@ impl<T: Float> Irradiation<T> {
         self.0 / T::from_f64(11356.526682226975)
     }
 
-    /// Alias for [`Self::as_btus_per_square_foot`].
-    #[inline]
-    pub fn as_btu_per_square_foot(self) -> T {
-        self.as_btus_per_square_foot()
-    }
-
     /// Creates a [`Irradiation`] from a value in KilobtusPerSquareFoot (`kBtu/ft²`).
     #[inline]
     pub fn from_kilobtus_per_square_foot(value: T) -> Self {
@@ -425,12 +377,6 @@ impl<T: Float> Irradiation<T> {
     #[inline]
     pub fn as_kilobtus_per_square_foot(self) -> T {
         self.0 / T::from_f64(1.1356526682226976e7)
-    }
-
-    /// Alias for [`Self::as_kilobtus_per_square_foot`].
-    #[inline]
-    pub fn as_kilobtu_per_square_foot(self) -> T {
-        self.as_kilobtus_per_square_foot()
     }
 }
 

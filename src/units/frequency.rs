@@ -410,12 +410,6 @@ impl<T: Float> Frequency<T> {
         self.0 / T::from_f64(0.15915494309189535)
     }
 
-    /// Alias for [`Self::as_radians_per_second`].
-    #[inline]
-    pub fn as_radian_per_second(self) -> T {
-        self.as_radians_per_second()
-    }
-
     /// Creates a [`Frequency`] from a value in CyclesPerMinute (`cpm`).
     #[inline]
     pub fn from_cycles_per_minute(value: T) -> Self {
@@ -426,12 +420,6 @@ impl<T: Float> Frequency<T> {
     #[inline]
     pub fn as_cycles_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_cycles_per_minute`].
-    #[inline]
-    pub fn as_cycle_per_minute(self) -> T {
-        self.as_cycles_per_minute()
     }
 
     /// Creates a [`Frequency`] from a value in CyclesPerHour (`cph`).
@@ -446,12 +434,6 @@ impl<T: Float> Frequency<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_cycles_per_hour`].
-    #[inline]
-    pub fn as_cycle_per_hour(self) -> T {
-        self.as_cycles_per_hour()
-    }
-
     /// Creates a [`Frequency`] from a value in BeatsPerMinute (`bpm`).
     #[inline]
     pub fn from_beats_per_minute(value: T) -> Self {
@@ -462,12 +444,6 @@ impl<T: Float> Frequency<T> {
     #[inline]
     pub fn as_beats_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_beats_per_minute`].
-    #[inline]
-    pub fn as_beat_per_minute(self) -> T {
-        self.as_beats_per_minute()
     }
 
     /// Creates a [`Frequency`] from a value in PerSecond (`s⁻¹`).

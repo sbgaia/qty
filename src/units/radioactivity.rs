@@ -594,12 +594,6 @@ impl<T: Float> Radioactivity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_becquerels`].
-    #[inline]
-    pub fn as_becquerel(self) -> T {
-        self.as_becquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Picobecquerels (`pBq`).
     #[inline]
     pub fn from_picobecquerels(value: T) -> Self {
@@ -610,12 +604,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_picobecquerels(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picobecquerels`].
-    #[inline]
-    pub fn as_picobecquerel(self) -> T {
-        self.as_picobecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Nanobecquerels (`nBq`).
@@ -630,12 +618,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanobecquerels`].
-    #[inline]
-    pub fn as_nanobecquerel(self) -> T {
-        self.as_nanobecquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Microbecquerels (`µBq`).
     #[inline]
     pub fn from_microbecquerels(value: T) -> Self {
@@ -646,12 +628,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_microbecquerels(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_microbecquerels`].
-    #[inline]
-    pub fn as_microbecquerel(self) -> T {
-        self.as_microbecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Millibecquerels (`mBq`).
@@ -666,12 +642,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millibecquerels`].
-    #[inline]
-    pub fn as_millibecquerel(self) -> T {
-        self.as_millibecquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Kilobecquerels (`kBq`).
     #[inline]
     pub fn from_kilobecquerels(value: T) -> Self {
@@ -682,12 +652,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_kilobecquerels(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilobecquerels`].
-    #[inline]
-    pub fn as_kilobecquerel(self) -> T {
-        self.as_kilobecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Megabecquerels (`MBq`).
@@ -702,12 +666,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megabecquerels`].
-    #[inline]
-    pub fn as_megabecquerel(self) -> T {
-        self.as_megabecquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Gigabecquerels (`GBq`).
     #[inline]
     pub fn from_gigabecquerels(value: T) -> Self {
@@ -718,12 +676,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_gigabecquerels(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigabecquerels`].
-    #[inline]
-    pub fn as_gigabecquerel(self) -> T {
-        self.as_gigabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Terabecquerels (`TBq`).
@@ -738,12 +690,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_terabecquerels`].
-    #[inline]
-    pub fn as_terabecquerel(self) -> T {
-        self.as_terabecquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Petabecquerels (`PBq`).
     #[inline]
     pub fn from_petabecquerels(value: T) -> Self {
@@ -754,12 +700,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_petabecquerels(self) -> T {
         self.0 / T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_petabecquerels`].
-    #[inline]
-    pub fn as_petabecquerel(self) -> T {
-        self.as_petabecquerels()
     }
 
     /// Creates a [`Radioactivity`] from a value in Exabecquerels (`EBq`).
@@ -774,12 +714,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1e18)
     }
 
-    /// Alias for [`Self::as_exabecquerels`].
-    #[inline]
-    pub fn as_exabecquerel(self) -> T {
-        self.as_exabecquerels()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Curies (`Ci`).
     #[inline]
     pub fn from_curies(value: T) -> Self {
@@ -790,12 +724,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_curies(self) -> T {
         self.0 / T::from_f64(3.7e10)
-    }
-
-    /// Alias for [`Self::as_curies`].
-    #[inline]
-    pub fn as_curie(self) -> T {
-        self.as_curies()
     }
 
     /// Creates a [`Radioactivity`] from a value in Picocuries (`pCi`).
@@ -810,12 +738,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(0.037)
     }
 
-    /// Alias for [`Self::as_picocuries`].
-    #[inline]
-    pub fn as_picocurie(self) -> T {
-        self.as_picocuries()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Nanocuries (`nCi`).
     #[inline]
     pub fn from_nanocuries(value: T) -> Self {
@@ -826,12 +748,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_nanocuries(self) -> T {
         self.0 / T::from_f64(37.0)
-    }
-
-    /// Alias for [`Self::as_nanocuries`].
-    #[inline]
-    pub fn as_nanocurie(self) -> T {
-        self.as_nanocuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Microcuries (`µCi`).
@@ -846,12 +762,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(37000.0)
     }
 
-    /// Alias for [`Self::as_microcuries`].
-    #[inline]
-    pub fn as_microcurie(self) -> T {
-        self.as_microcuries()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Millicuries (`mCi`).
     #[inline]
     pub fn from_millicuries(value: T) -> Self {
@@ -862,12 +772,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_millicuries(self) -> T {
         self.0 / T::from_f64(3.7e7)
-    }
-
-    /// Alias for [`Self::as_millicuries`].
-    #[inline]
-    pub fn as_millicurie(self) -> T {
-        self.as_millicuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Kilocuries (`kCi`).
@@ -882,12 +786,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(3.7e13)
     }
 
-    /// Alias for [`Self::as_kilocuries`].
-    #[inline]
-    pub fn as_kilocurie(self) -> T {
-        self.as_kilocuries()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Megacuries (`MCi`).
     #[inline]
     pub fn from_megacuries(value: T) -> Self {
@@ -898,12 +796,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_megacuries(self) -> T {
         self.0 / T::from_f64(3.7e16)
-    }
-
-    /// Alias for [`Self::as_megacuries`].
-    #[inline]
-    pub fn as_megacurie(self) -> T {
-        self.as_megacuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Gigacuries (`GCi`).
@@ -918,12 +810,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(3.7e19)
     }
 
-    /// Alias for [`Self::as_gigacuries`].
-    #[inline]
-    pub fn as_gigacurie(self) -> T {
-        self.as_gigacuries()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Teracuries (`TCi`).
     #[inline]
     pub fn from_teracuries(value: T) -> Self {
@@ -934,12 +820,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_teracuries(self) -> T {
         self.0 / T::from_f64(3.7e22)
-    }
-
-    /// Alias for [`Self::as_teracuries`].
-    #[inline]
-    pub fn as_teracurie(self) -> T {
-        self.as_teracuries()
     }
 
     /// Creates a [`Radioactivity`] from a value in Rutherfords (`Rd`).
@@ -954,12 +834,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_rutherfords`].
-    #[inline]
-    pub fn as_rutherford(self) -> T {
-        self.as_rutherfords()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Picorutherfords (`pRd`).
     #[inline]
     pub fn from_picorutherfords(value: T) -> Self {
@@ -970,12 +844,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_picorutherfords(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_picorutherfords`].
-    #[inline]
-    pub fn as_picorutherford(self) -> T {
-        self.as_picorutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Nanorutherfords (`nRd`).
@@ -990,12 +858,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_nanorutherfords`].
-    #[inline]
-    pub fn as_nanorutherford(self) -> T {
-        self.as_nanorutherfords()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Microrutherfords (`µRd`).
     #[inline]
     pub fn from_microrutherfords(value: T) -> Self {
@@ -1006,12 +868,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_microrutherfords(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_microrutherfords`].
-    #[inline]
-    pub fn as_microrutherford(self) -> T {
-        self.as_microrutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Millirutherfords (`mRd`).
@@ -1026,12 +882,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millirutherfords`].
-    #[inline]
-    pub fn as_millirutherford(self) -> T {
-        self.as_millirutherfords()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Kilorutherfords (`kRd`).
     #[inline]
     pub fn from_kilorutherfords(value: T) -> Self {
@@ -1042,12 +892,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_kilorutherfords(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_kilorutherfords`].
-    #[inline]
-    pub fn as_kilorutherford(self) -> T {
-        self.as_kilorutherfords()
     }
 
     /// Creates a [`Radioactivity`] from a value in Megarutherfords (`MRd`).
@@ -1062,12 +906,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_megarutherfords`].
-    #[inline]
-    pub fn as_megarutherford(self) -> T {
-        self.as_megarutherfords()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Gigarutherfords (`GRd`).
     #[inline]
     pub fn from_gigarutherfords(value: T) -> Self {
@@ -1080,12 +918,6 @@ impl<T: Float> Radioactivity<T> {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Alias for [`Self::as_gigarutherfords`].
-    #[inline]
-    pub fn as_gigarutherford(self) -> T {
-        self.as_gigarutherfords()
-    }
-
     /// Creates a [`Radioactivity`] from a value in Terarutherfords (`TRd`).
     #[inline]
     pub fn from_terarutherfords(value: T) -> Self {
@@ -1096,12 +928,6 @@ impl<T: Float> Radioactivity<T> {
     #[inline]
     pub fn as_terarutherfords(self) -> T {
         self.0 / T::from_f64(1e18)
-    }
-
-    /// Alias for [`Self::as_terarutherfords`].
-    #[inline]
-    pub fn as_terarutherford(self) -> T {
-        self.as_terarutherfords()
     }
 }
 

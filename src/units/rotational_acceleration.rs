@@ -210,12 +210,6 @@ impl<T: Float> RotationalAcceleration<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_radians_per_second_squared`].
-    #[inline]
-    pub fn as_radian_per_second_squared(self) -> T {
-        self.as_radians_per_second_squared()
-    }
-
     /// Creates a [`RotationalAcceleration`] from a value in DegreesPerSecondSquared (`°/s²`).
     #[inline]
     pub fn from_degrees_per_second_squared(value: T) -> Self {
@@ -226,12 +220,6 @@ impl<T: Float> RotationalAcceleration<T> {
     #[inline]
     pub fn as_degrees_per_second_squared(self) -> T {
         self.0 / T::from_f64(0.017453292519943295)
-    }
-
-    /// Alias for [`Self::as_degrees_per_second_squared`].
-    #[inline]
-    pub fn as_degree_per_second_squared(self) -> T {
-        self.as_degrees_per_second_squared()
     }
 
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerMinutePerSecond (`rpm/s`).
@@ -246,12 +234,6 @@ impl<T: Float> RotationalAcceleration<T> {
         self.0 / T::from_f64(0.10471975511965978)
     }
 
-    /// Alias for [`Self::as_revolutions_per_minute_per_second`].
-    #[inline]
-    pub fn as_revolution_per_minute_per_second(self) -> T {
-        self.as_revolutions_per_minute_per_second()
-    }
-
     /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerSecondSquared (`r/s²`).
     #[inline]
     pub fn from_revolutions_per_second_squared(value: T) -> Self {
@@ -262,12 +244,6 @@ impl<T: Float> RotationalAcceleration<T> {
     #[inline]
     pub fn as_revolutions_per_second_squared(self) -> T {
         self.0 / T::from_f64(6.283185307179586)
-    }
-
-    /// Alias for [`Self::as_revolutions_per_second_squared`].
-    #[inline]
-    pub fn as_revolution_per_second_squared(self) -> T {
-        self.as_revolutions_per_second_squared()
     }
 }
 

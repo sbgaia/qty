@@ -739,12 +739,6 @@ impl<T: Float> BitRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_bits_per_second`].
-    #[inline]
-    pub fn as_bit_per_second(self) -> T {
-        self.as_bits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in KilobitsPerSecond (`kbit/s`).
     #[inline]
     pub fn from_kilobits_per_second(value: T) -> Self {
@@ -755,12 +749,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_kilobits_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilobits_per_second`].
-    #[inline]
-    pub fn as_kilobit_per_second(self) -> T {
-        self.as_kilobits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MegabitsPerSecond (`Mbit/s`).
@@ -775,12 +763,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megabits_per_second`].
-    #[inline]
-    pub fn as_megabit_per_second(self) -> T {
-        self.as_megabits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in GigabitsPerSecond (`Gbit/s`).
     #[inline]
     pub fn from_gigabits_per_second(value: T) -> Self {
@@ -791,12 +773,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_gigabits_per_second(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigabits_per_second`].
-    #[inline]
-    pub fn as_gigabit_per_second(self) -> T {
-        self.as_gigabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TerabitsPerSecond (`Tbit/s`).
@@ -811,12 +787,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_terabits_per_second`].
-    #[inline]
-    pub fn as_terabit_per_second(self) -> T {
-        self.as_terabits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in PetabitsPerSecond (`Pbit/s`).
     #[inline]
     pub fn from_petabits_per_second(value: T) -> Self {
@@ -827,12 +797,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_petabits_per_second(self) -> T {
         self.0 / T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_petabits_per_second`].
-    #[inline]
-    pub fn as_petabit_per_second(self) -> T {
-        self.as_petabits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExabitsPerSecond (`Ebit/s`).
@@ -847,12 +811,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(1e18)
     }
 
-    /// Alias for [`Self::as_exabits_per_second`].
-    #[inline]
-    pub fn as_exabit_per_second(self) -> T {
-        self.as_exabits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in KibibitsPerSecond (`Kibit/s`).
     #[inline]
     pub fn from_kibibits_per_second(value: T) -> Self {
@@ -863,12 +821,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_kibibits_per_second(self) -> T {
         self.0 * T::from_f64(0.0009765625)
-    }
-
-    /// Alias for [`Self::as_kibibits_per_second`].
-    #[inline]
-    pub fn as_kibibit_per_second(self) -> T {
-        self.as_kibibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MebibitsPerSecond (`Mibit/s`).
@@ -883,12 +835,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(9.5367431640625e-7)
     }
 
-    /// Alias for [`Self::as_mebibits_per_second`].
-    #[inline]
-    pub fn as_mebibit_per_second(self) -> T {
-        self.as_mebibits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in GibibitsPerSecond (`Gibit/s`).
     #[inline]
     pub fn from_gibibits_per_second(value: T) -> Self {
@@ -899,12 +845,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_gibibits_per_second(self) -> T {
         self.0 * T::from_f64(9.313225746154785e-10)
-    }
-
-    /// Alias for [`Self::as_gibibits_per_second`].
-    #[inline]
-    pub fn as_gibibit_per_second(self) -> T {
-        self.as_gibibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TebibitsPerSecond (`Tibit/s`).
@@ -919,12 +859,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(9.094947017729282e-13)
     }
 
-    /// Alias for [`Self::as_tebibits_per_second`].
-    #[inline]
-    pub fn as_tebibit_per_second(self) -> T {
-        self.as_tebibits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in PebibitsPerSecond (`Pibit/s`).
     #[inline]
     pub fn from_pebibits_per_second(value: T) -> Self {
@@ -935,12 +869,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_pebibits_per_second(self) -> T {
         self.0 * T::from_f64(8.881784197001252e-16)
-    }
-
-    /// Alias for [`Self::as_pebibits_per_second`].
-    #[inline]
-    pub fn as_pebibit_per_second(self) -> T {
-        self.as_pebibits_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExbibitsPerSecond (`Eibit/s`).
@@ -955,12 +883,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(8.673617379884035e-19)
     }
 
-    /// Alias for [`Self::as_exbibits_per_second`].
-    #[inline]
-    pub fn as_exbibit_per_second(self) -> T {
-        self.as_exbibits_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in BytesPerSecond (`B/s`).
     #[inline]
     pub fn from_bytes_per_second(value: T) -> Self {
@@ -971,12 +893,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_bytes_per_second(self) -> T {
         self.0 * T::from_f64(0.125)
-    }
-
-    /// Alias for [`Self::as_bytes_per_second`].
-    #[inline]
-    pub fn as_byte_per_second(self) -> T {
-        self.as_bytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KilobytesPerSecond (`kB/s`).
@@ -991,12 +907,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8000.0)
     }
 
-    /// Alias for [`Self::as_kilobytes_per_second`].
-    #[inline]
-    pub fn as_kilobyte_per_second(self) -> T {
-        self.as_kilobytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in MegabytesPerSecond (`MB/s`).
     #[inline]
     pub fn from_megabytes_per_second(value: T) -> Self {
@@ -1007,12 +917,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_megabytes_per_second(self) -> T {
         self.0 / T::from_f64(8000000.0)
-    }
-
-    /// Alias for [`Self::as_megabytes_per_second`].
-    #[inline]
-    pub fn as_megabyte_per_second(self) -> T {
-        self.as_megabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GigabytesPerSecond (`GB/s`).
@@ -1027,12 +931,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8e9)
     }
 
-    /// Alias for [`Self::as_gigabytes_per_second`].
-    #[inline]
-    pub fn as_gigabyte_per_second(self) -> T {
-        self.as_gigabytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in TerabytesPerSecond (`TB/s`).
     #[inline]
     pub fn from_terabytes_per_second(value: T) -> Self {
@@ -1043,12 +941,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_terabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e12)
-    }
-
-    /// Alias for [`Self::as_terabytes_per_second`].
-    #[inline]
-    pub fn as_terabyte_per_second(self) -> T {
-        self.as_terabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PetabytesPerSecond (`PB/s`).
@@ -1063,12 +955,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8e15)
     }
 
-    /// Alias for [`Self::as_petabytes_per_second`].
-    #[inline]
-    pub fn as_petabyte_per_second(self) -> T {
-        self.as_petabytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in ExabytesPerSecond (`EB/s`).
     #[inline]
     pub fn from_exabytes_per_second(value: T) -> Self {
@@ -1079,12 +965,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_exabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e18)
-    }
-
-    /// Alias for [`Self::as_exabytes_per_second`].
-    #[inline]
-    pub fn as_exabyte_per_second(self) -> T {
-        self.as_exabytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in KibibytesPerSecond (`KiB/s`).
@@ -1099,12 +979,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(0.0001220703125)
     }
 
-    /// Alias for [`Self::as_kibibytes_per_second`].
-    #[inline]
-    pub fn as_kibibyte_per_second(self) -> T {
-        self.as_kibibytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in MebibytesPerSecond (`MiB/s`).
     #[inline]
     pub fn from_mebibytes_per_second(value: T) -> Self {
@@ -1115,12 +989,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_mebibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1920928955078125e-7)
-    }
-
-    /// Alias for [`Self::as_mebibytes_per_second`].
-    #[inline]
-    pub fn as_mebibyte_per_second(self) -> T {
-        self.as_mebibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in GibibytesPerSecond (`GiB/s`).
@@ -1135,12 +1003,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
-    /// Alias for [`Self::as_gibibytes_per_second`].
-    #[inline]
-    pub fn as_gibibyte_per_second(self) -> T {
-        self.as_gibibytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in TebibytesPerSecond (`TiB/s`).
     #[inline]
     pub fn from_tebibytes_per_second(value: T) -> Self {
@@ -1151,12 +1013,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_tebibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1368683772161603e-13)
-    }
-
-    /// Alias for [`Self::as_tebibytes_per_second`].
-    #[inline]
-    pub fn as_tebibyte_per_second(self) -> T {
-        self.as_tebibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in PebibytesPerSecond (`PiB/s`).
@@ -1171,12 +1027,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
-    /// Alias for [`Self::as_pebibytes_per_second`].
-    #[inline]
-    pub fn as_pebibyte_per_second(self) -> T {
-        self.as_pebibytes_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in ExbibytesPerSecond (`EiB/s`).
     #[inline]
     pub fn from_exbibytes_per_second(value: T) -> Self {
@@ -1187,12 +1037,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_exbibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.0842021724855044e-19)
-    }
-
-    /// Alias for [`Self::as_exbibytes_per_second`].
-    #[inline]
-    pub fn as_exbibyte_per_second(self) -> T {
-        self.as_exbibytes_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in OctetsPerSecond (`o/s`).
@@ -1207,12 +1051,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(0.125)
     }
 
-    /// Alias for [`Self::as_octets_per_second`].
-    #[inline]
-    pub fn as_octet_per_second(self) -> T {
-        self.as_octets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in KilooctetsPerSecond (`ko/s`).
     #[inline]
     pub fn from_kilooctets_per_second(value: T) -> Self {
@@ -1223,12 +1061,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_kilooctets_per_second(self) -> T {
         self.0 / T::from_f64(8000.0)
-    }
-
-    /// Alias for [`Self::as_kilooctets_per_second`].
-    #[inline]
-    pub fn as_kilooctet_per_second(self) -> T {
-        self.as_kilooctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MegaoctetsPerSecond (`Mo/s`).
@@ -1243,12 +1075,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8000000.0)
     }
 
-    /// Alias for [`Self::as_megaoctets_per_second`].
-    #[inline]
-    pub fn as_megaoctet_per_second(self) -> T {
-        self.as_megaoctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in GigaoctetsPerSecond (`Go/s`).
     #[inline]
     pub fn from_gigaoctets_per_second(value: T) -> Self {
@@ -1259,12 +1085,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_gigaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e9)
-    }
-
-    /// Alias for [`Self::as_gigaoctets_per_second`].
-    #[inline]
-    pub fn as_gigaoctet_per_second(self) -> T {
-        self.as_gigaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TeraoctetsPerSecond (`To/s`).
@@ -1279,12 +1099,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8e12)
     }
 
-    /// Alias for [`Self::as_teraoctets_per_second`].
-    #[inline]
-    pub fn as_teraoctet_per_second(self) -> T {
-        self.as_teraoctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in PetaoctetsPerSecond (`Po/s`).
     #[inline]
     pub fn from_petaoctets_per_second(value: T) -> Self {
@@ -1295,12 +1109,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_petaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e15)
-    }
-
-    /// Alias for [`Self::as_petaoctets_per_second`].
-    #[inline]
-    pub fn as_petaoctet_per_second(self) -> T {
-        self.as_petaoctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in ExaoctetsPerSecond (`Eo/s`).
@@ -1315,12 +1123,6 @@ impl<T: Float> BitRate<T> {
         self.0 / T::from_f64(8e18)
     }
 
-    /// Alias for [`Self::as_exaoctets_per_second`].
-    #[inline]
-    pub fn as_exaoctet_per_second(self) -> T {
-        self.as_exaoctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in KibioctetsPerSecond (`Kio/s`).
     #[inline]
     pub fn from_kibioctets_per_second(value: T) -> Self {
@@ -1331,12 +1133,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_kibioctets_per_second(self) -> T {
         self.0 * T::from_f64(0.0001220703125)
-    }
-
-    /// Alias for [`Self::as_kibioctets_per_second`].
-    #[inline]
-    pub fn as_kibioctet_per_second(self) -> T {
-        self.as_kibioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in MebioctetsPerSecond (`Mio/s`).
@@ -1351,12 +1147,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
-    /// Alias for [`Self::as_mebioctets_per_second`].
-    #[inline]
-    pub fn as_mebioctet_per_second(self) -> T {
-        self.as_mebioctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in GibioctetsPerSecond (`Gio/s`).
     #[inline]
     pub fn from_gibioctets_per_second(value: T) -> Self {
@@ -1367,12 +1157,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_gibioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.1641532182693481e-10)
-    }
-
-    /// Alias for [`Self::as_gibioctets_per_second`].
-    #[inline]
-    pub fn as_gibioctet_per_second(self) -> T {
-        self.as_gibioctets_per_second()
     }
 
     /// Creates a [`BitRate`] from a value in TebioctetsPerSecond (`Tio/s`).
@@ -1387,12 +1171,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
-    /// Alias for [`Self::as_tebioctets_per_second`].
-    #[inline]
-    pub fn as_tebioctet_per_second(self) -> T {
-        self.as_tebioctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in PebioctetsPerSecond (`Pio/s`).
     #[inline]
     pub fn from_pebioctets_per_second(value: T) -> Self {
@@ -1405,12 +1183,6 @@ impl<T: Float> BitRate<T> {
         self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
-    /// Alias for [`Self::as_pebioctets_per_second`].
-    #[inline]
-    pub fn as_pebioctet_per_second(self) -> T {
-        self.as_pebioctets_per_second()
-    }
-
     /// Creates a [`BitRate`] from a value in ExbioctetsPerSecond (`Eio/s`).
     #[inline]
     pub fn from_exbioctets_per_second(value: T) -> Self {
@@ -1421,12 +1193,6 @@ impl<T: Float> BitRate<T> {
     #[inline]
     pub fn as_exbioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.0842021724855044e-19)
-    }
-
-    /// Alias for [`Self::as_exbioctets_per_second`].
-    #[inline]
-    pub fn as_exbioctet_per_second(self) -> T {
-        self.as_exbioctets_per_second()
     }
 }
 

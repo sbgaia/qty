@@ -997,12 +997,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_gram_per_cubic_millimeter(self) -> T {
-        self.as_grams_per_cubic_millimeter()
-    }
-
     /// Creates a [`Density`] from a value in KilogramsPerCubicMillimeter (`kg/mm³`).
     #[inline]
     pub fn from_kilograms_per_cubic_millimeter(value: T) -> Self {
@@ -1013,12 +1007,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_millimeter(self) -> T {
-        self.as_kilograms_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicCentimeter (`g/cm³`).
@@ -1033,12 +1021,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_gram_per_cubic_centimeter(self) -> T {
-        self.as_grams_per_cubic_centimeter()
-    }
-
     /// Creates a [`Density`] from a value in KilogramsPerCubicCentimeter (`kg/cm³`).
     #[inline]
     pub fn from_kilograms_per_cubic_centimeter(value: T) -> Self {
@@ -1049,12 +1031,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_centimeter(self) -> T {
-        self.as_kilograms_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicMeter (`g/m³`).
@@ -1069,12 +1045,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_meter`].
-    #[inline]
-    pub fn as_gram_per_cubic_meter(self) -> T {
-        self.as_grams_per_cubic_meter()
-    }
-
     /// Creates a [`Density`] from a value in KilogramsPerCubicMeter (`kg/m³`).
     #[inline]
     pub fn from_kilograms_per_cubic_meter(value: T) -> Self {
@@ -1085,12 +1055,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilograms_per_cubic_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilograms_per_cubic_meter`].
-    #[inline]
-    pub fn as_kilogram_per_cubic_meter(self) -> T {
-        self.as_kilograms_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in MilligramsPerCubicMeter (`mg/m³`).
@@ -1105,12 +1069,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_milligrams_per_cubic_meter`].
-    #[inline]
-    pub fn as_milligram_per_cubic_meter(self) -> T {
-        self.as_milligrams_per_cubic_meter()
-    }
-
     /// Creates a [`Density`] from a value in MicrogramsPerCubicMeter (`µg/m³`).
     #[inline]
     pub fn from_micrograms_per_cubic_meter(value: T) -> Self {
@@ -1121,12 +1079,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_micrograms_per_cubic_meter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_micrograms_per_cubic_meter`].
-    #[inline]
-    pub fn as_microgram_per_cubic_meter(self) -> T {
-        self.as_micrograms_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicInch (`lb/in³`).
@@ -1141,12 +1093,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(27679.90471020312)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_inch`].
-    #[inline]
-    pub fn as_pound_per_cubic_inch(self) -> T {
-        self.as_pounds_per_cubic_inch()
-    }
-
     /// Creates a [`Density`] from a value in KilopoundsPerCubicInch (`klb/in³`).
     #[inline]
     pub fn from_kilopounds_per_cubic_inch(value: T) -> Self {
@@ -1157,12 +1103,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilopounds_per_cubic_inch(self) -> T {
         self.0 / T::from_f64(2.7679904710203122e7)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_cubic_inch`].
-    #[inline]
-    pub fn as_kilopound_per_cubic_inch(self) -> T {
-        self.as_kilopounds_per_cubic_inch()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicFoot (`lb/ft³`).
@@ -1177,12 +1117,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(16.018463373960138)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_foot`].
-    #[inline]
-    pub fn as_pound_per_cubic_foot(self) -> T {
-        self.as_pounds_per_cubic_foot()
-    }
-
     /// Creates a [`Density`] from a value in KilopoundsPerCubicFoot (`klb/ft³`).
     #[inline]
     pub fn from_kilopounds_per_cubic_foot(value: T) -> Self {
@@ -1193,12 +1127,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilopounds_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(16018.46337396014)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_cubic_foot`].
-    #[inline]
-    pub fn as_kilopound_per_cubic_foot(self) -> T {
-        self.as_kilopounds_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicYard (`lb/yd³`).
@@ -1213,12 +1141,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(0.5932764212577829)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_yard`].
-    #[inline]
-    pub fn as_pound_per_cubic_yard(self) -> T {
-        self.as_pounds_per_cubic_yard()
-    }
-
     /// Creates a [`Density`] from a value in KilopoundsPerCubicYard (`klb/yd³`).
     #[inline]
     pub fn from_kilopounds_per_cubic_yard(value: T) -> Self {
@@ -1229,12 +1151,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_kilopounds_per_cubic_yard(self) -> T {
         self.0 / T::from_f64(593.276421257783)
-    }
-
-    /// Alias for [`Self::as_kilopounds_per_cubic_yard`].
-    #[inline]
-    pub fn as_kilopound_per_cubic_yard(self) -> T {
-        self.as_kilopounds_per_cubic_yard()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicMillimeter (`t/mm³`).
@@ -1249,12 +1165,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_tonnes_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_millimeter(self) -> T {
-        self.as_tonnes_per_cubic_millimeter()
-    }
-
     /// Creates a [`Density`] from a value in TonnesPerCubicCentimeter (`t/cm³`).
     #[inline]
     pub fn from_tonnes_per_cubic_centimeter(value: T) -> Self {
@@ -1265,12 +1175,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_tonnes_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_tonnes_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_centimeter(self) -> T {
-        self.as_tonnes_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicMeter (`t/m³`).
@@ -1285,12 +1189,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_tonnes_per_cubic_meter`].
-    #[inline]
-    pub fn as_tonne_per_cubic_meter(self) -> T {
-        self.as_tonnes_per_cubic_meter()
-    }
-
     /// Creates a [`Density`] from a value in SlugsPerCubicFoot (`slug/ft³`).
     #[inline]
     pub fn from_slugs_per_cubic_foot(value: T) -> Self {
@@ -1301,12 +1199,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_slugs_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(515.3788183931962)
-    }
-
-    /// Alias for [`Self::as_slugs_per_cubic_foot`].
-    #[inline]
-    pub fn as_slug_per_cubic_foot(self) -> T {
-        self.as_slugs_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in GramsPerLiter (`g/l`).
@@ -1321,12 +1213,6 @@ impl<T: Float> Density<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_grams_per_liter`].
-    #[inline]
-    pub fn as_gram_per_liter(self) -> T {
-        self.as_grams_per_liter()
-    }
-
     /// Creates a [`Density`] from a value in FemtogramsPerLiter (`fg/l`).
     #[inline]
     pub fn from_femtograms_per_liter(value: T) -> Self {
@@ -1337,12 +1223,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_femtograms_per_liter(self) -> T {
         self.0 * T::from_f64(1e15)
-    }
-
-    /// Alias for [`Self::as_femtograms_per_liter`].
-    #[inline]
-    pub fn as_femtogram_per_liter(self) -> T {
-        self.as_femtograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerLiter (`pg/l`).
@@ -1357,12 +1237,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_picograms_per_liter`].
-    #[inline]
-    pub fn as_picogram_per_liter(self) -> T {
-        self.as_picograms_per_liter()
-    }
-
     /// Creates a [`Density`] from a value in NanogramsPerLiter (`ng/l`).
     #[inline]
     pub fn from_nanograms_per_liter(value: T) -> Self {
@@ -1373,12 +1247,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_nanograms_per_liter(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_liter`].
-    #[inline]
-    pub fn as_nanogram_per_liter(self) -> T {
-        self.as_nanograms_per_liter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerLiter (`µg/l`).
@@ -1393,12 +1261,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_liter`].
-    #[inline]
-    pub fn as_microgram_per_liter(self) -> T {
-        self.as_micrograms_per_liter()
-    }
-
     /// Creates a [`Density`] from a value in MilligramsPerLiter (`mg/l`).
     #[inline]
     pub fn from_milligrams_per_liter(value: T) -> Self {
@@ -1409,12 +1271,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_milligrams_per_liter(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_liter`].
-    #[inline]
-    pub fn as_milligram_per_liter(self) -> T {
-        self.as_milligrams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerLiter (`cg/l`).
@@ -1429,12 +1285,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_liter`].
-    #[inline]
-    pub fn as_centigram_per_liter(self) -> T {
-        self.as_centigrams_per_liter()
-    }
-
     /// Creates a [`Density`] from a value in DecigramsPerLiter (`dg/l`).
     #[inline]
     pub fn from_decigrams_per_liter(value: T) -> Self {
@@ -1445,12 +1295,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_decigrams_per_liter(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_liter`].
-    #[inline]
-    pub fn as_decigram_per_liter(self) -> T {
-        self.as_decigrams_per_liter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerDeciliter (`g/dl`).
@@ -1465,12 +1309,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_grams_per_deciliter`].
-    #[inline]
-    pub fn as_gram_per_deciliter(self) -> T {
-        self.as_grams_per_deciliter()
-    }
-
     /// Creates a [`Density`] from a value in FemtogramsPerDeciliter (`fg/dl`).
     #[inline]
     pub fn from_femtograms_per_deciliter(value: T) -> Self {
@@ -1481,12 +1319,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_femtograms_per_deciliter(self) -> T {
         self.0 * T::from_f64(1e14)
-    }
-
-    /// Alias for [`Self::as_femtograms_per_deciliter`].
-    #[inline]
-    pub fn as_femtogram_per_deciliter(self) -> T {
-        self.as_femtograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerDeciliter (`pg/dl`).
@@ -1501,12 +1333,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1e11)
     }
 
-    /// Alias for [`Self::as_picograms_per_deciliter`].
-    #[inline]
-    pub fn as_picogram_per_deciliter(self) -> T {
-        self.as_picograms_per_deciliter()
-    }
-
     /// Creates a [`Density`] from a value in NanogramsPerDeciliter (`ng/dl`).
     #[inline]
     pub fn from_nanograms_per_deciliter(value: T) -> Self {
@@ -1517,12 +1343,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_nanograms_per_deciliter(self) -> T {
         self.0 * T::from_f64(1e8)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_deciliter`].
-    #[inline]
-    pub fn as_nanogram_per_deciliter(self) -> T {
-        self.as_nanograms_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerDeciliter (`µg/dl`).
@@ -1537,12 +1357,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_deciliter`].
-    #[inline]
-    pub fn as_microgram_per_deciliter(self) -> T {
-        self.as_micrograms_per_deciliter()
-    }
-
     /// Creates a [`Density`] from a value in MilligramsPerDeciliter (`mg/dl`).
     #[inline]
     pub fn from_milligrams_per_deciliter(value: T) -> Self {
@@ -1553,12 +1367,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_milligrams_per_deciliter(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_milligrams_per_deciliter`].
-    #[inline]
-    pub fn as_milligram_per_deciliter(self) -> T {
-        self.as_milligrams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerDeciliter (`cg/dl`).
@@ -1573,12 +1381,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_deciliter`].
-    #[inline]
-    pub fn as_centigram_per_deciliter(self) -> T {
-        self.as_centigrams_per_deciliter()
-    }
-
     /// Creates a [`Density`] from a value in DecigramsPerDeciliter (`dg/dl`).
     #[inline]
     pub fn from_decigrams_per_deciliter(value: T) -> Self {
@@ -1589,12 +1391,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_decigrams_per_deciliter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_decigrams_per_deciliter`].
-    #[inline]
-    pub fn as_decigram_per_deciliter(self) -> T {
-        self.as_decigrams_per_deciliter()
     }
 
     /// Creates a [`Density`] from a value in GramsPerMilliliter (`g/ml`).
@@ -1609,12 +1405,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_grams_per_milliliter`].
-    #[inline]
-    pub fn as_gram_per_milliliter(self) -> T {
-        self.as_grams_per_milliliter()
-    }
-
     /// Creates a [`Density`] from a value in FemtogramsPerMilliliter (`fg/ml`).
     #[inline]
     pub fn from_femtograms_per_milliliter(value: T) -> Self {
@@ -1625,12 +1415,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_femtograms_per_milliliter(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_femtograms_per_milliliter`].
-    #[inline]
-    pub fn as_femtogram_per_milliliter(self) -> T {
-        self.as_femtograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in PicogramsPerMilliliter (`pg/ml`).
@@ -1645,12 +1429,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_picograms_per_milliliter`].
-    #[inline]
-    pub fn as_picogram_per_milliliter(self) -> T {
-        self.as_picograms_per_milliliter()
-    }
-
     /// Creates a [`Density`] from a value in NanogramsPerMilliliter (`ng/ml`).
     #[inline]
     pub fn from_nanograms_per_milliliter(value: T) -> Self {
@@ -1661,12 +1439,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_nanograms_per_milliliter(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_nanograms_per_milliliter`].
-    #[inline]
-    pub fn as_nanogram_per_milliliter(self) -> T {
-        self.as_nanograms_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in MicrogramsPerMilliliter (`µg/ml`).
@@ -1681,12 +1453,6 @@ impl<T: Float> Density<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_micrograms_per_milliliter`].
-    #[inline]
-    pub fn as_microgram_per_milliliter(self) -> T {
-        self.as_micrograms_per_milliliter()
-    }
-
     /// Creates a [`Density`] from a value in MilligramsPerMilliliter (`mg/ml`).
     #[inline]
     pub fn from_milligrams_per_milliliter(value: T) -> Self {
@@ -1697,12 +1463,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_milligrams_per_milliliter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_milligrams_per_milliliter`].
-    #[inline]
-    pub fn as_milligram_per_milliliter(self) -> T {
-        self.as_milligrams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in CentigramsPerMilliliter (`cg/ml`).
@@ -1717,12 +1477,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_centigrams_per_milliliter`].
-    #[inline]
-    pub fn as_centigram_per_milliliter(self) -> T {
-        self.as_centigrams_per_milliliter()
-    }
-
     /// Creates a [`Density`] from a value in DecigramsPerMilliliter (`dg/ml`).
     #[inline]
     pub fn from_decigrams_per_milliliter(value: T) -> Self {
@@ -1733,12 +1487,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_decigrams_per_milliliter(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_decigrams_per_milliliter`].
-    #[inline]
-    pub fn as_decigram_per_milliliter(self) -> T {
-        self.as_decigrams_per_milliliter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerUSGallon (`ppg (U.S.)`).
@@ -1753,12 +1501,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(119.82642731689663)
     }
 
-    /// Alias for [`Self::as_pounds_per_us_gallon`].
-    #[inline]
-    pub fn as_pound_per_us_gallon(self) -> T {
-        self.as_pounds_per_us_gallon()
-    }
-
     /// Creates a [`Density`] from a value in PoundsPerImperialGallon (`ppg (imp.)`).
     #[inline]
     pub fn from_pounds_per_imperial_gallon(value: T) -> Self {
@@ -1769,12 +1511,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_pounds_per_imperial_gallon(self) -> T {
         self.0 / T::from_f64(99.7763726631017)
-    }
-
-    /// Alias for [`Self::as_pounds_per_imperial_gallon`].
-    #[inline]
-    pub fn as_pound_per_imperial_gallon(self) -> T {
-        self.as_pounds_per_imperial_gallon()
     }
 
     /// Creates a [`Density`] from a value in KilogramsPerLiter (`kg/l`).
@@ -1789,12 +1525,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilograms_per_liter`].
-    #[inline]
-    pub fn as_kilogram_per_liter(self) -> T {
-        self.as_kilograms_per_liter()
-    }
-
     /// Creates a [`Density`] from a value in TonnesPerCubicFoot (`t/ft³`).
     #[inline]
     pub fn from_tonnes_per_cubic_foot(value: T) -> Self {
@@ -1805,12 +1535,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_tonnes_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(35314.66672148859)
-    }
-
-    /// Alias for [`Self::as_tonnes_per_cubic_foot`].
-    #[inline]
-    pub fn as_tonne_per_cubic_foot(self) -> T {
-        self.as_tonnes_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in TonnesPerCubicInch (`t/in³`).
@@ -1825,12 +1549,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(6.1023744094732285e7)
     }
 
-    /// Alias for [`Self::as_tonnes_per_cubic_inch`].
-    #[inline]
-    pub fn as_tonne_per_cubic_inch(self) -> T {
-        self.as_tonnes_per_cubic_inch()
-    }
-
     /// Creates a [`Density`] from a value in GramsPerCubicFoot (`g/ft³`).
     #[inline]
     pub fn from_grams_per_cubic_foot(value: T) -> Self {
@@ -1841,12 +1559,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_grams_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(0.03531466672148859)
-    }
-
-    /// Alias for [`Self::as_grams_per_cubic_foot`].
-    #[inline]
-    pub fn as_gram_per_cubic_foot(self) -> T {
-        self.as_grams_per_cubic_foot()
     }
 
     /// Creates a [`Density`] from a value in GramsPerCubicInch (`g/in³`).
@@ -1861,12 +1573,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(61.02374409473229)
     }
 
-    /// Alias for [`Self::as_grams_per_cubic_inch`].
-    #[inline]
-    pub fn as_gram_per_cubic_inch(self) -> T {
-        self.as_grams_per_cubic_inch()
-    }
-
     /// Creates a [`Density`] from a value in PoundsPerCubicMeter (`lb/m³`).
     #[inline]
     pub fn from_pounds_per_cubic_meter(value: T) -> Self {
@@ -1877,12 +1583,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_pounds_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(0.45359237)
-    }
-
-    /// Alias for [`Self::as_pounds_per_cubic_meter`].
-    #[inline]
-    pub fn as_pound_per_cubic_meter(self) -> T {
-        self.as_pounds_per_cubic_meter()
     }
 
     /// Creates a [`Density`] from a value in PoundsPerCubicCentimeter (`lb/cm³`).
@@ -1897,12 +1597,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(453592.37)
     }
 
-    /// Alias for [`Self::as_pounds_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_pound_per_cubic_centimeter(self) -> T {
-        self.as_pounds_per_cubic_centimeter()
-    }
-
     /// Creates a [`Density`] from a value in PoundsPerCubicMillimeter (`lb/mm³`).
     #[inline]
     pub fn from_pounds_per_cubic_millimeter(value: T) -> Self {
@@ -1913,12 +1607,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_pounds_per_cubic_millimeter(self) -> T {
         self.0 / T::from_f64(4.5359237e8)
-    }
-
-    /// Alias for [`Self::as_pounds_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_pound_per_cubic_millimeter(self) -> T {
-        self.as_pounds_per_cubic_millimeter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicMeter (`slug/m³`).
@@ -1933,12 +1621,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(14.593902937206364)
     }
 
-    /// Alias for [`Self::as_slugs_per_cubic_meter`].
-    #[inline]
-    pub fn as_slug_per_cubic_meter(self) -> T {
-        self.as_slugs_per_cubic_meter()
-    }
-
     /// Creates a [`Density`] from a value in SlugsPerCubicCentimeter (`slug/cm³`).
     #[inline]
     pub fn from_slugs_per_cubic_centimeter(value: T) -> Self {
@@ -1949,12 +1631,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_slugs_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1.4593902937206365e7)
-    }
-
-    /// Alias for [`Self::as_slugs_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_slug_per_cubic_centimeter(self) -> T {
-        self.as_slugs_per_cubic_centimeter()
     }
 
     /// Creates a [`Density`] from a value in SlugsPerCubicMillimeter (`slug/mm³`).
@@ -1969,12 +1645,6 @@ impl<T: Float> Density<T> {
         self.0 / T::from_f64(1.4593902937206366e10)
     }
 
-    /// Alias for [`Self::as_slugs_per_cubic_millimeter`].
-    #[inline]
-    pub fn as_slug_per_cubic_millimeter(self) -> T {
-        self.as_slugs_per_cubic_millimeter()
-    }
-
     /// Creates a [`Density`] from a value in SlugsPerCubicInch (`slug/in³`).
     #[inline]
     pub fn from_slugs_per_cubic_inch(value: T) -> Self {
@@ -1985,12 +1655,6 @@ impl<T: Float> Density<T> {
     #[inline]
     pub fn as_slugs_per_cubic_inch(self) -> T {
         self.0 / T::from_f64(890574.5981834431)
-    }
-
-    /// Alias for [`Self::as_slugs_per_cubic_inch`].
-    #[inline]
-    pub fn as_slug_per_cubic_inch(self) -> T {
-        self.as_slugs_per_cubic_inch()
     }
 }
 

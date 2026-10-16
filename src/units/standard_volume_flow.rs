@@ -280,12 +280,6 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_standard_cubic_meters_per_second`].
-    #[inline]
-    pub fn as_standard_cubic_meter_per_second(self) -> T {
-        self.as_standard_cubic_meters_per_second()
-    }
-
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerMinute (`Sm³/min`).
     #[inline]
     pub fn from_standard_cubic_meters_per_minute(value: T) -> Self {
@@ -296,12 +290,6 @@ impl<T: Float> StandardVolumeFlow<T> {
     #[inline]
     pub fn as_standard_cubic_meters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_standard_cubic_meters_per_minute`].
-    #[inline]
-    pub fn as_standard_cubic_meter_per_minute(self) -> T {
-        self.as_standard_cubic_meters_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerHour (`Sm³/h`).
@@ -316,12 +304,6 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Alias for [`Self::as_standard_cubic_meters_per_hour`].
-    #[inline]
-    pub fn as_standard_cubic_meter_per_hour(self) -> T {
-        self.as_standard_cubic_meters_per_hour()
-    }
-
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerDay (`Sm³/d`).
     #[inline]
     pub fn from_standard_cubic_meters_per_day(value: T) -> Self {
@@ -332,12 +314,6 @@ impl<T: Float> StandardVolumeFlow<T> {
     #[inline]
     pub fn as_standard_cubic_meters_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
-    }
-
-    /// Alias for [`Self::as_standard_cubic_meters_per_day`].
-    #[inline]
-    pub fn as_standard_cubic_meter_per_day(self) -> T {
-        self.as_standard_cubic_meters_per_day()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicCentimetersPerMinute (`sccm`).
@@ -352,12 +328,6 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.0 * T::from_f64(6e7)
     }
 
-    /// Alias for [`Self::as_standard_cubic_centimeters_per_minute`].
-    #[inline]
-    pub fn as_standard_cubic_centimeter_per_minute(self) -> T {
-        self.as_standard_cubic_centimeters_per_minute()
-    }
-
     /// Creates a [`StandardVolumeFlow`] from a value in StandardLitersPerMinute (`slm`).
     #[inline]
     pub fn from_standard_liters_per_minute(value: T) -> Self {
@@ -368,12 +338,6 @@ impl<T: Float> StandardVolumeFlow<T> {
     #[inline]
     pub fn as_standard_liters_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
-    }
-
-    /// Alias for [`Self::as_standard_liters_per_minute`].
-    #[inline]
-    pub fn as_standard_liter_per_minute(self) -> T {
-        self.as_standard_liters_per_minute()
     }
 
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerSecond (`Sft³/s`).
@@ -388,12 +352,6 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.0 / T::from_f64(0.028316846592)
     }
 
-    /// Alias for [`Self::as_standard_cubic_feet_per_second`].
-    #[inline]
-    pub fn as_standard_cubic_foot_per_second(self) -> T {
-        self.as_standard_cubic_feet_per_second()
-    }
-
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerMinute (`scfm`).
     #[inline]
     pub fn from_standard_cubic_feet_per_minute(value: T) -> Self {
@@ -406,12 +364,6 @@ impl<T: Float> StandardVolumeFlow<T> {
         self.0 / T::from_f64(0.0004719474432)
     }
 
-    /// Alias for [`Self::as_standard_cubic_feet_per_minute`].
-    #[inline]
-    pub fn as_standard_cubic_foot_per_minute(self) -> T {
-        self.as_standard_cubic_feet_per_minute()
-    }
-
     /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerHour (`scfh`).
     #[inline]
     pub fn from_standard_cubic_feet_per_hour(value: T) -> Self {
@@ -422,12 +374,6 @@ impl<T: Float> StandardVolumeFlow<T> {
     #[inline]
     pub fn as_standard_cubic_feet_per_hour(self) -> T {
         self.0 / T::from_f64(7.86579072e-6)
-    }
-
-    /// Alias for [`Self::as_standard_cubic_feet_per_hour`].
-    #[inline]
-    pub fn as_standard_cubic_foot_per_hour(self) -> T {
-        self.as_standard_cubic_feet_per_hour()
     }
 }
 

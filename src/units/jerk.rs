@@ -312,12 +312,6 @@ impl<T: Float> Jerk<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_meters_per_second_cubed`].
-    #[inline]
-    pub fn as_meter_per_second_cubed(self) -> T {
-        self.as_meters_per_second_cubed()
-    }
-
     /// Creates a [`Jerk`] from a value in NanometersPerSecondCubed (`nm/s³`).
     #[inline]
     pub fn from_nanometers_per_second_cubed(value: T) -> Self {
@@ -328,12 +322,6 @@ impl<T: Float> Jerk<T> {
     #[inline]
     pub fn as_nanometers_per_second_cubed(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_nanometers_per_second_cubed`].
-    #[inline]
-    pub fn as_nanometer_per_second_cubed(self) -> T {
-        self.as_nanometers_per_second_cubed()
     }
 
     /// Creates a [`Jerk`] from a value in MicrometersPerSecondCubed (`µm/s³`).
@@ -348,12 +336,6 @@ impl<T: Float> Jerk<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_micrometers_per_second_cubed`].
-    #[inline]
-    pub fn as_micrometer_per_second_cubed(self) -> T {
-        self.as_micrometers_per_second_cubed()
-    }
-
     /// Creates a [`Jerk`] from a value in MillimetersPerSecondCubed (`mm/s³`).
     #[inline]
     pub fn from_millimeters_per_second_cubed(value: T) -> Self {
@@ -364,12 +346,6 @@ impl<T: Float> Jerk<T> {
     #[inline]
     pub fn as_millimeters_per_second_cubed(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millimeters_per_second_cubed`].
-    #[inline]
-    pub fn as_millimeter_per_second_cubed(self) -> T {
-        self.as_millimeters_per_second_cubed()
     }
 
     /// Creates a [`Jerk`] from a value in CentimetersPerSecondCubed (`cm/s³`).
@@ -384,12 +360,6 @@ impl<T: Float> Jerk<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_centimeters_per_second_cubed`].
-    #[inline]
-    pub fn as_centimeter_per_second_cubed(self) -> T {
-        self.as_centimeters_per_second_cubed()
-    }
-
     /// Creates a [`Jerk`] from a value in DecimetersPerSecondCubed (`dm/s³`).
     #[inline]
     pub fn from_decimeters_per_second_cubed(value: T) -> Self {
@@ -400,12 +370,6 @@ impl<T: Float> Jerk<T> {
     #[inline]
     pub fn as_decimeters_per_second_cubed(self) -> T {
         self.0 * T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decimeters_per_second_cubed`].
-    #[inline]
-    pub fn as_decimeter_per_second_cubed(self) -> T {
-        self.as_decimeters_per_second_cubed()
     }
 
     /// Creates a [`Jerk`] from a value in KilometersPerSecondCubed (`km/s³`).
@@ -420,12 +384,6 @@ impl<T: Float> Jerk<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilometers_per_second_cubed`].
-    #[inline]
-    pub fn as_kilometer_per_second_cubed(self) -> T {
-        self.as_kilometers_per_second_cubed()
-    }
-
     /// Creates a [`Jerk`] from a value in InchesPerSecondCubed (`in/s³`).
     #[inline]
     pub fn from_inches_per_second_cubed(value: T) -> Self {
@@ -438,12 +396,6 @@ impl<T: Float> Jerk<T> {
         self.0 / T::from_f64(0.0254)
     }
 
-    /// Alias for [`Self::as_inches_per_second_cubed`].
-    #[inline]
-    pub fn as_inch_per_second_cubed(self) -> T {
-        self.as_inches_per_second_cubed()
-    }
-
     /// Creates a [`Jerk`] from a value in FeetPerSecondCubed (`ft/s³`).
     #[inline]
     pub fn from_feet_per_second_cubed(value: T) -> Self {
@@ -454,12 +406,6 @@ impl<T: Float> Jerk<T> {
     #[inline]
     pub fn as_feet_per_second_cubed(self) -> T {
         self.0 / T::from_f64(0.3048)
-    }
-
-    /// Alias for [`Self::as_feet_per_second_cubed`].
-    #[inline]
-    pub fn as_foot_per_second_cubed(self) -> T {
-        self.as_feet_per_second_cubed()
     }
 
     /// Creates a [`Jerk`] from a value in StandardGravitiesPerSecond (`g/s`).

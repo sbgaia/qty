@@ -143,12 +143,6 @@ impl<T: Float> LuminousFlux<T> {
     pub fn as_lumens(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_lumens`].
-    #[inline]
-    pub fn as_lumen(self) -> T {
-        self.as_lumens()
-    }
 }
 
 impl LuminousFlux<f64> {

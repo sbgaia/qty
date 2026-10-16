@@ -347,12 +347,6 @@ impl<T: Float> Impulse<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilogram_meters_per_second`].
-    #[inline]
-    pub fn as_kilogram_meter_per_second(self) -> T {
-        self.as_kilogram_meters_per_second()
-    }
-
     /// Creates a [`Impulse`] from a value in NewtonSeconds (`N·s`).
     #[inline]
     pub fn from_newton_seconds(value: T) -> Self {
@@ -363,12 +357,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_newton_seconds(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_newton_seconds`].
-    #[inline]
-    pub fn as_newton_second(self) -> T {
-        self.as_newton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in NanonewtonSeconds (`nN·s`).
@@ -383,12 +371,6 @@ impl<T: Float> Impulse<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanonewton_seconds`].
-    #[inline]
-    pub fn as_nanonewton_second(self) -> T {
-        self.as_nanonewton_seconds()
-    }
-
     /// Creates a [`Impulse`] from a value in MicronewtonSeconds (`µN·s`).
     #[inline]
     pub fn from_micronewton_seconds(value: T) -> Self {
@@ -399,12 +381,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_micronewton_seconds(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micronewton_seconds`].
-    #[inline]
-    pub fn as_micronewton_second(self) -> T {
-        self.as_micronewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in MillinewtonSeconds (`mN·s`).
@@ -419,12 +395,6 @@ impl<T: Float> Impulse<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millinewton_seconds`].
-    #[inline]
-    pub fn as_millinewton_second(self) -> T {
-        self.as_millinewton_seconds()
-    }
-
     /// Creates a [`Impulse`] from a value in CentinewtonSeconds (`cN·s`).
     #[inline]
     pub fn from_centinewton_seconds(value: T) -> Self {
@@ -435,12 +405,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_centinewton_seconds(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_centinewton_seconds`].
-    #[inline]
-    pub fn as_centinewton_second(self) -> T {
-        self.as_centinewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in DecinewtonSeconds (`dN·s`).
@@ -455,12 +419,6 @@ impl<T: Float> Impulse<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_decinewton_seconds`].
-    #[inline]
-    pub fn as_decinewton_second(self) -> T {
-        self.as_decinewton_seconds()
-    }
-
     /// Creates a [`Impulse`] from a value in DecanewtonSeconds (`daN·s`).
     #[inline]
     pub fn from_decanewton_seconds(value: T) -> Self {
@@ -471,12 +429,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_decanewton_seconds(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decanewton_seconds`].
-    #[inline]
-    pub fn as_decanewton_second(self) -> T {
-        self.as_decanewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in KilonewtonSeconds (`kN·s`).
@@ -491,12 +443,6 @@ impl<T: Float> Impulse<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilonewton_seconds`].
-    #[inline]
-    pub fn as_kilonewton_second(self) -> T {
-        self.as_kilonewton_seconds()
-    }
-
     /// Creates a [`Impulse`] from a value in MeganewtonSeconds (`MN·s`).
     #[inline]
     pub fn from_meganewton_seconds(value: T) -> Self {
@@ -507,12 +453,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_meganewton_seconds(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_meganewton_seconds`].
-    #[inline]
-    pub fn as_meganewton_second(self) -> T {
-        self.as_meganewton_seconds()
     }
 
     /// Creates a [`Impulse`] from a value in PoundFeetPerSecond (`lb·ft/s`).
@@ -527,12 +467,6 @@ impl<T: Float> Impulse<T> {
         self.0 / T::from_f64(0.138254954376)
     }
 
-    /// Alias for [`Self::as_pound_feet_per_second`].
-    #[inline]
-    pub fn as_pound_foot_per_second(self) -> T {
-        self.as_pound_feet_per_second()
-    }
-
     /// Creates a [`Impulse`] from a value in PoundForceSeconds (`lbf·s`).
     #[inline]
     pub fn from_pound_force_seconds(value: T) -> Self {
@@ -545,12 +479,6 @@ impl<T: Float> Impulse<T> {
         self.0 / T::from_f64(4.4482216152605)
     }
 
-    /// Alias for [`Self::as_pound_force_seconds`].
-    #[inline]
-    pub fn as_pound_force_second(self) -> T {
-        self.as_pound_force_seconds()
-    }
-
     /// Creates a [`Impulse`] from a value in SlugFeetPerSecond (`slug·ft/s`).
     #[inline]
     pub fn from_slug_feet_per_second(value: T) -> Self {
@@ -561,12 +489,6 @@ impl<T: Float> Impulse<T> {
     #[inline]
     pub fn as_slug_feet_per_second(self) -> T {
         self.0 / T::from_f64(4.4482216152605)
-    }
-
-    /// Alias for [`Self::as_slug_feet_per_second`].
-    #[inline]
-    pub fn as_slug_foot_per_second(self) -> T {
-        self.as_slug_feet_per_second()
     }
 }
 

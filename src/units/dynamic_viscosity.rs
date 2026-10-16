@@ -294,12 +294,6 @@ impl<T: Float> DynamicViscosity<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newton_seconds_per_meter_squared`].
-    #[inline]
-    pub fn as_newton_second_per_meter_squared(self) -> T {
-        self.as_newton_seconds_per_meter_squared()
-    }
-
     /// Creates a [`DynamicViscosity`] from a value in PascalSeconds (`Pa·s`).
     #[inline]
     pub fn from_pascal_seconds(value: T) -> Self {
@@ -310,12 +304,6 @@ impl<T: Float> DynamicViscosity<T> {
     #[inline]
     pub fn as_pascal_seconds(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_pascal_seconds`].
-    #[inline]
-    pub fn as_pascal_second(self) -> T {
-        self.as_pascal_seconds()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in MillipascalSeconds (`mPa·s`).
@@ -330,12 +318,6 @@ impl<T: Float> DynamicViscosity<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millipascal_seconds`].
-    #[inline]
-    pub fn as_millipascal_second(self) -> T {
-        self.as_millipascal_seconds()
-    }
-
     /// Creates a [`DynamicViscosity`] from a value in MicropascalSeconds (`µPa·s`).
     #[inline]
     pub fn from_micropascal_seconds(value: T) -> Self {
@@ -346,12 +328,6 @@ impl<T: Float> DynamicViscosity<T> {
     #[inline]
     pub fn as_micropascal_seconds(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micropascal_seconds`].
-    #[inline]
-    pub fn as_micropascal_second(self) -> T {
-        self.as_micropascal_seconds()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in Poise (`P`).
@@ -390,12 +366,6 @@ impl<T: Float> DynamicViscosity<T> {
         self.0 / T::from_f64(6894.757293168362)
     }
 
-    /// Alias for [`Self::as_reyns`].
-    #[inline]
-    pub fn as_reyn(self) -> T {
-        self.as_reyns()
-    }
-
     /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareInch (`lbf·s/in²`).
     #[inline]
     pub fn from_pounds_force_second_per_square_inch(value: T) -> Self {
@@ -406,12 +376,6 @@ impl<T: Float> DynamicViscosity<T> {
     #[inline]
     pub fn as_pounds_force_second_per_square_inch(self) -> T {
         self.0 / T::from_f64(6894.757293168362)
-    }
-
-    /// Alias for [`Self::as_pounds_force_second_per_square_inch`].
-    #[inline]
-    pub fn as_pound_force_second_per_square_inch(self) -> T {
-        self.as_pounds_force_second_per_square_inch()
     }
 
     /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareFoot (`lbf·s/ft²`).
@@ -426,12 +390,6 @@ impl<T: Float> DynamicViscosity<T> {
         self.0 / T::from_f64(47.880258980335846)
     }
 
-    /// Alias for [`Self::as_pounds_force_second_per_square_foot`].
-    #[inline]
-    pub fn as_pound_force_second_per_square_foot(self) -> T {
-        self.as_pounds_force_second_per_square_foot()
-    }
-
     /// Creates a [`DynamicViscosity`] from a value in PoundsPerFootSecond (`lb/(ft·s)`).
     #[inline]
     pub fn from_pounds_per_foot_second(value: T) -> Self {
@@ -442,12 +400,6 @@ impl<T: Float> DynamicViscosity<T> {
     #[inline]
     pub fn as_pounds_per_foot_second(self) -> T {
         self.0 / T::from_f64(1.4881639435695537)
-    }
-
-    /// Alias for [`Self::as_pounds_per_foot_second`].
-    #[inline]
-    pub fn as_pound_per_foot_second(self) -> T {
-        self.as_pounds_per_foot_second()
     }
 }
 

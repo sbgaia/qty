@@ -164,12 +164,6 @@ impl<T: Float> RatioChangeRate<T> {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_percents_per_second`].
-    #[inline]
-    pub fn as_percent_per_second(self) -> T {
-        self.as_percents_per_second()
-    }
-
     /// Creates a [`RatioChangeRate`] from a value in DecimalFractionsPerSecond (`/s`).
     #[inline]
     pub fn from_decimal_fractions_per_second(value: T) -> Self {
@@ -180,12 +174,6 @@ impl<T: Float> RatioChangeRate<T> {
     #[inline]
     pub fn as_decimal_fractions_per_second(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_decimal_fractions_per_second`].
-    #[inline]
-    pub fn as_decimal_fraction_per_second(self) -> T {
-        self.as_decimal_fractions_per_second()
     }
 }
 

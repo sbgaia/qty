@@ -227,12 +227,6 @@ impl<T: Float> ElectricInductance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_henries`].
-    #[inline]
-    pub fn as_henry(self) -> T {
-        self.as_henries()
-    }
-
     /// Creates a [`ElectricInductance`] from a value in Picohenries (`pH`).
     #[inline]
     pub fn from_picohenries(value: T) -> Self {
@@ -243,12 +237,6 @@ impl<T: Float> ElectricInductance<T> {
     #[inline]
     pub fn as_picohenries(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_picohenries`].
-    #[inline]
-    pub fn as_picohenry(self) -> T {
-        self.as_picohenries()
     }
 
     /// Creates a [`ElectricInductance`] from a value in Nanohenries (`nH`).
@@ -263,12 +251,6 @@ impl<T: Float> ElectricInductance<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_nanohenries`].
-    #[inline]
-    pub fn as_nanohenry(self) -> T {
-        self.as_nanohenries()
-    }
-
     /// Creates a [`ElectricInductance`] from a value in Microhenries (`µH`).
     #[inline]
     pub fn from_microhenries(value: T) -> Self {
@@ -281,12 +263,6 @@ impl<T: Float> ElectricInductance<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_microhenries`].
-    #[inline]
-    pub fn as_microhenry(self) -> T {
-        self.as_microhenries()
-    }
-
     /// Creates a [`ElectricInductance`] from a value in Millihenries (`mH`).
     #[inline]
     pub fn from_millihenries(value: T) -> Self {
@@ -297,12 +273,6 @@ impl<T: Float> ElectricInductance<T> {
     #[inline]
     pub fn as_millihenries(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_millihenries`].
-    #[inline]
-    pub fn as_millihenry(self) -> T {
-        self.as_millihenries()
     }
 }
 

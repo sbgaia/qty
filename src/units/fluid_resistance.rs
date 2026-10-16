@@ -496,12 +496,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_pascal_seconds_per_liter`].
-    #[inline]
-    pub fn as_pascal_second_per_liter(self) -> T {
-        self.as_pascal_seconds_per_liter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerLiter (`Pa·min/l`).
     #[inline]
     pub fn from_pascal_minutes_per_liter(value: T) -> Self {
@@ -512,12 +506,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_pascal_minutes_per_liter(self) -> T {
         self.0 / T::from_f64(60000.0)
-    }
-
-    /// Alias for [`Self::as_pascal_minutes_per_liter`].
-    #[inline]
-    pub fn as_pascal_minute_per_liter(self) -> T {
-        self.as_pascal_minutes_per_liter()
     }
 
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerMilliliter (`Pa·s/ml`).
@@ -532,12 +520,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_pascal_seconds_per_milliliter`].
-    #[inline]
-    pub fn as_pascal_second_per_milliliter(self) -> T {
-        self.as_pascal_seconds_per_milliliter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerMilliliter (`Pa·min/ml`).
     #[inline]
     pub fn from_pascal_minutes_per_milliliter(value: T) -> Self {
@@ -548,12 +530,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_pascal_minutes_per_milliliter(self) -> T {
         self.0 / T::from_f64(6e7)
-    }
-
-    /// Alias for [`Self::as_pascal_minutes_per_milliliter`].
-    #[inline]
-    pub fn as_pascal_minute_per_milliliter(self) -> T {
-        self.as_pascal_minutes_per_milliliter()
     }
 
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicMeter (`Pa·s/m³`).
@@ -568,12 +544,6 @@ impl<T: Float> FluidResistance<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_pascal_seconds_per_cubic_meter`].
-    #[inline]
-    pub fn as_pascal_second_per_cubic_meter(self) -> T {
-        self.as_pascal_seconds_per_cubic_meter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in MegapascalSecondsPerCubicMeter (`MPa·s/m³`).
     #[inline]
     pub fn from_megapascal_seconds_per_cubic_meter(value: T) -> Self {
@@ -584,12 +554,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_megapascal_seconds_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_megapascal_seconds_per_cubic_meter`].
-    #[inline]
-    pub fn as_megapascal_second_per_cubic_meter(self) -> T {
-        self.as_megapascal_seconds_per_cubic_meter()
     }
 
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicMeter (`Pa·min/m³`).
@@ -604,12 +568,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(60.0)
     }
 
-    /// Alias for [`Self::as_pascal_minutes_per_cubic_meter`].
-    #[inline]
-    pub fn as_pascal_minute_per_cubic_meter(self) -> T {
-        self.as_pascal_minutes_per_cubic_meter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicCentimeter (`Pa·s/cm³`).
     #[inline]
     pub fn from_pascal_seconds_per_cubic_centimeter(value: T) -> Self {
@@ -620,12 +578,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_pascal_seconds_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_pascal_seconds_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_pascal_second_per_cubic_centimeter(self) -> T {
-        self.as_pascal_seconds_per_cubic_centimeter()
     }
 
     /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicCentimeter (`Pa·min/cm³`).
@@ -640,12 +592,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(6e7)
     }
 
-    /// Alias for [`Self::as_pascal_minutes_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_pascal_minute_per_cubic_centimeter(self) -> T {
-        self.as_pascal_minutes_per_cubic_centimeter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in DyneSecondsPerCentimeterToTheFifth (`dyn·s/cm⁵`).
     #[inline]
     pub fn from_dyne_seconds_per_centimeter_to_the_fifth(value: T) -> Self {
@@ -656,12 +602,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_dyne_seconds_per_centimeter_to_the_fifth(self) -> T {
         self.0 / T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_dyne_seconds_per_centimeter_to_the_fifth`].
-    #[inline]
-    pub fn as_dyne_second_per_centimeter_to_the_fifth(self) -> T {
-        self.as_dyne_seconds_per_centimeter_to_the_fifth()
     }
 
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerLiter (`mmHg·s/l`).
@@ -676,12 +616,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(133322.368)
     }
 
-    /// Alias for [`Self::as_millimeter_mercury_seconds_per_liter`].
-    #[inline]
-    pub fn as_millimeter_mercury_second_per_liter(self) -> T {
-        self.as_millimeter_mercury_seconds_per_liter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerLiter (`mmHg·min/l`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_liter(value: T) -> Self {
@@ -692,12 +626,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_liter(self) -> T {
         self.0 / T::from_f64(7999342.08)
-    }
-
-    /// Alias for [`Self::as_millimeter_mercury_minutes_per_liter`].
-    #[inline]
-    pub fn as_millimeter_mercury_minute_per_liter(self) -> T {
-        self.as_millimeter_mercury_minutes_per_liter()
     }
 
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerMilliliter (`mmHg·s/ml`).
@@ -712,12 +640,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(1.33322368e8)
     }
 
-    /// Alias for [`Self::as_millimeter_mercury_seconds_per_milliliter`].
-    #[inline]
-    pub fn as_millimeter_mercury_second_per_milliliter(self) -> T {
-        self.as_millimeter_mercury_seconds_per_milliliter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerMilliliter (`mmHg·min/ml`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_milliliter(value: T) -> Self {
@@ -728,12 +650,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_milliliter(self) -> T {
         self.0 / T::from_f64(7.99934208e9)
-    }
-
-    /// Alias for [`Self::as_millimeter_mercury_minutes_per_milliliter`].
-    #[inline]
-    pub fn as_millimeter_mercury_minute_per_milliliter(self) -> T {
-        self.as_millimeter_mercury_minutes_per_milliliter()
     }
 
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicCentimeter (`mmHg·s/cm³`).
@@ -748,12 +664,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(1.33322368e8)
     }
 
-    /// Alias for [`Self::as_millimeter_mercury_seconds_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_millimeter_mercury_second_per_cubic_centimeter(self) -> T {
-        self.as_millimeter_mercury_seconds_per_cubic_centimeter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicCentimeter (`mmHg·min/cm³`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_centimeter(value: T) -> Self {
@@ -764,12 +674,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(7.99934208e9)
-    }
-
-    /// Alias for [`Self::as_millimeter_mercury_minutes_per_cubic_centimeter`].
-    #[inline]
-    pub fn as_millimeter_mercury_minute_per_cubic_centimeter(self) -> T {
-        self.as_millimeter_mercury_minutes_per_cubic_centimeter()
     }
 
     /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicMeter (`mmHg·s/m³`).
@@ -784,12 +688,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(133.322368)
     }
 
-    /// Alias for [`Self::as_millimeter_mercury_seconds_per_cubic_meter`].
-    #[inline]
-    pub fn as_millimeter_mercury_second_per_cubic_meter(self) -> T {
-        self.as_millimeter_mercury_seconds_per_cubic_meter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicMeter (`mmHg·min/m³`).
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_meter(value: T) -> Self {
@@ -802,12 +700,6 @@ impl<T: Float> FluidResistance<T> {
         self.0 / T::from_f64(7999.34208)
     }
 
-    /// Alias for [`Self::as_millimeter_mercury_minutes_per_cubic_meter`].
-    #[inline]
-    pub fn as_millimeter_mercury_minute_per_cubic_meter(self) -> T {
-        self.as_millimeter_mercury_minutes_per_cubic_meter()
-    }
-
     /// Creates a [`FluidResistance`] from a value in WoodUnits (`WU`).
     #[inline]
     pub fn from_wood_units(value: T) -> Self {
@@ -818,12 +710,6 @@ impl<T: Float> FluidResistance<T> {
     #[inline]
     pub fn as_wood_units(self) -> T {
         self.0 / T::from_f64(7999342.08)
-    }
-
-    /// Alias for [`Self::as_wood_units`].
-    #[inline]
-    pub fn as_wood_unit(self) -> T {
-        self.as_wood_units()
     }
 }
 

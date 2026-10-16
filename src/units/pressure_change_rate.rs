@@ -465,12 +465,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_pascals_per_second`].
-    #[inline]
-    pub fn as_pascal_per_second(self) -> T {
-        self.as_pascals_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in KilopascalsPerSecond (`kPa/s`).
     #[inline]
     pub fn from_kilopascals_per_second(value: T) -> Self {
@@ -481,12 +475,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_kilopascals_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilopascals_per_second`].
-    #[inline]
-    pub fn as_kilopascal_per_second(self) -> T {
-        self.as_kilopascals_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapascalsPerSecond (`MPa/s`).
@@ -501,12 +489,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megapascals_per_second`].
-    #[inline]
-    pub fn as_megapascal_per_second(self) -> T {
-        self.as_megapascals_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in PascalsPerMinute (`Pa/min`).
     #[inline]
     pub fn from_pascals_per_minute(value: T) -> Self {
@@ -517,12 +499,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_pascals_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
-    }
-
-    /// Alias for [`Self::as_pascals_per_minute`].
-    #[inline]
-    pub fn as_pascal_per_minute(self) -> T {
-        self.as_pascals_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopascalsPerMinute (`kPa/min`).
@@ -537,12 +513,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(16.666666666666668)
     }
 
-    /// Alias for [`Self::as_kilopascals_per_minute`].
-    #[inline]
-    pub fn as_kilopascal_per_minute(self) -> T {
-        self.as_kilopascals_per_minute()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in MegapascalsPerMinute (`MPa/min`).
     #[inline]
     pub fn from_megapascals_per_minute(value: T) -> Self {
@@ -553,12 +523,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_megapascals_per_minute(self) -> T {
         self.0 / T::from_f64(16666.666666666668)
-    }
-
-    /// Alias for [`Self::as_megapascals_per_minute`].
-    #[inline]
-    pub fn as_megapascal_per_minute(self) -> T {
-        self.as_megapascals_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MillimetersOfMercuryPerSecond (`mmHg/s`).
@@ -573,12 +537,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(133.322387415)
     }
 
-    /// Alias for [`Self::as_millimeters_of_mercury_per_second`].
-    #[inline]
-    pub fn as_millimeter_of_mercury_per_second(self) -> T {
-        self.as_millimeters_of_mercury_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in AtmospheresPerSecond (`atm/s`).
     #[inline]
     pub fn from_atmospheres_per_second(value: T) -> Self {
@@ -589,12 +547,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_atmospheres_per_second(self) -> T {
         self.0 / T::from_f64(101325.0)
-    }
-
-    /// Alias for [`Self::as_atmospheres_per_second`].
-    #[inline]
-    pub fn as_atmosphere_per_second(self) -> T {
-        self.as_atmospheres_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in PoundsForcePerSquareInchPerSecond (`psi/s`).
@@ -609,12 +561,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(6894.757293168362)
     }
 
-    /// Alias for [`Self::as_pounds_force_per_square_inch_per_second`].
-    #[inline]
-    pub fn as_pound_force_per_square_inch_per_second(self) -> T {
-        self.as_pounds_force_per_square_inch_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in KilopoundsForcePerSquareInchPerSecond (`kpsi/s`).
     #[inline]
     pub fn from_kilopounds_force_per_square_inch_per_second(value: T) -> Self {
@@ -625,12 +571,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_kilopounds_force_per_square_inch_per_second(self) -> T {
         self.0 / T::from_f64(6894757.293168361)
-    }
-
-    /// Alias for [`Self::as_kilopounds_force_per_square_inch_per_second`].
-    #[inline]
-    pub fn as_kilopound_force_per_square_inch_per_second(self) -> T {
-        self.as_kilopounds_force_per_square_inch_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in MegapoundsForcePerSquareInchPerSecond (`Mpsi/s`).
@@ -645,12 +585,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(6.894757293168362e9)
     }
 
-    /// Alias for [`Self::as_megapounds_force_per_square_inch_per_second`].
-    #[inline]
-    pub fn as_megapound_force_per_square_inch_per_second(self) -> T {
-        self.as_megapounds_force_per_square_inch_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in PoundsForcePerSquareInchPerMinute (`psi/min`).
     #[inline]
     pub fn from_pounds_force_per_square_inch_per_minute(value: T) -> Self {
@@ -661,12 +595,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_pounds_force_per_square_inch_per_minute(self) -> T {
         self.0 / T::from_f64(114.91262155280602)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_square_inch_per_minute`].
-    #[inline]
-    pub fn as_pound_force_per_square_inch_per_minute(self) -> T {
-        self.as_pounds_force_per_square_inch_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in KilopoundsForcePerSquareInchPerMinute (`kpsi/min`).
@@ -681,12 +609,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(114912.62155280603)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_square_inch_per_minute`].
-    #[inline]
-    pub fn as_kilopound_force_per_square_inch_per_minute(self) -> T {
-        self.as_kilopounds_force_per_square_inch_per_minute()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in MegapoundsForcePerSquareInchPerMinute (`Mpsi/min`).
     #[inline]
     pub fn from_megapounds_force_per_square_inch_per_minute(value: T) -> Self {
@@ -697,12 +619,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_megapounds_force_per_square_inch_per_minute(self) -> T {
         self.0 / T::from_f64(1.1491262155280602e8)
-    }
-
-    /// Alias for [`Self::as_megapounds_force_per_square_inch_per_minute`].
-    #[inline]
-    pub fn as_megapound_force_per_square_inch_per_minute(self) -> T {
-        self.as_megapounds_force_per_square_inch_per_minute()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in BarsPerSecond (`bar/s`).
@@ -717,12 +633,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Alias for [`Self::as_bars_per_second`].
-    #[inline]
-    pub fn as_bar_per_second(self) -> T {
-        self.as_bars_per_second()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in MillibarsPerSecond (`mbar/s`).
     #[inline]
     pub fn from_millibars_per_second(value: T) -> Self {
@@ -733,12 +643,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_millibars_per_second(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_millibars_per_second`].
-    #[inline]
-    pub fn as_millibar_per_second(self) -> T {
-        self.as_millibars_per_second()
     }
 
     /// Creates a [`PressureChangeRate`] from a value in BarsPerMinute (`bar/min`).
@@ -753,12 +657,6 @@ impl<T: Float> PressureChangeRate<T> {
         self.0 / T::from_f64(1666.6666666666667)
     }
 
-    /// Alias for [`Self::as_bars_per_minute`].
-    #[inline]
-    pub fn as_bar_per_minute(self) -> T {
-        self.as_bars_per_minute()
-    }
-
     /// Creates a [`PressureChangeRate`] from a value in MillibarsPerMinute (`mbar/min`).
     #[inline]
     pub fn from_millibars_per_minute(value: T) -> Self {
@@ -769,12 +667,6 @@ impl<T: Float> PressureChangeRate<T> {
     #[inline]
     pub fn as_millibars_per_minute(self) -> T {
         self.0 / T::from_f64(1.6666666666666667)
-    }
-
-    /// Alias for [`Self::as_millibars_per_minute`].
-    #[inline]
-    pub fn as_millibar_per_minute(self) -> T {
-        self.as_millibars_per_minute()
     }
 }
 

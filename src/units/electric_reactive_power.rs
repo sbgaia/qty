@@ -214,12 +214,6 @@ impl<T: Float> ElectricReactivePower<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_voltamperes_reactive`].
-    #[inline]
-    pub fn as_voltampere_reactive(self) -> T {
-        self.as_voltamperes_reactive()
-    }
-
     /// Creates a [`ElectricReactivePower`] from a value in KilovoltamperesReactive (`kvar`).
     #[inline]
     pub fn from_kilovoltamperes_reactive(value: T) -> Self {
@@ -230,12 +224,6 @@ impl<T: Float> ElectricReactivePower<T> {
     #[inline]
     pub fn as_kilovoltamperes_reactive(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilovoltamperes_reactive`].
-    #[inline]
-    pub fn as_kilovoltampere_reactive(self) -> T {
-        self.as_kilovoltamperes_reactive()
     }
 
     /// Creates a [`ElectricReactivePower`] from a value in MegavoltamperesReactive (`Mvar`).
@@ -250,12 +238,6 @@ impl<T: Float> ElectricReactivePower<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megavoltamperes_reactive`].
-    #[inline]
-    pub fn as_megavoltampere_reactive(self) -> T {
-        self.as_megavoltamperes_reactive()
-    }
-
     /// Creates a [`ElectricReactivePower`] from a value in GigavoltamperesReactive (`Gvar`).
     #[inline]
     pub fn from_gigavoltamperes_reactive(value: T) -> Self {
@@ -266,12 +248,6 @@ impl<T: Float> ElectricReactivePower<T> {
     #[inline]
     pub fn as_gigavoltamperes_reactive(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigavoltamperes_reactive`].
-    #[inline]
-    pub fn as_gigavoltampere_reactive(self) -> T {
-        self.as_gigavoltamperes_reactive()
     }
 }
 

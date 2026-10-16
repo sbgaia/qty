@@ -569,12 +569,6 @@ impl<T: Float> Torque<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_newton_millimeters`].
-    #[inline]
-    pub fn as_newton_millimeter(self) -> T {
-        self.as_newton_millimeters()
-    }
-
     /// Creates a [`Torque`] from a value in KilonewtonMillimeters (`kN·mm`).
     #[inline]
     pub fn from_kilonewton_millimeters(value: T) -> Self {
@@ -585,12 +579,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_kilonewton_millimeters(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_kilonewton_millimeters`].
-    #[inline]
-    pub fn as_kilonewton_millimeter(self) -> T {
-        self.as_kilonewton_millimeters()
     }
 
     /// Creates a [`Torque`] from a value in MeganewtonMillimeters (`MN·mm`).
@@ -605,12 +593,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_meganewton_millimeters`].
-    #[inline]
-    pub fn as_meganewton_millimeter(self) -> T {
-        self.as_meganewton_millimeters()
-    }
-
     /// Creates a [`Torque`] from a value in NewtonCentimeters (`N·cm`).
     #[inline]
     pub fn from_newton_centimeters(value: T) -> Self {
@@ -621,12 +603,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_newton_centimeters(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_newton_centimeters`].
-    #[inline]
-    pub fn as_newton_centimeter(self) -> T {
-        self.as_newton_centimeters()
     }
 
     /// Creates a [`Torque`] from a value in KilonewtonCentimeters (`kN·cm`).
@@ -641,12 +617,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_kilonewton_centimeters`].
-    #[inline]
-    pub fn as_kilonewton_centimeter(self) -> T {
-        self.as_kilonewton_centimeters()
-    }
-
     /// Creates a [`Torque`] from a value in MeganewtonCentimeters (`MN·cm`).
     #[inline]
     pub fn from_meganewton_centimeters(value: T) -> Self {
@@ -657,12 +627,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_meganewton_centimeters(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_meganewton_centimeters`].
-    #[inline]
-    pub fn as_meganewton_centimeter(self) -> T {
-        self.as_meganewton_centimeters()
     }
 
     /// Creates a [`Torque`] from a value in NewtonMeters (`N·m`).
@@ -677,12 +641,6 @@ impl<T: Float> Torque<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newton_meters`].
-    #[inline]
-    pub fn as_newton_meter(self) -> T {
-        self.as_newton_meters()
-    }
-
     /// Creates a [`Torque`] from a value in KilonewtonMeters (`kN·m`).
     #[inline]
     pub fn from_kilonewton_meters(value: T) -> Self {
@@ -693,12 +651,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_kilonewton_meters(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewton_meters`].
-    #[inline]
-    pub fn as_kilonewton_meter(self) -> T {
-        self.as_kilonewton_meters()
     }
 
     /// Creates a [`Torque`] from a value in MeganewtonMeters (`MN·m`).
@@ -713,12 +665,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_meganewton_meters`].
-    #[inline]
-    pub fn as_meganewton_meter(self) -> T {
-        self.as_meganewton_meters()
-    }
-
     /// Creates a [`Torque`] from a value in OunceForceFeet (`ozf·ft`).
     #[inline]
     pub fn from_ounce_force_feet(value: T) -> Self {
@@ -729,12 +675,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_ounce_force_feet(self) -> T {
         self.0 / T::from_f64(0.08473862177071252)
-    }
-
-    /// Alias for [`Self::as_ounce_force_feet`].
-    #[inline]
-    pub fn as_ounce_force_foot(self) -> T {
-        self.as_ounce_force_feet()
     }
 
     /// Creates a [`Torque`] from a value in OunceForceInches (`ozf·in`).
@@ -749,12 +689,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(0.0070615518142260435)
     }
 
-    /// Alias for [`Self::as_ounce_force_inches`].
-    #[inline]
-    pub fn as_ounce_force_inch(self) -> T {
-        self.as_ounce_force_inches()
-    }
-
     /// Creates a [`Torque`] from a value in PoundalFeet (`pdl·ft`).
     #[inline]
     pub fn from_poundal_feet(value: T) -> Self {
@@ -765,12 +699,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_poundal_feet(self) -> T {
         self.0 / T::from_f64(0.0421401100938048)
-    }
-
-    /// Alias for [`Self::as_poundal_feet`].
-    #[inline]
-    pub fn as_poundal_foot(self) -> T {
-        self.as_poundal_feet()
     }
 
     /// Creates a [`Torque`] from a value in PoundForceInches (`lbf·in`).
@@ -785,12 +713,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(0.1129848290276167)
     }
 
-    /// Alias for [`Self::as_pound_force_inches`].
-    #[inline]
-    pub fn as_pound_force_inch(self) -> T {
-        self.as_pound_force_inches()
-    }
-
     /// Creates a [`Torque`] from a value in KilopoundForceInches (`klbf·in`).
     #[inline]
     pub fn from_kilopound_force_inches(value: T) -> Self {
@@ -801,12 +723,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_kilopound_force_inches(self) -> T {
         self.0 / T::from_f64(112.9848290276167)
-    }
-
-    /// Alias for [`Self::as_kilopound_force_inches`].
-    #[inline]
-    pub fn as_kilopound_force_inch(self) -> T {
-        self.as_kilopound_force_inches()
     }
 
     /// Creates a [`Torque`] from a value in MegapoundForceInches (`Mlbf·in`).
@@ -821,12 +737,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(112984.8290276167)
     }
 
-    /// Alias for [`Self::as_megapound_force_inches`].
-    #[inline]
-    pub fn as_megapound_force_inch(self) -> T {
-        self.as_megapound_force_inches()
-    }
-
     /// Creates a [`Torque`] from a value in PoundForceFeet (`lbf·ft`).
     #[inline]
     pub fn from_pound_force_feet(value: T) -> Self {
@@ -837,12 +747,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_pound_force_feet(self) -> T {
         self.0 / T::from_f64(1.3558179483314003)
-    }
-
-    /// Alias for [`Self::as_pound_force_feet`].
-    #[inline]
-    pub fn as_pound_force_foot(self) -> T {
-        self.as_pound_force_feet()
     }
 
     /// Creates a [`Torque`] from a value in KilopoundForceFeet (`klbf·ft`).
@@ -857,12 +761,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(1355.8179483314004)
     }
 
-    /// Alias for [`Self::as_kilopound_force_feet`].
-    #[inline]
-    pub fn as_kilopound_force_foot(self) -> T {
-        self.as_kilopound_force_feet()
-    }
-
     /// Creates a [`Torque`] from a value in MegapoundForceFeet (`Mlbf·ft`).
     #[inline]
     pub fn from_megapound_force_feet(value: T) -> Self {
@@ -873,12 +771,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_megapound_force_feet(self) -> T {
         self.0 / T::from_f64(1355817.9483314003)
-    }
-
-    /// Alias for [`Self::as_megapound_force_feet`].
-    #[inline]
-    pub fn as_megapound_force_foot(self) -> T {
-        self.as_megapound_force_feet()
     }
 
     /// Creates a [`Torque`] from a value in GramForceMillimeters (`gf·mm`).
@@ -893,12 +785,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(9.80665e-6)
     }
 
-    /// Alias for [`Self::as_gram_force_millimeters`].
-    #[inline]
-    pub fn as_gram_force_millimeter(self) -> T {
-        self.as_gram_force_millimeters()
-    }
-
     /// Creates a [`Torque`] from a value in GramForceCentimeters (`gf·cm`).
     #[inline]
     pub fn from_gram_force_centimeters(value: T) -> Self {
@@ -909,12 +795,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_gram_force_centimeters(self) -> T {
         self.0 / T::from_f64(9.80665e-5)
-    }
-
-    /// Alias for [`Self::as_gram_force_centimeters`].
-    #[inline]
-    pub fn as_gram_force_centimeter(self) -> T {
-        self.as_gram_force_centimeters()
     }
 
     /// Creates a [`Torque`] from a value in GramForceMeters (`gf·m`).
@@ -929,12 +809,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(0.00980665)
     }
 
-    /// Alias for [`Self::as_gram_force_meters`].
-    #[inline]
-    pub fn as_gram_force_meter(self) -> T {
-        self.as_gram_force_meters()
-    }
-
     /// Creates a [`Torque`] from a value in KilogramForceMillimeters (`kgf·mm`).
     #[inline]
     pub fn from_kilogram_force_millimeters(value: T) -> Self {
@@ -945,12 +819,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_kilogram_force_millimeters(self) -> T {
         self.0 / T::from_f64(0.00980665)
-    }
-
-    /// Alias for [`Self::as_kilogram_force_millimeters`].
-    #[inline]
-    pub fn as_kilogram_force_millimeter(self) -> T {
-        self.as_kilogram_force_millimeters()
     }
 
     /// Creates a [`Torque`] from a value in KilogramForceCentimeters (`kgf·cm`).
@@ -965,12 +833,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(0.0980665)
     }
 
-    /// Alias for [`Self::as_kilogram_force_centimeters`].
-    #[inline]
-    pub fn as_kilogram_force_centimeter(self) -> T {
-        self.as_kilogram_force_centimeters()
-    }
-
     /// Creates a [`Torque`] from a value in KilogramForceMeters (`kgf·m`).
     #[inline]
     pub fn from_kilogram_force_meters(value: T) -> Self {
@@ -981,12 +843,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_kilogram_force_meters(self) -> T {
         self.0 / T::from_f64(9.80665)
-    }
-
-    /// Alias for [`Self::as_kilogram_force_meters`].
-    #[inline]
-    pub fn as_kilogram_force_meter(self) -> T {
-        self.as_kilogram_force_meters()
     }
 
     /// Creates a [`Torque`] from a value in TonneForceMillimeters (`tf·mm`).
@@ -1001,12 +857,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Alias for [`Self::as_tonne_force_millimeters`].
-    #[inline]
-    pub fn as_tonne_force_millimeter(self) -> T {
-        self.as_tonne_force_millimeters()
-    }
-
     /// Creates a [`Torque`] from a value in TonneForceCentimeters (`tf·cm`).
     #[inline]
     pub fn from_tonne_force_centimeters(value: T) -> Self {
@@ -1019,12 +869,6 @@ impl<T: Float> Torque<T> {
         self.0 / T::from_f64(98.0665)
     }
 
-    /// Alias for [`Self::as_tonne_force_centimeters`].
-    #[inline]
-    pub fn as_tonne_force_centimeter(self) -> T {
-        self.as_tonne_force_centimeters()
-    }
-
     /// Creates a [`Torque`] from a value in TonneForceMeters (`tf·m`).
     #[inline]
     pub fn from_tonne_force_meters(value: T) -> Self {
@@ -1035,12 +879,6 @@ impl<T: Float> Torque<T> {
     #[inline]
     pub fn as_tonne_force_meters(self) -> T {
         self.0 / T::from_f64(9806.65)
-    }
-
-    /// Alias for [`Self::as_tonne_force_meters`].
-    #[inline]
-    pub fn as_tonne_force_meter(self) -> T {
-        self.as_tonne_force_meters()
     }
 }
 

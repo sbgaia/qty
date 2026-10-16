@@ -785,12 +785,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_newton_meters_per_radian`].
-    #[inline]
-    pub fn as_newton_meter_per_radian(self) -> T {
-        self.as_newton_meters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMetersPerRadian (`kN·m/rad`).
     #[inline]
     pub fn from_kilonewton_meters_per_radian(value: T) -> Self {
@@ -801,12 +795,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_kilonewton_meters_per_radian(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilonewton_meters_per_radian`].
-    #[inline]
-    pub fn as_kilonewton_meter_per_radian(self) -> T {
-        self.as_kilonewton_meters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMetersPerRadian (`MN·m/rad`).
@@ -821,12 +809,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_meganewton_meters_per_radian`].
-    #[inline]
-    pub fn as_meganewton_meter_per_radian(self) -> T {
-        self.as_meganewton_meters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in PoundForceFeetPerDegrees (`lbf·ft/deg`).
     #[inline]
     pub fn from_pound_force_feet_per_degrees(value: T) -> Self {
@@ -837,12 +819,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_pound_force_feet_per_degrees(self) -> T {
         self.0 / T::from_f64(77.68264622747556)
-    }
-
-    /// Alias for [`Self::as_pound_force_feet_per_degrees`].
-    #[inline]
-    pub fn as_pound_force_foot_per_degrees(self) -> T {
-        self.as_pound_force_feet_per_degrees()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in KilopoundForceFeetPerDegrees (`kipf·ft/°`).
@@ -857,12 +833,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(77682.64622747556)
     }
 
-    /// Alias for [`Self::as_kilopound_force_feet_per_degrees`].
-    #[inline]
-    pub fn as_kilopound_force_foot_per_degrees(self) -> T {
-        self.as_kilopound_force_feet_per_degrees()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in NewtonMillimetersPerDegree (`N·mm/deg`).
     #[inline]
     pub fn from_newton_millimeters_per_degree(value: T) -> Self {
@@ -873,12 +843,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_newton_millimeters_per_degree(self) -> T {
         self.0 / T::from_f64(0.05729577951308232)
-    }
-
-    /// Alias for [`Self::as_newton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_newton_millimeter_per_degree(self) -> T {
-        self.as_newton_millimeters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMillimetersPerDegree (`nN·mm/deg`).
@@ -893,12 +857,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(5.729577951308232e-11)
     }
 
-    /// Alias for [`Self::as_nanonewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_nanonewton_millimeter_per_degree(self) -> T {
-        self.as_nanonewton_millimeters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMillimetersPerDegree (`µN·mm/deg`).
     #[inline]
     pub fn from_micronewton_millimeters_per_degree(value: T) -> Self {
@@ -909,12 +867,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_micronewton_millimeters_per_degree(self) -> T {
         self.0 / T::from_f64(5.729577951308232e-8)
-    }
-
-    /// Alias for [`Self::as_micronewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_micronewton_millimeter_per_degree(self) -> T {
-        self.as_micronewton_millimeters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMillimetersPerDegree (`mN·mm/deg`).
@@ -929,12 +881,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(5.7295779513082324e-5)
     }
 
-    /// Alias for [`Self::as_millinewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_millinewton_millimeter_per_degree(self) -> T {
-        self.as_millinewton_millimeters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMillimetersPerDegree (`cN·mm/deg`).
     #[inline]
     pub fn from_centinewton_millimeters_per_degree(value: T) -> Self {
@@ -945,12 +891,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_centinewton_millimeters_per_degree(self) -> T {
         self.0 / T::from_f64(0.0005729577951308232)
-    }
-
-    /// Alias for [`Self::as_centinewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_centinewton_millimeter_per_degree(self) -> T {
-        self.as_centinewton_millimeters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMillimetersPerDegree (`dN·mm/deg`).
@@ -965,12 +905,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(0.005729577951308232)
     }
 
-    /// Alias for [`Self::as_decinewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_decinewton_millimeter_per_degree(self) -> T {
-        self.as_decinewton_millimeters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMillimetersPerDegree (`daN·mm/deg`).
     #[inline]
     pub fn from_decanewton_millimeters_per_degree(value: T) -> Self {
@@ -981,12 +915,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_decanewton_millimeters_per_degree(self) -> T {
         self.0 / T::from_f64(0.5729577951308232)
-    }
-
-    /// Alias for [`Self::as_decanewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_decanewton_millimeter_per_degree(self) -> T {
-        self.as_decanewton_millimeters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMillimetersPerDegree (`kN·mm/deg`).
@@ -1001,12 +929,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(57.29577951308232)
     }
 
-    /// Alias for [`Self::as_kilonewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_kilonewton_millimeter_per_degree(self) -> T {
-        self.as_kilonewton_millimeters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMillimetersPerDegree (`MN·mm/deg`).
     #[inline]
     pub fn from_meganewton_millimeters_per_degree(value: T) -> Self {
@@ -1017,12 +939,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_meganewton_millimeters_per_degree(self) -> T {
         self.0 / T::from_f64(57295.77951308232)
-    }
-
-    /// Alias for [`Self::as_meganewton_millimeters_per_degree`].
-    #[inline]
-    pub fn as_meganewton_millimeter_per_degree(self) -> T {
-        self.as_meganewton_millimeters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in NewtonMetersPerDegree (`N·m/deg`).
@@ -1037,12 +953,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(57.29577951308232)
     }
 
-    /// Alias for [`Self::as_newton_meters_per_degree`].
-    #[inline]
-    pub fn as_newton_meter_per_degree(self) -> T {
-        self.as_newton_meters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMetersPerDegree (`nN·m/deg`).
     #[inline]
     pub fn from_nanonewton_meters_per_degree(value: T) -> Self {
@@ -1053,12 +963,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_nanonewton_meters_per_degree(self) -> T {
         self.0 / T::from_f64(5.729577951308232e-8)
-    }
-
-    /// Alias for [`Self::as_nanonewton_meters_per_degree`].
-    #[inline]
-    pub fn as_nanonewton_meter_per_degree(self) -> T {
-        self.as_nanonewton_meters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMetersPerDegree (`µN·m/deg`).
@@ -1073,12 +977,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(5.7295779513082324e-5)
     }
 
-    /// Alias for [`Self::as_micronewton_meters_per_degree`].
-    #[inline]
-    pub fn as_micronewton_meter_per_degree(self) -> T {
-        self.as_micronewton_meters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMetersPerDegree (`mN·m/deg`).
     #[inline]
     pub fn from_millinewton_meters_per_degree(value: T) -> Self {
@@ -1089,12 +987,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_millinewton_meters_per_degree(self) -> T {
         self.0 / T::from_f64(0.05729577951308232)
-    }
-
-    /// Alias for [`Self::as_millinewton_meters_per_degree`].
-    #[inline]
-    pub fn as_millinewton_meter_per_degree(self) -> T {
-        self.as_millinewton_meters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMetersPerDegree (`cN·m/deg`).
@@ -1109,12 +1001,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(0.5729577951308232)
     }
 
-    /// Alias for [`Self::as_centinewton_meters_per_degree`].
-    #[inline]
-    pub fn as_centinewton_meter_per_degree(self) -> T {
-        self.as_centinewton_meters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMetersPerDegree (`dN·m/deg`).
     #[inline]
     pub fn from_decinewton_meters_per_degree(value: T) -> Self {
@@ -1125,12 +1011,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_decinewton_meters_per_degree(self) -> T {
         self.0 / T::from_f64(5.729577951308232)
-    }
-
-    /// Alias for [`Self::as_decinewton_meters_per_degree`].
-    #[inline]
-    pub fn as_decinewton_meter_per_degree(self) -> T {
-        self.as_decinewton_meters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMetersPerDegree (`daN·m/deg`).
@@ -1145,12 +1025,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(572.9577951308232)
     }
 
-    /// Alias for [`Self::as_decanewton_meters_per_degree`].
-    #[inline]
-    pub fn as_decanewton_meter_per_degree(self) -> T {
-        self.as_decanewton_meters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMetersPerDegree (`kN·m/deg`).
     #[inline]
     pub fn from_kilonewton_meters_per_degree(value: T) -> Self {
@@ -1161,12 +1035,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_kilonewton_meters_per_degree(self) -> T {
         self.0 / T::from_f64(57295.77951308232)
-    }
-
-    /// Alias for [`Self::as_kilonewton_meters_per_degree`].
-    #[inline]
-    pub fn as_kilonewton_meter_per_degree(self) -> T {
-        self.as_kilonewton_meters_per_degree()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMetersPerDegree (`MN·m/deg`).
@@ -1181,12 +1049,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 / T::from_f64(5.729577951308232e7)
     }
 
-    /// Alias for [`Self::as_meganewton_meters_per_degree`].
-    #[inline]
-    pub fn as_meganewton_meter_per_degree(self) -> T {
-        self.as_meganewton_meters_per_degree()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in NewtonMillimetersPerRadian (`N·mm/rad`).
     #[inline]
     pub fn from_newton_millimeters_per_radian(value: T) -> Self {
@@ -1197,12 +1059,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_newton_millimeters_per_radian(self) -> T {
         self.0 * T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_newton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_newton_millimeter_per_radian(self) -> T {
-        self.as_newton_millimeters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in NanonewtonMillimetersPerRadian (`nN·mm/rad`).
@@ -1217,12 +1073,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Alias for [`Self::as_nanonewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_nanonewton_millimeter_per_radian(self) -> T {
-        self.as_nanonewton_millimeters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in MicronewtonMillimetersPerRadian (`µN·mm/rad`).
     #[inline]
     pub fn from_micronewton_millimeters_per_radian(value: T) -> Self {
@@ -1233,12 +1083,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_micronewton_millimeters_per_radian(self) -> T {
         self.0 * T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_micronewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_micronewton_millimeter_per_radian(self) -> T {
-        self.as_micronewton_millimeters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in MillinewtonMillimetersPerRadian (`mN·mm/rad`).
@@ -1253,12 +1097,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_millinewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_millinewton_millimeter_per_radian(self) -> T {
-        self.as_millinewton_millimeters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in CentinewtonMillimetersPerRadian (`cN·mm/rad`).
     #[inline]
     pub fn from_centinewton_millimeters_per_radian(value: T) -> Self {
@@ -1269,12 +1107,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_centinewton_millimeters_per_radian(self) -> T {
         self.0 * T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_centinewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_centinewton_millimeter_per_radian(self) -> T {
-        self.as_centinewton_millimeters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in DecinewtonMillimetersPerRadian (`dN·mm/rad`).
@@ -1289,12 +1121,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_decinewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_decinewton_millimeter_per_radian(self) -> T {
-        self.as_decinewton_millimeters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in DecanewtonMillimetersPerRadian (`daN·mm/rad`).
     #[inline]
     pub fn from_decanewton_millimeters_per_radian(value: T) -> Self {
@@ -1305,12 +1131,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_decanewton_millimeters_per_radian(self) -> T {
         self.0 * T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_decanewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_decanewton_millimeter_per_radian(self) -> T {
-        self.as_decanewton_millimeters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in KilonewtonMillimetersPerRadian (`kN·mm/rad`).
@@ -1325,12 +1145,6 @@ impl<T: Float> RotationalStiffness<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_kilonewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_kilonewton_millimeter_per_radian(self) -> T {
-        self.as_kilonewton_millimeters_per_radian()
-    }
-
     /// Creates a [`RotationalStiffness`] from a value in MeganewtonMillimetersPerRadian (`MN·mm/rad`).
     #[inline]
     pub fn from_meganewton_millimeters_per_radian(value: T) -> Self {
@@ -1341,12 +1155,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_meganewton_millimeters_per_radian(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_meganewton_millimeters_per_radian`].
-    #[inline]
-    pub fn as_meganewton_millimeter_per_radian(self) -> T {
-        self.as_meganewton_millimeters_per_radian()
     }
 
     /// Creates a [`RotationalStiffness`] from a value in PoundForceFeetPerRadian (`lbf·ft/rad`).
@@ -1371,12 +1179,6 @@ impl<T: Float> RotationalStiffness<T> {
     #[inline]
     pub fn as_kilopound_force_feet_per_radian(self) -> T {
         self.0 / T::from_f64(1355.8179483314004)
-    }
-
-    /// Alias for [`Self::as_kilopound_force_feet_per_radian`].
-    #[inline]
-    pub fn as_kilopound_force_foot_per_radian(self) -> T {
-        self.as_kilopound_force_feet_per_radian()
     }
 }
 

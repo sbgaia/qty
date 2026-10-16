@@ -143,12 +143,6 @@ impl<T: Float> Permeability<T> {
     pub fn as_henries_per_meter(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_henries_per_meter`].
-    #[inline]
-    pub fn as_henry_per_meter(self) -> T {
-        self.as_henries_per_meter()
-    }
 }
 
 impl Permeability<f64> {

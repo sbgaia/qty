@@ -921,12 +921,6 @@ impl<T: Float> Pressure<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_pascals`].
-    #[inline]
-    pub fn as_pascal(self) -> T {
-        self.as_pascals()
-    }
-
     /// Creates a [`Pressure`] from a value in Micropascals (`µPa`).
     #[inline]
     pub fn from_micropascals(value: T) -> Self {
@@ -937,12 +931,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_micropascals(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_micropascals`].
-    #[inline]
-    pub fn as_micropascal(self) -> T {
-        self.as_micropascals()
     }
 
     /// Creates a [`Pressure`] from a value in Millipascals (`mPa`).
@@ -957,12 +945,6 @@ impl<T: Float> Pressure<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_millipascals`].
-    #[inline]
-    pub fn as_millipascal(self) -> T {
-        self.as_millipascals()
-    }
-
     /// Creates a [`Pressure`] from a value in Decapascals (`daPa`).
     #[inline]
     pub fn from_decapascals(value: T) -> Self {
@@ -973,12 +955,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_decapascals(self) -> T {
         self.0 / T::from_f64(10.0)
-    }
-
-    /// Alias for [`Self::as_decapascals`].
-    #[inline]
-    pub fn as_decapascal(self) -> T {
-        self.as_decapascals()
     }
 
     /// Creates a [`Pressure`] from a value in Hectopascals (`hPa`).
@@ -993,12 +969,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Alias for [`Self::as_hectopascals`].
-    #[inline]
-    pub fn as_hectopascal(self) -> T {
-        self.as_hectopascals()
-    }
-
     /// Creates a [`Pressure`] from a value in Kilopascals (`kPa`).
     #[inline]
     pub fn from_kilopascals(value: T) -> Self {
@@ -1009,12 +979,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_kilopascals(self) -> T {
         self.0 / T::from_f64(1000.0)
-    }
-
-    /// Alias for [`Self::as_kilopascals`].
-    #[inline]
-    pub fn as_kilopascal(self) -> T {
-        self.as_kilopascals()
     }
 
     /// Creates a [`Pressure`] from a value in Megapascals (`MPa`).
@@ -1029,12 +993,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_megapascals`].
-    #[inline]
-    pub fn as_megapascal(self) -> T {
-        self.as_megapascals()
-    }
-
     /// Creates a [`Pressure`] from a value in Gigapascals (`GPa`).
     #[inline]
     pub fn from_gigapascals(value: T) -> Self {
@@ -1045,12 +1003,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_gigapascals(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_gigapascals`].
-    #[inline]
-    pub fn as_gigapascal(self) -> T {
-        self.as_gigapascals()
     }
 
     /// Creates a [`Pressure`] from a value in Atmospheres (`atm`).
@@ -1065,12 +1017,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(101325.0)
     }
 
-    /// Alias for [`Self::as_atmospheres`].
-    #[inline]
-    pub fn as_atmosphere(self) -> T {
-        self.as_atmospheres()
-    }
-
     /// Creates a [`Pressure`] from a value in Bars (`bar`).
     #[inline]
     pub fn from_bars(value: T) -> Self {
@@ -1081,12 +1027,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_bars(self) -> T {
         self.0 / T::from_f64(100000.0)
-    }
-
-    /// Alias for [`Self::as_bars`].
-    #[inline]
-    pub fn as_bar(self) -> T {
-        self.as_bars()
     }
 
     /// Creates a [`Pressure`] from a value in Microbars (`µbar`).
@@ -1101,12 +1041,6 @@ impl<T: Float> Pressure<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_microbars`].
-    #[inline]
-    pub fn as_microbar(self) -> T {
-        self.as_microbars()
-    }
-
     /// Creates a [`Pressure`] from a value in Millibars (`mbar`).
     #[inline]
     pub fn from_millibars(value: T) -> Self {
@@ -1117,12 +1051,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_millibars(self) -> T {
         self.0 / T::from_f64(100.0)
-    }
-
-    /// Alias for [`Self::as_millibars`].
-    #[inline]
-    pub fn as_millibar(self) -> T {
-        self.as_millibars()
     }
 
     /// Creates a [`Pressure`] from a value in Centibars (`cbar`).
@@ -1137,12 +1065,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_centibars`].
-    #[inline]
-    pub fn as_centibar(self) -> T {
-        self.as_centibars()
-    }
-
     /// Creates a [`Pressure`] from a value in Decibars (`dbar`).
     #[inline]
     pub fn from_decibars(value: T) -> Self {
@@ -1153,12 +1075,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_decibars(self) -> T {
         self.0 / T::from_f64(10000.0)
-    }
-
-    /// Alias for [`Self::as_decibars`].
-    #[inline]
-    pub fn as_decibar(self) -> T {
-        self.as_decibars()
     }
 
     /// Creates a [`Pressure`] from a value in Kilobars (`kbar`).
@@ -1173,12 +1089,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(1e8)
     }
 
-    /// Alias for [`Self::as_kilobars`].
-    #[inline]
-    pub fn as_kilobar(self) -> T {
-        self.as_kilobars()
-    }
-
     /// Creates a [`Pressure`] from a value in Megabars (`Mbar`).
     #[inline]
     pub fn from_megabars(value: T) -> Self {
@@ -1189,12 +1099,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_megabars(self) -> T {
         self.0 / T::from_f64(1e11)
-    }
-
-    /// Alias for [`Self::as_megabars`].
-    #[inline]
-    pub fn as_megabar(self) -> T {
-        self.as_megabars()
     }
 
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareMeter (`kgf/m²`).
@@ -1209,12 +1113,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Alias for [`Self::as_kilograms_force_per_square_meter`].
-    #[inline]
-    pub fn as_kilogram_force_per_square_meter(self) -> T {
-        self.as_kilograms_force_per_square_meter()
-    }
-
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareCentimeter (`kgf/cm²`).
     #[inline]
     pub fn from_kilograms_force_per_square_centimeter(value: T) -> Self {
@@ -1225,12 +1123,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_kilograms_force_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(98066.5)
-    }
-
-    /// Alias for [`Self::as_kilograms_force_per_square_centimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_square_centimeter(self) -> T {
-        self.as_kilograms_force_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in KilogramsForcePerSquareMillimeter (`kgf/mm²`).
@@ -1245,12 +1137,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9806650.0)
     }
 
-    /// Alias for [`Self::as_kilograms_force_per_square_millimeter`].
-    #[inline]
-    pub fn as_kilogram_force_per_square_millimeter(self) -> T {
-        self.as_kilograms_force_per_square_millimeter()
-    }
-
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareMeter (`N/m²`).
     #[inline]
     pub fn from_newtons_per_square_meter(value: T) -> Self {
@@ -1261,12 +1147,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_newtons_per_square_meter(self) -> T {
         self.0
-    }
-
-    /// Alias for [`Self::as_newtons_per_square_meter`].
-    #[inline]
-    pub fn as_newton_per_square_meter(self) -> T {
-        self.as_newtons_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareMeter (`kN/m²`).
@@ -1281,12 +1161,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_kilonewtons_per_square_meter`].
-    #[inline]
-    pub fn as_kilonewton_per_square_meter(self) -> T {
-        self.as_kilonewtons_per_square_meter()
-    }
-
     /// Creates a [`Pressure`] from a value in MeganewtonsPerSquareMeter (`MN/m²`).
     #[inline]
     pub fn from_meganewtons_per_square_meter(value: T) -> Self {
@@ -1297,12 +1171,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_meganewtons_per_square_meter(self) -> T {
         self.0 / T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_meganewtons_per_square_meter`].
-    #[inline]
-    pub fn as_meganewton_per_square_meter(self) -> T {
-        self.as_meganewtons_per_square_meter()
     }
 
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareCentimeter (`N/cm²`).
@@ -1317,12 +1185,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Alias for [`Self::as_newtons_per_square_centimeter`].
-    #[inline]
-    pub fn as_newton_per_square_centimeter(self) -> T {
-        self.as_newtons_per_square_centimeter()
-    }
-
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareCentimeter (`kN/cm²`).
     #[inline]
     pub fn from_kilonewtons_per_square_centimeter(value: T) -> Self {
@@ -1333,12 +1195,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_kilonewtons_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(1e7)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_square_centimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_square_centimeter(self) -> T {
-        self.as_kilonewtons_per_square_centimeter()
     }
 
     /// Creates a [`Pressure`] from a value in NewtonsPerSquareMillimeter (`N/mm²`).
@@ -1353,12 +1209,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Alias for [`Self::as_newtons_per_square_millimeter`].
-    #[inline]
-    pub fn as_newton_per_square_millimeter(self) -> T {
-        self.as_newtons_per_square_millimeter()
-    }
-
     /// Creates a [`Pressure`] from a value in KilonewtonsPerSquareMillimeter (`kN/mm²`).
     #[inline]
     pub fn from_kilonewtons_per_square_millimeter(value: T) -> Self {
@@ -1369,12 +1219,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_kilonewtons_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1e9)
-    }
-
-    /// Alias for [`Self::as_kilonewtons_per_square_millimeter`].
-    #[inline]
-    pub fn as_kilonewton_per_square_millimeter(self) -> T {
-        self.as_kilonewtons_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in TechnicalAtmospheres (`at`).
@@ -1389,12 +1233,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(98066.5)
     }
 
-    /// Alias for [`Self::as_technical_atmospheres`].
-    #[inline]
-    pub fn as_technical_atmosphere(self) -> T {
-        self.as_technical_atmospheres()
-    }
-
     /// Creates a [`Pressure`] from a value in Torrs (`torr`).
     #[inline]
     pub fn from_torrs(value: T) -> Self {
@@ -1405,12 +1243,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_torrs(self) -> T {
         self.0 / T::from_f64(133.32236842105263)
-    }
-
-    /// Alias for [`Self::as_torrs`].
-    #[inline]
-    pub fn as_torr(self) -> T {
-        self.as_torrs()
     }
 
     /// Creates a [`Pressure`] from a value in Millitorrs (`mtorr`).
@@ -1425,12 +1257,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(0.13332236842105263)
     }
 
-    /// Alias for [`Self::as_millitorrs`].
-    #[inline]
-    pub fn as_millitorr(self) -> T {
-        self.as_millitorrs()
-    }
-
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareInch (`psi`).
     #[inline]
     pub fn from_pounds_force_per_square_inch(value: T) -> Self {
@@ -1441,12 +1267,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_pounds_force_per_square_inch(self) -> T {
         self.0 / T::from_f64(6894.757293168362)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_square_inch`].
-    #[inline]
-    pub fn as_pound_force_per_square_inch(self) -> T {
-        self.as_pounds_force_per_square_inch()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareInch (`kpsi`).
@@ -1461,12 +1281,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(6894757.293168361)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_square_inch`].
-    #[inline]
-    pub fn as_kilopound_force_per_square_inch(self) -> T {
-        self.as_kilopounds_force_per_square_inch()
-    }
-
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareMil (`lb/mil²`).
     #[inline]
     pub fn from_pounds_force_per_square_mil(value: T) -> Self {
@@ -1477,12 +1291,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_pounds_force_per_square_mil(self) -> T {
         self.0 / T::from_f64(6.894757293168362e9)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_square_mil`].
-    #[inline]
-    pub fn as_pound_force_per_square_mil(self) -> T {
-        self.as_pounds_force_per_square_mil()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareMil (`klb/mil²`).
@@ -1497,12 +1305,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(6.894757293168361e12)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_square_mil`].
-    #[inline]
-    pub fn as_kilopound_force_per_square_mil(self) -> T {
-        self.as_kilopounds_force_per_square_mil()
-    }
-
     /// Creates a [`Pressure`] from a value in PoundsForcePerSquareFoot (`lb/ft²`).
     #[inline]
     pub fn from_pounds_force_per_square_foot(value: T) -> Self {
@@ -1513,12 +1315,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_pounds_force_per_square_foot(self) -> T {
         self.0 / T::from_f64(47.880258980335846)
-    }
-
-    /// Alias for [`Self::as_pounds_force_per_square_foot`].
-    #[inline]
-    pub fn as_pound_force_per_square_foot(self) -> T {
-        self.as_pounds_force_per_square_foot()
     }
 
     /// Creates a [`Pressure`] from a value in KilopoundsForcePerSquareFoot (`klb/ft²`).
@@ -1533,12 +1329,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(47880.25898033584)
     }
 
-    /// Alias for [`Self::as_kilopounds_force_per_square_foot`].
-    #[inline]
-    pub fn as_kilopound_force_per_square_foot(self) -> T {
-        self.as_kilopounds_force_per_square_foot()
-    }
-
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareMillimeter (`tf/mm²`).
     #[inline]
     pub fn from_tonnes_force_per_square_millimeter(value: T) -> Self {
@@ -1549,12 +1339,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_tonnes_force_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(9.80665e9)
-    }
-
-    /// Alias for [`Self::as_tonnes_force_per_square_millimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_square_millimeter(self) -> T {
-        self.as_tonnes_force_per_square_millimeter()
     }
 
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareMeter (`tf/m²`).
@@ -1569,12 +1353,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9806.65)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_square_meter`].
-    #[inline]
-    pub fn as_tonne_force_per_square_meter(self) -> T {
-        self.as_tonnes_force_per_square_meter()
-    }
-
     /// Creates a [`Pressure`] from a value in MetersOfHead (`m of head`).
     #[inline]
     pub fn from_meters_of_head(value: T) -> Self {
@@ -1585,12 +1363,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_meters_of_head(self) -> T {
         self.0 / T::from_f64(9804.139432)
-    }
-
-    /// Alias for [`Self::as_meters_of_head`].
-    #[inline]
-    pub fn as_meter_of_head(self) -> T {
-        self.as_meters_of_head()
     }
 
     /// Creates a [`Pressure`] from a value in TonnesForcePerSquareCentimeter (`tf/cm²`).
@@ -1605,12 +1377,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9.80665e7)
     }
 
-    /// Alias for [`Self::as_tonnes_force_per_square_centimeter`].
-    #[inline]
-    pub fn as_tonne_force_per_square_centimeter(self) -> T {
-        self.as_tonnes_force_per_square_centimeter()
-    }
-
     /// Creates a [`Pressure`] from a value in FeetOfHead (`ft of head`).
     #[inline]
     pub fn from_feet_of_head(value: T) -> Self {
@@ -1621,12 +1387,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_feet_of_head(self) -> T {
         self.0 / T::from_f64(2988.3016988736)
-    }
-
-    /// Alias for [`Self::as_feet_of_head`].
-    #[inline]
-    pub fn as_foot_of_head(self) -> T {
-        self.as_feet_of_head()
     }
 
     /// Creates a [`Pressure`] from a value in MillimetersOfMercury (`mmHg`).
@@ -1641,12 +1401,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(133.322387415)
     }
 
-    /// Alias for [`Self::as_millimeters_of_mercury`].
-    #[inline]
-    pub fn as_millimeter_of_mercury(self) -> T {
-        self.as_millimeters_of_mercury()
-    }
-
     /// Creates a [`Pressure`] from a value in InchesOfMercury (`inHg`).
     #[inline]
     pub fn from_inches_of_mercury(value: T) -> Self {
@@ -1657,12 +1411,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_inches_of_mercury(self) -> T {
         self.0 / T::from_f64(3386.388640341)
-    }
-
-    /// Alias for [`Self::as_inches_of_mercury`].
-    #[inline]
-    pub fn as_inch_of_mercury(self) -> T {
-        self.as_inches_of_mercury()
     }
 
     /// Creates a [`Pressure`] from a value in DynesPerSquareCentimeter (`dyn/cm²`).
@@ -1677,12 +1425,6 @@ impl<T: Float> Pressure<T> {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Alias for [`Self::as_dynes_per_square_centimeter`].
-    #[inline]
-    pub fn as_dyne_per_square_centimeter(self) -> T {
-        self.as_dynes_per_square_centimeter()
-    }
-
     /// Creates a [`Pressure`] from a value in PoundsPerInchSecondSquared (`lbm/(in·s²)`).
     #[inline]
     pub fn from_pounds_per_inch_second_squared(value: T) -> Self {
@@ -1693,12 +1435,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_pounds_per_inch_second_squared(self) -> T {
         self.0 / T::from_f64(17.857966521592093)
-    }
-
-    /// Alias for [`Self::as_pounds_per_inch_second_squared`].
-    #[inline]
-    pub fn as_pound_per_inch_second_squared(self) -> T {
-        self.as_pounds_per_inch_second_squared()
     }
 
     /// Creates a [`Pressure`] from a value in MetersOfWaterColumn (`mH₂O`).
@@ -1713,12 +1449,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9806.65)
     }
 
-    /// Alias for [`Self::as_meters_of_water_column`].
-    #[inline]
-    pub fn as_meter_of_water_column(self) -> T {
-        self.as_meters_of_water_column()
-    }
-
     /// Creates a [`Pressure`] from a value in MillimetersOfWaterColumn (`mmH₂O`).
     #[inline]
     pub fn from_millimeters_of_water_column(value: T) -> Self {
@@ -1729,12 +1459,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_millimeters_of_water_column(self) -> T {
         self.0 / T::from_f64(9.80665)
-    }
-
-    /// Alias for [`Self::as_millimeters_of_water_column`].
-    #[inline]
-    pub fn as_millimeter_of_water_column(self) -> T {
-        self.as_millimeters_of_water_column()
     }
 
     /// Creates a [`Pressure`] from a value in CentimetersOfWaterColumn (`cmH₂O`).
@@ -1749,12 +1473,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(98.0665)
     }
 
-    /// Alias for [`Self::as_centimeters_of_water_column`].
-    #[inline]
-    pub fn as_centimeter_of_water_column(self) -> T {
-        self.as_centimeters_of_water_column()
-    }
-
     /// Creates a [`Pressure`] from a value in InchesOfWaterColumn (`inH2O`).
     #[inline]
     pub fn from_inches_of_water_column(value: T) -> Self {
@@ -1765,12 +1483,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_inches_of_water_column(self) -> T {
         self.0 / T::from_f64(249.08891)
-    }
-
-    /// Alias for [`Self::as_inches_of_water_column`].
-    #[inline]
-    pub fn as_inch_of_water_column(self) -> T {
-        self.as_inches_of_water_column()
     }
 
     /// Creates a [`Pressure`] from a value in MilligramsForcePerSquareMeter (`mgf/m²`).
@@ -1785,12 +1497,6 @@ impl<T: Float> Pressure<T> {
         self.0 / T::from_f64(9.80665e-6)
     }
 
-    /// Alias for [`Self::as_milligrams_force_per_square_meter`].
-    #[inline]
-    pub fn as_milligram_force_per_square_meter(self) -> T {
-        self.as_milligrams_force_per_square_meter()
-    }
-
     /// Creates a [`Pressure`] from a value in MilligramsForcePerSquareFoot (`mgf/ft²`).
     #[inline]
     pub fn from_milligrams_force_per_square_foot(value: T) -> Self {
@@ -1801,12 +1507,6 @@ impl<T: Float> Pressure<T> {
     #[inline]
     pub fn as_milligrams_force_per_square_foot(self) -> T {
         self.0 / T::from_f64(0.0001055579020880264)
-    }
-
-    /// Alias for [`Self::as_milligrams_force_per_square_foot`].
-    #[inline]
-    pub fn as_milligram_force_per_square_foot(self) -> T {
-        self.as_milligrams_force_per_square_foot()
     }
 }
 

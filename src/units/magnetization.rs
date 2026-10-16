@@ -143,12 +143,6 @@ impl<T: Float> Magnetization<T> {
     pub fn as_amperes_per_meter(self) -> T {
         self.0
     }
-
-    /// Alias for [`Self::as_amperes_per_meter`].
-    #[inline]
-    pub fn as_ampere_per_meter(self) -> T {
-        self.as_amperes_per_meter()
-    }
 }
 
 impl Magnetization<f64> {

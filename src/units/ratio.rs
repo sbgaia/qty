@@ -221,12 +221,6 @@ impl<T: Float> Ratio<T> {
         self.0
     }
 
-    /// Alias for [`Self::as_decimal_fractions`].
-    #[inline]
-    pub fn as_decimal_fraction(self) -> T {
-        self.as_decimal_fractions()
-    }
-
     /// Creates a [`Ratio`] from a value in Percent (`%`).
     #[inline]
     pub fn from_percent(value: T) -> Self {
@@ -251,12 +245,6 @@ impl<T: Float> Ratio<T> {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Alias for [`Self::as_parts_per_thousand`].
-    #[inline]
-    pub fn as_part_per_thousand(self) -> T {
-        self.as_parts_per_thousand()
-    }
-
     /// Creates a [`Ratio`] from a value in PartsPerMillion (`ppm`).
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
@@ -267,12 +255,6 @@ impl<T: Float> Ratio<T> {
     #[inline]
     pub fn as_parts_per_million(self) -> T {
         self.0 * T::from_f64(1000000.0)
-    }
-
-    /// Alias for [`Self::as_parts_per_million`].
-    #[inline]
-    pub fn as_part_per_million(self) -> T {
-        self.as_parts_per_million()
     }
 
     /// Creates a [`Ratio`] from a value in PartsPerBillion (`ppb`).
@@ -287,12 +269,6 @@ impl<T: Float> Ratio<T> {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Alias for [`Self::as_parts_per_billion`].
-    #[inline]
-    pub fn as_part_per_billion(self) -> T {
-        self.as_parts_per_billion()
-    }
-
     /// Creates a [`Ratio`] from a value in PartsPerTrillion (`ppt`).
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
@@ -303,12 +279,6 @@ impl<T: Float> Ratio<T> {
     #[inline]
     pub fn as_parts_per_trillion(self) -> T {
         self.0 * T::from_f64(1e12)
-    }
-
-    /// Alias for [`Self::as_parts_per_trillion`].
-    #[inline]
-    pub fn as_part_per_trillion(self) -> T {
-        self.as_parts_per_trillion()
     }
 }
 
