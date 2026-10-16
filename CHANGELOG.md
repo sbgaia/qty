@@ -6,6 +6,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-16
+
 The first release.
 
 - 128 quantities and about 1,700 units, generated from the
