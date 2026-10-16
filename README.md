@@ -39,9 +39,9 @@ assert!((tyre.as_pounds_force_per_square_inch() - 34.8).abs() < 0.1);
 assert_eq!(Pressure::new(2.4, PressureUnit::Bar), tyre);
 
 let force: Force = Mass::from_kilograms(1200.0) * Acceleration::from_meters_per_second_squared(2.0);
+assert_eq!(force, Force::from_newtons(2400.0));
 let energy: Energy = Power::from_kilowatts(3.0) * Duration::from_hours(2.0);
 assert!((energy.as_kilowatt_hours() - 6.0).abs() < 1e-12);
-# let _ = force;
 ```
 
 Adding a length to a duration is a compile error. Operations that only make
@@ -102,15 +102,15 @@ use qty::*;
 use qty::unit::length::{Meter, Millimeter};
 use qty::unit::temperature::{DegreeCelsius, MillidegreeCelsius};
 
-let gap = Fixed::<Millimeter>::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven)?;
+let gap = Fixed::<Millimeter>::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven).unwrap();
 assert_eq!(gap.count(), 12);
 assert_eq!(gap + Fixed::<Meter>::new(1), Fixed::<Millimeter>::new(1_012));
-assert_eq!(Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?.count(), 2);
+let rounded = Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil).unwrap();
+assert_eq!(rounded.count(), 2);
 
 let reading = Fixed::<MillidegreeCelsius, i32>::new(21_375);
 assert!(reading > Fixed::<DegreeCelsius, i32>::new(21));
 assert_eq!(reading.display_in::<DegreeCelsius>().to_string(), "21.375 °C");
-# Ok::<(), RoundError>(())
 ```
 
 Mixing units where the result would not be exact, such as
@@ -174,10 +174,10 @@ cargo run -p codegen
 The generated tests check every unit against the upstream formulas. Property
 tests compare the integer arithmetic with exact rational arithmetic, and two
 fuzz targets cover parsing and `Fixed` (see `fuzz/README.md`). The examples
-in [`examples/`](examples) run in CI.
+in [`examples/`](https://github.com/sbgaia/qty/tree/master/examples) run in CI.
 
 ## License
 
-MIT, see [`LICENSE`](LICENSE). The unit definitions and descriptions come
+MIT, see [`LICENSE`](https://github.com/sbgaia/qty/blob/master/LICENSE). The unit definitions and descriptions come
 from [UnitsNet](https://github.com/angularsen/UnitsNet) by Andreas Gullberg
 Larsen and contributors, under the MIT No Attribution license.

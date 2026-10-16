@@ -1,241 +1,28 @@
-//! # qty
+#![doc = include_str!("../README.md")]
 //!
-//! Strongly-typed physical quantities and unit conversions, generated from
-//! [UnitsNet](https://github.com/angularsen/UnitsNet) definition files, with
-//! **zero runtime overhead** over the bare numbers they wrap.
+//! ## More details
 //!
-//! ## Quick start
-//!
-//! ```rust
-//! use qty::*;
-//!
-//! let dist = Length::from_kilometers(10.0);
-//! let time = Duration::from_hours(0.5);
-//! let speed: Speed = dist / time;
-//!
-//! // Exact comparison operators come from the derived PartialEq/PartialOrd.
-//! // For floating-point results, prefer the approximate comparisons from the
-//! // ApproxEq trait, which every float-valued quantity implements.
-//! assert!(speed.approx_eq_rel(Speed::from_kilometers_per_hour(20.0), 1e-12));
-//!
-//! let temp = Temperature::from_degrees_celsius(100.0);
-//! assert!(temp.approx_eq_rel(Temperature::from_degrees_fahrenheit(212.0), 1e-12));
-//! ```
-//!
-//! ## Design
-//!
-//! Every quantity is a `#[repr(transparent)]` newtype over its value in the
-//! quantity's base unit (UnitsNet's choice — usually the coherent SI unit,
-//! see [`Quantity::BASE_UNIT`]), generic over the numeric storage type:
-//!
-//! ```rust
-//! # use qty::*;
-//! assert_eq!(core::mem::size_of::<Length>(), 8);        // Length<f64>
-//! assert_eq!(core::mem::size_of::<Length<f32>>(), 4);
-//! assert_eq!(core::mem::size_of::<Length<i32>>(), 4);
-//! ```
-//!
-//! * **Arithmetic is free.** `a + b`, `a * 2.0`, `Length / Duration` and every
-//!   other operator compiles to the single machine instruction that the bare
-//!   numbers would use — the units exist only in the type system.
-//! * **Conversions cost one operation.** At code-generation time each
-//!   UnitsNet formula (e.g. `{x} * 2.54e-2 / 72.27`) is reduced with exact
-//!   rational arithmetic to a single factor, rounded once to the nearest
-//!   `f64`. Linear units convert with one multiplication or division,
-//!   affine units (°C, °F) with two operations. Whenever the factor or its
-//!   inverse is exactly representable (km ↔ m, h ↔ s, mm ↔ m, …) the
-//!   conversion is correctly rounded.
-//!   Every conversion stays within about one ulp of the exact result, and
-//!   both directions share one rounded constant, so `from_x(v).as_x()`
-//!   returns `v` exactly in the large majority of cases.
-//! * **Any numeric type.** Storage type `T` defaults to `f64`; `f32` works
-//!   everywhere, as does any type implementing [`Float`]. Integers (and any
-//!   other `T`) get arithmetic, comparison, hashing and the cross-quantity
-//!   operators whose base units are coherent, all working in base units.
-//! * **Points vs. amounts.** A [`Temperature`] is a point on a scale: two of
-//!   them cannot be added (20 °C + 20 °C is not 40 °C). Their difference is a
-//!   [`TemperatureDelta`], which adds, scales and sums like any amount, and
-//!   moves a temperature: `t + delta`.
-//! * **Bulk data without copies.** Because of `#[repr(transparent)]`, a
-//!   `&[f64]` of metres can be viewed as `&[Length]` and back for free, so
-//!   typed code can feed SIMD kernels or I/O buffers directly.
-//! * **`no_std`, no required dependencies, no allocation** (see the features below).
-//!
-//! ### Different numeric types
-//!
-//! ```rust
-//! use qty::*;
-//!
-//! // f32 storage: half the memory, ~7 significant digits.
-//! let l: Length<f32> = Length::from_feet(3.0);
-//! assert!(l.approx_eq_rel(Length::from_inches(36.0), 1e-6));
-//!
-//! // Integer storage: exact base-unit arithmetic, plus Eq/Ord/Hash.
-//! let a = Mass::<i64>::from_base(1_500); // kilograms
-//! let b = Mass::from_base(500_i64);
-//! assert_eq!(a + b, Mass::from_base(2_000));
-//! assert!(a > b);
-//! let force: Force<i64> = a * Acceleration::from_base(2); // kg · m/s² = N
-//! assert_eq!(force.as_base(), 3_000);
-//!
-//! // To float storage (like `as f64`), without unwrapping.
-//! let wide: Mass<f64> = a.to_f64();
-//! assert_eq!(wide.as_grams(), 1_500_000.0);
-//! ```
-//!
-//! [`Vector2`] and [`Vector3`] hold quantities: a `Vector3<Length>` divided
-//! by a `Duration` is a `Vector3<Speed>`, and dot and cross products follow
-//! the relations between quantities.
-//!
-//! `Uncertain` (value ± standard uncertainty; with `std` or `libm`) is a storage type too: a
-//! `Length<Uncertain>` propagates its uncertainty through conversions,
-//! relations and math functions.
-//!
-//! ### Integers in a unit of your choice, with explicit rounding
-//!
-//! [`Fixed<U, I>`](Fixed) is a whole number of the unit `U` — for example
-//! `Fixed<Millimeter>` counts millimetres in an `i64`. The unit is part of
-//! the type, so millimetres and metres cannot be mixed by accident. Values
-//! are exact, `Eq + Ord + Hash`, and arithmetic is plain integer arithmetic.
-//!
-//! Rounding happens only where information is lost — float → integer, a
-//! fine unit → a coarser one, integer division — and there the [`Rounding`]
-//! mode is always explicit. Lossless operations take no mode: `mm + m`
-//! (the result is in the left operand's unit) and `m.to_unit::<Millimeter>()`
-//! just work, and comparisons work between any two units. The lossy forms
-//! (`m + mm`, `mm.to_unit::<Meter>()`) are rejected when the code is
-//! compiled (by `cargo build`/`cargo test`; `cargo check` does not evaluate
-//! the unit ratio).
-//!
-//! ```rust
-//! use std::collections::HashMap;
-//! use qty::*;
-//! use qty::unit::length::{Meter, Millimeter};
-//!
-//! // Type aliases keep literals short.
-//! type Millimeters = Fixed<Millimeter>;
-//! type Meters = Fixed<Meter>;
-//!
-//! // Quantise a float measurement: 12.5 mm, ties to even → 12 mm.
-//! let a = Millimeters::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven)?;
-//! assert_eq!(a, Millimeters::new(12));
-//!
-//! // Exact integer arithmetic; integer keys.
-//! let mut stock: HashMap<Millimeters, u32> = HashMap::new();
-//! *stock.entry(a + Millimeters::new(588)).or_default() += 1;
-//! assert_eq!(stock[&Millimeters::new(600)], 1);
-//!
-//! // Mixing units where it is lossless: the result is in the left unit.
-//! assert_eq!(a + Meters::new(1), Millimeters::new(1_012));
-//! assert!(Meters::new(1) > a); // comparisons work across any units, exactly
-//!
-//! // Converting: lossless needs no rounding mode; lossy needs one.
-//! assert_eq!(Meters::new(2).to_unit::<Millimeter>()?, Millimeters::new(2_000));
-//! assert_eq!(Millimeters::new(1_500).to_unit_rounded::<Meter>(Rounding::Ceil)?, Meters::new(2));
-//! assert_eq!(
-//!     Fixed::<Millimeter>::new(1_500).to_unit_rounded::<Meter>(Rounding::Exact),
-//!     Err(RoundError::Inexact)
-//! );
-//!
-//! // Back to floats for everything else.
-//! let l: Length = a.to_f64();
-//! assert_eq!(l.as_millimeters(), 12.0);
-//! # Ok::<(), RoundError>(())
-//! ```
-//!
-//! The relations between quantities work on counts too, exactly:
-//! `mm.mul_to(mm, SquareMillimeter)` is a `Fixed<SquareMillimeter>`, and
-//! [`div_to`](Fixed::div_to) divides with an explicit rounding mode (see
-//! [`mul_to`](Fixed::mul_to)).
-//!
-//! Units are in [`unit`](mod@unit), one module per quantity (`unit::duration::Nanosecond`,
-//! `unit::mass::Gram`, …). Every linear unit has a marker, and so do the
-//! affine units of point quantities: a temperature sensor reporting
-//! millidegrees Celsius is a `Fixed<unit::temperature::MillidegreeCelsius, i32>`.
-//! Point markers ([`PointUnit`]) convert and compare exactly across scales
-//! (20 °C = 20 000 m°C; 300 K = 26 850 m°C), and their differences are
-//! counts of the matching delta unit — see [`PointUnit`]. `Fixed<BaseUnit, I>` and `Length<I>` (integers in the base
-//! unit, which also get the cross-quantity operators) convert into each other
-//! with `From`.
-//!
-//! ### Comparing, sorting and map keys
-//!
-//! Quantities of the same kind compare with `<`, `==`, `max`, … regardless
-//! of the unit they were created in, since all are stored in the base unit.
-//! Floats are not totally ordered (NaN), so for sorting use
-//! [`total_cmp`](Length::total_cmp), and for `HashMap`/`BTreeMap` keys wrap
-//! them in [`Ordered`]:
-//!
-//! ```rust
-//! use std::collections::BTreeMap;
-//! use qty::*;
-//!
-//! let mut v = vec![Length::from_meters(2.0), Length::from_inches(1.0)];
-//! v.sort_by(Length::total_cmp);
-//! assert_eq!(v[0], Length::from_inches(1.0));
-//!
-//! let mut names = BTreeMap::new();
-//! names.insert(Ordered(Length::from_kilometers(1.0)), "km");
-//! names.insert(Ordered(Length::from_meters(1.0)), "m");
-//! assert_eq!(names.values().copied().collect::<Vec<_>>(), ["m", "km"]);
-//! ```
-//!
-//! ### Zero-copy slices and `const` values
-//!
-//! ```rust
-//! use qty::*;
-//!
-//! // `const_new` works in any unit, with the same result as `new`.
-//! const MARATHON: Length = Length::const_new(42.195, LengthUnit::Kilometer);
-//! const BOILING: Temperature = Temperature::const_new(100.0, TemperatureUnit::DegreeCelsius);
-//! assert_eq!(MARATHON, Length::from_meters(42_195.0));
-//! assert_eq!(BOILING, Temperature::from_degrees_celsius(100.0));
-//!
-//! let raw = [1.0, 2.0, 3.0];
-//! let typed: &[Length] = Length::from_base_slice(&raw);
-//! let total: Length = typed.iter().sum();
-//! assert_eq!(total, Length::from_meters(6.0));
-//! assert!(MARATHON > total);
-//! ```
-//!
-//! With `f32` storage, write `quantity * 2.0` rather than `2.0 * quantity`:
-//! the reversed form is implemented for `f64` and the integer types only, so
-//! that `2.0 * Length::from_meters(1.0)` never needs a type annotation.
-//!
-//! ## Cargo features
-//!
-//! * `full` (default) — every quantity. The core quantities (length, area,
-//!   volume, mass, duration, speed, acceleration, force, energy, power,
-//!   pressure, temperature, angle, frequency, density, ratio) are always
-//!   compiled; the others come in groups — `mechanics`, `fluids`,
-//!   `electrical`, `thermal`, `chemistry`, `light`, `radiation`,
-//!   `information`, `misc` — and a relation between quantities exists when
-//!   all of their groups are enabled. Compiling the core alone takes about a
-//!   fifth of the time of `full`:
-//!
-//!   ```toml
-//!   qty = { version = "…", default-features = false, features = ["std", "electrical"] }
-//!   ```
-//! * `std` (default) — math functions: `Area::sqrt() → Length`,
-//!   `Volume::cbrt() → Length`, `hypot`, and trigonometry on [`Angle`]
-//!   (`sin`, `cos`, `Angle::atan2(y, x)`, …). The rest of the crate is
-//!   `no_std`: disable default features for embedded targets.
-//! * `libm` — the same math functions without `std`, through the `libm` crate.
-//! * `serde` — `Serialize`/`Deserialize` for every quantity (as its bare
-//!   base-unit number) and every unit enum; the `serde_str` module reads and writes
-//!   text with units instead (`"30 s"`, `"2 minutes"`).
-//! * `approx` — `AbsDiffEq`/`RelativeEq`/`UlpsEq`, so `assert_relative_eq!`
-//!   works on quantities.
-//! * `bytemuck` — `Pod`, `Zeroable` and `TransparentWrapper`, for zero-copy
-//!   casts between quantity buffers and bytes (GPU uploads, file I/O).
-//! * `defmt` — `defmt::Format`, for logging on embedded targets.
-//! * `chrono`, `time` — conversions between [`Duration`] (and
-//!   `Fixed<Nanosecond>`, exactly) and their durations.
-//! * `schemars` — JSON schemas for quantities and unit enums, and
-//!   `serde_str::schema` for text fields.
-//! * `dynamic` — the `any` module: quantities whose kind is known only at runtime
-//!   (`AnyQuantity`, `AnyUnit`, `QuantityKind`), parsed from text like
-//!   `"1.5 km"`, with runtime-checked arithmetic.
+//! - Every quantity is stored in its [base unit](Quantity::BASE_UNIT), and
+//!   each unit converts with one constant: one multiplication or division,
+//!   two operations for °C and °F. Where the factor or its inverse is exact
+//!   (km, h, mm) the result is correctly rounded; otherwise it is within
+//!   about one ulp.
+//! - Floats have no total order, so sort with
+//!   [`total_cmp`](Length::total_cmp) and wrap map keys in [`Ordered`].
+//!   Integer storage and [`Fixed`] are `Eq + Ord + Hash` as they are.
+//! - [`Length::const_new`] builds a value in any unit at compile time, with
+//!   the same result as `new`.
+//! - [`Length::from_base_slice`] views a `&[f64]` of metres as `&[Length]`
+//!   without copying; `as_base_slice` goes back.
+//! - The units for [`Fixed`] are in [`unit`](mod@unit), one module per
+//!   quantity (`unit::length::Millimeter`). Lossy mixes such as
+//!   `Fixed<Meter> + Fixed<Millimeter>` are rejected by `cargo build` and
+//!   `cargo test`; `cargo check` does not evaluate the unit ratio and lets
+//!   them through.
+//! - With `f32` storage, write `quantity * 2.0`: `2.0 * quantity` exists for
+//!   `f64` and the integers only, so that `f64` code needs no annotations.
+//! - A relation between quantities of two groups (say `mechanics` and
+//!   `electrical`) exists when both groups are enabled.
 
 #![no_std]
 #![warn(missing_debug_implementations)]
@@ -1708,11 +1495,6 @@ pub use uncertain::Uncertain;
 // Generated cross-type arithmetic (Length / Duration = Speed, etc.).
 // These are pure `impl` blocks — no named items to re-export.
 mod cross_type;
-
-// Compile and run the README's examples as doctests.
-#[cfg(doctest)]
-#[doc = include_str!("../README.md")]
-struct ReadmeDoctests;
 
 /// Convenience alias: the UnitsNet quantity is named `Duration`; `Time` is the
 /// colloquial name.
