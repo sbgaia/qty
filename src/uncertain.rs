@@ -255,6 +255,15 @@ impl<F: FloatMath> Float for Uncertain<F> {
     fn is_finite(self) -> bool {
         self.value.is_finite() && self.sigma.is_finite()
     }
+    #[inline]
+    fn is_nan(self) -> bool {
+        self.value.is_nan() || self.sigma.is_nan()
+    }
+    /// The sign of the value.
+    #[inline]
+    fn is_sign_negative(self) -> bool {
+        self.value.is_sign_negative()
+    }
 }
 
 /// `f(x ± σ) = f(x) ± |f′(x)|·σ`.
@@ -303,6 +312,27 @@ impl<F: FloatMath> FloatMath for Uncertain<F> {
         Self {
             value: h,
             sigma: (self.value * self.sigma).hypot(other.value * other.sigma) / h,
+        }
+    }
+    /// Rounds the value; the uncertainty is kept.
+    fn round(self) -> Self {
+        Self {
+            value: self.value.round(),
+            sigma: self.sigma,
+        }
+    }
+    /// Rounds the value down; the uncertainty is kept.
+    fn floor(self) -> Self {
+        Self {
+            value: self.value.floor(),
+            sigma: self.sigma,
+        }
+    }
+    /// Rounds the value up; the uncertainty is kept.
+    fn ceil(self) -> Self {
+        Self {
+            value: self.value.ceil(),
+            sigma: self.sigma,
         }
     }
 }

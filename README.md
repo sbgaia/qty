@@ -214,6 +214,9 @@ use unitsnet_rs::*;
 
 let side: Length = Area::from_square_meters(16.0).sqrt();
 assert_eq!(side, Length::from_meters(4.0));
+assert_eq!(side.squared(), Area::from_square_meters(16.0));
+let rounded = Length::from_meters(1.264).round_in(LengthUnit::Centimeter);
+assert!((rounded.as_centimeters() - 126.0).abs() < 1e-9);
 let heading = Angle::atan2(Length::from_meters(1.0), Length::from_meters(1.0));
 assert!((heading.as_degrees() - 45.0).abs() < 1e-12);
 

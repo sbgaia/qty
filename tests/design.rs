@@ -1771,3 +1771,158 @@ mod presentation {
         );
     }
 }
+
+mod polish {
+    use unitsnet_rs::unit::length::Millimeter;
+    use unitsnet_rs::*;
+
+    #[test]
+    fn generic_conversions_through_the_trait() {
+        fn round_trip<Q: Quantity<Value = f64>>(value: f64, unit: Q::Unit) -> f64 {
+            Q::new(value, unit).convert_to(unit)
+        }
+        assert!((round_trip::<Length>(3.5, LengthUnit::Foot) - 3.5).abs() < 1e-12);
+        assert!(
+            (round_trip::<Temperature>(-40.0, TemperatureUnit::DegreeFahrenheit) + 40.0).abs()
+                < 1e-12
+        );
+        fn in_base<Q: Quantity<Value = f64>>(value: f64, unit: Q::Unit) -> f64 {
+            Q::new(value, unit).as_base()
+        }
+        assert_eq!(in_base::<Length>(2.0, LengthUnit::Kilometer), 2000.0);
+    }
+
+    #[test]
+    fn float_predicates_and_signs() {
+        let m = Length::from_meters;
+        assert!(m(f64::NAN).is_nan());
+        assert!(!m(1.0).is_nan());
+        assert!(!m(f64::INFINITY).is_finite());
+        assert!(m(1.0).is_finite());
+        assert_eq!(m(-2.0).signum(), -1.0);
+        assert_eq!(m(0.0).signum(), 1.0);
+        assert_eq!(m(-0.0).signum(), -1.0);
+        assert!(m(f64::NAN).signum().is_nan());
+        assert_eq!(m(3.0).copysign(m(-1.0)), m(-3.0));
+        assert_eq!(m(-3.0).copysign(m(0.0)), m(3.0));
+        assert!(Temperature::from_kelvins(f64::NAN).is_nan());
+        assert!(Length::<f32>::from_meters(f32::NAN).is_nan());
+        assert_eq!(Length::<f32>::from_meters(-0.5).signum(), -1.0);
+    }
+
+    #[test]
+    fn zero_constants() {
+        const ORIGIN: Length = Length::ZERO;
+        assert_eq!(ORIGIN, Length::from_meters(0.0));
+        assert_eq!(Length::<f32>::default(), Length::<f32>::from_meters(0.0));
+        assert_eq!(
+            Duration::ZERO + Duration::from_seconds(1.0),
+            Duration::from_seconds(1.0)
+        );
+    }
+
+    #[test]
+    fn powers() {
+        let side = Length::from_meters(3.0);
+        let area: Area = side.squared();
+        assert_eq!(area, Area::from_square_meters(9.0));
+        let volume: Volume = side.cubed();
+        assert_eq!(volume, Volume::from_cubic_meters(27.0));
+        assert_eq!(area.sqrt(), side);
+    }
+
+    #[cfg(feature = "mechanics")]
+    #[test]
+    fn speed_squared_is_specific_energy() {
+        let v = Speed::from_meters_per_second(4.0);
+        assert_eq!(v.squared(), SpecificEnergy::from_joules_per_kilogram(16.0));
+    }
+
+    #[test]
+    fn rounding_in_a_unit() {
+        let l = Length::from_meters(1.264);
+        assert!((l.round_in(LengthUnit::Centimeter).as_centimeters() - 126.0).abs() < 1e-9);
+        assert_eq!(
+            Length::from_meters(1.0)
+                .floor_in(LengthUnit::Foot)
+                .as_feet(),
+            3.0
+        );
+        assert!((Length::from_meters(1.0).ceil_in(LengthUnit::Foot).as_feet() - 4.0).abs() < 1e-12);
+        assert!(
+            (Length::from_meters(-1.0)
+                .floor_in(LengthUnit::Foot)
+                .as_feet()
+                + 4.0)
+                .abs()
+                < 1e-12
+        );
+        // Points round on their own scale.
+        let t = Temperature::from_degrees_celsius(21.6);
+        assert!(
+            (t.round_in(TemperatureUnit::DegreeCelsius)
+                .as_degrees_celsius()
+                - 22.0)
+                .abs()
+                < 1e-9
+        );
+        // Ties away from zero.
+        assert_eq!(
+            Length::from_meters(2.5)
+                .round_in(LengthUnit::Meter)
+                .as_meters(),
+            3.0
+        );
+        assert_eq!(
+            Length::from_meters(-2.5)
+                .round_in(LengthUnit::Meter)
+                .as_meters(),
+            -3.0
+        );
+        // Uncertain storage rounds the value and keeps the uncertainty.
+        let u = Length::from_meters(Uncertain::new(1.26, 0.02)).round_in(LengthUnit::Meter);
+        assert_eq!(u.as_meters().value(), 1.0);
+        assert_eq!(u.as_meters().sigma(), 0.02);
+    }
+
+    #[test]
+    fn fixed_signs() {
+        type Mm = Fixed<Millimeter, i32>;
+        assert_eq!(Mm::new(-5).abs(), Mm::new(5));
+        assert_eq!(Mm::new(i32::MIN).checked_abs(), None);
+        assert_eq!(Mm::new(i32::MAX).checked_abs(), Some(Mm::new(i32::MAX)));
+        assert_eq!(Mm::new(7).checked_neg(), Some(Mm::new(-7)));
+        assert_eq!(Mm::new(i32::MIN).checked_neg(), None);
+        assert_eq!(
+            (
+                Mm::new(-3).signum(),
+                Mm::new(0).signum(),
+                Mm::new(9).signum()
+            ),
+            (-1, 0, 1)
+        );
+        type Unsigned = Fixed<Millimeter, u32>;
+        assert_eq!(Unsigned::new(5).checked_neg(), None);
+        assert_eq!(Unsigned::new(0).checked_neg(), Some(Unsigned::new(0)));
+        assert_eq!(Unsigned::new(5).abs(), Unsigned::new(5));
+        assert_eq!(Unsigned::new(5).signum(), 1);
+    }
+
+    #[test]
+    #[should_panic(expected = "Fixed::abs overflowed")]
+    fn fixed_abs_overflow_panics() {
+        let _ = Fixed::<Millimeter, i8>::new(i8::MIN).abs();
+    }
+
+    #[test]
+    fn vector_lerp() {
+        let a = Vector2::new(Length::from_meters(0.0), Length::from_meters(10.0));
+        let b = Vector2::new(Length::from_meters(4.0), Length::from_meters(0.0));
+        let mid = a.lerp(b, 0.5);
+        assert_eq!(
+            mid,
+            Vector2::new(Length::from_meters(2.0), Length::from_meters(5.0))
+        );
+        assert_eq!(a.lerp(b, 0.0), a);
+    }
+}

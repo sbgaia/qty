@@ -81,6 +81,19 @@ macro_rules! vector {
             }
         }
 
+        impl<Q: Quantity> $V<Q>
+        where
+            Q::Value: crate::Float,
+        {
+            /// Linear interpolation, component by component: `self` at
+            /// `t = 0`, `other` at `t = 1`.
+            #[inline]
+            pub fn lerp(self, other: Self, t: Q::Value) -> Self {
+                let (a, b) = (self.as_base(), other.as_base());
+                Self::from_base(core::array::from_fn(|i| a[i] + (b[i] - a[i]) * t))
+            }
+        }
+
         #[cfg(any(feature = "std", feature = "libm"))]
         impl<Q: Quantity> $V<Q>
         where

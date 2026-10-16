@@ -8,6 +8,15 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Generic conversions: `Quantity::new(value, unit)` and
+  `Quantity::convert_to(unit)` for code written over `Q: Quantity`.
+- On quantities: `is_nan`, `is_finite`, `signum`, `copysign`, `Length::ZERO`
+  (for `f64` storage), `round_in`/`floor_in`/`ceil_in` (round to a whole
+  number of a unit, points included), and `squared()`/`cubed()` as the
+  inverses of `sqrt()`/`cbrt()` (`Length` → `Area`, `Volume`; `Speed` →
+  `SpecificEnergy`).
+- `Fixed`: `abs`, `checked_abs`, `checked_neg`, `signum`.
+- `Vector2`/`Vector3::lerp`.
 - Presentation: `auto_unit_in` picks the largest unit from a list
   (`LengthUnit::IMPERIAL`, `MassUnit::US`, `MassUnit::IMPERIAL`,
   `VolumeUnit::US_LIQUID`, or your own); `significant(n)` shows a value
@@ -124,6 +133,8 @@ adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- `FloatMath` requires `round`, `floor` and `ceil`; `Float` gains `is_nan`
+  and `is_sign_negative`, with default implementations.
 - Conversions are folded at code-generation time into a single correctly
   rounded constant (one multiplication or division; two operations for affine
   units), instead of evaluating each upstream formula step by step.

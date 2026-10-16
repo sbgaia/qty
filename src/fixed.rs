@@ -909,6 +909,51 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     pub fn saturating_sub(self, other: Self) -> Self {
         Self::new(self.count.saturating_sub(other.count))
     }
+
+    /// The absolute value, or `None` if it does not fit (`i32::MIN`).
+    #[inline]
+    pub fn checked_abs(self) -> Option<Self> {
+        let (_, magnitude) = self.count.sign_magnitude();
+        i128::try_from(magnitude)
+            .ok()
+            .and_then(I::from_i128)
+            .map(Self::new)
+    }
+
+    /// The absolute value.
+    ///
+    /// # Panics
+    ///
+    /// If it does not fit: `Fixed::<_, i32>::new(i32::MIN).abs()`.
+    #[inline]
+    #[track_caller]
+    pub fn abs(self) -> Self {
+        self.checked_abs().expect("Fixed::abs overflowed")
+    }
+
+    /// `-self`, or `None` if it does not fit (`i32::MIN`, or any unsigned
+    /// count but zero).
+    #[inline]
+    pub fn checked_neg(self) -> Option<Self> {
+        self.count
+            .to_i128()
+            .and_then(i128::checked_neg)
+            .and_then(I::from_i128)
+            .map(Self::new)
+    }
+
+    /// `-1`, `0` or `1`, by the sign of the count.
+    #[inline]
+    pub fn signum(self) -> I {
+        let (negative, magnitude) = self.count.sign_magnitude();
+        let sign = match (negative, magnitude) {
+            (_, 0) => 0,
+            (true, _) => -1,
+            (false, _) => 1,
+        };
+        // -1 occurs only for signed types, where it fits.
+        I::from_i128(sign).unwrap_or_default()
+    }
 }
 
 /// Points: subtracting a difference. (`point - delta` cannot be an operator:

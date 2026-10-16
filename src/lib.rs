@@ -290,6 +290,22 @@ pub trait Float:
 
     /// `true` unless the value is NaN or infinite.
     fn is_finite(self) -> bool;
+
+    /// `true` for NaN.
+    #[inline]
+    fn is_nan(self) -> bool {
+        #[allow(clippy::eq_op)]
+        let nan = self != self;
+        nan
+    }
+
+    /// `true` for negative values, `-0.0` included (like
+    /// [`f64::is_sign_negative`]).
+    #[inline]
+    fn is_sign_negative(self) -> bool {
+        let zero = Self::from_f64(0.0);
+        self < zero || (self == zero && Self::from_f64(1.0) / self < zero)
+    }
 }
 
 macro_rules! impl_float {
@@ -321,6 +337,14 @@ macro_rules! impl_float {
             fn is_finite(self) -> bool {
                 $t::is_finite(self)
             }
+            #[inline(always)]
+            fn is_nan(self) -> bool {
+                $t::is_nan(self)
+            }
+            #[inline(always)]
+            fn is_sign_negative(self) -> bool {
+                $t::is_sign_negative(self)
+            }
         }
     )*};
 }
@@ -351,6 +375,12 @@ pub trait FloatMath: Float {
     fn atan2(self, other: Self) -> Self;
     /// `sqrt(self² + other²)` without intermediate overflow.
     fn hypot(self, other: Self) -> Self;
+    /// Nearest integer, ties away from zero.
+    fn round(self) -> Self;
+    /// Largest integer not above.
+    fn floor(self) -> Self;
+    /// Smallest integer not below.
+    fn ceil(self) -> Self;
 }
 
 #[cfg(any(feature = "std", feature = "libm"))]
@@ -372,12 +402,14 @@ macro_rules! impl_float_math {
 impl_float_math!(f64,
     sqrt() => sqrt, cbrt() => cbrt, sin() => sin, cos() => cos, tan() => tan,
     asin() => asin, acos() => acos, atan() => atan,
-    atan2(other) => atan2, hypot(other) => hypot);
+    atan2(other) => atan2, hypot(other) => hypot,
+    round() => round, floor() => floor, ceil() => ceil);
 #[cfg(any(feature = "std", feature = "libm"))]
 impl_float_math!(f32,
     sqrt() => sqrtf, cbrt() => cbrtf, sin() => sinf, cos() => cosf, tan() => tanf,
     asin() => asinf, acos() => acosf, atan() => atanf,
-    atan2(other) => atan2f, hypot(other) => hypotf);
+    atan2(other) => atan2f, hypot(other) => hypotf,
+    round() => roundf, floor() => floorf, ceil() => ceilf);
 
 // ── Quantity trait ────────────────────────────────────────────────────────────
 
@@ -404,6 +436,25 @@ pub trait Quantity: Copy {
 
     /// Returns the value expressed in [`Self::BASE_UNIT`].
     fn as_base(self) -> Self::Value;
+
+    /// A quantity from a value in `unit`, like the inherent `new`.
+    ///
+    /// ```rust
+    /// use unitsnet_rs::*;
+    ///
+    /// fn in_kilo<Q: Quantity<Value = f64>>(value: f64, kilo: Q::Unit, base: Q::Unit) -> f64 {
+    ///     Q::new(value, kilo).convert_to(base)
+    /// }
+    /// assert_eq!(in_kilo::<Length>(1.5, LengthUnit::Kilometer, LengthUnit::Meter), 1500.0);
+    /// ```
+    fn new(value: Self::Value, unit: Self::Unit) -> Self
+    where
+        Self::Value: Float;
+
+    /// The value expressed in `unit`, like the inherent `convert_to`.
+    fn convert_to(self, unit: Self::Unit) -> Self::Value
+    where
+        Self::Value: Float;
 }
 
 /// Implemented by every unit enum (`LengthUnit`, `MassUnit`, …).
@@ -766,6 +817,18 @@ macro_rules! quantity_core {
                 Self(self.0.abs())
             }
 
+            /// `true` for NaN.
+            #[inline(always)]
+            pub fn is_nan(self) -> bool {
+                self.0.is_nan()
+            }
+
+            /// `true` unless NaN or infinite.
+            #[inline(always)]
+            pub fn is_finite(self) -> bool {
+                self.0.is_finite()
+            }
+
             /// The larger of two quantities (ignoring NaN).
             #[inline(always)]
             pub fn max(self, other: Self) -> Self {
@@ -874,6 +937,20 @@ macro_rules! quantity_core {
             #[inline(always)]
             fn as_base(self) -> T {
                 self.0
+            }
+            #[inline]
+            fn new(value: T, unit: $U) -> Self
+            where
+                T: $crate::Float,
+            {
+                $Q::new(value, unit)
+            }
+            #[inline]
+            fn convert_to(self, unit: $U) -> T
+            where
+                T: $crate::Float,
+            {
+                $Q::convert_to(self, unit)
             }
         }
 
@@ -1051,6 +1128,29 @@ macro_rules! quantity_core {
             }
         }
 
+        #[cfg(any(feature = "std", feature = "libm"))]
+        impl<T: $crate::FloatMath> $Q<T> {
+            /// Rounds to a whole number of `unit`, ties away from zero:
+            /// 1.26 m in centimetres is 126 cm. Works for points too
+            /// (21.6 °C rounds to 22 °C).
+            #[inline]
+            pub fn round_in(self, unit: $U) -> Self {
+                Self::new(self.convert_to(unit).round(), unit)
+            }
+
+            /// Rounds down to a whole number of `unit`.
+            #[inline]
+            pub fn floor_in(self, unit: $U) -> Self {
+                Self::new(self.convert_to(unit).floor(), unit)
+            }
+
+            /// Rounds up to a whole number of `unit`.
+            #[inline]
+            pub fn ceil_in(self, unit: $U) -> Self {
+                Self::new(self.convert_to(unit).ceil(), unit)
+            }
+        }
+
         /// Parses a number followed by a unit: an abbreviation (`"1.5 km"`),
         /// a name (`"1.5 kilometres"`) or, for quantities other than points,
         /// an expression with the same dimensions (`"1.5 km/s*s"`, see
@@ -1094,6 +1194,39 @@ macro_rules! quantity_vector_ops {
             pub fn checked_sub(self, other: Self) -> Option<Self> {
                 self.0.checked_sub(other.0).map(Self)
             }
+        }
+
+        impl<T: $crate::Float> $Q<T> {
+            /// `1` for positive values and `+0`, `-1` for negative values
+            /// and `-0`, NaN for NaN (like [`f64::signum`]).
+            #[inline]
+            pub fn signum(self) -> T {
+                if self.0.is_nan() {
+                    self.0
+                } else if self.0.is_sign_negative() {
+                    T::from_f64(-1.0)
+                } else {
+                    T::from_f64(1.0)
+                }
+            }
+
+            /// The magnitude of `self` with the sign of `sign` (like
+            /// [`f64::copysign`]).
+            #[inline]
+            pub fn copysign(self, sign: Self) -> Self {
+                if self.0.is_sign_negative() == sign.0.is_sign_negative() {
+                    self
+                } else {
+                    Self(-self.0)
+                }
+            }
+        }
+
+        impl $Q<f64> {
+            /// Zero, as a constant. For `f64` storage only, like
+            /// `const_new`: with an `f32` constant too, `Length::ZERO`
+            /// would be ambiguous. Other storage types have `default()`.
+            pub const ZERO: Self = Self(0.0);
         }
 
         #[cfg(feature = "num-traits")]
@@ -1345,9 +1478,11 @@ macro_rules! cross_mul_scalar {
 macro_rules! cross_sqrt {
     ($C:ident => $A:ident) => {
         cross_sqrt!(@impl $C => $A, sqrt, "square", |v| v);
+        cross_power!($A => $C, squared, "square", |a| a * a);
     };
     ($C:ident => $A:ident; $k:literal) => {
         cross_sqrt!(@impl $C => $A, sqrt, "square", |v| v / T::from_f64($k));
+        cross_power!($A => $C, squared, "square", |a| a * a * T::from_f64($k));
     };
     (@impl $C:ident => $A:ident, $method:ident, $what:literal, |$v:ident| $scaled:expr) => {
         #[cfg(any(feature = "std", feature = "libm"))]
@@ -1365,13 +1500,30 @@ macro_rules! cross_sqrt {
     };
 }
 
+/// `A.squared() = C` and `A.cubed() = C`: the inverses of `cross_sqrt!` and
+/// `cross_cbrt!`; `$k` as there.
+macro_rules! cross_power {
+    ($A:ident => $C:ident, $method:ident, $what:literal, |$v:ident| $value:expr) => {
+        impl<T: $crate::Float> $A<T> {
+            #[doc = concat!("The ", $what, " of this quantity: a [`", stringify!($C), "`].")]
+            #[inline]
+            pub fn $method(self) -> $C<T> {
+                let $v = self.into_base();
+                $C::from_base($value)
+            }
+        }
+    };
+}
+
 /// `C.cbrt() = A` where `C = A * A * A` (e.g. `Volume` → `Length`).
 macro_rules! cross_cbrt {
     ($C:ident => $A:ident) => {
         cross_sqrt!(@impl $C => $A, cbrt, "cube", |v| v);
+        cross_power!($A => $C, cubed, "cube", |a| a * a * a);
     };
     ($C:ident => $A:ident; $k:literal) => {
         cross_sqrt!(@impl $C => $A, cbrt, "cube", |v| v / T::from_f64($k));
+        cross_power!($A => $C, cubed, "cube", |a| a * a * a * T::from_f64($k));
     };
 }
 
