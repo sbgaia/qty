@@ -162,6 +162,23 @@ jobs:
             exit 1
           fi
 
+  package:
+    name: Published crate builds with every feature
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # `cargo package` verifies the default features only: a file missing
+      # from `include` would break the others for crates.io users.
+      - run: cargo package -p qty --no-verify
+      - name: Build the packaged crate
+        run: |
+          mkdir "$RUNNER_TEMP/package"
+          tar -xzf target/package/qty-*.crate -C "$RUNNER_TEMP/package"
+          cd "$RUNNER_TEMP"/package/qty-*
+          cargo build --all-features
+
   benches:
     name: Benchmarks compile
     runs-on: ubuntu-latest

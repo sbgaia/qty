@@ -15,7 +15,7 @@ repository = "https://github.com/sbgaia/qty"
 documentation = "https://docs.rs/qty"
 readme = "README.md"
 # The generator, its data, benchmarks and CI are not needed by users.
-include = ["src/**/*.rs", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
+include = ["src/**/*.rs", "src/**/*.md", "Cargo.toml", "README.md", "CHANGELOG.md", "LICENSE"]
 keywords = ["units", "measurement", "physics", "conversion", "unitsnet"]
 categories = ["science", "no-std", "no-std::no-alloc"]
 
