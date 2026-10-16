@@ -413,11 +413,14 @@ fn apply_abbreviation_fixes(raw: &mut RawQuantity) {
 /// but rejected by `serde_json`. This performs a lightweight fix without a full
 /// JSON5 parser, handling the only pattern present in the UnitsNet sources.
 fn strip_trailing_commas(src: &str) -> String {
-    use regex::Regex;
-    use std::sync::OnceLock;
-    static RE: OnceLock<Regex> = OnceLock::new();
-    let re = RE.get_or_init(|| Regex::new(r",(\s*[}\]])").unwrap());
-    re.replace_all(src, "$1").into_owned()
+    let mut out = String::with_capacity(src.len());
+    for (i, c) in src.char_indices() {
+        let closes = || src[i + 1..].trim_start().starts_with(['}', ']']);
+        if c != ',' || !closes() {
+            out.push(c);
+        }
+    }
+    out
 }
 
 /// Constructs a prefix-expanded name by lowercasing the first character of `base_name`

@@ -6,7 +6,7 @@
 //! the generated files only contain what differs: the unit enum and the
 //! conversion methods.
 
-use heck::ToSnakeCase;
+use crate::case::ToSnakeCase;
 
 use crate::expr::{self, Direction, Form};
 use crate::parser::{QuantityDef, UnitDef};
@@ -1684,8 +1684,29 @@ fn escape_doc(s: &str) -> String {
         .replace("/*", "/ *")
         .replace('[', "\\[")
         .replace(']', "\\]");
-    let url = regex::Regex::new(r"(https?://[^\s<>]+)").unwrap();
-    url.replace_all(escaped.trim(), "<$1>").into_owned()
+    link_urls(escaped.trim())
+}
+
+/// Wraps bare `http://` and `https://` URLs in `<…>`, so rustdoc links them.
+fn link_urls(s: &str) -> String {
+    let mut out = String::with_capacity(s.len() + 8);
+    let mut rest = s;
+    while let Some(start) = ["http://", "https://"]
+        .iter()
+        .filter_map(|scheme| rest.find(scheme))
+        .min()
+    {
+        let len = rest[start..]
+            .find(|c: char| c.is_whitespace() || c == '<' || c == '>')
+            .unwrap_or(rest.len() - start);
+        out.push_str(&rest[..start]);
+        out.push('<');
+        out.push_str(&rest[start..start + len]);
+        out.push('>');
+        rest = &rest[start + len..];
+    }
+    out.push_str(rest);
+    out
 }
 
 // ── Runtime quantities (src/any.rs) ───────────────────────────────────────────

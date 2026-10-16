@@ -8,6 +8,7 @@
 //!
 //! Run with: `cargo run -p codegen`
 
+mod case;
 mod expr;
 mod formula;
 mod generator;
@@ -16,7 +17,7 @@ mod parser;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
-use heck::ToSnakeCase;
+use case::ToSnakeCase;
 
 use expr::{Const, Form};
 use generator::{generate_cross_type_tests, generate_quantity_tests, CrossKind, CrossOp};

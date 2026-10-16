@@ -2,33 +2,57 @@
 //! expressions. Used only to emit independent oracles in the generated tests; the
 //! library code itself uses the exact, folded forms from [`crate::expr`].
 
-use std::sync::OnceLock;
-
-use regex::Regex;
-
-/// Returns the compiled regex for stripping the C# `d` double literal suffix.
-fn double_suffix_re() -> &'static Regex {
-    static RE: OnceLock<Regex> = OnceLock::new();
-    RE.get_or_init(|| Regex::new(r"(\d)d\b").unwrap())
-}
-
-/// Returns the compiled regex for promoting bare integer literals to `f64`.
-///
-/// Alternation is left-to-right: float and scientific-notation patterns are tried first,
-/// so they are preserved as-is. Only bare integers (group 1) are promoted.
-fn int_promote_re() -> &'static Regex {
-    static RE: OnceLock<Regex> = OnceLock::new();
-    RE.get_or_init(|| Regex::new(r"\d+\.\d*(?:[eE][+-]?\d+)?|\d+[eE][+-]?\d+|\b(\d+)\b").unwrap())
-}
-
-/// Promotes any bare integer literal in `s` to an `f64` literal (appends `.0`).
-fn promote_integers(s: &str) -> String {
-    int_promote_re()
-        .replace_all(s, |caps: &regex::Captures| match caps.get(1) {
-            Some(m) => format!("{}.0", m.as_str()),
-            None => caps[0].to_string(),
-        })
-        .into_owned()
+/// Rewrites the number literals in `s` as `f64` literals: C# `d` suffixes
+/// become `.0` (`40d` → `40.0`) and bare integers gain `.0` (`365` →
+/// `365.0`); decimals and exponents (`1.5`, `1e-3`) are kept. Digits inside
+/// identifiers are left alone.
+fn float_literals(s: &str) -> String {
+    let bytes = s.as_bytes();
+    let word = |i: usize| {
+        bytes
+            .get(i)
+            .is_some_and(|b| b.is_ascii_alphanumeric() || *b == b'_')
+    };
+    let digits = |mut i: usize| {
+        while bytes.get(i).is_some_and(u8::is_ascii_digit) {
+            i += 1;
+        }
+        i
+    };
+    let mut out = String::with_capacity(s.len() + 8);
+    let mut i = 0;
+    while i < bytes.len() {
+        let starts_number = bytes[i].is_ascii_digit() && (i == 0 || !word(i - 1));
+        if !starts_number {
+            let c = s[i..].chars().next().unwrap();
+            out.push(c);
+            i += c.len_utf8();
+            continue;
+        }
+        let start = i;
+        i = digits(i);
+        let mut integer = true;
+        if bytes.get(i) == Some(&b'.') {
+            integer = false;
+            i = digits(i + 1);
+        }
+        if matches!(bytes.get(i), Some(b'e' | b'E')) {
+            let sign = usize::from(matches!(bytes.get(i + 1), Some(b'+' | b'-')));
+            if bytes.get(i + 1 + sign).is_some_and(u8::is_ascii_digit) {
+                integer = false;
+                i = digits(i + 1 + sign);
+            }
+        }
+        out.push_str(&s[start..i]);
+        let suffix = bytes.get(i) == Some(&b'd') && !word(i + 1);
+        if suffix {
+            i += 1;
+        }
+        if integer && (suffix || !word(i)) {
+            out.push_str(".0");
+        }
+    }
+    out
 }
 
 /// Translates a raw C# expression from a UnitsNet definition file into a valid Rust `f64`
@@ -42,8 +66,7 @@ fn promote_integers(s: &str) -> String {
 pub fn translate(raw: &str, var: &str) -> String {
     let s = raw.replace("{x}", var);
     let s = s.replace("Math.PI", "std::f64::consts::PI");
-    let s = double_suffix_re().replace_all(&s, "${1}.0");
-    promote_integers(&s)
+    float_literals(&s)
 }
 
 /// Translates the to-base or from-base formula for a **prefixed** variant of a unit.
@@ -63,8 +86,7 @@ pub fn translate_with_factor(raw: &str, factor: &str, to_base: bool) -> String {
         raw.replace("{x}", &format!("(x / {factor_str})"))
     };
     let substituted = substituted.replace("Math.PI", "std::f64::consts::PI");
-    let s = double_suffix_re().replace_all(&substituted, "${1}.0");
-    promote_integers(&s)
+    float_literals(&substituted)
 }
 
 #[cfg(test)]
