@@ -9,7 +9,7 @@ use core::hash::{Hash, Hasher};
 use core::marker::PhantomData;
 use core::ops;
 
-use crate::{Float, ParseError, Quantity};
+use crate::{Float, ParseError, Quantity, Unit};
 
 // ── Numeric traits ────────────────────────────────────────────────────────────
 
@@ -302,19 +302,13 @@ pub trait FixedUnit: Copy + 'static {
 
     /// The quantity's unit enum, e.g. [`LengthUnit`](crate::LengthUnit).
     /// Units of the same quantity share it.
-    type Unit: Copy + Eq + fmt::Debug + fmt::Display + 'static;
+    type Unit: crate::Unit;
 
     /// The marker of the quantity's base unit.
     type Base: FixedUnit<Unit = Self::Unit>;
 
     /// This unit as an enum value.
     const UNIT: Self::Unit;
-
-    /// Primary abbreviation, used by `Display`.
-    const ABBREVIATION: &'static str;
-
-    /// Every abbreviation accepted by `FromStr`.
-    const ABBREVIATIONS: &'static [&'static str];
 
     /// One of this unit is `NUM / DEN · π^PI_POW` base units, exactly
     /// (a reduced fraction).
@@ -1254,7 +1248,7 @@ impl<'a, U: AdditiveUnit, I: core::iter::Sum<&'a I> + 'a> core::iter::Sum<&'a Fi
 impl<U: FixedUnit, I: fmt::Display> fmt::Display for Fixed<U, I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Display::fmt(&self.count, f)?;
-        write!(f, " {}", U::ABBREVIATION)
+        write!(f, " {}", U::UNIT.abbreviation())
     }
 }
 
@@ -1408,7 +1402,7 @@ impl<V: FixedUnit> fmt::Display for Decimal<V> {
         } else {
             ""
         };
-        let abbreviation = V::ABBREVIATION;
+        let abbreviation = V::UNIT.abbreviation();
 
         let mut int_len = 1;
         let mut rest = int;
@@ -1467,7 +1461,7 @@ impl<V: FixedUnit> fmt::Debug for Decimal<V> {
 impl<U: FixedUnit, I: fmt::Debug> fmt::Debug for Fixed<U, I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Debug::fmt(&self.count, f)?;
-        write!(f, " {}", U::ABBREVIATION)
+        write!(f, " {}", U::UNIT.abbreviation())
     }
 }
 
@@ -1477,7 +1471,7 @@ impl<U: FixedUnit, I: core::str::FromStr> core::str::FromStr for Fixed<U, I> {
     fn from_str(s: &str) -> Result<Self, ParseError> {
         let (number, unit) = crate::split_value_unit(s);
         let count = number.parse().map_err(|_| ParseError::InvalidNumber)?;
-        if U::ABBREVIATIONS.contains(&unit) {
+        if U::UNIT.info().abbreviations.contains(&unit) {
             Ok(Self::new(count))
         } else {
             Err(ParseError::UnknownUnit)
@@ -1498,7 +1492,7 @@ unsafe impl<U, I> bytemuck::TransparentWrapper<I> for Fixed<U, I> {}
 #[cfg(feature = "defmt")]
 impl<U: FixedUnit, I: defmt::Format> defmt::Format for Fixed<U, I> {
     fn format(&self, f: defmt::Formatter<'_>) {
-        defmt::write!(f, "{} {=str}", self.count, U::ABBREVIATION);
+        defmt::write!(f, "{} {=str}", self.count, U::UNIT.abbreviation());
     }
 }
 

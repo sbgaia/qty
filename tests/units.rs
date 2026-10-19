@@ -11,7 +11,7 @@ const F32_TOL: f64 = 1e-6;
 /// Checks a `Fixed` unit marker: the float bridge, and that exact integer
 /// rescaling to and from the base unit agrees with float arithmetic.
 fn check_fixed<U: qty::FixedUnit>() {
-    use qty::{Fixed, Rounding};
+    use qty::{Fixed, Rounding, Unit};
     let f = Fixed::<U>::new(7);
     assert_eq!(f.to_f64(), U::to_quantity(7.0_f64));
     assert_eq!(
@@ -22,7 +22,7 @@ fn check_fixed<U: qty::FixedUnit>() {
         Fixed::<U, i32>::round_from_count(2.5_f64, Rounding::NearestTiesEven),
         Ok(Fixed::new(2))
     );
-    assert_eq!(format!("{f}"), format!("7 {}", U::ABBREVIATION));
+    assert_eq!(format!("{f}"), format!("7 {}", U::UNIT.abbreviation()));
 }
 
 /// Checks that exact integer rescaling between a `Fixed` unit and its base

@@ -1374,7 +1374,10 @@ macro_rules! fixed_unit {
             ") in [`", stringify!($V), "`](super::", stringify!($U), "::", stringify!($V),
             ") with [`Fixed`](crate::Fixed)."
         )]
-        #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+        // Markers are only type parameters and unit arguments: `Debug`
+        // on 1,700 of them would cost a tenth of the crate's build time.
+        #[derive(Clone, Copy)]
+        #[allow(missing_debug_implementations)]
         pub struct $M;
 
         impl $crate::FixedUnit for $M {
@@ -1382,8 +1385,6 @@ macro_rules! fixed_unit {
             type Unit = super::$U;
             type Base = $B;
             const UNIT: super::$U = super::$U::$V;
-            const ABBREVIATION: &'static str = super::$U::$V.abbreviation();
-            const ABBREVIATIONS: &'static [&'static str] = super::$U::$V.all_abbreviations();
             const NUM: u128 = $num;
             const DEN: u128 = $den;
             const PI_POW: i32 = $pi;
