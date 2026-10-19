@@ -6,6 +6,13 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-19
+
+### Fixed
+
+- The README, which is also the crates.io page, told you to depend on
+  `qty = "0.1"`.
+
 ## [0.2.0] - 2026-10-19
 
 ### Added

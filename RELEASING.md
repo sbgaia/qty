@@ -20,10 +20,13 @@ instead of a long-lived token.
    compares the code with the latest published version and fails on a
    breaking change whose version was not bumped.
 2. In a pull request:
-   - set `version` in `Cargo.toml`;
+   - set `version` in `Cargo.toml`, and in the `qty = ...` lines of
+     `README.md` when the minor version (or, after 1.0, the major) changes;
    - in `CHANGELOG.md`, rename `## [Unreleased]` to
      `## [X.Y.Z] - YYYY-MM-DD` and add a new, empty `## [Unreleased]` above it.
-3. Merge it once CI passes, then tag the merge commit on `master`:
+3. Merge it once CI passes. Then, and only then, pull and tag the merge
+   commit on `master` (a tag pushed earlier points at the commit before it,
+   and the workflow stops at the check):
 
    ```sh
    git checkout master && git pull

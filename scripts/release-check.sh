@@ -13,6 +13,19 @@ if [ "$tag" != "v$version" ]; then
   exit 1
 fi
 
+# The README's dependency lines name the release's compatible range: "0.Y"
+# before 1.0, "X" after.
+case "$version" in
+  0.*) range=$(echo "$version" | cut -d. -f1,2) ;;
+  *) range=$(echo "$version" | cut -d. -f1) ;;
+esac
+stale=$(grep -nE '^qty = ' README.md | grep -vF "\"$range\"" || true)
+if [ -n "$stale" ]; then
+  echo "error: README.md should depend on qty \"$range\":" >&2
+  echo "$stale" >&2
+  exit 1
+fi
+
 # The section `## [X.Y.Z] - YYYY-MM-DD`, up to the next `## [` heading.
 notes=$(awk -v v="$version" '
   index($0, "## [" v "] - ") == 1 { found = 1; next }
