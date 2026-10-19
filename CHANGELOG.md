@@ -12,6 +12,11 @@ follow [Semantic Versioning](https://semver.org/).
   and, for points such as temperatures, an offset. `new`, `convert_to` and
   `in_unit` take it like the built-in units, through the new `UnitOf`
   trait, which the generated unit enums implement too.
+- `custom_quantity!` defines a new quantity and its unit enum. It gets the
+  built-in quantities' arithmetic, conversions, formatting, parsing,
+  `Quantity` and metadata, and qty's `serde`, `approx` and `bytemuck`
+  integrations; not `from_<unit>` methods, `Fixed`, `AnyQuantity`, defmt or
+  schemars.
 
 ### Changed
 

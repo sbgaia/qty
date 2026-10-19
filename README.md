@@ -70,6 +70,27 @@ let race = Length::new(5.0, Furlong);
 assert_eq!(format!("{:.2}", race.in_unit(LengthUnit::Kilometer)), "1.01 km");
 ```
 
+and so can whole quantities, with their own units:
+
+```rust
+use qty::*;
+
+custom_quantity! {
+    /// Printed paper, counted in sheets.
+    pub struct Paper;
+
+    pub enum PaperUnit {
+        Sheet: "sh",          // the base unit
+        Quire: "qr" = 25.0,   // sheets in a quire
+        Ream: "rm" = 500.0,
+    }
+}
+
+let order = Paper::new(3.0, PaperUnit::Ream) + "2 quires".parse::<Paper>()?;
+assert_eq!(format!("{:.1}", order.in_unit(PaperUnit::Ream)), "3.1 rm");
+# Ok::<(), ParseError>(())
+```
+
 ## Text
 
 Quantities print in their base unit, or in any unit you ask for. Parsing
