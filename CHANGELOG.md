@@ -6,6 +6,20 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The crate builds about 25% faster (debug 15.8 s → 11.7 s, release
+  18.1 s → 13.3 s for every quantity on four cores). The `Fixed` unit
+  markers, such as `unit::length::Millimeter`, made up half of the crate's
+  trait impls; they now implement only `Clone` and `Copy`.
+
+### Removed
+
+- `Debug`, `PartialEq`, `Eq`, `PartialOrd`, `Ord`, `Hash` and `Default` on
+  the unit markers. `Fixed` values keep all of them.
+- `FixedUnit::ABBREVIATION` and `FixedUnit::ABBREVIATIONS`: use
+  `U::UNIT.abbreviation()` and `U::UNIT.info().abbreviations`.
+
 ## [0.1.0] - 2026-10-16
 
 The first release.
