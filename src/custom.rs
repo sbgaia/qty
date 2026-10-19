@@ -130,9 +130,45 @@ macro_rules! custom_unit {
 /// formatting, parsing unit abbreviations and names, [`Quantity`], and
 /// qty's `serde`, `approx` and `bytemuck` integrations when those features
 /// are on. It has no `from_<unit>` / `as_<unit>` methods, and parsing,
-/// `Fixed`, `AnyQuantity`, defmt and schemars do not know it. It has no
-/// physical dimensions, so unit expressions such as `"km/h"` do not parse
-/// as it, and products with other quantities are yours to define:
+/// `Fixed`, `AnyQuantity`, defmt and schemars do not know it.
+///
+/// # Dimensions
+///
+/// A quantity can declare its physical dimensions, as exponents of
+/// `length`, `mass`, `time`, `electric_current`, `temperature`,
+/// `amount_of_substance` and `luminous_intensity` (the fields of
+/// [`Dimensions`](crate::Dimensions)). Its base unit's abbreviation must
+/// then be a [unit expression](crate::UnitExpr) with those dimensions, and
+/// text in any unit with the same dimensions parses as the quantity:
+///
+/// ```rust
+/// use qty::*;
+///
+/// custom_quantity! {
+///     /// The weight of paper per area.
+///     pub struct Grammage;
+///     dimensions { mass: 1, length: -2 }
+///
+///     pub enum GrammageUnit {
+///         GramPerSquareMeter: "g/m²" (plural "GramsPerSquareMeter"),
+///         OuncePerSquareYard: "oz/yd²" (plural "OuncesPerSquareYard") = 33.9057474748823,
+///     }
+/// }
+///
+/// let office: Grammage = "80 g/m^2".parse()?;
+/// assert_eq!(office, "0.08 kg/m²".parse()?);
+/// assert_eq!(format!("{:.2}", office.in_unit(GrammageUnit::OuncePerSquareYard)), "2.36 oz/yd²");
+/// assert_eq!(Grammage::<f64>::INFO.dimensions, Dimensions::new(-2, 1, 0, 0, 0, 0, 0)); // L⁻² M
+/// assert_eq!("80 g/m".parse::<Grammage>(), Err(ParseError::UnknownUnit));
+/// # Ok::<(), ParseError>(())
+/// ```
+///
+/// A base unit that is not such an expression fails a `debug_assert!` the
+/// first time text falls back to an expression. Without dimensions, unit
+/// expressions do not parse as the quantity.
+///
+/// Products with other quantities are yours to define, with or without
+/// dimensions:
 ///
 /// ```rust
 /// # use qty::*;
@@ -155,6 +191,28 @@ macro_rules! custom_quantity {
     (
         $(#[doc = $doc:literal])*
         $vis:vis struct $Q:ident;
+        dimensions { $($dimension:ident: $exponent:literal),* $(,)? }
+        $($rest:tt)*
+    ) => {
+        $crate::custom_quantity! {
+            @define [$($doc),*] [$vis] $Q,
+            [$crate::Dimensions { $($dimension: $exponent,)* ..$crate::Dimensions::DIMENSIONLESS }],
+            CustomBase;
+            $($rest)*
+        }
+    };
+    (
+        $(#[doc = $doc:literal])*
+        $vis:vis struct $Q:ident;
+        $($rest:tt)*
+    ) => {
+        $crate::custom_quantity! {
+            @define [$($doc),*] [$vis] $Q, [$crate::Dimensions::DIMENSIONLESS], Off;
+            $($rest)*
+        }
+    };
+    (
+        @define [$($doc:literal),*] [$vis:vis] $Q:ident, [$($dimensions:tt)*], $exprs:ident;
 
         $(#[doc = $unit_doc:literal])*
         $unit_vis:vis enum $U:ident {
@@ -220,11 +278,11 @@ macro_rules! custom_quantity {
             const DOC: &'static str = concat!($($doc, "\n",)*);
             const DESCRIPTION: ([u8; $U::DOC.len()], usize) = $crate::__private::doc_text($U::DOC);
 
-            #[doc = concat!("Name, description and units of [`", stringify!($Q), "`].")]
+            #[doc = concat!("Name, description, dimensions and units of [`", stringify!($Q), "`].")]
             pub const QUANTITY: $crate::QuantityInfo = $crate::QuantityInfo {
                 name: stringify!($Q),
                 description: $crate::__private::doc_str(&$U::DESCRIPTION),
-                dimensions: $crate::Dimensions::DIMENSIONLESS,
+                dimensions: $($dimensions)*,
                 base_unit: &Self::INFOS[0],
                 units: Self::INFOS,
             };
@@ -287,7 +345,7 @@ macro_rules! custom_quantity {
             }
         }
 
-        $crate::__qty_common!($Q, $U, $base, names_only: true);
+        $crate::__qty_common!($Q, $U, $base, exprs: $exprs);
         $crate::__qty_vector_ops!($Q);
 
         $crate::__qty_if_serde! {
@@ -411,7 +469,39 @@ pub mod private {
     #[cfg(feature = "serde")]
     pub use serde;
 
-    use crate::{normalize_unit_name, ParseError, UnitEnum};
+    use crate::{normalize_unit_name, ParseError, Quantity, UnitEnum, UnitExpr};
+
+    /// Which unit expressions a quantity's `FromStr` accepts.
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum Exprs {
+        /// None: points, and custom quantities without dimensions.
+        Off,
+        /// Those with the quantity's dimensions, converted through its base
+        /// unit's abbreviation read as an expression.
+        Base,
+        /// As `Base`, for custom quantities: their base unit's abbreviation
+        /// must be an expression with their dimensions.
+        CustomBase,
+    }
+
+    /// The factor from the unit expression `unit` to `Q`'s base unit.
+    pub fn expr_factor<Q: Quantity>(unit: &str, exprs: Exprs) -> Option<f64> {
+        if exprs == Exprs::Off {
+            return None;
+        }
+        if exprs == Exprs::CustomBase {
+            let info = Q::INFO;
+            debug_assert!(
+                UnitExpr::parse(info.base_unit.abbreviation)
+                    .is_ok_and(|base| base.dimensions == info.dimensions),
+                "custom_quantity! {}: with `dimensions`, the base unit's abbreviation \
+                 (\"{}\") must be a unit expression with those dimensions, such as \"kg/m^2\"",
+                info.name,
+                info.base_unit.abbreviation,
+            );
+        }
+        UnitExpr::parse(unit).ok()?.factor_to_base::<Q>()
+    }
 
     /// Like the generated `from_name`: a singular or plural name.
     pub fn unit_from_name<U: UnitEnum>(name: &str) -> Option<U> {

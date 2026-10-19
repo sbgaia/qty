@@ -213,3 +213,91 @@ fn bytemuck() {
     assert_eq!(raw, [1.0, 50.0]);
     assert_eq!(Paper::from_base_slice(raw), sheets);
 }
+
+/// A quantity with dimensions, so that unit expressions parse as it.
+pub mod grammage {
+    qty::custom_quantity! {
+        /// The weight of paper per area.
+        pub struct Grammage;
+        dimensions { mass: 1, length: -2, }
+
+        /// Units of paper weight.
+        pub enum GrammageUnit {
+            GramPerSquareMeter: "g/m²" (plural "GramsPerSquareMeter"),
+            Gsm: "gsm" = 1.0,
+            OuncePerSquareYard: "oz/yd²" (plural "OuncesPerSquareYard") = 33.9057474748823,
+        }
+    }
+}
+
+use grammage::{Grammage, GrammageUnit};
+
+#[test]
+fn dimensions_enable_unit_expressions() {
+    let g = |grams: f64| Grammage::new(grams, GrammageUnit::GramPerSquareMeter);
+    // Listed units and names first, then any expression with the dimensions.
+    assert_eq!("80 gsm".parse::<Grammage>(), Ok(g(80.0)));
+    assert_eq!("80 grams per square meter".parse::<Grammage>(), Ok(g(80.0)));
+    assert_eq!("80 g/m^2".parse::<Grammage>(), Ok(g(80.0)));
+    assert_eq!("80 g·m⁻²".parse::<Grammage>(), Ok(g(80.0)));
+    assert_eq!("0.08 kg/m²".parse::<Grammage>(), Ok(g(80.0)));
+    assert_eq!("8 mg/cm^2".parse::<Grammage>(), Ok(g(80.0)));
+    // The listed ounce unit agrees with the expression.
+    let listed: Grammage = "3 oz/yd²".parse().unwrap();
+    let expr: Grammage = "3 oz/yd^2".parse().unwrap();
+    assert!((listed / expr - 1.0).abs() < 1e-15);
+    // Other dimensions are rejected.
+    assert_eq!(
+        "80 g/m".parse::<Grammage>(),
+        Err(qty::ParseError::UnknownUnit)
+    );
+    assert_eq!(
+        "80 N/m^2".parse::<Grammage>(),
+        Err(qty::ParseError::UnknownUnit)
+    );
+}
+
+#[test]
+fn dimensions_metadata() {
+    let info = Grammage::<f64>::INFO;
+    assert_eq!(info.dimensions, qty::Dimensions::new(-2, 1, 0, 0, 0, 0, 0));
+    assert_eq!(info.description, "The weight of paper per area.");
+    // Without the clause, a quantity is dimensionless and takes no expressions.
+    assert_eq!(
+        Paper::<f64>::INFO.dimensions,
+        qty::Dimensions::DIMENSIONLESS
+    );
+}
+
+#[test]
+fn private_quantities_with_dimensions() {
+    qty::custom_quantity! {
+        struct Cadence;
+        dimensions { time: -1 }
+        enum CadenceUnit {
+            Hertz: "Hz",
+            PerMinute: "spm" = 1.0 / 60.0,
+        }
+    }
+    let c: Cadence = "180 spm".parse().unwrap();
+    assert!((c.as_base() - 3.0).abs() < 1e-12);
+    assert!((("180 min^-1".parse::<Cadence>().unwrap() / c) - 1.0).abs() < 1e-12);
+}
+
+#[cfg(debug_assertions)]
+#[test]
+#[should_panic(
+    expected = "custom_quantity! Misdefined: with `dimensions`, the base unit's abbreviation (\"gsm\")"
+)]
+fn a_base_unit_that_is_not_an_expression_is_caught() {
+    qty::custom_quantity! {
+        struct Misdefined;
+        dimensions { mass: 1, length: -2 }
+        enum MisdefinedUnit {
+            Gsm: "gsm",
+        }
+    }
+    // Listed units parse as usual; the check runs on the expression fallback.
+    assert_eq!("1 gsm".parse::<Misdefined>().unwrap().as_base(), 1.0);
+    let _ = "1 g/m^2".parse::<Misdefined>();
+}

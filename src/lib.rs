@@ -547,11 +547,12 @@ macro_rules! __qty_fmt {
 /// `Display` and `FromStr`. Shared by the built-in quantities and
 /// `custom_quantity!`, so it names items only through `$crate` and checks
 /// qty's features through the `__qty_if_*` switches: it may expand in
-/// another crate. `names_only` turns off parsing unit expressions.
+/// another crate. `exprs` names the [`__private::Exprs`] mode: which unit
+/// expressions `FromStr` accepts.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_common {
-    ($Q:ident, $U:ident, $base:ident, names_only: $names_only:literal) => {
+    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
         impl<T> $Q<T> {
             /// Wraps a value expressed in the base unit. Free and `const`.
             #[inline(always)]
@@ -914,11 +915,8 @@ macro_rules! __qty_common {
                     .map_err(|_| $crate::ParseError::InvalidNumber)?;
                 match unit.parse::<$U>() {
                     Ok(unit) => Ok(Self::new(value, unit)),
-                    Err(e) if $names_only => Err(e),
                     Err(e) => {
-                        let factor = $crate::UnitExpr::parse(unit)
-                            .ok()
-                            .and_then(|expr| expr.factor_to_base::<Self>())
+                        let factor = $crate::__private::expr_factor::<Self>(unit, $crate::__private::Exprs::$exprs)
                             .ok_or(e)?;
                         Ok(Self::from_base(value * T::from_f64(factor)))
                     }
@@ -931,8 +929,8 @@ macro_rules! __qty_common {
 /// The built-in quantities: [`__qty_common!`] plus what only qty's own
 /// quantities have (`Fixed`, defmt and schemars).
 macro_rules! quantity_core {
-    ($Q:ident, $U:ident, $base:ident, point: $point:literal) => {
-        $crate::__qty_common!($Q, $U, $base, names_only: $point);
+    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
+        $crate::__qty_common!($Q, $U, $base, exprs: $exprs);
 
         impl<I: $crate::Integer> $Q<I> {
             /// Rounds a float quantity to a whole number of base units.
@@ -1166,7 +1164,7 @@ macro_rules! __qty_vector_ops {
 /// operators, [`Quantity`], `Display` and `FromStr`.
 macro_rules! quantity {
     ($Q:ident, $U:ident, $base:ident) => {
-        quantity_core!($Q, $U, $base, point: false);
+        quantity_core!($Q, $U, $base, exprs: Base);
         $crate::__qty_vector_ops!($Q);
     };
 }
@@ -1181,7 +1179,7 @@ macro_rules! quantity {
 /// `point / point` remains: it is a ratio of absolute values.
 macro_rules! point_quantity {
     ($Q:ident, $U:ident, $base:ident, $D:ident) => {
-        quantity_core!($Q, $U, $base, point: true);
+        quantity_core!($Q, $U, $base, exprs: Off);
 
         impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
             type Output = $D<T>;

@@ -91,6 +91,10 @@ assert_eq!(format!("{:.1}", order.in_unit(PaperUnit::Ream)), "3.1 rm");
 # Ok::<(), ParseError>(())
 ```
 
+A custom quantity can also declare its physical dimensions
+(`dimensions { mass: 1, length: -2 }`), so that unit expressions such as
+`"80 g/m^2"` parse as it.
+
 ## Text
 
 Quantities print in their base unit, or in any unit you ask for. Parsing
