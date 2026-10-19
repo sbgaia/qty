@@ -233,15 +233,12 @@ impl core::str::FromStr for JerkUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Jerk<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Jerk<T>> for JerkUnit {
     #[inline]
-    pub fn new(value: T, unit: JerkUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             JerkUnit::MeterPerSecondCubed => value,
             JerkUnit::NanometerPerSecondCubed => value / T::from_f64(1e9),
             JerkUnit::MicrometerPerSecondCubed => value / T::from_f64(1000000.0),
@@ -253,27 +250,28 @@ impl<T: Float> Jerk<T> {
             JerkUnit::FootPerSecondCubed => value * T::from_f64(0.3048),
             JerkUnit::StandardGravitiesPerSecond => value * T::from_f64(9.80665),
             JerkUnit::MillistandardGravitiesPerSecond => value * T::from_f64(0.00980665),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: JerkUnit) -> T {
-        match unit {
-            JerkUnit::MeterPerSecondCubed => self.0,
-            JerkUnit::NanometerPerSecondCubed => self.0 * T::from_f64(1e9),
-            JerkUnit::MicrometerPerSecondCubed => self.0 * T::from_f64(1000000.0),
-            JerkUnit::MillimeterPerSecondCubed => self.0 * T::from_f64(1000.0),
-            JerkUnit::CentimeterPerSecondCubed => self.0 * T::from_f64(100.0),
-            JerkUnit::DecimeterPerSecondCubed => self.0 * T::from_f64(10.0),
-            JerkUnit::KilometerPerSecondCubed => self.0 / T::from_f64(1000.0),
-            JerkUnit::InchPerSecondCubed => self.0 / T::from_f64(0.0254),
-            JerkUnit::FootPerSecondCubed => self.0 / T::from_f64(0.3048),
-            JerkUnit::StandardGravitiesPerSecond => self.0 / T::from_f64(9.80665),
-            JerkUnit::MillistandardGravitiesPerSecond => self.0 / T::from_f64(0.00980665),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            JerkUnit::MeterPerSecondCubed => value,
+            JerkUnit::NanometerPerSecondCubed => value * T::from_f64(1e9),
+            JerkUnit::MicrometerPerSecondCubed => value * T::from_f64(1000000.0),
+            JerkUnit::MillimeterPerSecondCubed => value * T::from_f64(1000.0),
+            JerkUnit::CentimeterPerSecondCubed => value * T::from_f64(100.0),
+            JerkUnit::DecimeterPerSecondCubed => value * T::from_f64(10.0),
+            JerkUnit::KilometerPerSecondCubed => value / T::from_f64(1000.0),
+            JerkUnit::InchPerSecondCubed => value / T::from_f64(0.0254),
+            JerkUnit::FootPerSecondCubed => value / T::from_f64(0.3048),
+            JerkUnit::StandardGravitiesPerSecond => value / T::from_f64(9.80665),
+            JerkUnit::MillistandardGravitiesPerSecond => value / T::from_f64(0.00980665),
+        }
+    }
+}
+
+impl<T: Float> Jerk<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nm/s³`, `µm/s³`, `mm/s³`, `m/s³`, `km/s³`).
     /// Zero, NaN and infinities are shown in the base unit.

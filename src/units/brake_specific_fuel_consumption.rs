@@ -138,35 +138,33 @@ impl core::str::FromStr for BrakeSpecificFuelConsumptionUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> BrakeSpecificFuelConsumption<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<BrakeSpecificFuelConsumption<T>> for BrakeSpecificFuelConsumptionUnit {
     #[inline]
-    pub fn new(value: T, unit: BrakeSpecificFuelConsumptionUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value / T::from_f64(3.6e9),
             BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
             BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
                 value * T::from_f64(1.6896594108226585e-7)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: BrakeSpecificFuelConsumptionUnit) -> T {
-        match unit {
-            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => self.0 * T::from_f64(3.6e9),
-            BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => self.0,
-            BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
-                self.0 / T::from_f64(1.6896594108226585e-7)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value * T::from_f64(3.6e9),
+            BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
+            BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
+                value / T::from_f64(1.6896594108226585e-7)
+            }
+        }
+    }
+}
+
+impl<T: Float> BrakeSpecificFuelConsumption<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`kg/J`).
     /// Zero, NaN and infinities are shown in the base unit.

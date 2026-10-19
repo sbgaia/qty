@@ -103,27 +103,25 @@ impl core::str::FromStr for MagnetizationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Magnetization<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
     #[inline]
-    pub fn new(value: T, unit: MagnetizationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MagnetizationUnit::AmperePerMeter => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MagnetizationUnit) -> T {
-        match unit {
-            MagnetizationUnit::AmperePerMeter => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MagnetizationUnit::AmperePerMeter => value,
+        }
+    }
+}
+
+impl<T: Float> Magnetization<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`A/m`).
     /// Zero, NaN and infinities are shown in the base unit.

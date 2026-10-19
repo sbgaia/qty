@@ -198,15 +198,12 @@ impl core::str::FromStr for ElectricResistanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricResistance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricResistanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricResistanceUnit::Ohm => value,
             ElectricResistanceUnit::Nanoohm => value / T::from_f64(1e9),
             ElectricResistanceUnit::Microohm => value / T::from_f64(1000000.0),
@@ -215,24 +212,25 @@ impl<T: Float> ElectricResistance<T> {
             ElectricResistanceUnit::Megaohm => value * T::from_f64(1000000.0),
             ElectricResistanceUnit::Gigaohm => value * T::from_f64(1e9),
             ElectricResistanceUnit::Teraohm => value * T::from_f64(1e12),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricResistanceUnit) -> T {
-        match unit {
-            ElectricResistanceUnit::Ohm => self.0,
-            ElectricResistanceUnit::Nanoohm => self.0 * T::from_f64(1e9),
-            ElectricResistanceUnit::Microohm => self.0 * T::from_f64(1000000.0),
-            ElectricResistanceUnit::Milliohm => self.0 * T::from_f64(1000.0),
-            ElectricResistanceUnit::Kiloohm => self.0 / T::from_f64(1000.0),
-            ElectricResistanceUnit::Megaohm => self.0 / T::from_f64(1000000.0),
-            ElectricResistanceUnit::Gigaohm => self.0 / T::from_f64(1e9),
-            ElectricResistanceUnit::Teraohm => self.0 / T::from_f64(1e12),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricResistanceUnit::Ohm => value,
+            ElectricResistanceUnit::Nanoohm => value * T::from_f64(1e9),
+            ElectricResistanceUnit::Microohm => value * T::from_f64(1000000.0),
+            ElectricResistanceUnit::Milliohm => value * T::from_f64(1000.0),
+            ElectricResistanceUnit::Kiloohm => value / T::from_f64(1000.0),
+            ElectricResistanceUnit::Megaohm => value / T::from_f64(1000000.0),
+            ElectricResistanceUnit::Gigaohm => value / T::from_f64(1e9),
+            ElectricResistanceUnit::Teraohm => value / T::from_f64(1e12),
+        }
+    }
+}
+
+impl<T: Float> ElectricResistance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
     /// Zero, NaN and infinities are shown in the base unit.

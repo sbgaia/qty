@@ -231,15 +231,12 @@ impl core::str::FromStr for VolumetricHeatCapacityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> VolumetricHeatCapacity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapacityUnit {
     #[inline]
-    pub fn new(value: T, unit: VolumetricHeatCapacityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin => value,
             VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => value * T::from_f64(1000.0),
             VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin => {
@@ -261,39 +258,38 @@ impl<T: Float> VolumetricHeatCapacity<T> {
             VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
                 value * T::from_f64(67066.10245409631)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: VolumetricHeatCapacityUnit) -> T {
-        match unit {
-            VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin => self.0,
-            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => {
-                self.0 / T::from_f64(1000.0)
-            }
-            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin => {
-                self.0 / T::from_f64(1000000.0)
-            }
-            VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius => self.0,
-            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius => {
-                self.0 / T::from_f64(1000.0)
-            }
-            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius => {
-                self.0 / T::from_f64(1000000.0)
-            }
-            VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius => {
-                self.0 / T::from_f64(4184000.0)
-            }
-            VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius => {
-                self.0 / T::from_f64(4.184e9)
-            }
-            VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
-                self.0 / T::from_f64(67066.10245409631)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin => value,
+            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin => value / T::from_f64(1000.0),
+            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterKelvin => {
+                value / T::from_f64(1000000.0)
+            }
+            VolumetricHeatCapacityUnit::JoulePerCubicMeterDegreeCelsius => value,
+            VolumetricHeatCapacityUnit::KilojoulePerCubicMeterDegreeCelsius => {
+                value / T::from_f64(1000.0)
+            }
+            VolumetricHeatCapacityUnit::MegajoulePerCubicMeterDegreeCelsius => {
+                value / T::from_f64(1000000.0)
+            }
+            VolumetricHeatCapacityUnit::CaloriePerCubicCentimeterDegreeCelsius => {
+                value / T::from_f64(4184000.0)
+            }
+            VolumetricHeatCapacityUnit::KilocaloriePerCubicCentimeterDegreeCelsius => {
+                value / T::from_f64(4.184e9)
+            }
+            VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
+                value / T::from_f64(67066.10245409631)
+            }
+        }
+    }
+}
+
+impl<T: Float> VolumetricHeatCapacity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/(m³·K)`, `kJ/(m³·K)`, `MJ/(m³·K)`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -211,15 +211,12 @@ impl core::str::FromStr for MolarFlowUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MolarFlow<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
     #[inline]
-    pub fn new(value: T, unit: MolarFlowUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MolarFlowUnit::MolePerSecond => value,
             MolarFlowUnit::KilomolePerSecond => value * T::from_f64(1000.0),
             MolarFlowUnit::MolePerMinute => value / T::from_f64(60.0),
@@ -229,25 +226,26 @@ impl<T: Float> MolarFlow<T> {
             MolarFlowUnit::PoundMolePerSecond => value * T::from_f64(453.59237),
             MolarFlowUnit::PoundMolePerMinute => value * T::from_f64(7.559872833333333),
             MolarFlowUnit::PoundMolePerHour => value * T::from_f64(0.12599788055555555),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MolarFlowUnit) -> T {
-        match unit {
-            MolarFlowUnit::MolePerSecond => self.0,
-            MolarFlowUnit::KilomolePerSecond => self.0 / T::from_f64(1000.0),
-            MolarFlowUnit::MolePerMinute => self.0 * T::from_f64(60.0),
-            MolarFlowUnit::KilomolePerMinute => self.0 / T::from_f64(16.666666666666668),
-            MolarFlowUnit::MolePerHour => self.0 * T::from_f64(3600.0),
-            MolarFlowUnit::KilomolePerHour => self.0 / T::from_f64(0.2777777777777778),
-            MolarFlowUnit::PoundMolePerSecond => self.0 / T::from_f64(453.59237),
-            MolarFlowUnit::PoundMolePerMinute => self.0 / T::from_f64(7.559872833333333),
-            MolarFlowUnit::PoundMolePerHour => self.0 / T::from_f64(0.12599788055555555),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MolarFlowUnit::MolePerSecond => value,
+            MolarFlowUnit::KilomolePerSecond => value / T::from_f64(1000.0),
+            MolarFlowUnit::MolePerMinute => value * T::from_f64(60.0),
+            MolarFlowUnit::KilomolePerMinute => value / T::from_f64(16.666666666666668),
+            MolarFlowUnit::MolePerHour => value * T::from_f64(3600.0),
+            MolarFlowUnit::KilomolePerHour => value / T::from_f64(0.2777777777777778),
+            MolarFlowUnit::PoundMolePerSecond => value / T::from_f64(453.59237),
+            MolarFlowUnit::PoundMolePerMinute => value / T::from_f64(7.559872833333333),
+            MolarFlowUnit::PoundMolePerHour => value / T::from_f64(0.12599788055555555),
+        }
+    }
+}
+
+impl<T: Float> MolarFlow<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`mol/s`, `kmol/s`).
     /// Zero, NaN and infinities are shown in the base unit.

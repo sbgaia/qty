@@ -405,15 +405,12 @@ impl core::str::FromStr for MassFractionUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MassFraction<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
     #[inline]
-    pub fn new(value: T, unit: MassFractionUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MassFractionUnit::DecimalFraction => value,
             MassFractionUnit::GramPerGram => value,
             MassFractionUnit::NanogramPerGram => value / T::from_f64(1e9),
@@ -438,40 +435,41 @@ impl<T: Float> MassFraction<T> {
             MassFractionUnit::PartPerMillion => value / T::from_f64(1000000.0),
             MassFractionUnit::PartPerBillion => value / T::from_f64(1e9),
             MassFractionUnit::PartPerTrillion => value / T::from_f64(1e12),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MassFractionUnit) -> T {
-        match unit {
-            MassFractionUnit::DecimalFraction => self.0,
-            MassFractionUnit::GramPerGram => self.0,
-            MassFractionUnit::NanogramPerGram => self.0 * T::from_f64(1e9),
-            MassFractionUnit::MicrogramPerGram => self.0 * T::from_f64(1000000.0),
-            MassFractionUnit::MilligramPerGram => self.0 * T::from_f64(1000.0),
-            MassFractionUnit::CentigramPerGram => self.0 * T::from_f64(100.0),
-            MassFractionUnit::DecigramPerGram => self.0 * T::from_f64(10.0),
-            MassFractionUnit::DecagramPerGram => self.0 / T::from_f64(10.0),
-            MassFractionUnit::HectogramPerGram => self.0 / T::from_f64(100.0),
-            MassFractionUnit::KilogramPerGram => self.0 / T::from_f64(1000.0),
-            MassFractionUnit::GramPerKilogram => self.0 * T::from_f64(1000.0),
-            MassFractionUnit::NanogramPerKilogram => self.0 * T::from_f64(1e12),
-            MassFractionUnit::MicrogramPerKilogram => self.0 * T::from_f64(1e9),
-            MassFractionUnit::MilligramPerKilogram => self.0 * T::from_f64(1000000.0),
-            MassFractionUnit::CentigramPerKilogram => self.0 * T::from_f64(100000.0),
-            MassFractionUnit::DecigramPerKilogram => self.0 * T::from_f64(10000.0),
-            MassFractionUnit::DecagramPerKilogram => self.0 * T::from_f64(100.0),
-            MassFractionUnit::HectogramPerKilogram => self.0 * T::from_f64(10.0),
-            MassFractionUnit::KilogramPerKilogram => self.0,
-            MassFractionUnit::Percent => self.0 * T::from_f64(100.0),
-            MassFractionUnit::PartPerThousand => self.0 * T::from_f64(1000.0),
-            MassFractionUnit::PartPerMillion => self.0 * T::from_f64(1000000.0),
-            MassFractionUnit::PartPerBillion => self.0 * T::from_f64(1e9),
-            MassFractionUnit::PartPerTrillion => self.0 * T::from_f64(1e12),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MassFractionUnit::DecimalFraction => value,
+            MassFractionUnit::GramPerGram => value,
+            MassFractionUnit::NanogramPerGram => value * T::from_f64(1e9),
+            MassFractionUnit::MicrogramPerGram => value * T::from_f64(1000000.0),
+            MassFractionUnit::MilligramPerGram => value * T::from_f64(1000.0),
+            MassFractionUnit::CentigramPerGram => value * T::from_f64(100.0),
+            MassFractionUnit::DecigramPerGram => value * T::from_f64(10.0),
+            MassFractionUnit::DecagramPerGram => value / T::from_f64(10.0),
+            MassFractionUnit::HectogramPerGram => value / T::from_f64(100.0),
+            MassFractionUnit::KilogramPerGram => value / T::from_f64(1000.0),
+            MassFractionUnit::GramPerKilogram => value * T::from_f64(1000.0),
+            MassFractionUnit::NanogramPerKilogram => value * T::from_f64(1e12),
+            MassFractionUnit::MicrogramPerKilogram => value * T::from_f64(1e9),
+            MassFractionUnit::MilligramPerKilogram => value * T::from_f64(1000000.0),
+            MassFractionUnit::CentigramPerKilogram => value * T::from_f64(100000.0),
+            MassFractionUnit::DecigramPerKilogram => value * T::from_f64(10000.0),
+            MassFractionUnit::DecagramPerKilogram => value * T::from_f64(100.0),
+            MassFractionUnit::HectogramPerKilogram => value * T::from_f64(10.0),
+            MassFractionUnit::KilogramPerKilogram => value,
+            MassFractionUnit::Percent => value * T::from_f64(100.0),
+            MassFractionUnit::PartPerThousand => value * T::from_f64(1000.0),
+            MassFractionUnit::PartPerMillion => value * T::from_f64(1000000.0),
+            MassFractionUnit::PartPerBillion => value * T::from_f64(1e9),
+            MassFractionUnit::PartPerTrillion => value * T::from_f64(1e12),
+        }
+    }
+}
+
+impl<T: Float> MassFraction<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (``).
     /// Zero, NaN and infinities are shown in the base unit.

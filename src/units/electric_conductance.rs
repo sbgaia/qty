@@ -294,15 +294,12 @@ impl core::str::FromStr for ElectricConductanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricConductance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricConductanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricConductanceUnit::Siemens => value,
             ElectricConductanceUnit::Nanosiemens => value / T::from_f64(1e9),
             ElectricConductanceUnit::Microsiemens => value / T::from_f64(1000000.0),
@@ -319,32 +316,33 @@ impl<T: Float> ElectricConductance<T> {
             ElectricConductanceUnit::Megamho => value * T::from_f64(1000000.0),
             ElectricConductanceUnit::Gigamho => value * T::from_f64(1e9),
             ElectricConductanceUnit::Teramho => value * T::from_f64(1e12),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricConductanceUnit) -> T {
-        match unit {
-            ElectricConductanceUnit::Siemens => self.0,
-            ElectricConductanceUnit::Nanosiemens => self.0 * T::from_f64(1e9),
-            ElectricConductanceUnit::Microsiemens => self.0 * T::from_f64(1000000.0),
-            ElectricConductanceUnit::Millisiemens => self.0 * T::from_f64(1000.0),
-            ElectricConductanceUnit::Kilosiemens => self.0 / T::from_f64(1000.0),
-            ElectricConductanceUnit::Megasiemens => self.0 / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Gigasiemens => self.0 / T::from_f64(1e9),
-            ElectricConductanceUnit::Terasiemens => self.0 / T::from_f64(1e12),
-            ElectricConductanceUnit::Mho => self.0,
-            ElectricConductanceUnit::Nanomho => self.0 * T::from_f64(1e9),
-            ElectricConductanceUnit::Micromho => self.0 * T::from_f64(1000000.0),
-            ElectricConductanceUnit::Millimho => self.0 * T::from_f64(1000.0),
-            ElectricConductanceUnit::Kilomho => self.0 / T::from_f64(1000.0),
-            ElectricConductanceUnit::Megamho => self.0 / T::from_f64(1000000.0),
-            ElectricConductanceUnit::Gigamho => self.0 / T::from_f64(1e9),
-            ElectricConductanceUnit::Teramho => self.0 / T::from_f64(1e12),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricConductanceUnit::Siemens => value,
+            ElectricConductanceUnit::Nanosiemens => value * T::from_f64(1e9),
+            ElectricConductanceUnit::Microsiemens => value * T::from_f64(1000000.0),
+            ElectricConductanceUnit::Millisiemens => value * T::from_f64(1000.0),
+            ElectricConductanceUnit::Kilosiemens => value / T::from_f64(1000.0),
+            ElectricConductanceUnit::Megasiemens => value / T::from_f64(1000000.0),
+            ElectricConductanceUnit::Gigasiemens => value / T::from_f64(1e9),
+            ElectricConductanceUnit::Terasiemens => value / T::from_f64(1e12),
+            ElectricConductanceUnit::Mho => value,
+            ElectricConductanceUnit::Nanomho => value * T::from_f64(1e9),
+            ElectricConductanceUnit::Micromho => value * T::from_f64(1000000.0),
+            ElectricConductanceUnit::Millimho => value * T::from_f64(1000.0),
+            ElectricConductanceUnit::Kilomho => value / T::from_f64(1000.0),
+            ElectricConductanceUnit::Megamho => value / T::from_f64(1000000.0),
+            ElectricConductanceUnit::Gigamho => value / T::from_f64(1e9),
+            ElectricConductanceUnit::Teramho => value / T::from_f64(1e12),
+        }
+    }
+}
+
+impl<T: Float> ElectricConductance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
     /// Zero, NaN and infinities are shown in the base unit.

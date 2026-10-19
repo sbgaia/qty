@@ -150,33 +150,31 @@ impl core::str::FromStr for ElectricReactivePowerUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricReactivePower<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricReactivePower<T>> for ElectricReactivePowerUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricReactivePowerUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricReactivePowerUnit::VoltampereReactive => value,
             ElectricReactivePowerUnit::KilovoltampereReactive => value * T::from_f64(1000.0),
             ElectricReactivePowerUnit::MegavoltampereReactive => value * T::from_f64(1000000.0),
             ElectricReactivePowerUnit::GigavoltampereReactive => value * T::from_f64(1e9),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricReactivePowerUnit) -> T {
-        match unit {
-            ElectricReactivePowerUnit::VoltampereReactive => self.0,
-            ElectricReactivePowerUnit::KilovoltampereReactive => self.0 / T::from_f64(1000.0),
-            ElectricReactivePowerUnit::MegavoltampereReactive => self.0 / T::from_f64(1000000.0),
-            ElectricReactivePowerUnit::GigavoltampereReactive => self.0 / T::from_f64(1e9),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricReactivePowerUnit::VoltampereReactive => value,
+            ElectricReactivePowerUnit::KilovoltampereReactive => value / T::from_f64(1000.0),
+            ElectricReactivePowerUnit::MegavoltampereReactive => value / T::from_f64(1000000.0),
+            ElectricReactivePowerUnit::GigavoltampereReactive => value / T::from_f64(1e9),
+        }
+    }
+}
+
+impl<T: Float> ElectricReactivePower<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`var`, `kvar`, `Mvar`, `Gvar`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -314,15 +314,12 @@ impl core::str::FromStr for ForceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Force<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Force<T>> for ForceUnit {
     #[inline]
-    pub fn new(value: T, unit: ForceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ForceUnit::Dyn => value / T::from_f64(100000.0),
             ForceUnit::GramForce => value * T::from_f64(0.00980665),
             ForceUnit::KilogramForce => value * T::from_f64(9.80665),
@@ -339,32 +336,33 @@ impl<T: Float> Force<T> {
             ForceUnit::KilopoundForce => value * T::from_f64(4448.2216152605),
             ForceUnit::OunceForce => value * T::from_f64(0.2780138509537812),
             ForceUnit::ShortTonForce => value * T::from_f64(8896.443230521),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ForceUnit) -> T {
-        match unit {
-            ForceUnit::Dyn => self.0 * T::from_f64(100000.0),
-            ForceUnit::GramForce => self.0 / T::from_f64(0.00980665),
-            ForceUnit::KilogramForce => self.0 / T::from_f64(9.80665),
-            ForceUnit::TonneForce => self.0 / T::from_f64(9806.65),
-            ForceUnit::Newton => self.0,
-            ForceUnit::Micronewton => self.0 * T::from_f64(1000000.0),
-            ForceUnit::Millinewton => self.0 * T::from_f64(1000.0),
-            ForceUnit::Decanewton => self.0 / T::from_f64(10.0),
-            ForceUnit::Kilonewton => self.0 / T::from_f64(1000.0),
-            ForceUnit::Meganewton => self.0 / T::from_f64(1000000.0),
-            ForceUnit::Kilopond => self.0 / T::from_f64(9.80665),
-            ForceUnit::Poundal => self.0 / T::from_f64(0.138254954376),
-            ForceUnit::PoundForce => self.0 / T::from_f64(4.4482216152605),
-            ForceUnit::KilopoundForce => self.0 / T::from_f64(4448.2216152605),
-            ForceUnit::OunceForce => self.0 / T::from_f64(0.2780138509537812),
-            ForceUnit::ShortTonForce => self.0 / T::from_f64(8896.443230521),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ForceUnit::Dyn => value * T::from_f64(100000.0),
+            ForceUnit::GramForce => value / T::from_f64(0.00980665),
+            ForceUnit::KilogramForce => value / T::from_f64(9.80665),
+            ForceUnit::TonneForce => value / T::from_f64(9806.65),
+            ForceUnit::Newton => value,
+            ForceUnit::Micronewton => value * T::from_f64(1000000.0),
+            ForceUnit::Millinewton => value * T::from_f64(1000.0),
+            ForceUnit::Decanewton => value / T::from_f64(10.0),
+            ForceUnit::Kilonewton => value / T::from_f64(1000.0),
+            ForceUnit::Meganewton => value / T::from_f64(1000000.0),
+            ForceUnit::Kilopond => value / T::from_f64(9.80665),
+            ForceUnit::Poundal => value / T::from_f64(0.138254954376),
+            ForceUnit::PoundForce => value / T::from_f64(4.4482216152605),
+            ForceUnit::KilopoundForce => value / T::from_f64(4448.2216152605),
+            ForceUnit::OunceForce => value / T::from_f64(0.2780138509537812),
+            ForceUnit::ShortTonForce => value / T::from_f64(8896.443230521),
+        }
+    }
+}
+
+impl<T: Float> Force<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µN`, `mN`, `N`, `kN`, `MN`).
     /// Zero, NaN and infinities are shown in the base unit.

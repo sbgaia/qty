@@ -1879,3 +1879,66 @@ mod polish {
         assert_eq!(a.lerp(b, 0.0), a);
     }
 }
+
+mod custom_units {
+    use qty::*;
+
+    custom_unit! {
+        /// The furlong: 220 yards.
+        pub struct Furlong for qty::Length {
+            abbreviation: "fur",
+            singular: "Furlong",
+            plural: "Furlongs",
+            factor: 201.168,
+        }
+    }
+
+    // Degrees Celsius again, to check the offset against the built-in unit.
+    custom_unit! {
+        struct Celsius for Temperature {
+            abbreviation: "°C*",
+            singular: "Celsius",
+            plural: "Celsius",
+            factor: 1.0,
+            offset: 273.15
+        }
+    }
+
+    #[test]
+    fn conversions() {
+        let race = Length::new(5.0, Furlong);
+        assert!((race.as_meters() - 1005.84).abs() < 1e-9);
+        assert!((race.convert_to(Furlong) - 5.0).abs() < 1e-12);
+        assert!((Length::from_miles(1.0).convert_to(Furlong) - 8.0).abs() < 1e-12);
+        let small: Length<f32> = Length::new(1.0, Furlong);
+        assert!((small.as_meters() - 201.168).abs() < 1e-4);
+    }
+
+    #[test]
+    fn offsets_for_points() {
+        let t = Temperature::new(21.5, Celsius);
+        assert!(t.approx_eq_abs(Temperature::from_degrees_celsius(21.5), 1e-12));
+        assert!((Temperature::from_kelvins(300.0).convert_to(Celsius) - 26.85).abs() < 1e-9);
+    }
+
+    #[test]
+    fn display_and_metadata() {
+        let d = Length::from_meters(402.336).in_unit(Furlong);
+        assert_eq!(format!("{d:.1}"), "2.0 fur");
+        assert_eq!(format!("{:>8}", Furlong), "     fur");
+        assert_eq!(Furlong.info().plural, "Furlongs");
+        assert_eq!(Furlong.abbreviation(), "fur");
+    }
+
+    #[test]
+    fn generic_code_takes_any_unit() {
+        fn in_unit_of<U: UnitOf<Length>>(meters: f64, unit: U) -> f64 {
+            Length::from_meters(meters).convert_to(unit)
+        }
+        assert!((in_unit_of(201.168, Furlong) - 1.0).abs() < 1e-12);
+        assert_eq!(in_unit_of(1500.0, LengthUnit::Kilometer), 1.5);
+        // Built-in units still infer the storage type from the value.
+        let l = Length::new(2.0, LengthUnit::Kilometer);
+        assert_eq!(l, Length::from_meters(2000.0));
+    }
+}

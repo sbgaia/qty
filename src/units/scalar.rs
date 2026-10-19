@@ -99,27 +99,25 @@ impl core::str::FromStr for ScalarUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Scalar<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Scalar<T>> for ScalarUnit {
     #[inline]
-    pub fn new(value: T, unit: ScalarUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ScalarUnit::Amount => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ScalarUnit) -> T {
-        match unit {
-            ScalarUnit::Amount => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ScalarUnit::Amount => value,
+        }
+    }
+}
+
+impl<T: Float> Scalar<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (``).
     /// Zero, NaN and infinities are shown in the base unit.

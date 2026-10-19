@@ -102,27 +102,25 @@ impl core::str::FromStr for RelativeHumidityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RelativeHumidity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
     #[inline]
-    pub fn new(value: T, unit: RelativeHumidityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RelativeHumidityUnit::Percent => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RelativeHumidityUnit) -> T {
-        match unit {
-            RelativeHumidityUnit::Percent => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RelativeHumidityUnit::Percent => value,
+        }
+    }
+}
+
+impl<T: Float> RelativeHumidity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`%RH`).
     /// Zero, NaN and infinities are shown in the base unit.

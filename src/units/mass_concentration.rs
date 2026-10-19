@@ -735,15 +735,12 @@ impl core::str::FromStr for MassConcentrationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MassConcentration<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
     #[inline]
-    pub fn new(value: T, unit: MassConcentrationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MassConcentrationUnit::GramPerCubicMillimeter => value * T::from_f64(1000000.0),
             MassConcentrationUnit::KilogramPerCubicMillimeter => value * T::from_f64(1e9),
             MassConcentrationUnit::GramPerCubicCentimeter => value * T::from_f64(1000.0),
@@ -795,69 +792,68 @@ impl<T: Float> MassConcentration<T> {
             MassConcentrationUnit::OuncePerUSGallon => value * T::from_f64(7.489151707306039),
             MassConcentrationUnit::OuncePerImperialGallon => value * T::from_f64(6.236023291443856),
             MassConcentrationUnit::PoundPerImperialGallon => value * T::from_f64(99.7763726631017),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MassConcentrationUnit) -> T {
-        match unit {
-            MassConcentrationUnit::GramPerCubicMillimeter => self.0 / T::from_f64(1000000.0),
-            MassConcentrationUnit::KilogramPerCubicMillimeter => self.0 / T::from_f64(1e9),
-            MassConcentrationUnit::GramPerCubicCentimeter => self.0 / T::from_f64(1000.0),
-            MassConcentrationUnit::KilogramPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
-            MassConcentrationUnit::GramPerCubicMeter => self.0 * T::from_f64(1000.0),
-            MassConcentrationUnit::KilogramPerCubicMeter => self.0,
-            MassConcentrationUnit::MilligramPerCubicMeter => self.0 * T::from_f64(1000000.0),
-            MassConcentrationUnit::MicrogramPerCubicMeter => self.0 * T::from_f64(1e9),
-            MassConcentrationUnit::GramPerMicroliter => self.0 / T::from_f64(1000000.0),
-            MassConcentrationUnit::PicogramPerMicroliter => self.0 * T::from_f64(1000000.0),
-            MassConcentrationUnit::NanogramPerMicroliter => self.0 * T::from_f64(1000.0),
-            MassConcentrationUnit::MicrogramPerMicroliter => self.0,
-            MassConcentrationUnit::MilligramPerMicroliter => self.0 / T::from_f64(1000.0),
-            MassConcentrationUnit::CentigramPerMicroliter => self.0 / T::from_f64(10000.0),
-            MassConcentrationUnit::DecigramPerMicroliter => self.0 / T::from_f64(100000.0),
-            MassConcentrationUnit::GramPerMilliliter => self.0 / T::from_f64(1000.0),
-            MassConcentrationUnit::PicogramPerMilliliter => self.0 * T::from_f64(1e9),
-            MassConcentrationUnit::NanogramPerMilliliter => self.0 * T::from_f64(1000000.0),
-            MassConcentrationUnit::MicrogramPerMilliliter => self.0 * T::from_f64(1000.0),
-            MassConcentrationUnit::MilligramPerMilliliter => self.0,
-            MassConcentrationUnit::CentigramPerMilliliter => self.0 / T::from_f64(10.0),
-            MassConcentrationUnit::DecigramPerMilliliter => self.0 / T::from_f64(100.0),
-            MassConcentrationUnit::GramPerDeciliter => self.0 / T::from_f64(10.0),
-            MassConcentrationUnit::PicogramPerDeciliter => self.0 * T::from_f64(1e11),
-            MassConcentrationUnit::NanogramPerDeciliter => self.0 * T::from_f64(1e8),
-            MassConcentrationUnit::MicrogramPerDeciliter => self.0 * T::from_f64(100000.0),
-            MassConcentrationUnit::MilligramPerDeciliter => self.0 * T::from_f64(100.0),
-            MassConcentrationUnit::CentigramPerDeciliter => self.0 * T::from_f64(10.0),
-            MassConcentrationUnit::DecigramPerDeciliter => self.0,
-            MassConcentrationUnit::GramPerLiter => self.0,
-            MassConcentrationUnit::PicogramPerLiter => self.0 * T::from_f64(1e12),
-            MassConcentrationUnit::NanogramPerLiter => self.0 * T::from_f64(1e9),
-            MassConcentrationUnit::MicrogramPerLiter => self.0 * T::from_f64(1000000.0),
-            MassConcentrationUnit::MilligramPerLiter => self.0 * T::from_f64(1000.0),
-            MassConcentrationUnit::CentigramPerLiter => self.0 * T::from_f64(100.0),
-            MassConcentrationUnit::DecigramPerLiter => self.0 * T::from_f64(10.0),
-            MassConcentrationUnit::KilogramPerLiter => self.0 / T::from_f64(1000.0),
-            MassConcentrationUnit::TonnePerCubicMillimeter => self.0 / T::from_f64(1e12),
-            MassConcentrationUnit::TonnePerCubicCentimeter => self.0 / T::from_f64(1e9),
-            MassConcentrationUnit::TonnePerCubicMeter => self.0 / T::from_f64(1000.0),
-            MassConcentrationUnit::PoundPerCubicInch => self.0 / T::from_f64(27679.90471020312),
-            MassConcentrationUnit::KilopoundPerCubicInch => {
-                self.0 / T::from_f64(2.7679904710203122e7)
-            }
-            MassConcentrationUnit::PoundPerCubicFoot => self.0 / T::from_f64(16.018463373960138),
-            MassConcentrationUnit::KilopoundPerCubicFoot => self.0 / T::from_f64(16018.46337396014),
-            MassConcentrationUnit::SlugPerCubicFoot => self.0 / T::from_f64(515.3788183931962),
-            MassConcentrationUnit::PoundPerUSGallon => self.0 / T::from_f64(119.82642731689663),
-            MassConcentrationUnit::OuncePerUSGallon => self.0 / T::from_f64(7.489151707306039),
-            MassConcentrationUnit::OuncePerImperialGallon => {
-                self.0 / T::from_f64(6.236023291443856)
-            }
-            MassConcentrationUnit::PoundPerImperialGallon => self.0 / T::from_f64(99.7763726631017),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MassConcentrationUnit::GramPerCubicMillimeter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::KilogramPerCubicMillimeter => value / T::from_f64(1e9),
+            MassConcentrationUnit::GramPerCubicCentimeter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicCentimeter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::GramPerCubicMeter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::KilogramPerCubicMeter => value,
+            MassConcentrationUnit::MilligramPerCubicMeter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerCubicMeter => value * T::from_f64(1e9),
+            MassConcentrationUnit::GramPerMicroliter => value / T::from_f64(1000000.0),
+            MassConcentrationUnit::PicogramPerMicroliter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::NanogramPerMicroliter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::MicrogramPerMicroliter => value,
+            MassConcentrationUnit::MilligramPerMicroliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerMicroliter => value / T::from_f64(10000.0),
+            MassConcentrationUnit::DecigramPerMicroliter => value / T::from_f64(100000.0),
+            MassConcentrationUnit::GramPerMilliliter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::PicogramPerMilliliter => value * T::from_f64(1e9),
+            MassConcentrationUnit::NanogramPerMilliliter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::MicrogramPerMilliliter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::MilligramPerMilliliter => value,
+            MassConcentrationUnit::CentigramPerMilliliter => value / T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerMilliliter => value / T::from_f64(100.0),
+            MassConcentrationUnit::GramPerDeciliter => value / T::from_f64(10.0),
+            MassConcentrationUnit::PicogramPerDeciliter => value * T::from_f64(1e11),
+            MassConcentrationUnit::NanogramPerDeciliter => value * T::from_f64(1e8),
+            MassConcentrationUnit::MicrogramPerDeciliter => value * T::from_f64(100000.0),
+            MassConcentrationUnit::MilligramPerDeciliter => value * T::from_f64(100.0),
+            MassConcentrationUnit::CentigramPerDeciliter => value * T::from_f64(10.0),
+            MassConcentrationUnit::DecigramPerDeciliter => value,
+            MassConcentrationUnit::GramPerLiter => value,
+            MassConcentrationUnit::PicogramPerLiter => value * T::from_f64(1e12),
+            MassConcentrationUnit::NanogramPerLiter => value * T::from_f64(1e9),
+            MassConcentrationUnit::MicrogramPerLiter => value * T::from_f64(1000000.0),
+            MassConcentrationUnit::MilligramPerLiter => value * T::from_f64(1000.0),
+            MassConcentrationUnit::CentigramPerLiter => value * T::from_f64(100.0),
+            MassConcentrationUnit::DecigramPerLiter => value * T::from_f64(10.0),
+            MassConcentrationUnit::KilogramPerLiter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
+            MassConcentrationUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
+            MassConcentrationUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
+            MassConcentrationUnit::PoundPerCubicInch => value / T::from_f64(27679.90471020312),
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                value / T::from_f64(2.7679904710203122e7)
+            }
+            MassConcentrationUnit::PoundPerCubicFoot => value / T::from_f64(16.018463373960138),
+            MassConcentrationUnit::KilopoundPerCubicFoot => value / T::from_f64(16018.46337396014),
+            MassConcentrationUnit::SlugPerCubicFoot => value / T::from_f64(515.3788183931962),
+            MassConcentrationUnit::PoundPerUSGallon => value / T::from_f64(119.82642731689663),
+            MassConcentrationUnit::OuncePerUSGallon => value / T::from_f64(7.489151707306039),
+            MassConcentrationUnit::OuncePerImperialGallon => value / T::from_f64(6.236023291443856),
+            MassConcentrationUnit::PoundPerImperialGallon => value / T::from_f64(99.7763726631017),
+        }
+    }
+}
+
+impl<T: Float> MassConcentration<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µg/m³`, `mg/m³`, `g/m³`, `kg/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

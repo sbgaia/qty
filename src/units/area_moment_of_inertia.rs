@@ -176,37 +176,35 @@ impl core::str::FromStr for AreaMomentOfInertiaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> AreaMomentOfInertia<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit {
     #[inline]
-    pub fn new(value: T, unit: AreaMomentOfInertiaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AreaMomentOfInertiaUnit::MeterToTheFourth => value,
             AreaMomentOfInertiaUnit::DecimeterToTheFourth => value / T::from_f64(10000.0),
             AreaMomentOfInertiaUnit::CentimeterToTheFourth => value / T::from_f64(1e8),
             AreaMomentOfInertiaUnit::MillimeterToTheFourth => value / T::from_f64(1e12),
             AreaMomentOfInertiaUnit::FootToTheFourth => value * T::from_f64(0.0086309748412416),
             AreaMomentOfInertiaUnit::InchToTheFourth => value * T::from_f64(4.162314256e-7),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AreaMomentOfInertiaUnit) -> T {
-        match unit {
-            AreaMomentOfInertiaUnit::MeterToTheFourth => self.0,
-            AreaMomentOfInertiaUnit::DecimeterToTheFourth => self.0 * T::from_f64(10000.0),
-            AreaMomentOfInertiaUnit::CentimeterToTheFourth => self.0 * T::from_f64(1e8),
-            AreaMomentOfInertiaUnit::MillimeterToTheFourth => self.0 * T::from_f64(1e12),
-            AreaMomentOfInertiaUnit::FootToTheFourth => self.0 / T::from_f64(0.0086309748412416),
-            AreaMomentOfInertiaUnit::InchToTheFourth => self.0 / T::from_f64(4.162314256e-7),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AreaMomentOfInertiaUnit::MeterToTheFourth => value,
+            AreaMomentOfInertiaUnit::DecimeterToTheFourth => value * T::from_f64(10000.0),
+            AreaMomentOfInertiaUnit::CentimeterToTheFourth => value * T::from_f64(1e8),
+            AreaMomentOfInertiaUnit::MillimeterToTheFourth => value * T::from_f64(1e12),
+            AreaMomentOfInertiaUnit::FootToTheFourth => value / T::from_f64(0.0086309748412416),
+            AreaMomentOfInertiaUnit::InchToTheFourth => value / T::from_f64(4.162314256e-7),
+        }
+    }
+}
+
+impl<T: Float> AreaMomentOfInertia<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m⁴`).
     /// Zero, NaN and infinities are shown in the base unit.

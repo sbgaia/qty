@@ -357,15 +357,12 @@ impl core::str::FromStr for VolumeConcentrationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> VolumeConcentration<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit {
     #[inline]
-    pub fn new(value: T, unit: VolumeConcentrationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             VolumeConcentrationUnit::DecimalFraction => value,
             VolumeConcentrationUnit::LiterPerLiter => value,
             VolumeConcentrationUnit::PicoliterPerLiter => value / T::from_f64(1e12),
@@ -386,36 +383,37 @@ impl<T: Float> VolumeConcentration<T> {
             VolumeConcentrationUnit::PartPerMillion => value / T::from_f64(1000000.0),
             VolumeConcentrationUnit::PartPerBillion => value / T::from_f64(1e9),
             VolumeConcentrationUnit::PartPerTrillion => value / T::from_f64(1e12),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: VolumeConcentrationUnit) -> T {
-        match unit {
-            VolumeConcentrationUnit::DecimalFraction => self.0,
-            VolumeConcentrationUnit::LiterPerLiter => self.0,
-            VolumeConcentrationUnit::PicoliterPerLiter => self.0 * T::from_f64(1e12),
-            VolumeConcentrationUnit::NanoliterPerLiter => self.0 * T::from_f64(1e9),
-            VolumeConcentrationUnit::MicroliterPerLiter => self.0 * T::from_f64(1000000.0),
-            VolumeConcentrationUnit::MilliliterPerLiter => self.0 * T::from_f64(1000.0),
-            VolumeConcentrationUnit::CentiliterPerLiter => self.0 * T::from_f64(100.0),
-            VolumeConcentrationUnit::DeciliterPerLiter => self.0 * T::from_f64(10.0),
-            VolumeConcentrationUnit::LiterPerMilliliter => self.0 / T::from_f64(1000.0),
-            VolumeConcentrationUnit::PicoliterPerMilliliter => self.0 * T::from_f64(1e9),
-            VolumeConcentrationUnit::NanoliterPerMilliliter => self.0 * T::from_f64(1000000.0),
-            VolumeConcentrationUnit::MicroliterPerMilliliter => self.0 * T::from_f64(1000.0),
-            VolumeConcentrationUnit::MilliliterPerMilliliter => self.0,
-            VolumeConcentrationUnit::CentiliterPerMilliliter => self.0 / T::from_f64(10.0),
-            VolumeConcentrationUnit::DeciliterPerMilliliter => self.0 / T::from_f64(100.0),
-            VolumeConcentrationUnit::Percent => self.0 * T::from_f64(100.0),
-            VolumeConcentrationUnit::PartPerThousand => self.0 * T::from_f64(1000.0),
-            VolumeConcentrationUnit::PartPerMillion => self.0 * T::from_f64(1000000.0),
-            VolumeConcentrationUnit::PartPerBillion => self.0 * T::from_f64(1e9),
-            VolumeConcentrationUnit::PartPerTrillion => self.0 * T::from_f64(1e12),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            VolumeConcentrationUnit::DecimalFraction => value,
+            VolumeConcentrationUnit::LiterPerLiter => value,
+            VolumeConcentrationUnit::PicoliterPerLiter => value * T::from_f64(1e12),
+            VolumeConcentrationUnit::NanoliterPerLiter => value * T::from_f64(1e9),
+            VolumeConcentrationUnit::MicroliterPerLiter => value * T::from_f64(1000000.0),
+            VolumeConcentrationUnit::MilliliterPerLiter => value * T::from_f64(1000.0),
+            VolumeConcentrationUnit::CentiliterPerLiter => value * T::from_f64(100.0),
+            VolumeConcentrationUnit::DeciliterPerLiter => value * T::from_f64(10.0),
+            VolumeConcentrationUnit::LiterPerMilliliter => value / T::from_f64(1000.0),
+            VolumeConcentrationUnit::PicoliterPerMilliliter => value * T::from_f64(1e9),
+            VolumeConcentrationUnit::NanoliterPerMilliliter => value * T::from_f64(1000000.0),
+            VolumeConcentrationUnit::MicroliterPerMilliliter => value * T::from_f64(1000.0),
+            VolumeConcentrationUnit::MilliliterPerMilliliter => value,
+            VolumeConcentrationUnit::CentiliterPerMilliliter => value / T::from_f64(10.0),
+            VolumeConcentrationUnit::DeciliterPerMilliliter => value / T::from_f64(100.0),
+            VolumeConcentrationUnit::Percent => value * T::from_f64(100.0),
+            VolumeConcentrationUnit::PartPerThousand => value * T::from_f64(1000.0),
+            VolumeConcentrationUnit::PartPerMillion => value * T::from_f64(1000000.0),
+            VolumeConcentrationUnit::PartPerBillion => value * T::from_f64(1e9),
+            VolumeConcentrationUnit::PartPerTrillion => value * T::from_f64(1e12),
+        }
+    }
+}
+
+impl<T: Float> VolumeConcentration<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (``).
     /// Zero, NaN and infinities are shown in the base unit.

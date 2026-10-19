@@ -133,31 +133,29 @@ impl core::str::FromStr for MolarEnergyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MolarEnergy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
     #[inline]
-    pub fn new(value: T, unit: MolarEnergyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MolarEnergyUnit::JoulePerMole => value,
             MolarEnergyUnit::KilojoulePerMole => value * T::from_f64(1000.0),
             MolarEnergyUnit::MegajoulePerMole => value * T::from_f64(1000000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MolarEnergyUnit) -> T {
-        match unit {
-            MolarEnergyUnit::JoulePerMole => self.0,
-            MolarEnergyUnit::KilojoulePerMole => self.0 / T::from_f64(1000.0),
-            MolarEnergyUnit::MegajoulePerMole => self.0 / T::from_f64(1000000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MolarEnergyUnit::JoulePerMole => value,
+            MolarEnergyUnit::KilojoulePerMole => value / T::from_f64(1000.0),
+            MolarEnergyUnit::MegajoulePerMole => value / T::from_f64(1000000.0),
+        }
+    }
+}
+
+impl<T: Float> MolarEnergy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/mol`, `kJ/mol`, `MJ/mol`).
     /// Zero, NaN and infinities are shown in the base unit.

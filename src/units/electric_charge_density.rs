@@ -107,27 +107,25 @@ impl core::str::FromStr for ElectricChargeDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricChargeDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricChargeDensity<T>> for ElectricChargeDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricChargeDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricChargeDensityUnit::CoulombPerCubicMeter => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricChargeDensityUnit) -> T {
-        match unit {
-            ElectricChargeDensityUnit::CoulombPerCubicMeter => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricChargeDensityUnit::CoulombPerCubicMeter => value,
+        }
+    }
+}
+
+impl<T: Float> ElectricChargeDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`C/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

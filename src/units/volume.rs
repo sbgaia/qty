@@ -855,15 +855,12 @@ impl core::str::FromStr for VolumeUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Volume<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Volume<T>> for VolumeUnit {
     #[inline]
-    pub fn new(value: T, unit: VolumeUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             VolumeUnit::Liter => value / T::from_f64(1000.0),
             VolumeUnit::Nanoliter => value / T::from_f64(1e12),
             VolumeUnit::Microliter => value / T::from_f64(1e9),
@@ -918,70 +915,71 @@ impl<T: Float> Volume<T> {
             VolumeUnit::AcreFoot => value * T::from_f64(1233.48183754752),
             VolumeUnit::ImperialPint => value * T::from_f64(0.00056826125),
             VolumeUnit::BoardFoot => value * T::from_f64(0.002359737216),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: VolumeUnit) -> T {
-        match unit {
-            VolumeUnit::Liter => self.0 * T::from_f64(1000.0),
-            VolumeUnit::Nanoliter => self.0 * T::from_f64(1e12),
-            VolumeUnit::Microliter => self.0 * T::from_f64(1e9),
-            VolumeUnit::Milliliter => self.0 * T::from_f64(1000000.0),
-            VolumeUnit::Centiliter => self.0 * T::from_f64(100000.0),
-            VolumeUnit::Deciliter => self.0 * T::from_f64(10000.0),
-            VolumeUnit::Decaliter => self.0 * T::from_f64(100.0),
-            VolumeUnit::Hectoliter => self.0 * T::from_f64(10.0),
-            VolumeUnit::Kiloliter => self.0,
-            VolumeUnit::Megaliter => self.0 / T::from_f64(1000.0),
-            VolumeUnit::CubicMeter => self.0,
-            VolumeUnit::ThousandCubicMeter => self.0 / T::from_f64(1000.0),
-            VolumeUnit::CubicKilometer => self.0 / T::from_f64(1e9),
-            VolumeUnit::CubicHectometer => self.0 / T::from_f64(1000000.0),
-            VolumeUnit::CubicDecimeter => self.0 * T::from_f64(1000.0),
-            VolumeUnit::CubicCentimeter => self.0 * T::from_f64(1000000.0),
-            VolumeUnit::CubicMillimeter => self.0 * T::from_f64(1e9),
-            VolumeUnit::CubicMicrometer => self.0 * T::from_f64(1e18),
-            VolumeUnit::CubicMile => self.0 / T::from_f64(4.1681818254405794e9),
-            VolumeUnit::CubicYard => self.0 / T::from_f64(0.764554857984),
-            VolumeUnit::CubicFoot => self.0 / T::from_f64(0.028316846592),
-            VolumeUnit::HundredCubicFoot => self.0 / T::from_f64(2.8316846592),
-            VolumeUnit::ThousandCubicFoot => self.0 / T::from_f64(28.316846592),
-            VolumeUnit::MillionCubicFoot => self.0 / T::from_f64(28316.846592),
-            VolumeUnit::CubicInch => self.0 / T::from_f64(1.6387064e-5),
-            VolumeUnit::ImperialGallon => self.0 / T::from_f64(0.00454609),
-            VolumeUnit::KiloimperialGallon => self.0 / T::from_f64(4.54609),
-            VolumeUnit::MegaimperialGallon => self.0 / T::from_f64(4546.09),
-            VolumeUnit::ImperialOunce => self.0 / T::from_f64(2.84130625e-5),
-            VolumeUnit::UsGallon => self.0 / T::from_f64(0.003785411784),
-            VolumeUnit::DecausGallon => self.0 / T::from_f64(0.03785411784),
-            VolumeUnit::DeciusGallon => self.0 / T::from_f64(0.0003785411784),
-            VolumeUnit::HectousGallon => self.0 / T::from_f64(0.3785411784),
-            VolumeUnit::KilousGallon => self.0 / T::from_f64(3.785411784),
-            VolumeUnit::MegausGallon => self.0 / T::from_f64(3785.411784),
-            VolumeUnit::UsOunce => self.0 / T::from_f64(2.95735295625e-5),
-            VolumeUnit::UsTablespoon => self.0 / T::from_f64(1.478676478125e-5),
-            VolumeUnit::AuTablespoon => self.0 * T::from_f64(50000.0),
-            VolumeUnit::MetricTablespoon => self.0 / T::from_f64(1.5e-5),
-            VolumeUnit::UkTablespoon => self.0 / T::from_f64(1.5e-5),
-            VolumeUnit::MetricTeaspoon => self.0 * T::from_f64(200000.0),
-            VolumeUnit::UsTeaspoon => self.0 / T::from_f64(4.92892159375e-6),
-            VolumeUnit::MetricCup => self.0 * T::from_f64(4000.0),
-            VolumeUnit::UsCustomaryCup => self.0 / T::from_f64(0.0002365882365),
-            VolumeUnit::UsLegalCup => self.0 / T::from_f64(0.00024),
-            VolumeUnit::OilBarrel => self.0 / T::from_f64(0.158987294928),
-            VolumeUnit::UsBeerBarrel => self.0 / T::from_f64(0.117347765304),
-            VolumeUnit::ImperialBeerBarrel => self.0 / T::from_f64(0.16365924),
-            VolumeUnit::UsQuart => self.0 / T::from_f64(0.000946352946),
-            VolumeUnit::ImperialQuart => self.0 / T::from_f64(0.0011365225),
-            VolumeUnit::UsPint => self.0 / T::from_f64(0.000473176473),
-            VolumeUnit::AcreFoot => self.0 / T::from_f64(1233.48183754752),
-            VolumeUnit::ImperialPint => self.0 / T::from_f64(0.00056826125),
-            VolumeUnit::BoardFoot => self.0 / T::from_f64(0.002359737216),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            VolumeUnit::Liter => value * T::from_f64(1000.0),
+            VolumeUnit::Nanoliter => value * T::from_f64(1e12),
+            VolumeUnit::Microliter => value * T::from_f64(1e9),
+            VolumeUnit::Milliliter => value * T::from_f64(1000000.0),
+            VolumeUnit::Centiliter => value * T::from_f64(100000.0),
+            VolumeUnit::Deciliter => value * T::from_f64(10000.0),
+            VolumeUnit::Decaliter => value * T::from_f64(100.0),
+            VolumeUnit::Hectoliter => value * T::from_f64(10.0),
+            VolumeUnit::Kiloliter => value,
+            VolumeUnit::Megaliter => value / T::from_f64(1000.0),
+            VolumeUnit::CubicMeter => value,
+            VolumeUnit::ThousandCubicMeter => value / T::from_f64(1000.0),
+            VolumeUnit::CubicKilometer => value / T::from_f64(1e9),
+            VolumeUnit::CubicHectometer => value / T::from_f64(1000000.0),
+            VolumeUnit::CubicDecimeter => value * T::from_f64(1000.0),
+            VolumeUnit::CubicCentimeter => value * T::from_f64(1000000.0),
+            VolumeUnit::CubicMillimeter => value * T::from_f64(1e9),
+            VolumeUnit::CubicMicrometer => value * T::from_f64(1e18),
+            VolumeUnit::CubicMile => value / T::from_f64(4.1681818254405794e9),
+            VolumeUnit::CubicYard => value / T::from_f64(0.764554857984),
+            VolumeUnit::CubicFoot => value / T::from_f64(0.028316846592),
+            VolumeUnit::HundredCubicFoot => value / T::from_f64(2.8316846592),
+            VolumeUnit::ThousandCubicFoot => value / T::from_f64(28.316846592),
+            VolumeUnit::MillionCubicFoot => value / T::from_f64(28316.846592),
+            VolumeUnit::CubicInch => value / T::from_f64(1.6387064e-5),
+            VolumeUnit::ImperialGallon => value / T::from_f64(0.00454609),
+            VolumeUnit::KiloimperialGallon => value / T::from_f64(4.54609),
+            VolumeUnit::MegaimperialGallon => value / T::from_f64(4546.09),
+            VolumeUnit::ImperialOunce => value / T::from_f64(2.84130625e-5),
+            VolumeUnit::UsGallon => value / T::from_f64(0.003785411784),
+            VolumeUnit::DecausGallon => value / T::from_f64(0.03785411784),
+            VolumeUnit::DeciusGallon => value / T::from_f64(0.0003785411784),
+            VolumeUnit::HectousGallon => value / T::from_f64(0.3785411784),
+            VolumeUnit::KilousGallon => value / T::from_f64(3.785411784),
+            VolumeUnit::MegausGallon => value / T::from_f64(3785.411784),
+            VolumeUnit::UsOunce => value / T::from_f64(2.95735295625e-5),
+            VolumeUnit::UsTablespoon => value / T::from_f64(1.478676478125e-5),
+            VolumeUnit::AuTablespoon => value * T::from_f64(50000.0),
+            VolumeUnit::MetricTablespoon => value / T::from_f64(1.5e-5),
+            VolumeUnit::UkTablespoon => value / T::from_f64(1.5e-5),
+            VolumeUnit::MetricTeaspoon => value * T::from_f64(200000.0),
+            VolumeUnit::UsTeaspoon => value / T::from_f64(4.92892159375e-6),
+            VolumeUnit::MetricCup => value * T::from_f64(4000.0),
+            VolumeUnit::UsCustomaryCup => value / T::from_f64(0.0002365882365),
+            VolumeUnit::UsLegalCup => value / T::from_f64(0.00024),
+            VolumeUnit::OilBarrel => value / T::from_f64(0.158987294928),
+            VolumeUnit::UsBeerBarrel => value / T::from_f64(0.117347765304),
+            VolumeUnit::ImperialBeerBarrel => value / T::from_f64(0.16365924),
+            VolumeUnit::UsQuart => value / T::from_f64(0.000946352946),
+            VolumeUnit::ImperialQuart => value / T::from_f64(0.0011365225),
+            VolumeUnit::UsPint => value / T::from_f64(0.000473176473),
+            VolumeUnit::AcreFoot => value / T::from_f64(1233.48183754752),
+            VolumeUnit::ImperialPint => value / T::from_f64(0.00056826125),
+            VolumeUnit::BoardFoot => value / T::from_f64(0.002359737216),
+        }
+    }
+}
+
+impl<T: Float> Volume<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m³`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -289,15 +289,12 @@ impl core::str::FromStr for ForceChangeRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ForceChangeRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
     #[inline]
-    pub fn new(value: T, unit: ForceChangeRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ForceChangeRateUnit::NewtonPerMinute => value / T::from_f64(60.0),
             ForceChangeRateUnit::DecanewtonPerMinute => value / T::from_f64(6.0),
             ForceChangeRateUnit::KilonewtonPerMinute => value * T::from_f64(16.666666666666668),
@@ -313,31 +310,32 @@ impl<T: Float> ForceChangeRate<T> {
             ForceChangeRateUnit::KilopoundForcePerMinute => value * T::from_f64(74.13702692100833),
             ForceChangeRateUnit::PoundForcePerSecond => value * T::from_f64(4.4482216152605),
             ForceChangeRateUnit::KilopoundForcePerSecond => value * T::from_f64(4448.2216152605),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ForceChangeRateUnit) -> T {
-        match unit {
-            ForceChangeRateUnit::NewtonPerMinute => self.0 * T::from_f64(60.0),
-            ForceChangeRateUnit::DecanewtonPerMinute => self.0 * T::from_f64(6.0),
-            ForceChangeRateUnit::KilonewtonPerMinute => self.0 / T::from_f64(16.666666666666668),
-            ForceChangeRateUnit::NewtonPerSecond => self.0,
-            ForceChangeRateUnit::NanonewtonPerSecond => self.0 * T::from_f64(1e9),
-            ForceChangeRateUnit::MicronewtonPerSecond => self.0 * T::from_f64(1000000.0),
-            ForceChangeRateUnit::MillinewtonPerSecond => self.0 * T::from_f64(1000.0),
-            ForceChangeRateUnit::CentinewtonPerSecond => self.0 * T::from_f64(100.0),
-            ForceChangeRateUnit::DecinewtonPerSecond => self.0 * T::from_f64(10.0),
-            ForceChangeRateUnit::DecanewtonPerSecond => self.0 / T::from_f64(10.0),
-            ForceChangeRateUnit::KilonewtonPerSecond => self.0 / T::from_f64(1000.0),
-            ForceChangeRateUnit::PoundForcePerMinute => self.0 / T::from_f64(0.07413702692100833),
-            ForceChangeRateUnit::KilopoundForcePerMinute => self.0 / T::from_f64(74.13702692100833),
-            ForceChangeRateUnit::PoundForcePerSecond => self.0 / T::from_f64(4.4482216152605),
-            ForceChangeRateUnit::KilopoundForcePerSecond => self.0 / T::from_f64(4448.2216152605),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ForceChangeRateUnit::NewtonPerMinute => value * T::from_f64(60.0),
+            ForceChangeRateUnit::DecanewtonPerMinute => value * T::from_f64(6.0),
+            ForceChangeRateUnit::KilonewtonPerMinute => value / T::from_f64(16.666666666666668),
+            ForceChangeRateUnit::NewtonPerSecond => value,
+            ForceChangeRateUnit::NanonewtonPerSecond => value * T::from_f64(1e9),
+            ForceChangeRateUnit::MicronewtonPerSecond => value * T::from_f64(1000000.0),
+            ForceChangeRateUnit::MillinewtonPerSecond => value * T::from_f64(1000.0),
+            ForceChangeRateUnit::CentinewtonPerSecond => value * T::from_f64(100.0),
+            ForceChangeRateUnit::DecinewtonPerSecond => value * T::from_f64(10.0),
+            ForceChangeRateUnit::DecanewtonPerSecond => value / T::from_f64(10.0),
+            ForceChangeRateUnit::KilonewtonPerSecond => value / T::from_f64(1000.0),
+            ForceChangeRateUnit::PoundForcePerMinute => value / T::from_f64(0.07413702692100833),
+            ForceChangeRateUnit::KilopoundForcePerMinute => value / T::from_f64(74.13702692100833),
+            ForceChangeRateUnit::PoundForcePerSecond => value / T::from_f64(4.4482216152605),
+            ForceChangeRateUnit::KilopoundForcePerSecond => value / T::from_f64(4448.2216152605),
+        }
+    }
+}
+
+impl<T: Float> ForceChangeRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nN/s`, `µN/s`, `mN/s`, `N/s`, `kN/s`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -6,6 +6,13 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `custom_unit!` defines a unit for an existing quantity, with a factor
+  and, for points such as temperatures, an offset. `new`, `convert_to` and
+  `in_unit` take it like the built-in units, through the new `UnitOf`
+  trait, which the generated unit enums implement too.
+
 ### Changed
 
 - The crate builds about 25% faster (debug 15.8 s → 11.7 s, release

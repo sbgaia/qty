@@ -483,15 +483,12 @@ impl core::str::FromStr for SpecificEnergyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> SpecificEnergy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
     #[inline]
-    pub fn new(value: T, unit: SpecificEnergyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpecificEnergyUnit::JoulePerKilogram => value,
             SpecificEnergyUnit::KilojoulePerKilogram => value * T::from_f64(1000.0),
             SpecificEnergyUnit::MegajoulePerKilogram => value * T::from_f64(1000000.0),
@@ -522,50 +519,47 @@ impl<T: Float> SpecificEnergy<T> {
             SpecificEnergyUnit::MegawattHourPerPound => value * T::from_f64(7.93664e9),
             SpecificEnergyUnit::GigawattHourPerPound => value * T::from_f64(7.93664e12),
             SpecificEnergyUnit::BtuPerPound => value * T::from_f64(2326.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpecificEnergyUnit) -> T {
-        match unit {
-            SpecificEnergyUnit::JoulePerKilogram => self.0,
-            SpecificEnergyUnit::KilojoulePerKilogram => self.0 / T::from_f64(1000.0),
-            SpecificEnergyUnit::MegajoulePerKilogram => self.0 / T::from_f64(1000000.0),
-            SpecificEnergyUnit::MegajoulePerTonne => self.0 / T::from_f64(1000.0),
-            SpecificEnergyUnit::CaloriePerGram => self.0 / T::from_f64(4184.0),
-            SpecificEnergyUnit::KilocaloriePerGram => self.0 / T::from_f64(4184000.0),
-            SpecificEnergyUnit::WattHourPerKilogram => self.0 / T::from_f64(3600.0),
-            SpecificEnergyUnit::KilowattHourPerKilogram => self.0 / T::from_f64(3600000.0),
-            SpecificEnergyUnit::MegawattHourPerKilogram => self.0 / T::from_f64(3.6e9),
-            SpecificEnergyUnit::GigawattHourPerKilogram => self.0 / T::from_f64(3.6e12),
-            SpecificEnergyUnit::WattDayPerKilogram => self.0 / T::from_f64(86400.0),
-            SpecificEnergyUnit::KilowattDayPerKilogram => self.0 / T::from_f64(8.64e7),
-            SpecificEnergyUnit::MegawattDayPerKilogram => self.0 / T::from_f64(8.64e10),
-            SpecificEnergyUnit::GigawattDayPerKilogram => self.0 / T::from_f64(8.64e13),
-            SpecificEnergyUnit::TerawattDayPerKilogram => self.0 / T::from_f64(8.64e16),
-            SpecificEnergyUnit::WattDayPerTonne => self.0 / T::from_f64(86.4),
-            SpecificEnergyUnit::KilowattDayPerTonne => self.0 / T::from_f64(86400.0),
-            SpecificEnergyUnit::MegawattDayPerTonne => self.0 / T::from_f64(8.64e7),
-            SpecificEnergyUnit::GigawattDayPerTonne => self.0 / T::from_f64(8.64e10),
-            SpecificEnergyUnit::TerawattDayPerTonne => self.0 / T::from_f64(8.64e13),
-            SpecificEnergyUnit::WattDayPerShortTon => self.0 / T::from_f64(95.23969726386711),
-            SpecificEnergyUnit::KilowattDayPerShortTon => self.0 / T::from_f64(95239.69726386711),
-            SpecificEnergyUnit::MegawattDayPerShortTon => self.0 / T::from_f64(9.523969726386711e7),
-            SpecificEnergyUnit::GigawattDayPerShortTon => {
-                self.0 / T::from_f64(9.523969726386711e10)
-            }
-            SpecificEnergyUnit::TerawattDayPerShortTon => {
-                self.0 / T::from_f64(9.523969726386711e13)
-            }
-            SpecificEnergyUnit::WattHourPerPound => self.0 / T::from_f64(7936.64),
-            SpecificEnergyUnit::KilowattHourPerPound => self.0 / T::from_f64(7936640.0),
-            SpecificEnergyUnit::MegawattHourPerPound => self.0 / T::from_f64(7.93664e9),
-            SpecificEnergyUnit::GigawattHourPerPound => self.0 / T::from_f64(7.93664e12),
-            SpecificEnergyUnit::BtuPerPound => self.0 / T::from_f64(2326.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpecificEnergyUnit::JoulePerKilogram => value,
+            SpecificEnergyUnit::KilojoulePerKilogram => value / T::from_f64(1000.0),
+            SpecificEnergyUnit::MegajoulePerKilogram => value / T::from_f64(1000000.0),
+            SpecificEnergyUnit::MegajoulePerTonne => value / T::from_f64(1000.0),
+            SpecificEnergyUnit::CaloriePerGram => value / T::from_f64(4184.0),
+            SpecificEnergyUnit::KilocaloriePerGram => value / T::from_f64(4184000.0),
+            SpecificEnergyUnit::WattHourPerKilogram => value / T::from_f64(3600.0),
+            SpecificEnergyUnit::KilowattHourPerKilogram => value / T::from_f64(3600000.0),
+            SpecificEnergyUnit::MegawattHourPerKilogram => value / T::from_f64(3.6e9),
+            SpecificEnergyUnit::GigawattHourPerKilogram => value / T::from_f64(3.6e12),
+            SpecificEnergyUnit::WattDayPerKilogram => value / T::from_f64(86400.0),
+            SpecificEnergyUnit::KilowattDayPerKilogram => value / T::from_f64(8.64e7),
+            SpecificEnergyUnit::MegawattDayPerKilogram => value / T::from_f64(8.64e10),
+            SpecificEnergyUnit::GigawattDayPerKilogram => value / T::from_f64(8.64e13),
+            SpecificEnergyUnit::TerawattDayPerKilogram => value / T::from_f64(8.64e16),
+            SpecificEnergyUnit::WattDayPerTonne => value / T::from_f64(86.4),
+            SpecificEnergyUnit::KilowattDayPerTonne => value / T::from_f64(86400.0),
+            SpecificEnergyUnit::MegawattDayPerTonne => value / T::from_f64(8.64e7),
+            SpecificEnergyUnit::GigawattDayPerTonne => value / T::from_f64(8.64e10),
+            SpecificEnergyUnit::TerawattDayPerTonne => value / T::from_f64(8.64e13),
+            SpecificEnergyUnit::WattDayPerShortTon => value / T::from_f64(95.23969726386711),
+            SpecificEnergyUnit::KilowattDayPerShortTon => value / T::from_f64(95239.69726386711),
+            SpecificEnergyUnit::MegawattDayPerShortTon => value / T::from_f64(9.523969726386711e7),
+            SpecificEnergyUnit::GigawattDayPerShortTon => value / T::from_f64(9.523969726386711e10),
+            SpecificEnergyUnit::TerawattDayPerShortTon => value / T::from_f64(9.523969726386711e13),
+            SpecificEnergyUnit::WattHourPerPound => value / T::from_f64(7936.64),
+            SpecificEnergyUnit::KilowattHourPerPound => value / T::from_f64(7936640.0),
+            SpecificEnergyUnit::MegawattHourPerPound => value / T::from_f64(7.93664e9),
+            SpecificEnergyUnit::GigawattHourPerPound => value / T::from_f64(7.93664e12),
+            SpecificEnergyUnit::BtuPerPound => value / T::from_f64(2326.0),
+        }
+    }
+}
+
+impl<T: Float> SpecificEnergy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/kg`, `kJ/kg`, `MJ/kg`).
     /// Zero, NaN and infinities are shown in the base unit.

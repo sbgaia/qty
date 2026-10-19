@@ -277,15 +277,12 @@ impl core::str::FromStr for LuminosityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Luminosity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
     #[inline]
-    pub fn new(value: T, unit: LuminosityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LuminosityUnit::Watt => value,
             LuminosityUnit::Femtowatt => value / T::from_f64(1e15),
             LuminosityUnit::Picowatt => value / T::from_f64(1e12),
@@ -300,30 +297,31 @@ impl<T: Float> Luminosity<T> {
             LuminosityUnit::Terawatt => value * T::from_f64(1e12),
             LuminosityUnit::Petawatt => value * T::from_f64(1e15),
             LuminosityUnit::SolarLuminosity => value * T::from_f64(3.828e26),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LuminosityUnit) -> T {
-        match unit {
-            LuminosityUnit::Watt => self.0,
-            LuminosityUnit::Femtowatt => self.0 * T::from_f64(1e15),
-            LuminosityUnit::Picowatt => self.0 * T::from_f64(1e12),
-            LuminosityUnit::Nanowatt => self.0 * T::from_f64(1e9),
-            LuminosityUnit::Microwatt => self.0 * T::from_f64(1000000.0),
-            LuminosityUnit::Milliwatt => self.0 * T::from_f64(1000.0),
-            LuminosityUnit::Deciwatt => self.0 * T::from_f64(10.0),
-            LuminosityUnit::Decawatt => self.0 / T::from_f64(10.0),
-            LuminosityUnit::Kilowatt => self.0 / T::from_f64(1000.0),
-            LuminosityUnit::Megawatt => self.0 / T::from_f64(1000000.0),
-            LuminosityUnit::Gigawatt => self.0 / T::from_f64(1e9),
-            LuminosityUnit::Terawatt => self.0 / T::from_f64(1e12),
-            LuminosityUnit::Petawatt => self.0 / T::from_f64(1e15),
-            LuminosityUnit::SolarLuminosity => self.0 / T::from_f64(3.828e26),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LuminosityUnit::Watt => value,
+            LuminosityUnit::Femtowatt => value * T::from_f64(1e15),
+            LuminosityUnit::Picowatt => value * T::from_f64(1e12),
+            LuminosityUnit::Nanowatt => value * T::from_f64(1e9),
+            LuminosityUnit::Microwatt => value * T::from_f64(1000000.0),
+            LuminosityUnit::Milliwatt => value * T::from_f64(1000.0),
+            LuminosityUnit::Deciwatt => value * T::from_f64(10.0),
+            LuminosityUnit::Decawatt => value / T::from_f64(10.0),
+            LuminosityUnit::Kilowatt => value / T::from_f64(1000.0),
+            LuminosityUnit::Megawatt => value / T::from_f64(1000000.0),
+            LuminosityUnit::Gigawatt => value / T::from_f64(1e9),
+            LuminosityUnit::Terawatt => value / T::from_f64(1e12),
+            LuminosityUnit::Petawatt => value / T::from_f64(1e15),
+            LuminosityUnit::SolarLuminosity => value / T::from_f64(3.828e26),
+        }
+    }
+}
+
+impl<T: Float> Luminosity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
     /// Zero, NaN and infinities are shown in the base unit.

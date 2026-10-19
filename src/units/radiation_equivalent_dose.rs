@@ -177,15 +177,12 @@ impl core::str::FromStr for RadiationEquivalentDoseUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RadiationEquivalentDose<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalentDoseUnit {
     #[inline]
-    pub fn new(value: T, unit: RadiationEquivalentDoseUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RadiationEquivalentDoseUnit::Sievert => value,
             RadiationEquivalentDoseUnit::Nanosievert => value / T::from_f64(1e9),
             RadiationEquivalentDoseUnit::Microsievert => value / T::from_f64(1000000.0),
@@ -194,24 +191,25 @@ impl<T: Float> RadiationEquivalentDose<T> {
             RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
                 value / T::from_f64(100000.0)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RadiationEquivalentDoseUnit) -> T {
-        match unit {
-            RadiationEquivalentDoseUnit::Sievert => self.0,
-            RadiationEquivalentDoseUnit::Nanosievert => self.0 * T::from_f64(1e9),
-            RadiationEquivalentDoseUnit::Microsievert => self.0 * T::from_f64(1000000.0),
-            RadiationEquivalentDoseUnit::Millisievert => self.0 * T::from_f64(1000.0),
-            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => self.0 * T::from_f64(100.0),
-            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
-                self.0 * T::from_f64(100000.0)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RadiationEquivalentDoseUnit::Sievert => value,
+            RadiationEquivalentDoseUnit::Nanosievert => value * T::from_f64(1e9),
+            RadiationEquivalentDoseUnit::Microsievert => value * T::from_f64(1000000.0),
+            RadiationEquivalentDoseUnit::Millisievert => value * T::from_f64(1000.0),
+            RadiationEquivalentDoseUnit::RoentgenEquivalentMan => value * T::from_f64(100.0),
+            RadiationEquivalentDoseUnit::MilliroentgenEquivalentMan => {
+                value * T::from_f64(100000.0)
+            }
+        }
+    }
+}
+
+impl<T: Float> RadiationEquivalentDose<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nSv`, `µSv`, `mSv`, `Sv`).
     /// Zero, NaN and infinities are shown in the base unit.

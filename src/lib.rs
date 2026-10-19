@@ -881,11 +881,25 @@ macro_rules! quantity_core {
             /// The value expressed in `unit`, for display or inspection:
             /// `length.in_unit(LengthUnit::Kilometer)` formats as `"1.5 km"`.
             #[inline]
-            pub fn in_unit(self, unit: $U) -> $crate::InUnit<T, $U> {
+            pub fn in_unit<V: $crate::UnitOf<Self>>(self, unit: V) -> $crate::InUnit<T, V> {
                 $crate::InUnit {
                     value: self.convert_to(unit),
                     unit,
                 }
+            }
+
+            /// A quantity from `value` expressed in `unit`: one of the
+            /// quantity's units (`LengthUnit::Kilometer`) or one defined
+            /// with [`custom_unit!`](crate::custom_unit).
+            #[inline]
+            pub fn new<V: $crate::UnitOf<Self>>(value: T, unit: V) -> Self {
+                Self(unit.value_to_base(value))
+            }
+
+            /// The quantity expressed in `unit`.
+            #[inline]
+            pub fn convert_to<V: $crate::UnitOf<Self>>(self, unit: V) -> T {
+                unit.value_from_base(self.0)
             }
 
             /// The value in the largest of `units` that does not exceed it
@@ -1481,6 +1495,9 @@ mod interop;
 
 mod format;
 pub use format::{Significant, SignificantFloat};
+
+mod custom;
+pub use custom::UnitOf;
 
 mod angle_wrap;
 

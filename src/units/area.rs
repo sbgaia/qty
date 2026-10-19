@@ -280,15 +280,12 @@ impl core::str::FromStr for AreaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Area<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Area<T>> for AreaUnit {
     #[inline]
-    pub fn new(value: T, unit: AreaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AreaUnit::SquareKilometer => value * T::from_f64(1000000.0),
             AreaUnit::SquareMeter => value,
             AreaUnit::SquareDecimeter => value / T::from_f64(100.0),
@@ -303,30 +300,31 @@ impl<T: Float> Area<T> {
             AreaUnit::Acre => value * T::from_f64(4046.8564224),
             AreaUnit::Hectare => value * T::from_f64(10000.0),
             AreaUnit::SquareNauticalMile => value * T::from_f64(3429904.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AreaUnit) -> T {
-        match unit {
-            AreaUnit::SquareKilometer => self.0 / T::from_f64(1000000.0),
-            AreaUnit::SquareMeter => self.0,
-            AreaUnit::SquareDecimeter => self.0 * T::from_f64(100.0),
-            AreaUnit::SquareCentimeter => self.0 * T::from_f64(10000.0),
-            AreaUnit::SquareMillimeter => self.0 * T::from_f64(1000000.0),
-            AreaUnit::SquareMicrometer => self.0 * T::from_f64(1e12),
-            AreaUnit::SquareMile => self.0 / T::from_f64(2589988.110336),
-            AreaUnit::SquareYard => self.0 / T::from_f64(0.83612736),
-            AreaUnit::SquareFoot => self.0 / T::from_f64(0.09290304),
-            AreaUnit::UsSurveySquareFoot => self.0 / T::from_f64(0.09290341161327484),
-            AreaUnit::SquareInch => self.0 / T::from_f64(0.00064516),
-            AreaUnit::Acre => self.0 / T::from_f64(4046.8564224),
-            AreaUnit::Hectare => self.0 / T::from_f64(10000.0),
-            AreaUnit::SquareNauticalMile => self.0 / T::from_f64(3429904.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AreaUnit::SquareKilometer => value / T::from_f64(1000000.0),
+            AreaUnit::SquareMeter => value,
+            AreaUnit::SquareDecimeter => value * T::from_f64(100.0),
+            AreaUnit::SquareCentimeter => value * T::from_f64(10000.0),
+            AreaUnit::SquareMillimeter => value * T::from_f64(1000000.0),
+            AreaUnit::SquareMicrometer => value * T::from_f64(1e12),
+            AreaUnit::SquareMile => value / T::from_f64(2589988.110336),
+            AreaUnit::SquareYard => value / T::from_f64(0.83612736),
+            AreaUnit::SquareFoot => value / T::from_f64(0.09290304),
+            AreaUnit::UsSurveySquareFoot => value / T::from_f64(0.09290341161327484),
+            AreaUnit::SquareInch => value / T::from_f64(0.00064516),
+            AreaUnit::Acre => value / T::from_f64(4046.8564224),
+            AreaUnit::Hectare => value / T::from_f64(10000.0),
+            AreaUnit::SquareNauticalMile => value / T::from_f64(3429904.0),
+        }
+    }
+}
+
+impl<T: Float> Area<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m²`).
     /// Zero, NaN and infinities are shown in the base unit.

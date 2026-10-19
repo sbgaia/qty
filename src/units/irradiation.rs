@@ -211,15 +211,12 @@ impl core::str::FromStr for IrradiationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Irradiation<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
     #[inline]
-    pub fn new(value: T, unit: IrradiationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             IrradiationUnit::JoulePerSquareMeter => value,
             IrradiationUnit::KilojoulePerSquareMeter => value * T::from_f64(1000.0),
             IrradiationUnit::JoulePerSquareCentimeter => value * T::from_f64(10000.0),
@@ -229,25 +226,26 @@ impl<T: Float> Irradiation<T> {
             IrradiationUnit::KilowattHourPerSquareMeter => value * T::from_f64(3600000.0),
             IrradiationUnit::BtuPerSquareFoot => value * T::from_f64(11356.526682226975),
             IrradiationUnit::KilobtuPerSquareFoot => value * T::from_f64(1.1356526682226976e7),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: IrradiationUnit) -> T {
-        match unit {
-            IrradiationUnit::JoulePerSquareMeter => self.0,
-            IrradiationUnit::KilojoulePerSquareMeter => self.0 / T::from_f64(1000.0),
-            IrradiationUnit::JoulePerSquareCentimeter => self.0 / T::from_f64(10000.0),
-            IrradiationUnit::MillijoulePerSquareCentimeter => self.0 / T::from_f64(10.0),
-            IrradiationUnit::JoulePerSquareMillimeter => self.0 / T::from_f64(1000000.0),
-            IrradiationUnit::WattHourPerSquareMeter => self.0 / T::from_f64(3600.0),
-            IrradiationUnit::KilowattHourPerSquareMeter => self.0 / T::from_f64(3600000.0),
-            IrradiationUnit::BtuPerSquareFoot => self.0 / T::from_f64(11356.526682226975),
-            IrradiationUnit::KilobtuPerSquareFoot => self.0 / T::from_f64(1.1356526682226976e7),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            IrradiationUnit::JoulePerSquareMeter => value,
+            IrradiationUnit::KilojoulePerSquareMeter => value / T::from_f64(1000.0),
+            IrradiationUnit::JoulePerSquareCentimeter => value / T::from_f64(10000.0),
+            IrradiationUnit::MillijoulePerSquareCentimeter => value / T::from_f64(10.0),
+            IrradiationUnit::JoulePerSquareMillimeter => value / T::from_f64(1000000.0),
+            IrradiationUnit::WattHourPerSquareMeter => value / T::from_f64(3600.0),
+            IrradiationUnit::KilowattHourPerSquareMeter => value / T::from_f64(3600000.0),
+            IrradiationUnit::BtuPerSquareFoot => value / T::from_f64(11356.526682226975),
+            IrradiationUnit::KilobtuPerSquareFoot => value / T::from_f64(1.1356526682226976e7),
+        }
+    }
+}
+
+impl<T: Float> Irradiation<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/m²`, `kJ/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

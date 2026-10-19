@@ -463,15 +463,12 @@ impl core::str::FromStr for MassMomentOfInertiaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MassMomentOfInertia<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUnit {
     #[inline]
-    pub fn new(value: T, unit: MassMomentOfInertiaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MassMomentOfInertiaUnit::GramSquareMeter => value / T::from_f64(1000.0),
             MassMomentOfInertiaUnit::MilligramSquareMeter => value / T::from_f64(1000000.0),
             MassMomentOfInertiaUnit::KilogramSquareMeter => value,
@@ -500,44 +497,45 @@ impl<T: Float> MassMomentOfInertia<T> {
             MassMomentOfInertiaUnit::PoundSquareInch => value * T::from_f64(0.0002926396534292),
             MassMomentOfInertiaUnit::SlugSquareFoot => value * T::from_f64(1.3558179483314003),
             MassMomentOfInertiaUnit::SlugSquareInch => value * T::from_f64(0.009415402418968058),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MassMomentOfInertiaUnit) -> T {
-        match unit {
-            MassMomentOfInertiaUnit::GramSquareMeter => self.0 * T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::MilligramSquareMeter => self.0 * T::from_f64(1000000.0),
-            MassMomentOfInertiaUnit::KilogramSquareMeter => self.0,
-            MassMomentOfInertiaUnit::GramSquareDecimeter => self.0 * T::from_f64(100000.0),
-            MassMomentOfInertiaUnit::MilligramSquareDecimeter => self.0 * T::from_f64(1e8),
-            MassMomentOfInertiaUnit::KilogramSquareDecimeter => self.0 * T::from_f64(100.0),
-            MassMomentOfInertiaUnit::GramSquareCentimeter => self.0 * T::from_f64(1e7),
-            MassMomentOfInertiaUnit::MilligramSquareCentimeter => self.0 * T::from_f64(1e10),
-            MassMomentOfInertiaUnit::KilogramSquareCentimeter => self.0 * T::from_f64(10000.0),
-            MassMomentOfInertiaUnit::GramSquareMillimeter => self.0 * T::from_f64(1e9),
-            MassMomentOfInertiaUnit::MilligramSquareMillimeter => self.0 * T::from_f64(1e12),
-            MassMomentOfInertiaUnit::KilogramSquareMillimeter => self.0 * T::from_f64(1000000.0),
-            MassMomentOfInertiaUnit::TonneSquareMeter => self.0 / T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::KilotonneSquareMeter => self.0 / T::from_f64(1000000.0),
-            MassMomentOfInertiaUnit::MegatonneSquareMeter => self.0 / T::from_f64(1e9),
-            MassMomentOfInertiaUnit::TonneSquareDecimeter => self.0 / T::from_f64(10.0),
-            MassMomentOfInertiaUnit::KilotonneSquareDecimeter => self.0 / T::from_f64(10000.0),
-            MassMomentOfInertiaUnit::MegatonneSquareDecimeter => self.0 / T::from_f64(1e7),
-            MassMomentOfInertiaUnit::TonneSquareCentimeter => self.0 * T::from_f64(10.0),
-            MassMomentOfInertiaUnit::KilotonneSquareCentimeter => self.0 / T::from_f64(100.0),
-            MassMomentOfInertiaUnit::MegatonneSquareCentimeter => self.0 / T::from_f64(100000.0),
-            MassMomentOfInertiaUnit::TonneSquareMillimeter => self.0 * T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::KilotonneSquareMillimeter => self.0,
-            MassMomentOfInertiaUnit::MegatonneSquareMillimeter => self.0 / T::from_f64(1000.0),
-            MassMomentOfInertiaUnit::PoundSquareFoot => self.0 / T::from_f64(0.0421401100938048),
-            MassMomentOfInertiaUnit::PoundSquareInch => self.0 / T::from_f64(0.0002926396534292),
-            MassMomentOfInertiaUnit::SlugSquareFoot => self.0 / T::from_f64(1.3558179483314003),
-            MassMomentOfInertiaUnit::SlugSquareInch => self.0 / T::from_f64(0.009415402418968058),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MassMomentOfInertiaUnit::GramSquareMeter => value * T::from_f64(1000.0),
+            MassMomentOfInertiaUnit::MilligramSquareMeter => value * T::from_f64(1000000.0),
+            MassMomentOfInertiaUnit::KilogramSquareMeter => value,
+            MassMomentOfInertiaUnit::GramSquareDecimeter => value * T::from_f64(100000.0),
+            MassMomentOfInertiaUnit::MilligramSquareDecimeter => value * T::from_f64(1e8),
+            MassMomentOfInertiaUnit::KilogramSquareDecimeter => value * T::from_f64(100.0),
+            MassMomentOfInertiaUnit::GramSquareCentimeter => value * T::from_f64(1e7),
+            MassMomentOfInertiaUnit::MilligramSquareCentimeter => value * T::from_f64(1e10),
+            MassMomentOfInertiaUnit::KilogramSquareCentimeter => value * T::from_f64(10000.0),
+            MassMomentOfInertiaUnit::GramSquareMillimeter => value * T::from_f64(1e9),
+            MassMomentOfInertiaUnit::MilligramSquareMillimeter => value * T::from_f64(1e12),
+            MassMomentOfInertiaUnit::KilogramSquareMillimeter => value * T::from_f64(1000000.0),
+            MassMomentOfInertiaUnit::TonneSquareMeter => value / T::from_f64(1000.0),
+            MassMomentOfInertiaUnit::KilotonneSquareMeter => value / T::from_f64(1000000.0),
+            MassMomentOfInertiaUnit::MegatonneSquareMeter => value / T::from_f64(1e9),
+            MassMomentOfInertiaUnit::TonneSquareDecimeter => value / T::from_f64(10.0),
+            MassMomentOfInertiaUnit::KilotonneSquareDecimeter => value / T::from_f64(10000.0),
+            MassMomentOfInertiaUnit::MegatonneSquareDecimeter => value / T::from_f64(1e7),
+            MassMomentOfInertiaUnit::TonneSquareCentimeter => value * T::from_f64(10.0),
+            MassMomentOfInertiaUnit::KilotonneSquareCentimeter => value / T::from_f64(100.0),
+            MassMomentOfInertiaUnit::MegatonneSquareCentimeter => value / T::from_f64(100000.0),
+            MassMomentOfInertiaUnit::TonneSquareMillimeter => value * T::from_f64(1000.0),
+            MassMomentOfInertiaUnit::KilotonneSquareMillimeter => value,
+            MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value / T::from_f64(1000.0),
+            MassMomentOfInertiaUnit::PoundSquareFoot => value / T::from_f64(0.0421401100938048),
+            MassMomentOfInertiaUnit::PoundSquareInch => value / T::from_f64(0.0002926396534292),
+            MassMomentOfInertiaUnit::SlugSquareFoot => value / T::from_f64(1.3558179483314003),
+            MassMomentOfInertiaUnit::SlugSquareInch => value / T::from_f64(0.009415402418968058),
+        }
+    }
+}
+
+impl<T: Float> MassMomentOfInertia<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`mg·m²`, `g·m²`, `kg·m²`).
     /// Zero, NaN and infinities are shown in the base unit.

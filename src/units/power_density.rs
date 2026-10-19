@@ -692,15 +692,12 @@ impl core::str::FromStr for PowerDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> PowerDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: PowerDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PowerDensityUnit::WattPerCubicMeter => value,
             PowerDensityUnit::PicowattPerCubicMeter => value / T::from_f64(1e12),
             PowerDensityUnit::NanowattPerCubicMeter => value / T::from_f64(1e9),
@@ -747,62 +744,63 @@ impl<T: Float> PowerDensity<T> {
             PowerDensityUnit::TerawattPerLiter => value * T::from_f64(1e15),
             PowerDensityUnit::BtuPerSecondCubicInch => value * T::from_f64(6.438345835593246e7),
             PowerDensityUnit::BtuPerSecondCubicFoot => value * T::from_f64(37258.94580783128),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PowerDensityUnit) -> T {
-        match unit {
-            PowerDensityUnit::WattPerCubicMeter => self.0,
-            PowerDensityUnit::PicowattPerCubicMeter => self.0 * T::from_f64(1e12),
-            PowerDensityUnit::NanowattPerCubicMeter => self.0 * T::from_f64(1e9),
-            PowerDensityUnit::MicrowattPerCubicMeter => self.0 * T::from_f64(1000000.0),
-            PowerDensityUnit::MilliwattPerCubicMeter => self.0 * T::from_f64(1000.0),
-            PowerDensityUnit::DeciwattPerCubicMeter => self.0 * T::from_f64(10.0),
-            PowerDensityUnit::DecawattPerCubicMeter => self.0 / T::from_f64(10.0),
-            PowerDensityUnit::KilowattPerCubicMeter => self.0 / T::from_f64(1000.0),
-            PowerDensityUnit::MegawattPerCubicMeter => self.0 / T::from_f64(1000000.0),
-            PowerDensityUnit::GigawattPerCubicMeter => self.0 / T::from_f64(1e9),
-            PowerDensityUnit::TerawattPerCubicMeter => self.0 / T::from_f64(1e12),
-            PowerDensityUnit::WattPerCubicInch => self.0 / T::from_f64(61023.74409473228),
-            PowerDensityUnit::PicowattPerCubicInch => self.0 * T::from_f64(1.6387064e7),
-            PowerDensityUnit::NanowattPerCubicInch => self.0 / T::from_f64(6.1023744094732284e-5),
-            PowerDensityUnit::MicrowattPerCubicInch => self.0 / T::from_f64(0.06102374409473228),
-            PowerDensityUnit::MilliwattPerCubicInch => self.0 / T::from_f64(61.02374409473229),
-            PowerDensityUnit::DeciwattPerCubicInch => self.0 / T::from_f64(6102.374409473228),
-            PowerDensityUnit::DecawattPerCubicInch => self.0 / T::from_f64(610237.4409473229),
-            PowerDensityUnit::KilowattPerCubicInch => self.0 / T::from_f64(6.1023744094732285e7),
-            PowerDensityUnit::MegawattPerCubicInch => self.0 / T::from_f64(6.1023744094732285e10),
-            PowerDensityUnit::GigawattPerCubicInch => self.0 / T::from_f64(6.102374409473228e13),
-            PowerDensityUnit::TerawattPerCubicInch => self.0 / T::from_f64(6.102374409473228e16),
-            PowerDensityUnit::WattPerCubicFoot => self.0 / T::from_f64(35.31466672148859),
-            PowerDensityUnit::PicowattPerCubicFoot => self.0 * T::from_f64(2.8316846592e10),
-            PowerDensityUnit::NanowattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e-8),
-            PowerDensityUnit::MicrowattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e-5),
-            PowerDensityUnit::MilliwattPerCubicFoot => self.0 / T::from_f64(0.03531466672148859),
-            PowerDensityUnit::DeciwattPerCubicFoot => self.0 / T::from_f64(3.5314666721488592),
-            PowerDensityUnit::DecawattPerCubicFoot => self.0 / T::from_f64(353.1466672148859),
-            PowerDensityUnit::KilowattPerCubicFoot => self.0 / T::from_f64(35314.66672148859),
-            PowerDensityUnit::MegawattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e7),
-            PowerDensityUnit::GigawattPerCubicFoot => self.0 / T::from_f64(3.5314666721488594e10),
-            PowerDensityUnit::TerawattPerCubicFoot => self.0 / T::from_f64(3.531466672148859e13),
-            PowerDensityUnit::WattPerLiter => self.0 / T::from_f64(1000.0),
-            PowerDensityUnit::PicowattPerLiter => self.0 * T::from_f64(1e9),
-            PowerDensityUnit::NanowattPerLiter => self.0 * T::from_f64(1000000.0),
-            PowerDensityUnit::MicrowattPerLiter => self.0 * T::from_f64(1000.0),
-            PowerDensityUnit::MilliwattPerLiter => self.0,
-            PowerDensityUnit::DeciwattPerLiter => self.0 / T::from_f64(100.0),
-            PowerDensityUnit::DecawattPerLiter => self.0 / T::from_f64(10000.0),
-            PowerDensityUnit::KilowattPerLiter => self.0 / T::from_f64(1000000.0),
-            PowerDensityUnit::MegawattPerLiter => self.0 / T::from_f64(1e9),
-            PowerDensityUnit::GigawattPerLiter => self.0 / T::from_f64(1e12),
-            PowerDensityUnit::TerawattPerLiter => self.0 / T::from_f64(1e15),
-            PowerDensityUnit::BtuPerSecondCubicInch => self.0 / T::from_f64(6.438345835593246e7),
-            PowerDensityUnit::BtuPerSecondCubicFoot => self.0 / T::from_f64(37258.94580783128),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PowerDensityUnit::WattPerCubicMeter => value,
+            PowerDensityUnit::PicowattPerCubicMeter => value * T::from_f64(1e12),
+            PowerDensityUnit::NanowattPerCubicMeter => value * T::from_f64(1e9),
+            PowerDensityUnit::MicrowattPerCubicMeter => value * T::from_f64(1000000.0),
+            PowerDensityUnit::MilliwattPerCubicMeter => value * T::from_f64(1000.0),
+            PowerDensityUnit::DeciwattPerCubicMeter => value * T::from_f64(10.0),
+            PowerDensityUnit::DecawattPerCubicMeter => value / T::from_f64(10.0),
+            PowerDensityUnit::KilowattPerCubicMeter => value / T::from_f64(1000.0),
+            PowerDensityUnit::MegawattPerCubicMeter => value / T::from_f64(1000000.0),
+            PowerDensityUnit::GigawattPerCubicMeter => value / T::from_f64(1e9),
+            PowerDensityUnit::TerawattPerCubicMeter => value / T::from_f64(1e12),
+            PowerDensityUnit::WattPerCubicInch => value / T::from_f64(61023.74409473228),
+            PowerDensityUnit::PicowattPerCubicInch => value * T::from_f64(1.6387064e7),
+            PowerDensityUnit::NanowattPerCubicInch => value / T::from_f64(6.1023744094732284e-5),
+            PowerDensityUnit::MicrowattPerCubicInch => value / T::from_f64(0.06102374409473228),
+            PowerDensityUnit::MilliwattPerCubicInch => value / T::from_f64(61.02374409473229),
+            PowerDensityUnit::DeciwattPerCubicInch => value / T::from_f64(6102.374409473228),
+            PowerDensityUnit::DecawattPerCubicInch => value / T::from_f64(610237.4409473229),
+            PowerDensityUnit::KilowattPerCubicInch => value / T::from_f64(6.1023744094732285e7),
+            PowerDensityUnit::MegawattPerCubicInch => value / T::from_f64(6.1023744094732285e10),
+            PowerDensityUnit::GigawattPerCubicInch => value / T::from_f64(6.102374409473228e13),
+            PowerDensityUnit::TerawattPerCubicInch => value / T::from_f64(6.102374409473228e16),
+            PowerDensityUnit::WattPerCubicFoot => value / T::from_f64(35.31466672148859),
+            PowerDensityUnit::PicowattPerCubicFoot => value * T::from_f64(2.8316846592e10),
+            PowerDensityUnit::NanowattPerCubicFoot => value / T::from_f64(3.531466672148859e-8),
+            PowerDensityUnit::MicrowattPerCubicFoot => value / T::from_f64(3.531466672148859e-5),
+            PowerDensityUnit::MilliwattPerCubicFoot => value / T::from_f64(0.03531466672148859),
+            PowerDensityUnit::DeciwattPerCubicFoot => value / T::from_f64(3.5314666721488592),
+            PowerDensityUnit::DecawattPerCubicFoot => value / T::from_f64(353.1466672148859),
+            PowerDensityUnit::KilowattPerCubicFoot => value / T::from_f64(35314.66672148859),
+            PowerDensityUnit::MegawattPerCubicFoot => value / T::from_f64(3.531466672148859e7),
+            PowerDensityUnit::GigawattPerCubicFoot => value / T::from_f64(3.5314666721488594e10),
+            PowerDensityUnit::TerawattPerCubicFoot => value / T::from_f64(3.531466672148859e13),
+            PowerDensityUnit::WattPerLiter => value / T::from_f64(1000.0),
+            PowerDensityUnit::PicowattPerLiter => value * T::from_f64(1e9),
+            PowerDensityUnit::NanowattPerLiter => value * T::from_f64(1000000.0),
+            PowerDensityUnit::MicrowattPerLiter => value * T::from_f64(1000.0),
+            PowerDensityUnit::MilliwattPerLiter => value,
+            PowerDensityUnit::DeciwattPerLiter => value / T::from_f64(100.0),
+            PowerDensityUnit::DecawattPerLiter => value / T::from_f64(10000.0),
+            PowerDensityUnit::KilowattPerLiter => value / T::from_f64(1000000.0),
+            PowerDensityUnit::MegawattPerLiter => value / T::from_f64(1e9),
+            PowerDensityUnit::GigawattPerLiter => value / T::from_f64(1e12),
+            PowerDensityUnit::TerawattPerLiter => value / T::from_f64(1e15),
+            PowerDensityUnit::BtuPerSecondCubicInch => value / T::from_f64(6.438345835593246e7),
+            PowerDensityUnit::BtuPerSecondCubicFoot => value / T::from_f64(37258.94580783128),
+        }
+    }
+}
+
+impl<T: Float> PowerDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pW/m³`, `nW/m³`, `µW/m³`, `mW/m³`, `W/m³`, `kW/m³`, `MW/m³`, `GW/m³`, `TW/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

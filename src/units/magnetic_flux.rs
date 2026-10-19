@@ -103,27 +103,25 @@ impl core::str::FromStr for MagneticFluxUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MagneticFlux<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MagneticFlux<T>> for MagneticFluxUnit {
     #[inline]
-    pub fn new(value: T, unit: MagneticFluxUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MagneticFluxUnit::Weber => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MagneticFluxUnit) -> T {
-        match unit {
-            MagneticFluxUnit::Weber => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MagneticFluxUnit::Weber => value,
+        }
+    }
+}
+
+impl<T: Float> MagneticFlux<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Wb`).
     /// Zero, NaN and infinities are shown in the base unit.

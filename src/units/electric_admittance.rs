@@ -294,15 +294,12 @@ impl core::str::FromStr for ElectricAdmittanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricAdmittance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricAdmittance<T>> for ElectricAdmittanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricAdmittanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricAdmittanceUnit::Siemens => value,
             ElectricAdmittanceUnit::Nanosiemens => value / T::from_f64(1e9),
             ElectricAdmittanceUnit::Microsiemens => value / T::from_f64(1000000.0),
@@ -319,32 +316,33 @@ impl<T: Float> ElectricAdmittance<T> {
             ElectricAdmittanceUnit::Megamho => value * T::from_f64(1000000.0),
             ElectricAdmittanceUnit::Gigamho => value * T::from_f64(1e9),
             ElectricAdmittanceUnit::Teramho => value * T::from_f64(1e12),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricAdmittanceUnit) -> T {
-        match unit {
-            ElectricAdmittanceUnit::Siemens => self.0,
-            ElectricAdmittanceUnit::Nanosiemens => self.0 * T::from_f64(1e9),
-            ElectricAdmittanceUnit::Microsiemens => self.0 * T::from_f64(1000000.0),
-            ElectricAdmittanceUnit::Millisiemens => self.0 * T::from_f64(1000.0),
-            ElectricAdmittanceUnit::Kilosiemens => self.0 / T::from_f64(1000.0),
-            ElectricAdmittanceUnit::Megasiemens => self.0 / T::from_f64(1000000.0),
-            ElectricAdmittanceUnit::Gigasiemens => self.0 / T::from_f64(1e9),
-            ElectricAdmittanceUnit::Terasiemens => self.0 / T::from_f64(1e12),
-            ElectricAdmittanceUnit::Mho => self.0,
-            ElectricAdmittanceUnit::Nanomho => self.0 * T::from_f64(1e9),
-            ElectricAdmittanceUnit::Micromho => self.0 * T::from_f64(1000000.0),
-            ElectricAdmittanceUnit::Millimho => self.0 * T::from_f64(1000.0),
-            ElectricAdmittanceUnit::Kilomho => self.0 / T::from_f64(1000.0),
-            ElectricAdmittanceUnit::Megamho => self.0 / T::from_f64(1000000.0),
-            ElectricAdmittanceUnit::Gigamho => self.0 / T::from_f64(1e9),
-            ElectricAdmittanceUnit::Teramho => self.0 / T::from_f64(1e12),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricAdmittanceUnit::Siemens => value,
+            ElectricAdmittanceUnit::Nanosiemens => value * T::from_f64(1e9),
+            ElectricAdmittanceUnit::Microsiemens => value * T::from_f64(1000000.0),
+            ElectricAdmittanceUnit::Millisiemens => value * T::from_f64(1000.0),
+            ElectricAdmittanceUnit::Kilosiemens => value / T::from_f64(1000.0),
+            ElectricAdmittanceUnit::Megasiemens => value / T::from_f64(1000000.0),
+            ElectricAdmittanceUnit::Gigasiemens => value / T::from_f64(1e9),
+            ElectricAdmittanceUnit::Terasiemens => value / T::from_f64(1e12),
+            ElectricAdmittanceUnit::Mho => value,
+            ElectricAdmittanceUnit::Nanomho => value * T::from_f64(1e9),
+            ElectricAdmittanceUnit::Micromho => value * T::from_f64(1000000.0),
+            ElectricAdmittanceUnit::Millimho => value * T::from_f64(1000.0),
+            ElectricAdmittanceUnit::Kilomho => value / T::from_f64(1000.0),
+            ElectricAdmittanceUnit::Megamho => value / T::from_f64(1000000.0),
+            ElectricAdmittanceUnit::Gigamho => value / T::from_f64(1e9),
+            ElectricAdmittanceUnit::Teramho => value / T::from_f64(1e12),
+        }
+    }
+}
+
+impl<T: Float> ElectricAdmittance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
     /// Zero, NaN and infinities are shown in the base unit.

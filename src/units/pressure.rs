@@ -761,15 +761,12 @@ impl core::str::FromStr for PressureUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Pressure<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
     #[inline]
-    pub fn new(value: T, unit: PressureUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PressureUnit::Pascal => value,
             PressureUnit::Micropascal => value / T::from_f64(1000000.0),
             PressureUnit::Millipascal => value / T::from_f64(1000.0),
@@ -820,68 +817,67 @@ impl<T: Float> Pressure<T> {
             PressureUnit::InchOfWaterColumn => value * T::from_f64(249.08891),
             PressureUnit::MilligramForcePerSquareMeter => value * T::from_f64(9.80665e-6),
             PressureUnit::MilligramForcePerSquareFoot => value * T::from_f64(0.0001055579020880264),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PressureUnit) -> T {
-        match unit {
-            PressureUnit::Pascal => self.0,
-            PressureUnit::Micropascal => self.0 * T::from_f64(1000000.0),
-            PressureUnit::Millipascal => self.0 * T::from_f64(1000.0),
-            PressureUnit::Decapascal => self.0 / T::from_f64(10.0),
-            PressureUnit::Hectopascal => self.0 / T::from_f64(100.0),
-            PressureUnit::Kilopascal => self.0 / T::from_f64(1000.0),
-            PressureUnit::Megapascal => self.0 / T::from_f64(1000000.0),
-            PressureUnit::Gigapascal => self.0 / T::from_f64(1e9),
-            PressureUnit::Atmosphere => self.0 / T::from_f64(101325.0),
-            PressureUnit::Bar => self.0 / T::from_f64(100000.0),
-            PressureUnit::Microbar => self.0 * T::from_f64(10.0),
-            PressureUnit::Millibar => self.0 / T::from_f64(100.0),
-            PressureUnit::Centibar => self.0 / T::from_f64(1000.0),
-            PressureUnit::Decibar => self.0 / T::from_f64(10000.0),
-            PressureUnit::Kilobar => self.0 / T::from_f64(1e8),
-            PressureUnit::Megabar => self.0 / T::from_f64(1e11),
-            PressureUnit::KilogramForcePerSquareMeter => self.0 / T::from_f64(9.80665),
-            PressureUnit::KilogramForcePerSquareCentimeter => self.0 / T::from_f64(98066.5),
-            PressureUnit::KilogramForcePerSquareMillimeter => self.0 / T::from_f64(9806650.0),
-            PressureUnit::NewtonPerSquareMeter => self.0,
-            PressureUnit::KilonewtonPerSquareMeter => self.0 / T::from_f64(1000.0),
-            PressureUnit::MeganewtonPerSquareMeter => self.0 / T::from_f64(1000000.0),
-            PressureUnit::NewtonPerSquareCentimeter => self.0 / T::from_f64(10000.0),
-            PressureUnit::KilonewtonPerSquareCentimeter => self.0 / T::from_f64(1e7),
-            PressureUnit::NewtonPerSquareMillimeter => self.0 / T::from_f64(1000000.0),
-            PressureUnit::KilonewtonPerSquareMillimeter => self.0 / T::from_f64(1e9),
-            PressureUnit::TechnicalAtmosphere => self.0 / T::from_f64(98066.5),
-            PressureUnit::Torr => self.0 / T::from_f64(133.32236842105263),
-            PressureUnit::Millitorr => self.0 / T::from_f64(0.13332236842105263),
-            PressureUnit::PoundForcePerSquareInch => self.0 / T::from_f64(6894.757293168362),
-            PressureUnit::KilopoundForcePerSquareInch => self.0 / T::from_f64(6894757.293168361),
-            PressureUnit::PoundForcePerSquareMil => self.0 / T::from_f64(6.894757293168362e9),
-            PressureUnit::KilopoundForcePerSquareMil => self.0 / T::from_f64(6.894757293168361e12),
-            PressureUnit::PoundForcePerSquareFoot => self.0 / T::from_f64(47.880258980335846),
-            PressureUnit::KilopoundForcePerSquareFoot => self.0 / T::from_f64(47880.25898033584),
-            PressureUnit::TonneForcePerSquareMillimeter => self.0 / T::from_f64(9.80665e9),
-            PressureUnit::TonneForcePerSquareMeter => self.0 / T::from_f64(9806.65),
-            PressureUnit::MeterOfHead => self.0 / T::from_f64(9804.139432),
-            PressureUnit::TonneForcePerSquareCentimeter => self.0 / T::from_f64(9.80665e7),
-            PressureUnit::FootOfHead => self.0 / T::from_f64(2988.3016988736),
-            PressureUnit::MillimeterOfMercury => self.0 / T::from_f64(133.322387415),
-            PressureUnit::InchOfMercury => self.0 / T::from_f64(3386.388640341),
-            PressureUnit::DynePerSquareCentimeter => self.0 * T::from_f64(10.0),
-            PressureUnit::PoundPerInchSecondSquared => self.0 / T::from_f64(17.857966521592093),
-            PressureUnit::MeterOfWaterColumn => self.0 / T::from_f64(9806.65),
-            PressureUnit::MillimeterOfWaterColumn => self.0 / T::from_f64(9.80665),
-            PressureUnit::CentimeterOfWaterColumn => self.0 / T::from_f64(98.0665),
-            PressureUnit::InchOfWaterColumn => self.0 / T::from_f64(249.08891),
-            PressureUnit::MilligramForcePerSquareMeter => self.0 / T::from_f64(9.80665e-6),
-            PressureUnit::MilligramForcePerSquareFoot => {
-                self.0 / T::from_f64(0.0001055579020880264)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PressureUnit::Pascal => value,
+            PressureUnit::Micropascal => value * T::from_f64(1000000.0),
+            PressureUnit::Millipascal => value * T::from_f64(1000.0),
+            PressureUnit::Decapascal => value / T::from_f64(10.0),
+            PressureUnit::Hectopascal => value / T::from_f64(100.0),
+            PressureUnit::Kilopascal => value / T::from_f64(1000.0),
+            PressureUnit::Megapascal => value / T::from_f64(1000000.0),
+            PressureUnit::Gigapascal => value / T::from_f64(1e9),
+            PressureUnit::Atmosphere => value / T::from_f64(101325.0),
+            PressureUnit::Bar => value / T::from_f64(100000.0),
+            PressureUnit::Microbar => value * T::from_f64(10.0),
+            PressureUnit::Millibar => value / T::from_f64(100.0),
+            PressureUnit::Centibar => value / T::from_f64(1000.0),
+            PressureUnit::Decibar => value / T::from_f64(10000.0),
+            PressureUnit::Kilobar => value / T::from_f64(1e8),
+            PressureUnit::Megabar => value / T::from_f64(1e11),
+            PressureUnit::KilogramForcePerSquareMeter => value / T::from_f64(9.80665),
+            PressureUnit::KilogramForcePerSquareCentimeter => value / T::from_f64(98066.5),
+            PressureUnit::KilogramForcePerSquareMillimeter => value / T::from_f64(9806650.0),
+            PressureUnit::NewtonPerSquareMeter => value,
+            PressureUnit::KilonewtonPerSquareMeter => value / T::from_f64(1000.0),
+            PressureUnit::MeganewtonPerSquareMeter => value / T::from_f64(1000000.0),
+            PressureUnit::NewtonPerSquareCentimeter => value / T::from_f64(10000.0),
+            PressureUnit::KilonewtonPerSquareCentimeter => value / T::from_f64(1e7),
+            PressureUnit::NewtonPerSquareMillimeter => value / T::from_f64(1000000.0),
+            PressureUnit::KilonewtonPerSquareMillimeter => value / T::from_f64(1e9),
+            PressureUnit::TechnicalAtmosphere => value / T::from_f64(98066.5),
+            PressureUnit::Torr => value / T::from_f64(133.32236842105263),
+            PressureUnit::Millitorr => value / T::from_f64(0.13332236842105263),
+            PressureUnit::PoundForcePerSquareInch => value / T::from_f64(6894.757293168362),
+            PressureUnit::KilopoundForcePerSquareInch => value / T::from_f64(6894757.293168361),
+            PressureUnit::PoundForcePerSquareMil => value / T::from_f64(6.894757293168362e9),
+            PressureUnit::KilopoundForcePerSquareMil => value / T::from_f64(6.894757293168361e12),
+            PressureUnit::PoundForcePerSquareFoot => value / T::from_f64(47.880258980335846),
+            PressureUnit::KilopoundForcePerSquareFoot => value / T::from_f64(47880.25898033584),
+            PressureUnit::TonneForcePerSquareMillimeter => value / T::from_f64(9.80665e9),
+            PressureUnit::TonneForcePerSquareMeter => value / T::from_f64(9806.65),
+            PressureUnit::MeterOfHead => value / T::from_f64(9804.139432),
+            PressureUnit::TonneForcePerSquareCentimeter => value / T::from_f64(9.80665e7),
+            PressureUnit::FootOfHead => value / T::from_f64(2988.3016988736),
+            PressureUnit::MillimeterOfMercury => value / T::from_f64(133.322387415),
+            PressureUnit::InchOfMercury => value / T::from_f64(3386.388640341),
+            PressureUnit::DynePerSquareCentimeter => value * T::from_f64(10.0),
+            PressureUnit::PoundPerInchSecondSquared => value / T::from_f64(17.857966521592093),
+            PressureUnit::MeterOfWaterColumn => value / T::from_f64(9806.65),
+            PressureUnit::MillimeterOfWaterColumn => value / T::from_f64(9.80665),
+            PressureUnit::CentimeterOfWaterColumn => value / T::from_f64(98.0665),
+            PressureUnit::InchOfWaterColumn => value / T::from_f64(249.08891),
+            PressureUnit::MilligramForcePerSquareMeter => value / T::from_f64(9.80665e-6),
+            PressureUnit::MilligramForcePerSquareFoot => value / T::from_f64(0.0001055579020880264),
+        }
+    }
+}
+
+impl<T: Float> Pressure<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µPa`, `mPa`, `Pa`, `kPa`, `MPa`, `GPa`).
     /// Zero, NaN and infinities are shown in the base unit.

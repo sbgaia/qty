@@ -473,15 +473,12 @@ impl core::str::FromStr for RadioactivityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Radioactivity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
     #[inline]
-    pub fn new(value: T, unit: RadioactivityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RadioactivityUnit::Becquerel => value,
             RadioactivityUnit::Picobecquerel => value / T::from_f64(1e12),
             RadioactivityUnit::Nanobecquerel => value / T::from_f64(1e9),
@@ -511,45 +508,46 @@ impl<T: Float> Radioactivity<T> {
             RadioactivityUnit::Megarutherford => value * T::from_f64(1e12),
             RadioactivityUnit::Gigarutherford => value * T::from_f64(1e15),
             RadioactivityUnit::Terarutherford => value * T::from_f64(1e18),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RadioactivityUnit) -> T {
-        match unit {
-            RadioactivityUnit::Becquerel => self.0,
-            RadioactivityUnit::Picobecquerel => self.0 * T::from_f64(1e12),
-            RadioactivityUnit::Nanobecquerel => self.0 * T::from_f64(1e9),
-            RadioactivityUnit::Microbecquerel => self.0 * T::from_f64(1000000.0),
-            RadioactivityUnit::Millibecquerel => self.0 * T::from_f64(1000.0),
-            RadioactivityUnit::Kilobecquerel => self.0 / T::from_f64(1000.0),
-            RadioactivityUnit::Megabecquerel => self.0 / T::from_f64(1000000.0),
-            RadioactivityUnit::Gigabecquerel => self.0 / T::from_f64(1e9),
-            RadioactivityUnit::Terabecquerel => self.0 / T::from_f64(1e12),
-            RadioactivityUnit::Petabecquerel => self.0 / T::from_f64(1e15),
-            RadioactivityUnit::Exabecquerel => self.0 / T::from_f64(1e18),
-            RadioactivityUnit::Curie => self.0 / T::from_f64(3.7e10),
-            RadioactivityUnit::Picocurie => self.0 / T::from_f64(0.037),
-            RadioactivityUnit::Nanocurie => self.0 / T::from_f64(37.0),
-            RadioactivityUnit::Microcurie => self.0 / T::from_f64(37000.0),
-            RadioactivityUnit::Millicurie => self.0 / T::from_f64(3.7e7),
-            RadioactivityUnit::Kilocurie => self.0 / T::from_f64(3.7e13),
-            RadioactivityUnit::Megacurie => self.0 / T::from_f64(3.7e16),
-            RadioactivityUnit::Gigacurie => self.0 / T::from_f64(3.7e19),
-            RadioactivityUnit::Teracurie => self.0 / T::from_f64(3.7e22),
-            RadioactivityUnit::Rutherford => self.0 / T::from_f64(1000000.0),
-            RadioactivityUnit::Picorutherford => self.0 * T::from_f64(1000000.0),
-            RadioactivityUnit::Nanorutherford => self.0 * T::from_f64(1000.0),
-            RadioactivityUnit::Microrutherford => self.0,
-            RadioactivityUnit::Millirutherford => self.0 / T::from_f64(1000.0),
-            RadioactivityUnit::Kilorutherford => self.0 / T::from_f64(1e9),
-            RadioactivityUnit::Megarutherford => self.0 / T::from_f64(1e12),
-            RadioactivityUnit::Gigarutherford => self.0 / T::from_f64(1e15),
-            RadioactivityUnit::Terarutherford => self.0 / T::from_f64(1e18),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RadioactivityUnit::Becquerel => value,
+            RadioactivityUnit::Picobecquerel => value * T::from_f64(1e12),
+            RadioactivityUnit::Nanobecquerel => value * T::from_f64(1e9),
+            RadioactivityUnit::Microbecquerel => value * T::from_f64(1000000.0),
+            RadioactivityUnit::Millibecquerel => value * T::from_f64(1000.0),
+            RadioactivityUnit::Kilobecquerel => value / T::from_f64(1000.0),
+            RadioactivityUnit::Megabecquerel => value / T::from_f64(1000000.0),
+            RadioactivityUnit::Gigabecquerel => value / T::from_f64(1e9),
+            RadioactivityUnit::Terabecquerel => value / T::from_f64(1e12),
+            RadioactivityUnit::Petabecquerel => value / T::from_f64(1e15),
+            RadioactivityUnit::Exabecquerel => value / T::from_f64(1e18),
+            RadioactivityUnit::Curie => value / T::from_f64(3.7e10),
+            RadioactivityUnit::Picocurie => value / T::from_f64(0.037),
+            RadioactivityUnit::Nanocurie => value / T::from_f64(37.0),
+            RadioactivityUnit::Microcurie => value / T::from_f64(37000.0),
+            RadioactivityUnit::Millicurie => value / T::from_f64(3.7e7),
+            RadioactivityUnit::Kilocurie => value / T::from_f64(3.7e13),
+            RadioactivityUnit::Megacurie => value / T::from_f64(3.7e16),
+            RadioactivityUnit::Gigacurie => value / T::from_f64(3.7e19),
+            RadioactivityUnit::Teracurie => value / T::from_f64(3.7e22),
+            RadioactivityUnit::Rutherford => value / T::from_f64(1000000.0),
+            RadioactivityUnit::Picorutherford => value * T::from_f64(1000000.0),
+            RadioactivityUnit::Nanorutherford => value * T::from_f64(1000.0),
+            RadioactivityUnit::Microrutherford => value,
+            RadioactivityUnit::Millirutherford => value / T::from_f64(1000.0),
+            RadioactivityUnit::Kilorutherford => value / T::from_f64(1e9),
+            RadioactivityUnit::Megarutherford => value / T::from_f64(1e12),
+            RadioactivityUnit::Gigarutherford => value / T::from_f64(1e15),
+            RadioactivityUnit::Terarutherford => value / T::from_f64(1e18),
+        }
+    }
+}
+
+impl<T: Float> Radioactivity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pBq`, `nBq`, `µBq`, `mBq`, `Bq`, `kBq`, `MBq`, `GBq`, `TBq`, `PBq`, `EBq`).
     /// Zero, NaN and infinities are shown in the base unit.

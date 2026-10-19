@@ -117,29 +117,27 @@ impl core::str::FromStr for LevelUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Level<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Level<T>> for LevelUnit {
     #[inline]
-    pub fn new(value: T, unit: LevelUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LevelUnit::Decibel => value,
             LevelUnit::Neper => value * T::from_f64(8.685889687081618),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LevelUnit) -> T {
-        match unit {
-            LevelUnit::Decibel => self.0,
-            LevelUnit::Neper => self.0 / T::from_f64(8.685889687081618),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LevelUnit::Decibel => value,
+            LevelUnit::Neper => value / T::from_f64(8.685889687081618),
+        }
+    }
+}
+
+impl<T: Float> Level<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`dB`).
     /// Zero, NaN and infinities are shown in the base unit.

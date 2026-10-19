@@ -186,15 +186,12 @@ impl core::str::FromStr for ElectricCapacitanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricCapacitance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricCapacitanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricCapacitanceUnit::Farad => value,
             ElectricCapacitanceUnit::Picofarad => value / T::from_f64(1e12),
             ElectricCapacitanceUnit::Nanofarad => value / T::from_f64(1e9),
@@ -202,23 +199,24 @@ impl<T: Float> ElectricCapacitance<T> {
             ElectricCapacitanceUnit::Millifarad => value / T::from_f64(1000.0),
             ElectricCapacitanceUnit::Kilofarad => value * T::from_f64(1000.0),
             ElectricCapacitanceUnit::Megafarad => value * T::from_f64(1000000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricCapacitanceUnit) -> T {
-        match unit {
-            ElectricCapacitanceUnit::Farad => self.0,
-            ElectricCapacitanceUnit::Picofarad => self.0 * T::from_f64(1e12),
-            ElectricCapacitanceUnit::Nanofarad => self.0 * T::from_f64(1e9),
-            ElectricCapacitanceUnit::Microfarad => self.0 * T::from_f64(1000000.0),
-            ElectricCapacitanceUnit::Millifarad => self.0 * T::from_f64(1000.0),
-            ElectricCapacitanceUnit::Kilofarad => self.0 / T::from_f64(1000.0),
-            ElectricCapacitanceUnit::Megafarad => self.0 / T::from_f64(1000000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricCapacitanceUnit::Farad => value,
+            ElectricCapacitanceUnit::Picofarad => value * T::from_f64(1e12),
+            ElectricCapacitanceUnit::Nanofarad => value * T::from_f64(1e9),
+            ElectricCapacitanceUnit::Microfarad => value * T::from_f64(1000000.0),
+            ElectricCapacitanceUnit::Millifarad => value * T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Kilofarad => value / T::from_f64(1000.0),
+            ElectricCapacitanceUnit::Megafarad => value / T::from_f64(1000000.0),
+        }
+    }
+}
+
+impl<T: Float> ElectricCapacitance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pF`, `nF`, `µF`, `mF`, `F`, `kF`, `MF`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -276,15 +276,12 @@ impl core::str::FromStr for AccelerationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Acceleration<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
     #[inline]
-    pub fn new(value: T, unit: AccelerationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AccelerationUnit::MeterPerSecondSquared => value,
             AccelerationUnit::NanometerPerSecondSquared => value / T::from_f64(1e9),
             AccelerationUnit::MicrometerPerSecondSquared => value / T::from_f64(1000000.0),
@@ -299,30 +296,31 @@ impl<T: Float> Acceleration<T> {
             AccelerationUnit::KnotPerHour => value * T::from_f64(0.00014290123456790123),
             AccelerationUnit::StandardGravity => value * T::from_f64(9.80665),
             AccelerationUnit::MillistandardGravity => value * T::from_f64(0.00980665),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AccelerationUnit) -> T {
-        match unit {
-            AccelerationUnit::MeterPerSecondSquared => self.0,
-            AccelerationUnit::NanometerPerSecondSquared => self.0 * T::from_f64(1e9),
-            AccelerationUnit::MicrometerPerSecondSquared => self.0 * T::from_f64(1000000.0),
-            AccelerationUnit::MillimeterPerSecondSquared => self.0 * T::from_f64(1000.0),
-            AccelerationUnit::CentimeterPerSecondSquared => self.0 * T::from_f64(100.0),
-            AccelerationUnit::DecimeterPerSecondSquared => self.0 * T::from_f64(10.0),
-            AccelerationUnit::KilometerPerSecondSquared => self.0 / T::from_f64(1000.0),
-            AccelerationUnit::InchPerSecondSquared => self.0 / T::from_f64(0.0254),
-            AccelerationUnit::FootPerSecondSquared => self.0 / T::from_f64(0.3048),
-            AccelerationUnit::KnotPerSecond => self.0 / T::from_f64(0.5144444444444445),
-            AccelerationUnit::KnotPerMinute => self.0 / T::from_f64(0.008574074074074074),
-            AccelerationUnit::KnotPerHour => self.0 / T::from_f64(0.00014290123456790123),
-            AccelerationUnit::StandardGravity => self.0 / T::from_f64(9.80665),
-            AccelerationUnit::MillistandardGravity => self.0 / T::from_f64(0.00980665),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AccelerationUnit::MeterPerSecondSquared => value,
+            AccelerationUnit::NanometerPerSecondSquared => value * T::from_f64(1e9),
+            AccelerationUnit::MicrometerPerSecondSquared => value * T::from_f64(1000000.0),
+            AccelerationUnit::MillimeterPerSecondSquared => value * T::from_f64(1000.0),
+            AccelerationUnit::CentimeterPerSecondSquared => value * T::from_f64(100.0),
+            AccelerationUnit::DecimeterPerSecondSquared => value * T::from_f64(10.0),
+            AccelerationUnit::KilometerPerSecondSquared => value / T::from_f64(1000.0),
+            AccelerationUnit::InchPerSecondSquared => value / T::from_f64(0.0254),
+            AccelerationUnit::FootPerSecondSquared => value / T::from_f64(0.3048),
+            AccelerationUnit::KnotPerSecond => value / T::from_f64(0.5144444444444445),
+            AccelerationUnit::KnotPerMinute => value / T::from_f64(0.008574074074074074),
+            AccelerationUnit::KnotPerHour => value / T::from_f64(0.00014290123456790123),
+            AccelerationUnit::StandardGravity => value / T::from_f64(9.80665),
+            AccelerationUnit::MillistandardGravity => value / T::from_f64(0.00980665),
+        }
+    }
+}
+
+impl<T: Float> Acceleration<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nm/s²`, `µm/s²`, `mm/s²`, `m/s²`, `km/s²`).
     /// Zero, NaN and infinities are shown in the base unit.

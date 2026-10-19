@@ -243,15 +243,12 @@ impl core::str::FromStr for FrequencyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Frequency<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Frequency<T>> for FrequencyUnit {
     #[inline]
-    pub fn new(value: T, unit: FrequencyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             FrequencyUnit::Hertz => value,
             FrequencyUnit::Microhertz => value / T::from_f64(1000000.0),
             FrequencyUnit::Millihertz => value / T::from_f64(1000.0),
@@ -264,28 +261,29 @@ impl<T: Float> Frequency<T> {
             FrequencyUnit::CyclePerHour => value / T::from_f64(3600.0),
             FrequencyUnit::BeatPerMinute => value / T::from_f64(60.0),
             FrequencyUnit::PerSecond => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: FrequencyUnit) -> T {
-        match unit {
-            FrequencyUnit::Hertz => self.0,
-            FrequencyUnit::Microhertz => self.0 * T::from_f64(1000000.0),
-            FrequencyUnit::Millihertz => self.0 * T::from_f64(1000.0),
-            FrequencyUnit::Kilohertz => self.0 / T::from_f64(1000.0),
-            FrequencyUnit::Megahertz => self.0 / T::from_f64(1000000.0),
-            FrequencyUnit::Gigahertz => self.0 / T::from_f64(1e9),
-            FrequencyUnit::Terahertz => self.0 / T::from_f64(1e12),
-            FrequencyUnit::RadianPerSecond => self.0 / T::from_f64(0.15915494309189535),
-            FrequencyUnit::CyclePerMinute => self.0 * T::from_f64(60.0),
-            FrequencyUnit::CyclePerHour => self.0 * T::from_f64(3600.0),
-            FrequencyUnit::BeatPerMinute => self.0 * T::from_f64(60.0),
-            FrequencyUnit::PerSecond => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            FrequencyUnit::Hertz => value,
+            FrequencyUnit::Microhertz => value * T::from_f64(1000000.0),
+            FrequencyUnit::Millihertz => value * T::from_f64(1000.0),
+            FrequencyUnit::Kilohertz => value / T::from_f64(1000.0),
+            FrequencyUnit::Megahertz => value / T::from_f64(1000000.0),
+            FrequencyUnit::Gigahertz => value / T::from_f64(1e9),
+            FrequencyUnit::Terahertz => value / T::from_f64(1e12),
+            FrequencyUnit::RadianPerSecond => value / T::from_f64(0.15915494309189535),
+            FrequencyUnit::CyclePerMinute => value * T::from_f64(60.0),
+            FrequencyUnit::CyclePerHour => value * T::from_f64(3600.0),
+            FrequencyUnit::BeatPerMinute => value * T::from_f64(60.0),
+            FrequencyUnit::PerSecond => value,
+        }
+    }
+}
+
+impl<T: Float> Frequency<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µHz`, `mHz`, `Hz`, `kHz`, `MHz`, `GHz`, `THz`).
     /// Zero, NaN and infinities are shown in the base unit.

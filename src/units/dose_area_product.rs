@@ -419,15 +419,12 @@ impl core::str::FromStr for DoseAreaProductUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> DoseAreaProduct<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
     #[inline]
-    pub fn new(value: T, unit: DoseAreaProductUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             DoseAreaProductUnit::GraySquareMeter => value,
             DoseAreaProductUnit::MicrograySquareMeter => value / T::from_f64(1000000.0),
             DoseAreaProductUnit::MilligraySquareMeter => value / T::from_f64(1000.0),
@@ -453,41 +450,42 @@ impl<T: Float> DoseAreaProduct<T> {
             DoseAreaProductUnit::MilligraySquareMicrometer => value / T::from_f64(1e15),
             DoseAreaProductUnit::CentigraySquareMicrometer => value / T::from_f64(1e14),
             DoseAreaProductUnit::DecigraySquareMicrometer => value / T::from_f64(1e13),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: DoseAreaProductUnit) -> T {
-        match unit {
-            DoseAreaProductUnit::GraySquareMeter => self.0,
-            DoseAreaProductUnit::MicrograySquareMeter => self.0 * T::from_f64(1000000.0),
-            DoseAreaProductUnit::MilligraySquareMeter => self.0 * T::from_f64(1000.0),
-            DoseAreaProductUnit::CentigraySquareMeter => self.0 * T::from_f64(100.0),
-            DoseAreaProductUnit::DecigraySquareMeter => self.0 * T::from_f64(10.0),
-            DoseAreaProductUnit::GraySquareDecimeter => self.0 * T::from_f64(100.0),
-            DoseAreaProductUnit::MicrograySquareDecimeter => self.0 * T::from_f64(1e8),
-            DoseAreaProductUnit::MilligraySquareDecimeter => self.0 * T::from_f64(100000.0),
-            DoseAreaProductUnit::CentigraySquareDecimeter => self.0 * T::from_f64(10000.0),
-            DoseAreaProductUnit::DecigraySquareDecimeter => self.0 * T::from_f64(1000.0),
-            DoseAreaProductUnit::GraySquareCentimeter => self.0 * T::from_f64(10000.0),
-            DoseAreaProductUnit::MicrograySquareCentimeter => self.0 * T::from_f64(1e10),
-            DoseAreaProductUnit::MilligraySquareCentimeter => self.0 * T::from_f64(1e7),
-            DoseAreaProductUnit::CentigraySquareCentimeter => self.0 * T::from_f64(1000000.0),
-            DoseAreaProductUnit::DecigraySquareCentimeter => self.0 * T::from_f64(100000.0),
-            DoseAreaProductUnit::GraySquareMillimeter => self.0 * T::from_f64(1000000.0),
-            DoseAreaProductUnit::MicrograySquareMillimeter => self.0 * T::from_f64(1e12),
-            DoseAreaProductUnit::MilligraySquareMillimeter => self.0 * T::from_f64(1e9),
-            DoseAreaProductUnit::CentigraySquareMillimeter => self.0 * T::from_f64(1e8),
-            DoseAreaProductUnit::DecigraySquareMillimeter => self.0 * T::from_f64(1e7),
-            DoseAreaProductUnit::GraySquareMicrometer => self.0 * T::from_f64(1e12),
-            DoseAreaProductUnit::MicrograySquareMicrometer => self.0 * T::from_f64(1e18),
-            DoseAreaProductUnit::MilligraySquareMicrometer => self.0 * T::from_f64(1e15),
-            DoseAreaProductUnit::CentigraySquareMicrometer => self.0 * T::from_f64(1e14),
-            DoseAreaProductUnit::DecigraySquareMicrometer => self.0 * T::from_f64(1e13),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            DoseAreaProductUnit::GraySquareMeter => value,
+            DoseAreaProductUnit::MicrograySquareMeter => value * T::from_f64(1000000.0),
+            DoseAreaProductUnit::MilligraySquareMeter => value * T::from_f64(1000.0),
+            DoseAreaProductUnit::CentigraySquareMeter => value * T::from_f64(100.0),
+            DoseAreaProductUnit::DecigraySquareMeter => value * T::from_f64(10.0),
+            DoseAreaProductUnit::GraySquareDecimeter => value * T::from_f64(100.0),
+            DoseAreaProductUnit::MicrograySquareDecimeter => value * T::from_f64(1e8),
+            DoseAreaProductUnit::MilligraySquareDecimeter => value * T::from_f64(100000.0),
+            DoseAreaProductUnit::CentigraySquareDecimeter => value * T::from_f64(10000.0),
+            DoseAreaProductUnit::DecigraySquareDecimeter => value * T::from_f64(1000.0),
+            DoseAreaProductUnit::GraySquareCentimeter => value * T::from_f64(10000.0),
+            DoseAreaProductUnit::MicrograySquareCentimeter => value * T::from_f64(1e10),
+            DoseAreaProductUnit::MilligraySquareCentimeter => value * T::from_f64(1e7),
+            DoseAreaProductUnit::CentigraySquareCentimeter => value * T::from_f64(1000000.0),
+            DoseAreaProductUnit::DecigraySquareCentimeter => value * T::from_f64(100000.0),
+            DoseAreaProductUnit::GraySquareMillimeter => value * T::from_f64(1000000.0),
+            DoseAreaProductUnit::MicrograySquareMillimeter => value * T::from_f64(1e12),
+            DoseAreaProductUnit::MilligraySquareMillimeter => value * T::from_f64(1e9),
+            DoseAreaProductUnit::CentigraySquareMillimeter => value * T::from_f64(1e8),
+            DoseAreaProductUnit::DecigraySquareMillimeter => value * T::from_f64(1e7),
+            DoseAreaProductUnit::GraySquareMicrometer => value * T::from_f64(1e12),
+            DoseAreaProductUnit::MicrograySquareMicrometer => value * T::from_f64(1e18),
+            DoseAreaProductUnit::MilligraySquareMicrometer => value * T::from_f64(1e15),
+            DoseAreaProductUnit::CentigraySquareMicrometer => value * T::from_f64(1e14),
+            DoseAreaProductUnit::DecigraySquareMicrometer => value * T::from_f64(1e13),
+        }
+    }
+}
+
+impl<T: Float> DoseAreaProduct<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µGy·m²`, `mGy·m²`, `Gy·m²`).
     /// Zero, NaN and infinities are shown in the base unit.

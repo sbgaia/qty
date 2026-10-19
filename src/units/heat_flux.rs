@@ -424,15 +424,12 @@ impl core::str::FromStr for HeatFluxUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> HeatFlux<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
     #[inline]
-    pub fn new(value: T, unit: HeatFluxUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             HeatFluxUnit::WattPerSquareMeter => value,
             HeatFluxUnit::NanowattPerSquareMeter => value / T::from_f64(1e9),
             HeatFluxUnit::MicrowattPerSquareMeter => value / T::from_f64(1000000.0),
@@ -458,41 +455,42 @@ impl<T: Float> HeatFlux<T> {
             HeatFluxUnit::KilocaloriePerHourSquareMeter => value * T::from_f64(1.1622222222222223),
             HeatFluxUnit::PoundForcePerFootSecond => value * T::from_f64(14.593902937206364),
             HeatFluxUnit::PoundPerSecondCubed => value * T::from_f64(0.45359237),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: HeatFluxUnit) -> T {
-        match unit {
-            HeatFluxUnit::WattPerSquareMeter => self.0,
-            HeatFluxUnit::NanowattPerSquareMeter => self.0 * T::from_f64(1e9),
-            HeatFluxUnit::MicrowattPerSquareMeter => self.0 * T::from_f64(1000000.0),
-            HeatFluxUnit::MilliwattPerSquareMeter => self.0 * T::from_f64(1000.0),
-            HeatFluxUnit::CentiwattPerSquareMeter => self.0 * T::from_f64(100.0),
-            HeatFluxUnit::DeciwattPerSquareMeter => self.0 * T::from_f64(10.0),
-            HeatFluxUnit::KilowattPerSquareMeter => self.0 / T::from_f64(1000.0),
-            HeatFluxUnit::WattPerSquareMillimeter => self.0 / T::from_f64(1000000.0),
-            HeatFluxUnit::NanowattPerSquareMillimeter => self.0 * T::from_f64(1000.0),
-            HeatFluxUnit::MicrowattPerSquareMillimeter => self.0,
-            HeatFluxUnit::MilliwattPerSquareMillimeter => self.0 / T::from_f64(1000.0),
-            HeatFluxUnit::CentiwattPerSquareMillimeter => self.0 / T::from_f64(10000.0),
-            HeatFluxUnit::DeciwattPerSquareMillimeter => self.0 / T::from_f64(100000.0),
-            HeatFluxUnit::KilowattPerSquareMillimeter => self.0 / T::from_f64(1e9),
-            HeatFluxUnit::WattPerSquareInch => self.0 / T::from_f64(1550.0031000062),
-            HeatFluxUnit::WattPerSquareFoot => self.0 / T::from_f64(10.763910416709722),
-            HeatFluxUnit::BtuPerSecondSquareInch => self.0 / T::from_f64(1635339.8422406844),
-            HeatFluxUnit::BtuPerSecondSquareFoot => self.0 / T::from_f64(11356.526682226975),
-            HeatFluxUnit::BtuPerMinuteSquareFoot => self.0 / T::from_f64(189.27544470378294),
-            HeatFluxUnit::BtuPerHourSquareFoot => self.0 / T::from_f64(3.154590745063049),
-            HeatFluxUnit::CaloriePerSecondSquareCentimeter => self.0 / T::from_f64(41840.0),
-            HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => self.0 / T::from_f64(4.184e7),
-            HeatFluxUnit::KilocaloriePerHourSquareMeter => self.0 / T::from_f64(1.1622222222222223),
-            HeatFluxUnit::PoundForcePerFootSecond => self.0 / T::from_f64(14.593902937206364),
-            HeatFluxUnit::PoundPerSecondCubed => self.0 / T::from_f64(0.45359237),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            HeatFluxUnit::WattPerSquareMeter => value,
+            HeatFluxUnit::NanowattPerSquareMeter => value * T::from_f64(1e9),
+            HeatFluxUnit::MicrowattPerSquareMeter => value * T::from_f64(1000000.0),
+            HeatFluxUnit::MilliwattPerSquareMeter => value * T::from_f64(1000.0),
+            HeatFluxUnit::CentiwattPerSquareMeter => value * T::from_f64(100.0),
+            HeatFluxUnit::DeciwattPerSquareMeter => value * T::from_f64(10.0),
+            HeatFluxUnit::KilowattPerSquareMeter => value / T::from_f64(1000.0),
+            HeatFluxUnit::WattPerSquareMillimeter => value / T::from_f64(1000000.0),
+            HeatFluxUnit::NanowattPerSquareMillimeter => value * T::from_f64(1000.0),
+            HeatFluxUnit::MicrowattPerSquareMillimeter => value,
+            HeatFluxUnit::MilliwattPerSquareMillimeter => value / T::from_f64(1000.0),
+            HeatFluxUnit::CentiwattPerSquareMillimeter => value / T::from_f64(10000.0),
+            HeatFluxUnit::DeciwattPerSquareMillimeter => value / T::from_f64(100000.0),
+            HeatFluxUnit::KilowattPerSquareMillimeter => value / T::from_f64(1e9),
+            HeatFluxUnit::WattPerSquareInch => value / T::from_f64(1550.0031000062),
+            HeatFluxUnit::WattPerSquareFoot => value / T::from_f64(10.763910416709722),
+            HeatFluxUnit::BtuPerSecondSquareInch => value / T::from_f64(1635339.8422406844),
+            HeatFluxUnit::BtuPerSecondSquareFoot => value / T::from_f64(11356.526682226975),
+            HeatFluxUnit::BtuPerMinuteSquareFoot => value / T::from_f64(189.27544470378294),
+            HeatFluxUnit::BtuPerHourSquareFoot => value / T::from_f64(3.154590745063049),
+            HeatFluxUnit::CaloriePerSecondSquareCentimeter => value / T::from_f64(41840.0),
+            HeatFluxUnit::KilocaloriePerSecondSquareCentimeter => value / T::from_f64(4.184e7),
+            HeatFluxUnit::KilocaloriePerHourSquareMeter => value / T::from_f64(1.1622222222222223),
+            HeatFluxUnit::PoundForcePerFootSecond => value / T::from_f64(14.593902937206364),
+            HeatFluxUnit::PoundPerSecondCubed => value / T::from_f64(0.45359237),
+        }
+    }
+}
+
+impl<T: Float> HeatFlux<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -146,33 +146,31 @@ impl core::str::FromStr for FuelEfficiencyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> FuelEfficiency<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
     #[inline]
-    pub fn new(value: T, unit: FuelEfficiencyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / value,
             FuelEfficiencyUnit::MilePerUsGallon => value * T::from_f64(0.425143707430272),
             FuelEfficiencyUnit::MilePerUkGallon => value * T::from_f64(0.3540061899346471),
             FuelEfficiencyUnit::KilometerPerLiter => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: FuelEfficiencyUnit) -> T {
-        match unit {
-            FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / self.0,
-            FuelEfficiencyUnit::MilePerUsGallon => self.0 / T::from_f64(0.425143707430272),
-            FuelEfficiencyUnit::MilePerUkGallon => self.0 / T::from_f64(0.3540061899346471),
-            FuelEfficiencyUnit::KilometerPerLiter => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / value,
+            FuelEfficiencyUnit::MilePerUsGallon => value / T::from_f64(0.425143707430272),
+            FuelEfficiencyUnit::MilePerUkGallon => value / T::from_f64(0.3540061899346471),
+            FuelEfficiencyUnit::KilometerPerLiter => value,
+        }
+    }
+}
+
+impl<T: Float> FuelEfficiency<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`km/l`).
     /// Zero, NaN and infinities are shown in the base unit.

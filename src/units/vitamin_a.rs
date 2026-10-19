@@ -103,27 +103,25 @@ impl core::str::FromStr for VitaminAUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> VitaminA<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<VitaminA<T>> for VitaminAUnit {
     #[inline]
-    pub fn new(value: T, unit: VitaminAUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             VitaminAUnit::InternationalUnit => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: VitaminAUnit) -> T {
-        match unit {
-            VitaminAUnit::InternationalUnit => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            VitaminAUnit::InternationalUnit => value,
+        }
+    }
+}
+
+impl<T: Float> VitaminA<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`IU`).
     /// Zero, NaN and infinities are shown in the base unit.

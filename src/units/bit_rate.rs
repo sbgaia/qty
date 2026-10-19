@@ -602,15 +602,12 @@ impl core::str::FromStr for BitRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> BitRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
     #[inline]
-    pub fn new(value: T, unit: BitRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             BitRateUnit::BitPerSecond => value,
             BitRateUnit::KilobitPerSecond => value * T::from_f64(1000.0),
             BitRateUnit::MegabitPerSecond => value * T::from_f64(1000000.0),
@@ -650,55 +647,56 @@ impl<T: Float> BitRate<T> {
             BitRateUnit::TebioctetPerSecond => value * T::from_f64(8.796093022208e12),
             BitRateUnit::PebioctetPerSecond => value * T::from_f64(9.007199254740992e15),
             BitRateUnit::ExbioctetPerSecond => value * T::from_f64(9.223372036854776e18),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: BitRateUnit) -> T {
-        match unit {
-            BitRateUnit::BitPerSecond => self.0,
-            BitRateUnit::KilobitPerSecond => self.0 / T::from_f64(1000.0),
-            BitRateUnit::MegabitPerSecond => self.0 / T::from_f64(1000000.0),
-            BitRateUnit::GigabitPerSecond => self.0 / T::from_f64(1e9),
-            BitRateUnit::TerabitPerSecond => self.0 / T::from_f64(1e12),
-            BitRateUnit::PetabitPerSecond => self.0 / T::from_f64(1e15),
-            BitRateUnit::ExabitPerSecond => self.0 / T::from_f64(1e18),
-            BitRateUnit::KibibitPerSecond => self.0 * T::from_f64(0.0009765625),
-            BitRateUnit::MebibitPerSecond => self.0 * T::from_f64(9.5367431640625e-7),
-            BitRateUnit::GibibitPerSecond => self.0 * T::from_f64(9.313225746154785e-10),
-            BitRateUnit::TebibitPerSecond => self.0 * T::from_f64(9.094947017729282e-13),
-            BitRateUnit::PebibitPerSecond => self.0 * T::from_f64(8.881784197001252e-16),
-            BitRateUnit::ExbibitPerSecond => self.0 * T::from_f64(8.673617379884035e-19),
-            BitRateUnit::BytePerSecond => self.0 * T::from_f64(0.125),
-            BitRateUnit::KilobytePerSecond => self.0 / T::from_f64(8000.0),
-            BitRateUnit::MegabytePerSecond => self.0 / T::from_f64(8000000.0),
-            BitRateUnit::GigabytePerSecond => self.0 / T::from_f64(8e9),
-            BitRateUnit::TerabytePerSecond => self.0 / T::from_f64(8e12),
-            BitRateUnit::PetabytePerSecond => self.0 / T::from_f64(8e15),
-            BitRateUnit::ExabytePerSecond => self.0 / T::from_f64(8e18),
-            BitRateUnit::KibibytePerSecond => self.0 * T::from_f64(0.0001220703125),
-            BitRateUnit::MebibytePerSecond => self.0 * T::from_f64(1.1920928955078125e-7),
-            BitRateUnit::GibibytePerSecond => self.0 * T::from_f64(1.1641532182693481e-10),
-            BitRateUnit::TebibytePerSecond => self.0 * T::from_f64(1.1368683772161603e-13),
-            BitRateUnit::PebibytePerSecond => self.0 * T::from_f64(1.1102230246251565e-16),
-            BitRateUnit::ExbibytePerSecond => self.0 * T::from_f64(1.0842021724855044e-19),
-            BitRateUnit::OctetPerSecond => self.0 * T::from_f64(0.125),
-            BitRateUnit::KilooctetPerSecond => self.0 / T::from_f64(8000.0),
-            BitRateUnit::MegaoctetPerSecond => self.0 / T::from_f64(8000000.0),
-            BitRateUnit::GigaoctetPerSecond => self.0 / T::from_f64(8e9),
-            BitRateUnit::TeraoctetPerSecond => self.0 / T::from_f64(8e12),
-            BitRateUnit::PetaoctetPerSecond => self.0 / T::from_f64(8e15),
-            BitRateUnit::ExaoctetPerSecond => self.0 / T::from_f64(8e18),
-            BitRateUnit::KibioctetPerSecond => self.0 * T::from_f64(0.0001220703125),
-            BitRateUnit::MebioctetPerSecond => self.0 * T::from_f64(1.1920928955078125e-7),
-            BitRateUnit::GibioctetPerSecond => self.0 * T::from_f64(1.1641532182693481e-10),
-            BitRateUnit::TebioctetPerSecond => self.0 * T::from_f64(1.1368683772161603e-13),
-            BitRateUnit::PebioctetPerSecond => self.0 * T::from_f64(1.1102230246251565e-16),
-            BitRateUnit::ExbioctetPerSecond => self.0 * T::from_f64(1.0842021724855044e-19),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            BitRateUnit::BitPerSecond => value,
+            BitRateUnit::KilobitPerSecond => value / T::from_f64(1000.0),
+            BitRateUnit::MegabitPerSecond => value / T::from_f64(1000000.0),
+            BitRateUnit::GigabitPerSecond => value / T::from_f64(1e9),
+            BitRateUnit::TerabitPerSecond => value / T::from_f64(1e12),
+            BitRateUnit::PetabitPerSecond => value / T::from_f64(1e15),
+            BitRateUnit::ExabitPerSecond => value / T::from_f64(1e18),
+            BitRateUnit::KibibitPerSecond => value * T::from_f64(0.0009765625),
+            BitRateUnit::MebibitPerSecond => value * T::from_f64(9.5367431640625e-7),
+            BitRateUnit::GibibitPerSecond => value * T::from_f64(9.313225746154785e-10),
+            BitRateUnit::TebibitPerSecond => value * T::from_f64(9.094947017729282e-13),
+            BitRateUnit::PebibitPerSecond => value * T::from_f64(8.881784197001252e-16),
+            BitRateUnit::ExbibitPerSecond => value * T::from_f64(8.673617379884035e-19),
+            BitRateUnit::BytePerSecond => value * T::from_f64(0.125),
+            BitRateUnit::KilobytePerSecond => value / T::from_f64(8000.0),
+            BitRateUnit::MegabytePerSecond => value / T::from_f64(8000000.0),
+            BitRateUnit::GigabytePerSecond => value / T::from_f64(8e9),
+            BitRateUnit::TerabytePerSecond => value / T::from_f64(8e12),
+            BitRateUnit::PetabytePerSecond => value / T::from_f64(8e15),
+            BitRateUnit::ExabytePerSecond => value / T::from_f64(8e18),
+            BitRateUnit::KibibytePerSecond => value * T::from_f64(0.0001220703125),
+            BitRateUnit::MebibytePerSecond => value * T::from_f64(1.1920928955078125e-7),
+            BitRateUnit::GibibytePerSecond => value * T::from_f64(1.1641532182693481e-10),
+            BitRateUnit::TebibytePerSecond => value * T::from_f64(1.1368683772161603e-13),
+            BitRateUnit::PebibytePerSecond => value * T::from_f64(1.1102230246251565e-16),
+            BitRateUnit::ExbibytePerSecond => value * T::from_f64(1.0842021724855044e-19),
+            BitRateUnit::OctetPerSecond => value * T::from_f64(0.125),
+            BitRateUnit::KilooctetPerSecond => value / T::from_f64(8000.0),
+            BitRateUnit::MegaoctetPerSecond => value / T::from_f64(8000000.0),
+            BitRateUnit::GigaoctetPerSecond => value / T::from_f64(8e9),
+            BitRateUnit::TeraoctetPerSecond => value / T::from_f64(8e12),
+            BitRateUnit::PetaoctetPerSecond => value / T::from_f64(8e15),
+            BitRateUnit::ExaoctetPerSecond => value / T::from_f64(8e18),
+            BitRateUnit::KibioctetPerSecond => value * T::from_f64(0.0001220703125),
+            BitRateUnit::MebioctetPerSecond => value * T::from_f64(1.1920928955078125e-7),
+            BitRateUnit::GibioctetPerSecond => value * T::from_f64(1.1641532182693481e-10),
+            BitRateUnit::TebioctetPerSecond => value * T::from_f64(1.1368683772161603e-13),
+            BitRateUnit::PebioctetPerSecond => value * T::from_f64(1.1102230246251565e-16),
+            BitRateUnit::ExbioctetPerSecond => value * T::from_f64(1.0842021724855044e-19),
+        }
+    }
+}
+
+impl<T: Float> BitRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`bit/s`, `kbit/s`, `Mbit/s`, `Gbit/s`, `Tbit/s`, `Pbit/s`, `Ebit/s`).
     /// Zero, NaN and infinities are shown in the base unit.

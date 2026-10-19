@@ -197,15 +197,12 @@ impl core::str::FromStr for ThermalInsulanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ThermalInsulance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ThermalInsulanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
             ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value * T::from_f64(1000.0),
             ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value * T::from_f64(1000.0),
@@ -217,27 +214,28 @@ impl<T: Float> ThermalInsulance<T> {
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
                 value * T::from_f64(176.11018368230583)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ThermalInsulanceUnit) -> T {
-        match unit {
-            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => self.0,
-            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => self.0 / T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => self.0 / T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => self.0 * T::from_f64(10.0),
-            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => self.0 * T::from_f64(1000.0),
-            ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                self.0 / T::from_f64(0.08604206500956023)
-            }
-            ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                self.0 / T::from_f64(176.11018368230583)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt => value,
+            ThermalInsulanceUnit::SquareMeterKelvinPerWatt => value / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareMeterDegreeCelsiusPerWatt => value / T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value * T::from_f64(10.0),
+            ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value * T::from_f64(1000.0),
+            ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
+                value / T::from_f64(0.08604206500956023)
+            }
+            ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
+                value / T::from_f64(176.11018368230583)
+            }
+        }
+    }
+}
+
+impl<T: Float> ThermalInsulance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m²K/kW`).
     /// Zero, NaN and infinities are shown in the base unit.

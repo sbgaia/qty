@@ -315,15 +315,12 @@ impl core::str::FromStr for AmountOfSubstanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> AmountOfSubstance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
     #[inline]
-    pub fn new(value: T, unit: AmountOfSubstanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AmountOfSubstanceUnit::Mole => value,
             AmountOfSubstanceUnit::Femtomole => value / T::from_f64(1e15),
             AmountOfSubstanceUnit::Picomole => value / T::from_f64(1e12),
@@ -341,33 +338,34 @@ impl<T: Float> AmountOfSubstance<T> {
             AmountOfSubstanceUnit::CentipoundMole => value * T::from_f64(4.5359237),
             AmountOfSubstanceUnit::DecipoundMole => value * T::from_f64(45.359237),
             AmountOfSubstanceUnit::KilopoundMole => value * T::from_f64(453592.37),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AmountOfSubstanceUnit) -> T {
-        match unit {
-            AmountOfSubstanceUnit::Mole => self.0,
-            AmountOfSubstanceUnit::Femtomole => self.0 * T::from_f64(1e15),
-            AmountOfSubstanceUnit::Picomole => self.0 * T::from_f64(1e12),
-            AmountOfSubstanceUnit::Nanomole => self.0 * T::from_f64(1e9),
-            AmountOfSubstanceUnit::Micromole => self.0 * T::from_f64(1000000.0),
-            AmountOfSubstanceUnit::Millimole => self.0 * T::from_f64(1000.0),
-            AmountOfSubstanceUnit::Centimole => self.0 * T::from_f64(100.0),
-            AmountOfSubstanceUnit::Decimole => self.0 * T::from_f64(10.0),
-            AmountOfSubstanceUnit::Kilomole => self.0 / T::from_f64(1000.0),
-            AmountOfSubstanceUnit::Megamole => self.0 / T::from_f64(1000000.0),
-            AmountOfSubstanceUnit::PoundMole => self.0 / T::from_f64(453.59237),
-            AmountOfSubstanceUnit::NanopoundMole => self.0 / T::from_f64(4.5359237e-7),
-            AmountOfSubstanceUnit::MicropoundMole => self.0 / T::from_f64(0.00045359237),
-            AmountOfSubstanceUnit::MillipoundMole => self.0 / T::from_f64(0.45359237),
-            AmountOfSubstanceUnit::CentipoundMole => self.0 / T::from_f64(4.5359237),
-            AmountOfSubstanceUnit::DecipoundMole => self.0 / T::from_f64(45.359237),
-            AmountOfSubstanceUnit::KilopoundMole => self.0 / T::from_f64(453592.37),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AmountOfSubstanceUnit::Mole => value,
+            AmountOfSubstanceUnit::Femtomole => value * T::from_f64(1e15),
+            AmountOfSubstanceUnit::Picomole => value * T::from_f64(1e12),
+            AmountOfSubstanceUnit::Nanomole => value * T::from_f64(1e9),
+            AmountOfSubstanceUnit::Micromole => value * T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::Millimole => value * T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Centimole => value * T::from_f64(100.0),
+            AmountOfSubstanceUnit::Decimole => value * T::from_f64(10.0),
+            AmountOfSubstanceUnit::Kilomole => value / T::from_f64(1000.0),
+            AmountOfSubstanceUnit::Megamole => value / T::from_f64(1000000.0),
+            AmountOfSubstanceUnit::PoundMole => value / T::from_f64(453.59237),
+            AmountOfSubstanceUnit::NanopoundMole => value / T::from_f64(4.5359237e-7),
+            AmountOfSubstanceUnit::MicropoundMole => value / T::from_f64(0.00045359237),
+            AmountOfSubstanceUnit::MillipoundMole => value / T::from_f64(0.45359237),
+            AmountOfSubstanceUnit::CentipoundMole => value / T::from_f64(4.5359237),
+            AmountOfSubstanceUnit::DecipoundMole => value / T::from_f64(45.359237),
+            AmountOfSubstanceUnit::KilopoundMole => value / T::from_f64(453592.37),
+        }
+    }
+}
+
+impl<T: Float> AmountOfSubstance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fmol`, `pmol`, `nmol`, `µmol`, `mmol`, `mol`, `kmol`, `Mmol`).
     /// Zero, NaN and infinities are shown in the base unit.

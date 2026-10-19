@@ -621,15 +621,12 @@ impl core::str::FromStr for EnergyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Energy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Energy<T>> for EnergyUnit {
     #[inline]
-    pub fn new(value: T, unit: EnergyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             EnergyUnit::Joule => value,
             EnergyUnit::Nanojoule => value / T::from_f64(1e9),
             EnergyUnit::Microjoule => value / T::from_f64(1000000.0),
@@ -670,56 +667,57 @@ impl<T: Float> Energy<T> {
             EnergyUnit::ThermImperial => value * T::from_f64(1.05505585257348e8),
             EnergyUnit::DecathermImperial => value * T::from_f64(1.05505585257348e9),
             EnergyUnit::HorsepowerHour => value * T::from_f64(2684519.537456106),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: EnergyUnit) -> T {
-        match unit {
-            EnergyUnit::Joule => self.0,
-            EnergyUnit::Nanojoule => self.0 * T::from_f64(1e9),
-            EnergyUnit::Microjoule => self.0 * T::from_f64(1000000.0),
-            EnergyUnit::Millijoule => self.0 * T::from_f64(1000.0),
-            EnergyUnit::Kilojoule => self.0 / T::from_f64(1000.0),
-            EnergyUnit::Megajoule => self.0 / T::from_f64(1000000.0),
-            EnergyUnit::Gigajoule => self.0 / T::from_f64(1e9),
-            EnergyUnit::Terajoule => self.0 / T::from_f64(1e12),
-            EnergyUnit::Petajoule => self.0 / T::from_f64(1e15),
-            EnergyUnit::Calorie => self.0 / T::from_f64(4.184),
-            EnergyUnit::Kilocalorie => self.0 / T::from_f64(4184.0),
-            EnergyUnit::Megacalorie => self.0 / T::from_f64(4184000.0),
-            EnergyUnit::BritishThermalUnit => self.0 / T::from_f64(1055.05585262),
-            EnergyUnit::KilobritishThermalUnit => self.0 / T::from_f64(1055055.85262),
-            EnergyUnit::MegabritishThermalUnit => self.0 / T::from_f64(1.05505585262e9),
-            EnergyUnit::GigabritishThermalUnit => self.0 / T::from_f64(1.05505585262e12),
-            EnergyUnit::ElectronVolt => self.0 / T::from_f64(1.602176634e-19),
-            EnergyUnit::KiloelectronVolt => self.0 / T::from_f64(1.602176634e-16),
-            EnergyUnit::MegaelectronVolt => self.0 / T::from_f64(1.602176634e-13),
-            EnergyUnit::GigaelectronVolt => self.0 / T::from_f64(1.602176634e-10),
-            EnergyUnit::TeraelectronVolt => self.0 / T::from_f64(1.602176634e-7),
-            EnergyUnit::FootPound => self.0 / T::from_f64(1.3558179483314003),
-            EnergyUnit::Erg => self.0 * T::from_f64(1e7),
-            EnergyUnit::WattHour => self.0 / T::from_f64(3600.0),
-            EnergyUnit::KilowattHour => self.0 / T::from_f64(3600000.0),
-            EnergyUnit::MegawattHour => self.0 / T::from_f64(3.6e9),
-            EnergyUnit::GigawattHour => self.0 / T::from_f64(3.6e12),
-            EnergyUnit::TerawattHour => self.0 / T::from_f64(3.6e15),
-            EnergyUnit::WattDay => self.0 / T::from_f64(86400.0),
-            EnergyUnit::KilowattDay => self.0 / T::from_f64(8.64e7),
-            EnergyUnit::MegawattDay => self.0 / T::from_f64(8.64e10),
-            EnergyUnit::GigawattDay => self.0 / T::from_f64(8.64e13),
-            EnergyUnit::TerawattDay => self.0 / T::from_f64(8.64e16),
-            EnergyUnit::ThermEc => self.0 / T::from_f64(1.05505585262e8),
-            EnergyUnit::DecathermEc => self.0 / T::from_f64(1.05505585262e9),
-            EnergyUnit::ThermUs => self.0 / T::from_f64(1.054804e8),
-            EnergyUnit::DecathermUs => self.0 / T::from_f64(1.054804e9),
-            EnergyUnit::ThermImperial => self.0 / T::from_f64(1.05505585257348e8),
-            EnergyUnit::DecathermImperial => self.0 / T::from_f64(1.05505585257348e9),
-            EnergyUnit::HorsepowerHour => self.0 / T::from_f64(2684519.537456106),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            EnergyUnit::Joule => value,
+            EnergyUnit::Nanojoule => value * T::from_f64(1e9),
+            EnergyUnit::Microjoule => value * T::from_f64(1000000.0),
+            EnergyUnit::Millijoule => value * T::from_f64(1000.0),
+            EnergyUnit::Kilojoule => value / T::from_f64(1000.0),
+            EnergyUnit::Megajoule => value / T::from_f64(1000000.0),
+            EnergyUnit::Gigajoule => value / T::from_f64(1e9),
+            EnergyUnit::Terajoule => value / T::from_f64(1e12),
+            EnergyUnit::Petajoule => value / T::from_f64(1e15),
+            EnergyUnit::Calorie => value / T::from_f64(4.184),
+            EnergyUnit::Kilocalorie => value / T::from_f64(4184.0),
+            EnergyUnit::Megacalorie => value / T::from_f64(4184000.0),
+            EnergyUnit::BritishThermalUnit => value / T::from_f64(1055.05585262),
+            EnergyUnit::KilobritishThermalUnit => value / T::from_f64(1055055.85262),
+            EnergyUnit::MegabritishThermalUnit => value / T::from_f64(1.05505585262e9),
+            EnergyUnit::GigabritishThermalUnit => value / T::from_f64(1.05505585262e12),
+            EnergyUnit::ElectronVolt => value / T::from_f64(1.602176634e-19),
+            EnergyUnit::KiloelectronVolt => value / T::from_f64(1.602176634e-16),
+            EnergyUnit::MegaelectronVolt => value / T::from_f64(1.602176634e-13),
+            EnergyUnit::GigaelectronVolt => value / T::from_f64(1.602176634e-10),
+            EnergyUnit::TeraelectronVolt => value / T::from_f64(1.602176634e-7),
+            EnergyUnit::FootPound => value / T::from_f64(1.3558179483314003),
+            EnergyUnit::Erg => value * T::from_f64(1e7),
+            EnergyUnit::WattHour => value / T::from_f64(3600.0),
+            EnergyUnit::KilowattHour => value / T::from_f64(3600000.0),
+            EnergyUnit::MegawattHour => value / T::from_f64(3.6e9),
+            EnergyUnit::GigawattHour => value / T::from_f64(3.6e12),
+            EnergyUnit::TerawattHour => value / T::from_f64(3.6e15),
+            EnergyUnit::WattDay => value / T::from_f64(86400.0),
+            EnergyUnit::KilowattDay => value / T::from_f64(8.64e7),
+            EnergyUnit::MegawattDay => value / T::from_f64(8.64e10),
+            EnergyUnit::GigawattDay => value / T::from_f64(8.64e13),
+            EnergyUnit::TerawattDay => value / T::from_f64(8.64e16),
+            EnergyUnit::ThermEc => value / T::from_f64(1.05505585262e8),
+            EnergyUnit::DecathermEc => value / T::from_f64(1.05505585262e9),
+            EnergyUnit::ThermUs => value / T::from_f64(1.054804e8),
+            EnergyUnit::DecathermUs => value / T::from_f64(1.054804e9),
+            EnergyUnit::ThermImperial => value / T::from_f64(1.05505585257348e8),
+            EnergyUnit::DecathermImperial => value / T::from_f64(1.05505585257348e9),
+            EnergyUnit::HorsepowerHour => value / T::from_f64(2684519.537456106),
+        }
+    }
+}
+
+impl<T: Float> Energy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nJ`, `µJ`, `mJ`, `J`, `kJ`, `MJ`, `GJ`, `TJ`, `PJ`).
     /// Zero, NaN and infinities are shown in the base unit.

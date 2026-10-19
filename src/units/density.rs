@@ -829,15 +829,12 @@ impl core::str::FromStr for DensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Density<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
     #[inline]
-    pub fn new(value: T, unit: DensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             DensityUnit::GramPerCubicMillimeter => value * T::from_f64(1000000.0),
             DensityUnit::KilogramPerCubicMillimeter => value * T::from_f64(1e9),
             DensityUnit::GramPerCubicCentimeter => value * T::from_f64(1000.0),
@@ -894,72 +891,73 @@ impl<T: Float> Density<T> {
             DensityUnit::SlugPerCubicCentimeter => value * T::from_f64(1.4593902937206365e7),
             DensityUnit::SlugPerCubicMillimeter => value * T::from_f64(1.4593902937206366e10),
             DensityUnit::SlugPerCubicInch => value * T::from_f64(890574.5981834431),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: DensityUnit) -> T {
-        match unit {
-            DensityUnit::GramPerCubicMillimeter => self.0 / T::from_f64(1000000.0),
-            DensityUnit::KilogramPerCubicMillimeter => self.0 / T::from_f64(1e9),
-            DensityUnit::GramPerCubicCentimeter => self.0 / T::from_f64(1000.0),
-            DensityUnit::KilogramPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
-            DensityUnit::GramPerCubicMeter => self.0 * T::from_f64(1000.0),
-            DensityUnit::KilogramPerCubicMeter => self.0,
-            DensityUnit::MilligramPerCubicMeter => self.0 * T::from_f64(1000000.0),
-            DensityUnit::MicrogramPerCubicMeter => self.0 * T::from_f64(1e9),
-            DensityUnit::PoundPerCubicInch => self.0 / T::from_f64(27679.90471020312),
-            DensityUnit::KilopoundPerCubicInch => self.0 / T::from_f64(2.7679904710203122e7),
-            DensityUnit::PoundPerCubicFoot => self.0 / T::from_f64(16.018463373960138),
-            DensityUnit::KilopoundPerCubicFoot => self.0 / T::from_f64(16018.46337396014),
-            DensityUnit::PoundPerCubicYard => self.0 / T::from_f64(0.5932764212577829),
-            DensityUnit::KilopoundPerCubicYard => self.0 / T::from_f64(593.276421257783),
-            DensityUnit::TonnePerCubicMillimeter => self.0 / T::from_f64(1e12),
-            DensityUnit::TonnePerCubicCentimeter => self.0 / T::from_f64(1e9),
-            DensityUnit::TonnePerCubicMeter => self.0 / T::from_f64(1000.0),
-            DensityUnit::SlugPerCubicFoot => self.0 / T::from_f64(515.3788183931962),
-            DensityUnit::GramPerLiter => self.0,
-            DensityUnit::FemtogramPerLiter => self.0 * T::from_f64(1e15),
-            DensityUnit::PicogramPerLiter => self.0 * T::from_f64(1e12),
-            DensityUnit::NanogramPerLiter => self.0 * T::from_f64(1e9),
-            DensityUnit::MicrogramPerLiter => self.0 * T::from_f64(1000000.0),
-            DensityUnit::MilligramPerLiter => self.0 * T::from_f64(1000.0),
-            DensityUnit::CentigramPerLiter => self.0 * T::from_f64(100.0),
-            DensityUnit::DecigramPerLiter => self.0 * T::from_f64(10.0),
-            DensityUnit::GramPerDeciliter => self.0 / T::from_f64(10.0),
-            DensityUnit::FemtogramPerDeciliter => self.0 * T::from_f64(1e14),
-            DensityUnit::PicogramPerDeciliter => self.0 * T::from_f64(1e11),
-            DensityUnit::NanogramPerDeciliter => self.0 * T::from_f64(1e8),
-            DensityUnit::MicrogramPerDeciliter => self.0 * T::from_f64(100000.0),
-            DensityUnit::MilligramPerDeciliter => self.0 * T::from_f64(100.0),
-            DensityUnit::CentigramPerDeciliter => self.0 * T::from_f64(10.0),
-            DensityUnit::DecigramPerDeciliter => self.0,
-            DensityUnit::GramPerMilliliter => self.0 / T::from_f64(1000.0),
-            DensityUnit::FemtogramPerMilliliter => self.0 * T::from_f64(1e12),
-            DensityUnit::PicogramPerMilliliter => self.0 * T::from_f64(1e9),
-            DensityUnit::NanogramPerMilliliter => self.0 * T::from_f64(1000000.0),
-            DensityUnit::MicrogramPerMilliliter => self.0 * T::from_f64(1000.0),
-            DensityUnit::MilligramPerMilliliter => self.0,
-            DensityUnit::CentigramPerMilliliter => self.0 / T::from_f64(10.0),
-            DensityUnit::DecigramPerMilliliter => self.0 / T::from_f64(100.0),
-            DensityUnit::PoundPerUSGallon => self.0 / T::from_f64(119.82642731689663),
-            DensityUnit::PoundPerImperialGallon => self.0 / T::from_f64(99.7763726631017),
-            DensityUnit::KilogramPerLiter => self.0 / T::from_f64(1000.0),
-            DensityUnit::TonnePerCubicFoot => self.0 / T::from_f64(35314.66672148859),
-            DensityUnit::TonnePerCubicInch => self.0 / T::from_f64(6.1023744094732285e7),
-            DensityUnit::GramPerCubicFoot => self.0 / T::from_f64(0.03531466672148859),
-            DensityUnit::GramPerCubicInch => self.0 / T::from_f64(61.02374409473229),
-            DensityUnit::PoundPerCubicMeter => self.0 / T::from_f64(0.45359237),
-            DensityUnit::PoundPerCubicCentimeter => self.0 / T::from_f64(453592.37),
-            DensityUnit::PoundPerCubicMillimeter => self.0 / T::from_f64(4.5359237e8),
-            DensityUnit::SlugPerCubicMeter => self.0 / T::from_f64(14.593902937206364),
-            DensityUnit::SlugPerCubicCentimeter => self.0 / T::from_f64(1.4593902937206365e7),
-            DensityUnit::SlugPerCubicMillimeter => self.0 / T::from_f64(1.4593902937206366e10),
-            DensityUnit::SlugPerCubicInch => self.0 / T::from_f64(890574.5981834431),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            DensityUnit::GramPerCubicMillimeter => value / T::from_f64(1000000.0),
+            DensityUnit::KilogramPerCubicMillimeter => value / T::from_f64(1e9),
+            DensityUnit::GramPerCubicCentimeter => value / T::from_f64(1000.0),
+            DensityUnit::KilogramPerCubicCentimeter => value / T::from_f64(1000000.0),
+            DensityUnit::GramPerCubicMeter => value * T::from_f64(1000.0),
+            DensityUnit::KilogramPerCubicMeter => value,
+            DensityUnit::MilligramPerCubicMeter => value * T::from_f64(1000000.0),
+            DensityUnit::MicrogramPerCubicMeter => value * T::from_f64(1e9),
+            DensityUnit::PoundPerCubicInch => value / T::from_f64(27679.90471020312),
+            DensityUnit::KilopoundPerCubicInch => value / T::from_f64(2.7679904710203122e7),
+            DensityUnit::PoundPerCubicFoot => value / T::from_f64(16.018463373960138),
+            DensityUnit::KilopoundPerCubicFoot => value / T::from_f64(16018.46337396014),
+            DensityUnit::PoundPerCubicYard => value / T::from_f64(0.5932764212577829),
+            DensityUnit::KilopoundPerCubicYard => value / T::from_f64(593.276421257783),
+            DensityUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
+            DensityUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
+            DensityUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
+            DensityUnit::SlugPerCubicFoot => value / T::from_f64(515.3788183931962),
+            DensityUnit::GramPerLiter => value,
+            DensityUnit::FemtogramPerLiter => value * T::from_f64(1e15),
+            DensityUnit::PicogramPerLiter => value * T::from_f64(1e12),
+            DensityUnit::NanogramPerLiter => value * T::from_f64(1e9),
+            DensityUnit::MicrogramPerLiter => value * T::from_f64(1000000.0),
+            DensityUnit::MilligramPerLiter => value * T::from_f64(1000.0),
+            DensityUnit::CentigramPerLiter => value * T::from_f64(100.0),
+            DensityUnit::DecigramPerLiter => value * T::from_f64(10.0),
+            DensityUnit::GramPerDeciliter => value / T::from_f64(10.0),
+            DensityUnit::FemtogramPerDeciliter => value * T::from_f64(1e14),
+            DensityUnit::PicogramPerDeciliter => value * T::from_f64(1e11),
+            DensityUnit::NanogramPerDeciliter => value * T::from_f64(1e8),
+            DensityUnit::MicrogramPerDeciliter => value * T::from_f64(100000.0),
+            DensityUnit::MilligramPerDeciliter => value * T::from_f64(100.0),
+            DensityUnit::CentigramPerDeciliter => value * T::from_f64(10.0),
+            DensityUnit::DecigramPerDeciliter => value,
+            DensityUnit::GramPerMilliliter => value / T::from_f64(1000.0),
+            DensityUnit::FemtogramPerMilliliter => value * T::from_f64(1e12),
+            DensityUnit::PicogramPerMilliliter => value * T::from_f64(1e9),
+            DensityUnit::NanogramPerMilliliter => value * T::from_f64(1000000.0),
+            DensityUnit::MicrogramPerMilliliter => value * T::from_f64(1000.0),
+            DensityUnit::MilligramPerMilliliter => value,
+            DensityUnit::CentigramPerMilliliter => value / T::from_f64(10.0),
+            DensityUnit::DecigramPerMilliliter => value / T::from_f64(100.0),
+            DensityUnit::PoundPerUSGallon => value / T::from_f64(119.82642731689663),
+            DensityUnit::PoundPerImperialGallon => value / T::from_f64(99.7763726631017),
+            DensityUnit::KilogramPerLiter => value / T::from_f64(1000.0),
+            DensityUnit::TonnePerCubicFoot => value / T::from_f64(35314.66672148859),
+            DensityUnit::TonnePerCubicInch => value / T::from_f64(6.1023744094732285e7),
+            DensityUnit::GramPerCubicFoot => value / T::from_f64(0.03531466672148859),
+            DensityUnit::GramPerCubicInch => value / T::from_f64(61.02374409473229),
+            DensityUnit::PoundPerCubicMeter => value / T::from_f64(0.45359237),
+            DensityUnit::PoundPerCubicCentimeter => value / T::from_f64(453592.37),
+            DensityUnit::PoundPerCubicMillimeter => value / T::from_f64(4.5359237e8),
+            DensityUnit::SlugPerCubicMeter => value / T::from_f64(14.593902937206364),
+            DensityUnit::SlugPerCubicCentimeter => value / T::from_f64(1.4593902937206365e7),
+            DensityUnit::SlugPerCubicMillimeter => value / T::from_f64(1.4593902937206366e10),
+            DensityUnit::SlugPerCubicInch => value / T::from_f64(890574.5981834431),
+        }
+    }
+}
+
+impl<T: Float> Density<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µg/m³`, `mg/m³`, `g/m³`, `kg/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

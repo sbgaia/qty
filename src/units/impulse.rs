@@ -263,15 +263,12 @@ impl core::str::FromStr for ImpulseUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Impulse<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Impulse<T>> for ImpulseUnit {
     #[inline]
-    pub fn new(value: T, unit: ImpulseUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ImpulseUnit::KilogramMeterPerSecond => value,
             ImpulseUnit::NewtonSecond => value,
             ImpulseUnit::NanonewtonSecond => value / T::from_f64(1e9),
@@ -285,29 +282,30 @@ impl<T: Float> Impulse<T> {
             ImpulseUnit::PoundFootPerSecond => value * T::from_f64(0.138254954376),
             ImpulseUnit::PoundForceSecond => value * T::from_f64(4.4482216152605),
             ImpulseUnit::SlugFootPerSecond => value * T::from_f64(4.4482216152605),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ImpulseUnit) -> T {
-        match unit {
-            ImpulseUnit::KilogramMeterPerSecond => self.0,
-            ImpulseUnit::NewtonSecond => self.0,
-            ImpulseUnit::NanonewtonSecond => self.0 * T::from_f64(1e9),
-            ImpulseUnit::MicronewtonSecond => self.0 * T::from_f64(1000000.0),
-            ImpulseUnit::MillinewtonSecond => self.0 * T::from_f64(1000.0),
-            ImpulseUnit::CentinewtonSecond => self.0 * T::from_f64(100.0),
-            ImpulseUnit::DecinewtonSecond => self.0 * T::from_f64(10.0),
-            ImpulseUnit::DecanewtonSecond => self.0 / T::from_f64(10.0),
-            ImpulseUnit::KilonewtonSecond => self.0 / T::from_f64(1000.0),
-            ImpulseUnit::MeganewtonSecond => self.0 / T::from_f64(1000000.0),
-            ImpulseUnit::PoundFootPerSecond => self.0 / T::from_f64(0.138254954376),
-            ImpulseUnit::PoundForceSecond => self.0 / T::from_f64(4.4482216152605),
-            ImpulseUnit::SlugFootPerSecond => self.0 / T::from_f64(4.4482216152605),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ImpulseUnit::KilogramMeterPerSecond => value,
+            ImpulseUnit::NewtonSecond => value,
+            ImpulseUnit::NanonewtonSecond => value * T::from_f64(1e9),
+            ImpulseUnit::MicronewtonSecond => value * T::from_f64(1000000.0),
+            ImpulseUnit::MillinewtonSecond => value * T::from_f64(1000.0),
+            ImpulseUnit::CentinewtonSecond => value * T::from_f64(100.0),
+            ImpulseUnit::DecinewtonSecond => value * T::from_f64(10.0),
+            ImpulseUnit::DecanewtonSecond => value / T::from_f64(10.0),
+            ImpulseUnit::KilonewtonSecond => value / T::from_f64(1000.0),
+            ImpulseUnit::MeganewtonSecond => value / T::from_f64(1000000.0),
+            ImpulseUnit::PoundFootPerSecond => value / T::from_f64(0.138254954376),
+            ImpulseUnit::PoundForceSecond => value / T::from_f64(4.4482216152605),
+            ImpulseUnit::SlugFootPerSecond => value / T::from_f64(4.4482216152605),
+        }
+    }
+}
+
+impl<T: Float> Impulse<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nN·s`, `µN·s`, `mN·s`, `N·s`, `kN·s`, `MN·s`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -160,35 +160,33 @@ impl core::str::FromStr for ElectricInductanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricInductance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricInductance<T>> for ElectricInductanceUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricInductanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricInductanceUnit::Henry => value,
             ElectricInductanceUnit::Picohenry => value / T::from_f64(1e12),
             ElectricInductanceUnit::Nanohenry => value / T::from_f64(1e9),
             ElectricInductanceUnit::Microhenry => value / T::from_f64(1000000.0),
             ElectricInductanceUnit::Millihenry => value / T::from_f64(1000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricInductanceUnit) -> T {
-        match unit {
-            ElectricInductanceUnit::Henry => self.0,
-            ElectricInductanceUnit::Picohenry => self.0 * T::from_f64(1e12),
-            ElectricInductanceUnit::Nanohenry => self.0 * T::from_f64(1e9),
-            ElectricInductanceUnit::Microhenry => self.0 * T::from_f64(1000000.0),
-            ElectricInductanceUnit::Millihenry => self.0 * T::from_f64(1000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricInductanceUnit::Henry => value,
+            ElectricInductanceUnit::Picohenry => value * T::from_f64(1e12),
+            ElectricInductanceUnit::Nanohenry => value * T::from_f64(1e9),
+            ElectricInductanceUnit::Microhenry => value * T::from_f64(1000000.0),
+            ElectricInductanceUnit::Millihenry => value * T::from_f64(1000.0),
+        }
+    }
+}
+
+impl<T: Float> ElectricInductance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pH`, `nH`, `µH`, `mH`, `H`).
     /// Zero, NaN and infinities are shown in the base unit.

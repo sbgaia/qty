@@ -150,15 +150,12 @@ impl core::str::FromStr for SpecificFuelConsumptionUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> SpecificFuelConsumption<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsumptionUnit {
     #[inline]
-    pub fn new(value: T, unit: SpecificFuelConsumptionUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
                 value * T::from_f64(28.325450360498007)
             }
@@ -167,26 +164,25 @@ impl<T: Float> SpecificFuelConsumption<T> {
             }
             SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
             SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value * T::from_f64(1000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpecificFuelConsumptionUnit) -> T {
-        match unit {
-            SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
-                self.0 / T::from_f64(28.325450360498007)
-            }
-            SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => {
-                self.0 / T::from_f64(28.325450360498007)
-            }
-            SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => self.0,
-            SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => {
-                self.0 / T::from_f64(1000.0)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
+                value / T::from_f64(28.325450360498007)
+            }
+            SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => {
+                value / T::from_f64(28.325450360498007)
+            }
+            SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
+            SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value / T::from_f64(1000.0),
+        }
+    }
+}
+
+impl<T: Float> SpecificFuelConsumption<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`g/(kN·s)`, `kg/(kN·s)`).
     /// Zero, NaN and infinities are shown in the base unit.

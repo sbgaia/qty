@@ -185,15 +185,12 @@ impl core::str::FromStr for EntropyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Entropy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Entropy<T>> for EntropyUnit {
     #[inline]
-    pub fn new(value: T, unit: EntropyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             EntropyUnit::JoulePerKelvin => value,
             EntropyUnit::KilojoulePerKelvin => value * T::from_f64(1000.0),
             EntropyUnit::MegajoulePerKelvin => value * T::from_f64(1000000.0),
@@ -201,23 +198,24 @@ impl<T: Float> Entropy<T> {
             EntropyUnit::KilocaloriePerKelvin => value * T::from_f64(4184.0),
             EntropyUnit::JoulePerDegreeCelsius => value,
             EntropyUnit::KilojoulePerDegreeCelsius => value * T::from_f64(1000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: EntropyUnit) -> T {
-        match unit {
-            EntropyUnit::JoulePerKelvin => self.0,
-            EntropyUnit::KilojoulePerKelvin => self.0 / T::from_f64(1000.0),
-            EntropyUnit::MegajoulePerKelvin => self.0 / T::from_f64(1000000.0),
-            EntropyUnit::CaloriePerKelvin => self.0 / T::from_f64(4.184),
-            EntropyUnit::KilocaloriePerKelvin => self.0 / T::from_f64(4184.0),
-            EntropyUnit::JoulePerDegreeCelsius => self.0,
-            EntropyUnit::KilojoulePerDegreeCelsius => self.0 / T::from_f64(1000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            EntropyUnit::JoulePerKelvin => value,
+            EntropyUnit::KilojoulePerKelvin => value / T::from_f64(1000.0),
+            EntropyUnit::MegajoulePerKelvin => value / T::from_f64(1000000.0),
+            EntropyUnit::CaloriePerKelvin => value / T::from_f64(4.184),
+            EntropyUnit::KilocaloriePerKelvin => value / T::from_f64(4184.0),
+            EntropyUnit::JoulePerDegreeCelsius => value,
+            EntropyUnit::KilojoulePerDegreeCelsius => value / T::from_f64(1000.0),
+        }
+    }
+}
+
+impl<T: Float> Entropy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/K`, `kJ/K`, `MJ/K`).
     /// Zero, NaN and infinities are shown in the base unit.

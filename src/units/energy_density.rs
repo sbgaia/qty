@@ -248,15 +248,12 @@ impl core::str::FromStr for EnergyDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> EnergyDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<EnergyDensity<T>> for EnergyDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: EnergyDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             EnergyDensityUnit::JoulePerCubicMeter => value,
             EnergyDensityUnit::KilojoulePerCubicMeter => value * T::from_f64(1000.0),
             EnergyDensityUnit::MegajoulePerCubicMeter => value * T::from_f64(1000000.0),
@@ -269,28 +266,29 @@ impl<T: Float> EnergyDensity<T> {
             EnergyDensityUnit::GigawattHourPerCubicMeter => value * T::from_f64(3.6e12),
             EnergyDensityUnit::TerawattHourPerCubicMeter => value * T::from_f64(3.6e15),
             EnergyDensityUnit::PetawattHourPerCubicMeter => value * T::from_f64(3.6e18),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: EnergyDensityUnit) -> T {
-        match unit {
-            EnergyDensityUnit::JoulePerCubicMeter => self.0,
-            EnergyDensityUnit::KilojoulePerCubicMeter => self.0 / T::from_f64(1000.0),
-            EnergyDensityUnit::MegajoulePerCubicMeter => self.0 / T::from_f64(1000000.0),
-            EnergyDensityUnit::GigajoulePerCubicMeter => self.0 / T::from_f64(1e9),
-            EnergyDensityUnit::TerajoulePerCubicMeter => self.0 / T::from_f64(1e12),
-            EnergyDensityUnit::PetajoulePerCubicMeter => self.0 / T::from_f64(1e15),
-            EnergyDensityUnit::WattHourPerCubicMeter => self.0 / T::from_f64(3600.0),
-            EnergyDensityUnit::KilowattHourPerCubicMeter => self.0 / T::from_f64(3600000.0),
-            EnergyDensityUnit::MegawattHourPerCubicMeter => self.0 / T::from_f64(3.6e9),
-            EnergyDensityUnit::GigawattHourPerCubicMeter => self.0 / T::from_f64(3.6e12),
-            EnergyDensityUnit::TerawattHourPerCubicMeter => self.0 / T::from_f64(3.6e15),
-            EnergyDensityUnit::PetawattHourPerCubicMeter => self.0 / T::from_f64(3.6e18),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            EnergyDensityUnit::JoulePerCubicMeter => value,
+            EnergyDensityUnit::KilojoulePerCubicMeter => value / T::from_f64(1000.0),
+            EnergyDensityUnit::MegajoulePerCubicMeter => value / T::from_f64(1000000.0),
+            EnergyDensityUnit::GigajoulePerCubicMeter => value / T::from_f64(1e9),
+            EnergyDensityUnit::TerajoulePerCubicMeter => value / T::from_f64(1e12),
+            EnergyDensityUnit::PetajoulePerCubicMeter => value / T::from_f64(1e15),
+            EnergyDensityUnit::WattHourPerCubicMeter => value / T::from_f64(3600.0),
+            EnergyDensityUnit::KilowattHourPerCubicMeter => value / T::from_f64(3600000.0),
+            EnergyDensityUnit::MegawattHourPerCubicMeter => value / T::from_f64(3.6e9),
+            EnergyDensityUnit::GigawattHourPerCubicMeter => value / T::from_f64(3.6e12),
+            EnergyDensityUnit::TerawattHourPerCubicMeter => value / T::from_f64(3.6e15),
+            EnergyDensityUnit::PetawattHourPerCubicMeter => value / T::from_f64(3.6e18),
+        }
+    }
+}
+
+impl<T: Float> EnergyDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/m³`, `kJ/m³`, `MJ/m³`, `GJ/m³`, `TJ/m³`, `PJ/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -211,15 +211,12 @@ impl core::str::FromStr for ElectricCurrentUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricCurrent<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricCurrentUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricCurrentUnit::Ampere => value,
             ElectricCurrentUnit::Femtoampere => value / T::from_f64(1e15),
             ElectricCurrentUnit::Picoampere => value / T::from_f64(1e12),
@@ -229,25 +226,26 @@ impl<T: Float> ElectricCurrent<T> {
             ElectricCurrentUnit::Centiampere => value / T::from_f64(100.0),
             ElectricCurrentUnit::Kiloampere => value * T::from_f64(1000.0),
             ElectricCurrentUnit::Megaampere => value * T::from_f64(1000000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricCurrentUnit) -> T {
-        match unit {
-            ElectricCurrentUnit::Ampere => self.0,
-            ElectricCurrentUnit::Femtoampere => self.0 * T::from_f64(1e15),
-            ElectricCurrentUnit::Picoampere => self.0 * T::from_f64(1e12),
-            ElectricCurrentUnit::Nanoampere => self.0 * T::from_f64(1e9),
-            ElectricCurrentUnit::Microampere => self.0 * T::from_f64(1000000.0),
-            ElectricCurrentUnit::Milliampere => self.0 * T::from_f64(1000.0),
-            ElectricCurrentUnit::Centiampere => self.0 * T::from_f64(100.0),
-            ElectricCurrentUnit::Kiloampere => self.0 / T::from_f64(1000.0),
-            ElectricCurrentUnit::Megaampere => self.0 / T::from_f64(1000000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricCurrentUnit::Ampere => value,
+            ElectricCurrentUnit::Femtoampere => value * T::from_f64(1e15),
+            ElectricCurrentUnit::Picoampere => value * T::from_f64(1e12),
+            ElectricCurrentUnit::Nanoampere => value * T::from_f64(1e9),
+            ElectricCurrentUnit::Microampere => value * T::from_f64(1000000.0),
+            ElectricCurrentUnit::Milliampere => value * T::from_f64(1000.0),
+            ElectricCurrentUnit::Centiampere => value * T::from_f64(100.0),
+            ElectricCurrentUnit::Kiloampere => value / T::from_f64(1000.0),
+            ElectricCurrentUnit::Megaampere => value / T::from_f64(1000000.0),
+        }
+    }
+}
+
+impl<T: Float> ElectricCurrent<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fA`, `pA`, `nA`, `µA`, `mA`, `A`, `kA`, `MA`).
     /// Zero, NaN and infinities are shown in the base unit.

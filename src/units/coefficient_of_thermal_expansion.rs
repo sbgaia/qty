@@ -170,15 +170,14 @@ impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> CoefficientOfThermalExpansion<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<CoefficientOfThermalExpansion<T>>
+    for CoefficientOfThermalExpansionUnit
+{
     #[inline]
-    pub fn new(value: T, unit: CoefficientOfThermalExpansionUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             CoefficientOfThermalExpansionUnit::PerKelvin => value,
             CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
             CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value * T::from_f64(1.8),
@@ -189,26 +188,27 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
             CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
                 value * T::from_f64(1.8e-6)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: CoefficientOfThermalExpansionUnit) -> T {
-        match unit {
-            CoefficientOfThermalExpansionUnit::PerKelvin => self.0,
-            CoefficientOfThermalExpansionUnit::PerDegreeCelsius => self.0,
-            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => self.0 / T::from_f64(1.8),
-            CoefficientOfThermalExpansionUnit::PpmPerKelvin => self.0 * T::from_f64(1000000.0),
-            CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => {
-                self.0 * T::from_f64(1000000.0)
-            }
-            CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
-                self.0 / T::from_f64(1.8e-6)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            CoefficientOfThermalExpansionUnit::PerKelvin => value,
+            CoefficientOfThermalExpansionUnit::PerDegreeCelsius => value,
+            CoefficientOfThermalExpansionUnit::PerDegreeFahrenheit => value / T::from_f64(1.8),
+            CoefficientOfThermalExpansionUnit::PpmPerKelvin => value * T::from_f64(1000000.0),
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeCelsius => {
+                value * T::from_f64(1000000.0)
+            }
+            CoefficientOfThermalExpansionUnit::PpmPerDegreeFahrenheit => {
+                value / T::from_f64(1.8e-6)
+            }
+        }
+    }
+}
+
+impl<T: Float> CoefficientOfThermalExpansion<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`K⁻¹`).
     /// Zero, NaN and infinities are shown in the base unit.

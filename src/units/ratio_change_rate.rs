@@ -121,29 +121,27 @@ impl core::str::FromStr for RatioChangeRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RatioChangeRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RatioChangeRate<T>> for RatioChangeRateUnit {
     #[inline]
-    pub fn new(value: T, unit: RatioChangeRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RatioChangeRateUnit::PercentPerSecond => value / T::from_f64(100.0),
             RatioChangeRateUnit::DecimalFractionPerSecond => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RatioChangeRateUnit) -> T {
-        match unit {
-            RatioChangeRateUnit::PercentPerSecond => self.0 * T::from_f64(100.0),
-            RatioChangeRateUnit::DecimalFractionPerSecond => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RatioChangeRateUnit::PercentPerSecond => value * T::from_f64(100.0),
+            RatioChangeRateUnit::DecimalFractionPerSecond => value,
+        }
+    }
+}
+
+impl<T: Float> RatioChangeRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`/s`).
     /// Zero, NaN and infinities are shown in the base unit.

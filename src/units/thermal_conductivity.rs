@@ -137,15 +137,12 @@ impl core::str::FromStr for ThermalConductivityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ThermalConductivity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit {
     #[inline]
-    pub fn new(value: T, unit: ThermalConductivityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ThermalConductivityUnit::WattPerMeterKelvin => value,
             ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
                 value * T::from_f64(1.7307346663713912)
@@ -153,23 +150,24 @@ impl<T: Float> ThermalConductivity<T> {
             ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
                 value * T::from_f64(74767.73758724409)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ThermalConductivityUnit) -> T {
-        match unit {
-            ThermalConductivityUnit::WattPerMeterKelvin => self.0,
-            ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
-                self.0 / T::from_f64(1.7307346663713912)
-            }
-            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
-                self.0 / T::from_f64(74767.73758724409)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ThermalConductivityUnit::WattPerMeterKelvin => value,
+            ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
+                value / T::from_f64(1.7307346663713912)
+            }
+            ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
+                value / T::from_f64(74767.73758724409)
+            }
+        }
+    }
+}
+
+impl<T: Float> ThermalConductivity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`W/(m·K)`).
     /// Zero, NaN and infinities are shown in the base unit.

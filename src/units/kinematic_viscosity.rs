@@ -208,15 +208,12 @@ impl core::str::FromStr for KinematicViscosityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> KinematicViscosity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
     #[inline]
-    pub fn new(value: T, unit: KinematicViscosityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             KinematicViscosityUnit::SquareMeterPerSecond => value,
             KinematicViscosityUnit::Stokes => value / T::from_f64(10000.0),
             KinematicViscosityUnit::Nanostokes => value / T::from_f64(1e13),
@@ -226,25 +223,26 @@ impl<T: Float> KinematicViscosity<T> {
             KinematicViscosityUnit::Decistokes => value / T::from_f64(100000.0),
             KinematicViscosityUnit::Kilostokes => value / T::from_f64(10.0),
             KinematicViscosityUnit::SquareFootPerSecond => value * T::from_f64(0.09290304),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: KinematicViscosityUnit) -> T {
-        match unit {
-            KinematicViscosityUnit::SquareMeterPerSecond => self.0,
-            KinematicViscosityUnit::Stokes => self.0 * T::from_f64(10000.0),
-            KinematicViscosityUnit::Nanostokes => self.0 * T::from_f64(1e13),
-            KinematicViscosityUnit::Microstokes => self.0 * T::from_f64(1e10),
-            KinematicViscosityUnit::Millistokes => self.0 * T::from_f64(1e7),
-            KinematicViscosityUnit::Centistokes => self.0 * T::from_f64(1000000.0),
-            KinematicViscosityUnit::Decistokes => self.0 * T::from_f64(100000.0),
-            KinematicViscosityUnit::Kilostokes => self.0 * T::from_f64(10.0),
-            KinematicViscosityUnit::SquareFootPerSecond => self.0 / T::from_f64(0.09290304),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            KinematicViscosityUnit::SquareMeterPerSecond => value,
+            KinematicViscosityUnit::Stokes => value * T::from_f64(10000.0),
+            KinematicViscosityUnit::Nanostokes => value * T::from_f64(1e13),
+            KinematicViscosityUnit::Microstokes => value * T::from_f64(1e10),
+            KinematicViscosityUnit::Millistokes => value * T::from_f64(1e7),
+            KinematicViscosityUnit::Centistokes => value * T::from_f64(1000000.0),
+            KinematicViscosityUnit::Decistokes => value * T::from_f64(100000.0),
+            KinematicViscosityUnit::Kilostokes => value * T::from_f64(10.0),
+            KinematicViscosityUnit::SquareFootPerSecond => value / T::from_f64(0.09290304),
+        }
+    }
+}
+
+impl<T: Float> KinematicViscosity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m²/s`).
     /// Zero, NaN and infinities are shown in the base unit.

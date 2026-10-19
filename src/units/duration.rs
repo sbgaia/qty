@@ -284,15 +284,12 @@ impl core::str::FromStr for DurationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Duration<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Duration<T>> for DurationUnit {
     #[inline]
-    pub fn new(value: T, unit: DurationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             DurationUnit::Year365 => value * T::from_f64(3.1536e7),
             DurationUnit::Month30 => value * T::from_f64(2592000.0),
             DurationUnit::Week => value * T::from_f64(604800.0),
@@ -306,29 +303,30 @@ impl<T: Float> Duration<T> {
             DurationUnit::Millisecond => value / T::from_f64(1000.0),
             DurationUnit::JulianYear => value * T::from_f64(3.15576e7),
             DurationUnit::Sol => value * T::from_f64(88775.244),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: DurationUnit) -> T {
-        match unit {
-            DurationUnit::Year365 => self.0 / T::from_f64(3.1536e7),
-            DurationUnit::Month30 => self.0 / T::from_f64(2592000.0),
-            DurationUnit::Week => self.0 / T::from_f64(604800.0),
-            DurationUnit::Day => self.0 / T::from_f64(86400.0),
-            DurationUnit::Hour => self.0 / T::from_f64(3600.0),
-            DurationUnit::Minute => self.0 / T::from_f64(60.0),
-            DurationUnit::Second => self.0,
-            DurationUnit::Picosecond => self.0 * T::from_f64(1e12),
-            DurationUnit::Nanosecond => self.0 * T::from_f64(1e9),
-            DurationUnit::Microsecond => self.0 * T::from_f64(1000000.0),
-            DurationUnit::Millisecond => self.0 * T::from_f64(1000.0),
-            DurationUnit::JulianYear => self.0 / T::from_f64(3.15576e7),
-            DurationUnit::Sol => self.0 / T::from_f64(88775.244),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            DurationUnit::Year365 => value / T::from_f64(3.1536e7),
+            DurationUnit::Month30 => value / T::from_f64(2592000.0),
+            DurationUnit::Week => value / T::from_f64(604800.0),
+            DurationUnit::Day => value / T::from_f64(86400.0),
+            DurationUnit::Hour => value / T::from_f64(3600.0),
+            DurationUnit::Minute => value / T::from_f64(60.0),
+            DurationUnit::Second => value,
+            DurationUnit::Picosecond => value * T::from_f64(1e12),
+            DurationUnit::Nanosecond => value * T::from_f64(1e9),
+            DurationUnit::Microsecond => value * T::from_f64(1000000.0),
+            DurationUnit::Millisecond => value * T::from_f64(1000.0),
+            DurationUnit::JulianYear => value / T::from_f64(3.15576e7),
+            DurationUnit::Sol => value / T::from_f64(88775.244),
+        }
+    }
+}
+
+impl<T: Float> Duration<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`ps`, `ns`, `µs`, `ms`, `s`).
     /// Zero, NaN and infinities are shown in the base unit.

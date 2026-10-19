@@ -321,15 +321,14 @@ impl core::str::FromStr for AbsorbedDoseOfIonizingRadiationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
+    for AbsorbedDoseOfIonizingRadiationUnit
+{
     #[inline]
-    pub fn new(value: T, unit: AbsorbedDoseOfIonizingRadiationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AbsorbedDoseOfIonizingRadiationUnit::Gray => value,
             AbsorbedDoseOfIonizingRadiationUnit::Femtogray => value / T::from_f64(1e15),
             AbsorbedDoseOfIonizingRadiationUnit::Picogray => value / T::from_f64(1e12),
@@ -347,33 +346,34 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
             AbsorbedDoseOfIonizingRadiationUnit::Millirad => value / T::from_f64(100000.0),
             AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value * T::from_f64(10.0),
             AbsorbedDoseOfIonizingRadiationUnit::Megarad => value * T::from_f64(10000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AbsorbedDoseOfIonizingRadiationUnit) -> T {
-        match unit {
-            AbsorbedDoseOfIonizingRadiationUnit::Gray => self.0,
-            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => self.0 * T::from_f64(1e15),
-            AbsorbedDoseOfIonizingRadiationUnit::Picogray => self.0 * T::from_f64(1e12),
-            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => self.0 * T::from_f64(1e9),
-            AbsorbedDoseOfIonizingRadiationUnit::Microgray => self.0 * T::from_f64(1000000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Milligray => self.0 * T::from_f64(1000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Centigray => self.0 * T::from_f64(100.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Decigray => self.0 * T::from_f64(10.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Kilogray => self.0 / T::from_f64(1000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Megagray => self.0 / T::from_f64(1000000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Gigagray => self.0 / T::from_f64(1e9),
-            AbsorbedDoseOfIonizingRadiationUnit::Teragray => self.0 / T::from_f64(1e12),
-            AbsorbedDoseOfIonizingRadiationUnit::Petagray => self.0 / T::from_f64(1e15),
-            AbsorbedDoseOfIonizingRadiationUnit::Rad => self.0 * T::from_f64(100.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Millirad => self.0 * T::from_f64(100000.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Kilorad => self.0 / T::from_f64(10.0),
-            AbsorbedDoseOfIonizingRadiationUnit::Megarad => self.0 / T::from_f64(10000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AbsorbedDoseOfIonizingRadiationUnit::Gray => value,
+            AbsorbedDoseOfIonizingRadiationUnit::Femtogray => value * T::from_f64(1e15),
+            AbsorbedDoseOfIonizingRadiationUnit::Picogray => value * T::from_f64(1e12),
+            AbsorbedDoseOfIonizingRadiationUnit::Nanogray => value * T::from_f64(1e9),
+            AbsorbedDoseOfIonizingRadiationUnit::Microgray => value * T::from_f64(1000000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Milligray => value * T::from_f64(1000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Centigray => value * T::from_f64(100.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Decigray => value * T::from_f64(10.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Kilogray => value / T::from_f64(1000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Megagray => value / T::from_f64(1000000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Gigagray => value / T::from_f64(1e9),
+            AbsorbedDoseOfIonizingRadiationUnit::Teragray => value / T::from_f64(1e12),
+            AbsorbedDoseOfIonizingRadiationUnit::Petagray => value / T::from_f64(1e15),
+            AbsorbedDoseOfIonizingRadiationUnit::Rad => value * T::from_f64(100.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Millirad => value * T::from_f64(100000.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Kilorad => value / T::from_f64(10.0),
+            AbsorbedDoseOfIonizingRadiationUnit::Megarad => value / T::from_f64(10000.0),
+        }
+    }
+}
+
+impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fGy`, `pGy`, `nGy`, `µGy`, `mGy`, `Gy`, `kGy`, `MGy`, `GGy`, `TGy`, `PGy`).
     /// Zero, NaN and infinities are shown in the base unit.

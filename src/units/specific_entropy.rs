@@ -212,15 +212,12 @@ impl core::str::FromStr for SpecificEntropyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> SpecificEntropy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
     #[inline]
-    pub fn new(value: T, unit: SpecificEntropyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpecificEntropyUnit::JoulePerKilogramKelvin => value,
             SpecificEntropyUnit::KilojoulePerKilogramKelvin => value * T::from_f64(1000.0),
             SpecificEntropyUnit::MegajoulePerKilogramKelvin => value * T::from_f64(1000000.0),
@@ -232,27 +229,28 @@ impl<T: Float> SpecificEntropy<T> {
             SpecificEntropyUnit::CaloriePerGramKelvin => value * T::from_f64(4184.0),
             SpecificEntropyUnit::KilocaloriePerGramKelvin => value * T::from_f64(4184000.0),
             SpecificEntropyUnit::BtuPerPoundFahrenheit => value * T::from_f64(4186.8),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpecificEntropyUnit) -> T {
-        match unit {
-            SpecificEntropyUnit::JoulePerKilogramKelvin => self.0,
-            SpecificEntropyUnit::KilojoulePerKilogramKelvin => self.0 / T::from_f64(1000.0),
-            SpecificEntropyUnit::MegajoulePerKilogramKelvin => self.0 / T::from_f64(1000000.0),
-            SpecificEntropyUnit::JoulePerKilogramDegreeCelsius => self.0,
-            SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius => self.0 / T::from_f64(1000.0),
-            SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => {
-                self.0 / T::from_f64(1000000.0)
-            }
-            SpecificEntropyUnit::CaloriePerGramKelvin => self.0 / T::from_f64(4184.0),
-            SpecificEntropyUnit::KilocaloriePerGramKelvin => self.0 / T::from_f64(4184000.0),
-            SpecificEntropyUnit::BtuPerPoundFahrenheit => self.0 / T::from_f64(4186.8),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpecificEntropyUnit::JoulePerKilogramKelvin => value,
+            SpecificEntropyUnit::KilojoulePerKilogramKelvin => value / T::from_f64(1000.0),
+            SpecificEntropyUnit::MegajoulePerKilogramKelvin => value / T::from_f64(1000000.0),
+            SpecificEntropyUnit::JoulePerKilogramDegreeCelsius => value,
+            SpecificEntropyUnit::KilojoulePerKilogramDegreeCelsius => value / T::from_f64(1000.0),
+            SpecificEntropyUnit::MegajoulePerKilogramDegreeCelsius => {
+                value / T::from_f64(1000000.0)
+            }
+            SpecificEntropyUnit::CaloriePerGramKelvin => value / T::from_f64(4184.0),
+            SpecificEntropyUnit::KilocaloriePerGramKelvin => value / T::from_f64(4184000.0),
+            SpecificEntropyUnit::BtuPerPoundFahrenheit => value / T::from_f64(4186.8),
+        }
+    }
+}
+
+impl<T: Float> SpecificEntropy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`J/kg·K`, `kJ/kg·K`, `MJ/kg·K`).
     /// Zero, NaN and infinities are shown in the base unit.

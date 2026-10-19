@@ -237,15 +237,12 @@ impl core::str::FromStr for ReciprocalAreaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ReciprocalArea<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
     #[inline]
-    pub fn new(value: T, unit: ReciprocalAreaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ReciprocalAreaUnit::InverseSquareMeter => value,
             ReciprocalAreaUnit::InverseSquareKilometer => value / T::from_f64(1000000.0),
             ReciprocalAreaUnit::InverseSquareDecimeter => value * T::from_f64(100.0),
@@ -259,29 +256,30 @@ impl<T: Float> ReciprocalArea<T> {
                 value * T::from_f64(10.763867361111112)
             }
             ReciprocalAreaUnit::InverseSquareInch => value * T::from_f64(1550.0031000062),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ReciprocalAreaUnit) -> T {
-        match unit {
-            ReciprocalAreaUnit::InverseSquareMeter => self.0,
-            ReciprocalAreaUnit::InverseSquareKilometer => self.0 * T::from_f64(1000000.0),
-            ReciprocalAreaUnit::InverseSquareDecimeter => self.0 / T::from_f64(100.0),
-            ReciprocalAreaUnit::InverseSquareCentimeter => self.0 / T::from_f64(10000.0),
-            ReciprocalAreaUnit::InverseSquareMillimeter => self.0 / T::from_f64(1000000.0),
-            ReciprocalAreaUnit::InverseSquareMicrometer => self.0 / T::from_f64(1e12),
-            ReciprocalAreaUnit::InverseSquareMile => self.0 / T::from_f64(3.8610215854244587e-7),
-            ReciprocalAreaUnit::InverseSquareYard => self.0 / T::from_f64(1.1959900463010802),
-            ReciprocalAreaUnit::InverseSquareFoot => self.0 / T::from_f64(10.763910416709722),
-            ReciprocalAreaUnit::InverseUsSurveySquareFoot => {
-                self.0 / T::from_f64(10.763867361111112)
-            }
-            ReciprocalAreaUnit::InverseSquareInch => self.0 / T::from_f64(1550.0031000062),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ReciprocalAreaUnit::InverseSquareMeter => value,
+            ReciprocalAreaUnit::InverseSquareKilometer => value * T::from_f64(1000000.0),
+            ReciprocalAreaUnit::InverseSquareDecimeter => value / T::from_f64(100.0),
+            ReciprocalAreaUnit::InverseSquareCentimeter => value / T::from_f64(10000.0),
+            ReciprocalAreaUnit::InverseSquareMillimeter => value / T::from_f64(1000000.0),
+            ReciprocalAreaUnit::InverseSquareMicrometer => value / T::from_f64(1e12),
+            ReciprocalAreaUnit::InverseSquareMile => value / T::from_f64(3.8610215854244587e-7),
+            ReciprocalAreaUnit::InverseSquareYard => value / T::from_f64(1.1959900463010802),
+            ReciprocalAreaUnit::InverseSquareFoot => value / T::from_f64(10.763910416709722),
+            ReciprocalAreaUnit::InverseUsSurveySquareFoot => {
+                value / T::from_f64(10.763867361111112)
+            }
+            ReciprocalAreaUnit::InverseSquareInch => value / T::from_f64(1550.0031000062),
+        }
+    }
+}
+
+impl<T: Float> ReciprocalArea<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m⁻²`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -346,15 +346,12 @@ impl core::str::FromStr for PressureChangeRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> PressureChangeRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<PressureChangeRate<T>> for PressureChangeRateUnit {
     #[inline]
-    pub fn new(value: T, unit: PressureChangeRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PressureChangeRateUnit::PascalPerSecond => value,
             PressureChangeRateUnit::KilopascalPerSecond => value * T::from_f64(1000.0),
             PressureChangeRateUnit::MegapascalPerSecond => value * T::from_f64(1000000.0),
@@ -387,48 +384,49 @@ impl<T: Float> PressureChangeRate<T> {
             PressureChangeRateUnit::MillibarPerSecond => value * T::from_f64(100.0),
             PressureChangeRateUnit::BarPerMinute => value * T::from_f64(1666.6666666666667),
             PressureChangeRateUnit::MillibarPerMinute => value * T::from_f64(1.6666666666666667),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PressureChangeRateUnit) -> T {
-        match unit {
-            PressureChangeRateUnit::PascalPerSecond => self.0,
-            PressureChangeRateUnit::KilopascalPerSecond => self.0 / T::from_f64(1000.0),
-            PressureChangeRateUnit::MegapascalPerSecond => self.0 / T::from_f64(1000000.0),
-            PressureChangeRateUnit::PascalPerMinute => self.0 * T::from_f64(60.0),
-            PressureChangeRateUnit::KilopascalPerMinute => self.0 / T::from_f64(16.666666666666668),
-            PressureChangeRateUnit::MegapascalPerMinute => self.0 / T::from_f64(16666.666666666668),
-            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
-                self.0 / T::from_f64(133.322387415)
-            }
-            PressureChangeRateUnit::AtmospherePerSecond => self.0 / T::from_f64(101325.0),
-            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
-                self.0 / T::from_f64(6894.757293168362)
-            }
-            PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
-                self.0 / T::from_f64(6894757.293168361)
-            }
-            PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
-                self.0 / T::from_f64(6.894757293168362e9)
-            }
-            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => {
-                self.0 / T::from_f64(114.91262155280602)
-            }
-            PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
-                self.0 / T::from_f64(114912.62155280603)
-            }
-            PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
-                self.0 / T::from_f64(1.1491262155280602e8)
-            }
-            PressureChangeRateUnit::BarPerSecond => self.0 / T::from_f64(100000.0),
-            PressureChangeRateUnit::MillibarPerSecond => self.0 / T::from_f64(100.0),
-            PressureChangeRateUnit::BarPerMinute => self.0 / T::from_f64(1666.6666666666667),
-            PressureChangeRateUnit::MillibarPerMinute => self.0 / T::from_f64(1.6666666666666667),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PressureChangeRateUnit::PascalPerSecond => value,
+            PressureChangeRateUnit::KilopascalPerSecond => value / T::from_f64(1000.0),
+            PressureChangeRateUnit::MegapascalPerSecond => value / T::from_f64(1000000.0),
+            PressureChangeRateUnit::PascalPerMinute => value * T::from_f64(60.0),
+            PressureChangeRateUnit::KilopascalPerMinute => value / T::from_f64(16.666666666666668),
+            PressureChangeRateUnit::MegapascalPerMinute => value / T::from_f64(16666.666666666668),
+            PressureChangeRateUnit::MillimeterOfMercuryPerSecond => {
+                value / T::from_f64(133.322387415)
+            }
+            PressureChangeRateUnit::AtmospherePerSecond => value / T::from_f64(101325.0),
+            PressureChangeRateUnit::PoundForcePerSquareInchPerSecond => {
+                value / T::from_f64(6894.757293168362)
+            }
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerSecond => {
+                value / T::from_f64(6894757.293168361)
+            }
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerSecond => {
+                value / T::from_f64(6.894757293168362e9)
+            }
+            PressureChangeRateUnit::PoundForcePerSquareInchPerMinute => {
+                value / T::from_f64(114.91262155280602)
+            }
+            PressureChangeRateUnit::KilopoundForcePerSquareInchPerMinute => {
+                value / T::from_f64(114912.62155280603)
+            }
+            PressureChangeRateUnit::MegapoundForcePerSquareInchPerMinute => {
+                value / T::from_f64(1.1491262155280602e8)
+            }
+            PressureChangeRateUnit::BarPerSecond => value / T::from_f64(100000.0),
+            PressureChangeRateUnit::MillibarPerSecond => value / T::from_f64(100.0),
+            PressureChangeRateUnit::BarPerMinute => value / T::from_f64(1666.6666666666667),
+            PressureChangeRateUnit::MillibarPerMinute => value / T::from_f64(1.6666666666666667),
+        }
+    }
+}
+
+impl<T: Float> PressureChangeRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Pa/s`, `kPa/s`, `MPa/s`).
     /// Zero, NaN and infinities are shown in the base unit.

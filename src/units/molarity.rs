@@ -238,15 +238,12 @@ impl core::str::FromStr for MolarityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Molarity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
     #[inline]
-    pub fn new(value: T, unit: MolarityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MolarityUnit::MolePerCubicMeter => value,
             MolarityUnit::KilomolePerCubicMeter => value * T::from_f64(1000.0),
             MolarityUnit::MolePerLiter => value * T::from_f64(1000.0),
@@ -258,27 +255,28 @@ impl<T: Float> Molarity<T> {
             MolarityUnit::CentimolePerLiter => value * T::from_f64(10.0),
             MolarityUnit::DecimolePerLiter => value * T::from_f64(100.0),
             MolarityUnit::PoundMolePerCubicFoot => value * T::from_f64(16018.46337396014),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MolarityUnit) -> T {
-        match unit {
-            MolarityUnit::MolePerCubicMeter => self.0,
-            MolarityUnit::KilomolePerCubicMeter => self.0 / T::from_f64(1000.0),
-            MolarityUnit::MolePerLiter => self.0 / T::from_f64(1000.0),
-            MolarityUnit::FemtomolePerLiter => self.0 * T::from_f64(1e12),
-            MolarityUnit::PicomolePerLiter => self.0 * T::from_f64(1e9),
-            MolarityUnit::NanomolePerLiter => self.0 * T::from_f64(1000000.0),
-            MolarityUnit::MicromolePerLiter => self.0 * T::from_f64(1000.0),
-            MolarityUnit::MillimolePerLiter => self.0,
-            MolarityUnit::CentimolePerLiter => self.0 / T::from_f64(10.0),
-            MolarityUnit::DecimolePerLiter => self.0 / T::from_f64(100.0),
-            MolarityUnit::PoundMolePerCubicFoot => self.0 / T::from_f64(16018.46337396014),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MolarityUnit::MolePerCubicMeter => value,
+            MolarityUnit::KilomolePerCubicMeter => value / T::from_f64(1000.0),
+            MolarityUnit::MolePerLiter => value / T::from_f64(1000.0),
+            MolarityUnit::FemtomolePerLiter => value * T::from_f64(1e12),
+            MolarityUnit::PicomolePerLiter => value * T::from_f64(1e9),
+            MolarityUnit::NanomolePerLiter => value * T::from_f64(1000000.0),
+            MolarityUnit::MicromolePerLiter => value * T::from_f64(1000.0),
+            MolarityUnit::MillimolePerLiter => value,
+            MolarityUnit::CentimolePerLiter => value / T::from_f64(10.0),
+            MolarityUnit::DecimolePerLiter => value / T::from_f64(100.0),
+            MolarityUnit::PoundMolePerCubicFoot => value / T::from_f64(16018.46337396014),
+        }
+    }
+}
+
+impl<T: Float> Molarity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`mol/m³`, `kmol/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

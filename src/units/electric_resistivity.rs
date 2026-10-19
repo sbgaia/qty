@@ -276,15 +276,12 @@ impl core::str::FromStr for ElectricResistivityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricResistivity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricResistivityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricResistivityUnit::OhmMeter => value,
             ElectricResistivityUnit::PicoohmMeter => value / T::from_f64(1e12),
             ElectricResistivityUnit::NanoohmMeter => value / T::from_f64(1e9),
@@ -299,30 +296,31 @@ impl<T: Float> ElectricResistivity<T> {
             ElectricResistivityUnit::MilliohmCentimeter => value / T::from_f64(100000.0),
             ElectricResistivityUnit::KiloohmCentimeter => value * T::from_f64(10.0),
             ElectricResistivityUnit::MegaohmCentimeter => value * T::from_f64(10000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricResistivityUnit) -> T {
-        match unit {
-            ElectricResistivityUnit::OhmMeter => self.0,
-            ElectricResistivityUnit::PicoohmMeter => self.0 * T::from_f64(1e12),
-            ElectricResistivityUnit::NanoohmMeter => self.0 * T::from_f64(1e9),
-            ElectricResistivityUnit::MicroohmMeter => self.0 * T::from_f64(1000000.0),
-            ElectricResistivityUnit::MilliohmMeter => self.0 * T::from_f64(1000.0),
-            ElectricResistivityUnit::KiloohmMeter => self.0 / T::from_f64(1000.0),
-            ElectricResistivityUnit::MegaohmMeter => self.0 / T::from_f64(1000000.0),
-            ElectricResistivityUnit::OhmCentimeter => self.0 * T::from_f64(100.0),
-            ElectricResistivityUnit::PicoohmCentimeter => self.0 * T::from_f64(1e14),
-            ElectricResistivityUnit::NanoohmCentimeter => self.0 * T::from_f64(1e11),
-            ElectricResistivityUnit::MicroohmCentimeter => self.0 * T::from_f64(1e8),
-            ElectricResistivityUnit::MilliohmCentimeter => self.0 * T::from_f64(100000.0),
-            ElectricResistivityUnit::KiloohmCentimeter => self.0 / T::from_f64(10.0),
-            ElectricResistivityUnit::MegaohmCentimeter => self.0 / T::from_f64(10000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricResistivityUnit::OhmMeter => value,
+            ElectricResistivityUnit::PicoohmMeter => value * T::from_f64(1e12),
+            ElectricResistivityUnit::NanoohmMeter => value * T::from_f64(1e9),
+            ElectricResistivityUnit::MicroohmMeter => value * T::from_f64(1000000.0),
+            ElectricResistivityUnit::MilliohmMeter => value * T::from_f64(1000.0),
+            ElectricResistivityUnit::KiloohmMeter => value / T::from_f64(1000.0),
+            ElectricResistivityUnit::MegaohmMeter => value / T::from_f64(1000000.0),
+            ElectricResistivityUnit::OhmCentimeter => value * T::from_f64(100.0),
+            ElectricResistivityUnit::PicoohmCentimeter => value * T::from_f64(1e14),
+            ElectricResistivityUnit::NanoohmCentimeter => value * T::from_f64(1e11),
+            ElectricResistivityUnit::MicroohmCentimeter => value * T::from_f64(1e8),
+            ElectricResistivityUnit::MilliohmCentimeter => value * T::from_f64(100000.0),
+            ElectricResistivityUnit::KiloohmCentimeter => value / T::from_f64(10.0),
+            ElectricResistivityUnit::MegaohmCentimeter => value / T::from_f64(10000.0),
+        }
+    }
+}
+
+impl<T: Float> ElectricResistivity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pΩ·m`, `nΩ·m`, `µΩ·m`, `mΩ·m`, `Ω·m`, `kΩ·m`, `MΩ·m`).
     /// Zero, NaN and infinities are shown in the base unit.

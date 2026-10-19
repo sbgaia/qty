@@ -144,37 +144,35 @@ impl core::str::FromStr for TemperatureGradientUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> TemperatureGradient<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit {
     #[inline]
-    pub fn new(value: T, unit: TemperatureGradientUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             TemperatureGradientUnit::KelvinPerMeter => value,
             TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
             TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
                 value * T::from_f64(1.8226888305628464)
             }
             TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / T::from_f64(1000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: TemperatureGradientUnit) -> T {
-        match unit {
-            TemperatureGradientUnit::KelvinPerMeter => self.0,
-            TemperatureGradientUnit::DegreeCelsiusPerMeter => self.0,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
-                self.0 / T::from_f64(1.8226888305628464)
-            }
-            TemperatureGradientUnit::DegreeCelsiusPerKilometer => self.0 * T::from_f64(1000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            TemperatureGradientUnit::KelvinPerMeter => value,
+            TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
+                value / T::from_f64(1.8226888305628464)
+            }
+            TemperatureGradientUnit::DegreeCelsiusPerKilometer => value * T::from_f64(1000.0),
+        }
+    }
+}
+
+impl<T: Float> TemperatureGradient<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`∆°K/m`).
     /// Zero, NaN and infinities are shown in the base unit.

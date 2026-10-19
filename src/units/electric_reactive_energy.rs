@@ -137,35 +137,33 @@ impl core::str::FromStr for ElectricReactiveEnergyUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricReactiveEnergy<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricReactiveEnergy<T>> for ElectricReactiveEnergyUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricReactiveEnergyUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricReactiveEnergyUnit::VoltampereReactiveHour => value,
             ElectricReactiveEnergyUnit::KilovoltampereReactiveHour => value * T::from_f64(1000.0),
             ElectricReactiveEnergyUnit::MegavoltampereReactiveHour => {
                 value * T::from_f64(1000000.0)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricReactiveEnergyUnit) -> T {
-        match unit {
-            ElectricReactiveEnergyUnit::VoltampereReactiveHour => self.0,
-            ElectricReactiveEnergyUnit::KilovoltampereReactiveHour => self.0 / T::from_f64(1000.0),
-            ElectricReactiveEnergyUnit::MegavoltampereReactiveHour => {
-                self.0 / T::from_f64(1000000.0)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricReactiveEnergyUnit::VoltampereReactiveHour => value,
+            ElectricReactiveEnergyUnit::KilovoltampereReactiveHour => value / T::from_f64(1000.0),
+            ElectricReactiveEnergyUnit::MegavoltampereReactiveHour => {
+                value / T::from_f64(1000000.0)
+            }
+        }
+    }
+}
+
+impl<T: Float> ElectricReactiveEnergy<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`varh`, `kvarh`, `Mvarh`).
     /// Zero, NaN and infinities are shown in the base unit.

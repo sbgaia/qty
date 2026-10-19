@@ -315,15 +315,12 @@ impl core::str::FromStr for SpecificWeightUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> SpecificWeight<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
     #[inline]
-    pub fn new(value: T, unit: SpecificWeightUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpecificWeightUnit::NewtonPerCubicMillimeter => value * T::from_f64(1e9),
             SpecificWeightUnit::KilonewtonPerCubicMillimeter => value * T::from_f64(1e12),
             SpecificWeightUnit::NewtonPerCubicCentimeter => value * T::from_f64(1000000.0),
@@ -345,37 +342,38 @@ impl<T: Float> SpecificWeight<T> {
             SpecificWeightUnit::TonneForcePerCubicMillimeter => value * T::from_f64(9.80665e12),
             SpecificWeightUnit::TonneForcePerCubicCentimeter => value * T::from_f64(9.80665e9),
             SpecificWeightUnit::TonneForcePerCubicMeter => value * T::from_f64(9806.65),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpecificWeightUnit) -> T {
-        match unit {
-            SpecificWeightUnit::NewtonPerCubicMillimeter => self.0 / T::from_f64(1e9),
-            SpecificWeightUnit::KilonewtonPerCubicMillimeter => self.0 / T::from_f64(1e12),
-            SpecificWeightUnit::NewtonPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
-            SpecificWeightUnit::KilonewtonPerCubicCentimeter => self.0 / T::from_f64(1e9),
-            SpecificWeightUnit::NewtonPerCubicMeter => self.0,
-            SpecificWeightUnit::KilonewtonPerCubicMeter => self.0 / T::from_f64(1000.0),
-            SpecificWeightUnit::MeganewtonPerCubicMeter => self.0 / T::from_f64(1000000.0),
-            SpecificWeightUnit::KilogramForcePerCubicMillimeter => self.0 / T::from_f64(9.80665e9),
-            SpecificWeightUnit::KilogramForcePerCubicCentimeter => self.0 / T::from_f64(9806650.0),
-            SpecificWeightUnit::KilogramForcePerCubicMeter => self.0 / T::from_f64(9.80665),
-            SpecificWeightUnit::PoundForcePerCubicInch => self.0 / T::from_f64(271447.1375263134),
-            SpecificWeightUnit::KilopoundForcePerCubicInch => {
-                self.0 / T::from_f64(2.714471375263134e8)
-            }
-            SpecificWeightUnit::PoundForcePerCubicFoot => self.0 / T::from_f64(157.0874638462462),
-            SpecificWeightUnit::KilopoundForcePerCubicFoot => {
-                self.0 / T::from_f64(157087.46384624622)
-            }
-            SpecificWeightUnit::TonneForcePerCubicMillimeter => self.0 / T::from_f64(9.80665e12),
-            SpecificWeightUnit::TonneForcePerCubicCentimeter => self.0 / T::from_f64(9.80665e9),
-            SpecificWeightUnit::TonneForcePerCubicMeter => self.0 / T::from_f64(9806.65),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpecificWeightUnit::NewtonPerCubicMillimeter => value / T::from_f64(1e9),
+            SpecificWeightUnit::KilonewtonPerCubicMillimeter => value / T::from_f64(1e12),
+            SpecificWeightUnit::NewtonPerCubicCentimeter => value / T::from_f64(1000000.0),
+            SpecificWeightUnit::KilonewtonPerCubicCentimeter => value / T::from_f64(1e9),
+            SpecificWeightUnit::NewtonPerCubicMeter => value,
+            SpecificWeightUnit::KilonewtonPerCubicMeter => value / T::from_f64(1000.0),
+            SpecificWeightUnit::MeganewtonPerCubicMeter => value / T::from_f64(1000000.0),
+            SpecificWeightUnit::KilogramForcePerCubicMillimeter => value / T::from_f64(9.80665e9),
+            SpecificWeightUnit::KilogramForcePerCubicCentimeter => value / T::from_f64(9806650.0),
+            SpecificWeightUnit::KilogramForcePerCubicMeter => value / T::from_f64(9.80665),
+            SpecificWeightUnit::PoundForcePerCubicInch => value / T::from_f64(271447.1375263134),
+            SpecificWeightUnit::KilopoundForcePerCubicInch => {
+                value / T::from_f64(2.714471375263134e8)
+            }
+            SpecificWeightUnit::PoundForcePerCubicFoot => value / T::from_f64(157.0874638462462),
+            SpecificWeightUnit::KilopoundForcePerCubicFoot => {
+                value / T::from_f64(157087.46384624622)
+            }
+            SpecificWeightUnit::TonneForcePerCubicMillimeter => value / T::from_f64(9.80665e12),
+            SpecificWeightUnit::TonneForcePerCubicCentimeter => value / T::from_f64(9.80665e9),
+            SpecificWeightUnit::TonneForcePerCubicMeter => value / T::from_f64(9806.65),
+        }
+    }
+}
+
+impl<T: Float> SpecificWeight<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`N/m³`, `kN/m³`, `MN/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

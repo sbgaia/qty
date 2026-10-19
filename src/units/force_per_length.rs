@@ -592,15 +592,12 @@ impl core::str::FromStr for ForcePerLengthUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ForcePerLength<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
     #[inline]
-    pub fn new(value: T, unit: ForcePerLengthUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ForcePerLengthUnit::NewtonPerMeter => value,
             ForcePerLengthUnit::NanonewtonPerMeter => value / T::from_f64(1e9),
             ForcePerLengthUnit::MicronewtonPerMeter => value / T::from_f64(1000000.0),
@@ -639,54 +636,55 @@ impl<T: Float> ForcePerLength<T> {
             ForcePerLengthUnit::PoundForcePerYard => value * T::from_f64(4.864634312402122),
             ForcePerLengthUnit::KilopoundForcePerFoot => value * T::from_f64(14593.902937206365),
             ForcePerLengthUnit::KilopoundForcePerInch => value * T::from_f64(175126.83524647637),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ForcePerLengthUnit) -> T {
-        match unit {
-            ForcePerLengthUnit::NewtonPerMeter => self.0,
-            ForcePerLengthUnit::NanonewtonPerMeter => self.0 * T::from_f64(1e9),
-            ForcePerLengthUnit::MicronewtonPerMeter => self.0 * T::from_f64(1000000.0),
-            ForcePerLengthUnit::MillinewtonPerMeter => self.0 * T::from_f64(1000.0),
-            ForcePerLengthUnit::CentinewtonPerMeter => self.0 * T::from_f64(100.0),
-            ForcePerLengthUnit::DecinewtonPerMeter => self.0 * T::from_f64(10.0),
-            ForcePerLengthUnit::DecanewtonPerMeter => self.0 / T::from_f64(10.0),
-            ForcePerLengthUnit::KilonewtonPerMeter => self.0 / T::from_f64(1000.0),
-            ForcePerLengthUnit::MeganewtonPerMeter => self.0 / T::from_f64(1000000.0),
-            ForcePerLengthUnit::NewtonPerCentimeter => self.0 / T::from_f64(100.0),
-            ForcePerLengthUnit::NanonewtonPerCentimeter => self.0 * T::from_f64(1e7),
-            ForcePerLengthUnit::MicronewtonPerCentimeter => self.0 * T::from_f64(10000.0),
-            ForcePerLengthUnit::MillinewtonPerCentimeter => self.0 * T::from_f64(10.0),
-            ForcePerLengthUnit::CentinewtonPerCentimeter => self.0,
-            ForcePerLengthUnit::DecinewtonPerCentimeter => self.0 / T::from_f64(10.0),
-            ForcePerLengthUnit::DecanewtonPerCentimeter => self.0 / T::from_f64(1000.0),
-            ForcePerLengthUnit::KilonewtonPerCentimeter => self.0 / T::from_f64(100000.0),
-            ForcePerLengthUnit::MeganewtonPerCentimeter => self.0 / T::from_f64(1e8),
-            ForcePerLengthUnit::NewtonPerMillimeter => self.0 / T::from_f64(1000.0),
-            ForcePerLengthUnit::NanonewtonPerMillimeter => self.0 * T::from_f64(1000000.0),
-            ForcePerLengthUnit::MicronewtonPerMillimeter => self.0 * T::from_f64(1000.0),
-            ForcePerLengthUnit::MillinewtonPerMillimeter => self.0,
-            ForcePerLengthUnit::CentinewtonPerMillimeter => self.0 / T::from_f64(10.0),
-            ForcePerLengthUnit::DecinewtonPerMillimeter => self.0 / T::from_f64(100.0),
-            ForcePerLengthUnit::DecanewtonPerMillimeter => self.0 / T::from_f64(10000.0),
-            ForcePerLengthUnit::KilonewtonPerMillimeter => self.0 / T::from_f64(1000000.0),
-            ForcePerLengthUnit::MeganewtonPerMillimeter => self.0 / T::from_f64(1e9),
-            ForcePerLengthUnit::KilogramForcePerMeter => self.0 / T::from_f64(9.80665),
-            ForcePerLengthUnit::KilogramForcePerCentimeter => self.0 / T::from_f64(980.665),
-            ForcePerLengthUnit::KilogramForcePerMillimeter => self.0 / T::from_f64(9806.65),
-            ForcePerLengthUnit::TonneForcePerMeter => self.0 / T::from_f64(9806.65),
-            ForcePerLengthUnit::TonneForcePerCentimeter => self.0 / T::from_f64(980665.0),
-            ForcePerLengthUnit::TonneForcePerMillimeter => self.0 / T::from_f64(9806650.0),
-            ForcePerLengthUnit::PoundForcePerFoot => self.0 / T::from_f64(14.593902937206364),
-            ForcePerLengthUnit::PoundForcePerInch => self.0 / T::from_f64(175.1268352464764),
-            ForcePerLengthUnit::PoundForcePerYard => self.0 / T::from_f64(4.864634312402122),
-            ForcePerLengthUnit::KilopoundForcePerFoot => self.0 / T::from_f64(14593.902937206365),
-            ForcePerLengthUnit::KilopoundForcePerInch => self.0 / T::from_f64(175126.83524647637),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ForcePerLengthUnit::NewtonPerMeter => value,
+            ForcePerLengthUnit::NanonewtonPerMeter => value * T::from_f64(1e9),
+            ForcePerLengthUnit::MicronewtonPerMeter => value * T::from_f64(1000000.0),
+            ForcePerLengthUnit::MillinewtonPerMeter => value * T::from_f64(1000.0),
+            ForcePerLengthUnit::CentinewtonPerMeter => value * T::from_f64(100.0),
+            ForcePerLengthUnit::DecinewtonPerMeter => value * T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerMeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::KilonewtonPerMeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::MeganewtonPerMeter => value / T::from_f64(1000000.0),
+            ForcePerLengthUnit::NewtonPerCentimeter => value / T::from_f64(100.0),
+            ForcePerLengthUnit::NanonewtonPerCentimeter => value * T::from_f64(1e7),
+            ForcePerLengthUnit::MicronewtonPerCentimeter => value * T::from_f64(10000.0),
+            ForcePerLengthUnit::MillinewtonPerCentimeter => value * T::from_f64(10.0),
+            ForcePerLengthUnit::CentinewtonPerCentimeter => value,
+            ForcePerLengthUnit::DecinewtonPerCentimeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::DecanewtonPerCentimeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::KilonewtonPerCentimeter => value / T::from_f64(100000.0),
+            ForcePerLengthUnit::MeganewtonPerCentimeter => value / T::from_f64(1e8),
+            ForcePerLengthUnit::NewtonPerMillimeter => value / T::from_f64(1000.0),
+            ForcePerLengthUnit::NanonewtonPerMillimeter => value * T::from_f64(1000000.0),
+            ForcePerLengthUnit::MicronewtonPerMillimeter => value * T::from_f64(1000.0),
+            ForcePerLengthUnit::MillinewtonPerMillimeter => value,
+            ForcePerLengthUnit::CentinewtonPerMillimeter => value / T::from_f64(10.0),
+            ForcePerLengthUnit::DecinewtonPerMillimeter => value / T::from_f64(100.0),
+            ForcePerLengthUnit::DecanewtonPerMillimeter => value / T::from_f64(10000.0),
+            ForcePerLengthUnit::KilonewtonPerMillimeter => value / T::from_f64(1000000.0),
+            ForcePerLengthUnit::MeganewtonPerMillimeter => value / T::from_f64(1e9),
+            ForcePerLengthUnit::KilogramForcePerMeter => value / T::from_f64(9.80665),
+            ForcePerLengthUnit::KilogramForcePerCentimeter => value / T::from_f64(980.665),
+            ForcePerLengthUnit::KilogramForcePerMillimeter => value / T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerMeter => value / T::from_f64(9806.65),
+            ForcePerLengthUnit::TonneForcePerCentimeter => value / T::from_f64(980665.0),
+            ForcePerLengthUnit::TonneForcePerMillimeter => value / T::from_f64(9806650.0),
+            ForcePerLengthUnit::PoundForcePerFoot => value / T::from_f64(14.593902937206364),
+            ForcePerLengthUnit::PoundForcePerInch => value / T::from_f64(175.1268352464764),
+            ForcePerLengthUnit::PoundForcePerYard => value / T::from_f64(4.864634312402122),
+            ForcePerLengthUnit::KilopoundForcePerFoot => value / T::from_f64(14593.902937206365),
+            ForcePerLengthUnit::KilopoundForcePerInch => value / T::from_f64(175126.83524647637),
+        }
+    }
+}
+
+impl<T: Float> ForcePerLength<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nN/m`, `µN/m`, `mN/m`, `N/m`, `kN/m`, `MN/m`).
     /// Zero, NaN and infinities are shown in the base unit.

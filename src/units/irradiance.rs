@@ -276,15 +276,12 @@ impl core::str::FromStr for IrradianceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Irradiance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
     #[inline]
-    pub fn new(value: T, unit: IrradianceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             IrradianceUnit::WattPerSquareMeter => value,
             IrradianceUnit::PicowattPerSquareMeter => value / T::from_f64(1e12),
             IrradianceUnit::NanowattPerSquareMeter => value / T::from_f64(1e9),
@@ -299,30 +296,31 @@ impl<T: Float> Irradiance<T> {
             IrradianceUnit::MilliwattPerSquareCentimeter => value * T::from_f64(10.0),
             IrradianceUnit::KilowattPerSquareCentimeter => value * T::from_f64(1e7),
             IrradianceUnit::MegawattPerSquareCentimeter => value * T::from_f64(1e10),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: IrradianceUnit) -> T {
-        match unit {
-            IrradianceUnit::WattPerSquareMeter => self.0,
-            IrradianceUnit::PicowattPerSquareMeter => self.0 * T::from_f64(1e12),
-            IrradianceUnit::NanowattPerSquareMeter => self.0 * T::from_f64(1e9),
-            IrradianceUnit::MicrowattPerSquareMeter => self.0 * T::from_f64(1000000.0),
-            IrradianceUnit::MilliwattPerSquareMeter => self.0 * T::from_f64(1000.0),
-            IrradianceUnit::KilowattPerSquareMeter => self.0 / T::from_f64(1000.0),
-            IrradianceUnit::MegawattPerSquareMeter => self.0 / T::from_f64(1000000.0),
-            IrradianceUnit::WattPerSquareCentimeter => self.0 / T::from_f64(10000.0),
-            IrradianceUnit::PicowattPerSquareCentimeter => self.0 * T::from_f64(1e8),
-            IrradianceUnit::NanowattPerSquareCentimeter => self.0 * T::from_f64(100000.0),
-            IrradianceUnit::MicrowattPerSquareCentimeter => self.0 * T::from_f64(100.0),
-            IrradianceUnit::MilliwattPerSquareCentimeter => self.0 / T::from_f64(10.0),
-            IrradianceUnit::KilowattPerSquareCentimeter => self.0 / T::from_f64(1e7),
-            IrradianceUnit::MegawattPerSquareCentimeter => self.0 / T::from_f64(1e10),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            IrradianceUnit::WattPerSquareMeter => value,
+            IrradianceUnit::PicowattPerSquareMeter => value * T::from_f64(1e12),
+            IrradianceUnit::NanowattPerSquareMeter => value * T::from_f64(1e9),
+            IrradianceUnit::MicrowattPerSquareMeter => value * T::from_f64(1000000.0),
+            IrradianceUnit::MilliwattPerSquareMeter => value * T::from_f64(1000.0),
+            IrradianceUnit::KilowattPerSquareMeter => value / T::from_f64(1000.0),
+            IrradianceUnit::MegawattPerSquareMeter => value / T::from_f64(1000000.0),
+            IrradianceUnit::WattPerSquareCentimeter => value / T::from_f64(10000.0),
+            IrradianceUnit::PicowattPerSquareCentimeter => value * T::from_f64(1e8),
+            IrradianceUnit::NanowattPerSquareCentimeter => value * T::from_f64(100000.0),
+            IrradianceUnit::MicrowattPerSquareCentimeter => value * T::from_f64(100.0),
+            IrradianceUnit::MilliwattPerSquareCentimeter => value / T::from_f64(10.0),
+            IrradianceUnit::KilowattPerSquareCentimeter => value / T::from_f64(1e7),
+            IrradianceUnit::MegawattPerSquareCentimeter => value / T::from_f64(1e10),
+        }
+    }
+}
+
+impl<T: Float> Irradiance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pW/m²`, `nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`, `MW/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

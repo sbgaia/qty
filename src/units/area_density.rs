@@ -170,37 +170,33 @@ impl core::str::FromStr for AreaDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> AreaDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: AreaDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AreaDensityUnit::KilogramPerSquareMeter => value,
             AreaDensityUnit::GramPerSquareMeter => value / T::from_f64(1000.0),
             AreaDensityUnit::MilligramPerSquareMeter => value / T::from_f64(1000000.0),
             AreaDensityUnit::PoundPerSquareFoot => value * T::from_f64(4.88242763638305),
             AreaDensityUnit::PoundPerThousandSquareFeet => value * T::from_f64(0.00488242763638305),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AreaDensityUnit) -> T {
-        match unit {
-            AreaDensityUnit::KilogramPerSquareMeter => self.0,
-            AreaDensityUnit::GramPerSquareMeter => self.0 * T::from_f64(1000.0),
-            AreaDensityUnit::MilligramPerSquareMeter => self.0 * T::from_f64(1000000.0),
-            AreaDensityUnit::PoundPerSquareFoot => self.0 / T::from_f64(4.88242763638305),
-            AreaDensityUnit::PoundPerThousandSquareFeet => {
-                self.0 / T::from_f64(0.00488242763638305)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AreaDensityUnit::KilogramPerSquareMeter => value,
+            AreaDensityUnit::GramPerSquareMeter => value * T::from_f64(1000.0),
+            AreaDensityUnit::MilligramPerSquareMeter => value * T::from_f64(1000000.0),
+            AreaDensityUnit::PoundPerSquareFoot => value / T::from_f64(4.88242763638305),
+            AreaDensityUnit::PoundPerThousandSquareFeet => value / T::from_f64(0.00488242763638305),
+        }
+    }
+}
+
+impl<T: Float> AreaDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`kg/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

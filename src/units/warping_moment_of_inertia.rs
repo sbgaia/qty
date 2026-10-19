@@ -177,41 +177,35 @@ impl core::str::FromStr for WarpingMomentOfInertiaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> WarpingMomentOfInertia<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInertiaUnit {
     #[inline]
-    pub fn new(value: T, unit: WarpingMomentOfInertiaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
             WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value / T::from_f64(1000000.0),
             WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value / T::from_f64(1e12),
             WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value / T::from_f64(1e18),
             WarpingMomentOfInertiaUnit::FootToTheSixth => value * T::from_f64(0.000801843800914862),
             WarpingMomentOfInertiaUnit::InchToTheSixth => value * T::from_f64(2.68535866540096e-10),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: WarpingMomentOfInertiaUnit) -> T {
-        match unit {
-            WarpingMomentOfInertiaUnit::MeterToTheSixth => self.0,
-            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => self.0 * T::from_f64(1000000.0),
-            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => self.0 * T::from_f64(1e12),
-            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => self.0 * T::from_f64(1e18),
-            WarpingMomentOfInertiaUnit::FootToTheSixth => {
-                self.0 / T::from_f64(0.000801843800914862)
-            }
-            WarpingMomentOfInertiaUnit::InchToTheSixth => {
-                self.0 / T::from_f64(2.68535866540096e-10)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            WarpingMomentOfInertiaUnit::MeterToTheSixth => value,
+            WarpingMomentOfInertiaUnit::DecimeterToTheSixth => value * T::from_f64(1000000.0),
+            WarpingMomentOfInertiaUnit::CentimeterToTheSixth => value * T::from_f64(1e12),
+            WarpingMomentOfInertiaUnit::MillimeterToTheSixth => value * T::from_f64(1e18),
+            WarpingMomentOfInertiaUnit::FootToTheSixth => value / T::from_f64(0.000801843800914862),
+            WarpingMomentOfInertiaUnit::InchToTheSixth => value / T::from_f64(2.68535866540096e-10),
+        }
+    }
+}
+
+impl<T: Float> WarpingMomentOfInertia<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m⁶`).
     /// Zero, NaN and infinities are shown in the base unit.

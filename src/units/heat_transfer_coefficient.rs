@@ -231,15 +231,12 @@ impl core::str::FromStr for HeatTransferCoefficientUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> HeatTransferCoefficient<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoefficientUnit {
     #[inline]
-    pub fn new(value: T, unit: HeatTransferCoefficientUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
             HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
             HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
@@ -254,30 +251,31 @@ impl<T: Float> HeatTransferCoefficient<T> {
             HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
                 value * T::from_f64(1.1622222222222223)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: HeatTransferCoefficientUnit) -> T {
-        match unit {
-            HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => self.0,
-            HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => self.0,
-            HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
-                self.0 / T::from_f64(5.678263341113488)
-            }
-            HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
-                self.0 / T::from_f64(2943611.716033232)
-            }
-            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
-                self.0 / T::from_f64(0.0011622222222222223)
-            }
-            HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
-                self.0 / T::from_f64(1.1622222222222223)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
+            HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
+            HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
+                value / T::from_f64(5.678263341113488)
+            }
+            HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
+                value / T::from_f64(2943611.716033232)
+            }
+            HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
+                value / T::from_f64(0.0011622222222222223)
+            }
+            HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
+                value / T::from_f64(1.1622222222222223)
+            }
+        }
+    }
+}
+
+impl<T: Float> HeatTransferCoefficient<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`W/(m²·K)`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -211,15 +211,12 @@ impl core::str::FromStr for TemperatureDeltaUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> TemperatureDelta<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
     #[inline]
-    pub fn new(value: T, unit: TemperatureDeltaUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             TemperatureDeltaUnit::Kelvin => value,
             TemperatureDeltaUnit::DegreeCelsius => value,
             TemperatureDeltaUnit::MillidegreeCelsius => value / T::from_f64(1000.0),
@@ -229,25 +226,26 @@ impl<T: Float> TemperatureDelta<T> {
             TemperatureDeltaUnit::DegreeRankine => value * T::from_f64(0.5555555555555556),
             TemperatureDeltaUnit::DegreeReaumur => value * T::from_f64(1.25),
             TemperatureDeltaUnit::DegreeRoemer => value * T::from_f64(1.9047619047619047),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: TemperatureDeltaUnit) -> T {
-        match unit {
-            TemperatureDeltaUnit::Kelvin => self.0,
-            TemperatureDeltaUnit::DegreeCelsius => self.0,
-            TemperatureDeltaUnit::MillidegreeCelsius => self.0 * T::from_f64(1000.0),
-            TemperatureDeltaUnit::DegreeDelisle => self.0 * T::from_f64(-1.5),
-            TemperatureDeltaUnit::DegreeFahrenheit => self.0 / T::from_f64(0.5555555555555556),
-            TemperatureDeltaUnit::DegreeNewton => self.0 / T::from_f64(3.0303030303030303),
-            TemperatureDeltaUnit::DegreeRankine => self.0 / T::from_f64(0.5555555555555556),
-            TemperatureDeltaUnit::DegreeReaumur => self.0 / T::from_f64(1.25),
-            TemperatureDeltaUnit::DegreeRoemer => self.0 / T::from_f64(1.9047619047619047),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            TemperatureDeltaUnit::Kelvin => value,
+            TemperatureDeltaUnit::DegreeCelsius => value,
+            TemperatureDeltaUnit::MillidegreeCelsius => value * T::from_f64(1000.0),
+            TemperatureDeltaUnit::DegreeDelisle => value * T::from_f64(-1.5),
+            TemperatureDeltaUnit::DegreeFahrenheit => value / T::from_f64(0.5555555555555556),
+            TemperatureDeltaUnit::DegreeNewton => value / T::from_f64(3.0303030303030303),
+            TemperatureDeltaUnit::DegreeRankine => value / T::from_f64(0.5555555555555556),
+            TemperatureDeltaUnit::DegreeReaumur => value / T::from_f64(1.25),
+            TemperatureDeltaUnit::DegreeRoemer => value / T::from_f64(1.9047619047619047),
+        }
+    }
+}
+
+impl<T: Float> TemperatureDelta<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`∆K`).
     /// Zero, NaN and infinities are shown in the base unit.

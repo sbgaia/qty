@@ -51,6 +51,25 @@ sense for some quantities exist only there: `Area::sqrt` gives a `Length`,
 The storage type is `f64` unless you pick another: `Length<f32>`,
 `Mass<i64>`, or your own float type through the `Float` trait.
 
+Units missing from UnitsNet can be added in your own crate:
+
+```rust
+use qty::*;
+
+custom_unit! {
+    /// The furlong: 220 yards.
+    pub struct Furlong for Length {
+        abbreviation: "fur",
+        singular: "Furlong",
+        plural: "Furlongs",
+        factor: 201.168, // metres in one furlong
+    }
+}
+
+let race = Length::new(5.0, Furlong);
+assert_eq!(format!("{:.2}", race.in_unit(LengthUnit::Kilometer)), "1.01 km");
+```
+
 ## Text
 
 Quantities print in their base unit, or in any unit you ask for. Parsing

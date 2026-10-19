@@ -139,29 +139,27 @@ impl core::str::FromStr for PowerRatioUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> PowerRatio<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<PowerRatio<T>> for PowerRatioUnit {
     #[inline]
-    pub fn new(value: T, unit: PowerRatioUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PowerRatioUnit::DecibelWatt => value,
             PowerRatioUnit::DecibelMilliwatt => value - T::from_f64(30.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PowerRatioUnit) -> T {
-        match unit {
-            PowerRatioUnit::DecibelWatt => self.0,
-            PowerRatioUnit::DecibelMilliwatt => self.0 + T::from_f64(30.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PowerRatioUnit::DecibelWatt => value,
+            PowerRatioUnit::DecibelMilliwatt => value + T::from_f64(30.0),
+        }
+    }
+}
+
+impl<T: Float> PowerRatio<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`dBW`).
     /// Zero, NaN and infinities are shown in the base unit.

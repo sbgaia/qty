@@ -102,27 +102,25 @@ impl core::str::FromStr for TurbidityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Turbidity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
     #[inline]
-    pub fn new(value: T, unit: TurbidityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             TurbidityUnit::NTU => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: TurbidityUnit) -> T {
-        match unit {
-            TurbidityUnit::NTU => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            TurbidityUnit::NTU => value,
+        }
+    }
+}
+
+impl<T: Float> Turbidity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`NTU`).
     /// Zero, NaN and infinities are shown in the base unit.

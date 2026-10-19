@@ -103,27 +103,25 @@ impl core::str::FromStr for LuminousFluxUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> LuminousFlux<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<LuminousFlux<T>> for LuminousFluxUnit {
     #[inline]
-    pub fn new(value: T, unit: LuminousFluxUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LuminousFluxUnit::Lumen => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LuminousFluxUnit) -> T {
-        match unit {
-            LuminousFluxUnit::Lumen => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LuminousFluxUnit::Lumen => value,
+        }
+    }
+}
+
+impl<T: Float> LuminousFlux<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`lm`).
     /// Zero, NaN and infinities are shown in the base unit.

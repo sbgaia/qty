@@ -134,31 +134,29 @@ impl core::str::FromStr for SpecificVolumeUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> SpecificVolume<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<SpecificVolume<T>> for SpecificVolumeUnit {
     #[inline]
-    pub fn new(value: T, unit: SpecificVolumeUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpecificVolumeUnit::CubicMeterPerKilogram => value,
             SpecificVolumeUnit::CubicMillimeterPerKilogram => value / T::from_f64(1e9),
             SpecificVolumeUnit::CubicFootPerPound => value * T::from_f64(0.06242796057614461),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpecificVolumeUnit) -> T {
-        match unit {
-            SpecificVolumeUnit::CubicMeterPerKilogram => self.0,
-            SpecificVolumeUnit::CubicMillimeterPerKilogram => self.0 * T::from_f64(1e9),
-            SpecificVolumeUnit::CubicFootPerPound => self.0 / T::from_f64(0.06242796057614461),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpecificVolumeUnit::CubicMeterPerKilogram => value,
+            SpecificVolumeUnit::CubicMillimeterPerKilogram => value * T::from_f64(1e9),
+            SpecificVolumeUnit::CubicFootPerPound => value / T::from_f64(0.06242796057614461),
+        }
+    }
+}
+
+impl<T: Float> SpecificVolume<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m³/kg`).
     /// Zero, NaN and infinities are shown in the base unit.

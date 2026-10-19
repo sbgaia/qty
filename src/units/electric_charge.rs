@@ -238,15 +238,12 @@ impl core::str::FromStr for ElectricChargeUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricCharge<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricChargeUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricChargeUnit::Coulomb => value,
             ElectricChargeUnit::Picocoulomb => value / T::from_f64(1e12),
             ElectricChargeUnit::Nanocoulomb => value / T::from_f64(1e9),
@@ -258,27 +255,28 @@ impl<T: Float> ElectricCharge<T> {
             ElectricChargeUnit::MilliampereHour => value * T::from_f64(3.6),
             ElectricChargeUnit::KiloampereHour => value * T::from_f64(3600000.0),
             ElectricChargeUnit::MegaampereHour => value * T::from_f64(3.6e9),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricChargeUnit) -> T {
-        match unit {
-            ElectricChargeUnit::Coulomb => self.0,
-            ElectricChargeUnit::Picocoulomb => self.0 * T::from_f64(1e12),
-            ElectricChargeUnit::Nanocoulomb => self.0 * T::from_f64(1e9),
-            ElectricChargeUnit::Microcoulomb => self.0 * T::from_f64(1000000.0),
-            ElectricChargeUnit::Millicoulomb => self.0 * T::from_f64(1000.0),
-            ElectricChargeUnit::Kilocoulomb => self.0 / T::from_f64(1000.0),
-            ElectricChargeUnit::Megacoulomb => self.0 / T::from_f64(1000000.0),
-            ElectricChargeUnit::AmpereHour => self.0 / T::from_f64(3600.0),
-            ElectricChargeUnit::MilliampereHour => self.0 / T::from_f64(3.6),
-            ElectricChargeUnit::KiloampereHour => self.0 / T::from_f64(3600000.0),
-            ElectricChargeUnit::MegaampereHour => self.0 / T::from_f64(3.6e9),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricChargeUnit::Coulomb => value,
+            ElectricChargeUnit::Picocoulomb => value * T::from_f64(1e12),
+            ElectricChargeUnit::Nanocoulomb => value * T::from_f64(1e9),
+            ElectricChargeUnit::Microcoulomb => value * T::from_f64(1000000.0),
+            ElectricChargeUnit::Millicoulomb => value * T::from_f64(1000.0),
+            ElectricChargeUnit::Kilocoulomb => value / T::from_f64(1000.0),
+            ElectricChargeUnit::Megacoulomb => value / T::from_f64(1000000.0),
+            ElectricChargeUnit::AmpereHour => value / T::from_f64(3600.0),
+            ElectricChargeUnit::MilliampereHour => value / T::from_f64(3.6),
+            ElectricChargeUnit::KiloampereHour => value / T::from_f64(3600000.0),
+            ElectricChargeUnit::MegaampereHour => value / T::from_f64(3.6e9),
+        }
+    }
+}
+
+impl<T: Float> ElectricCharge<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`pC`, `nC`, `µC`, `mC`, `C`, `kC`, `MC`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -769,11 +769,8 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     let name = &qty.name;
     let enum_name = format!("{name}Unit");
 
-    w!(
-        out,
-        "/// Unit conversions, available for floating-point storage."
-    );
-    w!(out, "///");
+    // Conversions, as the unit enum's `UnitOf` impl; `new` and
+    // `convert_to` on the quantity take any `UnitOf`.
     w!(
         out,
         "/// Every conversion is a single multiplication or division by a constant"
@@ -782,20 +779,15 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         out,
         "/// folded at code-generation time (two operations for affine units)."
     );
-    w!(out, "impl<T: Float> {}<T> {{", name);
-
-    // new()
     w!(
         out,
-        "    /// Creates a new value from `value` expressed in `unit`."
-    );
-    w!(out, "    #[inline]");
-    w!(
-        out,
-        "    pub fn new(value: T, unit: {}) -> Self {{",
+        "impl<T: Float> crate::UnitOf<{}<T>> for {} {{",
+        name,
         enum_name
     );
-    w!(out, "        Self(match unit {{");
+    w!(out, "    #[inline]");
+    w!(out, "    fn value_to_base(self, value: T) -> T {{");
+    w!(out, "        match self {{");
     for unit in &qty.units {
         w!(
             out,
@@ -805,31 +797,26 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             expr::emit(&unit.to_base, "value", Direction::ToBase)
         );
     }
-    w!(out, "        }})");
+    w!(out, "        }}");
     w!(out, "    }}");
     w!(out);
-
-    // convert_to()
-    w!(out, "    /// Returns the quantity expressed in `unit`.");
     w!(out, "    #[inline]");
-    w!(
-        out,
-        "    pub fn convert_to(self, unit: {}) -> T {{",
-        enum_name
-    );
-    w!(out, "        match unit {{");
+    w!(out, "    fn value_from_base(self, value: T) -> T {{");
+    w!(out, "        match self {{");
     for unit in &qty.units {
         w!(
             out,
             "            {}::{} => {},",
             enum_name,
             unit.singular,
-            expr::emit(&unit.from_base, "self.0", Direction::FromBase)
+            expr::emit(&unit.from_base, "value", Direction::FromBase)
         );
     }
     w!(out, "        }}");
     w!(out, "    }}");
+    w!(out, "}}");
     w!(out);
+    w!(out, "impl<T: Float> {}<T> {{", name);
 
     emit_auto_unit(qty, out);
 

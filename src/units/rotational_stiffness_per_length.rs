@@ -187,15 +187,12 @@ impl core::str::FromStr for RotationalStiffnessPerLengthUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RotationalStiffnessPerLength<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RotationalStiffnessPerLength<T>> for RotationalStiffnessPerLengthUnit {
     #[inline]
-    pub fn new(value: T, unit: RotationalStiffnessPerLengthUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter => value,
             RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => {
                 value * T::from_f64(1000.0)
@@ -209,29 +206,30 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
             RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot => {
                 value * T::from_f64(254864.3248932925)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RotationalStiffnessPerLengthUnit) -> T {
-        match unit {
-            RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter => self.0,
-            RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => {
-                self.0 / T::from_f64(1000.0)
-            }
-            RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter => {
-                self.0 / T::from_f64(1000000.0)
-            }
-            RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot => {
-                self.0 / T::from_f64(254.86432489329252)
-            }
-            RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot => {
-                self.0 / T::from_f64(254864.3248932925)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RotationalStiffnessPerLengthUnit::NewtonMeterPerRadianPerMeter => value,
+            RotationalStiffnessPerLengthUnit::KilonewtonMeterPerRadianPerMeter => {
+                value / T::from_f64(1000.0)
+            }
+            RotationalStiffnessPerLengthUnit::MeganewtonMeterPerRadianPerMeter => {
+                value / T::from_f64(1000000.0)
+            }
+            RotationalStiffnessPerLengthUnit::PoundForceFootPerDegreesPerFoot => {
+                value / T::from_f64(254.86432489329252)
+            }
+            RotationalStiffnessPerLengthUnit::KilopoundForceFootPerDegreesPerFoot => {
+                value / T::from_f64(254864.3248932925)
+            }
+        }
+    }
+}
+
+impl<T: Float> RotationalStiffnessPerLength<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`N·m/rad/m`, `kN·m/rad/m`, `MN·m/rad/m`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -529,15 +529,12 @@ impl core::str::FromStr for SpeedUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Speed<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Speed<T>> for SpeedUnit {
     #[inline]
-    pub fn new(value: T, unit: SpeedUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             SpeedUnit::MeterPerSecond => value,
             SpeedUnit::NanometerPerSecond => value / T::from_f64(1e9),
             SpeedUnit::MicrometerPerSecond => value / T::from_f64(1000000.0),
@@ -571,49 +568,50 @@ impl<T: Float> Speed<T> {
             SpeedUnit::Knot => value * T::from_f64(0.5144444444444445),
             SpeedUnit::MilePerHour => value * T::from_f64(0.44704),
             SpeedUnit::Mach => value * T::from_f64(340.29),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: SpeedUnit) -> T {
-        match unit {
-            SpeedUnit::MeterPerSecond => self.0,
-            SpeedUnit::NanometerPerSecond => self.0 * T::from_f64(1e9),
-            SpeedUnit::MicrometerPerSecond => self.0 * T::from_f64(1000000.0),
-            SpeedUnit::MillimeterPerSecond => self.0 * T::from_f64(1000.0),
-            SpeedUnit::CentimeterPerSecond => self.0 * T::from_f64(100.0),
-            SpeedUnit::DecimeterPerSecond => self.0 * T::from_f64(10.0),
-            SpeedUnit::KilometerPerSecond => self.0 / T::from_f64(1000.0),
-            SpeedUnit::MeterPerMinute => self.0 * T::from_f64(60.0),
-            SpeedUnit::NanometerPerMinute => self.0 * T::from_f64(6e10),
-            SpeedUnit::MicrometerPerMinute => self.0 * T::from_f64(6e7),
-            SpeedUnit::MillimeterPerMinute => self.0 * T::from_f64(60000.0),
-            SpeedUnit::CentimeterPerMinute => self.0 * T::from_f64(6000.0),
-            SpeedUnit::DecimeterPerMinute => self.0 * T::from_f64(600.0),
-            SpeedUnit::KilometerPerMinute => self.0 / T::from_f64(16.666666666666668),
-            SpeedUnit::MeterPerHour => self.0 * T::from_f64(3600.0),
-            SpeedUnit::MillimeterPerHour => self.0 * T::from_f64(3600000.0),
-            SpeedUnit::CentimeterPerHour => self.0 * T::from_f64(360000.0),
-            SpeedUnit::KilometerPerHour => self.0 / T::from_f64(0.2777777777777778),
-            SpeedUnit::FootPerSecond => self.0 / T::from_f64(0.3048),
-            SpeedUnit::FootPerMinute => self.0 / T::from_f64(0.00508),
-            SpeedUnit::FootPerHour => self.0 / T::from_f64(8.466666666666666e-5),
-            SpeedUnit::UsSurveyFootPerSecond => self.0 / T::from_f64(0.3048006096012192),
-            SpeedUnit::UsSurveyFootPerMinute => self.0 / T::from_f64(0.00508001016002032),
-            SpeedUnit::UsSurveyFootPerHour => self.0 * T::from_f64(11811.0),
-            SpeedUnit::InchPerSecond => self.0 / T::from_f64(0.0254),
-            SpeedUnit::InchPerMinute => self.0 / T::from_f64(0.00042333333333333334),
-            SpeedUnit::InchPerHour => self.0 / T::from_f64(7.055555555555556e-6),
-            SpeedUnit::YardPerSecond => self.0 / T::from_f64(0.9144),
-            SpeedUnit::YardPerMinute => self.0 / T::from_f64(0.01524),
-            SpeedUnit::YardPerHour => self.0 / T::from_f64(0.000254),
-            SpeedUnit::Knot => self.0 / T::from_f64(0.5144444444444445),
-            SpeedUnit::MilePerHour => self.0 / T::from_f64(0.44704),
-            SpeedUnit::Mach => self.0 / T::from_f64(340.29),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            SpeedUnit::MeterPerSecond => value,
+            SpeedUnit::NanometerPerSecond => value * T::from_f64(1e9),
+            SpeedUnit::MicrometerPerSecond => value * T::from_f64(1000000.0),
+            SpeedUnit::MillimeterPerSecond => value * T::from_f64(1000.0),
+            SpeedUnit::CentimeterPerSecond => value * T::from_f64(100.0),
+            SpeedUnit::DecimeterPerSecond => value * T::from_f64(10.0),
+            SpeedUnit::KilometerPerSecond => value / T::from_f64(1000.0),
+            SpeedUnit::MeterPerMinute => value * T::from_f64(60.0),
+            SpeedUnit::NanometerPerMinute => value * T::from_f64(6e10),
+            SpeedUnit::MicrometerPerMinute => value * T::from_f64(6e7),
+            SpeedUnit::MillimeterPerMinute => value * T::from_f64(60000.0),
+            SpeedUnit::CentimeterPerMinute => value * T::from_f64(6000.0),
+            SpeedUnit::DecimeterPerMinute => value * T::from_f64(600.0),
+            SpeedUnit::KilometerPerMinute => value / T::from_f64(16.666666666666668),
+            SpeedUnit::MeterPerHour => value * T::from_f64(3600.0),
+            SpeedUnit::MillimeterPerHour => value * T::from_f64(3600000.0),
+            SpeedUnit::CentimeterPerHour => value * T::from_f64(360000.0),
+            SpeedUnit::KilometerPerHour => value / T::from_f64(0.2777777777777778),
+            SpeedUnit::FootPerSecond => value / T::from_f64(0.3048),
+            SpeedUnit::FootPerMinute => value / T::from_f64(0.00508),
+            SpeedUnit::FootPerHour => value / T::from_f64(8.466666666666666e-5),
+            SpeedUnit::UsSurveyFootPerSecond => value / T::from_f64(0.3048006096012192),
+            SpeedUnit::UsSurveyFootPerMinute => value / T::from_f64(0.00508001016002032),
+            SpeedUnit::UsSurveyFootPerHour => value * T::from_f64(11811.0),
+            SpeedUnit::InchPerSecond => value / T::from_f64(0.0254),
+            SpeedUnit::InchPerMinute => value / T::from_f64(0.00042333333333333334),
+            SpeedUnit::InchPerHour => value / T::from_f64(7.055555555555556e-6),
+            SpeedUnit::YardPerSecond => value / T::from_f64(0.9144),
+            SpeedUnit::YardPerMinute => value / T::from_f64(0.01524),
+            SpeedUnit::YardPerHour => value / T::from_f64(0.000254),
+            SpeedUnit::Knot => value / T::from_f64(0.5144444444444445),
+            SpeedUnit::MilePerHour => value / T::from_f64(0.44704),
+            SpeedUnit::Mach => value / T::from_f64(340.29),
+        }
+    }
+}
+
+impl<T: Float> Speed<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nm/s`, `µm/s`, `mm/s`, `m/s`, `km/s`).
     /// Zero, NaN and infinities are shown in the base unit.

@@ -190,15 +190,12 @@ impl core::str::FromStr for CompressibilityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Compressibility<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
     #[inline]
-    pub fn new(value: T, unit: CompressibilityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             CompressibilityUnit::InversePascal => value,
             CompressibilityUnit::InverseKilopascal => value / T::from_f64(1000.0),
             CompressibilityUnit::InverseMegapascal => value / T::from_f64(1000000.0),
@@ -208,25 +205,26 @@ impl<T: Float> Compressibility<T> {
             CompressibilityUnit::InversePoundForcePerSquareInch => {
                 value * T::from_f64(0.0001450377377302092)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: CompressibilityUnit) -> T {
-        match unit {
-            CompressibilityUnit::InversePascal => self.0,
-            CompressibilityUnit::InverseKilopascal => self.0 * T::from_f64(1000.0),
-            CompressibilityUnit::InverseMegapascal => self.0 * T::from_f64(1000000.0),
-            CompressibilityUnit::InverseAtmosphere => self.0 * T::from_f64(101325.0),
-            CompressibilityUnit::InverseMillibar => self.0 * T::from_f64(100.0),
-            CompressibilityUnit::InverseBar => self.0 * T::from_f64(100000.0),
-            CompressibilityUnit::InversePoundForcePerSquareInch => {
-                self.0 / T::from_f64(0.0001450377377302092)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            CompressibilityUnit::InversePascal => value,
+            CompressibilityUnit::InverseKilopascal => value * T::from_f64(1000.0),
+            CompressibilityUnit::InverseMegapascal => value * T::from_f64(1000000.0),
+            CompressibilityUnit::InverseAtmosphere => value * T::from_f64(101325.0),
+            CompressibilityUnit::InverseMillibar => value * T::from_f64(100.0),
+            CompressibilityUnit::InverseBar => value * T::from_f64(100000.0),
+            CompressibilityUnit::InversePoundForcePerSquareInch => {
+                value / T::from_f64(0.0001450377377302092)
+            }
+        }
+    }
+}
+
+impl<T: Float> Compressibility<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Pa⁻¹`).
     /// Zero, NaN and infinities are shown in the base unit.

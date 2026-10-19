@@ -358,15 +358,12 @@ impl core::str::FromStr for ElectricPotentialChangeRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricPotentialChangeRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotentialChangeRateUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricPotentialChangeRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricPotentialChangeRateUnit::VoltPerSecond => value,
             ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value / T::from_f64(1000000.0),
             ElectricPotentialChangeRateUnit::MillivoltPerSecond => value / T::from_f64(1000.0),
@@ -395,46 +392,45 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
             ElectricPotentialChangeRateUnit::MegavoltPerHour => {
                 value * T::from_f64(277.77777777777777)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricPotentialChangeRateUnit) -> T {
-        match unit {
-            ElectricPotentialChangeRateUnit::VoltPerSecond => self.0,
-            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => self.0 * T::from_f64(1000000.0),
-            ElectricPotentialChangeRateUnit::MillivoltPerSecond => self.0 * T::from_f64(1000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerSecond => self.0 / T::from_f64(1000.0),
-            ElectricPotentialChangeRateUnit::MegavoltPerSecond => self.0 / T::from_f64(1000000.0),
-            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => self.0 / T::from_f64(1000000.0),
-            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => self.0,
-            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => {
-                self.0 / T::from_f64(1000.0)
-            }
-            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => self.0 / T::from_f64(1e9),
-            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => self.0 / T::from_f64(1e12),
-            ElectricPotentialChangeRateUnit::VoltPerMinute => self.0 * T::from_f64(60.0),
-            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => self.0 * T::from_f64(6e7),
-            ElectricPotentialChangeRateUnit::MillivoltPerMinute => self.0 * T::from_f64(60000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
-                self.0 / T::from_f64(16.666666666666668)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
-                self.0 / T::from_f64(16666.666666666668)
-            }
-            ElectricPotentialChangeRateUnit::VoltPerHour => self.0 * T::from_f64(3600.0),
-            ElectricPotentialChangeRateUnit::MicrovoltPerHour => self.0 * T::from_f64(3.6e9),
-            ElectricPotentialChangeRateUnit::MillivoltPerHour => self.0 * T::from_f64(3600000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
-                self.0 / T::from_f64(0.2777777777777778)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
-                self.0 / T::from_f64(277.77777777777777)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricPotentialChangeRateUnit::VoltPerSecond => value,
+            ElectricPotentialChangeRateUnit::MicrovoltPerSecond => value * T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MillivoltPerSecond => value * T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerSecond => value / T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerSecond => value / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::VoltPerMicrosecond => value / T::from_f64(1000000.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMicrosecond => value,
+            ElectricPotentialChangeRateUnit::MillivoltPerMicrosecond => value / T::from_f64(1000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerMicrosecond => value / T::from_f64(1e9),
+            ElectricPotentialChangeRateUnit::MegavoltPerMicrosecond => value / T::from_f64(1e12),
+            ElectricPotentialChangeRateUnit::VoltPerMinute => value * T::from_f64(60.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value * T::from_f64(6e7),
+            ElectricPotentialChangeRateUnit::MillivoltPerMinute => value * T::from_f64(60000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
+                value / T::from_f64(16.666666666666668)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
+                value / T::from_f64(16666.666666666668)
+            }
+            ElectricPotentialChangeRateUnit::VoltPerHour => value * T::from_f64(3600.0),
+            ElectricPotentialChangeRateUnit::MicrovoltPerHour => value * T::from_f64(3.6e9),
+            ElectricPotentialChangeRateUnit::MillivoltPerHour => value * T::from_f64(3600000.0),
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
+                value / T::from_f64(0.2777777777777778)
+            }
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
+                value / T::from_f64(277.77777777777777)
+            }
+        }
+    }
+}
+
+impl<T: Float> ElectricPotentialChangeRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µV/s`, `mV/s`, `V/s`, `kV/s`, `MV/s`).
     /// Zero, NaN and infinities are shown in the base unit.

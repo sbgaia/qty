@@ -168,33 +168,31 @@ impl core::str::FromStr for AmplitudeRatioUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> AmplitudeRatio<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
     #[inline]
-    pub fn new(value: T, unit: AmplitudeRatioUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AmplitudeRatioUnit::DecibelVolt => value,
             AmplitudeRatioUnit::DecibelMicrovolt => value - T::from_f64(120.0),
             AmplitudeRatioUnit::DecibelMillivolt => value - T::from_f64(60.0),
             AmplitudeRatioUnit::DecibelUnloaded => value - T::from_f64(2.218487499),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AmplitudeRatioUnit) -> T {
-        match unit {
-            AmplitudeRatioUnit::DecibelVolt => self.0,
-            AmplitudeRatioUnit::DecibelMicrovolt => self.0 + T::from_f64(120.0),
-            AmplitudeRatioUnit::DecibelMillivolt => self.0 + T::from_f64(60.0),
-            AmplitudeRatioUnit::DecibelUnloaded => self.0 + T::from_f64(2.218487499),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AmplitudeRatioUnit::DecibelVolt => value,
+            AmplitudeRatioUnit::DecibelMicrovolt => value + T::from_f64(120.0),
+            AmplitudeRatioUnit::DecibelMillivolt => value + T::from_f64(60.0),
+            AmplitudeRatioUnit::DecibelUnloaded => value + T::from_f64(2.218487499),
+        }
+    }
+}
+
+impl<T: Float> AmplitudeRatio<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`dBV`).
     /// Zero, NaN and infinities are shown in the base unit.

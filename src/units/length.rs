@@ -664,15 +664,12 @@ impl core::str::FromStr for LengthUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Length<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
     #[inline]
-    pub fn new(value: T, unit: LengthUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LengthUnit::Meter => value,
             LengthUnit::Femtometer => value / T::from_f64(1e15),
             LengthUnit::Picometer => value / T::from_f64(1e12),
@@ -715,58 +712,59 @@ impl<T: Float> Length<T> {
             LengthUnit::Chain => value * T::from_f64(20.1168),
             LengthUnit::Angstrom => value / T::from_f64(1e10),
             LengthUnit::DataMile => value * T::from_f64(1828.8),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LengthUnit) -> T {
-        match unit {
-            LengthUnit::Meter => self.0,
-            LengthUnit::Femtometer => self.0 * T::from_f64(1e15),
-            LengthUnit::Picometer => self.0 * T::from_f64(1e12),
-            LengthUnit::Nanometer => self.0 * T::from_f64(1e9),
-            LengthUnit::Micrometer => self.0 * T::from_f64(1000000.0),
-            LengthUnit::Millimeter => self.0 * T::from_f64(1000.0),
-            LengthUnit::Centimeter => self.0 * T::from_f64(100.0),
-            LengthUnit::Decimeter => self.0 * T::from_f64(10.0),
-            LengthUnit::Decameter => self.0 / T::from_f64(10.0),
-            LengthUnit::Hectometer => self.0 / T::from_f64(100.0),
-            LengthUnit::Kilometer => self.0 / T::from_f64(1000.0),
-            LengthUnit::Megameter => self.0 / T::from_f64(1000000.0),
-            LengthUnit::Gigameter => self.0 / T::from_f64(1e9),
-            LengthUnit::Mile => self.0 / T::from_f64(1609.344),
-            LengthUnit::Yard => self.0 / T::from_f64(0.9144),
-            LengthUnit::Kiloyard => self.0 / T::from_f64(914.4),
-            LengthUnit::Foot => self.0 / T::from_f64(0.3048),
-            LengthUnit::Kilofoot => self.0 / T::from_f64(304.8),
-            LengthUnit::UsSurveyFoot => self.0 / T::from_f64(0.3048006096012192),
-            LengthUnit::Inch => self.0 / T::from_f64(0.0254),
-            LengthUnit::Mil => self.0 / T::from_f64(2.54e-5),
-            LengthUnit::NauticalMile => self.0 / T::from_f64(1852.0),
-            LengthUnit::Fathom => self.0 / T::from_f64(1.8288),
-            LengthUnit::Shackle => self.0 / T::from_f64(27.432),
-            LengthUnit::Microinch => self.0 / T::from_f64(2.54e-8),
-            LengthUnit::PrinterPoint => self.0 / T::from_f64(0.00035145980351459805),
-            LengthUnit::DtpPoint => self.0 / T::from_f64(0.00035277777777777776),
-            LengthUnit::PrinterPica => self.0 / T::from_f64(0.004217517642175176),
-            LengthUnit::DtpPica => self.0 / T::from_f64(0.004233333333333334),
-            LengthUnit::Twip => self.0 / T::from_f64(1.763888888888889e-5),
-            LengthUnit::Hand => self.0 / T::from_f64(0.1016),
-            LengthUnit::AstronomicalUnit => self.0 / T::from_f64(1.495978707e11),
-            LengthUnit::Parsec => self.0 / T::from_f64(3.08567758128e16),
-            LengthUnit::Kiloparsec => self.0 / T::from_f64(3.08567758128e19),
-            LengthUnit::Megaparsec => self.0 / T::from_f64(3.08567758128e22),
-            LengthUnit::LightYear => self.0 / T::from_f64(9.46073047258e15),
-            LengthUnit::KilolightYear => self.0 / T::from_f64(9.46073047258e18),
-            LengthUnit::MegalightYear => self.0 / T::from_f64(9.46073047258e21),
-            LengthUnit::SolarRadius => self.0 / T::from_f64(6.957e8),
-            LengthUnit::Chain => self.0 / T::from_f64(20.1168),
-            LengthUnit::Angstrom => self.0 * T::from_f64(1e10),
-            LengthUnit::DataMile => self.0 / T::from_f64(1828.8),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LengthUnit::Meter => value,
+            LengthUnit::Femtometer => value * T::from_f64(1e15),
+            LengthUnit::Picometer => value * T::from_f64(1e12),
+            LengthUnit::Nanometer => value * T::from_f64(1e9),
+            LengthUnit::Micrometer => value * T::from_f64(1000000.0),
+            LengthUnit::Millimeter => value * T::from_f64(1000.0),
+            LengthUnit::Centimeter => value * T::from_f64(100.0),
+            LengthUnit::Decimeter => value * T::from_f64(10.0),
+            LengthUnit::Decameter => value / T::from_f64(10.0),
+            LengthUnit::Hectometer => value / T::from_f64(100.0),
+            LengthUnit::Kilometer => value / T::from_f64(1000.0),
+            LengthUnit::Megameter => value / T::from_f64(1000000.0),
+            LengthUnit::Gigameter => value / T::from_f64(1e9),
+            LengthUnit::Mile => value / T::from_f64(1609.344),
+            LengthUnit::Yard => value / T::from_f64(0.9144),
+            LengthUnit::Kiloyard => value / T::from_f64(914.4),
+            LengthUnit::Foot => value / T::from_f64(0.3048),
+            LengthUnit::Kilofoot => value / T::from_f64(304.8),
+            LengthUnit::UsSurveyFoot => value / T::from_f64(0.3048006096012192),
+            LengthUnit::Inch => value / T::from_f64(0.0254),
+            LengthUnit::Mil => value / T::from_f64(2.54e-5),
+            LengthUnit::NauticalMile => value / T::from_f64(1852.0),
+            LengthUnit::Fathom => value / T::from_f64(1.8288),
+            LengthUnit::Shackle => value / T::from_f64(27.432),
+            LengthUnit::Microinch => value / T::from_f64(2.54e-8),
+            LengthUnit::PrinterPoint => value / T::from_f64(0.00035145980351459805),
+            LengthUnit::DtpPoint => value / T::from_f64(0.00035277777777777776),
+            LengthUnit::PrinterPica => value / T::from_f64(0.004217517642175176),
+            LengthUnit::DtpPica => value / T::from_f64(0.004233333333333334),
+            LengthUnit::Twip => value / T::from_f64(1.763888888888889e-5),
+            LengthUnit::Hand => value / T::from_f64(0.1016),
+            LengthUnit::AstronomicalUnit => value / T::from_f64(1.495978707e11),
+            LengthUnit::Parsec => value / T::from_f64(3.08567758128e16),
+            LengthUnit::Kiloparsec => value / T::from_f64(3.08567758128e19),
+            LengthUnit::Megaparsec => value / T::from_f64(3.08567758128e22),
+            LengthUnit::LightYear => value / T::from_f64(9.46073047258e15),
+            LengthUnit::KilolightYear => value / T::from_f64(9.46073047258e18),
+            LengthUnit::MegalightYear => value / T::from_f64(9.46073047258e21),
+            LengthUnit::SolarRadius => value / T::from_f64(6.957e8),
+            LengthUnit::Chain => value / T::from_f64(20.1168),
+            LengthUnit::Angstrom => value * T::from_f64(1e10),
+            LengthUnit::DataMile => value / T::from_f64(1828.8),
+        }
+    }
+}
+
+impl<T: Float> Length<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fm`, `pm`, `nm`, `µm`, `mm`, `m`, `km`, `Mm`, `Gm`).
     /// Zero, NaN and infinities are shown in the base unit.

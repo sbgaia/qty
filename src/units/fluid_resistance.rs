@@ -371,15 +371,12 @@ impl core::str::FromStr for FluidResistanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> FluidResistance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
     #[inline]
-    pub fn new(value: T, unit: FluidResistanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             FluidResistanceUnit::PascalSecondPerLiter => value * T::from_f64(1000.0),
             FluidResistanceUnit::PascalMinutePerLiter => value * T::from_f64(60000.0),
             FluidResistanceUnit::PascalSecondPerMilliliter => value * T::from_f64(1000000.0),
@@ -411,53 +408,48 @@ impl<T: Float> FluidResistance<T> {
                 value * T::from_f64(7999.34208)
             }
             FluidResistanceUnit::WoodUnit => value * T::from_f64(7999342.08),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: FluidResistanceUnit) -> T {
-        match unit {
-            FluidResistanceUnit::PascalSecondPerLiter => self.0 / T::from_f64(1000.0),
-            FluidResistanceUnit::PascalMinutePerLiter => self.0 / T::from_f64(60000.0),
-            FluidResistanceUnit::PascalSecondPerMilliliter => self.0 / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerMilliliter => self.0 / T::from_f64(6e7),
-            FluidResistanceUnit::PascalSecondPerCubicMeter => self.0,
-            FluidResistanceUnit::MegapascalSecondPerCubicMeter => self.0 / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerCubicMeter => self.0 / T::from_f64(60.0),
-            FluidResistanceUnit::PascalSecondPerCubicCentimeter => self.0 / T::from_f64(1000000.0),
-            FluidResistanceUnit::PascalMinutePerCubicCentimeter => self.0 / T::from_f64(6e7),
-            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => {
-                self.0 / T::from_f64(100000.0)
-            }
-            FluidResistanceUnit::MillimeterMercurySecondPerLiter => {
-                self.0 / T::from_f64(133322.368)
-            }
-            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => {
-                self.0 / T::from_f64(7999342.08)
-            }
-            FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => {
-                self.0 / T::from_f64(1.33322368e8)
-            }
-            FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter => {
-                self.0 / T::from_f64(7.99934208e9)
-            }
-            FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter => {
-                self.0 / T::from_f64(1.33322368e8)
-            }
-            FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter => {
-                self.0 / T::from_f64(7.99934208e9)
-            }
-            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => {
-                self.0 / T::from_f64(133.322368)
-            }
-            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => {
-                self.0 / T::from_f64(7999.34208)
-            }
-            FluidResistanceUnit::WoodUnit => self.0 / T::from_f64(7999342.08),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            FluidResistanceUnit::PascalSecondPerLiter => value / T::from_f64(1000.0),
+            FluidResistanceUnit::PascalMinutePerLiter => value / T::from_f64(60000.0),
+            FluidResistanceUnit::PascalSecondPerMilliliter => value / T::from_f64(1000000.0),
+            FluidResistanceUnit::PascalMinutePerMilliliter => value / T::from_f64(6e7),
+            FluidResistanceUnit::PascalSecondPerCubicMeter => value,
+            FluidResistanceUnit::MegapascalSecondPerCubicMeter => value / T::from_f64(1000000.0),
+            FluidResistanceUnit::PascalMinutePerCubicMeter => value / T::from_f64(60.0),
+            FluidResistanceUnit::PascalSecondPerCubicCentimeter => value / T::from_f64(1000000.0),
+            FluidResistanceUnit::PascalMinutePerCubicCentimeter => value / T::from_f64(6e7),
+            FluidResistanceUnit::DyneSecondPerCentimeterToTheFifth => value / T::from_f64(100000.0),
+            FluidResistanceUnit::MillimeterMercurySecondPerLiter => value / T::from_f64(133322.368),
+            FluidResistanceUnit::MillimeterMercuryMinutePerLiter => value / T::from_f64(7999342.08),
+            FluidResistanceUnit::MillimeterMercurySecondPerMilliliter => {
+                value / T::from_f64(1.33322368e8)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerMilliliter => {
+                value / T::from_f64(7.99934208e9)
+            }
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicCentimeter => {
+                value / T::from_f64(1.33322368e8)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicCentimeter => {
+                value / T::from_f64(7.99934208e9)
+            }
+            FluidResistanceUnit::MillimeterMercurySecondPerCubicMeter => {
+                value / T::from_f64(133.322368)
+            }
+            FluidResistanceUnit::MillimeterMercuryMinutePerCubicMeter => {
+                value / T::from_f64(7999.34208)
+            }
+            FluidResistanceUnit::WoodUnit => value / T::from_f64(7999342.08),
+        }
+    }
+}
+
+impl<T: Float> FluidResistance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Pa·s/m³`, `MPa·s/m³`).
     /// Zero, NaN and infinities are shown in the base unit.

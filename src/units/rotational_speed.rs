@@ -266,15 +266,12 @@ impl core::str::FromStr for RotationalSpeedUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RotationalSpeed<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RotationalSpeed<T>> for RotationalSpeedUnit {
     #[inline]
-    pub fn new(value: T, unit: RotationalSpeedUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RotationalSpeedUnit::RadianPerSecond => value,
             RotationalSpeedUnit::NanoradianPerSecond => value / T::from_f64(1e9),
             RotationalSpeedUnit::MicroradianPerSecond => value / T::from_f64(1000000.0),
@@ -288,35 +285,30 @@ impl<T: Float> RotationalSpeed<T> {
             RotationalSpeedUnit::DegreePerMinute => value * T::from_f64(0.0002908882086657216),
             RotationalSpeedUnit::RevolutionPerSecond => value * T::from_f64(6.283185307179586),
             RotationalSpeedUnit::RevolutionPerMinute => value * T::from_f64(0.10471975511965978),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RotationalSpeedUnit) -> T {
-        match unit {
-            RotationalSpeedUnit::RadianPerSecond => self.0,
-            RotationalSpeedUnit::NanoradianPerSecond => self.0 * T::from_f64(1e9),
-            RotationalSpeedUnit::MicroradianPerSecond => self.0 * T::from_f64(1000000.0),
-            RotationalSpeedUnit::MilliradianPerSecond => self.0 * T::from_f64(1000.0),
-            RotationalSpeedUnit::CentiradianPerSecond => self.0 * T::from_f64(100.0),
-            RotationalSpeedUnit::DeciradianPerSecond => self.0 * T::from_f64(10.0),
-            RotationalSpeedUnit::DegreePerSecond => self.0 / T::from_f64(0.017453292519943295),
-            RotationalSpeedUnit::NanodegreePerSecond => {
-                self.0 / T::from_f64(1.7453292519943295e-11)
-            }
-            RotationalSpeedUnit::MicrodegreePerSecond => {
-                self.0 / T::from_f64(1.7453292519943295e-8)
-            }
-            RotationalSpeedUnit::MillidegreePerSecond => {
-                self.0 / T::from_f64(1.7453292519943296e-5)
-            }
-            RotationalSpeedUnit::DegreePerMinute => self.0 / T::from_f64(0.0002908882086657216),
-            RotationalSpeedUnit::RevolutionPerSecond => self.0 / T::from_f64(6.283185307179586),
-            RotationalSpeedUnit::RevolutionPerMinute => self.0 / T::from_f64(0.10471975511965978),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RotationalSpeedUnit::RadianPerSecond => value,
+            RotationalSpeedUnit::NanoradianPerSecond => value * T::from_f64(1e9),
+            RotationalSpeedUnit::MicroradianPerSecond => value * T::from_f64(1000000.0),
+            RotationalSpeedUnit::MilliradianPerSecond => value * T::from_f64(1000.0),
+            RotationalSpeedUnit::CentiradianPerSecond => value * T::from_f64(100.0),
+            RotationalSpeedUnit::DeciradianPerSecond => value * T::from_f64(10.0),
+            RotationalSpeedUnit::DegreePerSecond => value / T::from_f64(0.017453292519943295),
+            RotationalSpeedUnit::NanodegreePerSecond => value / T::from_f64(1.7453292519943295e-11),
+            RotationalSpeedUnit::MicrodegreePerSecond => value / T::from_f64(1.7453292519943295e-8),
+            RotationalSpeedUnit::MillidegreePerSecond => value / T::from_f64(1.7453292519943296e-5),
+            RotationalSpeedUnit::DegreePerMinute => value / T::from_f64(0.0002908882086657216),
+            RotationalSpeedUnit::RevolutionPerSecond => value / T::from_f64(6.283185307179586),
+            RotationalSpeedUnit::RevolutionPerMinute => value / T::from_f64(0.10471975511965978),
+        }
+    }
+}
+
+impl<T: Float> RotationalSpeed<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nrad/s`, `µrad/s`, `mrad/s`, `rad/s`).
     /// Zero, NaN and infinities are shown in the base unit.

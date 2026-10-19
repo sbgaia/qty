@@ -601,15 +601,12 @@ impl core::str::FromStr for InformationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Information<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Information<T>> for InformationUnit {
     #[inline]
-    pub fn new(value: T, unit: InformationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             InformationUnit::Byte => value * T::from_f64(8.0),
             InformationUnit::Kilobyte => value * T::from_f64(8000.0),
             InformationUnit::Megabyte => value * T::from_f64(8000000.0),
@@ -649,55 +646,56 @@ impl<T: Float> Information<T> {
             InformationUnit::Tebibit => value * T::from_f64(1.099511627776e12),
             InformationUnit::Pebibit => value * T::from_f64(1.125899906842624e15),
             InformationUnit::Exbibit => value * T::from_f64(1.152921504606847e18),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: InformationUnit) -> T {
-        match unit {
-            InformationUnit::Byte => self.0 * T::from_f64(0.125),
-            InformationUnit::Kilobyte => self.0 / T::from_f64(8000.0),
-            InformationUnit::Megabyte => self.0 / T::from_f64(8000000.0),
-            InformationUnit::Gigabyte => self.0 / T::from_f64(8e9),
-            InformationUnit::Terabyte => self.0 / T::from_f64(8e12),
-            InformationUnit::Petabyte => self.0 / T::from_f64(8e15),
-            InformationUnit::Exabyte => self.0 / T::from_f64(8e18),
-            InformationUnit::Kibibyte => self.0 * T::from_f64(0.0001220703125),
-            InformationUnit::Mebibyte => self.0 * T::from_f64(1.1920928955078125e-7),
-            InformationUnit::Gibibyte => self.0 * T::from_f64(1.1641532182693481e-10),
-            InformationUnit::Tebibyte => self.0 * T::from_f64(1.1368683772161603e-13),
-            InformationUnit::Pebibyte => self.0 * T::from_f64(1.1102230246251565e-16),
-            InformationUnit::Exbibyte => self.0 * T::from_f64(1.0842021724855044e-19),
-            InformationUnit::Octet => self.0 * T::from_f64(0.125),
-            InformationUnit::Kilooctet => self.0 / T::from_f64(8000.0),
-            InformationUnit::Megaoctet => self.0 / T::from_f64(8000000.0),
-            InformationUnit::Gigaoctet => self.0 / T::from_f64(8e9),
-            InformationUnit::Teraoctet => self.0 / T::from_f64(8e12),
-            InformationUnit::Petaoctet => self.0 / T::from_f64(8e15),
-            InformationUnit::Exaoctet => self.0 / T::from_f64(8e18),
-            InformationUnit::Kibioctet => self.0 * T::from_f64(0.0001220703125),
-            InformationUnit::Mebioctet => self.0 * T::from_f64(1.1920928955078125e-7),
-            InformationUnit::Gibioctet => self.0 * T::from_f64(1.1641532182693481e-10),
-            InformationUnit::Tebioctet => self.0 * T::from_f64(1.1368683772161603e-13),
-            InformationUnit::Pebioctet => self.0 * T::from_f64(1.1102230246251565e-16),
-            InformationUnit::Exbioctet => self.0 * T::from_f64(1.0842021724855044e-19),
-            InformationUnit::Bit => self.0,
-            InformationUnit::Kilobit => self.0 / T::from_f64(1000.0),
-            InformationUnit::Megabit => self.0 / T::from_f64(1000000.0),
-            InformationUnit::Gigabit => self.0 / T::from_f64(1e9),
-            InformationUnit::Terabit => self.0 / T::from_f64(1e12),
-            InformationUnit::Petabit => self.0 / T::from_f64(1e15),
-            InformationUnit::Exabit => self.0 / T::from_f64(1e18),
-            InformationUnit::Kibibit => self.0 * T::from_f64(0.0009765625),
-            InformationUnit::Mebibit => self.0 * T::from_f64(9.5367431640625e-7),
-            InformationUnit::Gibibit => self.0 * T::from_f64(9.313225746154785e-10),
-            InformationUnit::Tebibit => self.0 * T::from_f64(9.094947017729282e-13),
-            InformationUnit::Pebibit => self.0 * T::from_f64(8.881784197001252e-16),
-            InformationUnit::Exbibit => self.0 * T::from_f64(8.673617379884035e-19),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            InformationUnit::Byte => value * T::from_f64(0.125),
+            InformationUnit::Kilobyte => value / T::from_f64(8000.0),
+            InformationUnit::Megabyte => value / T::from_f64(8000000.0),
+            InformationUnit::Gigabyte => value / T::from_f64(8e9),
+            InformationUnit::Terabyte => value / T::from_f64(8e12),
+            InformationUnit::Petabyte => value / T::from_f64(8e15),
+            InformationUnit::Exabyte => value / T::from_f64(8e18),
+            InformationUnit::Kibibyte => value * T::from_f64(0.0001220703125),
+            InformationUnit::Mebibyte => value * T::from_f64(1.1920928955078125e-7),
+            InformationUnit::Gibibyte => value * T::from_f64(1.1641532182693481e-10),
+            InformationUnit::Tebibyte => value * T::from_f64(1.1368683772161603e-13),
+            InformationUnit::Pebibyte => value * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Exbibyte => value * T::from_f64(1.0842021724855044e-19),
+            InformationUnit::Octet => value * T::from_f64(0.125),
+            InformationUnit::Kilooctet => value / T::from_f64(8000.0),
+            InformationUnit::Megaoctet => value / T::from_f64(8000000.0),
+            InformationUnit::Gigaoctet => value / T::from_f64(8e9),
+            InformationUnit::Teraoctet => value / T::from_f64(8e12),
+            InformationUnit::Petaoctet => value / T::from_f64(8e15),
+            InformationUnit::Exaoctet => value / T::from_f64(8e18),
+            InformationUnit::Kibioctet => value * T::from_f64(0.0001220703125),
+            InformationUnit::Mebioctet => value * T::from_f64(1.1920928955078125e-7),
+            InformationUnit::Gibioctet => value * T::from_f64(1.1641532182693481e-10),
+            InformationUnit::Tebioctet => value * T::from_f64(1.1368683772161603e-13),
+            InformationUnit::Pebioctet => value * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Exbioctet => value * T::from_f64(1.0842021724855044e-19),
+            InformationUnit::Bit => value,
+            InformationUnit::Kilobit => value / T::from_f64(1000.0),
+            InformationUnit::Megabit => value / T::from_f64(1000000.0),
+            InformationUnit::Gigabit => value / T::from_f64(1e9),
+            InformationUnit::Terabit => value / T::from_f64(1e12),
+            InformationUnit::Petabit => value / T::from_f64(1e15),
+            InformationUnit::Exabit => value / T::from_f64(1e18),
+            InformationUnit::Kibibit => value * T::from_f64(0.0009765625),
+            InformationUnit::Mebibit => value * T::from_f64(9.5367431640625e-7),
+            InformationUnit::Gibibit => value * T::from_f64(9.313225746154785e-10),
+            InformationUnit::Tebibit => value * T::from_f64(9.094947017729282e-13),
+            InformationUnit::Pebibit => value * T::from_f64(8.881784197001252e-16),
+            InformationUnit::Exbibit => value * T::from_f64(8.673617379884035e-19),
+        }
+    }
+}
+
+impl<T: Float> Information<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`b`, `kb`, `Mb`, `Gb`, `Tb`, `Pb`, `Eb`).
     /// Zero, NaN and infinities are shown in the base unit.

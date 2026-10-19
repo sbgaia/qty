@@ -279,15 +279,12 @@ impl core::str::FromStr for MolarMassUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MolarMass<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
     #[inline]
-    pub fn new(value: T, unit: MolarMassUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MolarMassUnit::GramPerMole => value / T::from_f64(1000.0),
             MolarMassUnit::NanogramPerMole => value / T::from_f64(1e12),
             MolarMassUnit::MicrogramPerMole => value / T::from_f64(1e9),
@@ -302,30 +299,31 @@ impl<T: Float> MolarMass<T> {
             MolarMassUnit::KilopoundPerMole => value * T::from_f64(453.59237),
             MolarMassUnit::MegapoundPerMole => value * T::from_f64(453592.37),
             MolarMassUnit::PoundPerPoundMole => value / T::from_f64(1000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MolarMassUnit) -> T {
-        match unit {
-            MolarMassUnit::GramPerMole => self.0 * T::from_f64(1000.0),
-            MolarMassUnit::NanogramPerMole => self.0 * T::from_f64(1e12),
-            MolarMassUnit::MicrogramPerMole => self.0 * T::from_f64(1e9),
-            MolarMassUnit::MilligramPerMole => self.0 * T::from_f64(1000000.0),
-            MolarMassUnit::CentigramPerMole => self.0 * T::from_f64(100000.0),
-            MolarMassUnit::DecigramPerMole => self.0 * T::from_f64(10000.0),
-            MolarMassUnit::DecagramPerMole => self.0 * T::from_f64(100.0),
-            MolarMassUnit::HectogramPerMole => self.0 * T::from_f64(10.0),
-            MolarMassUnit::KilogramPerMole => self.0,
-            MolarMassUnit::KilogramPerKilomole => self.0 * T::from_f64(1000.0),
-            MolarMassUnit::PoundPerMole => self.0 / T::from_f64(0.45359237),
-            MolarMassUnit::KilopoundPerMole => self.0 / T::from_f64(453.59237),
-            MolarMassUnit::MegapoundPerMole => self.0 / T::from_f64(453592.37),
-            MolarMassUnit::PoundPerPoundMole => self.0 * T::from_f64(1000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MolarMassUnit::GramPerMole => value * T::from_f64(1000.0),
+            MolarMassUnit::NanogramPerMole => value * T::from_f64(1e12),
+            MolarMassUnit::MicrogramPerMole => value * T::from_f64(1e9),
+            MolarMassUnit::MilligramPerMole => value * T::from_f64(1000000.0),
+            MolarMassUnit::CentigramPerMole => value * T::from_f64(100000.0),
+            MolarMassUnit::DecigramPerMole => value * T::from_f64(10000.0),
+            MolarMassUnit::DecagramPerMole => value * T::from_f64(100.0),
+            MolarMassUnit::HectogramPerMole => value * T::from_f64(10.0),
+            MolarMassUnit::KilogramPerMole => value,
+            MolarMassUnit::KilogramPerKilomole => value * T::from_f64(1000.0),
+            MolarMassUnit::PoundPerMole => value / T::from_f64(0.45359237),
+            MolarMassUnit::KilopoundPerMole => value / T::from_f64(453.59237),
+            MolarMassUnit::MegapoundPerMole => value / T::from_f64(453592.37),
+            MolarMassUnit::PoundPerPoundMole => value * T::from_f64(1000.0),
+        }
+    }
+}
+
+impl<T: Float> MolarMass<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`ng/mol`, `µg/mol`, `mg/mol`, `g/mol`, `kg/mol`).
     /// Zero, NaN and infinities are shown in the base unit.

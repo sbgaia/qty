@@ -296,15 +296,12 @@ impl core::str::FromStr for AngleUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Angle<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Angle<T>> for AngleUnit {
     #[inline]
-    pub fn new(value: T, unit: AngleUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             AngleUnit::Radian => value,
             AngleUnit::Nanoradian => value / T::from_f64(1e9),
             AngleUnit::Microradian => value / T::from_f64(1000000.0),
@@ -320,31 +317,32 @@ impl<T: Float> Angle<T> {
             AngleUnit::Gradian => value * T::from_f64(0.015707963267948967),
             AngleUnit::NatoMil => value * T::from_f64(0.0009817477042468104),
             AngleUnit::Revolution => value * T::from_f64(6.283185307179586),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: AngleUnit) -> T {
-        match unit {
-            AngleUnit::Radian => self.0,
-            AngleUnit::Nanoradian => self.0 * T::from_f64(1e9),
-            AngleUnit::Microradian => self.0 * T::from_f64(1000000.0),
-            AngleUnit::Milliradian => self.0 * T::from_f64(1000.0),
-            AngleUnit::Centiradian => self.0 * T::from_f64(100.0),
-            AngleUnit::Deciradian => self.0 * T::from_f64(10.0),
-            AngleUnit::Degree => self.0 / T::from_f64(0.017453292519943295),
-            AngleUnit::Nanodegree => self.0 / T::from_f64(1.7453292519943295e-11),
-            AngleUnit::Microdegree => self.0 / T::from_f64(1.7453292519943295e-8),
-            AngleUnit::Millidegree => self.0 / T::from_f64(1.7453292519943296e-5),
-            AngleUnit::Arcminute => self.0 / T::from_f64(0.0002908882086657216),
-            AngleUnit::Arcsecond => self.0 / T::from_f64(4.84813681109536e-6),
-            AngleUnit::Gradian => self.0 / T::from_f64(0.015707963267948967),
-            AngleUnit::NatoMil => self.0 / T::from_f64(0.0009817477042468104),
-            AngleUnit::Revolution => self.0 / T::from_f64(6.283185307179586),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            AngleUnit::Radian => value,
+            AngleUnit::Nanoradian => value * T::from_f64(1e9),
+            AngleUnit::Microradian => value * T::from_f64(1000000.0),
+            AngleUnit::Milliradian => value * T::from_f64(1000.0),
+            AngleUnit::Centiradian => value * T::from_f64(100.0),
+            AngleUnit::Deciradian => value * T::from_f64(10.0),
+            AngleUnit::Degree => value / T::from_f64(0.017453292519943295),
+            AngleUnit::Nanodegree => value / T::from_f64(1.7453292519943295e-11),
+            AngleUnit::Microdegree => value / T::from_f64(1.7453292519943295e-8),
+            AngleUnit::Millidegree => value / T::from_f64(1.7453292519943296e-5),
+            AngleUnit::Arcminute => value / T::from_f64(0.0002908882086657216),
+            AngleUnit::Arcsecond => value / T::from_f64(4.84813681109536e-6),
+            AngleUnit::Gradian => value / T::from_f64(0.015707963267948967),
+            AngleUnit::NatoMil => value / T::from_f64(0.0009817477042468104),
+            AngleUnit::Revolution => value / T::from_f64(6.283185307179586),
+        }
+    }
+}
+
+impl<T: Float> Angle<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nrad`, `µrad`, `mrad`, `rad`).
     /// Zero, NaN and infinities are shown in the base unit.

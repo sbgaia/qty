@@ -319,15 +319,12 @@ impl core::str::FromStr for TemperatureChangeRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> TemperatureChangeRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRateUnit {
     #[inline]
-    pub fn new(value: T, unit: TemperatureChangeRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
             TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value / T::from_f64(1e9),
             TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
@@ -349,37 +346,38 @@ impl<T: Float> TemperatureChangeRate<T> {
             TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / T::from_f64(3600.0),
             TemperatureChangeRateUnit::DegreeKelvinPerHour => value / T::from_f64(3600.0),
             TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value / T::from_f64(6480.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: TemperatureChangeRateUnit) -> T {
-        match unit {
-            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => self.0,
-            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => self.0 * T::from_f64(1e9),
-            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
-                self.0 * T::from_f64(1000000.0)
-            }
-            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => self.0 * T::from_f64(1000.0),
-            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => self.0 * T::from_f64(100.0),
-            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => self.0 * T::from_f64(10.0),
-            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => self.0 / T::from_f64(10.0),
-            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => self.0 / T::from_f64(100.0),
-            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => self.0 / T::from_f64(1000.0),
-            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => self.0 * T::from_f64(60.0),
-            TemperatureChangeRateUnit::DegreeKelvinPerMinute => self.0 * T::from_f64(60.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => self.0 * T::from_f64(108.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
-                self.0 / T::from_f64(0.5555555555555556)
-            }
-            TemperatureChangeRateUnit::DegreeKelvinPerSecond => self.0,
-            TemperatureChangeRateUnit::DegreeCelsiusPerHour => self.0 * T::from_f64(3600.0),
-            TemperatureChangeRateUnit::DegreeKelvinPerHour => self.0 * T::from_f64(3600.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => self.0 * T::from_f64(6480.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            TemperatureChangeRateUnit::DegreeCelsiusPerSecond => value,
+            TemperatureChangeRateUnit::NanodegreeCelsiusPerSecond => value * T::from_f64(1e9),
+            TemperatureChangeRateUnit::MicrodegreeCelsiusPerSecond => {
+                value * T::from_f64(1000000.0)
+            }
+            TemperatureChangeRateUnit::MillidegreeCelsiusPerSecond => value * T::from_f64(1000.0),
+            TemperatureChangeRateUnit::CentidegreeCelsiusPerSecond => value * T::from_f64(100.0),
+            TemperatureChangeRateUnit::DecidegreeCelsiusPerSecond => value * T::from_f64(10.0),
+            TemperatureChangeRateUnit::DecadegreeCelsiusPerSecond => value / T::from_f64(10.0),
+            TemperatureChangeRateUnit::HectodegreeCelsiusPerSecond => value / T::from_f64(100.0),
+            TemperatureChangeRateUnit::KilodegreeCelsiusPerSecond => value / T::from_f64(1000.0),
+            TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value * T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerMinute => value * T::from_f64(60.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value * T::from_f64(108.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
+                value / T::from_f64(0.5555555555555556)
+            }
+            TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
+            TemperatureChangeRateUnit::DegreeCelsiusPerHour => value * T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeKelvinPerHour => value * T::from_f64(3600.0),
+            TemperatureChangeRateUnit::DegreeFahrenheitPerHour => value * T::from_f64(6480.0),
+        }
+    }
+}
+
+impl<T: Float> TemperatureChangeRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`n°C/s`, `µ°C/s`, `m°C/s`, `°C/s`, `k°C/s`).
     /// Zero, NaN and infinities are shown in the base unit.

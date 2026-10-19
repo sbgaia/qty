@@ -137,15 +137,12 @@ impl core::str::FromStr for ElectricSurfaceChargeDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricSurfaceChargeDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricSurfaceChargeDensity<T>> for ElectricSurfaceChargeDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricSurfaceChargeDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => value,
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => {
                 value * T::from_f64(10000.0)
@@ -153,23 +150,24 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
                 value * T::from_f64(1550.0031000062)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricSurfaceChargeDensityUnit) -> T {
-        match unit {
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => self.0,
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => {
-                self.0 / T::from_f64(10000.0)
-            }
-            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
-                self.0 / T::from_f64(1550.0031000062)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter => value,
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareCentimeter => {
+                value / T::from_f64(10000.0)
+            }
+            ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
+                value / T::from_f64(1550.0031000062)
+            }
+        }
+    }
+}
+
+impl<T: Float> ElectricSurfaceChargeDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`C/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

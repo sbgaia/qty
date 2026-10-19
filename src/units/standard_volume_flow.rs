@@ -215,15 +215,12 @@ impl core::str::FromStr for StandardVolumeFlowUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> StandardVolumeFlow<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
     #[inline]
-    pub fn new(value: T, unit: StandardVolumeFlowUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
             StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value / T::from_f64(60.0),
             StandardVolumeFlowUnit::StandardCubicMeterPerHour => value / T::from_f64(3600.0),
@@ -237,29 +234,30 @@ impl<T: Float> StandardVolumeFlow<T> {
                 value * T::from_f64(0.0004719474432)
             }
             StandardVolumeFlowUnit::StandardCubicFootPerHour => value * T::from_f64(7.86579072e-6),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: StandardVolumeFlowUnit) -> T {
-        match unit {
-            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => self.0,
-            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => self.0 * T::from_f64(60.0),
-            StandardVolumeFlowUnit::StandardCubicMeterPerHour => self.0 * T::from_f64(3600.0),
-            StandardVolumeFlowUnit::StandardCubicMeterPerDay => self.0 * T::from_f64(86400.0),
-            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => self.0 * T::from_f64(6e7),
-            StandardVolumeFlowUnit::StandardLiterPerMinute => self.0 * T::from_f64(60000.0),
-            StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
-                self.0 / T::from_f64(0.028316846592)
-            }
-            StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
-                self.0 / T::from_f64(0.0004719474432)
-            }
-            StandardVolumeFlowUnit::StandardCubicFootPerHour => self.0 / T::from_f64(7.86579072e-6),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            StandardVolumeFlowUnit::StandardCubicMeterPerSecond => value,
+            StandardVolumeFlowUnit::StandardCubicMeterPerMinute => value * T::from_f64(60.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerHour => value * T::from_f64(3600.0),
+            StandardVolumeFlowUnit::StandardCubicMeterPerDay => value * T::from_f64(86400.0),
+            StandardVolumeFlowUnit::StandardCubicCentimeterPerMinute => value * T::from_f64(6e7),
+            StandardVolumeFlowUnit::StandardLiterPerMinute => value * T::from_f64(60000.0),
+            StandardVolumeFlowUnit::StandardCubicFootPerSecond => {
+                value / T::from_f64(0.028316846592)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerMinute => {
+                value / T::from_f64(0.0004719474432)
+            }
+            StandardVolumeFlowUnit::StandardCubicFootPerHour => value / T::from_f64(7.86579072e-6),
+        }
+    }
+}
+
+impl<T: Float> StandardVolumeFlow<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Sm³/s`).
     /// Zero, NaN and infinities are shown in the base unit.

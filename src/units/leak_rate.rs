@@ -146,33 +146,31 @@ impl core::str::FromStr for LeakRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> LeakRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
     #[inline]
-    pub fn new(value: T, unit: LeakRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LeakRateUnit::PascalCubicMeterPerSecond => value,
             LeakRateUnit::MillibarLiterPerSecond => value / T::from_f64(10.0),
             LeakRateUnit::TorrLiterPerSecond => value / T::from_f64(7.5),
             LeakRateUnit::AtmCubicCentimeterPerSecond => value * T::from_f64(0.101325),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LeakRateUnit) -> T {
-        match unit {
-            LeakRateUnit::PascalCubicMeterPerSecond => self.0,
-            LeakRateUnit::MillibarLiterPerSecond => self.0 * T::from_f64(10.0),
-            LeakRateUnit::TorrLiterPerSecond => self.0 * T::from_f64(7.5),
-            LeakRateUnit::AtmCubicCentimeterPerSecond => self.0 / T::from_f64(0.101325),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LeakRateUnit::PascalCubicMeterPerSecond => value,
+            LeakRateUnit::MillibarLiterPerSecond => value * T::from_f64(10.0),
+            LeakRateUnit::TorrLiterPerSecond => value * T::from_f64(7.5),
+            LeakRateUnit::AtmCubicCentimeterPerSecond => value / T::from_f64(0.101325),
+        }
+    }
+}
+
+impl<T: Float> LeakRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Pa·m³/s`).
     /// Zero, NaN and infinities are shown in the base unit.

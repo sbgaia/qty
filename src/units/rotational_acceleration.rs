@@ -151,15 +151,12 @@ impl core::str::FromStr for RotationalAccelerationUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RotationalAcceleration<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerationUnit {
     #[inline]
-    pub fn new(value: T, unit: RotationalAccelerationUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RotationalAccelerationUnit::RadianPerSecondSquared => value,
             RotationalAccelerationUnit::DegreePerSecondSquared => {
                 value * T::from_f64(0.017453292519943295)
@@ -170,26 +167,27 @@ impl<T: Float> RotationalAcceleration<T> {
             RotationalAccelerationUnit::RevolutionPerSecondSquared => {
                 value * T::from_f64(6.283185307179586)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RotationalAccelerationUnit) -> T {
-        match unit {
-            RotationalAccelerationUnit::RadianPerSecondSquared => self.0,
-            RotationalAccelerationUnit::DegreePerSecondSquared => {
-                self.0 / T::from_f64(0.017453292519943295)
-            }
-            RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
-                self.0 / T::from_f64(0.10471975511965978)
-            }
-            RotationalAccelerationUnit::RevolutionPerSecondSquared => {
-                self.0 / T::from_f64(6.283185307179586)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RotationalAccelerationUnit::RadianPerSecondSquared => value,
+            RotationalAccelerationUnit::DegreePerSecondSquared => {
+                value / T::from_f64(0.017453292519943295)
+            }
+            RotationalAccelerationUnit::RevolutionPerMinutePerSecond => {
+                value / T::from_f64(0.10471975511965978)
+            }
+            RotationalAccelerationUnit::RevolutionPerSecondSquared => {
+                value / T::from_f64(6.283185307179586)
+            }
+        }
+    }
+}
+
+impl<T: Float> RotationalAcceleration<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`rad/s²`).
     /// Zero, NaN and infinities are shown in the base unit.

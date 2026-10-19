@@ -568,15 +568,12 @@ impl core::str::FromStr for RotationalStiffnessUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RotationalStiffness<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit {
     #[inline]
-    pub fn new(value: T, unit: RotationalStiffnessUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RotationalStiffnessUnit::NewtonMeterPerRadian => value,
             RotationalStiffnessUnit::KilonewtonMeterPerRadian => value * T::from_f64(1000.0),
             RotationalStiffnessUnit::MeganewtonMeterPerRadian => value * T::from_f64(1000000.0),
@@ -657,98 +654,97 @@ impl<T: Float> RotationalStiffness<T> {
             RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
                 value * T::from_f64(1355.8179483314004)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RotationalStiffnessUnit) -> T {
-        match unit {
-            RotationalStiffnessUnit::NewtonMeterPerRadian => self.0,
-            RotationalStiffnessUnit::KilonewtonMeterPerRadian => self.0 / T::from_f64(1000.0),
-            RotationalStiffnessUnit::MeganewtonMeterPerRadian => self.0 / T::from_f64(1000000.0),
-            RotationalStiffnessUnit::PoundForceFootPerDegrees => {
-                self.0 / T::from_f64(77.68264622747556)
-            }
-            RotationalStiffnessUnit::KilopoundForceFootPerDegrees => {
-                self.0 / T::from_f64(77682.64622747556)
-            }
-            RotationalStiffnessUnit::NewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(0.05729577951308232)
-            }
-            RotationalStiffnessUnit::NanonewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(5.729577951308232e-11)
-            }
-            RotationalStiffnessUnit::MicronewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(5.729577951308232e-8)
-            }
-            RotationalStiffnessUnit::MillinewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(5.7295779513082324e-5)
-            }
-            RotationalStiffnessUnit::CentinewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(0.0005729577951308232)
-            }
-            RotationalStiffnessUnit::DecinewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(0.005729577951308232)
-            }
-            RotationalStiffnessUnit::DecanewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(0.5729577951308232)
-            }
-            RotationalStiffnessUnit::KilonewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(57.29577951308232)
-            }
-            RotationalStiffnessUnit::MeganewtonMillimeterPerDegree => {
-                self.0 / T::from_f64(57295.77951308232)
-            }
-            RotationalStiffnessUnit::NewtonMeterPerDegree => {
-                self.0 / T::from_f64(57.29577951308232)
-            }
-            RotationalStiffnessUnit::NanonewtonMeterPerDegree => {
-                self.0 / T::from_f64(5.729577951308232e-8)
-            }
-            RotationalStiffnessUnit::MicronewtonMeterPerDegree => {
-                self.0 / T::from_f64(5.7295779513082324e-5)
-            }
-            RotationalStiffnessUnit::MillinewtonMeterPerDegree => {
-                self.0 / T::from_f64(0.05729577951308232)
-            }
-            RotationalStiffnessUnit::CentinewtonMeterPerDegree => {
-                self.0 / T::from_f64(0.5729577951308232)
-            }
-            RotationalStiffnessUnit::DecinewtonMeterPerDegree => {
-                self.0 / T::from_f64(5.729577951308232)
-            }
-            RotationalStiffnessUnit::DecanewtonMeterPerDegree => {
-                self.0 / T::from_f64(572.9577951308232)
-            }
-            RotationalStiffnessUnit::KilonewtonMeterPerDegree => {
-                self.0 / T::from_f64(57295.77951308232)
-            }
-            RotationalStiffnessUnit::MeganewtonMeterPerDegree => {
-                self.0 / T::from_f64(5.729577951308232e7)
-            }
-            RotationalStiffnessUnit::NewtonMillimeterPerRadian => self.0 * T::from_f64(1000.0),
-            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => self.0 * T::from_f64(1e12),
-            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => self.0 * T::from_f64(1e9),
-            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => {
-                self.0 * T::from_f64(1000000.0)
-            }
-            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => {
-                self.0 * T::from_f64(100000.0)
-            }
-            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => self.0 * T::from_f64(10000.0),
-            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => self.0 * T::from_f64(100.0),
-            RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => self.0,
-            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => self.0 / T::from_f64(1000.0),
-            RotationalStiffnessUnit::PoundForceFeetPerRadian => {
-                self.0 / T::from_f64(1.3558179483314003)
-            }
-            RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
-                self.0 / T::from_f64(1355.8179483314004)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RotationalStiffnessUnit::NewtonMeterPerRadian => value,
+            RotationalStiffnessUnit::KilonewtonMeterPerRadian => value / T::from_f64(1000.0),
+            RotationalStiffnessUnit::MeganewtonMeterPerRadian => value / T::from_f64(1000000.0),
+            RotationalStiffnessUnit::PoundForceFootPerDegrees => {
+                value / T::from_f64(77.68264622747556)
+            }
+            RotationalStiffnessUnit::KilopoundForceFootPerDegrees => {
+                value / T::from_f64(77682.64622747556)
+            }
+            RotationalStiffnessUnit::NewtonMillimeterPerDegree => {
+                value / T::from_f64(0.05729577951308232)
+            }
+            RotationalStiffnessUnit::NanonewtonMillimeterPerDegree => {
+                value / T::from_f64(5.729577951308232e-11)
+            }
+            RotationalStiffnessUnit::MicronewtonMillimeterPerDegree => {
+                value / T::from_f64(5.729577951308232e-8)
+            }
+            RotationalStiffnessUnit::MillinewtonMillimeterPerDegree => {
+                value / T::from_f64(5.7295779513082324e-5)
+            }
+            RotationalStiffnessUnit::CentinewtonMillimeterPerDegree => {
+                value / T::from_f64(0.0005729577951308232)
+            }
+            RotationalStiffnessUnit::DecinewtonMillimeterPerDegree => {
+                value / T::from_f64(0.005729577951308232)
+            }
+            RotationalStiffnessUnit::DecanewtonMillimeterPerDegree => {
+                value / T::from_f64(0.5729577951308232)
+            }
+            RotationalStiffnessUnit::KilonewtonMillimeterPerDegree => {
+                value / T::from_f64(57.29577951308232)
+            }
+            RotationalStiffnessUnit::MeganewtonMillimeterPerDegree => {
+                value / T::from_f64(57295.77951308232)
+            }
+            RotationalStiffnessUnit::NewtonMeterPerDegree => value / T::from_f64(57.29577951308232),
+            RotationalStiffnessUnit::NanonewtonMeterPerDegree => {
+                value / T::from_f64(5.729577951308232e-8)
+            }
+            RotationalStiffnessUnit::MicronewtonMeterPerDegree => {
+                value / T::from_f64(5.7295779513082324e-5)
+            }
+            RotationalStiffnessUnit::MillinewtonMeterPerDegree => {
+                value / T::from_f64(0.05729577951308232)
+            }
+            RotationalStiffnessUnit::CentinewtonMeterPerDegree => {
+                value / T::from_f64(0.5729577951308232)
+            }
+            RotationalStiffnessUnit::DecinewtonMeterPerDegree => {
+                value / T::from_f64(5.729577951308232)
+            }
+            RotationalStiffnessUnit::DecanewtonMeterPerDegree => {
+                value / T::from_f64(572.9577951308232)
+            }
+            RotationalStiffnessUnit::KilonewtonMeterPerDegree => {
+                value / T::from_f64(57295.77951308232)
+            }
+            RotationalStiffnessUnit::MeganewtonMeterPerDegree => {
+                value / T::from_f64(5.729577951308232e7)
+            }
+            RotationalStiffnessUnit::NewtonMillimeterPerRadian => value * T::from_f64(1000.0),
+            RotationalStiffnessUnit::NanonewtonMillimeterPerRadian => value * T::from_f64(1e12),
+            RotationalStiffnessUnit::MicronewtonMillimeterPerRadian => value * T::from_f64(1e9),
+            RotationalStiffnessUnit::MillinewtonMillimeterPerRadian => {
+                value * T::from_f64(1000000.0)
+            }
+            RotationalStiffnessUnit::CentinewtonMillimeterPerRadian => {
+                value * T::from_f64(100000.0)
+            }
+            RotationalStiffnessUnit::DecinewtonMillimeterPerRadian => value * T::from_f64(10000.0),
+            RotationalStiffnessUnit::DecanewtonMillimeterPerRadian => value * T::from_f64(100.0),
+            RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
+            RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value / T::from_f64(1000.0),
+            RotationalStiffnessUnit::PoundForceFeetPerRadian => {
+                value / T::from_f64(1.3558179483314003)
+            }
+            RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
+                value / T::from_f64(1355.8179483314004)
+            }
+        }
+    }
+}
+
+impl<T: Float> RotationalStiffness<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`N·m/rad`, `kN·m/rad`, `MN·m/rad`).
     /// Zero, NaN and infinities are shown in the base unit.

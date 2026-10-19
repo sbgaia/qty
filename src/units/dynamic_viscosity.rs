@@ -227,15 +227,12 @@ impl core::str::FromStr for DynamicViscosityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> DynamicViscosity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
     #[inline]
-    pub fn new(value: T, unit: DynamicViscosityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             DynamicViscosityUnit::NewtonSecondPerMeterSquared => value,
             DynamicViscosityUnit::PascalSecond => value,
             DynamicViscosityUnit::MillipascalSecond => value / T::from_f64(1000.0),
@@ -250,30 +247,31 @@ impl<T: Float> DynamicViscosity<T> {
                 value * T::from_f64(47.880258980335846)
             }
             DynamicViscosityUnit::PoundPerFootSecond => value * T::from_f64(1.4881639435695537),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: DynamicViscosityUnit) -> T {
-        match unit {
-            DynamicViscosityUnit::NewtonSecondPerMeterSquared => self.0,
-            DynamicViscosityUnit::PascalSecond => self.0,
-            DynamicViscosityUnit::MillipascalSecond => self.0 * T::from_f64(1000.0),
-            DynamicViscosityUnit::MicropascalSecond => self.0 * T::from_f64(1000000.0),
-            DynamicViscosityUnit::Poise => self.0 * T::from_f64(10.0),
-            DynamicViscosityUnit::Centipoise => self.0 * T::from_f64(1000.0),
-            DynamicViscosityUnit::Reyn => self.0 / T::from_f64(6894.757293168362),
-            DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
-                self.0 / T::from_f64(6894.757293168362)
-            }
-            DynamicViscosityUnit::PoundForceSecondPerSquareFoot => {
-                self.0 / T::from_f64(47.880258980335846)
-            }
-            DynamicViscosityUnit::PoundPerFootSecond => self.0 / T::from_f64(1.4881639435695537),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            DynamicViscosityUnit::NewtonSecondPerMeterSquared => value,
+            DynamicViscosityUnit::PascalSecond => value,
+            DynamicViscosityUnit::MillipascalSecond => value * T::from_f64(1000.0),
+            DynamicViscosityUnit::MicropascalSecond => value * T::from_f64(1000000.0),
+            DynamicViscosityUnit::Poise => value * T::from_f64(10.0),
+            DynamicViscosityUnit::Centipoise => value * T::from_f64(1000.0),
+            DynamicViscosityUnit::Reyn => value / T::from_f64(6894.757293168362),
+            DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
+                value / T::from_f64(6894.757293168362)
+            }
+            DynamicViscosityUnit::PoundForceSecondPerSquareFoot => {
+                value / T::from_f64(47.880258980335846)
+            }
+            DynamicViscosityUnit::PoundPerFootSecond => value / T::from_f64(1.4881639435695537),
+        }
+    }
+}
+
+impl<T: Float> DynamicViscosity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`Ns/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

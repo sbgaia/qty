@@ -258,15 +258,12 @@ impl core::str::FromStr for MassFluxUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> MassFlux<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
     #[inline]
-    pub fn new(value: T, unit: MassFluxUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MassFluxUnit::GramPerSecondPerSquareMeter => value / T::from_f64(1000.0),
             MassFluxUnit::KilogramPerSecondPerSquareMeter => value,
             MassFluxUnit::GramPerSecondPerSquareCentimeter => value * T::from_f64(10.0),
@@ -283,34 +280,33 @@ impl<T: Float> MassFlux<T> {
             MassFluxUnit::KilogramPerHourPerSquareMillimeter => {
                 value * T::from_f64(277.77777777777777)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MassFluxUnit) -> T {
-        match unit {
-            MassFluxUnit::GramPerSecondPerSquareMeter => self.0 * T::from_f64(1000.0),
-            MassFluxUnit::KilogramPerSecondPerSquareMeter => self.0,
-            MassFluxUnit::GramPerSecondPerSquareCentimeter => self.0 / T::from_f64(10.0),
-            MassFluxUnit::KilogramPerSecondPerSquareCentimeter => self.0 / T::from_f64(10000.0),
-            MassFluxUnit::GramPerSecondPerSquareMillimeter => self.0 / T::from_f64(1000.0),
-            MassFluxUnit::KilogramPerSecondPerSquareMillimeter => self.0 / T::from_f64(1000000.0),
-            MassFluxUnit::GramPerHourPerSquareMeter => self.0 * T::from_f64(3600000.0),
-            MassFluxUnit::KilogramPerHourPerSquareMeter => self.0 * T::from_f64(3600.0),
-            MassFluxUnit::GramPerHourPerSquareCentimeter => self.0 * T::from_f64(360.0),
-            MassFluxUnit::KilogramPerHourPerSquareCentimeter => {
-                self.0 / T::from_f64(2.7777777777777777)
-            }
-            MassFluxUnit::GramPerHourPerSquareMillimeter => {
-                self.0 / T::from_f64(0.2777777777777778)
-            }
-            MassFluxUnit::KilogramPerHourPerSquareMillimeter => {
-                self.0 / T::from_f64(277.77777777777777)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MassFluxUnit::GramPerSecondPerSquareMeter => value * T::from_f64(1000.0),
+            MassFluxUnit::KilogramPerSecondPerSquareMeter => value,
+            MassFluxUnit::GramPerSecondPerSquareCentimeter => value / T::from_f64(10.0),
+            MassFluxUnit::KilogramPerSecondPerSquareCentimeter => value / T::from_f64(10000.0),
+            MassFluxUnit::GramPerSecondPerSquareMillimeter => value / T::from_f64(1000.0),
+            MassFluxUnit::KilogramPerSecondPerSquareMillimeter => value / T::from_f64(1000000.0),
+            MassFluxUnit::GramPerHourPerSquareMeter => value * T::from_f64(3600000.0),
+            MassFluxUnit::KilogramPerHourPerSquareMeter => value * T::from_f64(3600.0),
+            MassFluxUnit::GramPerHourPerSquareCentimeter => value * T::from_f64(360.0),
+            MassFluxUnit::KilogramPerHourPerSquareCentimeter => {
+                value / T::from_f64(2.7777777777777777)
+            }
+            MassFluxUnit::GramPerHourPerSquareMillimeter => value / T::from_f64(0.2777777777777778),
+            MassFluxUnit::KilogramPerHourPerSquareMillimeter => {
+                value / T::from_f64(277.77777777777777)
+            }
+        }
+    }
+}
+
+impl<T: Float> MassFlux<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`g·s⁻¹·m⁻²`, `kg·s⁻¹·m⁻²`).
     /// Zero, NaN and infinities are shown in the base unit.

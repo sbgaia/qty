@@ -212,15 +212,12 @@ impl core::str::FromStr for VolumePerLengthUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> VolumePerLength<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
     #[inline]
-    pub fn new(value: T, unit: VolumePerLengthUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             VolumePerLengthUnit::CubicMeterPerMeter => value,
             VolumePerLengthUnit::LiterPerMeter => value / T::from_f64(1000.0),
             VolumePerLengthUnit::LiterPerKilometer => value / T::from_f64(1000000.0),
@@ -232,27 +229,28 @@ impl<T: Float> VolumePerLength<T> {
             VolumePerLengthUnit::ImperialGallonPerMile => {
                 value * T::from_f64(2.8248093633182216e-6)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: VolumePerLengthUnit) -> T {
-        match unit {
-            VolumePerLengthUnit::CubicMeterPerMeter => self.0,
-            VolumePerLengthUnit::LiterPerMeter => self.0 * T::from_f64(1000.0),
-            VolumePerLengthUnit::LiterPerKilometer => self.0 * T::from_f64(1000000.0),
-            VolumePerLengthUnit::LiterPerMillimeter => self.0,
-            VolumePerLengthUnit::OilBarrelPerFoot => self.0 / T::from_f64(0.52161186),
-            VolumePerLengthUnit::CubicYardPerFoot => self.0 / T::from_f64(2.50838208),
-            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => self.0 / T::from_f64(2.50837706323584),
-            VolumePerLengthUnit::UsGallonPerMile => self.0 / T::from_f64(2.3521458333333333e-6),
-            VolumePerLengthUnit::ImperialGallonPerMile => {
-                self.0 / T::from_f64(2.8248093633182216e-6)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            VolumePerLengthUnit::CubicMeterPerMeter => value,
+            VolumePerLengthUnit::LiterPerMeter => value * T::from_f64(1000.0),
+            VolumePerLengthUnit::LiterPerKilometer => value * T::from_f64(1000000.0),
+            VolumePerLengthUnit::LiterPerMillimeter => value,
+            VolumePerLengthUnit::OilBarrelPerFoot => value / T::from_f64(0.52161186),
+            VolumePerLengthUnit::CubicYardPerFoot => value / T::from_f64(2.50838208),
+            VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value / T::from_f64(2.50837706323584),
+            VolumePerLengthUnit::UsGallonPerMile => value / T::from_f64(2.3521458333333333e-6),
+            VolumePerLengthUnit::ImperialGallonPerMile => {
+                value / T::from_f64(2.8248093633182216e-6)
+            }
+        }
+    }
+}
+
+impl<T: Float> VolumePerLength<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m³/m`).
     /// Zero, NaN and infinities are shown in the base unit.

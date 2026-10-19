@@ -172,37 +172,35 @@ impl core::str::FromStr for ElectricPotentialUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ElectricPotential<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
     #[inline]
-    pub fn new(value: T, unit: ElectricPotentialUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ElectricPotentialUnit::Volt => value,
             ElectricPotentialUnit::Nanovolt => value / T::from_f64(1e9),
             ElectricPotentialUnit::Microvolt => value / T::from_f64(1000000.0),
             ElectricPotentialUnit::Millivolt => value / T::from_f64(1000.0),
             ElectricPotentialUnit::Kilovolt => value * T::from_f64(1000.0),
             ElectricPotentialUnit::Megavolt => value * T::from_f64(1000000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ElectricPotentialUnit) -> T {
-        match unit {
-            ElectricPotentialUnit::Volt => self.0,
-            ElectricPotentialUnit::Nanovolt => self.0 * T::from_f64(1e9),
-            ElectricPotentialUnit::Microvolt => self.0 * T::from_f64(1000000.0),
-            ElectricPotentialUnit::Millivolt => self.0 * T::from_f64(1000.0),
-            ElectricPotentialUnit::Kilovolt => self.0 / T::from_f64(1000.0),
-            ElectricPotentialUnit::Megavolt => self.0 / T::from_f64(1000000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ElectricPotentialUnit::Volt => value,
+            ElectricPotentialUnit::Nanovolt => value * T::from_f64(1e9),
+            ElectricPotentialUnit::Microvolt => value * T::from_f64(1000000.0),
+            ElectricPotentialUnit::Millivolt => value * T::from_f64(1000.0),
+            ElectricPotentialUnit::Kilovolt => value / T::from_f64(1000.0),
+            ElectricPotentialUnit::Megavolt => value / T::from_f64(1000000.0),
+        }
+    }
+}
+
+impl<T: Float> ElectricPotential<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nV`, `µV`, `mV`, `V`, `kV`, `MV`).
     /// Zero, NaN and infinities are shown in the base unit.

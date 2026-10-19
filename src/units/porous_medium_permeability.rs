@@ -162,35 +162,33 @@ impl core::str::FromStr for PorousMediumPermeabilityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> PorousMediumPermeability<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermeabilityUnit {
     #[inline]
-    pub fn new(value: T, unit: PorousMediumPermeabilityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PorousMediumPermeabilityUnit::Darcy => value * T::from_f64(9.869233e-13),
             PorousMediumPermeabilityUnit::Microdarcy => value * T::from_f64(9.869233e-19),
             PorousMediumPermeabilityUnit::Millidarcy => value * T::from_f64(9.869233e-16),
             PorousMediumPermeabilityUnit::SquareMeter => value,
             PorousMediumPermeabilityUnit::SquareCentimeter => value / T::from_f64(10000.0),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PorousMediumPermeabilityUnit) -> T {
-        match unit {
-            PorousMediumPermeabilityUnit::Darcy => self.0 / T::from_f64(9.869233e-13),
-            PorousMediumPermeabilityUnit::Microdarcy => self.0 / T::from_f64(9.869233e-19),
-            PorousMediumPermeabilityUnit::Millidarcy => self.0 / T::from_f64(9.869233e-16),
-            PorousMediumPermeabilityUnit::SquareMeter => self.0,
-            PorousMediumPermeabilityUnit::SquareCentimeter => self.0 * T::from_f64(10000.0),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PorousMediumPermeabilityUnit::Darcy => value / T::from_f64(9.869233e-13),
+            PorousMediumPermeabilityUnit::Microdarcy => value / T::from_f64(9.869233e-19),
+            PorousMediumPermeabilityUnit::Millidarcy => value / T::from_f64(9.869233e-16),
+            PorousMediumPermeabilityUnit::SquareMeter => value,
+            PorousMediumPermeabilityUnit::SquareCentimeter => value * T::from_f64(10000.0),
+        }
+    }
+}
+
+impl<T: Float> PorousMediumPermeability<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m²`).
     /// Zero, NaN and infinities are shown in the base unit.

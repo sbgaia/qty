@@ -228,15 +228,12 @@ impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> RadiationEquivalentDoseRate<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquivalentDoseRateUnit {
     #[inline]
-    pub fn new(value: T, unit: RadiationEquivalentDoseRateUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             RadiationEquivalentDoseRateUnit::SievertPerHour => value / T::from_f64(3600.0),
             RadiationEquivalentDoseRateUnit::NanosievertPerHour => value / T::from_f64(3.6e12),
             RadiationEquivalentDoseRateUnit::MicrosievertPerHour => value / T::from_f64(3.6e9),
@@ -253,32 +250,33 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
             RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => {
                 value / T::from_f64(3.6e8)
             }
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: RadiationEquivalentDoseRateUnit) -> T {
-        match unit {
-            RadiationEquivalentDoseRateUnit::SievertPerHour => self.0 * T::from_f64(3600.0),
-            RadiationEquivalentDoseRateUnit::NanosievertPerHour => self.0 * T::from_f64(3.6e12),
-            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => self.0 * T::from_f64(3.6e9),
-            RadiationEquivalentDoseRateUnit::MillisievertPerHour => self.0 * T::from_f64(3600000.0),
-            RadiationEquivalentDoseRateUnit::SievertPerSecond => self.0,
-            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => self.0 * T::from_f64(1e9),
-            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => {
-                self.0 * T::from_f64(1000000.0)
-            }
-            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => self.0 * T::from_f64(1000.0),
-            RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour => {
-                self.0 * T::from_f64(360000.0)
-            }
-            RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => {
-                self.0 * T::from_f64(3.6e8)
-            }
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            RadiationEquivalentDoseRateUnit::SievertPerHour => value * T::from_f64(3600.0),
+            RadiationEquivalentDoseRateUnit::NanosievertPerHour => value * T::from_f64(3.6e12),
+            RadiationEquivalentDoseRateUnit::MicrosievertPerHour => value * T::from_f64(3.6e9),
+            RadiationEquivalentDoseRateUnit::MillisievertPerHour => value * T::from_f64(3600000.0),
+            RadiationEquivalentDoseRateUnit::SievertPerSecond => value,
+            RadiationEquivalentDoseRateUnit::NanosievertPerSecond => value * T::from_f64(1e9),
+            RadiationEquivalentDoseRateUnit::MicrosievertPerSecond => {
+                value * T::from_f64(1000000.0)
+            }
+            RadiationEquivalentDoseRateUnit::MillisievertPerSecond => value * T::from_f64(1000.0),
+            RadiationEquivalentDoseRateUnit::RoentgenEquivalentManPerHour => {
+                value * T::from_f64(360000.0)
+            }
+            RadiationEquivalentDoseRateUnit::MilliroentgenEquivalentManPerHour => {
+                value * T::from_f64(3.6e8)
+            }
+        }
+    }
+}
+
+impl<T: Float> RadiationEquivalentDoseRate<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nSv/s`, `µSv/s`, `mSv/s`, `Sv/s`).
     /// Zero, NaN and infinities are shown in the base unit.

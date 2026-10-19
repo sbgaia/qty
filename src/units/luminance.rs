@@ -222,15 +222,12 @@ impl core::str::FromStr for LuminanceUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Luminance<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
     #[inline]
-    pub fn new(value: T, unit: LuminanceUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LuminanceUnit::CandelaPerSquareMeter => value,
             LuminanceUnit::NanocandelaPerSquareMeter => value / T::from_f64(1e9),
             LuminanceUnit::MicrocandelaPerSquareMeter => value / T::from_f64(1000000.0),
@@ -241,26 +238,27 @@ impl<T: Float> Luminance<T> {
             LuminanceUnit::CandelaPerSquareFoot => value * T::from_f64(10.763910416709722),
             LuminanceUnit::CandelaPerSquareInch => value * T::from_f64(1550.0031000062),
             LuminanceUnit::Nit => value,
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LuminanceUnit) -> T {
-        match unit {
-            LuminanceUnit::CandelaPerSquareMeter => self.0,
-            LuminanceUnit::NanocandelaPerSquareMeter => self.0 * T::from_f64(1e9),
-            LuminanceUnit::MicrocandelaPerSquareMeter => self.0 * T::from_f64(1000000.0),
-            LuminanceUnit::MillicandelaPerSquareMeter => self.0 * T::from_f64(1000.0),
-            LuminanceUnit::CenticandelaPerSquareMeter => self.0 * T::from_f64(100.0),
-            LuminanceUnit::DecicandelaPerSquareMeter => self.0 * T::from_f64(10.0),
-            LuminanceUnit::KilocandelaPerSquareMeter => self.0 / T::from_f64(1000.0),
-            LuminanceUnit::CandelaPerSquareFoot => self.0 / T::from_f64(10.763910416709722),
-            LuminanceUnit::CandelaPerSquareInch => self.0 / T::from_f64(1550.0031000062),
-            LuminanceUnit::Nit => self.0,
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LuminanceUnit::CandelaPerSquareMeter => value,
+            LuminanceUnit::NanocandelaPerSquareMeter => value * T::from_f64(1e9),
+            LuminanceUnit::MicrocandelaPerSquareMeter => value * T::from_f64(1000000.0),
+            LuminanceUnit::MillicandelaPerSquareMeter => value * T::from_f64(1000.0),
+            LuminanceUnit::CenticandelaPerSquareMeter => value * T::from_f64(100.0),
+            LuminanceUnit::DecicandelaPerSquareMeter => value * T::from_f64(10.0),
+            LuminanceUnit::KilocandelaPerSquareMeter => value / T::from_f64(1000.0),
+            LuminanceUnit::CandelaPerSquareFoot => value / T::from_f64(10.763910416709722),
+            LuminanceUnit::CandelaPerSquareInch => value / T::from_f64(1550.0031000062),
+            LuminanceUnit::Nit => value,
+        }
+    }
+}
+
+impl<T: Float> Luminance<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`nCd/m²`, `µCd/m²`, `mCd/m²`, `Cd/m²`, `kCd/m²`).
     /// Zero, NaN and infinities are shown in the base unit.

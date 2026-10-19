@@ -460,15 +460,12 @@ impl core::str::FromStr for TorqueUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Torque<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
     #[inline]
-    pub fn new(value: T, unit: TorqueUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             TorqueUnit::NewtonMillimeter => value / T::from_f64(1000.0),
             TorqueUnit::KilonewtonMillimeter => value,
             TorqueUnit::MeganewtonMillimeter => value * T::from_f64(1000.0),
@@ -496,43 +493,44 @@ impl<T: Float> Torque<T> {
             TorqueUnit::TonneForceMillimeter => value * T::from_f64(9.80665),
             TorqueUnit::TonneForceCentimeter => value * T::from_f64(98.0665),
             TorqueUnit::TonneForceMeter => value * T::from_f64(9806.65),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: TorqueUnit) -> T {
-        match unit {
-            TorqueUnit::NewtonMillimeter => self.0 * T::from_f64(1000.0),
-            TorqueUnit::KilonewtonMillimeter => self.0,
-            TorqueUnit::MeganewtonMillimeter => self.0 / T::from_f64(1000.0),
-            TorqueUnit::NewtonCentimeter => self.0 * T::from_f64(100.0),
-            TorqueUnit::KilonewtonCentimeter => self.0 / T::from_f64(10.0),
-            TorqueUnit::MeganewtonCentimeter => self.0 / T::from_f64(10000.0),
-            TorqueUnit::NewtonMeter => self.0,
-            TorqueUnit::KilonewtonMeter => self.0 / T::from_f64(1000.0),
-            TorqueUnit::MeganewtonMeter => self.0 / T::from_f64(1000000.0),
-            TorqueUnit::OunceForceFoot => self.0 / T::from_f64(0.08473862177071252),
-            TorqueUnit::OunceForceInch => self.0 / T::from_f64(0.0070615518142260435),
-            TorqueUnit::PoundalFoot => self.0 / T::from_f64(0.0421401100938048),
-            TorqueUnit::PoundForceInch => self.0 / T::from_f64(0.1129848290276167),
-            TorqueUnit::KilopoundForceInch => self.0 / T::from_f64(112.9848290276167),
-            TorqueUnit::MegapoundForceInch => self.0 / T::from_f64(112984.8290276167),
-            TorqueUnit::PoundForceFoot => self.0 / T::from_f64(1.3558179483314003),
-            TorqueUnit::KilopoundForceFoot => self.0 / T::from_f64(1355.8179483314004),
-            TorqueUnit::MegapoundForceFoot => self.0 / T::from_f64(1355817.9483314003),
-            TorqueUnit::GramForceMillimeter => self.0 / T::from_f64(9.80665e-6),
-            TorqueUnit::GramForceCentimeter => self.0 / T::from_f64(9.80665e-5),
-            TorqueUnit::GramForceMeter => self.0 / T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceMillimeter => self.0 / T::from_f64(0.00980665),
-            TorqueUnit::KilogramForceCentimeter => self.0 / T::from_f64(0.0980665),
-            TorqueUnit::KilogramForceMeter => self.0 / T::from_f64(9.80665),
-            TorqueUnit::TonneForceMillimeter => self.0 / T::from_f64(9.80665),
-            TorqueUnit::TonneForceCentimeter => self.0 / T::from_f64(98.0665),
-            TorqueUnit::TonneForceMeter => self.0 / T::from_f64(9806.65),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            TorqueUnit::NewtonMillimeter => value * T::from_f64(1000.0),
+            TorqueUnit::KilonewtonMillimeter => value,
+            TorqueUnit::MeganewtonMillimeter => value / T::from_f64(1000.0),
+            TorqueUnit::NewtonCentimeter => value * T::from_f64(100.0),
+            TorqueUnit::KilonewtonCentimeter => value / T::from_f64(10.0),
+            TorqueUnit::MeganewtonCentimeter => value / T::from_f64(10000.0),
+            TorqueUnit::NewtonMeter => value,
+            TorqueUnit::KilonewtonMeter => value / T::from_f64(1000.0),
+            TorqueUnit::MeganewtonMeter => value / T::from_f64(1000000.0),
+            TorqueUnit::OunceForceFoot => value / T::from_f64(0.08473862177071252),
+            TorqueUnit::OunceForceInch => value / T::from_f64(0.0070615518142260435),
+            TorqueUnit::PoundalFoot => value / T::from_f64(0.0421401100938048),
+            TorqueUnit::PoundForceInch => value / T::from_f64(0.1129848290276167),
+            TorqueUnit::KilopoundForceInch => value / T::from_f64(112.9848290276167),
+            TorqueUnit::MegapoundForceInch => value / T::from_f64(112984.8290276167),
+            TorqueUnit::PoundForceFoot => value / T::from_f64(1.3558179483314003),
+            TorqueUnit::KilopoundForceFoot => value / T::from_f64(1355.8179483314004),
+            TorqueUnit::MegapoundForceFoot => value / T::from_f64(1355817.9483314003),
+            TorqueUnit::GramForceMillimeter => value / T::from_f64(9.80665e-6),
+            TorqueUnit::GramForceCentimeter => value / T::from_f64(9.80665e-5),
+            TorqueUnit::GramForceMeter => value / T::from_f64(0.00980665),
+            TorqueUnit::KilogramForceMillimeter => value / T::from_f64(0.00980665),
+            TorqueUnit::KilogramForceCentimeter => value / T::from_f64(0.0980665),
+            TorqueUnit::KilogramForceMeter => value / T::from_f64(9.80665),
+            TorqueUnit::TonneForceMillimeter => value / T::from_f64(9.80665),
+            TorqueUnit::TonneForceCentimeter => value / T::from_f64(98.0665),
+            TorqueUnit::TonneForceMeter => value / T::from_f64(9806.65),
+        }
+    }
+}
+
+impl<T: Float> Torque<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`N·m`, `kN·m`, `MN·m`).
     /// Zero, NaN and infinities are shown in the base unit.

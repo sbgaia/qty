@@ -234,15 +234,12 @@ impl core::str::FromStr for ReciprocalLengthUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> ReciprocalLength<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<ReciprocalLength<T>> for ReciprocalLengthUnit {
     #[inline]
-    pub fn new(value: T, unit: ReciprocalLengthUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             ReciprocalLengthUnit::InverseMeter => value,
             ReciprocalLengthUnit::InverseCentimeter => value * T::from_f64(100.0),
             ReciprocalLengthUnit::InverseMillimeter => value * T::from_f64(1000.0),
@@ -253,26 +250,27 @@ impl<T: Float> ReciprocalLength<T> {
             ReciprocalLengthUnit::InverseInch => value * T::from_f64(39.37007874015748),
             ReciprocalLengthUnit::InverseMil => value * T::from_f64(39370.07874015748),
             ReciprocalLengthUnit::InverseMicroinch => value * T::from_f64(3.937007874015748e7),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: ReciprocalLengthUnit) -> T {
-        match unit {
-            ReciprocalLengthUnit::InverseMeter => self.0,
-            ReciprocalLengthUnit::InverseCentimeter => self.0 / T::from_f64(100.0),
-            ReciprocalLengthUnit::InverseMillimeter => self.0 / T::from_f64(1000.0),
-            ReciprocalLengthUnit::InverseMile => self.0 / T::from_f64(0.0006213711922373339),
-            ReciprocalLengthUnit::InverseYard => self.0 / T::from_f64(1.0936132983377078),
-            ReciprocalLengthUnit::InverseFoot => self.0 / T::from_f64(3.2808398950131235),
-            ReciprocalLengthUnit::InverseUsSurveyFoot => self.0 / T::from_f64(3.2808333333333333),
-            ReciprocalLengthUnit::InverseInch => self.0 / T::from_f64(39.37007874015748),
-            ReciprocalLengthUnit::InverseMil => self.0 / T::from_f64(39370.07874015748),
-            ReciprocalLengthUnit::InverseMicroinch => self.0 / T::from_f64(3.937007874015748e7),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            ReciprocalLengthUnit::InverseMeter => value,
+            ReciprocalLengthUnit::InverseCentimeter => value / T::from_f64(100.0),
+            ReciprocalLengthUnit::InverseMillimeter => value / T::from_f64(1000.0),
+            ReciprocalLengthUnit::InverseMile => value / T::from_f64(0.0006213711922373339),
+            ReciprocalLengthUnit::InverseYard => value / T::from_f64(1.0936132983377078),
+            ReciprocalLengthUnit::InverseFoot => value / T::from_f64(3.2808398950131235),
+            ReciprocalLengthUnit::InverseUsSurveyFoot => value / T::from_f64(3.2808333333333333),
+            ReciprocalLengthUnit::InverseInch => value / T::from_f64(39.37007874015748),
+            ReciprocalLengthUnit::InverseMil => value / T::from_f64(39370.07874015748),
+            ReciprocalLengthUnit::InverseMicroinch => value / T::from_f64(3.937007874015748e7),
+        }
+    }
+}
+
+impl<T: Float> ReciprocalLength<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`m⁻¹`).
     /// Zero, NaN and infinities are shown in the base unit.

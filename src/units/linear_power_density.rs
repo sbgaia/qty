@@ -419,15 +419,12 @@ impl core::str::FromStr for LinearPowerDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> LinearPowerDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: LinearPowerDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LinearPowerDensityUnit::WattPerMeter => value,
             LinearPowerDensityUnit::MilliwattPerMeter => value / T::from_f64(1000.0),
             LinearPowerDensityUnit::KilowattPerMeter => value * T::from_f64(1000.0),
@@ -453,41 +450,42 @@ impl<T: Float> LinearPowerDensity<T> {
             LinearPowerDensityUnit::KilowattPerFoot => value * T::from_f64(3280.839895013123),
             LinearPowerDensityUnit::MegawattPerFoot => value * T::from_f64(3280839.8950131233),
             LinearPowerDensityUnit::GigawattPerFoot => value * T::from_f64(3.2808398950131235e9),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LinearPowerDensityUnit) -> T {
-        match unit {
-            LinearPowerDensityUnit::WattPerMeter => self.0,
-            LinearPowerDensityUnit::MilliwattPerMeter => self.0 * T::from_f64(1000.0),
-            LinearPowerDensityUnit::KilowattPerMeter => self.0 / T::from_f64(1000.0),
-            LinearPowerDensityUnit::MegawattPerMeter => self.0 / T::from_f64(1000000.0),
-            LinearPowerDensityUnit::GigawattPerMeter => self.0 / T::from_f64(1e9),
-            LinearPowerDensityUnit::WattPerCentimeter => self.0 / T::from_f64(100.0),
-            LinearPowerDensityUnit::MilliwattPerCentimeter => self.0 * T::from_f64(10.0),
-            LinearPowerDensityUnit::KilowattPerCentimeter => self.0 / T::from_f64(100000.0),
-            LinearPowerDensityUnit::MegawattPerCentimeter => self.0 / T::from_f64(1e8),
-            LinearPowerDensityUnit::GigawattPerCentimeter => self.0 / T::from_f64(1e11),
-            LinearPowerDensityUnit::WattPerMillimeter => self.0 / T::from_f64(1000.0),
-            LinearPowerDensityUnit::MilliwattPerMillimeter => self.0,
-            LinearPowerDensityUnit::KilowattPerMillimeter => self.0 / T::from_f64(1000000.0),
-            LinearPowerDensityUnit::MegawattPerMillimeter => self.0 / T::from_f64(1e9),
-            LinearPowerDensityUnit::GigawattPerMillimeter => self.0 / T::from_f64(1e12),
-            LinearPowerDensityUnit::WattPerInch => self.0 / T::from_f64(39.37007874015748),
-            LinearPowerDensityUnit::MilliwattPerInch => self.0 / T::from_f64(0.03937007874015748),
-            LinearPowerDensityUnit::KilowattPerInch => self.0 / T::from_f64(39370.07874015748),
-            LinearPowerDensityUnit::MegawattPerInch => self.0 / T::from_f64(3.937007874015748e7),
-            LinearPowerDensityUnit::GigawattPerInch => self.0 / T::from_f64(3.937007874015748e10),
-            LinearPowerDensityUnit::WattPerFoot => self.0 / T::from_f64(3.2808398950131235),
-            LinearPowerDensityUnit::MilliwattPerFoot => self.0 / T::from_f64(0.0032808398950131233),
-            LinearPowerDensityUnit::KilowattPerFoot => self.0 / T::from_f64(3280.839895013123),
-            LinearPowerDensityUnit::MegawattPerFoot => self.0 / T::from_f64(3280839.8950131233),
-            LinearPowerDensityUnit::GigawattPerFoot => self.0 / T::from_f64(3.2808398950131235e9),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LinearPowerDensityUnit::WattPerMeter => value,
+            LinearPowerDensityUnit::MilliwattPerMeter => value * T::from_f64(1000.0),
+            LinearPowerDensityUnit::KilowattPerMeter => value / T::from_f64(1000.0),
+            LinearPowerDensityUnit::MegawattPerMeter => value / T::from_f64(1000000.0),
+            LinearPowerDensityUnit::GigawattPerMeter => value / T::from_f64(1e9),
+            LinearPowerDensityUnit::WattPerCentimeter => value / T::from_f64(100.0),
+            LinearPowerDensityUnit::MilliwattPerCentimeter => value * T::from_f64(10.0),
+            LinearPowerDensityUnit::KilowattPerCentimeter => value / T::from_f64(100000.0),
+            LinearPowerDensityUnit::MegawattPerCentimeter => value / T::from_f64(1e8),
+            LinearPowerDensityUnit::GigawattPerCentimeter => value / T::from_f64(1e11),
+            LinearPowerDensityUnit::WattPerMillimeter => value / T::from_f64(1000.0),
+            LinearPowerDensityUnit::MilliwattPerMillimeter => value,
+            LinearPowerDensityUnit::KilowattPerMillimeter => value / T::from_f64(1000000.0),
+            LinearPowerDensityUnit::MegawattPerMillimeter => value / T::from_f64(1e9),
+            LinearPowerDensityUnit::GigawattPerMillimeter => value / T::from_f64(1e12),
+            LinearPowerDensityUnit::WattPerInch => value / T::from_f64(39.37007874015748),
+            LinearPowerDensityUnit::MilliwattPerInch => value / T::from_f64(0.03937007874015748),
+            LinearPowerDensityUnit::KilowattPerInch => value / T::from_f64(39370.07874015748),
+            LinearPowerDensityUnit::MegawattPerInch => value / T::from_f64(3.937007874015748e7),
+            LinearPowerDensityUnit::GigawattPerInch => value / T::from_f64(3.937007874015748e10),
+            LinearPowerDensityUnit::WattPerFoot => value / T::from_f64(3.2808398950131235),
+            LinearPowerDensityUnit::MilliwattPerFoot => value / T::from_f64(0.0032808398950131233),
+            LinearPowerDensityUnit::KilowattPerFoot => value / T::from_f64(3280.839895013123),
+            LinearPowerDensityUnit::MegawattPerFoot => value / T::from_f64(3280839.8950131233),
+            LinearPowerDensityUnit::GigawattPerFoot => value / T::from_f64(3.2808398950131235e9),
+        }
+    }
+}
+
+impl<T: Float> LinearPowerDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`mW/m`, `W/m`, `kW/m`, `MW/m`, `GW/m`).
     /// Zero, NaN and infinities are shown in the base unit.

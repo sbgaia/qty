@@ -328,15 +328,12 @@ impl core::str::FromStr for LinearDensityUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> LinearDensity<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
     #[inline]
-    pub fn new(value: T, unit: LinearDensityUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             LinearDensityUnit::GramPerMillimeter => value,
             LinearDensityUnit::MicrogramPerMillimeter => value / T::from_f64(1000000.0),
             LinearDensityUnit::MilligramPerMillimeter => value / T::from_f64(1000.0),
@@ -355,34 +352,35 @@ impl<T: Float> LinearDensity<T> {
             LinearDensityUnit::MicrogramPerFoot => value / T::from_f64(3.048e8),
             LinearDensityUnit::MilligramPerFoot => value / T::from_f64(304800.0),
             LinearDensityUnit::KilogramPerFoot => value * T::from_f64(3.2808398950131235),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: LinearDensityUnit) -> T {
-        match unit {
-            LinearDensityUnit::GramPerMillimeter => self.0,
-            LinearDensityUnit::MicrogramPerMillimeter => self.0 * T::from_f64(1000000.0),
-            LinearDensityUnit::MilligramPerMillimeter => self.0 * T::from_f64(1000.0),
-            LinearDensityUnit::KilogramPerMillimeter => self.0 / T::from_f64(1000.0),
-            LinearDensityUnit::GramPerCentimeter => self.0 * T::from_f64(10.0),
-            LinearDensityUnit::MicrogramPerCentimeter => self.0 * T::from_f64(1e7),
-            LinearDensityUnit::MilligramPerCentimeter => self.0 * T::from_f64(10000.0),
-            LinearDensityUnit::KilogramPerCentimeter => self.0 / T::from_f64(100.0),
-            LinearDensityUnit::GramPerMeter => self.0 * T::from_f64(1000.0),
-            LinearDensityUnit::MicrogramPerMeter => self.0 * T::from_f64(1e9),
-            LinearDensityUnit::MilligramPerMeter => self.0 * T::from_f64(1000000.0),
-            LinearDensityUnit::KilogramPerMeter => self.0,
-            LinearDensityUnit::PoundPerInch => self.0 / T::from_f64(17.857967322834646),
-            LinearDensityUnit::PoundPerFoot => self.0 / T::from_f64(1.4881639435695537),
-            LinearDensityUnit::GramPerFoot => self.0 / T::from_f64(0.0032808398950131233),
-            LinearDensityUnit::MicrogramPerFoot => self.0 * T::from_f64(3.048e8),
-            LinearDensityUnit::MilligramPerFoot => self.0 * T::from_f64(304800.0),
-            LinearDensityUnit::KilogramPerFoot => self.0 / T::from_f64(3.2808398950131235),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            LinearDensityUnit::GramPerMillimeter => value,
+            LinearDensityUnit::MicrogramPerMillimeter => value * T::from_f64(1000000.0),
+            LinearDensityUnit::MilligramPerMillimeter => value * T::from_f64(1000.0),
+            LinearDensityUnit::KilogramPerMillimeter => value / T::from_f64(1000.0),
+            LinearDensityUnit::GramPerCentimeter => value * T::from_f64(10.0),
+            LinearDensityUnit::MicrogramPerCentimeter => value * T::from_f64(1e7),
+            LinearDensityUnit::MilligramPerCentimeter => value * T::from_f64(10000.0),
+            LinearDensityUnit::KilogramPerCentimeter => value / T::from_f64(100.0),
+            LinearDensityUnit::GramPerMeter => value * T::from_f64(1000.0),
+            LinearDensityUnit::MicrogramPerMeter => value * T::from_f64(1e9),
+            LinearDensityUnit::MilligramPerMeter => value * T::from_f64(1000000.0),
+            LinearDensityUnit::KilogramPerMeter => value,
+            LinearDensityUnit::PoundPerInch => value / T::from_f64(17.857967322834646),
+            LinearDensityUnit::PoundPerFoot => value / T::from_f64(1.4881639435695537),
+            LinearDensityUnit::GramPerFoot => value / T::from_f64(0.0032808398950131233),
+            LinearDensityUnit::MicrogramPerFoot => value * T::from_f64(3.048e8),
+            LinearDensityUnit::MilligramPerFoot => value * T::from_f64(304800.0),
+            LinearDensityUnit::KilogramPerFoot => value / T::from_f64(3.2808398950131235),
+        }
+    }
+}
+
+impl<T: Float> LinearDensity<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`µg/m`, `mg/m`, `g/m`, `kg/m`).
     /// Zero, NaN and infinities are shown in the base unit.

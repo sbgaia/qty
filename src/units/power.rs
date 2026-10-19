@@ -446,15 +446,12 @@ impl core::str::FromStr for PowerUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Power<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Power<T>> for PowerUnit {
     #[inline]
-    pub fn new(value: T, unit: PowerUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             PowerUnit::Watt => value,
             PowerUnit::Femtowatt => value / T::from_f64(1e15),
             PowerUnit::Picowatt => value / T::from_f64(1e12),
@@ -482,43 +479,44 @@ impl<T: Float> Power<T> {
             PowerUnit::MegajoulePerHour => value * T::from_f64(277.77777777777777),
             PowerUnit::GigajoulePerHour => value * T::from_f64(277777.77777777775),
             PowerUnit::TonOfRefrigeration => value * T::from_f64(3516.853),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: PowerUnit) -> T {
-        match unit {
-            PowerUnit::Watt => self.0,
-            PowerUnit::Femtowatt => self.0 * T::from_f64(1e15),
-            PowerUnit::Picowatt => self.0 * T::from_f64(1e12),
-            PowerUnit::Nanowatt => self.0 * T::from_f64(1e9),
-            PowerUnit::Microwatt => self.0 * T::from_f64(1000000.0),
-            PowerUnit::Milliwatt => self.0 * T::from_f64(1000.0),
-            PowerUnit::Deciwatt => self.0 * T::from_f64(10.0),
-            PowerUnit::Decawatt => self.0 / T::from_f64(10.0),
-            PowerUnit::Kilowatt => self.0 / T::from_f64(1000.0),
-            PowerUnit::Megawatt => self.0 / T::from_f64(1000000.0),
-            PowerUnit::Gigawatt => self.0 / T::from_f64(1e9),
-            PowerUnit::Terawatt => self.0 / T::from_f64(1e12),
-            PowerUnit::Petawatt => self.0 / T::from_f64(1e15),
-            PowerUnit::MechanicalHorsepower => self.0 / T::from_f64(745.699871515585),
-            PowerUnit::MetricHorsepower => self.0 / T::from_f64(735.49875),
-            PowerUnit::ElectricalHorsepower => self.0 / T::from_f64(746.0),
-            PowerUnit::BoilerHorsepower => self.0 / T::from_f64(9812.5),
-            PowerUnit::HydraulicHorsepower => self.0 / T::from_f64(745.6998715822702),
-            PowerUnit::BritishThermalUnitPerHour => self.0 / T::from_f64(0.2930710701722222),
-            PowerUnit::KilobritishThermalUnitPerHour => self.0 / T::from_f64(293.0710701722222),
-            PowerUnit::MegabritishThermalUnitPerHour => self.0 / T::from_f64(293071.0701722222),
-            PowerUnit::JoulePerHour => self.0 * T::from_f64(3600.0),
-            PowerUnit::MillijoulePerHour => self.0 * T::from_f64(3600000.0),
-            PowerUnit::KilojoulePerHour => self.0 / T::from_f64(0.2777777777777778),
-            PowerUnit::MegajoulePerHour => self.0 / T::from_f64(277.77777777777777),
-            PowerUnit::GigajoulePerHour => self.0 / T::from_f64(277777.77777777775),
-            PowerUnit::TonOfRefrigeration => self.0 / T::from_f64(3516.853),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            PowerUnit::Watt => value,
+            PowerUnit::Femtowatt => value * T::from_f64(1e15),
+            PowerUnit::Picowatt => value * T::from_f64(1e12),
+            PowerUnit::Nanowatt => value * T::from_f64(1e9),
+            PowerUnit::Microwatt => value * T::from_f64(1000000.0),
+            PowerUnit::Milliwatt => value * T::from_f64(1000.0),
+            PowerUnit::Deciwatt => value * T::from_f64(10.0),
+            PowerUnit::Decawatt => value / T::from_f64(10.0),
+            PowerUnit::Kilowatt => value / T::from_f64(1000.0),
+            PowerUnit::Megawatt => value / T::from_f64(1000000.0),
+            PowerUnit::Gigawatt => value / T::from_f64(1e9),
+            PowerUnit::Terawatt => value / T::from_f64(1e12),
+            PowerUnit::Petawatt => value / T::from_f64(1e15),
+            PowerUnit::MechanicalHorsepower => value / T::from_f64(745.699871515585),
+            PowerUnit::MetricHorsepower => value / T::from_f64(735.49875),
+            PowerUnit::ElectricalHorsepower => value / T::from_f64(746.0),
+            PowerUnit::BoilerHorsepower => value / T::from_f64(9812.5),
+            PowerUnit::HydraulicHorsepower => value / T::from_f64(745.6998715822702),
+            PowerUnit::BritishThermalUnitPerHour => value / T::from_f64(0.2930710701722222),
+            PowerUnit::KilobritishThermalUnitPerHour => value / T::from_f64(293.0710701722222),
+            PowerUnit::MegabritishThermalUnitPerHour => value / T::from_f64(293071.0701722222),
+            PowerUnit::JoulePerHour => value * T::from_f64(3600.0),
+            PowerUnit::MillijoulePerHour => value * T::from_f64(3600000.0),
+            PowerUnit::KilojoulePerHour => value / T::from_f64(0.2777777777777778),
+            PowerUnit::MegajoulePerHour => value / T::from_f64(277.77777777777777),
+            PowerUnit::GigajoulePerHour => value / T::from_f64(277777.77777777775),
+            PowerUnit::TonOfRefrigeration => value / T::from_f64(3516.853),
+        }
+    }
+}
+
+impl<T: Float> Power<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
     /// Zero, NaN and infinities are shown in the base unit.

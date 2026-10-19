@@ -512,15 +512,12 @@ impl core::str::FromStr for MassUnit {
     }
 }
 
-/// Unit conversions, available for floating-point storage.
-///
 /// Every conversion is a single multiplication or division by a constant
 /// folded at code-generation time (two operations for affine units).
-impl<T: Float> Mass<T> {
-    /// Creates a new value from `value` expressed in `unit`.
+impl<T: Float> crate::UnitOf<Mass<T>> for MassUnit {
     #[inline]
-    pub fn new(value: T, unit: MassUnit) -> Self {
-        Self(match unit {
+    fn value_to_base(self, value: T) -> T {
+        match self {
             MassUnit::Gram => value / T::from_f64(1000.0),
             MassUnit::Femtogram => value / T::from_f64(1e18),
             MassUnit::Picogram => value / T::from_f64(1e15),
@@ -552,47 +549,48 @@ impl<T: Float> Mass<T> {
             MassUnit::Kilodalton => value * T::from_f64(1.6605390666e-24),
             MassUnit::Megadalton => value * T::from_f64(1.6605390666e-21),
             MassUnit::Gigadalton => value * T::from_f64(1.6605390666e-18),
-        })
-    }
-
-    /// Returns the quantity expressed in `unit`.
-    #[inline]
-    pub fn convert_to(self, unit: MassUnit) -> T {
-        match unit {
-            MassUnit::Gram => self.0 * T::from_f64(1000.0),
-            MassUnit::Femtogram => self.0 * T::from_f64(1e18),
-            MassUnit::Picogram => self.0 * T::from_f64(1e15),
-            MassUnit::Nanogram => self.0 * T::from_f64(1e12),
-            MassUnit::Microgram => self.0 * T::from_f64(1e9),
-            MassUnit::Milligram => self.0 * T::from_f64(1000000.0),
-            MassUnit::Centigram => self.0 * T::from_f64(100000.0),
-            MassUnit::Decigram => self.0 * T::from_f64(10000.0),
-            MassUnit::Decagram => self.0 * T::from_f64(100.0),
-            MassUnit::Hectogram => self.0 * T::from_f64(10.0),
-            MassUnit::Kilogram => self.0,
-            MassUnit::Tonne => self.0 / T::from_f64(1000.0),
-            MassUnit::Kilotonne => self.0 / T::from_f64(1000000.0),
-            MassUnit::Megatonne => self.0 / T::from_f64(1e9),
-            MassUnit::ShortTon => self.0 / T::from_f64(907.18474),
-            MassUnit::LongTon => self.0 / T::from_f64(1016.0469088),
-            MassUnit::Pound => self.0 / T::from_f64(0.45359237),
-            MassUnit::Kilopound => self.0 / T::from_f64(453.59237),
-            MassUnit::Megapound => self.0 / T::from_f64(453592.37),
-            MassUnit::Ounce => self.0 / T::from_f64(0.028349523125),
-            MassUnit::Slug => self.0 / T::from_f64(14.593902937206364),
-            MassUnit::Stone => self.0 / T::from_f64(6.35029318),
-            MassUnit::ShortHundredweight => self.0 / T::from_f64(45.359237),
-            MassUnit::LongHundredweight => self.0 / T::from_f64(50.80234544),
-            MassUnit::Grain => self.0 / T::from_f64(6.479891e-5),
-            MassUnit::SolarMass => self.0 / T::from_f64(1.98947e30),
-            MassUnit::EarthMass => self.0 / T::from_f64(5.9722e24),
-            MassUnit::Dalton => self.0 / T::from_f64(1.6605390666e-27),
-            MassUnit::Kilodalton => self.0 / T::from_f64(1.6605390666e-24),
-            MassUnit::Megadalton => self.0 / T::from_f64(1.6605390666e-21),
-            MassUnit::Gigadalton => self.0 / T::from_f64(1.6605390666e-18),
         }
     }
 
+    #[inline]
+    fn value_from_base(self, value: T) -> T {
+        match self {
+            MassUnit::Gram => value * T::from_f64(1000.0),
+            MassUnit::Femtogram => value * T::from_f64(1e18),
+            MassUnit::Picogram => value * T::from_f64(1e15),
+            MassUnit::Nanogram => value * T::from_f64(1e12),
+            MassUnit::Microgram => value * T::from_f64(1e9),
+            MassUnit::Milligram => value * T::from_f64(1000000.0),
+            MassUnit::Centigram => value * T::from_f64(100000.0),
+            MassUnit::Decigram => value * T::from_f64(10000.0),
+            MassUnit::Decagram => value * T::from_f64(100.0),
+            MassUnit::Hectogram => value * T::from_f64(10.0),
+            MassUnit::Kilogram => value,
+            MassUnit::Tonne => value / T::from_f64(1000.0),
+            MassUnit::Kilotonne => value / T::from_f64(1000000.0),
+            MassUnit::Megatonne => value / T::from_f64(1e9),
+            MassUnit::ShortTon => value / T::from_f64(907.18474),
+            MassUnit::LongTon => value / T::from_f64(1016.0469088),
+            MassUnit::Pound => value / T::from_f64(0.45359237),
+            MassUnit::Kilopound => value / T::from_f64(453.59237),
+            MassUnit::Megapound => value / T::from_f64(453592.37),
+            MassUnit::Ounce => value / T::from_f64(0.028349523125),
+            MassUnit::Slug => value / T::from_f64(14.593902937206364),
+            MassUnit::Stone => value / T::from_f64(6.35029318),
+            MassUnit::ShortHundredweight => value / T::from_f64(45.359237),
+            MassUnit::LongHundredweight => value / T::from_f64(50.80234544),
+            MassUnit::Grain => value / T::from_f64(6.479891e-5),
+            MassUnit::SolarMass => value / T::from_f64(1.98947e30),
+            MassUnit::EarthMass => value / T::from_f64(5.9722e24),
+            MassUnit::Dalton => value / T::from_f64(1.6605390666e-27),
+            MassUnit::Kilodalton => value / T::from_f64(1.6605390666e-24),
+            MassUnit::Megadalton => value / T::from_f64(1.6605390666e-21),
+            MassUnit::Gigadalton => value / T::from_f64(1.6605390666e-18),
+        }
+    }
+}
+
+impl<T: Float> Mass<T> {
     /// The value in the most readable SI-prefixed form of the base unit, in
     /// steps of 1000: the largest unit not exceeding the value (`fg`, `pg`, `ng`, `µg`, `mg`, `g`, `kg`).
     /// Zero, NaN and infinities are shown in the base unit.
