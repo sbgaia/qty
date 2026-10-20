@@ -89,21 +89,26 @@
 //! assert_eq!(format!("{weight:.1}"), "98.1 N");
 //! ```
 //!
-//! An intermediate result can be kept in a variable as an `Expr<_>`:
+//! [`expr!`](crate::expr!) keeps an intermediate result as an `Expr`, with
+//! no type annotation. It prints in SI units:
 //!
 //! ```rust
 //! # use qty::*;
-//! use qty::formula::Expr;
-//!
 //! let (m, v) = (Mass::from_kilograms(2.0), Speed::from_meters_per_second(3.0));
-//! let mv2: Expr<_> = formula!(m * v * v);
+//! let mv2 = expr!(m * v * v);
+//! assert_eq!(mv2.to_string(), "18 kg·m²/s²");
 //! let energy: Energy = formula!(0.5 * mv2);
 //! assert_eq!(energy.as_joules(), 9.0);
 //! ```
+//!
+//! `.powi::<N>()` raises any value in a formula to a whole power, negative
+//! ones too: `formula!(0.5 * m * v.powi::<2>())`.
 
 use core::fmt;
 use core::marker::PhantomData;
 use core::ops::{Add, Div, Mul, Neg, Sub};
+
+use crate::Dimensions;
 
 mod exponents;
 pub use exponents::MAX_EXPONENT;
@@ -213,6 +218,76 @@ pub trait CbrtDim {
     type Out;
 }
 
+/// An exponent's value, for [`Dimension`].
+pub trait Exponent {
+    /// The exponent.
+    const VALUE: i8;
+}
+
+impl<const N: i8> Exponent for E<N> {
+    const VALUE: i8 = N;
+}
+
+/// The dimensions of a [`Dim`] as a value, for printing an [`Expr`].
+pub trait Dimension {
+    /// The exponents.
+    const DIMENSIONS: Dimensions;
+}
+
+impl<L, M, T, I, Th, N, J> Dimension for Dim<L, M, T, I, Th, N, J>
+where
+    L: Exponent,
+    M: Exponent,
+    T: Exponent,
+    I: Exponent,
+    Th: Exponent,
+    N: Exponent,
+    J: Exponent,
+{
+    const DIMENSIONS: Dimensions = Dimensions::new(
+        L::VALUE,
+        M::VALUE,
+        T::VALUE,
+        I::VALUE,
+        Th::VALUE,
+        N::VALUE,
+        J::VALUE,
+    );
+}
+
+/// `A × N` for exponents.
+#[diagnostic::on_unimplemented(
+    message = "an exponent in this formula is out of range",
+    note = "formulas support exponents up to qty::formula::MAX_EXPONENT"
+)]
+pub trait MulE<const N: i8> {
+    /// The product.
+    type Out;
+}
+
+/// The dimensions of a power.
+#[diagnostic::on_unimplemented(
+    message = "an exponent in this formula is out of range",
+    note = "formulas support exponents up to qty::formula::MAX_EXPONENT"
+)]
+pub trait PowDim<const N: i8> {
+    /// Every exponent times `N`.
+    type Out;
+}
+
+impl<L, M, T, I, H, N, J, const P: i8> PowDim<P> for Dim<L, M, T, I, H, N, J>
+where
+    L: MulE<P>,
+    M: MulE<P>,
+    T: MulE<P>,
+    I: MulE<P>,
+    H: MulE<P>,
+    N: MulE<P>,
+    J: MulE<P>,
+{
+    type Out = Dim<L::Out, M::Out, T::Out, I::Out, H::Out, N::Out, J::Out>;
+}
+
 macro_rules! dim_op {
     ($Op:ident, $E:ident) => {
         impl<L1, M1, T1, I1, H1, N1, J1, L2, M2, T2, I2, H2, N2, J2>
@@ -280,6 +355,53 @@ impl<D, V> Expr<D, V> {
     }
 }
 
+impl<D: Dimension, V> Expr<D, V> {
+    /// The dimensions.
+    ///
+    /// ```rust
+    /// # use qty::*;
+    /// use qty::formula::Expr;
+    ///
+    /// let m = Mass::from_kilograms(2.0);
+    /// let v = Speed::from_meters_per_second(3.0);
+    /// assert_eq!(Expr::dimensions(&expr!(m * v)), Dimensions::new(1, 1, -1, 0, 0, 0, 0));
+    /// ```
+    pub const fn dimensions(&self) -> Dimensions {
+        D::DIMENSIONS
+    }
+}
+
+impl<D, V: crate::Float> Expr<D, V> {
+    /// `self` to the power `N`, which can be negative. The exponents of
+    /// the dimensions are multiplied by `N`.
+    ///
+    /// ```rust
+    /// # use qty::*;
+    /// // The power radiated by a black body.
+    /// use qty::constants::STEFAN_BOLTZMANN_CONSTANT as SIGMA;
+    ///
+    /// let (area, t) = (Area::from_square_meters(1.0), TemperatureDelta::from_kelvins(300.0));
+    /// let p: Power = formula!(SIGMA * area * t.powi::<4>());
+    /// assert_eq!(format!("{p:.0}"), "459 W");
+    /// ```
+    #[inline(always)]
+    pub fn powi<const N: i8>(self) -> Expr<D::Out, V>
+    where
+        D: PowDim<N>,
+    {
+        // `N` is a constant, so this loop unrolls to `|N| - 1`
+        // multiplications.
+        let one = V::from_f64(1.0);
+        let mut result = one;
+        let mut i = 0;
+        while i < N.unsigned_abs() {
+            result = result * self.0;
+            i += 1;
+        }
+        Expr::new(if N < 0 { one / result } else { result })
+    }
+}
+
 #[cfg(any(feature = "std", feature = "libm"))]
 impl<D, V: crate::FloatMath> Expr<D, V> {
     /// Square root. Every exponent must be even.
@@ -317,6 +439,103 @@ impl<D, V: Clone> Clone for Expr<D, V> {
     }
 }
 impl<D, V: Copy> Copy for Expr<D, V> {}
+
+/// The value in coherent SI units and those units, like `4 kg²` or
+/// `6 kg·m²/s²`. Format flags apply to the number. The text parses back as
+/// a quantity with these dimensions.
+///
+/// ```rust
+/// # use qty::*;
+/// let (m, v) = (Mass::from_kilograms(2.0), Speed::from_meters_per_second(3.0));
+/// assert_eq!(expr!(m * m).to_string(), "4 kg²");
+/// assert_eq!(format!("{:.1}", expr!(0.5 * m * v * v)), "9.0 kg·m²/s²");
+/// assert_eq!(qty::constants::GRAVITATIONAL_CONSTANT.to_string(), "0.000000000066743 m³/(kg·s²)");
+/// assert_eq!(format!("{:e}", qty::constants::GRAVITATIONAL_CONSTANT), "6.6743e-11 m³/(kg·s²)");
+/// ```
+impl<D: Dimension, V: fmt::Display> fmt::Display for Expr<D, V> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(&self.0, f)?;
+        write_si_units(f, D::DIMENSIONS)
+    }
+}
+
+impl<D: Dimension, V: fmt::LowerExp> fmt::LowerExp for Expr<D, V> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::LowerExp::fmt(&self.0, f)?;
+        write_si_units(f, D::DIMENSIONS)
+    }
+}
+
+impl<D: Dimension, V: fmt::UpperExp> fmt::UpperExp for Expr<D, V> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::UpperExp::fmt(&self.0, f)?;
+        write_si_units(f, D::DIMENSIONS)
+    }
+}
+
+/// Writes ` kg·m²/s²` for `dimensions`, or nothing when dimensionless.
+/// Mass comes first, as in `kg·m²`; the denominator gets parentheses when
+/// it has more than one unit, and with no numerator the exponents are
+/// negative, as in `s⁻¹`.
+fn write_si_units(f: &mut fmt::Formatter<'_>, dimensions: Dimensions) -> fmt::Result {
+    const UNITS: [&str; 7] = ["kg", "m", "s", "A", "K", "mol", "cd"];
+    let [l, m, t, i, th, n, j] = dimensions.to_array();
+    let exponents = [m, l, t, i, th, n, j];
+    if exponents.iter().all(|&e| e == 0) {
+        return Ok(());
+    }
+    f.write_str(" ")?;
+    if exponents.iter().all(|&e| e <= 0) {
+        return write_units(f, &UNITS, &exponents, -1, true);
+    }
+    write_units(f, &UNITS, &exponents, 1, false)?;
+    let denominator = exponents.iter().filter(|&&e| e < 0).count();
+    if denominator > 0 {
+        f.write_str("/")?;
+        if denominator > 1 {
+            f.write_str("(")?;
+        }
+        write_units(f, &UNITS, &exponents, -1, false)?;
+        if denominator > 1 {
+            f.write_str(")")?;
+        }
+    }
+    Ok(())
+}
+
+/// Writes the units whose exponents have `sign`, as `kg·m²`, or as `s⁻¹`
+/// with `with_sign`.
+fn write_units(
+    f: &mut fmt::Formatter<'_>,
+    units: &[&str; 7],
+    exponents: &[i8; 7],
+    sign: i8,
+    with_sign: bool,
+) -> fmt::Result {
+    const SUPERSCRIPTS: [char; 10] = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
+    let mut first = true;
+    for (unit, &exponent) in units.iter().zip(exponents) {
+        if exponent.signum() != sign {
+            continue;
+        }
+        if !first {
+            f.write_str("·")?;
+        }
+        first = false;
+        f.write_str(unit)?;
+        let e = exponent.unsigned_abs();
+        if with_sign {
+            f.write_str("⁻")?;
+        }
+        if e >= 10 {
+            write!(f, "{}", SUPERSCRIPTS[usize::from(e / 10)])?;
+        }
+        if e != 1 || with_sign {
+            write!(f, "{}", SUPERSCRIPTS[usize::from(e % 10)])?;
+        }
+    }
+    Ok(())
+}
 
 impl<D, V: fmt::Debug> fmt::Debug for Expr<D, V> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -572,8 +791,8 @@ pub trait SiFactor {
 /// Each value in the formula can be a quantity, a plain number, a constant
 /// from [`constants`](crate::constants) or another [`Expr`](crate::formula::Expr).
 /// The intermediate results don't need to be named quantities. The formula
-/// keeps Rust's precedence and parentheses, and `.sqrt()` and `.cbrt()` work
-/// on any value or parenthesised group:
+/// keeps Rust's precedence and parentheses, and `.sqrt()`, `.cbrt()` and
+/// `.powi::<N>()` work on any value or parenthesised group:
 ///
 /// ```rust
 /// use qty::*;
@@ -591,12 +810,34 @@ pub trait SiFactor {
 /// ```
 ///
 /// The result's type has to be known, from a type annotation, a function's
-/// return type or an argument. See [`formula`](mod@crate::formula) for how it works
-/// and what it checks.
+/// return type or an argument. Where there is none, [`expr!`](crate::expr!)
+/// gives the [`Expr`](crate::formula::Expr) itself. See
+/// [`formula`](mod@crate::formula) for how it works and what it checks.
 #[macro_export]
 macro_rules! formula {
     ($($t:tt)+) => {
         $crate::formula::FromFormula::from_formula($crate::__formula!(@start [] $($t)+))
+    };
+}
+
+/// Computes a formula like [`formula!`](crate::formula!), but gives the
+/// [`Expr`](crate::formula::Expr) itself, so no type annotation is needed.
+/// It prints in SI units, and works in later formulas or with `into()`:
+///
+/// ```rust
+/// use qty::*;
+///
+/// let (m, v) = (Mass::from_kilograms(2.0), Speed::from_meters_per_second(3.0));
+/// let twice_energy = expr!(m * v * v);
+/// assert_eq!(twice_energy.to_string(), "18 kg·m²/s²");
+///
+/// let energy: Energy = formula!(0.5 * twice_energy);
+/// assert_eq!(energy.as_joules(), 9.0);
+/// ```
+#[macro_export]
+macro_rules! expr {
+    ($($t:tt)+) => {
+        $crate::__formula!(@start [] $($t)+)
     };
 }
 
@@ -615,6 +856,13 @@ macro_rules! __formula {
     (@start [$($o:tt)*] ($($g:tt)+) . cbrt () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).cbrt()] [] $($rest)*)
     };
+    (@start [$($o:tt)*] ($($g:tt)+) . powi :: < $n:literal > () $($rest:tt)*) => {
+        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ $n }>()] [] $($rest)*)
+    };
+    // `<-` is a single token.
+    (@start [$($o:tt)*] ($($g:tt)+) . powi :: <- $n:literal > () $($rest:tt)*) => {
+        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ -$n }>()] [] $($rest)*)
+    };
     (@start [$($o:tt)*] ($($g:tt)+) $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
     };
@@ -630,16 +878,23 @@ macro_rules! __formula {
         $($o)* $crate::formula::operand($($v)+)
     };
 
-    // `.sqrt()` and `.cbrt()` on a value work on its `Expr`, so they accept
-    // any dimensions with even (or multiple of 3) exponents.
+    // `.sqrt()`, `.cbrt()` and `.powi::<N>()` on a value work on its `Expr`,
+    // so the roots accept any dimensions with even (or multiple of 3)
+    // exponents.
     (@value [$($o:tt)*] [$($v:tt)+] . sqrt () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).sqrt()] [] $($rest)*)
     };
     (@value [$($o:tt)*] [$($v:tt)+] . cbrt () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).cbrt()] [] $($rest)*)
     };
+    (@value [$($o:tt)*] [$($v:tt)+] . powi :: < $n:literal > () $($rest:tt)*) => {
+        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).powi::<{ $n }>()] [] $($rest)*)
+    };
+    (@value [$($o:tt)*] [$($v:tt)+] . powi :: <- $n:literal > () $($rest:tt)*) => {
+        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).powi::<{ -$n }>()] [] $($rest)*)
+    };
     (@value [$($o:tt)*] [] . $($rest:tt)*) => {
-        ::core::compile_error!("formula!: only .sqrt() and .cbrt() can follow parentheses")
+        ::core::compile_error!("formula!: only .sqrt(), .cbrt() and .powi::<N>() can follow parentheses")
     };
 
     // An operator ends the value. With no value before it, it's a unary

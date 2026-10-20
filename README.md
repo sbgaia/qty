@@ -143,6 +143,18 @@ A formula whose dimensions don't match the target fails `cargo check`, with
 the dimensions it has in the message. At run time it's the same code as the
 arithmetic on plain floats. `qty::constants` has the physical constants.
 
+`.powi::<N>()` raises a value to a whole power, and `expr!` keeps a result
+whose type has no name, with no annotation; it prints in SI units:
+
+```rust
+use qty::*;
+
+let (m, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
+let e: Energy = formula!(0.5 * m * v.powi::<2>());
+assert_eq!(e.as_joules(), 315.0);
+assert_eq!(expr!(m * m).to_string(), "4900 kg²");
+```
+
 ## Text
 
 Quantities print in their base unit, or in any unit you ask for. Parsing

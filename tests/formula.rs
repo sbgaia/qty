@@ -245,3 +245,94 @@ fn custom_quantities() {
         1e-12,
     );
 }
+
+#[test]
+fn powers() {
+    let (m, v) = (
+        Mass::from_kilograms(2.0),
+        Speed::from_meters_per_second(3.0),
+    );
+    let e: Energy = formula!(0.5 * m * v.powi::<2>());
+    assert_eq!(e.as_joules(), 9.0);
+
+    let t = Duration::from_seconds(4.0);
+    let f: Frequency = formula!(t.powi::<-1>());
+    assert_eq!(f.as_hertz(), 0.25);
+
+    // On a group, and outside the macro.
+    let a: Area = formula!((Length::from_meters(1.0) + Length::from_meters(2.0)).powi::<2>());
+    assert_eq!(a.as_square_meters(), 9.0);
+    let r = Length::from_meters(2.0);
+    let per_volume: Expr<Dims<-3>> = expr!(r).powi::<-3>();
+    assert_eq!(per_volume.value(), 0.125);
+    let one: f64 = formula!(r.powi::<0>());
+    assert_eq!(one, 1.0);
+}
+
+#[test]
+fn expressions_without_annotations() {
+    let (m, v) = (
+        Mass::from_kilograms(2.0),
+        Speed::from_meters_per_second(3.0),
+    );
+    let m2 = expr!(m * m);
+    assert_eq!(m2.dimensions(), Dimensions::new(0, 2, 0, 0, 0, 0, 0));
+    assert_eq!(m2.value(), 4.0);
+
+    let momentum = expr!(m * v);
+    let impulse: Impulse = momentum.into();
+    assert_eq!(impulse.as_newton_seconds(), 6.0);
+    let e: Energy = formula!(0.5 * momentum * v);
+    assert_eq!(e.as_joules(), 9.0);
+}
+
+#[test]
+fn display() {
+    let (m, v) = (
+        Mass::from_kilograms(2.0),
+        Speed::from_meters_per_second(3.0),
+    );
+    assert_eq!(expr!(m * m).to_string(), "4 kg²");
+    assert_eq!(expr!(m * v).to_string(), "6 kg·m/s");
+    assert_eq!(format!("{:.1}", expr!(0.5 * m * v * v)), "9.0 kg·m²/s²");
+    assert_eq!(
+        expr!(1.0 / Duration::from_seconds(4.0)).to_string(),
+        "0.25 s⁻¹"
+    );
+    assert_eq!(
+        expr!(Length::from_meters(2.0).powi::<-3>()).to_string(),
+        "0.125 m⁻³"
+    );
+    assert_eq!(
+        expr!(1.0 / (Mass::from_kilograms(1.0) * Duration::from_seconds(1.0))).to_string(),
+        "1 kg⁻¹·s⁻¹"
+    );
+    assert_eq!(
+        "0.25 s⁻¹".parse::<Frequency>(),
+        Ok(Frequency::from_hertz(0.25))
+    );
+    assert_eq!(expr!(m / m).to_string(), "1");
+    assert_eq!(
+        format!("{:e}", GRAVITATIONAL_CONSTANT),
+        "6.6743e-11 m³/(kg·s²)"
+    );
+    assert_eq!(
+        format!("{:.3E}", BOLTZMANN_CONSTANT),
+        "1.381E-23 kg·m²/(s²·K)"
+    );
+    assert_eq!(
+        expr!(v.powi::<-12>()).dimensions(),
+        Dimensions::new(-12, 0, 12, 0, 0, 0, 0)
+    );
+    assert!(expr!(v.powi::<-12>()).to_string().ends_with(" s¹²/m¹²"));
+
+    // The text parses back as a quantity with the same dimensions.
+    let text = expr!(0.5 * m * v * v).to_string();
+    assert_eq!(text.parse::<Energy>(), Ok(Energy::from_joules(9.0)));
+    let text = expr!(m / (Length::from_meters(2.0) * Duration::from_seconds(1.0))).to_string();
+    assert_eq!(text, "1 kg/(m·s)");
+    assert_eq!(
+        text.parse::<DynamicViscosity>(),
+        Ok(DynamicViscosity::from_newton_seconds_per_meter_squared(1.0))
+    );
+}

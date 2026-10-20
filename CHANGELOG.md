@@ -6,6 +6,18 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `expr!` computes a formula like `formula!` but gives the `Expr` itself,
+  so `let x = expr!(m * m)` needs no type annotation.
+- `Expr` implements `Display` (and `LowerExp`, `UpperExp`), in SI units:
+  `4 kg²`, `9 kg·m²/s²`, `6.6743e-11 m³/(kg·s²)`. The text parses back as a
+  quantity with the same dimensions.
+- `.powi::<N>()` in formulas and on `Expr`, for whole powers, negative ones
+  included: `formula!(0.5 * m * v.powi::<2>())`.
+- `Expr::dimensions`, and the `Dimension`, `Exponent`, `MulE` and `PowDim`
+  traits behind them.
+
 ## [0.2.4] - 2026-10-20
 
 ### Added
