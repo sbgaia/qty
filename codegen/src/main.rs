@@ -164,17 +164,23 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
         }
     };
 
-    let mut entries: Vec<String> = serde_json::from_str(&content)
+    let upstream: Vec<String> = serde_json::from_str(&content)
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
-    // Relations added in this repository, after upstream's so that
-    // upstream's win on any conflicting operator.
-    let extra = Path::new("codegen/relations/ExtraRelations.json");
-    let extra: Vec<String> = serde_json::from_str(
-        &std::fs::read_to_string(extra)
-            .unwrap_or_else(|e| panic!("failed to read {}: {e}", extra.display())),
-    )
-    .unwrap_or_else(|e| panic!("failed to parse {}: {e}", extra.display()));
-    entries.extend(extra);
+    let read_list = |path: &Path| -> Vec<String> {
+        serde_json::from_str(
+            &std::fs::read_to_string(path)
+                .unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display())),
+        )
+        .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()))
+    };
+    // The first relation for an operator wins (see the dedup below), so the
+    // preferred relations come first, then upstream's, then the extra ones,
+    // which only fill gaps.
+    let mut entries = read_list(Path::new("codegen/relations/PreferredRelations.json"));
+    entries.extend(upstream);
+    entries.extend(read_list(Path::new(
+        "codegen/relations/ExtraRelations.json",
+    )));
 
     // The exact to-base factor of each "Quantity.Unit" (linear units only).
     let factors: HashMap<String, Const> = quantities

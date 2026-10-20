@@ -3317,17 +3317,16 @@ fn mul_force_duration() {
     }
 }
 
-#[cfg(feature = "mechanics")]
 #[test]
 fn mul_force_length() {
     let a = Force::from_base(6.0);
     let b = Length::from_base(2.0);
-    let c: Torque = a * b;
+    let c: Energy = a * b;
     assert_eq!(c.as_base(), 12.0 * 1.0);
     // Coherent base units: works for integer storage too.
     let a = Force::<i32>::from_base(6);
     let b = Length::<i32>::from_base(2);
-    let c: Torque<i32> = a * b;
+    let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
     for (x, y) in [
         (6_i64, 2_i64),
@@ -3341,9 +3340,9 @@ fn mul_force_length() {
             Fixed::<unit::length::Meter>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
             .map(|c| c.count());
-        let float: Torque = a.to_f64() * b.to_f64();
+        let float: Energy = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -4089,17 +4088,16 @@ fn mul_length_electric_field() {
     }
 }
 
-#[cfg(feature = "mechanics")]
 #[test]
 fn mul_length_force() {
     let a = Length::from_base(6.0);
     let b = Force::from_base(2.0);
-    let c: Torque = a * b;
+    let c: Energy = a * b;
     assert_eq!(c.as_base(), 12.0 * 1.0);
     // Coherent base units: works for integer storage too.
     let a = Length::<i32>::from_base(6);
     let b = Force::<i32>::from_base(2);
-    let c: Torque<i32> = a * b;
+    let c: Energy<i32> = a * b;
     assert_eq!(c.as_base(), 12);
     for (x, y) in [
         (6_i64, 2_i64),
@@ -4113,9 +4111,9 @@ fn mul_length_force() {
             Fixed::<unit::force::Newton>::new(y),
         );
         let fixed = a
-            .mul_to_rounded(b, unit::torque::NewtonMeter, Rounding::NearestTiesEven)
+            .mul_to_rounded(b, unit::energy::Joule, Rounding::NearestTiesEven)
             .map(|c| c.count());
-        let float: Torque = a.to_f64() * b.to_f64();
+        let float: Energy = a.to_f64() * b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }
@@ -10303,6 +10301,66 @@ fn div_energy_entropy() {
             )
             .map(|c| c.count());
         let float: TemperatureDelta = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[test]
+fn div_energy_force() {
+    let a = Energy::from_base(6.0);
+    let b = Force::from_base(2.0);
+    let c: Length = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Force::<i32>::from_base(2);
+    let c: Length<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::force::Newton>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::length::Meter, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Length = a.to_f64() / b.to_f64();
+        check_fixed_relation(fixed, float.as_base());
+    }
+}
+
+#[test]
+fn div_energy_length() {
+    let a = Energy::from_base(6.0);
+    let b = Length::from_base(2.0);
+    let c: Force = a / b;
+    assert_eq!(c.as_base(), 3.0 * 1.0);
+    // Coherent base units: works for integer storage too.
+    let a = Energy::<i32>::from_base(6);
+    let b = Length::<i32>::from_base(2);
+    let c: Force<i32> = a / b;
+    assert_eq!(c.as_base(), 3);
+    for (x, y) in [
+        (6_i64, 2_i64),
+        (-1234, 567),
+        (1, 1),
+        (999_999, -3),
+        (7, 1_000_000),
+    ] {
+        let (a, b) = (
+            Fixed::<unit::energy::Joule>::new(x),
+            Fixed::<unit::length::Meter>::new(y),
+        );
+        let fixed = a
+            .div_to(b, unit::force::Newton, Rounding::NearestTiesEven)
+            .map(|c| c.count());
+        let float: Force = a.to_f64() / b.to_f64();
         check_fixed_relation(fixed, float.as_base());
     }
 }

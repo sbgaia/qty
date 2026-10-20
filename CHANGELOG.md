@@ -18,6 +18,17 @@ follow [Semantic Versioning](https://semver.org/).
 - `Expr::dimensions`, and the `Dimension`, `Exponent`, `MulE` and `PowDim`
   traits behind them.
 
+### Changed
+
+- **Breaking:** `Force * Length` and `Length * Force` give an `Energy`, the
+  work done, instead of a `Torque`, so W = F·d has the right type, and
+  `Energy / Length = Force` and `Energy / Force = Length` are new. They need
+  only the core quantities, where the torque needed `mechanics`. For a
+  torque, write `let t: Torque = formula!(force * lever)`; `Torque / Length`,
+  `Torque / Force` and `Torque * RotationalSpeed` are unchanged. The vector
+  cross product `r × F` follows: it gives energies, converted with
+  `formula!`. `AnyQuantity` arithmetic changes the same way.
+
 ## [0.2.4] - 2026-10-20
 
 ### Added
