@@ -7092,8 +7092,7 @@ impl AnyQuantity {
             (Self::FluidResistance(a), Self::VolumeFlow(b)) => Some(Self::Pressure(a * b)),
             #[cfg(feature = "mechanics")]
             (Self::Force(a), Self::Duration(b)) => Some(Self::Impulse(a * b)),
-            #[cfg(feature = "mechanics")]
-            (Self::Force(a), Self::Length(b)) => Some(Self::Torque(a * b)),
+            (Self::Force(a), Self::Length(b)) => Some(Self::Energy(a * b)),
             #[cfg(feature = "mechanics")]
             (Self::Force(a), Self::ReciprocalArea(b)) => Some(Self::Pressure(a * b)),
             #[cfg(feature = "mechanics")]
@@ -7141,8 +7140,7 @@ impl AnyQuantity {
             (Self::Length(a), Self::Density(b)) => Some(Self::AreaDensity(a * b)),
             #[cfg(feature = "electrical")]
             (Self::Length(a), Self::ElectricField(b)) => Some(Self::ElectricPotential(a * b)),
-            #[cfg(feature = "mechanics")]
-            (Self::Length(a), Self::Force(b)) => Some(Self::Torque(a * b)),
+            (Self::Length(a), Self::Force(b)) => Some(Self::Energy(a * b)),
             #[cfg(feature = "mechanics")]
             (Self::Length(a), Self::ForcePerLength(b)) => Some(Self::Force(a * b)),
             #[cfg(feature = "thermal")]
@@ -7608,6 +7606,8 @@ impl AnyQuantity {
             (Self::Energy(a), Self::EnergyDensity(b)) => Some(Self::Volume(a / b)),
             #[cfg(feature = "thermal")]
             (Self::Energy(a), Self::Entropy(b)) => Some(Self::TemperatureDelta(a / b)),
+            (Self::Energy(a), Self::Force(b)) => Some(Self::Length(a / b)),
+            (Self::Energy(a), Self::Length(b)) => Some(Self::Force(a / b)),
             #[cfg(feature = "mechanics")]
             (Self::Energy(a), Self::Mass(b)) => Some(Self::SpecificEnergy(a / b)),
             #[cfg(feature = "chemistry")]

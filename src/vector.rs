@@ -40,11 +40,8 @@ macro_rules! vector {
             }
 
             /// The dot product. Its type comes from the relation between the
-            /// quantities, so `Force · Speed` is a `Power`.
-            ///
-            /// The relations are UnitsNet's, where `Force × Length` is a
-            /// `Torque`. For the work done by a force, which is an `Energy`
-            /// in the same N·m, convert with `Energy::from_base(t.as_base())`.
+            /// quantities, so `Force · Speed` is a `Power` and the work
+            /// `Force · Length` is an `Energy`.
             #[inline]
             pub fn dot<R, O>(self, other: $V<R>) -> O
             where
@@ -324,7 +321,22 @@ vector! {
 
 impl<Q> Vector3<Q> {
     /// The cross product. Its type comes from the relation between the
-    /// quantities, so `r × F` with a `Length` and a `Force` is a `Torque`.
+    /// quantities, so `Length × Length` is an `Area`.
+    ///
+    /// `Force × Length` is an `Energy`, the work done, so a torque `r × F`
+    /// comes out as a vector of energies; [`formula!`](crate::formula!)
+    /// turns each component into a `Torque`:
+    ///
+    /// ```rust
+    /// # #[cfg(feature = "mechanics")] {
+    /// use qty::*;
+    ///
+    /// let r = Vector3::<Length>::from_base([0.5, 0.0, 0.0]);
+    /// let f = Vector3::<Force>::from_base([0.0, 10.0, 0.0]);
+    /// let torque = r.cross(f).map(|c| -> Torque { formula!(c) });
+    /// assert_eq!(torque.z, Torque::from_newton_meters(5.0));
+    /// # }
+    /// ```
     #[inline]
     pub fn cross<R, O>(self, other: Vector3<R>) -> Vector3<O>
     where

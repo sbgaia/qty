@@ -38,7 +38,11 @@ fn mechanics() {
     let f: Force = formula!(m * v * v / r);
     assert_eq!(f.as_newtons(), 12.0);
 
-    // Force times length is a torque or an energy, whichever is asked for.
+    // Force times length is the work done, an energy. `formula!` gives a
+    // torque, of the same dimensions, when that is asked for.
+    let w: Energy = f * Length::from_meters(0.5);
+    assert_eq!(w.as_joules(), 6.0);
+    assert_eq!(w / Length::from_meters(0.5), f);
     let lever = Length::from_meters(0.5);
     let torque: Torque = formula!(f * lever);
     let work: Energy = formula!(f * lever);
