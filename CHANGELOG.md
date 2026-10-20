@@ -11,7 +11,13 @@ follow [Semantic Versioning](https://semver.org/).
 - `custom_quantity!` takes an optional `dimensions { mass: 1, length: -2 }`
   clause. The quantity's metadata then has those dimensions, and text in
   any unit expression with them, such as `"80 g/m^2"`, parses as it. The
-  base unit's abbreviation must be such an expression.
+  base unit's abbreviation must be such an expression, which is checked at
+  compile time.
+- `relation!(Grammage * Area = Mass)` implements a product or quotient
+  between a custom quantity and another quantity, custom or built in. The
+  factor between the base units is computed at compile time, and a
+  relation whose dimensions differ does not compile.
+- `UnitExpr::parse` is a `const fn`.
 
 ## [0.2.1] - 2026-10-19
 

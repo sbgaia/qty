@@ -284,20 +284,66 @@ fn private_quantities_with_dimensions() {
     assert!((("180 min^-1".parse::<Cadence>().unwrap() / c) - 1.0).abs() < 1e-12);
 }
 
-#[cfg(debug_assertions)]
-#[test]
-#[should_panic(
-    expected = "custom_quantity! Misdefined: with `dimensions`, the base unit's abbreviation (\"gsm\")"
-)]
-fn a_base_unit_that_is_not_an_expression_is_caught() {
-    qty::custom_quantity! {
-        struct Misdefined;
-        dimensions { mass: 1, length: -2 }
-        enum MisdefinedUnit {
-            Gsm: "gsm",
-        }
+mod relations {
+    use super::grammage::{Grammage, GrammageUnit};
+    use qty::{Area, Energy, Mass, Ratio, Speed, TemperatureDelta};
+
+    qty::relation! {
+        Grammage * Area = Mass;
+        Area * Grammage = Mass;
     }
-    // Listed units parse as usual; the check runs on the expression fallback.
-    assert_eq!("1 gsm".parse::<Misdefined>().unwrap().as_base(), 1.0);
-    let _ = "1 g/m^2".parse::<Misdefined>();
+    // A qualified path in the output, and a quotient.
+    qty::relation!(qty::Mass / Grammage = qty::Area);
+    // A dimensionless built-in, through its base-unit override ("" → "1").
+    qty::relation!(Grammage * Ratio = Grammage);
+
+    fn gsm(grams: f64) -> Grammage {
+        Grammage::new(grams, GrammageUnit::GramPerSquareMeter)
+    }
+
+    #[test]
+    fn custom_and_builtin() {
+        // g/m² × m² is grams: the factor to kilograms comes from the base units.
+        let ream = gsm(80.0) * Area::from_square_meters(31.25);
+        assert!((ream.as_kilograms() - 2.5).abs() < 1e-12);
+        let area = Mass::from_kilograms(2.5) / gsm(80.0);
+        assert!((area.as_square_meters() - 31.25).abs() < 1e-12);
+        let half = gsm(80.0) * Ratio::from_decimal_fractions(0.5);
+        assert_eq!(half, gsm(40.0));
+        let small: Mass<f32> = Grammage::<f32>::new(80.0, GrammageUnit::GramPerSquareMeter)
+            * Area::<f32>::from_square_meters(31.25);
+        assert!((small.as_kilograms() - 2.5).abs() < 1e-6);
+    }
+
+    #[test]
+    fn custom_and_custom() {
+        qty::custom_quantity! {
+            struct Cadence;
+            dimensions { time: -1 }
+            enum CadenceUnit { Hertz: "Hz", StepPerMinute: "spm" = 1.0 / 60.0 }
+        }
+        qty::custom_quantity! {
+            struct Stride;
+            dimensions { length: 1 }
+            enum StrideUnit { Centimeter: "cm" }
+        }
+        qty::relation!(Cadence * Stride = Speed);
+        let pace: Speed = Cadence::new(180.0, CadenceUnit::StepPerMinute)
+            * Stride::new(80.0, StrideUnit::Centimeter);
+        assert!((pace.as_meters_per_second() - 2.4).abs() < 1e-12);
+    }
+
+    #[test]
+    fn builtins_whose_abbreviation_is_not_an_expression() {
+        qty::custom_quantity! {
+            struct ThermalMass;
+            dimensions { length: 2, mass: 1, time: -2, temperature: -1 }
+            enum ThermalMassUnit { JoulePerKelvin: "J/K" (plural "JoulesPerKelvin") }
+        }
+        // TemperatureDelta's base unit is written "∆K".
+        qty::relation!(ThermalMass * TemperatureDelta = Energy);
+        let heat: Energy = ThermalMass::new(4184.0, ThermalMassUnit::JoulePerKelvin)
+            * TemperatureDelta::from_degrees_celsius(10.0);
+        assert!((heat.as_kilojoules() - 41.84).abs() < 1e-9);
+    }
 }

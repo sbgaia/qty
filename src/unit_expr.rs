@@ -61,18 +61,33 @@ impl UnitExpr {
 
     /// Parses an expression; [`ParseError::UnknownUnit`] if it is malformed
     /// or names an unknown unit.
-    pub fn parse(s: &str) -> Result<Self, ParseError> {
-        let mut parser = Parser { s, pos: 0 };
-        parser.skip_spaces();
-        let expr = parser.expr()?;
-        parser.skip_spaces();
-        if parser.pos != s.len() {
-            return Err(ParseError::UnknownUnit);
+    ///
+    /// `const`, so expressions can be checked at compile time:
+    ///
+    /// ```rust
+    /// use qty::*;
+    ///
+    /// const KWH: UnitExpr = match UnitExpr::parse("kW·h") {
+    ///     Ok(e) => e,
+    ///     Err(_) => panic!("not a unit"),
+    /// };
+    /// assert_eq!(KWH.factor, 3.6e6);
+    /// ```
+    pub const fn parse(s: &str) -> Result<Self, ParseError> {
+        let b = s.as_bytes();
+        let pos = skip_spaces(b, 0).1;
+        let (expr, pos) = match expr(b, pos) {
+            Ok(step) => step,
+            Err(e) => return Err(e),
+        };
+        if skip_spaces(b, pos).1 == b.len() {
+            Ok(expr)
+        } else {
+            Err(ParseError::UnknownUnit)
         }
-        Ok(expr)
     }
 
-    fn mul(self, other: Self) -> Self {
+    pub(crate) const fn mul(self, other: Self) -> Self {
         Self {
             dimensions: self.dimensions.mul(other.dimensions),
             angle: self.angle + other.angle,
@@ -80,10 +95,12 @@ impl UnitExpr {
         }
     }
 
-    fn powi(self, n: i8) -> Self {
+    pub(crate) const fn powi(self, n: i8) -> Self {
         let mut factor = 1.0;
-        for _ in 0..n.unsigned_abs() {
+        let mut i = 0;
+        while i < n.unsigned_abs() {
             factor *= self.factor;
+            i += 1;
         }
         Self {
             dimensions: self.dimensions.powi(n),
@@ -237,161 +254,306 @@ const PREFIXES: &[(&str, f64)] = &[
     ("q", 1e-30),
 ];
 
-fn lookup(token: &str) -> Option<UnitExpr> {
-    let from_atom = |a: &Atom, prefix: f64| UnitExpr {
-        dimensions: Dimensions::new(
-            a.dims[0], a.dims[1], a.dims[2], a.dims[3], a.dims[4], a.dims[5], a.dims[6],
-        ),
-        angle: a.angle,
-        factor: a.factor * prefix,
-    };
-    if let Some(a) = ATOMS.iter().find(|a| a.symbol == token) {
-        return Some(from_atom(a, 1.0));
-    }
-    PREFIXES.iter().find_map(|&(prefix, scale)| {
-        let rest = token.strip_prefix(prefix)?;
-        ATOMS
-            .iter()
-            .find(|a| a.prefixed && a.symbol == rest)
-            .map(|a| from_atom(a, scale))
-    })
-}
-
 // ── Parser ────────────────────────────────────────────────────────────────────
+//
+// `const`, so that unit expressions can be checked at compile time. Without
+// `&mut` in `const fn` (before Rust 1.83), each step takes the input and a
+// byte position and returns the new position.
 
-struct Parser<'a> {
-    s: &'a str,
-    pos: usize,
+type Step<T> = Result<(T, usize), ParseError>;
+
+const fn bytes_eq(a: &[u8], b: &[u8]) -> bool {
+    if a.len() != b.len() {
+        return false;
+    }
+    let mut i = 0;
+    while i < a.len() {
+        if a[i] != b[i] {
+            return false;
+        }
+        i += 1;
+    }
+    true
 }
 
-const SUPERSCRIPT_DIGITS: [char; 10] = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹'];
-
-impl Parser<'_> {
-    fn peek(&self) -> Option<char> {
-        self.s[self.pos..].chars().next()
+/// Whether `pat` follows at `pos`, and the position after it if so.
+const fn eat(b: &[u8], pos: usize, pat: &str) -> (bool, usize) {
+    let pat = pat.as_bytes();
+    if pos + pat.len() > b.len() {
+        return (false, pos);
     }
+    let mut i = 0;
+    while i < pat.len() {
+        if b[pos + i] != pat[i] {
+            return (false, pos);
+        }
+        i += 1;
+    }
+    (true, pos + pat.len())
+}
 
-    fn bump(&mut self) {
-        if let Some(c) = self.peek() {
-            self.pos += c.len_utf8();
+/// The character at `pos` and its length in bytes. `b` is valid UTF-8 and
+/// `pos` a character boundary.
+const fn peek(b: &[u8], pos: usize) -> Option<(char, usize)> {
+    if pos >= b.len() {
+        return None;
+    }
+    let first = b[pos] as u32;
+    let (len, mut c) = if first < 0x80 {
+        (1, first)
+    } else if first < 0xE0 {
+        (2, first & 0x1F)
+    } else if first < 0xF0 {
+        (3, first & 0x0F)
+    } else {
+        (4, first & 0x07)
+    };
+    let mut i = 1;
+    while i < len {
+        c = (c << 6) | (b[pos + i] as u32 & 0x3F);
+        i += 1;
+    }
+    match char::from_u32(c) {
+        Some(c) => Some((c, len)),
+        None => None,
+    }
+}
+
+/// `char::is_whitespace`: the Unicode `White_Space` property.
+const fn is_whitespace(c: char) -> bool {
+    matches!(
+        c,
+        '\t'..='\r'
+            | ' '
+            | '\u{85}'
+            | '\u{A0}'
+            | '\u{1680}'
+            | '\u{2000}'..='\u{200A}'
+            | '\u{2028}'
+            | '\u{2029}'
+            | '\u{202F}'
+            | '\u{205F}'
+            | '\u{3000}'
+    )
+}
+
+/// Characters of unit symbols: every character used by `ATOMS` and
+/// `PREFIXES`. (A token with any other letter would match no unit anyway.)
+const fn is_symbol_char(c: char) -> bool {
+    c.is_ascii_alphabetic() || matches!(c, '°' | 'Å' | 'µ' | 'μ' | 'Ω')
+}
+
+/// Whether any whitespace was skipped, and the position after it.
+const fn skip_spaces(b: &[u8], mut pos: usize) -> (bool, usize) {
+    let start = pos;
+    while let Some((c, len)) = peek(b, pos) {
+        if !is_whitespace(c) {
+            break;
+        }
+        pos += len;
+    }
+    (pos != start, pos)
+}
+
+const fn lookup(token: &[u8]) -> Option<UnitExpr> {
+    const fn from_atom(a: &Atom, prefix: f64) -> UnitExpr {
+        UnitExpr {
+            dimensions: Dimensions::new(
+                a.dims[0], a.dims[1], a.dims[2], a.dims[3], a.dims[4], a.dims[5], a.dims[6],
+            ),
+            angle: a.angle,
+            factor: a.factor * prefix,
         }
     }
+    let mut i = 0;
+    while i < ATOMS.len() {
+        if bytes_eq(ATOMS[i].symbol.as_bytes(), token) {
+            return Some(from_atom(&ATOMS[i], 1.0));
+        }
+        i += 1;
+    }
+    let mut p = 0;
+    while p < PREFIXES.len() {
+        let (prefix, scale) = PREFIXES[p];
+        let (matched, rest) = eat(token, 0, prefix);
+        if matched {
+            let rest = token.split_at(rest).1;
+            let mut i = 0;
+            while i < ATOMS.len() {
+                if ATOMS[i].prefixed && bytes_eq(ATOMS[i].symbol.as_bytes(), rest) {
+                    return Some(from_atom(&ATOMS[i], scale));
+                }
+                i += 1;
+            }
+        }
+        p += 1;
+    }
+    None
+}
 
-    fn eat(&mut self, token: &str) -> bool {
-        if self.s[self.pos..].starts_with(token) {
-            self.pos += token.len();
+/// `factor (op factor)*`, where `op` is a multiplication sign, a space or `/`.
+const fn expr(b: &[u8], pos: usize) -> Step<UnitExpr> {
+    let (mut acc, mut pos) = match factor(b, pos) {
+        Ok(step) => step,
+        Err(e) => return Err(e),
+    };
+    loop {
+        let (spaced, after_spaces) = skip_spaces(b, pos);
+        pos = after_spaces;
+        let divide = if let (true, p) = eat(b, pos, "/") {
+            pos = p;
             true
-        } else {
+        } else if eat(b, pos, "**").0 {
+            // `**` right after a factor was consumed as an exponent.
+            return Err(ParseError::UnknownUnit);
+        } else if let (true, p) = eat_multiplication_sign(b, pos) {
+            pos = p;
             false
-        }
+        } else if spaced && !matches!(peek(b, pos), None | Some((')', _))) {
+            // A space between factors.
+            false
+        } else {
+            return Ok((acc, pos));
+        };
+        pos = skip_spaces(b, pos).1;
+        let rhs = match factor(b, pos) {
+            Ok((rhs, p)) => {
+                pos = p;
+                rhs
+            }
+            Err(e) => return Err(e),
+        };
+        acc = acc.mul(if divide { rhs.powi(-1) } else { rhs });
     }
+}
 
-    fn skip_spaces(&mut self) -> bool {
-        let start = self.pos;
-        while self.peek().is_some_and(char::is_whitespace) {
-            self.bump();
+const fn eat_multiplication_sign(b: &[u8], pos: usize) -> (bool, usize) {
+    let signs = ["*", "·", "⋅", "×"];
+    let mut i = 0;
+    while i < signs.len() {
+        if let (true, p) = eat(b, pos, signs[i]) {
+            return (true, p);
         }
-        self.pos != start
+        i += 1;
     }
+    (false, pos)
+}
 
-    /// `factor (op factor)*`, where `op` is a multiplication sign, a space or `/`.
-    fn expr(&mut self) -> Result<UnitExpr, ParseError> {
-        let mut acc = self.factor()?;
-        loop {
-            let spaced = self.skip_spaces();
-            let divide = if self.eat("/") {
-                true
-            } else if self.eat("**") {
-                // `**` right after a factor was consumed as an exponent.
+/// `primary exponent?`.
+const fn factor(b: &[u8], pos: usize) -> Step<UnitExpr> {
+    let (base, pos) = match primary(b, pos) {
+        Ok(step) => step,
+        Err(e) => return Err(e),
+    };
+    match exponent(b, pos) {
+        Ok((Some(n), pos)) => Ok((base.powi(n), pos)),
+        Ok((None, pos)) => Ok((base, pos)),
+        Err(e) => Err(e),
+    }
+}
+
+const fn primary(b: &[u8], pos: usize) -> Step<UnitExpr> {
+    if let (true, pos) = eat(b, pos, "(") {
+        let pos = skip_spaces(b, pos).1;
+        let (inner, pos) = match expr(b, pos) {
+            Ok(step) => step,
+            Err(e) => return Err(e),
+        };
+        let pos = skip_spaces(b, pos).1;
+        return match eat(b, pos, ")") {
+            (true, pos) => Ok((inner, pos)),
+            (false, _) => Err(ParseError::UnknownUnit),
+        };
+    }
+    if let (true, pos) = eat(b, pos, "1") {
+        return Ok((UnitExpr::ONE, pos));
+    }
+    let start = pos;
+    let mut pos = pos;
+    while let Some((c, len)) = peek(b, pos) {
+        if !is_symbol_char(c) {
+            break;
+        }
+        pos += len;
+    }
+    match lookup(b.split_at(pos).0.split_at(start).1) {
+        Some(unit) => Ok((unit, pos)),
+        None => Err(ParseError::UnknownUnit),
+    }
+}
+
+/// The value of a superscript digit.
+const fn superscript_digit(c: char) -> Option<i8> {
+    match c {
+        '⁰' => Some(0),
+        '¹' => Some(1),
+        '²' => Some(2),
+        '³' => Some(3),
+        '⁴'..='⁹' => Some((c as u32 - '⁴' as u32) as i8 + 4),
+        _ => None,
+    }
+}
+
+/// `^n`, `**n` or superscript digits, with an optional minus sign.
+const fn exponent(b: &[u8], pos: usize) -> Step<Option<i8>> {
+    // Spaces may surround `^` (`s ^ 2`), but a space alone separates factors.
+    let after_spaces = skip_spaces(b, pos).1;
+    let (caret, mut p) = eat(b, after_spaces, "^");
+    let (stars, p2) = eat(b, after_spaces, "**");
+    if caret || stars {
+        if stars {
+            p = p2;
+        }
+        p = skip_spaces(b, p).1;
+        let (minus, p3) = eat(b, p, "-");
+        let (minus_sign, p4) = eat(b, p, "−");
+        let negative = minus || minus_sign;
+        p = if minus {
+            p3
+        } else if minus_sign {
+            p4
+        } else {
+            eat(b, p, "+").1
+        };
+        // Up to i8::MAX, like `str::parse::<i8>` on the digits.
+        let start = p;
+        let mut n: i32 = 0;
+        while p < b.len() && b[p].is_ascii_digit() {
+            n = n * 10 + (b[p] - b'0') as i32;
+            if n > i8::MAX as i32 {
                 return Err(ParseError::UnknownUnit);
-            } else if ["*", "·", "⋅", "×"].iter().any(|op| self.eat(op))
-                || (spaced && self.peek().is_some_and(|c| c != ')'))
-            {
-                // An explicit multiplication sign, or a space between factors.
-                false
-            } else {
-                return Ok(acc);
-            };
-            self.skip_spaces();
-            let rhs = self.factor()?;
-            acc = acc.mul(if divide { rhs.powi(-1) } else { rhs });
-        }
-    }
-
-    /// `primary exponent?`.
-    fn factor(&mut self) -> Result<UnitExpr, ParseError> {
-        let base = self.primary()?;
-        Ok(match self.exponent()? {
-            Some(n) => base.powi(n),
-            None => base,
-        })
-    }
-
-    fn primary(&mut self) -> Result<UnitExpr, ParseError> {
-        if self.eat("(") {
-            self.skip_spaces();
-            let inner = self.expr()?;
-            self.skip_spaces();
-            return if self.eat(")") {
-                Ok(inner)
-            } else {
-                Err(ParseError::UnknownUnit)
-            };
-        }
-        if self.eat("1") {
-            return Ok(UnitExpr::ONE);
-        }
-        let start = self.pos;
-        while self
-            .peek()
-            .is_some_and(|c| c.is_alphabetic() || matches!(c, '°' | 'Å'))
-        {
-            self.bump();
-        }
-        lookup(&self.s[start..self.pos]).ok_or(ParseError::UnknownUnit)
-    }
-
-    /// `^n`, `**n` or superscript digits, with an optional minus sign.
-    fn exponent(&mut self) -> Result<Option<i8>, ParseError> {
-        // Spaces may surround `^` (`s ^ 2`), but a space alone separates factors.
-        let before_spaces = self.pos;
-        self.skip_spaces();
-        if self.eat("^") || self.eat("**") {
-            self.skip_spaces();
-            let negative = self.eat("-") || self.eat("−");
-            if !negative {
-                self.eat("+");
             }
-            let start = self.pos;
-            while self.peek().is_some_and(|c| c.is_ascii_digit()) {
-                self.bump();
-            }
-            let n: i8 = self.s[start..self.pos]
-                .parse()
-                .map_err(|_| ParseError::UnknownUnit)?;
-            return Ok(Some(if negative { -n } else { n }));
+            p += 1;
         }
-        self.pos = before_spaces;
-        let negative = self.eat("⁻");
-        let mut n: Option<i8> = None;
-        while let Some(d) = self
-            .peek()
-            .and_then(|c| SUPERSCRIPT_DIGITS.iter().position(|&s| s == c))
-        {
-            self.bump();
-            let digit = i8::try_from(d).map_err(|_| ParseError::UnknownUnit)?;
-            n = Some(
-                n.unwrap_or(0)
-                    .checked_mul(10)
-                    .and_then(|v| v.checked_add(digit))
-                    .ok_or(ParseError::UnknownUnit)?,
-            );
+        if p == start {
+            return Err(ParseError::UnknownUnit);
         }
-        match (negative, n) {
-            (true, None) => Err(ParseError::UnknownUnit),
-            (true, Some(n)) => Ok(Some(-n)),
-            (false, n) => Ok(n),
-        }
+        let n = n as i8;
+        return Ok((Some(if negative { -n } else { n }), p));
+    }
+    let (negative, mut p) = eat(b, pos, "⁻");
+    let mut n: Option<i8> = None;
+    while let Some((c, len)) = peek(b, p) {
+        let Some(digit) = superscript_digit(c) else {
+            break;
+        };
+        p += len;
+        let value = match n {
+            Some(n) => n,
+            None => 0,
+        };
+        n = match value.checked_mul(10) {
+            Some(v) => match v.checked_add(digit) {
+                Some(v) => Some(v),
+                None => return Err(ParseError::UnknownUnit),
+            },
+            None => return Err(ParseError::UnknownUnit),
+        };
+    }
+    match (negative, n) {
+        (true, None) => Err(ParseError::UnknownUnit),
+        (true, Some(n)) => Ok((Some(-n), p)),
+        (false, n) => Ok((n, p)),
     }
 }
 

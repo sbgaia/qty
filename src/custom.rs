@@ -1,5 +1,6 @@
 //! Units and quantities defined outside qty: [`custom_unit!`](crate::custom_unit)
-//! and [`custom_quantity!`](crate::custom_quantity).
+//! and [`custom_quantity!`](crate::custom_quantity), and relations with
+//! [`relation!`](crate::relation).
 
 use crate::{Quantity, Unit};
 
@@ -163,12 +164,20 @@ macro_rules! custom_unit {
 /// # Ok::<(), ParseError>(())
 /// ```
 ///
-/// A base unit that is not such an expression fails a `debug_assert!` the
-/// first time text falls back to an expression. Without dimensions, unit
-/// expressions do not parse as the quantity.
+/// A base unit that is not such an expression is a compile error, and
+/// with dimensions the quantity can take part in [`relation!`](crate::relation)s.
+/// Without dimensions, unit expressions do not parse as the quantity.
 ///
-/// Products with other quantities are yours to define, with or without
-/// dimensions:
+/// ```rust,compile_fail,E0080
+/// # use qty::*;
+/// custom_quantity! {
+///     pub struct Grammage;
+///     dimensions { mass: 1, length: -2 }
+///     pub enum GrammageUnit { Gsm: "gsm" } // not a unit expression
+/// }
+/// ```
+///
+/// Products with quantities without dimensions are yours to write:
 ///
 /// ```rust
 /// # use qty::*;
@@ -197,9 +206,16 @@ macro_rules! custom_quantity {
         $crate::custom_quantity! {
             @define [$($doc),*] [$vis] $Q,
             [$crate::Dimensions { $($dimension: $exponent,)* ..$crate::Dimensions::DIMENSIONLESS }],
-            CustomBase;
+            Base;
             $($rest)*
         }
+        const _: () = ::core::assert!(
+            $crate::__private::base_unit_has_dimensions(<$Q<f64> as $crate::Quantity>::INFO),
+            ::core::concat!(
+                "custom_quantity! ", ::core::stringify!($Q), ": with `dimensions`, the base unit's ",
+                "abbreviation must be a unit expression with those dimensions, such as \"kg/m^2\"",
+            ),
+        );
     };
     (
         $(#[doc = $doc:literal])*
@@ -391,6 +407,119 @@ macro_rules! custom_quantity {
     };
 }
 
+/// Defines products and quotients between quantities, for custom quantities:
+/// `A * B = C` implements `Mul<B> for A` with output `C`, and `A / B = C`
+/// implements `Div<B> for A`.
+///
+/// The conversion between the three base units is computed at compile time,
+/// from their abbreviations read as [unit expressions](crate::UnitExpr), and
+/// a relation whose dimensions do not add up does not compile. A custom
+/// quantity therefore needs [`dimensions`](crate::custom_quantity#dimensions).
+///
+/// ```rust
+/// use qty::*;
+///
+/// custom_quantity! {
+///     /// The weight of paper per area.
+///     pub struct Grammage;
+///     dimensions { mass: 1, length: -2 }
+///
+///     pub enum GrammageUnit {
+///         GramPerSquareMeter: "g/m²" (plural "GramsPerSquareMeter"),
+///     }
+/// }
+///
+/// relation! {
+///     Grammage * Area = Mass;
+///     Area * Grammage = Mass;
+///     Mass / Grammage = Area;
+/// }
+///
+/// let ream = "80 g/m^2".parse::<Grammage>()? * Area::from_square_meters(500.0 / 16.0);
+/// assert!((ream.as_kilograms() - 2.5).abs() < 1e-12);
+/// let sheets = Mass::from_kilograms(2.5) / Grammage::new(80.0, GrammageUnit::GramPerSquareMeter);
+/// assert!((sheets.as_square_meters() - 31.25).abs() < 1e-12);
+/// # Ok::<(), ParseError>(())
+/// ```
+///
+/// Each line is one impl, so write both orders of a product if you want
+/// both. Rust's orphan rule applies: one of the two operands must be a type
+/// of your crate, so a relation between built-in quantities alone, such as
+/// `Mass / Area = Grammage`, cannot be added (qty already has
+/// `Mass / Area = AreaDensity`). Storage types are floats: `Grammage<f32>`
+/// times `Area<f32>` is `Mass<f32>`.
+///
+/// Dimensions that do not match are a compile error:
+///
+/// ```rust,compile_fail,E0080
+/// # use qty::*;
+/// # custom_quantity! {
+/// #     pub struct Grammage;
+/// #     dimensions { mass: 1, length: -2 }
+/// #     pub enum GrammageUnit { GramPerSquareMeter: "g/m²" (plural "GramsPerSquareMeter") }
+/// # }
+/// relation!(Grammage * Length = Mass); // M·L⁻² × L is not M
+/// ```
+#[macro_export]
+macro_rules! relation {
+    () => {};
+    ($($a:ident)::+ * $($b:ident)::+ = $($c:ident)::+ $(; $($rest:tt)*)?) => {
+        $crate::__qty_relation!(
+            Mul, mul, *, false, [$($a)::+], [$($b)::+], [$($c)::+],
+            ::core::stringify!($($a)::+ * $($b)::+ = $($c)::+)
+        );
+        $($crate::relation!($($rest)*);)?
+    };
+    ($($a:ident)::+ / $($b:ident)::+ = $($c:ident)::+ $(; $($rest:tt)*)?) => {
+        $crate::__qty_relation!(
+            Div, div, /, true, [$($a)::+], [$($b)::+], [$($c)::+],
+            ::core::stringify!($($a)::+ / $($b)::+ = $($c)::+)
+        );
+        $($crate::relation!($($rest)*);)?
+    };
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __qty_relation {
+    (
+        $Trait:ident, $method:ident, $op:tt, $divide:literal,
+        [$($a:tt)*], [$($b:tt)*], [$($c:tt)*], $text:expr
+    ) => {
+        impl<T: $crate::Float> ::core::ops::$Trait<$($b)*<T>> for $($a)*<T> {
+            type Output = $($c)*<T>;
+            #[inline]
+            fn $method(self, rhs: $($b)*<T>) -> $($c)*<T> {
+                const K: f64 = match $crate::__private::relation_factor(
+                    <$($a)*<f64> as $crate::Quantity>::BASE_EXPR,
+                    <$($b)*<f64> as $crate::Quantity>::BASE_EXPR,
+                    <$($c)*<f64> as $crate::Quantity>::BASE_EXPR,
+                    $divide,
+                ) {
+                    ::core::result::Result::Ok(k) => k,
+                    ::core::result::Result::Err($crate::__private::RelationError::Lhs) => ::core::panic!(
+                        ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($a)*),
+                            "` is not a unit expression (does it have `dimensions`?)")
+                    ),
+                    ::core::result::Result::Err($crate::__private::RelationError::Rhs) => ::core::panic!(
+                        ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($b)*),
+                            "` is not a unit expression (does it have `dimensions`?)")
+                    ),
+                    ::core::result::Result::Err($crate::__private::RelationError::Output) => ::core::panic!(
+                        ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($c)*),
+                            "` is not a unit expression (does it have `dimensions`?)")
+                    ),
+                    ::core::result::Result::Err($crate::__private::RelationError::Dimensions) => ::core::panic!(
+                        ::core::concat!("relation!(", $text, "): the dimensions of the two sides differ")
+                    ),
+                };
+                let value = $crate::Quantity::as_base(self) $op $crate::Quantity::as_base(rhs);
+                <$($c)*<T> as $crate::Quantity>::from_base(if K == 1.0 { value } else { value * T::from_f64(K) })
+            }
+        }
+    };
+}
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_plural {
@@ -469,7 +598,9 @@ pub mod private {
     #[cfg(feature = "serde")]
     pub use serde;
 
-    use crate::{normalize_unit_name, ParseError, Quantity, UnitEnum, UnitExpr};
+    use crate::{
+        normalize_unit_name, Dimensions, ParseError, Quantity, QuantityInfo, UnitEnum, UnitExpr,
+    };
 
     /// Which unit expressions a quantity's `FromStr` accepts.
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -479,28 +610,133 @@ pub mod private {
         /// Those with the quantity's dimensions, converted through its base
         /// unit's abbreviation read as an expression.
         Base,
-        /// As `Base`, for custom quantities: their base unit's abbreviation
-        /// must be an expression with their dimensions.
-        CustomBase,
     }
 
     /// The factor from the unit expression `unit` to `Q`'s base unit.
     pub fn expr_factor<Q: Quantity>(unit: &str, exprs: Exprs) -> Option<f64> {
-        if exprs == Exprs::Off {
-            return None;
+        match exprs {
+            Exprs::Off => None,
+            Exprs::Base => UnitExpr::parse(unit).ok()?.factor_to_base::<Q>(),
         }
-        if exprs == Exprs::CustomBase {
-            let info = Q::INFO;
-            debug_assert!(
-                UnitExpr::parse(info.base_unit.abbreviation)
-                    .is_ok_and(|base| base.dimensions == info.dimensions),
-                "custom_quantity! {}: with `dimensions`, the base unit's abbreviation \
-                 (\"{}\") must be a unit expression with those dimensions, such as \"kg/m^2\"",
-                info.name,
-                info.base_unit.abbreviation,
-            );
+    }
+
+    const fn same_dimensions(a: Dimensions, b: Dimensions) -> bool {
+        let (a, b) = (a.to_array(), b.to_array());
+        let mut i = 0;
+        while i < 7 {
+            if a[i] != b[i] {
+                return false;
+            }
+            i += 1;
         }
-        UnitExpr::parse(unit).ok()?.factor_to_base::<Q>()
+        true
+    }
+
+    const fn parse(expr: &str) -> Option<UnitExpr> {
+        match UnitExpr::parse(expr) {
+            Ok(e) => Some(e),
+            Err(_) => None,
+        }
+    }
+
+    /// Whether a quantity's base unit is a unit expression with its
+    /// dimensions, as `custom_quantity!` requires with `dimensions`.
+    pub const fn base_unit_has_dimensions(info: QuantityInfo) -> bool {
+        match parse(info.base_unit.abbreviation) {
+            Some(base) => same_dimensions(base.dimensions, info.dimensions),
+            None => false,
+        }
+    }
+
+    /// The base units of the built-in quantities whose abbreviation is not
+    /// a unit expression, as expressions. Levels in dB, `%RH`, `NTU` and
+    /// `IU` are not products of units, and UnitsNet's standard volume flow
+    /// (`Sm³/s`) has the dimensions of a mass flow; they stay out of
+    /// relations.
+    const BUILTIN_BASE_EXPRS: &[(&str, &str)] = &[
+        ("Ratio", "1"),
+        ("Scalar", "1"),
+        ("MassFraction", "1"),
+        ("VolumeConcentration", "1"),
+        ("Information", "1"),
+        ("BitRate", "1/s"),
+        ("RatioChangeRate", "1/s"),
+        ("TemperatureDelta", "K"),
+        ("TemperatureGradient", "K/m"),
+        ("ElectricApparentPower", "V·A"),
+        ("ElectricReactivePower", "V·A"),
+        ("ElectricApparentEnergy", "V·A·h"),
+        ("ElectricReactiveEnergy", "V·A·h"),
+        ("DynamicViscosity", "N·s/m²"),
+        ("Luminance", "cd/m²"),
+        ("SpecificEntropy", "J/(kg·K)"),
+        ("ThermalInsulance", "m²·K/kW"),
+    ];
+
+    const fn str_eq(a: &str, b: &str) -> bool {
+        let (a, b) = (a.as_bytes(), b.as_bytes());
+        if a.len() != b.len() {
+            return false;
+        }
+        let mut i = 0;
+        while i < a.len() {
+            if a[i] != b[i] {
+                return false;
+            }
+            i += 1;
+        }
+        true
+    }
+
+    /// `Quantity::BASE_EXPR` of the built-in quantity `name`.
+    pub const fn builtin_base_expr(name: &str, abbreviation: &'static str) -> &'static str {
+        let mut i = 0;
+        while i < BUILTIN_BASE_EXPRS.len() {
+            if str_eq(BUILTIN_BASE_EXPRS[i].0, name) {
+                return BUILTIN_BASE_EXPRS[i].1;
+            }
+            i += 1;
+        }
+        abbreviation
+    }
+
+    /// Why `relation!` rejects a relation.
+    #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    pub enum RelationError {
+        /// The first quantity's base unit is not a unit expression.
+        Lhs,
+        /// The second quantity's.
+        Rhs,
+        /// The result's.
+        Output,
+        /// The dimensions (or angles) of the two sides differ.
+        Dimensions,
+    }
+
+    /// For `A * B = C` (or `A / B = C` with `divide`), given the three
+    /// `Quantity::BASE_EXPR`s: the factor `k` with `c = a * b * k` (or
+    /// `a / b * k`) in base units.
+    pub const fn relation_factor(
+        a: &str,
+        b: &str,
+        c: &str,
+        divide: bool,
+    ) -> Result<f64, RelationError> {
+        let Some(a) = parse(a) else {
+            return Err(RelationError::Lhs);
+        };
+        let Some(b) = parse(b) else {
+            return Err(RelationError::Rhs);
+        };
+        let Some(c) = parse(c) else {
+            return Err(RelationError::Output);
+        };
+        let product = a.mul(if divide { b.powi(-1) } else { b });
+        if same_dimensions(product.dimensions, c.dimensions) && product.angle == c.angle {
+            Ok(product.factor / c.factor)
+        } else {
+            Err(RelationError::Dimensions)
+        }
     }
 
     /// Like the generated `from_name`: a singular or plural name.
@@ -648,5 +884,63 @@ pub mod private {
         }
 
         deserializer.deserialize_enum(name, variants, Enum(variants, PhantomData))
+    }
+
+    #[cfg(all(test, feature = "dynamic", feature = "full"))]
+    mod tests {
+        extern crate std;
+        use super::*;
+        use crate::QuantityKind;
+        use std::vec::Vec;
+
+        /// Every built-in base unit is an expression with the quantity's
+        /// dimensions, apart from units that are not products of units.
+        #[test]
+        fn builtin_base_expressions() {
+            let mut not_expressions = Vec::new();
+            for kind in QuantityKind::all() {
+                let info = kind.info();
+                let expr = builtin_base_expr(info.name, info.base_unit.abbreviation);
+                match UnitExpr::parse(expr) {
+                    Ok(e) => assert_eq!(e.dimensions, info.dimensions, "{}: {expr:?}", info.name),
+                    Err(_) => not_expressions.push(info.name),
+                }
+            }
+            not_expressions.sort_unstable();
+            assert_eq!(
+                not_expressions,
+                [
+                    "AmplitudeRatio",
+                    "Level",
+                    "PowerRatio",
+                    "RelativeHumidity",
+                    "StandardVolumeFlow",
+                    "Turbidity",
+                    "VitaminA",
+                ]
+            );
+            // Every override names a built-in quantity.
+            for (name, _) in BUILTIN_BASE_EXPRS {
+                assert!(
+                    QuantityKind::all().any(|k| k.info().name == *name),
+                    "{name}"
+                );
+            }
+        }
+
+        #[test]
+        fn relation_factors() {
+            let k = |a, b, c, divide| relation_factor(a, b, c, divide);
+            assert_eq!(k("g/m²", "m²", "kg", false), Ok(1e-3));
+            assert_eq!(k("kg", "g/m²", "m²", true), Ok(1e3));
+            assert_eq!(k("N", "m", "J", false), Ok(1.0));
+            assert_eq!(k("m²·K/kW", "W/m²", "K", false), Ok(1e-3));
+            assert_eq!(k("N", "m", "rad", false), Err(RelationError::Dimensions));
+            // Angles count: N·m is not N·m/rad.
+            assert_eq!(k("N·m", "rad", "J", true), Err(RelationError::Dimensions));
+            assert_eq!(k("gsm", "m²", "kg", false), Err(RelationError::Lhs));
+            assert_eq!(k("g/m²", "", "kg", false), Err(RelationError::Rhs));
+            assert_eq!(k("g/m²", "m²", "dB", false), Err(RelationError::Output));
+        }
     }
 }

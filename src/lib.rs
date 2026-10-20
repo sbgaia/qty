@@ -219,6 +219,12 @@ pub trait Quantity: Copy {
     /// Name, description, dimensions and units of the quantity.
     const INFO: QuantityInfo;
 
+    /// The base unit as a [`UnitExpr`], for `relation!`. Usually its
+    /// abbreviation; a few built-in quantities whose abbreviation is not an
+    /// expression (`∆K`, `Ns/m²`) override it.
+    #[doc(hidden)]
+    const BASE_EXPR: &'static str = Self::INFO.base_unit.abbreviation;
+
     /// Wraps a value expressed in [`Self::BASE_UNIT`].
     fn from_base(value: Self::Value) -> Self;
 
@@ -552,7 +558,7 @@ macro_rules! __qty_fmt {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_common {
-    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
+    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident $(, base_expr: $base_expr:expr)?) => {
         impl<T> $Q<T> {
             /// Wraps a value expressed in the base unit. Free and `const`.
             #[inline(always)]
@@ -717,6 +723,7 @@ macro_rules! __qty_common {
             type Unit = $U;
             const BASE_UNIT: $U = $U::$base;
             const INFO: $crate::QuantityInfo = $U::QUANTITY;
+            $(const BASE_EXPR: &'static str = $base_expr;)?
             #[inline(always)]
             fn from_base(value: T) -> Self {
                 Self(value)
@@ -930,7 +937,10 @@ macro_rules! __qty_common {
 /// quantities have (`Fixed`, defmt and schemars).
 macro_rules! quantity_core {
     ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
-        $crate::__qty_common!($Q, $U, $base, exprs: $exprs);
+        $crate::__qty_common!(
+            $Q, $U, $base, exprs: $exprs,
+            base_expr: $crate::__private::builtin_base_expr(::core::stringify!($Q), $U::QUANTITY.base_unit.abbreviation)
+        );
 
         impl<I: $crate::Integer> $Q<I> {
             /// Rounds a float quantity to a whole number of base units.

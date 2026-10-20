@@ -93,7 +93,29 @@ assert_eq!(format!("{:.1}", order.in_unit(PaperUnit::Ream)), "3.1 rm");
 
 A custom quantity can also declare its physical dimensions
 (`dimensions { mass: 1, length: -2 }`), so that unit expressions such as
-`"80 g/m^2"` parse as it.
+`"80 g/m^2"` parse as it, and `relation!` connects it to other quantities.
+The conversion factor is worked out at compile time, and a relation whose
+dimensions don't add up doesn't compile:
+
+```rust
+use qty::*;
+
+custom_quantity! {
+    /// The weight of paper per area.
+    pub struct Grammage;
+    dimensions { mass: 1, length: -2 }
+
+    pub enum GrammageUnit {
+        GramPerSquareMeter: "g/m²" (plural "GramsPerSquareMeter"),
+    }
+}
+
+relation!(Grammage * Area = Mass);
+
+let ream: Mass = "80 g/m^2".parse::<Grammage>()? * Area::from_square_meters(31.25);
+assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
+# Ok::<(), ParseError>(())
+```
 
 ## Text
 
