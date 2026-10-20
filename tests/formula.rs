@@ -1,5 +1,7 @@
 //! Textbook formulas through `formula!`, checked against known values.
 
+#![cfg(all(feature = "full", any(feature = "std", feature = "libm")))]
+
 use qty::constants::*;
 use qty::formula::{Dims, Expr};
 use qty::*;

@@ -63,12 +63,12 @@
 //! plain floats.
 //!
 //! Quantities whose base unit isn't coherent SI (grams per second for
-//! [`MassFlow`](crate::MassFlow)) are converted on the way in and out, with
+//! `MassFlow`) are converted on the way in and out, with
 //! one multiplication by a constant.
 //!
 //! Quantities with the same dimensions are interchangeable here: `force *
-//! length` can become a [`Torque`](crate::Torque) or an
-//! [`Energy`](crate::Energy), whichever the target is. Angles are
+//! length` can become a `Torque` or an [`Energy`](crate::Energy), whichever
+//! the target is. Angles are
 //! dimensionless, as in SI.
 //!
 //! Exponents can be up to ±[`MAX_EXPONENT`], twice the largest exponent of
@@ -83,11 +83,10 @@
 //!
 //! ```rust
 //! # use qty::*;
-//! use qty::constants::ELEMENTARY_CHARGE as E;
+//! use qty::constants::STANDARD_GRAVITY as G0;
 //!
-//! let field = ElectricField::from_volts_per_meter(1e4);
-//! let force: Force = (E * field).into();
-//! assert!((force.as_newtons() - 1.602e-15).abs() < 1e-18);
+//! let weight: Force = (Mass::from_kilograms(10.0) * G0).into();
+//! assert_eq!(format!("{weight:.1}"), "98.1 N");
 //! ```
 //!
 //! An intermediate result can be kept in a variable as an `Expr<_>`:
