@@ -1,6 +1,6 @@
 # Releasing
 
-Releasing is merging a release PR. Once CI passes on master, the `Release`
+Releasing is merging a release PR. Once CI passes on main, the `Release`
 workflow sees that the version in `Cargo.toml` isn't on crates.io yet and
 publishes it, with a tag and a GitHub release. Don't push tags by hand.
 
@@ -28,7 +28,7 @@ instead of a long-lived token.
    `./scripts/release-check.sh vX.Y.Z` checks both locally.
 3. Merge it once CI passes.
 
-After CI passes on master, the workflow runs the same check, `cargo publish`
+After CI passes on main, the workflow runs the same check, `cargo publish`
 (which builds the packaged crate on its own), and creates the tag `vX.Y.Z`
 and a GitHub release whose notes are the changelog section. Merges that
 don't change the version release nothing. If a release fails, fix the cause
