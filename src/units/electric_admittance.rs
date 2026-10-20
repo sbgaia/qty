@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ElectricAdmittance<T = f64>(T);
 
 quantity!(ElectricAdmittance, ElectricAdmittanceUnit, Siemens, si: Some(crate::__private::si_unit([-2, -1, 3, 2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricAdmittance, ElectricAdmittanceUnit);
 
 /// The units of [`ElectricAdmittance`].
 ///

@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Irradiance<T = f64>(T);
 
 quantity!(Irradiance, IrradianceUnit, WattPerSquareMeter, si: Some(crate::__private::si_unit([0, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Irradiance, IrradianceUnit);
 
 /// The units of [`Irradiance`].
 ///

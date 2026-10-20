@@ -89,6 +89,16 @@ fn main() {
     rustfmt(any_path);
     println!("codegen: wrote src/any.rs");
 
+    let exponents_path = Path::new("src/formula/exponents.rs");
+    std::fs::create_dir_all("src/formula").expect("create src/formula/");
+    std::fs::write(
+        exponents_path,
+        generator::generate_formula_exponents(&quantities),
+    )
+    .unwrap_or_else(|e| panic!("write {}: {e}", exponents_path.display()));
+    rustfmt(exponents_path);
+    println!("codegen: wrote src/formula/exponents.rs");
+
     let cross_source = generator::generate_cross_type(&cross_ops);
     let cross_path = Path::new("src/cross_type.rs");
     std::fs::write(cross_path, &cross_source)

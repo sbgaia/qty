@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Force<T = f64>(T);
 
 quantity!(Force, ForceUnit, Newton, si: Some(crate::__private::si_unit([1, 1, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Force, ForceUnit);
 
 /// The units of [`Force`].
 ///

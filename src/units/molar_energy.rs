@@ -23,6 +23,7 @@ use crate::Float;
 pub struct MolarEnergy<T = f64>(T);
 
 quantity!(MolarEnergy, MolarEnergyUnit, JoulePerMole, si: Some(crate::__private::si_unit([2, 1, -2, 0, 0, -1, 0], 1.0)));
+crate::__qty_formula!(MolarEnergy, MolarEnergyUnit);
 
 /// The units of [`MolarEnergy`].
 ///

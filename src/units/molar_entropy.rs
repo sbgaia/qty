@@ -23,6 +23,7 @@ use crate::Float;
 pub struct MolarEntropy<T = f64>(T);
 
 quantity!(MolarEntropy, MolarEntropyUnit, JoulePerMoleKelvin, si: Some(crate::__private::si_unit([2, 1, -2, 0, -1, -1, 0], 1.0)));
+crate::__qty_formula!(MolarEntropy, MolarEntropyUnit);
 
 /// The units of [`MolarEntropy`].
 ///

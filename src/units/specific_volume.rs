@@ -23,6 +23,7 @@ use crate::Float;
 pub struct SpecificVolume<T = f64>(T);
 
 quantity!(SpecificVolume, SpecificVolumeUnit, CubicMeterPerKilogram, si: Some(crate::__private::si_unit([3, -1, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(SpecificVolume, SpecificVolumeUnit);
 
 /// The units of [`SpecificVolume`].
 ///

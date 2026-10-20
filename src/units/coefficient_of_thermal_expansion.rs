@@ -23,6 +23,10 @@ use crate::Float;
 pub struct CoefficientOfThermalExpansion<T = f64>(T);
 
 quantity!(CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit, PerKelvin, si: Some(crate::__private::si_unit([0, 0, 0, 0, -1, 0, 0], 1.0)));
+crate::__qty_formula!(
+    CoefficientOfThermalExpansion,
+    CoefficientOfThermalExpansionUnit
+);
 
 /// The units of [`CoefficientOfThermalExpansion`].
 ///

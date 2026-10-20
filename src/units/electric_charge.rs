@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ElectricCharge<T = f64>(T);
 
 quantity!(ElectricCharge, ElectricChargeUnit, Coulomb, si: Some(crate::__private::si_unit([0, 0, 1, 1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricCharge, ElectricChargeUnit);
 
 /// The units of [`ElectricCharge`].
 ///

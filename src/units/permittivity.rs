@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Permittivity<T = f64>(T);
 
 quantity!(Permittivity, PermittivityUnit, FaradPerMeter, si: Some(crate::__private::si_unit([-3, -1, 4, 2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Permittivity, PermittivityUnit);
 
 /// The units of [`Permittivity`].
 ///

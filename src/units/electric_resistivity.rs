@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ElectricResistivity<T = f64>(T);
 
 quantity!(ElectricResistivity, ElectricResistivityUnit, OhmMeter, si: Some(crate::__private::si_unit([3, 1, -3, -2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricResistivity, ElectricResistivityUnit);
 
 /// The units of [`ElectricResistivity`].
 ///

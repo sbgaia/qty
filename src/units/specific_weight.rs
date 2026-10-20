@@ -23,6 +23,7 @@ use crate::Float;
 pub struct SpecificWeight<T = f64>(T);
 
 quantity!(SpecificWeight, SpecificWeightUnit, NewtonPerCubicMeter, si: Some(crate::__private::si_unit([-2, 1, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(SpecificWeight, SpecificWeightUnit);
 
 /// The units of [`SpecificWeight`].
 ///

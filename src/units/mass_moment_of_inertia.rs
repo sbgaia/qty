@@ -23,6 +23,7 @@ use crate::Float;
 pub struct MassMomentOfInertia<T = f64>(T);
 
 quantity!(MassMomentOfInertia, MassMomentOfInertiaUnit, KilogramSquareMeter, si: Some(crate::__private::si_unit([2, 1, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(MassMomentOfInertia, MassMomentOfInertiaUnit);
 
 /// The units of [`MassMomentOfInertia`].
 ///

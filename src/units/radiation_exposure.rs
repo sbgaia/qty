@@ -23,6 +23,7 @@ use crate::Float;
 pub struct RadiationExposure<T = f64>(T);
 
 quantity!(RadiationExposure, RadiationExposureUnit, CoulombPerKilogram, si: Some(crate::__private::si_unit([0, -1, 1, 1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(RadiationExposure, RadiationExposureUnit);
 
 /// The units of [`RadiationExposure`].
 ///
