@@ -240,10 +240,10 @@ cargo run -p codegen
 The generated tests check every unit against the upstream formulas. Property
 tests compare the integer arithmetic with exact rational arithmetic, and two
 fuzz targets cover parsing and `Fixed` (see `fuzz/README.md`). The examples
-in [`examples/`](https://github.com/sbgaia/qty/tree/master/examples) run in CI.
+in [`examples/`](https://github.com/sbgaia/qty/tree/main/examples) run in CI.
 
 ## License
 
-MIT, see [`LICENSE`](https://github.com/sbgaia/qty/blob/master/LICENSE). The unit definitions and descriptions come
+MIT, see [`LICENSE`](https://github.com/sbgaia/qty/blob/main/LICENSE). The unit definitions and descriptions come
 from [UnitsNet](https://github.com/angularsen/UnitsNet) by Andreas Gullberg
 Larsen and contributors, under the MIT No Attribution license.
