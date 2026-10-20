@@ -1,7 +1,8 @@
 # Releasing
 
-Releases are published to crates.io by the `Release` workflow when a version
-tag is pushed.
+Releasing is merging a release PR. Once CI passes on master, the `Release`
+workflow sees that the version in `Cargo.toml` isn't on crates.io yet and
+publishes it, with a tag and a GitHub release. Don't push tags by hand.
 
 ## Once: set up publishing
 
@@ -24,19 +25,14 @@ instead of a long-lived token.
      `README.md` when the minor version (or, after 1.0, the major) changes;
    - in `CHANGELOG.md`, rename `## [Unreleased]` to
      `## [X.Y.Z] - YYYY-MM-DD` and add a new, empty `## [Unreleased]` above it.
-3. Merge it once CI passes. Then, and only then, pull and tag the merge
-   commit on `master` (a tag pushed earlier points at the commit before it,
-   and the workflow stops at the check):
+   `./scripts/release-check.sh vX.Y.Z` checks both locally.
+3. Merge it once CI passes.
 
-   ```sh
-   git checkout master && git pull
-   ./scripts/release-check.sh vX.Y.Z   # checks the tag, version and changelog
-   git tag vX.Y.Z && git push origin vX.Y.Z
-   ```
-
-The workflow checks the tag again, runs `cargo publish` (which builds the
-packaged crate on its own) and creates a GitHub release whose notes are the
-changelog section.
+After CI passes on master, the workflow runs the same check, `cargo publish`
+(which builds the packaged crate on its own), and creates the tag `vX.Y.Z`
+and a GitHub release whose notes are the changelog section. Merges that
+don't change the version release nothing. If a release fails, fix the cause
+and run the workflow again from the Actions tab.
 
 ## Updating UnitsNet
 

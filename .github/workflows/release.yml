@@ -1,37 +1,92 @@
-# Publishes to crates.io and creates a GitHub release when a version tag is
-# pushed (`git tag v0.1.0 && git push origin v0.1.0`). See RELEASING.md.
+# Publishes a release once CI passes on master with a version in Cargo.toml
+# that isn't on crates.io yet. It runs the release check, publishes the crate,
+# and creates the tag and the GitHub release on that commit, so releasing is
+# just merging a release PR. See RELEASING.md.
 #
 # Needs the repository secret CARGO_REGISTRY_TOKEN: a crates.io API token
 # with the "publish-new" and "publish-update" scopes.
 name: Release
 
 on:
-  push:
-    tags: ["v*"]
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [master]
+  # To retry a release that failed, from the Actions tab.
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   publish:
-    name: Publish ${{ github.ref_name }}
+    name: Publish
+    # After a green CI run on a push to master, or when run by hand.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: dtolnay/rust-toolchain@stable
+        with:
+          # The commit CI passed on, not whatever master is now.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          # With tags, to check for one pushed by hand.
+          fetch-depth: 0
 
-      - name: Check the tag, version and changelog agree
-        run: ./scripts/release-check.sh "$GITHUB_REF_NAME" > release-notes.md
+      - name: Find the version to release
+        id: version
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"$/\1/p' Cargo.toml | head -n 1)
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          status=$(curl -sS -o /dev/null -w '%{http_code}' \
+            -A 'qty release workflow (https://github.com/sbgaia/qty)' \
+            "https://crates.io/api/v1/crates/qty/$version")
+          case "$status" in
+            200) echo "qty $version is already on crates.io, nothing to release"
+                 echo "release=false" >> "$GITHUB_OUTPUT" ;;
+            404) echo "release=true" >> "$GITHUB_OUTPUT" ;;
+            *)   echo "error: crates.io answered $status" >&2; exit 1 ;;
+          esac
+
+      - name: Check the version, changelog and tag
+        if: steps.version.outputs.release == 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          ./scripts/release-check.sh "$TAG" > release-notes.md
+          # A tag pushed by hand has to point at this commit.
+          if git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+            tagged=$(git rev-parse "$TAG^{commit}")
+            if [ "$tagged" != "$(git rev-parse HEAD)" ]; then
+              echo "error: $TAG points at $tagged, not at $(git rev-parse HEAD)." >&2
+              echo "Delete it with 'git push origin :refs/tags/$TAG' and run this workflow again." >&2
+              exit 1
+            fi
+          fi
+
+      - uses: dtolnay/rust-toolchain@stable
+        if: steps.version.outputs.release == 'true'
 
       - name: Publish to crates.io
+        if: steps.version.outputs.release == 'true'
         run: cargo publish -p qty
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
 
-      - name: Create the GitHub release
-        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file release-notes.md
+      - name: Create the tag and the GitHub release
+        if: steps.version.outputs.release == 'true'
         env:
+          TAG: ${{ steps.version.outputs.tag }}
           GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$TAG" --target "$(git rev-parse HEAD)" \
+            --title "$TAG" --notes-file release-notes.md
