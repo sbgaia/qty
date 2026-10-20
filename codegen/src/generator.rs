@@ -524,8 +524,8 @@ pub fn in_formulas(qty: &QuantityDef, all: &[QuantityDef]) -> bool {
             || (qty.dimensions == [0; 7] && PLAIN.contains(&qty.base_unit.as_str())))
 }
 
-/// The source of `src/formula/exponents.rs`: sums, differences, halves and
-/// thirds of exponents as types. The range is twice the largest exponent of
+/// The source of `src/formula/exponents.rs`: sums, differences, products,
+/// halves and thirds of exponents as types. The range is twice the largest exponent of
 /// any quantity, so any product or quotient of two quantities fits.
 pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
     let max = 2 * quantities
@@ -544,7 +544,7 @@ pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
         "//! Exponent arithmetic for formulas, from -{max} to {max}."
     );
     w!(out);
-    w!(out, "use super::{{AddE, HalfE, SubE, ThirdE, E}};");
+    w!(out, "use super::{{AddE, HalfE, MulE, SubE, ThirdE, E}};");
     w!(out);
     w!(
         out,
@@ -567,6 +567,17 @@ pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
                     out,
                     "impl SubE<E<{b}>> for E<{a}> {{ type Out = E<{}>; }}",
                     a - b
+                );
+            }
+        }
+    }
+    for a in range.clone() {
+        for n in range.clone() {
+            if range.contains(&(a * n)) {
+                w!(
+                    out,
+                    "impl MulE<{n}> for E<{a}> {{ type Out = E<{}>; }}",
+                    a * n
                 );
             }
         }
