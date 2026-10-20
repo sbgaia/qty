@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Power<T = f64>(T);
 
-quantity!(Power, PowerUnit, Watt);
+quantity!(Power, PowerUnit, Watt, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Power`].
 ///

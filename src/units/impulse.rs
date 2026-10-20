@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Impulse<T = f64>(T);
 
-quantity!(Impulse, ImpulseUnit, NewtonSecond);
+quantity!(Impulse, ImpulseUnit, NewtonSecond, si: Some(crate::__private::si_unit([1, 1, -1, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Impulse`].
 ///

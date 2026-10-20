@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Level<T = f64>(T);
 
-quantity!(Level, LevelUnit, Decibel);
+quantity!(Level, LevelUnit, Decibel, si: None);
 
 /// The units of [`Level`].
 ///

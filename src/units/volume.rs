@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Volume<T = f64>(T);
 
-quantity!(Volume, VolumeUnit, CubicMeter);
+quantity!(Volume, VolumeUnit, CubicMeter, si: Some(crate::__private::si_unit([3, 0, 0, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Volume`].
 ///

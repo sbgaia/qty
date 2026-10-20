@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Molarity<T = f64>(T);
 
-quantity!(Molarity, MolarityUnit, MolePerCubicMeter);
+quantity!(Molarity, MolarityUnit, MolePerCubicMeter, si: Some(crate::__private::si_unit([-3, 0, 0, 0, 0, 1, 0], 1.0)));
 
 /// The units of [`Molarity`].
 ///

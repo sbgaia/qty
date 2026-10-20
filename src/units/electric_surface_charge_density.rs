@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct ElectricSurfaceChargeDensity<T = f64>(T);
 
-quantity!(
-    ElectricSurfaceChargeDensity,
-    ElectricSurfaceChargeDensityUnit,
-    CoulombPerSquareMeter
-);
+quantity!(ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit, CoulombPerSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 1, 1, 0, 0, 0], 1.0)));
 
 /// The units of [`ElectricSurfaceChargeDensity`].
 ///

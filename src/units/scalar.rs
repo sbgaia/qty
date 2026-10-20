@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Scalar<T = f64>(T);
 
-quantity!(Scalar, ScalarUnit, Amount);
+quantity!(Scalar, ScalarUnit, Amount, si: None);
 
 /// The units of [`Scalar`].
 ///

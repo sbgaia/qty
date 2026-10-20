@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct BitRate<T = f64>(T);
 
-quantity!(BitRate, BitRateUnit, BitPerSecond);
+quantity!(BitRate, BitRateUnit, BitPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`BitRate`].
 ///

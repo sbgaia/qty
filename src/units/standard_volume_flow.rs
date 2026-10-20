@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct StandardVolumeFlow<T = f64>(T);
 
-quantity!(
-    StandardVolumeFlow,
-    StandardVolumeFlowUnit,
-    StandardCubicMeterPerSecond
-);
+quantity!(StandardVolumeFlow, StandardVolumeFlowUnit, StandardCubicMeterPerSecond, si: None);
 
 /// The units of [`StandardVolumeFlow`].
 ///

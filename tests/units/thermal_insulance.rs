@@ -286,6 +286,26 @@ fn hour_square_feet_degrees_fahrenheit_per_btu() {
 }
 
 #[test]
+fn base_unit_expression() {
+    let info = <ThermalInsulance<f64> as Quantity>::INFO;
+    let expr = <ThermalInsulance<f64> as Quantity>::BASE_UNIT_EXPR;
+    let parsed = UnitExpr::parse("m²K/kW")
+        .ok()
+        .filter(|e| e.dimensions == info.dimensions);
+    let from_data: Option<f64> = Some(0.001);
+    if let (Some(parsed), Some(size)) = (parsed, from_data) {
+        assert_close(parsed.factor, size, F64_TOL);
+    }
+    match parsed {
+        Some(parsed) => assert_eq!(expr, Some(parsed)),
+        None => assert_eq!(expr.map(|e| e.factor), from_data),
+    }
+    if let Some(expr) = expr {
+        assert_eq!(expr.dimensions, info.dimensions);
+    }
+}
+
+#[test]
 fn fixed_units() {
     check_fixed::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>();
     check_fixed_rescale::<unit::thermal_insulance::SquareMeterKelvinPerKilowatt>();

@@ -161,6 +161,26 @@ fn decibels_unloaded() {
 }
 
 #[test]
+fn base_unit_expression() {
+    let info = <AmplitudeRatio<f64> as Quantity>::INFO;
+    let expr = <AmplitudeRatio<f64> as Quantity>::BASE_UNIT_EXPR;
+    let parsed = UnitExpr::parse("dBV")
+        .ok()
+        .filter(|e| e.dimensions == info.dimensions);
+    let from_data: Option<f64> = None;
+    if let (Some(parsed), Some(size)) = (parsed, from_data) {
+        assert_close(parsed.factor, size, F64_TOL);
+    }
+    match parsed {
+        Some(parsed) => assert_eq!(expr, Some(parsed)),
+        None => assert_eq!(expr.map(|e| e.factor), from_data),
+    }
+    if let Some(expr) = expr {
+        assert_eq!(expr.dimensions, info.dimensions);
+    }
+}
+
+#[test]
 fn fixed_units() {
     check_fixed::<unit::amplitude_ratio::DecibelVolt>();
     check_fixed_rescale::<unit::amplitude_ratio::DecibelVolt>();

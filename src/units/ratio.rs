@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Ratio<T = f64>(T);
 
-quantity!(Ratio, RatioUnit, DecimalFraction);
+quantity!(Ratio, RatioUnit, DecimalFraction, si: None);
 
 /// The units of [`Ratio`].
 ///

@@ -235,6 +235,26 @@ fn inches_to_the_fourth() {
 }
 
 #[test]
+fn base_unit_expression() {
+    let info = <AreaMomentOfInertia<f64> as Quantity>::INFO;
+    let expr = <AreaMomentOfInertia<f64> as Quantity>::BASE_UNIT_EXPR;
+    let parsed = UnitExpr::parse("m⁴")
+        .ok()
+        .filter(|e| e.dimensions == info.dimensions);
+    let from_data: Option<f64> = Some(1.0);
+    if let (Some(parsed), Some(size)) = (parsed, from_data) {
+        assert_close(parsed.factor, size, F64_TOL);
+    }
+    match parsed {
+        Some(parsed) => assert_eq!(expr, Some(parsed)),
+        None => assert_eq!(expr.map(|e| e.factor), from_data),
+    }
+    if let Some(expr) = expr {
+        assert_eq!(expr.dimensions, info.dimensions);
+    }
+}
+
+#[test]
 fn fixed_units() {
     check_fixed::<unit::area_moment_of_inertia::MeterToTheFourth>();
     check_fixed_rescale::<unit::area_moment_of_inertia::MeterToTheFourth>();

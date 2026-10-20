@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct HeatFlux<T = f64>(T);
 
-quantity!(HeatFlux, HeatFluxUnit, WattPerSquareMeter);
+quantity!(HeatFlux, HeatFluxUnit, WattPerSquareMeter, si: Some(crate::__private::si_unit([0, 1, -3, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`HeatFlux`].
 ///

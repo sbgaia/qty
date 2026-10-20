@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct MagneticField<T = f64>(T);
 
-quantity!(MagneticField, MagneticFieldUnit, Tesla);
+quantity!(MagneticField, MagneticFieldUnit, Tesla, si: None);
 
 /// The units of [`MagneticField`].
 ///

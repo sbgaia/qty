@@ -116,11 +116,15 @@ impl UnitExpr {
         }
     }
 
-    /// The factor from this unit to `Q`'s base unit, if the dimensions and
-    /// angles agree and `Q`'s base unit is itself an expression.
+    /// The factor from this unit to `Q`'s base unit, if `Q` has a base unit
+    /// expression and the dimensions and angles agree. Plain numbers don't
+    /// take expressions, so `"5 m/m"` isn't a ratio.
     #[doc(hidden)]
     pub fn factor_to_base<Q: Quantity>(self) -> Option<f64> {
-        let base = Self::parse(Q::INFO.base_unit.abbreviation).ok()?;
+        let base = Q::BASE_UNIT_EXPR?;
+        if base.dimensions.is_dimensionless() && base.angle == 0 {
+            return None;
+        }
         (base.dimensions == self.dimensions
             && base.angle == self.angle
             && base.dimensions == Q::INFO.dimensions)

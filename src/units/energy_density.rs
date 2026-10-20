@@ -20,7 +20,7 @@ use crate::Float;
 #[must_use]
 pub struct EnergyDensity<T = f64>(T);
 
-quantity!(EnergyDensity, EnergyDensityUnit, JoulePerCubicMeter);
+quantity!(EnergyDensity, EnergyDensityUnit, JoulePerCubicMeter, si: Some(crate::__private::si_unit([-1, 1, -2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`EnergyDensity`].
 ///

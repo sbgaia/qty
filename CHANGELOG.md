@@ -6,6 +6,22 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Unit expressions parse for quantities whose UnitsNet base unit isn't one,
+  such as `"3 mK"` as a `TemperatureDelta`, `"2 Pa*s"` as a
+  `DynamicViscosity` and `"5 J/(kg*K)"` as a `SpecificEntropy`. The
+  generator now works these base units out from UnitsNet's data instead of
+  a hand-written list.
+
+### Changed
+
+- `"3 kV*A"` and other expressions that fit power, apparent power and
+  reactive power are now `ParseError::Ambiguous` for `AnyQuantity`, rather
+  than a `Power`.
+- `ElectricApparentEnergy`, `ElectricReactiveEnergy` and `Information` can
+  no longer be used in `relation!`: UnitsNet has no base-unit data for them.
+
 ## [0.2.2] - 2026-10-20
 
 ### Added

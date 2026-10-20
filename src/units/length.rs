@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Length<T = f64>(T);
 
-quantity!(Length, LengthUnit, Meter);
+quantity!(Length, LengthUnit, Meter, si: Some(crate::__private::si_unit([1, 0, 0, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Length`].
 ///

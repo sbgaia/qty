@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct MassFraction<T = f64>(T);
 
-quantity!(MassFraction, MassFractionUnit, DecimalFraction);
+quantity!(MassFraction, MassFractionUnit, DecimalFraction, si: None);
 
 /// The units of [`MassFraction`].
 ///

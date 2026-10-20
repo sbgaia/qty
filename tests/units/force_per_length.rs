@@ -1421,6 +1421,26 @@ fn kilopounds_force_per_inch() {
 }
 
 #[test]
+fn base_unit_expression() {
+    let info = <ForcePerLength<f64> as Quantity>::INFO;
+    let expr = <ForcePerLength<f64> as Quantity>::BASE_UNIT_EXPR;
+    let parsed = UnitExpr::parse("N/m")
+        .ok()
+        .filter(|e| e.dimensions == info.dimensions);
+    let from_data: Option<f64> = Some(1.0);
+    if let (Some(parsed), Some(size)) = (parsed, from_data) {
+        assert_close(parsed.factor, size, F64_TOL);
+    }
+    match parsed {
+        Some(parsed) => assert_eq!(expr, Some(parsed)),
+        None => assert_eq!(expr.map(|e| e.factor), from_data),
+    }
+    if let Some(expr) = expr {
+        assert_eq!(expr.dimensions, info.dimensions);
+    }
+}
+
+#[test]
 fn fixed_units() {
     check_fixed::<unit::force_per_length::NewtonPerMeter>();
     check_fixed_rescale::<unit::force_per_length::NewtonPerMeter>();

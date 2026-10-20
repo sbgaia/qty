@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct SpecificEntropy<T = f64>(T);
 
-quantity!(SpecificEntropy, SpecificEntropyUnit, JoulePerKilogramKelvin);
+quantity!(SpecificEntropy, SpecificEntropyUnit, JoulePerKilogramKelvin, si: Some(crate::__private::si_unit([2, 0, -2, 0, -1, 0, 0], 1.0)));
 
 /// The units of [`SpecificEntropy`].
 ///

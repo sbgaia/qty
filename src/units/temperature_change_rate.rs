@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct TemperatureChangeRate<T = f64>(T);
 
-quantity!(
-    TemperatureChangeRate,
-    TemperatureChangeRateUnit,
-    DegreeCelsiusPerSecond
-);
+quantity!(TemperatureChangeRate, TemperatureChangeRateUnit, DegreeCelsiusPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 1, 0, 0], 1.0)));
 
 /// The units of [`TemperatureChangeRate`].
 ///

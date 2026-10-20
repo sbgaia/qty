@@ -231,6 +231,46 @@ fn temperature_is_affine() {
 // Formatting and parsing
 
 #[test]
+fn expressions_for_base_units_unitsnet_writes_differently() {
+    // UnitsNet writes these base units as ∆K, Ns/m², J/kg·K, Cd/m², VA and
+    // m²K/kW, which aren't unit expressions. The generator works them out
+    // from UnitsNet's data instead.
+    assert_eq!("3 mK".parse(), Ok(TemperatureDelta::from_kelvins(0.003)));
+    assert_eq!(
+        "2 Pa*s".parse(),
+        Ok(DynamicViscosity::from_newton_seconds_per_meter_squared(2.0))
+    );
+    assert_eq!(
+        "2 N*s/m^2".parse(),
+        Ok(DynamicViscosity::from_newton_seconds_per_meter_squared(2.0))
+    );
+    assert_eq!(
+        "5 J/(kg*K)".parse(),
+        Ok(SpecificEntropy::from_joules_per_kilogram_kelvin(5.0))
+    );
+    assert_eq!(
+        "100 cd/m^2".parse(),
+        Ok(Luminance::from_candelas_per_square_meter(100.0))
+    );
+    assert_eq!(
+        "3 kV*A".parse(),
+        Ok(ElectricApparentPower::from_kilovoltamperes(3.0))
+    );
+    assert_eq!(
+        "2 m^2*K/W".parse(),
+        Ok(ThermalInsulance::from_square_meter_kelvins_per_watt(2.0))
+    );
+    // Plain numbers and counts still don't take expressions.
+    assert_eq!("5 m/m".parse::<Ratio>(), Err(ParseError::UnknownUnit));
+    assert_eq!("5 m/m".parse::<Information>(), Err(ParseError::UnknownUnit));
+    // UnitsNet gives standard volume flow the dimensions of a mass flow.
+    assert_eq!(
+        "3 kg/s".parse::<StandardVolumeFlow>(),
+        Err(ParseError::UnknownUnit)
+    );
+}
+
+#[test]
 fn display_honours_format_flags() {
     assert_eq!(Length::from_meters(1.5).to_string(), "1.5 m");
     assert_eq!(format!("{:.2}", Length::from_meters(1.0)), "1.00 m");
@@ -1370,6 +1410,23 @@ fn decimal_display_flags() {
 #[cfg(feature = "dynamic")]
 mod runtime {
     use qty::*;
+
+    #[test]
+    fn expressions_can_be_ambiguous() {
+        assert_eq!(
+            "2 Pa*s".parse::<AnyQuantity>(),
+            Ok(AnyQuantity::DynamicViscosity(
+                DynamicViscosity::from_newton_seconds_per_meter_squared(2.0)
+            ))
+        );
+        // V·A is power, apparent power and reactive power.
+        assert_eq!("3 kV*A".parse::<AnyQuantity>(), Err(ParseError::Ambiguous));
+        // A listed unit wins over expressions: K is the kelvin, a temperature.
+        assert_eq!(
+            "3 K".parse::<AnyQuantity>(),
+            Ok(AnyQuantity::Temperature(Temperature::from_kelvins(3.0)))
+        );
+    }
 
     #[test]
     fn every_unit_round_trips() {

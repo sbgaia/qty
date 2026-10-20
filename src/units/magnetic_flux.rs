@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct MagneticFlux<T = f64>(T);
 
-quantity!(MagneticFlux, MagneticFluxUnit, Weber);
+quantity!(MagneticFlux, MagneticFluxUnit, Weber, si: Some(crate::__private::si_unit([2, 1, -2, -1, 0, 0, 0], 1.0)));
 
 /// The units of [`MagneticFlux`].
 ///

@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Frequency<T = f64>(T);
 
-quantity!(Frequency, FrequencyUnit, Hertz);
+quantity!(Frequency, FrequencyUnit, Hertz, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Frequency`].
 ///

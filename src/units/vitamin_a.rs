@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct VitaminA<T = f64>(T);
 
-quantity!(VitaminA, VitaminAUnit, InternationalUnit);
+quantity!(VitaminA, VitaminAUnit, InternationalUnit, si: None);
 
 /// The units of [`VitaminA`].
 ///

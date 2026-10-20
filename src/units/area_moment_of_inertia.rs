@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct AreaMomentOfInertia<T = f64>(T);
 
-quantity!(
-    AreaMomentOfInertia,
-    AreaMomentOfInertiaUnit,
-    MeterToTheFourth
-);
+quantity!(AreaMomentOfInertia, AreaMomentOfInertiaUnit, MeterToTheFourth, si: Some(crate::__private::si_unit([4, 0, 0, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`AreaMomentOfInertia`].
 ///

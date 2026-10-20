@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Angle<T = f64>(T);
 
-quantity!(Angle, AngleUnit, Radian);
+quantity!(Angle, AngleUnit, Radian, si: None);
 
 /// The units of [`Angle`].
 ///

@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct ElectricCurrent<T = f64>(T);
 
-quantity!(ElectricCurrent, ElectricCurrentUnit, Ampere);
+quantity!(ElectricCurrent, ElectricCurrentUnit, Ampere, si: Some(crate::__private::si_unit([0, 0, 0, 1, 0, 0, 0], 1.0)));
 
 /// The units of [`ElectricCurrent`].
 ///

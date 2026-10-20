@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct ElectricReactiveEnergy<T = f64>(T);
 
-quantity!(
-    ElectricReactiveEnergy,
-    ElectricReactiveEnergyUnit,
-    VoltampereReactiveHour
-);
+quantity!(ElectricReactiveEnergy, ElectricReactiveEnergyUnit, VoltampereReactiveHour, si: None);
 
 /// The units of [`ElectricReactiveEnergy`].
 ///

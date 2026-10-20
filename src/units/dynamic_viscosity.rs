@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct DynamicViscosity<T = f64>(T);
 
-quantity!(
-    DynamicViscosity,
-    DynamicViscosityUnit,
-    NewtonSecondPerMeterSquared
-);
+quantity!(DynamicViscosity, DynamicViscosityUnit, NewtonSecondPerMeterSquared, si: Some(crate::__private::si_unit([-1, 1, -1, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`DynamicViscosity`].
 ///

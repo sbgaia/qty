@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct SpecificFuelConsumption<T = f64>(T);
 
-quantity!(
-    SpecificFuelConsumption,
-    SpecificFuelConsumptionUnit,
-    GramPerKilonewtonSecond
-);
+quantity!(SpecificFuelConsumption, SpecificFuelConsumptionUnit, GramPerKilonewtonSecond, si: None);
 
 /// The units of [`SpecificFuelConsumption`].
 ///

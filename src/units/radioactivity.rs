@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Radioactivity<T = f64>(T);
 
-quantity!(Radioactivity, RadioactivityUnit, Becquerel);
+quantity!(Radioactivity, RadioactivityUnit, Becquerel, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Radioactivity`].
 ///

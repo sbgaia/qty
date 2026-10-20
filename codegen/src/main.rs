@@ -12,6 +12,7 @@ mod expr;
 mod formula;
 mod generator;
 mod parser;
+mod si;
 
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
@@ -46,6 +47,7 @@ fn main() {
             parser::parse(&path)
         })
         .collect();
+    si::check_system(&quantities);
 
     let mut generated_modules: Vec<String> = Vec::new();
 
@@ -105,7 +107,7 @@ fn main() {
     for qty in &quantities {
         let module_name = qty.name.to_snake_case();
         let path = tests_units_dir.join(format!("{module_name}.rs"));
-        let source = generate_quantity_tests(qty);
+        let source = generate_quantity_tests(qty, &quantities);
         std::fs::write(&path, &source).unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
         rustfmt(&path);
         test_modules.push(module_name);

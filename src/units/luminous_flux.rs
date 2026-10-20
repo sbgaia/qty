@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct LuminousFlux<T = f64>(T);
 
-quantity!(LuminousFlux, LuminousFluxUnit, Lumen);
+quantity!(LuminousFlux, LuminousFluxUnit, Lumen, si: Some(crate::__private::si_unit([0, 0, 0, 0, 0, 0, 1], 1.0)));
 
 /// The units of [`LuminousFlux`].
 ///

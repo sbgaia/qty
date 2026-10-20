@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Irradiation<T = f64>(T);
 
-quantity!(Irradiation, IrradiationUnit, JoulePerSquareMeter);
+quantity!(Irradiation, IrradiationUnit, JoulePerSquareMeter, si: Some(crate::__private::si_unit([0, 1, -2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Irradiation`].
 ///

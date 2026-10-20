@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct DoseAreaProduct<T = f64>(T);
 
-quantity!(DoseAreaProduct, DoseAreaProductUnit, GraySquareMeter);
+quantity!(DoseAreaProduct, DoseAreaProductUnit, GraySquareMeter, si: Some(crate::__private::si_unit([4, 0, -2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`DoseAreaProduct`].
 ///

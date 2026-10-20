@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct ThermalConductivity<T = f64>(T);
 
-quantity!(
-    ThermalConductivity,
-    ThermalConductivityUnit,
-    WattPerMeterKelvin
-);
+quantity!(ThermalConductivity, ThermalConductivityUnit, WattPerMeterKelvin, si: Some(crate::__private::si_unit([1, 1, -3, 0, -1, 0, 0], 1.0)));
 
 /// The units of [`ThermalConductivity`].
 ///

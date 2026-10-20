@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct MassFlow<T = f64>(T);
 
-quantity!(MassFlow, MassFlowUnit, GramPerSecond);
+quantity!(MassFlow, MassFlowUnit, GramPerSecond, si: Some(crate::__private::si_unit([0, 1, -1, 0, 0, 0, 0], 0.001)));
 
 /// The units of [`MassFlow`].
 ///

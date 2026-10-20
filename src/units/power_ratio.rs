@@ -43,7 +43,7 @@ use crate::Level;
 #[must_use]
 pub struct PowerRatio<T = f64>(T);
 
-point_quantity!(PowerRatio, PowerRatioUnit, DecibelWatt, Level);
+point_quantity!(PowerRatio, PowerRatioUnit, DecibelWatt, Level, si: None);
 
 /// The units of [`PowerRatio`].
 ///

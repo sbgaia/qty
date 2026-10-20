@@ -10,6 +10,7 @@ use crate::case::ToSnakeCase;
 
 use crate::expr::{self, Direction, Form};
 use crate::parser::{QuantityDef, UnitDef};
+use crate::si;
 
 // Appends a line to `out`. It always goes through `format!`, so `{{` and
 // `}}` in a literal come out as `{` and `}`.
@@ -292,12 +293,24 @@ pub fn point_delta(name: &str) -> Option<&'static str> {
 pub fn generate(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(64 * 1024);
 
-    emit_header(qty, &mut out);
+    emit_header(qty, all, &mut out);
     emit_enum(qty, &mut out);
     emit_enum_impl(qty, &mut out);
     emit_struct_impl(qty, &mut out);
     emit_fixed_units(qty, all, &mut out);
     out
+}
+
+/// The base unit in SI from UnitsNet's data, as an `Option<UnitExpr>`
+/// expression for the generated code.
+fn si_unit_expr(qty: &QuantityDef, all: &[QuantityDef]) -> String {
+    match si::base_unit_size(qty, all) {
+        Some(size) => format!(
+            "Some(crate::__private::si_unit({:?}, {size}))",
+            qty.dimensions
+        ),
+        None => "None".to_string(),
+    }
 }
 
 /// The exact definition of a `Fixed` marker: one unit is
@@ -409,7 +422,7 @@ fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     w!(out, "}}");
 }
 
-fn emit_header(qty: &QuantityDef, out: &mut String) {
+fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     let name = &qty.name;
     w!(
         out,
@@ -482,12 +495,16 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     w!(out, "#[must_use]");
     w!(out, "pub struct {}<T = f64>(T);", name);
     w!(out);
+    let si = si_unit_expr(qty, all);
     let invocation = match point_delta(name) {
         Some(delta) => format!(
-            "point_quantity!({name}, {name}Unit, {}, {delta});",
+            "point_quantity!({name}, {name}Unit, {}, {delta}, si: {si});",
             qty.base_unit
         ),
-        None => format!("quantity!({name}, {name}Unit, {});", qty.base_unit),
+        None => format!(
+            "quantity!({name}, {name}Unit, {}, si: {si});",
+            qty.base_unit
+        ),
     };
     w!(out, "{invocation}");
     w!(out);
@@ -1086,7 +1103,7 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
 /// The tests of one quantity, `tests/units/<quantity>.rs`. They check the
 /// folded conversions against UnitsNet's formulas, translated verbatim and
 /// compiled by rustc as an independent oracle.
-pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
+pub fn generate_quantity_tests(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(16 * 1024);
     let name = &qty.name;
     let enum_name = format!("{}Unit", name);
@@ -1119,6 +1136,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     for unit in &qty.units {
         emit_unit_test(name, unit, &mut out);
     }
+    emit_base_unit_test(qty, all, &mut out);
 
     // Fixed markers: float bridge and integer rescaling agree with floats.
     let markers: Vec<&UnitDef> = qty
@@ -1388,6 +1406,60 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
 
 /// One test per unit: f64 against the upstream formula, f32 against the
 /// same, and the f64 round trip.
+/// Checks `BASE_UNIT_EXPR`. Where the base unit's abbreviation parses with
+/// the right dimensions, its size must match the one from UnitsNet's data,
+/// which tests the data-derived fallback against the parser.
+fn emit_base_unit_test(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
+    let name = &qty.name;
+    let base = qty
+        .units
+        .iter()
+        .find(|u| u.singular == qty.base_unit)
+        .expect("base unit");
+    // What qty falls back to when the abbreviation doesn't parse: a plain
+    // number for an empty abbreviation without dimensions, otherwise the
+    // size from UnitsNet's data.
+    let from_data = match si::base_unit_size(qty, all) {
+        _ if base.abbreviation.is_empty() && qty.dimensions == [0; 7] => "Some(1.0)".to_string(),
+        Some(size) => format!("Some({size})"),
+        None => "None".to_string(),
+    };
+    w!(out, "#[test]");
+    w!(out, "fn base_unit_expression() {{");
+    w!(out, "    let info = <{name}<f64> as Quantity>::INFO;");
+    w!(
+        out,
+        "    let expr = <{name}<f64> as Quantity>::BASE_UNIT_EXPR;"
+    );
+    w!(
+        out,
+        "    let parsed = UnitExpr::parse({}).ok().filter(|e| e.dimensions == info.dimensions);",
+        rust_str_literal(&base.abbreviation)
+    );
+    w!(out, "    let from_data: Option<f64> = {from_data};");
+    w!(
+        out,
+        "    if let (Some(parsed), Some(size)) = (parsed, from_data) {{"
+    );
+    w!(out, "        assert_close(parsed.factor, size, F64_TOL);");
+    w!(out, "    }}");
+    w!(out, "    match parsed {{");
+    w!(
+        out,
+        "        Some(parsed) => assert_eq!(expr, Some(parsed)),"
+    );
+    w!(
+        out,
+        "        None => assert_eq!(expr.map(|e| e.factor), from_data),"
+    );
+    w!(out, "    }}");
+    w!(out, "    if let Some(expr) = expr {{");
+    w!(out, "        assert_eq!(expr.dimensions, info.dimensions);");
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+}
+
 fn emit_unit_test(name: &str, unit: &UnitDef, out: &mut String) {
     let snake = unit.plural.to_snake_case();
 

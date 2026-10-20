@@ -211,11 +211,12 @@ pub trait Quantity: Copy {
     /// Name, description, dimensions and units of the quantity.
     const INFO: QuantityInfo;
 
-    /// The base unit as a [`UnitExpr`], for `relation!`. Usually its
-    /// abbreviation; a few built-in quantities whose abbreviation is not an
-    /// expression (`∆K`, `Ns/m²`) override it.
+    /// The base unit as a unit expression, for reading expressions and for
+    /// `relation!`. It's the base unit's abbreviation when that is an
+    /// expression with the quantity's dimensions. Built-in quantities whose
+    /// abbreviation isn't (`∆K`, `Ns/m²`) get it from UnitsNet's data.
     #[doc(hidden)]
-    const BASE_EXPR: &'static str = Self::INFO.base_unit.abbreviation;
+    const BASE_UNIT_EXPR: Option<UnitExpr> = custom::private::base_unit_expr(Self::INFO, None);
 
     /// Wraps a value expressed in [`Self::BASE_UNIT`].
     fn from_base(value: Self::Value) -> Self;
@@ -535,7 +536,7 @@ macro_rules! __qty_fmt {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_common {
-    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident $(, base_expr: $base_expr:expr)?) => {
+    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident $(, si: $si:expr)?) => {
         impl<T> $Q<T> {
             /// Wraps a value in the base unit.
             #[inline(always)]
@@ -699,7 +700,10 @@ macro_rules! __qty_common {
             type Unit = $U;
             const BASE_UNIT: $U = $U::$base;
             const INFO: $crate::QuantityInfo = $U::QUANTITY;
-            $(const BASE_EXPR: &'static str = $base_expr;)?
+            $(
+                const BASE_UNIT_EXPR: ::core::option::Option<$crate::UnitExpr> =
+                    $crate::__private::base_unit_expr($U::QUANTITY, $si);
+            )?
             #[inline(always)]
             fn from_base(value: T) -> Self {
                 Self(value)
@@ -903,11 +907,8 @@ macro_rules! __qty_common {
 /// For built-in quantities: [`__qty_common!`] plus what only they have
 /// (`Fixed`, defmt, schemars).
 macro_rules! quantity_core {
-    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
-        $crate::__qty_common!(
-            $Q, $U, $base, exprs: $exprs,
-            base_expr: $crate::__private::builtin_base_expr(::core::stringify!($Q), $U::QUANTITY.base_unit.abbreviation)
-        );
+    ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident, si: $si:expr) => {
+        $crate::__qty_common!($Q, $U, $base, exprs: $exprs, si: $si);
 
         impl<I: $crate::Integer> $Q<I> {
             /// Rounds a float quantity to a whole number of base units.
@@ -1132,8 +1133,8 @@ macro_rules! __qty_vector_ops {
 
 /// Everything an amount quantity needs apart from its unit conversions.
 macro_rules! quantity {
-    ($Q:ident, $U:ident, $base:ident) => {
-        quantity_core!($Q, $U, $base, exprs: Base);
+    ($Q:ident, $U:ident, $base:ident, si: $si:expr) => {
+        quantity_core!($Q, $U, $base, exprs: Base, si: $si);
         $crate::__qty_vector_ops!($Q);
     };
 }
@@ -1147,8 +1148,8 @@ macro_rules! quantity {
 ///
 /// `point / point` is still allowed, as a ratio of absolute values.
 macro_rules! point_quantity {
-    ($Q:ident, $U:ident, $base:ident, $D:ident) => {
-        quantity_core!($Q, $U, $base, exprs: Off);
+    ($Q:ident, $U:ident, $base:ident, $D:ident, si: $si:expr) => {
+        quantity_core!($Q, $U, $base, exprs: Off, si: $si);
 
         impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
             type Output = $D<T>;

@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct BrakeSpecificFuelConsumption<T = f64>(T);
 
-quantity!(
-    BrakeSpecificFuelConsumption,
-    BrakeSpecificFuelConsumptionUnit,
-    KilogramPerJoule
-);
+quantity!(BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit, KilogramPerJoule, si: Some(crate::__private::si_unit([-2, 0, 2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`BrakeSpecificFuelConsumption`].
 ///

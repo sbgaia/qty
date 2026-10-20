@@ -161,6 +161,26 @@ fn kilometers_per_liter() {
 }
 
 #[test]
+fn base_unit_expression() {
+    let info = <FuelEfficiency<f64> as Quantity>::INFO;
+    let expr = <FuelEfficiency<f64> as Quantity>::BASE_UNIT_EXPR;
+    let parsed = UnitExpr::parse("km/l")
+        .ok()
+        .filter(|e| e.dimensions == info.dimensions);
+    let from_data: Option<f64> = None;
+    if let (Some(parsed), Some(size)) = (parsed, from_data) {
+        assert_close(parsed.factor, size, F64_TOL);
+    }
+    match parsed {
+        Some(parsed) => assert_eq!(expr, Some(parsed)),
+        None => assert_eq!(expr.map(|e| e.factor), from_data),
+    }
+    if let Some(expr) = expr {
+        assert_eq!(expr.dimensions, info.dimensions);
+    }
+}
+
+#[test]
 fn fixed_units() {
     check_fixed::<unit::fuel_efficiency::MilePerUsGallon>();
     check_fixed_rescale::<unit::fuel_efficiency::MilePerUsGallon>();

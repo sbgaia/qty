@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Turbidity<T = f64>(T);
 
-quantity!(Turbidity, TurbidityUnit, NTU);
+quantity!(Turbidity, TurbidityUnit, NTU, si: None);
 
 /// The units of [`Turbidity`].
 ///

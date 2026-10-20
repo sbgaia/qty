@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct HeatTransferCoefficient<T = f64>(T);
 
-quantity!(
-    HeatTransferCoefficient,
-    HeatTransferCoefficientUnit,
-    WattPerSquareMeterKelvin
-);
+quantity!(HeatTransferCoefficient, HeatTransferCoefficientUnit, WattPerSquareMeterKelvin, si: Some(crate::__private::si_unit([0, 1, -3, 0, -1, 0, 0], 1.0)));
 
 /// The units of [`HeatTransferCoefficient`].
 ///

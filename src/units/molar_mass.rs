@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct MolarMass<T = f64>(T);
 
-quantity!(MolarMass, MolarMassUnit, KilogramPerMole);
+quantity!(MolarMass, MolarMassUnit, KilogramPerMole, si: Some(crate::__private::si_unit([0, 1, 0, 0, 0, -1, 0], 1.0)));
 
 /// The units of [`MolarMass`].
 ///

@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Information<T = f64>(T);
 
-quantity!(Information, InformationUnit, Bit);
+quantity!(Information, InformationUnit, Bit, si: None);
 
 /// The units of [`Information`].
 ///

@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct SpecificEnergy<T = f64>(T);
 
-quantity!(SpecificEnergy, SpecificEnergyUnit, JoulePerKilogram);
+quantity!(SpecificEnergy, SpecificEnergyUnit, JoulePerKilogram, si: Some(crate::__private::si_unit([2, 0, -2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`SpecificEnergy`].
 ///

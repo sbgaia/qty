@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct FuelEfficiency<T = f64>(T);
 
-quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter);
+quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter, si: None);
 
 /// The units of [`FuelEfficiency`].
 ///

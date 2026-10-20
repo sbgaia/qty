@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct ElectricSusceptance<T = f64>(T);
 
-quantity!(ElectricSusceptance, ElectricSusceptanceUnit, Siemens);
+quantity!(ElectricSusceptance, ElectricSusceptanceUnit, Siemens, si: Some(crate::__private::si_unit([-2, -1, 3, 2, 0, 0, 0], 1.0)));
 
 /// The units of [`ElectricSusceptance`].
 ///

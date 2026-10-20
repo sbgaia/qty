@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Acceleration<T = f64>(T);
 
-quantity!(Acceleration, AccelerationUnit, MeterPerSecondSquared);
+quantity!(Acceleration, AccelerationUnit, MeterPerSecondSquared, si: Some(crate::__private::si_unit([1, 0, -2, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Acceleration`].
 ///

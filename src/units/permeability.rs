@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Permeability<T = f64>(T);
 
-quantity!(Permeability, PermeabilityUnit, HenryPerMeter);
+quantity!(Permeability, PermeabilityUnit, HenryPerMeter, si: Some(crate::__private::si_unit([1, 1, -2, -2, 0, 0, 0], 1.0)));
 
 /// The units of [`Permeability`].
 ///

@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct RelativeHumidity<T = f64>(T);
 
-quantity!(RelativeHumidity, RelativeHumidityUnit, Percent);
+quantity!(RelativeHumidity, RelativeHumidityUnit, Percent, si: None);
 
 /// The units of [`RelativeHumidity`].
 ///

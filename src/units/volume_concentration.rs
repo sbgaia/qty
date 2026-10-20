@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct VolumeConcentration<T = f64>(T);
 
-quantity!(
-    VolumeConcentration,
-    VolumeConcentrationUnit,
-    DecimalFraction
-);
+quantity!(VolumeConcentration, VolumeConcentrationUnit, DecimalFraction, si: None);
 
 /// The units of [`VolumeConcentration`].
 ///

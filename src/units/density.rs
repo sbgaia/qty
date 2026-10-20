@@ -22,7 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct Density<T = f64>(T);
 
-quantity!(Density, DensityUnit, KilogramPerCubicMeter);
+quantity!(Density, DensityUnit, KilogramPerCubicMeter, si: Some(crate::__private::si_unit([-3, 1, 0, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`Density`].
 ///

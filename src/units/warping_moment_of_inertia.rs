@@ -22,11 +22,7 @@ use crate::Float;
 #[must_use]
 pub struct WarpingMomentOfInertia<T = f64>(T);
 
-quantity!(
-    WarpingMomentOfInertia,
-    WarpingMomentOfInertiaUnit,
-    MeterToTheSixth
-);
+quantity!(WarpingMomentOfInertia, WarpingMomentOfInertiaUnit, MeterToTheSixth, si: Some(crate::__private::si_unit([6, 0, 0, 0, 0, 0, 0], 1.0)));
 
 /// The units of [`WarpingMomentOfInertia`].
 ///

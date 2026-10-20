@@ -43,7 +43,7 @@ use crate::Level;
 #[must_use]
 pub struct AmplitudeRatio<T = f64>(T);
 
-point_quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt, Level);
+point_quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt, Level, si: None);
 
 /// The units of [`AmplitudeRatio`].
 ///

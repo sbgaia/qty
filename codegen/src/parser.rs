@@ -154,6 +154,9 @@ pub struct RawUnit {
     pub xml_doc_summary: Option<String>,
     #[serde(default)]
     pub localization: Vec<RawLocalization>,
+    /// The SI-system units the unit is made of, by dimension: `{"L": "Meter"}`.
+    #[serde(default)]
+    pub base_units: Option<std::collections::BTreeMap<String, String>>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -212,6 +215,9 @@ pub struct UnitDef {
     /// Power of ten of the SI prefix (`3` for kilo, `0` for the unprefixed
     /// unit); `None` for binary prefixes (kibi, mebi, …).
     pub decimal_exp: Option<i32>,
+    /// UnitsNet's `BaseUnits`, by dimension symbol. Only upstream units
+    /// have them, not their prefixed forms.
+    pub base_units: Option<std::collections::BTreeMap<String, String>>,
 }
 
 /// Parses a UnitsNet definition file, expanding the prefixes.
@@ -249,6 +255,7 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
             doc: raw_unit.xml_doc_summary.clone(),
             family: raw_unit.singular_name.clone(),
             decimal_exp: Some(0),
+            base_units: raw_unit.base_units.clone(),
         });
 
         // Prefix-expanded variants.
@@ -302,6 +309,7 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
                     .factor
                     .strip_prefix("1e")
                     .map(|e| e.parse().expect("decimal prefix exponent")),
+                base_units: None,
             });
         }
     }
