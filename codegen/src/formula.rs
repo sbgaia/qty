@@ -2,10 +2,9 @@
 //! expressions. Used only to emit independent oracles in the generated tests; the
 //! library code itself uses the exact, folded forms from [`crate::expr`].
 
-/// Rewrites the number literals in `s` as `f64` literals: C# `d` suffixes
-/// become `.0` (`40d` → `40.0`) and bare integers gain `.0` (`365` →
-/// `365.0`); decimals and exponents (`1.5`, `1e-3`) are kept. Digits inside
-/// identifiers are left alone.
+/// Rewrites the number literals in `s` as `f64` literals: `40d` becomes
+/// `40.0` and `365` becomes `365.0`, while `1.5` and `1e-3` stay as they
+/// are. Digits inside identifiers are left alone.
 fn float_literals(s: &str) -> String {
     let bytes = s.as_bytes();
     let word = |i: usize| {
@@ -55,29 +54,20 @@ fn float_literals(s: &str) -> String {
     out
 }
 
-/// Translates a raw C# expression from a UnitsNet definition file into a valid Rust `f64`
-/// expression, with `{x}` replaced by `var`.
-///
-/// Steps applied in order:
-/// 1. `{x}` → `var`
-/// 2. `Math.PI` → `std::f64::consts::PI`
-/// 3. C# `double` literal suffix stripped: `40d` → `40.0`
-/// 4. Bare integer literals promoted to `f64`: `365` → `365.0`
+/// Translates a C# expression from a UnitsNet file into a Rust `f64`
+/// expression of `var`. `Math.PI` becomes `std::f64::consts::PI`, and every
+/// number becomes an `f64` literal.
 pub fn translate(raw: &str, var: &str) -> String {
     let s = raw.replace("{x}", var);
     let s = s.replace("Math.PI", "std::f64::consts::PI");
     float_literals(&s)
 }
 
-/// Translates the to-base or from-base formula for a **prefixed** variant of a unit.
-///
-/// For `to_base = true`:  substitutes `{x}` with `(x * factor)` before translating.
-/// For `to_base = false`: substitutes `{x}` with `(x / factor)` before translating.
-///
-/// This correctly handles all linear (non-affine) formulas, which is the only kind that
-/// UnitsNet applies SI prefixes to.
+/// Translates a formula for a prefixed unit, substituting `x * factor` for
+/// `{x}` (or `x / factor` from the base unit). That's right for linear
+/// formulas, the only ones UnitsNet prefixes.
 pub fn translate_with_factor(raw: &str, factor: &str, to_base: bool) -> String {
-    // Format factor in scientific notation so it is always a valid Rust `f64` literal.
+    // Scientific notation is always a valid `f64` literal.
     let factor: f64 = factor.parse().expect("prefix factor");
     let factor_str = format!("{factor:e}");
     let substituted = if to_base {

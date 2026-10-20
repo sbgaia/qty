@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Level is the logarithm of the ratio of a quantity Q to a reference value of that quantity, Q₀, expressed in dimensionless units.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LevelUnit::Decibel`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LevelUnit::Decibel`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Level<T = f64>(T);
 
 quantity!(Level, LevelUnit, Decibel);
 
-/// Unit variants for [`Level`].
+/// The units of [`Level`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -37,7 +36,7 @@ pub enum LevelUnit {
 }
 
 impl LevelUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[Self::Decibel, Self::Neper];
 
     const INFOS: &'static [crate::UnitInfo] = &[
@@ -55,7 +54,7 @@ impl LevelUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -70,7 +69,7 @@ impl LevelUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -79,7 +78,7 @@ impl LevelUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -88,8 +87,8 @@ impl LevelUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -106,8 +105,8 @@ impl LevelUnit {
 impl core::str::FromStr for LevelUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "dB" => Ok(Self::Decibel),
@@ -117,8 +116,8 @@ impl core::str::FromStr for LevelUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Level<T>> for LevelUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -138,33 +137,33 @@ impl<T: Float> crate::UnitOf<Level<T>> for LevelUnit {
 }
 
 impl<T: Float> Level<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`dB`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`dB`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LevelUnit> {
         self.in_unit(LevelUnit::Decibel)
     }
 
-    /// Creates a [`Level`] from a value in Decibels (`dB`).
+    /// A [`Level`] from a value in `dB`.
     #[inline]
     pub fn from_decibels(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Decibels (`dB`).
+    /// The value in `dB`.
     #[inline]
     pub fn as_decibels(self) -> T {
         self.0
     }
 
-    /// Creates a [`Level`] from a value in Nepers (`Np`).
+    /// A [`Level`] from a value in `Np`.
     #[inline]
     pub fn from_nepers(value: T) -> Self {
         Self(value * T::from_f64(8.685889687081618))
     }
 
-    /// Returns the value expressed in Nepers (`Np`).
+    /// The value in `Np`.
     #[inline]
     pub fn as_nepers(self) -> T {
         self.0 / T::from_f64(8.685889687081618)
@@ -172,9 +171,8 @@ impl<T: Float> Level<T> {
 }
 
 impl Level<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LevelUnit) -> Self {
         Self(match unit {
@@ -186,9 +184,9 @@ impl Level<f64> {
 
 fixed_base!(Level, Decibel);
 
-/// Unit markers for counting [`Level`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Level`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::level`](crate::unit::level).
+/// Also at [`unit::level`](crate::unit::level).
 pub mod unit {
     fixed_unit!(Decibel: Level, LevelUnit::Decibel, base Decibel, 1 / 1, pi^0, from_decibels, as_decibels, additive);
     fixed_unit!(Neper: Level, LevelUnit::Neper, base Decibel, 500000000 / 57564627, pi^0, from_nepers, as_nepers, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Thermal conductivity is the property of a material to conduct heat.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ThermalConductivityUnit::WattPerMeterKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ThermalConductivityUnit::WattPerMeterKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     WattPerMeterKelvin
 );
 
-/// Unit variants for [`ThermalConductivity`].
+/// The units of [`ThermalConductivity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -42,7 +41,7 @@ pub enum ThermalConductivityUnit {
 }
 
 impl ThermalConductivityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::WattPerMeterKelvin,
         Self::BtuPerHourFootFahrenheit,
@@ -70,7 +69,7 @@ impl ThermalConductivityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -85,7 +84,7 @@ impl ThermalConductivityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -95,7 +94,7 @@ impl ThermalConductivityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -105,8 +104,8 @@ impl ThermalConductivityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -125,8 +124,8 @@ impl ThermalConductivityUnit {
 impl core::str::FromStr for ThermalConductivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/(m·K)" => Ok(Self::WattPerMeterKelvin),
@@ -137,8 +136,8 @@ impl core::str::FromStr for ThermalConductivityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -168,45 +167,45 @@ impl<T: Float> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit
 }
 
 impl<T: Float> ThermalConductivity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`W/(m·K)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`W/(m·K)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ThermalConductivityUnit> {
         self.in_unit(ThermalConductivityUnit::WattPerMeterKelvin)
     }
 
-    /// Creates a [`ThermalConductivity`] from a value in WattsPerMeterKelvin (`W/(m·K)`).
+    /// A [`ThermalConductivity`] from a value in `W/(m·K)`.
     #[inline]
     pub fn from_watts_per_meter_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in WattsPerMeterKelvin (`W/(m·K)`).
+    /// The value in `W/(m·K)`.
     #[inline]
     pub fn as_watts_per_meter_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`ThermalConductivity`] from a value in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
+    /// A [`ThermalConductivity`] from a value in `BTU/(h·ft·°F)`.
     #[inline]
     pub fn from_btus_per_hour_foot_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(1.7307346663713912))
     }
 
-    /// Returns the value expressed in BtusPerHourFootFahrenheit (`BTU/(h·ft·°F)`).
+    /// The value in `BTU/(h·ft·°F)`.
     #[inline]
     pub fn as_btus_per_hour_foot_fahrenheit(self) -> T {
         self.0 / T::from_f64(1.7307346663713912)
     }
 
-    /// Creates a [`ThermalConductivity`] from a value in BtusPerSecondInchFahrenheit (`BTU/(s·in·°F)`).
+    /// A [`ThermalConductivity`] from a value in `BTU/(s·in·°F)`.
     #[inline]
     pub fn from_btus_per_second_inch_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(74767.73758724409))
     }
 
-    /// Returns the value expressed in BtusPerSecondInchFahrenheit (`BTU/(s·in·°F)`).
+    /// The value in `BTU/(s·in·°F)`.
     #[inline]
     pub fn as_btus_per_second_inch_fahrenheit(self) -> T {
         self.0 / T::from_f64(74767.73758724409)
@@ -214,9 +213,8 @@ impl<T: Float> ThermalConductivity<T> {
 }
 
 impl ThermalConductivity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ThermalConductivityUnit) -> Self {
         Self(match unit {
@@ -229,9 +227,9 @@ impl ThermalConductivity<f64> {
 
 fixed_base!(ThermalConductivity, WattPerMeterKelvin);
 
-/// Unit markers for counting [`ThermalConductivity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ThermalConductivity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::thermal_conductivity`](crate::unit::thermal_conductivity).
+/// Also at [`unit::thermal_conductivity`](crate::unit::thermal_conductivity).
 pub mod unit {
     fixed_unit!(WattPerMeterKelvin: ThermalConductivity, ThermalConductivityUnit::WattPerMeterKelvin, base WattPerMeterKelvin, 1 / 1, pi^0, from_watts_per_meter_kelvin, as_watts_per_meter_kelvin, additive);
     fixed_unit!(BtuPerHourFootFahrenheit: ThermalConductivity, ThermalConductivityUnit::BtuPerHourFootFahrenheit, base WattPerMeterKelvin, 52752792631 / 30480000000, pi^0, from_btus_per_hour_foot_fahrenheit, as_btus_per_hour_foot_fahrenheit, additive);

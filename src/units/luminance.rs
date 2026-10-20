@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LuminanceUnit::CandelaPerSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LuminanceUnit::CandelaPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,9 +22,9 @@ pub struct Luminance<T = f64>(T);
 
 quantity!(Luminance, LuminanceUnit, CandelaPerSquareMeter);
 
-/// Unit variants for [`Luminance`].
+/// The units of [`Luminance`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum LuminanceUnit {
 }
 
 impl LuminanceUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::CandelaPerSquareMeter,
         Self::NanocandelaPerSquareMeter,
@@ -120,7 +119,7 @@ impl LuminanceUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -135,7 +134,7 @@ impl LuminanceUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -152,7 +151,7 @@ impl LuminanceUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -169,8 +168,8 @@ impl LuminanceUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -203,8 +202,8 @@ impl LuminanceUnit {
 impl core::str::FromStr for LuminanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Cd/m²" => Ok(Self::CandelaPerSquareMeter),
@@ -222,8 +221,8 @@ impl core::str::FromStr for LuminanceUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -259,9 +258,9 @@ impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
 }
 
 impl<T: Float> Luminance<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nCd/m²`, `µCd/m²`, `mCd/m²`, `Cd/m²`, `kCd/m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nCd/m²`, `µCd/m²`, `mCd/m²`, `Cd/m²`, `kCd/m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LuminanceUnit> {
         const SCALE: [(f64, LuminanceUnit); 5] = [
@@ -285,121 +284,121 @@ impl<T: Float> Luminance<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Luminance`] from a value in CandelasPerSquareMeter (`Cd/m²`).
+    /// A [`Luminance`] from a value in `Cd/m²`.
     #[inline]
     pub fn from_candelas_per_square_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in CandelasPerSquareMeter (`Cd/m²`).
+    /// The value in `Cd/m²`.
     #[inline]
     pub fn as_candelas_per_square_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`Luminance`] from a value in NanocandelasPerSquareMeter (`nCd/m²`).
+    /// A [`Luminance`] from a value in `nCd/m²`.
     #[inline]
     pub fn from_nanocandelas_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanocandelasPerSquareMeter (`nCd/m²`).
+    /// The value in `nCd/m²`.
     #[inline]
     pub fn as_nanocandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Luminance`] from a value in MicrocandelasPerSquareMeter (`µCd/m²`).
+    /// A [`Luminance`] from a value in `µCd/m²`.
     #[inline]
     pub fn from_microcandelas_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrocandelasPerSquareMeter (`µCd/m²`).
+    /// The value in `µCd/m²`.
     #[inline]
     pub fn as_microcandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Luminance`] from a value in MillicandelasPerSquareMeter (`mCd/m²`).
+    /// A [`Luminance`] from a value in `mCd/m²`.
     #[inline]
     pub fn from_millicandelas_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillicandelasPerSquareMeter (`mCd/m²`).
+    /// The value in `mCd/m²`.
     #[inline]
     pub fn as_millicandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Luminance`] from a value in CenticandelasPerSquareMeter (`cCd/m²`).
+    /// A [`Luminance`] from a value in `cCd/m²`.
     #[inline]
     pub fn from_centicandelas_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CenticandelasPerSquareMeter (`cCd/m²`).
+    /// The value in `cCd/m²`.
     #[inline]
     pub fn as_centicandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Luminance`] from a value in DecicandelasPerSquareMeter (`dCd/m²`).
+    /// A [`Luminance`] from a value in `dCd/m²`.
     #[inline]
     pub fn from_decicandelas_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecicandelasPerSquareMeter (`dCd/m²`).
+    /// The value in `dCd/m²`.
     #[inline]
     pub fn as_decicandelas_per_square_meter(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Luminance`] from a value in KilocandelasPerSquareMeter (`kCd/m²`).
+    /// A [`Luminance`] from a value in `kCd/m²`.
     #[inline]
     pub fn from_kilocandelas_per_square_meter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilocandelasPerSquareMeter (`kCd/m²`).
+    /// The value in `kCd/m²`.
     #[inline]
     pub fn as_kilocandelas_per_square_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Luminance`] from a value in CandelasPerSquareFoot (`Cd/ft²`).
+    /// A [`Luminance`] from a value in `Cd/ft²`.
     #[inline]
     pub fn from_candelas_per_square_foot(value: T) -> Self {
         Self(value * T::from_f64(10.763910416709722))
     }
 
-    /// Returns the value expressed in CandelasPerSquareFoot (`Cd/ft²`).
+    /// The value in `Cd/ft²`.
     #[inline]
     pub fn as_candelas_per_square_foot(self) -> T {
         self.0 / T::from_f64(10.763910416709722)
     }
 
-    /// Creates a [`Luminance`] from a value in CandelasPerSquareInch (`Cd/in²`).
+    /// A [`Luminance`] from a value in `Cd/in²`.
     #[inline]
     pub fn from_candelas_per_square_inch(value: T) -> Self {
         Self(value * T::from_f64(1550.0031000062))
     }
 
-    /// Returns the value expressed in CandelasPerSquareInch (`Cd/in²`).
+    /// The value in `Cd/in²`.
     #[inline]
     pub fn as_candelas_per_square_inch(self) -> T {
         self.0 / T::from_f64(1550.0031000062)
     }
 
-    /// Creates a [`Luminance`] from a value in Nits (`nt`).
+    /// A [`Luminance`] from a value in `nt`.
     #[inline]
     pub fn from_nits(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Nits (`nt`).
+    /// The value in `nt`.
     #[inline]
     pub fn as_nits(self) -> T {
         self.0
@@ -407,9 +406,8 @@ impl<T: Float> Luminance<T> {
 }
 
 impl Luminance<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LuminanceUnit) -> Self {
         Self(match unit {
@@ -429,9 +427,9 @@ impl Luminance<f64> {
 
 fixed_base!(Luminance, CandelaPerSquareMeter);
 
-/// Unit markers for counting [`Luminance`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Luminance`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::luminance`](crate::unit::luminance).
+/// Also at [`unit::luminance`](crate::unit::luminance).
 pub mod unit {
     fixed_unit!(CandelaPerSquareMeter: Luminance, LuminanceUnit::CandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1, pi^0, from_candelas_per_square_meter, as_candelas_per_square_meter, additive);
     fixed_unit!(NanocandelaPerSquareMeter: Luminance, LuminanceUnit::NanocandelaPerSquareMeter, base CandelaPerSquareMeter, 1 / 1000000000, pi^0, from_nanocandelas_per_square_meter, as_nanocandelas_per_square_meter, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Molar entropy is amount of energy required to increase temperature of 1 mole substance by 1 Kelvin.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarEntropyUnit::JoulePerMoleKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolarEntropyUnit::JoulePerMoleKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MolarEntropy<T = f64>(T);
 
 quantity!(MolarEntropy, MolarEntropyUnit, JoulePerMoleKelvin);
 
-/// Unit variants for [`MolarEntropy`].
+/// The units of [`MolarEntropy`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -38,7 +37,7 @@ pub enum MolarEntropyUnit {
 }
 
 impl MolarEntropyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::JoulePerMoleKelvin,
         Self::KilojoulePerMoleKelvin,
@@ -66,7 +65,7 @@ impl MolarEntropyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -81,7 +80,7 @@ impl MolarEntropyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -91,7 +90,7 @@ impl MolarEntropyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -101,8 +100,8 @@ impl MolarEntropyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -121,8 +120,8 @@ impl MolarEntropyUnit {
 impl core::str::FromStr for MolarEntropyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/(mol·K)" => Ok(Self::JoulePerMoleKelvin),
@@ -133,8 +132,8 @@ impl core::str::FromStr for MolarEntropyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -156,9 +155,9 @@ impl<T: Float> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
 }
 
 impl<T: Float> MolarEntropy<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`J/(mol·K)`, `kJ/(mol·K)`, `MJ/(mol·K)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`J/(mol·K)`, `kJ/(mol·K)`, `MJ/(mol·K)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolarEntropyUnit> {
         const SCALE: [(f64, MolarEntropyUnit); 3] = [
@@ -180,37 +179,37 @@ impl<T: Float> MolarEntropy<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MolarEntropy`] from a value in JoulesPerMoleKelvin (`J/(mol·K)`).
+    /// A [`MolarEntropy`] from a value in `J/(mol·K)`.
     #[inline]
     pub fn from_joules_per_mole_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerMoleKelvin (`J/(mol·K)`).
+    /// The value in `J/(mol·K)`.
     #[inline]
     pub fn as_joules_per_mole_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`MolarEntropy`] from a value in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
+    /// A [`MolarEntropy`] from a value in `kJ/(mol·K)`.
     #[inline]
     pub fn from_kilojoules_per_mole_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerMoleKelvin (`kJ/(mol·K)`).
+    /// The value in `kJ/(mol·K)`.
     #[inline]
     pub fn as_kilojoules_per_mole_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`MolarEntropy`] from a value in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
+    /// A [`MolarEntropy`] from a value in `MJ/(mol·K)`.
     #[inline]
     pub fn from_megajoules_per_mole_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegajoulesPerMoleKelvin (`MJ/(mol·K)`).
+    /// The value in `MJ/(mol·K)`.
     #[inline]
     pub fn as_megajoules_per_mole_kelvin(self) -> T {
         self.0 / T::from_f64(1000000.0)
@@ -218,9 +217,8 @@ impl<T: Float> MolarEntropy<T> {
 }
 
 impl MolarEntropy<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolarEntropyUnit) -> Self {
         Self(match unit {
@@ -233,9 +231,9 @@ impl MolarEntropy<f64> {
 
 fixed_base!(MolarEntropy, JoulePerMoleKelvin);
 
-/// Unit markers for counting [`MolarEntropy`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MolarEntropy`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_entropy`](crate::unit::molar_entropy).
+/// Also at [`unit::molar_entropy`](crate::unit::molar_entropy).
 pub mod unit {
     fixed_unit!(JoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::JoulePerMoleKelvin, base JoulePerMoleKelvin, 1 / 1, pi^0, from_joules_per_mole_kelvin, as_joules_per_mole_kelvin, additive);
     fixed_unit!(KilojoulePerMoleKelvin: MolarEntropy, MolarEntropyUnit::KilojoulePerMoleKelvin, base JoulePerMoleKelvin, 1000 / 1, pi^0, from_kilojoules_per_mole_kelvin, as_kilojoules_per_mole_kelvin, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Reciprocal area (Inverse-square) quantity is used to specify a physical quantity inversely proportional to the square of the distance.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ReciprocalAreaUnit::InverseSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ReciprocalAreaUnit::InverseSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct ReciprocalArea<T = f64>(T);
 
 quantity!(ReciprocalArea, ReciprocalAreaUnit, InverseSquareMeter);
 
-/// Unit variants for [`ReciprocalArea`].
+/// The units of [`ReciprocalArea`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -46,7 +45,7 @@ pub enum ReciprocalAreaUnit {
 }
 
 impl ReciprocalAreaUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::InverseSquareMeter,
         Self::InverseSquareKilometer,
@@ -130,7 +129,7 @@ impl ReciprocalAreaUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -145,7 +144,7 @@ impl ReciprocalAreaUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -163,7 +162,7 @@ impl ReciprocalAreaUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -181,8 +180,8 @@ impl ReciprocalAreaUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -217,8 +216,8 @@ impl ReciprocalAreaUnit {
 impl core::str::FromStr for ReciprocalAreaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁻²" => Ok(Self::InverseSquareMeter),
@@ -237,8 +236,8 @@ impl core::str::FromStr for ReciprocalAreaUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -280,141 +279,141 @@ impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
 }
 
 impl<T: Float> ReciprocalArea<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m⁻²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m⁻²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ReciprocalAreaUnit> {
         self.in_unit(ReciprocalAreaUnit::InverseSquareMeter)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareMeters (`m⁻²`).
+    /// A [`ReciprocalArea`] from a value in `m⁻²`.
     #[inline]
     pub fn from_inverse_square_meters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in InverseSquareMeters (`m⁻²`).
+    /// The value in `m⁻²`.
     #[inline]
     pub fn as_inverse_square_meters(self) -> T {
         self.0
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareKilometers (`km⁻²`).
+    /// A [`ReciprocalArea`] from a value in `km⁻²`.
     #[inline]
     pub fn from_inverse_square_kilometers(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in InverseSquareKilometers (`km⁻²`).
+    /// The value in `km⁻²`.
     #[inline]
     pub fn as_inverse_square_kilometers(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareDecimeters (`dm⁻²`).
+    /// A [`ReciprocalArea`] from a value in `dm⁻²`.
     #[inline]
     pub fn from_inverse_square_decimeters(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in InverseSquareDecimeters (`dm⁻²`).
+    /// The value in `dm⁻²`.
     #[inline]
     pub fn as_inverse_square_decimeters(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareCentimeters (`cm⁻²`).
+    /// A [`ReciprocalArea`] from a value in `cm⁻²`.
     #[inline]
     pub fn from_inverse_square_centimeters(value: T) -> Self {
         Self(value * T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in InverseSquareCentimeters (`cm⁻²`).
+    /// The value in `cm⁻²`.
     #[inline]
     pub fn as_inverse_square_centimeters(self) -> T {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareMillimeters (`mm⁻²`).
+    /// A [`ReciprocalArea`] from a value in `mm⁻²`.
     #[inline]
     pub fn from_inverse_square_millimeters(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in InverseSquareMillimeters (`mm⁻²`).
+    /// The value in `mm⁻²`.
     #[inline]
     pub fn as_inverse_square_millimeters(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareMicrometers (`µm⁻²`).
+    /// A [`ReciprocalArea`] from a value in `µm⁻²`.
     #[inline]
     pub fn from_inverse_square_micrometers(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in InverseSquareMicrometers (`µm⁻²`).
+    /// The value in `µm⁻²`.
     #[inline]
     pub fn as_inverse_square_micrometers(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareMiles (`mi⁻²`).
+    /// A [`ReciprocalArea`] from a value in `mi⁻²`.
     #[inline]
     pub fn from_inverse_square_miles(value: T) -> Self {
         Self(value * T::from_f64(3.8610215854244587e-7))
     }
 
-    /// Returns the value expressed in InverseSquareMiles (`mi⁻²`).
+    /// The value in `mi⁻²`.
     #[inline]
     pub fn as_inverse_square_miles(self) -> T {
         self.0 / T::from_f64(3.8610215854244587e-7)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareYards (`yd⁻²`).
+    /// A [`ReciprocalArea`] from a value in `yd⁻²`.
     #[inline]
     pub fn from_inverse_square_yards(value: T) -> Self {
         Self(value * T::from_f64(1.1959900463010802))
     }
 
-    /// Returns the value expressed in InverseSquareYards (`yd⁻²`).
+    /// The value in `yd⁻²`.
     #[inline]
     pub fn as_inverse_square_yards(self) -> T {
         self.0 / T::from_f64(1.1959900463010802)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareFeet (`ft⁻²`).
+    /// A [`ReciprocalArea`] from a value in `ft⁻²`.
     #[inline]
     pub fn from_inverse_square_feet(value: T) -> Self {
         Self(value * T::from_f64(10.763910416709722))
     }
 
-    /// Returns the value expressed in InverseSquareFeet (`ft⁻²`).
+    /// The value in `ft⁻²`.
     #[inline]
     pub fn as_inverse_square_feet(self) -> T {
         self.0 / T::from_f64(10.763910416709722)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseUsSurveySquareFeet (`ft⁻² (US)`).
+    /// A [`ReciprocalArea`] from a value in `ft⁻² (US)`.
     #[inline]
     pub fn from_inverse_us_survey_square_feet(value: T) -> Self {
         Self(value * T::from_f64(10.763867361111112))
     }
 
-    /// Returns the value expressed in InverseUsSurveySquareFeet (`ft⁻² (US)`).
+    /// The value in `ft⁻² (US)`.
     #[inline]
     pub fn as_inverse_us_survey_square_feet(self) -> T {
         self.0 / T::from_f64(10.763867361111112)
     }
 
-    /// Creates a [`ReciprocalArea`] from a value in InverseSquareInches (`in⁻²`).
+    /// A [`ReciprocalArea`] from a value in `in⁻²`.
     #[inline]
     pub fn from_inverse_square_inches(value: T) -> Self {
         Self(value * T::from_f64(1550.0031000062))
     }
 
-    /// Returns the value expressed in InverseSquareInches (`in⁻²`).
+    /// The value in `in⁻²`.
     #[inline]
     pub fn as_inverse_square_inches(self) -> T {
         self.0 / T::from_f64(1550.0031000062)
@@ -422,9 +421,8 @@ impl<T: Float> ReciprocalArea<T> {
 }
 
 impl ReciprocalArea<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ReciprocalAreaUnit) -> Self {
         Self(match unit {
@@ -445,9 +443,9 @@ impl ReciprocalArea<f64> {
 
 fixed_base!(ReciprocalArea, InverseSquareMeter);
 
-/// Unit markers for counting [`ReciprocalArea`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ReciprocalArea`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::reciprocal_area`](crate::unit::reciprocal_area).
+/// Also at [`unit::reciprocal_area`](crate::unit::reciprocal_area).
 pub mod unit {
     fixed_unit!(InverseSquareMeter: ReciprocalArea, ReciprocalAreaUnit::InverseSquareMeter, base InverseSquareMeter, 1 / 1, pi^0, from_inverse_square_meters, as_inverse_square_meters, additive);
     fixed_unit!(InverseSquareKilometer: ReciprocalArea, ReciprocalAreaUnit::InverseSquareKilometer, base InverseSquareMeter, 1 / 1000000, pi^0, from_inverse_square_kilometers, as_inverse_square_kilometers, additive);

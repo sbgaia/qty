@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A dose rate is quantity of radiation absorbed or delivered per unit time.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadiationEquivalentDoseRateUnit::SievertPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`RadiationEquivalentDoseRateUnit::SievertPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     SievertPerSecond
 );
 
-/// Unit variants for [`RadiationEquivalentDoseRate`].
+/// The units of [`RadiationEquivalentDoseRate`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -49,7 +48,7 @@ pub enum RadiationEquivalentDoseRateUnit {
 }
 
 impl RadiationEquivalentDoseRateUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::SievertPerHour,
         Self::NanosievertPerHour,
@@ -126,7 +125,7 @@ impl RadiationEquivalentDoseRateUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -141,7 +140,7 @@ impl RadiationEquivalentDoseRateUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -158,7 +157,7 @@ impl RadiationEquivalentDoseRateUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -175,8 +174,8 @@ impl RadiationEquivalentDoseRateUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -209,8 +208,8 @@ impl RadiationEquivalentDoseRateUnit {
 impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sv/h" => Ok(Self::SievertPerHour),
@@ -228,8 +227,8 @@ impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquivalentDoseRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -277,9 +276,9 @@ impl<T: Float> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquiva
 }
 
 impl<T: Float> RadiationEquivalentDoseRate<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nSv/s`, `µSv/s`, `mSv/s`, `Sv/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nSv/s`, `µSv/s`, `mSv/s`, `Sv/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, RadiationEquivalentDoseRateUnit> {
         const SCALE: [(f64, RadiationEquivalentDoseRateUnit); 4] = [
@@ -305,121 +304,121 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in SievertsPerHour (`Sv/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `Sv/h`.
     #[inline]
     pub fn from_sieverts_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in SievertsPerHour (`Sv/h`).
+    /// The value in `Sv/h`.
     #[inline]
     pub fn as_sieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerHour (`nSv/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `nSv/h`.
     #[inline]
     pub fn from_nanosieverts_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e12))
     }
 
-    /// Returns the value expressed in NanosievertsPerHour (`nSv/h`).
+    /// The value in `nSv/h`.
     #[inline]
     pub fn as_nanosieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e12)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerHour (`µSv/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `µSv/h`.
     #[inline]
     pub fn from_microsieverts_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e9))
     }
 
-    /// Returns the value expressed in MicrosievertsPerHour (`µSv/h`).
+    /// The value in `µSv/h`.
     #[inline]
     pub fn as_microsieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerHour (`mSv/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `mSv/h`.
     #[inline]
     pub fn from_millisieverts_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600000.0))
     }
 
-    /// Returns the value expressed in MillisievertsPerHour (`mSv/h`).
+    /// The value in `mSv/h`.
     #[inline]
     pub fn as_millisieverts_per_hour(self) -> T {
         self.0 * T::from_f64(3600000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in SievertsPerSecond (`Sv/s`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `Sv/s`.
     #[inline]
     pub fn from_sieverts_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in SievertsPerSecond (`Sv/s`).
+    /// The value in `Sv/s`.
     #[inline]
     pub fn as_sieverts_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in NanosievertsPerSecond (`nSv/s`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `nSv/s`.
     #[inline]
     pub fn from_nanosieverts_per_second(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanosievertsPerSecond (`nSv/s`).
+    /// The value in `nSv/s`.
     #[inline]
     pub fn as_nanosieverts_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in MicrosievertsPerSecond (`µSv/s`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `µSv/s`.
     #[inline]
     pub fn from_microsieverts_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrosievertsPerSecond (`µSv/s`).
+    /// The value in `µSv/s`.
     #[inline]
     pub fn as_microsieverts_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in MillisievertsPerSecond (`mSv/s`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `mSv/s`.
     #[inline]
     pub fn from_millisieverts_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillisievertsPerSecond (`mSv/s`).
+    /// The value in `mSv/s`.
     #[inline]
     pub fn as_millisieverts_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in RoentgensEquivalentManPerHour (`rem/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `rem/h`.
     #[inline]
     pub fn from_roentgens_equivalent_man_per_hour(value: T) -> Self {
         Self(value / T::from_f64(360000.0))
     }
 
-    /// Returns the value expressed in RoentgensEquivalentManPerHour (`rem/h`).
+    /// The value in `rem/h`.
     #[inline]
     pub fn as_roentgens_equivalent_man_per_hour(self) -> T {
         self.0 * T::from_f64(360000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDoseRate`] from a value in MilliroentgensEquivalentManPerHour (`mrem/h`).
+    /// A [`RadiationEquivalentDoseRate`] from a value in `mrem/h`.
     #[inline]
     pub fn from_milliroentgens_equivalent_man_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e8))
     }
 
-    /// Returns the value expressed in MilliroentgensEquivalentManPerHour (`mrem/h`).
+    /// The value in `mrem/h`.
     #[inline]
     pub fn as_milliroentgens_equivalent_man_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e8)
@@ -427,9 +426,8 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
 }
 
 impl RadiationEquivalentDoseRate<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: RadiationEquivalentDoseRateUnit) -> Self {
         Self(match unit {
@@ -449,9 +447,9 @@ impl RadiationEquivalentDoseRate<f64> {
 
 fixed_base!(RadiationEquivalentDoseRate, SievertPerSecond);
 
-/// Unit markers for counting [`RadiationEquivalentDoseRate`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`RadiationEquivalentDoseRate`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate).
+/// Also at [`unit::radiation_equivalent_dose_rate`](crate::unit::radiation_equivalent_dose_rate).
 pub mod unit {
     fixed_unit!(SievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::SievertPerHour, base SievertPerSecond, 1 / 3600, pi^0, from_sieverts_per_hour, as_sieverts_per_hour, additive);
     fixed_unit!(NanosievertPerHour: RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit::NanosievertPerHour, base SievertPerSecond, 1 / 3600000000000, pi^0, from_nanosieverts_per_hour, as_nanosieverts_per_hour, additive);

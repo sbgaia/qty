@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Equivalent dose is a dose quantity representing the stochastic health effects of low levels of ionizing radiation on the human body which represents the probability of radiation-induced cancer and genetic damage.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadiationEquivalentDoseUnit::Sievert`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`RadiationEquivalentDoseUnit::Sievert`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     Sievert
 );
 
-/// Unit variants for [`RadiationEquivalentDose`].
+/// The units of [`RadiationEquivalentDose`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -46,7 +45,7 @@ pub enum RadiationEquivalentDoseUnit {
 }
 
 impl RadiationEquivalentDoseUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Sievert,
         Self::Nanosievert,
@@ -95,7 +94,7 @@ impl RadiationEquivalentDoseUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -110,7 +109,7 @@ impl RadiationEquivalentDoseUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -123,7 +122,7 @@ impl RadiationEquivalentDoseUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -136,8 +135,8 @@ impl RadiationEquivalentDoseUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -162,8 +161,8 @@ impl RadiationEquivalentDoseUnit {
 impl core::str::FromStr for RadiationEquivalentDoseUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sv" => Ok(Self::Sievert),
@@ -177,8 +176,8 @@ impl core::str::FromStr for RadiationEquivalentDoseUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalentDoseUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -210,9 +209,9 @@ impl<T: Float> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalent
 }
 
 impl<T: Float> RadiationEquivalentDose<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nSv`, `µSv`, `mSv`, `Sv`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nSv`, `µSv`, `mSv`, `Sv`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, RadiationEquivalentDoseUnit> {
         const SCALE: [(f64, RadiationEquivalentDoseUnit); 4] = [
@@ -235,73 +234,73 @@ impl<T: Float> RadiationEquivalentDose<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in Sieverts (`Sv`).
+    /// A [`RadiationEquivalentDose`] from a value in `Sv`.
     #[inline]
     pub fn from_sieverts(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Sieverts (`Sv`).
+    /// The value in `Sv`.
     #[inline]
     pub fn as_sieverts(self) -> T {
         self.0
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in Nanosieverts (`nSv`).
+    /// A [`RadiationEquivalentDose`] from a value in `nSv`.
     #[inline]
     pub fn from_nanosieverts(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanosieverts (`nSv`).
+    /// The value in `nSv`.
     #[inline]
     pub fn as_nanosieverts(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in Microsieverts (`µSv`).
+    /// A [`RadiationEquivalentDose`] from a value in `µSv`.
     #[inline]
     pub fn from_microsieverts(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microsieverts (`µSv`).
+    /// The value in `µSv`.
     #[inline]
     pub fn as_microsieverts(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in Millisieverts (`mSv`).
+    /// A [`RadiationEquivalentDose`] from a value in `mSv`.
     #[inline]
     pub fn from_millisieverts(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millisieverts (`mSv`).
+    /// The value in `mSv`.
     #[inline]
     pub fn as_millisieverts(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in RoentgensEquivalentMan (`rem`).
+    /// A [`RadiationEquivalentDose`] from a value in `rem`.
     #[inline]
     pub fn from_roentgens_equivalent_man(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in RoentgensEquivalentMan (`rem`).
+    /// The value in `rem`.
     #[inline]
     pub fn as_roentgens_equivalent_man(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`RadiationEquivalentDose`] from a value in MilliroentgensEquivalentMan (`mrem`).
+    /// A [`RadiationEquivalentDose`] from a value in `mrem`.
     #[inline]
     pub fn from_milliroentgens_equivalent_man(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in MilliroentgensEquivalentMan (`mrem`).
+    /// The value in `mrem`.
     #[inline]
     pub fn as_milliroentgens_equivalent_man(self) -> T {
         self.0 * T::from_f64(100000.0)
@@ -309,9 +308,8 @@ impl<T: Float> RadiationEquivalentDose<T> {
 }
 
 impl RadiationEquivalentDose<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: RadiationEquivalentDoseUnit) -> Self {
         Self(match unit {
@@ -327,9 +325,9 @@ impl RadiationEquivalentDose<f64> {
 
 fixed_base!(RadiationEquivalentDose, Sievert);
 
-/// Unit markers for counting [`RadiationEquivalentDose`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`RadiationEquivalentDose`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radiation_equivalent_dose`](crate::unit::radiation_equivalent_dose).
+/// Also at [`unit::radiation_equivalent_dose`](crate::unit::radiation_equivalent_dose).
 pub mod unit {
     fixed_unit!(Sievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Sievert, base Sievert, 1 / 1, pi^0, from_sieverts, as_sieverts, additive);
     fixed_unit!(Nanosievert: RadiationEquivalentDose, RadiationEquivalentDoseUnit::Nanosievert, base Sievert, 1 / 1000000000, pi^0, from_nanosieverts, as_nanosieverts, additive);

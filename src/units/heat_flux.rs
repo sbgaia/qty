@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Heat flux is the flow of energy per unit of area per unit of time
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`HeatFluxUnit::WattPerSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`HeatFluxUnit::WattPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct HeatFlux<T = f64>(T);
 
 quantity!(HeatFlux, HeatFluxUnit, WattPerSquareMeter);
 
-/// Unit variants for [`HeatFlux`].
+/// The units of [`HeatFlux`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -60,7 +59,7 @@ pub enum HeatFluxUnit {
 }
 
 impl HeatFluxUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::WattPerSquareMeter,
         Self::NanowattPerSquareMeter,
@@ -242,7 +241,7 @@ impl HeatFluxUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -257,7 +256,7 @@ impl HeatFluxUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -289,7 +288,7 @@ impl HeatFluxUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -321,8 +320,8 @@ impl HeatFluxUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -389,8 +388,8 @@ impl HeatFluxUnit {
 impl core::str::FromStr for HeatFluxUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/m²" => Ok(Self::WattPerSquareMeter),
@@ -424,8 +423,8 @@ impl core::str::FromStr for HeatFluxUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -491,9 +490,9 @@ impl<T: Float> crate::UnitOf<HeatFlux<T>> for HeatFluxUnit {
 }
 
 impl<T: Float> HeatFlux<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, HeatFluxUnit> {
         const SCALE: [(f64, HeatFluxUnit); 5] = [
@@ -517,301 +516,301 @@ impl<T: Float> HeatFlux<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`HeatFlux`] from a value in WattsPerSquareMeter (`W/m²`).
+    /// A [`HeatFlux`] from a value in `W/m²`.
     #[inline]
     pub fn from_watts_per_square_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in WattsPerSquareMeter (`W/m²`).
+    /// The value in `W/m²`.
     #[inline]
     pub fn as_watts_per_square_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`HeatFlux`] from a value in NanowattsPerSquareMeter (`nW/m²`).
+    /// A [`HeatFlux`] from a value in `nW/m²`.
     #[inline]
     pub fn from_nanowatts_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanowattsPerSquareMeter (`nW/m²`).
+    /// The value in `nW/m²`.
     #[inline]
     pub fn as_nanowatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`HeatFlux`] from a value in MicrowattsPerSquareMeter (`µW/m²`).
+    /// A [`HeatFlux`] from a value in `µW/m²`.
     #[inline]
     pub fn from_microwatts_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrowattsPerSquareMeter (`µW/m²`).
+    /// The value in `µW/m²`.
     #[inline]
     pub fn as_microwatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in MilliwattsPerSquareMeter (`mW/m²`).
+    /// A [`HeatFlux`] from a value in `mW/m²`.
     #[inline]
     pub fn from_milliwatts_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MilliwattsPerSquareMeter (`mW/m²`).
+    /// The value in `mW/m²`.
     #[inline]
     pub fn as_milliwatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in CentiwattsPerSquareMeter (`cW/m²`).
+    /// A [`HeatFlux`] from a value in `cW/m²`.
     #[inline]
     pub fn from_centiwatts_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentiwattsPerSquareMeter (`cW/m²`).
+    /// The value in `cW/m²`.
     #[inline]
     pub fn as_centiwatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in DeciwattsPerSquareMeter (`dW/m²`).
+    /// A [`HeatFlux`] from a value in `dW/m²`.
     #[inline]
     pub fn from_deciwatts_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DeciwattsPerSquareMeter (`dW/m²`).
+    /// The value in `dW/m²`.
     #[inline]
     pub fn as_deciwatts_per_square_meter(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in KilowattsPerSquareMeter (`kW/m²`).
+    /// A [`HeatFlux`] from a value in `kW/m²`.
     #[inline]
     pub fn from_kilowatts_per_square_meter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilowattsPerSquareMeter (`kW/m²`).
+    /// The value in `kW/m²`.
     #[inline]
     pub fn as_kilowatts_per_square_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in WattsPerSquareMillimeter (`W/mm²`).
+    /// A [`HeatFlux`] from a value in `W/mm²`.
     #[inline]
     pub fn from_watts_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in WattsPerSquareMillimeter (`W/mm²`).
+    /// The value in `W/mm²`.
     #[inline]
     pub fn as_watts_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in NanowattsPerSquareMillimeter (`nW/mm²`).
+    /// A [`HeatFlux`] from a value in `nW/mm²`.
     #[inline]
     pub fn from_nanowatts_per_square_millimeter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in NanowattsPerSquareMillimeter (`nW/mm²`).
+    /// The value in `nW/mm²`.
     #[inline]
     pub fn as_nanowatts_per_square_millimeter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in MicrowattsPerSquareMillimeter (`µW/mm²`).
+    /// A [`HeatFlux`] from a value in `µW/mm²`.
     #[inline]
     pub fn from_microwatts_per_square_millimeter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MicrowattsPerSquareMillimeter (`µW/mm²`).
+    /// The value in `µW/mm²`.
     #[inline]
     pub fn as_microwatts_per_square_millimeter(self) -> T {
         self.0
     }
 
-    /// Creates a [`HeatFlux`] from a value in MilliwattsPerSquareMillimeter (`mW/mm²`).
+    /// A [`HeatFlux`] from a value in `mW/mm²`.
     #[inline]
     pub fn from_milliwatts_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MilliwattsPerSquareMillimeter (`mW/mm²`).
+    /// The value in `mW/mm²`.
     #[inline]
     pub fn as_milliwatts_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in CentiwattsPerSquareMillimeter (`cW/mm²`).
+    /// A [`HeatFlux`] from a value in `cW/mm²`.
     #[inline]
     pub fn from_centiwatts_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in CentiwattsPerSquareMillimeter (`cW/mm²`).
+    /// The value in `cW/mm²`.
     #[inline]
     pub fn as_centiwatts_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in DeciwattsPerSquareMillimeter (`dW/mm²`).
+    /// A [`HeatFlux`] from a value in `dW/mm²`.
     #[inline]
     pub fn from_deciwatts_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in DeciwattsPerSquareMillimeter (`dW/mm²`).
+    /// The value in `dW/mm²`.
     #[inline]
     pub fn as_deciwatts_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in KilowattsPerSquareMillimeter (`kW/mm²`).
+    /// A [`HeatFlux`] from a value in `kW/mm²`.
     #[inline]
     pub fn from_kilowatts_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in KilowattsPerSquareMillimeter (`kW/mm²`).
+    /// The value in `kW/mm²`.
     #[inline]
     pub fn as_kilowatts_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`HeatFlux`] from a value in WattsPerSquareInch (`W/in²`).
+    /// A [`HeatFlux`] from a value in `W/in²`.
     #[inline]
     pub fn from_watts_per_square_inch(value: T) -> Self {
         Self(value * T::from_f64(1550.0031000062))
     }
 
-    /// Returns the value expressed in WattsPerSquareInch (`W/in²`).
+    /// The value in `W/in²`.
     #[inline]
     pub fn as_watts_per_square_inch(self) -> T {
         self.0 / T::from_f64(1550.0031000062)
     }
 
-    /// Creates a [`HeatFlux`] from a value in WattsPerSquareFoot (`W/ft²`).
+    /// A [`HeatFlux`] from a value in `W/ft²`.
     #[inline]
     pub fn from_watts_per_square_foot(value: T) -> Self {
         Self(value * T::from_f64(10.763910416709722))
     }
 
-    /// Returns the value expressed in WattsPerSquareFoot (`W/ft²`).
+    /// The value in `W/ft²`.
     #[inline]
     pub fn as_watts_per_square_foot(self) -> T {
         self.0 / T::from_f64(10.763910416709722)
     }
 
-    /// Creates a [`HeatFlux`] from a value in BtusPerSecondSquareInch (`BTU/(s·in²)`).
+    /// A [`HeatFlux`] from a value in `BTU/(s·in²)`.
     #[inline]
     pub fn from_btus_per_second_square_inch(value: T) -> Self {
         Self(value * T::from_f64(1635339.8422406844))
     }
 
-    /// Returns the value expressed in BtusPerSecondSquareInch (`BTU/(s·in²)`).
+    /// The value in `BTU/(s·in²)`.
     #[inline]
     pub fn as_btus_per_second_square_inch(self) -> T {
         self.0 / T::from_f64(1635339.8422406844)
     }
 
-    /// Creates a [`HeatFlux`] from a value in BtusPerSecondSquareFoot (`BTU/(s·ft²)`).
+    /// A [`HeatFlux`] from a value in `BTU/(s·ft²)`.
     #[inline]
     pub fn from_btus_per_second_square_foot(value: T) -> Self {
         Self(value * T::from_f64(11356.526682226975))
     }
 
-    /// Returns the value expressed in BtusPerSecondSquareFoot (`BTU/(s·ft²)`).
+    /// The value in `BTU/(s·ft²)`.
     #[inline]
     pub fn as_btus_per_second_square_foot(self) -> T {
         self.0 / T::from_f64(11356.526682226975)
     }
 
-    /// Creates a [`HeatFlux`] from a value in BtusPerMinuteSquareFoot (`BTU/(min·ft²)`).
+    /// A [`HeatFlux`] from a value in `BTU/(min·ft²)`.
     #[inline]
     pub fn from_btus_per_minute_square_foot(value: T) -> Self {
         Self(value * T::from_f64(189.27544470378294))
     }
 
-    /// Returns the value expressed in BtusPerMinuteSquareFoot (`BTU/(min·ft²)`).
+    /// The value in `BTU/(min·ft²)`.
     #[inline]
     pub fn as_btus_per_minute_square_foot(self) -> T {
         self.0 / T::from_f64(189.27544470378294)
     }
 
-    /// Creates a [`HeatFlux`] from a value in BtusPerHourSquareFoot (`BTU/(h·ft²)`).
+    /// A [`HeatFlux`] from a value in `BTU/(h·ft²)`.
     #[inline]
     pub fn from_btus_per_hour_square_foot(value: T) -> Self {
         Self(value * T::from_f64(3.154590745063049))
     }
 
-    /// Returns the value expressed in BtusPerHourSquareFoot (`BTU/(h·ft²)`).
+    /// The value in `BTU/(h·ft²)`.
     #[inline]
     pub fn as_btus_per_hour_square_foot(self) -> T {
         self.0 / T::from_f64(3.154590745063049)
     }
 
-    /// Creates a [`HeatFlux`] from a value in CaloriesPerSecondSquareCentimeter (`cal/(s·cm²)`).
+    /// A [`HeatFlux`] from a value in `cal/(s·cm²)`.
     #[inline]
     pub fn from_calories_per_second_square_centimeter(value: T) -> Self {
         Self(value * T::from_f64(41840.0))
     }
 
-    /// Returns the value expressed in CaloriesPerSecondSquareCentimeter (`cal/(s·cm²)`).
+    /// The value in `cal/(s·cm²)`.
     #[inline]
     pub fn as_calories_per_second_square_centimeter(self) -> T {
         self.0 / T::from_f64(41840.0)
     }
 
-    /// Creates a [`HeatFlux`] from a value in KilocaloriesPerSecondSquareCentimeter (`kcal/(s·cm²)`).
+    /// A [`HeatFlux`] from a value in `kcal/(s·cm²)`.
     #[inline]
     pub fn from_kilocalories_per_second_square_centimeter(value: T) -> Self {
         Self(value * T::from_f64(4.184e7))
     }
 
-    /// Returns the value expressed in KilocaloriesPerSecondSquareCentimeter (`kcal/(s·cm²)`).
+    /// The value in `kcal/(s·cm²)`.
     #[inline]
     pub fn as_kilocalories_per_second_square_centimeter(self) -> T {
         self.0 / T::from_f64(4.184e7)
     }
 
-    /// Creates a [`HeatFlux`] from a value in KilocaloriesPerHourSquareMeter (`kcal/(h·m²)`).
+    /// A [`HeatFlux`] from a value in `kcal/(h·m²)`.
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter(value: T) -> Self {
         Self(value * T::from_f64(1.1622222222222223))
     }
 
-    /// Returns the value expressed in KilocaloriesPerHourSquareMeter (`kcal/(h·m²)`).
+    /// The value in `kcal/(h·m²)`.
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter(self) -> T {
         self.0 / T::from_f64(1.1622222222222223)
     }
 
-    /// Creates a [`HeatFlux`] from a value in PoundsForcePerFootSecond (`lbf/(ft·s)`).
+    /// A [`HeatFlux`] from a value in `lbf/(ft·s)`.
     #[inline]
     pub fn from_pounds_force_per_foot_second(value: T) -> Self {
         Self(value * T::from_f64(14.593902937206364))
     }
 
-    /// Returns the value expressed in PoundsForcePerFootSecond (`lbf/(ft·s)`).
+    /// The value in `lbf/(ft·s)`.
     #[inline]
     pub fn as_pounds_force_per_foot_second(self) -> T {
         self.0 / T::from_f64(14.593902937206364)
     }
 
-    /// Creates a [`HeatFlux`] from a value in PoundsPerSecondCubed (`lb/s³`).
+    /// A [`HeatFlux`] from a value in `lb/s³`.
     #[inline]
     pub fn from_pounds_per_second_cubed(value: T) -> Self {
         Self(value * T::from_f64(0.45359237))
     }
 
-    /// Returns the value expressed in PoundsPerSecondCubed (`lb/s³`).
+    /// The value in `lb/s³`.
     #[inline]
     pub fn as_pounds_per_second_cubed(self) -> T {
         self.0 / T::from_f64(0.45359237)
@@ -819,9 +818,8 @@ impl<T: Float> HeatFlux<T> {
 }
 
 impl HeatFlux<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: HeatFluxUnit) -> Self {
         Self(match unit {
@@ -856,9 +854,9 @@ impl HeatFlux<f64> {
 
 fixed_base!(HeatFlux, WattPerSquareMeter);
 
-/// Unit markers for counting [`HeatFlux`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`HeatFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::heat_flux`](crate::unit::heat_flux).
+/// Also at [`unit::heat_flux`](crate::unit::heat_flux).
 pub mod unit {
     fixed_unit!(WattPerSquareMeter: HeatFlux, HeatFluxUnit::WattPerSquareMeter, base WattPerSquareMeter, 1 / 1, pi^0, from_watts_per_square_meter, as_watts_per_square_meter, additive);
     fixed_unit!(NanowattPerSquareMeter: HeatFlux, HeatFluxUnit::NanowattPerSquareMeter, base WattPerSquareMeter, 1 / 1000000000, pi^0, from_nanowatts_per_square_meter, as_nanowatts_per_square_meter, additive);

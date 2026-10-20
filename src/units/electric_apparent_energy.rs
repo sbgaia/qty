@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A unit for expressing the integral of apparent power over time, equal to the product of 1 volt-ampere and 1 hour, or to 3600 joules.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricApparentEnergyUnit::VoltampereHour`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricApparentEnergyUnit::VoltampereHour`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     VoltampereHour
 );
 
-/// Unit variants for [`ElectricApparentEnergy`].
+/// The units of [`ElectricApparentEnergy`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -42,7 +41,7 @@ pub enum ElectricApparentEnergyUnit {
 }
 
 impl ElectricApparentEnergyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::VoltampereHour,
         Self::KilovoltampereHour,
@@ -70,7 +69,7 @@ impl ElectricApparentEnergyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -85,7 +84,7 @@ impl ElectricApparentEnergyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -95,7 +94,7 @@ impl ElectricApparentEnergyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -105,8 +104,8 @@ impl ElectricApparentEnergyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -125,8 +124,8 @@ impl ElectricApparentEnergyUnit {
 impl core::str::FromStr for ElectricApparentEnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "VAh" => Ok(Self::VoltampereHour),
@@ -137,8 +136,8 @@ impl core::str::FromStr for ElectricApparentEnergyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -160,9 +159,9 @@ impl<T: Float> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEner
 }
 
 impl<T: Float> ElectricApparentEnergy<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`VAh`, `kVAh`, `MVAh`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`VAh`, `kVAh`, `MVAh`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricApparentEnergyUnit> {
         const SCALE: [(f64, ElectricApparentEnergyUnit); 3] = [
@@ -184,37 +183,37 @@ impl<T: Float> ElectricApparentEnergy<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ElectricApparentEnergy`] from a value in VoltampereHours (`VAh`).
+    /// A [`ElectricApparentEnergy`] from a value in `VAh`.
     #[inline]
     pub fn from_voltampere_hours(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in VoltampereHours (`VAh`).
+    /// The value in `VAh`.
     #[inline]
     pub fn as_voltampere_hours(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricApparentEnergy`] from a value in KilovoltampereHours (`kVAh`).
+    /// A [`ElectricApparentEnergy`] from a value in `kVAh`.
     #[inline]
     pub fn from_kilovoltampere_hours(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilovoltampereHours (`kVAh`).
+    /// The value in `kVAh`.
     #[inline]
     pub fn as_kilovoltampere_hours(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricApparentEnergy`] from a value in MegavoltampereHours (`MVAh`).
+    /// A [`ElectricApparentEnergy`] from a value in `MVAh`.
     #[inline]
     pub fn from_megavoltampere_hours(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegavoltampereHours (`MVAh`).
+    /// The value in `MVAh`.
     #[inline]
     pub fn as_megavoltampere_hours(self) -> T {
         self.0 / T::from_f64(1000000.0)
@@ -222,9 +221,8 @@ impl<T: Float> ElectricApparentEnergy<T> {
 }
 
 impl ElectricApparentEnergy<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricApparentEnergyUnit) -> Self {
         Self(match unit {
@@ -237,9 +235,9 @@ impl ElectricApparentEnergy<f64> {
 
 fixed_base!(ElectricApparentEnergy, VoltampereHour);
 
-/// Unit markers for counting [`ElectricApparentEnergy`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricApparentEnergy`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_apparent_energy`](crate::unit::electric_apparent_energy).
+/// Also at [`unit::electric_apparent_energy`](crate::unit::electric_apparent_energy).
 pub mod unit {
     fixed_unit!(VoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::VoltampereHour, base VoltampereHour, 1 / 1, pi^0, from_voltampere_hours, as_voltampere_hours, additive);
     fixed_unit!(KilovoltampereHour: ElectricApparentEnergy, ElectricApparentEnergyUnit::KilovoltampereHour, base VoltampereHour, 1000 / 1, pi^0, from_kilovoltampere_hours, as_kilovoltampere_hours, additive);

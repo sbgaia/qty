@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In physics and engineering, in particular fluid dynamics and hydrometry, the volumetric flow rate, (also known as volume flow rate, rate of fluid flow or volume velocity) is the volume of fluid which passes through a given surface per unit time. The SI unit is m³/s (cubic meters per second). In US Customary Units and British Imperial Units, volumetric flow rate is often expressed as ft³/s (cubic feet per second). It is usually represented by the symbol Q.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`VolumeFlowUnit::CubicMeterPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`VolumeFlowUnit::CubicMeterPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct VolumeFlow<T = f64>(T);
 
 quantity!(VolumeFlow, VolumeFlowUnit, CubicMeterPerSecond);
 
-/// Unit variants for [`VolumeFlow`].
+/// The units of [`VolumeFlow`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -113,7 +112,7 @@ pub enum VolumeFlowUnit {
 }
 
 impl VolumeFlowUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::CubicMeterPerSecond,
         Self::CubicMeterPerMinute,
@@ -666,7 +665,7 @@ impl VolumeFlowUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -681,7 +680,7 @@ impl VolumeFlowUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -766,7 +765,7 @@ impl VolumeFlowUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -851,8 +850,8 @@ impl VolumeFlowUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -1021,8 +1020,8 @@ impl VolumeFlowUnit {
 impl core::str::FromStr for VolumeFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m³/s" => Ok(Self::CubicMeterPerSecond),
@@ -1121,8 +1120,8 @@ impl core::str::FromStr for VolumeFlowUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -1294,945 +1293,945 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
 }
 
 impl<T: Float> VolumeFlow<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m³/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m³/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowUnit> {
         self.in_unit(VolumeFlowUnit::CubicMeterPerSecond)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMetersPerSecond (`m³/s`).
+    /// A [`VolumeFlow`] from a value in `m³/s`.
     #[inline]
     pub fn from_cubic_meters_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in CubicMetersPerSecond (`m³/s`).
+    /// The value in `m³/s`.
     #[inline]
     pub fn as_cubic_meters_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMetersPerMinute (`m³/min`).
+    /// A [`VolumeFlow`] from a value in `m³/min`.
     #[inline]
     pub fn from_cubic_meters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in CubicMetersPerMinute (`m³/min`).
+    /// The value in `m³/min`.
     #[inline]
     pub fn as_cubic_meters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMetersPerHour (`m³/h`).
+    /// A [`VolumeFlow`] from a value in `m³/h`.
     #[inline]
     pub fn from_cubic_meters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in CubicMetersPerHour (`m³/h`).
+    /// The value in `m³/h`.
     #[inline]
     pub fn as_cubic_meters_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMetersPerDay (`m³/d`).
+    /// A [`VolumeFlow`] from a value in `m³/d`.
     #[inline]
     pub fn from_cubic_meters_per_day(value: T) -> Self {
         Self(value / T::from_f64(86400.0))
     }
 
-    /// Returns the value expressed in CubicMetersPerDay (`m³/d`).
+    /// The value in `m³/d`.
     #[inline]
     pub fn as_cubic_meters_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicFeetPerSecond (`ft³/s`).
+    /// A [`VolumeFlow`] from a value in `ft³/s`.
     #[inline]
     pub fn from_cubic_feet_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.028316846592))
     }
 
-    /// Returns the value expressed in CubicFeetPerSecond (`ft³/s`).
+    /// The value in `ft³/s`.
     #[inline]
     pub fn as_cubic_feet_per_second(self) -> T {
         self.0 / T::from_f64(0.028316846592)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicInchesPerSecond (`in³/s`).
+    /// A [`VolumeFlow`] from a value in `in³/s`.
     #[inline]
     pub fn from_cubic_inches_per_second(value: T) -> Self {
         Self(value * T::from_f64(1.6387064e-5))
     }
 
-    /// Returns the value expressed in CubicInchesPerSecond (`in³/s`).
+    /// The value in `in³/s`.
     #[inline]
     pub fn as_cubic_inches_per_second(self) -> T {
         self.0 / T::from_f64(1.6387064e-5)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicFeetPerMinute (`ft³/min`).
+    /// A [`VolumeFlow`] from a value in `ft³/min`.
     #[inline]
     pub fn from_cubic_feet_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.0004719474432))
     }
 
-    /// Returns the value expressed in CubicFeetPerMinute (`ft³/min`).
+    /// The value in `ft³/min`.
     #[inline]
     pub fn as_cubic_feet_per_minute(self) -> T {
         self.0 / T::from_f64(0.0004719474432)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicInchesPerMinute (`in³/min`).
+    /// A [`VolumeFlow`] from a value in `in³/min`.
     #[inline]
     pub fn from_cubic_inches_per_minute(value: T) -> Self {
         Self(value * T::from_f64(2.7311773333333333e-7))
     }
 
-    /// Returns the value expressed in CubicInchesPerMinute (`in³/min`).
+    /// The value in `in³/min`.
     #[inline]
     pub fn as_cubic_inches_per_minute(self) -> T {
         self.0 / T::from_f64(2.7311773333333333e-7)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicFeetPerHour (`ft³/h`).
+    /// A [`VolumeFlow`] from a value in `ft³/h`.
     #[inline]
     pub fn from_cubic_feet_per_hour(value: T) -> Self {
         Self(value * T::from_f64(7.86579072e-6))
     }
 
-    /// Returns the value expressed in CubicFeetPerHour (`ft³/h`).
+    /// The value in `ft³/h`.
     #[inline]
     pub fn as_cubic_feet_per_hour(self) -> T {
         self.0 / T::from_f64(7.86579072e-6)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicYardsPerSecond (`yd³/s`).
+    /// A [`VolumeFlow`] from a value in `yd³/s`.
     #[inline]
     pub fn from_cubic_yards_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.764554857984))
     }
 
-    /// Returns the value expressed in CubicYardsPerSecond (`yd³/s`).
+    /// The value in `yd³/s`.
     #[inline]
     pub fn as_cubic_yards_per_second(self) -> T {
         self.0 / T::from_f64(0.764554857984)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicYardsPerMinute (`yd³/min`).
+    /// A [`VolumeFlow`] from a value in `yd³/min`.
     #[inline]
     pub fn from_cubic_yards_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.0127425809664))
     }
 
-    /// Returns the value expressed in CubicYardsPerMinute (`yd³/min`).
+    /// The value in `yd³/min`.
     #[inline]
     pub fn as_cubic_yards_per_minute(self) -> T {
         self.0 / T::from_f64(0.0127425809664)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicYardsPerHour (`yd³/h`).
+    /// A [`VolumeFlow`] from a value in `yd³/h`.
     #[inline]
     pub fn from_cubic_yards_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.00021237634944))
     }
 
-    /// Returns the value expressed in CubicYardsPerHour (`yd³/h`).
+    /// The value in `yd³/h`.
     #[inline]
     pub fn as_cubic_yards_per_hour(self) -> T {
         self.0 / T::from_f64(0.00021237634944)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicYardsPerDay (`cy/day`).
+    /// A [`VolumeFlow`] from a value in `cy/day`.
     #[inline]
     pub fn from_cubic_yards_per_day(value: T) -> Self {
         Self(value * T::from_f64(8.84901456e-6))
     }
 
-    /// Returns the value expressed in CubicYardsPerDay (`cy/day`).
+    /// The value in `cy/day`.
     #[inline]
     pub fn as_cubic_yards_per_day(self) -> T {
         self.0 / T::from_f64(8.84901456e-6)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MillionUsGallonsPerDay (`MGD`).
+    /// A [`VolumeFlow`] from a value in `MGD`.
     #[inline]
     pub fn from_million_us_gallons_per_day(value: T) -> Self {
         Self(value * T::from_f64(0.04381263638888889))
     }
 
-    /// Returns the value expressed in MillionUsGallonsPerDay (`MGD`).
+    /// The value in `MGD`.
     #[inline]
     pub fn as_million_us_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.04381263638888889)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UsGallonsPerDay (`gpd`).
+    /// A [`VolumeFlow`] from a value in `gpd`.
     #[inline]
     pub fn from_us_gallons_per_day(value: T) -> Self {
         Self(value * T::from_f64(4.3812636388888886e-8))
     }
 
-    /// Returns the value expressed in UsGallonsPerDay (`gpd`).
+    /// The value in `gpd`.
     #[inline]
     pub fn as_us_gallons_per_day(self) -> T {
         self.0 / T::from_f64(4.3812636388888886e-8)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegausGallonsPerDay (`Mgpd`).
+    /// A [`VolumeFlow`] from a value in `Mgpd`.
     #[inline]
     pub fn from_megaus_gallons_per_day(value: T) -> Self {
         Self(value * T::from_f64(0.04381263638888889))
     }
 
-    /// Returns the value expressed in MegausGallonsPerDay (`Mgpd`).
+    /// The value in `Mgpd`.
     #[inline]
     pub fn as_megaus_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.04381263638888889)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in LitersPerSecond (`l/s`).
+    /// A [`VolumeFlow`] from a value in `l/s`.
     #[inline]
     pub fn from_liters_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in LitersPerSecond (`l/s`).
+    /// The value in `l/s`.
     #[inline]
     pub fn as_liters_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in NanolitersPerSecond (`nl/s`).
+    /// A [`VolumeFlow`] from a value in `nl/s`.
     #[inline]
     pub fn from_nanoliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in NanolitersPerSecond (`nl/s`).
+    /// The value in `nl/s`.
     #[inline]
     pub fn as_nanoliters_per_second(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MicrolitersPerSecond (`µl/s`).
+    /// A [`VolumeFlow`] from a value in `µl/s`.
     #[inline]
     pub fn from_microliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in MicrolitersPerSecond (`µl/s`).
+    /// The value in `µl/s`.
     #[inline]
     pub fn as_microliters_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MillilitersPerSecond (`ml/s`).
+    /// A [`VolumeFlow`] from a value in `ml/s`.
     #[inline]
     pub fn from_milliliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MillilitersPerSecond (`ml/s`).
+    /// The value in `ml/s`.
     #[inline]
     pub fn as_milliliters_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CentilitersPerSecond (`cl/s`).
+    /// A [`VolumeFlow`] from a value in `cl/s`.
     #[inline]
     pub fn from_centiliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in CentilitersPerSecond (`cl/s`).
+    /// The value in `cl/s`.
     #[inline]
     pub fn as_centiliters_per_second(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecilitersPerSecond (`dl/s`).
+    /// A [`VolumeFlow`] from a value in `dl/s`.
     #[inline]
     pub fn from_deciliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in DecilitersPerSecond (`dl/s`).
+    /// The value in `dl/s`.
     #[inline]
     pub fn as_deciliters_per_second(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecalitersPerSecond (`dal/s`).
+    /// A [`VolumeFlow`] from a value in `dal/s`.
     #[inline]
     pub fn from_decaliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in DecalitersPerSecond (`dal/s`).
+    /// The value in `dal/s`.
     #[inline]
     pub fn as_decaliters_per_second(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in HectolitersPerSecond (`hl/s`).
+    /// A [`VolumeFlow`] from a value in `hl/s`.
     #[inline]
     pub fn from_hectoliters_per_second(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in HectolitersPerSecond (`hl/s`).
+    /// The value in `hl/s`.
     #[inline]
     pub fn as_hectoliters_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in KilolitersPerSecond (`kl/s`).
+    /// A [`VolumeFlow`] from a value in `kl/s`.
     #[inline]
     pub fn from_kiloliters_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilolitersPerSecond (`kl/s`).
+    /// The value in `kl/s`.
     #[inline]
     pub fn as_kiloliters_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegalitersPerSecond (`Ml/s`).
+    /// A [`VolumeFlow`] from a value in `Ml/s`.
     #[inline]
     pub fn from_megaliters_per_second(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MegalitersPerSecond (`Ml/s`).
+    /// The value in `Ml/s`.
     #[inline]
     pub fn as_megaliters_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in LitersPerMinute (`l/min`).
+    /// A [`VolumeFlow`] from a value in `l/min`.
     #[inline]
     pub fn from_liters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60000.0))
     }
 
-    /// Returns the value expressed in LitersPerMinute (`l/min`).
+    /// The value in `l/min`.
     #[inline]
     pub fn as_liters_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in NanolitersPerMinute (`nl/min`).
+    /// A [`VolumeFlow`] from a value in `nl/min`.
     #[inline]
     pub fn from_nanoliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e13))
     }
 
-    /// Returns the value expressed in NanolitersPerMinute (`nl/min`).
+    /// The value in `nl/min`.
     #[inline]
     pub fn as_nanoliters_per_minute(self) -> T {
         self.0 * T::from_f64(6e13)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MicrolitersPerMinute (`µl/min`).
+    /// A [`VolumeFlow`] from a value in `µl/min`.
     #[inline]
     pub fn from_microliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e10))
     }
 
-    /// Returns the value expressed in MicrolitersPerMinute (`µl/min`).
+    /// The value in `µl/min`.
     #[inline]
     pub fn as_microliters_per_minute(self) -> T {
         self.0 * T::from_f64(6e10)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MillilitersPerMinute (`ml/min`).
+    /// A [`VolumeFlow`] from a value in `ml/min`.
     #[inline]
     pub fn from_milliliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e7))
     }
 
-    /// Returns the value expressed in MillilitersPerMinute (`ml/min`).
+    /// The value in `ml/min`.
     #[inline]
     pub fn as_milliliters_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CentilitersPerMinute (`cl/min`).
+    /// A [`VolumeFlow`] from a value in `cl/min`.
     #[inline]
     pub fn from_centiliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6000000.0))
     }
 
-    /// Returns the value expressed in CentilitersPerMinute (`cl/min`).
+    /// The value in `cl/min`.
     #[inline]
     pub fn as_centiliters_per_minute(self) -> T {
         self.0 * T::from_f64(6000000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecilitersPerMinute (`dl/min`).
+    /// A [`VolumeFlow`] from a value in `dl/min`.
     #[inline]
     pub fn from_deciliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(600000.0))
     }
 
-    /// Returns the value expressed in DecilitersPerMinute (`dl/min`).
+    /// The value in `dl/min`.
     #[inline]
     pub fn as_deciliters_per_minute(self) -> T {
         self.0 * T::from_f64(600000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecalitersPerMinute (`dal/min`).
+    /// A [`VolumeFlow`] from a value in `dal/min`.
     #[inline]
     pub fn from_decaliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6000.0))
     }
 
-    /// Returns the value expressed in DecalitersPerMinute (`dal/min`).
+    /// The value in `dal/min`.
     #[inline]
     pub fn as_decaliters_per_minute(self) -> T {
         self.0 * T::from_f64(6000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in HectolitersPerMinute (`hl/min`).
+    /// A [`VolumeFlow`] from a value in `hl/min`.
     #[inline]
     pub fn from_hectoliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(600.0))
     }
 
-    /// Returns the value expressed in HectolitersPerMinute (`hl/min`).
+    /// The value in `hl/min`.
     #[inline]
     pub fn as_hectoliters_per_minute(self) -> T {
         self.0 * T::from_f64(600.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in KilolitersPerMinute (`kl/min`).
+    /// A [`VolumeFlow`] from a value in `kl/min`.
     #[inline]
     pub fn from_kiloliters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in KilolitersPerMinute (`kl/min`).
+    /// The value in `kl/min`.
     #[inline]
     pub fn as_kiloliters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegalitersPerMinute (`Ml/min`).
+    /// A [`VolumeFlow`] from a value in `Ml/min`.
     #[inline]
     pub fn from_megaliters_per_minute(value: T) -> Self {
         Self(value * T::from_f64(16.666666666666668))
     }
 
-    /// Returns the value expressed in MegalitersPerMinute (`Ml/min`).
+    /// The value in `Ml/min`.
     #[inline]
     pub fn as_megaliters_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in LitersPerHour (`l/h`).
+    /// A [`VolumeFlow`] from a value in `l/h`.
     #[inline]
     pub fn from_liters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600000.0))
     }
 
-    /// Returns the value expressed in LitersPerHour (`l/h`).
+    /// The value in `l/h`.
     #[inline]
     pub fn as_liters_per_hour(self) -> T {
         self.0 * T::from_f64(3600000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in NanolitersPerHour (`nl/h`).
+    /// A [`VolumeFlow`] from a value in `nl/h`.
     #[inline]
     pub fn from_nanoliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e15))
     }
 
-    /// Returns the value expressed in NanolitersPerHour (`nl/h`).
+    /// The value in `nl/h`.
     #[inline]
     pub fn as_nanoliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e15)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MicrolitersPerHour (`µl/h`).
+    /// A [`VolumeFlow`] from a value in `µl/h`.
     #[inline]
     pub fn from_microliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e12))
     }
 
-    /// Returns the value expressed in MicrolitersPerHour (`µl/h`).
+    /// The value in `µl/h`.
     #[inline]
     pub fn as_microliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e12)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MillilitersPerHour (`ml/h`).
+    /// A [`VolumeFlow`] from a value in `ml/h`.
     #[inline]
     pub fn from_milliliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e9))
     }
 
-    /// Returns the value expressed in MillilitersPerHour (`ml/h`).
+    /// The value in `ml/h`.
     #[inline]
     pub fn as_milliliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CentilitersPerHour (`cl/h`).
+    /// A [`VolumeFlow`] from a value in `cl/h`.
     #[inline]
     pub fn from_centiliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e8))
     }
 
-    /// Returns the value expressed in CentilitersPerHour (`cl/h`).
+    /// The value in `cl/h`.
     #[inline]
     pub fn as_centiliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e8)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecilitersPerHour (`dl/h`).
+    /// A [`VolumeFlow`] from a value in `dl/h`.
     #[inline]
     pub fn from_deciliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e7))
     }
 
-    /// Returns the value expressed in DecilitersPerHour (`dl/h`).
+    /// The value in `dl/h`.
     #[inline]
     pub fn as_deciliters_per_hour(self) -> T {
         self.0 * T::from_f64(3.6e7)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecalitersPerHour (`dal/h`).
+    /// A [`VolumeFlow`] from a value in `dal/h`.
     #[inline]
     pub fn from_decaliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(360000.0))
     }
 
-    /// Returns the value expressed in DecalitersPerHour (`dal/h`).
+    /// The value in `dal/h`.
     #[inline]
     pub fn as_decaliters_per_hour(self) -> T {
         self.0 * T::from_f64(360000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in HectolitersPerHour (`hl/h`).
+    /// A [`VolumeFlow`] from a value in `hl/h`.
     #[inline]
     pub fn from_hectoliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(36000.0))
     }
 
-    /// Returns the value expressed in HectolitersPerHour (`hl/h`).
+    /// The value in `hl/h`.
     #[inline]
     pub fn as_hectoliters_per_hour(self) -> T {
         self.0 * T::from_f64(36000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in KilolitersPerHour (`kl/h`).
+    /// A [`VolumeFlow`] from a value in `kl/h`.
     #[inline]
     pub fn from_kiloliters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in KilolitersPerHour (`kl/h`).
+    /// The value in `kl/h`.
     #[inline]
     pub fn as_kiloliters_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegalitersPerHour (`Ml/h`).
+    /// A [`VolumeFlow`] from a value in `Ml/h`.
     #[inline]
     pub fn from_megaliters_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.2777777777777778))
     }
 
-    /// Returns the value expressed in MegalitersPerHour (`Ml/h`).
+    /// The value in `Ml/h`.
     #[inline]
     pub fn as_megaliters_per_hour(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in LitersPerDay (`l/day`).
+    /// A [`VolumeFlow`] from a value in `l/day`.
     #[inline]
     pub fn from_liters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e7))
     }
 
-    /// Returns the value expressed in LitersPerDay (`l/day`).
+    /// The value in `l/day`.
     #[inline]
     pub fn as_liters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e7)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in NanolitersPerDay (`nl/day`).
+    /// A [`VolumeFlow`] from a value in `nl/day`.
     #[inline]
     pub fn from_nanoliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e16))
     }
 
-    /// Returns the value expressed in NanolitersPerDay (`nl/day`).
+    /// The value in `nl/day`.
     #[inline]
     pub fn as_nanoliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e16)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MicrolitersPerDay (`µl/day`).
+    /// A [`VolumeFlow`] from a value in `µl/day`.
     #[inline]
     pub fn from_microliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e13))
     }
 
-    /// Returns the value expressed in MicrolitersPerDay (`µl/day`).
+    /// The value in `µl/day`.
     #[inline]
     pub fn as_microliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e13)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MillilitersPerDay (`ml/day`).
+    /// A [`VolumeFlow`] from a value in `ml/day`.
     #[inline]
     pub fn from_milliliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e10))
     }
 
-    /// Returns the value expressed in MillilitersPerDay (`ml/day`).
+    /// The value in `ml/day`.
     #[inline]
     pub fn as_milliliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e10)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CentilitersPerDay (`cl/day`).
+    /// A [`VolumeFlow`] from a value in `cl/day`.
     #[inline]
     pub fn from_centiliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e9))
     }
 
-    /// Returns the value expressed in CentilitersPerDay (`cl/day`).
+    /// The value in `cl/day`.
     #[inline]
     pub fn as_centiliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e9)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecilitersPerDay (`dl/day`).
+    /// A [`VolumeFlow`] from a value in `dl/day`.
     #[inline]
     pub fn from_deciliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8.64e8))
     }
 
-    /// Returns the value expressed in DecilitersPerDay (`dl/day`).
+    /// The value in `dl/day`.
     #[inline]
     pub fn as_deciliters_per_day(self) -> T {
         self.0 * T::from_f64(8.64e8)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in DecalitersPerDay (`dal/day`).
+    /// A [`VolumeFlow`] from a value in `dal/day`.
     #[inline]
     pub fn from_decaliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(8640000.0))
     }
 
-    /// Returns the value expressed in DecalitersPerDay (`dal/day`).
+    /// The value in `dal/day`.
     #[inline]
     pub fn as_decaliters_per_day(self) -> T {
         self.0 * T::from_f64(8640000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in HectolitersPerDay (`hl/day`).
+    /// A [`VolumeFlow`] from a value in `hl/day`.
     #[inline]
     pub fn from_hectoliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(864000.0))
     }
 
-    /// Returns the value expressed in HectolitersPerDay (`hl/day`).
+    /// The value in `hl/day`.
     #[inline]
     pub fn as_hectoliters_per_day(self) -> T {
         self.0 * T::from_f64(864000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in KilolitersPerDay (`kl/day`).
+    /// A [`VolumeFlow`] from a value in `kl/day`.
     #[inline]
     pub fn from_kiloliters_per_day(value: T) -> Self {
         Self(value / T::from_f64(86400.0))
     }
 
-    /// Returns the value expressed in KilolitersPerDay (`kl/day`).
+    /// The value in `kl/day`.
     #[inline]
     pub fn as_kiloliters_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegalitersPerDay (`Ml/day`).
+    /// A [`VolumeFlow`] from a value in `Ml/day`.
     #[inline]
     pub fn from_megaliters_per_day(value: T) -> Self {
         Self(value * T::from_f64(0.011574074074074073))
     }
 
-    /// Returns the value expressed in MegalitersPerDay (`Ml/day`).
+    /// The value in `Ml/day`.
     #[inline]
     pub fn as_megaliters_per_day(self) -> T {
         self.0 / T::from_f64(0.011574074074074073)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UsGallonsPerSecond (`gal (U.S.)/s`).
+    /// A [`VolumeFlow`] from a value in `gal (U.S.)/s`.
     #[inline]
     pub fn from_us_gallons_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.003785411784))
     }
 
-    /// Returns the value expressed in UsGallonsPerSecond (`gal (U.S.)/s`).
+    /// The value in `gal (U.S.)/s`.
     #[inline]
     pub fn as_us_gallons_per_second(self) -> T {
         self.0 / T::from_f64(0.003785411784)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UsGallonsPerMinute (`gal (U.S.)/min`).
+    /// A [`VolumeFlow`] from a value in `gal (U.S.)/min`.
     #[inline]
     pub fn from_us_gallons_per_minute(value: T) -> Self {
         Self(value * T::from_f64(6.30901964e-5))
     }
 
-    /// Returns the value expressed in UsGallonsPerMinute (`gal (U.S.)/min`).
+    /// The value in `gal (U.S.)/min`.
     #[inline]
     pub fn as_us_gallons_per_minute(self) -> T {
         self.0 / T::from_f64(6.30901964e-5)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UkGallonsPerDay (`gal (U. K.)/d`).
+    /// A [`VolumeFlow`] from a value in `gal (U. K.)/d`.
     #[inline]
     pub fn from_uk_gallons_per_day(value: T) -> Self {
         Self(value * T::from_f64(5.2616782407407406e-8))
     }
 
-    /// Returns the value expressed in UkGallonsPerDay (`gal (U. K.)/d`).
+    /// The value in `gal (U. K.)/d`.
     #[inline]
     pub fn as_uk_gallons_per_day(self) -> T {
         self.0 / T::from_f64(5.2616782407407406e-8)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegaukGallonsPerDay (`Mgal (U. K.)/d`).
+    /// A [`VolumeFlow`] from a value in `Mgal (U. K.)/d`.
     #[inline]
     pub fn from_megauk_gallons_per_day(value: T) -> Self {
         Self(value * T::from_f64(0.05261678240740741))
     }
 
-    /// Returns the value expressed in MegaukGallonsPerDay (`Mgal (U. K.)/d`).
+    /// The value in `Mgal (U. K.)/d`.
     #[inline]
     pub fn as_megauk_gallons_per_day(self) -> T {
         self.0 / T::from_f64(0.05261678240740741)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UkGallonsPerHour (`gal (imp.)/h`).
+    /// A [`VolumeFlow`] from a value in `gal (imp.)/h`.
     #[inline]
     pub fn from_uk_gallons_per_hour(value: T) -> Self {
         Self(value * T::from_f64(1.2628027777777779e-6))
     }
 
-    /// Returns the value expressed in UkGallonsPerHour (`gal (imp.)/h`).
+    /// The value in `gal (imp.)/h`.
     #[inline]
     pub fn as_uk_gallons_per_hour(self) -> T {
         self.0 / T::from_f64(1.2628027777777779e-6)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UkGallonsPerMinute (`gal (imp.)/min`).
+    /// A [`VolumeFlow`] from a value in `gal (imp.)/min`.
     #[inline]
     pub fn from_uk_gallons_per_minute(value: T) -> Self {
         Self(value * T::from_f64(7.576816666666667e-5))
     }
 
-    /// Returns the value expressed in UkGallonsPerMinute (`gal (imp.)/min`).
+    /// The value in `gal (imp.)/min`.
     #[inline]
     pub fn as_uk_gallons_per_minute(self) -> T {
         self.0 / T::from_f64(7.576816666666667e-5)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UkGallonsPerSecond (`gal (imp.)/s`).
+    /// A [`VolumeFlow`] from a value in `gal (imp.)/s`.
     #[inline]
     pub fn from_uk_gallons_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.00454609))
     }
 
-    /// Returns the value expressed in UkGallonsPerSecond (`gal (imp.)/s`).
+    /// The value in `gal (imp.)/s`.
     #[inline]
     pub fn as_uk_gallons_per_second(self) -> T {
         self.0 / T::from_f64(0.00454609)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in MegaukGallonsPerSecond (`Mgal (imp.)/s`).
+    /// A [`VolumeFlow`] from a value in `Mgal (imp.)/s`.
     #[inline]
     pub fn from_megauk_gallons_per_second(value: T) -> Self {
         Self(value * T::from_f64(4546.09))
     }
 
-    /// Returns the value expressed in MegaukGallonsPerSecond (`Mgal (imp.)/s`).
+    /// The value in `Mgal (imp.)/s`.
     #[inline]
     pub fn as_megauk_gallons_per_second(self) -> T {
         self.0 / T::from_f64(4546.09)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in KilousGallonsPerMinute (`kgal (U.S.)/min`).
+    /// A [`VolumeFlow`] from a value in `kgal (U.S.)/min`.
     #[inline]
     pub fn from_kilous_gallons_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.0630901964))
     }
 
-    /// Returns the value expressed in KilousGallonsPerMinute (`kgal (U.S.)/min`).
+    /// The value in `kgal (U.S.)/min`.
     #[inline]
     pub fn as_kilous_gallons_per_minute(self) -> T {
         self.0 / T::from_f64(0.0630901964)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in UsGallonsPerHour (`gal (U.S.)/h`).
+    /// A [`VolumeFlow`] from a value in `gal (U.S.)/h`.
     #[inline]
     pub fn from_us_gallons_per_hour(value: T) -> Self {
         Self(value * T::from_f64(1.0515032733333334e-6))
     }
 
-    /// Returns the value expressed in UsGallonsPerHour (`gal (U.S.)/h`).
+    /// The value in `gal (U.S.)/h`.
     #[inline]
     pub fn as_us_gallons_per_hour(self) -> T {
         self.0 / T::from_f64(1.0515032733333334e-6)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicDecimetersPerMinute (`dm³/min`).
+    /// A [`VolumeFlow`] from a value in `dm³/min`.
     #[inline]
     pub fn from_cubic_decimeters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60000.0))
     }
 
-    /// Returns the value expressed in CubicDecimetersPerMinute (`dm³/min`).
+    /// The value in `dm³/min`.
     #[inline]
     pub fn as_cubic_decimeters_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerDay (`bbl/d`).
+    /// A [`VolumeFlow`] from a value in `bbl/d`.
     #[inline]
     pub fn from_oil_barrels_per_day(value: T) -> Self {
         Self(value * T::from_f64(1.8401307283333333e-6))
     }
 
-    /// Returns the value expressed in OilBarrelsPerDay (`bbl/d`).
+    /// The value in `bbl/d`.
     #[inline]
     pub fn as_oil_barrels_per_day(self) -> T {
         self.0 / T::from_f64(1.8401307283333333e-6)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerMinute (`bbl/min`).
+    /// A [`VolumeFlow`] from a value in `bbl/min`.
     #[inline]
     pub fn from_oil_barrels_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.0026497882488))
     }
 
-    /// Returns the value expressed in OilBarrelsPerMinute (`bbl/min`).
+    /// The value in `bbl/min`.
     #[inline]
     pub fn as_oil_barrels_per_minute(self) -> T {
         self.0 / T::from_f64(0.0026497882488)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerHour (`bbl/hr`).
+    /// A [`VolumeFlow`] from a value in `bbl/hr`.
     #[inline]
     pub fn from_oil_barrels_per_hour(value: T) -> Self {
         Self(value * T::from_f64(4.416313748e-5))
     }
 
-    /// Returns the value expressed in OilBarrelsPerHour (`bbl/hr`).
+    /// The value in `bbl/hr`.
     #[inline]
     pub fn as_oil_barrels_per_hour(self) -> T {
         self.0 / T::from_f64(4.416313748e-5)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in OilBarrelsPerSecond (`bbl/s`).
+    /// A [`VolumeFlow`] from a value in `bbl/s`.
     #[inline]
     pub fn from_oil_barrels_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.158987294928))
     }
 
-    /// Returns the value expressed in OilBarrelsPerSecond (`bbl/s`).
+    /// The value in `bbl/s`.
     #[inline]
     pub fn as_oil_barrels_per_second(self) -> T {
         self.0 / T::from_f64(0.158987294928)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMillimetersPerSecond (`mm³/s`).
+    /// A [`VolumeFlow`] from a value in `mm³/s`.
     #[inline]
     pub fn from_cubic_millimeters_per_second(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in CubicMillimetersPerSecond (`mm³/s`).
+    /// The value in `mm³/s`.
     #[inline]
     pub fn as_cubic_millimeters_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicMillimetersPerMinute (`mm³/min`).
+    /// A [`VolumeFlow`] from a value in `mm³/min`.
     #[inline]
     pub fn from_cubic_millimeters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e10))
     }
 
-    /// Returns the value expressed in CubicMillimetersPerMinute (`mm³/min`).
+    /// The value in `mm³/min`.
     #[inline]
     pub fn as_cubic_millimeters_per_minute(self) -> T {
         self.0 * T::from_f64(6e10)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in AcreFeetPerSecond (`af/s`).
+    /// A [`VolumeFlow`] from a value in `af/s`.
     #[inline]
     pub fn from_acre_feet_per_second(value: T) -> Self {
         Self(value * T::from_f64(1233.48183754752))
     }
 
-    /// Returns the value expressed in AcreFeetPerSecond (`af/s`).
+    /// The value in `af/s`.
     #[inline]
     pub fn as_acre_feet_per_second(self) -> T {
         self.0 / T::from_f64(1233.48183754752)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in AcreFeetPerMinute (`af/m`).
+    /// A [`VolumeFlow`] from a value in `af/m`.
     #[inline]
     pub fn from_acre_feet_per_minute(value: T) -> Self {
         Self(value * T::from_f64(20.558030625792))
     }
 
-    /// Returns the value expressed in AcreFeetPerMinute (`af/m`).
+    /// The value in `af/m`.
     #[inline]
     pub fn as_acre_feet_per_minute(self) -> T {
         self.0 / T::from_f64(20.558030625792)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in AcreFeetPerHour (`af/h`).
+    /// A [`VolumeFlow`] from a value in `af/h`.
     #[inline]
     pub fn from_acre_feet_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.3426338437632))
     }
 
-    /// Returns the value expressed in AcreFeetPerHour (`af/h`).
+    /// The value in `af/h`.
     #[inline]
     pub fn as_acre_feet_per_hour(self) -> T {
         self.0 / T::from_f64(0.3426338437632)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in AcreFeetPerDay (`af/d`).
+    /// A [`VolumeFlow`] from a value in `af/d`.
     #[inline]
     pub fn from_acre_feet_per_day(value: T) -> Self {
         Self(value * T::from_f64(0.0142764101568))
     }
 
-    /// Returns the value expressed in AcreFeetPerDay (`af/d`).
+    /// The value in `af/d`.
     #[inline]
     pub fn as_acre_feet_per_day(self) -> T {
         self.0 / T::from_f64(0.0142764101568)
     }
 
-    /// Creates a [`VolumeFlow`] from a value in CubicCentimetersPerMinute (`cm³/min`).
+    /// A [`VolumeFlow`] from a value in `cm³/min`.
     #[inline]
     pub fn from_cubic_centimeters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e7))
     }
 
-    /// Returns the value expressed in CubicCentimetersPerMinute (`cm³/min`).
+    /// The value in `cm³/min`.
     #[inline]
     pub fn as_cubic_centimeters_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
@@ -2240,9 +2239,8 @@ impl<T: Float> VolumeFlow<T> {
 }
 
 impl VolumeFlow<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: VolumeFlowUnit) -> Self {
         Self(match unit {
@@ -2330,9 +2328,9 @@ impl VolumeFlow<f64> {
 
 fixed_base!(VolumeFlow, CubicMeterPerSecond);
 
-/// Unit markers for counting [`VolumeFlow`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`VolumeFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume_flow`](crate::unit::volume_flow).
+/// Also at [`unit::volume_flow`](crate::unit::volume_flow).
 pub mod unit {
     fixed_unit!(CubicMeterPerSecond: VolumeFlow, VolumeFlowUnit::CubicMeterPerSecond, base CubicMeterPerSecond, 1 / 1, pi^0, from_cubic_meters_per_second, as_cubic_meters_per_second, additive);
     fixed_unit!(CubicMeterPerMinute: VolumeFlow, VolumeFlowUnit::CubicMeterPerMinute, base CubicMeterPerSecond, 1 / 60, pi^0, from_cubic_meters_per_minute, as_cubic_meters_per_minute, additive);

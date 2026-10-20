@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The dynamic (shear) viscosity of a fluid expresses its resistance to shearing flows, where adjacent layers move parallel to each other with different speeds
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`DynamicViscosityUnit::NewtonSecondPerMeterSquared`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`DynamicViscosityUnit::NewtonSecondPerMeterSquared`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     NewtonSecondPerMeterSquared
 );
 
-/// Unit variants for [`DynamicViscosity`].
+/// The units of [`DynamicViscosity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -49,7 +48,7 @@ pub enum DynamicViscosityUnit {
 }
 
 impl DynamicViscosityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::NewtonSecondPerMeterSquared,
         Self::PascalSecond,
@@ -126,7 +125,7 @@ impl DynamicViscosityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -141,7 +140,7 @@ impl DynamicViscosityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -158,7 +157,7 @@ impl DynamicViscosityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -175,8 +174,8 @@ impl DynamicViscosityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -207,8 +206,8 @@ impl DynamicViscosityUnit {
 impl core::str::FromStr for DynamicViscosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Ns/m²" => Ok(Self::NewtonSecondPerMeterSquared),
@@ -227,8 +226,8 @@ impl core::str::FromStr for DynamicViscosityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -272,129 +271,129 @@ impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
 }
 
 impl<T: Float> DynamicViscosity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`Ns/m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`Ns/m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, DynamicViscosityUnit> {
         self.in_unit(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in NewtonSecondsPerMeterSquared (`Ns/m²`).
+    /// A [`DynamicViscosity`] from a value in `Ns/m²`.
     #[inline]
     pub fn from_newton_seconds_per_meter_squared(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in NewtonSecondsPerMeterSquared (`Ns/m²`).
+    /// The value in `Ns/m²`.
     #[inline]
     pub fn as_newton_seconds_per_meter_squared(self) -> T {
         self.0
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in PascalSeconds (`Pa·s`).
+    /// A [`DynamicViscosity`] from a value in `Pa·s`.
     #[inline]
     pub fn from_pascal_seconds(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PascalSeconds (`Pa·s`).
+    /// The value in `Pa·s`.
     #[inline]
     pub fn as_pascal_seconds(self) -> T {
         self.0
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in MillipascalSeconds (`mPa·s`).
+    /// A [`DynamicViscosity`] from a value in `mPa·s`.
     #[inline]
     pub fn from_millipascal_seconds(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillipascalSeconds (`mPa·s`).
+    /// The value in `mPa·s`.
     #[inline]
     pub fn as_millipascal_seconds(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in MicropascalSeconds (`µPa·s`).
+    /// A [`DynamicViscosity`] from a value in `µPa·s`.
     #[inline]
     pub fn from_micropascal_seconds(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicropascalSeconds (`µPa·s`).
+    /// The value in `µPa·s`.
     #[inline]
     pub fn as_micropascal_seconds(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in Poise (`P`).
+    /// A [`DynamicViscosity`] from a value in `P`.
     #[inline]
     pub fn from_poise(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Poise (`P`).
+    /// The value in `P`.
     #[inline]
     pub fn as_poise(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in Centipoise (`cP`).
+    /// A [`DynamicViscosity`] from a value in `cP`.
     #[inline]
     pub fn from_centipoise(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Centipoise (`cP`).
+    /// The value in `cP`.
     #[inline]
     pub fn as_centipoise(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in Reyns (`reyn`).
+    /// A [`DynamicViscosity`] from a value in `reyn`.
     #[inline]
     pub fn from_reyns(value: T) -> Self {
         Self(value * T::from_f64(6894.757293168362))
     }
 
-    /// Returns the value expressed in Reyns (`reyn`).
+    /// The value in `reyn`.
     #[inline]
     pub fn as_reyns(self) -> T {
         self.0 / T::from_f64(6894.757293168362)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareInch (`lbf·s/in²`).
+    /// A [`DynamicViscosity`] from a value in `lbf·s/in²`.
     #[inline]
     pub fn from_pounds_force_second_per_square_inch(value: T) -> Self {
         Self(value * T::from_f64(6894.757293168362))
     }
 
-    /// Returns the value expressed in PoundsForceSecondPerSquareInch (`lbf·s/in²`).
+    /// The value in `lbf·s/in²`.
     #[inline]
     pub fn as_pounds_force_second_per_square_inch(self) -> T {
         self.0 / T::from_f64(6894.757293168362)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in PoundsForceSecondPerSquareFoot (`lbf·s/ft²`).
+    /// A [`DynamicViscosity`] from a value in `lbf·s/ft²`.
     #[inline]
     pub fn from_pounds_force_second_per_square_foot(value: T) -> Self {
         Self(value * T::from_f64(47.880258980335846))
     }
 
-    /// Returns the value expressed in PoundsForceSecondPerSquareFoot (`lbf·s/ft²`).
+    /// The value in `lbf·s/ft²`.
     #[inline]
     pub fn as_pounds_force_second_per_square_foot(self) -> T {
         self.0 / T::from_f64(47.880258980335846)
     }
 
-    /// Creates a [`DynamicViscosity`] from a value in PoundsPerFootSecond (`lb/(ft·s)`).
+    /// A [`DynamicViscosity`] from a value in `lb/(ft·s)`.
     #[inline]
     pub fn from_pounds_per_foot_second(value: T) -> Self {
         Self(value * T::from_f64(1.4881639435695537))
     }
 
-    /// Returns the value expressed in PoundsPerFootSecond (`lb/(ft·s)`).
+    /// The value in `lb/(ft·s)`.
     #[inline]
     pub fn as_pounds_per_foot_second(self) -> T {
         self.0 / T::from_f64(1.4881639435695537)
@@ -402,9 +401,8 @@ impl<T: Float> DynamicViscosity<T> {
 }
 
 impl DynamicViscosity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: DynamicViscosityUnit) -> Self {
         Self(match unit {
@@ -424,9 +422,9 @@ impl DynamicViscosity<f64> {
 
 fixed_base!(DynamicViscosity, NewtonSecondPerMeterSquared);
 
-/// Unit markers for counting [`DynamicViscosity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`DynamicViscosity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity).
+/// Also at [`unit::dynamic_viscosity`](crate::unit::dynamic_viscosity).
 pub mod unit {
     fixed_unit!(NewtonSecondPerMeterSquared: DynamicViscosity, DynamicViscosityUnit::NewtonSecondPerMeterSquared, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_newton_seconds_per_meter_squared, as_newton_seconds_per_meter_squared, additive);
     fixed_unit!(PascalSecond: DynamicViscosity, DynamicViscosityUnit::PascalSecond, base NewtonSecondPerMeterSquared, 1 / 1, pi^0, from_pascal_seconds, as_pascal_seconds, additive);

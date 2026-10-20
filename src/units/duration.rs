@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Time is a dimension in which events can be ordered from the past through the present into the future, and also the measure of durations of events and the intervals between them.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`DurationUnit::Second`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`DurationUnit::Second`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Duration<T = f64>(T);
 
 quantity!(Duration, DurationUnit, Second);
 
-/// Unit variants for [`Duration`].
+/// The units of [`Duration`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -48,7 +47,7 @@ pub enum DurationUnit {
 }
 
 impl DurationUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Year365,
         Self::Month30,
@@ -146,7 +145,7 @@ impl DurationUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -161,7 +160,7 @@ impl DurationUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -181,7 +180,7 @@ impl DurationUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -201,8 +200,8 @@ impl DurationUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -241,8 +240,8 @@ impl DurationUnit {
 impl core::str::FromStr for DurationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "yr" => Ok(Self::Year365),
@@ -284,8 +283,8 @@ impl core::str::FromStr for DurationUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Duration<T>> for DurationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -327,9 +326,9 @@ impl<T: Float> crate::UnitOf<Duration<T>> for DurationUnit {
 }
 
 impl<T: Float> Duration<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`ps`, `ns`, `µs`, `ms`, `s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`ps`, `ns`, `µs`, `ms`, `s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, DurationUnit> {
         const SCALE: [(f64, DurationUnit); 5] = [
@@ -353,157 +352,157 @@ impl<T: Float> Duration<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Duration`] from a value in Years365 (`yr`).
+    /// A [`Duration`] from a value in `yr`.
     #[inline]
     pub fn from_years365(value: T) -> Self {
         Self(value * T::from_f64(3.1536e7))
     }
 
-    /// Returns the value expressed in Years365 (`yr`).
+    /// The value in `yr`.
     #[inline]
     pub fn as_years365(self) -> T {
         self.0 / T::from_f64(3.1536e7)
     }
 
-    /// Creates a [`Duration`] from a value in Months30 (`mo`).
+    /// A [`Duration`] from a value in `mo`.
     #[inline]
     pub fn from_months30(value: T) -> Self {
         Self(value * T::from_f64(2592000.0))
     }
 
-    /// Returns the value expressed in Months30 (`mo`).
+    /// The value in `mo`.
     #[inline]
     pub fn as_months30(self) -> T {
         self.0 / T::from_f64(2592000.0)
     }
 
-    /// Creates a [`Duration`] from a value in Weeks (`wk`).
+    /// A [`Duration`] from a value in `wk`.
     #[inline]
     pub fn from_weeks(value: T) -> Self {
         Self(value * T::from_f64(604800.0))
     }
 
-    /// Returns the value expressed in Weeks (`wk`).
+    /// The value in `wk`.
     #[inline]
     pub fn as_weeks(self) -> T {
         self.0 / T::from_f64(604800.0)
     }
 
-    /// Creates a [`Duration`] from a value in Days (`d`).
+    /// A [`Duration`] from a value in `d`.
     #[inline]
     pub fn from_days(value: T) -> Self {
         Self(value * T::from_f64(86400.0))
     }
 
-    /// Returns the value expressed in Days (`d`).
+    /// The value in `d`.
     #[inline]
     pub fn as_days(self) -> T {
         self.0 / T::from_f64(86400.0)
     }
 
-    /// Creates a [`Duration`] from a value in Hours (`h`).
+    /// A [`Duration`] from a value in `h`.
     #[inline]
     pub fn from_hours(value: T) -> Self {
         Self(value * T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in Hours (`h`).
+    /// The value in `h`.
     #[inline]
     pub fn as_hours(self) -> T {
         self.0 / T::from_f64(3600.0)
     }
 
-    /// Creates a [`Duration`] from a value in Minutes (`m`).
+    /// A [`Duration`] from a value in `m`.
     #[inline]
     pub fn from_minutes(value: T) -> Self {
         Self(value * T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in Minutes (`m`).
+    /// The value in `m`.
     #[inline]
     pub fn as_minutes(self) -> T {
         self.0 / T::from_f64(60.0)
     }
 
-    /// Creates a [`Duration`] from a value in Seconds (`s`).
+    /// A [`Duration`] from a value in `s`.
     #[inline]
     pub fn from_seconds(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Seconds (`s`).
+    /// The value in `s`.
     #[inline]
     pub fn as_seconds(self) -> T {
         self.0
     }
 
-    /// Creates a [`Duration`] from a value in Picoseconds (`ps`).
+    /// A [`Duration`] from a value in `ps`.
     #[inline]
     pub fn from_picoseconds(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Picoseconds (`ps`).
+    /// The value in `ps`.
     #[inline]
     pub fn as_picoseconds(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`Duration`] from a value in Nanoseconds (`ns`).
+    /// A [`Duration`] from a value in `ns`.
     #[inline]
     pub fn from_nanoseconds(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanoseconds (`ns`).
+    /// The value in `ns`.
     #[inline]
     pub fn as_nanoseconds(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Duration`] from a value in Microseconds (`µs`).
+    /// A [`Duration`] from a value in `µs`.
     #[inline]
     pub fn from_microseconds(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microseconds (`µs`).
+    /// The value in `µs`.
     #[inline]
     pub fn as_microseconds(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Duration`] from a value in Milliseconds (`ms`).
+    /// A [`Duration`] from a value in `ms`.
     #[inline]
     pub fn from_milliseconds(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Milliseconds (`ms`).
+    /// The value in `ms`.
     #[inline]
     pub fn as_milliseconds(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Duration`] from a value in JulianYears (`jyr`).
+    /// A [`Duration`] from a value in `jyr`.
     #[inline]
     pub fn from_julian_years(value: T) -> Self {
         Self(value * T::from_f64(3.15576e7))
     }
 
-    /// Returns the value expressed in JulianYears (`jyr`).
+    /// The value in `jyr`.
     #[inline]
     pub fn as_julian_years(self) -> T {
         self.0 / T::from_f64(3.15576e7)
     }
 
-    /// Creates a [`Duration`] from a value in Sols (`sol`).
+    /// A [`Duration`] from a value in `sol`.
     #[inline]
     pub fn from_sols(value: T) -> Self {
         Self(value * T::from_f64(88775.244))
     }
 
-    /// Returns the value expressed in Sols (`sol`).
+    /// The value in `sol`.
     #[inline]
     pub fn as_sols(self) -> T {
         self.0 / T::from_f64(88775.244)
@@ -511,9 +510,8 @@ impl<T: Float> Duration<T> {
 }
 
 impl Duration<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: DurationUnit) -> Self {
         Self(match unit {
@@ -536,9 +534,9 @@ impl Duration<f64> {
 
 fixed_base!(Duration, Second);
 
-/// Unit markers for counting [`Duration`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Duration`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::duration`](crate::unit::duration).
+/// Also at [`unit::duration`](crate::unit::duration).
 pub mod unit {
     fixed_unit!(Year365: Duration, DurationUnit::Year365, base Second, 31536000 / 1, pi^0, from_years365, as_years365, additive);
     fixed_unit!(Month30: Duration, DurationUnit::Month30, base Second, 2592000 / 1, pi^0, from_months30, as_months30, additive);

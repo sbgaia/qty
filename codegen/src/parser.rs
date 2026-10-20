@@ -6,15 +6,13 @@ use serde::Deserialize;
 use crate::expr::{self, Const, Form};
 use crate::formula;
 
-// ── SI prefix table ──────────────────────────────────────────────────────────
-
 /// Metadata for a single SI prefix.
 pub struct PrefixInfo {
-    /// PascalCase name as it appears in the JSON `Prefixes` array (e.g. `"Kilo"`).
+    /// PascalCase name as it appears in the JSON `Prefixes` array (such as `"Kilo"`).
     pub name: &'static str,
-    /// Symbol prepended to the base-unit abbreviation (e.g. `"k"`).
+    /// Symbol prepended to the base-unit abbreviation (such as `"k"`).
     pub symbol: &'static str,
-    /// Exact multiplier relative to the base unit, as a decimal literal (e.g. `"1e3"`).
+    /// Exact multiplier relative to the base unit, as a decimal literal (such as `"1e3"`).
     pub factor: &'static str,
 }
 
@@ -96,7 +94,7 @@ pub const PREFIX_TABLE: &[PrefixInfo] = &[
         symbol: "E",
         factor: "1e18",
     },
-    // IEC binary prefixes (2^10, 2^20, …, 2^60) — used by BitRate / Information.
+    // IEC binary prefixes, 2^10 to 2^60, used by BitRate and Information.
     PrefixInfo {
         name: "Kibi",
         symbol: "Ki",
@@ -128,8 +126,6 @@ pub const PREFIX_TABLE: &[PrefixInfo] = &[
         factor: "1152921504606846976",
     }, // 2^60
 ];
-
-// ── Raw JSON deserialization ──────────────────────────────────────────────────
 
 #[derive(Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
@@ -167,17 +163,15 @@ pub struct RawLocalization {
     pub abbreviations: Vec<String>,
 }
 
-// ── Internal model ────────────────────────────────────────────────────────────
-
-/// Fully-resolved definition for a single physical quantity (e.g. `Length`).
+/// One quantity, with its prefixed units expanded.
 pub struct QuantityDef {
-    /// PascalCase quantity name, used as the Rust struct name (e.g. `Length`).
+    /// The name, which is also the type's: `Length`.
     pub name: String,
-    /// PascalCase name of the SI base unit variant (e.g. `Meter`).
+    /// The base unit's variant: `Meter`.
     pub base_unit: String,
-    /// Doc comment for the generated struct.
+    /// UnitsNet's description, for the struct's docs.
     pub doc: String,
-    /// All unit variants, including prefix expansions.
+    /// Every unit, prefixed ones included.
     pub units: Vec<UnitDef>,
     /// Exponents of the SI base dimensions, in the order of [`DIMENSIONS`].
     pub dimensions: Dimensions,
@@ -191,45 +185,42 @@ pub const DIMENSIONS: [&str; 7] = ["L", "M", "T", "I", "Θ", "N", "J"];
 /// Exponents of the SI base dimensions.
 pub type Dimensions = [i32; 7];
 
-/// A single unit variant (possibly prefix-expanded).
+/// One unit, possibly a prefixed form of an upstream one.
 pub struct UnitDef {
-    /// PascalCase variant name used in the enum (e.g. `KilometerPerSecond`).
+    /// The variant name: `KilometerPerSecond`.
     pub singular: String,
-    /// PascalCase plural name used to derive method names (e.g. `KilometersPerSecond`).
+    /// The plural, for method names: `KilometersPerSecond`.
     pub plural: String,
     /// Exact conversion from this unit to the base unit.
     pub to_base: Form,
     /// Exact conversion from the base unit to this unit (inverse of `to_base`).
     pub from_base: Form,
-    /// The upstream to-base formula translated verbatim into a Rust `f64`
-    /// expression of `x`; an independent oracle for the generated tests.
+    /// UnitsNet's to-base formula, translated verbatim into a Rust `f64`
+    /// expression of `x`. The generated tests use it as an oracle.
     pub oracle_to_base: String,
     /// The upstream from-base formula, translated verbatim (test oracle).
     pub oracle_from_base: String,
-    /// Primary display abbreviation (e.g. `"km/s"`).
+    /// The abbreviation used for display: `"km/s"`.
     pub abbreviation: String,
-    /// All recognised abbreviations for `FromStr` parsing.
+    /// Every abbreviation `FromStr` accepts.
     pub all_abbreviations: Vec<String>,
-    /// Optional doc comment for the enum variant.
+    /// Docs for the variant, if UnitsNet has any.
     pub doc: Option<String>,
-    /// The upstream (unprefixed) unit this one was expanded from, e.g.
-    /// `Gram` for `Kilogram` and `Milligram`, and `Gram` for `Gram` itself.
+    /// The unprefixed upstream unit: `Gram` for `Kilogram`, `Milligram`
+    /// and `Gram` itself.
     pub family: String,
     /// Power of ten of the SI prefix (`3` for kilo, `0` for the unprefixed
     /// unit); `None` for binary prefixes (kibi, mebi, …).
     pub decimal_exp: Option<i32>,
 }
 
-// ── Parser ────────────────────────────────────────────────────────────────────
-
-/// Parses a UnitsNet JSON definition file into a [`QuantityDef`] with all prefixes expanded.
+/// Parses a UnitsNet definition file, expanding the prefixes.
 pub fn parse(path: &std::path::Path) -> QuantityDef {
     let content = std::fs::read_to_string(path)
         .unwrap_or_else(|e| panic!("failed to read {}: {e}", path.display()));
     // Some upstream files start with a UTF-8 BOM (\u{FEFF}); serde_json rejects it.
     let content = content.strip_prefix('\u{FEFF}').unwrap_or(&content);
-    // Some upstream files contain trailing commas (valid JSON5, invalid JSON).
-    // Strip them before handing to serde_json.
+    // Some upstream files have trailing commas, which serde_json rejects.
     let content = strip_trailing_commas(content);
     let mut raw: RawQuantity = serde_json::from_str(&content)
         .unwrap_or_else(|e| panic!("failed to parse {}: {e}", path.display()));
@@ -267,11 +258,8 @@ pub fn parse(path: &std::path::Path) -> QuantityDef {
                 .find(|p| p.name == prefix_name)
                 .unwrap_or_else(|| panic!("unknown prefix '{prefix_name}'"));
 
-            // Construct names by lowercasing the first letter of the base name so that
-            // `heck::to_snake_case` produces clean output: e.g. `Kilo` + `meter` = `Kilometer`
-            // → snake_case → `kilometer`.
-            // UnitsNet only applies prefixes to linear units, for which
-            // prefixing the input is exact: f(x · prefix).
+            // UnitsNet only prefixes linear units, for which prefixing the
+            // input is exact: f(x · prefix).
             assert!(
                 to_base.is_linear(),
                 "{}.{}: prefixes on an affine unit",
@@ -353,7 +341,7 @@ fn check_inverse(quantity: &str, unit: &str, to_base: &Form, from_base: &Form) {
     );
 }
 
-/// Returns the en-US abbreviations for `unit`, falling back to the first available culture.
+/// The en-US abbreviations of `unit`, or the first culture's if it has none.
 fn en_us_abbreviations(unit: &RawUnit) -> Vec<String> {
     unit.localization
         .iter()
@@ -363,10 +351,9 @@ fn en_us_abbreviations(unit: &RawUnit) -> Vec<String> {
         .unwrap_or_default()
 }
 
-/// Corrections to upstream abbreviations: `(quantity, unit, wrong prefix of
-/// each abbreviation, correct prefix)`. Each was found by the generated test
-/// that parses every abbreviation as a unit expression and compares it with
-/// the unit's conversion.
+/// Corrections to upstream abbreviations, as `(quantity, unit, wrong prefix
+/// of each abbreviation, correct prefix)`. The generated test that reads
+/// every abbreviation as a unit expression found them.
 ///
 /// - HeatTransferCoefficient `CaloriePerHourSquareMeterDegreeCelsius`
 ///   converts as calories (`× 4.184 / 3600`) but is abbreviated `kcal/…`, so
@@ -407,11 +394,8 @@ fn apply_abbreviation_fixes(raw: &mut RawQuantity) {
     }
 }
 
-/// Removes trailing commas before `}` or `]` to accept JSON5-style upstream files.
-///
-/// Some UnitsNet definition files contain trailing commas which are valid JSON5
-/// but rejected by `serde_json`. This performs a lightweight fix without a full
-/// JSON5 parser, handling the only pattern present in the UnitsNet sources.
+/// Removes trailing commas before `}` or `]`. Some UnitsNet files have them,
+/// and they're the only thing in those files that `serde_json` rejects.
 fn strip_trailing_commas(src: &str) -> String {
     let mut out = String::with_capacity(src.len());
     for (i, c) in src.char_indices() {
@@ -423,8 +407,7 @@ fn strip_trailing_commas(src: &str) -> String {
     out
 }
 
-/// Constructs a prefix-expanded name by lowercasing the first character of `base_name`
-/// and prepending `prefix_name`, producing e.g. `Kilometer` instead of `KiloMeter`.
+/// The prefixed name: `Kilometer`, not `KiloMeter`.
 fn prefix_expanded_name(prefix_name: &str, base_name: &str) -> String {
     let mut chars = base_name.chars();
     match chars.next() {

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Molar flow is the ratio of the amount of substance change to the time during which the change occurred (value of amount of substance changes per unit time).
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarFlowUnit::MolePerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolarFlowUnit::MolePerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MolarFlow<T = f64>(T);
 
 quantity!(MolarFlow, MolarFlowUnit, MolePerSecond);
 
-/// Unit variants for [`MolarFlow`].
+/// The units of [`MolarFlow`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -44,7 +43,7 @@ pub enum MolarFlowUnit {
 }
 
 impl MolarFlowUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MolePerSecond,
         Self::KilomolePerSecond,
@@ -114,7 +113,7 @@ impl MolarFlowUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -129,7 +128,7 @@ impl MolarFlowUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -145,7 +144,7 @@ impl MolarFlowUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -161,8 +160,8 @@ impl MolarFlowUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -193,8 +192,8 @@ impl MolarFlowUnit {
 impl core::str::FromStr for MolarFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/s" => Ok(Self::MolePerSecond),
@@ -211,8 +210,8 @@ impl core::str::FromStr for MolarFlowUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -246,9 +245,9 @@ impl<T: Float> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
 }
 
 impl<T: Float> MolarFlow<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`mol/s`, `kmol/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`mol/s`, `kmol/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolarFlowUnit> {
         const SCALE: [(f64, MolarFlowUnit); 2] = [
@@ -269,109 +268,109 @@ impl<T: Float> MolarFlow<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MolarFlow`] from a value in MolesPerSecond (`mol/s`).
+    /// A [`MolarFlow`] from a value in `mol/s`.
     #[inline]
     pub fn from_moles_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MolesPerSecond (`mol/s`).
+    /// The value in `mol/s`.
     #[inline]
     pub fn as_moles_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`MolarFlow`] from a value in KilomolesPerSecond (`kmol/s`).
+    /// A [`MolarFlow`] from a value in `kmol/s`.
     #[inline]
     pub fn from_kilomoles_per_second(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilomolesPerSecond (`kmol/s`).
+    /// The value in `kmol/s`.
     #[inline]
     pub fn as_kilomoles_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`MolarFlow`] from a value in MolesPerMinute (`mol/min`).
+    /// A [`MolarFlow`] from a value in `mol/min`.
     #[inline]
     pub fn from_moles_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in MolesPerMinute (`mol/min`).
+    /// The value in `mol/min`.
     #[inline]
     pub fn as_moles_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`MolarFlow`] from a value in KilomolesPerMinute (`kmol/min`).
+    /// A [`MolarFlow`] from a value in `kmol/min`.
     #[inline]
     pub fn from_kilomoles_per_minute(value: T) -> Self {
         Self(value * T::from_f64(16.666666666666668))
     }
 
-    /// Returns the value expressed in KilomolesPerMinute (`kmol/min`).
+    /// The value in `kmol/min`.
     #[inline]
     pub fn as_kilomoles_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
     }
 
-    /// Creates a [`MolarFlow`] from a value in MolesPerHour (`mol/h`).
+    /// A [`MolarFlow`] from a value in `mol/h`.
     #[inline]
     pub fn from_moles_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in MolesPerHour (`mol/h`).
+    /// The value in `mol/h`.
     #[inline]
     pub fn as_moles_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`MolarFlow`] from a value in KilomolesPerHour (`kmol/h`).
+    /// A [`MolarFlow`] from a value in `kmol/h`.
     #[inline]
     pub fn from_kilomoles_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.2777777777777778))
     }
 
-    /// Returns the value expressed in KilomolesPerHour (`kmol/h`).
+    /// The value in `kmol/h`.
     #[inline]
     pub fn as_kilomoles_per_hour(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Creates a [`MolarFlow`] from a value in PoundMolesPerSecond (`lbmol/s`).
+    /// A [`MolarFlow`] from a value in `lbmol/s`.
     #[inline]
     pub fn from_pound_moles_per_second(value: T) -> Self {
         Self(value * T::from_f64(453.59237))
     }
 
-    /// Returns the value expressed in PoundMolesPerSecond (`lbmol/s`).
+    /// The value in `lbmol/s`.
     #[inline]
     pub fn as_pound_moles_per_second(self) -> T {
         self.0 / T::from_f64(453.59237)
     }
 
-    /// Creates a [`MolarFlow`] from a value in PoundMolesPerMinute (`lbmol/min`).
+    /// A [`MolarFlow`] from a value in `lbmol/min`.
     #[inline]
     pub fn from_pound_moles_per_minute(value: T) -> Self {
         Self(value * T::from_f64(7.559872833333333))
     }
 
-    /// Returns the value expressed in PoundMolesPerMinute (`lbmol/min`).
+    /// The value in `lbmol/min`.
     #[inline]
     pub fn as_pound_moles_per_minute(self) -> T {
         self.0 / T::from_f64(7.559872833333333)
     }
 
-    /// Creates a [`MolarFlow`] from a value in PoundMolesPerHour (`lbmol/h`).
+    /// A [`MolarFlow`] from a value in `lbmol/h`.
     #[inline]
     pub fn from_pound_moles_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.12599788055555555))
     }
 
-    /// Returns the value expressed in PoundMolesPerHour (`lbmol/h`).
+    /// The value in `lbmol/h`.
     #[inline]
     pub fn as_pound_moles_per_hour(self) -> T {
         self.0 / T::from_f64(0.12599788055555555)
@@ -379,9 +378,8 @@ impl<T: Float> MolarFlow<T> {
 }
 
 impl MolarFlow<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolarFlowUnit) -> Self {
         Self(match unit {
@@ -400,9 +398,9 @@ impl MolarFlow<f64> {
 
 fixed_base!(MolarFlow, MolePerSecond);
 
-/// Unit markers for counting [`MolarFlow`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MolarFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_flow`](crate::unit::molar_flow).
+/// Also at [`unit::molar_flow`](crate::unit::molar_flow).
 pub mod unit {
     fixed_unit!(MolePerSecond: MolarFlow, MolarFlowUnit::MolePerSecond, base MolePerSecond, 1 / 1, pi^0, from_moles_per_second, as_moles_per_second, additive);
     fixed_unit!(KilomolePerSecond: MolarFlow, MolarFlowUnit::KilomolePerSecond, base MolePerSecond, 1000 / 1, pi^0, from_kilomoles_per_second, as_kilomoles_per_second, additive);

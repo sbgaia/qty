@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In chemistry, the molar mass M is a physical property defined as the mass of a given substance (chemical element or chemical compound) divided by the amount of substance.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarMassUnit::KilogramPerMole`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolarMassUnit::KilogramPerMole`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MolarMass<T = f64>(T);
 
 quantity!(MolarMass, MolarMassUnit, KilogramPerMole);
 
-/// Unit variants for [`MolarMass`].
+/// The units of [`MolarMass`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -51,7 +50,7 @@ pub enum MolarMassUnit {
 }
 
 impl MolarMassUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::GramPerMole,
         Self::NanogramPerMole,
@@ -156,7 +155,7 @@ impl MolarMassUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -171,7 +170,7 @@ impl MolarMassUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -192,7 +191,7 @@ impl MolarMassUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -213,8 +212,8 @@ impl MolarMassUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -255,8 +254,8 @@ impl MolarMassUnit {
 impl core::str::FromStr for MolarMassUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/mol" => Ok(Self::GramPerMole),
@@ -279,8 +278,8 @@ impl core::str::FromStr for MolarMassUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -324,9 +323,9 @@ impl<T: Float> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
 }
 
 impl<T: Float> MolarMass<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`ng/mol`, `µg/mol`, `mg/mol`, `g/mol`, `kg/mol`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`ng/mol`, `µg/mol`, `mg/mol`, `g/mol`, `kg/mol`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolarMassUnit> {
         const SCALE: [(f64, MolarMassUnit); 5] = [
@@ -350,169 +349,169 @@ impl<T: Float> MolarMass<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MolarMass`] from a value in GramsPerMole (`g/mol`).
+    /// A [`MolarMass`] from a value in `g/mol`.
     #[inline]
     pub fn from_grams_per_mole(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in GramsPerMole (`g/mol`).
+    /// The value in `g/mol`.
     #[inline]
     pub fn as_grams_per_mole(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in NanogramsPerMole (`ng/mol`).
+    /// A [`MolarMass`] from a value in `ng/mol`.
     #[inline]
     pub fn from_nanograms_per_mole(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in NanogramsPerMole (`ng/mol`).
+    /// The value in `ng/mol`.
     #[inline]
     pub fn as_nanograms_per_mole(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`MolarMass`] from a value in MicrogramsPerMole (`µg/mol`).
+    /// A [`MolarMass`] from a value in `µg/mol`.
     #[inline]
     pub fn from_micrograms_per_mole(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in MicrogramsPerMole (`µg/mol`).
+    /// The value in `µg/mol`.
     #[inline]
     pub fn as_micrograms_per_mole(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`MolarMass`] from a value in MilligramsPerMole (`mg/mol`).
+    /// A [`MolarMass`] from a value in `mg/mol`.
     #[inline]
     pub fn from_milligrams_per_mole(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MilligramsPerMole (`mg/mol`).
+    /// The value in `mg/mol`.
     #[inline]
     pub fn as_milligrams_per_mole(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in CentigramsPerMole (`cg/mol`).
+    /// A [`MolarMass`] from a value in `cg/mol`.
     #[inline]
     pub fn from_centigrams_per_mole(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in CentigramsPerMole (`cg/mol`).
+    /// The value in `cg/mol`.
     #[inline]
     pub fn as_centigrams_per_mole(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in DecigramsPerMole (`dg/mol`).
+    /// A [`MolarMass`] from a value in `dg/mol`.
     #[inline]
     pub fn from_decigrams_per_mole(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in DecigramsPerMole (`dg/mol`).
+    /// The value in `dg/mol`.
     #[inline]
     pub fn as_decigrams_per_mole(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in DecagramsPerMole (`dag/mol`).
+    /// A [`MolarMass`] from a value in `dag/mol`.
     #[inline]
     pub fn from_decagrams_per_mole(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in DecagramsPerMole (`dag/mol`).
+    /// The value in `dag/mol`.
     #[inline]
     pub fn as_decagrams_per_mole(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in HectogramsPerMole (`hg/mol`).
+    /// A [`MolarMass`] from a value in `hg/mol`.
     #[inline]
     pub fn from_hectograms_per_mole(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in HectogramsPerMole (`hg/mol`).
+    /// The value in `hg/mol`.
     #[inline]
     pub fn as_hectograms_per_mole(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in KilogramsPerMole (`kg/mol`).
+    /// A [`MolarMass`] from a value in `kg/mol`.
     #[inline]
     pub fn from_kilograms_per_mole(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilogramsPerMole (`kg/mol`).
+    /// The value in `kg/mol`.
     #[inline]
     pub fn as_kilograms_per_mole(self) -> T {
         self.0
     }
 
-    /// Creates a [`MolarMass`] from a value in KilogramsPerKilomole (`kg/kmol`).
+    /// A [`MolarMass`] from a value in `kg/kmol`.
     #[inline]
     pub fn from_kilograms_per_kilomole(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilogramsPerKilomole (`kg/kmol`).
+    /// The value in `kg/kmol`.
     #[inline]
     pub fn as_kilograms_per_kilomole(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`MolarMass`] from a value in PoundsPerMole (`lb/mol`).
+    /// A [`MolarMass`] from a value in `lb/mol`.
     #[inline]
     pub fn from_pounds_per_mole(value: T) -> Self {
         Self(value * T::from_f64(0.45359237))
     }
 
-    /// Returns the value expressed in PoundsPerMole (`lb/mol`).
+    /// The value in `lb/mol`.
     #[inline]
     pub fn as_pounds_per_mole(self) -> T {
         self.0 / T::from_f64(0.45359237)
     }
 
-    /// Creates a [`MolarMass`] from a value in KilopoundsPerMole (`klb/mol`).
+    /// A [`MolarMass`] from a value in `klb/mol`.
     #[inline]
     pub fn from_kilopounds_per_mole(value: T) -> Self {
         Self(value * T::from_f64(453.59237))
     }
 
-    /// Returns the value expressed in KilopoundsPerMole (`klb/mol`).
+    /// The value in `klb/mol`.
     #[inline]
     pub fn as_kilopounds_per_mole(self) -> T {
         self.0 / T::from_f64(453.59237)
     }
 
-    /// Creates a [`MolarMass`] from a value in MegapoundsPerMole (`Mlb/mol`).
+    /// A [`MolarMass`] from a value in `Mlb/mol`.
     #[inline]
     pub fn from_megapounds_per_mole(value: T) -> Self {
         Self(value * T::from_f64(453592.37))
     }
 
-    /// Returns the value expressed in MegapoundsPerMole (`Mlb/mol`).
+    /// The value in `Mlb/mol`.
     #[inline]
     pub fn as_megapounds_per_mole(self) -> T {
         self.0 / T::from_f64(453592.37)
     }
 
-    /// Creates a [`MolarMass`] from a value in PoundsPerPoundMole (`lb/lbmol`).
+    /// A [`MolarMass`] from a value in `lb/lbmol`.
     #[inline]
     pub fn from_pounds_per_pound_mole(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in PoundsPerPoundMole (`lb/lbmol`).
+    /// The value in `lb/lbmol`.
     #[inline]
     pub fn as_pounds_per_pound_mole(self) -> T {
         self.0 * T::from_f64(1000.0)
@@ -520,9 +519,8 @@ impl<T: Float> MolarMass<T> {
 }
 
 impl MolarMass<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolarMassUnit) -> Self {
         Self(match unit {
@@ -546,9 +544,9 @@ impl MolarMass<f64> {
 
 fixed_base!(MolarMass, KilogramPerMole);
 
-/// Unit markers for counting [`MolarMass`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MolarMass`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_mass`](crate::unit::molar_mass).
+/// Also at [`unit::molar_mass`](crate::unit::molar_mass).
 pub mod unit {
     fixed_unit!(GramPerMole: MolarMass, MolarMassUnit::GramPerMole, base KilogramPerMole, 1 / 1000, pi^0, from_grams_per_mole, as_grams_per_mole, additive);
     fixed_unit!(NanogramPerMole: MolarMass, MolarMassUnit::NanogramPerMole, base KilogramPerMole, 1 / 1000000000000, pi^0, from_nanograms_per_mole, as_nanograms_per_mole, additive);

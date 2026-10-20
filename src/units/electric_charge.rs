@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricChargeUnit::Coulomb`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricChargeUnit::Coulomb`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct ElectricCharge<T = f64>(T);
 
 quantity!(ElectricCharge, ElectricChargeUnit, Coulomb);
 
-/// Unit variants for [`ElectricCharge`].
+/// The units of [`ElectricCharge`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -46,7 +45,7 @@ pub enum ElectricChargeUnit {
 }
 
 impl ElectricChargeUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Coulomb,
         Self::Picocoulomb,
@@ -130,7 +129,7 @@ impl ElectricChargeUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -145,7 +144,7 @@ impl ElectricChargeUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -163,7 +162,7 @@ impl ElectricChargeUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -181,8 +180,8 @@ impl ElectricChargeUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -217,8 +216,8 @@ impl ElectricChargeUnit {
 impl core::str::FromStr for ElectricChargeUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "C" => Ok(Self::Coulomb),
@@ -238,8 +237,8 @@ impl core::str::FromStr for ElectricChargeUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -277,9 +276,9 @@ impl<T: Float> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
 }
 
 impl<T: Float> ElectricCharge<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`pC`, `nC`, `µC`, `mC`, `C`, `kC`, `MC`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`pC`, `nC`, `µC`, `mC`, `C`, `kC`, `MC`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricChargeUnit> {
         const SCALE: [(f64, ElectricChargeUnit); 7] = [
@@ -305,133 +304,133 @@ impl<T: Float> ElectricCharge<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Coulombs (`C`).
+    /// A [`ElectricCharge`] from a value in `C`.
     #[inline]
     pub fn from_coulombs(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Coulombs (`C`).
+    /// The value in `C`.
     #[inline]
     pub fn as_coulombs(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Picocoulombs (`pC`).
+    /// A [`ElectricCharge`] from a value in `pC`.
     #[inline]
     pub fn from_picocoulombs(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Picocoulombs (`pC`).
+    /// The value in `pC`.
     #[inline]
     pub fn as_picocoulombs(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Nanocoulombs (`nC`).
+    /// A [`ElectricCharge`] from a value in `nC`.
     #[inline]
     pub fn from_nanocoulombs(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanocoulombs (`nC`).
+    /// The value in `nC`.
     #[inline]
     pub fn as_nanocoulombs(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Microcoulombs (`µC`).
+    /// A [`ElectricCharge`] from a value in `µC`.
     #[inline]
     pub fn from_microcoulombs(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microcoulombs (`µC`).
+    /// The value in `µC`.
     #[inline]
     pub fn as_microcoulombs(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Millicoulombs (`mC`).
+    /// A [`ElectricCharge`] from a value in `mC`.
     #[inline]
     pub fn from_millicoulombs(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millicoulombs (`mC`).
+    /// The value in `mC`.
     #[inline]
     pub fn as_millicoulombs(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Kilocoulombs (`kC`).
+    /// A [`ElectricCharge`] from a value in `kC`.
     #[inline]
     pub fn from_kilocoulombs(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilocoulombs (`kC`).
+    /// The value in `kC`.
     #[inline]
     pub fn as_kilocoulombs(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in Megacoulombs (`MC`).
+    /// A [`ElectricCharge`] from a value in `MC`.
     #[inline]
     pub fn from_megacoulombs(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megacoulombs (`MC`).
+    /// The value in `MC`.
     #[inline]
     pub fn as_megacoulombs(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in AmpereHours (`A-h`).
+    /// A [`ElectricCharge`] from a value in `A-h`.
     #[inline]
     pub fn from_ampere_hours(value: T) -> Self {
         Self(value * T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in AmpereHours (`A-h`).
+    /// The value in `A-h`.
     #[inline]
     pub fn as_ampere_hours(self) -> T {
         self.0 / T::from_f64(3600.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in MilliampereHours (`mA-h`).
+    /// A [`ElectricCharge`] from a value in `mA-h`.
     #[inline]
     pub fn from_milliampere_hours(value: T) -> Self {
         Self(value * T::from_f64(3.6))
     }
 
-    /// Returns the value expressed in MilliampereHours (`mA-h`).
+    /// The value in `mA-h`.
     #[inline]
     pub fn as_milliampere_hours(self) -> T {
         self.0 / T::from_f64(3.6)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in KiloampereHours (`kA-h`).
+    /// A [`ElectricCharge`] from a value in `kA-h`.
     #[inline]
     pub fn from_kiloampere_hours(value: T) -> Self {
         Self(value * T::from_f64(3600000.0))
     }
 
-    /// Returns the value expressed in KiloampereHours (`kA-h`).
+    /// The value in `kA-h`.
     #[inline]
     pub fn as_kiloampere_hours(self) -> T {
         self.0 / T::from_f64(3600000.0)
     }
 
-    /// Creates a [`ElectricCharge`] from a value in MegaampereHours (`MA-h`).
+    /// A [`ElectricCharge`] from a value in `MA-h`.
     #[inline]
     pub fn from_megaampere_hours(value: T) -> Self {
         Self(value * T::from_f64(3.6e9))
     }
 
-    /// Returns the value expressed in MegaampereHours (`MA-h`).
+    /// The value in `MA-h`.
     #[inline]
     pub fn as_megaampere_hours(self) -> T {
         self.0 / T::from_f64(3.6e9)
@@ -439,9 +438,8 @@ impl<T: Float> ElectricCharge<T> {
 }
 
 impl ElectricCharge<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricChargeUnit) -> Self {
         Self(match unit {
@@ -462,9 +460,9 @@ impl ElectricCharge<f64> {
 
 fixed_base!(ElectricCharge, Coulomb);
 
-/// Unit markers for counting [`ElectricCharge`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricCharge`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_charge`](crate::unit::electric_charge).
+/// Also at [`unit::electric_charge`](crate::unit::electric_charge).
 pub mod unit {
     fixed_unit!(Coulomb: ElectricCharge, ElectricChargeUnit::Coulomb, base Coulomb, 1 / 1, pi^0, from_coulombs, as_coulombs, additive);
     fixed_unit!(Picocoulomb: ElectricCharge, ElectricChargeUnit::Picocoulomb, base Coulomb, 1 / 1000000000000, pi^0, from_picocoulombs, as_picocoulombs, additive);

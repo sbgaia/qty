@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The viscosity of a fluid is a measure of its resistance to gradual deformation by shear stress or tensile stress.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`KinematicViscosityUnit::SquareMeterPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`KinematicViscosityUnit::SquareMeterPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     SquareMeterPerSecond
 );
 
-/// Unit variants for [`KinematicViscosity`].
+/// The units of [`KinematicViscosity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -48,7 +47,7 @@ pub enum KinematicViscosityUnit {
 }
 
 impl KinematicViscosityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::SquareMeterPerSecond,
         Self::Stokes,
@@ -118,7 +117,7 @@ impl KinematicViscosityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -133,7 +132,7 @@ impl KinematicViscosityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -149,7 +148,7 @@ impl KinematicViscosityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -165,8 +164,8 @@ impl KinematicViscosityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -190,8 +189,8 @@ impl KinematicViscosityUnit {
 impl core::str::FromStr for KinematicViscosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m²/s" => Ok(Self::SquareMeterPerSecond),
@@ -208,8 +207,8 @@ impl core::str::FromStr for KinematicViscosityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -243,117 +242,117 @@ impl<T: Float> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
 }
 
 impl<T: Float> KinematicViscosity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m²/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m²/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, KinematicViscosityUnit> {
         self.in_unit(KinematicViscosityUnit::SquareMeterPerSecond)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in SquareMetersPerSecond (`m²/s`).
+    /// A [`KinematicViscosity`] from a value in `m²/s`.
     #[inline]
     pub fn from_square_meters_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in SquareMetersPerSecond (`m²/s`).
+    /// The value in `m²/s`.
     #[inline]
     pub fn as_square_meters_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Stokes (`St`).
+    /// A [`KinematicViscosity`] from a value in `St`.
     #[inline]
     pub fn from_stokes(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in Stokes (`St`).
+    /// The value in `St`.
     #[inline]
     pub fn as_stokes(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Nanostokes (`nSt`).
+    /// A [`KinematicViscosity`] from a value in `nSt`.
     #[inline]
     pub fn from_nanostokes(value: T) -> Self {
         Self(value / T::from_f64(1e13))
     }
 
-    /// Returns the value expressed in Nanostokes (`nSt`).
+    /// The value in `nSt`.
     #[inline]
     pub fn as_nanostokes(self) -> T {
         self.0 * T::from_f64(1e13)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Microstokes (`µSt`).
+    /// A [`KinematicViscosity`] from a value in `µSt`.
     #[inline]
     pub fn from_microstokes(value: T) -> Self {
         Self(value / T::from_f64(1e10))
     }
 
-    /// Returns the value expressed in Microstokes (`µSt`).
+    /// The value in `µSt`.
     #[inline]
     pub fn as_microstokes(self) -> T {
         self.0 * T::from_f64(1e10)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Millistokes (`mSt`).
+    /// A [`KinematicViscosity`] from a value in `mSt`.
     #[inline]
     pub fn from_millistokes(value: T) -> Self {
         Self(value / T::from_f64(1e7))
     }
 
-    /// Returns the value expressed in Millistokes (`mSt`).
+    /// The value in `mSt`.
     #[inline]
     pub fn as_millistokes(self) -> T {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Centistokes (`cSt`).
+    /// A [`KinematicViscosity`] from a value in `cSt`.
     #[inline]
     pub fn from_centistokes(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Centistokes (`cSt`).
+    /// The value in `cSt`.
     #[inline]
     pub fn as_centistokes(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Decistokes (`dSt`).
+    /// A [`KinematicViscosity`] from a value in `dSt`.
     #[inline]
     pub fn from_decistokes(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in Decistokes (`dSt`).
+    /// The value in `dSt`.
     #[inline]
     pub fn as_decistokes(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in Kilostokes (`kSt`).
+    /// A [`KinematicViscosity`] from a value in `kSt`.
     #[inline]
     pub fn from_kilostokes(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Kilostokes (`kSt`).
+    /// The value in `kSt`.
     #[inline]
     pub fn as_kilostokes(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`KinematicViscosity`] from a value in SquareFeetPerSecond (`ft²/s`).
+    /// A [`KinematicViscosity`] from a value in `ft²/s`.
     #[inline]
     pub fn from_square_feet_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.09290304))
     }
 
-    /// Returns the value expressed in SquareFeetPerSecond (`ft²/s`).
+    /// The value in `ft²/s`.
     #[inline]
     pub fn as_square_feet_per_second(self) -> T {
         self.0 / T::from_f64(0.09290304)
@@ -361,9 +360,8 @@ impl<T: Float> KinematicViscosity<T> {
 }
 
 impl KinematicViscosity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: KinematicViscosityUnit) -> Self {
         Self(match unit {
@@ -382,9 +380,9 @@ impl KinematicViscosity<f64> {
 
 fixed_base!(KinematicViscosity, SquareMeterPerSecond);
 
-/// Unit markers for counting [`KinematicViscosity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`KinematicViscosity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity).
+/// Also at [`unit::kinematic_viscosity`](crate::unit::kinematic_viscosity).
 pub mod unit {
     fixed_unit!(SquareMeterPerSecond: KinematicViscosity, KinematicViscosityUnit::SquareMeterPerSecond, base SquareMeterPerSecond, 1 / 1, pi^0, from_square_meters_per_second, as_square_meters_per_second, additive);
     fixed_unit!(Stokes: KinematicViscosity, KinematicViscosityUnit::Stokes, base SquareMeterPerSecond, 1 / 10000, pi^0, from_stokes, as_stokes, additive);

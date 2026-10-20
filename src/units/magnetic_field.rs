@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A magnetic field is a force field that is created by moving electric charges (electric currents) and magnetic dipoles, and exerts a force on other nearby moving charges and magnetic dipoles.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MagneticFieldUnit::Tesla`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MagneticFieldUnit::Tesla`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MagneticField<T = f64>(T);
 
 quantity!(MagneticField, MagneticFieldUnit, Tesla);
 
-/// Unit variants for [`MagneticField`].
+/// The units of [`MagneticField`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -41,7 +40,7 @@ pub enum MagneticFieldUnit {
 }
 
 impl MagneticFieldUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Tesla,
         Self::Nanotesla,
@@ -90,7 +89,7 @@ impl MagneticFieldUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -105,7 +104,7 @@ impl MagneticFieldUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -118,7 +117,7 @@ impl MagneticFieldUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -131,8 +130,8 @@ impl MagneticFieldUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -157,8 +156,8 @@ impl MagneticFieldUnit {
 impl core::str::FromStr for MagneticFieldUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "T" => Ok(Self::Tesla),
@@ -172,8 +171,8 @@ impl core::str::FromStr for MagneticFieldUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -201,9 +200,9 @@ impl<T: Float> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
 }
 
 impl<T: Float> MagneticField<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nT`, `µT`, `mT`, `T`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nT`, `µT`, `mT`, `T`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MagneticFieldUnit> {
         const SCALE: [(f64, MagneticFieldUnit); 4] = [
@@ -226,73 +225,73 @@ impl<T: Float> MagneticField<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MagneticField`] from a value in Teslas (`T`).
+    /// A [`MagneticField`] from a value in `T`.
     #[inline]
     pub fn from_teslas(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Teslas (`T`).
+    /// The value in `T`.
     #[inline]
     pub fn as_teslas(self) -> T {
         self.0
     }
 
-    /// Creates a [`MagneticField`] from a value in Nanoteslas (`nT`).
+    /// A [`MagneticField`] from a value in `nT`.
     #[inline]
     pub fn from_nanoteslas(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanoteslas (`nT`).
+    /// The value in `nT`.
     #[inline]
     pub fn as_nanoteslas(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`MagneticField`] from a value in Microteslas (`µT`).
+    /// A [`MagneticField`] from a value in `µT`.
     #[inline]
     pub fn from_microteslas(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microteslas (`µT`).
+    /// The value in `µT`.
     #[inline]
     pub fn as_microteslas(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`MagneticField`] from a value in Milliteslas (`mT`).
+    /// A [`MagneticField`] from a value in `mT`.
     #[inline]
     pub fn from_milliteslas(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Milliteslas (`mT`).
+    /// The value in `mT`.
     #[inline]
     pub fn as_milliteslas(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`MagneticField`] from a value in Gausses (`G`).
+    /// A [`MagneticField`] from a value in `G`.
     #[inline]
     pub fn from_gausses(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in Gausses (`G`).
+    /// The value in `G`.
     #[inline]
     pub fn as_gausses(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`MagneticField`] from a value in Milligausses (`mG`).
+    /// A [`MagneticField`] from a value in `mG`.
     #[inline]
     pub fn from_milligausses(value: T) -> Self {
         Self(value / T::from_f64(1e7))
     }
 
-    /// Returns the value expressed in Milligausses (`mG`).
+    /// The value in `mG`.
     #[inline]
     pub fn as_milligausses(self) -> T {
         self.0 * T::from_f64(1e7)
@@ -300,9 +299,8 @@ impl<T: Float> MagneticField<T> {
 }
 
 impl MagneticField<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MagneticFieldUnit) -> Self {
         Self(match unit {
@@ -318,9 +316,9 @@ impl MagneticField<f64> {
 
 fixed_base!(MagneticField, Tesla);
 
-/// Unit markers for counting [`MagneticField`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MagneticField`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::magnetic_field`](crate::unit::magnetic_field).
+/// Also at [`unit::magnetic_field`](crate::unit::magnetic_field).
 pub mod unit {
     fixed_unit!(Tesla: MagneticField, MagneticFieldUnit::Tesla, base Tesla, 1 / 1, pi^0, from_teslas, as_teslas, additive);
     fixed_unit!(Nanotesla: MagneticField, MagneticFieldUnit::Nanotesla, base Tesla, 1 / 1000000000, pi^0, from_nanoteslas, as_nanoteslas, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In geometry, an angle is the figure formed by two rays, called the sides of the angle, sharing a common endpoint, called the vertex of the angle.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`AngleUnit::Radian`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`AngleUnit::Radian`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Angle<T = f64>(T);
 
 quantity!(Angle, AngleUnit, Radian);
 
-/// Unit variants for [`Angle`].
+/// The units of [`Angle`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -50,7 +49,7 @@ pub enum AngleUnit {
 }
 
 impl AngleUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Radian,
         Self::Nanoradian,
@@ -162,7 +161,7 @@ impl AngleUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -177,7 +176,7 @@ impl AngleUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -199,7 +198,7 @@ impl AngleUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -221,8 +220,8 @@ impl AngleUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -265,8 +264,8 @@ impl AngleUnit {
 impl core::str::FromStr for AngleUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "rad" => Ok(Self::Radian),
@@ -296,8 +295,8 @@ impl core::str::FromStr for AngleUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Angle<T>> for AngleUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -343,9 +342,9 @@ impl<T: Float> crate::UnitOf<Angle<T>> for AngleUnit {
 }
 
 impl<T: Float> Angle<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nrad`, `µrad`, `mrad`, `rad`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nrad`, `µrad`, `mrad`, `rad`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, AngleUnit> {
         const SCALE: [(f64, AngleUnit); 4] = [
@@ -368,181 +367,181 @@ impl<T: Float> Angle<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Angle`] from a value in Radians (`rad`).
+    /// A [`Angle`] from a value in `rad`.
     #[inline]
     pub fn from_radians(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Radians (`rad`).
+    /// The value in `rad`.
     #[inline]
     pub fn as_radians(self) -> T {
         self.0
     }
 
-    /// Creates a [`Angle`] from a value in Nanoradians (`nrad`).
+    /// A [`Angle`] from a value in `nrad`.
     #[inline]
     pub fn from_nanoradians(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanoradians (`nrad`).
+    /// The value in `nrad`.
     #[inline]
     pub fn as_nanoradians(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Angle`] from a value in Microradians (`µrad`).
+    /// A [`Angle`] from a value in `µrad`.
     #[inline]
     pub fn from_microradians(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microradians (`µrad`).
+    /// The value in `µrad`.
     #[inline]
     pub fn as_microradians(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Angle`] from a value in Milliradians (`mrad`).
+    /// A [`Angle`] from a value in `mrad`.
     #[inline]
     pub fn from_milliradians(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Milliradians (`mrad`).
+    /// The value in `mrad`.
     #[inline]
     pub fn as_milliradians(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Angle`] from a value in Centiradians (`crad`).
+    /// A [`Angle`] from a value in `crad`.
     #[inline]
     pub fn from_centiradians(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in Centiradians (`crad`).
+    /// The value in `crad`.
     #[inline]
     pub fn as_centiradians(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Angle`] from a value in Deciradians (`drad`).
+    /// A [`Angle`] from a value in `drad`.
     #[inline]
     pub fn from_deciradians(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Deciradians (`drad`).
+    /// The value in `drad`.
     #[inline]
     pub fn as_deciradians(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Angle`] from a value in Degrees (`°`).
+    /// A [`Angle`] from a value in `°`.
     #[inline]
     pub fn from_degrees(value: T) -> Self {
         Self(value * T::from_f64(0.017453292519943295))
     }
 
-    /// Returns the value expressed in Degrees (`°`).
+    /// The value in `°`.
     #[inline]
     pub fn as_degrees(self) -> T {
         self.0 / T::from_f64(0.017453292519943295)
     }
 
-    /// Creates a [`Angle`] from a value in Nanodegrees (`n°`).
+    /// A [`Angle`] from a value in `n°`.
     #[inline]
     pub fn from_nanodegrees(value: T) -> Self {
         Self(value * T::from_f64(1.7453292519943295e-11))
     }
 
-    /// Returns the value expressed in Nanodegrees (`n°`).
+    /// The value in `n°`.
     #[inline]
     pub fn as_nanodegrees(self) -> T {
         self.0 / T::from_f64(1.7453292519943295e-11)
     }
 
-    /// Creates a [`Angle`] from a value in Microdegrees (`µ°`).
+    /// A [`Angle`] from a value in `µ°`.
     #[inline]
     pub fn from_microdegrees(value: T) -> Self {
         Self(value * T::from_f64(1.7453292519943295e-8))
     }
 
-    /// Returns the value expressed in Microdegrees (`µ°`).
+    /// The value in `µ°`.
     #[inline]
     pub fn as_microdegrees(self) -> T {
         self.0 / T::from_f64(1.7453292519943295e-8)
     }
 
-    /// Creates a [`Angle`] from a value in Millidegrees (`m°`).
+    /// A [`Angle`] from a value in `m°`.
     #[inline]
     pub fn from_millidegrees(value: T) -> Self {
         Self(value * T::from_f64(1.7453292519943296e-5))
     }
 
-    /// Returns the value expressed in Millidegrees (`m°`).
+    /// The value in `m°`.
     #[inline]
     pub fn as_millidegrees(self) -> T {
         self.0 / T::from_f64(1.7453292519943296e-5)
     }
 
-    /// Creates a [`Angle`] from a value in Arcminutes (`'`).
+    /// A [`Angle`] from a value in `'`.
     #[inline]
     pub fn from_arcminutes(value: T) -> Self {
         Self(value * T::from_f64(0.0002908882086657216))
     }
 
-    /// Returns the value expressed in Arcminutes (`'`).
+    /// The value in `'`.
     #[inline]
     pub fn as_arcminutes(self) -> T {
         self.0 / T::from_f64(0.0002908882086657216)
     }
 
-    /// Creates a [`Angle`] from a value in Arcseconds (`″`).
+    /// A [`Angle`] from a value in `″`.
     #[inline]
     pub fn from_arcseconds(value: T) -> Self {
         Self(value * T::from_f64(4.84813681109536e-6))
     }
 
-    /// Returns the value expressed in Arcseconds (`″`).
+    /// The value in `″`.
     #[inline]
     pub fn as_arcseconds(self) -> T {
         self.0 / T::from_f64(4.84813681109536e-6)
     }
 
-    /// Creates a [`Angle`] from a value in Gradians (`g`).
+    /// A [`Angle`] from a value in `g`.
     #[inline]
     pub fn from_gradians(value: T) -> Self {
         Self(value * T::from_f64(0.015707963267948967))
     }
 
-    /// Returns the value expressed in Gradians (`g`).
+    /// The value in `g`.
     #[inline]
     pub fn as_gradians(self) -> T {
         self.0 / T::from_f64(0.015707963267948967)
     }
 
-    /// Creates a [`Angle`] from a value in NatoMils (`mil`).
+    /// A [`Angle`] from a value in `mil`.
     #[inline]
     pub fn from_nato_mils(value: T) -> Self {
         Self(value * T::from_f64(0.0009817477042468104))
     }
 
-    /// Returns the value expressed in NatoMils (`mil`).
+    /// The value in `mil`.
     #[inline]
     pub fn as_nato_mils(self) -> T {
         self.0 / T::from_f64(0.0009817477042468104)
     }
 
-    /// Creates a [`Angle`] from a value in Revolutions (`r`).
+    /// A [`Angle`] from a value in `r`.
     #[inline]
     pub fn from_revolutions(value: T) -> Self {
         Self(value * T::from_f64(6.283185307179586))
     }
 
-    /// Returns the value expressed in Revolutions (`r`).
+    /// The value in `r`.
     #[inline]
     pub fn as_revolutions(self) -> T {
         self.0 / T::from_f64(6.283185307179586)
@@ -550,9 +549,8 @@ impl<T: Float> Angle<T> {
 }
 
 impl Angle<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: AngleUnit) -> Self {
         Self(match unit {
@@ -577,9 +575,9 @@ impl Angle<f64> {
 
 fixed_base!(Angle, Radian);
 
-/// Unit markers for counting [`Angle`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Angle`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::angle`](crate::unit::angle).
+/// Also at [`unit::angle`](crate::unit::angle).
 pub mod unit {
     fixed_unit!(Radian: Angle, AngleUnit::Radian, base Radian, 1 / 1, pi^0, from_radians, as_radians, additive);
     fixed_unit!(Nanoradian: Angle, AngleUnit::Nanoradian, base Radian, 1 / 1000000000, pi^0, from_nanoradians, as_nanoradians, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In the context of transport, fuel economy is the energy efficiency of a particular vehicle, given as a ratio of distance traveled per unit of fuel consumed. In most countries, using the metric system, fuel economy is stated as "fuel consumption" in liters per 100 kilometers (L/100 km) or kilometers per liter (km/L or kmpl). In countries using non-metric system, fuel economy is expressed in miles per gallon (mpg) (imperial galon or US galon).
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`FuelEfficiencyUnit::KilometerPerLiter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`FuelEfficiencyUnit::KilometerPerLiter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct FuelEfficiency<T = f64>(T);
 
 quantity!(FuelEfficiency, FuelEfficiencyUnit, KilometerPerLiter);
 
-/// Unit variants for [`FuelEfficiency`].
+/// The units of [`FuelEfficiency`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -39,7 +38,7 @@ pub enum FuelEfficiencyUnit {
 }
 
 impl FuelEfficiencyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::LiterPer100Kilometers,
         Self::MilePerUsGallon,
@@ -74,7 +73,7 @@ impl FuelEfficiencyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -89,7 +88,7 @@ impl FuelEfficiencyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -100,7 +99,7 @@ impl FuelEfficiencyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -111,8 +110,8 @@ impl FuelEfficiencyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -133,8 +132,8 @@ impl FuelEfficiencyUnit {
 impl core::str::FromStr for FuelEfficiencyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "l/100km" => Ok(Self::LiterPer100Kilometers),
@@ -146,8 +145,8 @@ impl core::str::FromStr for FuelEfficiencyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -171,57 +170,57 @@ impl<T: Float> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
 }
 
 impl<T: Float> FuelEfficiency<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`km/l`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`km/l`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, FuelEfficiencyUnit> {
         self.in_unit(FuelEfficiencyUnit::KilometerPerLiter)
     }
 
-    /// Creates a [`FuelEfficiency`] from a value in LitersPer100Kilometers (`l/100km`).
+    /// A [`FuelEfficiency`] from a value in `l/100km`.
     #[inline]
     pub fn from_liters_per100_kilometers(value: T) -> Self {
         Self(T::from_f64(100.0) / value)
     }
 
-    /// Returns the value expressed in LitersPer100Kilometers (`l/100km`).
+    /// The value in `l/100km`.
     #[inline]
     pub fn as_liters_per100_kilometers(self) -> T {
         T::from_f64(100.0) / self.0
     }
 
-    /// Creates a [`FuelEfficiency`] from a value in MilesPerUsGallon (`mpg (U.S.)`).
+    /// A [`FuelEfficiency`] from a value in `mpg (U.S.)`.
     #[inline]
     pub fn from_miles_per_us_gallon(value: T) -> Self {
         Self(value * T::from_f64(0.425143707430272))
     }
 
-    /// Returns the value expressed in MilesPerUsGallon (`mpg (U.S.)`).
+    /// The value in `mpg (U.S.)`.
     #[inline]
     pub fn as_miles_per_us_gallon(self) -> T {
         self.0 / T::from_f64(0.425143707430272)
     }
 
-    /// Creates a [`FuelEfficiency`] from a value in MilesPerUkGallon (`mpg (imp.)`).
+    /// A [`FuelEfficiency`] from a value in `mpg (imp.)`.
     #[inline]
     pub fn from_miles_per_uk_gallon(value: T) -> Self {
         Self(value * T::from_f64(0.3540061899346471))
     }
 
-    /// Returns the value expressed in MilesPerUkGallon (`mpg (imp.)`).
+    /// The value in `mpg (imp.)`.
     #[inline]
     pub fn as_miles_per_uk_gallon(self) -> T {
         self.0 / T::from_f64(0.3540061899346471)
     }
 
-    /// Creates a [`FuelEfficiency`] from a value in KilometersPerLiter (`km/l`).
+    /// A [`FuelEfficiency`] from a value in `km/l`.
     #[inline]
     pub fn from_kilometers_per_liter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilometersPerLiter (`km/l`).
+    /// The value in `km/l`.
     #[inline]
     pub fn as_kilometers_per_liter(self) -> T {
         self.0
@@ -229,9 +228,8 @@ impl<T: Float> FuelEfficiency<T> {
 }
 
 impl FuelEfficiency<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: FuelEfficiencyUnit) -> Self {
         Self(match unit {
@@ -245,9 +243,9 @@ impl FuelEfficiency<f64> {
 
 fixed_base!(FuelEfficiency, KilometerPerLiter);
 
-/// Unit markers for counting [`FuelEfficiency`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`FuelEfficiency`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::fuel_efficiency`](crate::unit::fuel_efficiency).
+/// Also at [`unit::fuel_efficiency`](crate::unit::fuel_efficiency).
 pub mod unit {
     fixed_unit!(MilePerUsGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUsGallon, base KilometerPerLiter, 48000 / 112903, pi^0, from_miles_per_us_gallon, as_miles_per_us_gallon, additive);
     fixed_unit!(MilePerUkGallon: FuelEfficiency, FuelEfficiencyUnit::MilePerUkGallon, base KilometerPerLiter, 804672 / 2273045, pi^0, from_miles_per_uk_gallon, as_miles_per_uk_gallon, additive);

@@ -1,6 +1,6 @@
-//! Hand-written tests for the library-wide design guarantees: zero-cost
-//! layout, generic storage, operators, formatting, parsing and the
-//! cross-quantity relations whose base units are not coherent.
+//! Tests for the crate-wide behaviour: layout, storage types, operators,
+//! formatting, parsing, and the relations between quantities whose base
+//! units aren't coherent.
 
 // Uses quantities from every feature group.
 #![cfg(feature = "full")]

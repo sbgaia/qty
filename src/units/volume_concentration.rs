@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The volume concentration (not to be confused with volume fraction) is defined as the volume of a constituent divided by the total volume of the mixture.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`VolumeConcentrationUnit::DecimalFraction`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`VolumeConcentrationUnit::DecimalFraction`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     DecimalFraction
 );
 
-/// Unit variants for [`VolumeConcentration`].
+/// The units of [`VolumeConcentration`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -59,7 +58,7 @@ pub enum VolumeConcentrationUnit {
 }
 
 impl VolumeConcentrationUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::DecimalFraction,
         Self::LiterPerLiter,
@@ -206,7 +205,7 @@ impl VolumeConcentrationUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -221,7 +220,7 @@ impl VolumeConcentrationUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -248,7 +247,7 @@ impl VolumeConcentrationUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -275,8 +274,8 @@ impl VolumeConcentrationUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -328,8 +327,8 @@ impl VolumeConcentrationUnit {
 impl core::str::FromStr for VolumeConcentrationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "l/l" => Ok(Self::LiterPerLiter),
@@ -357,8 +356,8 @@ impl core::str::FromStr for VolumeConcentrationUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -414,249 +413,249 @@ impl<T: Float> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit
 }
 
 impl<T: Float> VolumeConcentration<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (``).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (``).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeConcentrationUnit> {
         self.in_unit(VolumeConcentrationUnit::DecimalFraction)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in DecimalFractions (``).
+    /// A [`VolumeConcentration`] from a value in [`VolumeConcentrationUnit::DecimalFraction`].
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in DecimalFractions (``).
+    /// The value in [`VolumeConcentrationUnit::DecimalFraction`].
     #[inline]
     pub fn as_decimal_fractions(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in LitersPerLiter (`l/l`).
+    /// A [`VolumeConcentration`] from a value in `l/l`.
     #[inline]
     pub fn from_liters_per_liter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in LitersPerLiter (`l/l`).
+    /// The value in `l/l`.
     #[inline]
     pub fn as_liters_per_liter(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PicolitersPerLiter (`pl/l`).
+    /// A [`VolumeConcentration`] from a value in `pl/l`.
     #[inline]
     pub fn from_picoliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in PicolitersPerLiter (`pl/l`).
+    /// The value in `pl/l`.
     #[inline]
     pub fn as_picoliters_per_liter(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in NanolitersPerLiter (`nl/l`).
+    /// A [`VolumeConcentration`] from a value in `nl/l`.
     #[inline]
     pub fn from_nanoliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanolitersPerLiter (`nl/l`).
+    /// The value in `nl/l`.
     #[inline]
     pub fn as_nanoliters_per_liter(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerLiter (`µl/l`).
+    /// A [`VolumeConcentration`] from a value in `µl/l`.
     #[inline]
     pub fn from_microliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrolitersPerLiter (`µl/l`).
+    /// The value in `µl/l`.
     #[inline]
     pub fn as_microliters_per_liter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in MillilitersPerLiter (`ml/l`).
+    /// A [`VolumeConcentration`] from a value in `ml/l`.
     #[inline]
     pub fn from_milliliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillilitersPerLiter (`ml/l`).
+    /// The value in `ml/l`.
     #[inline]
     pub fn as_milliliters_per_liter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in CentilitersPerLiter (`cl/l`).
+    /// A [`VolumeConcentration`] from a value in `cl/l`.
     #[inline]
     pub fn from_centiliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentilitersPerLiter (`cl/l`).
+    /// The value in `cl/l`.
     #[inline]
     pub fn as_centiliters_per_liter(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in DecilitersPerLiter (`dl/l`).
+    /// A [`VolumeConcentration`] from a value in `dl/l`.
     #[inline]
     pub fn from_deciliters_per_liter(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecilitersPerLiter (`dl/l`).
+    /// The value in `dl/l`.
     #[inline]
     pub fn as_deciliters_per_liter(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in LitersPerMilliliter (`l/ml`).
+    /// A [`VolumeConcentration`] from a value in `l/ml`.
     #[inline]
     pub fn from_liters_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in LitersPerMilliliter (`l/ml`).
+    /// The value in `l/ml`.
     #[inline]
     pub fn as_liters_per_milliliter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PicolitersPerMilliliter (`pl/ml`).
+    /// A [`VolumeConcentration`] from a value in `pl/ml`.
     #[inline]
     pub fn from_picoliters_per_milliliter(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in PicolitersPerMilliliter (`pl/ml`).
+    /// The value in `pl/ml`.
     #[inline]
     pub fn as_picoliters_per_milliliter(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in NanolitersPerMilliliter (`nl/ml`).
+    /// A [`VolumeConcentration`] from a value in `nl/ml`.
     #[inline]
     pub fn from_nanoliters_per_milliliter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in NanolitersPerMilliliter (`nl/ml`).
+    /// The value in `nl/ml`.
     #[inline]
     pub fn as_nanoliters_per_milliliter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in MicrolitersPerMilliliter (`µl/ml`).
+    /// A [`VolumeConcentration`] from a value in `µl/ml`.
     #[inline]
     pub fn from_microliters_per_milliliter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MicrolitersPerMilliliter (`µl/ml`).
+    /// The value in `µl/ml`.
     #[inline]
     pub fn as_microliters_per_milliliter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in MillilitersPerMilliliter (`ml/ml`).
+    /// A [`VolumeConcentration`] from a value in `ml/ml`.
     #[inline]
     pub fn from_milliliters_per_milliliter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MillilitersPerMilliliter (`ml/ml`).
+    /// The value in `ml/ml`.
     #[inline]
     pub fn as_milliliters_per_milliliter(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in CentilitersPerMilliliter (`cl/ml`).
+    /// A [`VolumeConcentration`] from a value in `cl/ml`.
     #[inline]
     pub fn from_centiliters_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in CentilitersPerMilliliter (`cl/ml`).
+    /// The value in `cl/ml`.
     #[inline]
     pub fn as_centiliters_per_milliliter(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in DecilitersPerMilliliter (`dl/ml`).
+    /// A [`VolumeConcentration`] from a value in `dl/ml`.
     #[inline]
     pub fn from_deciliters_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in DecilitersPerMilliliter (`dl/ml`).
+    /// The value in `dl/ml`.
     #[inline]
     pub fn as_deciliters_per_milliliter(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in Percent (`%`).
+    /// A [`VolumeConcentration`] from a value in `%`.
     #[inline]
     pub fn from_percent(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in Percent (`%`).
+    /// The value in `%`.
     #[inline]
     pub fn as_percent(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PartsPerThousand (`‰`).
+    /// A [`VolumeConcentration`] from a value in `‰`.
     #[inline]
     pub fn from_parts_per_thousand(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in PartsPerThousand (`‰`).
+    /// The value in `‰`.
     #[inline]
     pub fn as_parts_per_thousand(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PartsPerMillion (`ppm`).
+    /// A [`VolumeConcentration`] from a value in `ppm`.
     #[inline]
     pub fn from_parts_per_million(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in PartsPerMillion (`ppm`).
+    /// The value in `ppm`.
     #[inline]
     pub fn as_parts_per_million(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PartsPerBillion (`ppb`).
+    /// A [`VolumeConcentration`] from a value in `ppb`.
     #[inline]
     pub fn from_parts_per_billion(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in PartsPerBillion (`ppb`).
+    /// The value in `ppb`.
     #[inline]
     pub fn as_parts_per_billion(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`VolumeConcentration`] from a value in PartsPerTrillion (`ppt`).
+    /// A [`VolumeConcentration`] from a value in `ppt`.
     #[inline]
     pub fn from_parts_per_trillion(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in PartsPerTrillion (`ppt`).
+    /// The value in `ppt`.
     #[inline]
     pub fn as_parts_per_trillion(self) -> T {
         self.0 * T::from_f64(1e12)
@@ -664,9 +663,8 @@ impl<T: Float> VolumeConcentration<T> {
 }
 
 impl VolumeConcentration<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: VolumeConcentrationUnit) -> Self {
         Self(match unit {
@@ -696,9 +694,9 @@ impl VolumeConcentration<f64> {
 
 fixed_base!(VolumeConcentration, DecimalFraction);
 
-/// Unit markers for counting [`VolumeConcentration`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`VolumeConcentration`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume_concentration`](crate::unit::volume_concentration).
+/// Also at [`unit::volume_concentration`](crate::unit::volume_concentration).
 pub mod unit {
     fixed_unit!(DecimalFraction: VolumeConcentration, VolumeConcentrationUnit::DecimalFraction, base DecimalFraction, 1 / 1, pi^0, from_decimal_fractions, as_decimal_fractions, additive);
     fixed_unit!(LiterPerLiter: VolumeConcentration, VolumeConcentrationUnit::LiterPerLiter, base DecimalFraction, 1 / 1, pi^0, from_liters_per_liter, as_liters_per_liter, additive);

@@ -12,12 +12,11 @@ use crate::Level;
 
 /// The strength of a signal expressed in decibels (dB) relative to one volt RMS.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`AmplitudeRatioUnit::DecibelVolt`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`AmplitudeRatioUnit::DecibelVolt`], with the same layout as `T`.
 ///
-/// A AmplitudeRatio is a *point on a scale*, not an amount: two of them cannot
-/// be added (a 20 dBV signal plus a 20 dBV signal is not 40 dBV), negated or scaled. Their
-/// difference is a [`Level`], which can be added back:
+/// A AmplitudeRatio is a point on a scale, not an amount, so two of them can't
+/// be added (a 20 dBV signal plus a 20 dBV signal is not 40 dBV), negated or scaled. Subtracting
+/// one from another gives a [`Level`], which can be added back:
 ///
 /// ```rust
 /// use qty::*;
@@ -46,9 +45,9 @@ pub struct AmplitudeRatio<T = f64>(T);
 
 point_quantity!(AmplitudeRatio, AmplitudeRatioUnit, DecibelVolt, Level);
 
-/// Unit variants for [`AmplitudeRatio`].
+/// The units of [`AmplitudeRatio`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -60,7 +59,7 @@ pub enum AmplitudeRatioUnit {
 }
 
 impl AmplitudeRatioUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::DecibelVolt,
         Self::DecibelMicrovolt,
@@ -95,7 +94,7 @@ impl AmplitudeRatioUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -111,7 +110,7 @@ impl AmplitudeRatioUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -122,7 +121,7 @@ impl AmplitudeRatioUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -133,8 +132,8 @@ impl AmplitudeRatioUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -155,8 +154,8 @@ impl AmplitudeRatioUnit {
 impl core::str::FromStr for AmplitudeRatioUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "dBV" => Ok(Self::DecibelVolt),
@@ -168,8 +167,8 @@ impl core::str::FromStr for AmplitudeRatioUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -193,57 +192,57 @@ impl<T: Float> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
 }
 
 impl<T: Float> AmplitudeRatio<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`dBV`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`dBV`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, AmplitudeRatioUnit> {
         self.in_unit(AmplitudeRatioUnit::DecibelVolt)
     }
 
-    /// Creates a [`AmplitudeRatio`] from a value in DecibelVolts (`dBV`).
+    /// A [`AmplitudeRatio`] from a value in `dBV`.
     #[inline]
     pub fn from_decibel_volts(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in DecibelVolts (`dBV`).
+    /// The value in `dBV`.
     #[inline]
     pub fn as_decibel_volts(self) -> T {
         self.0
     }
 
-    /// Creates a [`AmplitudeRatio`] from a value in DecibelMicrovolts (`dBµV`).
+    /// A [`AmplitudeRatio`] from a value in `dBµV`.
     #[inline]
     pub fn from_decibel_microvolts(value: T) -> Self {
         Self(value - T::from_f64(120.0))
     }
 
-    /// Returns the value expressed in DecibelMicrovolts (`dBµV`).
+    /// The value in `dBµV`.
     #[inline]
     pub fn as_decibel_microvolts(self) -> T {
         self.0 + T::from_f64(120.0)
     }
 
-    /// Creates a [`AmplitudeRatio`] from a value in DecibelMillivolts (`dBmV`).
+    /// A [`AmplitudeRatio`] from a value in `dBmV`.
     #[inline]
     pub fn from_decibel_millivolts(value: T) -> Self {
         Self(value - T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in DecibelMillivolts (`dBmV`).
+    /// The value in `dBmV`.
     #[inline]
     pub fn as_decibel_millivolts(self) -> T {
         self.0 + T::from_f64(60.0)
     }
 
-    /// Creates a [`AmplitudeRatio`] from a value in DecibelsUnloaded (`dBu`).
+    /// A [`AmplitudeRatio`] from a value in `dBu`.
     #[inline]
     pub fn from_decibels_unloaded(value: T) -> Self {
         Self(value - T::from_f64(2.218487499))
     }
 
-    /// Returns the value expressed in DecibelsUnloaded (`dBu`).
+    /// The value in `dBu`.
     #[inline]
     pub fn as_decibels_unloaded(self) -> T {
         self.0 + T::from_f64(2.218487499)
@@ -251,9 +250,8 @@ impl<T: Float> AmplitudeRatio<T> {
 }
 
 impl AmplitudeRatio<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: AmplitudeRatioUnit) -> Self {
         Self(match unit {
@@ -267,9 +265,9 @@ impl AmplitudeRatio<f64> {
 
 fixed_base!(AmplitudeRatio, DecibelVolt);
 
-/// Unit markers for counting [`AmplitudeRatio`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`AmplitudeRatio`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::amplitude_ratio`](crate::unit::amplitude_ratio).
+/// Also at [`unit::amplitude_ratio`](crate::unit::amplitude_ratio).
 pub mod unit {
     fixed_unit!(DecibelVolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelVolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_volts, as_decibel_volts, point crate::units::level::unit::Decibel);
     fixed_unit!(DecibelMicrovolt: AmplitudeRatio, AmplitudeRatioUnit::DecibelMicrovolt, base DecibelVolt, 1 / 1, pi^0, from_decibel_microvolts, as_decibel_microvolts, offset(-120, 1), point crate::units::level::unit::Decibel);

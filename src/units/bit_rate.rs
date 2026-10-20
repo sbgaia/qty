@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In telecommunications and computing, bit rate is the number of bits that are conveyed or processed per unit of time.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`BitRateUnit::BitPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`BitRateUnit::BitPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct BitRate<T = f64>(T);
 
 quantity!(BitRate, BitRateUnit, BitPerSecond);
 
-/// Unit variants for [`BitRate`].
+/// The units of [`BitRate`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -74,7 +73,7 @@ pub enum BitRateUnit {
 }
 
 impl BitRateUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::BitPerSecond,
         Self::KilobitPerSecond,
@@ -354,7 +353,7 @@ impl BitRateUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -369,7 +368,7 @@ impl BitRateUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -415,7 +414,7 @@ impl BitRateUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -461,8 +460,8 @@ impl BitRateUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -553,8 +552,8 @@ impl BitRateUnit {
 impl core::str::FromStr for BitRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "bit/s" => Ok(Self::BitPerSecond),
@@ -602,8 +601,8 @@ impl core::str::FromStr for BitRateUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -697,9 +696,9 @@ impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
 }
 
 impl<T: Float> BitRate<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`bit/s`, `kbit/s`, `Mbit/s`, `Gbit/s`, `Tbit/s`, `Pbit/s`, `Ebit/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`bit/s`, `kbit/s`, `Mbit/s`, `Gbit/s`, `Tbit/s`, `Pbit/s`, `Ebit/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, BitRateUnit> {
         const SCALE: [(f64, BitRateUnit); 7] = [
@@ -725,469 +724,469 @@ impl<T: Float> BitRate<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`BitRate`] from a value in BitsPerSecond (`bit/s`).
+    /// A [`BitRate`] from a value in `bit/s`.
     #[inline]
     pub fn from_bits_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in BitsPerSecond (`bit/s`).
+    /// The value in `bit/s`.
     #[inline]
     pub fn as_bits_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`BitRate`] from a value in KilobitsPerSecond (`kbit/s`).
+    /// A [`BitRate`] from a value in `kbit/s`.
     #[inline]
     pub fn from_kilobits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilobitsPerSecond (`kbit/s`).
+    /// The value in `kbit/s`.
     #[inline]
     pub fn as_kilobits_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in MegabitsPerSecond (`Mbit/s`).
+    /// A [`BitRate`] from a value in `Mbit/s`.
     #[inline]
     pub fn from_megabits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegabitsPerSecond (`Mbit/s`).
+    /// The value in `Mbit/s`.
     #[inline]
     pub fn as_megabits_per_second(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in GigabitsPerSecond (`Gbit/s`).
+    /// A [`BitRate`] from a value in `Gbit/s`.
     #[inline]
     pub fn from_gigabits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in GigabitsPerSecond (`Gbit/s`).
+    /// The value in `Gbit/s`.
     #[inline]
     pub fn as_gigabits_per_second(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`BitRate`] from a value in TerabitsPerSecond (`Tbit/s`).
+    /// A [`BitRate`] from a value in `Tbit/s`.
     #[inline]
     pub fn from_terabits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in TerabitsPerSecond (`Tbit/s`).
+    /// The value in `Tbit/s`.
     #[inline]
     pub fn as_terabits_per_second(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`BitRate`] from a value in PetabitsPerSecond (`Pbit/s`).
+    /// A [`BitRate`] from a value in `Pbit/s`.
     #[inline]
     pub fn from_petabits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in PetabitsPerSecond (`Pbit/s`).
+    /// The value in `Pbit/s`.
     #[inline]
     pub fn as_petabits_per_second(self) -> T {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Creates a [`BitRate`] from a value in ExabitsPerSecond (`Ebit/s`).
+    /// A [`BitRate`] from a value in `Ebit/s`.
     #[inline]
     pub fn from_exabits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1e18))
     }
 
-    /// Returns the value expressed in ExabitsPerSecond (`Ebit/s`).
+    /// The value in `Ebit/s`.
     #[inline]
     pub fn as_exabits_per_second(self) -> T {
         self.0 / T::from_f64(1e18)
     }
 
-    /// Creates a [`BitRate`] from a value in KibibitsPerSecond (`Kibit/s`).
+    /// A [`BitRate`] from a value in `Kibit/s`.
     #[inline]
     pub fn from_kibibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1024.0))
     }
 
-    /// Returns the value expressed in KibibitsPerSecond (`Kibit/s`).
+    /// The value in `Kibit/s`.
     #[inline]
     pub fn as_kibibits_per_second(self) -> T {
         self.0 * T::from_f64(0.0009765625)
     }
 
-    /// Creates a [`BitRate`] from a value in MebibitsPerSecond (`Mibit/s`).
+    /// A [`BitRate`] from a value in `Mibit/s`.
     #[inline]
     pub fn from_mebibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1048576.0))
     }
 
-    /// Returns the value expressed in MebibitsPerSecond (`Mibit/s`).
+    /// The value in `Mibit/s`.
     #[inline]
     pub fn as_mebibits_per_second(self) -> T {
         self.0 * T::from_f64(9.5367431640625e-7)
     }
 
-    /// Creates a [`BitRate`] from a value in GibibitsPerSecond (`Gibit/s`).
+    /// A [`BitRate`] from a value in `Gibit/s`.
     #[inline]
     pub fn from_gibibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1.073741824e9))
     }
 
-    /// Returns the value expressed in GibibitsPerSecond (`Gibit/s`).
+    /// The value in `Gibit/s`.
     #[inline]
     pub fn as_gibibits_per_second(self) -> T {
         self.0 * T::from_f64(9.313225746154785e-10)
     }
 
-    /// Creates a [`BitRate`] from a value in TebibitsPerSecond (`Tibit/s`).
+    /// A [`BitRate`] from a value in `Tibit/s`.
     #[inline]
     pub fn from_tebibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1.099511627776e12))
     }
 
-    /// Returns the value expressed in TebibitsPerSecond (`Tibit/s`).
+    /// The value in `Tibit/s`.
     #[inline]
     pub fn as_tebibits_per_second(self) -> T {
         self.0 * T::from_f64(9.094947017729282e-13)
     }
 
-    /// Creates a [`BitRate`] from a value in PebibitsPerSecond (`Pibit/s`).
+    /// A [`BitRate`] from a value in `Pibit/s`.
     #[inline]
     pub fn from_pebibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1.125899906842624e15))
     }
 
-    /// Returns the value expressed in PebibitsPerSecond (`Pibit/s`).
+    /// The value in `Pibit/s`.
     #[inline]
     pub fn as_pebibits_per_second(self) -> T {
         self.0 * T::from_f64(8.881784197001252e-16)
     }
 
-    /// Creates a [`BitRate`] from a value in ExbibitsPerSecond (`Eibit/s`).
+    /// A [`BitRate`] from a value in `Eibit/s`.
     #[inline]
     pub fn from_exbibits_per_second(value: T) -> Self {
         Self(value * T::from_f64(1.152921504606847e18))
     }
 
-    /// Returns the value expressed in ExbibitsPerSecond (`Eibit/s`).
+    /// The value in `Eibit/s`.
     #[inline]
     pub fn as_exbibits_per_second(self) -> T {
         self.0 * T::from_f64(8.673617379884035e-19)
     }
 
-    /// Creates a [`BitRate`] from a value in BytesPerSecond (`B/s`).
+    /// A [`BitRate`] from a value in `B/s`.
     #[inline]
     pub fn from_bytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.0))
     }
 
-    /// Returns the value expressed in BytesPerSecond (`B/s`).
+    /// The value in `B/s`.
     #[inline]
     pub fn as_bytes_per_second(self) -> T {
         self.0 * T::from_f64(0.125)
     }
 
-    /// Creates a [`BitRate`] from a value in KilobytesPerSecond (`kB/s`).
+    /// A [`BitRate`] from a value in `kB/s`.
     #[inline]
     pub fn from_kilobytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8000.0))
     }
 
-    /// Returns the value expressed in KilobytesPerSecond (`kB/s`).
+    /// The value in `kB/s`.
     #[inline]
     pub fn as_kilobytes_per_second(self) -> T {
         self.0 / T::from_f64(8000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in MegabytesPerSecond (`MB/s`).
+    /// A [`BitRate`] from a value in `MB/s`.
     #[inline]
     pub fn from_megabytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8000000.0))
     }
 
-    /// Returns the value expressed in MegabytesPerSecond (`MB/s`).
+    /// The value in `MB/s`.
     #[inline]
     pub fn as_megabytes_per_second(self) -> T {
         self.0 / T::from_f64(8000000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in GigabytesPerSecond (`GB/s`).
+    /// A [`BitRate`] from a value in `GB/s`.
     #[inline]
     pub fn from_gigabytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e9))
     }
 
-    /// Returns the value expressed in GigabytesPerSecond (`GB/s`).
+    /// The value in `GB/s`.
     #[inline]
     pub fn as_gigabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e9)
     }
 
-    /// Creates a [`BitRate`] from a value in TerabytesPerSecond (`TB/s`).
+    /// A [`BitRate`] from a value in `TB/s`.
     #[inline]
     pub fn from_terabytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e12))
     }
 
-    /// Returns the value expressed in TerabytesPerSecond (`TB/s`).
+    /// The value in `TB/s`.
     #[inline]
     pub fn as_terabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e12)
     }
 
-    /// Creates a [`BitRate`] from a value in PetabytesPerSecond (`PB/s`).
+    /// A [`BitRate`] from a value in `PB/s`.
     #[inline]
     pub fn from_petabytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e15))
     }
 
-    /// Returns the value expressed in PetabytesPerSecond (`PB/s`).
+    /// The value in `PB/s`.
     #[inline]
     pub fn as_petabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e15)
     }
 
-    /// Creates a [`BitRate`] from a value in ExabytesPerSecond (`EB/s`).
+    /// A [`BitRate`] from a value in `EB/s`.
     #[inline]
     pub fn from_exabytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e18))
     }
 
-    /// Returns the value expressed in ExabytesPerSecond (`EB/s`).
+    /// The value in `EB/s`.
     #[inline]
     pub fn as_exabytes_per_second(self) -> T {
         self.0 / T::from_f64(8e18)
     }
 
-    /// Creates a [`BitRate`] from a value in KibibytesPerSecond (`KiB/s`).
+    /// A [`BitRate`] from a value in `KiB/s`.
     #[inline]
     pub fn from_kibibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8192.0))
     }
 
-    /// Returns the value expressed in KibibytesPerSecond (`KiB/s`).
+    /// The value in `KiB/s`.
     #[inline]
     pub fn as_kibibytes_per_second(self) -> T {
         self.0 * T::from_f64(0.0001220703125)
     }
 
-    /// Creates a [`BitRate`] from a value in MebibytesPerSecond (`MiB/s`).
+    /// A [`BitRate`] from a value in `MiB/s`.
     #[inline]
     pub fn from_mebibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8388608.0))
     }
 
-    /// Returns the value expressed in MebibytesPerSecond (`MiB/s`).
+    /// The value in `MiB/s`.
     #[inline]
     pub fn as_mebibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
-    /// Creates a [`BitRate`] from a value in GibibytesPerSecond (`GiB/s`).
+    /// A [`BitRate`] from a value in `GiB/s`.
     #[inline]
     pub fn from_gibibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.589934592e9))
     }
 
-    /// Returns the value expressed in GibibytesPerSecond (`GiB/s`).
+    /// The value in `GiB/s`.
     #[inline]
     pub fn as_gibibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
-    /// Creates a [`BitRate`] from a value in TebibytesPerSecond (`TiB/s`).
+    /// A [`BitRate`] from a value in `TiB/s`.
     #[inline]
     pub fn from_tebibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.796093022208e12))
     }
 
-    /// Returns the value expressed in TebibytesPerSecond (`TiB/s`).
+    /// The value in `TiB/s`.
     #[inline]
     pub fn as_tebibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
-    /// Creates a [`BitRate`] from a value in PebibytesPerSecond (`PiB/s`).
+    /// A [`BitRate`] from a value in `PiB/s`.
     #[inline]
     pub fn from_pebibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(9.007199254740992e15))
     }
 
-    /// Returns the value expressed in PebibytesPerSecond (`PiB/s`).
+    /// The value in `PiB/s`.
     #[inline]
     pub fn as_pebibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
-    /// Creates a [`BitRate`] from a value in ExbibytesPerSecond (`EiB/s`).
+    /// A [`BitRate`] from a value in `EiB/s`.
     #[inline]
     pub fn from_exbibytes_per_second(value: T) -> Self {
         Self(value * T::from_f64(9.223372036854776e18))
     }
 
-    /// Returns the value expressed in ExbibytesPerSecond (`EiB/s`).
+    /// The value in `EiB/s`.
     #[inline]
     pub fn as_exbibytes_per_second(self) -> T {
         self.0 * T::from_f64(1.0842021724855044e-19)
     }
 
-    /// Creates a [`BitRate`] from a value in OctetsPerSecond (`o/s`).
+    /// A [`BitRate`] from a value in `o/s`.
     #[inline]
     pub fn from_octets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.0))
     }
 
-    /// Returns the value expressed in OctetsPerSecond (`o/s`).
+    /// The value in `o/s`.
     #[inline]
     pub fn as_octets_per_second(self) -> T {
         self.0 * T::from_f64(0.125)
     }
 
-    /// Creates a [`BitRate`] from a value in KilooctetsPerSecond (`ko/s`).
+    /// A [`BitRate`] from a value in `ko/s`.
     #[inline]
     pub fn from_kilooctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8000.0))
     }
 
-    /// Returns the value expressed in KilooctetsPerSecond (`ko/s`).
+    /// The value in `ko/s`.
     #[inline]
     pub fn as_kilooctets_per_second(self) -> T {
         self.0 / T::from_f64(8000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in MegaoctetsPerSecond (`Mo/s`).
+    /// A [`BitRate`] from a value in `Mo/s`.
     #[inline]
     pub fn from_megaoctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8000000.0))
     }
 
-    /// Returns the value expressed in MegaoctetsPerSecond (`Mo/s`).
+    /// The value in `Mo/s`.
     #[inline]
     pub fn as_megaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8000000.0)
     }
 
-    /// Creates a [`BitRate`] from a value in GigaoctetsPerSecond (`Go/s`).
+    /// A [`BitRate`] from a value in `Go/s`.
     #[inline]
     pub fn from_gigaoctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e9))
     }
 
-    /// Returns the value expressed in GigaoctetsPerSecond (`Go/s`).
+    /// The value in `Go/s`.
     #[inline]
     pub fn as_gigaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e9)
     }
 
-    /// Creates a [`BitRate`] from a value in TeraoctetsPerSecond (`To/s`).
+    /// A [`BitRate`] from a value in `To/s`.
     #[inline]
     pub fn from_teraoctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e12))
     }
 
-    /// Returns the value expressed in TeraoctetsPerSecond (`To/s`).
+    /// The value in `To/s`.
     #[inline]
     pub fn as_teraoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e12)
     }
 
-    /// Creates a [`BitRate`] from a value in PetaoctetsPerSecond (`Po/s`).
+    /// A [`BitRate`] from a value in `Po/s`.
     #[inline]
     pub fn from_petaoctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e15))
     }
 
-    /// Returns the value expressed in PetaoctetsPerSecond (`Po/s`).
+    /// The value in `Po/s`.
     #[inline]
     pub fn as_petaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e15)
     }
 
-    /// Creates a [`BitRate`] from a value in ExaoctetsPerSecond (`Eo/s`).
+    /// A [`BitRate`] from a value in `Eo/s`.
     #[inline]
     pub fn from_exaoctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8e18))
     }
 
-    /// Returns the value expressed in ExaoctetsPerSecond (`Eo/s`).
+    /// The value in `Eo/s`.
     #[inline]
     pub fn as_exaoctets_per_second(self) -> T {
         self.0 / T::from_f64(8e18)
     }
 
-    /// Creates a [`BitRate`] from a value in KibioctetsPerSecond (`Kio/s`).
+    /// A [`BitRate`] from a value in `Kio/s`.
     #[inline]
     pub fn from_kibioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8192.0))
     }
 
-    /// Returns the value expressed in KibioctetsPerSecond (`Kio/s`).
+    /// The value in `Kio/s`.
     #[inline]
     pub fn as_kibioctets_per_second(self) -> T {
         self.0 * T::from_f64(0.0001220703125)
     }
 
-    /// Creates a [`BitRate`] from a value in MebioctetsPerSecond (`Mio/s`).
+    /// A [`BitRate`] from a value in `Mio/s`.
     #[inline]
     pub fn from_mebioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8388608.0))
     }
 
-    /// Returns the value expressed in MebioctetsPerSecond (`Mio/s`).
+    /// The value in `Mio/s`.
     #[inline]
     pub fn as_mebioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.1920928955078125e-7)
     }
 
-    /// Creates a [`BitRate`] from a value in GibioctetsPerSecond (`Gio/s`).
+    /// A [`BitRate`] from a value in `Gio/s`.
     #[inline]
     pub fn from_gibioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.589934592e9))
     }
 
-    /// Returns the value expressed in GibioctetsPerSecond (`Gio/s`).
+    /// The value in `Gio/s`.
     #[inline]
     pub fn as_gibioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.1641532182693481e-10)
     }
 
-    /// Creates a [`BitRate`] from a value in TebioctetsPerSecond (`Tio/s`).
+    /// A [`BitRate`] from a value in `Tio/s`.
     #[inline]
     pub fn from_tebioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(8.796093022208e12))
     }
 
-    /// Returns the value expressed in TebioctetsPerSecond (`Tio/s`).
+    /// The value in `Tio/s`.
     #[inline]
     pub fn as_tebioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.1368683772161603e-13)
     }
 
-    /// Creates a [`BitRate`] from a value in PebioctetsPerSecond (`Pio/s`).
+    /// A [`BitRate`] from a value in `Pio/s`.
     #[inline]
     pub fn from_pebioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(9.007199254740992e15))
     }
 
-    /// Returns the value expressed in PebioctetsPerSecond (`Pio/s`).
+    /// The value in `Pio/s`.
     #[inline]
     pub fn as_pebioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.1102230246251565e-16)
     }
 
-    /// Creates a [`BitRate`] from a value in ExbioctetsPerSecond (`Eio/s`).
+    /// A [`BitRate`] from a value in `Eio/s`.
     #[inline]
     pub fn from_exbioctets_per_second(value: T) -> Self {
         Self(value * T::from_f64(9.223372036854776e18))
     }
 
-    /// Returns the value expressed in ExbioctetsPerSecond (`Eio/s`).
+    /// The value in `Eio/s`.
     #[inline]
     pub fn as_exbioctets_per_second(self) -> T {
         self.0 * T::from_f64(1.0842021724855044e-19)
@@ -1195,9 +1194,8 @@ impl<T: Float> BitRate<T> {
 }
 
 impl BitRate<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: BitRateUnit) -> Self {
         Self(match unit {
@@ -1246,9 +1244,9 @@ impl BitRate<f64> {
 
 fixed_base!(BitRate, BitPerSecond);
 
-/// Unit markers for counting [`BitRate`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`BitRate`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::bit_rate`](crate::unit::bit_rate).
+/// Also at [`unit::bit_rate`](crate::unit::bit_rate).
 pub mod unit {
     fixed_unit!(BitPerSecond: BitRate, BitRateUnit::BitPerSecond, base BitPerSecond, 1 / 1, pi^0, from_bits_per_second, as_bits_per_second, additive);
     fixed_unit!(KilobitPerSecond: BitRate, BitRateUnit::KilobitPerSecond, base BitPerSecond, 1000 / 1, pi^0, from_kilobits_per_second, as_kilobits_per_second, additive);

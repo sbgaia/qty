@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The number of occurrences of a repeating event per unit time.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`FrequencyUnit::Hertz`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`FrequencyUnit::Hertz`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Frequency<T = f64>(T);
 
 quantity!(Frequency, FrequencyUnit, Hertz);
 
-/// Unit variants for [`Frequency`].
+/// The units of [`Frequency`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -48,7 +47,7 @@ pub enum FrequencyUnit {
 }
 
 impl FrequencyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Hertz,
         Self::Microhertz,
@@ -139,7 +138,7 @@ impl FrequencyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -154,7 +153,7 @@ impl FrequencyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -173,7 +172,7 @@ impl FrequencyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -192,8 +191,8 @@ impl FrequencyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -222,8 +221,8 @@ impl FrequencyUnit {
 impl core::str::FromStr for FrequencyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Hz" => Ok(Self::Hertz),
@@ -243,8 +242,8 @@ impl core::str::FromStr for FrequencyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Frequency<T>> for FrequencyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -284,9 +283,9 @@ impl<T: Float> crate::UnitOf<Frequency<T>> for FrequencyUnit {
 }
 
 impl<T: Float> Frequency<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`µHz`, `mHz`, `Hz`, `kHz`, `MHz`, `GHz`, `THz`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`µHz`, `mHz`, `Hz`, `kHz`, `MHz`, `GHz`, `THz`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, FrequencyUnit> {
         const SCALE: [(f64, FrequencyUnit); 7] = [
@@ -312,145 +311,145 @@ impl<T: Float> Frequency<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Frequency`] from a value in Hertz (`Hz`).
+    /// A [`Frequency`] from a value in `Hz`.
     #[inline]
     pub fn from_hertz(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Hertz (`Hz`).
+    /// The value in `Hz`.
     #[inline]
     pub fn as_hertz(self) -> T {
         self.0
     }
 
-    /// Creates a [`Frequency`] from a value in Microhertz (`µHz`).
+    /// A [`Frequency`] from a value in `µHz`.
     #[inline]
     pub fn from_microhertz(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microhertz (`µHz`).
+    /// The value in `µHz`.
     #[inline]
     pub fn as_microhertz(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Frequency`] from a value in Millihertz (`mHz`).
+    /// A [`Frequency`] from a value in `mHz`.
     #[inline]
     pub fn from_millihertz(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millihertz (`mHz`).
+    /// The value in `mHz`.
     #[inline]
     pub fn as_millihertz(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Frequency`] from a value in Kilohertz (`kHz`).
+    /// A [`Frequency`] from a value in `kHz`.
     #[inline]
     pub fn from_kilohertz(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilohertz (`kHz`).
+    /// The value in `kHz`.
     #[inline]
     pub fn as_kilohertz(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Frequency`] from a value in Megahertz (`MHz`).
+    /// A [`Frequency`] from a value in `MHz`.
     #[inline]
     pub fn from_megahertz(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megahertz (`MHz`).
+    /// The value in `MHz`.
     #[inline]
     pub fn as_megahertz(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Frequency`] from a value in Gigahertz (`GHz`).
+    /// A [`Frequency`] from a value in `GHz`.
     #[inline]
     pub fn from_gigahertz(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Gigahertz (`GHz`).
+    /// The value in `GHz`.
     #[inline]
     pub fn as_gigahertz(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`Frequency`] from a value in Terahertz (`THz`).
+    /// A [`Frequency`] from a value in `THz`.
     #[inline]
     pub fn from_terahertz(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Terahertz (`THz`).
+    /// The value in `THz`.
     #[inline]
     pub fn as_terahertz(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`Frequency`] from a value in RadiansPerSecond (`rad/s`).
+    /// A [`Frequency`] from a value in `rad/s`.
     #[inline]
     pub fn from_radians_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.15915494309189535))
     }
 
-    /// Returns the value expressed in RadiansPerSecond (`rad/s`).
+    /// The value in `rad/s`.
     #[inline]
     pub fn as_radians_per_second(self) -> T {
         self.0 / T::from_f64(0.15915494309189535)
     }
 
-    /// Creates a [`Frequency`] from a value in CyclesPerMinute (`cpm`).
+    /// A [`Frequency`] from a value in `cpm`.
     #[inline]
     pub fn from_cycles_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in CyclesPerMinute (`cpm`).
+    /// The value in `cpm`.
     #[inline]
     pub fn as_cycles_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`Frequency`] from a value in CyclesPerHour (`cph`).
+    /// A [`Frequency`] from a value in `cph`.
     #[inline]
     pub fn from_cycles_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in CyclesPerHour (`cph`).
+    /// The value in `cph`.
     #[inline]
     pub fn as_cycles_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`Frequency`] from a value in BeatsPerMinute (`bpm`).
+    /// A [`Frequency`] from a value in `bpm`.
     #[inline]
     pub fn from_beats_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in BeatsPerMinute (`bpm`).
+    /// The value in `bpm`.
     #[inline]
     pub fn as_beats_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`Frequency`] from a value in PerSecond (`s⁻¹`).
+    /// A [`Frequency`] from a value in `s⁻¹`.
     #[inline]
     pub fn from_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PerSecond (`s⁻¹`).
+    /// The value in `s⁻¹`.
     #[inline]
     pub fn as_per_second(self) -> T {
         self.0
@@ -458,9 +457,8 @@ impl<T: Float> Frequency<T> {
 }
 
 impl Frequency<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: FrequencyUnit) -> Self {
         Self(match unit {
@@ -482,9 +480,9 @@ impl Frequency<f64> {
 
 fixed_base!(Frequency, Hertz);
 
-/// Unit markers for counting [`Frequency`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Frequency`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::frequency`](crate::unit::frequency).
+/// Also at [`unit::frequency`](crate::unit::frequency).
 pub mod unit {
     fixed_unit!(Hertz: Frequency, FrequencyUnit::Hertz, base Hertz, 1 / 1, pi^0, from_hertz, as_hertz, additive);
     fixed_unit!(Microhertz: Frequency, FrequencyUnit::Microhertz, base Hertz, 1 / 1000000, pi^0, from_microhertz, as_microhertz, additive);

@@ -12,12 +12,11 @@ use crate::TemperatureDelta;
 
 /// A temperature is a numerical measure of hot or cold. Its measurement is by detection of heat radiation or particle velocity or kinetic energy, or by the bulk behavior of a thermometric material. It may be calibrated in any of various temperature scales, Celsius, Fahrenheit, Kelvin, etc. The fundamental physical definition of temperature is provided by thermodynamics.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureUnit::Kelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`TemperatureUnit::Kelvin`], with the same layout as `T`.
 ///
-/// A Temperature is a *point on a scale*, not an amount: two of them cannot
-/// be added (20 °C + 20 °C is not 40 °C), negated or scaled. Their
-/// difference is a [`TemperatureDelta`], which can be added back:
+/// A Temperature is a point on a scale, not an amount, so two of them can't
+/// be added (20 °C + 20 °C is not 40 °C), negated or scaled. Subtracting
+/// one from another gives a [`TemperatureDelta`], which can be added back:
 ///
 /// ```rust
 /// use qty::*;
@@ -46,9 +45,9 @@ pub struct Temperature<T = f64>(T);
 
 point_quantity!(Temperature, TemperatureUnit, Kelvin, TemperatureDelta);
 
-/// Unit variants for [`Temperature`].
+/// The units of [`Temperature`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -66,7 +65,7 @@ pub enum TemperatureUnit {
 }
 
 impl TemperatureUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Kelvin,
         Self::DegreeCelsius,
@@ -143,7 +142,7 @@ impl TemperatureUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -158,7 +157,7 @@ impl TemperatureUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -175,7 +174,7 @@ impl TemperatureUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -192,8 +191,8 @@ impl TemperatureUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -226,8 +225,8 @@ impl TemperatureUnit {
 impl core::str::FromStr for TemperatureUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "K" => Ok(Self::Kelvin),
@@ -245,8 +244,8 @@ impl core::str::FromStr for TemperatureUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Temperature<T>> for TemperatureUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -298,129 +297,129 @@ impl<T: Float> crate::UnitOf<Temperature<T>> for TemperatureUnit {
 }
 
 impl<T: Float> Temperature<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`K`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`K`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, TemperatureUnit> {
         self.in_unit(TemperatureUnit::Kelvin)
     }
 
-    /// Creates a [`Temperature`] from a value in Kelvins (`K`).
+    /// A [`Temperature`] from a value in `K`.
     #[inline]
     pub fn from_kelvins(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Kelvins (`K`).
+    /// The value in `K`.
     #[inline]
     pub fn as_kelvins(self) -> T {
         self.0
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesCelsius (`°C`).
+    /// A [`Temperature`] from a value in `°C`.
     #[inline]
     pub fn from_degrees_celsius(value: T) -> Self {
         Self(value + T::from_f64(273.15))
     }
 
-    /// Returns the value expressed in DegreesCelsius (`°C`).
+    /// The value in `°C`.
     #[inline]
     pub fn as_degrees_celsius(self) -> T {
         self.0 - T::from_f64(273.15)
     }
 
-    /// Creates a [`Temperature`] from a value in MillidegreesCelsius (`m°C`).
+    /// A [`Temperature`] from a value in `m°C`.
     #[inline]
     pub fn from_millidegrees_celsius(value: T) -> Self {
         Self(value / T::from_f64(1000.0) + T::from_f64(273.15))
     }
 
-    /// Returns the value expressed in MillidegreesCelsius (`m°C`).
+    /// The value in `m°C`.
     #[inline]
     pub fn as_millidegrees_celsius(self) -> T {
         (self.0 - T::from_f64(273.15)) * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesDelisle (`°De`).
+    /// A [`Temperature`] from a value in `°De`.
     #[inline]
     pub fn from_degrees_delisle(value: T) -> Self {
         Self(value / T::from_f64(-1.5) + T::from_f64(373.15))
     }
 
-    /// Returns the value expressed in DegreesDelisle (`°De`).
+    /// The value in `°De`.
     #[inline]
     pub fn as_degrees_delisle(self) -> T {
         (self.0 - T::from_f64(373.15)) * T::from_f64(-1.5)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesFahrenheit (`°F`).
+    /// A [`Temperature`] from a value in `°F`.
     #[inline]
     pub fn from_degrees_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(0.5555555555555556) + T::from_f64(255.37222222222223))
     }
 
-    /// Returns the value expressed in DegreesFahrenheit (`°F`).
+    /// The value in `°F`.
     #[inline]
     pub fn as_degrees_fahrenheit(self) -> T {
         (self.0 - T::from_f64(255.37222222222223)) / T::from_f64(0.5555555555555556)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesNewton (`°N`).
+    /// A [`Temperature`] from a value in `°N`.
     #[inline]
     pub fn from_degrees_newton(value: T) -> Self {
         Self(value * T::from_f64(3.0303030303030303) + T::from_f64(273.15))
     }
 
-    /// Returns the value expressed in DegreesNewton (`°N`).
+    /// The value in `°N`.
     #[inline]
     pub fn as_degrees_newton(self) -> T {
         (self.0 - T::from_f64(273.15)) / T::from_f64(3.0303030303030303)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesRankine (`°R`).
+    /// A [`Temperature`] from a value in `°R`.
     #[inline]
     pub fn from_degrees_rankine(value: T) -> Self {
         Self(value * T::from_f64(0.5555555555555556))
     }
 
-    /// Returns the value expressed in DegreesRankine (`°R`).
+    /// The value in `°R`.
     #[inline]
     pub fn as_degrees_rankine(self) -> T {
         self.0 / T::from_f64(0.5555555555555556)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesReaumur (`°Ré`).
+    /// A [`Temperature`] from a value in `°Ré`.
     #[inline]
     pub fn from_degrees_reaumur(value: T) -> Self {
         Self(value * T::from_f64(1.25) + T::from_f64(273.15))
     }
 
-    /// Returns the value expressed in DegreesReaumur (`°Ré`).
+    /// The value in `°Ré`.
     #[inline]
     pub fn as_degrees_reaumur(self) -> T {
         (self.0 - T::from_f64(273.15)) / T::from_f64(1.25)
     }
 
-    /// Creates a [`Temperature`] from a value in DegreesRoemer (`°Rø`).
+    /// A [`Temperature`] from a value in `°Rø`.
     #[inline]
     pub fn from_degrees_roemer(value: T) -> Self {
         Self(value * T::from_f64(1.9047619047619047) + T::from_f64(258.8642857142857))
     }
 
-    /// Returns the value expressed in DegreesRoemer (`°Rø`).
+    /// The value in `°Rø`.
     #[inline]
     pub fn as_degrees_roemer(self) -> T {
         (self.0 - T::from_f64(258.8642857142857)) / T::from_f64(1.9047619047619047)
     }
 
-    /// Creates a [`Temperature`] from a value in SolarTemperatures (`T⊙`).
+    /// A [`Temperature`] from a value in `T⊙`.
     #[inline]
     pub fn from_solar_temperatures(value: T) -> Self {
         Self(value * T::from_f64(5778.0))
     }
 
-    /// Returns the value expressed in SolarTemperatures (`T⊙`).
+    /// The value in `T⊙`.
     #[inline]
     pub fn as_solar_temperatures(self) -> T {
         self.0 / T::from_f64(5778.0)
@@ -428,9 +427,8 @@ impl<T: Float> Temperature<T> {
 }
 
 impl Temperature<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: TemperatureUnit) -> Self {
         Self(match unit {
@@ -450,9 +448,9 @@ impl Temperature<f64> {
 
 fixed_base!(Temperature, Kelvin);
 
-/// Unit markers for counting [`Temperature`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Temperature`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature`](crate::unit::temperature).
+/// Also at [`unit::temperature`](crate::unit::temperature).
 pub mod unit {
     fixed_unit!(Kelvin: Temperature, TemperatureUnit::Kelvin, base Kelvin, 1 / 1, pi^0, from_kelvins, as_kelvins, point crate::units::temperature_delta::unit::Kelvin);
     fixed_unit!(DegreeCelsius: Temperature, TemperatureUnit::DegreeCelsius, base Kelvin, 1 / 1, pi^0, from_degrees_celsius, as_degrees_celsius, offset(5463, 20), point crate::units::temperature_delta::unit::DegreeCelsius);

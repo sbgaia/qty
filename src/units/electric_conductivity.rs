@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Electrical conductivity or specific conductance is the reciprocal of electrical resistivity, and measures a material's ability to conduct an electric current.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricConductivityUnit::SiemensPerMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricConductivityUnit::SiemensPerMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     SiemensPerMeter
 );
 
-/// Unit variants for [`ElectricConductivity`].
+/// The units of [`ElectricConductivity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -45,7 +44,7 @@ pub enum ElectricConductivityUnit {
 }
 
 impl ElectricConductivityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::SiemensPerMeter,
         Self::SiemensPerInch,
@@ -94,7 +93,7 @@ impl ElectricConductivityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -109,7 +108,7 @@ impl ElectricConductivityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -122,7 +121,7 @@ impl ElectricConductivityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -135,8 +134,8 @@ impl ElectricConductivityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -155,8 +154,8 @@ impl ElectricConductivityUnit {
 impl core::str::FromStr for ElectricConductivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "S/m" => Ok(Self::SiemensPerMeter),
@@ -170,8 +169,8 @@ impl core::str::FromStr for ElectricConductivityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -199,81 +198,81 @@ impl<T: Float> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUn
 }
 
 impl<T: Float> ElectricConductivity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`S/m`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`S/m`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricConductivityUnit> {
         self.in_unit(ElectricConductivityUnit::SiemensPerMeter)
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in SiemensPerMeter (`S/m`).
+    /// A [`ElectricConductivity`] from a value in `S/m`.
     #[inline]
     pub fn from_siemens_per_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in SiemensPerMeter (`S/m`).
+    /// The value in `S/m`.
     #[inline]
     pub fn as_siemens_per_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in SiemensPerInch (`S/in`).
+    /// A [`ElectricConductivity`] from a value in `S/in`.
     #[inline]
     pub fn from_siemens_per_inch(value: T) -> Self {
         Self(value * T::from_f64(39.37007874015748))
     }
 
-    /// Returns the value expressed in SiemensPerInch (`S/in`).
+    /// The value in `S/in`.
     #[inline]
     pub fn as_siemens_per_inch(self) -> T {
         self.0 / T::from_f64(39.37007874015748)
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in SiemensPerFoot (`S/ft`).
+    /// A [`ElectricConductivity`] from a value in `S/ft`.
     #[inline]
     pub fn from_siemens_per_foot(value: T) -> Self {
         Self(value * T::from_f64(3.2808398950131235))
     }
 
-    /// Returns the value expressed in SiemensPerFoot (`S/ft`).
+    /// The value in `S/ft`.
     #[inline]
     pub fn as_siemens_per_foot(self) -> T {
         self.0 / T::from_f64(3.2808398950131235)
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in SiemensPerCentimeter (`S/cm`).
+    /// A [`ElectricConductivity`] from a value in `S/cm`.
     #[inline]
     pub fn from_siemens_per_centimeter(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in SiemensPerCentimeter (`S/cm`).
+    /// The value in `S/cm`.
     #[inline]
     pub fn as_siemens_per_centimeter(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in MicrosiemensPerCentimeter (`µS/cm`).
+    /// A [`ElectricConductivity`] from a value in `µS/cm`.
     #[inline]
     pub fn from_microsiemens_per_centimeter(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in MicrosiemensPerCentimeter (`µS/cm`).
+    /// The value in `µS/cm`.
     #[inline]
     pub fn as_microsiemens_per_centimeter(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`ElectricConductivity`] from a value in MillisiemensPerCentimeter (`mS/cm`).
+    /// A [`ElectricConductivity`] from a value in `mS/cm`.
     #[inline]
     pub fn from_millisiemens_per_centimeter(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in MillisiemensPerCentimeter (`mS/cm`).
+    /// The value in `mS/cm`.
     #[inline]
     pub fn as_millisiemens_per_centimeter(self) -> T {
         self.0 * T::from_f64(10.0)
@@ -281,9 +280,8 @@ impl<T: Float> ElectricConductivity<T> {
 }
 
 impl ElectricConductivity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricConductivityUnit) -> Self {
         Self(match unit {
@@ -299,9 +297,9 @@ impl ElectricConductivity<f64> {
 
 fixed_base!(ElectricConductivity, SiemensPerMeter);
 
-/// Unit markers for counting [`ElectricConductivity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricConductivity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_conductivity`](crate::unit::electric_conductivity).
+/// Also at [`unit::electric_conductivity`](crate::unit::electric_conductivity).
 pub mod unit {
     fixed_unit!(SiemensPerMeter: ElectricConductivity, ElectricConductivityUnit::SiemensPerMeter, base SiemensPerMeter, 1 / 1, pi^0, from_siemens_per_meter, as_siemens_per_meter, additive);
     fixed_unit!(SiemensPerInch: ElectricConductivity, ElectricConductivityUnit::SiemensPerInch, base SiemensPerMeter, 5000 / 127, pi^0, from_siemens_per_inch, as_siemens_per_inch, additive);

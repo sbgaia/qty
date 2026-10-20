@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A unit that represents a fractional change in size in response to a change in temperature.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`CoefficientOfThermalExpansionUnit::PerKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`CoefficientOfThermalExpansionUnit::PerKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     PerKelvin
 );
 
-/// Unit variants for [`CoefficientOfThermalExpansion`].
+/// The units of [`CoefficientOfThermalExpansion`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -45,7 +44,7 @@ pub enum CoefficientOfThermalExpansionUnit {
 }
 
 impl CoefficientOfThermalExpansionUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::PerKelvin,
         Self::PerDegreeCelsius,
@@ -94,7 +93,7 @@ impl CoefficientOfThermalExpansionUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -109,7 +108,7 @@ impl CoefficientOfThermalExpansionUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -122,7 +121,7 @@ impl CoefficientOfThermalExpansionUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -135,8 +134,8 @@ impl CoefficientOfThermalExpansionUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -155,8 +154,8 @@ impl CoefficientOfThermalExpansionUnit {
 impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "K⁻¹" => Ok(Self::PerKelvin),
@@ -170,8 +169,8 @@ impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<CoefficientOfThermalExpansion<T>>
     for CoefficientOfThermalExpansionUnit
 {
@@ -209,81 +208,81 @@ impl<T: Float> crate::UnitOf<CoefficientOfThermalExpansion<T>>
 }
 
 impl<T: Float> CoefficientOfThermalExpansion<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`K⁻¹`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`K⁻¹`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, CoefficientOfThermalExpansionUnit> {
         self.in_unit(CoefficientOfThermalExpansionUnit::PerKelvin)
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerKelvin (`K⁻¹`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `K⁻¹`.
     #[inline]
     pub fn from_per_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PerKelvin (`K⁻¹`).
+    /// The value in `K⁻¹`.
     #[inline]
     pub fn as_per_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerDegreeCelsius (`°C⁻¹`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `°C⁻¹`.
     #[inline]
     pub fn from_per_degree_celsius(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PerDegreeCelsius (`°C⁻¹`).
+    /// The value in `°C⁻¹`.
     #[inline]
     pub fn as_per_degree_celsius(self) -> T {
         self.0
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PerDegreeFahrenheit (`°F⁻¹`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `°F⁻¹`.
     #[inline]
     pub fn from_per_degree_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(1.8))
     }
 
-    /// Returns the value expressed in PerDegreeFahrenheit (`°F⁻¹`).
+    /// The value in `°F⁻¹`.
     #[inline]
     pub fn as_per_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(1.8)
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerKelvin (`ppm/K`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/K`.
     #[inline]
     pub fn from_ppm_per_kelvin(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in PpmPerKelvin (`ppm/K`).
+    /// The value in `ppm/K`.
     #[inline]
     pub fn as_ppm_per_kelvin(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerDegreeCelsius (`ppm/°C`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/°C`.
     #[inline]
     pub fn from_ppm_per_degree_celsius(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in PpmPerDegreeCelsius (`ppm/°C`).
+    /// The value in `ppm/°C`.
     #[inline]
     pub fn as_ppm_per_degree_celsius(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`CoefficientOfThermalExpansion`] from a value in PpmPerDegreeFahrenheit (`ppm/°F`).
+    /// A [`CoefficientOfThermalExpansion`] from a value in `ppm/°F`.
     #[inline]
     pub fn from_ppm_per_degree_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(1.8e-6))
     }
 
-    /// Returns the value expressed in PpmPerDegreeFahrenheit (`ppm/°F`).
+    /// The value in `ppm/°F`.
     #[inline]
     pub fn as_ppm_per_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(1.8e-6)
@@ -291,9 +290,8 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
 }
 
 impl CoefficientOfThermalExpansion<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: CoefficientOfThermalExpansionUnit) -> Self {
         Self(match unit {
@@ -309,9 +307,9 @@ impl CoefficientOfThermalExpansion<f64> {
 
 fixed_base!(CoefficientOfThermalExpansion, PerKelvin);
 
-/// Unit markers for counting [`CoefficientOfThermalExpansion`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`CoefficientOfThermalExpansion`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion).
+/// Also at [`unit::coefficient_of_thermal_expansion`](crate::unit::coefficient_of_thermal_expansion).
 pub mod unit {
     fixed_unit!(PerKelvin: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerKelvin, base PerKelvin, 1 / 1, pi^0, from_per_kelvin, as_per_kelvin, additive);
     fixed_unit!(PerDegreeCelsius: CoefficientOfThermalExpansion, CoefficientOfThermalExpansionUnit::PerDegreeCelsius, base PerKelvin, 1 / 1, pi^0, from_per_degree_celsius, as_per_degree_celsius, additive);

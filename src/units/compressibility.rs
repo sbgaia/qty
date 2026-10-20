@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`CompressibilityUnit::InversePascal`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`CompressibilityUnit::InversePascal`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,9 +22,9 @@ pub struct Compressibility<T = f64>(T);
 
 quantity!(Compressibility, CompressibilityUnit, InversePascal);
 
-/// Unit variants for [`Compressibility`].
+/// The units of [`Compressibility`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -40,7 +39,7 @@ pub enum CompressibilityUnit {
 }
 
 impl CompressibilityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::InversePascal,
         Self::InverseKilopascal,
@@ -96,7 +95,7 @@ impl CompressibilityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -111,7 +110,7 @@ impl CompressibilityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -125,7 +124,7 @@ impl CompressibilityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -139,8 +138,8 @@ impl CompressibilityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -167,8 +166,8 @@ impl CompressibilityUnit {
 impl core::str::FromStr for CompressibilityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa⁻¹" => Ok(Self::InversePascal),
@@ -190,8 +189,8 @@ impl core::str::FromStr for CompressibilityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -225,93 +224,93 @@ impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
 }
 
 impl<T: Float> Compressibility<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`Pa⁻¹`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`Pa⁻¹`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, CompressibilityUnit> {
         self.in_unit(CompressibilityUnit::InversePascal)
     }
 
-    /// Creates a [`Compressibility`] from a value in InversePascals (`Pa⁻¹`).
+    /// A [`Compressibility`] from a value in `Pa⁻¹`.
     #[inline]
     pub fn from_inverse_pascals(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in InversePascals (`Pa⁻¹`).
+    /// The value in `Pa⁻¹`.
     #[inline]
     pub fn as_inverse_pascals(self) -> T {
         self.0
     }
 
-    /// Creates a [`Compressibility`] from a value in InverseKilopascals (`kPa⁻¹`).
+    /// A [`Compressibility`] from a value in `kPa⁻¹`.
     #[inline]
     pub fn from_inverse_kilopascals(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in InverseKilopascals (`kPa⁻¹`).
+    /// The value in `kPa⁻¹`.
     #[inline]
     pub fn as_inverse_kilopascals(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Compressibility`] from a value in InverseMegapascals (`MPa⁻¹`).
+    /// A [`Compressibility`] from a value in `MPa⁻¹`.
     #[inline]
     pub fn from_inverse_megapascals(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in InverseMegapascals (`MPa⁻¹`).
+    /// The value in `MPa⁻¹`.
     #[inline]
     pub fn as_inverse_megapascals(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Compressibility`] from a value in InverseAtmospheres (`atm⁻¹`).
+    /// A [`Compressibility`] from a value in `atm⁻¹`.
     #[inline]
     pub fn from_inverse_atmospheres(value: T) -> Self {
         Self(value / T::from_f64(101325.0))
     }
 
-    /// Returns the value expressed in InverseAtmospheres (`atm⁻¹`).
+    /// The value in `atm⁻¹`.
     #[inline]
     pub fn as_inverse_atmospheres(self) -> T {
         self.0 * T::from_f64(101325.0)
     }
 
-    /// Creates a [`Compressibility`] from a value in InverseMillibars (`mbar⁻¹`).
+    /// A [`Compressibility`] from a value in `mbar⁻¹`.
     #[inline]
     pub fn from_inverse_millibars(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in InverseMillibars (`mbar⁻¹`).
+    /// The value in `mbar⁻¹`.
     #[inline]
     pub fn as_inverse_millibars(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Compressibility`] from a value in InverseBars (`bar⁻¹`).
+    /// A [`Compressibility`] from a value in `bar⁻¹`.
     #[inline]
     pub fn from_inverse_bars(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in InverseBars (`bar⁻¹`).
+    /// The value in `bar⁻¹`.
     #[inline]
     pub fn as_inverse_bars(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`Compressibility`] from a value in InversePoundsForcePerSquareInch (`psi⁻¹`).
+    /// A [`Compressibility`] from a value in `psi⁻¹`.
     #[inline]
     pub fn from_inverse_pounds_force_per_square_inch(value: T) -> Self {
         Self(value * T::from_f64(0.0001450377377302092))
     }
 
-    /// Returns the value expressed in InversePoundsForcePerSquareInch (`psi⁻¹`).
+    /// The value in `psi⁻¹`.
     #[inline]
     pub fn as_inverse_pounds_force_per_square_inch(self) -> T {
         self.0 / T::from_f64(0.0001450377377302092)
@@ -319,9 +318,8 @@ impl<T: Float> Compressibility<T> {
 }
 
 impl Compressibility<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: CompressibilityUnit) -> Self {
         Self(match unit {
@@ -338,9 +336,9 @@ impl Compressibility<f64> {
 
 fixed_base!(Compressibility, InversePascal);
 
-/// Unit markers for counting [`Compressibility`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Compressibility`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::compressibility`](crate::unit::compressibility).
+/// Also at [`unit::compressibility`](crate::unit::compressibility).
 pub mod unit {
     fixed_unit!(InversePascal: Compressibility, CompressibilityUnit::InversePascal, base InversePascal, 1 / 1, pi^0, from_inverse_pascals, as_inverse_pascals, additive);
     fixed_unit!(InverseKilopascal: Compressibility, CompressibilityUnit::InverseKilopascal, base InversePascal, 1 / 1000, pi^0, from_inverse_kilopascals, as_inverse_kilopascals, additive);

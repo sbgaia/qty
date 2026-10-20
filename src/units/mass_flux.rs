@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Mass flux is the mass flow rate per unit area.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MassFluxUnit::KilogramPerSecondPerSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MassFluxUnit::KilogramPerSecondPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MassFlux<T = f64>(T);
 
 quantity!(MassFlux, MassFluxUnit, KilogramPerSecondPerSquareMeter);
 
-/// Unit variants for [`MassFlux`].
+/// The units of [`MassFlux`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -47,7 +46,7 @@ pub enum MassFluxUnit {
 }
 
 impl MassFluxUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::GramPerSecondPerSquareMeter,
         Self::KilogramPerSecondPerSquareMeter,
@@ -138,7 +137,7 @@ impl MassFluxUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -153,7 +152,7 @@ impl MassFluxUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -172,7 +171,7 @@ impl MassFluxUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -191,8 +190,8 @@ impl MassFluxUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -237,8 +236,8 @@ impl MassFluxUnit {
 impl core::str::FromStr for MassFluxUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g·s⁻¹·m⁻²" => Ok(Self::GramPerSecondPerSquareMeter),
@@ -258,8 +257,8 @@ impl core::str::FromStr for MassFluxUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -307,9 +306,9 @@ impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
 }
 
 impl<T: Float> MassFlux<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`g·s⁻¹·m⁻²`, `kg·s⁻¹·m⁻²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`g·s⁻¹·m⁻²`, `kg·s⁻¹·m⁻²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MassFluxUnit> {
         const SCALE: [(f64, MassFluxUnit); 2] = [
@@ -330,145 +329,145 @@ impl<T: Float> MassFlux<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
+    /// A [`MassFlux`] from a value in `g·s⁻¹·m⁻²`.
     #[inline]
     pub fn from_grams_per_second_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in GramsPerSecondPerSquareMeter (`g·s⁻¹·m⁻²`).
+    /// The value in `g·s⁻¹·m⁻²`.
     #[inline]
     pub fn as_grams_per_second_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
+    /// A [`MassFlux`] from a value in `kg·s⁻¹·m⁻²`.
     #[inline]
     pub fn from_kilograms_per_second_per_square_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilogramsPerSecondPerSquareMeter (`kg·s⁻¹·m⁻²`).
+    /// The value in `kg·s⁻¹·m⁻²`.
     #[inline]
     pub fn as_kilograms_per_second_per_square_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
+    /// A [`MassFlux`] from a value in `g·s⁻¹·cm⁻²`.
     #[inline]
     pub fn from_grams_per_second_per_square_centimeter(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in GramsPerSecondPerSquareCentimeter (`g·s⁻¹·cm⁻²`).
+    /// The value in `g·s⁻¹·cm⁻²`.
     #[inline]
     pub fn as_grams_per_second_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
+    /// A [`MassFlux`] from a value in `kg·s⁻¹·cm⁻²`.
     #[inline]
     pub fn from_kilograms_per_second_per_square_centimeter(value: T) -> Self {
         Self(value * T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in KilogramsPerSecondPerSquareCentimeter (`kg·s⁻¹·cm⁻²`).
+    /// The value in `kg·s⁻¹·cm⁻²`.
     #[inline]
     pub fn as_kilograms_per_second_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
+    /// A [`MassFlux`] from a value in `g·s⁻¹·mm⁻²`.
     #[inline]
     pub fn from_grams_per_second_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in GramsPerSecondPerSquareMillimeter (`g·s⁻¹·mm⁻²`).
+    /// The value in `g·s⁻¹·mm⁻²`.
     #[inline]
     pub fn as_grams_per_second_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
+    /// A [`MassFlux`] from a value in `kg·s⁻¹·mm⁻²`.
     #[inline]
     pub fn from_kilograms_per_second_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in KilogramsPerSecondPerSquareMillimeter (`kg·s⁻¹·mm⁻²`).
+    /// The value in `kg·s⁻¹·mm⁻²`.
     #[inline]
     pub fn as_kilograms_per_second_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
+    /// A [`MassFlux`] from a value in `g·h⁻¹·m⁻²`.
     #[inline]
     pub fn from_grams_per_hour_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(3600000.0))
     }
 
-    /// Returns the value expressed in GramsPerHourPerSquareMeter (`g·h⁻¹·m⁻²`).
+    /// The value in `g·h⁻¹·m⁻²`.
     #[inline]
     pub fn as_grams_per_hour_per_square_meter(self) -> T {
         self.0 * T::from_f64(3600000.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
+    /// A [`MassFlux`] from a value in `kg·h⁻¹·m⁻²`.
     #[inline]
     pub fn from_kilograms_per_hour_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in KilogramsPerHourPerSquareMeter (`kg·h⁻¹·m⁻²`).
+    /// The value in `kg·h⁻¹·m⁻²`.
     #[inline]
     pub fn as_kilograms_per_hour_per_square_meter(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
+    /// A [`MassFlux`] from a value in `g·h⁻¹·cm⁻²`.
     #[inline]
     pub fn from_grams_per_hour_per_square_centimeter(value: T) -> Self {
         Self(value / T::from_f64(360.0))
     }
 
-    /// Returns the value expressed in GramsPerHourPerSquareCentimeter (`g·h⁻¹·cm⁻²`).
+    /// The value in `g·h⁻¹·cm⁻²`.
     #[inline]
     pub fn as_grams_per_hour_per_square_centimeter(self) -> T {
         self.0 * T::from_f64(360.0)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
+    /// A [`MassFlux`] from a value in `kg·h⁻¹·cm⁻²`.
     #[inline]
     pub fn from_kilograms_per_hour_per_square_centimeter(value: T) -> Self {
         Self(value * T::from_f64(2.7777777777777777))
     }
 
-    /// Returns the value expressed in KilogramsPerHourPerSquareCentimeter (`kg·h⁻¹·cm⁻²`).
+    /// The value in `kg·h⁻¹·cm⁻²`.
     #[inline]
     pub fn as_kilograms_per_hour_per_square_centimeter(self) -> T {
         self.0 / T::from_f64(2.7777777777777777)
     }
 
-    /// Creates a [`MassFlux`] from a value in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
+    /// A [`MassFlux`] from a value in `g·h⁻¹·mm⁻²`.
     #[inline]
     pub fn from_grams_per_hour_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(0.2777777777777778))
     }
 
-    /// Returns the value expressed in GramsPerHourPerSquareMillimeter (`g·h⁻¹·mm⁻²`).
+    /// The value in `g·h⁻¹·mm⁻²`.
     #[inline]
     pub fn as_grams_per_hour_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(0.2777777777777778)
     }
 
-    /// Creates a [`MassFlux`] from a value in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
+    /// A [`MassFlux`] from a value in `kg·h⁻¹·mm⁻²`.
     #[inline]
     pub fn from_kilograms_per_hour_per_square_millimeter(value: T) -> Self {
         Self(value * T::from_f64(277.77777777777777))
     }
 
-    /// Returns the value expressed in KilogramsPerHourPerSquareMillimeter (`kg·h⁻¹·mm⁻²`).
+    /// The value in `kg·h⁻¹·mm⁻²`.
     #[inline]
     pub fn as_kilograms_per_hour_per_square_millimeter(self) -> T {
         self.0 / T::from_f64(277.77777777777777)
@@ -476,9 +475,8 @@ impl<T: Float> MassFlux<T> {
 }
 
 impl MassFlux<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MassFluxUnit) -> Self {
         Self(match unit {
@@ -500,9 +498,9 @@ impl MassFlux<f64> {
 
 fixed_base!(MassFlux, KilogramPerSecondPerSquareMeter);
 
-/// Unit markers for counting [`MassFlux`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MassFlux`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::mass_flux`](crate::unit::mass_flux).
+/// Also at [`unit::mass_flux`](crate::unit::mass_flux).
 pub mod unit {
     fixed_unit!(GramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::GramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1000, pi^0, from_grams_per_second_per_square_meter, as_grams_per_second_per_square_meter, additive);
     fixed_unit!(KilogramPerSecondPerSquareMeter: MassFlux, MassFluxUnit::KilogramPerSecondPerSquareMeter, base KilogramPerSecondPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_second_per_square_meter, as_kilograms_per_second_per_square_meter, additive);

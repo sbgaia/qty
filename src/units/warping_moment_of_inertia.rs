@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A geometric property of an area that is used to determine the warping stress.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`WarpingMomentOfInertiaUnit::MeterToTheSixth`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`WarpingMomentOfInertiaUnit::MeterToTheSixth`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     MeterToTheSixth
 );
 
-/// Unit variants for [`WarpingMomentOfInertia`].
+/// The units of [`WarpingMomentOfInertia`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -45,7 +44,7 @@ pub enum WarpingMomentOfInertiaUnit {
 }
 
 impl WarpingMomentOfInertiaUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MeterToTheSixth,
         Self::DecimeterToTheSixth,
@@ -94,7 +93,7 @@ impl WarpingMomentOfInertiaUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -110,7 +109,7 @@ impl WarpingMomentOfInertiaUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -123,7 +122,7 @@ impl WarpingMomentOfInertiaUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -136,8 +135,8 @@ impl WarpingMomentOfInertiaUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -162,8 +161,8 @@ impl WarpingMomentOfInertiaUnit {
 impl core::str::FromStr for WarpingMomentOfInertiaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁶" => Ok(Self::MeterToTheSixth),
@@ -177,8 +176,8 @@ impl core::str::FromStr for WarpingMomentOfInertiaUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInertiaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -206,81 +205,81 @@ impl<T: Float> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInert
 }
 
 impl<T: Float> WarpingMomentOfInertia<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m⁶`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m⁶`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, WarpingMomentOfInertiaUnit> {
         self.in_unit(WarpingMomentOfInertiaUnit::MeterToTheSixth)
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in MetersToTheSixth (`m⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `m⁶`.
     #[inline]
     pub fn from_meters_to_the_sixth(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MetersToTheSixth (`m⁶`).
+    /// The value in `m⁶`.
     #[inline]
     pub fn as_meters_to_the_sixth(self) -> T {
         self.0
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in DecimetersToTheSixth (`dm⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `dm⁶`.
     #[inline]
     pub fn from_decimeters_to_the_sixth(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in DecimetersToTheSixth (`dm⁶`).
+    /// The value in `dm⁶`.
     #[inline]
     pub fn as_decimeters_to_the_sixth(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in CentimetersToTheSixth (`cm⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `cm⁶`.
     #[inline]
     pub fn from_centimeters_to_the_sixth(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in CentimetersToTheSixth (`cm⁶`).
+    /// The value in `cm⁶`.
     #[inline]
     pub fn as_centimeters_to_the_sixth(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in MillimetersToTheSixth (`mm⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `mm⁶`.
     #[inline]
     pub fn from_millimeters_to_the_sixth(value: T) -> Self {
         Self(value / T::from_f64(1e18))
     }
 
-    /// Returns the value expressed in MillimetersToTheSixth (`mm⁶`).
+    /// The value in `mm⁶`.
     #[inline]
     pub fn as_millimeters_to_the_sixth(self) -> T {
         self.0 * T::from_f64(1e18)
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in FeetToTheSixth (`ft⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `ft⁶`.
     #[inline]
     pub fn from_feet_to_the_sixth(value: T) -> Self {
         Self(value * T::from_f64(0.000801843800914862))
     }
 
-    /// Returns the value expressed in FeetToTheSixth (`ft⁶`).
+    /// The value in `ft⁶`.
     #[inline]
     pub fn as_feet_to_the_sixth(self) -> T {
         self.0 / T::from_f64(0.000801843800914862)
     }
 
-    /// Creates a [`WarpingMomentOfInertia`] from a value in InchesToTheSixth (`in⁶`).
+    /// A [`WarpingMomentOfInertia`] from a value in `in⁶`.
     #[inline]
     pub fn from_inches_to_the_sixth(value: T) -> Self {
         Self(value * T::from_f64(2.68535866540096e-10))
     }
 
-    /// Returns the value expressed in InchesToTheSixth (`in⁶`).
+    /// The value in `in⁶`.
     #[inline]
     pub fn as_inches_to_the_sixth(self) -> T {
         self.0 / T::from_f64(2.68535866540096e-10)
@@ -288,9 +287,8 @@ impl<T: Float> WarpingMomentOfInertia<T> {
 }
 
 impl WarpingMomentOfInertia<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: WarpingMomentOfInertiaUnit) -> Self {
         Self(match unit {
@@ -306,9 +304,9 @@ impl WarpingMomentOfInertia<f64> {
 
 fixed_base!(WarpingMomentOfInertia, MeterToTheSixth);
 
-/// Unit markers for counting [`WarpingMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`WarpingMomentOfInertia`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia).
+/// Also at [`unit::warping_moment_of_inertia`](crate::unit::warping_moment_of_inertia).
 pub mod unit {
     fixed_unit!(MeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::MeterToTheSixth, base MeterToTheSixth, 1 / 1, pi^0, from_meters_to_the_sixth, as_meters_to_the_sixth, additive);
     fixed_unit!(DecimeterToTheSixth: WarpingMomentOfInertia, WarpingMomentOfInertiaUnit::DecimeterToTheSixth, base MeterToTheSixth, 1 / 1000000, pi^0, from_decimeters_to_the_sixth, as_decimeters_to_the_sixth, additive);

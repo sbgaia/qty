@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In classical electromagnetism, the electric potential (a scalar quantity denoted by Φ, ΦE or V and also called the electric field potential or the electrostatic potential) at a point is the amount of electric potential energy that a unitary point charge would have when located at that point.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricPotentialUnit::Volt`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricPotentialUnit::Volt`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct ElectricPotential<T = f64>(T);
 
 quantity!(ElectricPotential, ElectricPotentialUnit, Volt);
 
-/// Unit variants for [`ElectricPotential`].
+/// The units of [`ElectricPotential`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -41,7 +40,7 @@ pub enum ElectricPotentialUnit {
 }
 
 impl ElectricPotentialUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Volt,
         Self::Nanovolt,
@@ -90,7 +89,7 @@ impl ElectricPotentialUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -105,7 +104,7 @@ impl ElectricPotentialUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -118,7 +117,7 @@ impl ElectricPotentialUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -131,8 +130,8 @@ impl ElectricPotentialUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -157,8 +156,8 @@ impl ElectricPotentialUnit {
 impl core::str::FromStr for ElectricPotentialUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "V" => Ok(Self::Volt),
@@ -172,8 +171,8 @@ impl core::str::FromStr for ElectricPotentialUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -201,9 +200,9 @@ impl<T: Float> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
 }
 
 impl<T: Float> ElectricPotential<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nV`, `µV`, `mV`, `V`, `kV`, `MV`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nV`, `µV`, `mV`, `V`, `kV`, `MV`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricPotentialUnit> {
         const SCALE: [(f64, ElectricPotentialUnit); 6] = [
@@ -228,73 +227,73 @@ impl<T: Float> ElectricPotential<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Volts (`V`).
+    /// A [`ElectricPotential`] from a value in `V`.
     #[inline]
     pub fn from_volts(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Volts (`V`).
+    /// The value in `V`.
     #[inline]
     pub fn as_volts(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Nanovolts (`nV`).
+    /// A [`ElectricPotential`] from a value in `nV`.
     #[inline]
     pub fn from_nanovolts(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanovolts (`nV`).
+    /// The value in `nV`.
     #[inline]
     pub fn as_nanovolts(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Microvolts (`µV`).
+    /// A [`ElectricPotential`] from a value in `µV`.
     #[inline]
     pub fn from_microvolts(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microvolts (`µV`).
+    /// The value in `µV`.
     #[inline]
     pub fn as_microvolts(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Millivolts (`mV`).
+    /// A [`ElectricPotential`] from a value in `mV`.
     #[inline]
     pub fn from_millivolts(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millivolts (`mV`).
+    /// The value in `mV`.
     #[inline]
     pub fn as_millivolts(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Kilovolts (`kV`).
+    /// A [`ElectricPotential`] from a value in `kV`.
     #[inline]
     pub fn from_kilovolts(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilovolts (`kV`).
+    /// The value in `kV`.
     #[inline]
     pub fn as_kilovolts(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricPotential`] from a value in Megavolts (`MV`).
+    /// A [`ElectricPotential`] from a value in `MV`.
     #[inline]
     pub fn from_megavolts(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megavolts (`MV`).
+    /// The value in `MV`.
     #[inline]
     pub fn as_megavolts(self) -> T {
         self.0 / T::from_f64(1000000.0)
@@ -302,9 +301,8 @@ impl<T: Float> ElectricPotential<T> {
 }
 
 impl ElectricPotential<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricPotentialUnit) -> Self {
         Self(match unit {
@@ -320,9 +318,9 @@ impl ElectricPotential<f64> {
 
 fixed_base!(ElectricPotential, Volt);
 
-/// Unit markers for counting [`ElectricPotential`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricPotential`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_potential`](crate::unit::electric_potential).
+/// Also at [`unit::electric_potential`](crate::unit::electric_potential).
 pub mod unit {
     fixed_unit!(Volt: ElectricPotential, ElectricPotentialUnit::Volt, base Volt, 1 / 1, pi^0, from_volts, as_volts, additive);
     fixed_unit!(Nanovolt: ElectricPotential, ElectricPotentialUnit::Nanovolt, base Volt, 1 / 1000000000, pi^0, from_nanovolts, as_nanovolts, additive);

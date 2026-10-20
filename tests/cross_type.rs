@@ -2,8 +2,8 @@
 
 use qty::*;
 
-/// `Fixed::mul_to_rounded`/`div_to` (exact integer arithmetic) against the
-/// float operators: within half a unit, or an overflow where the result is huge.
+/// Checks `Fixed::mul_to_rounded` and `div_to` against the float operators:
+/// within half a unit, or an overflow when the result is huge.
 #[allow(dead_code)]
 fn check_fixed_relation(fixed: Result<i64, RoundError>, float: f64) {
     match fixed {

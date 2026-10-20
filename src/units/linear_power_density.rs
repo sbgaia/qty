@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The Linear Power Density of a substance is its power per unit length.  The term linear density is most often used when describing the characteristics of one-dimensional objects, although linear density can also be used to describe the density of a three-dimensional quantity along one particular dimension.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LinearPowerDensityUnit::WattPerMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LinearPowerDensityUnit::WattPerMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct LinearPowerDensity<T = f64>(T);
 
 quantity!(LinearPowerDensity, LinearPowerDensityUnit, WattPerMeter);
 
-/// Unit variants for [`LinearPowerDensity`].
+/// The units of [`LinearPowerDensity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -60,7 +59,7 @@ pub enum LinearPowerDensityUnit {
 }
 
 impl LinearPowerDensityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::WattPerMeter,
         Self::MilliwattPerMeter,
@@ -242,7 +241,7 @@ impl LinearPowerDensityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -257,7 +256,7 @@ impl LinearPowerDensityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -289,7 +288,7 @@ impl LinearPowerDensityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -321,8 +320,8 @@ impl LinearPowerDensityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -385,8 +384,8 @@ impl LinearPowerDensityUnit {
 impl core::str::FromStr for LinearPowerDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/m" => Ok(Self::WattPerMeter),
@@ -419,8 +418,8 @@ impl core::str::FromStr for LinearPowerDensityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -486,9 +485,9 @@ impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
 }
 
 impl<T: Float> LinearPowerDensity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`mW/m`, `W/m`, `kW/m`, `MW/m`, `GW/m`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`mW/m`, `W/m`, `kW/m`, `MW/m`, `GW/m`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LinearPowerDensityUnit> {
         const SCALE: [(f64, LinearPowerDensityUnit); 5] = [
@@ -512,301 +511,301 @@ impl<T: Float> LinearPowerDensity<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in WattsPerMeter (`W/m`).
+    /// A [`LinearPowerDensity`] from a value in `W/m`.
     #[inline]
     pub fn from_watts_per_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in WattsPerMeter (`W/m`).
+    /// The value in `W/m`.
     #[inline]
     pub fn as_watts_per_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerMeter (`mW/m`).
+    /// A [`LinearPowerDensity`] from a value in `mW/m`.
     #[inline]
     pub fn from_milliwatts_per_meter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MilliwattsPerMeter (`mW/m`).
+    /// The value in `mW/m`.
     #[inline]
     pub fn as_milliwatts_per_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerMeter (`kW/m`).
+    /// A [`LinearPowerDensity`] from a value in `kW/m`.
     #[inline]
     pub fn from_kilowatts_per_meter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilowattsPerMeter (`kW/m`).
+    /// The value in `kW/m`.
     #[inline]
     pub fn as_kilowatts_per_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerMeter (`MW/m`).
+    /// A [`LinearPowerDensity`] from a value in `MW/m`.
     #[inline]
     pub fn from_megawatts_per_meter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegawattsPerMeter (`MW/m`).
+    /// The value in `MW/m`.
     #[inline]
     pub fn as_megawatts_per_meter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerMeter (`GW/m`).
+    /// A [`LinearPowerDensity`] from a value in `GW/m`.
     #[inline]
     pub fn from_gigawatts_per_meter(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in GigawattsPerMeter (`GW/m`).
+    /// The value in `GW/m`.
     #[inline]
     pub fn as_gigawatts_per_meter(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in WattsPerCentimeter (`W/cm`).
+    /// A [`LinearPowerDensity`] from a value in `W/cm`.
     #[inline]
     pub fn from_watts_per_centimeter(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in WattsPerCentimeter (`W/cm`).
+    /// The value in `W/cm`.
     #[inline]
     pub fn as_watts_per_centimeter(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerCentimeter (`mW/cm`).
+    /// A [`LinearPowerDensity`] from a value in `mW/cm`.
     #[inline]
     pub fn from_milliwatts_per_centimeter(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in MilliwattsPerCentimeter (`mW/cm`).
+    /// The value in `mW/cm`.
     #[inline]
     pub fn as_milliwatts_per_centimeter(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerCentimeter (`kW/cm`).
+    /// A [`LinearPowerDensity`] from a value in `kW/cm`.
     #[inline]
     pub fn from_kilowatts_per_centimeter(value: T) -> Self {
         Self(value * T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in KilowattsPerCentimeter (`kW/cm`).
+    /// The value in `kW/cm`.
     #[inline]
     pub fn as_kilowatts_per_centimeter(self) -> T {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerCentimeter (`MW/cm`).
+    /// A [`LinearPowerDensity`] from a value in `MW/cm`.
     #[inline]
     pub fn from_megawatts_per_centimeter(value: T) -> Self {
         Self(value * T::from_f64(1e8))
     }
 
-    /// Returns the value expressed in MegawattsPerCentimeter (`MW/cm`).
+    /// The value in `MW/cm`.
     #[inline]
     pub fn as_megawatts_per_centimeter(self) -> T {
         self.0 / T::from_f64(1e8)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerCentimeter (`GW/cm`).
+    /// A [`LinearPowerDensity`] from a value in `GW/cm`.
     #[inline]
     pub fn from_gigawatts_per_centimeter(value: T) -> Self {
         Self(value * T::from_f64(1e11))
     }
 
-    /// Returns the value expressed in GigawattsPerCentimeter (`GW/cm`).
+    /// The value in `GW/cm`.
     #[inline]
     pub fn as_gigawatts_per_centimeter(self) -> T {
         self.0 / T::from_f64(1e11)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in WattsPerMillimeter (`W/mm`).
+    /// A [`LinearPowerDensity`] from a value in `W/mm`.
     #[inline]
     pub fn from_watts_per_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in WattsPerMillimeter (`W/mm`).
+    /// The value in `W/mm`.
     #[inline]
     pub fn as_watts_per_millimeter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerMillimeter (`mW/mm`).
+    /// A [`LinearPowerDensity`] from a value in `mW/mm`.
     #[inline]
     pub fn from_milliwatts_per_millimeter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MilliwattsPerMillimeter (`mW/mm`).
+    /// The value in `mW/mm`.
     #[inline]
     pub fn as_milliwatts_per_millimeter(self) -> T {
         self.0
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerMillimeter (`kW/mm`).
+    /// A [`LinearPowerDensity`] from a value in `kW/mm`.
     #[inline]
     pub fn from_kilowatts_per_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in KilowattsPerMillimeter (`kW/mm`).
+    /// The value in `kW/mm`.
     #[inline]
     pub fn as_kilowatts_per_millimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerMillimeter (`MW/mm`).
+    /// A [`LinearPowerDensity`] from a value in `MW/mm`.
     #[inline]
     pub fn from_megawatts_per_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in MegawattsPerMillimeter (`MW/mm`).
+    /// The value in `MW/mm`.
     #[inline]
     pub fn as_megawatts_per_millimeter(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerMillimeter (`GW/mm`).
+    /// A [`LinearPowerDensity`] from a value in `GW/mm`.
     #[inline]
     pub fn from_gigawatts_per_millimeter(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in GigawattsPerMillimeter (`GW/mm`).
+    /// The value in `GW/mm`.
     #[inline]
     pub fn as_gigawatts_per_millimeter(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in WattsPerInch (`W/in`).
+    /// A [`LinearPowerDensity`] from a value in `W/in`.
     #[inline]
     pub fn from_watts_per_inch(value: T) -> Self {
         Self(value * T::from_f64(39.37007874015748))
     }
 
-    /// Returns the value expressed in WattsPerInch (`W/in`).
+    /// The value in `W/in`.
     #[inline]
     pub fn as_watts_per_inch(self) -> T {
         self.0 / T::from_f64(39.37007874015748)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerInch (`mW/in`).
+    /// A [`LinearPowerDensity`] from a value in `mW/in`.
     #[inline]
     pub fn from_milliwatts_per_inch(value: T) -> Self {
         Self(value * T::from_f64(0.03937007874015748))
     }
 
-    /// Returns the value expressed in MilliwattsPerInch (`mW/in`).
+    /// The value in `mW/in`.
     #[inline]
     pub fn as_milliwatts_per_inch(self) -> T {
         self.0 / T::from_f64(0.03937007874015748)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerInch (`kW/in`).
+    /// A [`LinearPowerDensity`] from a value in `kW/in`.
     #[inline]
     pub fn from_kilowatts_per_inch(value: T) -> Self {
         Self(value * T::from_f64(39370.07874015748))
     }
 
-    /// Returns the value expressed in KilowattsPerInch (`kW/in`).
+    /// The value in `kW/in`.
     #[inline]
     pub fn as_kilowatts_per_inch(self) -> T {
         self.0 / T::from_f64(39370.07874015748)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerInch (`MW/in`).
+    /// A [`LinearPowerDensity`] from a value in `MW/in`.
     #[inline]
     pub fn from_megawatts_per_inch(value: T) -> Self {
         Self(value * T::from_f64(3.937007874015748e7))
     }
 
-    /// Returns the value expressed in MegawattsPerInch (`MW/in`).
+    /// The value in `MW/in`.
     #[inline]
     pub fn as_megawatts_per_inch(self) -> T {
         self.0 / T::from_f64(3.937007874015748e7)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerInch (`GW/in`).
+    /// A [`LinearPowerDensity`] from a value in `GW/in`.
     #[inline]
     pub fn from_gigawatts_per_inch(value: T) -> Self {
         Self(value * T::from_f64(3.937007874015748e10))
     }
 
-    /// Returns the value expressed in GigawattsPerInch (`GW/in`).
+    /// The value in `GW/in`.
     #[inline]
     pub fn as_gigawatts_per_inch(self) -> T {
         self.0 / T::from_f64(3.937007874015748e10)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in WattsPerFoot (`W/ft`).
+    /// A [`LinearPowerDensity`] from a value in `W/ft`.
     #[inline]
     pub fn from_watts_per_foot(value: T) -> Self {
         Self(value * T::from_f64(3.2808398950131235))
     }
 
-    /// Returns the value expressed in WattsPerFoot (`W/ft`).
+    /// The value in `W/ft`.
     #[inline]
     pub fn as_watts_per_foot(self) -> T {
         self.0 / T::from_f64(3.2808398950131235)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MilliwattsPerFoot (`mW/ft`).
+    /// A [`LinearPowerDensity`] from a value in `mW/ft`.
     #[inline]
     pub fn from_milliwatts_per_foot(value: T) -> Self {
         Self(value * T::from_f64(0.0032808398950131233))
     }
 
-    /// Returns the value expressed in MilliwattsPerFoot (`mW/ft`).
+    /// The value in `mW/ft`.
     #[inline]
     pub fn as_milliwatts_per_foot(self) -> T {
         self.0 / T::from_f64(0.0032808398950131233)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in KilowattsPerFoot (`kW/ft`).
+    /// A [`LinearPowerDensity`] from a value in `kW/ft`.
     #[inline]
     pub fn from_kilowatts_per_foot(value: T) -> Self {
         Self(value * T::from_f64(3280.839895013123))
     }
 
-    /// Returns the value expressed in KilowattsPerFoot (`kW/ft`).
+    /// The value in `kW/ft`.
     #[inline]
     pub fn as_kilowatts_per_foot(self) -> T {
         self.0 / T::from_f64(3280.839895013123)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in MegawattsPerFoot (`MW/ft`).
+    /// A [`LinearPowerDensity`] from a value in `MW/ft`.
     #[inline]
     pub fn from_megawatts_per_foot(value: T) -> Self {
         Self(value * T::from_f64(3280839.8950131233))
     }
 
-    /// Returns the value expressed in MegawattsPerFoot (`MW/ft`).
+    /// The value in `MW/ft`.
     #[inline]
     pub fn as_megawatts_per_foot(self) -> T {
         self.0 / T::from_f64(3280839.8950131233)
     }
 
-    /// Creates a [`LinearPowerDensity`] from a value in GigawattsPerFoot (`GW/ft`).
+    /// A [`LinearPowerDensity`] from a value in `GW/ft`.
     #[inline]
     pub fn from_gigawatts_per_foot(value: T) -> Self {
         Self(value * T::from_f64(3.2808398950131235e9))
     }
 
-    /// Returns the value expressed in GigawattsPerFoot (`GW/ft`).
+    /// The value in `GW/ft`.
     #[inline]
     pub fn as_gigawatts_per_foot(self) -> T {
         self.0 / T::from_f64(3.2808398950131235e9)
@@ -814,9 +813,8 @@ impl<T: Float> LinearPowerDensity<T> {
 }
 
 impl LinearPowerDensity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LinearPowerDensityUnit) -> Self {
         Self(match unit {
@@ -851,9 +849,9 @@ impl LinearPowerDensity<f64> {
 
 fixed_base!(LinearPowerDensity, WattPerMeter);
 
-/// Unit markers for counting [`LinearPowerDensity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`LinearPowerDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::linear_power_density`](crate::unit::linear_power_density).
+/// Also at [`unit::linear_power_density`](crate::unit::linear_power_density).
 pub mod unit {
     fixed_unit!(WattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::WattPerMeter, base WattPerMeter, 1 / 1, pi^0, from_watts_per_meter, as_watts_per_meter, additive);
     fixed_unit!(MilliwattPerMeter: LinearPowerDensity, LinearPowerDensityUnit::MilliwattPerMeter, base WattPerMeter, 1 / 1000, pi^0, from_milliwatts_per_meter, as_milliwatts_per_meter, additive);

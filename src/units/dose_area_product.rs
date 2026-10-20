@@ -11,8 +11,7 @@ use crate::Float;
 
 /// It is defined as the absorbed dose multiplied by the area irradiated.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`DoseAreaProductUnit::GraySquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`DoseAreaProductUnit::GraySquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct DoseAreaProduct<T = f64>(T);
 
 quantity!(DoseAreaProduct, DoseAreaProductUnit, GraySquareMeter);
 
-/// Unit variants for [`DoseAreaProduct`].
+/// The units of [`DoseAreaProduct`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -60,7 +59,7 @@ pub enum DoseAreaProductUnit {
 }
 
 impl DoseAreaProductUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::GraySquareMeter,
         Self::MicrograySquareMeter,
@@ -242,7 +241,7 @@ impl DoseAreaProductUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -257,7 +256,7 @@ impl DoseAreaProductUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -289,7 +288,7 @@ impl DoseAreaProductUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -321,8 +320,8 @@ impl DoseAreaProductUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -385,8 +384,8 @@ impl DoseAreaProductUnit {
 impl core::str::FromStr for DoseAreaProductUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Gy·m²" => Ok(Self::GraySquareMeter),
@@ -419,8 +418,8 @@ impl core::str::FromStr for DoseAreaProductUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -486,9 +485,9 @@ impl<T: Float> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
 }
 
 impl<T: Float> DoseAreaProduct<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`µGy·m²`, `mGy·m²`, `Gy·m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`µGy·m²`, `mGy·m²`, `Gy·m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, DoseAreaProductUnit> {
         const SCALE: [(f64, DoseAreaProductUnit); 3] = [
@@ -510,301 +509,301 @@ impl<T: Float> DoseAreaProduct<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in GraySquareMeters (`Gy·m²`).
+    /// A [`DoseAreaProduct`] from a value in `Gy·m²`.
     #[inline]
     pub fn from_gray_square_meters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in GraySquareMeters (`Gy·m²`).
+    /// The value in `Gy·m²`.
     #[inline]
     pub fn as_gray_square_meters(self) -> T {
         self.0
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMeters (`µGy·m²`).
+    /// A [`DoseAreaProduct`] from a value in `µGy·m²`.
     #[inline]
     pub fn from_microgray_square_meters(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrograySquareMeters (`µGy·m²`).
+    /// The value in `µGy·m²`.
     #[inline]
     pub fn as_microgray_square_meters(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMeters (`mGy·m²`).
+    /// A [`DoseAreaProduct`] from a value in `mGy·m²`.
     #[inline]
     pub fn from_milligray_square_meters(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MilligraySquareMeters (`mGy·m²`).
+    /// The value in `mGy·m²`.
     #[inline]
     pub fn as_milligray_square_meters(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMeters (`cGy·m²`).
+    /// A [`DoseAreaProduct`] from a value in `cGy·m²`.
     #[inline]
     pub fn from_centigray_square_meters(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentigraySquareMeters (`cGy·m²`).
+    /// The value in `cGy·m²`.
     #[inline]
     pub fn as_centigray_square_meters(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMeters (`dGy·m²`).
+    /// A [`DoseAreaProduct`] from a value in `dGy·m²`.
     #[inline]
     pub fn from_decigray_square_meters(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecigraySquareMeters (`dGy·m²`).
+    /// The value in `dGy·m²`.
     #[inline]
     pub fn as_decigray_square_meters(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in GraySquareDecimeters (`Gy·dm²`).
+    /// A [`DoseAreaProduct`] from a value in `Gy·dm²`.
     #[inline]
     pub fn from_gray_square_decimeters(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in GraySquareDecimeters (`Gy·dm²`).
+    /// The value in `Gy·dm²`.
     #[inline]
     pub fn as_gray_square_decimeters(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareDecimeters (`µGy·dm²`).
+    /// A [`DoseAreaProduct`] from a value in `µGy·dm²`.
     #[inline]
     pub fn from_microgray_square_decimeters(value: T) -> Self {
         Self(value / T::from_f64(1e8))
     }
 
-    /// Returns the value expressed in MicrograySquareDecimeters (`µGy·dm²`).
+    /// The value in `µGy·dm²`.
     #[inline]
     pub fn as_microgray_square_decimeters(self) -> T {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareDecimeters (`mGy·dm²`).
+    /// A [`DoseAreaProduct`] from a value in `mGy·dm²`.
     #[inline]
     pub fn from_milligray_square_decimeters(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in MilligraySquareDecimeters (`mGy·dm²`).
+    /// The value in `mGy·dm²`.
     #[inline]
     pub fn as_milligray_square_decimeters(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareDecimeters (`cGy·dm²`).
+    /// A [`DoseAreaProduct`] from a value in `cGy·dm²`.
     #[inline]
     pub fn from_centigray_square_decimeters(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in CentigraySquareDecimeters (`cGy·dm²`).
+    /// The value in `cGy·dm²`.
     #[inline]
     pub fn as_centigray_square_decimeters(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareDecimeters (`dGy·dm²`).
+    /// A [`DoseAreaProduct`] from a value in `dGy·dm²`.
     #[inline]
     pub fn from_decigray_square_decimeters(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in DecigraySquareDecimeters (`dGy·dm²`).
+    /// The value in `dGy·dm²`.
     #[inline]
     pub fn as_decigray_square_decimeters(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in GraySquareCentimeters (`Gy·cm²`).
+    /// A [`DoseAreaProduct`] from a value in `Gy·cm²`.
     #[inline]
     pub fn from_gray_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in GraySquareCentimeters (`Gy·cm²`).
+    /// The value in `Gy·cm²`.
     #[inline]
     pub fn as_gray_square_centimeters(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareCentimeters (`µGy·cm²`).
+    /// A [`DoseAreaProduct`] from a value in `µGy·cm²`.
     #[inline]
     pub fn from_microgray_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(1e10))
     }
 
-    /// Returns the value expressed in MicrograySquareCentimeters (`µGy·cm²`).
+    /// The value in `µGy·cm²`.
     #[inline]
     pub fn as_microgray_square_centimeters(self) -> T {
         self.0 * T::from_f64(1e10)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareCentimeters (`mGy·cm²`).
+    /// A [`DoseAreaProduct`] from a value in `mGy·cm²`.
     #[inline]
     pub fn from_milligray_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(1e7))
     }
 
-    /// Returns the value expressed in MilligraySquareCentimeters (`mGy·cm²`).
+    /// The value in `mGy·cm²`.
     #[inline]
     pub fn as_milligray_square_centimeters(self) -> T {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareCentimeters (`cGy·cm²`).
+    /// A [`DoseAreaProduct`] from a value in `cGy·cm²`.
     #[inline]
     pub fn from_centigray_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in CentigraySquareCentimeters (`cGy·cm²`).
+    /// The value in `cGy·cm²`.
     #[inline]
     pub fn as_centigray_square_centimeters(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareCentimeters (`dGy·cm²`).
+    /// A [`DoseAreaProduct`] from a value in `dGy·cm²`.
     #[inline]
     pub fn from_decigray_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in DecigraySquareCentimeters (`dGy·cm²`).
+    /// The value in `dGy·cm²`.
     #[inline]
     pub fn as_decigray_square_centimeters(self) -> T {
         self.0 * T::from_f64(100000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in GraySquareMillimeters (`Gy·mm²`).
+    /// A [`DoseAreaProduct`] from a value in `Gy·mm²`.
     #[inline]
     pub fn from_gray_square_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in GraySquareMillimeters (`Gy·mm²`).
+    /// The value in `Gy·mm²`.
     #[inline]
     pub fn as_gray_square_millimeters(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMillimeters (`µGy·mm²`).
+    /// A [`DoseAreaProduct`] from a value in `µGy·mm²`.
     #[inline]
     pub fn from_microgray_square_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in MicrograySquareMillimeters (`µGy·mm²`).
+    /// The value in `µGy·mm²`.
     #[inline]
     pub fn as_microgray_square_millimeters(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMillimeters (`mGy·mm²`).
+    /// A [`DoseAreaProduct`] from a value in `mGy·mm²`.
     #[inline]
     pub fn from_milligray_square_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in MilligraySquareMillimeters (`mGy·mm²`).
+    /// The value in `mGy·mm²`.
     #[inline]
     pub fn as_milligray_square_millimeters(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMillimeters (`cGy·mm²`).
+    /// A [`DoseAreaProduct`] from a value in `cGy·mm²`.
     #[inline]
     pub fn from_centigray_square_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1e8))
     }
 
-    /// Returns the value expressed in CentigraySquareMillimeters (`cGy·mm²`).
+    /// The value in `cGy·mm²`.
     #[inline]
     pub fn as_centigray_square_millimeters(self) -> T {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMillimeters (`dGy·mm²`).
+    /// A [`DoseAreaProduct`] from a value in `dGy·mm²`.
     #[inline]
     pub fn from_decigray_square_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1e7))
     }
 
-    /// Returns the value expressed in DecigraySquareMillimeters (`dGy·mm²`).
+    /// The value in `dGy·mm²`.
     #[inline]
     pub fn as_decigray_square_millimeters(self) -> T {
         self.0 * T::from_f64(1e7)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in GraySquareMicrometers (`Gy·μm²`).
+    /// A [`DoseAreaProduct`] from a value in `Gy·μm²`.
     #[inline]
     pub fn from_gray_square_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in GraySquareMicrometers (`Gy·μm²`).
+    /// The value in `Gy·μm²`.
     #[inline]
     pub fn as_gray_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MicrograySquareMicrometers (`µGy·μm²`).
+    /// A [`DoseAreaProduct`] from a value in `µGy·μm²`.
     #[inline]
     pub fn from_microgray_square_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1e18))
     }
 
-    /// Returns the value expressed in MicrograySquareMicrometers (`µGy·μm²`).
+    /// The value in `µGy·μm²`.
     #[inline]
     pub fn as_microgray_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e18)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in MilligraySquareMicrometers (`mGy·μm²`).
+    /// A [`DoseAreaProduct`] from a value in `mGy·μm²`.
     #[inline]
     pub fn from_milligray_square_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in MilligraySquareMicrometers (`mGy·μm²`).
+    /// The value in `mGy·μm²`.
     #[inline]
     pub fn as_milligray_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e15)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in CentigraySquareMicrometers (`cGy·μm²`).
+    /// A [`DoseAreaProduct`] from a value in `cGy·μm²`.
     #[inline]
     pub fn from_centigray_square_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1e14))
     }
 
-    /// Returns the value expressed in CentigraySquareMicrometers (`cGy·μm²`).
+    /// The value in `cGy·μm²`.
     #[inline]
     pub fn as_centigray_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e14)
     }
 
-    /// Creates a [`DoseAreaProduct`] from a value in DecigraySquareMicrometers (`dGy·μm²`).
+    /// A [`DoseAreaProduct`] from a value in `dGy·μm²`.
     #[inline]
     pub fn from_decigray_square_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1e13))
     }
 
-    /// Returns the value expressed in DecigraySquareMicrometers (`dGy·μm²`).
+    /// The value in `dGy·μm²`.
     #[inline]
     pub fn as_decigray_square_micrometers(self) -> T {
         self.0 * T::from_f64(1e13)
@@ -812,9 +811,8 @@ impl<T: Float> DoseAreaProduct<T> {
 }
 
 impl DoseAreaProduct<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: DoseAreaProductUnit) -> Self {
         Self(match unit {
@@ -849,9 +847,9 @@ impl DoseAreaProduct<f64> {
 
 fixed_base!(DoseAreaProduct, GraySquareMeter);
 
-/// Unit markers for counting [`DoseAreaProduct`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`DoseAreaProduct`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::dose_area_product`](crate::unit::dose_area_product).
+/// Also at [`unit::dose_area_product`](crate::unit::dose_area_product).
 pub mod unit {
     fixed_unit!(GraySquareMeter: DoseAreaProduct, DoseAreaProductUnit::GraySquareMeter, base GraySquareMeter, 1 / 1, pi^0, from_gray_square_meters, as_gray_square_meters, additive);
     fixed_unit!(MicrograySquareMeter: DoseAreaProduct, DoseAreaProductUnit::MicrograySquareMeter, base GraySquareMeter, 1 / 1000000, pi^0, from_microgray_square_meters, as_microgray_square_meters, additive);

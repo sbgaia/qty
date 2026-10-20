@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A geometric property of an area that reflects how its points are distributed with regard to an axis.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`AreaMomentOfInertiaUnit::MeterToTheFourth`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`AreaMomentOfInertiaUnit::MeterToTheFourth`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     MeterToTheFourth
 );
 
-/// Unit variants for [`AreaMomentOfInertia`].
+/// The units of [`AreaMomentOfInertia`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -45,7 +44,7 @@ pub enum AreaMomentOfInertiaUnit {
 }
 
 impl AreaMomentOfInertiaUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MeterToTheFourth,
         Self::DecimeterToTheFourth,
@@ -94,7 +93,7 @@ impl AreaMomentOfInertiaUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -109,7 +108,7 @@ impl AreaMomentOfInertiaUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -122,7 +121,7 @@ impl AreaMomentOfInertiaUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -135,8 +134,8 @@ impl AreaMomentOfInertiaUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -161,8 +160,8 @@ impl AreaMomentOfInertiaUnit {
 impl core::str::FromStr for AreaMomentOfInertiaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m⁴" => Ok(Self::MeterToTheFourth),
@@ -176,8 +175,8 @@ impl core::str::FromStr for AreaMomentOfInertiaUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -205,81 +204,81 @@ impl<T: Float> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit
 }
 
 impl<T: Float> AreaMomentOfInertia<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m⁴`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m⁴`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, AreaMomentOfInertiaUnit> {
         self.in_unit(AreaMomentOfInertiaUnit::MeterToTheFourth)
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in MetersToTheFourth (`m⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `m⁴`.
     #[inline]
     pub fn from_meters_to_the_fourth(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MetersToTheFourth (`m⁴`).
+    /// The value in `m⁴`.
     #[inline]
     pub fn as_meters_to_the_fourth(self) -> T {
         self.0
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in DecimetersToTheFourth (`dm⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `dm⁴`.
     #[inline]
     pub fn from_decimeters_to_the_fourth(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in DecimetersToTheFourth (`dm⁴`).
+    /// The value in `dm⁴`.
     #[inline]
     pub fn as_decimeters_to_the_fourth(self) -> T {
         self.0 * T::from_f64(10000.0)
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in CentimetersToTheFourth (`cm⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `cm⁴`.
     #[inline]
     pub fn from_centimeters_to_the_fourth(value: T) -> Self {
         Self(value / T::from_f64(1e8))
     }
 
-    /// Returns the value expressed in CentimetersToTheFourth (`cm⁴`).
+    /// The value in `cm⁴`.
     #[inline]
     pub fn as_centimeters_to_the_fourth(self) -> T {
         self.0 * T::from_f64(1e8)
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in MillimetersToTheFourth (`mm⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `mm⁴`.
     #[inline]
     pub fn from_millimeters_to_the_fourth(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in MillimetersToTheFourth (`mm⁴`).
+    /// The value in `mm⁴`.
     #[inline]
     pub fn as_millimeters_to_the_fourth(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in FeetToTheFourth (`ft⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `ft⁴`.
     #[inline]
     pub fn from_feet_to_the_fourth(value: T) -> Self {
         Self(value * T::from_f64(0.0086309748412416))
     }
 
-    /// Returns the value expressed in FeetToTheFourth (`ft⁴`).
+    /// The value in `ft⁴`.
     #[inline]
     pub fn as_feet_to_the_fourth(self) -> T {
         self.0 / T::from_f64(0.0086309748412416)
     }
 
-    /// Creates a [`AreaMomentOfInertia`] from a value in InchesToTheFourth (`in⁴`).
+    /// A [`AreaMomentOfInertia`] from a value in `in⁴`.
     #[inline]
     pub fn from_inches_to_the_fourth(value: T) -> Self {
         Self(value * T::from_f64(4.162314256e-7))
     }
 
-    /// Returns the value expressed in InchesToTheFourth (`in⁴`).
+    /// The value in `in⁴`.
     #[inline]
     pub fn as_inches_to_the_fourth(self) -> T {
         self.0 / T::from_f64(4.162314256e-7)
@@ -287,9 +286,8 @@ impl<T: Float> AreaMomentOfInertia<T> {
 }
 
 impl AreaMomentOfInertia<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: AreaMomentOfInertiaUnit) -> Self {
         Self(match unit {
@@ -305,9 +303,9 @@ impl AreaMomentOfInertia<f64> {
 
 fixed_base!(AreaMomentOfInertia, MeterToTheFourth);
 
-/// Unit markers for counting [`AreaMomentOfInertia`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`AreaMomentOfInertia`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::area_moment_of_inertia`](crate::unit::area_moment_of_inertia).
+/// Also at [`unit::area_moment_of_inertia`](crate::unit::area_moment_of_inertia).
 pub mod unit {
     fixed_unit!(MeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::MeterToTheFourth, base MeterToTheFourth, 1 / 1, pi^0, from_meters_to_the_fourth, as_meters_to_the_fourth, additive);
     fixed_unit!(DecimeterToTheFourth: AreaMomentOfInertia, AreaMomentOfInertiaUnit::DecimeterToTheFourth, base MeterToTheFourth, 1 / 10000, pi^0, from_decimeters_to_the_fourth, as_decimeters_to_the_fourth, additive);

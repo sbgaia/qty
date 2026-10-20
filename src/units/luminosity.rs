@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Luminosity is an absolute measure of radiated electromagnetic power (light), the radiant power emitted by a light-emitting object.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LuminosityUnit::Watt`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LuminosityUnit::Watt`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Luminosity<T = f64>(T);
 
 quantity!(Luminosity, LuminosityUnit, Watt);
 
-/// Unit variants for [`Luminosity`].
+/// The units of [`Luminosity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -50,7 +49,7 @@ pub enum LuminosityUnit {
 }
 
 impl LuminosityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Watt,
         Self::Femtowatt,
@@ -155,7 +154,7 @@ impl LuminosityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -170,7 +169,7 @@ impl LuminosityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -191,7 +190,7 @@ impl LuminosityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -212,8 +211,8 @@ impl LuminosityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -254,8 +253,8 @@ impl LuminosityUnit {
 impl core::str::FromStr for LuminosityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W" => Ok(Self::Watt),
@@ -277,8 +276,8 @@ impl core::str::FromStr for LuminosityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -322,9 +321,9 @@ impl<T: Float> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
 }
 
 impl<T: Float> Luminosity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LuminosityUnit> {
         const SCALE: [(f64, LuminosityUnit); 11] = [
@@ -354,169 +353,169 @@ impl<T: Float> Luminosity<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Luminosity`] from a value in Watts (`W`).
+    /// A [`Luminosity`] from a value in `W`.
     #[inline]
     pub fn from_watts(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Watts (`W`).
+    /// The value in `W`.
     #[inline]
     pub fn as_watts(self) -> T {
         self.0
     }
 
-    /// Creates a [`Luminosity`] from a value in Femtowatts (`fW`).
+    /// A [`Luminosity`] from a value in `fW`.
     #[inline]
     pub fn from_femtowatts(value: T) -> Self {
         Self(value / T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in Femtowatts (`fW`).
+    /// The value in `fW`.
     #[inline]
     pub fn as_femtowatts(self) -> T {
         self.0 * T::from_f64(1e15)
     }
 
-    /// Creates a [`Luminosity`] from a value in Picowatts (`pW`).
+    /// A [`Luminosity`] from a value in `pW`.
     #[inline]
     pub fn from_picowatts(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Picowatts (`pW`).
+    /// The value in `pW`.
     #[inline]
     pub fn as_picowatts(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`Luminosity`] from a value in Nanowatts (`nW`).
+    /// A [`Luminosity`] from a value in `nW`.
     #[inline]
     pub fn from_nanowatts(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanowatts (`nW`).
+    /// The value in `nW`.
     #[inline]
     pub fn as_nanowatts(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Luminosity`] from a value in Microwatts (`µW`).
+    /// A [`Luminosity`] from a value in `µW`.
     #[inline]
     pub fn from_microwatts(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microwatts (`µW`).
+    /// The value in `µW`.
     #[inline]
     pub fn as_microwatts(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Milliwatts (`mW`).
+    /// A [`Luminosity`] from a value in `mW`.
     #[inline]
     pub fn from_milliwatts(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Milliwatts (`mW`).
+    /// The value in `mW`.
     #[inline]
     pub fn as_milliwatts(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Deciwatts (`dW`).
+    /// A [`Luminosity`] from a value in `dW`.
     #[inline]
     pub fn from_deciwatts(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Deciwatts (`dW`).
+    /// The value in `dW`.
     #[inline]
     pub fn as_deciwatts(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Decawatts (`daW`).
+    /// A [`Luminosity`] from a value in `daW`.
     #[inline]
     pub fn from_decawatts(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Decawatts (`daW`).
+    /// The value in `daW`.
     #[inline]
     pub fn as_decawatts(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Kilowatts (`kW`).
+    /// A [`Luminosity`] from a value in `kW`.
     #[inline]
     pub fn from_kilowatts(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilowatts (`kW`).
+    /// The value in `kW`.
     #[inline]
     pub fn as_kilowatts(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Megawatts (`MW`).
+    /// A [`Luminosity`] from a value in `MW`.
     #[inline]
     pub fn from_megawatts(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megawatts (`MW`).
+    /// The value in `MW`.
     #[inline]
     pub fn as_megawatts(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Luminosity`] from a value in Gigawatts (`GW`).
+    /// A [`Luminosity`] from a value in `GW`.
     #[inline]
     pub fn from_gigawatts(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Gigawatts (`GW`).
+    /// The value in `GW`.
     #[inline]
     pub fn as_gigawatts(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`Luminosity`] from a value in Terawatts (`TW`).
+    /// A [`Luminosity`] from a value in `TW`.
     #[inline]
     pub fn from_terawatts(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Terawatts (`TW`).
+    /// The value in `TW`.
     #[inline]
     pub fn as_terawatts(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`Luminosity`] from a value in Petawatts (`PW`).
+    /// A [`Luminosity`] from a value in `PW`.
     #[inline]
     pub fn from_petawatts(value: T) -> Self {
         Self(value * T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in Petawatts (`PW`).
+    /// The value in `PW`.
     #[inline]
     pub fn as_petawatts(self) -> T {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Creates a [`Luminosity`] from a value in SolarLuminosities (`L⊙`).
+    /// A [`Luminosity`] from a value in `L⊙`.
     #[inline]
     pub fn from_solar_luminosities(value: T) -> Self {
         Self(value * T::from_f64(3.828e26))
     }
 
-    /// Returns the value expressed in SolarLuminosities (`L⊙`).
+    /// The value in `L⊙`.
     #[inline]
     pub fn as_solar_luminosities(self) -> T {
         self.0 / T::from_f64(3.828e26)
@@ -524,9 +523,8 @@ impl<T: Float> Luminosity<T> {
 }
 
 impl Luminosity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LuminosityUnit) -> Self {
         Self(match unit {
@@ -550,9 +548,9 @@ impl Luminosity<f64> {
 
 fixed_base!(Luminosity, Watt);
 
-/// Unit markers for counting [`Luminosity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Luminosity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::luminosity`](crate::unit::luminosity).
+/// Also at [`unit::luminosity`](crate::unit::luminosity).
 pub mod unit {
     fixed_unit!(Watt: Luminosity, LuminosityUnit::Watt, base Watt, 1 / 1, pi^0, from_watts, as_watts, additive);
     fixed_unit!(Femtowatt: Luminosity, LuminosityUnit::Femtowatt, base Watt, 1 / 1000000000000000, pi^0, from_femtowatts, as_femtowatts, additive);

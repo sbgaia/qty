@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`JerkUnit::MeterPerSecondCubed`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`JerkUnit::MeterPerSecondCubed`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,9 +22,9 @@ pub struct Jerk<T = f64>(T);
 
 quantity!(Jerk, JerkUnit, MeterPerSecondCubed);
 
-/// Unit variants for [`Jerk`].
+/// The units of [`Jerk`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -44,7 +43,7 @@ pub enum JerkUnit {
 }
 
 impl JerkUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MeterPerSecondCubed,
         Self::NanometerPerSecondCubed,
@@ -128,7 +127,7 @@ impl JerkUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -143,7 +142,7 @@ impl JerkUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -161,7 +160,7 @@ impl JerkUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -179,8 +178,8 @@ impl JerkUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -213,8 +212,8 @@ impl JerkUnit {
 impl core::str::FromStr for JerkUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m/s³" => Ok(Self::MeterPerSecondCubed),
@@ -233,8 +232,8 @@ impl core::str::FromStr for JerkUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Jerk<T>> for JerkUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -272,9 +271,9 @@ impl<T: Float> crate::UnitOf<Jerk<T>> for JerkUnit {
 }
 
 impl<T: Float> Jerk<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nm/s³`, `µm/s³`, `mm/s³`, `m/s³`, `km/s³`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nm/s³`, `µm/s³`, `mm/s³`, `m/s³`, `km/s³`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, JerkUnit> {
         const SCALE: [(f64, JerkUnit); 5] = [
@@ -298,133 +297,133 @@ impl<T: Float> Jerk<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Jerk`] from a value in MetersPerSecondCubed (`m/s³`).
+    /// A [`Jerk`] from a value in `m/s³`.
     #[inline]
     pub fn from_meters_per_second_cubed(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MetersPerSecondCubed (`m/s³`).
+    /// The value in `m/s³`.
     #[inline]
     pub fn as_meters_per_second_cubed(self) -> T {
         self.0
     }
 
-    /// Creates a [`Jerk`] from a value in NanometersPerSecondCubed (`nm/s³`).
+    /// A [`Jerk`] from a value in `nm/s³`.
     #[inline]
     pub fn from_nanometers_per_second_cubed(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanometersPerSecondCubed (`nm/s³`).
+    /// The value in `nm/s³`.
     #[inline]
     pub fn as_nanometers_per_second_cubed(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Jerk`] from a value in MicrometersPerSecondCubed (`µm/s³`).
+    /// A [`Jerk`] from a value in `µm/s³`.
     #[inline]
     pub fn from_micrometers_per_second_cubed(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrometersPerSecondCubed (`µm/s³`).
+    /// The value in `µm/s³`.
     #[inline]
     pub fn as_micrometers_per_second_cubed(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Jerk`] from a value in MillimetersPerSecondCubed (`mm/s³`).
+    /// A [`Jerk`] from a value in `mm/s³`.
     #[inline]
     pub fn from_millimeters_per_second_cubed(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillimetersPerSecondCubed (`mm/s³`).
+    /// The value in `mm/s³`.
     #[inline]
     pub fn as_millimeters_per_second_cubed(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Jerk`] from a value in CentimetersPerSecondCubed (`cm/s³`).
+    /// A [`Jerk`] from a value in `cm/s³`.
     #[inline]
     pub fn from_centimeters_per_second_cubed(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentimetersPerSecondCubed (`cm/s³`).
+    /// The value in `cm/s³`.
     #[inline]
     pub fn as_centimeters_per_second_cubed(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Jerk`] from a value in DecimetersPerSecondCubed (`dm/s³`).
+    /// A [`Jerk`] from a value in `dm/s³`.
     #[inline]
     pub fn from_decimeters_per_second_cubed(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecimetersPerSecondCubed (`dm/s³`).
+    /// The value in `dm/s³`.
     #[inline]
     pub fn as_decimeters_per_second_cubed(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Jerk`] from a value in KilometersPerSecondCubed (`km/s³`).
+    /// A [`Jerk`] from a value in `km/s³`.
     #[inline]
     pub fn from_kilometers_per_second_cubed(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilometersPerSecondCubed (`km/s³`).
+    /// The value in `km/s³`.
     #[inline]
     pub fn as_kilometers_per_second_cubed(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Jerk`] from a value in InchesPerSecondCubed (`in/s³`).
+    /// A [`Jerk`] from a value in `in/s³`.
     #[inline]
     pub fn from_inches_per_second_cubed(value: T) -> Self {
         Self(value * T::from_f64(0.0254))
     }
 
-    /// Returns the value expressed in InchesPerSecondCubed (`in/s³`).
+    /// The value in `in/s³`.
     #[inline]
     pub fn as_inches_per_second_cubed(self) -> T {
         self.0 / T::from_f64(0.0254)
     }
 
-    /// Creates a [`Jerk`] from a value in FeetPerSecondCubed (`ft/s³`).
+    /// A [`Jerk`] from a value in `ft/s³`.
     #[inline]
     pub fn from_feet_per_second_cubed(value: T) -> Self {
         Self(value * T::from_f64(0.3048))
     }
 
-    /// Returns the value expressed in FeetPerSecondCubed (`ft/s³`).
+    /// The value in `ft/s³`.
     #[inline]
     pub fn as_feet_per_second_cubed(self) -> T {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Creates a [`Jerk`] from a value in StandardGravitiesPerSecond (`g/s`).
+    /// A [`Jerk`] from a value in `g/s`.
     #[inline]
     pub fn from_standard_gravities_per_second(value: T) -> Self {
         Self(value * T::from_f64(9.80665))
     }
 
-    /// Returns the value expressed in StandardGravitiesPerSecond (`g/s`).
+    /// The value in `g/s`.
     #[inline]
     pub fn as_standard_gravities_per_second(self) -> T {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Creates a [`Jerk`] from a value in MillistandardGravitiesPerSecond (`mg/s`).
+    /// A [`Jerk`] from a value in `mg/s`.
     #[inline]
     pub fn from_millistandard_gravities_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.00980665))
     }
 
-    /// Returns the value expressed in MillistandardGravitiesPerSecond (`mg/s`).
+    /// The value in `mg/s`.
     #[inline]
     pub fn as_millistandard_gravities_per_second(self) -> T {
         self.0 / T::from_f64(0.00980665)
@@ -432,9 +431,8 @@ impl<T: Float> Jerk<T> {
 }
 
 impl Jerk<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: JerkUnit) -> Self {
         Self(match unit {
@@ -455,9 +453,9 @@ impl Jerk<f64> {
 
 fixed_base!(Jerk, MeterPerSecondCubed);
 
-/// Unit markers for counting [`Jerk`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Jerk`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::jerk`](crate::unit::jerk).
+/// Also at [`unit::jerk`](crate::unit::jerk).
 pub mod unit {
     fixed_unit!(MeterPerSecondCubed: Jerk, JerkUnit::MeterPerSecondCubed, base MeterPerSecondCubed, 1 / 1, pi^0, from_meters_per_second_cubed, as_meters_per_second_cubed, additive);
     fixed_unit!(NanometerPerSecondCubed: Jerk, JerkUnit::NanometerPerSecondCubed, base MeterPerSecondCubed, 1 / 1000000000, pi^0, from_nanometers_per_second_cubed, as_nanometers_per_second_cubed, additive);

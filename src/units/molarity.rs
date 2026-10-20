@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Molar concentration, also called molarity, amount concentration or substance concentration, is a measure of the concentration of a solute in a solution, or of any chemical species, in terms of amount of substance in a given volume.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarityUnit::MolePerCubicMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolarityUnit::MolePerCubicMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Molarity<T = f64>(T);
 
 quantity!(Molarity, MolarityUnit, MolePerCubicMeter);
 
-/// Unit variants for [`Molarity`].
+/// The units of [`Molarity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -46,7 +45,7 @@ pub enum MolarityUnit {
 }
 
 impl MolarityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MolePerCubicMeter,
         Self::KilomolePerCubicMeter,
@@ -130,7 +129,7 @@ impl MolarityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -145,7 +144,7 @@ impl MolarityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -163,7 +162,7 @@ impl MolarityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -181,8 +180,8 @@ impl MolarityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -217,8 +216,8 @@ impl MolarityUnit {
 impl core::str::FromStr for MolarityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/m³" => Ok(Self::MolePerCubicMeter),
@@ -238,8 +237,8 @@ impl core::str::FromStr for MolarityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -277,9 +276,9 @@ impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
 }
 
 impl<T: Float> Molarity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`mol/m³`, `kmol/m³`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`mol/m³`, `kmol/m³`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolarityUnit> {
         const SCALE: [(f64, MolarityUnit); 2] = [
@@ -300,133 +299,133 @@ impl<T: Float> Molarity<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Molarity`] from a value in MolesPerCubicMeter (`mol/m³`).
+    /// A [`Molarity`] from a value in `mol/m³`.
     #[inline]
     pub fn from_moles_per_cubic_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MolesPerCubicMeter (`mol/m³`).
+    /// The value in `mol/m³`.
     #[inline]
     pub fn as_moles_per_cubic_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`Molarity`] from a value in KilomolesPerCubicMeter (`kmol/m³`).
+    /// A [`Molarity`] from a value in `kmol/m³`.
     #[inline]
     pub fn from_kilomoles_per_cubic_meter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilomolesPerCubicMeter (`kmol/m³`).
+    /// The value in `kmol/m³`.
     #[inline]
     pub fn as_kilomoles_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Molarity`] from a value in MolesPerLiter (`mol/l`).
+    /// A [`Molarity`] from a value in `mol/l`.
     #[inline]
     pub fn from_moles_per_liter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MolesPerLiter (`mol/l`).
+    /// The value in `mol/l`.
     #[inline]
     pub fn as_moles_per_liter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Molarity`] from a value in FemtomolesPerLiter (`fmol/l`).
+    /// A [`Molarity`] from a value in `fmol/l`.
     #[inline]
     pub fn from_femtomoles_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in FemtomolesPerLiter (`fmol/l`).
+    /// The value in `fmol/l`.
     #[inline]
     pub fn as_femtomoles_per_liter(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`Molarity`] from a value in PicomolesPerLiter (`pmol/l`).
+    /// A [`Molarity`] from a value in `pmol/l`.
     #[inline]
     pub fn from_picomoles_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in PicomolesPerLiter (`pmol/l`).
+    /// The value in `pmol/l`.
     #[inline]
     pub fn as_picomoles_per_liter(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Molarity`] from a value in NanomolesPerLiter (`nmol/l`).
+    /// A [`Molarity`] from a value in `nmol/l`.
     #[inline]
     pub fn from_nanomoles_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in NanomolesPerLiter (`nmol/l`).
+    /// The value in `nmol/l`.
     #[inline]
     pub fn as_nanomoles_per_liter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Molarity`] from a value in MicromolesPerLiter (`µmol/l`).
+    /// A [`Molarity`] from a value in `µmol/l`.
     #[inline]
     pub fn from_micromoles_per_liter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MicromolesPerLiter (`µmol/l`).
+    /// The value in `µmol/l`.
     #[inline]
     pub fn as_micromoles_per_liter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Molarity`] from a value in MillimolesPerLiter (`mmol/l`).
+    /// A [`Molarity`] from a value in `mmol/l`.
     #[inline]
     pub fn from_millimoles_per_liter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MillimolesPerLiter (`mmol/l`).
+    /// The value in `mmol/l`.
     #[inline]
     pub fn as_millimoles_per_liter(self) -> T {
         self.0
     }
 
-    /// Creates a [`Molarity`] from a value in CentimolesPerLiter (`cmol/l`).
+    /// A [`Molarity`] from a value in `cmol/l`.
     #[inline]
     pub fn from_centimoles_per_liter(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in CentimolesPerLiter (`cmol/l`).
+    /// The value in `cmol/l`.
     #[inline]
     pub fn as_centimoles_per_liter(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`Molarity`] from a value in DecimolesPerLiter (`dmol/l`).
+    /// A [`Molarity`] from a value in `dmol/l`.
     #[inline]
     pub fn from_decimoles_per_liter(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in DecimolesPerLiter (`dmol/l`).
+    /// The value in `dmol/l`.
     #[inline]
     pub fn as_decimoles_per_liter(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`Molarity`] from a value in PoundMolesPerCubicFoot (`lbmol/ft³`).
+    /// A [`Molarity`] from a value in `lbmol/ft³`.
     #[inline]
     pub fn from_pound_moles_per_cubic_foot(value: T) -> Self {
         Self(value * T::from_f64(16018.46337396014))
     }
 
-    /// Returns the value expressed in PoundMolesPerCubicFoot (`lbmol/ft³`).
+    /// The value in `lbmol/ft³`.
     #[inline]
     pub fn as_pound_moles_per_cubic_foot(self) -> T {
         self.0 / T::from_f64(16018.46337396014)
@@ -434,9 +433,8 @@ impl<T: Float> Molarity<T> {
 }
 
 impl Molarity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolarityUnit) -> Self {
         Self(match unit {
@@ -457,9 +455,9 @@ impl Molarity<f64> {
 
 fixed_base!(Molarity, MolePerCubicMeter);
 
-/// Unit markers for counting [`Molarity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Molarity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molarity`](crate::unit::molarity).
+/// Also at [`unit::molarity`](crate::unit::molarity).
 pub mod unit {
     fixed_unit!(MolePerCubicMeter: Molarity, MolarityUnit::MolePerCubicMeter, base MolePerCubicMeter, 1 / 1, pi^0, from_moles_per_cubic_meter, as_moles_per_cubic_meter, additive);
     fixed_unit!(KilomolePerCubicMeter: Molarity, MolarityUnit::KilomolePerCubicMeter, base MolePerCubicMeter, 1000 / 1, pi^0, from_kilomoles_per_cubic_meter, as_kilomoles_per_cubic_meter, additive);

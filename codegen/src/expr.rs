@@ -6,18 +6,10 @@
 //! (LLVM may not re-associate float arithmetic) and accumulates a rounding
 //! error at every step.
 //!
-//! This module parses each formula and reduces it **symbolically, with exact
-//! rational arithmetic**, to one of three canonical forms:
-//!
-//! | Form | Meaning | Example |
-//! |---|---|---|
-//! | [`Form::Affine`] with `b = 0` | `y = a·x` | metre ↔ inch |
-//! | [`Form::Affine`] | `y = a·x + b` | kelvin ↔ °F |
-//! | [`Form::Reciprocal`] | `y = k / x` | km/L ↔ L/100 km |
-//!
-//! The constants are then rounded **once** to the nearest `f64`, so the
-//! generated code performs a single operation per conversion with a single
-//! rounding of its constant.
+//! This module parses each formula and reduces it with exact rational
+//! arithmetic to `y = a·x + b` (with `b = 0` for most units) or `y = k / x`
+//! (km/L and L/100 km). The constants are then rounded once to the nearest
+//! `f64`, so the generated code does one operation per conversion.
 
 use std::fmt;
 use std::ops::{Add, Div, Mul, Neg, Sub};
@@ -27,16 +19,13 @@ use num_integer::Integer;
 use num_rational::BigRational;
 use num_traits::{One, Signed, ToPrimitive, Zero};
 
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-/// π to 64 significant digits — far beyond what an `f64` can distinguish.
+/// π to 64 significant digits, far more than an `f64` holds.
 const PI_DIGITS: &str = "3.141592653589793238462643383279502884197169399375105820974944592";
 
 /// An exact constant of the form `r · π^pi`.
 ///
-/// Keeping the power of π separate lets every formula except the ones that
-/// genuinely involve π stay exact, so we can tell whether a factor is exactly
-/// representable as an `f64`.
+/// With the power of π kept apart, every formula without π stays exact, so we
+/// can tell whether a factor is exactly representable as an `f64`.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Const {
     r: BigRational,
@@ -281,8 +270,6 @@ impl fmt::Display for Const {
     }
 }
 
-// ── Canonical forms ───────────────────────────────────────────────────────────
-
 /// A conversion formula reduced to canonical form.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Form {
@@ -365,7 +352,7 @@ impl Form {
         panic!("unsupported non-linear formula: {self:?} / {rhs:?}")
     }
 
-    /// Substitutes `x → x·p`, i.e. applies an SI prefix to the input unit.
+    /// Substitutes `x·p` for `x`: an SI prefix on the input unit.
     pub fn with_input_factor(self, p: &Const) -> Form {
         match self {
             Form::Affine { a, b } => Form::Affine {
@@ -376,7 +363,7 @@ impl Form {
         }
     }
 
-    /// The inverse function (`y = f(x)` → `x = f⁻¹(y)`).
+    /// The inverse function.
     pub fn inverse(&self) -> Form {
         match self {
             Form::Affine { a, b } => {
@@ -418,8 +405,6 @@ impl Form {
     }
 }
 
-// ── Rust emission ─────────────────────────────────────────────────────────────
-
 /// Which way a conversion goes; decides how inexact factors are emitted.
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
@@ -436,11 +421,10 @@ fn lit(c: &Const) -> String {
 
 /// Emits `x · f` using a single operation.
 ///
-/// Prefers whichever of `f` or `1/f` is exactly representable, so that, e.g.,
-/// kilometres → metres is `x * 1000` and metres → kilometres is `x / 1000`
-/// (both correctly rounded). When neither is exact, both directions share the
-/// constant rounded in the to-base direction, so that
-/// `from_unit(v).as_unit()` round-trips `v` in practically every case.
+/// Uses whichever of `f` and `1/f` is exactly representable, so kilometres
+/// to metres is `x * 1000` and back is `x / 1000`, both correctly rounded.
+/// When neither is exact, both directions share the constant rounded for the
+/// to-base direction, so `from_unit(v).as_unit()` almost always gives `v`.
 fn emit_scale(x: &str, f: &Const, dir: Direction) -> String {
     if f.is_one() {
         return x.to_owned();
@@ -497,8 +481,6 @@ fn offset(expr: &str, b: &Const) -> String {
         format!("{expr} + {}", lit(b))
     }
 }
-
-// ── Parser ────────────────────────────────────────────────────────────────────
 
 #[derive(Debug, Clone, PartialEq)]
 enum Token {

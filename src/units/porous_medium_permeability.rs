@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`PorousMediumPermeabilityUnit::SquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`PorousMediumPermeabilityUnit::SquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -27,9 +26,9 @@ quantity!(
     SquareMeter
 );
 
-/// Unit variants for [`PorousMediumPermeability`].
+/// The units of [`PorousMediumPermeability`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum PorousMediumPermeabilityUnit {
 }
 
 impl PorousMediumPermeabilityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Darcy,
         Self::Microdarcy,
@@ -85,7 +84,7 @@ impl PorousMediumPermeabilityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -100,7 +99,7 @@ impl PorousMediumPermeabilityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -112,7 +111,7 @@ impl PorousMediumPermeabilityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -124,8 +123,8 @@ impl PorousMediumPermeabilityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -148,8 +147,8 @@ impl PorousMediumPermeabilityUnit {
 impl core::str::FromStr for PorousMediumPermeabilityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "D" => Ok(Self::Darcy),
@@ -162,8 +161,8 @@ impl core::str::FromStr for PorousMediumPermeabilityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermeabilityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -189,69 +188,69 @@ impl<T: Float> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermea
 }
 
 impl<T: Float> PorousMediumPermeability<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, PorousMediumPermeabilityUnit> {
         self.in_unit(PorousMediumPermeabilityUnit::SquareMeter)
     }
 
-    /// Creates a [`PorousMediumPermeability`] from a value in Darcys (`D`).
+    /// A [`PorousMediumPermeability`] from a value in `D`.
     #[inline]
     pub fn from_darcys(value: T) -> Self {
         Self(value * T::from_f64(9.869233e-13))
     }
 
-    /// Returns the value expressed in Darcys (`D`).
+    /// The value in `D`.
     #[inline]
     pub fn as_darcys(self) -> T {
         self.0 / T::from_f64(9.869233e-13)
     }
 
-    /// Creates a [`PorousMediumPermeability`] from a value in Microdarcys (`µD`).
+    /// A [`PorousMediumPermeability`] from a value in `µD`.
     #[inline]
     pub fn from_microdarcys(value: T) -> Self {
         Self(value * T::from_f64(9.869233e-19))
     }
 
-    /// Returns the value expressed in Microdarcys (`µD`).
+    /// The value in `µD`.
     #[inline]
     pub fn as_microdarcys(self) -> T {
         self.0 / T::from_f64(9.869233e-19)
     }
 
-    /// Creates a [`PorousMediumPermeability`] from a value in Millidarcys (`mD`).
+    /// A [`PorousMediumPermeability`] from a value in `mD`.
     #[inline]
     pub fn from_millidarcys(value: T) -> Self {
         Self(value * T::from_f64(9.869233e-16))
     }
 
-    /// Returns the value expressed in Millidarcys (`mD`).
+    /// The value in `mD`.
     #[inline]
     pub fn as_millidarcys(self) -> T {
         self.0 / T::from_f64(9.869233e-16)
     }
 
-    /// Creates a [`PorousMediumPermeability`] from a value in SquareMeters (`m²`).
+    /// A [`PorousMediumPermeability`] from a value in `m²`.
     #[inline]
     pub fn from_square_meters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in SquareMeters (`m²`).
+    /// The value in `m²`.
     #[inline]
     pub fn as_square_meters(self) -> T {
         self.0
     }
 
-    /// Creates a [`PorousMediumPermeability`] from a value in SquareCentimeters (`cm²`).
+    /// A [`PorousMediumPermeability`] from a value in `cm²`.
     #[inline]
     pub fn from_square_centimeters(value: T) -> Self {
         Self(value / T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in SquareCentimeters (`cm²`).
+    /// The value in `cm²`.
     #[inline]
     pub fn as_square_centimeters(self) -> T {
         self.0 * T::from_f64(10000.0)
@@ -259,9 +258,8 @@ impl<T: Float> PorousMediumPermeability<T> {
 }
 
 impl PorousMediumPermeability<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: PorousMediumPermeabilityUnit) -> Self {
         Self(match unit {
@@ -276,9 +274,9 @@ impl PorousMediumPermeability<f64> {
 
 fixed_base!(PorousMediumPermeability, SquareMeter);
 
-/// Unit markers for counting [`PorousMediumPermeability`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`PorousMediumPermeability`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::porous_medium_permeability`](crate::unit::porous_medium_permeability).
+/// Also at [`unit::porous_medium_permeability`](crate::unit::porous_medium_permeability).
 pub mod unit {
     fixed_unit!(Darcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Darcy, base SquareMeter, 9869233 / 10000000000000000000, pi^0, from_darcys, as_darcys, additive);
     fixed_unit!(Microdarcy: PorousMediumPermeability, PorousMediumPermeabilityUnit::Microdarcy, base SquareMeter, 9869233 / 10000000000000000000000000, pi^0, from_microdarcys, as_microdarcys, additive);

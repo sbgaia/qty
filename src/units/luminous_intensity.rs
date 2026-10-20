@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In photometry, luminous intensity is a measure of the wavelength-weighted power emitted by a light source in a particular direction per unit solid angle, based on the luminosity function, a standardized model of the sensitivity of the human eye.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LuminousIntensityUnit::Candela`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LuminousIntensityUnit::Candela`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct LuminousIntensity<T = f64>(T);
 
 quantity!(LuminousIntensity, LuminousIntensityUnit, Candela);
 
-/// Unit variants for [`LuminousIntensity`].
+/// The units of [`LuminousIntensity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -36,7 +35,7 @@ pub enum LuminousIntensityUnit {
 }
 
 impl LuminousIntensityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[Self::Candela];
 
     const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
@@ -46,7 +45,7 @@ impl LuminousIntensityUnit {
         abbreviations: &["cd"],
     }];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -61,7 +60,7 @@ impl LuminousIntensityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -69,7 +68,7 @@ impl LuminousIntensityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -77,8 +76,8 @@ impl LuminousIntensityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -92,8 +91,8 @@ impl LuminousIntensityUnit {
 impl core::str::FromStr for LuminousIntensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "cd" => Ok(Self::Candela),
@@ -102,8 +101,8 @@ impl core::str::FromStr for LuminousIntensityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<LuminousIntensity<T>> for LuminousIntensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -121,21 +120,21 @@ impl<T: Float> crate::UnitOf<LuminousIntensity<T>> for LuminousIntensityUnit {
 }
 
 impl<T: Float> LuminousIntensity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`cd`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`cd`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LuminousIntensityUnit> {
         self.in_unit(LuminousIntensityUnit::Candela)
     }
 
-    /// Creates a [`LuminousIntensity`] from a value in Candela (`cd`).
+    /// A [`LuminousIntensity`] from a value in `cd`.
     #[inline]
     pub fn from_candela(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Candela (`cd`).
+    /// The value in `cd`.
     #[inline]
     pub fn as_candela(self) -> T {
         self.0
@@ -143,9 +142,8 @@ impl<T: Float> LuminousIntensity<T> {
 }
 
 impl LuminousIntensity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LuminousIntensityUnit) -> Self {
         Self(match unit {
@@ -156,9 +154,9 @@ impl LuminousIntensity<f64> {
 
 fixed_base!(LuminousIntensity, Candela);
 
-/// Unit markers for counting [`LuminousIntensity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`LuminousIntensity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::luminous_intensity`](crate::unit::luminous_intensity).
+/// Also at [`unit::luminous_intensity`](crate::unit::luminous_intensity).
 pub mod unit {
     fixed_unit!(Candela: LuminousIntensity, LuminousIntensityUnit::Candela, base Candela, 1 / 1, pi^0, from_candela, as_candela, additive);
 }

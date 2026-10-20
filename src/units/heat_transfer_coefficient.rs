@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The heat transfer coefficient or film coefficient, or film effectiveness, in thermodynamics and in mechanics is the proportionality constant between the heat flux and the thermodynamic driving force for the flow of heat (i.e., the temperature difference, ΔT)
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`HeatTransferCoefficientUnit::WattPerSquareMeterKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`HeatTransferCoefficientUnit::WattPerSquareMeterKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     WattPerSquareMeterKelvin
 );
 
-/// Unit variants for [`HeatTransferCoefficient`].
+/// The units of [`HeatTransferCoefficient`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -45,7 +44,7 @@ pub enum HeatTransferCoefficientUnit {
 }
 
 impl HeatTransferCoefficientUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::WattPerSquareMeterKelvin,
         Self::WattPerSquareMeterCelsius,
@@ -109,7 +108,7 @@ impl HeatTransferCoefficientUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -124,7 +123,7 @@ impl HeatTransferCoefficientUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -137,7 +136,7 @@ impl HeatTransferCoefficientUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -165,8 +164,8 @@ impl HeatTransferCoefficientUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -207,8 +206,8 @@ impl HeatTransferCoefficientUnit {
 impl core::str::FromStr for HeatTransferCoefficientUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "W/(m²·K)" => Ok(Self::WattPerSquareMeterKelvin),
@@ -231,8 +230,8 @@ impl core::str::FromStr for HeatTransferCoefficientUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoefficientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -276,81 +275,81 @@ impl<T: Float> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoeffic
 }
 
 impl<T: Float> HeatTransferCoefficient<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`W/(m²·K)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`W/(m²·K)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, HeatTransferCoefficientUnit> {
         self.in_unit(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterKelvin (`W/(m²·K)`).
+    /// A [`HeatTransferCoefficient`] from a value in `W/(m²·K)`.
     #[inline]
     pub fn from_watts_per_square_meter_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in WattsPerSquareMeterKelvin (`W/(m²·K)`).
+    /// The value in `W/(m²·K)`.
     #[inline]
     pub fn as_watts_per_square_meter_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in WattsPerSquareMeterCelsius (`W/(m²·°C)`).
+    /// A [`HeatTransferCoefficient`] from a value in `W/(m²·°C)`.
     #[inline]
     pub fn from_watts_per_square_meter_celsius(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in WattsPerSquareMeterCelsius (`W/(m²·°C)`).
+    /// The value in `W/(m²·°C)`.
     #[inline]
     pub fn as_watts_per_square_meter_celsius(self) -> T {
         self.0
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in BtusPerHourSquareFootDegreeFahrenheit (`Btu/(h·ft²·°F)`).
+    /// A [`HeatTransferCoefficient`] from a value in `Btu/(h·ft²·°F)`.
     #[inline]
     pub fn from_btus_per_hour_square_foot_degree_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(5.678263341113488))
     }
 
-    /// Returns the value expressed in BtusPerHourSquareFootDegreeFahrenheit (`Btu/(h·ft²·°F)`).
+    /// The value in `Btu/(h·ft²·°F)`.
     #[inline]
     pub fn as_btus_per_hour_square_foot_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(5.678263341113488)
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in BtusPerSecondSquareInchDegreeFahrenheit (`Btu/(s·in²·°F)`).
+    /// A [`HeatTransferCoefficient`] from a value in `Btu/(s·in²·°F)`.
     #[inline]
     pub fn from_btus_per_second_square_inch_degree_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(2943611.716033232))
     }
 
-    /// Returns the value expressed in BtusPerSecondSquareInchDegreeFahrenheit (`Btu/(s·in²·°F)`).
+    /// The value in `Btu/(s·in²·°F)`.
     #[inline]
     pub fn as_btus_per_second_square_inch_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(2943611.716033232)
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in CaloriesPerHourSquareMeterDegreeCelsius (`cal/(h·m²·°C)`).
+    /// A [`HeatTransferCoefficient`] from a value in `cal/(h·m²·°C)`.
     #[inline]
     pub fn from_calories_per_hour_square_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(0.0011622222222222223))
     }
 
-    /// Returns the value expressed in CaloriesPerHourSquareMeterDegreeCelsius (`cal/(h·m²·°C)`).
+    /// The value in `cal/(h·m²·°C)`.
     #[inline]
     pub fn as_calories_per_hour_square_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(0.0011622222222222223)
     }
 
-    /// Creates a [`HeatTransferCoefficient`] from a value in KilocaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
+    /// A [`HeatTransferCoefficient`] from a value in `kcal/(h·m²·°C)`.
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(1.1622222222222223))
     }
 
-    /// Returns the value expressed in KilocaloriesPerHourSquareMeterDegreeCelsius (`kcal/(h·m²·°C)`).
+    /// The value in `kcal/(h·m²·°C)`.
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1.1622222222222223)
@@ -358,9 +357,8 @@ impl<T: Float> HeatTransferCoefficient<T> {
 }
 
 impl HeatTransferCoefficient<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: HeatTransferCoefficientUnit) -> Self {
         Self(match unit {
@@ -384,9 +382,9 @@ impl HeatTransferCoefficient<f64> {
 
 fixed_base!(HeatTransferCoefficient, WattPerSquareMeterKelvin);
 
-/// Unit markers for counting [`HeatTransferCoefficient`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`HeatTransferCoefficient`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::heat_transfer_coefficient`](crate::unit::heat_transfer_coefficient).
+/// Also at [`unit::heat_transfer_coefficient`](crate::unit::heat_transfer_coefficient).
 pub mod unit {
     fixed_unit!(WattPerSquareMeterKelvin: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterKelvin, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_kelvin, as_watts_per_square_meter_kelvin, additive);
     fixed_unit!(WattPerSquareMeterCelsius: HeatTransferCoefficient, HeatTransferCoefficientUnit::WattPerSquareMeterCelsius, base WattPerSquareMeterKelvin, 1 / 1, pi^0, from_watts_per_square_meter_celsius, as_watts_per_square_meter_celsius, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The area density of a two-dimensional object is calculated as the mass per unit area. For paper this is also called grammage.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`AreaDensityUnit::KilogramPerSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`AreaDensityUnit::KilogramPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct AreaDensity<T = f64>(T);
 
 quantity!(AreaDensity, AreaDensityUnit, KilogramPerSquareMeter);
 
-/// Unit variants for [`AreaDensity`].
+/// The units of [`AreaDensity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -41,7 +40,7 @@ pub enum AreaDensityUnit {
 }
 
 impl AreaDensityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::KilogramPerSquareMeter,
         Self::GramPerSquareMeter,
@@ -83,7 +82,7 @@ impl AreaDensityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -98,7 +97,7 @@ impl AreaDensityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -110,7 +109,7 @@ impl AreaDensityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -124,8 +123,8 @@ impl AreaDensityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -148,8 +147,8 @@ impl AreaDensityUnit {
 impl core::str::FromStr for AreaDensityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "kg/m²" => Ok(Self::KilogramPerSquareMeter),
@@ -170,8 +169,8 @@ impl core::str::FromStr for AreaDensityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -197,69 +196,69 @@ impl<T: Float> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
 }
 
 impl<T: Float> AreaDensity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`kg/m²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`kg/m²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, AreaDensityUnit> {
         self.in_unit(AreaDensityUnit::KilogramPerSquareMeter)
     }
 
-    /// Creates a [`AreaDensity`] from a value in KilogramsPerSquareMeter (`kg/m²`).
+    /// A [`AreaDensity`] from a value in `kg/m²`.
     #[inline]
     pub fn from_kilograms_per_square_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilogramsPerSquareMeter (`kg/m²`).
+    /// The value in `kg/m²`.
     #[inline]
     pub fn as_kilograms_per_square_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`AreaDensity`] from a value in GramsPerSquareMeter (`g/m²`).
+    /// A [`AreaDensity`] from a value in `g/m²`.
     #[inline]
     pub fn from_grams_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in GramsPerSquareMeter (`g/m²`).
+    /// The value in `g/m²`.
     #[inline]
     pub fn as_grams_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`AreaDensity`] from a value in MilligramsPerSquareMeter (`mg/m²`).
+    /// A [`AreaDensity`] from a value in `mg/m²`.
     #[inline]
     pub fn from_milligrams_per_square_meter(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MilligramsPerSquareMeter (`mg/m²`).
+    /// The value in `mg/m²`.
     #[inline]
     pub fn as_milligrams_per_square_meter(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`AreaDensity`] from a value in PoundsPerSquareFoot (`lb/ft²`).
+    /// A [`AreaDensity`] from a value in `lb/ft²`.
     #[inline]
     pub fn from_pounds_per_square_foot(value: T) -> Self {
         Self(value * T::from_f64(4.88242763638305))
     }
 
-    /// Returns the value expressed in PoundsPerSquareFoot (`lb/ft²`).
+    /// The value in `lb/ft²`.
     #[inline]
     pub fn as_pounds_per_square_foot(self) -> T {
         self.0 / T::from_f64(4.88242763638305)
     }
 
-    /// Creates a [`AreaDensity`] from a value in PoundsPerThousandSquareFeet (`lb/MSF`).
+    /// A [`AreaDensity`] from a value in `lb/MSF`.
     #[inline]
     pub fn from_pounds_per_thousand_square_feet(value: T) -> Self {
         Self(value * T::from_f64(0.00488242763638305))
     }
 
-    /// Returns the value expressed in PoundsPerThousandSquareFeet (`lb/MSF`).
+    /// The value in `lb/MSF`.
     #[inline]
     pub fn as_pounds_per_thousand_square_feet(self) -> T {
         self.0 / T::from_f64(0.00488242763638305)
@@ -267,9 +266,8 @@ impl<T: Float> AreaDensity<T> {
 }
 
 impl AreaDensity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: AreaDensityUnit) -> Self {
         Self(match unit {
@@ -284,9 +282,9 @@ impl AreaDensity<f64> {
 
 fixed_base!(AreaDensity, KilogramPerSquareMeter);
 
-/// Unit markers for counting [`AreaDensity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`AreaDensity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::area_density`](crate::unit::area_density).
+/// Also at [`unit::area_density`](crate::unit::area_density).
 pub mod unit {
     fixed_unit!(KilogramPerSquareMeter: AreaDensity, AreaDensityUnit::KilogramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1, pi^0, from_kilograms_per_square_meter, as_kilograms_per_square_meter, additive);
     fixed_unit!(GramPerSquareMeter: AreaDensity, AreaDensityUnit::GramPerSquareMeter, base KilogramPerSquareMeter, 1 / 1000, pi^0, from_grams_per_square_meter, as_grams_per_square_meter, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// SFC is the fuel efficiency of an engine design with respect to thrust output
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`SpecificFuelConsumptionUnit::GramPerKilonewtonSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`SpecificFuelConsumptionUnit::GramPerKilonewtonSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     GramPerKilonewtonSecond
 );
 
-/// Unit variants for [`SpecificFuelConsumption`].
+/// The units of [`SpecificFuelConsumption`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum SpecificFuelConsumptionUnit {
 }
 
 impl SpecificFuelConsumptionUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::PoundMassPerPoundForceHour,
         Self::KilogramPerKilogramForceHour,
@@ -78,7 +77,7 @@ impl SpecificFuelConsumptionUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -93,7 +92,7 @@ impl SpecificFuelConsumptionUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -104,7 +103,7 @@ impl SpecificFuelConsumptionUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -115,8 +114,8 @@ impl SpecificFuelConsumptionUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -137,8 +136,8 @@ impl SpecificFuelConsumptionUnit {
 impl core::str::FromStr for SpecificFuelConsumptionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "lb/(lbf·h)" => Ok(Self::PoundMassPerPoundForceHour),
@@ -150,8 +149,8 @@ impl core::str::FromStr for SpecificFuelConsumptionUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsumptionUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -183,9 +182,9 @@ impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsump
 }
 
 impl<T: Float> SpecificFuelConsumption<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`g/(kN·s)`, `kg/(kN·s)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`g/(kN·s)`, `kg/(kN·s)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, SpecificFuelConsumptionUnit> {
         const SCALE: [(f64, SpecificFuelConsumptionUnit); 2] = [
@@ -209,49 +208,49 @@ impl<T: Float> SpecificFuelConsumption<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`SpecificFuelConsumption`] from a value in PoundsMassPerPoundForceHour (`lb/(lbf·h)`).
+    /// A [`SpecificFuelConsumption`] from a value in `lb/(lbf·h)`.
     #[inline]
     pub fn from_pounds_mass_per_pound_force_hour(value: T) -> Self {
         Self(value * T::from_f64(28.325450360498007))
     }
 
-    /// Returns the value expressed in PoundsMassPerPoundForceHour (`lb/(lbf·h)`).
+    /// The value in `lb/(lbf·h)`.
     #[inline]
     pub fn as_pounds_mass_per_pound_force_hour(self) -> T {
         self.0 / T::from_f64(28.325450360498007)
     }
 
-    /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilogramForceHour (`kg/(kgf·h)`).
+    /// A [`SpecificFuelConsumption`] from a value in `kg/(kgf·h)`.
     #[inline]
     pub fn from_kilograms_per_kilogram_force_hour(value: T) -> Self {
         Self(value * T::from_f64(28.325450360498007))
     }
 
-    /// Returns the value expressed in KilogramsPerKilogramForceHour (`kg/(kgf·h)`).
+    /// The value in `kg/(kgf·h)`.
     #[inline]
     pub fn as_kilograms_per_kilogram_force_hour(self) -> T {
         self.0 / T::from_f64(28.325450360498007)
     }
 
-    /// Creates a [`SpecificFuelConsumption`] from a value in GramsPerKilonewtonSecond (`g/(kN·s)`).
+    /// A [`SpecificFuelConsumption`] from a value in `g/(kN·s)`.
     #[inline]
     pub fn from_grams_per_kilonewton_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in GramsPerKilonewtonSecond (`g/(kN·s)`).
+    /// The value in `g/(kN·s)`.
     #[inline]
     pub fn as_grams_per_kilonewton_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`SpecificFuelConsumption`] from a value in KilogramsPerKilonewtonSecond (`kg/(kN·s)`).
+    /// A [`SpecificFuelConsumption`] from a value in `kg/(kN·s)`.
     #[inline]
     pub fn from_kilograms_per_kilonewton_second(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilogramsPerKilonewtonSecond (`kg/(kN·s)`).
+    /// The value in `kg/(kN·s)`.
     #[inline]
     pub fn as_kilograms_per_kilonewton_second(self) -> T {
         self.0 / T::from_f64(1000.0)
@@ -259,9 +258,8 @@ impl<T: Float> SpecificFuelConsumption<T> {
 }
 
 impl SpecificFuelConsumption<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: SpecificFuelConsumptionUnit) -> Self {
         Self(match unit {
@@ -275,9 +273,9 @@ impl SpecificFuelConsumption<f64> {
 
 fixed_base!(SpecificFuelConsumption, GramPerKilonewtonSecond);
 
-/// Unit markers for counting [`SpecificFuelConsumption`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`SpecificFuelConsumption`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption).
+/// Also at [`unit::specific_fuel_consumption`](crate::unit::specific_fuel_consumption).
 pub mod unit {
     fixed_unit!(PoundMassPerPoundForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_pounds_mass_per_pound_force_hour, as_pounds_mass_per_pound_force_hour, additive);
     fixed_unit!(KilogramPerKilogramForceHour: SpecificFuelConsumption, SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour, base GramPerKilonewtonSecond, 50000000 / 1765197, pi^0, from_kilograms_per_kilogram_force_hour, as_kilograms_per_kilogram_force_hour, additive);

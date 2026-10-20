@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Relative humidity is a ratio of the actual water vapor present in the air to the maximum water vapor in the air at the given temperature.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`RelativeHumidityUnit::Percent`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`RelativeHumidityUnit::Percent`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct RelativeHumidity<T = f64>(T);
 
 quantity!(RelativeHumidity, RelativeHumidityUnit, Percent);
 
-/// Unit variants for [`RelativeHumidity`].
+/// The units of [`RelativeHumidity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -36,7 +35,7 @@ pub enum RelativeHumidityUnit {
 }
 
 impl RelativeHumidityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[Self::Percent];
 
     const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
@@ -46,7 +45,7 @@ impl RelativeHumidityUnit {
         abbreviations: &["%RH"],
     }];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -61,7 +60,7 @@ impl RelativeHumidityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -69,7 +68,7 @@ impl RelativeHumidityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -77,8 +76,8 @@ impl RelativeHumidityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -92,8 +91,8 @@ impl RelativeHumidityUnit {
 impl core::str::FromStr for RelativeHumidityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "%RH" => Ok(Self::Percent),
@@ -102,8 +101,8 @@ impl core::str::FromStr for RelativeHumidityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -121,21 +120,21 @@ impl<T: Float> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
 }
 
 impl<T: Float> RelativeHumidity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`%RH`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`%RH`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, RelativeHumidityUnit> {
         self.in_unit(RelativeHumidityUnit::Percent)
     }
 
-    /// Creates a [`RelativeHumidity`] from a value in Percent (`%RH`).
+    /// A [`RelativeHumidity`] from a value in `%RH`.
     #[inline]
     pub fn from_percent(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Percent (`%RH`).
+    /// The value in `%RH`.
     #[inline]
     pub fn as_percent(self) -> T {
         self.0
@@ -143,9 +142,8 @@ impl<T: Float> RelativeHumidity<T> {
 }
 
 impl RelativeHumidity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: RelativeHumidityUnit) -> Self {
         Self(match unit {
@@ -156,9 +154,9 @@ impl RelativeHumidity<f64> {
 
 fixed_base!(RelativeHumidity, Percent);
 
-/// Unit markers for counting [`RelativeHumidity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`RelativeHumidity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::relative_humidity`](crate::unit::relative_humidity).
+/// Also at [`unit::relative_humidity`](crate::unit::relative_humidity).
 pub mod unit {
     fixed_unit!(Percent: RelativeHumidity, RelativeHumidityUnit::Percent, base Percent, 1 / 1, pi^0, from_percent, as_percent, additive);
 }

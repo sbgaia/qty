@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -27,9 +26,9 @@ quantity!(
     CubicMeterPerSecondPerSquareMeter
 );
 
-/// Unit variants for [`VolumeFlowPerArea`].
+/// The units of [`VolumeFlowPerArea`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -39,7 +38,7 @@ pub enum VolumeFlowPerAreaUnit {
 }
 
 impl VolumeFlowPerAreaUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::CubicMeterPerSecondPerSquareMeter,
         Self::CubicFootPerMinutePerSquareFoot,
@@ -60,7 +59,7 @@ impl VolumeFlowPerAreaUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -75,7 +74,7 @@ impl VolumeFlowPerAreaUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -84,7 +83,7 @@ impl VolumeFlowPerAreaUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -93,8 +92,8 @@ impl VolumeFlowPerAreaUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -111,8 +110,8 @@ impl VolumeFlowPerAreaUnit {
 impl core::str::FromStr for VolumeFlowPerAreaUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m³/(s·m²)" => Ok(Self::CubicMeterPerSecondPerSquareMeter),
@@ -122,8 +121,8 @@ impl core::str::FromStr for VolumeFlowPerAreaUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -143,33 +142,33 @@ impl<T: Float> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
 }
 
 impl<T: Float> VolumeFlowPerArea<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`m³/(s·m²)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`m³/(s·m²)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowPerAreaUnit> {
         self.in_unit(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
     }
 
-    /// Creates a [`VolumeFlowPerArea`] from a value in CubicMetersPerSecondPerSquareMeter (`m³/(s·m²)`).
+    /// A [`VolumeFlowPerArea`] from a value in `m³/(s·m²)`.
     #[inline]
     pub fn from_cubic_meters_per_second_per_square_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in CubicMetersPerSecondPerSquareMeter (`m³/(s·m²)`).
+    /// The value in `m³/(s·m²)`.
     #[inline]
     pub fn as_cubic_meters_per_second_per_square_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumeFlowPerArea`] from a value in CubicFeetPerMinutePerSquareFoot (`CFM/ft²`).
+    /// A [`VolumeFlowPerArea`] from a value in `CFM/ft²`.
     #[inline]
     pub fn from_cubic_feet_per_minute_per_square_foot(value: T) -> Self {
         Self(value * T::from_f64(0.00508))
     }
 
-    /// Returns the value expressed in CubicFeetPerMinutePerSquareFoot (`CFM/ft²`).
+    /// The value in `CFM/ft²`.
     #[inline]
     pub fn as_cubic_feet_per_minute_per_square_foot(self) -> T {
         self.0 / T::from_f64(0.00508)
@@ -177,9 +176,8 @@ impl<T: Float> VolumeFlowPerArea<T> {
 }
 
 impl VolumeFlowPerArea<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: VolumeFlowPerAreaUnit) -> Self {
         Self(match unit {
@@ -191,9 +189,9 @@ impl VolumeFlowPerArea<f64> {
 
 fixed_base!(VolumeFlowPerArea, CubicMeterPerSecondPerSquareMeter);
 
-/// Unit markers for counting [`VolumeFlowPerArea`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`VolumeFlowPerArea`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volume_flow_per_area`](crate::unit::volume_flow_per_area).
+/// Also at [`unit::volume_flow_per_area`](crate::unit::volume_flow_per_area).
 pub mod unit {
     fixed_unit!(CubicMeterPerSecondPerSquareMeter: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter, base CubicMeterPerSecondPerSquareMeter, 1 / 1, pi^0, from_cubic_meters_per_second_per_square_meter, as_cubic_meters_per_second_per_square_meter, additive);
     fixed_unit!(CubicFootPerMinutePerSquareFoot: VolumeFlowPerArea, VolumeFlowPerAreaUnit::CubicFootPerMinutePerSquareFoot, base CubicMeterPerSecondPerSquareMeter, 127 / 25000, pi^0, from_cubic_feet_per_minute_per_square_foot, as_cubic_feet_per_minute_per_square_foot, additive);

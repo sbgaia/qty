@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Angular acceleration is the rate of change of rotational speed.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`RotationalAccelerationUnit::RadianPerSecondSquared`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`RotationalAccelerationUnit::RadianPerSecondSquared`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     RadianPerSecondSquared
 );
 
-/// Unit variants for [`RotationalAcceleration`].
+/// The units of [`RotationalAcceleration`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum RotationalAccelerationUnit {
 }
 
 impl RotationalAccelerationUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::RadianPerSecondSquared,
         Self::DegreePerSecondSquared,
@@ -78,7 +77,7 @@ impl RotationalAccelerationUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -93,7 +92,7 @@ impl RotationalAccelerationUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -104,7 +103,7 @@ impl RotationalAccelerationUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -115,8 +114,8 @@ impl RotationalAccelerationUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -137,8 +136,8 @@ impl RotationalAccelerationUnit {
 impl core::str::FromStr for RotationalAccelerationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "rad/s²" => Ok(Self::RadianPerSecondSquared),
@@ -151,8 +150,8 @@ impl core::str::FromStr for RotationalAccelerationUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -188,57 +187,57 @@ impl<T: Float> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerati
 }
 
 impl<T: Float> RotationalAcceleration<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`rad/s²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`rad/s²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, RotationalAccelerationUnit> {
         self.in_unit(RotationalAccelerationUnit::RadianPerSecondSquared)
     }
 
-    /// Creates a [`RotationalAcceleration`] from a value in RadiansPerSecondSquared (`rad/s²`).
+    /// A [`RotationalAcceleration`] from a value in `rad/s²`.
     #[inline]
     pub fn from_radians_per_second_squared(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in RadiansPerSecondSquared (`rad/s²`).
+    /// The value in `rad/s²`.
     #[inline]
     pub fn as_radians_per_second_squared(self) -> T {
         self.0
     }
 
-    /// Creates a [`RotationalAcceleration`] from a value in DegreesPerSecondSquared (`°/s²`).
+    /// A [`RotationalAcceleration`] from a value in `°/s²`.
     #[inline]
     pub fn from_degrees_per_second_squared(value: T) -> Self {
         Self(value * T::from_f64(0.017453292519943295))
     }
 
-    /// Returns the value expressed in DegreesPerSecondSquared (`°/s²`).
+    /// The value in `°/s²`.
     #[inline]
     pub fn as_degrees_per_second_squared(self) -> T {
         self.0 / T::from_f64(0.017453292519943295)
     }
 
-    /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerMinutePerSecond (`rpm/s`).
+    /// A [`RotationalAcceleration`] from a value in `rpm/s`.
     #[inline]
     pub fn from_revolutions_per_minute_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.10471975511965978))
     }
 
-    /// Returns the value expressed in RevolutionsPerMinutePerSecond (`rpm/s`).
+    /// The value in `rpm/s`.
     #[inline]
     pub fn as_revolutions_per_minute_per_second(self) -> T {
         self.0 / T::from_f64(0.10471975511965978)
     }
 
-    /// Creates a [`RotationalAcceleration`] from a value in RevolutionsPerSecondSquared (`r/s²`).
+    /// A [`RotationalAcceleration`] from a value in `r/s²`.
     #[inline]
     pub fn from_revolutions_per_second_squared(value: T) -> Self {
         Self(value * T::from_f64(6.283185307179586))
     }
 
-    /// Returns the value expressed in RevolutionsPerSecondSquared (`r/s²`).
+    /// The value in `r/s²`.
     #[inline]
     pub fn as_revolutions_per_second_squared(self) -> T {
         self.0 / T::from_f64(6.283185307179586)
@@ -246,9 +245,8 @@ impl<T: Float> RotationalAcceleration<T> {
 }
 
 impl RotationalAcceleration<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: RotationalAccelerationUnit) -> Self {
         Self(match unit {
@@ -262,9 +260,9 @@ impl RotationalAcceleration<f64> {
 
 fixed_base!(RotationalAcceleration, RadianPerSecondSquared);
 
-/// Unit markers for counting [`RotationalAcceleration`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`RotationalAcceleration`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::rotational_acceleration`](crate::unit::rotational_acceleration).
+/// Also at [`unit::rotational_acceleration`](crate::unit::rotational_acceleration).
 pub mod unit {
     fixed_unit!(RadianPerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::RadianPerSecondSquared, base RadianPerSecondSquared, 1 / 1, pi^0, from_radians_per_second_squared, as_radians_per_second_squared, additive);
     fixed_unit!(DegreePerSecondSquared: RotationalAcceleration, RotationalAccelerationUnit::DegreePerSecondSquared, base RadianPerSecondSquared, 1 / 180, pi^1, from_degrees_per_second_squared, as_degrees_per_second_squared, additive);

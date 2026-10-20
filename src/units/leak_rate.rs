@@ -11,8 +11,7 @@ use crate::Float;
 
 /// A leakage rate of QL = 1 Pa-m³/s is given when the pressure in a closed, evacuated container with a volume of 1 m³ rises by 1 Pa per second or when the pressure in the container drops by 1 Pa in the event of overpressure.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LeakRateUnit::PascalCubicMeterPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LeakRateUnit::PascalCubicMeterPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct LeakRate<T = f64>(T);
 
 quantity!(LeakRate, LeakRateUnit, PascalCubicMeterPerSecond);
 
-/// Unit variants for [`LeakRate`].
+/// The units of [`LeakRate`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -39,7 +38,7 @@ pub enum LeakRateUnit {
 }
 
 impl LeakRateUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::PascalCubicMeterPerSecond,
         Self::MillibarLiterPerSecond,
@@ -74,7 +73,7 @@ impl LeakRateUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -89,7 +88,7 @@ impl LeakRateUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -100,7 +99,7 @@ impl LeakRateUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -111,8 +110,8 @@ impl LeakRateUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -133,8 +132,8 @@ impl LeakRateUnit {
 impl core::str::FromStr for LeakRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa·m³/s" => Ok(Self::PascalCubicMeterPerSecond),
@@ -146,8 +145,8 @@ impl core::str::FromStr for LeakRateUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -171,57 +170,57 @@ impl<T: Float> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
 }
 
 impl<T: Float> LeakRate<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`Pa·m³/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`Pa·m³/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LeakRateUnit> {
         self.in_unit(LeakRateUnit::PascalCubicMeterPerSecond)
     }
 
-    /// Creates a [`LeakRate`] from a value in PascalCubicMetersPerSecond (`Pa·m³/s`).
+    /// A [`LeakRate`] from a value in `Pa·m³/s`.
     #[inline]
     pub fn from_pascal_cubic_meters_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PascalCubicMetersPerSecond (`Pa·m³/s`).
+    /// The value in `Pa·m³/s`.
     #[inline]
     pub fn as_pascal_cubic_meters_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`LeakRate`] from a value in MillibarLitersPerSecond (`mbar·l/s`).
+    /// A [`LeakRate`] from a value in `mbar·l/s`.
     #[inline]
     pub fn from_millibar_liters_per_second(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in MillibarLitersPerSecond (`mbar·l/s`).
+    /// The value in `mbar·l/s`.
     #[inline]
     pub fn as_millibar_liters_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`LeakRate`] from a value in TorrLitersPerSecond (`Torr·l/s`).
+    /// A [`LeakRate`] from a value in `Torr·l/s`.
     #[inline]
     pub fn from_torr_liters_per_second(value: T) -> Self {
         Self(value / T::from_f64(7.5))
     }
 
-    /// Returns the value expressed in TorrLitersPerSecond (`Torr·l/s`).
+    /// The value in `Torr·l/s`.
     #[inline]
     pub fn as_torr_liters_per_second(self) -> T {
         self.0 * T::from_f64(7.5)
     }
 
-    /// Creates a [`LeakRate`] from a value in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
+    /// A [`LeakRate`] from a value in `atm·cm³/s`.
     #[inline]
     pub fn from_atm_cubic_centimeters_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.101325))
     }
 
-    /// Returns the value expressed in AtmCubicCentimetersPerSecond (`atm·cm³/s`).
+    /// The value in `atm·cm³/s`.
     #[inline]
     pub fn as_atm_cubic_centimeters_per_second(self) -> T {
         self.0 / T::from_f64(0.101325)
@@ -229,9 +228,8 @@ impl<T: Float> LeakRate<T> {
 }
 
 impl LeakRate<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LeakRateUnit) -> Self {
         Self(match unit {
@@ -245,9 +243,9 @@ impl LeakRate<f64> {
 
 fixed_base!(LeakRate, PascalCubicMeterPerSecond);
 
-/// Unit markers for counting [`LeakRate`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`LeakRate`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::leak_rate`](crate::unit::leak_rate).
+/// Also at [`unit::leak_rate`](crate::unit::leak_rate).
 pub mod unit {
     fixed_unit!(PascalCubicMeterPerSecond: LeakRate, LeakRateUnit::PascalCubicMeterPerSecond, base PascalCubicMeterPerSecond, 1 / 1, pi^0, from_pascal_cubic_meters_per_second, as_pascal_cubic_meters_per_second, additive);
     fixed_unit!(MillibarLiterPerSecond: LeakRate, LeakRateUnit::MillibarLiterPerSecond, base PascalCubicMeterPerSecond, 1 / 10, pi^0, from_millibar_liters_per_second, as_millibar_liters_per_second, additive);

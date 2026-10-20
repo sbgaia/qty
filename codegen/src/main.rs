@@ -1,10 +1,9 @@
 //! Code generator for `qty`.
 //!
-//! Reads every `data/quantities/*.json` file and writes a corresponding
-//! `src/units/<quantity_snake>.rs` file, plus `src/cross_type.rs` derived
-//! from `data/relations/UnitRelations.json`. Integration tests are written to
-//! `tests/units/<quantity_snake>.rs` (mirroring `src/units/`) and
-//! `tests/cross_type.rs`.
+//! Reads `data/quantities/*.json` and writes one `src/units/<quantity>.rs`
+//! per quantity, plus `src/cross_type.rs` from
+//! `data/relations/UnitRelations.json`. The tests go to
+//! `tests/units/<quantity>.rs` and `tests/cross_type.rs`.
 //!
 //! Run with: `cargo run -p codegen`
 
@@ -35,10 +34,10 @@ fn main() {
         .filter(|e| e.path().extension().is_some_and(|ext| ext == "json"))
         .collect();
 
-    // Sort for deterministic output order.
+    // Sorted, so the output doesn't depend on the directory order.
     entries.sort_by_key(|e| e.path());
 
-    // Parse all quantities up front so we can pass them to `generate_tests` later.
+    // Parsed up front: `generate_tests` needs all of them.
     let quantities: Vec<QuantityDef> = entries
         .iter()
         .map(|e| {
@@ -68,7 +67,7 @@ fn main() {
         generated_modules.push(module_name);
     }
 
-    // Write src/units.rs — the module declaration file.
+    // src/units.rs declares the modules.
     let names: Vec<&str> = quantities.iter().map(|q| q.name.as_str()).collect();
     let units_mod_path = Path::new("src/units.rs");
     write_units_mod(units_mod_path, &generated_modules, &names);
@@ -80,7 +79,6 @@ fn main() {
     rustfmt(unit_mod_path);
     println!("codegen: wrote src/unit.rs");
 
-    // Read curated cross-type relationships from UnitRelations.json.
     let cross_ops = parse_relations(&quantities);
     let any_source = generator::generate_any(&quantities, &cross_ops);
     let any_path = Path::new("src/any.rs");
@@ -99,8 +97,7 @@ fn main() {
         cross_ops.len()
     );
 
-    // Write one test file per quantity into tests/units/ (mirrors src/units/)
-    // and one cross-type test file into tests/.
+    // One test file per quantity, and one for the relations.
     let tests_units_dir = Path::new("tests/units");
     std::fs::create_dir_all(tests_units_dir).expect("create tests/units/");
 
@@ -114,8 +111,6 @@ fn main() {
         test_modules.push(module_name);
     }
 
-    // Cargo only discovers top-level `tests/*.rs` binaries. Write `tests/units.rs`
-    // as the entry point that `mod`-includes every quantity test file.
     let units_test_mod_path = Path::new("tests/units.rs");
     write_test_units_mod(units_test_mod_path, &test_modules);
     rustfmt(units_test_mod_path);
@@ -132,22 +127,18 @@ fn main() {
     );
 }
 
-// ── Cross-type relations ──────────────────────────────────────────────────────
-
-/// Parses `data/relations/UnitRelations.json` and returns [`CrossOp`]s for every
-/// relation whose quantities were all generated.
+/// The products and quotients in `data/relations/UnitRelations.json` whose
+/// quantities were all generated.
 ///
-/// Each curated entry `"C.Unit = A.Unit * B.Unit"` yields:
-/// - `Mul<B> for A = C` and `Mul<A> for B = C`
-/// - `Div<B> for C = A` and `Div<A> for C = B` (unless `-- NoInferredDivision`)
+/// An entry `"C.Unit = A.Unit * B.Unit"` gives `A * B = C` and `B * A = C`,
+/// and also `C / B = A` and `C / A = B` unless marked `NoInferredDivision`.
+/// A dimensionless entry, `"1 = A.Unit * B.Unit"`, gives `A * B` and `B * A`
+/// as plain numbers, and `1 / A = B` and `1 / B = A`.
 ///
-/// Dimensionless entries (`"1 = A.Unit * B.Unit"`) yield `A * B → T`,
-/// `B * A → T`, and `1 / A = B`, `1 / B = A`.
-///
-/// The relation holds in the units it names. Operators work on base-unit
-/// values, so the factor between those units and the base units is computed
-/// exactly; it is 1 for coherent SI base units, in which case the operator is
-/// a bare multiplication or division.
+/// An entry holds in the units it names, while the operators work on base
+/// units, so the factor between the two is computed exactly. For coherent
+/// SI base units it is 1 and the operator is a bare multiplication or
+/// division.
 fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     let path = Path::new("data/relations/UnitRelations.json");
     let content = match std::fs::read_to_string(path) {
@@ -173,7 +164,7 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     .unwrap_or_else(|e| panic!("failed to parse {}: {e}", extra.display()));
     entries.extend(extra);
 
-    // "Quantity.Unit" → exact to-base factor (linear units only).
+    // The exact to-base factor of each "Quantity.Unit" (linear units only).
     let factors: HashMap<String, Const> = quantities
         .iter()
         .flat_map(|q| {
@@ -256,14 +247,14 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
 
         products.push((a_qty.clone(), b_qty.clone(), out_qty.clone(), k.clone()));
 
-        // A * B = C  and  B * A = C  (commutative; emit both).
+        // A * B = C and B * A = C.
         ops.push(op(CrossKind::Mul, &a_qty, &b_qty, &out_qty, &k));
         if a_qty != b_qty {
             ops.push(op(CrossKind::Mul, &b_qty, &a_qty, &out_qty, &k));
         }
 
-        // C / B = A  and  C / A = B  (unless division is suppressed).
-        // Skip ops where lhs == rhs: same-type division already yields `T`.
+        // C / B = A and C / A = B, unless suppressed. When the two sides are
+        // the same type, division already gives a plain number.
         if !no_div {
             if out_qty != b_qty {
                 ops.push(op(CrossKind::Div, &out_qty, &b_qty, &a_qty, &k_inv));
@@ -315,10 +306,10 @@ fn parse_relations(quantities: &[QuantityDef]) -> Vec<CrossOp> {
     ops
 }
 
-/// Panics unless every operation is dimensionally consistent, using the
-/// upstream `BaseDimensions`: `[A] + [B] = [C]` for `A * B = C`, and so on.
-/// Guards against inconsistent upstream relations and mistakes in how they
-/// are expanded here (inferred divisions, roots).
+/// Panics unless every operation is dimensionally consistent, checked with
+/// UnitsNet's `BaseDimensions` (`[A] + [B] = [C]` for `A * B = C`). This
+/// catches bad upstream relations and mistakes in how they're expanded here,
+/// such as the inferred divisions and roots.
 fn check_dimensions(ops: &[CrossOp], quantities: &[QuantityDef]) {
     let dims = |name: &str| -> parser::Dimensions {
         quantities
@@ -372,10 +363,8 @@ fn dimension_sum(a: parser::Dimensions, b: parser::Dimensions, sign: i32) -> par
     std::array::from_fn(|i| a[i] + sign * b[i])
 }
 
-// ── Module file ───────────────────────────────────────────────────────────────
-
-/// Writes `src/unit.rs`: `unit::<quantity>` re-exports each quantity's
-/// `Fixed` unit markers under a short path.
+/// Writes `src/unit.rs`, which re-exports each quantity's `Fixed` units
+/// under a short path: `unit::<quantity>`.
 fn write_unit_markers_mod(path: &Path, modules: &[String], names: &[&str]) {
     let mut content = String::from(
         "// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT\n\
@@ -389,8 +378,8 @@ fn write_unit_markers_mod(path: &Path, modules: &[String], names: &[&str]) {
     std::fs::write(path, content).unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
 }
 
-/// `#[cfg]` (and docs.rs badge) lines gating an item on `name`'s feature
-/// group; empty for core quantities.
+/// The `#[cfg]` and docs.rs badge lines for `name`'s feature group. Empty
+/// for core quantities.
 fn gate(name: &str) -> String {
     match generator::group(name) {
         None => String::new(),
@@ -400,8 +389,8 @@ fn gate(name: &str) -> String {
     }
 }
 
-/// Writes `src/units.rs` with `pub mod` declarations for every generated module
-/// and re-exports each quantity type and its unit enum.
+/// Writes `src/units.rs`, which declares every quantity module and
+/// re-exports the quantities and their unit enums.
 fn write_units_mod(path: &Path, modules: &[String], names: &[&str]) {
     let mut content =
         String::from("// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT\n\n");
@@ -421,12 +410,9 @@ fn write_units_mod(path: &Path, modules: &[String], names: &[&str]) {
     std::fs::write(path, content).unwrap_or_else(|e| panic!("write {}: {e}", path.display()));
 }
 
-/// Writes `tests/units.rs` — the entry point for the `units` integration test binary.
-///
-/// Cargo only auto-discovers top-level `tests/*.rs` binaries; files inside
-/// `tests/units/` are submodules.  Because `tests/units.rs` is the crate root
-/// its `mod foo;` declarations resolve relative to `tests/` (not `tests/units/`),
-/// so we use `#[path]` to point each module at the correct file.
+/// Writes `tests/units.rs`, the root of the `units` test binary. Cargo only
+/// finds the top-level `tests/*.rs`, so the files in `tests/units/` are its
+/// modules. Their `mod` paths would resolve from `tests/`, hence `#[path]`.
 fn write_test_units_mod(path: &Path, modules: &[String]) {
     let mut content =
         String::from("// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT\n\n");
@@ -527,12 +513,9 @@ fn check_unit_exprs<Q: qty::Quantity<Value = f64>>(new: fn(f64, Q::Unit) -> Q) -
 }
 "#;
 
-// ── Formatting ────────────────────────────────────────────────────────────────
-
-/// Runs `rustfmt` on a single file so generated source always passes `cargo fmt --check`.
-///
-/// Failures are intentionally ignored: if `rustfmt` is unavailable the build still succeeds,
-/// and CI's `cargo fmt --check` step will catch any remaining drift.
+/// Formats a generated file, so it passes `cargo fmt --check`. Failures are
+/// ignored: without rustfmt the code is still valid, and CI's format check
+/// would catch the difference.
 fn rustfmt(path: &Path) {
     std::process::Command::new("rustfmt")
         .arg("--edition=2021")

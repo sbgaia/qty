@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Entropy is an important concept in the branch of science known as thermodynamics. The idea of "irreversibility" is central to the understanding of entropy.  It is often said that entropy is an expression of the disorder, or randomness of a system, or of our lack of information about it. Entropy is an extensive property. It has the dimension of energy divided by temperature, which has a unit of joules per kelvin (J/K) in the International System of Units
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`EntropyUnit::JoulePerKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`EntropyUnit::JoulePerKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Entropy<T = f64>(T);
 
 quantity!(Entropy, EntropyUnit, JoulePerKelvin);
 
-/// Unit variants for [`Entropy`].
+/// The units of [`Entropy`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -42,7 +41,7 @@ pub enum EntropyUnit {
 }
 
 impl EntropyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::JoulePerKelvin,
         Self::KilojoulePerKelvin,
@@ -98,7 +97,7 @@ impl EntropyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -113,7 +112,7 @@ impl EntropyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -127,7 +126,7 @@ impl EntropyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -141,8 +140,8 @@ impl EntropyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -169,8 +168,8 @@ impl EntropyUnit {
 impl core::str::FromStr for EntropyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/K" => Ok(Self::JoulePerKelvin),
@@ -185,8 +184,8 @@ impl core::str::FromStr for EntropyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Entropy<T>> for EntropyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -216,9 +215,9 @@ impl<T: Float> crate::UnitOf<Entropy<T>> for EntropyUnit {
 }
 
 impl<T: Float> Entropy<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`J/K`, `kJ/K`, `MJ/K`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`J/K`, `kJ/K`, `MJ/K`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, EntropyUnit> {
         const SCALE: [(f64, EntropyUnit); 3] = [
@@ -240,85 +239,85 @@ impl<T: Float> Entropy<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Entropy`] from a value in JoulesPerKelvin (`J/K`).
+    /// A [`Entropy`] from a value in `J/K`.
     #[inline]
     pub fn from_joules_per_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerKelvin (`J/K`).
+    /// The value in `J/K`.
     #[inline]
     pub fn as_joules_per_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`Entropy`] from a value in KilojoulesPerKelvin (`kJ/K`).
+    /// A [`Entropy`] from a value in `kJ/K`.
     #[inline]
     pub fn from_kilojoules_per_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerKelvin (`kJ/K`).
+    /// The value in `kJ/K`.
     #[inline]
     pub fn as_kilojoules_per_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Entropy`] from a value in MegajoulesPerKelvin (`MJ/K`).
+    /// A [`Entropy`] from a value in `MJ/K`.
     #[inline]
     pub fn from_megajoules_per_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegajoulesPerKelvin (`MJ/K`).
+    /// The value in `MJ/K`.
     #[inline]
     pub fn as_megajoules_per_kelvin(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Entropy`] from a value in CaloriesPerKelvin (`cal/K`).
+    /// A [`Entropy`] from a value in `cal/K`.
     #[inline]
     pub fn from_calories_per_kelvin(value: T) -> Self {
         Self(value * T::from_f64(4.184))
     }
 
-    /// Returns the value expressed in CaloriesPerKelvin (`cal/K`).
+    /// The value in `cal/K`.
     #[inline]
     pub fn as_calories_per_kelvin(self) -> T {
         self.0 / T::from_f64(4.184)
     }
 
-    /// Creates a [`Entropy`] from a value in KilocaloriesPerKelvin (`kcal/K`).
+    /// A [`Entropy`] from a value in `kcal/K`.
     #[inline]
     pub fn from_kilocalories_per_kelvin(value: T) -> Self {
         Self(value * T::from_f64(4184.0))
     }
 
-    /// Returns the value expressed in KilocaloriesPerKelvin (`kcal/K`).
+    /// The value in `kcal/K`.
     #[inline]
     pub fn as_kilocalories_per_kelvin(self) -> T {
         self.0 / T::from_f64(4184.0)
     }
 
-    /// Creates a [`Entropy`] from a value in JoulesPerDegreeCelsius (`J/°C`).
+    /// A [`Entropy`] from a value in `J/°C`.
     #[inline]
     pub fn from_joules_per_degree_celsius(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerDegreeCelsius (`J/°C`).
+    /// The value in `J/°C`.
     #[inline]
     pub fn as_joules_per_degree_celsius(self) -> T {
         self.0
     }
 
-    /// Creates a [`Entropy`] from a value in KilojoulesPerDegreeCelsius (`kJ/°C`).
+    /// A [`Entropy`] from a value in `kJ/°C`.
     #[inline]
     pub fn from_kilojoules_per_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerDegreeCelsius (`kJ/°C`).
+    /// The value in `kJ/°C`.
     #[inline]
     pub fn as_kilojoules_per_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000.0)
@@ -326,9 +325,8 @@ impl<T: Float> Entropy<T> {
 }
 
 impl Entropy<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: EntropyUnit) -> Self {
         Self(match unit {
@@ -345,9 +343,9 @@ impl Entropy<f64> {
 
 fixed_base!(Entropy, JoulePerKelvin);
 
-/// Unit markers for counting [`Entropy`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Entropy`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::entropy`](crate::unit::entropy).
+/// Also at [`unit::entropy`](crate::unit::entropy).
 pub mod unit {
     fixed_unit!(JoulePerKelvin: Entropy, EntropyUnit::JoulePerKelvin, base JoulePerKelvin, 1 / 1, pi^0, from_joules_per_kelvin, as_joules_per_kelvin, additive);
     fixed_unit!(KilojoulePerKelvin: Entropy, EntropyUnit::KilojoulePerKelvin, base JoulePerKelvin, 1000 / 1, pi^0, from_kilojoules_per_kelvin, as_kilojoules_per_kelvin, additive);

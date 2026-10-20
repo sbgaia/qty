@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Many different units of length have been used around the world. The main units in modern use are U.S. customary units in the United States and the Metric system elsewhere. British Imperial units are still used for some purposes in the United Kingdom and some other countries. The metric system is sub-divided into SI and non-SI units.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`LengthUnit::Meter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`LengthUnit::Meter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Length<T = f64>(T);
 
 quantity!(Length, LengthUnit, Meter);
 
-/// Unit variants for [`Length`].
+/// The units of [`Length`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -95,7 +94,7 @@ pub enum LengthUnit {
 }
 
 impl LengthUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Meter,
         Self::Femtometer,
@@ -396,7 +395,7 @@ impl LengthUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -411,7 +410,7 @@ impl LengthUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -460,7 +459,7 @@ impl LengthUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -509,8 +508,8 @@ impl LengthUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -607,8 +606,8 @@ impl LengthUnit {
 impl core::str::FromStr for LengthUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m" => Ok(Self::Meter),
@@ -664,8 +663,8 @@ impl core::str::FromStr for LengthUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -765,9 +764,9 @@ impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
 }
 
 impl<T: Float> Length<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`fm`, `pm`, `nm`, `µm`, `mm`, `m`, `km`, `Mm`, `Gm`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`fm`, `pm`, `nm`, `µm`, `mm`, `m`, `km`, `Mm`, `Gm`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, LengthUnit> {
         const SCALE: [(f64, LengthUnit); 9] = [
@@ -795,505 +794,505 @@ impl<T: Float> Length<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Length`] from a value in Meters (`m`).
+    /// A [`Length`] from a value in `m`.
     #[inline]
     pub fn from_meters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Meters (`m`).
+    /// The value in `m`.
     #[inline]
     pub fn as_meters(self) -> T {
         self.0
     }
 
-    /// Creates a [`Length`] from a value in Femtometers (`fm`).
+    /// A [`Length`] from a value in `fm`.
     #[inline]
     pub fn from_femtometers(value: T) -> Self {
         Self(value / T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in Femtometers (`fm`).
+    /// The value in `fm`.
     #[inline]
     pub fn as_femtometers(self) -> T {
         self.0 * T::from_f64(1e15)
     }
 
-    /// Creates a [`Length`] from a value in Picometers (`pm`).
+    /// A [`Length`] from a value in `pm`.
     #[inline]
     pub fn from_picometers(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Picometers (`pm`).
+    /// The value in `pm`.
     #[inline]
     pub fn as_picometers(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`Length`] from a value in Nanometers (`nm`).
+    /// A [`Length`] from a value in `nm`.
     #[inline]
     pub fn from_nanometers(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanometers (`nm`).
+    /// The value in `nm`.
     #[inline]
     pub fn as_nanometers(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Length`] from a value in Micrometers (`µm`).
+    /// A [`Length`] from a value in `µm`.
     #[inline]
     pub fn from_micrometers(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Micrometers (`µm`).
+    /// The value in `µm`.
     #[inline]
     pub fn as_micrometers(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Length`] from a value in Millimeters (`mm`).
+    /// A [`Length`] from a value in `mm`.
     #[inline]
     pub fn from_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millimeters (`mm`).
+    /// The value in `mm`.
     #[inline]
     pub fn as_millimeters(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Length`] from a value in Centimeters (`cm`).
+    /// A [`Length`] from a value in `cm`.
     #[inline]
     pub fn from_centimeters(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in Centimeters (`cm`).
+    /// The value in `cm`.
     #[inline]
     pub fn as_centimeters(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Length`] from a value in Decimeters (`dm`).
+    /// A [`Length`] from a value in `dm`.
     #[inline]
     pub fn from_decimeters(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Decimeters (`dm`).
+    /// The value in `dm`.
     #[inline]
     pub fn as_decimeters(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Length`] from a value in Decameters (`dam`).
+    /// A [`Length`] from a value in `dam`.
     #[inline]
     pub fn from_decameters(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in Decameters (`dam`).
+    /// The value in `dam`.
     #[inline]
     pub fn as_decameters(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`Length`] from a value in Hectometers (`hm`).
+    /// A [`Length`] from a value in `hm`.
     #[inline]
     pub fn from_hectometers(value: T) -> Self {
         Self(value * T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in Hectometers (`hm`).
+    /// The value in `hm`.
     #[inline]
     pub fn as_hectometers(self) -> T {
         self.0 / T::from_f64(100.0)
     }
 
-    /// Creates a [`Length`] from a value in Kilometers (`km`).
+    /// A [`Length`] from a value in `km`.
     #[inline]
     pub fn from_kilometers(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilometers (`km`).
+    /// The value in `km`.
     #[inline]
     pub fn as_kilometers(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Length`] from a value in Megameters (`Mm`).
+    /// A [`Length`] from a value in `Mm`.
     #[inline]
     pub fn from_megameters(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megameters (`Mm`).
+    /// The value in `Mm`.
     #[inline]
     pub fn as_megameters(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Length`] from a value in Gigameters (`Gm`).
+    /// A [`Length`] from a value in `Gm`.
     #[inline]
     pub fn from_gigameters(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Gigameters (`Gm`).
+    /// The value in `Gm`.
     #[inline]
     pub fn as_gigameters(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`Length`] from a value in Miles (`mi`).
+    /// A [`Length`] from a value in `mi`.
     #[inline]
     pub fn from_miles(value: T) -> Self {
         Self(value * T::from_f64(1609.344))
     }
 
-    /// Returns the value expressed in Miles (`mi`).
+    /// The value in `mi`.
     #[inline]
     pub fn as_miles(self) -> T {
         self.0 / T::from_f64(1609.344)
     }
 
-    /// Creates a [`Length`] from a value in Yards (`yd`).
+    /// A [`Length`] from a value in `yd`.
     #[inline]
     pub fn from_yards(value: T) -> Self {
         Self(value * T::from_f64(0.9144))
     }
 
-    /// Returns the value expressed in Yards (`yd`).
+    /// The value in `yd`.
     #[inline]
     pub fn as_yards(self) -> T {
         self.0 / T::from_f64(0.9144)
     }
 
-    /// Creates a [`Length`] from a value in Kiloyards (`kyd`).
+    /// A [`Length`] from a value in `kyd`.
     #[inline]
     pub fn from_kiloyards(value: T) -> Self {
         Self(value * T::from_f64(914.4))
     }
 
-    /// Returns the value expressed in Kiloyards (`kyd`).
+    /// The value in `kyd`.
     #[inline]
     pub fn as_kiloyards(self) -> T {
         self.0 / T::from_f64(914.4)
     }
 
-    /// Creates a [`Length`] from a value in Feet (`ft`).
+    /// A [`Length`] from a value in `ft`.
     #[inline]
     pub fn from_feet(value: T) -> Self {
         Self(value * T::from_f64(0.3048))
     }
 
-    /// Returns the value expressed in Feet (`ft`).
+    /// The value in `ft`.
     #[inline]
     pub fn as_feet(self) -> T {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Creates a [`Length`] from a value in Kilofeet (`kft`).
+    /// A [`Length`] from a value in `kft`.
     #[inline]
     pub fn from_kilofeet(value: T) -> Self {
         Self(value * T::from_f64(304.8))
     }
 
-    /// Returns the value expressed in Kilofeet (`kft`).
+    /// The value in `kft`.
     #[inline]
     pub fn as_kilofeet(self) -> T {
         self.0 / T::from_f64(304.8)
     }
 
-    /// Creates a [`Length`] from a value in UsSurveyFeet (`ftUS`).
+    /// A [`Length`] from a value in `ftUS`.
     #[inline]
     pub fn from_us_survey_feet(value: T) -> Self {
         Self(value * T::from_f64(0.3048006096012192))
     }
 
-    /// Returns the value expressed in UsSurveyFeet (`ftUS`).
+    /// The value in `ftUS`.
     #[inline]
     pub fn as_us_survey_feet(self) -> T {
         self.0 / T::from_f64(0.3048006096012192)
     }
 
-    /// Creates a [`Length`] from a value in Inches (`in`).
+    /// A [`Length`] from a value in `in`.
     #[inline]
     pub fn from_inches(value: T) -> Self {
         Self(value * T::from_f64(0.0254))
     }
 
-    /// Returns the value expressed in Inches (`in`).
+    /// The value in `in`.
     #[inline]
     pub fn as_inches(self) -> T {
         self.0 / T::from_f64(0.0254)
     }
 
-    /// Creates a [`Length`] from a value in Mils (`mil`).
+    /// A [`Length`] from a value in `mil`.
     #[inline]
     pub fn from_mils(value: T) -> Self {
         Self(value * T::from_f64(2.54e-5))
     }
 
-    /// Returns the value expressed in Mils (`mil`).
+    /// The value in `mil`.
     #[inline]
     pub fn as_mils(self) -> T {
         self.0 / T::from_f64(2.54e-5)
     }
 
-    /// Creates a [`Length`] from a value in NauticalMiles (`NM`).
+    /// A [`Length`] from a value in `NM`.
     #[inline]
     pub fn from_nautical_miles(value: T) -> Self {
         Self(value * T::from_f64(1852.0))
     }
 
-    /// Returns the value expressed in NauticalMiles (`NM`).
+    /// The value in `NM`.
     #[inline]
     pub fn as_nautical_miles(self) -> T {
         self.0 / T::from_f64(1852.0)
     }
 
-    /// Creates a [`Length`] from a value in Fathoms (`fathom`).
+    /// A [`Length`] from a value in `fathom`.
     #[inline]
     pub fn from_fathoms(value: T) -> Self {
         Self(value * T::from_f64(1.8288))
     }
 
-    /// Returns the value expressed in Fathoms (`fathom`).
+    /// The value in `fathom`.
     #[inline]
     pub fn as_fathoms(self) -> T {
         self.0 / T::from_f64(1.8288)
     }
 
-    /// Creates a [`Length`] from a value in Shackles (`shackle`).
+    /// A [`Length`] from a value in `shackle`.
     #[inline]
     pub fn from_shackles(value: T) -> Self {
         Self(value * T::from_f64(27.432))
     }
 
-    /// Returns the value expressed in Shackles (`shackle`).
+    /// The value in `shackle`.
     #[inline]
     pub fn as_shackles(self) -> T {
         self.0 / T::from_f64(27.432)
     }
 
-    /// Creates a [`Length`] from a value in Microinches (`µin`).
+    /// A [`Length`] from a value in `µin`.
     #[inline]
     pub fn from_microinches(value: T) -> Self {
         Self(value * T::from_f64(2.54e-8))
     }
 
-    /// Returns the value expressed in Microinches (`µin`).
+    /// The value in `µin`.
     #[inline]
     pub fn as_microinches(self) -> T {
         self.0 / T::from_f64(2.54e-8)
     }
 
-    /// Creates a [`Length`] from a value in PrinterPoints (`pt`).
+    /// A [`Length`] from a value in `pt`.
     #[inline]
     pub fn from_printer_points(value: T) -> Self {
         Self(value * T::from_f64(0.00035145980351459805))
     }
 
-    /// Returns the value expressed in PrinterPoints (`pt`).
+    /// The value in `pt`.
     #[inline]
     pub fn as_printer_points(self) -> T {
         self.0 / T::from_f64(0.00035145980351459805)
     }
 
-    /// Creates a [`Length`] from a value in DtpPoints (`pt`).
+    /// A [`Length`] from a value in `pt`.
     #[inline]
     pub fn from_dtp_points(value: T) -> Self {
         Self(value * T::from_f64(0.00035277777777777776))
     }
 
-    /// Returns the value expressed in DtpPoints (`pt`).
+    /// The value in `pt`.
     #[inline]
     pub fn as_dtp_points(self) -> T {
         self.0 / T::from_f64(0.00035277777777777776)
     }
 
-    /// Creates a [`Length`] from a value in PrinterPicas (`pica`).
+    /// A [`Length`] from a value in `pica`.
     #[inline]
     pub fn from_printer_picas(value: T) -> Self {
         Self(value * T::from_f64(0.004217517642175176))
     }
 
-    /// Returns the value expressed in PrinterPicas (`pica`).
+    /// The value in `pica`.
     #[inline]
     pub fn as_printer_picas(self) -> T {
         self.0 / T::from_f64(0.004217517642175176)
     }
 
-    /// Creates a [`Length`] from a value in DtpPicas (`pica`).
+    /// A [`Length`] from a value in `pica`.
     #[inline]
     pub fn from_dtp_picas(value: T) -> Self {
         Self(value * T::from_f64(0.004233333333333334))
     }
 
-    /// Returns the value expressed in DtpPicas (`pica`).
+    /// The value in `pica`.
     #[inline]
     pub fn as_dtp_picas(self) -> T {
         self.0 / T::from_f64(0.004233333333333334)
     }
 
-    /// Creates a [`Length`] from a value in Twips (`twip`).
+    /// A [`Length`] from a value in `twip`.
     #[inline]
     pub fn from_twips(value: T) -> Self {
         Self(value * T::from_f64(1.763888888888889e-5))
     }
 
-    /// Returns the value expressed in Twips (`twip`).
+    /// The value in `twip`.
     #[inline]
     pub fn as_twips(self) -> T {
         self.0 / T::from_f64(1.763888888888889e-5)
     }
 
-    /// Creates a [`Length`] from a value in Hands (`h`).
+    /// A [`Length`] from a value in `h`.
     #[inline]
     pub fn from_hands(value: T) -> Self {
         Self(value * T::from_f64(0.1016))
     }
 
-    /// Returns the value expressed in Hands (`h`).
+    /// The value in `h`.
     #[inline]
     pub fn as_hands(self) -> T {
         self.0 / T::from_f64(0.1016)
     }
 
-    /// Creates a [`Length`] from a value in AstronomicalUnits (`au`).
+    /// A [`Length`] from a value in `au`.
     #[inline]
     pub fn from_astronomical_units(value: T) -> Self {
         Self(value * T::from_f64(1.495978707e11))
     }
 
-    /// Returns the value expressed in AstronomicalUnits (`au`).
+    /// The value in `au`.
     #[inline]
     pub fn as_astronomical_units(self) -> T {
         self.0 / T::from_f64(1.495978707e11)
     }
 
-    /// Creates a [`Length`] from a value in Parsecs (`pc`).
+    /// A [`Length`] from a value in `pc`.
     #[inline]
     pub fn from_parsecs(value: T) -> Self {
         Self(value * T::from_f64(3.08567758128e16))
     }
 
-    /// Returns the value expressed in Parsecs (`pc`).
+    /// The value in `pc`.
     #[inline]
     pub fn as_parsecs(self) -> T {
         self.0 / T::from_f64(3.08567758128e16)
     }
 
-    /// Creates a [`Length`] from a value in Kiloparsecs (`kpc`).
+    /// A [`Length`] from a value in `kpc`.
     #[inline]
     pub fn from_kiloparsecs(value: T) -> Self {
         Self(value * T::from_f64(3.08567758128e19))
     }
 
-    /// Returns the value expressed in Kiloparsecs (`kpc`).
+    /// The value in `kpc`.
     #[inline]
     pub fn as_kiloparsecs(self) -> T {
         self.0 / T::from_f64(3.08567758128e19)
     }
 
-    /// Creates a [`Length`] from a value in Megaparsecs (`Mpc`).
+    /// A [`Length`] from a value in `Mpc`.
     #[inline]
     pub fn from_megaparsecs(value: T) -> Self {
         Self(value * T::from_f64(3.08567758128e22))
     }
 
-    /// Returns the value expressed in Megaparsecs (`Mpc`).
+    /// The value in `Mpc`.
     #[inline]
     pub fn as_megaparsecs(self) -> T {
         self.0 / T::from_f64(3.08567758128e22)
     }
 
-    /// Creates a [`Length`] from a value in LightYears (`ly`).
+    /// A [`Length`] from a value in `ly`.
     #[inline]
     pub fn from_light_years(value: T) -> Self {
         Self(value * T::from_f64(9.46073047258e15))
     }
 
-    /// Returns the value expressed in LightYears (`ly`).
+    /// The value in `ly`.
     #[inline]
     pub fn as_light_years(self) -> T {
         self.0 / T::from_f64(9.46073047258e15)
     }
 
-    /// Creates a [`Length`] from a value in KilolightYears (`kly`).
+    /// A [`Length`] from a value in `kly`.
     #[inline]
     pub fn from_kilolight_years(value: T) -> Self {
         Self(value * T::from_f64(9.46073047258e18))
     }
 
-    /// Returns the value expressed in KilolightYears (`kly`).
+    /// The value in `kly`.
     #[inline]
     pub fn as_kilolight_years(self) -> T {
         self.0 / T::from_f64(9.46073047258e18)
     }
 
-    /// Creates a [`Length`] from a value in MegalightYears (`Mly`).
+    /// A [`Length`] from a value in `Mly`.
     #[inline]
     pub fn from_megalight_years(value: T) -> Self {
         Self(value * T::from_f64(9.46073047258e21))
     }
 
-    /// Returns the value expressed in MegalightYears (`Mly`).
+    /// The value in `Mly`.
     #[inline]
     pub fn as_megalight_years(self) -> T {
         self.0 / T::from_f64(9.46073047258e21)
     }
 
-    /// Creates a [`Length`] from a value in SolarRadiuses (`R⊙`).
+    /// A [`Length`] from a value in `R⊙`.
     #[inline]
     pub fn from_solar_radiuses(value: T) -> Self {
         Self(value * T::from_f64(6.957e8))
     }
 
-    /// Returns the value expressed in SolarRadiuses (`R⊙`).
+    /// The value in `R⊙`.
     #[inline]
     pub fn as_solar_radiuses(self) -> T {
         self.0 / T::from_f64(6.957e8)
     }
 
-    /// Creates a [`Length`] from a value in Chains (`ch`).
+    /// A [`Length`] from a value in `ch`.
     #[inline]
     pub fn from_chains(value: T) -> Self {
         Self(value * T::from_f64(20.1168))
     }
 
-    /// Returns the value expressed in Chains (`ch`).
+    /// The value in `ch`.
     #[inline]
     pub fn as_chains(self) -> T {
         self.0 / T::from_f64(20.1168)
     }
 
-    /// Creates a [`Length`] from a value in Angstroms (`Å`).
+    /// A [`Length`] from a value in `Å`.
     #[inline]
     pub fn from_angstroms(value: T) -> Self {
         Self(value / T::from_f64(1e10))
     }
 
-    /// Returns the value expressed in Angstroms (`Å`).
+    /// The value in `Å`.
     #[inline]
     pub fn as_angstroms(self) -> T {
         self.0 * T::from_f64(1e10)
     }
 
-    /// Creates a [`Length`] from a value in DataMiles (`DM`).
+    /// A [`Length`] from a value in `DM`.
     #[inline]
     pub fn from_data_miles(value: T) -> Self {
         Self(value * T::from_f64(1828.8))
     }
 
-    /// Returns the value expressed in DataMiles (`DM`).
+    /// The value in `DM`.
     #[inline]
     pub fn as_data_miles(self) -> T {
         self.0 / T::from_f64(1828.8)
@@ -1301,9 +1300,8 @@ impl<T: Float> Length<T> {
 }
 
 impl Length<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: LengthUnit) -> Self {
         Self(match unit {
@@ -1355,9 +1353,9 @@ impl Length<f64> {
 
 fixed_base!(Length, Meter);
 
-/// Unit markers for counting [`Length`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Length`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::length`](crate::unit::length).
+/// Also at [`unit::length`](crate::unit::length).
 pub mod unit {
     fixed_unit!(Meter: Length, LengthUnit::Meter, base Meter, 1 / 1, pi^0, from_meters, as_meters, additive);
     fixed_unit!(Femtometer: Length, LengthUnit::Femtometer, base Meter, 1 / 1000000000000000, pi^0, from_femtometers, as_femtometers, additive);

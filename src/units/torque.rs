@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Torque, moment or moment of force (see the terminology below), is the tendency of a force to rotate an object about an axis,\[1\] fulcrum, or pivot. Just as a force is a push or a pull, a torque can be thought of as a twist to an object. Mathematically, torque is defined as the cross product of the lever-arm distance and force, which tends to produce rotation. Loosely speaking, torque is a measure of the turning force on an object such as a bolt or a flywheel. For example, pushing or pulling the handle of a wrench connected to a nut or bolt produces a torque (turning force) that loosens or tightens the nut or bolt.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`TorqueUnit::NewtonMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`TorqueUnit::NewtonMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Torque<T = f64>(T);
 
 quantity!(Torque, TorqueUnit, NewtonMeter);
 
-/// Unit variants for [`Torque`].
+/// The units of [`Torque`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -62,7 +61,7 @@ pub enum TorqueUnit {
 }
 
 impl TorqueUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::NewtonMillimeter,
         Self::KilonewtonMillimeter,
@@ -258,7 +257,7 @@ impl TorqueUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -273,7 +272,7 @@ impl TorqueUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -307,7 +306,7 @@ impl TorqueUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -341,8 +340,8 @@ impl TorqueUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -409,8 +408,8 @@ impl TorqueUnit {
 impl core::str::FromStr for TorqueUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N·mm" => Ok(Self::NewtonMillimeter),
@@ -460,8 +459,8 @@ impl core::str::FromStr for TorqueUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -531,9 +530,9 @@ impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
 }
 
 impl<T: Float> Torque<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`N·m`, `kN·m`, `MN·m`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`N·m`, `kN·m`, `MN·m`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, TorqueUnit> {
         const SCALE: [(f64, TorqueUnit); 3] = [
@@ -555,325 +554,325 @@ impl<T: Float> Torque<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Torque`] from a value in NewtonMillimeters (`N·mm`).
+    /// A [`Torque`] from a value in `N·mm`.
     #[inline]
     pub fn from_newton_millimeters(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in NewtonMillimeters (`N·mm`).
+    /// The value in `N·mm`.
     #[inline]
     pub fn as_newton_millimeters(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Torque`] from a value in KilonewtonMillimeters (`kN·mm`).
+    /// A [`Torque`] from a value in `kN·mm`.
     #[inline]
     pub fn from_kilonewton_millimeters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilonewtonMillimeters (`kN·mm`).
+    /// The value in `kN·mm`.
     #[inline]
     pub fn as_kilonewton_millimeters(self) -> T {
         self.0
     }
 
-    /// Creates a [`Torque`] from a value in MeganewtonMillimeters (`MN·mm`).
+    /// A [`Torque`] from a value in `MN·mm`.
     #[inline]
     pub fn from_meganewton_millimeters(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MeganewtonMillimeters (`MN·mm`).
+    /// The value in `MN·mm`.
     #[inline]
     pub fn as_meganewton_millimeters(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Torque`] from a value in NewtonCentimeters (`N·cm`).
+    /// A [`Torque`] from a value in `N·cm`.
     #[inline]
     pub fn from_newton_centimeters(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in NewtonCentimeters (`N·cm`).
+    /// The value in `N·cm`.
     #[inline]
     pub fn as_newton_centimeters(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Torque`] from a value in KilonewtonCentimeters (`kN·cm`).
+    /// A [`Torque`] from a value in `kN·cm`.
     #[inline]
     pub fn from_kilonewton_centimeters(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in KilonewtonCentimeters (`kN·cm`).
+    /// The value in `kN·cm`.
     #[inline]
     pub fn as_kilonewton_centimeters(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`Torque`] from a value in MeganewtonCentimeters (`MN·cm`).
+    /// A [`Torque`] from a value in `MN·cm`.
     #[inline]
     pub fn from_meganewton_centimeters(value: T) -> Self {
         Self(value * T::from_f64(10000.0))
     }
 
-    /// Returns the value expressed in MeganewtonCentimeters (`MN·cm`).
+    /// The value in `MN·cm`.
     #[inline]
     pub fn as_meganewton_centimeters(self) -> T {
         self.0 / T::from_f64(10000.0)
     }
 
-    /// Creates a [`Torque`] from a value in NewtonMeters (`N·m`).
+    /// A [`Torque`] from a value in `N·m`.
     #[inline]
     pub fn from_newton_meters(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in NewtonMeters (`N·m`).
+    /// The value in `N·m`.
     #[inline]
     pub fn as_newton_meters(self) -> T {
         self.0
     }
 
-    /// Creates a [`Torque`] from a value in KilonewtonMeters (`kN·m`).
+    /// A [`Torque`] from a value in `kN·m`.
     #[inline]
     pub fn from_kilonewton_meters(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilonewtonMeters (`kN·m`).
+    /// The value in `kN·m`.
     #[inline]
     pub fn as_kilonewton_meters(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Torque`] from a value in MeganewtonMeters (`MN·m`).
+    /// A [`Torque`] from a value in `MN·m`.
     #[inline]
     pub fn from_meganewton_meters(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MeganewtonMeters (`MN·m`).
+    /// The value in `MN·m`.
     #[inline]
     pub fn as_meganewton_meters(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Torque`] from a value in OunceForceFeet (`ozf·ft`).
+    /// A [`Torque`] from a value in `ozf·ft`.
     #[inline]
     pub fn from_ounce_force_feet(value: T) -> Self {
         Self(value * T::from_f64(0.08473862177071252))
     }
 
-    /// Returns the value expressed in OunceForceFeet (`ozf·ft`).
+    /// The value in `ozf·ft`.
     #[inline]
     pub fn as_ounce_force_feet(self) -> T {
         self.0 / T::from_f64(0.08473862177071252)
     }
 
-    /// Creates a [`Torque`] from a value in OunceForceInches (`ozf·in`).
+    /// A [`Torque`] from a value in `ozf·in`.
     #[inline]
     pub fn from_ounce_force_inches(value: T) -> Self {
         Self(value * T::from_f64(0.0070615518142260435))
     }
 
-    /// Returns the value expressed in OunceForceInches (`ozf·in`).
+    /// The value in `ozf·in`.
     #[inline]
     pub fn as_ounce_force_inches(self) -> T {
         self.0 / T::from_f64(0.0070615518142260435)
     }
 
-    /// Creates a [`Torque`] from a value in PoundalFeet (`pdl·ft`).
+    /// A [`Torque`] from a value in `pdl·ft`.
     #[inline]
     pub fn from_poundal_feet(value: T) -> Self {
         Self(value * T::from_f64(0.0421401100938048))
     }
 
-    /// Returns the value expressed in PoundalFeet (`pdl·ft`).
+    /// The value in `pdl·ft`.
     #[inline]
     pub fn as_poundal_feet(self) -> T {
         self.0 / T::from_f64(0.0421401100938048)
     }
 
-    /// Creates a [`Torque`] from a value in PoundForceInches (`lbf·in`).
+    /// A [`Torque`] from a value in `lbf·in`.
     #[inline]
     pub fn from_pound_force_inches(value: T) -> Self {
         Self(value * T::from_f64(0.1129848290276167))
     }
 
-    /// Returns the value expressed in PoundForceInches (`lbf·in`).
+    /// The value in `lbf·in`.
     #[inline]
     pub fn as_pound_force_inches(self) -> T {
         self.0 / T::from_f64(0.1129848290276167)
     }
 
-    /// Creates a [`Torque`] from a value in KilopoundForceInches (`klbf·in`).
+    /// A [`Torque`] from a value in `klbf·in`.
     #[inline]
     pub fn from_kilopound_force_inches(value: T) -> Self {
         Self(value * T::from_f64(112.9848290276167))
     }
 
-    /// Returns the value expressed in KilopoundForceInches (`klbf·in`).
+    /// The value in `klbf·in`.
     #[inline]
     pub fn as_kilopound_force_inches(self) -> T {
         self.0 / T::from_f64(112.9848290276167)
     }
 
-    /// Creates a [`Torque`] from a value in MegapoundForceInches (`Mlbf·in`).
+    /// A [`Torque`] from a value in `Mlbf·in`.
     #[inline]
     pub fn from_megapound_force_inches(value: T) -> Self {
         Self(value * T::from_f64(112984.8290276167))
     }
 
-    /// Returns the value expressed in MegapoundForceInches (`Mlbf·in`).
+    /// The value in `Mlbf·in`.
     #[inline]
     pub fn as_megapound_force_inches(self) -> T {
         self.0 / T::from_f64(112984.8290276167)
     }
 
-    /// Creates a [`Torque`] from a value in PoundForceFeet (`lbf·ft`).
+    /// A [`Torque`] from a value in `lbf·ft`.
     #[inline]
     pub fn from_pound_force_feet(value: T) -> Self {
         Self(value * T::from_f64(1.3558179483314003))
     }
 
-    /// Returns the value expressed in PoundForceFeet (`lbf·ft`).
+    /// The value in `lbf·ft`.
     #[inline]
     pub fn as_pound_force_feet(self) -> T {
         self.0 / T::from_f64(1.3558179483314003)
     }
 
-    /// Creates a [`Torque`] from a value in KilopoundForceFeet (`klbf·ft`).
+    /// A [`Torque`] from a value in `klbf·ft`.
     #[inline]
     pub fn from_kilopound_force_feet(value: T) -> Self {
         Self(value * T::from_f64(1355.8179483314004))
     }
 
-    /// Returns the value expressed in KilopoundForceFeet (`klbf·ft`).
+    /// The value in `klbf·ft`.
     #[inline]
     pub fn as_kilopound_force_feet(self) -> T {
         self.0 / T::from_f64(1355.8179483314004)
     }
 
-    /// Creates a [`Torque`] from a value in MegapoundForceFeet (`Mlbf·ft`).
+    /// A [`Torque`] from a value in `Mlbf·ft`.
     #[inline]
     pub fn from_megapound_force_feet(value: T) -> Self {
         Self(value * T::from_f64(1355817.9483314003))
     }
 
-    /// Returns the value expressed in MegapoundForceFeet (`Mlbf·ft`).
+    /// The value in `Mlbf·ft`.
     #[inline]
     pub fn as_megapound_force_feet(self) -> T {
         self.0 / T::from_f64(1355817.9483314003)
     }
 
-    /// Creates a [`Torque`] from a value in GramForceMillimeters (`gf·mm`).
+    /// A [`Torque`] from a value in `gf·mm`.
     #[inline]
     pub fn from_gram_force_millimeters(value: T) -> Self {
         Self(value * T::from_f64(9.80665e-6))
     }
 
-    /// Returns the value expressed in GramForceMillimeters (`gf·mm`).
+    /// The value in `gf·mm`.
     #[inline]
     pub fn as_gram_force_millimeters(self) -> T {
         self.0 / T::from_f64(9.80665e-6)
     }
 
-    /// Creates a [`Torque`] from a value in GramForceCentimeters (`gf·cm`).
+    /// A [`Torque`] from a value in `gf·cm`.
     #[inline]
     pub fn from_gram_force_centimeters(value: T) -> Self {
         Self(value * T::from_f64(9.80665e-5))
     }
 
-    /// Returns the value expressed in GramForceCentimeters (`gf·cm`).
+    /// The value in `gf·cm`.
     #[inline]
     pub fn as_gram_force_centimeters(self) -> T {
         self.0 / T::from_f64(9.80665e-5)
     }
 
-    /// Creates a [`Torque`] from a value in GramForceMeters (`gf·m`).
+    /// A [`Torque`] from a value in `gf·m`.
     #[inline]
     pub fn from_gram_force_meters(value: T) -> Self {
         Self(value * T::from_f64(0.00980665))
     }
 
-    /// Returns the value expressed in GramForceMeters (`gf·m`).
+    /// The value in `gf·m`.
     #[inline]
     pub fn as_gram_force_meters(self) -> T {
         self.0 / T::from_f64(0.00980665)
     }
 
-    /// Creates a [`Torque`] from a value in KilogramForceMillimeters (`kgf·mm`).
+    /// A [`Torque`] from a value in `kgf·mm`.
     #[inline]
     pub fn from_kilogram_force_millimeters(value: T) -> Self {
         Self(value * T::from_f64(0.00980665))
     }
 
-    /// Returns the value expressed in KilogramForceMillimeters (`kgf·mm`).
+    /// The value in `kgf·mm`.
     #[inline]
     pub fn as_kilogram_force_millimeters(self) -> T {
         self.0 / T::from_f64(0.00980665)
     }
 
-    /// Creates a [`Torque`] from a value in KilogramForceCentimeters (`kgf·cm`).
+    /// A [`Torque`] from a value in `kgf·cm`.
     #[inline]
     pub fn from_kilogram_force_centimeters(value: T) -> Self {
         Self(value * T::from_f64(0.0980665))
     }
 
-    /// Returns the value expressed in KilogramForceCentimeters (`kgf·cm`).
+    /// The value in `kgf·cm`.
     #[inline]
     pub fn as_kilogram_force_centimeters(self) -> T {
         self.0 / T::from_f64(0.0980665)
     }
 
-    /// Creates a [`Torque`] from a value in KilogramForceMeters (`kgf·m`).
+    /// A [`Torque`] from a value in `kgf·m`.
     #[inline]
     pub fn from_kilogram_force_meters(value: T) -> Self {
         Self(value * T::from_f64(9.80665))
     }
 
-    /// Returns the value expressed in KilogramForceMeters (`kgf·m`).
+    /// The value in `kgf·m`.
     #[inline]
     pub fn as_kilogram_force_meters(self) -> T {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Creates a [`Torque`] from a value in TonneForceMillimeters (`tf·mm`).
+    /// A [`Torque`] from a value in `tf·mm`.
     #[inline]
     pub fn from_tonne_force_millimeters(value: T) -> Self {
         Self(value * T::from_f64(9.80665))
     }
 
-    /// Returns the value expressed in TonneForceMillimeters (`tf·mm`).
+    /// The value in `tf·mm`.
     #[inline]
     pub fn as_tonne_force_millimeters(self) -> T {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Creates a [`Torque`] from a value in TonneForceCentimeters (`tf·cm`).
+    /// A [`Torque`] from a value in `tf·cm`.
     #[inline]
     pub fn from_tonne_force_centimeters(value: T) -> Self {
         Self(value * T::from_f64(98.0665))
     }
 
-    /// Returns the value expressed in TonneForceCentimeters (`tf·cm`).
+    /// The value in `tf·cm`.
     #[inline]
     pub fn as_tonne_force_centimeters(self) -> T {
         self.0 / T::from_f64(98.0665)
     }
 
-    /// Creates a [`Torque`] from a value in TonneForceMeters (`tf·m`).
+    /// A [`Torque`] from a value in `tf·m`.
     #[inline]
     pub fn from_tonne_force_meters(value: T) -> Self {
         Self(value * T::from_f64(9806.65))
     }
 
-    /// Returns the value expressed in TonneForceMeters (`tf·m`).
+    /// The value in `tf·m`.
     #[inline]
     pub fn as_tonne_force_meters(self) -> T {
         self.0 / T::from_f64(9806.65)
@@ -881,9 +880,8 @@ impl<T: Float> Torque<T> {
 }
 
 impl Torque<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: TorqueUnit) -> Self {
         Self(match unit {
@@ -920,9 +918,9 @@ impl Torque<f64> {
 
 fixed_base!(Torque, NewtonMeter);
 
-/// Unit markers for counting [`Torque`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Torque`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::torque`](crate::unit::torque).
+/// Also at [`unit::torque`](crate::unit::torque).
 pub mod unit {
     fixed_unit!(NewtonMillimeter: Torque, TorqueUnit::NewtonMillimeter, base NewtonMeter, 1 / 1000, pi^0, from_newton_millimeters, as_newton_millimeters, additive);
     fixed_unit!(KilonewtonMillimeter: Torque, TorqueUnit::KilonewtonMillimeter, base NewtonMeter, 1 / 1, pi^0, from_kilonewton_millimeters, as_kilonewton_millimeters, additive);

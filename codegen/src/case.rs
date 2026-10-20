@@ -1,7 +1,7 @@
-//! `snake_case` from UnitsNet's `PascalCase` names, with the word rules of
-//! the `heck` crate: a word ends before an uppercase letter that follows a
-//! lowercase one (`KiloMeter` → `kilo_meter`), and before the last capital
-//! of a run followed by a lowercase letter (`SIUnit` → `si_unit`); digits
+//! `snake_case` from UnitsNet's `PascalCase` names, with the `heck` crate's
+//! word rules. A word ends before an uppercase letter that follows a
+//! lowercase one (`KiloMeter` is `kilo_meter`) and before the last capital
+//! of a run followed by a lowercase letter (`SIUnit` is `si_unit`). Digits
 //! stay with the letters before them.
 
 pub trait ToSnakeCase {

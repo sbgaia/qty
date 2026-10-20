@@ -11,8 +11,8 @@ use crate::case::ToSnakeCase;
 use crate::expr::{self, Direction, Form};
 use crate::parser::{QuantityDef, UnitDef};
 
-// Convenience: append a formatted line (+ newline) to `out`.
-// Always routes through `format!` so `{{`/`}}` in literals become `{`/`}` in the output.
+// Appends a line to `out`. It always goes through `format!`, so `{{` and
+// `}}` in a literal come out as `{` and `}`.
 macro_rules! w {
     ($out:expr) => { $out.push('\n'); };
     ($out:expr, $($arg:tt)+) => {
@@ -21,11 +21,9 @@ macro_rules! w {
     };
 }
 
-// ── Feature groups ────────────────────────────────────────────────────────────
-
-/// Quantities grouped into Cargo features, so that users who need a few
-/// quantities do not compile all of them. Quantities in no group are always
-/// compiled. The `full` feature (default) enables every group.
+/// Quantities grouped into Cargo features, so that users who need a few of
+/// them don't compile all 128. Quantities in no group are always compiled,
+/// and `full` (on by default) enables every group.
 pub const GROUPS: &[(&str, &[&str])] = &[
     (
         "mechanics",
@@ -240,8 +238,8 @@ pub fn cfg_for(quantities: &[&str]) -> String {
 }
 
 /// A quantity that is a point on a scale rather than an amount, and the
-/// quantity measuring the difference between two of its points. UnitsNet
-/// does not mark this in its definitions, so the list lives here.
+/// quantity for the difference between two points. UnitsNet doesn't mark
+/// these, so the list lives here.
 pub struct PointQuantity {
     pub point: &'static str,
     pub delta: &'static str,
@@ -260,8 +258,8 @@ pub const POINT_QUANTITIES: &[PointQuantity] = &[
         point_unit: "degrees_celsius",
         delta_unit: "kelvins",
     },
-    // Decibel levels relative to a fixed reference (dBV, dBm, …): adding two
-    // levels would multiply the underlying amplitudes or powers. The
+    // Decibel levels against a fixed reference, such as dBV and dBm. Adding
+    // two levels would multiply the amplitudes or powers underneath. The
     // difference between two levels is a gain, a `Level` in dB.
     PointQuantity {
         point: "AmplitudeRatio",
@@ -284,13 +282,13 @@ pub fn point_quantity(name: &str) -> Option<&'static PointQuantity> {
     POINT_QUANTITIES.iter().find(|p| p.point == name)
 }
 
-/// The difference quantity of a point quantity (`Temperature` →
-/// `TemperatureDelta`), or `None` for ordinary quantities.
+/// The difference quantity of a point quantity (`TemperatureDelta` for
+/// `Temperature`), or `None` for ordinary quantities.
 pub fn point_delta(name: &str) -> Option<&'static str> {
     point_quantity(name).map(|p| p.delta)
 }
 
-/// Generates a complete `.rs` source file for `qty` and returns it as a `String`.
+/// The source file of one quantity.
 pub fn generate(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(64 * 1024);
 
@@ -302,8 +300,6 @@ pub fn generate(qty: &QuantityDef, all: &[QuantityDef]) -> String {
     out
 }
 
-/// The `Fixed` marker for `unit`, if it has one: linear units whose factor is
-/// an exact fraction (times a power of π) fitting in `u128`.
 /// The exact definition of a `Fixed` marker: one unit is
 /// `num / den · π^pi` base units, plus `offset` base units for affine units.
 pub struct FixedParts {
@@ -313,10 +309,10 @@ pub struct FixedParts {
     pub offset: Option<(i128, u128)>,
 }
 
-/// The `Fixed` marker definition for `unit`, if it has one: linear units
-/// whose factor is an exact fraction (times a power of π) fitting in
-/// `u128`, and — for point quantities only — affine units with a positive
-/// exact factor and offset (°C, m°C, °F, dBµV, …).
+/// The `Fixed` marker definition for `unit`, if it has one. Linear units
+/// qualify when their factor is an exact fraction, times a power of π, that
+/// fits in `u128`. Point quantities also get affine units with an exact
+/// positive factor and offset, such as °C, m°C, °F and dBµV.
 pub fn fixed_parts(qty: &QuantityDef, unit: &UnitDef) -> Option<FixedParts> {
     let Form::Affine { a, b } = &unit.to_base else {
         return None;
@@ -337,8 +333,8 @@ pub fn fixed_parts(qty: &QuantityDef, unit: &UnitDef) -> Option<FixedParts> {
     })
 }
 
-/// For a unit of a point quantity, the delta quantity's unit with the same
-/// scale (°C → Δ°C, m°C → Δm°C), preferring the same name.
+/// For a unit of a point quantity, the delta unit with the same scale
+/// (Δ°C for °C, Δm°C for m°C), preferring the same name.
 fn delta_unit<'a>(unit: &UnitDef, delta: &'a QuantityDef) -> Option<&'a UnitDef> {
     let Form::Affine { a, .. } = &unit.to_base else {
         return None;
@@ -354,8 +350,6 @@ fn delta_unit<'a>(unit: &UnitDef, delta: &'a QuantityDef) -> Option<&'a UnitDef>
         .filter(|d| fixed_parts(delta, d).is_some())
 }
 
-// ── Fixed unit markers ────────────────────────────────────────────────────────
-
 fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     let name = &qty.name;
     w!(out);
@@ -363,13 +357,13 @@ fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     w!(out);
     w!(
         out,
-        "/// Unit markers for counting [`{}`] as an integer with [`Fixed`](crate::Fixed).",
+        "/// Units for counting [`{}`] in integers with [`Fixed`](crate::Fixed).",
         name
     );
     w!(out, "///");
     w!(
         out,
-        "/// Also available as [`unit::{}`](crate::unit::{}).",
+        "/// Also at [`unit::{}`](crate::unit::{}).",
         name.to_snake_case(),
         name.to_snake_case()
     );
@@ -415,8 +409,6 @@ fn emit_fixed_units(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     w!(out, "}}");
 }
 
-// ── File header & struct definition ──────────────────────────────────────────
-
 fn emit_header(qty: &QuantityDef, out: &mut String) {
     let name = &qty.name;
     w!(
@@ -444,21 +436,20 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     }
     w!(
         out,
-        "/// Stored as a value of type `T` (default `f64`) in the base unit, [`{}Unit::{}`].",
+        "/// Stored as a `T` (`f64` by default) in [`{}Unit::{}`], with the same layout as `T`.",
         name,
         qty.base_unit
-    );
-    w!(
-        out,
-        "/// `#[repr(transparent)]`: same size, alignment and ABI as `T`."
     );
     if let Some(pq) = point_quantity(name) {
         let (delta, snake, delta_unit) = (pq.delta, pq.point_unit, pq.delta_unit);
         for line in [
             "///".to_owned(),
-            format!("/// A {name} is a *point on a scale*, not an amount: two of them cannot"),
-            format!("/// be added ({}), negated or scaled. Their", pq.example),
-            format!("/// difference is a [`{delta}`], which can be added back:"),
+            format!("/// A {name} is a point on a scale, not an amount, so two of them can't"),
+            format!(
+                "/// be added ({}), negated or scaled. Subtracting",
+                pq.example
+            ),
+            format!("/// one from another gives a [`{delta}`], which can be added back:"),
             "///".to_owned(),
             "/// ```rust".to_owned(),
             "/// use qty::*;".to_owned(),
@@ -502,14 +493,12 @@ fn emit_header(qty: &QuantityDef, out: &mut String) {
     w!(out);
 }
 
-// ── Unit enum ─────────────────────────────────────────────────────────────────
-
 fn emit_enum(qty: &QuantityDef, out: &mut String) {
-    w!(out, "/// Unit variants for [`{}`].", qty.name);
+    w!(out, "/// The units of [`{}`].", qty.name);
     w!(out, "///");
     w!(
         out,
-        "/// Non-exhaustive: upstream UnitsNet regularly adds units."
+        "/// Non-exhaustive, since UnitsNet keeps adding units."
     );
     w!(out, "#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]");
     w!(
@@ -529,15 +518,12 @@ fn emit_enum(qty: &QuantityDef, out: &mut String) {
     w!(out);
 }
 
-// ── impl on the enum ──────────────────────────────────────────────────────────
-
 fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     let enum_name = format!("{}Unit", qty.name);
 
     w!(out, "impl {} {{", enum_name);
 
-    // ALL constant
-    w!(out, "    /// Every unit variant for this quantity.");
+    w!(out, "    /// Every unit.");
     w!(out, "    pub const ALL: &'static [Self] = &[");
     for unit in &qty.units {
         w!(out, "        Self::{},", unit.singular);
@@ -565,7 +551,7 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     }
     w!(out, "    ];");
     w!(out);
-    w!(out, "    /// Names and abbreviations of this unit.");
+    w!(out, "    /// Names and abbreviations.");
     w!(out, "    #[inline]");
     w!(
         out,
@@ -607,11 +593,7 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    }};");
     w!(out);
 
-    // abbreviation()
-    w!(
-        out,
-        "    /// Returns the primary display abbreviation for this unit."
-    );
+    w!(out, "    /// The abbreviation used for display.");
     w!(out, "    #[inline]");
     w!(
         out,
@@ -626,11 +608,7 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    }}");
     w!(out);
 
-    // all_abbreviations()
-    w!(
-        out,
-        "    /// Returns every abbreviation recognised when parsing this unit."
-    );
+    w!(out, "    /// Every abbreviation accepted when parsing.");
     w!(out, "    #[inline]");
     w!(
         out,
@@ -650,14 +628,13 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "    }}");
     w!(out);
 
-    // Names: case-insensitive, singular or plural, spaces/`_`/`-` ignored.
     w!(
         out,
-        "    /// Parses a unit *name*, singular or plural, ignoring case, spaces,"
+        "    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't"
     );
     w!(
         out,
-        "    /// `_` and `-`, and accepting British spellings: `\"kilometres\"`,"
+        "    /// matter, and British spellings work: `\"kilometres\"`,"
     );
     w!(out, "    /// `\"Square Meter\"`, `\"square_meters\"`.");
     w!(out, "    pub fn from_name(name: &str) -> Option<Self> {{");
@@ -680,18 +657,17 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "}}");
     w!(out);
 
-    // FromStr: a `match` on the abbreviation (exact, case-sensitive: `mm`
-    // is not `Mm`), then on the name.
+    // Abbreviations are case-sensitive (`mm` is not `Mm`); names are not.
     w!(out, "impl core::str::FromStr for {} {{", enum_name);
     w!(out, "    type Err = crate::ParseError;");
     w!(out);
     w!(
         out,
-        "    /// Parses a unit abbreviation (exact, e.g. `\"km\"`) or name (lenient,"
+        "    /// Parses an abbreviation such as `\"km\"`, which must match exactly, or a"
     );
     w!(
         out,
-        "    /// e.g. `\"kilometers\"`); see [`Self::from_name`]."
+        "    /// name such as `\"kilometers\"` (see [`Self::from_name`])."
     );
     w!(
         out,
@@ -727,8 +703,8 @@ fn emit_enum_impl(qty: &QuantityDef, out: &mut String) {
     w!(out);
 }
 
-/// Every normalised unit name (singular and plural) and its variant. Names
-/// shared by two units are left out: ambiguous, so not accepted.
+/// Every normalised unit name, singular and plural, with its variant. Names
+/// shared by two units are ambiguous and left out.
 pub fn name_map(qty: &QuantityDef) -> Vec<(String, &str)> {
     let mut map: Vec<(String, &str)> = Vec::new();
     let mut ambiguous = std::collections::HashSet::new();
@@ -763,22 +739,15 @@ fn parse_map(qty: &QuantityDef) -> Vec<(&str, &str)> {
         .collect()
 }
 
-// ── impl on the struct ────────────────────────────────────────────────────────
-
 fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     let name = &qty.name;
     let enum_name = format!("{name}Unit");
 
-    // Conversions, as the unit enum's `UnitOf` impl; `new` and
-    // `convert_to` on the quantity take any `UnitOf`.
     w!(
         out,
-        "/// Every conversion is a single multiplication or division by a constant"
+        "/// Each conversion is one multiplication or division by a constant, or two"
     );
-    w!(
-        out,
-        "/// folded at code-generation time (two operations for affine units)."
-    );
+    w!(out, "/// operations for units with an offset.");
     w!(
         out,
         "impl<T: Float> crate::UnitOf<{}<T>> for {} {{",
@@ -820,18 +789,18 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
 
     emit_auto_unit(qty, out);
 
-    // Per-unit convenience constructors and accessors.
+    // `from_<unit>` and `as_<unit>`.
     for unit in &qty.units {
         let snake_plural = unit.plural.to_snake_case();
-        let abbr = &unit.abbreviation;
+        // The method name already spells the unit out, so the docs give the
+        // abbreviation, or the enum variant for units without one.
+        let in_unit = if unit.abbreviation.is_empty() {
+            format!("[`{name}Unit::{}`]", unit.singular)
+        } else {
+            format!("`{}`", unit.abbreviation)
+        };
 
-        w!(
-            out,
-            "    /// Creates a [`{}`] from a value in {} (`{}`).",
-            name,
-            unit.plural,
-            abbr
-        );
+        w!(out, "    /// A [`{}`] from a value in {}.", name, in_unit);
         w!(out, "    #[inline]");
         w!(out, "    pub fn from_{}(value: T) -> Self {{", snake_plural);
         w!(
@@ -842,12 +811,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         w!(out, "    }}");
         w!(out);
 
-        w!(
-            out,
-            "    /// Returns the value expressed in {} (`{}`).",
-            unit.plural,
-            abbr
-        );
+        w!(out, "    /// The value in {}.", in_unit);
         w!(out, "    #[inline]");
         w!(out, "    pub fn as_{}(self) -> T {{", snake_plural);
         w!(
@@ -865,22 +829,17 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     emit_const_new(qty, out);
 }
 
-/// `const_new()` for `f64` storage: the same conversion expressions as
-/// `new()`, with the constants as plain `f64` literals, so the results are
-/// bit-identical and usable in `const` items.
+/// `const_new()` for `f64` storage. It uses the same expressions as `new()`
+/// with the constants as plain literals, so the results are identical.
 fn emit_const_new(qty: &QuantityDef, out: &mut String) {
     let name = &qty.name;
     let enum_name = format!("{name}Unit");
     w!(out, "impl {name}<f64> {{");
     w!(
         out,
-        "    /// Like [`new`](Self::new), but `const`: for constants in any unit."
+        "    /// Like [`new`](Self::new), but usable in `const` items. The result is"
     );
-    w!(out, "    ///");
-    w!(
-        out,
-        "    /// The result is identical to `new(value, unit)`."
-    );
+    w!(out, "    /// the same.");
     w!(out, "    #[inline]");
     w!(
         out,
@@ -901,7 +860,7 @@ fn emit_const_new(qty: &QuantityDef, out: &mut String) {
     w!(out, "}}");
 }
 
-/// `T::from_f64(LIT)` → `LIT`: the literals never contain parentheses.
+/// Turns `T::from_f64(LIT)` into `LIT`. The literals never contain parentheses.
 fn strip_from_f64(expr: &str) -> String {
     const OPEN: &str = "T::from_f64(";
     let mut out = String::with_capacity(expr.len());
@@ -943,11 +902,11 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
 
     w!(
         out,
-        "    /// The value in the most readable SI-prefixed form of the base unit, in"
+        "    /// The value in the largest SI-prefixed form of the base unit that doesn't"
     );
     w!(
         out,
-        "    /// steps of 1000: the largest unit not exceeding the value ({}).",
+        "    /// exceed it, in steps of 1000 ({}).",
         scale
             .iter()
             .rev()
@@ -960,7 +919,7 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
     );
     w!(
         out,
-        "    /// Zero, NaN and infinities are shown in the base unit."
+        "    /// Zero, NaN and infinities stay in the base unit."
     );
     w!(out, "    #[inline]");
     w!(
@@ -1007,8 +966,6 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
     w!(out);
 }
 
-// ── Cross-type arithmetic ─────────────────────────────────────────────────────
-
 /// The kind of operator a [`CrossOp`] implements.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
 pub enum CrossKind {
@@ -1039,7 +996,7 @@ impl CrossKind {
     }
 }
 
-/// A single cross-type arithmetic relationship derived from dimensional analysis.
+/// One product or quotient between quantities.
 ///
 /// For example, `Length / Duration = Speed` is represented as:
 /// ```text
@@ -1048,11 +1005,11 @@ impl CrossKind {
 #[derive(Clone, Debug)]
 pub struct CrossOp {
     pub kind: CrossKind,
-    /// Left-hand side type name (e.g. `"Length"`); empty for [`CrossKind::Recip`].
+    /// Left-hand type, such as `"Length"`. Empty for [`CrossKind::Recip`].
     pub lhs: String,
-    /// Right-hand side type name (e.g. `"Duration"`).
+    /// Right-hand type, such as `"Duration"`.
     pub rhs: String,
-    /// Result type name (e.g. `"Speed"`); empty for [`CrossKind::MulScalar`].
+    /// Result type, such as `"Speed"`. Empty for [`CrossKind::MulScalar`].
     pub output: String,
     /// Factor relating the base units, when they are not coherent. `None`
     /// means exactly 1, so the operator works for any storage type.
@@ -1061,10 +1018,8 @@ pub struct CrossOp {
     pub k: crate::expr::Const,
 }
 
-/// Generates the complete `src/cross_type.rs` source from the supplied operations.
-///
-/// Every impl works on base-unit values, so the arithmetic is correct
-/// regardless of which unit the caller used to construct the value.
+/// The source of `src/cross_type.rs`. Every impl works on base-unit values,
+/// so the unit a value was created in doesn't matter.
 pub fn generate_cross_type(ops: &[CrossOp]) -> String {
     let mut out = String::with_capacity(16 * 1024);
 
@@ -1072,10 +1027,7 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
         out,
         "// Code generated by `cargo run -p codegen` \u{2014} DO NOT EDIT"
     );
-    w!(
-        out,
-        "//! Cross-type arithmetic relationships derived from dimensional analysis."
-    );
+    w!(out, "//! Products and quotients between quantities.");
     w!(out);
     w!(out, "use crate::units::*;");
     w!(out);
@@ -1131,13 +1083,9 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
     out
 }
 
-// ── Test files ────────────────────────────────────────────────────────────────
-
-/// Generates the content of `tests/units/<quantity_snake>.rs` for a single quantity.
-///
-/// The conversion tests compare the generated (folded) conversions against
-/// the upstream formulas translated verbatim, compiled by rustc as an
-/// independent oracle.
+/// The tests of one quantity, `tests/units/<quantity>.rs`. They check the
+/// folded conversions against UnitsNet's formulas, translated verbatim and
+/// compiled by rustc as an independent oracle.
 pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
     let mut out = String::with_capacity(16 * 1024);
     let name = &qty.name;
@@ -1399,7 +1347,7 @@ pub fn generate_quantity_tests(qty: &QuantityDef) -> String {
         w!(out, "}}");
         w!(out);
     } else {
-        // Arithmetic smoke tests on exact base-unit values, for float and integer storage.
+        // Arithmetic on exact base-unit values, with float and integer storage.
         w!(out, "#[test]");
         w!(out, "fn arithmetic_f64() {{");
         w!(out, "    let a = {name}::from_base(6.0);");
@@ -1487,7 +1435,7 @@ fn emit_unit_test(name: &str, unit: &UnitDef, out: &mut String) {
     w!(out);
 }
 
-/// Generates the content of `tests/cross_type.rs` — one test per cross-type op.
+/// The source of `tests/cross_type.rs`, one test per product or quotient.
 ///
 /// Base-unit operands are small integers, so the expected results are exact.
 pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) -> String {
@@ -1502,11 +1450,11 @@ pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) ->
     w!(out);
     w!(
         out,
-        "/// `Fixed::mul_to_rounded`/`div_to` (exact integer arithmetic) against the"
+        "/// Checks `Fixed::mul_to_rounded` and `div_to` against the float operators:"
     );
     w!(
         out,
-        "/// float operators: within half a unit, or an overflow where the result is huge."
+        "/// within half a unit, or an overflow when the result is huge."
     );
     w!(out, "#[allow(dead_code)]");
     w!(
@@ -1653,15 +1601,13 @@ pub fn generate_cross_type_tests(ops: &[CrossOp], quantities: &[QuantityDef]) ->
     out
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
-
 /// Wraps `s` in a Rust string literal, escaping backslashes and double-quotes.
 fn rust_str_literal(s: &str) -> String {
     let escaped = s.replace('\\', "\\\\").replace('"', "\\\"");
     format!("\"{escaped}\"")
 }
 
-/// Truncates `s` to its first sentence/line for use in a `///` doc comment.
+/// The first line of upstream text, made safe for a `///` doc comment.
 fn escape_doc(s: &str) -> String {
     let first = s.split(['\n', '\r']).next().unwrap_or(s);
     // Escape brackets so upstream citation markers like `[18]` are not
@@ -1674,7 +1620,7 @@ fn escape_doc(s: &str) -> String {
     link_urls(escaped.trim())
 }
 
-/// Wraps bare `http://` and `https://` URLs in `<…>`, so rustdoc links them.
+/// Wraps bare `http://` and `https://` URLs in `<>` so rustdoc links them.
 fn link_urls(s: &str) -> String {
     let mut out = String::with_capacity(s.len() + 8);
     let mut rest = s;
@@ -1696,10 +1642,7 @@ fn link_urls(s: &str) -> String {
     out
 }
 
-// ── Runtime quantities (src/any.rs) ───────────────────────────────────────────
-
-/// Generates `src/any.rs`: `QuantityKind`, `AnyUnit` and `AnyQuantity`, for
-/// quantities whose kind is known only at runtime.
+/// The source of `src/any.rs`: `QuantityKind`, `AnyUnit` and `AnyQuantity`.
 pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
     let mut out = String::with_capacity(256 * 1024);
     w!(
@@ -1731,7 +1674,7 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
         }
     };
 
-    // ── QuantityKind ──
+    // QuantityKind
     w!(out, "/// The kind of a quantity: `Length`, `Mass`, …");
     w!(
         out,
@@ -1840,7 +1783,7 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
     w!(out, "}}");
     w!(out);
 
-    // ── AnyUnit ──
+    // AnyUnit
     w!(
         out,
         "/// A unit of any quantity: `AnyUnit::Length(LengthUnit::Meter)`."
@@ -1930,7 +1873,7 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
     }
     w!(out);
 
-    // ── AnyQuantity ──
+    // AnyQuantity
     w!(
         out,
         "/// A quantity of any kind, with `f64` storage. See the [module documentation](self)."
@@ -1953,7 +1896,7 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
     w!(out, "}}");
     w!(out);
 
-    // Applies `$body` (an expression of the typed quantity `q`) to every
+    // Applies `$body`, an expression of the typed quantity `q`, to every
     // variant.
     let each = |out: &mut String, indent: &str, body: &str| {
         for q in quantities {

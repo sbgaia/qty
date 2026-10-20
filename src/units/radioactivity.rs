@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Amount of ionizing radiation released when an element spontaneously emits energy as a result of the radioactive decay of an unstable atom per unit time.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`RadioactivityUnit::Becquerel`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`RadioactivityUnit::Becquerel`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Radioactivity<T = f64>(T);
 
 quantity!(Radioactivity, RadioactivityUnit, Becquerel);
 
-/// Unit variants for [`Radioactivity`].
+/// The units of [`Radioactivity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -66,7 +65,7 @@ pub enum RadioactivityUnit {
 }
 
 impl RadioactivityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Becquerel,
         Self::Picobecquerel,
@@ -276,7 +275,7 @@ impl RadioactivityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -291,7 +290,7 @@ impl RadioactivityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -327,7 +326,7 @@ impl RadioactivityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -363,8 +362,8 @@ impl RadioactivityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -435,8 +434,8 @@ impl RadioactivityUnit {
 impl core::str::FromStr for RadioactivityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Bq" => Ok(Self::Becquerel),
@@ -473,8 +472,8 @@ impl core::str::FromStr for RadioactivityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -548,9 +547,9 @@ impl<T: Float> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
 }
 
 impl<T: Float> Radioactivity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`pBq`, `nBq`, `µBq`, `mBq`, `Bq`, `kBq`, `MBq`, `GBq`, `TBq`, `PBq`, `EBq`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`pBq`, `nBq`, `µBq`, `mBq`, `Bq`, `kBq`, `MBq`, `GBq`, `TBq`, `PBq`, `EBq`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, RadioactivityUnit> {
         const SCALE: [(f64, RadioactivityUnit); 11] = [
@@ -580,349 +579,349 @@ impl<T: Float> Radioactivity<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Becquerels (`Bq`).
+    /// A [`Radioactivity`] from a value in `Bq`.
     #[inline]
     pub fn from_becquerels(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Becquerels (`Bq`).
+    /// The value in `Bq`.
     #[inline]
     pub fn as_becquerels(self) -> T {
         self.0
     }
 
-    /// Creates a [`Radioactivity`] from a value in Picobecquerels (`pBq`).
+    /// A [`Radioactivity`] from a value in `pBq`.
     #[inline]
     pub fn from_picobecquerels(value: T) -> Self {
         Self(value / T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Picobecquerels (`pBq`).
+    /// The value in `pBq`.
     #[inline]
     pub fn as_picobecquerels(self) -> T {
         self.0 * T::from_f64(1e12)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Nanobecquerels (`nBq`).
+    /// A [`Radioactivity`] from a value in `nBq`.
     #[inline]
     pub fn from_nanobecquerels(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanobecquerels (`nBq`).
+    /// The value in `nBq`.
     #[inline]
     pub fn as_nanobecquerels(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Microbecquerels (`µBq`).
+    /// A [`Radioactivity`] from a value in `µBq`.
     #[inline]
     pub fn from_microbecquerels(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microbecquerels (`µBq`).
+    /// The value in `µBq`.
     #[inline]
     pub fn as_microbecquerels(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Millibecquerels (`mBq`).
+    /// A [`Radioactivity`] from a value in `mBq`.
     #[inline]
     pub fn from_millibecquerels(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millibecquerels (`mBq`).
+    /// The value in `mBq`.
     #[inline]
     pub fn as_millibecquerels(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Kilobecquerels (`kBq`).
+    /// A [`Radioactivity`] from a value in `kBq`.
     #[inline]
     pub fn from_kilobecquerels(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kilobecquerels (`kBq`).
+    /// The value in `kBq`.
     #[inline]
     pub fn as_kilobecquerels(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Megabecquerels (`MBq`).
+    /// A [`Radioactivity`] from a value in `MBq`.
     #[inline]
     pub fn from_megabecquerels(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megabecquerels (`MBq`).
+    /// The value in `MBq`.
     #[inline]
     pub fn as_megabecquerels(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Gigabecquerels (`GBq`).
+    /// A [`Radioactivity`] from a value in `GBq`.
     #[inline]
     pub fn from_gigabecquerels(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Gigabecquerels (`GBq`).
+    /// The value in `GBq`.
     #[inline]
     pub fn as_gigabecquerels(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Terabecquerels (`TBq`).
+    /// A [`Radioactivity`] from a value in `TBq`.
     #[inline]
     pub fn from_terabecquerels(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Terabecquerels (`TBq`).
+    /// The value in `TBq`.
     #[inline]
     pub fn as_terabecquerels(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Petabecquerels (`PBq`).
+    /// A [`Radioactivity`] from a value in `PBq`.
     #[inline]
     pub fn from_petabecquerels(value: T) -> Self {
         Self(value * T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in Petabecquerels (`PBq`).
+    /// The value in `PBq`.
     #[inline]
     pub fn as_petabecquerels(self) -> T {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Exabecquerels (`EBq`).
+    /// A [`Radioactivity`] from a value in `EBq`.
     #[inline]
     pub fn from_exabecquerels(value: T) -> Self {
         Self(value * T::from_f64(1e18))
     }
 
-    /// Returns the value expressed in Exabecquerels (`EBq`).
+    /// The value in `EBq`.
     #[inline]
     pub fn as_exabecquerels(self) -> T {
         self.0 / T::from_f64(1e18)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Curies (`Ci`).
+    /// A [`Radioactivity`] from a value in `Ci`.
     #[inline]
     pub fn from_curies(value: T) -> Self {
         Self(value * T::from_f64(3.7e10))
     }
 
-    /// Returns the value expressed in Curies (`Ci`).
+    /// The value in `Ci`.
     #[inline]
     pub fn as_curies(self) -> T {
         self.0 / T::from_f64(3.7e10)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Picocuries (`pCi`).
+    /// A [`Radioactivity`] from a value in `pCi`.
     #[inline]
     pub fn from_picocuries(value: T) -> Self {
         Self(value * T::from_f64(0.037))
     }
 
-    /// Returns the value expressed in Picocuries (`pCi`).
+    /// The value in `pCi`.
     #[inline]
     pub fn as_picocuries(self) -> T {
         self.0 / T::from_f64(0.037)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Nanocuries (`nCi`).
+    /// A [`Radioactivity`] from a value in `nCi`.
     #[inline]
     pub fn from_nanocuries(value: T) -> Self {
         Self(value * T::from_f64(37.0))
     }
 
-    /// Returns the value expressed in Nanocuries (`nCi`).
+    /// The value in `nCi`.
     #[inline]
     pub fn as_nanocuries(self) -> T {
         self.0 / T::from_f64(37.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Microcuries (`µCi`).
+    /// A [`Radioactivity`] from a value in `µCi`.
     #[inline]
     pub fn from_microcuries(value: T) -> Self {
         Self(value * T::from_f64(37000.0))
     }
 
-    /// Returns the value expressed in Microcuries (`µCi`).
+    /// The value in `µCi`.
     #[inline]
     pub fn as_microcuries(self) -> T {
         self.0 / T::from_f64(37000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Millicuries (`mCi`).
+    /// A [`Radioactivity`] from a value in `mCi`.
     #[inline]
     pub fn from_millicuries(value: T) -> Self {
         Self(value * T::from_f64(3.7e7))
     }
 
-    /// Returns the value expressed in Millicuries (`mCi`).
+    /// The value in `mCi`.
     #[inline]
     pub fn as_millicuries(self) -> T {
         self.0 / T::from_f64(3.7e7)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Kilocuries (`kCi`).
+    /// A [`Radioactivity`] from a value in `kCi`.
     #[inline]
     pub fn from_kilocuries(value: T) -> Self {
         Self(value * T::from_f64(3.7e13))
     }
 
-    /// Returns the value expressed in Kilocuries (`kCi`).
+    /// The value in `kCi`.
     #[inline]
     pub fn as_kilocuries(self) -> T {
         self.0 / T::from_f64(3.7e13)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Megacuries (`MCi`).
+    /// A [`Radioactivity`] from a value in `MCi`.
     #[inline]
     pub fn from_megacuries(value: T) -> Self {
         Self(value * T::from_f64(3.7e16))
     }
 
-    /// Returns the value expressed in Megacuries (`MCi`).
+    /// The value in `MCi`.
     #[inline]
     pub fn as_megacuries(self) -> T {
         self.0 / T::from_f64(3.7e16)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Gigacuries (`GCi`).
+    /// A [`Radioactivity`] from a value in `GCi`.
     #[inline]
     pub fn from_gigacuries(value: T) -> Self {
         Self(value * T::from_f64(3.7e19))
     }
 
-    /// Returns the value expressed in Gigacuries (`GCi`).
+    /// The value in `GCi`.
     #[inline]
     pub fn as_gigacuries(self) -> T {
         self.0 / T::from_f64(3.7e19)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Teracuries (`TCi`).
+    /// A [`Radioactivity`] from a value in `TCi`.
     #[inline]
     pub fn from_teracuries(value: T) -> Self {
         Self(value * T::from_f64(3.7e22))
     }
 
-    /// Returns the value expressed in Teracuries (`TCi`).
+    /// The value in `TCi`.
     #[inline]
     pub fn as_teracuries(self) -> T {
         self.0 / T::from_f64(3.7e22)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Rutherfords (`Rd`).
+    /// A [`Radioactivity`] from a value in `Rd`.
     #[inline]
     pub fn from_rutherfords(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Rutherfords (`Rd`).
+    /// The value in `Rd`.
     #[inline]
     pub fn as_rutherfords(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Picorutherfords (`pRd`).
+    /// A [`Radioactivity`] from a value in `pRd`.
     #[inline]
     pub fn from_picorutherfords(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Picorutherfords (`pRd`).
+    /// The value in `pRd`.
     #[inline]
     pub fn as_picorutherfords(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Nanorutherfords (`nRd`).
+    /// A [`Radioactivity`] from a value in `nRd`.
     #[inline]
     pub fn from_nanorutherfords(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Nanorutherfords (`nRd`).
+    /// The value in `nRd`.
     #[inline]
     pub fn as_nanorutherfords(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Microrutherfords (`µRd`).
+    /// A [`Radioactivity`] from a value in `µRd`.
     #[inline]
     pub fn from_microrutherfords(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Microrutherfords (`µRd`).
+    /// The value in `µRd`.
     #[inline]
     pub fn as_microrutherfords(self) -> T {
         self.0
     }
 
-    /// Creates a [`Radioactivity`] from a value in Millirutherfords (`mRd`).
+    /// A [`Radioactivity`] from a value in `mRd`.
     #[inline]
     pub fn from_millirutherfords(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Millirutherfords (`mRd`).
+    /// The value in `mRd`.
     #[inline]
     pub fn as_millirutherfords(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Kilorutherfords (`kRd`).
+    /// A [`Radioactivity`] from a value in `kRd`.
     #[inline]
     pub fn from_kilorutherfords(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Kilorutherfords (`kRd`).
+    /// The value in `kRd`.
     #[inline]
     pub fn as_kilorutherfords(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Megarutherfords (`MRd`).
+    /// A [`Radioactivity`] from a value in `MRd`.
     #[inline]
     pub fn from_megarutherfords(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Megarutherfords (`MRd`).
+    /// The value in `MRd`.
     #[inline]
     pub fn as_megarutherfords(self) -> T {
         self.0 / T::from_f64(1e12)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Gigarutherfords (`GRd`).
+    /// A [`Radioactivity`] from a value in `GRd`.
     #[inline]
     pub fn from_gigarutherfords(value: T) -> Self {
         Self(value * T::from_f64(1e15))
     }
 
-    /// Returns the value expressed in Gigarutherfords (`GRd`).
+    /// The value in `GRd`.
     #[inline]
     pub fn as_gigarutherfords(self) -> T {
         self.0 / T::from_f64(1e15)
     }
 
-    /// Creates a [`Radioactivity`] from a value in Terarutherfords (`TRd`).
+    /// A [`Radioactivity`] from a value in `TRd`.
     #[inline]
     pub fn from_terarutherfords(value: T) -> Self {
         Self(value * T::from_f64(1e18))
     }
 
-    /// Returns the value expressed in Terarutherfords (`TRd`).
+    /// The value in `TRd`.
     #[inline]
     pub fn as_terarutherfords(self) -> T {
         self.0 / T::from_f64(1e18)
@@ -930,9 +929,8 @@ impl<T: Float> Radioactivity<T> {
 }
 
 impl Radioactivity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: RadioactivityUnit) -> Self {
         Self(match unit {
@@ -971,9 +969,9 @@ impl Radioactivity<f64> {
 
 fixed_base!(Radioactivity, Becquerel);
 
-/// Unit markers for counting [`Radioactivity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Radioactivity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::radioactivity`](crate::unit::radioactivity).
+/// Also at [`unit::radioactivity`](crate::unit::radioactivity).
 pub mod unit {
     fixed_unit!(Becquerel: Radioactivity, RadioactivityUnit::Becquerel, base Becquerel, 1 / 1, pi^0, from_becquerels, as_becquerels, additive);
     fixed_unit!(Picobecquerel: Radioactivity, RadioactivityUnit::Picobecquerel, base Becquerel, 1 / 1000000000000, pi^0, from_picobecquerels, as_picobecquerels, additive);

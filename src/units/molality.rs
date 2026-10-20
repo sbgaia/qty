@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Molality is a measure of the amount of solute in a solution relative to a given mass of solvent.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolalityUnit::MolePerKilogram`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolalityUnit::MolePerKilogram`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Molality<T = f64>(T);
 
 quantity!(Molality, MolalityUnit, MolePerKilogram);
 
-/// Unit variants for [`Molality`].
+/// The units of [`Molality`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -38,7 +37,7 @@ pub enum MolalityUnit {
 }
 
 impl MolalityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MolePerKilogram,
         Self::MillimolePerKilogram,
@@ -66,7 +65,7 @@ impl MolalityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -81,7 +80,7 @@ impl MolalityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -91,7 +90,7 @@ impl MolalityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -101,8 +100,8 @@ impl MolalityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -121,8 +120,8 @@ impl MolalityUnit {
 impl core::str::FromStr for MolalityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "mol/kg" => Ok(Self::MolePerKilogram),
@@ -133,8 +132,8 @@ impl core::str::FromStr for MolalityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Molality<T>> for MolalityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -156,9 +155,9 @@ impl<T: Float> crate::UnitOf<Molality<T>> for MolalityUnit {
 }
 
 impl<T: Float> Molality<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`mmol/kg`, `mol/kg`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`mmol/kg`, `mol/kg`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolalityUnit> {
         const SCALE: [(f64, MolalityUnit); 2] = [
@@ -179,37 +178,37 @@ impl<T: Float> Molality<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Molality`] from a value in MolesPerKilogram (`mol/kg`).
+    /// A [`Molality`] from a value in `mol/kg`.
     #[inline]
     pub fn from_moles_per_kilogram(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MolesPerKilogram (`mol/kg`).
+    /// The value in `mol/kg`.
     #[inline]
     pub fn as_moles_per_kilogram(self) -> T {
         self.0
     }
 
-    /// Creates a [`Molality`] from a value in MillimolesPerKilogram (`mmol/kg`).
+    /// A [`Molality`] from a value in `mmol/kg`.
     #[inline]
     pub fn from_millimoles_per_kilogram(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillimolesPerKilogram (`mmol/kg`).
+    /// The value in `mmol/kg`.
     #[inline]
     pub fn as_millimoles_per_kilogram(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Molality`] from a value in MolesPerGram (`mol/g`).
+    /// A [`Molality`] from a value in `mol/g`.
     #[inline]
     pub fn from_moles_per_gram(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MolesPerGram (`mol/g`).
+    /// The value in `mol/g`.
     #[inline]
     pub fn as_moles_per_gram(self) -> T {
         self.0 / T::from_f64(1000.0)
@@ -217,9 +216,8 @@ impl<T: Float> Molality<T> {
 }
 
 impl Molality<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolalityUnit) -> Self {
         Self(match unit {
@@ -232,9 +230,9 @@ impl Molality<f64> {
 
 fixed_base!(Molality, MolePerKilogram);
 
-/// Unit markers for counting [`Molality`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Molality`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molality`](crate::unit::molality).
+/// Also at [`unit::molality`](crate::unit::molality).
 pub mod unit {
     fixed_unit!(MolePerKilogram: Molality, MolalityUnit::MolePerKilogram, base MolePerKilogram, 1 / 1, pi^0, from_moles_per_kilogram, as_moles_per_kilogram, additive);
     fixed_unit!(MillimolePerKilogram: Molality, MolalityUnit::MillimolePerKilogram, base MolePerKilogram, 1 / 1000, pi^0, from_millimoles_per_kilogram, as_millimoles_per_kilogram, additive);

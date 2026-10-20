@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Force change rate is the ratio of the force change to the time during which the change occurred (value of force changes per unit time).
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ForceChangeRateUnit::NewtonPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ForceChangeRateUnit::NewtonPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct ForceChangeRate<T = f64>(T);
 
 quantity!(ForceChangeRate, ForceChangeRateUnit, NewtonPerSecond);
 
-/// Unit variants for [`ForceChangeRate`].
+/// The units of [`ForceChangeRate`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -50,7 +49,7 @@ pub enum ForceChangeRateUnit {
 }
 
 impl ForceChangeRateUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::NewtonPerMinute,
         Self::DecanewtonPerMinute,
@@ -162,7 +161,7 @@ impl ForceChangeRateUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -177,7 +176,7 @@ impl ForceChangeRateUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -199,7 +198,7 @@ impl ForceChangeRateUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -221,8 +220,8 @@ impl ForceChangeRateUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -265,8 +264,8 @@ impl ForceChangeRateUnit {
 impl core::str::FromStr for ForceChangeRateUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "N/min" => Ok(Self::NewtonPerMinute),
@@ -289,8 +288,8 @@ impl core::str::FromStr for ForceChangeRateUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -336,9 +335,9 @@ impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
 }
 
 impl<T: Float> ForceChangeRate<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nN/s`, `µN/s`, `mN/s`, `N/s`, `kN/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nN/s`, `µN/s`, `mN/s`, `N/s`, `kN/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ForceChangeRateUnit> {
         const SCALE: [(f64, ForceChangeRateUnit); 5] = [
@@ -362,181 +361,181 @@ impl<T: Float> ForceChangeRate<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in NewtonsPerMinute (`N/min`).
+    /// A [`ForceChangeRate`] from a value in `N/min`.
     #[inline]
     pub fn from_newtons_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in NewtonsPerMinute (`N/min`).
+    /// The value in `N/min`.
     #[inline]
     pub fn as_newtons_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in DecanewtonsPerMinute (`daN/min`).
+    /// A [`ForceChangeRate`] from a value in `daN/min`.
     #[inline]
     pub fn from_decanewtons_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6.0))
     }
 
-    /// Returns the value expressed in DecanewtonsPerMinute (`daN/min`).
+    /// The value in `daN/min`.
     #[inline]
     pub fn as_decanewtons_per_minute(self) -> T {
         self.0 * T::from_f64(6.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in KilonewtonsPerMinute (`kN/min`).
+    /// A [`ForceChangeRate`] from a value in `kN/min`.
     #[inline]
     pub fn from_kilonewtons_per_minute(value: T) -> Self {
         Self(value * T::from_f64(16.666666666666668))
     }
 
-    /// Returns the value expressed in KilonewtonsPerMinute (`kN/min`).
+    /// The value in `kN/min`.
     #[inline]
     pub fn as_kilonewtons_per_minute(self) -> T {
         self.0 / T::from_f64(16.666666666666668)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in NewtonsPerSecond (`N/s`).
+    /// A [`ForceChangeRate`] from a value in `N/s`.
     #[inline]
     pub fn from_newtons_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in NewtonsPerSecond (`N/s`).
+    /// The value in `N/s`.
     #[inline]
     pub fn as_newtons_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in NanonewtonsPerSecond (`nN/s`).
+    /// A [`ForceChangeRate`] from a value in `nN/s`.
     #[inline]
     pub fn from_nanonewtons_per_second(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanonewtonsPerSecond (`nN/s`).
+    /// The value in `nN/s`.
     #[inline]
     pub fn as_nanonewtons_per_second(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in MicronewtonsPerSecond (`µN/s`).
+    /// A [`ForceChangeRate`] from a value in `µN/s`.
     #[inline]
     pub fn from_micronewtons_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicronewtonsPerSecond (`µN/s`).
+    /// The value in `µN/s`.
     #[inline]
     pub fn as_micronewtons_per_second(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in MillinewtonsPerSecond (`mN/s`).
+    /// A [`ForceChangeRate`] from a value in `mN/s`.
     #[inline]
     pub fn from_millinewtons_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillinewtonsPerSecond (`mN/s`).
+    /// The value in `mN/s`.
     #[inline]
     pub fn as_millinewtons_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in CentinewtonsPerSecond (`cN/s`).
+    /// A [`ForceChangeRate`] from a value in `cN/s`.
     #[inline]
     pub fn from_centinewtons_per_second(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentinewtonsPerSecond (`cN/s`).
+    /// The value in `cN/s`.
     #[inline]
     pub fn as_centinewtons_per_second(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in DecinewtonsPerSecond (`dN/s`).
+    /// A [`ForceChangeRate`] from a value in `dN/s`.
     #[inline]
     pub fn from_decinewtons_per_second(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecinewtonsPerSecond (`dN/s`).
+    /// The value in `dN/s`.
     #[inline]
     pub fn as_decinewtons_per_second(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in DecanewtonsPerSecond (`daN/s`).
+    /// A [`ForceChangeRate`] from a value in `daN/s`.
     #[inline]
     pub fn from_decanewtons_per_second(value: T) -> Self {
         Self(value * T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecanewtonsPerSecond (`daN/s`).
+    /// The value in `daN/s`.
     #[inline]
     pub fn as_decanewtons_per_second(self) -> T {
         self.0 / T::from_f64(10.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in KilonewtonsPerSecond (`kN/s`).
+    /// A [`ForceChangeRate`] from a value in `kN/s`.
     #[inline]
     pub fn from_kilonewtons_per_second(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilonewtonsPerSecond (`kN/s`).
+    /// The value in `kN/s`.
     #[inline]
     pub fn as_kilonewtons_per_second(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in PoundsForcePerMinute (`lbf/min`).
+    /// A [`ForceChangeRate`] from a value in `lbf/min`.
     #[inline]
     pub fn from_pounds_force_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.07413702692100833))
     }
 
-    /// Returns the value expressed in PoundsForcePerMinute (`lbf/min`).
+    /// The value in `lbf/min`.
     #[inline]
     pub fn as_pounds_force_per_minute(self) -> T {
         self.0 / T::from_f64(0.07413702692100833)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in KilopoundsForcePerMinute (`klbf/min`).
+    /// A [`ForceChangeRate`] from a value in `klbf/min`.
     #[inline]
     pub fn from_kilopounds_force_per_minute(value: T) -> Self {
         Self(value * T::from_f64(74.13702692100833))
     }
 
-    /// Returns the value expressed in KilopoundsForcePerMinute (`klbf/min`).
+    /// The value in `klbf/min`.
     #[inline]
     pub fn as_kilopounds_force_per_minute(self) -> T {
         self.0 / T::from_f64(74.13702692100833)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in PoundsForcePerSecond (`lbf/s`).
+    /// A [`ForceChangeRate`] from a value in `lbf/s`.
     #[inline]
     pub fn from_pounds_force_per_second(value: T) -> Self {
         Self(value * T::from_f64(4.4482216152605))
     }
 
-    /// Returns the value expressed in PoundsForcePerSecond (`lbf/s`).
+    /// The value in `lbf/s`.
     #[inline]
     pub fn as_pounds_force_per_second(self) -> T {
         self.0 / T::from_f64(4.4482216152605)
     }
 
-    /// Creates a [`ForceChangeRate`] from a value in KilopoundsForcePerSecond (`klbf/s`).
+    /// A [`ForceChangeRate`] from a value in `klbf/s`.
     #[inline]
     pub fn from_kilopounds_force_per_second(value: T) -> Self {
         Self(value * T::from_f64(4448.2216152605))
     }
 
-    /// Returns the value expressed in KilopoundsForcePerSecond (`klbf/s`).
+    /// The value in `klbf/s`.
     #[inline]
     pub fn as_kilopounds_force_per_second(self) -> T {
         self.0 / T::from_f64(4448.2216152605)
@@ -544,9 +543,8 @@ impl<T: Float> ForceChangeRate<T> {
 }
 
 impl ForceChangeRate<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ForceChangeRateUnit) -> Self {
         Self(match unit {
@@ -571,9 +569,9 @@ impl ForceChangeRate<f64> {
 
 fixed_base!(ForceChangeRate, NewtonPerSecond);
 
-/// Unit markers for counting [`ForceChangeRate`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ForceChangeRate`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::force_change_rate`](crate::unit::force_change_rate).
+/// Also at [`unit::force_change_rate`](crate::unit::force_change_rate).
 pub mod unit {
     fixed_unit!(NewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::NewtonPerMinute, base NewtonPerSecond, 1 / 60, pi^0, from_newtons_per_minute, as_newtons_per_minute, additive);
     fixed_unit!(DecanewtonPerMinute: ForceChangeRate, ForceChangeRateUnit::DecanewtonPerMinute, base NewtonPerSecond, 1 / 6, pi^0, from_decanewtons_per_minute, as_decanewtons_per_minute, additive);

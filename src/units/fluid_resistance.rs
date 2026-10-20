@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Fluid Resistance is a force acting opposite to the relative motion of any object moving with respect to a surrounding fluid. Fluid Resistance is sometimes referred to as drag or fluid friction.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`FluidResistanceUnit::PascalSecondPerCubicMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`FluidResistanceUnit::PascalSecondPerCubicMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     PascalSecondPerCubicMeter
 );
 
-/// Unit variants for [`FluidResistance`].
+/// The units of [`FluidResistance`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -58,7 +57,7 @@ pub enum FluidResistanceUnit {
 }
 
 impl FluidResistanceUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::PascalSecondPerLiter,
         Self::PascalMinutePerLiter,
@@ -198,7 +197,7 @@ impl FluidResistanceUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -213,7 +212,7 @@ impl FluidResistanceUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -239,7 +238,7 @@ impl FluidResistanceUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -265,8 +264,8 @@ impl FluidResistanceUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -341,8 +340,8 @@ impl FluidResistanceUnit {
 impl core::str::FromStr for FluidResistanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Pa·s/l" => Ok(Self::PascalSecondPerLiter),
@@ -371,8 +370,8 @@ impl core::str::FromStr for FluidResistanceUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -450,9 +449,9 @@ impl<T: Float> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
 }
 
 impl<T: Float> FluidResistance<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`Pa·s/m³`, `MPa·s/m³`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`Pa·s/m³`, `MPa·s/m³`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, FluidResistanceUnit> {
         const SCALE: [(f64, FluidResistanceUnit); 2] = [
@@ -476,229 +475,229 @@ impl<T: Float> FluidResistance<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalSecondsPerLiter (`Pa·s/l`).
+    /// A [`FluidResistance`] from a value in `Pa·s/l`.
     #[inline]
     pub fn from_pascal_seconds_per_liter(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in PascalSecondsPerLiter (`Pa·s/l`).
+    /// The value in `Pa·s/l`.
     #[inline]
     pub fn as_pascal_seconds_per_liter(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalMinutesPerLiter (`Pa·min/l`).
+    /// A [`FluidResistance`] from a value in `Pa·min/l`.
     #[inline]
     pub fn from_pascal_minutes_per_liter(value: T) -> Self {
         Self(value * T::from_f64(60000.0))
     }
 
-    /// Returns the value expressed in PascalMinutesPerLiter (`Pa·min/l`).
+    /// The value in `Pa·min/l`.
     #[inline]
     pub fn as_pascal_minutes_per_liter(self) -> T {
         self.0 / T::from_f64(60000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalSecondsPerMilliliter (`Pa·s/ml`).
+    /// A [`FluidResistance`] from a value in `Pa·s/ml`.
     #[inline]
     pub fn from_pascal_seconds_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in PascalSecondsPerMilliliter (`Pa·s/ml`).
+    /// The value in `Pa·s/ml`.
     #[inline]
     pub fn as_pascal_seconds_per_milliliter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalMinutesPerMilliliter (`Pa·min/ml`).
+    /// A [`FluidResistance`] from a value in `Pa·min/ml`.
     #[inline]
     pub fn from_pascal_minutes_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(6e7))
     }
 
-    /// Returns the value expressed in PascalMinutesPerMilliliter (`Pa·min/ml`).
+    /// The value in `Pa·min/ml`.
     #[inline]
     pub fn as_pascal_minutes_per_milliliter(self) -> T {
         self.0 / T::from_f64(6e7)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicMeter (`Pa·s/m³`).
+    /// A [`FluidResistance`] from a value in `Pa·s/m³`.
     #[inline]
     pub fn from_pascal_seconds_per_cubic_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in PascalSecondsPerCubicMeter (`Pa·s/m³`).
+    /// The value in `Pa·s/m³`.
     #[inline]
     pub fn as_pascal_seconds_per_cubic_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`FluidResistance`] from a value in MegapascalSecondsPerCubicMeter (`MPa·s/m³`).
+    /// A [`FluidResistance`] from a value in `MPa·s/m³`.
     #[inline]
     pub fn from_megapascal_seconds_per_cubic_meter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegapascalSecondsPerCubicMeter (`MPa·s/m³`).
+    /// The value in `MPa·s/m³`.
     #[inline]
     pub fn as_megapascal_seconds_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicMeter (`Pa·min/m³`).
+    /// A [`FluidResistance`] from a value in `Pa·min/m³`.
     #[inline]
     pub fn from_pascal_minutes_per_cubic_meter(value: T) -> Self {
         Self(value * T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in PascalMinutesPerCubicMeter (`Pa·min/m³`).
+    /// The value in `Pa·min/m³`.
     #[inline]
     pub fn as_pascal_minutes_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(60.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalSecondsPerCubicCentimeter (`Pa·s/cm³`).
+    /// A [`FluidResistance`] from a value in `Pa·s/cm³`.
     #[inline]
     pub fn from_pascal_seconds_per_cubic_centimeter(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in PascalSecondsPerCubicCentimeter (`Pa·s/cm³`).
+    /// The value in `Pa·s/cm³`.
     #[inline]
     pub fn as_pascal_seconds_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in PascalMinutesPerCubicCentimeter (`Pa·min/cm³`).
+    /// A [`FluidResistance`] from a value in `Pa·min/cm³`.
     #[inline]
     pub fn from_pascal_minutes_per_cubic_centimeter(value: T) -> Self {
         Self(value * T::from_f64(6e7))
     }
 
-    /// Returns the value expressed in PascalMinutesPerCubicCentimeter (`Pa·min/cm³`).
+    /// The value in `Pa·min/cm³`.
     #[inline]
     pub fn as_pascal_minutes_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(6e7)
     }
 
-    /// Creates a [`FluidResistance`] from a value in DyneSecondsPerCentimeterToTheFifth (`dyn·s/cm⁵`).
+    /// A [`FluidResistance`] from a value in `dyn·s/cm⁵`.
     #[inline]
     pub fn from_dyne_seconds_per_centimeter_to_the_fifth(value: T) -> Self {
         Self(value * T::from_f64(100000.0))
     }
 
-    /// Returns the value expressed in DyneSecondsPerCentimeterToTheFifth (`dyn·s/cm⁵`).
+    /// The value in `dyn·s/cm⁵`.
     #[inline]
     pub fn as_dyne_seconds_per_centimeter_to_the_fifth(self) -> T {
         self.0 / T::from_f64(100000.0)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerLiter (`mmHg·s/l`).
+    /// A [`FluidResistance`] from a value in `mmHg·s/l`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_liter(value: T) -> Self {
         Self(value * T::from_f64(133322.368))
     }
 
-    /// Returns the value expressed in MillimeterMercurySecondsPerLiter (`mmHg·s/l`).
+    /// The value in `mmHg·s/l`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_liter(self) -> T {
         self.0 / T::from_f64(133322.368)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerLiter (`mmHg·min/l`).
+    /// A [`FluidResistance`] from a value in `mmHg·min/l`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_liter(value: T) -> Self {
         Self(value * T::from_f64(7999342.08))
     }
 
-    /// Returns the value expressed in MillimeterMercuryMinutesPerLiter (`mmHg·min/l`).
+    /// The value in `mmHg·min/l`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_liter(self) -> T {
         self.0 / T::from_f64(7999342.08)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerMilliliter (`mmHg·s/ml`).
+    /// A [`FluidResistance`] from a value in `mmHg·s/ml`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(1.33322368e8))
     }
 
-    /// Returns the value expressed in MillimeterMercurySecondsPerMilliliter (`mmHg·s/ml`).
+    /// The value in `mmHg·s/ml`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_milliliter(self) -> T {
         self.0 / T::from_f64(1.33322368e8)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerMilliliter (`mmHg·min/ml`).
+    /// A [`FluidResistance`] from a value in `mmHg·min/ml`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_milliliter(value: T) -> Self {
         Self(value * T::from_f64(7.99934208e9))
     }
 
-    /// Returns the value expressed in MillimeterMercuryMinutesPerMilliliter (`mmHg·min/ml`).
+    /// The value in `mmHg·min/ml`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_milliliter(self) -> T {
         self.0 / T::from_f64(7.99934208e9)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicCentimeter (`mmHg·s/cm³`).
+    /// A [`FluidResistance`] from a value in `mmHg·s/cm³`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_cubic_centimeter(value: T) -> Self {
         Self(value * T::from_f64(1.33322368e8))
     }
 
-    /// Returns the value expressed in MillimeterMercurySecondsPerCubicCentimeter (`mmHg·s/cm³`).
+    /// The value in `mmHg·s/cm³`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(1.33322368e8)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicCentimeter (`mmHg·min/cm³`).
+    /// A [`FluidResistance`] from a value in `mmHg·min/cm³`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_centimeter(value: T) -> Self {
         Self(value * T::from_f64(7.99934208e9))
     }
 
-    /// Returns the value expressed in MillimeterMercuryMinutesPerCubicCentimeter (`mmHg·min/cm³`).
+    /// The value in `mmHg·min/cm³`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_centimeter(self) -> T {
         self.0 / T::from_f64(7.99934208e9)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercurySecondsPerCubicMeter (`mmHg·s/m³`).
+    /// A [`FluidResistance`] from a value in `mmHg·s/m³`.
     #[inline]
     pub fn from_millimeter_mercury_seconds_per_cubic_meter(value: T) -> Self {
         Self(value * T::from_f64(133.322368))
     }
 
-    /// Returns the value expressed in MillimeterMercurySecondsPerCubicMeter (`mmHg·s/m³`).
+    /// The value in `mmHg·s/m³`.
     #[inline]
     pub fn as_millimeter_mercury_seconds_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(133.322368)
     }
 
-    /// Creates a [`FluidResistance`] from a value in MillimeterMercuryMinutesPerCubicMeter (`mmHg·min/m³`).
+    /// A [`FluidResistance`] from a value in `mmHg·min/m³`.
     #[inline]
     pub fn from_millimeter_mercury_minutes_per_cubic_meter(value: T) -> Self {
         Self(value * T::from_f64(7999.34208))
     }
 
-    /// Returns the value expressed in MillimeterMercuryMinutesPerCubicMeter (`mmHg·min/m³`).
+    /// The value in `mmHg·min/m³`.
     #[inline]
     pub fn as_millimeter_mercury_minutes_per_cubic_meter(self) -> T {
         self.0 / T::from_f64(7999.34208)
     }
 
-    /// Creates a [`FluidResistance`] from a value in WoodUnits (`WU`).
+    /// A [`FluidResistance`] from a value in `WU`.
     #[inline]
     pub fn from_wood_units(value: T) -> Self {
         Self(value * T::from_f64(7999342.08))
     }
 
-    /// Returns the value expressed in WoodUnits (`WU`).
+    /// The value in `WU`.
     #[inline]
     pub fn as_wood_units(self) -> T {
         self.0 / T::from_f64(7999342.08)
@@ -706,9 +705,8 @@ impl<T: Float> FluidResistance<T> {
 }
 
 impl FluidResistance<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: FluidResistanceUnit) -> Self {
         Self(match unit {
@@ -737,9 +735,9 @@ impl FluidResistance<f64> {
 
 fixed_base!(FluidResistance, PascalSecondPerCubicMeter);
 
-/// Unit markers for counting [`FluidResistance`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`FluidResistance`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::fluid_resistance`](crate::unit::fluid_resistance).
+/// Also at [`unit::fluid_resistance`](crate::unit::fluid_resistance).
 pub mod unit {
     fixed_unit!(PascalSecondPerLiter: FluidResistance, FluidResistanceUnit::PascalSecondPerLiter, base PascalSecondPerCubicMeter, 1000 / 1, pi^0, from_pascal_seconds_per_liter, as_pascal_seconds_per_liter, additive);
     fixed_unit!(PascalMinutePerLiter: FluidResistance, FluidResistanceUnit::PascalMinutePerLiter, base PascalSecondPerCubicMeter, 60000 / 1, pi^0, from_pascal_minutes_per_liter, as_pascal_minutes_per_liter, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Acceleration, in physics, is the rate at which the velocity of an object changes over time. An object's acceleration is the net result of any and all forces acting on the object, as described by Newton's Second Law. The SI unit for acceleration is the Meter per second squared (m/s²). Accelerations are vector quantities (they have magnitude and direction) and add according to the parallelogram law. As a vector, the calculated net force is equal to the product of the object's mass (a scalar quantity) and the acceleration.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`AccelerationUnit::MeterPerSecondSquared`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`AccelerationUnit::MeterPerSecondSquared`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Acceleration<T = f64>(T);
 
 quantity!(Acceleration, AccelerationUnit, MeterPerSecondSquared);
 
-/// Unit variants for [`Acceleration`].
+/// The units of [`Acceleration`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -51,7 +50,7 @@ pub enum AccelerationUnit {
 }
 
 impl AccelerationUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::MeterPerSecondSquared,
         Self::NanometerPerSecondSquared,
@@ -156,7 +155,7 @@ impl AccelerationUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -171,7 +170,7 @@ impl AccelerationUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -192,7 +191,7 @@ impl AccelerationUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -213,8 +212,8 @@ impl AccelerationUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -253,8 +252,8 @@ impl AccelerationUnit {
 impl core::str::FromStr for AccelerationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "m/s²" => Ok(Self::MeterPerSecondSquared),
@@ -276,8 +275,8 @@ impl core::str::FromStr for AccelerationUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -321,9 +320,9 @@ impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
 }
 
 impl<T: Float> Acceleration<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nm/s²`, `µm/s²`, `mm/s²`, `m/s²`, `km/s²`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nm/s²`, `µm/s²`, `mm/s²`, `m/s²`, `km/s²`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, AccelerationUnit> {
         const SCALE: [(f64, AccelerationUnit); 5] = [
@@ -347,169 +346,169 @@ impl<T: Float> Acceleration<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`Acceleration`] from a value in MetersPerSecondSquared (`m/s²`).
+    /// A [`Acceleration`] from a value in `m/s²`.
     #[inline]
     pub fn from_meters_per_second_squared(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in MetersPerSecondSquared (`m/s²`).
+    /// The value in `m/s²`.
     #[inline]
     pub fn as_meters_per_second_squared(self) -> T {
         self.0
     }
 
-    /// Creates a [`Acceleration`] from a value in NanometersPerSecondSquared (`nm/s²`).
+    /// A [`Acceleration`] from a value in `nm/s²`.
     #[inline]
     pub fn from_nanometers_per_second_squared(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in NanometersPerSecondSquared (`nm/s²`).
+    /// The value in `nm/s²`.
     #[inline]
     pub fn as_nanometers_per_second_squared(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`Acceleration`] from a value in MicrometersPerSecondSquared (`µm/s²`).
+    /// A [`Acceleration`] from a value in `µm/s²`.
     #[inline]
     pub fn from_micrometers_per_second_squared(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MicrometersPerSecondSquared (`µm/s²`).
+    /// The value in `µm/s²`.
     #[inline]
     pub fn as_micrometers_per_second_squared(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`Acceleration`] from a value in MillimetersPerSecondSquared (`mm/s²`).
+    /// A [`Acceleration`] from a value in `mm/s²`.
     #[inline]
     pub fn from_millimeters_per_second_squared(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MillimetersPerSecondSquared (`mm/s²`).
+    /// The value in `mm/s²`.
     #[inline]
     pub fn as_millimeters_per_second_squared(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`Acceleration`] from a value in CentimetersPerSecondSquared (`cm/s²`).
+    /// A [`Acceleration`] from a value in `cm/s²`.
     #[inline]
     pub fn from_centimeters_per_second_squared(value: T) -> Self {
         Self(value / T::from_f64(100.0))
     }
 
-    /// Returns the value expressed in CentimetersPerSecondSquared (`cm/s²`).
+    /// The value in `cm/s²`.
     #[inline]
     pub fn as_centimeters_per_second_squared(self) -> T {
         self.0 * T::from_f64(100.0)
     }
 
-    /// Creates a [`Acceleration`] from a value in DecimetersPerSecondSquared (`dm/s²`).
+    /// A [`Acceleration`] from a value in `dm/s²`.
     #[inline]
     pub fn from_decimeters_per_second_squared(value: T) -> Self {
         Self(value / T::from_f64(10.0))
     }
 
-    /// Returns the value expressed in DecimetersPerSecondSquared (`dm/s²`).
+    /// The value in `dm/s²`.
     #[inline]
     pub fn as_decimeters_per_second_squared(self) -> T {
         self.0 * T::from_f64(10.0)
     }
 
-    /// Creates a [`Acceleration`] from a value in KilometersPerSecondSquared (`km/s²`).
+    /// A [`Acceleration`] from a value in `km/s²`.
     #[inline]
     pub fn from_kilometers_per_second_squared(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilometersPerSecondSquared (`km/s²`).
+    /// The value in `km/s²`.
     #[inline]
     pub fn as_kilometers_per_second_squared(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`Acceleration`] from a value in InchesPerSecondSquared (`in/s²`).
+    /// A [`Acceleration`] from a value in `in/s²`.
     #[inline]
     pub fn from_inches_per_second_squared(value: T) -> Self {
         Self(value * T::from_f64(0.0254))
     }
 
-    /// Returns the value expressed in InchesPerSecondSquared (`in/s²`).
+    /// The value in `in/s²`.
     #[inline]
     pub fn as_inches_per_second_squared(self) -> T {
         self.0 / T::from_f64(0.0254)
     }
 
-    /// Creates a [`Acceleration`] from a value in FeetPerSecondSquared (`ft/s²`).
+    /// A [`Acceleration`] from a value in `ft/s²`.
     #[inline]
     pub fn from_feet_per_second_squared(value: T) -> Self {
         Self(value * T::from_f64(0.3048))
     }
 
-    /// Returns the value expressed in FeetPerSecondSquared (`ft/s²`).
+    /// The value in `ft/s²`.
     #[inline]
     pub fn as_feet_per_second_squared(self) -> T {
         self.0 / T::from_f64(0.3048)
     }
 
-    /// Creates a [`Acceleration`] from a value in KnotsPerSecond (`kn/s`).
+    /// A [`Acceleration`] from a value in `kn/s`.
     #[inline]
     pub fn from_knots_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.5144444444444445))
     }
 
-    /// Returns the value expressed in KnotsPerSecond (`kn/s`).
+    /// The value in `kn/s`.
     #[inline]
     pub fn as_knots_per_second(self) -> T {
         self.0 / T::from_f64(0.5144444444444445)
     }
 
-    /// Creates a [`Acceleration`] from a value in KnotsPerMinute (`kn/min`).
+    /// A [`Acceleration`] from a value in `kn/min`.
     #[inline]
     pub fn from_knots_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.008574074074074074))
     }
 
-    /// Returns the value expressed in KnotsPerMinute (`kn/min`).
+    /// The value in `kn/min`.
     #[inline]
     pub fn as_knots_per_minute(self) -> T {
         self.0 / T::from_f64(0.008574074074074074)
     }
 
-    /// Creates a [`Acceleration`] from a value in KnotsPerHour (`kn/h`).
+    /// A [`Acceleration`] from a value in `kn/h`.
     #[inline]
     pub fn from_knots_per_hour(value: T) -> Self {
         Self(value * T::from_f64(0.00014290123456790123))
     }
 
-    /// Returns the value expressed in KnotsPerHour (`kn/h`).
+    /// The value in `kn/h`.
     #[inline]
     pub fn as_knots_per_hour(self) -> T {
         self.0 / T::from_f64(0.00014290123456790123)
     }
 
-    /// Creates a [`Acceleration`] from a value in StandardGravity (`g`).
+    /// A [`Acceleration`] from a value in `g`.
     #[inline]
     pub fn from_standard_gravity(value: T) -> Self {
         Self(value * T::from_f64(9.80665))
     }
 
-    /// Returns the value expressed in StandardGravity (`g`).
+    /// The value in `g`.
     #[inline]
     pub fn as_standard_gravity(self) -> T {
         self.0 / T::from_f64(9.80665)
     }
 
-    /// Creates a [`Acceleration`] from a value in MillistandardGravity (`mg`).
+    /// A [`Acceleration`] from a value in `mg`.
     #[inline]
     pub fn from_millistandard_gravity(value: T) -> Self {
         Self(value * T::from_f64(0.00980665))
     }
 
-    /// Returns the value expressed in MillistandardGravity (`mg`).
+    /// The value in `mg`.
     #[inline]
     pub fn as_millistandard_gravity(self) -> T {
         self.0 / T::from_f64(0.00980665)
@@ -517,9 +516,8 @@ impl<T: Float> Acceleration<T> {
 }
 
 impl Acceleration<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: AccelerationUnit) -> Self {
         Self(match unit {
@@ -543,9 +541,9 @@ impl Acceleration<f64> {
 
 fixed_base!(Acceleration, MeterPerSecondSquared);
 
-/// Unit markers for counting [`Acceleration`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Acceleration`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::acceleration`](crate::unit::acceleration).
+/// Also at [`unit::acceleration`](crate::unit::acceleration).
 pub mod unit {
     fixed_unit!(MeterPerSecondSquared: Acceleration, AccelerationUnit::MeterPerSecondSquared, base MeterPerSecondSquared, 1 / 1, pi^0, from_meters_per_second_squared, as_meters_per_second_squared, additive);
     fixed_unit!(NanometerPerSecondSquared: Acceleration, AccelerationUnit::NanometerPerSecondSquared, base MeterPerSecondSquared, 1 / 1000000000, pi^0, from_nanometers_per_second_squared, as_nanometers_per_second_squared, additive);

@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Brake specific fuel consumption (BSFC) is a measure of the fuel efficiency of any prime mover that burns fuel and produces rotational, or shaft, power. It is typically used for comparing the efficiency of internal combustion engines with a shaft output.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`BrakeSpecificFuelConsumptionUnit::KilogramPerJoule`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`BrakeSpecificFuelConsumptionUnit::KilogramPerJoule`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     KilogramPerJoule
 );
 
-/// Unit variants for [`BrakeSpecificFuelConsumption`].
+/// The units of [`BrakeSpecificFuelConsumption`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum BrakeSpecificFuelConsumptionUnit {
 }
 
 impl BrakeSpecificFuelConsumptionUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::GramPerKiloWattHour,
         Self::KilogramPerJoule,
@@ -71,7 +70,7 @@ impl BrakeSpecificFuelConsumptionUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -86,7 +85,7 @@ impl BrakeSpecificFuelConsumptionUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -96,7 +95,7 @@ impl BrakeSpecificFuelConsumptionUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -106,8 +105,8 @@ impl BrakeSpecificFuelConsumptionUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -126,8 +125,8 @@ impl BrakeSpecificFuelConsumptionUnit {
 impl core::str::FromStr for BrakeSpecificFuelConsumptionUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "g/kWh" => Ok(Self::GramPerKiloWattHour),
@@ -138,8 +137,8 @@ impl core::str::FromStr for BrakeSpecificFuelConsumptionUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<BrakeSpecificFuelConsumption<T>> for BrakeSpecificFuelConsumptionUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -165,45 +164,45 @@ impl<T: Float> crate::UnitOf<BrakeSpecificFuelConsumption<T>> for BrakeSpecificF
 }
 
 impl<T: Float> BrakeSpecificFuelConsumption<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`kg/J`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`kg/J`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, BrakeSpecificFuelConsumptionUnit> {
         self.in_unit(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
     }
 
-    /// Creates a [`BrakeSpecificFuelConsumption`] from a value in GramsPerKiloWattHour (`g/kWh`).
+    /// A [`BrakeSpecificFuelConsumption`] from a value in `g/kWh`.
     #[inline]
     pub fn from_grams_per_kilo_watt_hour(value: T) -> Self {
         Self(value / T::from_f64(3.6e9))
     }
 
-    /// Returns the value expressed in GramsPerKiloWattHour (`g/kWh`).
+    /// The value in `g/kWh`.
     #[inline]
     pub fn as_grams_per_kilo_watt_hour(self) -> T {
         self.0 * T::from_f64(3.6e9)
     }
 
-    /// Creates a [`BrakeSpecificFuelConsumption`] from a value in KilogramsPerJoule (`kg/J`).
+    /// A [`BrakeSpecificFuelConsumption`] from a value in `kg/J`.
     #[inline]
     pub fn from_kilograms_per_joule(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KilogramsPerJoule (`kg/J`).
+    /// The value in `kg/J`.
     #[inline]
     pub fn as_kilograms_per_joule(self) -> T {
         self.0
     }
 
-    /// Creates a [`BrakeSpecificFuelConsumption`] from a value in PoundsPerMechanicalHorsepowerHour (`lb/hph`).
+    /// A [`BrakeSpecificFuelConsumption`] from a value in `lb/hph`.
     #[inline]
     pub fn from_pounds_per_mechanical_horsepower_hour(value: T) -> Self {
         Self(value * T::from_f64(1.6896594108226585e-7))
     }
 
-    /// Returns the value expressed in PoundsPerMechanicalHorsepowerHour (`lb/hph`).
+    /// The value in `lb/hph`.
     #[inline]
     pub fn as_pounds_per_mechanical_horsepower_hour(self) -> T {
         self.0 / T::from_f64(1.6896594108226585e-7)
@@ -211,9 +210,8 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
 }
 
 impl BrakeSpecificFuelConsumption<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: BrakeSpecificFuelConsumptionUnit) -> Self {
         Self(match unit {
@@ -228,9 +226,9 @@ impl BrakeSpecificFuelConsumption<f64> {
 
 fixed_base!(BrakeSpecificFuelConsumption, KilogramPerJoule);
 
-/// Unit markers for counting [`BrakeSpecificFuelConsumption`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`BrakeSpecificFuelConsumption`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::brake_specific_fuel_consumption`](crate::unit::brake_specific_fuel_consumption).
+/// Also at [`unit::brake_specific_fuel_consumption`](crate::unit::brake_specific_fuel_consumption).
 pub mod unit {
     fixed_unit!(GramPerKiloWattHour: BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour, base KilogramPerJoule, 1 / 3600000000, pi^0, from_grams_per_kilo_watt_hour, as_grams_per_kilo_watt_hour, additive);
     fixed_unit!(KilogramPerJoule: BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit::KilogramPerJoule, base KilogramPerJoule, 1 / 1, pi^0, from_kilograms_per_joule, as_kilograms_per_joule, additive);

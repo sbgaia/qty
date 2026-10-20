@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Molar energy is the amount of energy stored in 1 mole of a substance.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MolarEnergyUnit::JoulePerMole`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MolarEnergyUnit::JoulePerMole`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct MolarEnergy<T = f64>(T);
 
 quantity!(MolarEnergy, MolarEnergyUnit, JoulePerMole);
 
-/// Unit variants for [`MolarEnergy`].
+/// The units of [`MolarEnergy`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -38,7 +37,7 @@ pub enum MolarEnergyUnit {
 }
 
 impl MolarEnergyUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::JoulePerMole,
         Self::KilojoulePerMole,
@@ -66,7 +65,7 @@ impl MolarEnergyUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -81,7 +80,7 @@ impl MolarEnergyUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -91,7 +90,7 @@ impl MolarEnergyUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -101,8 +100,8 @@ impl MolarEnergyUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -121,8 +120,8 @@ impl MolarEnergyUnit {
 impl core::str::FromStr for MolarEnergyUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/mol" => Ok(Self::JoulePerMole),
@@ -133,8 +132,8 @@ impl core::str::FromStr for MolarEnergyUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -156,9 +155,9 @@ impl<T: Float> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
 }
 
 impl<T: Float> MolarEnergy<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`J/mol`, `kJ/mol`, `MJ/mol`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`J/mol`, `kJ/mol`, `MJ/mol`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MolarEnergyUnit> {
         const SCALE: [(f64, MolarEnergyUnit); 3] = [
@@ -180,37 +179,37 @@ impl<T: Float> MolarEnergy<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`MolarEnergy`] from a value in JoulesPerMole (`J/mol`).
+    /// A [`MolarEnergy`] from a value in `J/mol`.
     #[inline]
     pub fn from_joules_per_mole(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerMole (`J/mol`).
+    /// The value in `J/mol`.
     #[inline]
     pub fn as_joules_per_mole(self) -> T {
         self.0
     }
 
-    /// Creates a [`MolarEnergy`] from a value in KilojoulesPerMole (`kJ/mol`).
+    /// A [`MolarEnergy`] from a value in `kJ/mol`.
     #[inline]
     pub fn from_kilojoules_per_mole(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerMole (`kJ/mol`).
+    /// The value in `kJ/mol`.
     #[inline]
     pub fn as_kilojoules_per_mole(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`MolarEnergy`] from a value in MegajoulesPerMole (`MJ/mol`).
+    /// A [`MolarEnergy`] from a value in `MJ/mol`.
     #[inline]
     pub fn from_megajoules_per_mole(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegajoulesPerMole (`MJ/mol`).
+    /// The value in `MJ/mol`.
     #[inline]
     pub fn as_megajoules_per_mole(self) -> T {
         self.0 / T::from_f64(1000000.0)
@@ -218,9 +217,8 @@ impl<T: Float> MolarEnergy<T> {
 }
 
 impl MolarEnergy<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MolarEnergyUnit) -> Self {
         Self(match unit {
@@ -233,9 +231,9 @@ impl MolarEnergy<f64> {
 
 fixed_base!(MolarEnergy, JoulePerMole);
 
-/// Unit markers for counting [`MolarEnergy`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`MolarEnergy`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::molar_energy`](crate::unit::molar_energy).
+/// Also at [`unit::molar_energy`](crate::unit::molar_energy).
 pub mod unit {
     fixed_unit!(JoulePerMole: MolarEnergy, MolarEnergyUnit::JoulePerMole, base JoulePerMole, 1 / 1, pi^0, from_joules_per_mole, as_joules_per_mole, additive);
     fixed_unit!(KilojoulePerMole: MolarEnergy, MolarEnergyUnit::KilojoulePerMole, base JoulePerMole, 1000 / 1, pi^0, from_kilojoules_per_mole, as_kilojoules_per_mole, additive);

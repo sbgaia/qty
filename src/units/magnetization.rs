@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In classical electromagnetism, magnetization is the vector field that expresses the density of permanent or induced magnetic dipole moments in a magnetic material.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`MagnetizationUnit::AmperePerMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`MagnetizationUnit::AmperePerMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Magnetization<T = f64>(T);
 
 quantity!(Magnetization, MagnetizationUnit, AmperePerMeter);
 
-/// Unit variants for [`Magnetization`].
+/// The units of [`Magnetization`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -36,7 +35,7 @@ pub enum MagnetizationUnit {
 }
 
 impl MagnetizationUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[Self::AmperePerMeter];
 
     const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
@@ -46,7 +45,7 @@ impl MagnetizationUnit {
         abbreviations: &["A/m"],
     }];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -61,7 +60,7 @@ impl MagnetizationUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -69,7 +68,7 @@ impl MagnetizationUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -77,8 +76,8 @@ impl MagnetizationUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -93,8 +92,8 @@ impl MagnetizationUnit {
 impl core::str::FromStr for MagnetizationUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "A/m" => Ok(Self::AmperePerMeter),
@@ -103,8 +102,8 @@ impl core::str::FromStr for MagnetizationUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -122,21 +121,21 @@ impl<T: Float> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
 }
 
 impl<T: Float> Magnetization<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`A/m`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`A/m`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, MagnetizationUnit> {
         self.in_unit(MagnetizationUnit::AmperePerMeter)
     }
 
-    /// Creates a [`Magnetization`] from a value in AmperesPerMeter (`A/m`).
+    /// A [`Magnetization`] from a value in `A/m`.
     #[inline]
     pub fn from_amperes_per_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in AmperesPerMeter (`A/m`).
+    /// The value in `A/m`.
     #[inline]
     pub fn as_amperes_per_meter(self) -> T {
         self.0
@@ -144,9 +143,8 @@ impl<T: Float> Magnetization<T> {
 }
 
 impl Magnetization<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: MagnetizationUnit) -> Self {
         Self(match unit {
@@ -157,9 +155,9 @@ impl Magnetization<f64> {
 
 fixed_base!(Magnetization, AmperePerMeter);
 
-/// Unit markers for counting [`Magnetization`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Magnetization`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::magnetization`](crate::unit::magnetization).
+/// Also at [`unit::magnetization`](crate::unit::magnetization).
 pub mod unit {
     fixed_unit!(AmperePerMeter: Magnetization, MagnetizationUnit::AmperePerMeter, base AmperePerMeter, 1 / 1, pi^0, from_amperes_per_meter, as_amperes_per_meter, additive);
 }

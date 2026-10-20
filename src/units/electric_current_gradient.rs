@@ -11,8 +11,7 @@ use crate::Float;
 
 /// In electromagnetism, the current gradient describes how the current changes in time.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricCurrentGradientUnit::AmperePerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricCurrentGradientUnit::AmperePerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     AmperePerSecond
 );
 
-/// Unit variants for [`ElectricCurrentGradient`].
+/// The units of [`ElectricCurrentGradient`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -46,7 +45,7 @@ pub enum ElectricCurrentGradientUnit {
 }
 
 impl ElectricCurrentGradientUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::AmperePerSecond,
         Self::MilliamperePerSecond,
@@ -102,7 +101,7 @@ impl ElectricCurrentGradientUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -118,7 +117,7 @@ impl ElectricCurrentGradientUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -132,7 +131,7 @@ impl ElectricCurrentGradientUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -146,8 +145,8 @@ impl ElectricCurrentGradientUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -174,8 +173,8 @@ impl ElectricCurrentGradientUnit {
 impl core::str::FromStr for ElectricCurrentGradientUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "A/s" => Ok(Self::AmperePerSecond),
@@ -190,8 +189,8 @@ impl core::str::FromStr for ElectricCurrentGradientUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGradientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -221,9 +220,9 @@ impl<T: Float> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGrad
 }
 
 impl<T: Float> ElectricCurrentGradient<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`mA/s`, `A/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`mA/s`, `A/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricCurrentGradientUnit> {
         const SCALE: [(f64, ElectricCurrentGradientUnit); 2] = [
@@ -244,85 +243,85 @@ impl<T: Float> ElectricCurrentGradient<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerSecond (`A/s`).
+    /// A [`ElectricCurrentGradient`] from a value in `A/s`.
     #[inline]
     pub fn from_amperes_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in AmperesPerSecond (`A/s`).
+    /// The value in `A/s`.
     #[inline]
     pub fn as_amperes_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerSecond (`mA/s`).
+    /// A [`ElectricCurrentGradient`] from a value in `mA/s`.
     #[inline]
     pub fn from_milliamperes_per_second(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in MilliamperesPerSecond (`mA/s`).
+    /// The value in `mA/s`.
     #[inline]
     pub fn as_milliamperes_per_second(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMinute (`A/min`).
+    /// A [`ElectricCurrentGradient`] from a value in `A/min`.
     #[inline]
     pub fn from_amperes_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in AmperesPerMinute (`A/min`).
+    /// The value in `A/min`.
     #[inline]
     pub fn as_amperes_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in MilliamperesPerMinute (`mA/min`).
+    /// A [`ElectricCurrentGradient`] from a value in `mA/min`.
     #[inline]
     pub fn from_milliamperes_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60000.0))
     }
 
-    /// Returns the value expressed in MilliamperesPerMinute (`mA/min`).
+    /// The value in `mA/min`.
     #[inline]
     pub fn as_milliamperes_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMillisecond (`A/ms`).
+    /// A [`ElectricCurrentGradient`] from a value in `A/ms`.
     #[inline]
     pub fn from_amperes_per_millisecond(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in AmperesPerMillisecond (`A/ms`).
+    /// The value in `A/ms`.
     #[inline]
     pub fn as_amperes_per_millisecond(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerMicrosecond (`A/μs`).
+    /// A [`ElectricCurrentGradient`] from a value in `A/μs`.
     #[inline]
     pub fn from_amperes_per_microsecond(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in AmperesPerMicrosecond (`A/μs`).
+    /// The value in `A/μs`.
     #[inline]
     pub fn as_amperes_per_microsecond(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricCurrentGradient`] from a value in AmperesPerNanosecond (`A/ns`).
+    /// A [`ElectricCurrentGradient`] from a value in `A/ns`.
     #[inline]
     pub fn from_amperes_per_nanosecond(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in AmperesPerNanosecond (`A/ns`).
+    /// The value in `A/ns`.
     #[inline]
     pub fn as_amperes_per_nanosecond(self) -> T {
         self.0 / T::from_f64(1e9)
@@ -330,9 +329,8 @@ impl<T: Float> ElectricCurrentGradient<T> {
 }
 
 impl ElectricCurrentGradient<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricCurrentGradientUnit) -> Self {
         Self(match unit {
@@ -349,9 +347,9 @@ impl ElectricCurrentGradient<f64> {
 
 fixed_base!(ElectricCurrentGradient, AmperePerSecond);
 
-/// Unit markers for counting [`ElectricCurrentGradient`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricCurrentGradient`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_current_gradient`](crate::unit::electric_current_gradient).
+/// Also at [`unit::electric_current_gradient`](crate::unit::electric_current_gradient).
 pub mod unit {
     fixed_unit!(AmperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::AmperePerSecond, base AmperePerSecond, 1 / 1, pi^0, from_amperes_per_second, as_amperes_per_second, additive);
     fixed_unit!(MilliamperePerSecond: ElectricCurrentGradient, ElectricCurrentGradientUnit::MilliamperePerSecond, base AmperePerSecond, 1 / 1000, pi^0, from_milliamperes_per_second, as_milliamperes_per_second, additive);

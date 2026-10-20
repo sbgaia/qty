@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Turbidity is the cloudiness or haziness of a fluid caused by large numbers of individual particles that are generally invisible to the naked eye, similar to smoke in air. The measurement of turbidity is a key test of water quality.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`TurbidityUnit::NTU`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`TurbidityUnit::NTU`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct Turbidity<T = f64>(T);
 
 quantity!(Turbidity, TurbidityUnit, NTU);
 
-/// Unit variants for [`Turbidity`].
+/// The units of [`Turbidity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -36,7 +35,7 @@ pub enum TurbidityUnit {
 }
 
 impl TurbidityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[Self::NTU];
 
     const INFOS: &'static [crate::UnitInfo] = &[crate::UnitInfo {
@@ -46,7 +45,7 @@ impl TurbidityUnit {
         abbreviations: &["NTU"],
     }];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -61,7 +60,7 @@ impl TurbidityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -69,7 +68,7 @@ impl TurbidityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -77,8 +76,8 @@ impl TurbidityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -92,8 +91,8 @@ impl TurbidityUnit {
 impl core::str::FromStr for TurbidityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "NTU" => Ok(Self::NTU),
@@ -102,8 +101,8 @@ impl core::str::FromStr for TurbidityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -121,21 +120,21 @@ impl<T: Float> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
 }
 
 impl<T: Float> Turbidity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`NTU`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`NTU`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, TurbidityUnit> {
         self.in_unit(TurbidityUnit::NTU)
     }
 
-    /// Creates a [`Turbidity`] from a value in NTU (`NTU`).
+    /// A [`Turbidity`] from a value in `NTU`.
     #[inline]
     pub fn from_ntu(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in NTU (`NTU`).
+    /// The value in `NTU`.
     #[inline]
     pub fn as_ntu(self) -> T {
         self.0
@@ -143,9 +142,8 @@ impl<T: Float> Turbidity<T> {
 }
 
 impl Turbidity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: TurbidityUnit) -> Self {
         Self(match unit {
@@ -156,9 +154,9 @@ impl Turbidity<f64> {
 
 fixed_base!(Turbidity, NTU);
 
-/// Unit markers for counting [`Turbidity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`Turbidity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::turbidity`](crate::unit::turbidity).
+/// Also at [`unit::turbidity`](crate::unit::turbidity).
 pub mod unit {
     fixed_unit!(NTU: Turbidity, TurbidityUnit::NTU, base NTU, 1 / 1, pi^0, from_ntu, as_ntu, additive);
 }

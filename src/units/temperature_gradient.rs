@@ -9,8 +9,7 @@
 
 use crate::Float;
 
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`TemperatureGradientUnit::KelvinPerMeter`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`TemperatureGradientUnit::KelvinPerMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -23,9 +22,9 @@ pub struct TemperatureGradient<T = f64>(T);
 
 quantity!(TemperatureGradient, TemperatureGradientUnit, KelvinPerMeter);
 
-/// Unit variants for [`TemperatureGradient`].
+/// The units of [`TemperatureGradient`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -37,7 +36,7 @@ pub enum TemperatureGradientUnit {
 }
 
 impl TemperatureGradientUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::KelvinPerMeter,
         Self::DegreeCelsiusPerMeter,
@@ -72,7 +71,7 @@ impl TemperatureGradientUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -87,7 +86,7 @@ impl TemperatureGradientUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -98,7 +97,7 @@ impl TemperatureGradientUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -109,8 +108,8 @@ impl TemperatureGradientUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -131,8 +130,8 @@ impl TemperatureGradientUnit {
 impl core::str::FromStr for TemperatureGradientUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "∆°K/m" => Ok(Self::KelvinPerMeter),
@@ -144,8 +143,8 @@ impl core::str::FromStr for TemperatureGradientUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -173,57 +172,57 @@ impl<T: Float> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit
 }
 
 impl<T: Float> TemperatureGradient<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`∆°K/m`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`∆°K/m`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, TemperatureGradientUnit> {
         self.in_unit(TemperatureGradientUnit::KelvinPerMeter)
     }
 
-    /// Creates a [`TemperatureGradient`] from a value in KelvinsPerMeter (`∆°K/m`).
+    /// A [`TemperatureGradient`] from a value in `∆°K/m`.
     #[inline]
     pub fn from_kelvins_per_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in KelvinsPerMeter (`∆°K/m`).
+    /// The value in `∆°K/m`.
     #[inline]
     pub fn as_kelvins_per_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerMeter (`∆°C/m`).
+    /// A [`TemperatureGradient`] from a value in `∆°C/m`.
     #[inline]
     pub fn from_degrees_celsius_per_meter(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in DegreesCelsiusPerMeter (`∆°C/m`).
+    /// The value in `∆°C/m`.
     #[inline]
     pub fn as_degrees_celsius_per_meter(self) -> T {
         self.0
     }
 
-    /// Creates a [`TemperatureGradient`] from a value in DegreesFahrenheitPerFoot (`∆°F/ft`).
+    /// A [`TemperatureGradient`] from a value in `∆°F/ft`.
     #[inline]
     pub fn from_degrees_fahrenheit_per_foot(value: T) -> Self {
         Self(value * T::from_f64(1.8226888305628464))
     }
 
-    /// Returns the value expressed in DegreesFahrenheitPerFoot (`∆°F/ft`).
+    /// The value in `∆°F/ft`.
     #[inline]
     pub fn as_degrees_fahrenheit_per_foot(self) -> T {
         self.0 / T::from_f64(1.8226888305628464)
     }
 
-    /// Creates a [`TemperatureGradient`] from a value in DegreesCelsiusPerKilometer (`∆°C/km`).
+    /// A [`TemperatureGradient`] from a value in `∆°C/km`.
     #[inline]
     pub fn from_degrees_celsius_per_kilometer(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in DegreesCelsiusPerKilometer (`∆°C/km`).
+    /// The value in `∆°C/km`.
     #[inline]
     pub fn as_degrees_celsius_per_kilometer(self) -> T {
         self.0 * T::from_f64(1000.0)
@@ -231,9 +230,8 @@ impl<T: Float> TemperatureGradient<T> {
 }
 
 impl TemperatureGradient<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: TemperatureGradientUnit) -> Self {
         Self(match unit {
@@ -247,9 +245,9 @@ impl TemperatureGradient<f64> {
 
 fixed_base!(TemperatureGradient, KelvinPerMeter);
 
-/// Unit markers for counting [`TemperatureGradient`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`TemperatureGradient`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::temperature_gradient`](crate::unit::temperature_gradient).
+/// Also at [`unit::temperature_gradient`](crate::unit::temperature_gradient).
 pub mod unit {
     fixed_unit!(KelvinPerMeter: TemperatureGradient, TemperatureGradientUnit::KelvinPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_kelvins_per_meter, as_kelvins_per_meter, additive);
     fixed_unit!(DegreeCelsiusPerMeter: TemperatureGradient, TemperatureGradientUnit::DegreeCelsiusPerMeter, base KelvinPerMeter, 1 / 1, pi^0, from_degrees_celsius_per_meter, as_degrees_celsius_per_meter, additive);

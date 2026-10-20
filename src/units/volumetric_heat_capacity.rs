@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The volumetric heat capacity is the amount of energy that must be added, in the form of heat, to one unit of volume of the material in order to cause an increase of one unit in its temperature.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     JoulePerCubicMeterKelvin
 );
 
-/// Unit variants for [`VolumetricHeatCapacity`].
+/// The units of [`VolumetricHeatCapacity`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -48,7 +47,7 @@ pub enum VolumetricHeatCapacityUnit {
 }
 
 impl VolumetricHeatCapacityUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::JoulePerCubicMeterKelvin,
         Self::KilojoulePerCubicMeterKelvin,
@@ -118,7 +117,7 @@ impl VolumetricHeatCapacityUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -133,7 +132,7 @@ impl VolumetricHeatCapacityUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -149,7 +148,7 @@ impl VolumetricHeatCapacityUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -165,8 +164,8 @@ impl VolumetricHeatCapacityUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -213,8 +212,8 @@ impl VolumetricHeatCapacityUnit {
 impl core::str::FromStr for VolumetricHeatCapacityUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "J/(m³·K)" => Ok(Self::JoulePerCubicMeterKelvin),
@@ -231,8 +230,8 @@ impl core::str::FromStr for VolumetricHeatCapacityUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapacityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -290,9 +289,9 @@ impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapaci
 }
 
 impl<T: Float> VolumetricHeatCapacity<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`J/(m³·K)`, `kJ/(m³·K)`, `MJ/(m³·K)`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`J/(m³·K)`, `kJ/(m³·K)`, `MJ/(m³·K)`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, VolumetricHeatCapacityUnit> {
         const SCALE: [(f64, VolumetricHeatCapacityUnit); 3] = [
@@ -320,109 +319,109 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in JoulesPerCubicMeterKelvin (`J/(m³·K)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `J/(m³·K)`.
     #[inline]
     pub fn from_joules_per_cubic_meter_kelvin(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerCubicMeterKelvin (`J/(m³·K)`).
+    /// The value in `J/(m³·K)`.
     #[inline]
     pub fn as_joules_per_cubic_meter_kelvin(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterKelvin (`kJ/(m³·K)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `kJ/(m³·K)`.
     #[inline]
     pub fn from_kilojoules_per_cubic_meter_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerCubicMeterKelvin (`kJ/(m³·K)`).
+    /// The value in `kJ/(m³·K)`.
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_kelvin(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterKelvin (`MJ/(m³·K)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `MJ/(m³·K)`.
     #[inline]
     pub fn from_megajoules_per_cubic_meter_kelvin(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegajoulesPerCubicMeterKelvin (`MJ/(m³·K)`).
+    /// The value in `MJ/(m³·K)`.
     #[inline]
     pub fn as_megajoules_per_cubic_meter_kelvin(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in JoulesPerCubicMeterDegreeCelsius (`J/(m³·°C)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `J/(m³·°C)`.
     #[inline]
     pub fn from_joules_per_cubic_meter_degree_celsius(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in JoulesPerCubicMeterDegreeCelsius (`J/(m³·°C)`).
+    /// The value in `J/(m³·°C)`.
     #[inline]
     pub fn as_joules_per_cubic_meter_degree_celsius(self) -> T {
         self.0
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in KilojoulesPerCubicMeterDegreeCelsius (`kJ/(m³·°C)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `kJ/(m³·°C)`.
     #[inline]
     pub fn from_kilojoules_per_cubic_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in KilojoulesPerCubicMeterDegreeCelsius (`kJ/(m³·°C)`).
+    /// The value in `kJ/(m³·°C)`.
     #[inline]
     pub fn as_kilojoules_per_cubic_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in MegajoulesPerCubicMeterDegreeCelsius (`MJ/(m³·°C)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `MJ/(m³·°C)`.
     #[inline]
     pub fn from_megajoules_per_cubic_meter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in MegajoulesPerCubicMeterDegreeCelsius (`MJ/(m³·°C)`).
+    /// The value in `MJ/(m³·°C)`.
     #[inline]
     pub fn as_megajoules_per_cubic_meter_degree_celsius(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in CaloriesPerCubicCentimeterDegreeCelsius (`cal/(cm³·°C)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `cal/(cm³·°C)`.
     #[inline]
     pub fn from_calories_per_cubic_centimeter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(4184000.0))
     }
 
-    /// Returns the value expressed in CaloriesPerCubicCentimeterDegreeCelsius (`cal/(cm³·°C)`).
+    /// The value in `cal/(cm³·°C)`.
     #[inline]
     pub fn as_calories_per_cubic_centimeter_degree_celsius(self) -> T {
         self.0 / T::from_f64(4184000.0)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in KilocaloriesPerCubicCentimeterDegreeCelsius (`kcal/(cm³·°C)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `kcal/(cm³·°C)`.
     #[inline]
     pub fn from_kilocalories_per_cubic_centimeter_degree_celsius(value: T) -> Self {
         Self(value * T::from_f64(4.184e9))
     }
 
-    /// Returns the value expressed in KilocaloriesPerCubicCentimeterDegreeCelsius (`kcal/(cm³·°C)`).
+    /// The value in `kcal/(cm³·°C)`.
     #[inline]
     pub fn as_kilocalories_per_cubic_centimeter_degree_celsius(self) -> T {
         self.0 / T::from_f64(4.184e9)
     }
 
-    /// Creates a [`VolumetricHeatCapacity`] from a value in BtusPerCubicFootDegreeFahrenheit (`BTU/(ft³·°F)`).
+    /// A [`VolumetricHeatCapacity`] from a value in `BTU/(ft³·°F)`.
     #[inline]
     pub fn from_btus_per_cubic_foot_degree_fahrenheit(value: T) -> Self {
         Self(value * T::from_f64(67066.10245409631))
     }
 
-    /// Returns the value expressed in BtusPerCubicFootDegreeFahrenheit (`BTU/(ft³·°F)`).
+    /// The value in `BTU/(ft³·°F)`.
     #[inline]
     pub fn as_btus_per_cubic_foot_degree_fahrenheit(self) -> T {
         self.0 / T::from_f64(67066.10245409631)
@@ -430,9 +429,8 @@ impl<T: Float> VolumetricHeatCapacity<T> {
 }
 
 impl VolumetricHeatCapacity<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: VolumetricHeatCapacityUnit) -> Self {
         Self(match unit {
@@ -455,9 +453,9 @@ impl VolumetricHeatCapacity<f64> {
 
 fixed_base!(VolumetricHeatCapacity, JoulePerCubicMeterKelvin);
 
-/// Unit markers for counting [`VolumetricHeatCapacity`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`VolumetricHeatCapacity`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::volumetric_heat_capacity`](crate::unit::volumetric_heat_capacity).
+/// Also at [`unit::volumetric_heat_capacity`](crate::unit::volumetric_heat_capacity).
 pub mod unit {
     fixed_unit!(JoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::JoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1 / 1, pi^0, from_joules_per_cubic_meter_kelvin, as_joules_per_cubic_meter_kelvin, additive);
     fixed_unit!(KilojoulePerCubicMeterKelvin: VolumetricHeatCapacity, VolumetricHeatCapacityUnit::KilojoulePerCubicMeterKelvin, base JoulePerCubicMeterKelvin, 1000 / 1, pi^0, from_kilojoules_per_cubic_meter_kelvin, as_kilojoules_per_cubic_meter_kelvin, additive);

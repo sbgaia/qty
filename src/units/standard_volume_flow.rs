@@ -11,8 +11,7 @@ use crate::Float;
 
 /// The molar flow rate of a gas corrected to standardized conditions of temperature and pressure thus representing a fixed number of moles of gas regardless of composition and actual flow conditions.
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`StandardVolumeFlowUnit::StandardCubicMeterPerSecond`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`StandardVolumeFlowUnit::StandardCubicMeterPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -29,9 +28,9 @@ quantity!(
     StandardCubicMeterPerSecond
 );
 
-/// Unit variants for [`StandardVolumeFlow`].
+/// The units of [`StandardVolumeFlow`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -48,7 +47,7 @@ pub enum StandardVolumeFlowUnit {
 }
 
 impl StandardVolumeFlowUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::StandardCubicMeterPerSecond,
         Self::StandardCubicMeterPerMinute,
@@ -118,7 +117,7 @@ impl StandardVolumeFlowUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -133,7 +132,7 @@ impl StandardVolumeFlowUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -149,7 +148,7 @@ impl StandardVolumeFlowUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -165,8 +164,8 @@ impl StandardVolumeFlowUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -197,8 +196,8 @@ impl StandardVolumeFlowUnit {
 impl core::str::FromStr for StandardVolumeFlowUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Sm³/s" => Ok(Self::StandardCubicMeterPerSecond),
@@ -215,8 +214,8 @@ impl core::str::FromStr for StandardVolumeFlowUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -258,117 +257,117 @@ impl<T: Float> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
 }
 
 impl<T: Float> StandardVolumeFlow<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`Sm³/s`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`Sm³/s`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, StandardVolumeFlowUnit> {
         self.in_unit(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerSecond (`Sm³/s`).
+    /// A [`StandardVolumeFlow`] from a value in `Sm³/s`.
     #[inline]
     pub fn from_standard_cubic_meters_per_second(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in StandardCubicMetersPerSecond (`Sm³/s`).
+    /// The value in `Sm³/s`.
     #[inline]
     pub fn as_standard_cubic_meters_per_second(self) -> T {
         self.0
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerMinute (`Sm³/min`).
+    /// A [`StandardVolumeFlow`] from a value in `Sm³/min`.
     #[inline]
     pub fn from_standard_cubic_meters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60.0))
     }
 
-    /// Returns the value expressed in StandardCubicMetersPerMinute (`Sm³/min`).
+    /// The value in `Sm³/min`.
     #[inline]
     pub fn as_standard_cubic_meters_per_minute(self) -> T {
         self.0 * T::from_f64(60.0)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerHour (`Sm³/h`).
+    /// A [`StandardVolumeFlow`] from a value in `Sm³/h`.
     #[inline]
     pub fn from_standard_cubic_meters_per_hour(value: T) -> Self {
         Self(value / T::from_f64(3600.0))
     }
 
-    /// Returns the value expressed in StandardCubicMetersPerHour (`Sm³/h`).
+    /// The value in `Sm³/h`.
     #[inline]
     pub fn as_standard_cubic_meters_per_hour(self) -> T {
         self.0 * T::from_f64(3600.0)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicMetersPerDay (`Sm³/d`).
+    /// A [`StandardVolumeFlow`] from a value in `Sm³/d`.
     #[inline]
     pub fn from_standard_cubic_meters_per_day(value: T) -> Self {
         Self(value / T::from_f64(86400.0))
     }
 
-    /// Returns the value expressed in StandardCubicMetersPerDay (`Sm³/d`).
+    /// The value in `Sm³/d`.
     #[inline]
     pub fn as_standard_cubic_meters_per_day(self) -> T {
         self.0 * T::from_f64(86400.0)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicCentimetersPerMinute (`sccm`).
+    /// A [`StandardVolumeFlow`] from a value in `sccm`.
     #[inline]
     pub fn from_standard_cubic_centimeters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(6e7))
     }
 
-    /// Returns the value expressed in StandardCubicCentimetersPerMinute (`sccm`).
+    /// The value in `sccm`.
     #[inline]
     pub fn as_standard_cubic_centimeters_per_minute(self) -> T {
         self.0 * T::from_f64(6e7)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardLitersPerMinute (`slm`).
+    /// A [`StandardVolumeFlow`] from a value in `slm`.
     #[inline]
     pub fn from_standard_liters_per_minute(value: T) -> Self {
         Self(value / T::from_f64(60000.0))
     }
 
-    /// Returns the value expressed in StandardLitersPerMinute (`slm`).
+    /// The value in `slm`.
     #[inline]
     pub fn as_standard_liters_per_minute(self) -> T {
         self.0 * T::from_f64(60000.0)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerSecond (`Sft³/s`).
+    /// A [`StandardVolumeFlow`] from a value in `Sft³/s`.
     #[inline]
     pub fn from_standard_cubic_feet_per_second(value: T) -> Self {
         Self(value * T::from_f64(0.028316846592))
     }
 
-    /// Returns the value expressed in StandardCubicFeetPerSecond (`Sft³/s`).
+    /// The value in `Sft³/s`.
     #[inline]
     pub fn as_standard_cubic_feet_per_second(self) -> T {
         self.0 / T::from_f64(0.028316846592)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerMinute (`scfm`).
+    /// A [`StandardVolumeFlow`] from a value in `scfm`.
     #[inline]
     pub fn from_standard_cubic_feet_per_minute(value: T) -> Self {
         Self(value * T::from_f64(0.0004719474432))
     }
 
-    /// Returns the value expressed in StandardCubicFeetPerMinute (`scfm`).
+    /// The value in `scfm`.
     #[inline]
     pub fn as_standard_cubic_feet_per_minute(self) -> T {
         self.0 / T::from_f64(0.0004719474432)
     }
 
-    /// Creates a [`StandardVolumeFlow`] from a value in StandardCubicFeetPerHour (`scfh`).
+    /// A [`StandardVolumeFlow`] from a value in `scfh`.
     #[inline]
     pub fn from_standard_cubic_feet_per_hour(value: T) -> Self {
         Self(value * T::from_f64(7.86579072e-6))
     }
 
-    /// Returns the value expressed in StandardCubicFeetPerHour (`scfh`).
+    /// The value in `scfh`.
     #[inline]
     pub fn as_standard_cubic_feet_per_hour(self) -> T {
         self.0 / T::from_f64(7.86579072e-6)
@@ -376,9 +375,8 @@ impl<T: Float> StandardVolumeFlow<T> {
 }
 
 impl StandardVolumeFlow<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: StandardVolumeFlowUnit) -> Self {
         Self(match unit {
@@ -397,9 +395,9 @@ impl StandardVolumeFlow<f64> {
 
 fixed_base!(StandardVolumeFlow, StandardCubicMeterPerSecond);
 
-/// Unit markers for counting [`StandardVolumeFlow`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`StandardVolumeFlow`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::standard_volume_flow`](crate::unit::standard_volume_flow).
+/// Also at [`unit::standard_volume_flow`](crate::unit::standard_volume_flow).
 pub mod unit {
     fixed_unit!(StandardCubicMeterPerSecond: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerSecond, base StandardCubicMeterPerSecond, 1 / 1, pi^0, from_standard_cubic_meters_per_second, as_standard_cubic_meters_per_second, additive);
     fixed_unit!(StandardCubicMeterPerMinute: StandardVolumeFlow, StandardVolumeFlowUnit::StandardCubicMeterPerMinute, base StandardCubicMeterPerSecond, 1 / 60, pi^0, from_standard_cubic_meters_per_minute, as_standard_cubic_meters_per_minute, additive);

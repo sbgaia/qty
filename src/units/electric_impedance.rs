@@ -11,8 +11,7 @@ use crate::Float;
 
 /// Electric impedance is the opposition to alternating current presented by the combined effect of resistance and reactance in a circuit. It is defined as the inverse of admittance. The SI unit of impedance is the ohm (symbol Ω).
 ///
-/// Stored as a value of type `T` (default `f64`) in the base unit, [`ElectricImpedanceUnit::Ohm`].
-/// `#[repr(transparent)]`: same size, alignment and ABI as `T`.
+/// Stored as a `T` (`f64` by default) in [`ElectricImpedanceUnit::Ohm`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
 #[cfg_attr(
     feature = "serde",
@@ -25,9 +24,9 @@ pub struct ElectricImpedance<T = f64>(T);
 
 quantity!(ElectricImpedance, ElectricImpedanceUnit, Ohm);
 
-/// Unit variants for [`ElectricImpedance`].
+/// The units of [`ElectricImpedance`].
 ///
-/// Non-exhaustive: upstream UnitsNet regularly adds units.
+/// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
@@ -43,7 +42,7 @@ pub enum ElectricImpedanceUnit {
 }
 
 impl ElectricImpedanceUnit {
-    /// Every unit variant for this quantity.
+    /// Every unit.
     pub const ALL: &'static [Self] = &[
         Self::Ohm,
         Self::Nanoohm,
@@ -106,7 +105,7 @@ impl ElectricImpedanceUnit {
         },
     ];
 
-    /// Names and abbreviations of this unit.
+    /// Names and abbreviations.
     #[inline]
     pub const fn info(self) -> &'static crate::UnitInfo {
         &Self::INFOS[self as usize]
@@ -121,7 +120,7 @@ impl ElectricImpedanceUnit {
         units: Self::INFOS,
     };
 
-    /// Returns the primary display abbreviation for this unit.
+    /// The abbreviation used for display.
     #[inline]
     pub const fn abbreviation(self) -> &'static str {
         match self {
@@ -136,7 +135,7 @@ impl ElectricImpedanceUnit {
         }
     }
 
-    /// Returns every abbreviation recognised when parsing this unit.
+    /// Every abbreviation accepted when parsing.
     #[inline]
     pub const fn all_abbreviations(self) -> &'static [&'static str] {
         match self {
@@ -151,8 +150,8 @@ impl ElectricImpedanceUnit {
         }
     }
 
-    /// Parses a unit *name*, singular or plural, ignoring case, spaces,
-    /// `_` and `-`, and accepting British spellings: `"kilometres"`,
+    /// Parses a unit name, singular or plural. Case, spaces, `_` and `-` don't
+    /// matter, and British spellings work: `"kilometres"`,
     /// `"Square Meter"`, `"square_meters"`.
     pub fn from_name(name: &str) -> Option<Self> {
         let mut buf = [0; 64];
@@ -181,8 +180,8 @@ impl ElectricImpedanceUnit {
 impl core::str::FromStr for ElectricImpedanceUnit {
     type Err = crate::ParseError;
 
-    /// Parses a unit abbreviation (exact, e.g. `"km"`) or name (lenient,
-    /// e.g. `"kilometers"`); see [`Self::from_name`].
+    /// Parses an abbreviation such as `"km"`, which must match exactly, or a
+    /// name such as `"kilometers"` (see [`Self::from_name`]).
     fn from_str(s: &str) -> Result<Self, crate::ParseError> {
         match s {
             "Ω" => Ok(Self::Ohm),
@@ -198,8 +197,8 @@ impl core::str::FromStr for ElectricImpedanceUnit {
     }
 }
 
-/// Every conversion is a single multiplication or division by a constant
-/// folded at code-generation time (two operations for affine units).
+/// Each conversion is one multiplication or division by a constant, or two
+/// operations for units with an offset.
 impl<T: Float> crate::UnitOf<ElectricImpedance<T>> for ElectricImpedanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
@@ -231,9 +230,9 @@ impl<T: Float> crate::UnitOf<ElectricImpedance<T>> for ElectricImpedanceUnit {
 }
 
 impl<T: Float> ElectricImpedance<T> {
-    /// The value in the most readable SI-prefixed form of the base unit, in
-    /// steps of 1000: the largest unit not exceeding the value (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
-    /// Zero, NaN and infinities are shown in the base unit.
+    /// The value in the largest SI-prefixed form of the base unit that doesn't
+    /// exceed it, in steps of 1000 (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
+    /// Zero, NaN and infinities stay in the base unit.
     #[inline]
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricImpedanceUnit> {
         const SCALE: [(f64, ElectricImpedanceUnit); 8] = [
@@ -260,97 +259,97 @@ impl<T: Float> ElectricImpedance<T> {
         self.in_unit(unit)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Ohms (`Ω`).
+    /// A [`ElectricImpedance`] from a value in `Ω`.
     #[inline]
     pub fn from_ohms(value: T) -> Self {
         Self(value)
     }
 
-    /// Returns the value expressed in Ohms (`Ω`).
+    /// The value in `Ω`.
     #[inline]
     pub fn as_ohms(self) -> T {
         self.0
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Nanoohms (`nΩ`).
+    /// A [`ElectricImpedance`] from a value in `nΩ`.
     #[inline]
     pub fn from_nanoohms(value: T) -> Self {
         Self(value / T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Nanoohms (`nΩ`).
+    /// The value in `nΩ`.
     #[inline]
     pub fn as_nanoohms(self) -> T {
         self.0 * T::from_f64(1e9)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Microohms (`µΩ`).
+    /// A [`ElectricImpedance`] from a value in `µΩ`.
     #[inline]
     pub fn from_microohms(value: T) -> Self {
         Self(value / T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Microohms (`µΩ`).
+    /// The value in `µΩ`.
     #[inline]
     pub fn as_microohms(self) -> T {
         self.0 * T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Milliohms (`mΩ`).
+    /// A [`ElectricImpedance`] from a value in `mΩ`.
     #[inline]
     pub fn from_milliohms(value: T) -> Self {
         Self(value / T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Milliohms (`mΩ`).
+    /// The value in `mΩ`.
     #[inline]
     pub fn as_milliohms(self) -> T {
         self.0 * T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Kiloohms (`kΩ`).
+    /// A [`ElectricImpedance`] from a value in `kΩ`.
     #[inline]
     pub fn from_kiloohms(value: T) -> Self {
         Self(value * T::from_f64(1000.0))
     }
 
-    /// Returns the value expressed in Kiloohms (`kΩ`).
+    /// The value in `kΩ`.
     #[inline]
     pub fn as_kiloohms(self) -> T {
         self.0 / T::from_f64(1000.0)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Megaohms (`MΩ`).
+    /// A [`ElectricImpedance`] from a value in `MΩ`.
     #[inline]
     pub fn from_megaohms(value: T) -> Self {
         Self(value * T::from_f64(1000000.0))
     }
 
-    /// Returns the value expressed in Megaohms (`MΩ`).
+    /// The value in `MΩ`.
     #[inline]
     pub fn as_megaohms(self) -> T {
         self.0 / T::from_f64(1000000.0)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Gigaohms (`GΩ`).
+    /// A [`ElectricImpedance`] from a value in `GΩ`.
     #[inline]
     pub fn from_gigaohms(value: T) -> Self {
         Self(value * T::from_f64(1e9))
     }
 
-    /// Returns the value expressed in Gigaohms (`GΩ`).
+    /// The value in `GΩ`.
     #[inline]
     pub fn as_gigaohms(self) -> T {
         self.0 / T::from_f64(1e9)
     }
 
-    /// Creates a [`ElectricImpedance`] from a value in Teraohms (`TΩ`).
+    /// A [`ElectricImpedance`] from a value in `TΩ`.
     #[inline]
     pub fn from_teraohms(value: T) -> Self {
         Self(value * T::from_f64(1e12))
     }
 
-    /// Returns the value expressed in Teraohms (`TΩ`).
+    /// The value in `TΩ`.
     #[inline]
     pub fn as_teraohms(self) -> T {
         self.0 / T::from_f64(1e12)
@@ -358,9 +357,8 @@ impl<T: Float> ElectricImpedance<T> {
 }
 
 impl ElectricImpedance<f64> {
-    /// Like [`new`](Self::new), but `const`: for constants in any unit.
-    ///
-    /// The result is identical to `new(value, unit)`.
+    /// Like [`new`](Self::new), but usable in `const` items. The result is
+    /// the same.
     #[inline]
     pub const fn const_new(value: f64, unit: ElectricImpedanceUnit) -> Self {
         Self(match unit {
@@ -378,9 +376,9 @@ impl ElectricImpedance<f64> {
 
 fixed_base!(ElectricImpedance, Ohm);
 
-/// Unit markers for counting [`ElectricImpedance`] as an integer with [`Fixed`](crate::Fixed).
+/// Units for counting [`ElectricImpedance`] in integers with [`Fixed`](crate::Fixed).
 ///
-/// Also available as [`unit::electric_impedance`](crate::unit::electric_impedance).
+/// Also at [`unit::electric_impedance`](crate::unit::electric_impedance).
 pub mod unit {
     fixed_unit!(Ohm: ElectricImpedance, ElectricImpedanceUnit::Ohm, base Ohm, 1 / 1, pi^0, from_ohms, as_ohms, additive);
     fixed_unit!(Nanoohm: ElectricImpedance, ElectricImpedanceUnit::Nanoohm, base Ohm, 1 / 1000000000, pi^0, from_nanoohms, as_nanoohms, additive);
