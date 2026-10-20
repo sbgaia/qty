@@ -23,6 +23,7 @@ use crate::Float;
 pub struct VolumetricHeatCapacity<T = f64>(T);
 
 quantity!(VolumetricHeatCapacity, VolumetricHeatCapacityUnit, JoulePerCubicMeterKelvin, si: Some(crate::__private::si_unit([-1, 1, -2, 0, -1, 0, 0], 1.0)));
+crate::__qty_formula!(VolumetricHeatCapacity, VolumetricHeatCapacityUnit);
 
 /// The units of [`VolumetricHeatCapacity`].
 ///

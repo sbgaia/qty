@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ElectricReactivePower<T = f64>(T);
 
 quantity!(ElectricReactivePower, ElectricReactivePowerUnit, VoltampereReactive, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricReactivePower, ElectricReactivePowerUnit);
 
 /// The units of [`ElectricReactivePower`].
 ///

@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Luminosity<T = f64>(T);
 
 quantity!(Luminosity, LuminosityUnit, Watt, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Luminosity, LuminosityUnit);
 
 /// The units of [`Luminosity`].
 ///

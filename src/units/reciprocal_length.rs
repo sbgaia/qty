@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ReciprocalLength<T = f64>(T);
 
 quantity!(ReciprocalLength, ReciprocalLengthUnit, InverseMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ReciprocalLength, ReciprocalLengthUnit);
 
 /// The units of [`ReciprocalLength`].
 ///

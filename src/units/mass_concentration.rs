@@ -23,6 +23,7 @@ use crate::Float;
 pub struct MassConcentration<T = f64>(T);
 
 quantity!(MassConcentration, MassConcentrationUnit, KilogramPerCubicMeter, si: Some(crate::__private::si_unit([-3, 1, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(MassConcentration, MassConcentrationUnit);
 
 /// The units of [`MassConcentration`].
 ///

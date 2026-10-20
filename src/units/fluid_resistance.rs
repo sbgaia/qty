@@ -23,6 +23,7 @@ use crate::Float;
 pub struct FluidResistance<T = f64>(T);
 
 quantity!(FluidResistance, FluidResistanceUnit, PascalSecondPerCubicMeter, si: Some(crate::__private::si_unit([-4, 1, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(FluidResistance, FluidResistanceUnit);
 
 /// The units of [`FluidResistance`].
 ///

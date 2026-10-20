@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Length<T = f64>(T);
 
 quantity!(Length, LengthUnit, Meter, si: Some(crate::__private::si_unit([1, 0, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Length, LengthUnit);
 
 /// The units of [`Length`].
 ///

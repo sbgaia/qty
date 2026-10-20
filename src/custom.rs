@@ -137,7 +137,8 @@ macro_rules! custom_unit {
 /// fields of [`Dimensions`](crate::Dimensions). The base unit's
 /// abbreviation then has to be a [unit expression](crate::UnitExpr) with
 /// those dimensions. Any unit with the same dimensions then parses as the
-/// quantity, and it can be used in [`relation!`](crate::relation).
+/// quantity, and it can be used in [`formula!`](crate::formula!) and
+/// [`relation!`](crate::relation).
 ///
 /// ```rust
 /// use qty::*;
@@ -204,6 +205,7 @@ macro_rules! custom_quantity {
             Base;
             $($rest)*
         }
+        $crate::custom_quantity!(@formula $Q, $($rest)*);
         const _: () = ::core::assert!(
             <$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR.is_some(),
             ::core::concat!(
@@ -221,6 +223,9 @@ macro_rules! custom_quantity {
             @define [$($doc),*] [$vis] $Q, [$crate::Dimensions::DIMENSIONLESS], Off;
             $($rest)*
         }
+    };
+    (@formula $Q:ident, $(#[$attr:meta])* $unit_vis:vis enum $U:ident $body:tt) => {
+        $crate::__qty_formula!($Q, $U);
     };
     (
         @define [$($doc:literal),*] [$vis:vis] $Q:ident, [$($dimensions:tt)*], $exprs:ident;

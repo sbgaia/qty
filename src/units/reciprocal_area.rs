@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ReciprocalArea<T = f64>(T);
 
 quantity!(ReciprocalArea, ReciprocalAreaUnit, InverseSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ReciprocalArea, ReciprocalAreaUnit);
 
 /// The units of [`ReciprocalArea`].
 ///

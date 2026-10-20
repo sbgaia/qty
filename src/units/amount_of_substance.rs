@@ -23,6 +23,7 @@ use crate::Float;
 pub struct AmountOfSubstance<T = f64>(T);
 
 quantity!(AmountOfSubstance, AmountOfSubstanceUnit, Mole, si: Some(crate::__private::si_unit([0, 0, 0, 0, 0, 1, 0], 1.0)));
+crate::__qty_formula!(AmountOfSubstance, AmountOfSubstanceUnit);
 
 /// The units of [`AmountOfSubstance`].
 ///

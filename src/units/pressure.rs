@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Pressure<T = f64>(T);
 
 quantity!(Pressure, PressureUnit, Pascal, si: Some(crate::__private::si_unit([-1, 1, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Pressure, PressureUnit);
 
 /// The units of [`Pressure`].
 ///

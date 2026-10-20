@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Mass<T = f64>(T);
 
 quantity!(Mass, MassUnit, Kilogram, si: Some(crate::__private::si_unit([0, 1, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Mass, MassUnit);
 
 /// The units of [`Mass`].
 ///

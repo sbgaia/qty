@@ -23,6 +23,7 @@ use crate::Float;
 pub struct SolidAngle<T = f64>(T);
 
 quantity!(SolidAngle, SolidAngleUnit, Steradian, si: None);
+crate::__qty_formula!(SolidAngle, SolidAngleUnit);
 
 /// The units of [`SolidAngle`].
 ///

@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ForcePerLength<T = f64>(T);
 
 quantity!(ForcePerLength, ForcePerLengthUnit, NewtonPerMeter, si: Some(crate::__private::si_unit([0, 1, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ForcePerLength, ForcePerLengthUnit);
 
 /// The units of [`ForcePerLength`].
 ///

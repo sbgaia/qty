@@ -6,6 +6,18 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `formula!` computes formulas whose intermediate results aren't named
+  quantities, such as `G * m1 * m2 / (r * r)` or `0.5 * m * v * v`, and
+  converts the result to the quantity the context expects. The dimensions
+  are checked at compile time, and the generated code is the same as with
+  plain floats. Custom quantities with dimensions work in it too.
+- `qty::constants`: the SI defining constants and CODATA 2022 values, such
+  as `SPEED_OF_LIGHT`, `PLANCK_CONSTANT` and `GRAVITATIONAL_CONSTANT`.
+- `qty::formula`, with `Expr`, the value type of formulas, for keeping an
+  intermediate result or defining a constant of your own.
+
 ## [0.2.3] - 2026-10-20
 
 ### Fixed

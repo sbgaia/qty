@@ -93,7 +93,8 @@ assert_eq!(format!("{:.1}", order.in_unit(PaperUnit::Ream)), "3.1 rm");
 
 A custom quantity can also declare its physical dimensions
 (`dimensions { mass: 1, length: -2 }`), so that unit expressions such as
-`"80 g/m^2"` parse as it, and `relation!` connects it to other quantities.
+`"80 g/m^2"` parse as it, it works in `formula!`, and `relation!` connects it
+to other quantities.
 The conversion factor is worked out at compile time, and a relation whose
 dimensions don't add up doesn't compile:
 
@@ -116,6 +117,31 @@ let ream: Mass = "80 g/m^2".parse::<Grammage>()? * Area::from_square_meters(31.2
 assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
 # Ok::<(), ParseError>(())
 ```
+
+## Formulas
+
+`Mass * Mass` has no type of its own, so a formula like Newton's law of
+gravitation doesn't compile with the operators alone. `formula!` works out
+the dimensions of every step at compile time and converts the result to the
+type you ask for:
+
+```rust
+use qty::*;
+use qty::constants::GRAVITATIONAL_CONSTANT as G;
+
+let (earth, person) = (Mass::from_kilograms(5.972e24), Mass::from_kilograms(70.0));
+let r = Length::from_kilometers(6371.0);
+let weight: Force = formula!(G * earth * person / (r * r));
+assert_eq!(format!("{weight:.0}"), "687 N");
+
+let v = Speed::from_meters_per_second(3.0);
+let energy: Energy = formula!(0.5 * person * v * v);
+assert_eq!(energy.as_joules(), 315.0);
+```
+
+A formula whose dimensions don't match the target fails `cargo check`, with
+the dimensions it has in the message. At run time it's the same code as the
+arithmetic on plain floats. `qty::constants` has the physical constants.
 
 ## Text
 

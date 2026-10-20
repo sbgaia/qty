@@ -59,7 +59,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       # The library and its tests; codegen and benches are dev tools that may
       # need a newer toolchain.
-      - run: cargo test -p qty --all-features --lib --test design --test cross_type
+      - run: cargo test -p qty --all-features --lib --test design --test cross_type --test formula
 
   no-std:
     name: no_std (thumbv7em-none-eabihf)

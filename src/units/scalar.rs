@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Scalar<T = f64>(T);
 
 quantity!(Scalar, ScalarUnit, Amount, si: None);
+crate::__qty_formula!(Scalar, ScalarUnit);
 
 /// The units of [`Scalar`].
 ///

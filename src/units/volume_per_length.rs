@@ -23,6 +23,7 @@ use crate::Float;
 pub struct VolumePerLength<T = f64>(T);
 
 quantity!(VolumePerLength, VolumePerLengthUnit, CubicMeterPerMeter, si: Some(crate::__private::si_unit([2, 0, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(VolumePerLength, VolumePerLengthUnit);
 
 /// The units of [`VolumePerLength`].
 ///

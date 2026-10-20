@@ -23,6 +23,7 @@ use crate::Float;
 pub struct VolumeFlow<T = f64>(T);
 
 quantity!(VolumeFlow, VolumeFlowUnit, CubicMeterPerSecond, si: Some(crate::__private::si_unit([3, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(VolumeFlow, VolumeFlowUnit);
 
 /// The units of [`VolumeFlow`].
 ///

@@ -23,6 +23,7 @@ use crate::Float;
 pub struct ElectricField<T = f64>(T);
 
 quantity!(ElectricField, ElectricFieldUnit, VoltPerMeter, si: Some(crate::__private::si_unit([1, 1, -3, -1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricField, ElectricFieldUnit);
 
 /// The units of [`ElectricField`].
 ///

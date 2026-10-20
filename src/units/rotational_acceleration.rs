@@ -23,6 +23,7 @@ use crate::Float;
 pub struct RotationalAcceleration<T = f64>(T);
 
 quantity!(RotationalAcceleration, RotationalAccelerationUnit, RadianPerSecondSquared, si: Some(crate::__private::si_unit([0, 0, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(RotationalAcceleration, RotationalAccelerationUnit);
 
 /// The units of [`RotationalAcceleration`].
 ///

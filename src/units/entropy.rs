@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Entropy<T = f64>(T);
 
 quantity!(Entropy, EntropyUnit, JoulePerKelvin, si: Some(crate::__private::si_unit([2, 1, -2, 0, -1, 0, 0], 1.0)));
+crate::__qty_formula!(Entropy, EntropyUnit);
 
 /// The units of [`Entropy`].
 ///

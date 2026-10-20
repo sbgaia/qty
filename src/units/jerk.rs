@@ -21,6 +21,7 @@ use crate::Float;
 pub struct Jerk<T = f64>(T);
 
 quantity!(Jerk, JerkUnit, MeterPerSecondCubed, si: Some(crate::__private::si_unit([1, 0, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Jerk, JerkUnit);
 
 /// The units of [`Jerk`].
 ///

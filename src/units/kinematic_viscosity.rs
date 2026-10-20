@@ -23,6 +23,7 @@ use crate::Float;
 pub struct KinematicViscosity<T = f64>(T);
 
 quantity!(KinematicViscosity, KinematicViscosityUnit, SquareMeterPerSecond, si: Some(crate::__private::si_unit([2, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(KinematicViscosity, KinematicViscosityUnit);
 
 /// The units of [`KinematicViscosity`].
 ///

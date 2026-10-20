@@ -23,6 +23,7 @@ use crate::Float;
 pub struct Magnetization<T = f64>(T);
 
 quantity!(Magnetization, MagnetizationUnit, AmperePerMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Magnetization, MagnetizationUnit);
 
 /// The units of [`Magnetization`].
 ///
