@@ -6,6 +6,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-10-20
+
 ### Fixed
 
 - Unit expressions parse for quantities whose UnitsNet base unit isn't one,
