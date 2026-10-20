@@ -571,7 +571,7 @@ pub trait SiFactor {
 /// expects.
 ///
 /// Each value in the formula can be a quantity, a plain number, a constant
-/// from [`constants`](crate::constants) or another [`Expr`](formula::Expr).
+/// from [`constants`](crate::constants) or another [`Expr`](crate::formula::Expr).
 /// The intermediate results don't need to be named quantities. The formula
 /// keeps Rust's precedence and parentheses, and `.sqrt()` and `.cbrt()` work
 /// on any value or parenthesised group:
@@ -592,7 +592,7 @@ pub trait SiFactor {
 /// ```
 ///
 /// The result's type has to be known, from a type annotation, a function's
-/// return type or an argument. See [`formula`](mod@formula) for how it works
+/// return type or an argument. See [`formula`](mod@crate::formula) for how it works
 /// and what it checks.
 #[macro_export]
 macro_rules! formula {
