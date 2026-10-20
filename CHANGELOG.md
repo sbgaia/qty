@@ -6,6 +6,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2026-10-20
+
 ### Added
 
 - `custom_quantity!` takes an optional `dimensions { mass: 1, length: -2 }`
@@ -17,6 +19,12 @@ follow [Semantic Versioning](https://semver.org/).
   between the base units is worked out at compile time, and a relation
   whose dimensions don't match fails to compile.
 - `UnitExpr::parse` is a `const fn`.
+
+### Changed
+
+- Plainer docs throughout. The per-unit methods now name the unit by its
+  abbreviation (`from_kilometers`: "a value in `km`").
+- `RoundError::Inexact` displays as "result is not a whole number".
 
 ## [0.2.1] - 2026-10-19
 
