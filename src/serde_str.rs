@@ -1,18 +1,16 @@
-//! (De)serialize quantities as text with a unit, such as `"30 s"` or
-//! `"1.5 km"`, for configuration files and other human-edited data. Use it
-//! with `#[serde(with = "qty::serde_str")]`.
+//! Serde support for quantities written as text with a unit, such as
+//! `"30 s"` or `"1.5 km"`. Meant for configuration files and other data
+//! that people edit. Use it with `#[serde(with = "qty::serde_str")]`.
 //!
-//! Plain `serde` stores a quantity as its bare base-unit number (`30.0`),
-//! which is compact but leaves the unit implicit. With this module:
+//! Plain `serde` stores a quantity as a bare number in the base unit
+//! (`30.0`), which is compact but leaves the unit unsaid. With this module,
+//! reading accepts any unit and spelling the quantity can parse, like
+//! `"0.5 min"` or `"2 minutes"`. Writing uses the base unit at full
+//! precision (`"30 s"`), so values round-trip exactly.
 //!
-//! * **reading** accepts any unit and any spelling the quantity parses —
-//!   abbreviations (`"0.5 min"`) and names (`"2 minutes"`);
-//! * **writing** uses the base unit at full precision (`"30 s"`), so values
-//!   round-trip exactly.
-//!
-//! It works for every type that displays and parses: float quantities,
-//! [`Fixed`](crate::Fixed) counts (`"12 mm"`) and unit enums. For optional
-//! fields use [`option`].
+//! It works for anything that displays and parses: float quantities,
+//! [`Fixed`](crate::Fixed) counts (`"12 mm"`) and unit enums. Use
+//! [`option`] for optional fields.
 //!
 //! ```rust
 //! use serde::{Deserialize, Serialize};
@@ -42,7 +40,7 @@
 //! assert!(err.to_string().contains("unknown unit"));
 //! ```
 //!
-//! Available with the `serde` feature.
+//! Needs the `serde` feature.
 
 use core::fmt;
 use core::marker::PhantomData;
@@ -53,7 +51,7 @@ use serde::Serializer;
 
 use crate::ParseError;
 
-/// Serializes `value` as text: its `Display` form, e.g. `"1.5 m"`.
+/// Serializes `value` as its `Display` text, such as `"1.5 m"`.
 pub fn serialize<Q: fmt::Display, S: Serializer>(
     value: &Q,
     serializer: S,
@@ -61,7 +59,7 @@ pub fn serialize<Q: fmt::Display, S: Serializer>(
     serializer.collect_str(value)
 }
 
-/// Deserializes text with a unit, e.g. `"1.5 km"` or `"1.5 kilometres"`.
+/// Deserializes text with a unit, such as `"1.5 km"` or `"1.5 kilometres"`.
 pub fn deserialize<'de, Q, D>(deserializer: D) -> Result<Q, D::Error>
 where
     Q: FromStr<Err = ParseError>,
@@ -98,8 +96,8 @@ pub fn schema<Q: crate::Quantity>(_: &mut schemars::SchemaGenerator) -> schemars
     schemars::json_schema!({ "type": "string", "description": description })
 }
 
-/// The same for `Option<…>` fields: `None` is `null` (or a missing field,
-/// with `#[serde(default)]`).
+/// The same for `Option` fields. `None` is `null`, or a missing field with
+/// `#[serde(default)]`.
 pub mod option {
     use super::*;
     use serde::{Deserialize, Serialize};

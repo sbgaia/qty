@@ -44,7 +44,7 @@ if ! ./scripts/download.sh --current > "$log" 2>&1; then
 fi
 
 if ! cargo run -q -p codegen > /dev/null 2> "$log"; then
-  echo "**The code generator failed** — the new definitions need a change to the generator:"
+  echo "**The code generator failed.** The new definitions need a change to the generator:"
   echo; echo '```'; tail -n 30 "$log"; echo '```'
   exit 0
 fi

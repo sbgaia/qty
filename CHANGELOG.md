@@ -9,14 +9,13 @@ follow [Semantic Versioning](https://semver.org/).
 ### Added
 
 - `custom_quantity!` takes an optional `dimensions { mass: 1, length: -2 }`
-  clause. The quantity's metadata then has those dimensions, and text in
-  any unit expression with them, such as `"80 g/m^2"`, parses as it. The
-  base unit's abbreviation must be such an expression, which is checked at
-  compile time.
-- `relation!(Grammage * Area = Mass)` implements a product or quotient
-  between a custom quantity and another quantity, custom or built in. The
-  factor between the base units is computed at compile time, and a
-  relation whose dimensions differ does not compile.
+  clause. The quantity then has those dimensions in its metadata, and unit
+  expressions with them, like `"80 g/m^2"`, parse as it. Its base unit has
+  to be such an expression, which is checked at compile time.
+- `relation!(Grammage * Area = Mass)` implements `*` or `/` between a
+  custom quantity and another quantity, custom or built in. The factor
+  between the base units is worked out at compile time, and a relation
+  whose dimensions don't match fails to compile.
 - `UnitExpr::parse` is a `const fn`.
 
 ## [0.2.1] - 2026-10-19
@@ -42,8 +41,8 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-- The crate builds about 25% faster (debug 15.8 s → 11.7 s, release
-  18.1 s → 13.3 s for every quantity on four cores). The `Fixed` unit
+- The crate builds about 25% faster: from 15.8 s to 11.7 s in debug and
+  from 18.1 s to 13.3 s in release, for every quantity on four cores. The `Fixed` unit
   markers, such as `unit::length::Millimeter`, made up half of the crate's
   trait impls; they now implement only `Clone` and `Copy`.
 

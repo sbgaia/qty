@@ -2,9 +2,9 @@
 
 use crate::{Angle, Float};
 
-/// Wrapping, for float storage types with `%` (`f32`, `f64`).
+/// Wrapping, for float storage with `%` such as `f32` and `f64`.
 impl<T: Float + core::ops::Rem<Output = T>> Angle<T> {
-    /// The same direction as an angle in `[0°, 360°)`.
+    /// The same direction, as an angle in `[0°, 360°)`.
     ///
     /// ```rust
     /// use qty::*;
@@ -19,11 +19,11 @@ impl<T: Float + core::ops::Rem<Output = T>> Angle<T> {
         let (zero, tau) = (T::from_f64(0.0), T::from_f64(core::f64::consts::TAU));
         let r = self.into_base() % tau;
         let r = if r < zero { r + tau } else { r };
-        // A tiny negative remainder plus TAU can round up to TAU.
+        // A tiny negative remainder plus TAU can round up to TAU itself.
         Self::from_base(if r >= tau { zero } else { r })
     }
 
-    /// The same direction as an angle in `(−180°, 180°]`, e.g. for the
+    /// The same direction, as an angle in `(-180°, 180°]`. Handy for the
     /// difference between two headings.
     ///
     /// ```rust

@@ -2,8 +2,7 @@
 
 use crate::{Angle, FloatMath, Quantity};
 
-/// Trigonometric functions. Available with the `std` (default) or `libm`
-/// feature.
+/// Trigonometry. Needs the `std` (default) or `libm` feature.
 ///
 /// ```rust
 /// use qty::*;
@@ -45,26 +44,26 @@ impl<T: FloatMath> Angle<T> {
         (r.sin(), r.cos())
     }
 
-    /// The angle whose sine is `value` (in −90°…90°).
+    /// The angle whose sine is `value`, from -90° to 90°.
     #[inline]
     pub fn asin(value: T) -> Self {
         Self::from_base(value.asin())
     }
 
-    /// The angle whose cosine is `value` (in 0°…180°).
+    /// The angle whose cosine is `value`, from 0° to 180°.
     #[inline]
     pub fn acos(value: T) -> Self {
         Self::from_base(value.acos())
     }
 
-    /// The angle whose tangent is `value` (in −90°…90°).
+    /// The angle whose tangent is `value`, from -90° to 90°.
     #[inline]
     pub fn atan(value: T) -> Self {
         Self::from_base(value.atan())
     }
 
-    /// The angle of the vector `(x, y)` from the x axis (in −180°…180°),
-    /// for any two values of the same quantity: lengths, speeds, forces, …
+    /// The angle of the vector `(x, y)` from the x axis, from -180° to 180°.
+    /// `x` and `y` can be any quantity, as long as it's the same for both.
     #[inline]
     pub fn atan2<Q: Quantity<Value = T>>(y: Q, x: Q) -> Self {
         Self::from_base(y.as_base().atan2(x.as_base()))

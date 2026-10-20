@@ -1,46 +1,26 @@
-//! Benchmark comparing `qty` against popular Rust unit-conversion
-//! libraries across six representative operations:
+//! Compares qty with other unit crates on a few basic operations:
 //!
-//! 1. **`construction_from_km`** — build a `Length` value from a kilometres
-//!    input (reveals whether the library eagerly converts to SI base at
-//!    construction or stores the raw value in the given unit).
-//! 2. **`convert_km_to_m`** — extract the numeric value expressed in metres
-//!    (the complementary cost to construction).
-//! 3. **`add_two_lengths`** — add two pre-built `Length` values of the same
-//!    unit (pure f64 arithmetic overhead; operands are hoisted outside the
-//!    timed loop so only the `+` itself is measured).
-//! 4. **`chain`** — realistic round-trip: construct from km, construct from m,
-//!    add them, then read the result as metres.
-//! 5. **`sum_10k_lengths`** — fold-sum 10 000 lengths, against bare `f64`.
-//! 6. **`scale_10k_lengths`** — scale 10 000 lengths in place, against bare
-//!    `f64` (checks that the wrapper does not block SIMD vectorisation).
+//! 1. `construction_from_km`: build a length from kilometres.
+//! 2. `convert_km_to_m`: read a length in metres.
+//! 3. `add_two_lengths`: add two lengths in the same unit.
+//! 4. `chain`: build one length from km and one from m, add them, and read
+//!    the sum in metres.
+//! 5. `sum_10k_lengths`: sum 10,000 lengths, with bare `f64` as baseline.
+//! 6. `scale_10k_lengths`: scale 10,000 lengths in place, to see whether the
+//!    wrapper gets in the way of vectorisation.
 //!
-//! # Running
+//! Run with `cargo bench -p qty-benches`. The HTML report ends up in
+//! `target/criterion/report/index.html`.
 //!
-//! ```bash
-//! cargo bench -p qty-benches
-//! # HTML report: target/criterion/report/index.html
-//! ```
-//!
-//! # Architectural notes
-//!
-//! | Library        | Storage strategy | Construction cost | Conversion cost |
-//! |----------------|-----------------|-------------------|-----------------|
-//! | qty    | SI base (metres) | 1 multiply        | read (free)     |
-//! | uom            | SI base          | 1 multiply        | read (free)     |
-//! | simple-si-units| SI base          | 1 multiply        | read (free)     |
-//! | measurements   | SI base          | 1 multiply        | read (free)     |
-//! | ferrunitas     | caller's unit    | free (store only) | 1 multiply      |
-//! | measures-rs    | caller's unit    | free (store only) | 1 multiply      |
-//!
-//! The `chain` benchmark equalises these costs: every library ultimately
-//! performs exactly one multiplication plus one addition.
+//! qty, uom, simple-si-units and measurements store metres, so they multiply
+//! when building from km and just read when asked for metres. ferrunitas and
+//! measures-rs store the unit they were given and multiply when converting.
+//! In `chain` everyone does one multiplication and one addition.
 
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-// ─── qty ──────────────────────────────────────────────────────────────
-// Stores every value in the SI base unit (metres).  `from_kilometers` multiplies
-// by 1 000 at construction; `as_meters` is a plain field read.
+// qty stores metres: `from_kilometers` multiplies by 1000 and `as_meters`
+// reads the field.
 
 #[inline(always)]
 fn qty_from_km(km: f64) -> qty::Length {
@@ -62,10 +42,7 @@ fn qty_chain(km: f64, m: f64) -> f64 {
     (qty::Length::from_kilometers(km) + qty::Length::from_meters(m)).as_meters()
 }
 
-// ─── uom ─────────────────────────────────────────────────────────────────────
-// Type-parameterised dimensional analysis via typenum.  `uom::si::f64::Length`
-// is an alias for `Quantity<ISQ<P1,Z0,Z0,…>, SI<f64>, f64>`.  Internally stores
-// in SI base (metres).
+// uom checks dimensions with typenum parameters and also stores metres.
 
 use uom::si::f64::Length as UomLength;
 use uom::si::length::{kilometer as uom_km, meter as uom_m};
@@ -90,9 +67,7 @@ fn uom_chain(km: f64, m: f64) -> f64 {
     (UomLength::new::<uom_km>(km) + UomLength::new::<uom_m>(m)).get::<uom_m>()
 }
 
-// ─── simple-si-units ──────────────────────────────────────────────────────────
-// `Distance<V>` is generic over the numeric type.  The `m` field stores the
-// SI base value; `from_km` multiplies at construction and `to_m` reads directly.
+// simple-si-units: `Distance<V>` stores metres in its `m` field.
 
 use simple_si_units::base::Distance;
 
@@ -116,9 +91,7 @@ fn simple_chain(km: f64, m: f64) -> f64 {
     (Distance::<f64>::from_km(km) + Distance::<f64>::from_m(m)).to_m()
 }
 
-// ─── measurements ─────────────────────────────────────────────────────────────
-// Struct-based physical quantities backed by a single f64 (SI base).
-// `as_meters` takes `&self`; the return value is the raw stored f64.
+// measurements stores metres in an f64; `as_meters` takes `&self`.
 
 use measurements::Length as MeasLength;
 
@@ -142,17 +115,11 @@ fn meas_chain(km: f64, m: f64) -> f64 {
     (MeasLength::from_kilometers(km) + MeasLength::from_meters(m)).as_meters()
 }
 
-// ─── ferrunitas ───────────────────────────────────────────────────────────────
-// Zero-sized unit marker structs.  `Measure<U>` stores the raw value in the
-// caller's unit — no conversion at construction.  The ×1000 km→m factor is
-// applied lazily on `.convert::<Metre>()` or implicitly during cross-unit `+`.
-//
-// Addition of different-unit measures of the same dimension is supported:
-//   `Measure<U1> + Measure<U2>` → `Measure<U1>`  (converts rhs to lhs unit)
-// The value is accessed via `.value()` (the field is `pub(crate)`).
+// ferrunitas stores the value in the unit it was given and converts on
+// `.convert::<Metre>()`. Adding two units converts the right side to the left
+// side's unit.
 
 use ferrunitas::system::{Kilometre as FerrKm, Metre as FerrM};
-// `Unit::new` is the constructor on all ferrunitas unit marker structs.
 use ferrunitas::Unit as _;
 
 #[inline(always)]
@@ -175,28 +142,16 @@ fn ferr_add(
 
 #[inline(always)]
 fn ferr_chain(km: f64, m: f64) -> f64 {
-    // ferrunitas supports cross-unit addition (rhs is automatically converted
-    // to the lhs unit before adding).  The result is Measure<Kilometre>.
-    // We then call convert::<Metre>() to get the value in metres.
+    // The sum is in kilometres, the left side's unit.
     (FerrKm::new(km) + FerrM::new(m)).convert::<FerrM>().value()
 }
 
-// ─── measures-rs ─────────────────────────────────────────────────────────────
-// Macro-generated unit system.  A single `define_measure_types!` call emits:
-//   - A `Measure<U, Number=f64>` struct with a `pub value: Number` field
-//   - Trait impls (MeasurementUnit) for every declared unit
-//   - Arithmetic operators for `Measure<U>` (same-unit only — convert first)
-//
-// Like ferrunitas, values are stored in the caller's unit; `convert::<T>()`
-// multiplies by `(source_ratio / dest_ratio)` to switch units.
-//
-// Note: `add_two_lengths` uses same-unit operands here (both Kilometre), so
-// the addition is a plain f64 add after LLVM optimises away the trivial ×/÷ 1
-// that appears in the through-Quantity path.
+// measures-rs generates its types with `define_measure_types!`. Like
+// ferrunitas it stores the given unit, and `+` needs both sides in the same
+// unit.
 
 mod msr {
-    // `exact` generates non-uncertain (plain f64) Measure types.
-    // All unit definitions live inside this one macro call.
+    // `exact`: plain f64, no uncertainty.
     measures::define_measure_types! {
         exact,
         scalar_properties [
@@ -220,7 +175,6 @@ fn msr_from_km(km: f64) -> msr::Measure<msr::Kilometre> {
 
 #[inline(always)]
 fn msr_to_m(l: msr::Measure<msr::Kilometre>) -> f64 {
-    // `convert` multiplies by `Kilometre::RATIO / Metre::RATIO` = 1000.
     l.convert::<msr::Metre>().value
 }
 
@@ -234,22 +188,15 @@ fn msr_add(
 
 #[inline(always)]
 fn msr_chain(km: f64, m: f64) -> f64 {
-    // measures-rs requires same-unit operands for `+`.  Convert km→m first,
-    // then add the metre value, then read the public `.value` field.
+    // `+` needs the same unit on both sides, so convert to metres first.
     let a: msr::Measure<msr::Metre> =
         msr::Measure::<msr::Kilometre>::new(km).convert::<msr::Metre>();
     let b = msr::Measure::<msr::Metre>::new(m);
     (a + b).value
 }
 
-// ─── Benchmark groups ─────────────────────────────────────────────────────────
-
-/// Benchmark 1 — construct a `Length` from a kilometres value.
-///
-/// Libraries that convert to SI base at construction (`qty`, `uom`,
-/// `simple-si-units`, `measurements`) perform one f64 multiplication here.
-/// Libraries that defer conversion (`ferrunitas`, `measures-rs`) perform only
-/// a struct wrap — expect them to be faster in this group.
+/// Builds a length from kilometres. Crates that store metres multiply here;
+/// ferrunitas and measures-rs only wrap the value.
 fn bench_construction(c: &mut Criterion) {
     let km = black_box(1.5_f64);
     let mut g = c.benchmark_group("construction_from_km");
@@ -262,15 +209,11 @@ fn bench_construction(c: &mut Criterion) {
     g.finish();
 }
 
-/// Benchmark 2 — extract the metres value from a pre-built `Length` (in km).
-///
-/// For SI-base libraries this is a plain read (potentially free after inlining).
-/// For lazy-convert libraries (`ferrunitas`, `measures-rs`) this does the ×1000
-/// multiplication — the complementary cost to the cheap construction above.
+/// Reads a length built from kilometres in metres. This is where ferrunitas
+/// and measures-rs multiply.
 fn bench_conversion(c: &mut Criterion) {
     let km = 1.5_f64;
     let mut g = c.benchmark_group("convert_km_to_m");
-    // Pre-build outside the timed loop; pass by reference where the API requires it.
     let u = qty_from_km(km);
     let q = uom_from_km(km);
     let s = simple_from_km(km);
@@ -287,10 +230,8 @@ fn bench_conversion(c: &mut Criterion) {
     g.finish();
 }
 
-/// Benchmark 3 — add two `Length` values of the same unit.
-///
-/// Operands are constructed once outside the timed loop; only the `+` is
-/// measured.  Expected to compile down to a single `fadd` for all libraries.
+/// Adds two lengths in the same unit. The operands are built outside the
+/// timed loop.
 fn bench_add(c: &mut Criterion) {
     let (km1, km2) = (1.5_f64, 2.3_f64);
     let mut g = c.benchmark_group("add_two_lengths");
@@ -329,12 +270,8 @@ fn bench_add(c: &mut Criterion) {
     g.finish();
 }
 
-/// Benchmark 4 — realistic end-to-end: construct(km) + construct(m) → add →
-/// extract as metres.
-///
-/// Every library performs exactly one f64 multiplication plus one addition
-/// along this path (though *when* each operation occurs differs).  Timings
-/// should be very close across all libraries.
+/// Builds a length from km and one from m, adds them and reads metres. Every
+/// crate does one multiplication and one addition here.
 fn bench_chain(c: &mut Criterion) {
     let (km, m) = (black_box(1.5_f64), black_box(300.0_f64));
     let mut g = c.benchmark_group("chain_construct_add_convert");
@@ -347,8 +284,6 @@ fn bench_chain(c: &mut Criterion) {
     g.finish();
 }
 
-// ─── Bulk data ────────────────────────────────────────────────────────────────
-
 /// Number of values in the bulk benchmarks.
 const N: usize = 10_000;
 
@@ -357,11 +292,8 @@ fn raw_values() -> Vec<f64> {
     (0..N).map(|i| 0.5 + i as f64 * 1e-3).collect()
 }
 
-/// Benchmark 5 — sum `N` lengths with a left fold of `+`.
-///
-/// A strict-order float fold cannot be vectorised, so this measures whether a
-/// library's `+` stays a bare `addsd` inside a loop. The `f64` entry is the
-/// unit-free baseline.
+/// Sums `N` lengths in order. A float fold can't be vectorised, so this
+/// shows whether `+` stays a single add inside a loop.
 fn bench_sum(c: &mut Criterion) {
     let raw = raw_values();
     let u: Vec<qty::Length> = raw.iter().map(|&m| qty::Length::from_meters(m)).collect();
@@ -404,12 +336,9 @@ fn bench_sum(c: &mut Criterion) {
     g.finish();
 }
 
-/// Benchmark 6 — scale `N` lengths in place by a plain number.
-///
-/// Written as `*x = *x * k` because not every library implements `*=`.
-///
-/// Independent per-element work: any library whose wrapper is transparent to
-/// the optimiser gets the same SIMD loop as bare `f64`.
+/// Scales `N` lengths in place. Each element is independent, so a wrapper
+/// the optimiser can see through should give the same SIMD loop as `f64`.
+/// Written as `*x = *x * k` because not every crate has `*=`.
 #[allow(clippy::assign_op_pattern)]
 fn bench_scale(c: &mut Criterion) {
     let raw = raw_values();
@@ -418,8 +347,8 @@ fn bench_scale(c: &mut Criterion) {
     let mut q: Vec<UomLength> = raw.iter().map(|&m| UomLength::new::<uom_m>(m)).collect();
     let mut s: Vec<Distance<f64>> = raw.iter().map(|&m| Distance::<f64>::from_m(m)).collect();
     let mut me: Vec<MeasLength> = raw.iter().map(|&m| MeasLength::from_meters(m)).collect();
-    // Multiplying by 1.0 keeps the values stable across iterations without
-    // letting the optimiser skip the work (`k` is opaque).
+    // `k` is 1.0 behind `black_box`, so the values stay the same between
+    // iterations but the work can't be skipped.
     let k = black_box(1.0_f64);
 
     let mut g = c.benchmark_group("scale_10k_lengths");

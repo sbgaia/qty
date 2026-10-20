@@ -107,7 +107,7 @@ fuzz_target!(|input: (i64, i64, u8)| {
         .map(|f| f.count());
     assert_eq!(got, reference(wa, wb, mode));
 
-    // Floats → integers: never panics, and agrees with `f64` rounding.
+    // Float to integer conversion never panics and agrees with `f64` rounding.
     let x = f64::from_bits(a as u64);
     let got = Fixed::<Meter>::round_from(Length::from_meters(x), mode);
     if x.is_finite() && x.abs() < 9e15 {

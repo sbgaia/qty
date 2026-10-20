@@ -38,17 +38,14 @@ extern crate self as qty;
 use core::fmt;
 use core::ops::{Add, Div, Mul, Neg, Sub};
 
-// ── Numeric storage ───────────────────────────────────────────────────────────
-
 /// Floating-point storage types that support unit conversions.
 ///
-/// Implemented for `f32` and `f64`. Implement it for your own type
-/// (half-precision floats, dual numbers for automatic differentiation, …)
-/// to unlock `from_<unit>` / `as_<unit>` conversions on it.
+/// Implemented for `f32` and `f64`. Implement it for your own type, such as
+/// a half-precision float or a dual number for automatic differentiation, to
+/// get unit conversions on it.
 ///
-/// Arithmetic operators do **not** require this trait: they are available for
-/// any storage type that supports the corresponding operator, including
-/// integers.
+/// Arithmetic operators don't need this trait. They work for any storage
+/// type that has the operator, integers included.
 pub trait Float:
     ToFloat
     + fmt::Debug
@@ -59,9 +56,8 @@ pub trait Float:
     + Div<Output = Self>
     + Neg<Output = Self>
 {
-    /// Converts an `f64` conversion constant into `Self`, rounding to nearest.
-    ///
-    /// Always called with a literal, so it is folded away at compile time.
+    /// Converts a conversion constant to `Self`, rounding to nearest. It's
+    /// always called with a literal, so this happens at compile time.
     fn from_f64(value: f64) -> Self;
 
     /// Absolute value.
@@ -199,13 +195,9 @@ impl_float_math!(f32,
     atan2(other) => atan2f, hypot(other) => hypotf,
     round() => roundf, floor() => floorf, ceil() => ceilf);
 
-// ── Quantity trait ────────────────────────────────────────────────────────────
-
-/// Implemented by every quantity type, for writing code that is generic over
-/// quantities.
+/// Implemented by every quantity, for code that is generic over quantities.
 ///
-/// The inherent methods of the same names are `const` and preferred in
-/// non-generic code.
+/// In other code, call the inherent methods with the same names.
 pub trait Quantity: Copy {
     /// The numeric storage type (`f64` unless specified).
     type Value: Copy;
@@ -260,7 +252,7 @@ pub trait UnitEnum: Unit {
 /// A unit: its abbreviation and names. Implemented by every unit enum and,
 /// with the `dynamic` feature, by `AnyUnit`.
 pub trait Unit: Copy + Eq + core::hash::Hash + fmt::Debug + fmt::Display + 'static {
-    /// The primary abbreviation, e.g. `"km"`.
+    /// The abbreviation shown when printing, like `"km"`.
     fn abbreviation(self) -> &'static str;
 
     /// Names and abbreviations.
@@ -308,22 +300,13 @@ macro_rules! in_unit_fmt {
 }
 in_unit_fmt!(Display, LowerExp, UpperExp);
 
-// ── Approximate comparison ────────────────────────────────────────────────────
-
-/// Approximate floating-point comparison for any float-valued [`Quantity`].
+/// Approximate comparison of float quantities. Every quantity implements it.
 ///
-/// Every quantity type implements this trait automatically through a blanket
-/// implementation; the comparison logic is written exactly once.
-///
-/// # Choosing a method
-///
-/// | Method | Formula | Use when |
-/// |---|---|---|
-/// | [`approx_eq_abs`][ApproxEq::approx_eq_abs] | `\|a−b\| ≤ ε` | magnitude is known in advance |
-/// | [`approx_eq_rel`][ApproxEq::approx_eq_rel] | `\|a−b\| ≤ tol·max(\|a\|,\|b\|)` | magnitude varies; relative accuracy matters |
-/// | [`approx_eq`][ApproxEq::approx_eq] | `\|a−b\| ≤ ε + tol·max(\|a\|,\|b\|)` | mixed: safe near zero **and** for large values |
-///
-/// Tolerances are expressed in base-unit terms.
+/// [`approx_eq_abs`](ApproxEq::approx_eq_abs) allows a fixed difference,
+/// which suits values of a known size. [`approx_eq_rel`](ApproxEq::approx_eq_rel)
+/// scales the allowed difference with the values. [`approx_eq`](ApproxEq::approx_eq)
+/// passes if either test does, so it also works near zero. Tolerances are
+/// in the base unit.
 ///
 /// # Examples
 ///
@@ -339,7 +322,7 @@ in_unit_fmt!(Display, LowerExp, UpperExp);
 /// // Relative: difference must be under 1 part per billion.
 /// assert!(a.approx_eq_rel(b, 1e-9));
 ///
-/// // Combined: absolute OR relative criterion, safe near zero.
+/// // Either: works near zero too.
 /// assert!(a.approx_eq(b, 1e-12, 1e-9));
 /// ```
 pub trait ApproxEq: Quantity {
@@ -354,8 +337,8 @@ pub trait ApproxEq: Quantity {
 
     /// Returns `true` if `|self − other| ≤ epsilon + rel_tol × max(|self|, |other|)`.
     ///
-    /// Combines absolute and relative tolerances, matching the semantics of
-    /// NumPy's [`numpy.isclose`](https://numpy.org/doc/stable/reference/generated/numpy.isclose.html).
+    /// The same test as NumPy's
+    /// [`isclose`](https://numpy.org/doc/stable/reference/generated/numpy.isclose.html).
     fn approx_eq(self, other: Self, epsilon: Self::Value, rel_tol: Self::Value) -> bool;
 }
 
@@ -371,7 +354,7 @@ where
     #[inline]
     fn approx_eq_rel(self, other: Self, rel_tol: Self::Value) -> bool {
         let (a, b) = (self.as_base(), other.as_base());
-        // Exactly equal (including both zero) → trivially equal.
+        // Also covers both being zero, where the relative test fails.
         a == b || (a - b).abs() <= rel_tol * a.abs().max(b.abs())
     }
 
@@ -381,8 +364,6 @@ where
         (a - b).abs() <= epsilon + rel_tol * a.abs().max(b.abs())
     }
 }
-
-// ── Parsing ───────────────────────────────────────────────────────────────────
 
 /// Error returned when parsing a quantity or a unit from a string fails.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -476,16 +457,13 @@ pub fn split_value_unit(s: &str) -> (&str, &str) {
     (&s[..i], s[i..].trim_start())
 }
 
-// ── Code shared by every generated quantity ──────────────────────────────────
-
-/// Storage types that get `scalar * quantity` (the reverse of
-/// `quantity * scalar`, which is generic). Coherence rules forbid a generic
-/// impl on a foreign type parameter, so this list is explicit.
+/// `number * quantity` for the listed storage types. `quantity * number` is
+/// generic, but the orphan rule rules out a generic impl with the number on
+/// the left, hence the list.
 ///
-/// `f32` is deliberately absent: with two float impls, `2.0 * q` would be
-/// ambiguous whenever `q`'s float type is not yet inferred
-/// (`let q = Length::from_meters(1.0)`), forcing annotations on the far more
-/// common `f64` code. With `f32` storage, write `q * 2.0`.
+/// `f32` is left out on purpose. With two float impls, `2.0 * q` would be
+/// ambiguous until the type of `q` is known, and plain `f64` code would need
+/// annotations. With `f32` storage, write `q * 2.0`.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_scalar_lhs_mul {
@@ -548,26 +526,25 @@ macro_rules! __qty_fmt {
     )*};
 }
 
-/// Implements everything a quantity needs apart from its unit conversions
-/// and arithmetic: base-unit access, zero-copy slice views, [`Quantity`],
-/// `Display` and `FromStr`. Shared by the built-in quantities and
-/// `custom_quantity!`, so it names items only through `$crate` and checks
-/// qty's features through the `__qty_if_*` switches: it may expand in
-/// another crate. `exprs` names the [`__private::Exprs`] mode: which unit
-/// expressions `FromStr` accepts.
+/// What every quantity needs apart from unit conversions and arithmetic.
+///
+/// Used by the built-in quantities and by `custom_quantity!`, so it can
+/// expand in other crates. That's why it names everything through `$crate`
+/// and checks qty's features with the `__qty_if_*` switches. `exprs` is the
+/// [`__private::Exprs`] mode for parsing.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_common {
     ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident $(, base_expr: $base_expr:expr)?) => {
         impl<T> $Q<T> {
-            /// Wraps a value expressed in the base unit. Free and `const`.
+            /// Wraps a value in the base unit.
             #[inline(always)]
             pub const fn from_base(value: T) -> Self {
                 Self(value)
             }
 
-            /// Unwraps the value expressed in the base unit. Unlike
-            /// [`as_base`](Self::as_base) this does not require `T: Copy`.
+            /// Unwraps the value in the base unit. Unlike
+            /// [`as_base`](Self::as_base), it works without `T: Copy`.
             #[inline(always)]
             pub fn into_base(self) -> T {
                 self.0
@@ -601,7 +578,7 @@ macro_rules! __qty_common {
                 unsafe { &mut *(values as *mut [Self] as *mut [T]) }
             }
 
-            /// Changes the storage type losslessly, e.g. `i32` → `f64`.
+            /// Changes the storage type without loss, such as from `i32` to `f64`.
             #[inline(always)]
             pub fn cast<U: From<T>>(self) -> $Q<U> {
                 $Q(U::from(self.0))
@@ -609,7 +586,7 @@ macro_rules! __qty_common {
         }
 
         impl<T: Copy> $Q<T> {
-            /// Returns the value expressed in the base unit. Free and `const`.
+            /// The value in the base unit.
             #[inline(always)]
             pub const fn as_base(self) -> T {
                 self.0
@@ -667,13 +644,12 @@ macro_rules! __qty_common {
                 }
             }
 
-            /// The mean of `values`, or `None` if there are none. Computed as
-            /// the first value plus the mean difference from it, so it also
-            /// works for points: the mean of 20 °C and 30 °C is 25 °C.
+            /// The mean of `values`, or `None` if there are none.
             ///
-            /// With `Uncertain` storage the first value
-            /// enters every difference, which overstates the uncertainty;
-            /// sum and divide instead.
+            /// It's the first value plus the mean difference from it, so it
+            /// works for points too: the mean of 20 °C and 30 °C is 25 °C.
+            /// With `Uncertain` storage this overstates the uncertainty, as the
+            /// first value enters every difference. Sum and divide instead.
             pub fn mean<I: IntoIterator<Item = Self>>(values: I) -> ::core::option::Option<Self> {
                 let mut values = values.into_iter();
                 let first = values.next()?.0;
@@ -686,15 +662,15 @@ macro_rules! __qty_common {
                 Some(Self(first + sum / T::from_f64(f64::from(n))))
             }
 
-            /// Linear interpolation: `self` at `t = 0`, `other` at `t = 1`
-            /// (to within rounding), extrapolating outside `[0, 1]`. Works
-            /// for points too: halfway between 10 °C and 20 °C is 15 °C.
+            /// Linear interpolation from `self` at `t = 0` to `other` at
+            /// `t = 1`. Outside `[0, 1]` it extrapolates. Works for points
+            /// too: halfway between 10 °C and 20 °C is 15 °C.
             #[inline]
             pub fn lerp(self, other: Self, t: T) -> Self {
                 Self(self.0 + (other.0 - self.0) * t)
             }
 
-            /// IEEE 754 total order (like [`f64::total_cmp`]), for sorting:
+            /// Total order, like [`f64::total_cmp`], for
             /// `values.sort_by(Length::total_cmp)`. For map keys, see
             /// [`Ordered`](qty::Ordered).
             #[inline(always)]
@@ -704,14 +680,14 @@ macro_rules! __qty_common {
         }
 
         impl<T: $crate::ToFloat> $Q<T> {
-            /// Converts the storage to `f64` (like `as f64`), e.g.
-            /// `Length<i64>` → `Length<f64>`.
+            /// Converts the storage to `f64` the way `as f64` does, such as
+            /// `Length<i64>` to `Length<f64>`.
             #[inline(always)]
             pub fn to_f64(self) -> $Q<f64> {
                 $Q(self.0.to_f64())
             }
 
-            /// Converts the storage to `f32` (like `as f32`).
+            /// Converts the storage to `f32` the way `as f32` does.
             #[inline(always)]
             pub fn to_f32(self) -> $Q<f32> {
                 $Q(self.0.to_f32())
@@ -748,15 +724,12 @@ macro_rules! __qty_common {
             }
         }
 
-        // ── Scaling vectors: `mass * acceleration_vector` ──
-        // For concrete storage types: a generic `$Q<T>` impl would overlap
-        // with `$Q<T> * T` when `T` is itself a vector.
+        // `mass * acceleration_vector`, for concrete storage types only: a
+        // generic impl would overlap with `$Q<T> * T` when `T` is a vector.
         $crate::__qty_times_vector!($Q: f64, f32);
         $crate::__qty_if_math! {
             $crate::__qty_times_vector!($Q<F>: $crate::Uncertain<F>);
         }
-
-        // ── Same-quantity ratio ──
 
         /// Dividing two values of the same quantity gives a plain number.
         impl<T: ::core::ops::Div<Output = T>> ::core::ops::Div for $Q<T> {
@@ -767,8 +740,6 @@ macro_rules! __qty_common {
             }
         }
 
-        // ── Formatting & parsing ──
-
         $crate::__qty_fmt!($Q, $U, $base: Display, LowerExp, UpperExp);
 
         impl ::core::fmt::Display for $U {
@@ -776,8 +747,6 @@ macro_rules! __qty_common {
                 f.pad(self.abbreviation())
             }
         }
-
-        // ── Optional integrations ──
 
         $crate::__qty_if_approx! {
             impl<T: $crate::__private::approx::AbsDiffEq> $crate::__private::approx::AbsDiffEq for $Q<T> {
@@ -837,8 +806,8 @@ macro_rules! __qty_common {
         }
 
         impl<T: $crate::Float> $Q<T> {
-            /// The value expressed in `unit`, for display or inspection:
-            /// `length.in_unit(LengthUnit::Kilometer)` formats as `"1.5 km"`.
+            /// The value in `unit`, for display: `length.in_unit(LengthUnit::Kilometer)`
+            /// prints as `1.5 km`.
             #[inline]
             pub fn in_unit<V: $crate::UnitOf<Self>>(self, unit: V) -> $crate::InUnit<T, V> {
                 $crate::InUnit {
@@ -847,25 +816,24 @@ macro_rules! __qty_common {
                 }
             }
 
-            /// A quantity from `value` expressed in `unit`: one of the
-            /// quantity's units (`LengthUnit::Kilometer`) or one defined
-            /// with [`custom_unit!`](qty::custom_unit).
+            /// A quantity from `value` in `unit`. The unit can be a built-in one
+            /// like `LengthUnit::Kilometer` or one made with
+            /// [`custom_unit!`](qty::custom_unit).
             #[inline]
             pub fn new<V: $crate::UnitOf<Self>>(value: T, unit: V) -> Self {
                 Self(unit.value_to_base(value))
             }
 
-            /// The quantity expressed in `unit`.
+            /// The value in `unit`.
             #[inline]
             pub fn convert_to<V: $crate::UnitOf<Self>>(self, unit: V) -> T {
                 unit.value_from_base(self.0)
             }
 
-            /// The value in the largest of `units` that does not exceed it
-            /// (the smallest of them for smaller values), like
-            /// `auto_unit` over a unit list of your
-            /// choice: `length.auto_unit_in(LengthUnit::IMPERIAL)`. Meant
-            /// for linear units; with an empty list, the base unit.
+            /// Like `auto_unit`, but choosing from `units`: the largest one
+            /// that doesn't exceed the value, or the smallest one if they all
+            /// do. For example `length.auto_unit_in(LengthUnit::IMPERIAL)`.
+            /// Meant for linear units. An empty list gives the base unit.
             pub fn auto_unit_in(self, units: &[$U]) -> $crate::InUnit<T, $U> {
                 let magnitude = self.0.abs();
                 let one = |unit: $U| Self::new(T::from_f64(1.0), unit).0.abs();
@@ -887,9 +855,8 @@ macro_rules! __qty_common {
 
         $crate::__qty_if_math! {
             impl<T: $crate::FloatMath> $Q<T> {
-                /// Rounds to a whole number of `unit`, ties away from zero:
-                /// 1.26 m in centimetres is 126 cm. Works for points too
-                /// (21.6 °C rounds to 22 °C).
+                /// Rounds to a whole number of `unit`, ties away from zero.
+                /// 1.26 m becomes 126 cm, and 21.6 °C becomes 22 °C.
                 #[inline]
                 pub fn round_in(self, unit: $U) -> Self {
                     Self::new(self.convert_to(unit).round(), unit)
@@ -909,10 +876,10 @@ macro_rules! __qty_common {
             }
         }
 
-        /// Parses a number followed by a unit: an abbreviation (`"1.5 km"`),
-        /// a name (`"1.5 kilometres"`) or, for quantities other than points,
-        /// an expression with the same dimensions (`"1.5 km/s*s"`, see
-        /// [`UnitExpr`](qty::UnitExpr)).
+        /// Parses a number and a unit. The unit can be an abbreviation
+        /// (`"1.5 km"`), a name (`"1.5 kilometres"`) or, except for points,
+        /// a [unit expression](qty::UnitExpr) with the same dimensions
+        /// (`"1.5 km/s*s"`).
         impl<T: $crate::Float + ::core::str::FromStr> ::core::str::FromStr for $Q<T> {
             type Err = $crate::ParseError;
             fn from_str(s: &str) -> ::core::result::Result<Self, $crate::ParseError> {
@@ -933,8 +900,8 @@ macro_rules! __qty_common {
     };
 }
 
-/// The built-in quantities: [`__qty_common!`] plus what only qty's own
-/// quantities have (`Fixed`, defmt and schemars).
+/// For built-in quantities: [`__qty_common!`] plus what only they have
+/// (`Fixed`, defmt, schemars).
 macro_rules! quantity_core {
     ($Q:ident, $U:ident, $base:ident, exprs: $exprs:ident) => {
         $crate::__qty_common!(
@@ -1007,8 +974,8 @@ macro_rules! quantity_core {
     };
 }
 
-/// Arithmetic for ordinary ("vector") quantities: values that can be added,
-/// negated and scaled — lengths, durations, temperature differences, …
+/// Arithmetic for amounts: quantities that can be added, negated and
+/// scaled, like lengths, durations and temperature differences.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_vector_ops {
@@ -1054,9 +1021,9 @@ macro_rules! __qty_vector_ops {
         }
 
         impl $Q<f64> {
-            /// Zero, as a constant. For `f64` storage only, like
-            /// `const_new`: with an `f32` constant too, `Length::ZERO`
-            /// would be ambiguous. Other storage types have `default()`.
+            /// Zero. Only for `f64` storage, since a second constant would
+            /// make `Length::ZERO` ambiguous. Other storage types have
+            /// `default()`.
             pub const ZERO: Self = Self(0.0);
         }
 
@@ -1070,8 +1037,6 @@ macro_rules! __qty_vector_ops {
                 }
             }
         }
-
-        // ── Arithmetic: same quantity ──
 
         impl<T: ::core::ops::Add<Output = T>> ::core::ops::Add for $Q<T> {
             type Output = Self;
@@ -1120,8 +1085,6 @@ macro_rules! __qty_vector_ops {
             }
         }
 
-        // ── Arithmetic: scaling by a plain number ──
-
         impl<T: ::core::ops::Mul<Output = T>> ::core::ops::Mul<T> for $Q<T> {
             type Output = Self;
             #[inline(always)]
@@ -1150,10 +1113,8 @@ macro_rules! __qty_vector_ops {
         }
         $crate::__qty_scalar_lhs_mul!($Q: f64, i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
-        // ── Iterators ──
-
-        // Delegates to `T`'s own `Sum`, so the semantics (and the machine
-        // code) are exactly those of summing the bare numbers.
+        // Uses `T`'s own `Sum`, so this behaves and compiles like summing
+        // the numbers.
         impl<T: ::core::iter::Sum> ::core::iter::Sum for $Q<T> {
             #[inline]
             fn sum<I: Iterator<Item = Self>>(iter: I) -> Self {
@@ -1169,9 +1130,7 @@ macro_rules! __qty_vector_ops {
     };
 }
 
-/// Implements everything an ordinary quantity needs apart from its unit
-/// conversions: base-unit access, zero-copy slice views, arithmetic
-/// operators, [`Quantity`], `Display` and `FromStr`.
+/// Everything an amount quantity needs apart from its unit conversions.
 macro_rules! quantity {
     ($Q:ident, $U:ident, $base:ident) => {
         quantity_core!($Q, $U, $base, exprs: Base);
@@ -1179,14 +1138,14 @@ macro_rules! quantity {
     };
 }
 
-/// A quantity that is a *point on a scale* rather than an amount — an
-/// absolute temperature. Points cannot be added, negated or scaled
-/// (20 °C + 20 °C is not 40 °C); their differences are amounts of `$D`:
+/// A point on a scale rather than an amount, such as an absolute
+/// temperature. Points can't be added, negated or scaled (20 °C + 20 °C
+/// isn't 40 °C). Their differences are amounts of `$D`:
 ///
 /// * `point - point = $D`
 /// * `point ± $D = point`, `$D + point = point`, `point ±= $D`
 ///
-/// `point / point` remains: it is a ratio of absolute values.
+/// `point / point` is still allowed, as a ratio of absolute values.
 macro_rules! point_quantity {
     ($Q:ident, $U:ident, $base:ident, $D:ident) => {
         quantity_core!($Q, $U, $base, exprs: Off);
@@ -1293,8 +1252,8 @@ macro_rules! cross_mul_scalar {
     };
 }
 
-/// `C.sqrt() = A` where `C = A * A` (e.g. `Area` → `Length`); `$k` relates
-/// the base units when they are not coherent.
+/// `C.sqrt() = A` where `C = A * A`, such as `Area` to `Length`. `$k`
+/// relates the base units when they aren't coherent.
 macro_rules! cross_sqrt {
     ($C:ident => $A:ident) => {
         cross_sqrt!(@impl $C => $A, sqrt, "square", |v| v);
@@ -1335,7 +1294,7 @@ macro_rules! cross_power {
     };
 }
 
-/// `C.cbrt() = A` where `C = A * A * A` (e.g. `Volume` → `Length`).
+/// `C.cbrt() = A` where `C = A * A * A`, such as `Volume` to `Length`.
 macro_rules! cross_cbrt {
     ($C:ident => $A:ident) => {
         cross_sqrt!(@impl $C => $A, cbrt, "cube", |v| v);
@@ -1347,8 +1306,8 @@ macro_rules! cross_cbrt {
     };
 }
 
-/// `1 / A = B` for `f64` storage, e.g. `1.0 / duration` is a `Frequency`.
-/// (`f32` is omitted for the inference reason given on `__qty_scalar_lhs_mul!`.)
+/// `1 / A = B` for `f64` storage: `1.0 / duration` is a `Frequency`. Not
+/// for `f32`, for the reason given on `__qty_scalar_lhs_mul!`.
 macro_rules! cross_recip {
     ($A:ident => $B:ident) => {
         impl core::ops::Div<$A<f64>> for f64 {
@@ -1497,7 +1456,7 @@ pub use fixed::{
     ToFloat, UnitDiv, UnitMul,
 };
 
-// Generated quantity modules — re-exports each quantity and its unit enum.
+// The generated quantity modules, each with a quantity and its unit enum.
 pub mod units;
 pub use units::*;
 
@@ -1546,10 +1505,9 @@ mod uncertain;
 #[cfg(any(feature = "std", feature = "libm"))]
 pub use uncertain::Uncertain;
 
-// Generated cross-type arithmetic (Length / Duration = Speed, etc.).
-// These are pure `impl` blocks — no named items to re-export.
+// Generated arithmetic between quantities, like Length / Duration = Speed.
+// Only impls, so there's nothing to re-export.
 mod cross_type;
 
-/// Convenience alias: the UnitsNet quantity is named `Duration`; `Time` is the
-/// colloquial name.
+/// Another name for [`Duration`], which is what UnitsNet calls it.
 pub type Time<T = f64> = Duration<T>;

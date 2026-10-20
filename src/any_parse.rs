@@ -1,5 +1,5 @@
-//! Parsing, formatting and errors for runtime quantities (hand-written; the
-//! rest of the module is generated).
+//! Parsing, formatting and errors for runtime quantities. This part is
+//! written by hand; the rest of the module is generated.
 
 use core::fmt;
 use core::str::FromStr;
@@ -60,18 +60,19 @@ impl crate::Unit for AnyUnit {
 }
 
 impl AnyUnit {
-    /// Every unit, of any kind, that `s` names (an abbreviation or a name):
-    /// `"m"` is both the metre and the minute.
+    /// Every unit, of any kind, that `s` names as an abbreviation or a name.
+    /// `"m"` gives both the metre and the minute.
     pub fn candidates(s: &str) -> impl Iterator<Item = Self> + '_ {
         QuantityKind::all().filter_map(move |kind| Self::parse_in(kind, s).ok())
     }
 }
 
 impl AnyQuantity {
-    /// Every reading of `s` as a quantity of some kind. Units listed for a
-    /// quantity (abbreviations and names) come first: if any kind lists the
-    /// unit, only those readings are returned; otherwise the readings of
-    /// the unit as an expression ([`UnitExpr`]).
+    /// Every reading of `s` as a quantity of some kind.
+    ///
+    /// Units listed by a quantity, as abbreviations or names, take priority.
+    /// If any kind lists the unit, only those readings come back. Otherwise
+    /// the unit is read as an expression ([`UnitExpr`]).
     ///
     /// ```rust
     /// use qty::*;
@@ -105,16 +106,17 @@ impl AnyQuantity {
         self.kind().info().dimensions
     }
 
-    /// The unit values of this kind are stored in.
+    /// The unit that values of this kind are stored in.
     pub fn base_unit(&self) -> AnyUnit {
         self.kind().base_unit()
     }
 }
 
-/// Parses a number and a unit when the unit determines the kind:
-/// `"5 km"` is a length. A unit used by several quantities (`"5 m"`: metre
-/// or minute) gives [`ParseError::Ambiguous`]; use
-/// [`parse_as`](AnyQuantity::parse_as) or [`candidates`](AnyQuantity::candidates).
+/// Parses a number and a unit, when the unit tells the kind: `"5 km"` is a
+/// length. A unit shared by several quantities, like the `m` of metre and
+/// minute, gives [`ParseError::Ambiguous`]. Use
+/// [`parse_as`](AnyQuantity::parse_as) or [`candidates`](AnyQuantity::candidates)
+/// for those.
 impl FromStr for AnyQuantity {
     type Err = ParseError;
     fn from_str(s: &str) -> Result<Self, ParseError> {

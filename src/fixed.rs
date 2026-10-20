@@ -1,7 +1,5 @@
 //! Integer quantities in a unit of your choice, explicit rounding, and total
 //! ordering for float quantities.
-//!
-//! See the crate-level documentation for an overview.
 
 use core::cmp::Ordering;
 use core::fmt;
@@ -11,11 +9,9 @@ use core::ops;
 
 use crate::{Float, ParseError, Quantity, Unit};
 
-// ── Numeric traits ────────────────────────────────────────────────────────────
-
-/// Lossy conversion of a primitive number to `f64` / `f32` (Rust's `as`).
+/// Lossy conversion of a primitive number to `f64` or `f32`, like `as`.
 ///
-/// Implemented for every primitive integer and float type.
+/// Implemented for the primitive integer and float types.
 pub trait ToFloat: Copy {
     /// Converts to the nearest `f64`.
     fn to_f64(self) -> f64;
@@ -46,7 +42,8 @@ mod sealed {
 /// The primitive integer types, usable as the count of a [`Fixed`] quantity
 /// and as the storage of base-unit quantities such as `Length<i64>`.
 ///
-/// Sealed: implemented for `i8`–`i128`, `u8`–`u128`, `isize` and `usize`.
+/// Sealed. Implemented for `i8` to `i128`, `u8` to `u128`, `isize` and
+/// `usize`.
 pub trait Integer:
     ToFloat
     + Ord
@@ -75,7 +72,7 @@ pub trait Integer:
     fn saturating_add(self, rhs: Self) -> Self;
     #[doc(hidden)]
     fn saturating_sub(self, rhs: Self) -> Self;
-    /// `(is_negative, |self|)`, defined for every value of every type.
+    /// `(is_negative, |self|)`. Unlike `abs`, it can't overflow.
     #[doc(hidden)]
     fn sign_magnitude(self) -> (bool, u128);
 }
@@ -127,41 +124,37 @@ macro_rules! impl_integer {
 }
 impl_integer!(i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize);
 
-// ── Rounding ──────────────────────────────────────────────────────────────────
-
-/// How to round when a result cannot be represented exactly as an integer.
+/// How to round when a result isn't a whole number.
 ///
-/// Every lossy integer operation takes one explicitly; lossless ones take
-/// none. Pass a constant and the choice is resolved at compile time.
+/// Lossy integer operations take one; lossless ones don't. A constant mode
+/// is resolved at compile time.
 ///
-/// | Mode | 2.5 | −2.5 | 2.4 | −2.6 |
+/// | Mode | 2.5 | -2.5 | 2.4 | -2.6 |
 /// |---|---|---|---|---|
-/// | `Floor` | 2 | −3 | 2 | −3 |
-/// | `Ceil` | 3 | −2 | 3 | −2 |
-/// | `TowardZero` | 2 | −2 | 2 | −2 |
-/// | `AwayFromZero` | 3 | −3 | 3 | −3 |
-/// | `NearestTiesEven` | 2 | −2 | 2 | −3 |
-/// | `NearestTiesAway` | 3 | −3 | 2 | −3 |
+/// | `Floor` | 2 | -3 | 2 | -3 |
+/// | `Ceil` | 3 | -2 | 3 | -2 |
+/// | `TowardZero` | 2 | -2 | 2 | -2 |
+/// | `AwayFromZero` | 3 | -3 | 3 | -3 |
+/// | `NearestTiesEven` | 2 | -2 | 2 | -3 |
+/// | `NearestTiesAway` | 3 | -3 | 2 | -3 |
 /// | `Exact` | error | error | error | error |
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rounding {
-    /// Toward −∞.
+    /// Toward negative infinity.
     Floor,
-    /// Toward +∞.
+    /// Toward positive infinity.
     Ceil,
     /// Toward zero (truncation, like integer division).
     TowardZero,
     /// Away from zero.
     AwayFromZero,
-    /// To the nearest integer; ties to the even one ("banker's rounding",
-    /// the IEEE 754 default). Unbiased, so the best choice for statistics
-    /// and accumulated values.
+    /// To the nearest integer, ties to even. This is the IEEE 754 default,
+    /// and it doesn't bias sums, so it suits statistics and running totals.
     NearestTiesEven,
-    /// To the nearest integer; ties away from zero (school rounding, like
-    /// `f64::round`).
+    /// To the nearest integer, ties away from zero, like `f64::round`.
     NearestTiesAway,
-    /// Refuse to round: fail with [`RoundError::Inexact`] unless the result
-    /// is exactly representable.
+    /// Don't round. Fails with [`RoundError::Inexact`] when the result
+    /// isn't a whole number.
     Exact,
 }
 
@@ -172,7 +165,8 @@ pub enum RoundError {
     Overflow,
     /// The input is NaN or infinite.
     NotFinite,
-    /// [`Rounding::Exact`] was requested but the result is not an integer.
+    /// [`Rounding::Exact`] was asked for, but the result isn't a whole
+    /// number.
     Inexact,
     /// Division by zero.
     DivisionByZero,
@@ -183,7 +177,7 @@ impl fmt::Display for RoundError {
         f.write_str(match self {
             RoundError::Overflow => "result out of range for the integer type",
             RoundError::NotFinite => "value is NaN or infinite",
-            RoundError::Inexact => "result is not exactly representable",
+            RoundError::Inexact => "result is not a whole number",
             RoundError::DivisionByZero => "division by zero",
         })
     }
@@ -234,24 +228,25 @@ pub(crate) fn div_round(n: i128, d: i128, mode: Rounding) -> Result<i128, RoundE
     if r == 0 {
         return Ok(t);
     }
-    // Compare |r| with |d| − |r| instead of 2|r| with |d|: cannot overflow.
+    // |r| against |d| - |r| rather than 2|r| against |d|, which could
+    // overflow.
     let (ar, ad) = (r.unsigned_abs(), d.unsigned_abs());
     let positive = (r > 0) == (d > 0);
     pick(t, positive, ar.cmp(&(ad - ar)), mode)
 }
 
-/// Rounds a float to an integer. Exact: no intermediate rounding.
+/// Rounds a float to an integer, with no intermediate rounding.
 #[inline]
 pub(crate) fn round_f64(x: f64, mode: Rounding) -> Result<i128, RoundError> {
     if !x.is_finite() {
         return Err(RoundError::NotFinite);
     }
-    // 2^127: beyond it the value cannot fit an i128.
+    // Beyond 2^127 it can't fit in an i128.
     if !(-1.7014118346046923e38..1.7014118346046923e38).contains(&x) {
         return Err(RoundError::Overflow);
     }
-    // Truncate toward zero. Through i64 when possible: one instruction each
-    // way, where i128 needs library calls.
+    // Truncate toward zero. Go through i64 when it fits: that's one
+    // instruction each way, while i128 needs library calls.
     let (t, back) = if (-9.223372036854775e18..9.223372036854775e18).contains(&x) {
         let t = x as i64;
         (t as i128, t as f64)
@@ -259,8 +254,8 @@ pub(crate) fn round_f64(x: f64, mode: Rounding) -> Result<i128, RoundError> {
         let t = x as i128;
         (t, t as f64)
     };
-    // Exact: for |x| < 2^52, `t` and `x` are close floats (Sterbenz); above
-    // it, `x` is already an integer and the difference is zero.
+    // Exact by Sterbenz's lemma below 2^52. Above that, `x` is already an
+    // integer and the difference is zero.
     let frac = x - back;
     if frac == 0.0 {
         return Ok(t);
@@ -286,22 +281,18 @@ fn widen<I: Integer>(v: I) -> Result<i128, RoundError> {
     v.to_i128().ok_or(RoundError::Overflow)
 }
 
-// ── Units for fixed quantities ────────────────────────────────────────────────
-
 /// A unit that [`Fixed`] integer quantities can be counted in.
 ///
-/// Implemented by the zero-sized marker types in [`crate::unit`], one per
-/// linear unit (affine units such as °C have no marker: adding two counts of
-/// °C is not adding two temperatures).
+/// Implemented by the zero-sized markers in [`crate::unit`].
 pub trait FixedUnit: Copy + 'static {
-    /// The quantity with float storage `F`, e.g. `Length<F>`.
+    /// The quantity with float storage `F`, such as `Length<F>`.
     type Quantity<F: Float>: Quantity<Value = F, Unit = Self::Unit>
         + PartialEq
         + PartialOrd
         + fmt::Debug;
 
-    /// The quantity's unit enum, e.g. [`LengthUnit`](crate::LengthUnit).
-    /// Units of the same quantity share it.
+    /// The quantity's unit enum, such as [`LengthUnit`](crate::LengthUnit),
+    /// shared by all its units.
     type Unit: crate::Unit;
 
     /// The marker of the quantity's base unit.
@@ -310,34 +301,34 @@ pub trait FixedUnit: Copy + 'static {
     /// This unit as an enum value.
     const UNIT: Self::Unit;
 
-    /// One of this unit is `NUM / DEN · π^PI_POW` base units, exactly
-    /// (a reduced fraction).
+    /// One of this unit is exactly `NUM / DEN × π^PI_POW` base units, with
+    /// the fraction reduced.
     const NUM: u128;
     /// See [`NUM`](Self::NUM).
     const DEN: u128;
     /// See [`NUM`](Self::NUM).
     const PI_POW: i32;
 
-    /// For affine units (°C, °F, dBµV, …): zero of this unit is
-    /// `OFFSET_NUM / OFFSET_DEN` base units, exactly. Zero for linear units.
+    /// For affine units such as °C: zero of this unit is exactly
+    /// `OFFSET_NUM / OFFSET_DEN` base units. Zero for linear units.
     const OFFSET_NUM: i128 = 0;
     /// See [`OFFSET_NUM`](Self::OFFSET_NUM).
     const OFFSET_DEN: u128 = 1;
 
-    /// A float count of this unit as a quantity, e.g. `Length::from_millimeters`.
+    /// A float count of this unit as a quantity, like `Length::from_millimeters`.
     fn to_quantity<F: Float>(count: F) -> Self::Quantity<F>;
 
-    /// A quantity as a float count of this unit, e.g. `Length::as_millimeters`.
+    /// A quantity as a float count of this unit, like `Length::as_millimeters`.
     fn from_quantity<F: Float>(quantity: Self::Quantity<F>) -> F;
 }
 
 /// A [`FixedUnit`] whose counts can be added, subtracted, negated and
-/// scaled: every unit except those of point-like quantities (absolute
-/// temperatures, where 20 °C + 20 °C is not 40 °C).
+/// scaled. That's every unit except those of point quantities: 20 °C + 20 °C
+/// is not 40 °C.
 pub trait AdditiveUnit: FixedUnit {}
 
-/// A [`FixedUnit`] of a point quantity (an absolute temperature, a decibel
-/// level): counts cannot be added, but their differences are counts of
+/// A [`FixedUnit`] of a point quantity, such as an absolute temperature or a
+/// decibel level. Counts can't be added, but their difference is a count of
 /// [`Delta`](Self::Delta), which can be added back.
 ///
 /// ```rust
@@ -351,10 +342,10 @@ pub trait AdditiveUnit: FixedUnit {}
 /// assert_eq!(rise.count(), 7_750);
 /// assert_eq!(morning + rise, noon);
 ///
-/// // Exact across scales: °C → m°C and K → m°C need no rounding.
+/// // °C and K convert to m°C without rounding.
 /// assert_eq!(Fixed::<DegreeCelsius>::new(20).to_unit::<MillidegreeCelsius>()?.count(), 20_000);
 /// assert_eq!(Fixed::<Kelvin>::new(300).to_unit::<MillidegreeCelsius>()?.count(), 26_850);
-/// // m°C → K is not: 273.15 K is not a whole number of kelvins.
+/// // The other way they don't: 0 °C is 273.15 K.
 /// assert_eq!(
 ///     Fixed::<MillidegreeCelsius>::new(0).to_unit_rounded::<Kelvin>(Rounding::NearestTiesEven)?.count(),
 ///     273
@@ -364,58 +355,55 @@ pub trait AdditiveUnit: FixedUnit {}
 /// # Ok::<(), RoundError>(())
 /// ```
 pub trait PointUnit: FixedUnit {
-    /// The unit of the difference between two points, with the same scale
-    /// (°C → Δ°C, m°C → Δm°C, dBµV → dB).
+    /// The unit of a difference between two points, on the same scale: Δ°C
+    /// for °C, Δm°C for m°C, dB for dBµV.
     type Delta: AdditiveUnit;
 }
 
-/// A relation `Self × Rhs = Output` between the unit enums of three
-/// quantities (`LengthUnit × LengthUnit = AreaUnit`), with the exact factor
-/// between their base units: `output = K · lhs · rhs`, `K = num / den · π^pi`.
+/// The relation `Self × Rhs = Output` between three quantities' unit enums,
+/// such as `LengthUnit × LengthUnit = AreaUnit`, with the exact factor between
+/// their base units: `output = K × lhs × rhs`, where `K = num / den × π^pi`.
 ///
-/// Generated for every multiplication relation between quantities; used by
-/// [`Fixed::mul_to`].
+/// Generated for every product of quantities, for [`Fixed::mul_to`].
 pub trait UnitMul<Rhs> {
     /// The unit enum of the product's quantity.
     type Output;
-    /// `(num, den, pi)`: see the trait documentation.
+    /// `(num, den, pi)`, as described on the trait.
     const K: (u128, u128, i32);
 }
 
-/// A relation `Self ÷ Rhs = Output` between the unit enums of three
-/// quantities (`LengthUnit ÷ DurationUnit = SpeedUnit`), with the exact
-/// factor between their base units: `output = K · lhs / rhs`.
+/// The relation `Self ÷ Rhs = Output` between three quantities' unit enums,
+/// such as `LengthUnit ÷ DurationUnit = SpeedUnit`, with the exact factor
+/// between their base units: `output = K × lhs / rhs`.
 ///
-/// Generated for every division relation between quantities; used by
-/// [`Fixed::div_to`].
+/// Generated for every quotient of quantities, for [`Fixed::div_to`].
 pub trait UnitDiv<Rhs> {
     /// The unit enum of the quotient's quantity.
     type Output;
-    /// `(num, den, pi)`: see [`UnitMul`].
+    /// `(num, den, pi)`, as for [`UnitMul`].
     const K: (u128, u128, i32);
 }
 
-/// `a/b · c/d`, reduced, at compile time.
+/// `a/b × c/d`, reduced.
 const fn frac_mul((a, b): (u128, u128), (c, d): (u128, u128)) -> (u128, u128) {
     let (g1, g2) = (gcd(a, d), gcd(c, b));
     match ((a / g1).checked_mul(c / g2), (b / g2).checked_mul(d / g1)) {
         (Some(num), Some(den)) => (num, den),
-        _ => panic!("the ratio between these units is too large for integer arithmetic"),
+        _ => panic!("ratio between these units is too large for integer arithmetic"),
     }
 }
 
-/// The exact factor `R` in `count_V = R · count_U ⊙ count_W` for
-/// `U ⊙ W → V`, where `⊙` is `×` (`DIV = false`) or `÷` (`DIV = true`).
+/// The exact factor `R` in `count_V = R × count_U × count_W`, or
+/// `÷ count_W` when `DIV`.
 struct RelationRatio<U, W, V, const DIV: bool>(PhantomData<(U, W, V)>);
 
 impl<U: FixedUnit, W: FixedUnit, V: FixedUnit, const DIV: bool> RelationRatio<U, W, V, DIV> {
     const fn parts(k: (u128, u128, i32)) -> (u128, u128) {
-        // U · W^±1 · K / V, in base units.
+        // U × W^±1 × K / V, in base units.
         let w_pi = if DIV { -W::PI_POW } else { W::PI_POW };
         assert!(
             U::PI_POW + w_pi + k.2 == V::PI_POW,
-            "the ratio between these units is irrational (involves π): \
-             compute through float quantities instead"
+            "ratio between these units involves π: use float quantities instead"
         );
         let w = if DIV {
             (W::DEN, W::NUM)
@@ -435,8 +423,8 @@ where
     const PARTS: (u128, u128) = Self::parts(<U::Unit as UnitMul<W::Unit>>::K);
     const EXACT: () = assert!(
         Self::PARTS.1 == 1,
-        "this product is not a whole number of the target unit (mm · mm is \
-         not a whole number of m²): use `mul_to_rounded`, or a finer target unit"
+        "product is not always a whole number of the target unit (like \
+         mm × mm in m²): use `mul_to_rounded` or a finer unit"
     );
 }
 
@@ -447,7 +435,7 @@ where
     const PARTS: (u128, u128) = Self::parts(<U::Unit as UnitDiv<W::Unit>>::K);
 }
 
-/// `count · k` with the overflow behaviour of integer `*`.
+/// `count × k`, overflowing like integer `*`.
 #[inline(always)]
 fn scale_count<I: Integer>(count: I, k: u128) -> I {
     if k == 1 {
@@ -455,7 +443,7 @@ fn scale_count<I: Integer>(count: I, k: u128) -> I {
     }
     match i128::try_from(k).ok().and_then(I::from_i128) {
         Some(k) => count * k,
-        // The factor alone exceeds `I`: only zero is representable.
+        // The factor alone doesn't fit in `I`, so only zero survives.
         None if count == I::default() => count,
         None => panic!("attempt to multiply with overflow"),
     }
@@ -478,8 +466,7 @@ impl<From: FixedUnit, To: FixedUnit> Ratio<From, To> {
     const PARTS: (u128, u128) = {
         assert!(
             From::PI_POW == To::PI_POW,
-            "the ratio between these units is irrational (involves π): \
-             convert through a float quantity instead"
+            "ratio between these units involves π: convert through a float quantity instead"
         );
         let g1 = gcd(From::NUM, To::NUM);
         let g2 = gcd(From::DEN, To::DEN);
@@ -488,13 +475,13 @@ impl<From: FixedUnit, To: FixedUnit> Ratio<From, To> {
             (From::DEN / g2).checked_mul(To::NUM / g1),
         ) {
             (Some(num), Some(den)) => (num, den),
-            _ => panic!("the ratio between these units is too large for integer conversion"),
+            _ => panic!("ratio between these units is too large for integer conversion"),
         }
     };
     const NUM: u128 = Self::PARTS.0;
     const DEN: u128 = Self::PARTS.1;
-    /// `(b_From − b_To) / a_To`: the offset, in units of `To`, added after
-    /// scaling. Zero unless an affine unit is involved.
+    /// The offset added after scaling, in units of `To`:
+    /// `(b_From - b_To) / a_To`. Zero unless a unit is affine.
     const OFFSET: (i128, u128) = {
         if From::OFFSET_NUM == 0 && To::OFFSET_NUM == 0 {
             (0, 1)
@@ -518,9 +505,8 @@ impl<From: FixedUnit, To: FixedUnit> Ratio<From, To> {
     };
     const EXACT: () = assert!(
         Self::DEN == 1 && Self::OFFSET.1 == 1,
-        "this unit conversion is not exact (the target unit does not divide the \
-         source unit): for `+`/`-` put the finer unit on the left (`mm + m`), \
-         for conversions use `to_unit_rounded` with a `Rounding` mode"
+        "unit conversion is not exact: for `+` and `-` put the finer unit on \
+         the left (`mm + m`), otherwise use `to_unit_rounded`"
     );
 }
 
@@ -546,7 +532,7 @@ const fn sub_i(a: i128, b: i128) -> i128 {
     }
 }
 
-/// `count · num / den + offset`, rounded once.
+/// `count × num / den + offset`, rounded once.
 #[inline]
 fn rescale(
     count: i128,
@@ -580,22 +566,20 @@ fn rescale(
     }
 }
 
-// ── Fixed ─────────────────────────────────────────────────────────────────────
-
-/// An integer number of a fixed unit `U`, e.g. `Fixed<Millimeter>` is a
-/// whole number of millimetres stored as an `i64`.
+/// An integer number of a fixed unit `U`: `Fixed<Millimeter>` is a whole
+/// number of millimetres, stored as an `i64`.
 ///
-/// * **The unit is part of the type.** Mixing units is allowed exactly where
-///   it is lossless: `millimetres + metres` gives millimetres, while
-///   `metres + millimetres` does not compile (the result would need
-///   rounding: swap the operands, or use
-///   [`to_unit_rounded`](Self::to_unit_rounded) with a [`Rounding`] mode).
-///   Comparisons (`==`, `<`, …) work between any two units, exactly.
-/// * **Exact and free**: arithmetic in the same unit is plain integer
-///   arithmetic (`#[repr(transparent)]`, same machine code as the bare
-///   integer), and values are `Eq + Ord + Hash` — ideal as map keys.
-/// * **Overflow** behaves like Rust integers (panics in debug builds, wraps
-///   in release); `checked_*` / `saturating_*` variants are provided.
+/// The unit is part of the type. Units can be mixed where that's lossless:
+/// millimetres + metres gives millimetres, while metres + millimetres doesn't
+/// compile because the result would need rounding. Swap the operands, or use
+/// [`to_unit_rounded`](Self::to_unit_rounded). Comparisons work exactly
+/// between any two units of a quantity.
+///
+/// Arithmetic in one unit is plain integer arithmetic, with the same machine
+/// code as the bare integer, and values are `Eq + Ord + Hash`, so they make
+/// good map keys. Overflow behaves like Rust's integers: a panic in debug
+/// builds, wrapping in release. There are `checked_*` and `saturating_*`
+/// variants.
 ///
 /// ```rust
 /// use qty::*;
@@ -610,7 +594,7 @@ fn rescale(
 /// assert_eq!(a + b, Millimeters::new(1_550));
 /// assert_eq!(format!("{}", a + b), "1550 mm");
 ///
-/// // Mixed units: exact, in the left operand's unit.
+/// // Mixed units give the left operand's unit.
 /// assert_eq!(a + Meters::new(2), Millimeters::new(3_250));
 /// assert!(Meters::new(1) < a);
 /// assert_eq!(Meters::new(2), Millimeters::new(2_000));
@@ -620,7 +604,7 @@ fn rescale(
 /// let c = Fixed::<Millimeter>::round_from(Length::from_meters(0.0125), Rounding::NearestTiesEven);
 /// assert_eq!(c, Ok(Fixed::new(12))); // 12.5 mm, tie to even
 ///
-/// // Between units: exact one way, explicitly rounded the other.
+/// // Converting down is exact; converting up needs a rounding mode.
 /// let m = Fixed::<Meter>::new(2);
 /// assert_eq!(m.to_unit::<Millimeter>(), Ok(Fixed::new(2_000)));
 /// assert_eq!(a.to_unit_rounded::<Meter>(Rounding::Floor), Ok(Fixed::new(1)));
@@ -634,7 +618,7 @@ pub struct Fixed<U, I = i64> {
 }
 
 impl<U, I> Fixed<U, I> {
-    /// A count of `U`. Free and `const`.
+    /// A count of `U`.
     #[inline(always)]
     pub const fn new(count: I) -> Self {
         Self {
@@ -673,7 +657,7 @@ impl<U, I> Fixed<U, I> {
 }
 
 impl<U, I: Copy> Fixed<U, I> {
-    /// The number of `U`. Free and `const`.
+    /// The number of `U`.
     #[inline(always)]
     pub const fn count(self) -> I {
         self.count
@@ -681,13 +665,13 @@ impl<U, I: Copy> Fixed<U, I> {
 }
 
 impl<U: FixedUnit, I: Integer> Fixed<U, I> {
-    /// The quantity as `f64` storage, e.g. 1 250 mm → 1.25 m.
+    /// The quantity with `f64` storage: 1250 mm becomes 1.25 m.
     #[inline]
     pub fn to_f64(self) -> U::Quantity<f64> {
         U::to_quantity(self.count.to_f64())
     }
 
-    /// The quantity as `f32` storage.
+    /// The quantity with `f32` storage.
     #[inline]
     pub fn to_f32(self) -> U::Quantity<f32> {
         U::to_quantity(self.count.to_f32())
@@ -702,10 +686,9 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
         Self::round_from_count(U::from_quantity(quantity), mode)
     }
 
-    /// Rounds a float count of `U` (e.g. a sensor reading in millimetres)
-    /// to a whole number of `U`. Unlike going through
-    /// [`round_from`](Self::round_from), this involves no unit conversion,
-    /// so ties such as 2.5 are seen exactly.
+    /// Rounds a float count of `U`, such as a sensor reading in millimetres,
+    /// to a whole number. Unlike [`round_from`](Self::round_from) there is
+    /// no unit conversion, so ties like 2.5 stay exact.
     #[inline]
     pub fn round_from_count<F: Float>(count: F, mode: Rounding) -> Result<Self, RoundError> {
         round_f64(count.to_f64(), mode)
@@ -713,11 +696,12 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
             .map(Self::new)
     }
 
-    /// Converts to a smaller (or equal) unit, exactly: metres → millimetres.
+    /// Converts exactly to a unit that divides this one, such as metres to
+    /// millimetres.
     ///
-    /// Fails only on overflow. Converting to a unit that does not divide
-    /// this one evenly (millimetres → metres) is a **compile-time error**;
-    /// use [`to_unit_rounded`](Self::to_unit_rounded) for those.
+    /// Fails only on overflow. Other conversions, like millimetres to
+    /// metres, don't compile; use [`to_unit_rounded`](Self::to_unit_rounded)
+    /// for those.
     #[inline]
     pub fn to_unit<V: FixedUnit<Unit = U::Unit>>(self) -> Result<Fixed<V, I>, RoundError> {
         #[allow(clippy::let_unit_value)]
@@ -777,15 +761,13 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
         self.count.checked_mul(factor).map(Self::new)
     }
 
-    /// The product with a count of another quantity, as a count of the
-    /// related quantity in `unit` — exactly: `mm × mm → mm²`,
-    /// `N × m → N·m`, `km/h × h → km`.
+    /// The exact product with a count of another quantity, as a count of
+    /// `unit`: mm × mm in mm², N × m in N·m, km/h × h in km.
     ///
-    /// `unit` names the result's unit (the marker is a unit struct). The
-    /// conversion must be exact — for example `mm × mm` into `m²` is not —
-    /// which is checked when the code is compiled; for other units use
-    /// [`mul_to_rounded`](Self::mul_to_rounded). Overflow behaves like
-    /// integer `*`.
+    /// The result must be a whole number of `unit` for any input, which is
+    /// checked at compile time, so mm × mm in m² doesn't compile. Use
+    /// [`mul_to_rounded`](Self::mul_to_rounded) for those. Overflow behaves
+    /// like integer `*`.
     ///
     /// ```rust
     /// use qty::*;
@@ -796,7 +778,7 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     /// let height = Fixed::<Millimeter>::new(800);
     /// assert_eq!(width.mul_to(height, SquareMillimeter).count(), 960_000);
     ///
-    /// // Mixed units, as long as the result is exact: m × mm = 1000 mm².
+    /// // Mixed units work when the result is exact: 1 m × 1 mm is 1000 mm².
     /// assert_eq!(Fixed::<Meter>::new(2).mul_to(height, SquareMillimeter).count(), 1_600_000);
     ///
     /// let distance = Fixed::<KilometerPerHour>::new(90).mul_to(Fixed::<Hour>::new(3), Kilometer);
@@ -818,8 +800,8 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
         ))
     }
 
-    /// The product with a count of another quantity, as a count of the
-    /// related quantity in `unit`, rounding with `mode`.
+    /// Like [`mul_to`](Self::mul_to), for any target unit, rounding with
+    /// `mode`.
     ///
     /// ```rust
     /// use qty::*;
@@ -851,9 +833,8 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
             .map(Fixed::new)
     }
 
-    /// The quotient by a count of another quantity, as a count of the
-    /// related quantity in `unit`, rounding with `mode`:
-    /// `mm ÷ ms → mm/s`, `J ÷ s → W`.
+    /// The quotient by a count of another quantity, as a count of `unit`,
+    /// rounding with `mode`: mm ÷ ms in mm/s, J ÷ s in W.
     ///
     /// ```rust
     /// use qty::*;
@@ -904,7 +885,7 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
         Self::new(self.count.saturating_sub(other.count))
     }
 
-    /// The absolute value, or `None` if it does not fit (`i32::MIN`).
+    /// The absolute value, or `None` if it doesn't fit (`i32::MIN`).
     #[inline]
     pub fn checked_abs(self) -> Option<Self> {
         let (_, magnitude) = self.count.sign_magnitude();
@@ -918,15 +899,15 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     ///
     /// # Panics
     ///
-    /// If it does not fit: `Fixed::<_, i32>::new(i32::MIN).abs()`.
+    /// If it doesn't fit: `Fixed::<_, i32>::new(i32::MIN).abs()`.
     #[inline]
     #[track_caller]
     pub fn abs(self) -> Self {
         self.checked_abs().expect("Fixed::abs overflowed")
     }
 
-    /// `-self`, or `None` if it does not fit (`i32::MIN`, or any unsigned
-    /// count but zero).
+    /// `-self`, or `None` if it doesn't fit: `i32::MIN`, or any unsigned
+    /// count but zero.
     #[inline]
     pub fn checked_neg(self) -> Option<Self> {
         self.count
@@ -950,9 +931,8 @@ impl<U: AdditiveUnit, I: Integer> Fixed<U, I> {
     }
 }
 
-/// Points: subtracting a difference. (`point - delta` cannot be an operator:
-/// `point - point` already is, and Rust cannot tell the two apart by the
-/// kind of the right-hand side. `point + (-delta)` also works.)
+/// Subtracting a difference from a point. This can't be the `-` operator,
+/// which already means `point - point` here. `point + (-delta)` works too.
 impl<P: PointUnit, I: Integer> Fixed<P, I> {
     /// `self - delta`, where `delta` must convert exactly into
     /// [`P::Delta`](PointUnit::Delta) (checked at compile time).
@@ -965,7 +945,8 @@ impl<P: PointUnit, I: Integer> Fixed<P, I> {
     }
 }
 
-// Manual impls: derives would require `U: Trait` for the zero-sized marker.
+// Written by hand: derives would require the marker `U` to implement the
+// trait too.
 
 impl<U, I: Clone> Clone for Fixed<U, I> {
     #[inline(always)]
@@ -980,11 +961,11 @@ impl<U, I: Default> Default for Fixed<U, I> {
         Self::new(I::default())
     }
 }
-/// Exact comparison across units of the same quantity: `2 m > 1500 mm`.
+/// Compares across units of the same quantity: 2 m > 1500 mm.
 ///
-/// Decided with exact integer arithmetic (no rounding, no floats, no
-/// overflow), so equality and order are mathematically correct for any two
-/// values. Comparing within one unit compiles to a plain integer comparison.
+/// The comparison uses exact integer arithmetic, so it doesn't round or
+/// overflow. Only affine units such as °C fall back to floats, near the
+/// limits of `i128`. Within one unit it's a plain integer comparison.
 impl<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer> PartialEq<Fixed<V, I>>
     for Fixed<U, I>
 {
@@ -1034,11 +1015,10 @@ macro_rules! fixed_binop {
 }
 fixed_binop!(Rem rem RemAssign rem_assign);
 
-/// Adding or subtracting another unit of the same quantity: the result is in
+/// Adding or subtracting another unit of the same quantity. The result is in
 /// the left operand's unit, so the right operand must convert into it
-/// exactly. `millimetres + metres` is fine (1 m = 1000 mm);
-/// `metres + millimetres` is a compile-time error — swap the operands, or
-/// convert explicitly with [`Fixed::to_unit_rounded`].
+/// exactly: millimetres + metres works, metres + millimetres doesn't compile.
+/// Swap the operands, or convert first with [`Fixed::to_unit_rounded`].
 macro_rules! fixed_unit_op {
     ($Trait:ident $method:ident $TraitAssign:ident $method_assign:ident $op:tt) => {
         impl<U: AdditiveUnit, V: AdditiveUnit<Unit = U::Unit>, I: Integer> ops::$Trait<Fixed<V, I>>
@@ -1064,8 +1044,8 @@ fixed_unit_op!(Add add AddAssign add_assign +);
 fixed_unit_op!(Sub sub SubAssign sub_assign -);
 
 impl<V: FixedUnit, I: Integer> Fixed<V, I> {
-    /// The count expressed in `U`, which this unit must convert into
-    /// exactly (checked at compile time). Overflow behaves like integer `*`.
+    /// The count in `U`, which this unit must convert into exactly (checked
+    /// at compile time). Overflows like integer `*`.
     #[doc(hidden)]
     #[inline(always)]
     pub fn count_in<U: FixedUnit<Unit = V::Unit>>(self) -> I {
@@ -1079,7 +1059,7 @@ impl<V: FixedUnit, I: Integer> Fixed<V, I> {
                 .and_then(I::from_i128)
             {
                 Some(k) => self.count * k,
-                // The factor alone exceeds `I`: only zero converts.
+                // The factor alone doesn't fit in `I`, so only zero converts.
                 None if self.count == I::default() => self.count,
                 None => panic!("attempt to convert units with overflow"),
             }
@@ -1095,7 +1075,8 @@ impl<V: FixedUnit, I: Integer> Fixed<V, I> {
     }
 }
 
-/// Exact `a [U]` vs `b [V]`: compares `a · num` with `b · den`.
+/// Compares `a` in `U` with `b` in `V` exactly, as `a × num` against
+/// `b × den`.
 #[inline(always)]
 fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I) -> Ordering {
     let (num, den) = (Ratio::<U, V>::NUM, Ratio::<U, V>::DEN);
@@ -1106,7 +1087,7 @@ fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I)
     if num == 1 && den == 1 {
         return a.cmp(&b);
     }
-    // Fast path: both products fit in i128 (all realistic values).
+    // Fast path: both products fit in i128, as all realistic values do.
     if let (Some(a), Some(b), Ok(num), Ok(den)) = (
         a.to_i128(),
         b.to_i128(),
@@ -1117,11 +1098,11 @@ fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I)
             return pa.cmp(&pb);
         }
     }
-    // Exact for any magnitudes: sign and 256-bit magnitude.
+    // Otherwise compare signs and 256-bit magnitudes.
     let (neg_a, mag_a) = a.sign_magnitude();
     let (neg_b, mag_b) = b.sign_magnitude();
     let (pa, pb) = (mul_wide(mag_a, num), mul_wide(mag_b, den));
-    // Zero has no sign: compare magnitudes when the signs agree or both are zero.
+    // A zero product counts as positive, whatever the sign of the count.
     let neg_a = neg_a && pa != (0, 0);
     let neg_b = neg_b && pb != (0, 0);
     match (neg_a, neg_b) {
@@ -1132,10 +1113,9 @@ fn cmp_units<U: FixedUnit, V: FixedUnit<Unit = U::Unit>, I: Integer>(a: I, b: I)
     }
 }
 
-/// `a·num/den + off_num/off_den` vs `b`, i.e.
-/// `a·num·off_den + off_num·den` vs `b·den·off_den`. Exact in `i128`, which
-/// holds every realistic temperature or level; beyond that (counts near the
-/// limits of `i128`), compared through `f64`.
+/// Compares `a × num/den + off_num/off_den` with `b` by cross-multiplying.
+/// Exact in `i128`, which holds every realistic temperature or level; past
+/// that it falls back to `f64`.
 #[cold]
 #[inline(never)]
 fn cmp_affine<I: Integer>(
@@ -1207,7 +1187,7 @@ impl<U: AdditiveUnit, I: ops::Neg<Output = I>> ops::Neg for Fixed<U, I> {
     }
 }
 
-/// Dividing two values in the same unit gives a plain (truncated) integer.
+/// Dividing two values in the same unit gives a plain integer, truncated.
 impl<U: AdditiveUnit, I: ops::Div<Output = I>> ops::Div for Fixed<U, I> {
     type Output = I;
     #[inline(always)]
@@ -1244,15 +1224,13 @@ impl<'a, U: AdditiveUnit, I: core::iter::Sum<&'a I> + 'a> core::iter::Sum<&'a Fi
     }
 }
 
-/// `1550 mm`; formatting flags apply to the number.
+/// Formats as `1550 mm`, with formatting flags applied to the number.
 impl<U: FixedUnit, I: fmt::Display> fmt::Display for Fixed<U, I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         fmt::Display::fmt(&self.count, f)?;
         write!(f, " {}", U::UNIT.abbreviation())
     }
 }
-
-// ── Exact decimal display in another unit ─────────────────────────────────────
 
 /// `Some(k)` when `x == 10^k`.
 const fn pow10_exp(x: u128) -> Option<u32> {
@@ -1271,20 +1249,20 @@ const fn pow10_exp(x: u128) -> Option<u32> {
     }
 }
 
-/// `count_V = count_U · 10^UP / 10^DOWN` (one of the two is zero).
+/// `count_V = count_U × 10^UP / 10^DOWN`, where one exponent is zero.
 struct DecimalScale<U, V>(PhantomData<(U, V)>);
 
 impl<U: FixedUnit, V: FixedUnit> DecimalScale<U, V> {
     const EXP: (u32, u32) = {
         assert!(
             Ratio::<U, V>::OFFSET.0 == 0,
-            "these units have different zero points (°C and K): \
+            "units have different zero points (like °C and K): \
              convert with `to_unit_rounded` first"
         );
         match (pow10_exp(Ratio::<U, V>::NUM), pow10_exp(Ratio::<U, V>::DEN)) {
             (Some(up), Some(down)) => (up, down),
             _ => panic!(
-                "the ratio between these units is not a power of ten (mm and in): \
+                "ratio between these units is not a power of ten (like mm and in): \
                  use `to_unit_rounded`, or `to_f64().in_unit(...)` for an approximation"
             ),
         }
@@ -1292,11 +1270,14 @@ impl<U: FixedUnit, V: FixedUnit> DecimalScale<U, V> {
 }
 
 impl<U: FixedUnit, I: Integer> Fixed<U, I> {
-    /// The mean of `values`, rounded with `mode` (exactly: the sum is
-    /// taken in `i128`). Works for points too, such as temperatures, since
-    /// all values are in the same unit. [`RoundError::DivisionByZero`] if
-    /// there are no values; [`RoundError::Overflow`] if the sum leaves
-    /// `i128` or the mean leaves `I`.
+    /// The mean of `values`, rounded once with `mode`. The sum is taken in
+    /// `i128`, so it's exact. Works for points such as temperatures too.
+    ///
+    /// # Errors
+    ///
+    /// [`RoundError::DivisionByZero`] if there are no values, and
+    /// [`RoundError::Overflow`] if the sum doesn't fit in `i128` or the mean
+    /// doesn't fit in `I`.
     ///
     /// ```rust
     /// use qty::*;
@@ -1326,14 +1307,14 @@ impl<U: FixedUnit, I: Integer> Fixed<U, I> {
 }
 
 impl<U: FixedUnit, I: Integer> Fixed<U, I> {
-    /// Shows the count in another unit of the same quantity, as an exact
-    /// decimal: 1234 mm as `1.234 m`, 21 375 m°C as `21.375 °C`, 2 km as
-    /// `2000 m`. No float is involved.
+    /// Shows the count in another unit of the same quantity as an exact
+    /// decimal, without floats: 1234 mm as `1.234 m`, 21375 m°C as
+    /// `21.375 °C`, 2 km as `2000 m`.
     ///
     /// The ratio between the units must be a power of ten, which is checked
-    /// when the code is compiled. All decimals are shown by default (so the
-    /// resolution stays visible); a precision rounds to nearest, ties to
-    /// even, and width, alignment and `+` apply to the whole text.
+    /// at compile time. By default all decimals are shown, so the resolution
+    /// stays visible. A precision rounds to nearest, ties to even; width,
+    /// alignment and `+` apply to the whole text.
     ///
     /// ```rust
     /// use qty::*;
@@ -1377,7 +1358,7 @@ pub struct Decimal<V> {
 
 impl<V: FixedUnit> fmt::Display for Decimal<V> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // value = magnitude · 10^up / 10^down, shown with `decimals` digits
+        // value = magnitude × 10^up / 10^down, shown with `decimals` digits
         // after the point.
         let decimals = f.precision().unwrap_or(self.down as usize);
         let (digits, fraction_digits) = if decimals < self.down as usize {
@@ -1391,8 +1372,8 @@ impl<V: FixedUnit> fmt::Display for Decimal<V> {
         };
         let scale = 10u128.pow(fraction_digits);
         let (int, frac) = (digits / scale, digits % scale);
-        // Trailing zeros of an up-scaled whole number (2 km → 2000 m), and
-        // zeros beyond the count's resolution.
+        // Zeros after a scaled-up whole number (2 km is 2000 m), and zeros
+        // past the count's resolution.
         let int_zeros = if int == 0 { 0 } else { self.up as usize };
         let pad_zeros = decimals - fraction_digits as usize;
         let sign = if self.negative && digits != 0 {
@@ -1465,7 +1446,8 @@ impl<U: FixedUnit, I: fmt::Debug> fmt::Debug for Fixed<U, I> {
     }
 }
 
-/// Parses an integer followed by one of `U`'s abbreviations, e.g. `"1550 mm"`.
+/// Parses an integer followed by one of `U`'s abbreviations, such as
+/// `"1550 mm"`.
 impl<U: FixedUnit, I: core::str::FromStr> core::str::FromStr for Fixed<U, I> {
     type Err = ParseError;
     fn from_str(s: &str) -> Result<Self, ParseError> {
@@ -1510,18 +1492,15 @@ impl<'de, U, I: serde::Deserialize<'de>> serde::Deserialize<'de> for Fixed<U, I>
     }
 }
 
-// ── Total order for float quantities ─────────────────────────────────────────
-
-/// A float quantity with a total order, equality and hash, so it can be a
-/// key in `HashMap`, `HashSet`, `BTreeMap` or `BTreeSet`, or sorted with
-/// `sort()`.
+/// A float quantity with a total order, equality and hash, for use as a key
+/// in `HashMap`, `HashSet`, `BTreeMap` or `BTreeSet`, or with `sort()`.
 ///
-/// Values are compared by [`f64::total_cmp`] after normalising `-0.0` to
-/// `0.0` and every NaN to a single NaN, so equality agrees with `==` on
-/// numbers (`0.0 == -0.0`) and NaN is a valid key, greater than everything.
+/// Values are compared with [`f64::total_cmp`] after turning `-0.0` into
+/// `0.0` and every NaN into one NaN. So `0.0` equals `-0.0`, as with `==`,
+/// and NaN is a valid key that sorts after everything else.
 ///
-/// For keys that should merge nearly equal measurements, quantise instead:
-/// [`Fixed::round_from`] to a whole number of a suitable unit.
+/// To merge nearly equal measurements into one key, round them instead, with
+/// [`Fixed::round_from`] to a suitable unit.
 ///
 /// ```rust
 /// use std::collections::BTreeMap;

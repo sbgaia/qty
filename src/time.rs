@@ -1,16 +1,16 @@
 //! Conversions between [`Duration`] and the standard library's
-//! [`core::time::Duration`] (also `std::time::Duration`).
+//! [`core::time::Duration`], which `std` re-exports.
 //!
 //! ```rust
 //! use qty::*;
 //! use qty::unit::duration::Nanosecond;
 //!
-//! // From std: e.g. `Instant::elapsed()`.
+//! // From std, say the result of `Instant::elapsed()`.
 //! let elapsed = std::time::Duration::from_millis(1500);
 //! let t: Duration = elapsed.into();
 //! assert_eq!(t, Duration::from_seconds(1.5));
 //!
-//! // Back to std: fails for negative, NaN or too large values.
+//! // Back to std. This fails for negative, NaN or too large values.
 //! let timeout: std::time::Duration = Duration::from_minutes(2.0).try_into().unwrap();
 //! assert_eq!(timeout.as_secs(), 120);
 //! assert!(std::time::Duration::try_from(Duration::from_seconds(-1.0)).is_err());
@@ -27,8 +27,8 @@ use core::time::Duration as StdDuration;
 use crate::unit::duration::Nanosecond;
 use crate::{Duration, Fixed, Integer, RoundError};
 
-/// Rounds to the nearest `f64` second (exact below about 104 days at
-/// nanosecond resolution).
+/// Rounds to the nearest `f64` second. Exact to the nanosecond up to about
+/// 104 days.
 impl From<StdDuration> for Duration<f64> {
     #[inline]
     fn from(d: StdDuration) -> Self {
@@ -44,8 +44,8 @@ impl From<StdDuration> for Duration<f32> {
     }
 }
 
-/// Fails for negative, NaN or too large values; rounds to the nearest
-/// nanosecond otherwise.
+/// Rounds to the nearest nanosecond. Fails for negative, NaN or too large
+/// values.
 impl TryFrom<Duration<f64>> for StdDuration {
     type Error = core::time::TryFromFloatSecsError;
     #[inline]
@@ -54,8 +54,8 @@ impl TryFrom<Duration<f64>> for StdDuration {
     }
 }
 
-/// Fails for negative, NaN or too large values; rounds to the nearest
-/// nanosecond otherwise.
+/// Rounds to the nearest nanosecond. Fails for negative, NaN or too large
+/// values.
 impl TryFrom<Duration<f32>> for StdDuration {
     type Error = core::time::TryFromFloatSecsError;
     #[inline]
@@ -64,7 +64,7 @@ impl TryFrom<Duration<f32>> for StdDuration {
     }
 }
 
-/// Exact; [`RoundError::Overflow`] if the count does not fit in `I`.
+/// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
 impl<I: Integer> TryFrom<StdDuration> for Fixed<Nanosecond, I> {
     type Error = RoundError;
     #[inline]
@@ -77,7 +77,7 @@ impl<I: Integer> TryFrom<StdDuration> for Fixed<Nanosecond, I> {
     }
 }
 
-/// Exact; [`RoundError::Overflow`] for negative counts and for counts beyond
+/// Exact. [`RoundError::Overflow`] for negative counts and for counts past
 /// [`core::time::Duration::MAX`].
 impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for StdDuration {
     type Error = RoundError;

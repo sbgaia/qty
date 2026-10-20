@@ -1,4 +1,4 @@
-//! Formatting helpers: significant digits, and lists of customary units for
+//! Formatting with significant digits, and lists of customary units for
 //! `auto_unit_in`.
 
 use core::fmt::{self, Write};
@@ -6,19 +6,19 @@ use core::fmt::{self, Write};
 use crate::{InUnit, LengthUnit, MassUnit, Unit, VolumeUnit};
 
 impl LengthUnit {
-    /// Inch, foot, yard, mile: for [`auto_unit_in`](crate::Length::auto_unit_in).
+    /// Inch, foot, yard and mile, for [`auto_unit_in`](crate::Length::auto_unit_in).
     pub const IMPERIAL: &'static [Self] = &[Self::Inch, Self::Foot, Self::Yard, Self::Mile];
 }
 
 impl MassUnit {
-    /// Ounce, pound, short ton (US customary).
+    /// Ounce, pound and short ton (US customary).
     pub const US: &'static [Self] = &[Self::Ounce, Self::Pound, Self::ShortTon];
-    /// Ounce, pound, stone, long ton (British imperial).
+    /// Ounce, pound, stone and long ton (British imperial).
     pub const IMPERIAL: &'static [Self] = &[Self::Ounce, Self::Pound, Self::Stone, Self::LongTon];
 }
 
 impl VolumeUnit {
-    /// Teaspoon, tablespoon, fluid ounce, cup, pint, quart, gallon (US).
+    /// US teaspoon, tablespoon, fluid ounce, cup, pint, quart and gallon.
     pub const US_LIQUID: &'static [Self] = &[
         Self::UsTeaspoon,
         Self::UsTablespoon,
@@ -59,10 +59,10 @@ impl SignificantFloat for f32 {
 }
 
 impl<T: SignificantFloat, U: Unit> InUnit<T, U> {
-    /// Shows the value with `digits` significant digits (1 to 17 for `f64`,
-    /// 1 to 9 for `f32`), rounded to nearest: with
-    /// [`auto_unit`](crate::Length::auto_unit), engineering notation with SI
-    /// prefixes.
+    /// Shows the value rounded to `digits` significant digits, 1 to 17 for
+    /// `f64` and 1 to 9 for `f32`. Together with
+    /// [`auto_unit`](crate::Length::auto_unit) this gives engineering
+    /// notation with SI prefixes.
     ///
     /// ```rust
     /// use qty::*;
@@ -74,8 +74,8 @@ impl<T: SignificantFloat, U: Unit> InUnit<T, U> {
     /// assert_eq!(format!("{:>9}", Length::from_meters(9.996).auto_unit().significant(3)), "   10.0 m");
     /// ```
     ///
-    /// Width, fill, alignment and `+` apply to the whole text. Values below
-    /// 10⁻⁶ or from 10²¹ use exponent notation (`1.2e-7 m`).
+    /// Width, fill, alignment and `+` apply to the whole text. Values under
+    /// 10⁻⁶ or from 10²¹ up are written with an exponent, as in `1.2e-7 m`.
     pub fn significant(self, digits: usize) -> Significant<U> {
         Significant {
             value: self.value.as_f64(),
@@ -94,7 +94,7 @@ pub struct Significant<U> {
     unit: U,
 }
 
-/// A small stack buffer for formatting without allocation.
+/// A stack buffer, so formatting doesn't allocate.
 struct Buffer {
     bytes: [u8; 96],
     len: usize,
@@ -108,7 +108,7 @@ impl Buffer {
         }
     }
     fn as_str(&self) -> &str {
-        // Only `str`s are written.
+        // Only whole `str`s are ever written, so this is valid UTF-8.
         core::str::from_utf8(&self.bytes[..self.len]).unwrap_or("")
     }
 }
@@ -137,7 +137,8 @@ impl<U: Unit> fmt::Display for Significant<U> {
             } else if f.sign_plus() {
                 text.write_str("+")?;
             }
-            // `d.ddd…e±x`, correctly rounded by the standard library.
+            // Let the standard library do the rounding: it is correct, and
+            // `{:e}` gives the digits and the exponent.
             let mut scientific = Buffer::new();
             write!(scientific, "{:.*e}", self.digits - 1, v.abs())?;
             let (mantissa, exponent) = scientific.as_str().split_once('e').ok_or(fmt::Error)?;

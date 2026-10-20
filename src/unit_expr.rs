@@ -5,11 +5,11 @@ use core::str::FromStr;
 
 use crate::{Dimensions, ParseError, Quantity};
 
-/// A unit written as an expression of SI and common units: `"kg*m/s^2"`,
-/// `"N·m"`, `"W/(m²·K)"`, `"kWh"`, `"rev/min"`.
+/// A unit written as an expression of SI and common units, like
+/// `"kg*m/s^2"`, `"N·m"`, `"W/(m²·K)"`, `"kWh"` or `"rev/min"`.
 ///
-/// Quantities fall back to it when parsing text whose unit is not one of
-/// their listed abbreviations or names, so any equivalent spelling works:
+/// When text has a unit that a quantity doesn't list, parsing falls back to
+/// reading it as an expression, so any equivalent spelling works:
 ///
 /// ```rust
 /// use qty::*;
@@ -20,35 +20,42 @@ use crate::{Dimensions, ParseError, Quantity};
 /// assert_eq!(p, Pressure::from_pascals(2000.0));
 /// let f: Frequency = "120 min⁻¹".parse()?;
 /// assert_eq!(f, Frequency::from_hertz(2.0));
-/// // Dimensions must match: a pressure is not a force.
+/// // A pressure is not a force.
 /// assert_eq!("3 kg*m/s^2".parse::<Pressure>(), Err(ParseError::UnknownUnit));
 /// # Ok::<(), ParseError>(())
 /// ```
 ///
-/// **Syntax.** Factors are multiplied with `*`, `·`, `⋅`, `×` or a space and
-/// divided with `/` (`a/b/c` is `a/(b·c)`); parentheses group; exponents are
-/// `^2`, `**-1` or superscripts (`m²`, `s⁻¹`); `1/s` is allowed.
+/// # Syntax
 ///
-/// **Units.** The SI base and derived units with any SI prefix (`m`, `g`,
-/// `s`, `A`, `K`, `mol`, `cd`, `N`, `J`, `W`, `Pa`, `Hz`, `C`, `V`, `Ω`/`ohm`,
+/// Multiply with `*`, `·`, `⋅`, `×` or a space, and divide with `/`. `a/b/c`
+/// means `a/(b·c)`, and parentheses group. Exponents are written `^2`, `**-1`
+/// or as superscripts (`m²`, `s⁻¹`), and `1/s` works.
+///
+/// # Units
+///
+/// These take any SI prefix: the SI base and derived units (`m`, `g`, `s`,
+/// `A`, `K`, `mol`, `cd`, `N`, `J`, `W`, `Pa`, `Hz`, `C`, `V`, `Ω` or `ohm`,
 /// `S`, `F`, `H`, `Wb`, `T`, `lm`, `lx`, `Bq`, `Gy`, `Sv`, `kat`, `rad`), and
-/// `L`/`l`, `t`, `eV`, `Wh`, `Ah`, `bar` and `cal` (also prefixed); `min`,
-/// `h`, `d`, `ha`, `°`/`deg`, `rev`, `sr`, `Å`, `in`, `ft`, `yd`, `mi`,
-/// `nmi`, `lb`, `oz`, `lbf`, `psi`, `atm`, and `°C`, `°F`, `°R` as temperature
-/// *differences*. An exact name wins over a prefixed one: `min` is a minute,
-/// `cd` a candela.
+/// `L` or `l`, `t`, `eV`, `Wh`, `Ah`, `bar` and `cal`.
 ///
-/// **Angles** count as a dimension of their own here (radian 1, steradian 2),
-/// so that `Hz` and `rad/s`, or `N·m` and `N·m/rad`, are not confused.
-/// Point quantities (absolute temperatures, dB levels) do not use
-/// expressions, since their units have offsets.
+/// These don't: `min`, `h`, `d`, `ha`, `°` or `deg`, `rev`, `sr`, `Å`, `in`,
+/// `ft`, `yd`, `mi`, `nmi`, `lb`, `oz`, `lbf`, `psi`, `atm`, and `°C`, `°F`
+/// and `°R` as temperature differences.
+///
+/// A whole name beats a prefixed one, so `min` is a minute and `cd` a
+/// candela.
+///
+/// Angles count as a dimension of their own (1 for the radian, 2 for the
+/// steradian), so `Hz` isn't mistaken for `rad/s`, or `N·m` for `N·m/rad`.
+/// Absolute temperatures and dB levels don't parse from expressions,
+/// because their units have offsets.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct UnitExpr {
     /// The physical dimensions.
     pub dimensions: Dimensions,
     /// The exponent of the radian (2 for the steradian).
     pub angle: i8,
-    /// One of this unit in coherent SI units (with radians for angles).
+    /// The size of the unit in coherent SI units, with radians for angles.
     pub factor: f64,
 }
 
@@ -59,10 +66,10 @@ impl UnitExpr {
         factor: 1.0,
     };
 
-    /// Parses an expression; [`ParseError::UnknownUnit`] if it is malformed
-    /// or names an unknown unit.
+    /// Parses an expression. Fails with [`ParseError::UnknownUnit`] if it's
+    /// malformed or names a unit it doesn't know.
     ///
-    /// `const`, so expressions can be checked at compile time:
+    /// It's a `const fn`, so expressions can be checked at compile time:
     ///
     /// ```rust
     /// use qty::*;
@@ -109,8 +116,8 @@ impl UnitExpr {
         }
     }
 
-    /// The factor from this unit to `Q`'s base unit, if `Q` can be written
-    /// with expressions and the dimensions (and angles) agree.
+    /// The factor from this unit to `Q`'s base unit, if the dimensions and
+    /// angles agree and `Q`'s base unit is itself an expression.
     #[doc(hidden)]
     pub fn factor_to_base<Q: Quantity>(self) -> Option<f64> {
         let base = Self::parse(Q::INFO.base_unit.abbreviation).ok()?;
@@ -127,8 +134,6 @@ impl FromStr for UnitExpr {
         Self::parse(s)
     }
 }
-
-// ── Units ─────────────────────────────────────────────────────────────────────
 
 struct Atom {
     symbol: &'static str,
@@ -160,7 +165,7 @@ const PRESSURE: [i8; 7] = [-1, 1, -2, 0, 0, 0, 0];
 const TEMPERATURE: [i8; 7] = [0, 0, 0, 0, 1, 0, 0];
 
 const ATOMS: &[Atom] = &[
-    // SI base units (the kilogram through the gram, with prefixes).
+    // SI base units. The kilogram is the gram with a prefix.
     atom("m", L, 0, 1.0, true),
     atom("g", M, 0, 1e-3, true),
     atom("s", T, 0, 1.0, true),
@@ -254,11 +259,9 @@ const PREFIXES: &[(&str, f64)] = &[
     ("q", 1e-30),
 ];
 
-// ── Parser ────────────────────────────────────────────────────────────────────
-//
-// `const`, so that unit expressions can be checked at compile time. Without
-// `&mut` in `const fn` (before Rust 1.83), each step takes the input and a
-// byte position and returns the new position.
+// The parser is `const` so that expressions can be checked at compile time.
+// `const fn` can't take `&mut` before Rust 1.83, so each step takes the
+// input and a byte position and returns the new position.
 
 type Step<T> = Result<(T, usize), ParseError>;
 
@@ -319,7 +322,7 @@ const fn peek(b: &[u8], pos: usize) -> Option<(char, usize)> {
     }
 }
 
-/// `char::is_whitespace`: the Unicode `White_Space` property.
+/// Same as `char::is_whitespace`, which isn't `const`.
 const fn is_whitespace(c: char) -> bool {
     matches!(
         c,
@@ -337,8 +340,8 @@ const fn is_whitespace(c: char) -> bool {
     )
 }
 
-/// Characters of unit symbols: every character used by `ATOMS` and
-/// `PREFIXES`. (A token with any other letter would match no unit anyway.)
+/// Characters that can appear in unit symbols: those used by `ATOMS` and
+/// `PREFIXES`. A token with any other letter couldn't match a unit anyway.
 const fn is_symbol_char(c: char) -> bool {
     c.is_ascii_alphabetic() || matches!(c, '°' | 'Å' | 'µ' | 'μ' | 'Ω')
 }
@@ -515,7 +518,7 @@ const fn exponent(b: &[u8], pos: usize) -> Step<Option<i8>> {
         } else {
             eat(b, p, "+").1
         };
-        // Up to i8::MAX, like `str::parse::<i8>` on the digits.
+        // Stop at i8::MAX, as `str::parse::<i8>` would.
         let start = p;
         let mut n: i32 = 0;
         while p < b.len() && b[p].is_ascii_digit() {

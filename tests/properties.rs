@@ -93,7 +93,7 @@ fn reference(n: i128, d: i128, mode: Rounding) -> Result<i64, RoundError> {
 }
 
 proptest! {
-    // ── Fixed: conversions between units ──
+    // Fixed: conversions between units
 
     #[test]
     fn rescaling_matches_exact_rationals(a in count(), mode in rounding()) {
@@ -110,18 +110,18 @@ proptest! {
 
     #[test]
     fn affine_rescaling_matches_exact_rationals(t in count(), mode in rounding()) {
-        // °C → °F: 9c/5 + 32.
+        // °C to °F: 9c/5 + 32.
         let got = Fixed::<DegreeCelsius>::new(t).to_unit_rounded::<DegreeFahrenheit>(mode).map(|f| f.count());
         prop_assert_eq!(got, reference(9 * i128::from(t) + 160, 5, mode));
-        // m°C → K: m/1000 + 273.15.
+        // m°C to K: m/1000 + 273.15.
         let got = Fixed::<MillidegreeCelsius>::new(t).to_unit_rounded::<Kelvin>(mode).map(|f| f.count());
         prop_assert_eq!(got, reference(i128::from(t) + 273_150, 1000, mode));
-        // K → m°C is exact: 1000k − 273150.
+        // K to m°C is exact: 1000k − 273150.
         let got = Fixed::<Kelvin>::new(t).to_unit::<MillidegreeCelsius>().map(|f| f.count());
         prop_assert_eq!(got, reference(i128::from(t) * 1000 - 273_150, 1, mode));
     }
 
-    // ── Fixed: comparisons across units are exact ──
+    // Fixed: comparisons across units are exact
 
     #[test]
     fn comparisons_across_units_are_exact(
@@ -149,7 +149,7 @@ proptest! {
         );
     }
 
-    // ── Fixed: physics ──
+    // Fixed: physics
 
     #[test]
     fn products_and_quotients_match_exact_rationals(
@@ -161,12 +161,12 @@ proptest! {
         ],
         mode in rounding(),
     ) {
-        // mm × mm → m²: ab / 10⁶.
+        // mm × mm to m²: ab / 10⁶.
         let got = Fixed::<Millimeter>::new(a)
             .mul_to_rounded(Fixed::<Millimeter>::new(b), SquareMeter, mode)
             .map(|f| f.count());
         prop_assert_eq!(got, reference(i128::from(a) * i128::from(b), 1_000_000, mode));
-        // mm ÷ ms → m/s: a / b.
+        // mm ÷ ms to m/s: a / b.
         let got = Fixed::<Millimeter>::new(a)
             .div_to(Fixed::<Millisecond>::new(b), MeterPerSecond, mode)
             .map(|f| f.count());
@@ -182,7 +182,7 @@ proptest! {
         prop_assert_eq!(p1.sub_delta(delta), p0);
     }
 
-    // ── Floats → integers ──
+    // Floats to integers
 
     #[test]
     fn rounding_floats_matches_std(x in -1e15f64..1e15, mode in rounding()) {
@@ -201,7 +201,7 @@ proptest! {
         prop_assert_eq!(got, expected.map(|v| v as i64));
     }
 
-    // ── Floats: conversions, display and parsing ──
+    // Floats: conversions, display and parsing
 
     #[test]
     fn linear_conversions_round_trip(v in -1e250f64..1e250, i in 0usize..1000) {
@@ -224,7 +224,7 @@ proptest! {
             }
             let (value, text) = q.shown_in(unit);
             if !value.is_finite() {
-                return Ok(()); // e.g. 1e300 m in femtometres
+                return Ok(()); // like 1e300 m in femtometres
             }
             // Abbreviations shared by several units parse to the first one.
             let parsed_unit: Q::Unit = abbreviation.parse().unwrap();
@@ -247,7 +247,7 @@ proptest! {
         let _ = format!("{s} m").parse::<Length<f32>>();
     }
 
-    // ── Exact decimal display ──
+    // Exact decimal display
 
     #[test]
     fn decimal_display_matches_exact_rationals(n in count(), precision in prop::option::of(0usize..10)) {
@@ -288,7 +288,7 @@ proptest! {
         prop_assert_eq!(show(km), expected);
     }
 
-    // ── Uncertainty and vectors ──
+    // Uncertainty and vectors
 
     #[test]
     fn uncertainty_stays_valid(a in -1e100f64..1e100, sa in 0f64..1e100, b in -1e100f64..1e100, sb in 0f64..1e100) {

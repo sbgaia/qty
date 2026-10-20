@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-# ── Configuration ──────────────────────────────────────────────────────────────
+# Configuration
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 QUANTITIES_DIR="${REPO_ROOT}/data/quantities"
@@ -41,7 +41,7 @@ DEFAULT_QUANTITIES=(
     Temperature
 )
 
-# ── Argument parsing ───────────────────────────────────────────────────────────
+# Argument parsing
 
 ALL=false
 CURRENT=false
@@ -59,7 +59,7 @@ for arg in "$@"; do
     esac
 done
 
-# ── Resolve the list of quantities to download ────────────────────────────────
+# Resolve the list of quantities to download
 
 if $ALL; then
     echo "Fetching full quantity list from GitHub API…"
@@ -94,7 +94,7 @@ else
     QUANTITIES=("${DEFAULT_QUANTITIES[@]}")
 fi
 
-# ── Download ──────────────────────────────────────────────────────────────────
+# Download
 
 mkdir -p "$QUANTITIES_DIR" "$RELATIONS_DIR"
 

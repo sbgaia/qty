@@ -5,10 +5,10 @@ tag is pushed.
 
 ## Once: set up publishing
 
-1. On crates.io, create an API token (Account Settings → API Tokens) with the
+1. On crates.io, create an API token (Account Settings > API Tokens) with the
    `publish-new` and `publish-update` scopes.
 2. In the GitHub repository, add it as the secret `CARGO_REGISTRY_TOKEN`
-   (Settings → Secrets and variables → Actions).
+   (Settings > Secrets and variables > Actions).
 
 After the first release you can switch to crates.io's trusted publishing
 instead of a long-lived token.
@@ -16,7 +16,7 @@ instead of a long-lived token.
 ## Each release
 
 1. Choose the version. Before 1.0, a breaking change bumps the minor version
-   (0.1 → 0.2) and anything else the patch version. The `Semver` CI job
+   (0.1 to 0.2) and anything else the patch version. The `Semver` CI job
    compares the code with the latest published version and fails on a
    breaking change whose version was not bumped.
 2. In a pull request:

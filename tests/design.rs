@@ -10,7 +10,7 @@ use std::mem::{align_of, size_of};
 
 use qty::*;
 
-// ── Layout ────────────────────────────────────────────────────────────────────
+// Layout
 
 #[test]
 fn quantities_have_the_layout_of_their_storage() {
@@ -49,7 +49,7 @@ fn const_construction() {
     assert_eq!(SLICE.len(), 2);
 }
 
-// ── Storage types ─────────────────────────────────────────────────────────────
+// Storage types
 
 #[test]
 fn f32_storage() {
@@ -87,7 +87,7 @@ fn lossless_cast() {
 
 #[test]
 fn non_copy_storage_supports_arithmetic() {
-    // A deliberately non-Copy numeric type.
+    // A numeric type that is not Copy.
     #[derive(Debug, Clone, PartialEq, Default)]
     struct Big(Box<i128>);
     impl std::ops::Mul for Big {
@@ -107,7 +107,7 @@ fn non_copy_storage_supports_arithmetic() {
     assert_eq!(f.into_base(), Big(Box::new(11)));
 }
 
-// ── Operators ─────────────────────────────────────────────────────────────────
+// Operators
 
 #[test]
 fn assignment_operators_and_sum() {
@@ -165,7 +165,7 @@ fn relations_with_non_coherent_base_units() {
     assert!(t.approx_eq_rel(Duration::from_seconds(3.0), 1e-15));
 }
 
-// ── Conversions ───────────────────────────────────────────────────────────────
+// Conversions
 
 #[test]
 fn exact_factors_are_correctly_rounded() {
@@ -211,7 +211,8 @@ fn temperatures_are_points_and_deltas_are_amounts() {
     let heat: Energy = rise * Entropy::from_joules_per_kelvin(4.0);
     assert!(heat.approx_eq_rel(Energy::from_joules(4.0), 1e-12));
 
-    // Absolute ratio (e.g. Carnot efficiency 1 − Tc/Th) stays available.
+    // The ratio of absolute temperatures still works, as in the Carnot
+    // efficiency 1 − Tc/Th.
     let (cold, hot) = (
         Temperature::from_kelvins(300.0),
         Temperature::from_kelvins(600.0),
@@ -227,7 +228,7 @@ fn temperature_is_affine() {
     assert!((boiling.as_degrees_fahrenheit() - 212.0).abs() < 1e-12);
 }
 
-// ── Formatting & parsing ──────────────────────────────────────────────────────
+// Formatting and parsing
 
 #[test]
 fn display_honours_format_flags() {
@@ -348,7 +349,7 @@ fn split_value_unit_handles_digits_in_units() {
     assert_eq!(split_value_unit("4em"), ("4", "em"));
 }
 
-// ── Generic code ──────────────────────────────────────────────────────────────
+// Generic code
 
 /// Code generic over any quantity, using only the `Quantity` trait.
 fn total_in_base<Q: Quantity<Value = f64>>(items: &[Q]) -> f64 {
@@ -410,7 +411,7 @@ fn serde_is_transparent() {
     );
 }
 
-// ── Integers in a chosen unit, rounding, ordering ─────────────────────────────
+// Integers in a chosen unit, rounding, ordering
 
 mod fixed {
     use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
@@ -772,7 +773,7 @@ mod fixed {
     }
 }
 
-// ── Math ──────────────────────────────────────────────────────────────────────
+// Math
 
 #[cfg(any(feature = "std", feature = "libm"))]
 mod math {
@@ -812,7 +813,7 @@ mod math {
     }
 }
 
-// ── Optional integrations ─────────────────────────────────────────────────────
+// Optional integrations
 
 #[cfg(feature = "approx")]
 #[test]
@@ -850,7 +851,7 @@ fn defmt_format_is_implemented() {
     is_format::<Fixed<qty::unit::length::Millimeter>>();
 }
 
-// ── Uncertainty propagation ──────────────────────────────────────────────────
+// Uncertainty propagation
 
 mod uncertain {
     use qty::*;
@@ -962,7 +963,7 @@ mod uncertain {
     }
 }
 
-// ── Vectors ───────────────────────────────────────────────────────────────────
+// Vectors
 
 mod vectors {
     use qty::*;
@@ -1079,7 +1080,7 @@ mod vectors {
     }
 }
 
-// ── std::time::Duration interop ───────────────────────────────────────────────
+// std::time::Duration interop
 
 mod std_time {
     use qty::unit::duration::Nanosecond;
@@ -1144,7 +1145,7 @@ mod std_time {
     }
 }
 
-// ── serde as text ─────────────────────────────────────────────────────────────
+// serde as text
 
 #[cfg(feature = "serde")]
 mod serde_text {
@@ -1247,7 +1248,7 @@ mod serde_text {
     }
 }
 
-// ── Angle wrapping, clamp, lerp ───────────────────────────────────────────────
+// Angle wrapping, clamp, lerp
 
 mod wrapping {
     use qty::*;
@@ -1325,7 +1326,7 @@ mod wrapping {
     }
 }
 
-// ── Exact decimal display of Fixed ────────────────────────────────────────────
+// Exact decimal display of Fixed
 
 #[test]
 fn decimal_display_flags() {
@@ -1364,7 +1365,7 @@ fn decimal_display_flags() {
     );
 }
 
-// ── Runtime quantities ────────────────────────────────────────────────────────
+// Runtime quantities
 
 #[cfg(feature = "dynamic")]
 mod runtime {
@@ -1520,7 +1521,7 @@ mod runtime {
     }
 }
 
-// ── Integrations ──────────────────────────────────────────────────────────────
+// Integrations
 
 #[cfg(feature = "chrono")]
 #[test]

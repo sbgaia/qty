@@ -1,7 +1,7 @@
-For data whose kind is known only at runtime: a configuration value, a
-column in a file, a unit picked in a user interface. [`AnyQuantity`] holds a
-quantity of any kind (with `f64` storage), [`AnyUnit`] a unit of any kind and
-[`QuantityKind`] the kind itself.
+Quantities whose kind is only known at runtime, such as a configuration
+value, a column in a file or a unit picked in a user interface.
+[`AnyQuantity`] holds a quantity of any kind with `f64` storage, [`AnyUnit`]
+a unit of any kind, and [`QuantityKind`] the kind itself.
 
 ```rust
 use qty::*;
@@ -17,7 +17,7 @@ let length: Length = q.try_into().unwrap();
 assert_eq!(length, Length::from_kilometers(1.5));
 
 // Arithmetic follows the same relations as the typed quantities, checked
-// at runtime.
+// at runtime instead.
 let t: AnyQuantity = Duration::from_seconds(60.0).into();
 let v = q.checked_div(t).unwrap();
 assert_eq!(v.kind(), QuantityKind::Speed);
@@ -34,6 +34,6 @@ assert!(kind.info().units.iter().any(|u| u.abbreviation == "bar"));
 # Ok::<(), ParseError>(())
 ```
 
-Text whose unit is not listed for any quantity is read as a unit
-expression ([`UnitExpr`](crate::UnitExpr)) and given the kind whose
-dimensions it has, if there is exactly one: `"3 kg*m/s^2"` is a force.
+Text whose unit no quantity lists is read as a unit expression
+([`UnitExpr`](crate::UnitExpr)). If exactly one kind has its dimensions, it
+gets that kind, so `"3 kg*m/s^2"` is a force.

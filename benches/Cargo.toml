@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-# All dependencies are dev-only — this crate exists solely to run benchmarks.
+# Only dev-dependencies: this crate exists to run the benchmarks.
 [dev-dependencies]
 criterion = { version = "0.5", features = ["html_reports"] }
 
@@ -12,19 +12,19 @@ criterion = { version = "0.5", features = ["html_reports"] }
 qty = { path = ".." }
 
 # Competitor libraries.
-# uom — units of measure with compile-time dimensional analysis via type parameters.
+# uom: dimensions checked through type parameters.
 uom = { version = "0.37", features = ["si", "f64"] }
 
-# simple-si-units — lightweight SI units with template numeric type.
+# simple-si-units: SI units generic over the number type.
 simple-si-units = "1.1"
 
-# measurements — simple struct-based physical measurement types.
+# measurements: one struct per quantity.
 measurements = "0.11"
 
-# ferrunitas — zero-sized unit markers with compile-time dimensional analysis.
+# ferrunitas: zero-sized unit markers.
 ferrunitas = "0.4"
 
-# measures-rs — macro-generated unit system (lib name is "measures").
+# measures-rs: a macro-generated unit system. Its library is called `measures`.
 measures = { package = "measures-rs", version = "0.1" }
 
 [[bench]]

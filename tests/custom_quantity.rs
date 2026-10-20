@@ -294,7 +294,7 @@ mod relations {
     }
     // A qualified path in the output, and a quotient.
     qty::relation!(qty::Mass / Grammage = qty::Area);
-    // A dimensionless built-in, through its base-unit override ("" → "1").
+    // Ratio's base unit is written "", so it uses the "1" override.
     qty::relation!(Grammage * Ratio = Grammage);
 
     fn gsm(grams: f64) -> Grammage {

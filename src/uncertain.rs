@@ -9,9 +9,9 @@ use crate::{Float, FloatMath, ToFloat};
 
 /// A value with a standard uncertainty (one standard deviation), `value ± σ`.
 ///
-/// `Uncertain` is a storage type like `f64`, so every quantity can hold one:
-/// `Length<Uncertain>` gets all conversions, cross-quantity relations and
-/// math functions, and the uncertainty follows each operation.
+/// It is a storage type like `f64`, so any quantity can hold one.
+/// `Length<Uncertain>` has every conversion, relation and math function, and
+/// the uncertainty is carried through each of them.
 ///
 /// ```rust
 /// use qty::*;
@@ -31,15 +31,14 @@ use crate::{Float, FloatMath, ToFloat};
 /// assert!((area.as_base().sigma() - 200f64.sqrt()).abs() < 1e-9); // hypot(20·0.5, 100·0.1)
 /// ```
 ///
-/// Propagation is to first order (linear), the usual GUM rule, and assumes
-/// that the operands of each operation are **independent**. A value combined
-/// with itself is not: `x - x` gets an uncertainty of `σ·√2` instead of zero,
-/// and `x * x` gets `√2·|x|·σ` instead of `2·|x|·σ`. Write such expressions
-/// in terms of independent inputs (`x * Uncertain::from(2.0)` rather than
-/// `x + x`). First order is accurate when `σ` is small compared to the scale
-/// on which the function curves.
+/// Propagation is linear (first order), as in the GUM, and treats the two
+/// operands of every operation as independent. A value combined with itself
+/// breaks that: `x - x` comes out with `σ·√2` instead of zero. Write such
+/// expressions in terms of independent inputs, so `x * Uncertain::from(2.0)`
+/// rather than `x + x`. The linear rule is good while `σ` is small compared
+/// to how fast the function curves.
 ///
-/// Available with the `std` (default) or `libm` feature.
+/// Needs the `std` (default) or `libm` feature.
 #[derive(Clone, Copy, Debug, PartialEq, Default)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Uncertain<F = f64> {
@@ -57,7 +56,7 @@ impl<F: Float> Uncertain<F> {
         }
     }
 
-    /// An exactly known value (`σ = 0`), e.g. a defined constant.
+    /// A value known exactly, such as a defined constant.
     #[inline]
     pub fn exact(value: F) -> Self {
         Self {
@@ -72,20 +71,21 @@ impl<F: Float> Uncertain<F> {
         self.value
     }
 
-    /// The standard uncertainty (one standard deviation, `≥ 0`).
+    /// The standard uncertainty: one standard deviation, never negative.
     #[inline]
     pub fn sigma(self) -> F {
         self.sigma
     }
 
-    /// The relative uncertainty `σ / |value|` (infinite or NaN for zero).
+    /// The relative uncertainty `σ / |value|`. Infinite or NaN when the value
+    /// is zero.
     #[inline]
     pub fn relative(self) -> F {
         self.sigma / self.value.abs()
     }
 
-    /// `value ± sigma·k`, e.g. `k = 2` for a 95 % interval of a normal
-    /// distribution, as `(low, high)`.
+    /// The interval `value ± k·sigma` as `(low, high)`. With `k = 2` it covers
+    /// about 95 % of a normal distribution.
     #[inline]
     pub fn interval(self, k: F) -> (F, F) {
         let half = self.sigma * k;
@@ -101,8 +101,8 @@ impl<F: Float> From<F> for Uncertain<F> {
     }
 }
 
-/// Orders by value. Two values that are equal but have different
-/// uncertainties are unordered (consistent with `==`, which compares both).
+/// Orders by value. Equal values with different uncertainties are
+/// unordered, to agree with `==`, which compares both.
 impl<F: PartialOrd> PartialOrd for Uncertain<F> {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
@@ -112,8 +112,6 @@ impl<F: PartialOrd> PartialOrd for Uncertain<F> {
         }
     }
 }
-
-// ── Arithmetic ────────────────────────────────────────────────────────────────
 
 impl<F: FloatMath> ops::Add for Uncertain<F> {
     type Output = Self;
@@ -194,8 +192,6 @@ impl<'a, F: FloatMath> core::iter::Sum<&'a Uncertain<F>> for Uncertain<F> {
         iter.copied().sum()
     }
 }
-
-// ── Storage traits ────────────────────────────────────────────────────────────
 
 impl<F: Float> ToFloat for Uncertain<F> {
     /// The value, without its uncertainty.
@@ -338,7 +334,8 @@ impl<F: FloatMath> FloatMath for Uncertain<F> {
 }
 
 impl<F: Float> Uncertain<F> {
-    /// The result `value` of a function whose derivative at `self` is `slope`.
+    /// `value`, the result of a function whose derivative at `self` is `slope`,
+    /// with the uncertainty it inherits.
     #[inline]
     fn through(self, value: F, slope: F) -> Self {
         Self {
@@ -348,11 +345,10 @@ impl<F: Float> Uncertain<F> {
     }
 }
 
-// ── Formatting ────────────────────────────────────────────────────────────────
-
 macro_rules! uncertain_fmt {
     ($($Trait:ident),*) => {$(
-        /// `value ± sigma`, applying the format flags (such as precision) to both.
+        /// `value ± sigma`, with the format flags (such as precision) applied to
+        /// both numbers.
         impl<F: fmt::$Trait> fmt::$Trait for Uncertain<F> {
             fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                 fmt::$Trait::fmt(&self.value, f)?;

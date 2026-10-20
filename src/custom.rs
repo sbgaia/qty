@@ -1,27 +1,28 @@
-//! Units and quantities defined outside qty: [`custom_unit!`](crate::custom_unit)
-//! and [`custom_quantity!`](crate::custom_quantity), and relations with
-//! [`relation!`](crate::relation).
+//! Units, quantities and relations defined in other crates:
+//! [`custom_unit!`](crate::custom_unit), [`custom_quantity!`](crate::custom_quantity)
+//! and [`relation!`](crate::relation).
 
 use crate::{Quantity, Unit};
 
-/// A unit of the quantity `Q`: the generated unit enums (`LengthUnit` for
-/// `Length`, …) and units defined with [`custom_unit!`](crate::custom_unit).
-/// Quantities take any of them in `new`, `convert_to` and `in_unit`.
+/// A unit of `Q`.
+///
+/// Implemented by the generated unit enums (`LengthUnit` for `Length`) and
+/// by units from [`custom_unit!`](crate::custom_unit). `new`, `convert_to`
+/// and `in_unit` accept any of them.
 pub trait UnitOf<Q: Quantity>: Unit {
-    /// A value in this unit, in the quantity's base unit.
+    /// Converts `value` from this unit to the base unit.
     fn value_to_base(self, value: Q::Value) -> Q::Value;
 
-    /// A value in the quantity's base unit, in this unit.
+    /// Converts `value` from the base unit to this unit.
     fn value_from_base(self, value: Q::Value) -> Q::Value;
 }
 
 /// Defines a unit for an existing quantity.
 ///
-/// `factor` is the number of base units in one of this unit (the base unit
-/// is the one a quantity is stored in: metres for `Length`, kelvins for
-/// `Temperature`; see `Quantity::BASE_UNIT`). Point quantities such as
-/// temperatures may add an `offset`, in base units: a value `v` in this
-/// unit is `v × factor + offset` base units.
+/// `factor` is how many base units make one of the new unit. The base unit
+/// is the one the quantity is stored in, such as metres for `Length`. Units
+/// of point quantities like `Temperature` can also take an `offset`, so
+/// that `v` in the new unit is `v * factor + offset` base units.
 ///
 /// ```rust
 /// use qty::*;
@@ -41,9 +42,8 @@ pub trait UnitOf<Q: Quantity>: Unit {
 /// assert_eq!(format!("{:.1}", Length::from_meters(402.336).in_unit(Furlong)), "2.0 fur");
 /// ```
 ///
-/// The unit works wherever a quantity takes a unit: `new`, `convert_to` and
-/// `in_unit`. It is a type of your crate, so it is not known to parsing,
-/// `Fixed` or `AnyQuantity`.
+/// The unit works with `new`, `convert_to` and `in_unit`. Parsing, `Fixed`
+/// and `AnyQuantity` don't know about it.
 #[macro_export]
 macro_rules! custom_unit {
     (
@@ -95,13 +95,12 @@ macro_rules! custom_unit {
     };
 }
 
-/// Defines a new quantity: a type like `Length`, stored in its base unit,
-/// and an enum of its units.
+/// Defines a new quantity and the enum of its units.
 ///
-/// The first unit is the base unit, in which values are stored. Every other
-/// unit gives its size in base units after `=`. A unit's singular name is
-/// its variant name, and its plural adds an "s" unless given with
-/// `(plural "…")`. The quantity's doc comment becomes its description in
+/// The first unit is the base unit, the one values are stored in. The
+/// others give their size in base units after `=`. Unit names come from the
+/// variant names, with an "s" added for the plural unless you give one with
+/// `(plural "...")`. The doc comment becomes the quantity's description in
 /// [`QuantityInfo`](crate::QuantityInfo).
 ///
 /// ```rust
@@ -125,22 +124,20 @@ macro_rules! custom_unit {
 /// assert_eq!("2 boxes".parse::<Paper>(), Ok(Paper::new(10_000.0, PaperUnit::Sheet)));
 /// ```
 ///
-/// The quantity has what the built-in ones have that does not depend on
-/// their generated per-unit code: arithmetic with itself and with numbers,
+/// The new quantity gets most of what the built-in ones have: arithmetic,
 /// `new`, `convert_to`, `in_unit`, `auto_unit_in`, `const_new`, `ZERO`,
-/// formatting, parsing unit abbreviations and names, [`Quantity`], and
-/// qty's `serde`, `approx` and `bytemuck` integrations when those features
-/// are on. It has no `from_<unit>` / `as_<unit>` methods, and parsing,
-/// `Fixed`, `AnyQuantity`, defmt and schemars do not know it.
+/// formatting and parsing, the [`Quantity`] trait, and the `serde`, `approx`
+/// and `bytemuck` impls when those features are on. It has no
+/// `from_<unit>` or `as_<unit>` methods, and `Fixed`, `AnyQuantity`, defmt
+/// and schemars don't support it.
 ///
 /// # Dimensions
 ///
-/// A quantity can declare its physical dimensions, as exponents of
-/// `length`, `mass`, `time`, `electric_current`, `temperature`,
-/// `amount_of_substance` and `luminous_intensity` (the fields of
-/// [`Dimensions`](crate::Dimensions)). Its base unit's abbreviation must
-/// then be a [unit expression](crate::UnitExpr) with those dimensions, and
-/// text in any unit with the same dimensions parses as the quantity:
+/// You can give the quantity its physical dimensions, as exponents of the
+/// fields of [`Dimensions`](crate::Dimensions). The base unit's
+/// abbreviation then has to be a [unit expression](crate::UnitExpr) with
+/// those dimensions. Any unit with the same dimensions then parses as the
+/// quantity, and it can be used in [`relation!`](crate::relation).
 ///
 /// ```rust
 /// use qty::*;
@@ -164,9 +161,7 @@ macro_rules! custom_unit {
 /// # Ok::<(), ParseError>(())
 /// ```
 ///
-/// A base unit that is not such an expression is a compile error, and
-/// with dimensions the quantity can take part in [`relation!`](crate::relation)s.
-/// Without dimensions, unit expressions do not parse as the quantity.
+/// A base unit that isn't an expression fails to compile:
 ///
 /// ```rust,compile_fail,E0080
 /// # use qty::*;
@@ -177,7 +172,7 @@ macro_rules! custom_unit {
 /// }
 /// ```
 ///
-/// Products with quantities without dimensions are yours to write:
+/// Without dimensions, write products with other quantities by hand:
 ///
 /// ```rust
 /// # use qty::*;
@@ -193,8 +188,8 @@ macro_rules! custom_unit {
 /// assert!((stack.as_centimeters() - 5.0).abs() < 1e-12);
 /// ```
 ///
-/// Units can also be added to a custom quantity with
-/// [`custom_unit!`](crate::custom_unit).
+/// [`custom_unit!`](crate::custom_unit) can add units to a custom quantity
+/// too.
 #[macro_export]
 macro_rules! custom_quantity {
     (
@@ -212,8 +207,8 @@ macro_rules! custom_quantity {
         const _: () = ::core::assert!(
             $crate::__private::base_unit_has_dimensions(<$Q<f64> as $crate::Quantity>::INFO),
             ::core::concat!(
-                "custom_quantity! ", ::core::stringify!($Q), ": with `dimensions`, the base unit's ",
-                "abbreviation must be a unit expression with those dimensions, such as \"kg/m^2\"",
+                "custom_quantity! ", ::core::stringify!($Q), ": the base unit must be a unit ",
+                "expression with the given dimensions, like \"kg/m^2\"",
             ),
         );
     };
@@ -244,8 +239,7 @@ macro_rules! custom_quantity {
         $(#[doc = $doc])*
         #[doc = ""]
         #[doc = concat!(
-            "Stored as a value of type `T` (default `f64`) in the base unit, [`",
-            stringify!($U), "::", stringify!($base), "`].",
+            "Stored as `T` (by default `f64`) in [`", stringify!($U), "::", stringify!($base), "`].",
         )]
         #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
         #[repr(transparent)]
@@ -263,7 +257,7 @@ macro_rules! custom_quantity {
             $base,
             $(
                 #[doc = concat!(
-                    "`", $abbreviation, "`: ", stringify!($factor), " × [`",
+                    "`", $abbreviation, "`, ", stringify!($factor), " × [`",
                     stringify!($base), "`](Self::", stringify!($base), ").",
                 )]
                 #[doc = ""]
@@ -322,7 +316,7 @@ macro_rules! custom_quantity {
             }
         }
 
-        /// Parses a unit abbreviation (exact) or name (lenient, see
+        /// Accepts an abbreviation (case-sensitive) or a name (see
         /// `from_name`).
         impl ::core::str::FromStr for $U {
             type Err = $crate::ParseError;
@@ -349,9 +343,7 @@ macro_rules! custom_quantity {
         }
 
         impl $Q<f64> {
-            /// Like `new`, but `const`: for constants in any unit.
-            ///
-            /// The result is identical to `new(value, unit)`.
+            /// Same as `new`, but usable in constants.
             #[inline]
             pub const fn const_new(value: f64, unit: $U) -> Self {
                 Self(match unit {
@@ -407,14 +399,14 @@ macro_rules! custom_quantity {
     };
 }
 
-/// Defines products and quotients between quantities, for custom quantities:
-/// `A * B = C` implements `Mul<B> for A` with output `C`, and `A / B = C`
-/// implements `Div<B> for A`.
+/// Implements `*` or `/` between a custom quantity and another quantity.
 ///
-/// The conversion between the three base units is computed at compile time,
-/// from their abbreviations read as [unit expressions](crate::UnitExpr), and
-/// a relation whose dimensions do not add up does not compile. A custom
-/// quantity therefore needs [`dimensions`](crate::custom_quantity#dimensions).
+/// `A * B = C` implements `Mul<B> for A` with `C` as the output, and
+/// `A / B = C` implements `Div<B> for A`. The factor between the three base
+/// units is worked out at compile time by reading their abbreviations as
+/// [unit expressions](crate::UnitExpr), and a relation whose dimensions
+/// don't add up fails to compile. Custom quantities need
+/// [`dimensions`](crate::custom_quantity#dimensions) for this.
 ///
 /// ```rust
 /// use qty::*;
@@ -442,14 +434,13 @@ macro_rules! custom_quantity {
 /// # Ok::<(), ParseError>(())
 /// ```
 ///
-/// Each line is one impl, so write both orders of a product if you want
-/// both. Rust's orphan rule applies: one of the two operands must be a type
-/// of your crate, so a relation between built-in quantities alone, such as
-/// `Mass / Area = Grammage`, cannot be added (qty already has
-/// `Mass / Area = AreaDensity`). Storage types are floats: `Grammage<f32>`
-/// times `Area<f32>` is `Mass<f32>`.
+/// Each line makes one impl, so list both orders of a product if you want
+/// both. Because of Rust's orphan rule, one of the two operands has to be a
+/// type from your crate: you can't add relations between built-in
+/// quantities. Any float storage works, so `Grammage<f32> * Area<f32>` is a
+/// `Mass<f32>`.
 ///
-/// Dimensions that do not match are a compile error:
+/// A relation whose dimensions don't match fails to compile:
 ///
 /// ```rust,compile_fail,E0080
 /// # use qty::*;
@@ -499,18 +490,18 @@ macro_rules! __qty_relation {
                     ::core::result::Result::Ok(k) => k,
                     ::core::result::Result::Err($crate::__private::RelationError::Lhs) => ::core::panic!(
                         ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($a)*),
-                            "` is not a unit expression (does it have `dimensions`?)")
+                            "` is not a unit expression")
                     ),
                     ::core::result::Result::Err($crate::__private::RelationError::Rhs) => ::core::panic!(
                         ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($b)*),
-                            "` is not a unit expression (does it have `dimensions`?)")
+                            "` is not a unit expression")
                     ),
                     ::core::result::Result::Err($crate::__private::RelationError::Output) => ::core::panic!(
                         ::core::concat!("relation!(", $text, "): the base unit of `", ::core::stringify!($($c)*),
-                            "` is not a unit expression (does it have `dimensions`?)")
+                            "` is not a unit expression")
                     ),
                     ::core::result::Result::Err($crate::__private::RelationError::Dimensions) => ::core::panic!(
-                        ::core::concat!("relation!(", $text, "): the dimensions of the two sides differ")
+                        ::core::concat!("relation!(", $text, "): dimensions differ")
                     ),
                 };
                 let value = $crate::Quantity::as_base(self) $op $crate::Quantity::as_base(rhs);
@@ -531,10 +522,10 @@ macro_rules! __qty_plural {
     };
 }
 
-// Switches for code that the exported macros generate only with some of
-// qty's features: a `cfg` in the generated code would test the features of
-// the crate it expands in. (Written out: macros generated by a macro cannot
-// be called by path from within the crate.)
+// The exported macros expand in other crates, where `#[cfg(feature = ...)]`
+// would test that crate's features. These switches test qty's instead.
+// They're written out by hand because a macro defined by another macro
+// can't be called by path from inside the crate.
 
 #[cfg(any(feature = "std", feature = "libm"))]
 #[doc(hidden)]
@@ -588,7 +579,7 @@ macro_rules! __qty_if_bytemuck {
     ($($t:tt)*) => {};
 }
 
-/// Support for the exported macros.
+/// Used by the exported macros. Not public API.
 #[doc(hidden)]
 pub mod private {
     #[cfg(feature = "approx")]
@@ -605,10 +596,9 @@ pub mod private {
     /// Which unit expressions a quantity's `FromStr` accepts.
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
     pub enum Exprs {
-        /// None: points, and custom quantities without dimensions.
+        /// None. For points and custom quantities without dimensions.
         Off,
-        /// Those with the quantity's dimensions, converted through its base
-        /// unit's abbreviation read as an expression.
+        /// Any with the quantity's dimensions.
         Base,
     }
 
@@ -639,8 +629,8 @@ pub mod private {
         }
     }
 
-    /// Whether a quantity's base unit is a unit expression with its
-    /// dimensions, as `custom_quantity!` requires with `dimensions`.
+    /// Whether the base unit's abbreviation is an expression with the
+    /// quantity's dimensions.
     pub const fn base_unit_has_dimensions(info: QuantityInfo) -> bool {
         match parse(info.base_unit.abbreviation) {
             Some(base) => same_dimensions(base.dimensions, info.dimensions),
@@ -648,11 +638,12 @@ pub mod private {
         }
     }
 
-    /// The base units of the built-in quantities whose abbreviation is not
-    /// a unit expression, as expressions. Levels in dB, `%RH`, `NTU` and
-    /// `IU` are not products of units, and UnitsNet's standard volume flow
-    /// (`Sm³/s`) has the dimensions of a mass flow; they stay out of
-    /// relations.
+    /// Base units of built-in quantities whose UnitsNet abbreviation doesn't
+    /// parse as an expression (`∆K`, `Ns/m²`, ...), rewritten so they do.
+    ///
+    /// dB levels, `%RH`, `NTU` and `IU` aren't products of units, so they're
+    /// left out. So is standard volume flow: UnitsNet gives it the
+    /// dimensions of a mass flow, which `Sm³/s` doesn't express.
     const BUILTIN_BASE_EXPRS: &[(&str, &str)] = &[
         ("Ratio", "1"),
         ("Scalar", "1"),
@@ -713,9 +704,8 @@ pub mod private {
         Dimensions,
     }
 
-    /// For `A * B = C` (or `A / B = C` with `divide`), given the three
-    /// `Quantity::BASE_EXPR`s: the factor `k` with `c = a * b * k` (or
-    /// `a / b * k`) in base units.
+    /// The factor `k` with `c = a * b * k` (or `a / b * k` when `divide`),
+    /// in base units. Takes the three quantities' `BASE_EXPR`s.
     pub const fn relation_factor(
         a: &str,
         b: &str,
@@ -739,7 +729,7 @@ pub mod private {
         }
     }
 
-    /// Like the generated `from_name`: a singular or plural name.
+    /// The generated `from_name`, for custom unit enums.
     pub fn unit_from_name<U: UnitEnum>(name: &str) -> Option<U> {
         let mut buf = [0; 64];
         let name = normalize_unit_name(name, &mut buf)?;
@@ -752,7 +742,7 @@ pub mod private {
         })
     }
 
-    /// Like the generated `FromStr`: an exact abbreviation, else a name.
+    /// The generated `FromStr`: an exact abbreviation, else a name.
     pub fn unit_from_str<U: UnitEnum>(s: &str) -> Result<U, ParseError> {
         U::ALL
             .iter()
@@ -762,8 +752,9 @@ pub mod private {
             .ok_or(ParseError::UnknownUnit)
     }
 
-    /// The first paragraph of a doc comment (lines joined by `"\n"`), its
-    /// lines trimmed and joined by spaces, in the first `.1` bytes.
+    /// The first paragraph of a doc comment, on one line. `doc` has the
+    /// comment's lines joined with newlines; the result is the first `.1`
+    /// bytes of the array.
     pub const fn doc_text<const N: usize>(doc: &str) -> ([u8; N], usize) {
         const fn is_space(b: u8) -> bool {
             matches!(b, b' ' | b'\t' | b'\r')
@@ -804,7 +795,8 @@ pub mod private {
         (out, len)
     }
 
-    /// The text of [`doc_text`]. It is cut at ASCII bytes, so it is UTF-8.
+    /// The string in a [`doc_text`] result. It's only ever cut at ASCII
+    /// bytes, so it's valid UTF-8.
     pub const fn doc_str<const N: usize>(text: &'static ([u8; N], usize)) -> &'static str {
         match core::str::from_utf8(text.0.split_at(text.1).0) {
             Ok(s) => s,

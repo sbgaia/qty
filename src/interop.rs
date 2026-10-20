@@ -3,15 +3,15 @@
 #[allow(unused_imports)]
 use crate::{Duration, Fixed, Quantity, RoundError};
 
-/// `secs + nanos·10⁻⁹` for a float number of seconds, with `0 ≤ nanos < 10⁹`
-/// rounded to the nearest nanosecond; `None` if not finite or beyond `i64`
-/// seconds.
+/// Splits a float number of seconds into whole seconds and nanoseconds,
+/// rounded to the nearest nanosecond, with `0 ≤ nanos < 10⁹`. Fails when
+/// not finite or past `i64` seconds.
 #[cfg(any(feature = "chrono", feature = "time"))]
 fn split_seconds(seconds: f64) -> Result<(i64, u32), RoundError> {
     if !seconds.is_finite() {
         return Err(RoundError::NotFinite);
     }
-    // Floor without `std`: truncate, then step down for negative fractions.
+    // `floor` needs `std`, so truncate and step down for negative fractions.
     if !(-9.2e18..9.2e18).contains(&seconds) {
         return Err(RoundError::Overflow);
     }
@@ -28,7 +28,7 @@ fn split_seconds(seconds: f64) -> Result<(i64, u32), RoundError> {
     Ok((whole, nanos))
 }
 
-/// `(seconds, nanoseconds)` of a nanosecond count, with
+/// Splits a nanosecond count into seconds and nanoseconds, with
 /// `0 ≤ nanoseconds < 10⁹`.
 #[cfg(any(feature = "chrono", feature = "time"))]
 fn split_nanos<I: crate::Integer>(
@@ -39,8 +39,6 @@ fn split_nanos<I: crate::Integer>(
     // The remainder is in 0..10⁹.
     Ok((secs, n.rem_euclid(1_000_000_000) as u32))
 }
-
-// ── chrono ────────────────────────────────────────────────────────────────────
 
 #[cfg(feature = "chrono")]
 mod chrono_impls {
@@ -56,8 +54,8 @@ mod chrono_impls {
         }
     }
 
-    /// Rounds to the nearest nanosecond; fails for NaN, infinities and
-    /// durations beyond `TimeDelta`'s range.
+    /// Rounds to the nearest nanosecond. Fails for NaN, infinities and
+    /// durations outside `TimeDelta`'s range.
     impl TryFrom<Duration<f64>> for TimeDelta {
         type Error = RoundError;
         fn try_from(d: Duration<f64>) -> Result<Self, RoundError> {
@@ -66,7 +64,7 @@ mod chrono_impls {
         }
     }
 
-    /// Exact; [`RoundError::Overflow`] if the count does not fit in `I`.
+    /// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
     impl<I: Integer> TryFrom<TimeDelta> for Fixed<Nanosecond, I> {
         type Error = RoundError;
         fn try_from(d: TimeDelta) -> Result<Self, RoundError> {
@@ -75,7 +73,7 @@ mod chrono_impls {
         }
     }
 
-    /// Exact; [`RoundError::Overflow`] beyond `TimeDelta`'s range.
+    /// Exact. [`RoundError::Overflow`] outside `TimeDelta`'s range.
     impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for TimeDelta {
         type Error = RoundError;
         fn try_from(n: Fixed<Nanosecond, I>) -> Result<Self, RoundError> {
@@ -84,8 +82,6 @@ mod chrono_impls {
         }
     }
 }
-
-// ── time ──────────────────────────────────────────────────────────────────────
 
 #[cfg(feature = "time")]
 mod time_impls {
@@ -100,18 +96,18 @@ mod time_impls {
         }
     }
 
-    /// Rounds to the nearest nanosecond; fails for NaN, infinities and
-    /// durations beyond `time::Duration`'s range.
+    /// Rounds to the nearest nanosecond. Fails for NaN, infinities and
+    /// durations outside `time::Duration`'s range.
     impl TryFrom<Duration<f64>> for time::Duration {
         type Error = RoundError;
         fn try_from(d: Duration<f64>) -> Result<Self, RoundError> {
             let (secs, nanos) = split_seconds(d.as_base())?;
-            // `nanos < 10⁹` fits in an i32 and needs no carry.
+            // `nanos` is below 10⁹, so it fits in an i32.
             Ok(time::Duration::new(secs, nanos as i32))
         }
     }
 
-    /// Exact; [`RoundError::Overflow`] if the count does not fit in `I`.
+    /// Exact. [`RoundError::Overflow`] if the count doesn't fit in `I`.
     impl<I: Integer> TryFrom<time::Duration> for Fixed<Nanosecond, I> {
         type Error = RoundError;
         fn try_from(d: time::Duration) -> Result<Self, RoundError> {
@@ -121,7 +117,7 @@ mod time_impls {
         }
     }
 
-    /// Exact; [`RoundError::Overflow`] beyond `time::Duration`'s range.
+    /// Exact. [`RoundError::Overflow`] outside `time::Duration`'s range.
     impl<I: Integer> TryFrom<Fixed<Nanosecond, I>> for time::Duration {
         type Error = RoundError;
         fn try_from(n: Fixed<Nanosecond, I>) -> Result<Self, RoundError> {

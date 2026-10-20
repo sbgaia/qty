@@ -1,13 +1,12 @@
-//! Metadata about quantities and units: names, abbreviations and physical
-//! dimensions, for user interfaces, validation and generic code.
+//! Names, abbreviations and physical dimensions of quantities and units.
 
 use core::fmt;
 use core::ops::{Div, Mul};
 
 /// Exponents of the seven SI base dimensions: length L, mass M, time T,
 /// electric current I, temperature Θ, amount of substance N and luminous
-/// intensity J. A speed is `L·T⁻¹`; dimensionless quantities (ratios,
-/// angles) have all exponents zero.
+/// intensity J. A speed is `L·T⁻¹`. Ratios and angles have every exponent
+/// at zero.
 ///
 /// ```rust
 /// use qty::*;
@@ -37,7 +36,7 @@ pub struct Dimensions {
 }
 
 impl Dimensions {
-    /// No dimensions: a pure number.
+    /// The dimensions of a pure number.
     pub const DIMENSIONLESS: Self = Self::new(0, 0, 0, 0, 0, 0, 0);
 
     /// From the exponents of L, M, T, I, Θ, N and J, in that order.
@@ -83,12 +82,12 @@ impl Dimensions {
         true
     }
 
-    /// The dimensions of a product (exponents add).
+    /// The dimensions of a product. Exponents add.
     pub const fn mul(self, other: Self) -> Self {
         self.combine(other, 1)
     }
 
-    /// The dimensions of a quotient (exponents subtract).
+    /// The dimensions of a quotient. Exponents subtract.
     pub const fn div(self, other: Self) -> Self {
         self.combine(other, -1)
     }
@@ -162,15 +161,15 @@ impl fmt::Display for Dimensions {
     }
 }
 
-/// Names and abbreviations of a unit, from [`LengthUnit::info`](crate::LengthUnit::info)
-/// and the like.
+/// Names and abbreviations of a unit, as returned by
+/// [`LengthUnit::info`](crate::LengthUnit::info) and its siblings.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct UnitInfo {
-    /// The name, as the enum variant: `"KilometerPerHour"`.
+    /// The name, spelled like the enum variant: `"KilometerPerHour"`.
     pub singular: &'static str,
     /// The plural name: `"KilometersPerHour"`.
     pub plural: &'static str,
-    /// The primary abbreviation, used for display: `"km/h"`.
+    /// The abbreviation used for display: `"km/h"`.
     pub abbreviation: &'static str,
     /// Every abbreviation accepted when parsing.
     pub abbreviations: &'static [&'static str],
@@ -189,13 +188,13 @@ pub struct UnitInfo {
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct QuantityInfo {
-    /// The name, as the type: `"Length"`.
+    /// The name, spelled like the type: `"Length"`.
     pub name: &'static str,
     /// UnitsNet's description of the quantity.
     pub description: &'static str,
     /// The physical dimensions.
     pub dimensions: Dimensions,
-    /// The unit values are stored in.
+    /// The unit that values are stored in.
     pub base_unit: &'static UnitInfo,
     /// Every unit, in the order of the unit enum's `ALL`.
     pub units: &'static [UnitInfo],

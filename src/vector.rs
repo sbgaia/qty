@@ -27,7 +27,7 @@ macro_rules! vector {
                 Self { $($c),+ }
             }
 
-            /// Applies `f` to every component, e.g. `v.map(|c| c.as_kilometers())`.
+            /// Applies `f` to every component: `v.map(|c| c.as_kilometers())`.
             #[inline]
             pub fn map<R>(self, mut f: impl FnMut(Q) -> R) -> $V<R> {
                 $V { $($c: f(self.$c)),+ }
@@ -39,12 +39,12 @@ macro_rules! vector {
                 [$(self.$c),+]
             }
 
-            /// The dot product. Its type follows the quantities' relation:
-            /// `Force · Speed` is `Power`, `Length · Length` is `Area`.
+            /// The dot product. Its type comes from the relation between the
+            /// quantities, so `Force · Speed` is a `Power`.
             ///
-            /// The relations are UnitsNet's, which define `Force × Length`
-            /// as `Torque` only: for the work done by a force (an `Energy`,
-            /// same unit N·m), convert with `Energy::from_base(t.as_base())`.
+            /// The relations are UnitsNet's, where `Force × Length` is a
+            /// `Torque`. For the work done by a force, which is an `Energy`
+            /// in the same N·m, convert with `Energy::from_base(t.as_base())`.
             #[inline]
             pub fn dot<R, O>(self, other: $V<R>) -> O
             where
@@ -54,8 +54,8 @@ macro_rules! vector {
                 vector!(@sum $(self.$c * other.$c),+)
             }
 
-            /// The squared length, `self · self`: cheaper than `norm`, for
-            /// comparisons.
+            /// The squared length, `self · self`. Cheaper than `norm` when you
+            /// only compare lengths.
             #[inline]
             pub fn norm_squared<O>(self) -> O
             where
@@ -99,15 +99,16 @@ macro_rules! vector {
         where
             Q::Value: FloatMath,
         {
-            /// The length (magnitude), through `hypot`: no intermediate
-            /// overflow or underflow, and with [`Uncertain`](crate::Uncertain)
-            /// storage the components count as independent.
+            /// The length of the vector. It goes through `hypot`, so it doesn't
+            /// overflow or underflow on the way, and with
+            /// [`Uncertain`](crate::Uncertain) storage the components count as
+            /// independent.
             #[inline]
             pub fn norm(self) -> Q {
                 Q::from_base(vector!(@hypot $(self.$c.as_base()),+))
             }
 
-            /// The unit vector in the same direction: plain numbers. NaN for
+            /// The unit vector in the same direction, as plain numbers. NaN for
             /// the zero vector.
             #[inline]
             pub fn direction(self) -> $V<Q::Value> {
@@ -115,7 +116,7 @@ macro_rules! vector {
                 self.map(|c| c.as_base() / n)
             }
 
-            /// The angle between two vectors, in 0°…180°.
+            /// The angle between two vectors, from 0° to 180°.
             #[inline]
             pub fn angle_between(self, other: Self) -> Angle<Q::Value> {
                 let (a, b) = (self.map(Q::as_base), other.map(Q::as_base));
@@ -138,8 +139,6 @@ macro_rules! vector {
                 [$(v.$c),+]
             }
         }
-
-        // ── Arithmetic ──
 
         impl<Q: ops::Add<Output = Q>> ops::Add for $V<Q> {
             type Output = Self;
@@ -175,8 +174,8 @@ macro_rules! vector {
             }
         }
 
-        /// Scaling by a number or a quantity: `velocity * 2.0`,
-        /// `velocity * duration` (a displacement).
+        /// Scales by a number or a quantity. `velocity * duration` is a
+        /// displacement.
         impl<Q: ops::Mul<S>, S: Copy> ops::Mul<S> for $V<Q> {
             type Output = $V<Q::Output>;
             #[inline(always)]
@@ -184,8 +183,8 @@ macro_rules! vector {
                 $V { $($c: self.$c * rhs),+ }
             }
         }
-        /// Dividing by a number or a quantity: `displacement / duration` (a
-        /// velocity).
+        /// Divides by a number or a quantity. `displacement / duration` is a
+        /// velocity.
         impl<Q: ops::Div<S>, S: Copy> ops::Div<S> for $V<Q> {
             type Output = $V<Q::Output>;
             #[inline(always)]
@@ -230,8 +229,8 @@ macro_rules! vector {
             }
         }
 
-        /// `(x, y, …) unit`, with the components in the base unit and the
-        /// format flags applied to each: `(1.00, 2.00, 0.50) m`.
+        /// The components in the base unit, then the unit, with the format
+        /// flags applied to each component: `(1.00, 2.00, 0.50) m`.
         impl<Q: Quantity> fmt::Display for $V<Q>
         where
             Q::Value: fmt::Display,
@@ -268,7 +267,7 @@ macro_rules! vector {
     (@sum $first:expr $(, $rest:expr)*) => { $first $(+ $rest)* };
     (@hypot $x:expr, $y:expr) => { $x.hypot($y) };
     (@hypot $x:expr, $y:expr, $z:expr) => { $x.hypot($y).hypot($z) };
-    // |a × b|: for 2D the absolute perp-dot product.
+    // |a × b|. In 2D that's the absolute perp-dot product.
     (@cross_norm $a:ident, $b:ident; x, y) => { Float::abs($a.x * $b.y - $a.y * $b.x) };
     (@cross_norm $a:ident, $b:ident; x, y, z) => {
         ($a.y * $b.z - $a.z * $b.y)
@@ -278,20 +277,20 @@ macro_rules! vector {
 }
 
 vector! {
-    /// A 2D vector of quantities: a position, a velocity, a force in a plane.
+    /// A 2D vector of quantities, such as a position or a velocity in a plane.
     ///
-    /// See [`Vector3`] for the operations; `Vector2` has the same ones, with
-    /// [`perp_dot`](Vector2::perp_dot) in place of the cross product, plus
-    /// polar coordinates.
+    /// It has the operations of [`Vector3`], with
+    /// [`perp_dot`](Vector2::perp_dot) instead of the cross product, and polar
+    /// coordinates as well.
     Vector2, 2: x, y
 }
 
 vector! {
-    /// A 3D vector of quantities: a displacement, a velocity, a force, …
+    /// A 3D vector of quantities, such as a displacement, a velocity or a force.
     ///
-    /// Components are any quantity type, so the physics carries over:
-    /// dividing a displacement by a duration gives a velocity, and the dot
-    /// product of a force and a displacement is an energy.
+    /// The components can be any quantity, and the physics carries over.
+    /// A displacement divided by a duration is a velocity, and the dot
+    /// product of a force and a velocity is a power.
     ///
     /// ```rust
     /// use qty::*;
@@ -324,8 +323,8 @@ vector! {
 }
 
 impl<Q> Vector3<Q> {
-    /// The cross product. Its type follows the quantities' relation:
-    /// `Length × Force` is `Torque` (`r × F`).
+    /// The cross product. Its type comes from the relation between the
+    /// quantities, so `r × F` with a `Length` and a `Force` is a `Torque`.
     #[inline]
     pub fn cross<R, O>(self, other: Vector3<R>) -> Vector3<O>
     where
@@ -342,8 +341,8 @@ impl<Q> Vector3<Q> {
 }
 
 impl<Q> Vector2<Q> {
-    /// The 2D cross product `x₁·y₂ − y₁·x₂`: the z component of the 3D cross
-    /// product, positive when `other` is counter-clockwise from `self`.
+    /// The 2D cross product `x₁·y₂ − y₁·x₂`, which is the z component of the
+    /// 3D one. Positive when `other` is counter-clockwise from `self`.
     #[inline]
     pub fn perp_dot<R, O>(self, other: Vector2<R>) -> O
     where
@@ -376,7 +375,7 @@ where
         Self::from_base([r * cos, r * sin])
     }
 
-    /// The angle from the x axis, in −180°…180°.
+    /// The angle from the x axis, from -180° to 180°.
     #[inline]
     pub fn angle(self) -> Angle<Q::Value> {
         Angle::atan2(self.y, self.x)

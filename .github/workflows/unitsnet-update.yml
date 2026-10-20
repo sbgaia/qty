@@ -6,7 +6,7 @@
 # To run CI automatically, add a fine-grained token with contents and
 # pull-requests write access as the secret UNITSNET_UPDATE_TOKEN. Without it,
 # enable "Allow GitHub Actions to create and approve pull requests" in the
-# repository settings (Actions → General).
+# repository settings (Actions > General).
 name: UnitsNet update
 
 on:
