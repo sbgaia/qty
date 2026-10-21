@@ -316,10 +316,19 @@ pub trait FixedUnit: Copy + 'static {
     const OFFSET_DEN: u128 = 1;
 
     /// A float count of this unit as a quantity, like `Length::from_millimeters`.
-    fn to_quantity<F: Float>(count: F) -> Self::Quantity<F>;
+    // Provided rather than generated: 1,700 markers × two one-line bodies
+    // were a few percent of the crate's build time. With `UNIT` constant,
+    // `new` folds to the same single operation as `from_millimeters`.
+    #[inline(always)]
+    fn to_quantity<F: Float>(count: F) -> Self::Quantity<F> {
+        Quantity::new(count, Self::UNIT)
+    }
 
     /// A quantity as a float count of this unit, like `Length::as_millimeters`.
-    fn from_quantity<F: Float>(quantity: Self::Quantity<F>) -> F;
+    #[inline(always)]
+    fn from_quantity<F: Float>(quantity: Self::Quantity<F>) -> F {
+        quantity.convert_to(Self::UNIT)
+    }
 }
 
 /// A [`FixedUnit`] whose counts can be added, subtracted, negated and

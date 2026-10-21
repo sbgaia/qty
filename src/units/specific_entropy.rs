@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`SpecificEntropyUnit::JoulePerKilogramKelvin`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct SpecificEntropy<T = f64>(T);
@@ -29,7 +24,6 @@ crate::__qty_formula!(SpecificEntropy, SpecificEntropyUnit);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum SpecificEntropyUnit {
     JoulePerKilogramKelvin,
@@ -261,18 +255,7 @@ impl<T: crate::Float> SpecificEntropy<T> {
             (1000.0, SpecificEntropyUnit::KilojoulePerKilogramKelvin),
             (1.0, SpecificEntropyUnit::JoulePerKilogramKelvin),
         ];
-        let magnitude = self.0.abs();
-        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
-            return self.in_unit(SpecificEntropyUnit::JoulePerKilogramKelvin);
-        }
-        let mut unit = SCALE[SCALE.len() - 1].1;
-        for (factor, candidate) in SCALE {
-            if magnitude >= T::from_f64(factor) {
-                unit = candidate;
-                break;
-            }
-        }
-        self.in_unit(unit)
+        crate::__private::auto_unit(self, &SCALE)
     }
 }
 

@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`StandardVolumeFlowUnit::StandardCubicMeterPerSecond`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct StandardVolumeFlow<T = f64>(T);
@@ -28,7 +23,6 @@ quantity!(StandardVolumeFlow, StandardVolumeFlowUnit, StandardCubicMeterPerSecon
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum StandardVolumeFlowUnit {
     StandardCubicMeterPerSecond,
