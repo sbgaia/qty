@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The electrical resistance of an object is a measure of its opposition to the flow of electric current. Along with reactance, it is one of two elements of impedance. Its reciprocal quantity is electrical conductance.
 ///
@@ -200,7 +200,7 @@ impl core::str::FromStr for ElectricResistanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit {
+impl<T: Number> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -230,7 +230,7 @@ impl<T: Float> crate::UnitOf<ElectricResistance<T>> for ElectricResistanceUnit {
     }
 }
 
-impl<T: Float> ElectricResistance<T> {
+impl<T: crate::Float> ElectricResistance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -259,7 +259,9 @@ impl<T: Float> ElectricResistance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricResistance<T> {
     /// A [`ElectricResistance`] from a value in `Ω`.
     #[inline]
     pub fn from_ohms(value: T) -> Self {

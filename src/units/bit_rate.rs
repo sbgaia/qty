@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In telecommunications and computing, bit rate is the number of bits that are conveyed or processed per unit of time.
 ///
@@ -604,7 +604,7 @@ impl core::str::FromStr for BitRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
+impl<T: Number> crate::UnitOf<BitRate<T>> for BitRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -662,9 +662,9 @@ impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
             BitRateUnit::ExabitPerSecond => value / T::from_f64(1e18),
             BitRateUnit::KibibitPerSecond => value * T::from_f64(0.0009765625),
             BitRateUnit::MebibitPerSecond => value * T::from_f64(9.5367431640625e-7),
-            BitRateUnit::GibibitPerSecond => value * T::from_f64(9.313225746154785e-10),
-            BitRateUnit::TebibitPerSecond => value * T::from_f64(9.094947017729282e-13),
-            BitRateUnit::PebibitPerSecond => value * T::from_f64(8.881784197001252e-16),
+            BitRateUnit::GibibitPerSecond => value * T::from_ratio(1.0, 1073741824.0),
+            BitRateUnit::TebibitPerSecond => value * T::from_ratio(1.0, 1099511627776.0),
+            BitRateUnit::PebibitPerSecond => value * T::from_ratio(1.0, 1125899906842624.0),
             BitRateUnit::ExbibitPerSecond => value * T::from_f64(8.673617379884035e-19),
             BitRateUnit::BytePerSecond => value * T::from_f64(0.125),
             BitRateUnit::KilobytePerSecond => value / T::from_f64(8000.0),
@@ -675,9 +675,9 @@ impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
             BitRateUnit::ExabytePerSecond => value / T::from_f64(8e18),
             BitRateUnit::KibibytePerSecond => value * T::from_f64(0.0001220703125),
             BitRateUnit::MebibytePerSecond => value * T::from_f64(1.1920928955078125e-7),
-            BitRateUnit::GibibytePerSecond => value * T::from_f64(1.1641532182693481e-10),
-            BitRateUnit::TebibytePerSecond => value * T::from_f64(1.1368683772161603e-13),
-            BitRateUnit::PebibytePerSecond => value * T::from_f64(1.1102230246251565e-16),
+            BitRateUnit::GibibytePerSecond => value * T::from_ratio(1.0, 8589934592.0),
+            BitRateUnit::TebibytePerSecond => value * T::from_ratio(1.0, 8796093022208.0),
+            BitRateUnit::PebibytePerSecond => value * T::from_ratio(1.0, 9007199254740992.0),
             BitRateUnit::ExbibytePerSecond => value * T::from_f64(1.0842021724855044e-19),
             BitRateUnit::OctetPerSecond => value * T::from_f64(0.125),
             BitRateUnit::KilooctetPerSecond => value / T::from_f64(8000.0),
@@ -688,15 +688,15 @@ impl<T: Float> crate::UnitOf<BitRate<T>> for BitRateUnit {
             BitRateUnit::ExaoctetPerSecond => value / T::from_f64(8e18),
             BitRateUnit::KibioctetPerSecond => value * T::from_f64(0.0001220703125),
             BitRateUnit::MebioctetPerSecond => value * T::from_f64(1.1920928955078125e-7),
-            BitRateUnit::GibioctetPerSecond => value * T::from_f64(1.1641532182693481e-10),
-            BitRateUnit::TebioctetPerSecond => value * T::from_f64(1.1368683772161603e-13),
-            BitRateUnit::PebioctetPerSecond => value * T::from_f64(1.1102230246251565e-16),
+            BitRateUnit::GibioctetPerSecond => value * T::from_ratio(1.0, 8589934592.0),
+            BitRateUnit::TebioctetPerSecond => value * T::from_ratio(1.0, 8796093022208.0),
+            BitRateUnit::PebioctetPerSecond => value * T::from_ratio(1.0, 9007199254740992.0),
             BitRateUnit::ExbioctetPerSecond => value * T::from_f64(1.0842021724855044e-19),
         }
     }
 }
 
-impl<T: Float> BitRate<T> {
+impl<T: crate::Float> BitRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`bit/s`, `kbit/s`, `Mbit/s`, `Gbit/s`, `Tbit/s`, `Pbit/s`, `Ebit/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -724,7 +724,9 @@ impl<T: Float> BitRate<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> BitRate<T> {
     /// A [`BitRate`] from a value in `bit/s`.
     #[inline]
     pub fn from_bits_per_second(value: T) -> Self {
@@ -842,7 +844,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Gibit/s`.
     #[inline]
     pub fn as_gibibits_per_second(self) -> T {
-        self.0 * T::from_f64(9.313225746154785e-10)
+        self.0 * T::from_ratio(1.0, 1073741824.0)
     }
 
     /// A [`BitRate`] from a value in `Tibit/s`.
@@ -854,7 +856,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Tibit/s`.
     #[inline]
     pub fn as_tebibits_per_second(self) -> T {
-        self.0 * T::from_f64(9.094947017729282e-13)
+        self.0 * T::from_ratio(1.0, 1099511627776.0)
     }
 
     /// A [`BitRate`] from a value in `Pibit/s`.
@@ -866,7 +868,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Pibit/s`.
     #[inline]
     pub fn as_pebibits_per_second(self) -> T {
-        self.0 * T::from_f64(8.881784197001252e-16)
+        self.0 * T::from_ratio(1.0, 1125899906842624.0)
     }
 
     /// A [`BitRate`] from a value in `Eibit/s`.
@@ -998,7 +1000,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `GiB/s`.
     #[inline]
     pub fn as_gibibytes_per_second(self) -> T {
-        self.0 * T::from_f64(1.1641532182693481e-10)
+        self.0 * T::from_ratio(1.0, 8589934592.0)
     }
 
     /// A [`BitRate`] from a value in `TiB/s`.
@@ -1010,7 +1012,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `TiB/s`.
     #[inline]
     pub fn as_tebibytes_per_second(self) -> T {
-        self.0 * T::from_f64(1.1368683772161603e-13)
+        self.0 * T::from_ratio(1.0, 8796093022208.0)
     }
 
     /// A [`BitRate`] from a value in `PiB/s`.
@@ -1022,7 +1024,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `PiB/s`.
     #[inline]
     pub fn as_pebibytes_per_second(self) -> T {
-        self.0 * T::from_f64(1.1102230246251565e-16)
+        self.0 * T::from_ratio(1.0, 9007199254740992.0)
     }
 
     /// A [`BitRate`] from a value in `EiB/s`.
@@ -1154,7 +1156,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Gio/s`.
     #[inline]
     pub fn as_gibioctets_per_second(self) -> T {
-        self.0 * T::from_f64(1.1641532182693481e-10)
+        self.0 * T::from_ratio(1.0, 8589934592.0)
     }
 
     /// A [`BitRate`] from a value in `Tio/s`.
@@ -1166,7 +1168,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Tio/s`.
     #[inline]
     pub fn as_tebioctets_per_second(self) -> T {
-        self.0 * T::from_f64(1.1368683772161603e-13)
+        self.0 * T::from_ratio(1.0, 8796093022208.0)
     }
 
     /// A [`BitRate`] from a value in `Pio/s`.
@@ -1178,7 +1180,7 @@ impl<T: Float> BitRate<T> {
     /// The value in `Pio/s`.
     #[inline]
     pub fn as_pebioctets_per_second(self) -> T {
-        self.0 * T::from_f64(1.1102230246251565e-16)
+        self.0 * T::from_ratio(1.0, 9007199254740992.0)
     }
 
     /// A [`BitRate`] from a value in `Eio/s`.

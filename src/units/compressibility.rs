@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`CompressibilityUnit::InversePascal`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -192,7 +192,7 @@ impl core::str::FromStr for CompressibilityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
+impl<T: Number> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -203,7 +203,7 @@ impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
             CompressibilityUnit::InverseMillibar => value / T::from_f64(100.0),
             CompressibilityUnit::InverseBar => value / T::from_f64(100000.0),
             CompressibilityUnit::InversePoundForcePerSquareInch => {
-                value * T::from_f64(0.0001450377377302092)
+                T::mul_ratio(value, 1000000000000.0, 6894757293168361.0)
             }
         }
     }
@@ -218,13 +218,13 @@ impl<T: Float> crate::UnitOf<Compressibility<T>> for CompressibilityUnit {
             CompressibilityUnit::InverseMillibar => value * T::from_f64(100.0),
             CompressibilityUnit::InverseBar => value * T::from_f64(100000.0),
             CompressibilityUnit::InversePoundForcePerSquareInch => {
-                value / T::from_f64(0.0001450377377302092)
+                T::div_ratio(value, 1000000000000.0, 6894757293168361.0)
             }
         }
     }
 }
 
-impl<T: Float> Compressibility<T> {
+impl<T: crate::Float> Compressibility<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Pa⁻¹`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -232,7 +232,9 @@ impl<T: Float> Compressibility<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, CompressibilityUnit> {
         self.in_unit(CompressibilityUnit::InversePascal)
     }
+}
 
+impl<T: Number> Compressibility<T> {
     /// A [`Compressibility`] from a value in `Pa⁻¹`.
     #[inline]
     pub fn from_inverse_pascals(value: T) -> Self {
@@ -308,13 +310,13 @@ impl<T: Float> Compressibility<T> {
     /// A [`Compressibility`] from a value in `psi⁻¹`.
     #[inline]
     pub fn from_inverse_pounds_force_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(0.0001450377377302092))
+        Self(T::mul_ratio(value, 1000000000000.0, 6894757293168361.0))
     }
 
     /// The value in `psi⁻¹`.
     #[inline]
     pub fn as_inverse_pounds_force_per_square_inch(self) -> T {
-        self.0 / T::from_f64(0.0001450377377302092)
+        T::div_ratio(self.0, 1000000000000.0, 6894757293168361.0)
     }
 }
 

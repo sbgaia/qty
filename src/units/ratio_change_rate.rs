@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The change in ratio per unit of time.
 ///
@@ -119,7 +119,7 @@ impl core::str::FromStr for RatioChangeRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RatioChangeRate<T>> for RatioChangeRateUnit {
+impl<T: Number> crate::UnitOf<RatioChangeRate<T>> for RatioChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -137,7 +137,7 @@ impl<T: Float> crate::UnitOf<RatioChangeRate<T>> for RatioChangeRateUnit {
     }
 }
 
-impl<T: Float> RatioChangeRate<T> {
+impl<T: crate::Float> RatioChangeRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -145,7 +145,9 @@ impl<T: Float> RatioChangeRate<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, RatioChangeRateUnit> {
         self.in_unit(RatioChangeRateUnit::DecimalFractionPerSecond)
     }
+}
 
+impl<T: Number> RatioChangeRate<T> {
     /// A [`RatioChangeRate`] from a value in `%/s`.
     #[inline]
     pub fn from_percents_per_second(value: T) -> Self {

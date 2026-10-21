@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Pressure (symbol: P or p) is the ratio of force to the area over which that force is distributed. Pressure is force per unit area applied in a direction perpendicular to the surface of an object. Gauge pressure (also spelled gage pressure)\[a\] is the pressure relative to the local atmospheric or ambient pressure. Pressure is measured in any unit of force divided by any unit of area. The SI unit of pressure is the newton per square metre, which is called the pascal (Pa) after the seventeenth-century philosopher and scientist Blaise Pascal. A pressure of 1 Pa is small; it approximately equals the pressure exerted by a dollar bill resting flat on a table. Everyday pressures are often stated in kilopascals (1 kPa = 1000 Pa).
 ///
@@ -763,7 +763,7 @@ impl core::str::FromStr for PressureUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
+impl<T: Number> crate::UnitOf<Pressure<T>> for PressureUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -794,14 +794,22 @@ impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
             PressureUnit::NewtonPerSquareMillimeter => value * T::from_f64(1000000.0),
             PressureUnit::KilonewtonPerSquareMillimeter => value * T::from_f64(1e9),
             PressureUnit::TechnicalAtmosphere => value * T::from_f64(98066.5),
-            PressureUnit::Torr => value * T::from_f64(133.32236842105263),
-            PressureUnit::Millitorr => value * T::from_f64(0.13332236842105263),
-            PressureUnit::PoundForcePerSquareInch => value * T::from_f64(6894.757293168362),
-            PressureUnit::KilopoundForcePerSquareInch => value * T::from_f64(6894757.293168361),
-            PressureUnit::PoundForcePerSquareMil => value * T::from_f64(6.894757293168362e9),
+            PressureUnit::Torr => T::mul_ratio(value, 20265.0, 152.0),
+            PressureUnit::Millitorr => T::mul_ratio(value, 4053.0, 30400.0),
+            PressureUnit::PoundForcePerSquareInch => {
+                T::mul_ratio(value, 8896443230521.0, 1290320000.0)
+            }
+            PressureUnit::KilopoundForcePerSquareInch => {
+                T::mul_ratio(value, 8896443230521.0, 1290320.0)
+            }
+            PressureUnit::PoundForcePerSquareMil => T::mul_ratio(value, 222411080763025.0, 32258.0),
             PressureUnit::KilopoundForcePerSquareMil => value * T::from_f64(6.894757293168361e12),
-            PressureUnit::PoundForcePerSquareFoot => value * T::from_f64(47.880258980335846),
-            PressureUnit::KilopoundForcePerSquareFoot => value * T::from_f64(47880.25898033584),
+            PressureUnit::PoundForcePerSquareFoot => {
+                T::mul_ratio(value, 8896443230521.0, 185806080000.0)
+            }
+            PressureUnit::KilopoundForcePerSquareFoot => {
+                T::mul_ratio(value, 8896443230521.0, 185806080.0)
+            }
             PressureUnit::TonneForcePerSquareMillimeter => value * T::from_f64(9.80665e9),
             PressureUnit::TonneForcePerSquareMeter => value * T::from_f64(9806.65),
             PressureUnit::MeterOfHead => value * T::from_f64(9804.139432),
@@ -810,13 +818,17 @@ impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
             PressureUnit::MillimeterOfMercury => value * T::from_f64(133.322387415),
             PressureUnit::InchOfMercury => value * T::from_f64(3386.388640341),
             PressureUnit::DynePerSquareCentimeter => value / T::from_f64(10.0),
-            PressureUnit::PoundPerInchSecondSquared => value * T::from_f64(17.857966521592093),
+            PressureUnit::PoundPerInchSecondSquared => {
+                T::mul_ratio(value, 8896443230521.0, 498177842352.0)
+            }
             PressureUnit::MeterOfWaterColumn => value * T::from_f64(9806.65),
             PressureUnit::MillimeterOfWaterColumn => value * T::from_f64(9.80665),
             PressureUnit::CentimeterOfWaterColumn => value * T::from_f64(98.0665),
             PressureUnit::InchOfWaterColumn => value * T::from_f64(249.08891),
             PressureUnit::MilligramForcePerSquareMeter => value * T::from_f64(9.80665e-6),
-            PressureUnit::MilligramForcePerSquareFoot => value * T::from_f64(0.0001055579020880264),
+            PressureUnit::MilligramForcePerSquareFoot => {
+                T::mul_ratio(value, 196133.0, 1858060800.0)
+            }
         }
     }
 
@@ -850,14 +862,22 @@ impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
             PressureUnit::NewtonPerSquareMillimeter => value / T::from_f64(1000000.0),
             PressureUnit::KilonewtonPerSquareMillimeter => value / T::from_f64(1e9),
             PressureUnit::TechnicalAtmosphere => value / T::from_f64(98066.5),
-            PressureUnit::Torr => value / T::from_f64(133.32236842105263),
-            PressureUnit::Millitorr => value / T::from_f64(0.13332236842105263),
-            PressureUnit::PoundForcePerSquareInch => value / T::from_f64(6894.757293168362),
-            PressureUnit::KilopoundForcePerSquareInch => value / T::from_f64(6894757.293168361),
-            PressureUnit::PoundForcePerSquareMil => value / T::from_f64(6.894757293168362e9),
+            PressureUnit::Torr => T::div_ratio(value, 20265.0, 152.0),
+            PressureUnit::Millitorr => T::div_ratio(value, 4053.0, 30400.0),
+            PressureUnit::PoundForcePerSquareInch => {
+                T::div_ratio(value, 8896443230521.0, 1290320000.0)
+            }
+            PressureUnit::KilopoundForcePerSquareInch => {
+                T::div_ratio(value, 8896443230521.0, 1290320.0)
+            }
+            PressureUnit::PoundForcePerSquareMil => T::div_ratio(value, 222411080763025.0, 32258.0),
             PressureUnit::KilopoundForcePerSquareMil => value / T::from_f64(6.894757293168361e12),
-            PressureUnit::PoundForcePerSquareFoot => value / T::from_f64(47.880258980335846),
-            PressureUnit::KilopoundForcePerSquareFoot => value / T::from_f64(47880.25898033584),
+            PressureUnit::PoundForcePerSquareFoot => {
+                T::div_ratio(value, 8896443230521.0, 185806080000.0)
+            }
+            PressureUnit::KilopoundForcePerSquareFoot => {
+                T::div_ratio(value, 8896443230521.0, 185806080.0)
+            }
             PressureUnit::TonneForcePerSquareMillimeter => value / T::from_f64(9.80665e9),
             PressureUnit::TonneForcePerSquareMeter => value / T::from_f64(9806.65),
             PressureUnit::MeterOfHead => value / T::from_f64(9804.139432),
@@ -866,18 +886,22 @@ impl<T: Float> crate::UnitOf<Pressure<T>> for PressureUnit {
             PressureUnit::MillimeterOfMercury => value / T::from_f64(133.322387415),
             PressureUnit::InchOfMercury => value / T::from_f64(3386.388640341),
             PressureUnit::DynePerSquareCentimeter => value * T::from_f64(10.0),
-            PressureUnit::PoundPerInchSecondSquared => value / T::from_f64(17.857966521592093),
+            PressureUnit::PoundPerInchSecondSquared => {
+                T::div_ratio(value, 8896443230521.0, 498177842352.0)
+            }
             PressureUnit::MeterOfWaterColumn => value / T::from_f64(9806.65),
             PressureUnit::MillimeterOfWaterColumn => value / T::from_f64(9.80665),
             PressureUnit::CentimeterOfWaterColumn => value / T::from_f64(98.0665),
             PressureUnit::InchOfWaterColumn => value / T::from_f64(249.08891),
             PressureUnit::MilligramForcePerSquareMeter => value / T::from_f64(9.80665e-6),
-            PressureUnit::MilligramForcePerSquareFoot => value / T::from_f64(0.0001055579020880264),
+            PressureUnit::MilligramForcePerSquareFoot => {
+                T::div_ratio(value, 196133.0, 1858060800.0)
+            }
         }
     }
 }
 
-impl<T: Float> Pressure<T> {
+impl<T: crate::Float> Pressure<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µPa`, `mPa`, `Pa`, `kPa`, `MPa`, `GPa`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -904,7 +928,9 @@ impl<T: Float> Pressure<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Pressure<T> {
     /// A [`Pressure`] from a value in `Pa`.
     #[inline]
     pub fn from_pascals(value: T) -> Self {
@@ -1232,61 +1258,61 @@ impl<T: Float> Pressure<T> {
     /// A [`Pressure`] from a value in `torr`.
     #[inline]
     pub fn from_torrs(value: T) -> Self {
-        Self(value * T::from_f64(133.32236842105263))
+        Self(T::mul_ratio(value, 20265.0, 152.0))
     }
 
     /// The value in `torr`.
     #[inline]
     pub fn as_torrs(self) -> T {
-        self.0 / T::from_f64(133.32236842105263)
+        T::div_ratio(self.0, 20265.0, 152.0)
     }
 
     /// A [`Pressure`] from a value in `mtorr`.
     #[inline]
     pub fn from_millitorrs(value: T) -> Self {
-        Self(value * T::from_f64(0.13332236842105263))
+        Self(T::mul_ratio(value, 4053.0, 30400.0))
     }
 
     /// The value in `mtorr`.
     #[inline]
     pub fn as_millitorrs(self) -> T {
-        self.0 / T::from_f64(0.13332236842105263)
+        T::div_ratio(self.0, 4053.0, 30400.0)
     }
 
     /// A [`Pressure`] from a value in `psi`.
     #[inline]
     pub fn from_pounds_force_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(6894.757293168362))
+        Self(T::mul_ratio(value, 8896443230521.0, 1290320000.0))
     }
 
     /// The value in `psi`.
     #[inline]
     pub fn as_pounds_force_per_square_inch(self) -> T {
-        self.0 / T::from_f64(6894.757293168362)
+        T::div_ratio(self.0, 8896443230521.0, 1290320000.0)
     }
 
     /// A [`Pressure`] from a value in `kpsi`.
     #[inline]
     pub fn from_kilopounds_force_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(6894757.293168361))
+        Self(T::mul_ratio(value, 8896443230521.0, 1290320.0))
     }
 
     /// The value in `kpsi`.
     #[inline]
     pub fn as_kilopounds_force_per_square_inch(self) -> T {
-        self.0 / T::from_f64(6894757.293168361)
+        T::div_ratio(self.0, 8896443230521.0, 1290320.0)
     }
 
     /// A [`Pressure`] from a value in `lb/mil²`.
     #[inline]
     pub fn from_pounds_force_per_square_mil(value: T) -> Self {
-        Self(value * T::from_f64(6.894757293168362e9))
+        Self(T::mul_ratio(value, 222411080763025.0, 32258.0))
     }
 
     /// The value in `lb/mil²`.
     #[inline]
     pub fn as_pounds_force_per_square_mil(self) -> T {
-        self.0 / T::from_f64(6.894757293168362e9)
+        T::div_ratio(self.0, 222411080763025.0, 32258.0)
     }
 
     /// A [`Pressure`] from a value in `klb/mil²`.
@@ -1304,25 +1330,25 @@ impl<T: Float> Pressure<T> {
     /// A [`Pressure`] from a value in `lb/ft²`.
     #[inline]
     pub fn from_pounds_force_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(47.880258980335846))
+        Self(T::mul_ratio(value, 8896443230521.0, 185806080000.0))
     }
 
     /// The value in `lb/ft²`.
     #[inline]
     pub fn as_pounds_force_per_square_foot(self) -> T {
-        self.0 / T::from_f64(47.880258980335846)
+        T::div_ratio(self.0, 8896443230521.0, 185806080000.0)
     }
 
     /// A [`Pressure`] from a value in `klb/ft²`.
     #[inline]
     pub fn from_kilopounds_force_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(47880.25898033584))
+        Self(T::mul_ratio(value, 8896443230521.0, 185806080.0))
     }
 
     /// The value in `klb/ft²`.
     #[inline]
     pub fn as_kilopounds_force_per_square_foot(self) -> T {
-        self.0 / T::from_f64(47880.25898033584)
+        T::div_ratio(self.0, 8896443230521.0, 185806080.0)
     }
 
     /// A [`Pressure`] from a value in `tf/mm²`.
@@ -1424,13 +1450,13 @@ impl<T: Float> Pressure<T> {
     /// A [`Pressure`] from a value in `lbm/(in·s²)`.
     #[inline]
     pub fn from_pounds_per_inch_second_squared(value: T) -> Self {
-        Self(value * T::from_f64(17.857966521592093))
+        Self(T::mul_ratio(value, 8896443230521.0, 498177842352.0))
     }
 
     /// The value in `lbm/(in·s²)`.
     #[inline]
     pub fn as_pounds_per_inch_second_squared(self) -> T {
-        self.0 / T::from_f64(17.857966521592093)
+        T::div_ratio(self.0, 8896443230521.0, 498177842352.0)
     }
 
     /// A [`Pressure`] from a value in `mH₂O`.
@@ -1496,13 +1522,13 @@ impl<T: Float> Pressure<T> {
     /// A [`Pressure`] from a value in `mgf/ft²`.
     #[inline]
     pub fn from_milligrams_force_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.0001055579020880264))
+        Self(T::mul_ratio(value, 196133.0, 1858060800.0))
     }
 
     /// The value in `mgf/ft²`.
     #[inline]
     pub fn as_milligrams_force_per_square_foot(self) -> T {
-        self.0 / T::from_f64(0.0001055579020880264)
+        T::div_ratio(self.0, 196133.0, 1858060800.0)
     }
 }
 

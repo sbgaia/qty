@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// ElectricPotential change rate is the ratio of the electric potential change to the time during which the change occurred (value of electric potential changes per unit time).
 ///
@@ -356,7 +356,7 @@ impl core::str::FromStr for ElectricPotentialChangeRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotentialChangeRateUnit {
+impl<T: Number> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotentialChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -373,21 +373,13 @@ impl<T: Float> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotenti
             ElectricPotentialChangeRateUnit::VoltPerMinute => value / T::from_f64(60.0),
             ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value / T::from_f64(6e7),
             ElectricPotentialChangeRateUnit::MillivoltPerMinute => value / T::from_f64(60000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
-                value * T::from_f64(16.666666666666668)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
-                value * T::from_f64(16666.666666666668)
-            }
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => T::mul_ratio(value, 50.0, 3.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => T::mul_ratio(value, 50000.0, 3.0),
             ElectricPotentialChangeRateUnit::VoltPerHour => value / T::from_f64(3600.0),
             ElectricPotentialChangeRateUnit::MicrovoltPerHour => value / T::from_f64(3.6e9),
             ElectricPotentialChangeRateUnit::MillivoltPerHour => value / T::from_f64(3600000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
-                value * T::from_f64(0.2777777777777778)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
-                value * T::from_f64(277.77777777777777)
-            }
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => T::mul_ratio(value, 5.0, 18.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => T::mul_ratio(value, 2500.0, 9.0),
         }
     }
 
@@ -407,26 +399,18 @@ impl<T: Float> crate::UnitOf<ElectricPotentialChangeRate<T>> for ElectricPotenti
             ElectricPotentialChangeRateUnit::VoltPerMinute => value * T::from_f64(60.0),
             ElectricPotentialChangeRateUnit::MicrovoltPerMinute => value * T::from_f64(6e7),
             ElectricPotentialChangeRateUnit::MillivoltPerMinute => value * T::from_f64(60000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerMinute => {
-                value / T::from_f64(16.666666666666668)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerMinute => {
-                value / T::from_f64(16666.666666666668)
-            }
+            ElectricPotentialChangeRateUnit::KilovoltPerMinute => T::div_ratio(value, 50.0, 3.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerMinute => T::div_ratio(value, 50000.0, 3.0),
             ElectricPotentialChangeRateUnit::VoltPerHour => value * T::from_f64(3600.0),
             ElectricPotentialChangeRateUnit::MicrovoltPerHour => value * T::from_f64(3.6e9),
             ElectricPotentialChangeRateUnit::MillivoltPerHour => value * T::from_f64(3600000.0),
-            ElectricPotentialChangeRateUnit::KilovoltPerHour => {
-                value / T::from_f64(0.2777777777777778)
-            }
-            ElectricPotentialChangeRateUnit::MegavoltPerHour => {
-                value / T::from_f64(277.77777777777777)
-            }
+            ElectricPotentialChangeRateUnit::KilovoltPerHour => T::div_ratio(value, 5.0, 18.0),
+            ElectricPotentialChangeRateUnit::MegavoltPerHour => T::div_ratio(value, 2500.0, 9.0),
         }
     }
 }
 
-impl<T: Float> ElectricPotentialChangeRate<T> {
+impl<T: crate::Float> ElectricPotentialChangeRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µV/s`, `mV/s`, `V/s`, `kV/s`, `MV/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -455,7 +439,9 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `V/s`.
     #[inline]
     pub fn from_volts_per_second(value: T) -> Self {
@@ -615,25 +601,25 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `kV/min`.
     #[inline]
     pub fn from_kilovolts_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16.666666666666668))
+        Self(T::mul_ratio(value, 50.0, 3.0))
     }
 
     /// The value in `kV/min`.
     #[inline]
     pub fn as_kilovolts_per_minute(self) -> T {
-        self.0 / T::from_f64(16.666666666666668)
+        T::div_ratio(self.0, 50.0, 3.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `MV/min`.
     #[inline]
     pub fn from_megavolts_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16666.666666666668))
+        Self(T::mul_ratio(value, 50000.0, 3.0))
     }
 
     /// The value in `MV/min`.
     #[inline]
     pub fn as_megavolts_per_minute(self) -> T {
-        self.0 / T::from_f64(16666.666666666668)
+        T::div_ratio(self.0, 50000.0, 3.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `V/h`.
@@ -675,25 +661,25 @@ impl<T: Float> ElectricPotentialChangeRate<T> {
     /// A [`ElectricPotentialChangeRate`] from a value in `kV/h`.
     #[inline]
     pub fn from_kilovolts_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `kV/h`.
     #[inline]
     pub fn as_kilovolts_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`ElectricPotentialChangeRate`] from a value in `MV/h`.
     #[inline]
     pub fn from_megavolts_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(277.77777777777777))
+        Self(T::mul_ratio(value, 2500.0, 9.0))
     }
 
     /// The value in `MV/h`.
     #[inline]
     pub fn as_megavolts_per_hour(self) -> T {
-        self.0 / T::from_f64(277.77777777777777)
+        T::div_ratio(self.0, 2500.0, 9.0)
     }
 }
 

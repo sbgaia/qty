@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// <https://en.wikipedia.org/wiki/Stiffness#Rotational_stiffness>
 ///
@@ -188,7 +188,9 @@ impl core::str::FromStr for RotationalStiffnessPerLengthUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RotationalStiffnessPerLength<T>> for RotationalStiffnessPerLengthUnit {
+impl<T: Number> crate::UnitOf<RotationalStiffnessPerLength<T>>
+    for RotationalStiffnessPerLengthUnit
+{
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -228,7 +230,7 @@ impl<T: Float> crate::UnitOf<RotationalStiffnessPerLength<T>> for RotationalStif
     }
 }
 
-impl<T: Float> RotationalStiffnessPerLength<T> {
+impl<T: crate::Float> RotationalStiffnessPerLength<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`N·m/rad/m`, `kN·m/rad/m`, `MN·m/rad/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -261,7 +263,9 @@ impl<T: Float> RotationalStiffnessPerLength<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RotationalStiffnessPerLength<T> {
     /// A [`RotationalStiffnessPerLength`] from a value in `N·m/rad/m`.
     #[inline]
     pub fn from_newton_meters_per_radian_per_meter(value: T) -> Self {

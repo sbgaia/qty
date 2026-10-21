@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The electrical conductance of an object is a measure of the ease with which an electric current passes. Along with susceptance, it is one of two elements of admittance. Its reciprocal quantity is electrical resistance.
 ///
@@ -296,7 +296,7 @@ impl core::str::FromStr for ElectricConductanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUnit {
+impl<T: Number> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -342,7 +342,7 @@ impl<T: Float> crate::UnitOf<ElectricConductance<T>> for ElectricConductanceUnit
     }
 }
 
-impl<T: Float> ElectricConductance<T> {
+impl<T: crate::Float> ElectricConductance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -371,7 +371,9 @@ impl<T: Float> ElectricConductance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricConductance<T> {
     /// A [`ElectricConductance`] from a value in `S`.
     #[inline]
     pub fn from_siemens(value: T) -> Self {

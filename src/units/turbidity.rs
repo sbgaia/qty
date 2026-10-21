@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Turbidity is the cloudiness or haziness of a fluid caused by large numbers of individual particles that are generally invisible to the naked eye, similar to smoke in air. The measurement of turbidity is a key test of water quality.
 ///
@@ -103,7 +103,7 @@ impl core::str::FromStr for TurbidityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
+impl<T: Number> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -119,7 +119,7 @@ impl<T: Float> crate::UnitOf<Turbidity<T>> for TurbidityUnit {
     }
 }
 
-impl<T: Float> Turbidity<T> {
+impl<T: crate::Float> Turbidity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`NTU`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -127,7 +127,9 @@ impl<T: Float> Turbidity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, TurbidityUnit> {
         self.in_unit(TurbidityUnit::NTU)
     }
+}
 
+impl<T: Number> Turbidity<T> {
     /// A [`Turbidity`] from a value in `NTU`.
     #[inline]
     pub fn from_ntu(value: T) -> Self {

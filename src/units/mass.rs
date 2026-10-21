@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In physics, mass (from Greek μᾶζα "barley cake, lump \[of dough\]") is a property of a physical system or body, giving rise to the phenomena of the body's resistance to being accelerated by a force and the strength of its mutual gravitational attraction with other bodies. Instruments such as mass balances or scales use those phenomena to measure mass. The SI unit of mass is the kilogram (kg).
 ///
@@ -514,7 +514,7 @@ impl core::str::FromStr for MassUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Mass<T>> for MassUnit {
+impl<T: Number> crate::UnitOf<Mass<T>> for MassUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -538,7 +538,7 @@ impl<T: Float> crate::UnitOf<Mass<T>> for MassUnit {
             MassUnit::Kilopound => value * T::from_f64(453.59237),
             MassUnit::Megapound => value * T::from_f64(453592.37),
             MassUnit::Ounce => value * T::from_f64(0.028349523125),
-            MassUnit::Slug => value * T::from_f64(14.593902937206364),
+            MassUnit::Slug => T::mul_ratio(value, 8896443230521.0, 609600000000.0),
             MassUnit::Stone => value * T::from_f64(6.35029318),
             MassUnit::ShortHundredweight => value * T::from_f64(45.359237),
             MassUnit::LongHundredweight => value * T::from_f64(50.80234544),
@@ -575,7 +575,7 @@ impl<T: Float> crate::UnitOf<Mass<T>> for MassUnit {
             MassUnit::Kilopound => value / T::from_f64(453.59237),
             MassUnit::Megapound => value / T::from_f64(453592.37),
             MassUnit::Ounce => value / T::from_f64(0.028349523125),
-            MassUnit::Slug => value / T::from_f64(14.593902937206364),
+            MassUnit::Slug => T::div_ratio(value, 8896443230521.0, 609600000000.0),
             MassUnit::Stone => value / T::from_f64(6.35029318),
             MassUnit::ShortHundredweight => value / T::from_f64(45.359237),
             MassUnit::LongHundredweight => value / T::from_f64(50.80234544),
@@ -590,7 +590,7 @@ impl<T: Float> crate::UnitOf<Mass<T>> for MassUnit {
     }
 }
 
-impl<T: Float> Mass<T> {
+impl<T: crate::Float> Mass<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fg`, `pg`, `ng`, `µg`, `mg`, `g`, `kg`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -618,7 +618,9 @@ impl<T: Float> Mass<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Mass<T> {
     /// A [`Mass`] from a value in `g`.
     #[inline]
     pub fn from_grams(value: T) -> Self {
@@ -862,13 +864,13 @@ impl<T: Float> Mass<T> {
     /// A [`Mass`] from a value in `slug`.
     #[inline]
     pub fn from_slugs(value: T) -> Self {
-        Self(value * T::from_f64(14.593902937206364))
+        Self(T::mul_ratio(value, 8896443230521.0, 609600000000.0))
     }
 
     /// The value in `slug`.
     #[inline]
     pub fn as_slugs(self) -> T {
-        self.0 / T::from_f64(14.593902937206364)
+        T::div_ratio(self.0, 8896443230521.0, 609600000000.0)
     }
 
     /// A [`Mass`] from a value in `st`.

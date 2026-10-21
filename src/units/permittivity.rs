@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, permittivity is the measure of resistance that is encountered when forming an electric field in a particular medium.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for PermittivityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Permittivity<T>> for PermittivityUnit {
+impl<T: Number> crate::UnitOf<Permittivity<T>> for PermittivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<Permittivity<T>> for PermittivityUnit {
     }
 }
 
-impl<T: Float> Permittivity<T> {
+impl<T: crate::Float> Permittivity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`F/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> Permittivity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, PermittivityUnit> {
         self.in_unit(PermittivityUnit::FaradPerMeter)
     }
+}
 
+impl<T: Number> Permittivity<T> {
     /// A [`Permittivity`] from a value in `F/m`.
     #[inline]
     pub fn from_farads_per_meter(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Irradiance is the intensity of ultraviolet (UV) or visible light incident on a surface.
 ///
@@ -278,7 +278,7 @@ impl core::str::FromStr for IrradianceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
+impl<T: Number> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -320,7 +320,7 @@ impl<T: Float> crate::UnitOf<Irradiance<T>> for IrradianceUnit {
     }
 }
 
-impl<T: Float> Irradiance<T> {
+impl<T: crate::Float> Irradiance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pW/m²`, `nW/m²`, `µW/m²`, `mW/m²`, `W/m²`, `kW/m²`, `MW/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -348,7 +348,9 @@ impl<T: Float> Irradiance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Irradiance<T> {
     /// A [`Irradiance`] from a value in `W/m²`.
     #[inline]
     pub fn from_watts_per_square_meter(value: T) -> Self {

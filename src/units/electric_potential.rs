@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In classical electromagnetism, the electric potential (a scalar quantity denoted by Φ, ΦE or V and also called the electric field potential or the electrostatic potential) at a point is the amount of electric potential energy that a unitary point charge would have when located at that point.
 ///
@@ -174,7 +174,7 @@ impl core::str::FromStr for ElectricPotentialUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
+impl<T: Number> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -200,7 +200,7 @@ impl<T: Float> crate::UnitOf<ElectricPotential<T>> for ElectricPotentialUnit {
     }
 }
 
-impl<T: Float> ElectricPotential<T> {
+impl<T: crate::Float> ElectricPotential<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nV`, `µV`, `mV`, `V`, `kV`, `MV`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -227,7 +227,9 @@ impl<T: Float> ElectricPotential<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricPotential<T> {
     /// A [`ElectricPotential`] from a value in `V`.
     #[inline]
     pub fn from_volts(value: T) -> Self {

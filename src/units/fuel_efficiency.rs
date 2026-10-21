@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In the context of transport, fuel economy is the energy efficiency of a particular vehicle, given as a ratio of distance traveled per unit of fuel consumed. In most countries, using the metric system, fuel economy is stated as "fuel consumption" in liters per 100 kilometers (L/100 km) or kilometers per liter (km/L or kmpl). In countries using non-metric system, fuel economy is expressed in miles per gallon (mpg) (imperial galon or US galon).
 ///
@@ -147,13 +147,13 @@ impl core::str::FromStr for FuelEfficiencyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
+impl<T: Number> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / value,
-            FuelEfficiencyUnit::MilePerUsGallon => value * T::from_f64(0.425143707430272),
-            FuelEfficiencyUnit::MilePerUkGallon => value * T::from_f64(0.3540061899346471),
+            FuelEfficiencyUnit::MilePerUsGallon => T::mul_ratio(value, 48000.0, 112903.0),
+            FuelEfficiencyUnit::MilePerUkGallon => T::mul_ratio(value, 804672.0, 2273045.0),
             FuelEfficiencyUnit::KilometerPerLiter => value,
         }
     }
@@ -162,14 +162,14 @@ impl<T: Float> crate::UnitOf<FuelEfficiency<T>> for FuelEfficiencyUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             FuelEfficiencyUnit::LiterPer100Kilometers => T::from_f64(100.0) / value,
-            FuelEfficiencyUnit::MilePerUsGallon => value / T::from_f64(0.425143707430272),
-            FuelEfficiencyUnit::MilePerUkGallon => value / T::from_f64(0.3540061899346471),
+            FuelEfficiencyUnit::MilePerUsGallon => T::div_ratio(value, 48000.0, 112903.0),
+            FuelEfficiencyUnit::MilePerUkGallon => T::div_ratio(value, 804672.0, 2273045.0),
             FuelEfficiencyUnit::KilometerPerLiter => value,
         }
     }
 }
 
-impl<T: Float> FuelEfficiency<T> {
+impl<T: crate::Float> FuelEfficiency<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`km/l`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -177,7 +177,9 @@ impl<T: Float> FuelEfficiency<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, FuelEfficiencyUnit> {
         self.in_unit(FuelEfficiencyUnit::KilometerPerLiter)
     }
+}
 
+impl<T: Number> FuelEfficiency<T> {
     /// A [`FuelEfficiency`] from a value in `l/100km`.
     #[inline]
     pub fn from_liters_per100_kilometers(value: T) -> Self {
@@ -193,25 +195,25 @@ impl<T: Float> FuelEfficiency<T> {
     /// A [`FuelEfficiency`] from a value in `mpg (U.S.)`.
     #[inline]
     pub fn from_miles_per_us_gallon(value: T) -> Self {
-        Self(value * T::from_f64(0.425143707430272))
+        Self(T::mul_ratio(value, 48000.0, 112903.0))
     }
 
     /// The value in `mpg (U.S.)`.
     #[inline]
     pub fn as_miles_per_us_gallon(self) -> T {
-        self.0 / T::from_f64(0.425143707430272)
+        T::div_ratio(self.0, 48000.0, 112903.0)
     }
 
     /// A [`FuelEfficiency`] from a value in `mpg (imp.)`.
     #[inline]
     pub fn from_miles_per_uk_gallon(value: T) -> Self {
-        Self(value * T::from_f64(0.3540061899346471))
+        Self(T::mul_ratio(value, 804672.0, 2273045.0))
     }
 
     /// The value in `mpg (imp.)`.
     #[inline]
     pub fn as_miles_per_uk_gallon(self) -> T {
-        self.0 / T::from_f64(0.3540061899346471)
+        T::div_ratio(self.0, 804672.0, 2273045.0)
     }
 
     /// A [`FuelEfficiency`] from a value in `km/l`.

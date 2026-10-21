@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Mole is the amount of substance containing Avagadro's Number (6.02 x 10 ^ 23) of real particles such as molecules,atoms, ions or radicals.
 ///
@@ -317,7 +317,7 @@ impl core::str::FromStr for AmountOfSubstanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
+impl<T: Number> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -365,7 +365,7 @@ impl<T: Float> crate::UnitOf<AmountOfSubstance<T>> for AmountOfSubstanceUnit {
     }
 }
 
-impl<T: Float> AmountOfSubstance<T> {
+impl<T: crate::Float> AmountOfSubstance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fmol`, `pmol`, `nmol`, `µmol`, `mmol`, `mol`, `kmol`, `Mmol`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -394,7 +394,9 @@ impl<T: Float> AmountOfSubstance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> AmountOfSubstance<T> {
     /// A [`AmountOfSubstance`] from a value in `mol`.
     #[inline]
     pub fn from_moles(value: T) -> Self {

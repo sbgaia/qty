@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Thermal conductivity is the property of a material to conduct heat.
 ///
@@ -135,16 +135,16 @@ impl core::str::FromStr for ThermalConductivityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit {
+impl<T: Number> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             ThermalConductivityUnit::WattPerMeterKelvin => value,
             ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
-                value * T::from_f64(1.7307346663713912)
+                T::mul_ratio(value, 52752792631.0, 30480000000.0)
             }
             ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
-                value * T::from_f64(74767.73758724409)
+                T::mul_ratio(value, 474775133679.0, 6350000.0)
             }
         }
     }
@@ -154,16 +154,16 @@ impl<T: Float> crate::UnitOf<ThermalConductivity<T>> for ThermalConductivityUnit
         match self {
             ThermalConductivityUnit::WattPerMeterKelvin => value,
             ThermalConductivityUnit::BtuPerHourFootFahrenheit => {
-                value / T::from_f64(1.7307346663713912)
+                T::div_ratio(value, 52752792631.0, 30480000000.0)
             }
             ThermalConductivityUnit::BtuPerSecondInchFahrenheit => {
-                value / T::from_f64(74767.73758724409)
+                T::div_ratio(value, 474775133679.0, 6350000.0)
             }
         }
     }
 }
 
-impl<T: Float> ThermalConductivity<T> {
+impl<T: crate::Float> ThermalConductivity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`W/(m·K)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -171,7 +171,9 @@ impl<T: Float> ThermalConductivity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ThermalConductivityUnit> {
         self.in_unit(ThermalConductivityUnit::WattPerMeterKelvin)
     }
+}
 
+impl<T: Number> ThermalConductivity<T> {
     /// A [`ThermalConductivity`] from a value in `W/(m·K)`.
     #[inline]
     pub fn from_watts_per_meter_kelvin(value: T) -> Self {
@@ -187,25 +189,25 @@ impl<T: Float> ThermalConductivity<T> {
     /// A [`ThermalConductivity`] from a value in `BTU/(h·ft·°F)`.
     #[inline]
     pub fn from_btus_per_hour_foot_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(1.7307346663713912))
+        Self(T::mul_ratio(value, 52752792631.0, 30480000000.0))
     }
 
     /// The value in `BTU/(h·ft·°F)`.
     #[inline]
     pub fn as_btus_per_hour_foot_fahrenheit(self) -> T {
-        self.0 / T::from_f64(1.7307346663713912)
+        T::div_ratio(self.0, 52752792631.0, 30480000000.0)
     }
 
     /// A [`ThermalConductivity`] from a value in `BTU/(s·in·°F)`.
     #[inline]
     pub fn from_btus_per_second_inch_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(74767.73758724409))
+        Self(T::mul_ratio(value, 474775133679.0, 6350000.0))
     }
 
     /// The value in `BTU/(s·in·°F)`.
     #[inline]
     pub fn as_btus_per_second_inch_fahrenheit(self) -> T {
-        self.0 / T::from_f64(74767.73758724409)
+        T::div_ratio(self.0, 474775133679.0, 6350000.0)
     }
 }
 

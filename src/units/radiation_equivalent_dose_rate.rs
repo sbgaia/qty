@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A dose rate is quantity of radiation absorbed or delivered per unit time.
 ///
@@ -226,7 +226,7 @@ impl core::str::FromStr for RadiationEquivalentDoseRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquivalentDoseRateUnit {
+impl<T: Number> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquivalentDoseRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -272,7 +272,7 @@ impl<T: Float> crate::UnitOf<RadiationEquivalentDoseRate<T>> for RadiationEquiva
     }
 }
 
-impl<T: Float> RadiationEquivalentDoseRate<T> {
+impl<T: crate::Float> RadiationEquivalentDoseRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nSv/s`, `µSv/s`, `mSv/s`, `Sv/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -300,7 +300,9 @@ impl<T: Float> RadiationEquivalentDoseRate<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RadiationEquivalentDoseRate<T> {
     /// A [`RadiationEquivalentDoseRate`] from a value in `Sv/h`.
     #[inline]
     pub fn from_sieverts_per_hour(value: T) -> Self {

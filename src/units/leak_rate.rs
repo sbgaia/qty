@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A leakage rate of QL = 1 Pa-m³/s is given when the pressure in a closed, evacuated container with a volume of 1 m³ rises by 1 Pa per second or when the pressure in the container drops by 1 Pa in the event of overpressure.
 ///
@@ -148,7 +148,7 @@ impl core::str::FromStr for LeakRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
+impl<T: Number> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -170,7 +170,7 @@ impl<T: Float> crate::UnitOf<LeakRate<T>> for LeakRateUnit {
     }
 }
 
-impl<T: Float> LeakRate<T> {
+impl<T: crate::Float> LeakRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Pa·m³/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -178,7 +178,9 @@ impl<T: Float> LeakRate<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, LeakRateUnit> {
         self.in_unit(LeakRateUnit::PascalCubicMeterPerSecond)
     }
+}
 
+impl<T: Number> LeakRate<T> {
     /// A [`LeakRate`] from a value in `Pa·m³/s`.
     #[inline]
     pub fn from_pascal_cubic_meters_per_second(value: T) -> Self {

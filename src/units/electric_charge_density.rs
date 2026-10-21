@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, charge density is a measure of the amount of electric charge per volume.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for ElectricChargeDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricChargeDensity<T>> for ElectricChargeDensityUnit {
+impl<T: Number> crate::UnitOf<ElectricChargeDensity<T>> for ElectricChargeDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<ElectricChargeDensity<T>> for ElectricChargeDensity
     }
 }
 
-impl<T: Float> ElectricChargeDensity<T> {
+impl<T: crate::Float> ElectricChargeDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`C/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> ElectricChargeDensity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricChargeDensityUnit> {
         self.in_unit(ElectricChargeDensityUnit::CoulombPerCubicMeter)
     }
+}
 
+impl<T: Number> ElectricChargeDensity<T> {
     /// A [`ElectricChargeDensity`] from a value in `C/m³`.
     #[inline]
     pub fn from_coulombs_per_cubic_meter(value: T) -> Self {

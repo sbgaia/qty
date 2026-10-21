@@ -8,7 +8,7 @@
 
 use crate::case::ToSnakeCase;
 
-use crate::expr::{self, Direction, Form};
+use crate::expr::{self, Direction, Form, Target};
 use crate::parser::{QuantityDef, UnitDef};
 use crate::si;
 
@@ -436,7 +436,7 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
         "#![allow(clippy::approx_constant, clippy::excessive_precision, clippy::unreadable_literal)]"
     );
     w!(out);
-    w!(out, "use crate::Float;");
+    w!(out, "use crate::Number;");
     if let Some(delta) = point_delta(name) {
         w!(out, "use crate::{};", delta);
     }
@@ -850,7 +850,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     w!(out, "/// operations for units with an offset.");
     w!(
         out,
-        "impl<T: Float> crate::UnitOf<{}<T>> for {} {{",
+        "impl<T: Number> crate::UnitOf<{}<T>> for {} {{",
         name,
         enum_name
     );
@@ -863,7 +863,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             "            {}::{} => {},",
             enum_name,
             unit.singular,
-            expr::emit(&unit.to_base, "value", Direction::ToBase)
+            expr::emit(&unit.to_base, "value", Direction::ToBase, Target::Generic)
         );
     }
     w!(out, "        }}");
@@ -878,16 +878,25 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
             "            {}::{} => {},",
             enum_name,
             unit.singular,
-            expr::emit(&unit.from_base, "value", Direction::FromBase)
+            expr::emit(
+                &unit.from_base,
+                "value",
+                Direction::FromBase,
+                Target::Generic
+            )
         );
     }
     w!(out, "        }}");
     w!(out, "    }}");
     w!(out, "}}");
     w!(out);
-    w!(out, "impl<T: Float> {}<T> {{", name);
-
+    // Picking a unit compares magnitudes, so it needs an ordered type.
+    w!(out, "impl<T: crate::Float> {}<T> {{", name);
     emit_auto_unit(qty, out);
+    w!(out, "}}");
+    w!(out);
+
+    w!(out, "impl<T: Number> {}<T> {{", name);
 
     // `from_<unit>` and `as_<unit>`.
     for unit in &qty.units {
@@ -906,7 +915,7 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         w!(
             out,
             "        Self({})",
-            expr::emit(&unit.to_base, "value", Direction::ToBase)
+            expr::emit(&unit.to_base, "value", Direction::ToBase, Target::Generic)
         );
         w!(out, "    }}");
         w!(out);
@@ -917,7 +926,12 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
         w!(
             out,
             "        {}",
-            expr::emit(&unit.from_base, "self.0", Direction::FromBase)
+            expr::emit(
+                &unit.from_base,
+                "self.0",
+                Direction::FromBase,
+                Target::Generic
+            )
         );
         w!(out, "    }}");
 
@@ -929,8 +943,8 @@ fn emit_struct_impl(qty: &QuantityDef, out: &mut String) {
     emit_const_new(qty, out);
 }
 
-/// `const_new()` for `f64` storage. It uses the same expressions as `new()`
-/// with the constants as plain literals, so the results are identical.
+/// `const_new()` for `f64` storage. It uses the same expressions as `new()`,
+/// in plain `f64` arithmetic, so the results are identical.
 fn emit_const_new(qty: &QuantityDef, out: &mut String) {
     let name = &qty.name;
     let enum_name = format!("{name}Unit");
@@ -952,28 +966,12 @@ fn emit_const_new(qty: &QuantityDef, out: &mut String) {
             "            {}::{} => {},",
             enum_name,
             unit.singular,
-            strip_from_f64(&expr::emit(&unit.to_base, "value", Direction::ToBase))
+            expr::emit(&unit.to_base, "value", Direction::ToBase, Target::ConstF64)
         );
     }
     w!(out, "        }})");
     w!(out, "    }}");
     w!(out, "}}");
-}
-
-/// Turns `T::from_f64(LIT)` into `LIT`. The literals never contain parentheses.
-fn strip_from_f64(expr: &str) -> String {
-    const OPEN: &str = "T::from_f64(";
-    let mut out = String::with_capacity(expr.len());
-    let mut rest = expr;
-    while let Some(i) = rest.find(OPEN) {
-        out.push_str(&rest[..i]);
-        rest = &rest[i + OPEN.len()..];
-        let close = rest.find(')').expect("from_f64 literal is closed");
-        out.push_str(&rest[..close]);
-        rest = &rest[close + 1..];
-    }
-    out.push_str(rest);
-    out
 }
 
 /// `auto_unit()`: picks, among the SI-prefixed forms of the base unit in
@@ -1029,7 +1027,6 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
     if scale.len() <= 1 {
         w!(out, "        self.in_unit({enum_name}::{})", qty.base_unit);
         w!(out, "    }}");
-        w!(out);
         return;
     }
     w!(
@@ -1063,7 +1060,6 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
     w!(out, "        }}");
     w!(out, "        self.in_unit(unit)");
     w!(out, "    }}");
-    w!(out);
 }
 
 /// The kind of operator a [`CrossOp`] implements.

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electric admittance is a measure of how easily a circuit or device will allow a current to flow by the combined effect of conductance and susceptance in a circuit. It is defined as the inverse of impedance. The SI unit of admittance is the siemens (symbol S).
 ///
@@ -296,7 +296,7 @@ impl core::str::FromStr for ElectricAdmittanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricAdmittance<T>> for ElectricAdmittanceUnit {
+impl<T: Number> crate::UnitOf<ElectricAdmittance<T>> for ElectricAdmittanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -342,7 +342,7 @@ impl<T: Float> crate::UnitOf<ElectricAdmittance<T>> for ElectricAdmittanceUnit {
     }
 }
 
-impl<T: Float> ElectricAdmittance<T> {
+impl<T: crate::Float> ElectricAdmittance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -371,7 +371,9 @@ impl<T: Float> ElectricAdmittance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricAdmittance<T> {
     /// A [`ElectricAdmittance`] from a value in `S`.
     #[inline]
     pub fn from_siemens(value: T) -> Self {

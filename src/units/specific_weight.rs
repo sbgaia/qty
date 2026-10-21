@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The SpecificWeight, or more precisely, the volumetric weight density, of a substance is its weight per unit volume.
 ///
@@ -317,7 +317,7 @@ impl core::str::FromStr for SpecificWeightUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
+impl<T: Number> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -331,13 +331,17 @@ impl<T: Float> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
             SpecificWeightUnit::KilogramForcePerCubicMillimeter => value * T::from_f64(9.80665e9),
             SpecificWeightUnit::KilogramForcePerCubicCentimeter => value * T::from_f64(9806650.0),
             SpecificWeightUnit::KilogramForcePerCubicMeter => value * T::from_f64(9.80665),
-            SpecificWeightUnit::PoundForcePerCubicInch => value * T::from_f64(271447.1375263134),
-            SpecificWeightUnit::KilopoundForcePerCubicInch => {
-                value * T::from_f64(2.714471375263134e8)
+            SpecificWeightUnit::PoundForcePerCubicInch => {
+                T::mul_ratio(value, 8896443230521.0, 32774128.0)
             }
-            SpecificWeightUnit::PoundForcePerCubicFoot => value * T::from_f64(157.0874638462462),
+            SpecificWeightUnit::KilopoundForcePerCubicInch => {
+                T::mul_ratio(value, 1112055403815125.0, 4096766.0)
+            }
+            SpecificWeightUnit::PoundForcePerCubicFoot => {
+                T::mul_ratio(value, 8896443230521.0, 56633693184.0)
+            }
             SpecificWeightUnit::KilopoundForcePerCubicFoot => {
-                value * T::from_f64(157087.46384624622)
+                T::mul_ratio(value, 1112055403815125.0, 7079211648.0)
             }
             SpecificWeightUnit::TonneForcePerCubicMillimeter => value * T::from_f64(9.80665e12),
             SpecificWeightUnit::TonneForcePerCubicCentimeter => value * T::from_f64(9.80665e9),
@@ -358,13 +362,17 @@ impl<T: Float> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
             SpecificWeightUnit::KilogramForcePerCubicMillimeter => value / T::from_f64(9.80665e9),
             SpecificWeightUnit::KilogramForcePerCubicCentimeter => value / T::from_f64(9806650.0),
             SpecificWeightUnit::KilogramForcePerCubicMeter => value / T::from_f64(9.80665),
-            SpecificWeightUnit::PoundForcePerCubicInch => value / T::from_f64(271447.1375263134),
-            SpecificWeightUnit::KilopoundForcePerCubicInch => {
-                value / T::from_f64(2.714471375263134e8)
+            SpecificWeightUnit::PoundForcePerCubicInch => {
+                T::div_ratio(value, 8896443230521.0, 32774128.0)
             }
-            SpecificWeightUnit::PoundForcePerCubicFoot => value / T::from_f64(157.0874638462462),
+            SpecificWeightUnit::KilopoundForcePerCubicInch => {
+                T::div_ratio(value, 1112055403815125.0, 4096766.0)
+            }
+            SpecificWeightUnit::PoundForcePerCubicFoot => {
+                T::div_ratio(value, 8896443230521.0, 56633693184.0)
+            }
             SpecificWeightUnit::KilopoundForcePerCubicFoot => {
-                value / T::from_f64(157087.46384624622)
+                T::div_ratio(value, 1112055403815125.0, 7079211648.0)
             }
             SpecificWeightUnit::TonneForcePerCubicMillimeter => value / T::from_f64(9.80665e12),
             SpecificWeightUnit::TonneForcePerCubicCentimeter => value / T::from_f64(9.80665e9),
@@ -373,7 +381,7 @@ impl<T: Float> crate::UnitOf<SpecificWeight<T>> for SpecificWeightUnit {
     }
 }
 
-impl<T: Float> SpecificWeight<T> {
+impl<T: crate::Float> SpecificWeight<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`N/m³`, `kN/m³`, `MN/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -397,7 +405,9 @@ impl<T: Float> SpecificWeight<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> SpecificWeight<T> {
     /// A [`SpecificWeight`] from a value in `N/mm³`.
     #[inline]
     pub fn from_newtons_per_cubic_millimeter(value: T) -> Self {
@@ -521,49 +531,49 @@ impl<T: Float> SpecificWeight<T> {
     /// A [`SpecificWeight`] from a value in `lbf/in³`.
     #[inline]
     pub fn from_pounds_force_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(271447.1375263134))
+        Self(T::mul_ratio(value, 8896443230521.0, 32774128.0))
     }
 
     /// The value in `lbf/in³`.
     #[inline]
     pub fn as_pounds_force_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(271447.1375263134)
+        T::div_ratio(self.0, 8896443230521.0, 32774128.0)
     }
 
     /// A [`SpecificWeight`] from a value in `klbf/in³`.
     #[inline]
     pub fn from_kilopounds_force_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(2.714471375263134e8))
+        Self(T::mul_ratio(value, 1112055403815125.0, 4096766.0))
     }
 
     /// The value in `klbf/in³`.
     #[inline]
     pub fn as_kilopounds_force_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(2.714471375263134e8)
+        T::div_ratio(self.0, 1112055403815125.0, 4096766.0)
     }
 
     /// A [`SpecificWeight`] from a value in `lbf/ft³`.
     #[inline]
     pub fn from_pounds_force_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(157.0874638462462))
+        Self(T::mul_ratio(value, 8896443230521.0, 56633693184.0))
     }
 
     /// The value in `lbf/ft³`.
     #[inline]
     pub fn as_pounds_force_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(157.0874638462462)
+        T::div_ratio(self.0, 8896443230521.0, 56633693184.0)
     }
 
     /// A [`SpecificWeight`] from a value in `klbf/ft³`.
     #[inline]
     pub fn from_kilopounds_force_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(157087.46384624622))
+        Self(T::mul_ratio(value, 1112055403815125.0, 7079211648.0))
     }
 
     /// The value in `klbf/ft³`.
     #[inline]
     pub fn as_kilopounds_force_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(157087.46384624622)
+        T::div_ratio(self.0, 1112055403815125.0, 7079211648.0)
     }
 
     /// A [`SpecificWeight`] from a value in `tf/mm³`.

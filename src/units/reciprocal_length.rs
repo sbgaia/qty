@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Reciprocal (Inverse) Length is used in various fields of science and mathematics. It is defined as the inverse value of a length unit.
 ///
@@ -236,20 +236,20 @@ impl core::str::FromStr for ReciprocalLengthUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ReciprocalLength<T>> for ReciprocalLengthUnit {
+impl<T: Number> crate::UnitOf<ReciprocalLength<T>> for ReciprocalLengthUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             ReciprocalLengthUnit::InverseMeter => value,
             ReciprocalLengthUnit::InverseCentimeter => value * T::from_f64(100.0),
             ReciprocalLengthUnit::InverseMillimeter => value * T::from_f64(1000.0),
-            ReciprocalLengthUnit::InverseMile => value * T::from_f64(0.0006213711922373339),
-            ReciprocalLengthUnit::InverseYard => value * T::from_f64(1.0936132983377078),
-            ReciprocalLengthUnit::InverseFoot => value * T::from_f64(3.2808398950131235),
-            ReciprocalLengthUnit::InverseUsSurveyFoot => value * T::from_f64(3.2808333333333333),
-            ReciprocalLengthUnit::InverseInch => value * T::from_f64(39.37007874015748),
-            ReciprocalLengthUnit::InverseMil => value * T::from_f64(39370.07874015748),
-            ReciprocalLengthUnit::InverseMicroinch => value * T::from_f64(3.937007874015748e7),
+            ReciprocalLengthUnit::InverseMile => T::mul_ratio(value, 125.0, 201168.0),
+            ReciprocalLengthUnit::InverseYard => T::mul_ratio(value, 1250.0, 1143.0),
+            ReciprocalLengthUnit::InverseFoot => T::mul_ratio(value, 1250.0, 381.0),
+            ReciprocalLengthUnit::InverseUsSurveyFoot => T::mul_ratio(value, 3937.0, 1200.0),
+            ReciprocalLengthUnit::InverseInch => T::mul_ratio(value, 5000.0, 127.0),
+            ReciprocalLengthUnit::InverseMil => T::mul_ratio(value, 5000000.0, 127.0),
+            ReciprocalLengthUnit::InverseMicroinch => T::mul_ratio(value, 5000000000.0, 127.0),
         }
     }
 
@@ -259,18 +259,18 @@ impl<T: Float> crate::UnitOf<ReciprocalLength<T>> for ReciprocalLengthUnit {
             ReciprocalLengthUnit::InverseMeter => value,
             ReciprocalLengthUnit::InverseCentimeter => value / T::from_f64(100.0),
             ReciprocalLengthUnit::InverseMillimeter => value / T::from_f64(1000.0),
-            ReciprocalLengthUnit::InverseMile => value / T::from_f64(0.0006213711922373339),
-            ReciprocalLengthUnit::InverseYard => value / T::from_f64(1.0936132983377078),
-            ReciprocalLengthUnit::InverseFoot => value / T::from_f64(3.2808398950131235),
-            ReciprocalLengthUnit::InverseUsSurveyFoot => value / T::from_f64(3.2808333333333333),
-            ReciprocalLengthUnit::InverseInch => value / T::from_f64(39.37007874015748),
-            ReciprocalLengthUnit::InverseMil => value / T::from_f64(39370.07874015748),
-            ReciprocalLengthUnit::InverseMicroinch => value / T::from_f64(3.937007874015748e7),
+            ReciprocalLengthUnit::InverseMile => T::div_ratio(value, 125.0, 201168.0),
+            ReciprocalLengthUnit::InverseYard => T::div_ratio(value, 1250.0, 1143.0),
+            ReciprocalLengthUnit::InverseFoot => T::div_ratio(value, 1250.0, 381.0),
+            ReciprocalLengthUnit::InverseUsSurveyFoot => T::div_ratio(value, 3937.0, 1200.0),
+            ReciprocalLengthUnit::InverseInch => T::div_ratio(value, 5000.0, 127.0),
+            ReciprocalLengthUnit::InverseMil => T::div_ratio(value, 5000000.0, 127.0),
+            ReciprocalLengthUnit::InverseMicroinch => T::div_ratio(value, 5000000000.0, 127.0),
         }
     }
 }
 
-impl<T: Float> ReciprocalLength<T> {
+impl<T: crate::Float> ReciprocalLength<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m⁻¹`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -278,7 +278,9 @@ impl<T: Float> ReciprocalLength<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ReciprocalLengthUnit> {
         self.in_unit(ReciprocalLengthUnit::InverseMeter)
     }
+}
 
+impl<T: Number> ReciprocalLength<T> {
     /// A [`ReciprocalLength`] from a value in `m⁻¹`.
     #[inline]
     pub fn from_inverse_meters(value: T) -> Self {
@@ -318,85 +320,85 @@ impl<T: Float> ReciprocalLength<T> {
     /// A [`ReciprocalLength`] from a value in `mi⁻¹`.
     #[inline]
     pub fn from_inverse_miles(value: T) -> Self {
-        Self(value * T::from_f64(0.0006213711922373339))
+        Self(T::mul_ratio(value, 125.0, 201168.0))
     }
 
     /// The value in `mi⁻¹`.
     #[inline]
     pub fn as_inverse_miles(self) -> T {
-        self.0 / T::from_f64(0.0006213711922373339)
+        T::div_ratio(self.0, 125.0, 201168.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `yd⁻¹`.
     #[inline]
     pub fn from_inverse_yards(value: T) -> Self {
-        Self(value * T::from_f64(1.0936132983377078))
+        Self(T::mul_ratio(value, 1250.0, 1143.0))
     }
 
     /// The value in `yd⁻¹`.
     #[inline]
     pub fn as_inverse_yards(self) -> T {
-        self.0 / T::from_f64(1.0936132983377078)
+        T::div_ratio(self.0, 1250.0, 1143.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `ft⁻¹`.
     #[inline]
     pub fn from_inverse_feet(value: T) -> Self {
-        Self(value * T::from_f64(3.2808398950131235))
+        Self(T::mul_ratio(value, 1250.0, 381.0))
     }
 
     /// The value in `ft⁻¹`.
     #[inline]
     pub fn as_inverse_feet(self) -> T {
-        self.0 / T::from_f64(3.2808398950131235)
+        T::div_ratio(self.0, 1250.0, 381.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `ftUS⁻¹`.
     #[inline]
     pub fn from_inverse_us_survey_feet(value: T) -> Self {
-        Self(value * T::from_f64(3.2808333333333333))
+        Self(T::mul_ratio(value, 3937.0, 1200.0))
     }
 
     /// The value in `ftUS⁻¹`.
     #[inline]
     pub fn as_inverse_us_survey_feet(self) -> T {
-        self.0 / T::from_f64(3.2808333333333333)
+        T::div_ratio(self.0, 3937.0, 1200.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `in⁻¹`.
     #[inline]
     pub fn from_inverse_inches(value: T) -> Self {
-        Self(value * T::from_f64(39.37007874015748))
+        Self(T::mul_ratio(value, 5000.0, 127.0))
     }
 
     /// The value in `in⁻¹`.
     #[inline]
     pub fn as_inverse_inches(self) -> T {
-        self.0 / T::from_f64(39.37007874015748)
+        T::div_ratio(self.0, 5000.0, 127.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `mil⁻¹`.
     #[inline]
     pub fn from_inverse_mils(value: T) -> Self {
-        Self(value * T::from_f64(39370.07874015748))
+        Self(T::mul_ratio(value, 5000000.0, 127.0))
     }
 
     /// The value in `mil⁻¹`.
     #[inline]
     pub fn as_inverse_mils(self) -> T {
-        self.0 / T::from_f64(39370.07874015748)
+        T::div_ratio(self.0, 5000000.0, 127.0)
     }
 
     /// A [`ReciprocalLength`] from a value in `µin⁻¹`.
     #[inline]
     pub fn from_inverse_microinches(value: T) -> Self {
-        Self(value * T::from_f64(3.937007874015748e7))
+        Self(T::mul_ratio(value, 5000000000.0, 127.0))
     }
 
     /// The value in `µin⁻¹`.
     #[inline]
     pub fn as_inverse_microinches(self) -> T {
-        self.0 / T::from_f64(3.937007874015748e7)
+        T::div_ratio(self.0, 5000000000.0, 127.0)
     }
 }
 

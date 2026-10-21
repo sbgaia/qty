@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Volume is the quantity of three-dimensional space enclosed by some closed boundary, for example, the space that a substance (solid, liquid, gas, or plasma) or shape occupies or contains.\[1\] Volume is often quantified numerically using the SI derived unit, the cubic metre. The volume of a container is generally understood to be the capacity of the container, i. e. the amount of fluid (gas or liquid) that the container could hold, rather than the amount of space the container itself displaces.
 ///
@@ -857,7 +857,7 @@ impl core::str::FromStr for VolumeUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Volume<T>> for VolumeUnit {
+impl<T: Number> crate::UnitOf<Volume<T>> for VolumeUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -879,7 +879,7 @@ impl<T: Float> crate::UnitOf<Volume<T>> for VolumeUnit {
             VolumeUnit::CubicCentimeter => value / T::from_f64(1000000.0),
             VolumeUnit::CubicMillimeter => value / T::from_f64(1e9),
             VolumeUnit::CubicMicrometer => value / T::from_f64(1e18),
-            VolumeUnit::CubicMile => value * T::from_f64(4.1681818254405794e9),
+            VolumeUnit::CubicMile => T::mul_ratio(value, 8140980127813632.0, 1953125.0),
             VolumeUnit::CubicYard => value * T::from_f64(0.764554857984),
             VolumeUnit::CubicFoot => value * T::from_f64(0.028316846592),
             VolumeUnit::HundredCubicFoot => value * T::from_f64(2.8316846592),
@@ -939,7 +939,7 @@ impl<T: Float> crate::UnitOf<Volume<T>> for VolumeUnit {
             VolumeUnit::CubicCentimeter => value * T::from_f64(1000000.0),
             VolumeUnit::CubicMillimeter => value * T::from_f64(1e9),
             VolumeUnit::CubicMicrometer => value * T::from_f64(1e18),
-            VolumeUnit::CubicMile => value / T::from_f64(4.1681818254405794e9),
+            VolumeUnit::CubicMile => T::div_ratio(value, 8140980127813632.0, 1953125.0),
             VolumeUnit::CubicYard => value / T::from_f64(0.764554857984),
             VolumeUnit::CubicFoot => value / T::from_f64(0.028316846592),
             VolumeUnit::HundredCubicFoot => value / T::from_f64(2.8316846592),
@@ -979,7 +979,7 @@ impl<T: Float> crate::UnitOf<Volume<T>> for VolumeUnit {
     }
 }
 
-impl<T: Float> Volume<T> {
+impl<T: crate::Float> Volume<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -987,7 +987,9 @@ impl<T: Float> Volume<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeUnit> {
         self.in_unit(VolumeUnit::CubicMeter)
     }
+}
 
+impl<T: Number> Volume<T> {
     /// A [`Volume`] from a value in `l`.
     #[inline]
     pub fn from_liters(value: T) -> Self {
@@ -1207,13 +1209,13 @@ impl<T: Float> Volume<T> {
     /// A [`Volume`] from a value in `mi³`.
     #[inline]
     pub fn from_cubic_miles(value: T) -> Self {
-        Self(value * T::from_f64(4.1681818254405794e9))
+        Self(T::mul_ratio(value, 8140980127813632.0, 1953125.0))
     }
 
     /// The value in `mi³`.
     #[inline]
     pub fn as_cubic_miles(self) -> T {
-        self.0 / T::from_f64(4.1681818254405794e9)
+        T::div_ratio(self.0, 8140980127813632.0, 1953125.0)
     }
 
     /// A [`Volume`] from a value in `yd³`.

@@ -206,11 +206,14 @@ impl<F: Float> ToFloat for Uncertain<F> {
     }
 }
 
-impl<F: FloatMath> Float for Uncertain<F> {
+impl<F: FloatMath> crate::Number for Uncertain<F> {
     #[inline]
     fn from_f64(value: f64) -> Self {
         Self::exact(F::from_f64(value))
     }
+}
+
+impl<F: FloatMath> Float for Uncertain<F> {
     #[inline]
     fn abs(self) -> Self {
         Self {

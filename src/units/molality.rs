@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Molality is a measure of the amount of solute in a solution relative to a given mass of solvent.
 ///
@@ -135,7 +135,7 @@ impl core::str::FromStr for MolalityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Molality<T>> for MolalityUnit {
+impl<T: Number> crate::UnitOf<Molality<T>> for MolalityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -155,7 +155,7 @@ impl<T: Float> crate::UnitOf<Molality<T>> for MolalityUnit {
     }
 }
 
-impl<T: Float> Molality<T> {
+impl<T: crate::Float> Molality<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mmol/kg`, `mol/kg`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -178,7 +178,9 @@ impl<T: Float> Molality<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Molality<T> {
     /// A [`Molality`] from a value in `mol/kg`.
     #[inline]
     pub fn from_moles_per_kilogram(value: T) -> Self {

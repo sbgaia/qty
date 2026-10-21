@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electrical circuits, reactance is the opposition presented to alternating current by inductance and capacitance. Along with resistance, it is one of two elements of impedance.
 ///
@@ -200,7 +200,7 @@ impl core::str::FromStr for ElectricReactanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricReactance<T>> for ElectricReactanceUnit {
+impl<T: Number> crate::UnitOf<ElectricReactance<T>> for ElectricReactanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -230,7 +230,7 @@ impl<T: Float> crate::UnitOf<ElectricReactance<T>> for ElectricReactanceUnit {
     }
 }
 
-impl<T: Float> ElectricReactance<T> {
+impl<T: crate::Float> ElectricReactance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -259,7 +259,9 @@ impl<T: Float> ElectricReactance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricReactance<T> {
     /// A [`ElectricReactance`] from a value in `Ω`.
     #[inline]
     pub fn from_ohms(value: T) -> Self {

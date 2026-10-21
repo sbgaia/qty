@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In thermodynamics, the specific volume of a substance is the ratio of the substance's volume to its mass. It is the reciprocal of density and an intrinsic property of matter as well.
 ///
@@ -136,13 +136,15 @@ impl core::str::FromStr for SpecificVolumeUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SpecificVolume<T>> for SpecificVolumeUnit {
+impl<T: Number> crate::UnitOf<SpecificVolume<T>> for SpecificVolumeUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             SpecificVolumeUnit::CubicMeterPerKilogram => value,
             SpecificVolumeUnit::CubicMillimeterPerKilogram => value / T::from_f64(1e9),
-            SpecificVolumeUnit::CubicFootPerPound => value * T::from_f64(0.06242796057614461),
+            SpecificVolumeUnit::CubicFootPerPound => {
+                T::mul_ratio(value, 1769802912.0, 28349523125.0)
+            }
         }
     }
 
@@ -151,12 +153,14 @@ impl<T: Float> crate::UnitOf<SpecificVolume<T>> for SpecificVolumeUnit {
         match self {
             SpecificVolumeUnit::CubicMeterPerKilogram => value,
             SpecificVolumeUnit::CubicMillimeterPerKilogram => value * T::from_f64(1e9),
-            SpecificVolumeUnit::CubicFootPerPound => value / T::from_f64(0.06242796057614461),
+            SpecificVolumeUnit::CubicFootPerPound => {
+                T::div_ratio(value, 1769802912.0, 28349523125.0)
+            }
         }
     }
 }
 
-impl<T: Float> SpecificVolume<T> {
+impl<T: crate::Float> SpecificVolume<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m³/kg`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -164,7 +168,9 @@ impl<T: Float> SpecificVolume<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, SpecificVolumeUnit> {
         self.in_unit(SpecificVolumeUnit::CubicMeterPerKilogram)
     }
+}
 
+impl<T: Number> SpecificVolume<T> {
     /// A [`SpecificVolume`] from a value in `m³/kg`.
     #[inline]
     pub fn from_cubic_meters_per_kilogram(value: T) -> Self {
@@ -192,13 +198,13 @@ impl<T: Float> SpecificVolume<T> {
     /// A [`SpecificVolume`] from a value in `ft³/lb`.
     #[inline]
     pub fn from_cubic_feet_per_pound(value: T) -> Self {
-        Self(value * T::from_f64(0.06242796057614461))
+        Self(T::mul_ratio(value, 1769802912.0, 28349523125.0))
     }
 
     /// The value in `ft³/lb`.
     #[inline]
     pub fn as_cubic_feet_per_pound(self) -> T {
-        self.0 / T::from_f64(0.06242796057614461)
+        T::div_ratio(self.0, 1769802912.0, 28349523125.0)
     }
 }
 

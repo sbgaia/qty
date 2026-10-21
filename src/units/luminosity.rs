@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Luminosity is an absolute measure of radiated electromagnetic power (light), the radiant power emitted by a light-emitting object.
 ///
@@ -279,7 +279,7 @@ impl core::str::FromStr for LuminosityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
+impl<T: Number> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -321,7 +321,7 @@ impl<T: Float> crate::UnitOf<Luminosity<T>> for LuminosityUnit {
     }
 }
 
-impl<T: Float> Luminosity<T> {
+impl<T: crate::Float> Luminosity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -353,7 +353,9 @@ impl<T: Float> Luminosity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Luminosity<T> {
     /// A [`Luminosity`] from a value in `W`.
     #[inline]
     pub fn from_watts(value: T) -> Self {

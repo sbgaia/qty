@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Absorbed dose is a dose quantity which is the measure of the energy deposited in matter by ionizing radiation per unit mass.
 ///
@@ -322,7 +322,7 @@ impl core::str::FromStr for AbsorbedDoseOfIonizingRadiationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
+impl<T: Number> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
     for AbsorbedDoseOfIonizingRadiationUnit
 {
     #[inline]
@@ -372,7 +372,7 @@ impl<T: Float> crate::UnitOf<AbsorbedDoseOfIonizingRadiation<T>>
     }
 }
 
-impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
+impl<T: crate::Float> AbsorbedDoseOfIonizingRadiation<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fGy`, `pGy`, `nGy`, `µGy`, `mGy`, `Gy`, `kGy`, `MGy`, `GGy`, `TGy`, `PGy`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -404,7 +404,9 @@ impl<T: Float> AbsorbedDoseOfIonizingRadiation<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> AbsorbedDoseOfIonizingRadiation<T> {
     /// A [`AbsorbedDoseOfIonizingRadiation`] from a value in `Gy`.
     #[inline]
     pub fn from_grays(value: T) -> Self {

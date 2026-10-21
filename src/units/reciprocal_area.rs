@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Reciprocal area (Inverse-square) quantity is used to specify a physical quantity inversely proportional to the square of the distance.
 ///
@@ -239,7 +239,7 @@ impl core::str::FromStr for ReciprocalAreaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
+impl<T: Number> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -249,13 +249,13 @@ impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
             ReciprocalAreaUnit::InverseSquareCentimeter => value * T::from_f64(10000.0),
             ReciprocalAreaUnit::InverseSquareMillimeter => value * T::from_f64(1000000.0),
             ReciprocalAreaUnit::InverseSquareMicrometer => value * T::from_f64(1e12),
-            ReciprocalAreaUnit::InverseSquareMile => value * T::from_f64(3.8610215854244587e-7),
-            ReciprocalAreaUnit::InverseSquareYard => value * T::from_f64(1.1959900463010802),
-            ReciprocalAreaUnit::InverseSquareFoot => value * T::from_f64(10.763910416709722),
+            ReciprocalAreaUnit::InverseSquareMile => T::mul_ratio(value, 15625.0, 40468564224.0),
+            ReciprocalAreaUnit::InverseSquareYard => T::mul_ratio(value, 1562500.0, 1306449.0),
+            ReciprocalAreaUnit::InverseSquareFoot => T::mul_ratio(value, 1562500.0, 145161.0),
             ReciprocalAreaUnit::InverseUsSurveySquareFoot => {
-                value * T::from_f64(10.763867361111112)
+                T::mul_ratio(value, 15499969.0, 1440000.0)
             }
-            ReciprocalAreaUnit::InverseSquareInch => value * T::from_f64(1550.0031000062),
+            ReciprocalAreaUnit::InverseSquareInch => T::mul_ratio(value, 25000000.0, 16129.0),
         }
     }
 
@@ -268,18 +268,18 @@ impl<T: Float> crate::UnitOf<ReciprocalArea<T>> for ReciprocalAreaUnit {
             ReciprocalAreaUnit::InverseSquareCentimeter => value / T::from_f64(10000.0),
             ReciprocalAreaUnit::InverseSquareMillimeter => value / T::from_f64(1000000.0),
             ReciprocalAreaUnit::InverseSquareMicrometer => value / T::from_f64(1e12),
-            ReciprocalAreaUnit::InverseSquareMile => value / T::from_f64(3.8610215854244587e-7),
-            ReciprocalAreaUnit::InverseSquareYard => value / T::from_f64(1.1959900463010802),
-            ReciprocalAreaUnit::InverseSquareFoot => value / T::from_f64(10.763910416709722),
+            ReciprocalAreaUnit::InverseSquareMile => T::div_ratio(value, 15625.0, 40468564224.0),
+            ReciprocalAreaUnit::InverseSquareYard => T::div_ratio(value, 1562500.0, 1306449.0),
+            ReciprocalAreaUnit::InverseSquareFoot => T::div_ratio(value, 1562500.0, 145161.0),
             ReciprocalAreaUnit::InverseUsSurveySquareFoot => {
-                value / T::from_f64(10.763867361111112)
+                T::div_ratio(value, 15499969.0, 1440000.0)
             }
-            ReciprocalAreaUnit::InverseSquareInch => value / T::from_f64(1550.0031000062),
+            ReciprocalAreaUnit::InverseSquareInch => T::div_ratio(value, 25000000.0, 16129.0),
         }
     }
 }
 
-impl<T: Float> ReciprocalArea<T> {
+impl<T: crate::Float> ReciprocalArea<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m⁻²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -287,7 +287,9 @@ impl<T: Float> ReciprocalArea<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ReciprocalAreaUnit> {
         self.in_unit(ReciprocalAreaUnit::InverseSquareMeter)
     }
+}
 
+impl<T: Number> ReciprocalArea<T> {
     /// A [`ReciprocalArea`] from a value in `m⁻²`.
     #[inline]
     pub fn from_inverse_square_meters(value: T) -> Self {
@@ -363,61 +365,61 @@ impl<T: Float> ReciprocalArea<T> {
     /// A [`ReciprocalArea`] from a value in `mi⁻²`.
     #[inline]
     pub fn from_inverse_square_miles(value: T) -> Self {
-        Self(value * T::from_f64(3.8610215854244587e-7))
+        Self(T::mul_ratio(value, 15625.0, 40468564224.0))
     }
 
     /// The value in `mi⁻²`.
     #[inline]
     pub fn as_inverse_square_miles(self) -> T {
-        self.0 / T::from_f64(3.8610215854244587e-7)
+        T::div_ratio(self.0, 15625.0, 40468564224.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `yd⁻²`.
     #[inline]
     pub fn from_inverse_square_yards(value: T) -> Self {
-        Self(value * T::from_f64(1.1959900463010802))
+        Self(T::mul_ratio(value, 1562500.0, 1306449.0))
     }
 
     /// The value in `yd⁻²`.
     #[inline]
     pub fn as_inverse_square_yards(self) -> T {
-        self.0 / T::from_f64(1.1959900463010802)
+        T::div_ratio(self.0, 1562500.0, 1306449.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `ft⁻²`.
     #[inline]
     pub fn from_inverse_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(10.763910416709722))
+        Self(T::mul_ratio(value, 1562500.0, 145161.0))
     }
 
     /// The value in `ft⁻²`.
     #[inline]
     pub fn as_inverse_square_feet(self) -> T {
-        self.0 / T::from_f64(10.763910416709722)
+        T::div_ratio(self.0, 1562500.0, 145161.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `ft⁻² (US)`.
     #[inline]
     pub fn from_inverse_us_survey_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(10.763867361111112))
+        Self(T::mul_ratio(value, 15499969.0, 1440000.0))
     }
 
     /// The value in `ft⁻² (US)`.
     #[inline]
     pub fn as_inverse_us_survey_square_feet(self) -> T {
-        self.0 / T::from_f64(10.763867361111112)
+        T::div_ratio(self.0, 15499969.0, 1440000.0)
     }
 
     /// A [`ReciprocalArea`] from a value in `in⁻²`.
     #[inline]
     pub fn from_inverse_square_inches(value: T) -> Self {
-        Self(value * T::from_f64(1550.0031000062))
+        Self(T::mul_ratio(value, 25000000.0, 16129.0))
     }
 
     /// The value in `in⁻²`.
     #[inline]
     pub fn as_inverse_square_inches(self) -> T {
-        self.0 / T::from_f64(1550.0031000062)
+        T::div_ratio(self.0, 25000000.0, 16129.0)
     }
 }
 

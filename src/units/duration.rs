@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Time is a dimension in which events can be ordered from the past through the present into the future, and also the measure of durations of events and the intervals between them.
 ///
@@ -286,7 +286,7 @@ impl core::str::FromStr for DurationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Duration<T>> for DurationUnit {
+impl<T: Number> crate::UnitOf<Duration<T>> for DurationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -326,7 +326,7 @@ impl<T: Float> crate::UnitOf<Duration<T>> for DurationUnit {
     }
 }
 
-impl<T: Float> Duration<T> {
+impl<T: crate::Float> Duration<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`ps`, `ns`, `µs`, `ms`, `s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -352,7 +352,9 @@ impl<T: Float> Duration<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Duration<T> {
     /// A [`Duration`] from a value in `yr`.
     #[inline]
     pub fn from_years365(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The volt-ampere reactive hour (expressed as varh) is the reactive power of one Volt-ampere reactive produced in one hour.
 ///
@@ -134,7 +134,7 @@ impl core::str::FromStr for ElectricReactiveEnergyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricReactiveEnergy<T>> for ElectricReactiveEnergyUnit {
+impl<T: Number> crate::UnitOf<ElectricReactiveEnergy<T>> for ElectricReactiveEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -158,7 +158,7 @@ impl<T: Float> crate::UnitOf<ElectricReactiveEnergy<T>> for ElectricReactiveEner
     }
 }
 
-impl<T: Float> ElectricReactiveEnergy<T> {
+impl<T: crate::Float> ElectricReactiveEnergy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`varh`, `kvarh`, `Mvarh`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -188,7 +188,9 @@ impl<T: Float> ElectricReactiveEnergy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricReactiveEnergy<T> {
     /// A [`ElectricReactiveEnergy`] from a value in `varh`.
     #[inline]
     pub fn from_voltampere_reactive_hours(value: T) -> Self {

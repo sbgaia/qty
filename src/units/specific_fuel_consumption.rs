@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// SFC is the fuel efficiency of an engine design with respect to thrust output
 ///
@@ -147,15 +147,15 @@ impl core::str::FromStr for SpecificFuelConsumptionUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsumptionUnit {
+impl<T: Number> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsumptionUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
-                value * T::from_f64(28.325450360498007)
+                T::mul_ratio(value, 50000000.0, 1765197.0)
             }
             SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => {
-                value * T::from_f64(28.325450360498007)
+                T::mul_ratio(value, 50000000.0, 1765197.0)
             }
             SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
             SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value * T::from_f64(1000.0),
@@ -166,10 +166,10 @@ impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsump
     fn value_from_base(self, value: T) -> T {
         match self {
             SpecificFuelConsumptionUnit::PoundMassPerPoundForceHour => {
-                value / T::from_f64(28.325450360498007)
+                T::div_ratio(value, 50000000.0, 1765197.0)
             }
             SpecificFuelConsumptionUnit::KilogramPerKilogramForceHour => {
-                value / T::from_f64(28.325450360498007)
+                T::div_ratio(value, 50000000.0, 1765197.0)
             }
             SpecificFuelConsumptionUnit::GramPerKilonewtonSecond => value,
             SpecificFuelConsumptionUnit::KilogramPerKilonewtonSecond => value / T::from_f64(1000.0),
@@ -177,7 +177,7 @@ impl<T: Float> crate::UnitOf<SpecificFuelConsumption<T>> for SpecificFuelConsump
     }
 }
 
-impl<T: Float> SpecificFuelConsumption<T> {
+impl<T: crate::Float> SpecificFuelConsumption<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`g/(kN·s)`, `kg/(kN·s)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -203,29 +203,31 @@ impl<T: Float> SpecificFuelConsumption<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> SpecificFuelConsumption<T> {
     /// A [`SpecificFuelConsumption`] from a value in `lb/(lbf·h)`.
     #[inline]
     pub fn from_pounds_mass_per_pound_force_hour(value: T) -> Self {
-        Self(value * T::from_f64(28.325450360498007))
+        Self(T::mul_ratio(value, 50000000.0, 1765197.0))
     }
 
     /// The value in `lb/(lbf·h)`.
     #[inline]
     pub fn as_pounds_mass_per_pound_force_hour(self) -> T {
-        self.0 / T::from_f64(28.325450360498007)
+        T::div_ratio(self.0, 50000000.0, 1765197.0)
     }
 
     /// A [`SpecificFuelConsumption`] from a value in `kg/(kgf·h)`.
     #[inline]
     pub fn from_kilograms_per_kilogram_force_hour(value: T) -> Self {
-        Self(value * T::from_f64(28.325450360498007))
+        Self(T::mul_ratio(value, 50000000.0, 1765197.0))
     }
 
     /// The value in `kg/(kgf·h)`.
     #[inline]
     pub fn as_kilograms_per_kilogram_force_hour(self) -> T {
-        self.0 / T::from_f64(28.325450360498007)
+        T::div_ratio(self.0, 50000000.0, 1765197.0)
     }
 
     /// A [`SpecificFuelConsumption`] from a value in `g/(kN·s)`.

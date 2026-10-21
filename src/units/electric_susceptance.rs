@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electrical susceptance is the imaginary part of admittance, where the real part is conductance.
 ///
@@ -296,7 +296,7 @@ impl core::str::FromStr for ElectricSusceptanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricSusceptance<T>> for ElectricSusceptanceUnit {
+impl<T: Number> crate::UnitOf<ElectricSusceptance<T>> for ElectricSusceptanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -342,7 +342,7 @@ impl<T: Float> crate::UnitOf<ElectricSusceptance<T>> for ElectricSusceptanceUnit
     }
 }
 
-impl<T: Float> ElectricSusceptance<T> {
+impl<T: crate::Float> ElectricSusceptance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nS`, `µS`, `mS`, `S`, `kS`, `MS`, `GS`, `TS`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -371,7 +371,9 @@ impl<T: Float> ElectricSusceptance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricSusceptance<T> {
     /// A [`ElectricSusceptance`] from a value in `S`.
     #[inline]
     pub fn from_siemens(value: T) -> Self {

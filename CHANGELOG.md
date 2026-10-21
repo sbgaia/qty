@@ -17,6 +17,20 @@ follow [Semantic Versioning](https://semver.org/).
   included: `formula!(0.5 * m * v.powi::<2>())`.
 - `Expr::dimensions`, and the `Dimension`, `Exponent`, `MulE` and `PowDim`
   traits behind them.
+- Complex, decimal and rational storage, each behind a feature:
+  `num-complex` (`Complex<f32>`, `Complex<f64>`), `rust_decimal`
+  (`Decimal`) and `num-rational` (`Ratio<i32>`, `Ratio<i64>`,
+  `Ratio<i128>`). Conversions, relations and `formula!` work with them.
+  Decimals and rationals get each conversion constant as written in
+  decimal (a foot is exactly 0.3048 m), and constants with no exact decimal,
+  such as 5/9 for °F and 5/18 for km/h, as fractions, so rationals convert
+  exactly. A constant that doesn't fit the type panics: the solar mass in
+  `Decimal`, the electronvolt in `Ratio<i64>` (use `Ratio<i128>`).
+- The `Number` trait: the arithmetic operators and `from_f64`, which is
+  all that conversions need.
+- Number literals in `formula!` work with every storage type, so
+  `formula!(0.5 * m * v * v)` also works for `Uncertain` and the types
+  above.
 
 ### Changed
 
@@ -28,6 +42,11 @@ follow [Semantic Versioning](https://semver.org/).
   `Torque / Force` and `Torque * RotationalSpeed` are unchanged. The vector
   cross product `r × F` follows: it gives energies, converted with
   `formula!`. `AnyQuantity` arithmetic changes the same way.
+- **Breaking:** conversions (`new`, `convert_to`, `in_unit`, the
+  `from_`/`as_` methods, `UnitOf`) require `Number` instead of `Float`, and
+  `Float` requires `Number`. A custom `Float` type must now implement
+  `Number` too, which takes the `from_f64` method moved there from `Float`.
+  Ordering, parsing, rounding and `auto_unit` still require `Float`.
 
 ## [0.2.4] - 2026-10-20
 

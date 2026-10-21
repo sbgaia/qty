@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Specific entropy is an amount of energy required to raise temperature of a substance by 1 Kelvin per unit mass.
 ///
@@ -214,7 +214,7 @@ impl core::str::FromStr for SpecificEntropyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
+impl<T: Number> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -250,7 +250,7 @@ impl<T: Float> crate::UnitOf<SpecificEntropy<T>> for SpecificEntropyUnit {
     }
 }
 
-impl<T: Float> SpecificEntropy<T> {
+impl<T: crate::Float> SpecificEntropy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/kg·K`, `kJ/kg·K`, `MJ/kg·K`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -274,7 +274,9 @@ impl<T: Float> SpecificEntropy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> SpecificEntropy<T> {
     /// A [`SpecificEntropy`] from a value in `J/kg·K`.
     #[inline]
     pub fn from_joules_per_kilogram_kelvin(value: T) -> Self {

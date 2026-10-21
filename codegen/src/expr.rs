@@ -414,9 +414,81 @@ pub enum Direction {
     FromBase,
 }
 
-/// Wraps a constant for use in generic code over `T: Float`.
-fn lit(c: &Const) -> String {
-    format!("T::from_f64({c})")
+/// What the emitted code computes with.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum Target {
+    /// Generic code over `T: Number`.
+    Generic,
+    /// Plain `f64` arithmetic, usable in a `const fn`. The values are the
+    /// same as `Generic` with `T = f64`.
+    ConstF64,
+}
+
+/// How a constant is written in generic code.
+enum Written {
+    /// `T::from_f64(literal)`: an `f64` whose shortest literal is the exact
+    /// constant (0.3048, 1e-3, …), or one that can't be exact anyway (π).
+    Literal,
+    /// `numerator / denominator`, for fractions such as 5/9 or 5/18 that no
+    /// decimal writes exactly. Decimal and rational storage evaluate them
+    /// exactly; for `f64` the division gives the same value as the literal.
+    Ratio(String, String),
+}
+
+impl Const {
+    fn written(&self) -> Written {
+        // Integers up to 2⁵³ are exact as `f64`, so `n / d` is the correctly
+        // rounded constant.
+        const MAX: u64 = 1 << 53;
+        if self.pi != 0 || Const::parse_decimal(&self.to_string()) == *self {
+            return Written::Literal;
+        }
+        let parts = (self.r.numer().abs().to_u64(), self.r.denom().to_u64());
+        match parts {
+            (Some(n), Some(d)) if n <= MAX && d <= MAX => {
+                let sign = if self.r.is_negative() { "-" } else { "" };
+                Written::Ratio(format!("{sign}{n}.0"), format!("{d}.0"))
+            }
+            _ => Written::Literal,
+        }
+    }
+}
+
+/// A constant as an expression of type `T`.
+fn lit(c: &Const, target: Target) -> String {
+    match (target, c.written()) {
+        (Target::Generic, Written::Literal) => format!("T::from_f64({c})"),
+        (Target::Generic, Written::Ratio(n, d)) => format!("T::from_ratio({n}, {d})"),
+        (Target::ConstF64, _) => c.to_string(),
+    }
+}
+
+/// `x` without the parentheses `emit` puts around a sum, which a function
+/// argument doesn't need.
+fn unparen(x: &str) -> &str {
+    x.strip_prefix('(')
+        .and_then(|x| x.strip_suffix(')'))
+        .unwrap_or(x)
+}
+
+/// `x · c`, where `c` is not exact as an `f64`.
+fn mul_inexact(x: &str, c: &Const, target: Target) -> String {
+    match (target, c.written()) {
+        (Target::Generic, Written::Ratio(n, d)) => {
+            format!("T::mul_ratio({}, {n}, {d})", unparen(x))
+        }
+        _ => format!("{x} * {}", lit(c, target)),
+    }
+}
+
+/// `x / c`, where `c` is not exact as an `f64`.
+fn div_inexact(x: &str, c: &Const, target: Target) -> String {
+    match (target, c.written()) {
+        (Target::Generic, Written::Ratio(n, d)) => {
+            format!("T::div_ratio({}, {n}, {d})", unparen(x))
+        }
+        _ => format!("{x} / {}", lit(c, target)),
+    }
 }
 
 /// Emits `x · f` using a single operation.
@@ -425,35 +497,35 @@ fn lit(c: &Const) -> String {
 /// to metres is `x * 1000` and back is `x / 1000`, both correctly rounded.
 /// When neither is exact, both directions share the constant rounded for the
 /// to-base direction, so `from_unit(v).as_unit()` almost always gives `v`.
-fn emit_scale(x: &str, f: &Const, dir: Direction) -> String {
+fn emit_scale(x: &str, f: &Const, dir: Direction, target: Target) -> String {
     if f.is_one() {
         return x.to_owned();
     }
     let inv = f.recip();
     if f.is_exact_f64() {
-        format!("{x} * {}", lit(f))
+        format!("{x} * {}", lit(f, target))
     } else if inv.is_exact_f64() {
-        format!("{x} / {}", lit(&inv))
+        format!("{x} / {}", lit(&inv, target))
     } else {
         match dir {
-            Direction::ToBase => format!("{x} * {}", lit(f)),
-            Direction::FromBase => format!("{x} / {}", lit(&inv)),
+            Direction::ToBase => mul_inexact(x, f, target),
+            Direction::FromBase => div_inexact(x, &inv, target),
         }
     }
 }
 
 /// Emits a Rust expression of type `T` computing `form` applied to `x`.
-pub fn emit(form: &Form, x: &str, dir: Direction) -> String {
+pub fn emit(form: &Form, x: &str, dir: Direction, target: Target) -> String {
     match form {
         Form::Affine { a, b } => {
             if b.is_zero() {
-                return emit_scale(x, a, dir);
+                return emit_scale(x, a, dir, target);
             }
             match dir {
                 // y = a·x + b
                 Direction::ToBase => {
-                    let scaled = emit_scale(x, a, dir);
-                    offset(&scaled, b)
+                    let scaled = emit_scale(x, a, dir, target);
+                    offset(&scaled, b, target)
                 }
                 // `form` is the inverse of the to-base form `a₀·x + b₀`. Undo
                 // the to-base steps in reverse order, `(x − b₀) / a₀`, so both
@@ -461,24 +533,24 @@ pub fn emit(form: &Form, x: &str, dir: Direction) -> String {
                 Direction::FromBase => {
                     let a0 = a.recip();
                     let b0 = -(b.clone() * a0.clone());
-                    let shifted = offset(x, &(-b0));
+                    let shifted = offset(x, &(-b0), target);
                     if a0.is_one() {
                         shifted
                     } else {
-                        emit_scale(&format!("({shifted})"), &a0.recip(), dir)
+                        emit_scale(&format!("({shifted})"), &a0.recip(), dir, target)
                     }
                 }
             }
         }
-        Form::Reciprocal { k } => format!("{} / {x}", lit(k)),
+        Form::Reciprocal { k } => format!("{} / {x}", lit(k, target)),
     }
 }
 
-fn offset(expr: &str, b: &Const) -> String {
+fn offset(expr: &str, b: &Const, target: Target) -> String {
     if b.r.is_negative() {
-        format!("{expr} - {}", lit(&-b.clone()))
+        format!("{expr} - {}", lit(&-b.clone(), target))
     } else {
-        format!("{expr} + {}", lit(b))
+        format!("{expr} + {}", lit(b, target))
     }
 }
 
@@ -710,27 +782,36 @@ mod tests {
     #[test]
     fn emission_prefers_exact_constants() {
         let km = parse("{x} * 1e3");
-        assert_eq!(emit(&km, "x", Direction::ToBase), "x * T::from_f64(1000.0)");
         assert_eq!(
-            emit(&km.inverse(), "x", Direction::FromBase),
+            emit(&km, "x", Direction::ToBase, Target::Generic),
+            "x * T::from_f64(1000.0)"
+        );
+        assert_eq!(
+            emit(&km.inverse(), "x", Direction::FromBase, Target::Generic),
             "x / T::from_f64(1000.0)"
         );
         let mm = parse("{x} / 1e3");
-        assert_eq!(emit(&mm, "x", Direction::ToBase), "x / T::from_f64(1000.0)");
-        let fm = parse("{x} * 1e-15");
-        assert_eq!(emit(&fm, "x", Direction::ToBase), "x / T::from_f64(1e15)");
         assert_eq!(
-            emit(&mm.inverse(), "x", Direction::FromBase),
+            emit(&mm, "x", Direction::ToBase, Target::Generic),
+            "x / T::from_f64(1000.0)"
+        );
+        let fm = parse("{x} * 1e-15");
+        assert_eq!(
+            emit(&fm, "x", Direction::ToBase, Target::Generic),
+            "x / T::from_f64(1e15)"
+        );
+        assert_eq!(
+            emit(&mm.inverse(), "x", Direction::FromBase, Target::Generic),
             "x * T::from_f64(1000.0)"
         );
         // Neither 0.0254 nor 1/0.0254 is exact: both directions share 0.0254.
         let inch = parse("{x} * 2.54e-2");
         assert_eq!(
-            emit(&inch, "x", Direction::ToBase),
+            emit(&inch, "x", Direction::ToBase, Target::Generic),
             "x * T::from_f64(0.0254)"
         );
         assert_eq!(
-            emit(&inch.inverse(), "x", Direction::FromBase),
+            emit(&inch.inverse(), "x", Direction::FromBase, Target::Generic),
             "x / T::from_f64(0.0254)"
         );
     }
@@ -738,10 +819,41 @@ mod tests {
     #[test]
     fn emission_affine() {
         let c = parse("{x} + 273.15");
-        assert_eq!(emit(&c, "x", Direction::ToBase), "x + T::from_f64(273.15)");
         assert_eq!(
-            emit(&c.inverse(), "x", Direction::FromBase),
+            emit(&c, "x", Direction::ToBase, Target::Generic),
+            "x + T::from_f64(273.15)"
+        );
+        assert_eq!(
+            emit(&c.inverse(), "x", Direction::FromBase, Target::Generic),
             "x - T::from_f64(273.15)"
+        );
+    }
+
+    #[test]
+    fn emission_keeps_fractions_exact() {
+        // 1 km/h is 5/18 m/s, which no decimal writes exactly.
+        let kmh = parse("{x} / 3.6");
+        assert_eq!(
+            emit(&kmh, "x", Direction::ToBase, Target::Generic),
+            "T::mul_ratio(x, 5.0, 18.0)"
+        );
+        assert_eq!(
+            emit(&kmh.inverse(), "x", Direction::FromBase, Target::Generic),
+            "T::div_ratio(x, 5.0, 18.0)"
+        );
+        // The same values in plain `f64`.
+        assert_eq!(
+            emit(&kmh, "x", Direction::ToBase, Target::ConstF64),
+            "x * 0.2777777777777778"
+        );
+        let f = parse("({x} + 459.67) * 5 / 9");
+        assert_eq!(
+            emit(&f, "x", Direction::ToBase, Target::Generic),
+            "T::mul_ratio(x, 5.0, 9.0) + T::from_ratio(45967.0, 180.0)"
+        );
+        assert_eq!(
+            emit(&f.inverse(), "x", Direction::FromBase, Target::Generic),
+            "T::div_ratio(x - T::from_ratio(45967.0, 180.0), 5.0, 9.0)"
         );
     }
 }

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// An electric field is a force field that surrounds electric charges that attracts or repels other electric charges.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for ElectricFieldUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricField<T>> for ElectricFieldUnit {
+impl<T: Number> crate::UnitOf<ElectricField<T>> for ElectricFieldUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<ElectricField<T>> for ElectricFieldUnit {
     }
 }
 
-impl<T: Float> ElectricField<T> {
+impl<T: crate::Float> ElectricField<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`V/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> ElectricField<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricFieldUnit> {
         self.in_unit(ElectricFieldUnit::VoltPerMeter)
     }
+}
 
+impl<T: Number> ElectricField<T> {
     /// A [`ElectricField`] from a value in `V/m`.
     #[inline]
     pub fn from_volts_per_meter(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`PorousMediumPermeabilityUnit::SquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -160,7 +160,7 @@ impl core::str::FromStr for PorousMediumPermeabilityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermeabilityUnit {
+impl<T: Number> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermeabilityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -184,7 +184,7 @@ impl<T: Float> crate::UnitOf<PorousMediumPermeability<T>> for PorousMediumPermea
     }
 }
 
-impl<T: Float> PorousMediumPermeability<T> {
+impl<T: crate::Float> PorousMediumPermeability<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -192,7 +192,9 @@ impl<T: Float> PorousMediumPermeability<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, PorousMediumPermeabilityUnit> {
         self.in_unit(PorousMediumPermeabilityUnit::SquareMeter)
     }
+}
 
+impl<T: Number> PorousMediumPermeability<T> {
     /// A [`PorousMediumPermeability`] from a value in `D`.
     #[inline]
     pub fn from_darcys(value: T) -> Self {

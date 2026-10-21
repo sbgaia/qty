@@ -81,6 +81,14 @@ chrono = ["dep:chrono"]
 time = ["dep:time"]
 ## JSON schemas (`schemars::JsonSchema`) for quantities and unit enums.
 schemars = ["dep:schemars", "std"]
+## Complex storage, `Length<Complex<f64>>`, for phasors and other AC
+## quantities.
+num-complex = ["dep:num-complex"]
+## Decimal storage, `Length<rust_decimal::Decimal>`, where the conversion
+## factors are exact decimals.
+rust_decimal = ["dep:rust_decimal"]
+## Rational storage, `Length<Ratio<i64>>`, for exact arithmetic.
+num-rational = ["dep:num-rational"]
 ## Quantities whose kind is known only at runtime: `AnyQuantity`, `AnyUnit`,
 ## `QuantityKind` (adds about 15 % to the crate's compile time).
 dynamic = []
@@ -93,6 +101,9 @@ chrono = { version = "0.4.35", default-features = false, optional = true }
 schemars = { version = "1", default-features = false, features = ["std"], optional = true }
 time = { version = "0.3", default-features = false, optional = true }
 libm = { version = "0.2", optional = true }
+num-complex = { version = "0.4.6", default-features = false, optional = true }
+num-rational = { version = "0.4.2", default-features = false, optional = true }
+rust_decimal = { version = "1.36", default-features = false, optional = true }
 serde = { version = "1", default-features = false, features = ["derive"], optional = true }
 
 # Examples that need more than the default core quantities.

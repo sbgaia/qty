@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Torque, moment or moment of force (see the terminology below), is the tendency of a force to rotate an object about an axis,\[1\] fulcrum, or pivot. Just as a force is a push or a pull, a torque can be thought of as a twist to an object. Mathematically, torque is defined as the cross product of the lever-arm distance and force, which tends to produce rotation. Loosely speaking, torque is a measure of the turning force on an object such as a bolt or a flywheel. For example, pushing or pulling the handle of a wrench connected to a nut or bolt produces a torque (turning force) that loosens or tightens the nut or bolt.
 ///
@@ -462,7 +462,7 @@ impl core::str::FromStr for TorqueUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
+impl<T: Number> crate::UnitOf<Torque<T>> for TorqueUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -481,9 +481,11 @@ impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
             TorqueUnit::PoundForceInch => value * T::from_f64(0.1129848290276167),
             TorqueUnit::KilopoundForceInch => value * T::from_f64(112.9848290276167),
             TorqueUnit::MegapoundForceInch => value * T::from_f64(112984.8290276167),
-            TorqueUnit::PoundForceFoot => value * T::from_f64(1.3558179483314003),
+            TorqueUnit::PoundForceFoot => {
+                T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
             TorqueUnit::KilopoundForceFoot => value * T::from_f64(1355.8179483314004),
-            TorqueUnit::MegapoundForceFoot => value * T::from_f64(1355817.9483314003),
+            TorqueUnit::MegapoundForceFoot => T::mul_ratio(value, 3389544870828501.0, 2500000000.0),
             TorqueUnit::GramForceMillimeter => value * T::from_f64(9.80665e-6),
             TorqueUnit::GramForceCentimeter => value * T::from_f64(9.80665e-5),
             TorqueUnit::GramForceMeter => value * T::from_f64(0.00980665),
@@ -514,9 +516,11 @@ impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
             TorqueUnit::PoundForceInch => value / T::from_f64(0.1129848290276167),
             TorqueUnit::KilopoundForceInch => value / T::from_f64(112.9848290276167),
             TorqueUnit::MegapoundForceInch => value / T::from_f64(112984.8290276167),
-            TorqueUnit::PoundForceFoot => value / T::from_f64(1.3558179483314003),
+            TorqueUnit::PoundForceFoot => {
+                T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
             TorqueUnit::KilopoundForceFoot => value / T::from_f64(1355.8179483314004),
-            TorqueUnit::MegapoundForceFoot => value / T::from_f64(1355817.9483314003),
+            TorqueUnit::MegapoundForceFoot => T::div_ratio(value, 3389544870828501.0, 2500000000.0),
             TorqueUnit::GramForceMillimeter => value / T::from_f64(9.80665e-6),
             TorqueUnit::GramForceCentimeter => value / T::from_f64(9.80665e-5),
             TorqueUnit::GramForceMeter => value / T::from_f64(0.00980665),
@@ -530,7 +534,7 @@ impl<T: Float> crate::UnitOf<Torque<T>> for TorqueUnit {
     }
 }
 
-impl<T: Float> Torque<T> {
+impl<T: crate::Float> Torque<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`N·m`, `kN·m`, `MN·m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -554,7 +558,9 @@ impl<T: Float> Torque<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Torque<T> {
     /// A [`Torque`] from a value in `N·mm`.
     #[inline]
     pub fn from_newton_millimeters(value: T) -> Self {
@@ -738,13 +744,13 @@ impl<T: Float> Torque<T> {
     /// A [`Torque`] from a value in `lbf·ft`.
     #[inline]
     pub fn from_pound_force_feet(value: T) -> Self {
-        Self(value * T::from_f64(1.3558179483314003))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0))
     }
 
     /// The value in `lbf·ft`.
     #[inline]
     pub fn as_pound_force_feet(self) -> T {
-        self.0 / T::from_f64(1.3558179483314003)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000000.0)
     }
 
     /// A [`Torque`] from a value in `klbf·ft`.
@@ -762,13 +768,13 @@ impl<T: Float> Torque<T> {
     /// A [`Torque`] from a value in `Mlbf·ft`.
     #[inline]
     pub fn from_megapound_force_feet(value: T) -> Self {
-        Self(value * T::from_f64(1355817.9483314003))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000.0))
     }
 
     /// The value in `Mlbf·ft`.
     #[inline]
     pub fn as_megapound_force_feet(self) -> T {
-        self.0 / T::from_f64(1355817.9483314003)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000.0)
     }
 
     /// A [`Torque`] from a value in `gf·mm`.

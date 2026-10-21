@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`EnergyDensityUnit::JoulePerCubicMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -250,7 +250,7 @@ impl core::str::FromStr for EnergyDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<EnergyDensity<T>> for EnergyDensityUnit {
+impl<T: Number> crate::UnitOf<EnergyDensity<T>> for EnergyDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -288,7 +288,7 @@ impl<T: Float> crate::UnitOf<EnergyDensity<T>> for EnergyDensityUnit {
     }
 }
 
-impl<T: Float> EnergyDensity<T> {
+impl<T: crate::Float> EnergyDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/m³`, `kJ/m³`, `MJ/m³`, `GJ/m³`, `TJ/m³`, `PJ/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -315,7 +315,9 @@ impl<T: Float> EnergyDensity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> EnergyDensity<T> {
     /// A [`EnergyDensity`] from a value in `J/m³`.
     #[inline]
     pub fn from_joules_per_cubic_meter(value: T) -> Self {

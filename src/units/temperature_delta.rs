@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Difference between two temperatures. The conversions are different than for Temperature.
 ///
@@ -213,7 +213,7 @@ impl core::str::FromStr for TemperatureDeltaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
+impl<T: Number> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -221,11 +221,11 @@ impl<T: Float> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
             TemperatureDeltaUnit::DegreeCelsius => value,
             TemperatureDeltaUnit::MillidegreeCelsius => value / T::from_f64(1000.0),
             TemperatureDeltaUnit::DegreeDelisle => value / T::from_f64(-1.5),
-            TemperatureDeltaUnit::DegreeFahrenheit => value * T::from_f64(0.5555555555555556),
-            TemperatureDeltaUnit::DegreeNewton => value * T::from_f64(3.0303030303030303),
-            TemperatureDeltaUnit::DegreeRankine => value * T::from_f64(0.5555555555555556),
+            TemperatureDeltaUnit::DegreeFahrenheit => T::mul_ratio(value, 5.0, 9.0),
+            TemperatureDeltaUnit::DegreeNewton => T::mul_ratio(value, 100.0, 33.0),
+            TemperatureDeltaUnit::DegreeRankine => T::mul_ratio(value, 5.0, 9.0),
             TemperatureDeltaUnit::DegreeReaumur => value * T::from_f64(1.25),
-            TemperatureDeltaUnit::DegreeRoemer => value * T::from_f64(1.9047619047619047),
+            TemperatureDeltaUnit::DegreeRoemer => T::mul_ratio(value, 40.0, 21.0),
         }
     }
 
@@ -236,16 +236,16 @@ impl<T: Float> crate::UnitOf<TemperatureDelta<T>> for TemperatureDeltaUnit {
             TemperatureDeltaUnit::DegreeCelsius => value,
             TemperatureDeltaUnit::MillidegreeCelsius => value * T::from_f64(1000.0),
             TemperatureDeltaUnit::DegreeDelisle => value * T::from_f64(-1.5),
-            TemperatureDeltaUnit::DegreeFahrenheit => value / T::from_f64(0.5555555555555556),
-            TemperatureDeltaUnit::DegreeNewton => value / T::from_f64(3.0303030303030303),
-            TemperatureDeltaUnit::DegreeRankine => value / T::from_f64(0.5555555555555556),
+            TemperatureDeltaUnit::DegreeFahrenheit => T::div_ratio(value, 5.0, 9.0),
+            TemperatureDeltaUnit::DegreeNewton => T::div_ratio(value, 100.0, 33.0),
+            TemperatureDeltaUnit::DegreeRankine => T::div_ratio(value, 5.0, 9.0),
             TemperatureDeltaUnit::DegreeReaumur => value / T::from_f64(1.25),
-            TemperatureDeltaUnit::DegreeRoemer => value / T::from_f64(1.9047619047619047),
+            TemperatureDeltaUnit::DegreeRoemer => T::div_ratio(value, 40.0, 21.0),
         }
     }
 }
 
-impl<T: Float> TemperatureDelta<T> {
+impl<T: crate::Float> TemperatureDelta<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`∆K`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -253,7 +253,9 @@ impl<T: Float> TemperatureDelta<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, TemperatureDeltaUnit> {
         self.in_unit(TemperatureDeltaUnit::Kelvin)
     }
+}
 
+impl<T: Number> TemperatureDelta<T> {
     /// A [`TemperatureDelta`] from a value in `∆K`.
     #[inline]
     pub fn from_kelvins(value: T) -> Self {
@@ -305,37 +307,37 @@ impl<T: Float> TemperatureDelta<T> {
     /// A [`TemperatureDelta`] from a value in `∆°F`.
     #[inline]
     pub fn from_degrees_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(0.5555555555555556))
+        Self(T::mul_ratio(value, 5.0, 9.0))
     }
 
     /// The value in `∆°F`.
     #[inline]
     pub fn as_degrees_fahrenheit(self) -> T {
-        self.0 / T::from_f64(0.5555555555555556)
+        T::div_ratio(self.0, 5.0, 9.0)
     }
 
     /// A [`TemperatureDelta`] from a value in `∆°N`.
     #[inline]
     pub fn from_degrees_newton(value: T) -> Self {
-        Self(value * T::from_f64(3.0303030303030303))
+        Self(T::mul_ratio(value, 100.0, 33.0))
     }
 
     /// The value in `∆°N`.
     #[inline]
     pub fn as_degrees_newton(self) -> T {
-        self.0 / T::from_f64(3.0303030303030303)
+        T::div_ratio(self.0, 100.0, 33.0)
     }
 
     /// A [`TemperatureDelta`] from a value in `∆°R`.
     #[inline]
     pub fn from_degrees_rankine(value: T) -> Self {
-        Self(value * T::from_f64(0.5555555555555556))
+        Self(T::mul_ratio(value, 5.0, 9.0))
     }
 
     /// The value in `∆°R`.
     #[inline]
     pub fn as_degrees_rankine(self) -> T {
-        self.0 / T::from_f64(0.5555555555555556)
+        T::div_ratio(self.0, 5.0, 9.0)
     }
 
     /// A [`TemperatureDelta`] from a value in `∆°Ré`.
@@ -353,13 +355,13 @@ impl<T: Float> TemperatureDelta<T> {
     /// A [`TemperatureDelta`] from a value in `∆°Rø`.
     #[inline]
     pub fn from_degrees_roemer(value: T) -> Self {
-        Self(value * T::from_f64(1.9047619047619047))
+        Self(T::mul_ratio(value, 40.0, 21.0))
     }
 
     /// The value in `∆°Rø`.
     #[inline]
     pub fn as_degrees_roemer(self) -> T {
-        self.0 / T::from_f64(1.9047619047619047)
+        T::div_ratio(self.0, 40.0, 21.0)
     }
 }
 

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The Linear Density, or more precisely, the linear mass density, of a substance is its mass per unit length.  The term linear density is most often used when describing the characteristics of one-dimensional objects, although linear density can also be used to describe the density of a three-dimensional quantity along one particular dimension.
 ///
@@ -330,7 +330,7 @@ impl core::str::FromStr for LinearDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
+impl<T: Number> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -346,12 +346,12 @@ impl<T: Float> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
             LinearDensityUnit::MicrogramPerMeter => value / T::from_f64(1e9),
             LinearDensityUnit::MilligramPerMeter => value / T::from_f64(1000000.0),
             LinearDensityUnit::KilogramPerMeter => value,
-            LinearDensityUnit::PoundPerInch => value * T::from_f64(17.857967322834646),
-            LinearDensityUnit::PoundPerFoot => value * T::from_f64(1.4881639435695537),
-            LinearDensityUnit::GramPerFoot => value * T::from_f64(0.0032808398950131233),
+            LinearDensityUnit::PoundPerInch => T::mul_ratio(value, 45359237.0, 2540000.0),
+            LinearDensityUnit::PoundPerFoot => T::mul_ratio(value, 45359237.0, 30480000.0),
+            LinearDensityUnit::GramPerFoot => T::mul_ratio(value, 5.0, 1524.0),
             LinearDensityUnit::MicrogramPerFoot => value / T::from_f64(3.048e8),
             LinearDensityUnit::MilligramPerFoot => value / T::from_f64(304800.0),
-            LinearDensityUnit::KilogramPerFoot => value * T::from_f64(3.2808398950131235),
+            LinearDensityUnit::KilogramPerFoot => T::mul_ratio(value, 1250.0, 381.0),
         }
     }
 
@@ -370,17 +370,17 @@ impl<T: Float> crate::UnitOf<LinearDensity<T>> for LinearDensityUnit {
             LinearDensityUnit::MicrogramPerMeter => value * T::from_f64(1e9),
             LinearDensityUnit::MilligramPerMeter => value * T::from_f64(1000000.0),
             LinearDensityUnit::KilogramPerMeter => value,
-            LinearDensityUnit::PoundPerInch => value / T::from_f64(17.857967322834646),
-            LinearDensityUnit::PoundPerFoot => value / T::from_f64(1.4881639435695537),
-            LinearDensityUnit::GramPerFoot => value / T::from_f64(0.0032808398950131233),
+            LinearDensityUnit::PoundPerInch => T::div_ratio(value, 45359237.0, 2540000.0),
+            LinearDensityUnit::PoundPerFoot => T::div_ratio(value, 45359237.0, 30480000.0),
+            LinearDensityUnit::GramPerFoot => T::div_ratio(value, 5.0, 1524.0),
             LinearDensityUnit::MicrogramPerFoot => value * T::from_f64(3.048e8),
             LinearDensityUnit::MilligramPerFoot => value * T::from_f64(304800.0),
-            LinearDensityUnit::KilogramPerFoot => value / T::from_f64(3.2808398950131235),
+            LinearDensityUnit::KilogramPerFoot => T::div_ratio(value, 1250.0, 381.0),
         }
     }
 }
 
-impl<T: Float> LinearDensity<T> {
+impl<T: crate::Float> LinearDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µg/m`, `mg/m`, `g/m`, `kg/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -405,7 +405,9 @@ impl<T: Float> LinearDensity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `g/mm`.
     #[inline]
     pub fn from_grams_per_millimeter(value: T) -> Self {
@@ -553,37 +555,37 @@ impl<T: Float> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `lb/in`.
     #[inline]
     pub fn from_pounds_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(17.857967322834646))
+        Self(T::mul_ratio(value, 45359237.0, 2540000.0))
     }
 
     /// The value in `lb/in`.
     #[inline]
     pub fn as_pounds_per_inch(self) -> T {
-        self.0 / T::from_f64(17.857967322834646)
+        T::div_ratio(self.0, 45359237.0, 2540000.0)
     }
 
     /// A [`LinearDensity`] from a value in `lb/ft`.
     #[inline]
     pub fn from_pounds_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(1.4881639435695537))
+        Self(T::mul_ratio(value, 45359237.0, 30480000.0))
     }
 
     /// The value in `lb/ft`.
     #[inline]
     pub fn as_pounds_per_foot(self) -> T {
-        self.0 / T::from_f64(1.4881639435695537)
+        T::div_ratio(self.0, 45359237.0, 30480000.0)
     }
 
     /// A [`LinearDensity`] from a value in `g/ft`.
     #[inline]
     pub fn from_grams_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.0032808398950131233))
+        Self(T::mul_ratio(value, 5.0, 1524.0))
     }
 
     /// The value in `g/ft`.
     #[inline]
     pub fn as_grams_per_foot(self) -> T {
-        self.0 / T::from_f64(0.0032808398950131233)
+        T::div_ratio(self.0, 5.0, 1524.0)
     }
 
     /// A [`LinearDensity`] from a value in `µg/ft`.
@@ -613,13 +615,13 @@ impl<T: Float> LinearDensity<T> {
     /// A [`LinearDensity`] from a value in `kg/ft`.
     #[inline]
     pub fn from_kilograms_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.2808398950131235))
+        Self(T::mul_ratio(value, 1250.0, 381.0))
     }
 
     /// The value in `kg/ft`.
     #[inline]
     pub fn as_kilograms_per_foot(self) -> T {
-        self.0 / T::from_f64(3.2808398950131235)
+        T::div_ratio(self.0, 1250.0, 381.0)
     }
 }
 

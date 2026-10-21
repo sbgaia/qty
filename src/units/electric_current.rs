@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// An electric current is a flow of electric charge. In electric circuits this charge is often carried by moving electrons in a wire. It can also be carried by ions in an electrolyte, or by both ions and electrons such as in a plasma.
 ///
@@ -213,7 +213,7 @@ impl core::str::FromStr for ElectricCurrentUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
+impl<T: Number> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -245,7 +245,7 @@ impl<T: Float> crate::UnitOf<ElectricCurrent<T>> for ElectricCurrentUnit {
     }
 }
 
-impl<T: Float> ElectricCurrent<T> {
+impl<T: crate::Float> ElectricCurrent<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fA`, `pA`, `nA`, `µA`, `mA`, `A`, `kA`, `MA`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -274,7 +274,9 @@ impl<T: Float> ElectricCurrent<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricCurrent<T> {
     /// A [`ElectricCurrent`] from a value in `A`.
     #[inline]
     pub fn from_amperes(value: T) -> Self {

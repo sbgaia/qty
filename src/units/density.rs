@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The density, or more precisely, the volumetric mass density, of a substance is its mass per unit volume.
 ///
@@ -831,7 +831,7 @@ impl core::str::FromStr for DensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
+impl<T: Number> crate::UnitOf<Density<T>> for DensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -843,16 +843,20 @@ impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::KilogramPerCubicMeter => value,
             DensityUnit::MilligramPerCubicMeter => value / T::from_f64(1000000.0),
             DensityUnit::MicrogramPerCubicMeter => value / T::from_f64(1e9),
-            DensityUnit::PoundPerCubicInch => value * T::from_f64(27679.90471020312),
-            DensityUnit::KilopoundPerCubicInch => value * T::from_f64(2.7679904710203122e7),
-            DensityUnit::PoundPerCubicFoot => value * T::from_f64(16.018463373960138),
-            DensityUnit::KilopoundPerCubicFoot => value * T::from_f64(16018.46337396014),
-            DensityUnit::PoundPerCubicYard => value * T::from_f64(0.5932764212577829),
-            DensityUnit::KilopoundPerCubicYard => value * T::from_f64(593.276421257783),
+            DensityUnit::PoundPerCubicInch => T::mul_ratio(value, 56699046250.0, 2048383.0),
+            DensityUnit::KilopoundPerCubicInch => T::mul_ratio(value, 56699046250000.0, 2048383.0),
+            DensityUnit::PoundPerCubicFoot => T::mul_ratio(value, 28349523125.0, 1769802912.0),
+            DensityUnit::KilopoundPerCubicFoot => T::mul_ratio(value, 3543690390625.0, 221225364.0),
+            DensityUnit::PoundPerCubicYard => T::mul_ratio(value, 28349523125.0, 47784678624.0),
+            DensityUnit::KilopoundPerCubicYard => {
+                T::mul_ratio(value, 3543690390625.0, 5973084828.0)
+            }
             DensityUnit::TonnePerCubicMillimeter => value * T::from_f64(1e12),
             DensityUnit::TonnePerCubicCentimeter => value * T::from_f64(1e9),
             DensityUnit::TonnePerCubicMeter => value * T::from_f64(1000.0),
-            DensityUnit::SlugPerCubicFoot => value * T::from_f64(515.3788183931962),
+            DensityUnit::SlugPerCubicFoot => {
+                T::mul_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
             DensityUnit::GramPerLiter => value,
             DensityUnit::FemtogramPerLiter => value / T::from_f64(1e15),
             DensityUnit::PicogramPerLiter => value / T::from_f64(1e12),
@@ -877,20 +881,20 @@ impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::MilligramPerMilliliter => value,
             DensityUnit::CentigramPerMilliliter => value * T::from_f64(10.0),
             DensityUnit::DecigramPerMilliliter => value * T::from_f64(100.0),
-            DensityUnit::PoundPerUSGallon => value * T::from_f64(119.82642731689663),
-            DensityUnit::PoundPerImperialGallon => value * T::from_f64(99.7763726631017),
+            DensityUnit::PoundPerUSGallon => T::mul_ratio(value, 736351250.0, 6145149.0),
+            DensityUnit::PoundPerImperialGallon => T::mul_ratio(value, 45359237.0, 454609.0),
             DensityUnit::KilogramPerLiter => value * T::from_f64(1000.0),
-            DensityUnit::TonnePerCubicFoot => value * T::from_f64(35314.66672148859),
-            DensityUnit::TonnePerCubicInch => value * T::from_f64(6.1023744094732285e7),
-            DensityUnit::GramPerCubicFoot => value * T::from_f64(0.03531466672148859),
-            DensityUnit::GramPerCubicInch => value * T::from_f64(61.02374409473229),
+            DensityUnit::TonnePerCubicFoot => T::mul_ratio(value, 1953125000000.0, 55306341.0),
+            DensityUnit::TonnePerCubicInch => T::mul_ratio(value, 125000000000000.0, 2048383.0),
+            DensityUnit::GramPerCubicFoot => T::mul_ratio(value, 1953125.0, 55306341.0),
+            DensityUnit::GramPerCubicInch => T::mul_ratio(value, 125000000.0, 2048383.0),
             DensityUnit::PoundPerCubicMeter => value * T::from_f64(0.45359237),
             DensityUnit::PoundPerCubicCentimeter => value * T::from_f64(453592.37),
             DensityUnit::PoundPerCubicMillimeter => value * T::from_f64(4.5359237e8),
-            DensityUnit::SlugPerCubicMeter => value * T::from_f64(14.593902937206364),
-            DensityUnit::SlugPerCubicCentimeter => value * T::from_f64(1.4593902937206365e7),
-            DensityUnit::SlugPerCubicMillimeter => value * T::from_f64(1.4593902937206366e10),
-            DensityUnit::SlugPerCubicInch => value * T::from_f64(890574.5981834431),
+            DensityUnit::SlugPerCubicMeter => T::mul_ratio(value, 8896443230521.0, 609600000000.0),
+            DensityUnit::SlugPerCubicCentimeter => T::mul_ratio(value, 8896443230521.0, 609600.0),
+            DensityUnit::SlugPerCubicMillimeter => T::mul_ratio(value, 44482216152605.0, 3048.0),
+            DensityUnit::SlugPerCubicInch => T::mul_ratio(value, 5560277019075625.0, 6243471384.0),
         }
     }
 
@@ -905,16 +909,20 @@ impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::KilogramPerCubicMeter => value,
             DensityUnit::MilligramPerCubicMeter => value * T::from_f64(1000000.0),
             DensityUnit::MicrogramPerCubicMeter => value * T::from_f64(1e9),
-            DensityUnit::PoundPerCubicInch => value / T::from_f64(27679.90471020312),
-            DensityUnit::KilopoundPerCubicInch => value / T::from_f64(2.7679904710203122e7),
-            DensityUnit::PoundPerCubicFoot => value / T::from_f64(16.018463373960138),
-            DensityUnit::KilopoundPerCubicFoot => value / T::from_f64(16018.46337396014),
-            DensityUnit::PoundPerCubicYard => value / T::from_f64(0.5932764212577829),
-            DensityUnit::KilopoundPerCubicYard => value / T::from_f64(593.276421257783),
+            DensityUnit::PoundPerCubicInch => T::div_ratio(value, 56699046250.0, 2048383.0),
+            DensityUnit::KilopoundPerCubicInch => T::div_ratio(value, 56699046250000.0, 2048383.0),
+            DensityUnit::PoundPerCubicFoot => T::div_ratio(value, 28349523125.0, 1769802912.0),
+            DensityUnit::KilopoundPerCubicFoot => T::div_ratio(value, 3543690390625.0, 221225364.0),
+            DensityUnit::PoundPerCubicYard => T::div_ratio(value, 28349523125.0, 47784678624.0),
+            DensityUnit::KilopoundPerCubicYard => {
+                T::div_ratio(value, 3543690390625.0, 5973084828.0)
+            }
             DensityUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
             DensityUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
             DensityUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
-            DensityUnit::SlugPerCubicFoot => value / T::from_f64(515.3788183931962),
+            DensityUnit::SlugPerCubicFoot => {
+                T::div_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
             DensityUnit::GramPerLiter => value,
             DensityUnit::FemtogramPerLiter => value * T::from_f64(1e15),
             DensityUnit::PicogramPerLiter => value * T::from_f64(1e12),
@@ -939,25 +947,25 @@ impl<T: Float> crate::UnitOf<Density<T>> for DensityUnit {
             DensityUnit::MilligramPerMilliliter => value,
             DensityUnit::CentigramPerMilliliter => value / T::from_f64(10.0),
             DensityUnit::DecigramPerMilliliter => value / T::from_f64(100.0),
-            DensityUnit::PoundPerUSGallon => value / T::from_f64(119.82642731689663),
-            DensityUnit::PoundPerImperialGallon => value / T::from_f64(99.7763726631017),
+            DensityUnit::PoundPerUSGallon => T::div_ratio(value, 736351250.0, 6145149.0),
+            DensityUnit::PoundPerImperialGallon => T::div_ratio(value, 45359237.0, 454609.0),
             DensityUnit::KilogramPerLiter => value / T::from_f64(1000.0),
-            DensityUnit::TonnePerCubicFoot => value / T::from_f64(35314.66672148859),
-            DensityUnit::TonnePerCubicInch => value / T::from_f64(6.1023744094732285e7),
-            DensityUnit::GramPerCubicFoot => value / T::from_f64(0.03531466672148859),
-            DensityUnit::GramPerCubicInch => value / T::from_f64(61.02374409473229),
+            DensityUnit::TonnePerCubicFoot => T::div_ratio(value, 1953125000000.0, 55306341.0),
+            DensityUnit::TonnePerCubicInch => T::div_ratio(value, 125000000000000.0, 2048383.0),
+            DensityUnit::GramPerCubicFoot => T::div_ratio(value, 1953125.0, 55306341.0),
+            DensityUnit::GramPerCubicInch => T::div_ratio(value, 125000000.0, 2048383.0),
             DensityUnit::PoundPerCubicMeter => value / T::from_f64(0.45359237),
             DensityUnit::PoundPerCubicCentimeter => value / T::from_f64(453592.37),
             DensityUnit::PoundPerCubicMillimeter => value / T::from_f64(4.5359237e8),
-            DensityUnit::SlugPerCubicMeter => value / T::from_f64(14.593902937206364),
-            DensityUnit::SlugPerCubicCentimeter => value / T::from_f64(1.4593902937206365e7),
-            DensityUnit::SlugPerCubicMillimeter => value / T::from_f64(1.4593902937206366e10),
-            DensityUnit::SlugPerCubicInch => value / T::from_f64(890574.5981834431),
+            DensityUnit::SlugPerCubicMeter => T::div_ratio(value, 8896443230521.0, 609600000000.0),
+            DensityUnit::SlugPerCubicCentimeter => T::div_ratio(value, 8896443230521.0, 609600.0),
+            DensityUnit::SlugPerCubicMillimeter => T::div_ratio(value, 44482216152605.0, 3048.0),
+            DensityUnit::SlugPerCubicInch => T::div_ratio(value, 5560277019075625.0, 6243471384.0),
         }
     }
 }
 
-impl<T: Float> Density<T> {
+impl<T: crate::Float> Density<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µg/m³`, `mg/m³`, `g/m³`, `kg/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -982,7 +990,9 @@ impl<T: Float> Density<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Density<T> {
     /// A [`Density`] from a value in `g/mm³`.
     #[inline]
     pub fn from_grams_per_cubic_millimeter(value: T) -> Self {
@@ -1082,73 +1092,73 @@ impl<T: Float> Density<T> {
     /// A [`Density`] from a value in `lb/in³`.
     #[inline]
     pub fn from_pounds_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(27679.90471020312))
+        Self(T::mul_ratio(value, 56699046250.0, 2048383.0))
     }
 
     /// The value in `lb/in³`.
     #[inline]
     pub fn as_pounds_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(27679.90471020312)
+        T::div_ratio(self.0, 56699046250.0, 2048383.0)
     }
 
     /// A [`Density`] from a value in `klb/in³`.
     #[inline]
     pub fn from_kilopounds_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(2.7679904710203122e7))
+        Self(T::mul_ratio(value, 56699046250000.0, 2048383.0))
     }
 
     /// The value in `klb/in³`.
     #[inline]
     pub fn as_kilopounds_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(2.7679904710203122e7)
+        T::div_ratio(self.0, 56699046250000.0, 2048383.0)
     }
 
     /// A [`Density`] from a value in `lb/ft³`.
     #[inline]
     pub fn from_pounds_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(16.018463373960138))
+        Self(T::mul_ratio(value, 28349523125.0, 1769802912.0))
     }
 
     /// The value in `lb/ft³`.
     #[inline]
     pub fn as_pounds_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(16.018463373960138)
+        T::div_ratio(self.0, 28349523125.0, 1769802912.0)
     }
 
     /// A [`Density`] from a value in `klb/ft³`.
     #[inline]
     pub fn from_kilopounds_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(16018.46337396014))
+        Self(T::mul_ratio(value, 3543690390625.0, 221225364.0))
     }
 
     /// The value in `klb/ft³`.
     #[inline]
     pub fn as_kilopounds_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(16018.46337396014)
+        T::div_ratio(self.0, 3543690390625.0, 221225364.0)
     }
 
     /// A [`Density`] from a value in `lb/yd³`.
     #[inline]
     pub fn from_pounds_per_cubic_yard(value: T) -> Self {
-        Self(value * T::from_f64(0.5932764212577829))
+        Self(T::mul_ratio(value, 28349523125.0, 47784678624.0))
     }
 
     /// The value in `lb/yd³`.
     #[inline]
     pub fn as_pounds_per_cubic_yard(self) -> T {
-        self.0 / T::from_f64(0.5932764212577829)
+        T::div_ratio(self.0, 28349523125.0, 47784678624.0)
     }
 
     /// A [`Density`] from a value in `klb/yd³`.
     #[inline]
     pub fn from_kilopounds_per_cubic_yard(value: T) -> Self {
-        Self(value * T::from_f64(593.276421257783))
+        Self(T::mul_ratio(value, 3543690390625.0, 5973084828.0))
     }
 
     /// The value in `klb/yd³`.
     #[inline]
     pub fn as_kilopounds_per_cubic_yard(self) -> T {
-        self.0 / T::from_f64(593.276421257783)
+        T::div_ratio(self.0, 3543690390625.0, 5973084828.0)
     }
 
     /// A [`Density`] from a value in `t/mm³`.
@@ -1190,13 +1200,13 @@ impl<T: Float> Density<T> {
     /// A [`Density`] from a value in `slug/ft³`.
     #[inline]
     pub fn from_slugs_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(515.3788183931962))
+        Self(T::mul_ratio(value, 5560277019075625.0, 10788718551552.0))
     }
 
     /// The value in `slug/ft³`.
     #[inline]
     pub fn as_slugs_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(515.3788183931962)
+        T::div_ratio(self.0, 5560277019075625.0, 10788718551552.0)
     }
 
     /// A [`Density`] from a value in `g/l`.
@@ -1490,25 +1500,25 @@ impl<T: Float> Density<T> {
     /// A [`Density`] from a value in `ppg (U.S.)`.
     #[inline]
     pub fn from_pounds_per_us_gallon(value: T) -> Self {
-        Self(value * T::from_f64(119.82642731689663))
+        Self(T::mul_ratio(value, 736351250.0, 6145149.0))
     }
 
     /// The value in `ppg (U.S.)`.
     #[inline]
     pub fn as_pounds_per_us_gallon(self) -> T {
-        self.0 / T::from_f64(119.82642731689663)
+        T::div_ratio(self.0, 736351250.0, 6145149.0)
     }
 
     /// A [`Density`] from a value in `ppg (imp.)`.
     #[inline]
     pub fn from_pounds_per_imperial_gallon(value: T) -> Self {
-        Self(value * T::from_f64(99.7763726631017))
+        Self(T::mul_ratio(value, 45359237.0, 454609.0))
     }
 
     /// The value in `ppg (imp.)`.
     #[inline]
     pub fn as_pounds_per_imperial_gallon(self) -> T {
-        self.0 / T::from_f64(99.7763726631017)
+        T::div_ratio(self.0, 45359237.0, 454609.0)
     }
 
     /// A [`Density`] from a value in `kg/l`.
@@ -1526,49 +1536,49 @@ impl<T: Float> Density<T> {
     /// A [`Density`] from a value in `t/ft³`.
     #[inline]
     pub fn from_tonnes_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(35314.66672148859))
+        Self(T::mul_ratio(value, 1953125000000.0, 55306341.0))
     }
 
     /// The value in `t/ft³`.
     #[inline]
     pub fn as_tonnes_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(35314.66672148859)
+        T::div_ratio(self.0, 1953125000000.0, 55306341.0)
     }
 
     /// A [`Density`] from a value in `t/in³`.
     #[inline]
     pub fn from_tonnes_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(6.1023744094732285e7))
+        Self(T::mul_ratio(value, 125000000000000.0, 2048383.0))
     }
 
     /// The value in `t/in³`.
     #[inline]
     pub fn as_tonnes_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(6.1023744094732285e7)
+        T::div_ratio(self.0, 125000000000000.0, 2048383.0)
     }
 
     /// A [`Density`] from a value in `g/ft³`.
     #[inline]
     pub fn from_grams_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.03531466672148859))
+        Self(T::mul_ratio(value, 1953125.0, 55306341.0))
     }
 
     /// The value in `g/ft³`.
     #[inline]
     pub fn as_grams_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(0.03531466672148859)
+        T::div_ratio(self.0, 1953125.0, 55306341.0)
     }
 
     /// A [`Density`] from a value in `g/in³`.
     #[inline]
     pub fn from_grams_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(61.02374409473229))
+        Self(T::mul_ratio(value, 125000000.0, 2048383.0))
     }
 
     /// The value in `g/in³`.
     #[inline]
     pub fn as_grams_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(61.02374409473229)
+        T::div_ratio(self.0, 125000000.0, 2048383.0)
     }
 
     /// A [`Density`] from a value in `lb/m³`.
@@ -1610,49 +1620,49 @@ impl<T: Float> Density<T> {
     /// A [`Density`] from a value in `slug/m³`.
     #[inline]
     pub fn from_slugs_per_cubic_meter(value: T) -> Self {
-        Self(value * T::from_f64(14.593902937206364))
+        Self(T::mul_ratio(value, 8896443230521.0, 609600000000.0))
     }
 
     /// The value in `slug/m³`.
     #[inline]
     pub fn as_slugs_per_cubic_meter(self) -> T {
-        self.0 / T::from_f64(14.593902937206364)
+        T::div_ratio(self.0, 8896443230521.0, 609600000000.0)
     }
 
     /// A [`Density`] from a value in `slug/cm³`.
     #[inline]
     pub fn from_slugs_per_cubic_centimeter(value: T) -> Self {
-        Self(value * T::from_f64(1.4593902937206365e7))
+        Self(T::mul_ratio(value, 8896443230521.0, 609600.0))
     }
 
     /// The value in `slug/cm³`.
     #[inline]
     pub fn as_slugs_per_cubic_centimeter(self) -> T {
-        self.0 / T::from_f64(1.4593902937206365e7)
+        T::div_ratio(self.0, 8896443230521.0, 609600.0)
     }
 
     /// A [`Density`] from a value in `slug/mm³`.
     #[inline]
     pub fn from_slugs_per_cubic_millimeter(value: T) -> Self {
-        Self(value * T::from_f64(1.4593902937206366e10))
+        Self(T::mul_ratio(value, 44482216152605.0, 3048.0))
     }
 
     /// The value in `slug/mm³`.
     #[inline]
     pub fn as_slugs_per_cubic_millimeter(self) -> T {
-        self.0 / T::from_f64(1.4593902937206366e10)
+        T::div_ratio(self.0, 44482216152605.0, 3048.0)
     }
 
     /// A [`Density`] from a value in `slug/in³`.
     #[inline]
     pub fn from_slugs_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(890574.5981834431))
+        Self(T::mul_ratio(value, 5560277019075625.0, 6243471384.0))
     }
 
     /// The value in `slug/in³`.
     #[inline]
     pub fn as_slugs_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(890574.5981834431)
+        T::div_ratio(self.0, 5560277019075625.0, 6243471384.0)
     }
 }
 

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A unit that represents a fractional change in size in response to a change in temperature.
 ///
@@ -171,7 +171,7 @@ impl core::str::FromStr for CoefficientOfThermalExpansionUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<CoefficientOfThermalExpansion<T>>
+impl<T: Number> crate::UnitOf<CoefficientOfThermalExpansion<T>>
     for CoefficientOfThermalExpansionUnit
 {
     #[inline]
@@ -207,7 +207,7 @@ impl<T: Float> crate::UnitOf<CoefficientOfThermalExpansion<T>>
     }
 }
 
-impl<T: Float> CoefficientOfThermalExpansion<T> {
+impl<T: crate::Float> CoefficientOfThermalExpansion<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`K⁻¹`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -215,7 +215,9 @@ impl<T: Float> CoefficientOfThermalExpansion<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, CoefficientOfThermalExpansionUnit> {
         self.in_unit(CoefficientOfThermalExpansionUnit::PerKelvin)
     }
+}
 
+impl<T: Number> CoefficientOfThermalExpansion<T> {
     /// A [`CoefficientOfThermalExpansion`] from a value in `K⁻¹`.
     #[inline]
     pub fn from_per_kelvin(value: T) -> Self {

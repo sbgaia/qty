@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`TemperatureGradientUnit::KelvinPerMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -146,15 +146,13 @@ impl core::str::FromStr for TemperatureGradientUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit {
+impl<T: Number> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             TemperatureGradientUnit::KelvinPerMeter => value,
             TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
-                value * T::from_f64(1.8226888305628464)
-            }
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => T::mul_ratio(value, 6250.0, 3429.0),
             TemperatureGradientUnit::DegreeCelsiusPerKilometer => value / T::from_f64(1000.0),
         }
     }
@@ -164,15 +162,13 @@ impl<T: Float> crate::UnitOf<TemperatureGradient<T>> for TemperatureGradientUnit
         match self {
             TemperatureGradientUnit::KelvinPerMeter => value,
             TemperatureGradientUnit::DegreeCelsiusPerMeter => value,
-            TemperatureGradientUnit::DegreeFahrenheitPerFoot => {
-                value / T::from_f64(1.8226888305628464)
-            }
+            TemperatureGradientUnit::DegreeFahrenheitPerFoot => T::div_ratio(value, 6250.0, 3429.0),
             TemperatureGradientUnit::DegreeCelsiusPerKilometer => value * T::from_f64(1000.0),
         }
     }
 }
 
-impl<T: Float> TemperatureGradient<T> {
+impl<T: crate::Float> TemperatureGradient<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`∆°K/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -180,7 +176,9 @@ impl<T: Float> TemperatureGradient<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, TemperatureGradientUnit> {
         self.in_unit(TemperatureGradientUnit::KelvinPerMeter)
     }
+}
 
+impl<T: Number> TemperatureGradient<T> {
     /// A [`TemperatureGradient`] from a value in `∆°K/m`.
     #[inline]
     pub fn from_kelvins_per_meter(value: T) -> Self {
@@ -208,13 +206,13 @@ impl<T: Float> TemperatureGradient<T> {
     /// A [`TemperatureGradient`] from a value in `∆°F/ft`.
     #[inline]
     pub fn from_degrees_fahrenheit_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(1.8226888305628464))
+        Self(T::mul_ratio(value, 6250.0, 3429.0))
     }
 
     /// The value in `∆°F/ft`.
     #[inline]
     pub fn as_degrees_fahrenheit_per_foot(self) -> T {
-        self.0 / T::from_f64(1.8226888305628464)
+        T::div_ratio(self.0, 6250.0, 3429.0)
     }
 
     /// A [`TemperatureGradient`] from a value in `∆°C/km`.

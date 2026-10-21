@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Brake specific fuel consumption (BSFC) is a measure of the fuel efficiency of any prime mover that burns fuel and produces rotational, or shaft, power. It is typically used for comparing the efficiency of internal combustion engines with a shaft output.
 ///
@@ -139,14 +139,16 @@ impl core::str::FromStr for BrakeSpecificFuelConsumptionUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<BrakeSpecificFuelConsumption<T>> for BrakeSpecificFuelConsumptionUnit {
+impl<T: Number> crate::UnitOf<BrakeSpecificFuelConsumption<T>>
+    for BrakeSpecificFuelConsumptionUnit
+{
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value / T::from_f64(3.6e9),
             BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
             BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
-                value * T::from_f64(1.6896594108226585e-7)
+                T::mul_ratio(value, 32399455.0, 191751395532579.0)
             }
         }
     }
@@ -157,13 +159,13 @@ impl<T: Float> crate::UnitOf<BrakeSpecificFuelConsumption<T>> for BrakeSpecificF
             BrakeSpecificFuelConsumptionUnit::GramPerKiloWattHour => value * T::from_f64(3.6e9),
             BrakeSpecificFuelConsumptionUnit::KilogramPerJoule => value,
             BrakeSpecificFuelConsumptionUnit::PoundPerMechanicalHorsepowerHour => {
-                value / T::from_f64(1.6896594108226585e-7)
+                T::div_ratio(value, 32399455.0, 191751395532579.0)
             }
         }
     }
 }
 
-impl<T: Float> BrakeSpecificFuelConsumption<T> {
+impl<T: crate::Float> BrakeSpecificFuelConsumption<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`kg/J`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -171,7 +173,9 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, BrakeSpecificFuelConsumptionUnit> {
         self.in_unit(BrakeSpecificFuelConsumptionUnit::KilogramPerJoule)
     }
+}
 
+impl<T: Number> BrakeSpecificFuelConsumption<T> {
     /// A [`BrakeSpecificFuelConsumption`] from a value in `g/kWh`.
     #[inline]
     pub fn from_grams_per_kilo_watt_hour(value: T) -> Self {
@@ -199,13 +203,13 @@ impl<T: Float> BrakeSpecificFuelConsumption<T> {
     /// A [`BrakeSpecificFuelConsumption`] from a value in `lb/hph`.
     #[inline]
     pub fn from_pounds_per_mechanical_horsepower_hour(value: T) -> Self {
-        Self(value * T::from_f64(1.6896594108226585e-7))
+        Self(T::mul_ratio(value, 32399455.0, 191751395532579.0))
     }
 
     /// The value in `lb/hph`.
     #[inline]
     pub fn as_pounds_per_mechanical_horsepower_hour(self) -> T {
-        self.0 / T::from_f64(1.6896594108226585e-7)
+        T::div_ratio(self.0, 32399455.0, 191751395532579.0)
     }
 }
 

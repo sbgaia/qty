@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The molar flow rate of a gas corrected to standardized conditions of temperature and pressure thus representing a fixed number of moles of gas regardless of composition and actual flow conditions.
 ///
@@ -212,7 +212,7 @@ impl core::str::FromStr for StandardVolumeFlowUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
+impl<T: Number> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -252,7 +252,7 @@ impl<T: Float> crate::UnitOf<StandardVolumeFlow<T>> for StandardVolumeFlowUnit {
     }
 }
 
-impl<T: Float> StandardVolumeFlow<T> {
+impl<T: crate::Float> StandardVolumeFlow<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Sm³/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -260,7 +260,9 @@ impl<T: Float> StandardVolumeFlow<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, StandardVolumeFlowUnit> {
         self.in_unit(StandardVolumeFlowUnit::StandardCubicMeterPerSecond)
     }
+}
 
+impl<T: Number> StandardVolumeFlow<T> {
     /// A [`StandardVolumeFlow`] from a value in `Sm³/s`.
     #[inline]
     pub fn from_standard_cubic_meters_per_second(value: T) -> Self {

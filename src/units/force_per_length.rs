@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The magnitude of force per unit length.
 ///
@@ -594,7 +594,7 @@ impl core::str::FromStr for ForcePerLengthUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
+impl<T: Number> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -631,11 +631,21 @@ impl<T: Float> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
             ForcePerLengthUnit::TonneForcePerMeter => value * T::from_f64(9806.65),
             ForcePerLengthUnit::TonneForcePerCentimeter => value * T::from_f64(980665.0),
             ForcePerLengthUnit::TonneForcePerMillimeter => value * T::from_f64(9806650.0),
-            ForcePerLengthUnit::PoundForcePerFoot => value * T::from_f64(14.593902937206364),
-            ForcePerLengthUnit::PoundForcePerInch => value * T::from_f64(175.1268352464764),
-            ForcePerLengthUnit::PoundForcePerYard => value * T::from_f64(4.864634312402122),
-            ForcePerLengthUnit::KilopoundForcePerFoot => value * T::from_f64(14593.902937206365),
-            ForcePerLengthUnit::KilopoundForcePerInch => value * T::from_f64(175126.83524647637),
+            ForcePerLengthUnit::PoundForcePerFoot => {
+                T::mul_ratio(value, 8896443230521.0, 609600000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerInch => {
+                T::mul_ratio(value, 8896443230521.0, 50800000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerYard => {
+                T::mul_ratio(value, 8896443230521.0, 1828800000000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerFoot => {
+                T::mul_ratio(value, 8896443230521.0, 609600000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerInch => {
+                T::mul_ratio(value, 8896443230521.0, 50800000.0)
+            }
         }
     }
 
@@ -675,16 +685,26 @@ impl<T: Float> crate::UnitOf<ForcePerLength<T>> for ForcePerLengthUnit {
             ForcePerLengthUnit::TonneForcePerMeter => value / T::from_f64(9806.65),
             ForcePerLengthUnit::TonneForcePerCentimeter => value / T::from_f64(980665.0),
             ForcePerLengthUnit::TonneForcePerMillimeter => value / T::from_f64(9806650.0),
-            ForcePerLengthUnit::PoundForcePerFoot => value / T::from_f64(14.593902937206364),
-            ForcePerLengthUnit::PoundForcePerInch => value / T::from_f64(175.1268352464764),
-            ForcePerLengthUnit::PoundForcePerYard => value / T::from_f64(4.864634312402122),
-            ForcePerLengthUnit::KilopoundForcePerFoot => value / T::from_f64(14593.902937206365),
-            ForcePerLengthUnit::KilopoundForcePerInch => value / T::from_f64(175126.83524647637),
+            ForcePerLengthUnit::PoundForcePerFoot => {
+                T::div_ratio(value, 8896443230521.0, 609600000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerInch => {
+                T::div_ratio(value, 8896443230521.0, 50800000000.0)
+            }
+            ForcePerLengthUnit::PoundForcePerYard => {
+                T::div_ratio(value, 8896443230521.0, 1828800000000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerFoot => {
+                T::div_ratio(value, 8896443230521.0, 609600000.0)
+            }
+            ForcePerLengthUnit::KilopoundForcePerInch => {
+                T::div_ratio(value, 8896443230521.0, 50800000.0)
+            }
         }
     }
 }
 
-impl<T: Float> ForcePerLength<T> {
+impl<T: crate::Float> ForcePerLength<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nN/m`, `µN/m`, `mN/m`, `N/m`, `kN/m`, `MN/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -711,7 +731,9 @@ impl<T: Float> ForcePerLength<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `N/m`.
     #[inline]
     pub fn from_newtons_per_meter(value: T) -> Self {
@@ -1111,61 +1133,61 @@ impl<T: Float> ForcePerLength<T> {
     /// A [`ForcePerLength`] from a value in `lbf/ft`.
     #[inline]
     pub fn from_pounds_force_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(14.593902937206364))
+        Self(T::mul_ratio(value, 8896443230521.0, 609600000000.0))
     }
 
     /// The value in `lbf/ft`.
     #[inline]
     pub fn as_pounds_force_per_foot(self) -> T {
-        self.0 / T::from_f64(14.593902937206364)
+        T::div_ratio(self.0, 8896443230521.0, 609600000000.0)
     }
 
     /// A [`ForcePerLength`] from a value in `lbf/in`.
     #[inline]
     pub fn from_pounds_force_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(175.1268352464764))
+        Self(T::mul_ratio(value, 8896443230521.0, 50800000000.0))
     }
 
     /// The value in `lbf/in`.
     #[inline]
     pub fn as_pounds_force_per_inch(self) -> T {
-        self.0 / T::from_f64(175.1268352464764)
+        T::div_ratio(self.0, 8896443230521.0, 50800000000.0)
     }
 
     /// A [`ForcePerLength`] from a value in `lbf/yd`.
     #[inline]
     pub fn from_pounds_force_per_yard(value: T) -> Self {
-        Self(value * T::from_f64(4.864634312402122))
+        Self(T::mul_ratio(value, 8896443230521.0, 1828800000000.0))
     }
 
     /// The value in `lbf/yd`.
     #[inline]
     pub fn as_pounds_force_per_yard(self) -> T {
-        self.0 / T::from_f64(4.864634312402122)
+        T::div_ratio(self.0, 8896443230521.0, 1828800000000.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kipf/ft`.
     #[inline]
     pub fn from_kilopounds_force_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(14593.902937206365))
+        Self(T::mul_ratio(value, 8896443230521.0, 609600000.0))
     }
 
     /// The value in `kipf/ft`.
     #[inline]
     pub fn as_kilopounds_force_per_foot(self) -> T {
-        self.0 / T::from_f64(14593.902937206365)
+        T::div_ratio(self.0, 8896443230521.0, 609600000.0)
     }
 
     /// A [`ForcePerLength`] from a value in `kipf/in`.
     #[inline]
     pub fn from_kilopounds_force_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(175126.83524647637))
+        Self(T::mul_ratio(value, 8896443230521.0, 50800000.0))
     }
 
     /// The value in `kipf/in`.
     #[inline]
     pub fn as_kilopounds_force_per_inch(self) -> T {
-        self.0 / T::from_f64(175126.83524647637)
+        T::div_ratio(self.0, 8896443230521.0, 50800000.0)
     }
 }
 

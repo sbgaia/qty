@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Acceleration, in physics, is the rate at which the velocity of an object changes over time. An object's acceleration is the net result of any and all forces acting on the object, as described by Newton's Second Law. The SI unit for acceleration is the Meter per second squared (m/s²). Accelerations are vector quantities (they have magnitude and direction) and add according to the parallelogram law. As a vector, the calculated net force is equal to the product of the object's mass (a scalar quantity) and the acceleration.
 ///
@@ -278,7 +278,7 @@ impl core::str::FromStr for AccelerationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
+impl<T: Number> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -291,9 +291,9 @@ impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
             AccelerationUnit::KilometerPerSecondSquared => value * T::from_f64(1000.0),
             AccelerationUnit::InchPerSecondSquared => value * T::from_f64(0.0254),
             AccelerationUnit::FootPerSecondSquared => value * T::from_f64(0.3048),
-            AccelerationUnit::KnotPerSecond => value * T::from_f64(0.5144444444444445),
-            AccelerationUnit::KnotPerMinute => value * T::from_f64(0.008574074074074074),
-            AccelerationUnit::KnotPerHour => value * T::from_f64(0.00014290123456790123),
+            AccelerationUnit::KnotPerSecond => T::mul_ratio(value, 463.0, 900.0),
+            AccelerationUnit::KnotPerMinute => T::mul_ratio(value, 463.0, 54000.0),
+            AccelerationUnit::KnotPerHour => T::mul_ratio(value, 463.0, 3240000.0),
             AccelerationUnit::StandardGravity => value * T::from_f64(9.80665),
             AccelerationUnit::MillistandardGravity => value * T::from_f64(0.00980665),
         }
@@ -311,16 +311,16 @@ impl<T: Float> crate::UnitOf<Acceleration<T>> for AccelerationUnit {
             AccelerationUnit::KilometerPerSecondSquared => value / T::from_f64(1000.0),
             AccelerationUnit::InchPerSecondSquared => value / T::from_f64(0.0254),
             AccelerationUnit::FootPerSecondSquared => value / T::from_f64(0.3048),
-            AccelerationUnit::KnotPerSecond => value / T::from_f64(0.5144444444444445),
-            AccelerationUnit::KnotPerMinute => value / T::from_f64(0.008574074074074074),
-            AccelerationUnit::KnotPerHour => value / T::from_f64(0.00014290123456790123),
+            AccelerationUnit::KnotPerSecond => T::div_ratio(value, 463.0, 900.0),
+            AccelerationUnit::KnotPerMinute => T::div_ratio(value, 463.0, 54000.0),
+            AccelerationUnit::KnotPerHour => T::div_ratio(value, 463.0, 3240000.0),
             AccelerationUnit::StandardGravity => value / T::from_f64(9.80665),
             AccelerationUnit::MillistandardGravity => value / T::from_f64(0.00980665),
         }
     }
 }
 
-impl<T: Float> Acceleration<T> {
+impl<T: crate::Float> Acceleration<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nm/s²`, `µm/s²`, `mm/s²`, `m/s²`, `km/s²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -346,7 +346,9 @@ impl<T: Float> Acceleration<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Acceleration<T> {
     /// A [`Acceleration`] from a value in `m/s²`.
     #[inline]
     pub fn from_meters_per_second_squared(value: T) -> Self {
@@ -458,37 +460,37 @@ impl<T: Float> Acceleration<T> {
     /// A [`Acceleration`] from a value in `kn/s`.
     #[inline]
     pub fn from_knots_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.5144444444444445))
+        Self(T::mul_ratio(value, 463.0, 900.0))
     }
 
     /// The value in `kn/s`.
     #[inline]
     pub fn as_knots_per_second(self) -> T {
-        self.0 / T::from_f64(0.5144444444444445)
+        T::div_ratio(self.0, 463.0, 900.0)
     }
 
     /// A [`Acceleration`] from a value in `kn/min`.
     #[inline]
     pub fn from_knots_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.008574074074074074))
+        Self(T::mul_ratio(value, 463.0, 54000.0))
     }
 
     /// The value in `kn/min`.
     #[inline]
     pub fn as_knots_per_minute(self) -> T {
-        self.0 / T::from_f64(0.008574074074074074)
+        T::div_ratio(self.0, 463.0, 54000.0)
     }
 
     /// A [`Acceleration`] from a value in `kn/h`.
     #[inline]
     pub fn from_knots_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.00014290123456790123))
+        Self(T::mul_ratio(value, 463.0, 3240000.0))
     }
 
     /// The value in `kn/h`.
     #[inline]
     pub fn as_knots_per_hour(self) -> T {
-        self.0 / T::from_f64(0.00014290123456790123)
+        T::div_ratio(self.0, 463.0, 3240000.0)
     }
 
     /// A [`Acceleration`] from a value in `g`.

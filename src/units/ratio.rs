@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In mathematics, a ratio is a relationship between two numbers of the same kind (e.g., objects, persons, students, spoonfuls, units of whatever identical dimension), usually expressed as "a to b" or a:b, sometimes expressed arithmetically as a dimensionless quotient of the two that explicitly indicates how many times the first number contains the second (not necessarily an integer).
 ///
@@ -172,7 +172,7 @@ impl core::str::FromStr for RatioUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Ratio<T>> for RatioUnit {
+impl<T: Number> crate::UnitOf<Ratio<T>> for RatioUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -198,7 +198,7 @@ impl<T: Float> crate::UnitOf<Ratio<T>> for RatioUnit {
     }
 }
 
-impl<T: Float> Ratio<T> {
+impl<T: crate::Float> Ratio<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (``).
     /// Zero, NaN and infinities stay in the base unit.
@@ -206,7 +206,9 @@ impl<T: Float> Ratio<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, RatioUnit> {
         self.in_unit(RatioUnit::DecimalFraction)
     }
+}
 
+impl<T: Number> Ratio<T> {
     /// A [`Ratio`] from a value in [`RatioUnit::DecimalFraction`].
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {

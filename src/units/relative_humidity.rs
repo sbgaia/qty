@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Relative humidity is a ratio of the actual water vapor present in the air to the maximum water vapor in the air at the given temperature.
 ///
@@ -103,7 +103,7 @@ impl core::str::FromStr for RelativeHumidityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
+impl<T: Number> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -119,7 +119,7 @@ impl<T: Float> crate::UnitOf<RelativeHumidity<T>> for RelativeHumidityUnit {
     }
 }
 
-impl<T: Float> RelativeHumidity<T> {
+impl<T: crate::Float> RelativeHumidity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`%RH`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -127,7 +127,9 @@ impl<T: Float> RelativeHumidity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, RelativeHumidityUnit> {
         self.in_unit(RelativeHumidityUnit::Percent)
     }
+}
 
+impl<T: Number> RelativeHumidity<T> {
     /// A [`RelativeHumidity`] from a value in `%RH`.
     #[inline]
     pub fn from_percent(value: T) -> Self {

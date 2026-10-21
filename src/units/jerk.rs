@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`JerkUnit::MeterPerSecondCubed`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -235,7 +235,7 @@ impl core::str::FromStr for JerkUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Jerk<T>> for JerkUnit {
+impl<T: Number> crate::UnitOf<Jerk<T>> for JerkUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -271,7 +271,7 @@ impl<T: Float> crate::UnitOf<Jerk<T>> for JerkUnit {
     }
 }
 
-impl<T: Float> Jerk<T> {
+impl<T: crate::Float> Jerk<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nm/s³`, `µm/s³`, `mm/s³`, `m/s³`, `km/s³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -297,7 +297,9 @@ impl<T: Float> Jerk<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Jerk<T> {
     /// A [`Jerk`] from a value in `m/s³`.
     #[inline]
     pub fn from_meters_per_second_cubed(value: T) -> Self {

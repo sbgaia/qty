@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In chemistry, the mass concentration ρi (or γi) is defined as the mass of a constituent mi divided by the volume of the mixture V
 ///
@@ -733,7 +733,7 @@ impl core::str::FromStr for MassConcentrationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
+impl<T: Number> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -777,17 +777,29 @@ impl<T: Float> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
             MassConcentrationUnit::TonnePerCubicMillimeter => value * T::from_f64(1e12),
             MassConcentrationUnit::TonnePerCubicCentimeter => value * T::from_f64(1e9),
             MassConcentrationUnit::TonnePerCubicMeter => value * T::from_f64(1000.0),
-            MassConcentrationUnit::PoundPerCubicInch => value * T::from_f64(27679.90471020312),
-            MassConcentrationUnit::KilopoundPerCubicInch => {
-                value * T::from_f64(2.7679904710203122e7)
+            MassConcentrationUnit::PoundPerCubicInch => {
+                T::mul_ratio(value, 56699046250.0, 2048383.0)
             }
-            MassConcentrationUnit::PoundPerCubicFoot => value * T::from_f64(16.018463373960138),
-            MassConcentrationUnit::KilopoundPerCubicFoot => value * T::from_f64(16018.46337396014),
-            MassConcentrationUnit::SlugPerCubicFoot => value * T::from_f64(515.3788183931962),
-            MassConcentrationUnit::PoundPerUSGallon => value * T::from_f64(119.82642731689663),
-            MassConcentrationUnit::OuncePerUSGallon => value * T::from_f64(7.489151707306039),
-            MassConcentrationUnit::OuncePerImperialGallon => value * T::from_f64(6.236023291443856),
-            MassConcentrationUnit::PoundPerImperialGallon => value * T::from_f64(99.7763726631017),
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                T::mul_ratio(value, 56699046250000.0, 2048383.0)
+            }
+            MassConcentrationUnit::PoundPerCubicFoot => {
+                T::mul_ratio(value, 28349523125.0, 1769802912.0)
+            }
+            MassConcentrationUnit::KilopoundPerCubicFoot => {
+                T::mul_ratio(value, 3543690390625.0, 221225364.0)
+            }
+            MassConcentrationUnit::SlugPerCubicFoot => {
+                T::mul_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
+            MassConcentrationUnit::PoundPerUSGallon => T::mul_ratio(value, 736351250.0, 6145149.0),
+            MassConcentrationUnit::OuncePerUSGallon => T::mul_ratio(value, 368175625.0, 49161192.0),
+            MassConcentrationUnit::OuncePerImperialGallon => {
+                T::mul_ratio(value, 45359237.0, 7273744.0)
+            }
+            MassConcentrationUnit::PoundPerImperialGallon => {
+                T::mul_ratio(value, 45359237.0, 454609.0)
+            }
         }
     }
 
@@ -834,22 +846,34 @@ impl<T: Float> crate::UnitOf<MassConcentration<T>> for MassConcentrationUnit {
             MassConcentrationUnit::TonnePerCubicMillimeter => value / T::from_f64(1e12),
             MassConcentrationUnit::TonnePerCubicCentimeter => value / T::from_f64(1e9),
             MassConcentrationUnit::TonnePerCubicMeter => value / T::from_f64(1000.0),
-            MassConcentrationUnit::PoundPerCubicInch => value / T::from_f64(27679.90471020312),
-            MassConcentrationUnit::KilopoundPerCubicInch => {
-                value / T::from_f64(2.7679904710203122e7)
+            MassConcentrationUnit::PoundPerCubicInch => {
+                T::div_ratio(value, 56699046250.0, 2048383.0)
             }
-            MassConcentrationUnit::PoundPerCubicFoot => value / T::from_f64(16.018463373960138),
-            MassConcentrationUnit::KilopoundPerCubicFoot => value / T::from_f64(16018.46337396014),
-            MassConcentrationUnit::SlugPerCubicFoot => value / T::from_f64(515.3788183931962),
-            MassConcentrationUnit::PoundPerUSGallon => value / T::from_f64(119.82642731689663),
-            MassConcentrationUnit::OuncePerUSGallon => value / T::from_f64(7.489151707306039),
-            MassConcentrationUnit::OuncePerImperialGallon => value / T::from_f64(6.236023291443856),
-            MassConcentrationUnit::PoundPerImperialGallon => value / T::from_f64(99.7763726631017),
+            MassConcentrationUnit::KilopoundPerCubicInch => {
+                T::div_ratio(value, 56699046250000.0, 2048383.0)
+            }
+            MassConcentrationUnit::PoundPerCubicFoot => {
+                T::div_ratio(value, 28349523125.0, 1769802912.0)
+            }
+            MassConcentrationUnit::KilopoundPerCubicFoot => {
+                T::div_ratio(value, 3543690390625.0, 221225364.0)
+            }
+            MassConcentrationUnit::SlugPerCubicFoot => {
+                T::div_ratio(value, 5560277019075625.0, 10788718551552.0)
+            }
+            MassConcentrationUnit::PoundPerUSGallon => T::div_ratio(value, 736351250.0, 6145149.0),
+            MassConcentrationUnit::OuncePerUSGallon => T::div_ratio(value, 368175625.0, 49161192.0),
+            MassConcentrationUnit::OuncePerImperialGallon => {
+                T::div_ratio(value, 45359237.0, 7273744.0)
+            }
+            MassConcentrationUnit::PoundPerImperialGallon => {
+                T::div_ratio(value, 45359237.0, 454609.0)
+            }
         }
     }
 }
 
-impl<T: Float> MassConcentration<T> {
+impl<T: crate::Float> MassConcentration<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µg/m³`, `mg/m³`, `g/m³`, `kg/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -874,7 +898,9 @@ impl<T: Float> MassConcentration<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `g/mm³`.
     #[inline]
     pub fn from_grams_per_cubic_millimeter(value: T) -> Self {
@@ -1358,109 +1384,109 @@ impl<T: Float> MassConcentration<T> {
     /// A [`MassConcentration`] from a value in `lb/in³`.
     #[inline]
     pub fn from_pounds_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(27679.90471020312))
+        Self(T::mul_ratio(value, 56699046250.0, 2048383.0))
     }
 
     /// The value in `lb/in³`.
     #[inline]
     pub fn as_pounds_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(27679.90471020312)
+        T::div_ratio(self.0, 56699046250.0, 2048383.0)
     }
 
     /// A [`MassConcentration`] from a value in `klb/in³`.
     #[inline]
     pub fn from_kilopounds_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(2.7679904710203122e7))
+        Self(T::mul_ratio(value, 56699046250000.0, 2048383.0))
     }
 
     /// The value in `klb/in³`.
     #[inline]
     pub fn as_kilopounds_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(2.7679904710203122e7)
+        T::div_ratio(self.0, 56699046250000.0, 2048383.0)
     }
 
     /// A [`MassConcentration`] from a value in `lb/ft³`.
     #[inline]
     pub fn from_pounds_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(16.018463373960138))
+        Self(T::mul_ratio(value, 28349523125.0, 1769802912.0))
     }
 
     /// The value in `lb/ft³`.
     #[inline]
     pub fn as_pounds_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(16.018463373960138)
+        T::div_ratio(self.0, 28349523125.0, 1769802912.0)
     }
 
     /// A [`MassConcentration`] from a value in `klb/ft³`.
     #[inline]
     pub fn from_kilopounds_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(16018.46337396014))
+        Self(T::mul_ratio(value, 3543690390625.0, 221225364.0))
     }
 
     /// The value in `klb/ft³`.
     #[inline]
     pub fn as_kilopounds_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(16018.46337396014)
+        T::div_ratio(self.0, 3543690390625.0, 221225364.0)
     }
 
     /// A [`MassConcentration`] from a value in `slug/ft³`.
     #[inline]
     pub fn from_slugs_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(515.3788183931962))
+        Self(T::mul_ratio(value, 5560277019075625.0, 10788718551552.0))
     }
 
     /// The value in `slug/ft³`.
     #[inline]
     pub fn as_slugs_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(515.3788183931962)
+        T::div_ratio(self.0, 5560277019075625.0, 10788718551552.0)
     }
 
     /// A [`MassConcentration`] from a value in `ppg (U.S.)`.
     #[inline]
     pub fn from_pounds_per_us_gallon(value: T) -> Self {
-        Self(value * T::from_f64(119.82642731689663))
+        Self(T::mul_ratio(value, 736351250.0, 6145149.0))
     }
 
     /// The value in `ppg (U.S.)`.
     #[inline]
     pub fn as_pounds_per_us_gallon(self) -> T {
-        self.0 / T::from_f64(119.82642731689663)
+        T::div_ratio(self.0, 736351250.0, 6145149.0)
     }
 
     /// A [`MassConcentration`] from a value in `oz/gal (U.S.)`.
     #[inline]
     pub fn from_ounces_per_us_gallon(value: T) -> Self {
-        Self(value * T::from_f64(7.489151707306039))
+        Self(T::mul_ratio(value, 368175625.0, 49161192.0))
     }
 
     /// The value in `oz/gal (U.S.)`.
     #[inline]
     pub fn as_ounces_per_us_gallon(self) -> T {
-        self.0 / T::from_f64(7.489151707306039)
+        T::div_ratio(self.0, 368175625.0, 49161192.0)
     }
 
     /// A [`MassConcentration`] from a value in `oz/gal (imp.)`.
     #[inline]
     pub fn from_ounces_per_imperial_gallon(value: T) -> Self {
-        Self(value * T::from_f64(6.236023291443856))
+        Self(T::mul_ratio(value, 45359237.0, 7273744.0))
     }
 
     /// The value in `oz/gal (imp.)`.
     #[inline]
     pub fn as_ounces_per_imperial_gallon(self) -> T {
-        self.0 / T::from_f64(6.236023291443856)
+        T::div_ratio(self.0, 45359237.0, 7273744.0)
     }
 
     /// A [`MassConcentration`] from a value in `ppg (imp.)`.
     #[inline]
     pub fn from_pounds_per_imperial_gallon(value: T) -> Self {
-        Self(value * T::from_f64(99.7763726631017))
+        Self(T::mul_ratio(value, 45359237.0, 454609.0))
     }
 
     /// The value in `ppg (imp.)`.
     #[inline]
     pub fn as_pounds_per_imperial_gallon(self) -> T {
-        self.0 / T::from_f64(99.7763726631017)
+        T::div_ratio(self.0, 45359237.0, 454609.0)
     }
 }
 

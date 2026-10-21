@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Molar energy is the amount of energy stored in 1 mole of a substance.
 ///
@@ -135,7 +135,7 @@ impl core::str::FromStr for MolarEnergyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
+impl<T: Number> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -155,7 +155,7 @@ impl<T: Float> crate::UnitOf<MolarEnergy<T>> for MolarEnergyUnit {
     }
 }
 
-impl<T: Float> MolarEnergy<T> {
+impl<T: crate::Float> MolarEnergy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/mol`, `kJ/mol`, `MJ/mol`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -179,7 +179,9 @@ impl<T: Float> MolarEnergy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MolarEnergy<T> {
     /// A [`MolarEnergy`] from a value in `J/mol`.
     #[inline]
     pub fn from_joules_per_mole(value: T) -> Self {

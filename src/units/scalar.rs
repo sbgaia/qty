@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A way of representing a number of items.
 ///
@@ -101,7 +101,7 @@ impl core::str::FromStr for ScalarUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Scalar<T>> for ScalarUnit {
+impl<T: Number> crate::UnitOf<Scalar<T>> for ScalarUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -117,7 +117,7 @@ impl<T: Float> crate::UnitOf<Scalar<T>> for ScalarUnit {
     }
 }
 
-impl<T: Float> Scalar<T> {
+impl<T: crate::Float> Scalar<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (``).
     /// Zero, NaN and infinities stay in the base unit.
@@ -125,7 +125,9 @@ impl<T: Float> Scalar<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ScalarUnit> {
         self.in_unit(ScalarUnit::Amount)
     }
+}
 
+impl<T: Number> Scalar<T> {
     /// A [`Scalar`] from a value in [`ScalarUnit::Amount`].
     #[inline]
     pub fn from_amount(value: T) -> Self {

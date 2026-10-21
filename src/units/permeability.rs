@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, permeability is the measure of the ability of a material to support the formation of a magnetic field within itself.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for PermeabilityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Permeability<T>> for PermeabilityUnit {
+impl<T: Number> crate::UnitOf<Permeability<T>> for PermeabilityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<Permeability<T>> for PermeabilityUnit {
     }
 }
 
-impl<T: Float> Permeability<T> {
+impl<T: crate::Float> Permeability<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`H/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> Permeability<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, PermeabilityUnit> {
         self.in_unit(PermeabilityUnit::HenryPerMeter)
     }
+}
 
+impl<T: Number> Permeability<T> {
     /// A [`Permeability`] from a value in `H/m`.
     #[inline]
     pub fn from_henries_per_meter(value: T) -> Self {

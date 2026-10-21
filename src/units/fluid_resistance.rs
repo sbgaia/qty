@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Fluid Resistance is a force acting opposite to the relative motion of any object moving with respect to a surrounding fluid. Fluid Resistance is sometimes referred to as drag or fluid friction.
 ///
@@ -369,7 +369,7 @@ impl core::str::FromStr for FluidResistanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
+impl<T: Number> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -445,7 +445,7 @@ impl<T: Float> crate::UnitOf<FluidResistance<T>> for FluidResistanceUnit {
     }
 }
 
-impl<T: Float> FluidResistance<T> {
+impl<T: crate::Float> FluidResistance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Pa·s/m³`, `MPa·s/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -471,7 +471,9 @@ impl<T: Float> FluidResistance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> FluidResistance<T> {
     /// A [`FluidResistance`] from a value in `Pa·s/l`.
     #[inline]
     pub fn from_pascal_seconds_per_liter(value: T) -> Self {

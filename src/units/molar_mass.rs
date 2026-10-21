@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In chemistry, the molar mass M is a physical property defined as the mass of a given substance (chemical element or chemical compound) divided by the amount of substance.
 ///
@@ -281,7 +281,7 @@ impl core::str::FromStr for MolarMassUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
+impl<T: Number> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -323,7 +323,7 @@ impl<T: Float> crate::UnitOf<MolarMass<T>> for MolarMassUnit {
     }
 }
 
-impl<T: Float> MolarMass<T> {
+impl<T: crate::Float> MolarMass<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`ng/mol`, `µg/mol`, `mg/mol`, `g/mol`, `kg/mol`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -349,7 +349,9 @@ impl<T: Float> MolarMass<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MolarMass<T> {
     /// A [`MolarMass`] from a value in `g/mol`.
     #[inline]
     pub fn from_grams_per_mole(value: T) -> Self {

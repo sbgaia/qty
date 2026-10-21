@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Molar flow is the ratio of the amount of substance change to the time during which the change occurred (value of amount of substance changes per unit time).
 ///
@@ -213,19 +213,19 @@ impl core::str::FromStr for MolarFlowUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
+impl<T: Number> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             MolarFlowUnit::MolePerSecond => value,
             MolarFlowUnit::KilomolePerSecond => value * T::from_f64(1000.0),
             MolarFlowUnit::MolePerMinute => value / T::from_f64(60.0),
-            MolarFlowUnit::KilomolePerMinute => value * T::from_f64(16.666666666666668),
+            MolarFlowUnit::KilomolePerMinute => T::mul_ratio(value, 50.0, 3.0),
             MolarFlowUnit::MolePerHour => value / T::from_f64(3600.0),
-            MolarFlowUnit::KilomolePerHour => value * T::from_f64(0.2777777777777778),
+            MolarFlowUnit::KilomolePerHour => T::mul_ratio(value, 5.0, 18.0),
             MolarFlowUnit::PoundMolePerSecond => value * T::from_f64(453.59237),
-            MolarFlowUnit::PoundMolePerMinute => value * T::from_f64(7.559872833333333),
-            MolarFlowUnit::PoundMolePerHour => value * T::from_f64(0.12599788055555555),
+            MolarFlowUnit::PoundMolePerMinute => T::mul_ratio(value, 45359237.0, 6000000.0),
+            MolarFlowUnit::PoundMolePerHour => T::mul_ratio(value, 45359237.0, 360000000.0),
         }
     }
 
@@ -235,17 +235,17 @@ impl<T: Float> crate::UnitOf<MolarFlow<T>> for MolarFlowUnit {
             MolarFlowUnit::MolePerSecond => value,
             MolarFlowUnit::KilomolePerSecond => value / T::from_f64(1000.0),
             MolarFlowUnit::MolePerMinute => value * T::from_f64(60.0),
-            MolarFlowUnit::KilomolePerMinute => value / T::from_f64(16.666666666666668),
+            MolarFlowUnit::KilomolePerMinute => T::div_ratio(value, 50.0, 3.0),
             MolarFlowUnit::MolePerHour => value * T::from_f64(3600.0),
-            MolarFlowUnit::KilomolePerHour => value / T::from_f64(0.2777777777777778),
+            MolarFlowUnit::KilomolePerHour => T::div_ratio(value, 5.0, 18.0),
             MolarFlowUnit::PoundMolePerSecond => value / T::from_f64(453.59237),
-            MolarFlowUnit::PoundMolePerMinute => value / T::from_f64(7.559872833333333),
-            MolarFlowUnit::PoundMolePerHour => value / T::from_f64(0.12599788055555555),
+            MolarFlowUnit::PoundMolePerMinute => T::div_ratio(value, 45359237.0, 6000000.0),
+            MolarFlowUnit::PoundMolePerHour => T::div_ratio(value, 45359237.0, 360000000.0),
         }
     }
 }
 
-impl<T: Float> MolarFlow<T> {
+impl<T: crate::Float> MolarFlow<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mol/s`, `kmol/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -268,7 +268,9 @@ impl<T: Float> MolarFlow<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `mol/s`.
     #[inline]
     pub fn from_moles_per_second(value: T) -> Self {
@@ -308,13 +310,13 @@ impl<T: Float> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `kmol/min`.
     #[inline]
     pub fn from_kilomoles_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16.666666666666668))
+        Self(T::mul_ratio(value, 50.0, 3.0))
     }
 
     /// The value in `kmol/min`.
     #[inline]
     pub fn as_kilomoles_per_minute(self) -> T {
-        self.0 / T::from_f64(16.666666666666668)
+        T::div_ratio(self.0, 50.0, 3.0)
     }
 
     /// A [`MolarFlow`] from a value in `mol/h`.
@@ -332,13 +334,13 @@ impl<T: Float> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `kmol/h`.
     #[inline]
     pub fn from_kilomoles_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `kmol/h`.
     #[inline]
     pub fn as_kilomoles_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`MolarFlow`] from a value in `lbmol/s`.
@@ -356,25 +358,25 @@ impl<T: Float> MolarFlow<T> {
     /// A [`MolarFlow`] from a value in `lbmol/min`.
     #[inline]
     pub fn from_pound_moles_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(7.559872833333333))
+        Self(T::mul_ratio(value, 45359237.0, 6000000.0))
     }
 
     /// The value in `lbmol/min`.
     #[inline]
     pub fn as_pound_moles_per_minute(self) -> T {
-        self.0 / T::from_f64(7.559872833333333)
+        T::div_ratio(self.0, 45359237.0, 6000000.0)
     }
 
     /// A [`MolarFlow`] from a value in `lbmol/h`.
     #[inline]
     pub fn from_pound_moles_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.12599788055555555))
+        Self(T::mul_ratio(value, 45359237.0, 360000000.0))
     }
 
     /// The value in `lbmol/h`.
     #[inline]
     pub fn as_pound_moles_per_hour(self) -> T {
-        self.0 / T::from_f64(0.12599788055555555)
+        T::div_ratio(self.0, 45359237.0, 360000000.0)
     }
 }
 

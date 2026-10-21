@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// It is defined as the absorbed dose multiplied by the area irradiated.
 ///
@@ -421,7 +421,7 @@ impl core::str::FromStr for DoseAreaProductUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
+impl<T: Number> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -485,7 +485,7 @@ impl<T: Float> crate::UnitOf<DoseAreaProduct<T>> for DoseAreaProductUnit {
     }
 }
 
-impl<T: Float> DoseAreaProduct<T> {
+impl<T: crate::Float> DoseAreaProduct<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µGy·m²`, `mGy·m²`, `Gy·m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -509,7 +509,9 @@ impl<T: Float> DoseAreaProduct<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> DoseAreaProduct<T> {
     /// A [`DoseAreaProduct`] from a value in `Gy·m²`.
     #[inline]
     pub fn from_gray_square_meters(value: T) -> Self {

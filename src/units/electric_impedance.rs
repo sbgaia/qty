@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electric impedance is the opposition to alternating current presented by the combined effect of resistance and reactance in a circuit. It is defined as the inverse of admittance. The SI unit of impedance is the ohm (symbol Ω).
 ///
@@ -200,7 +200,7 @@ impl core::str::FromStr for ElectricImpedanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricImpedance<T>> for ElectricImpedanceUnit {
+impl<T: Number> crate::UnitOf<ElectricImpedance<T>> for ElectricImpedanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -230,7 +230,7 @@ impl<T: Float> crate::UnitOf<ElectricImpedance<T>> for ElectricImpedanceUnit {
     }
 }
 
-impl<T: Float> ElectricImpedance<T> {
+impl<T: crate::Float> ElectricImpedance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nΩ`, `µΩ`, `mΩ`, `Ω`, `kΩ`, `MΩ`, `GΩ`, `TΩ`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -259,7 +259,9 @@ impl<T: Float> ElectricImpedance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricImpedance<T> {
     /// A [`ElectricImpedance`] from a value in `Ω`.
     #[inline]
     pub fn from_ohms(value: T) -> Self {

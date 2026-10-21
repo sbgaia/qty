@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In photometry, illuminance is the total luminous flux incident on a surface, per unit area.
 ///
@@ -139,7 +139,7 @@ impl core::str::FromStr for IlluminanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Illuminance<T>> for IlluminanceUnit {
+impl<T: Number> crate::UnitOf<Illuminance<T>> for IlluminanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -161,7 +161,7 @@ impl<T: Float> crate::UnitOf<Illuminance<T>> for IlluminanceUnit {
     }
 }
 
-impl<T: Float> Illuminance<T> {
+impl<T: crate::Float> Illuminance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mlx`, `lx`, `klx`, `Mlx`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -186,7 +186,9 @@ impl<T: Float> Illuminance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Illuminance<T> {
     /// A [`Illuminance`] from a value in `lx`.
     #[inline]
     pub fn from_lux(value: T) -> Self {

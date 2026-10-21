@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Thermal resistance (R) measures the opposition to the heat current in a material or system. It is measured in units of kelvins per watt (K/W) and indicates how much temperature difference (in kelvins) is required to transfer a unit of heat current (in watts) through the material or object. It is essential to optimize the building insulation, evaluate the efficiency of electronic devices, and enhance the performance of heat sinks in various applications.
 ///
@@ -119,7 +119,7 @@ impl core::str::FromStr for ThermalResistanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ThermalResistance<T>> for ThermalResistanceUnit {
+impl<T: Number> crate::UnitOf<ThermalResistance<T>> for ThermalResistanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -137,7 +137,7 @@ impl<T: Float> crate::UnitOf<ThermalResistance<T>> for ThermalResistanceUnit {
     }
 }
 
-impl<T: Float> ThermalResistance<T> {
+impl<T: crate::Float> ThermalResistance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`K/W`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -145,7 +145,9 @@ impl<T: Float> ThermalResistance<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ThermalResistanceUnit> {
         self.in_unit(ThermalResistanceUnit::KelvinPerWatt)
     }
+}
 
+impl<T: Number> ThermalResistance<T> {
     /// A [`ThermalResistance`] from a value in `K/W`.
     #[inline]
     pub fn from_kelvins_per_watt(value: T) -> Self {

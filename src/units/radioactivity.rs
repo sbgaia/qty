@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Amount of ionizing radiation released when an element spontaneously emits energy as a result of the radioactive decay of an unstable atom per unit time.
 ///
@@ -475,7 +475,7 @@ impl core::str::FromStr for RadioactivityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
+impl<T: Number> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -547,7 +547,7 @@ impl<T: Float> crate::UnitOf<Radioactivity<T>> for RadioactivityUnit {
     }
 }
 
-impl<T: Float> Radioactivity<T> {
+impl<T: crate::Float> Radioactivity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pBq`, `nBq`, `µBq`, `mBq`, `Bq`, `kBq`, `MBq`, `GBq`, `TBq`, `PBq`, `EBq`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -579,7 +579,9 @@ impl<T: Float> Radioactivity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Radioactivity<T> {
     /// A [`Radioactivity`] from a value in `Bq`.
     #[inline]
     pub fn from_becquerels(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Force change rate is the ratio of the force change to the time during which the change occurred (value of force changes per unit time).
 ///
@@ -291,13 +291,13 @@ impl core::str::FromStr for ForceChangeRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
+impl<T: Number> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             ForceChangeRateUnit::NewtonPerMinute => value / T::from_f64(60.0),
             ForceChangeRateUnit::DecanewtonPerMinute => value / T::from_f64(6.0),
-            ForceChangeRateUnit::KilonewtonPerMinute => value * T::from_f64(16.666666666666668),
+            ForceChangeRateUnit::KilonewtonPerMinute => T::mul_ratio(value, 50.0, 3.0),
             ForceChangeRateUnit::NewtonPerSecond => value,
             ForceChangeRateUnit::NanonewtonPerSecond => value / T::from_f64(1e9),
             ForceChangeRateUnit::MicronewtonPerSecond => value / T::from_f64(1000000.0),
@@ -306,8 +306,12 @@ impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
             ForceChangeRateUnit::DecinewtonPerSecond => value / T::from_f64(10.0),
             ForceChangeRateUnit::DecanewtonPerSecond => value * T::from_f64(10.0),
             ForceChangeRateUnit::KilonewtonPerSecond => value * T::from_f64(1000.0),
-            ForceChangeRateUnit::PoundForcePerMinute => value * T::from_f64(0.07413702692100833),
-            ForceChangeRateUnit::KilopoundForcePerMinute => value * T::from_f64(74.13702692100833),
+            ForceChangeRateUnit::PoundForcePerMinute => {
+                T::mul_ratio(value, 8896443230521.0, 120000000000000.0)
+            }
+            ForceChangeRateUnit::KilopoundForcePerMinute => {
+                T::mul_ratio(value, 8896443230521.0, 120000000000.0)
+            }
             ForceChangeRateUnit::PoundForcePerSecond => value * T::from_f64(4.4482216152605),
             ForceChangeRateUnit::KilopoundForcePerSecond => value * T::from_f64(4448.2216152605),
         }
@@ -318,7 +322,7 @@ impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
         match self {
             ForceChangeRateUnit::NewtonPerMinute => value * T::from_f64(60.0),
             ForceChangeRateUnit::DecanewtonPerMinute => value * T::from_f64(6.0),
-            ForceChangeRateUnit::KilonewtonPerMinute => value / T::from_f64(16.666666666666668),
+            ForceChangeRateUnit::KilonewtonPerMinute => T::div_ratio(value, 50.0, 3.0),
             ForceChangeRateUnit::NewtonPerSecond => value,
             ForceChangeRateUnit::NanonewtonPerSecond => value * T::from_f64(1e9),
             ForceChangeRateUnit::MicronewtonPerSecond => value * T::from_f64(1000000.0),
@@ -327,15 +331,19 @@ impl<T: Float> crate::UnitOf<ForceChangeRate<T>> for ForceChangeRateUnit {
             ForceChangeRateUnit::DecinewtonPerSecond => value * T::from_f64(10.0),
             ForceChangeRateUnit::DecanewtonPerSecond => value / T::from_f64(10.0),
             ForceChangeRateUnit::KilonewtonPerSecond => value / T::from_f64(1000.0),
-            ForceChangeRateUnit::PoundForcePerMinute => value / T::from_f64(0.07413702692100833),
-            ForceChangeRateUnit::KilopoundForcePerMinute => value / T::from_f64(74.13702692100833),
+            ForceChangeRateUnit::PoundForcePerMinute => {
+                T::div_ratio(value, 8896443230521.0, 120000000000000.0)
+            }
+            ForceChangeRateUnit::KilopoundForcePerMinute => {
+                T::div_ratio(value, 8896443230521.0, 120000000000.0)
+            }
             ForceChangeRateUnit::PoundForcePerSecond => value / T::from_f64(4.4482216152605),
             ForceChangeRateUnit::KilopoundForcePerSecond => value / T::from_f64(4448.2216152605),
         }
     }
 }
 
-impl<T: Float> ForceChangeRate<T> {
+impl<T: crate::Float> ForceChangeRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nN/s`, `µN/s`, `mN/s`, `N/s`, `kN/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -361,7 +369,9 @@ impl<T: Float> ForceChangeRate<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ForceChangeRate<T> {
     /// A [`ForceChangeRate`] from a value in `N/min`.
     #[inline]
     pub fn from_newtons_per_minute(value: T) -> Self {
@@ -389,13 +399,13 @@ impl<T: Float> ForceChangeRate<T> {
     /// A [`ForceChangeRate`] from a value in `kN/min`.
     #[inline]
     pub fn from_kilonewtons_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16.666666666666668))
+        Self(T::mul_ratio(value, 50.0, 3.0))
     }
 
     /// The value in `kN/min`.
     #[inline]
     pub fn as_kilonewtons_per_minute(self) -> T {
-        self.0 / T::from_f64(16.666666666666668)
+        T::div_ratio(self.0, 50.0, 3.0)
     }
 
     /// A [`ForceChangeRate`] from a value in `N/s`.
@@ -497,25 +507,25 @@ impl<T: Float> ForceChangeRate<T> {
     /// A [`ForceChangeRate`] from a value in `lbf/min`.
     #[inline]
     pub fn from_pounds_force_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.07413702692100833))
+        Self(T::mul_ratio(value, 8896443230521.0, 120000000000000.0))
     }
 
     /// The value in `lbf/min`.
     #[inline]
     pub fn as_pounds_force_per_minute(self) -> T {
-        self.0 / T::from_f64(0.07413702692100833)
+        T::div_ratio(self.0, 8896443230521.0, 120000000000000.0)
     }
 
     /// A [`ForceChangeRate`] from a value in `klbf/min`.
     #[inline]
     pub fn from_kilopounds_force_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(74.13702692100833))
+        Self(T::mul_ratio(value, 8896443230521.0, 120000000000.0))
     }
 
     /// The value in `klbf/min`.
     #[inline]
     pub fn as_kilopounds_force_per_minute(self) -> T {
-        self.0 / T::from_f64(74.13702692100833)
+        T::div_ratio(self.0, 8896443230521.0, 120000000000.0)
     }
 
     /// A [`ForceChangeRate`] from a value in `lbf/s`.

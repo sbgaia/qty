@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In computing and telecommunications, a unit of information is the capacity of some standard data storage system or communication channel, used to measure the capacities of other systems and channels. In information theory, units of information are also used to measure the information contents or entropy of random variables.
 ///
@@ -602,7 +602,7 @@ impl core::str::FromStr for InformationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Information<T>> for InformationUnit {
+impl<T: Number> crate::UnitOf<Information<T>> for InformationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -660,9 +660,9 @@ impl<T: Float> crate::UnitOf<Information<T>> for InformationUnit {
             InformationUnit::Exabyte => value / T::from_f64(8e18),
             InformationUnit::Kibibyte => value * T::from_f64(0.0001220703125),
             InformationUnit::Mebibyte => value * T::from_f64(1.1920928955078125e-7),
-            InformationUnit::Gibibyte => value * T::from_f64(1.1641532182693481e-10),
-            InformationUnit::Tebibyte => value * T::from_f64(1.1368683772161603e-13),
-            InformationUnit::Pebibyte => value * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Gibibyte => value * T::from_ratio(1.0, 8589934592.0),
+            InformationUnit::Tebibyte => value * T::from_ratio(1.0, 8796093022208.0),
+            InformationUnit::Pebibyte => value * T::from_ratio(1.0, 9007199254740992.0),
             InformationUnit::Exbibyte => value * T::from_f64(1.0842021724855044e-19),
             InformationUnit::Octet => value * T::from_f64(0.125),
             InformationUnit::Kilooctet => value / T::from_f64(8000.0),
@@ -673,9 +673,9 @@ impl<T: Float> crate::UnitOf<Information<T>> for InformationUnit {
             InformationUnit::Exaoctet => value / T::from_f64(8e18),
             InformationUnit::Kibioctet => value * T::from_f64(0.0001220703125),
             InformationUnit::Mebioctet => value * T::from_f64(1.1920928955078125e-7),
-            InformationUnit::Gibioctet => value * T::from_f64(1.1641532182693481e-10),
-            InformationUnit::Tebioctet => value * T::from_f64(1.1368683772161603e-13),
-            InformationUnit::Pebioctet => value * T::from_f64(1.1102230246251565e-16),
+            InformationUnit::Gibioctet => value * T::from_ratio(1.0, 8589934592.0),
+            InformationUnit::Tebioctet => value * T::from_ratio(1.0, 8796093022208.0),
+            InformationUnit::Pebioctet => value * T::from_ratio(1.0, 9007199254740992.0),
             InformationUnit::Exbioctet => value * T::from_f64(1.0842021724855044e-19),
             InformationUnit::Bit => value,
             InformationUnit::Kilobit => value / T::from_f64(1000.0),
@@ -686,15 +686,15 @@ impl<T: Float> crate::UnitOf<Information<T>> for InformationUnit {
             InformationUnit::Exabit => value / T::from_f64(1e18),
             InformationUnit::Kibibit => value * T::from_f64(0.0009765625),
             InformationUnit::Mebibit => value * T::from_f64(9.5367431640625e-7),
-            InformationUnit::Gibibit => value * T::from_f64(9.313225746154785e-10),
-            InformationUnit::Tebibit => value * T::from_f64(9.094947017729282e-13),
-            InformationUnit::Pebibit => value * T::from_f64(8.881784197001252e-16),
+            InformationUnit::Gibibit => value * T::from_ratio(1.0, 1073741824.0),
+            InformationUnit::Tebibit => value * T::from_ratio(1.0, 1099511627776.0),
+            InformationUnit::Pebibit => value * T::from_ratio(1.0, 1125899906842624.0),
             InformationUnit::Exbibit => value * T::from_f64(8.673617379884035e-19),
         }
     }
 }
 
-impl<T: Float> Information<T> {
+impl<T: crate::Float> Information<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`b`, `kb`, `Mb`, `Gb`, `Tb`, `Pb`, `Eb`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -722,7 +722,9 @@ impl<T: Float> Information<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Information<T> {
     /// A [`Information`] from a value in `B`.
     #[inline]
     pub fn from_bytes(value: T) -> Self {
@@ -840,7 +842,7 @@ impl<T: Float> Information<T> {
     /// The value in `GiB`.
     #[inline]
     pub fn as_gibibytes(self) -> T {
-        self.0 * T::from_f64(1.1641532182693481e-10)
+        self.0 * T::from_ratio(1.0, 8589934592.0)
     }
 
     /// A [`Information`] from a value in `TiB`.
@@ -852,7 +854,7 @@ impl<T: Float> Information<T> {
     /// The value in `TiB`.
     #[inline]
     pub fn as_tebibytes(self) -> T {
-        self.0 * T::from_f64(1.1368683772161603e-13)
+        self.0 * T::from_ratio(1.0, 8796093022208.0)
     }
 
     /// A [`Information`] from a value in `PiB`.
@@ -864,7 +866,7 @@ impl<T: Float> Information<T> {
     /// The value in `PiB`.
     #[inline]
     pub fn as_pebibytes(self) -> T {
-        self.0 * T::from_f64(1.1102230246251565e-16)
+        self.0 * T::from_ratio(1.0, 9007199254740992.0)
     }
 
     /// A [`Information`] from a value in `EiB`.
@@ -996,7 +998,7 @@ impl<T: Float> Information<T> {
     /// The value in `Gio`.
     #[inline]
     pub fn as_gibioctets(self) -> T {
-        self.0 * T::from_f64(1.1641532182693481e-10)
+        self.0 * T::from_ratio(1.0, 8589934592.0)
     }
 
     /// A [`Information`] from a value in `Tio`.
@@ -1008,7 +1010,7 @@ impl<T: Float> Information<T> {
     /// The value in `Tio`.
     #[inline]
     pub fn as_tebioctets(self) -> T {
-        self.0 * T::from_f64(1.1368683772161603e-13)
+        self.0 * T::from_ratio(1.0, 8796093022208.0)
     }
 
     /// A [`Information`] from a value in `Pio`.
@@ -1020,7 +1022,7 @@ impl<T: Float> Information<T> {
     /// The value in `Pio`.
     #[inline]
     pub fn as_pebioctets(self) -> T {
-        self.0 * T::from_f64(1.1102230246251565e-16)
+        self.0 * T::from_ratio(1.0, 9007199254740992.0)
     }
 
     /// A [`Information`] from a value in `Eio`.
@@ -1152,7 +1154,7 @@ impl<T: Float> Information<T> {
     /// The value in `Gib`.
     #[inline]
     pub fn as_gibibits(self) -> T {
-        self.0 * T::from_f64(9.313225746154785e-10)
+        self.0 * T::from_ratio(1.0, 1073741824.0)
     }
 
     /// A [`Information`] from a value in `Tib`.
@@ -1164,7 +1166,7 @@ impl<T: Float> Information<T> {
     /// The value in `Tib`.
     #[inline]
     pub fn as_tebibits(self) -> T {
-        self.0 * T::from_f64(9.094947017729282e-13)
+        self.0 * T::from_ratio(1.0, 1099511627776.0)
     }
 
     /// A [`Information`] from a value in `Pib`.
@@ -1176,7 +1178,7 @@ impl<T: Float> Information<T> {
     /// The value in `Pib`.
     #[inline]
     pub fn as_pebibits(self) -> T {
-        self.0 * T::from_f64(8.881784197001252e-16)
+        self.0 * T::from_ratio(1.0, 1125899906842624.0)
     }
 
     /// A [`Information`] from a value in `Eib`.

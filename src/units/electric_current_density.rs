@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, current density is the electric current per unit area of cross section.
 ///
@@ -135,14 +135,16 @@ impl core::str::FromStr for ElectricCurrentDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricCurrentDensity<T>> for ElectricCurrentDensityUnit {
+impl<T: Number> crate::UnitOf<ElectricCurrentDensity<T>> for ElectricCurrentDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricCurrentDensityUnit::AmperePerSquareMeter => value,
-            ElectricCurrentDensityUnit::AmperePerSquareInch => value * T::from_f64(1550.0031000062),
+            ElectricCurrentDensityUnit::AmperePerSquareInch => {
+                T::mul_ratio(value, 25000000.0, 16129.0)
+            }
             ElectricCurrentDensityUnit::AmperePerSquareFoot => {
-                value * T::from_f64(10.763910416709722)
+                T::mul_ratio(value, 1562500.0, 145161.0)
             }
         }
     }
@@ -151,15 +153,17 @@ impl<T: Float> crate::UnitOf<ElectricCurrentDensity<T>> for ElectricCurrentDensi
     fn value_from_base(self, value: T) -> T {
         match self {
             ElectricCurrentDensityUnit::AmperePerSquareMeter => value,
-            ElectricCurrentDensityUnit::AmperePerSquareInch => value / T::from_f64(1550.0031000062),
+            ElectricCurrentDensityUnit::AmperePerSquareInch => {
+                T::div_ratio(value, 25000000.0, 16129.0)
+            }
             ElectricCurrentDensityUnit::AmperePerSquareFoot => {
-                value / T::from_f64(10.763910416709722)
+                T::div_ratio(value, 1562500.0, 145161.0)
             }
         }
     }
 }
 
-impl<T: Float> ElectricCurrentDensity<T> {
+impl<T: crate::Float> ElectricCurrentDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`A/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -167,7 +171,9 @@ impl<T: Float> ElectricCurrentDensity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricCurrentDensityUnit> {
         self.in_unit(ElectricCurrentDensityUnit::AmperePerSquareMeter)
     }
+}
 
+impl<T: Number> ElectricCurrentDensity<T> {
     /// A [`ElectricCurrentDensity`] from a value in `A/m²`.
     #[inline]
     pub fn from_amperes_per_square_meter(value: T) -> Self {
@@ -183,25 +189,25 @@ impl<T: Float> ElectricCurrentDensity<T> {
     /// A [`ElectricCurrentDensity`] from a value in `A/in²`.
     #[inline]
     pub fn from_amperes_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(1550.0031000062))
+        Self(T::mul_ratio(value, 25000000.0, 16129.0))
     }
 
     /// The value in `A/in²`.
     #[inline]
     pub fn as_amperes_per_square_inch(self) -> T {
-        self.0 / T::from_f64(1550.0031000062)
+        T::div_ratio(self.0, 25000000.0, 16129.0)
     }
 
     /// A [`ElectricCurrentDensity`] from a value in `A/ft²`.
     #[inline]
     pub fn from_amperes_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(10.763910416709722))
+        Self(T::mul_ratio(value, 1562500.0, 145161.0))
     }
 
     /// The value in `A/ft²`.
     #[inline]
     pub fn as_amperes_per_square_foot(self) -> T {
-        self.0 / T::from_f64(10.763910416709722)
+        T::div_ratio(self.0, 1562500.0, 145161.0)
     }
 }
 

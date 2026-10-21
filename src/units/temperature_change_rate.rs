@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Temperature change rate is the ratio of the temperature change to the time during which the change occurred (value of temperature changes per unit time).
 ///
@@ -317,7 +317,7 @@ impl core::str::FromStr for TemperatureChangeRateUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRateUnit {
+impl<T: Number> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRateUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -335,9 +335,7 @@ impl<T: Float> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRate
             TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value / T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeKelvinPerMinute => value / T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value / T::from_f64(108.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
-                value * T::from_f64(0.5555555555555556)
-            }
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => T::mul_ratio(value, 5.0, 9.0),
             TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
             TemperatureChangeRateUnit::DegreeCelsiusPerHour => value / T::from_f64(3600.0),
             TemperatureChangeRateUnit::DegreeKelvinPerHour => value / T::from_f64(3600.0),
@@ -362,9 +360,7 @@ impl<T: Float> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRate
             TemperatureChangeRateUnit::DegreeCelsiusPerMinute => value * T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeKelvinPerMinute => value * T::from_f64(60.0),
             TemperatureChangeRateUnit::DegreeFahrenheitPerMinute => value * T::from_f64(108.0),
-            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => {
-                value / T::from_f64(0.5555555555555556)
-            }
+            TemperatureChangeRateUnit::DegreeFahrenheitPerSecond => T::div_ratio(value, 5.0, 9.0),
             TemperatureChangeRateUnit::DegreeKelvinPerSecond => value,
             TemperatureChangeRateUnit::DegreeCelsiusPerHour => value * T::from_f64(3600.0),
             TemperatureChangeRateUnit::DegreeKelvinPerHour => value * T::from_f64(3600.0),
@@ -373,7 +369,7 @@ impl<T: Float> crate::UnitOf<TemperatureChangeRate<T>> for TemperatureChangeRate
     }
 }
 
-impl<T: Float> TemperatureChangeRate<T> {
+impl<T: crate::Float> TemperatureChangeRate<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`n°C/s`, `µ°C/s`, `m°C/s`, `°C/s`, `k°C/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -405,7 +401,9 @@ impl<T: Float> TemperatureChangeRate<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `°C/s`.
     #[inline]
     pub fn from_degrees_celsius_per_second(value: T) -> Self {
@@ -553,13 +551,13 @@ impl<T: Float> TemperatureChangeRate<T> {
     /// A [`TemperatureChangeRate`] from a value in `°F/s`.
     #[inline]
     pub fn from_degrees_fahrenheit_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.5555555555555556))
+        Self(T::mul_ratio(value, 5.0, 9.0))
     }
 
     /// The value in `°F/s`.
     #[inline]
     pub fn as_degrees_fahrenheit_per_second(self) -> T {
-        self.0 / T::from_f64(0.5555555555555556)
+        T::div_ratio(self.0, 5.0, 9.0)
     }
 
     /// A [`TemperatureChangeRate`] from a value in `K/s`.

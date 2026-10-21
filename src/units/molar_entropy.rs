@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Molar entropy is amount of energy required to increase temperature of 1 mole substance by 1 Kelvin.
 ///
@@ -135,7 +135,7 @@ impl core::str::FromStr for MolarEntropyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
+impl<T: Number> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -155,7 +155,7 @@ impl<T: Float> crate::UnitOf<MolarEntropy<T>> for MolarEntropyUnit {
     }
 }
 
-impl<T: Float> MolarEntropy<T> {
+impl<T: crate::Float> MolarEntropy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/(mol·K)`, `kJ/(mol·K)`, `MJ/(mol·K)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -179,7 +179,9 @@ impl<T: Float> MolarEntropy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MolarEntropy<T> {
     /// A [`MolarEntropy`] from a value in `J/(mol·K)`.
     #[inline]
     pub fn from_joules_per_mole_kelvin(value: T) -> Self {

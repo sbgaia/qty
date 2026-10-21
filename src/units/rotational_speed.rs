@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Rotational speed (sometimes called speed of revolution) is the number of complete rotations, revolutions, cycles, or turns per time unit. Rotational speed is a cyclic frequency, measured in radians per second or in hertz in the SI System by scientists, or in revolutions per minute (rpm or min-1) or revolutions per second in everyday life. The symbol for rotational speed is ω (the Greek lowercase letter "omega").
 ///
@@ -268,7 +268,7 @@ impl core::str::FromStr for RotationalSpeedUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RotationalSpeed<T>> for RotationalSpeedUnit {
+impl<T: Number> crate::UnitOf<RotationalSpeed<T>> for RotationalSpeedUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -308,7 +308,7 @@ impl<T: Float> crate::UnitOf<RotationalSpeed<T>> for RotationalSpeedUnit {
     }
 }
 
-impl<T: Float> RotationalSpeed<T> {
+impl<T: crate::Float> RotationalSpeed<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nrad/s`, `µrad/s`, `mrad/s`, `rad/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -333,7 +333,9 @@ impl<T: Float> RotationalSpeed<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RotationalSpeed<T> {
     /// A [`RotationalSpeed`] from a value in `rad/s`.
     #[inline]
     pub fn from_radians_per_second(value: T) -> Self {

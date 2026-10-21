@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A geometric property of an area that reflects how its points are distributed with regard to an axis.
 ///
@@ -174,7 +174,7 @@ impl core::str::FromStr for AreaMomentOfInertiaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit {
+impl<T: Number> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -200,7 +200,7 @@ impl<T: Float> crate::UnitOf<AreaMomentOfInertia<T>> for AreaMomentOfInertiaUnit
     }
 }
 
-impl<T: Float> AreaMomentOfInertia<T> {
+impl<T: crate::Float> AreaMomentOfInertia<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m⁴`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -208,7 +208,9 @@ impl<T: Float> AreaMomentOfInertia<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, AreaMomentOfInertiaUnit> {
         self.in_unit(AreaMomentOfInertiaUnit::MeterToTheFourth)
     }
+}
 
+impl<T: Number> AreaMomentOfInertia<T> {
     /// A [`AreaMomentOfInertia`] from a value in `m⁴`.
     #[inline]
     pub fn from_meters_to_the_fourth(value: T) -> Self {

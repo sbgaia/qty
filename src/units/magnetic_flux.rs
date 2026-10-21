@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In physics, specifically electromagnetism, the magnetic flux through a surface is the surface integral of the normal component of the magnetic field B passing through that surface.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for MagneticFluxUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MagneticFlux<T>> for MagneticFluxUnit {
+impl<T: Number> crate::UnitOf<MagneticFlux<T>> for MagneticFluxUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<MagneticFlux<T>> for MagneticFluxUnit {
     }
 }
 
-impl<T: Float> MagneticFlux<T> {
+impl<T: crate::Float> MagneticFlux<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Wb`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> MagneticFlux<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, MagneticFluxUnit> {
         self.in_unit(MagneticFluxUnit::Weber)
     }
+}
 
+impl<T: Number> MagneticFlux<T> {
     /// A [`MagneticFlux`] from a value in `Wb`.
     #[inline]
     pub fn from_webers(value: T) -> Self {

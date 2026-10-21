@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Many different units of length have been used around the world. The main units in modern use are U.S. customary units in the United States and the Metric system elsewhere. British Imperial units are still used for some purposes in the United Kingdom and some other countries. The metric system is sub-divided into SI and non-SI units.
 ///
@@ -666,7 +666,7 @@ impl core::str::FromStr for LengthUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
+impl<T: Number> crate::UnitOf<Length<T>> for LengthUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -688,18 +688,18 @@ impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
             LengthUnit::Kiloyard => value * T::from_f64(914.4),
             LengthUnit::Foot => value * T::from_f64(0.3048),
             LengthUnit::Kilofoot => value * T::from_f64(304.8),
-            LengthUnit::UsSurveyFoot => value * T::from_f64(0.3048006096012192),
+            LengthUnit::UsSurveyFoot => T::mul_ratio(value, 1200.0, 3937.0),
             LengthUnit::Inch => value * T::from_f64(0.0254),
             LengthUnit::Mil => value * T::from_f64(2.54e-5),
             LengthUnit::NauticalMile => value * T::from_f64(1852.0),
             LengthUnit::Fathom => value * T::from_f64(1.8288),
             LengthUnit::Shackle => value * T::from_f64(27.432),
             LengthUnit::Microinch => value * T::from_f64(2.54e-8),
-            LengthUnit::PrinterPoint => value * T::from_f64(0.00035145980351459805),
-            LengthUnit::DtpPoint => value * T::from_f64(0.00035277777777777776),
-            LengthUnit::PrinterPica => value * T::from_f64(0.004217517642175176),
-            LengthUnit::DtpPica => value * T::from_f64(0.004233333333333334),
-            LengthUnit::Twip => value * T::from_f64(1.763888888888889e-5),
+            LengthUnit::PrinterPoint => T::mul_ratio(value, 127.0, 361350.0),
+            LengthUnit::DtpPoint => T::mul_ratio(value, 127.0, 360000.0),
+            LengthUnit::PrinterPica => T::mul_ratio(value, 254.0, 60225.0),
+            LengthUnit::DtpPica => T::mul_ratio(value, 127.0, 30000.0),
+            LengthUnit::Twip => T::mul_ratio(value, 127.0, 7200000.0),
             LengthUnit::Hand => value * T::from_f64(0.1016),
             LengthUnit::AstronomicalUnit => value * T::from_f64(1.495978707e11),
             LengthUnit::Parsec => value * T::from_f64(3.08567758128e16),
@@ -736,18 +736,18 @@ impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
             LengthUnit::Kiloyard => value / T::from_f64(914.4),
             LengthUnit::Foot => value / T::from_f64(0.3048),
             LengthUnit::Kilofoot => value / T::from_f64(304.8),
-            LengthUnit::UsSurveyFoot => value / T::from_f64(0.3048006096012192),
+            LengthUnit::UsSurveyFoot => T::div_ratio(value, 1200.0, 3937.0),
             LengthUnit::Inch => value / T::from_f64(0.0254),
             LengthUnit::Mil => value / T::from_f64(2.54e-5),
             LengthUnit::NauticalMile => value / T::from_f64(1852.0),
             LengthUnit::Fathom => value / T::from_f64(1.8288),
             LengthUnit::Shackle => value / T::from_f64(27.432),
             LengthUnit::Microinch => value / T::from_f64(2.54e-8),
-            LengthUnit::PrinterPoint => value / T::from_f64(0.00035145980351459805),
-            LengthUnit::DtpPoint => value / T::from_f64(0.00035277777777777776),
-            LengthUnit::PrinterPica => value / T::from_f64(0.004217517642175176),
-            LengthUnit::DtpPica => value / T::from_f64(0.004233333333333334),
-            LengthUnit::Twip => value / T::from_f64(1.763888888888889e-5),
+            LengthUnit::PrinterPoint => T::div_ratio(value, 127.0, 361350.0),
+            LengthUnit::DtpPoint => T::div_ratio(value, 127.0, 360000.0),
+            LengthUnit::PrinterPica => T::div_ratio(value, 254.0, 60225.0),
+            LengthUnit::DtpPica => T::div_ratio(value, 127.0, 30000.0),
+            LengthUnit::Twip => T::div_ratio(value, 127.0, 7200000.0),
             LengthUnit::Hand => value / T::from_f64(0.1016),
             LengthUnit::AstronomicalUnit => value / T::from_f64(1.495978707e11),
             LengthUnit::Parsec => value / T::from_f64(3.08567758128e16),
@@ -764,7 +764,7 @@ impl<T: Float> crate::UnitOf<Length<T>> for LengthUnit {
     }
 }
 
-impl<T: Float> Length<T> {
+impl<T: crate::Float> Length<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fm`, `pm`, `nm`, `µm`, `mm`, `m`, `km`, `Mm`, `Gm`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -794,7 +794,9 @@ impl<T: Float> Length<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Length<T> {
     /// A [`Length`] from a value in `m`.
     #[inline]
     pub fn from_meters(value: T) -> Self {
@@ -1014,13 +1016,13 @@ impl<T: Float> Length<T> {
     /// A [`Length`] from a value in `ftUS`.
     #[inline]
     pub fn from_us_survey_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.3048006096012192))
+        Self(T::mul_ratio(value, 1200.0, 3937.0))
     }
 
     /// The value in `ftUS`.
     #[inline]
     pub fn as_us_survey_feet(self) -> T {
-        self.0 / T::from_f64(0.3048006096012192)
+        T::div_ratio(self.0, 1200.0, 3937.0)
     }
 
     /// A [`Length`] from a value in `in`.
@@ -1098,61 +1100,61 @@ impl<T: Float> Length<T> {
     /// A [`Length`] from a value in `pt`.
     #[inline]
     pub fn from_printer_points(value: T) -> Self {
-        Self(value * T::from_f64(0.00035145980351459805))
+        Self(T::mul_ratio(value, 127.0, 361350.0))
     }
 
     /// The value in `pt`.
     #[inline]
     pub fn as_printer_points(self) -> T {
-        self.0 / T::from_f64(0.00035145980351459805)
+        T::div_ratio(self.0, 127.0, 361350.0)
     }
 
     /// A [`Length`] from a value in `pt`.
     #[inline]
     pub fn from_dtp_points(value: T) -> Self {
-        Self(value * T::from_f64(0.00035277777777777776))
+        Self(T::mul_ratio(value, 127.0, 360000.0))
     }
 
     /// The value in `pt`.
     #[inline]
     pub fn as_dtp_points(self) -> T {
-        self.0 / T::from_f64(0.00035277777777777776)
+        T::div_ratio(self.0, 127.0, 360000.0)
     }
 
     /// A [`Length`] from a value in `pica`.
     #[inline]
     pub fn from_printer_picas(value: T) -> Self {
-        Self(value * T::from_f64(0.004217517642175176))
+        Self(T::mul_ratio(value, 254.0, 60225.0))
     }
 
     /// The value in `pica`.
     #[inline]
     pub fn as_printer_picas(self) -> T {
-        self.0 / T::from_f64(0.004217517642175176)
+        T::div_ratio(self.0, 254.0, 60225.0)
     }
 
     /// A [`Length`] from a value in `pica`.
     #[inline]
     pub fn from_dtp_picas(value: T) -> Self {
-        Self(value * T::from_f64(0.004233333333333334))
+        Self(T::mul_ratio(value, 127.0, 30000.0))
     }
 
     /// The value in `pica`.
     #[inline]
     pub fn as_dtp_picas(self) -> T {
-        self.0 / T::from_f64(0.004233333333333334)
+        T::div_ratio(self.0, 127.0, 30000.0)
     }
 
     /// A [`Length`] from a value in `twip`.
     #[inline]
     pub fn from_twips(value: T) -> Self {
-        Self(value * T::from_f64(1.763888888888889e-5))
+        Self(T::mul_ratio(value, 127.0, 7200000.0))
     }
 
     /// The value in `twip`.
     #[inline]
     pub fn as_twips(self) -> T {
-        self.0 / T::from_f64(1.763888888888889e-5)
+        T::div_ratio(self.0, 127.0, 7200000.0)
     }
 
     /// A [`Length`] from a value in `h`.

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Radiation exposure is a measure of the ionization of air due to ionizing radiation from photons.
 ///
@@ -200,7 +200,7 @@ impl core::str::FromStr for RadiationExposureUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RadiationExposure<T>> for RadiationExposureUnit {
+impl<T: Number> crate::UnitOf<RadiationExposure<T>> for RadiationExposureUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -230,7 +230,7 @@ impl<T: Float> crate::UnitOf<RadiationExposure<T>> for RadiationExposureUnit {
     }
 }
 
-impl<T: Float> RadiationExposure<T> {
+impl<T: crate::Float> RadiationExposure<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pC/kg`, `nC/kg`, `µC/kg`, `mC/kg`, `C/kg`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -256,7 +256,9 @@ impl<T: Float> RadiationExposure<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RadiationExposure<T> {
     /// A [`RadiationExposure`] from a value in `C/kg`.
     #[inline]
     pub fn from_coulombs_per_kilogram(value: T) -> Self {
