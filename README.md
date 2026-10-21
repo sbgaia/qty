@@ -23,7 +23,7 @@ code; converting to another unit is a single multiplication.
 
 ```toml
 [dependencies]
-qty = "0.2"
+qty = "0.3"
 ```
 
 ## Units and arithmetic
@@ -301,7 +301,7 @@ only those takes about a fifth of the time of `full`, so if you need few
 groups, list them:
 
 ```toml
-qty = { version = "0.2", default-features = false, features = ["std", "electrical"] }
+qty = { version = "0.3", default-features = false, features = ["std", "electrical"] }
 ```
 
 Without default features the crate is `no_std` and never allocates; add

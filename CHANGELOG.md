@@ -6,6 +6,23 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-21
+
+### Migrating from 0.2
+
+- A `Force * Length` product is now an `Energy`. Where you wanted a torque,
+  name it: `let t: Torque = formula!(force * lever)`. The same goes for the
+  cross product `r × F`.
+- A custom storage type that implements `Float` must also implement
+  `Number`: move its `from_f64` from the `Float` impl to a new `Number`
+  impl. Generic code bounded on `Float` keeps working; bound it on `Number`
+  instead to accept decimals and rationals too.
+- `expr + Expr::new(1.0)` needs the type of the constant, for example from
+  a `let` with a type annotation. Code that names
+  `FromFormula`, `HalfE` or `ThirdE` in its own bounds may need the new
+  `Gives`, `AddUnits`, `SubUnits` or `Rem` bounds; code that only calls
+  `formula!` and `expr!` is unaffected.
+
 ### Added
 
 - `qty!` writes a quantity with its unit, checked at compile time:
