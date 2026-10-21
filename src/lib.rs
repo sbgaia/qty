@@ -1572,6 +1572,9 @@ pub use custom::UnitOf;
 
 pub mod formula;
 
+#[doc(hidden)]
+pub mod literal;
+
 pub mod constants;
 
 mod angle_wrap;

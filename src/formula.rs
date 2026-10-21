@@ -723,6 +723,8 @@ macro_rules! __qty_formula {
             }
         }
 
+        $crate::__qty_literal_impl!($Q);
+
         impl<V: $crate::Number> $crate::formula::SiFactor for $Q<V> {
             const FACTOR: f64 =
                 $crate::formula::base_unit_factor(<$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR);
@@ -872,6 +874,10 @@ macro_rules! __formula {
     // `<-` is a single token.
     (@start [$($o:tt)*] ($($g:tt)+) . powi :: <- $n:literal > () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ -$n }>()] [] $($rest)*)
+    };
+    // A unit literal: its `Expr`.
+    (@start [$($o:tt)*] qty ! ($($g:tt)+) $($rest:tt)*) => {
+        $crate::__formula!(@value [$($o)*] [$crate::__qty_expr!($($g)+)] $($rest)*)
     };
     (@start [$($o:tt)*] ($($g:tt)+) $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
