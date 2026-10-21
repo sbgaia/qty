@@ -13,7 +13,7 @@ qty = { path = ".." }
 
 # Competitor libraries.
 # uom: dimensions checked through type parameters.
-uom = { version = "0.37", features = ["si", "f64"] }
+uom = { version = "0.38", features = ["si", "f64"] }
 
 # simple-si-units: SI units generic over the number type.
 simple-si-units = "1.1"
@@ -29,4 +29,8 @@ measures = { package = "measures-rs", version = "0.1" }
 
 [[bench]]
 name = "compare"
+harness = false
+
+[[bench]]
+name = "patterns"
 harness = false

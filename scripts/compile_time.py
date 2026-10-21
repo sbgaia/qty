@@ -5,16 +5,18 @@
 
 Two kinds of measurement:
 
-1. Library: a cold build of the crate itself, from `cargo clean`, with all of
-   its quantities and with the smallest useful feature set, for
-   `cargo check`, a debug build and a release build.
+1. Library: a cold build of the crate itself, from `cargo clean`, for
+   `cargo check`, a debug build and a release build. Both libraries are
+   built with the same features: every quantity, `f64` storage and `std`,
+   then the same with serde. qty with its core quantities only comes last.
 2. Downstream: rebuilding a crate that uses the library, with the library
-   already built. The crate has `--blocks` copies of a short block of
-   physics: build a length, a duration and a mass, divide to a speed and, in
-   the `kinetic` variant, compute 0.5·m·v² as an energy (with `formula!` in
-   qty, plain operators in uom). The `speed` variant leaves out the energy.
-   Incremental compilation is off, so every rebuild compiles the whole
-   crate.
+   already built (every quantity, `f64`, `std`). The crate has `--blocks`
+   copies of a short block of physics: build a length, a duration and a
+   mass, divide to a speed and, in the `kinetic` variant, compute 0.5·m·v²
+   as an energy (with `formula!` in qty, plain operators in uom). The
+   `speed` variant leaves out the energy. Incremental compilation is off,
+   so every rebuild compiles the whole crate. `scripts/scaling.py` does
+   the same for more patterns and sizes, and times the programs too.
 
 Each measurement runs in its own throwaway Cargo project under
 `target/compile-time/`, against this checkout of qty and uom from crates.io.
@@ -46,18 +48,35 @@ WORK_DIR = REPO_ROOT / "target" / "compile-time"
 
 # Library configurations: (name, crate, dependency line for Cargo.toml).
 # `{qty}` is replaced by the path of this checkout, `{uom}` by the uom version.
+# They come in pairs with the same features: every quantity (qty's 128, uom's
+# 116 SI ones), `f64` storage and `std`, then the same with serde. uom's
+# `autoconvert` and `f32` are off, as qty has no counterpart for them. The
+# last row, qty with its core quantities only, has no uom counterpart.
 LIBRARY_CONFIGS = [
-    ("qty, all quantities (default features)", "qty", 'qty = {{ path = "{qty}" }}'),
+    (
+        "qty, all quantities (std, full)",
+        "qty",
+        'qty = {{ path = "{qty}", default-features = false, features = ["std", "full"] }}',
+    ),
+    (
+        "uom, all quantities (si, f64, std)",
+        "uom",
+        'uom = {{ version = "{uom}", default-features = false, features = ["si", "f64", "std"] }}',
+    ),
+    (
+        "qty, all quantities and serde",
+        "qty",
+        'qty = {{ path = "{qty}", default-features = false, features = ["std", "full", "serde"] }}',
+    ),
+    (
+        "uom, all quantities and serde",
+        "uom",
+        'uom = {{ version = "{uom}", default-features = false, features = ["si", "f64", "std", "use_serde"] }}',
+    ),
     (
         "qty, core quantities (std only)",
         "qty",
         'qty = {{ path = "{qty}", default-features = false, features = ["std"] }}',
-    ),
-    ("uom, default features (f32 and f64)", "uom", 'uom = "{uom}"'),
-    (
-        "uom, si + f64 + std only",
-        "uom",
-        'uom = {{ version = "{uom}", default-features = false, features = ["si", "f64", "std"] }}',
     ),
 ]
 
@@ -180,8 +199,18 @@ def measure_downstream(args: argparse.Namespace) -> list[dict]:
     print("| Library | Variant | " + " | ".join(name for name, _ in DOWNSTREAM_COMMANDS) + " |")
     print("| --- | --- |" + " --- |" * len(DOWNSTREAM_COMMANDS))
     libraries = [
-        ("qty", f'qty = {{ path = "{REPO_ROOT}" }}', QTY_PRELUDE, QTY_BLOCK),
-        ("uom", f'uom = "{args.uom_version}"', UOM_PRELUDE, UOM_BLOCK),
+        (
+            "qty",
+            f'qty = {{ path = "{REPO_ROOT}", default-features = false, features = ["std", "full"] }}',
+            QTY_PRELUDE,
+            QTY_BLOCK,
+        ),
+        (
+            "uom",
+            f'uom = {{ version = "{args.uom_version}", default-features = false, features = ["si", "f64", "std"] }}',
+            UOM_PRELUDE,
+            UOM_BLOCK,
+        ),
     ]
     rows = []
     for library, dependency, prelude, blocks in libraries:

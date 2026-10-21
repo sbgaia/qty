@@ -326,10 +326,17 @@ tests compare the integer arithmetic with exact rational arithmetic, and two
 fuzz targets cover parsing and `Fixed` (see `fuzz/README.md`). The examples
 in [`examples/`](https://github.com/sbgaia/qty/tree/main/examples) run in CI.
 
-`cargo bench -p qty-benches` compares run-time speed with other unit crates.
+`cargo bench -p qty-benches` compares run-time speed with other unit crates,
+and its `patterns` benchmark with uom and plain `f64` on common uses.
 `python3 scripts/compile_time.py` compares compile times with uom: cold
-builds of each library, and rebuilds of a crate that uses it. Run it on an
-idle machine; it takes a few minutes per run.
+builds of each library, and rebuilds of a crate that uses it.
+`python3 scripts/scaling.py` generates programs of 10 to 1,000 functions
+(or more, with `--sizes`) in eight patterns, from plain arithmetic to
+`formula!`, unit literals, conversions, generics and serde, and measures
+how long they take to compile and to run with qty, with uom and with plain
+`f64`. Both scripts build qty and uom with the same features. Run them on
+an idle machine; `compile_time.py` takes a few minutes, `scaling.py` about
+an hour.
 
 ## License
 
