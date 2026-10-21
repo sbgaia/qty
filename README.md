@@ -157,9 +157,11 @@ let energy: Energy = formula!(0.5 * person * v * v);
 assert_eq!(energy.as_joules(), 315.0);
 ```
 
-A formula whose dimensions don't match the target fails `cargo check`, with
-the dimensions it has in the message. At run time it's the same code as the
-arithmetic on plain floats. `qty::constants` has the physical constants.
+A formula whose dimensions don't match the target fails `cargo check`, and
+the error names both in SI base units:
+``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` `` for an energy,
+kg·m²·s⁻². At run time it's the same code as the arithmetic on plain
+floats. `qty::constants` has the physical constants.
 
 `.powi::<N>()` raises a value to a whole power, and `expr!` keeps a result
 whose type has no name, with no annotation; it prints in SI units:

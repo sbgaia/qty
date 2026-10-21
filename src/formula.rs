@@ -30,27 +30,36 @@
 //! ```
 //!
 //! ```text
-//! error[E0277]: this formula doesn't give a `qty::Force`
-//!   |     formula!(0.5 * m * v * v)
-//!   |     the formula has dimensions `Dim<E<2>, E<1>, E<-2>, E<0>, E<0>, E<0>, E<0>>`
+//! error[E0277]: this formula gives `(kg, m<2>, s<-2>)`, not a `qty::Force`
+//!   |
+//!   |     let f: Force = formula!(0.5 * m * v * v); // an energy, not a force
+//!   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^ a `qty::Force` is `(kg, m, s<-2>)`
 //! ```
 //!
-//! The numbers in `Dim` are the exponents of length, mass, time, electric
-//! current, temperature, amount of substance and luminous intensity, so the
-//! formula above is m²·kg·s⁻².
+//! Dimensions in errors are tuples of SI base units ([`si`]), with their
+//! exponents: `(kg, m<2>, s<-2>)` is kg·m²·s⁻², the dimensions of an energy,
+//! and `()` is dimensionless.
 //!
 //! Adding values of different dimensions doesn't compile either, nor does
 //! a square root that would leave a fractional exponent:
 //!
-//! ```rust,compile_fail,E0308
+//! ```rust,compile_fail,E0277
 //! # use qty::*;
 //! # let (m, v) = (Mass::from_kilograms(1.0), Speed::from_meters_per_second(1.0));
 //! let e: Energy = formula!(m * v * v + m * v);
 //! ```
 //!
-//! ```rust,compile_fail,E0599
+//! ```text
+//! error[E0277]: can't add `(kg, m, s<-1>)` to `(kg, m<2>, s<-2>)`
+//! ```
+//!
+//! ```rust,compile_fail,E0277
 //! # use qty::*;
 //! let side: Length = formula!(Volume::from_cubic_meters(8.0).sqrt());
+//! ```
+//!
+//! ```text
+//! error[E0277]: the square root of `(m<3>,)` has a fractional exponent
 //! ```
 //!
 //! # How it works
@@ -160,24 +169,20 @@ pub trait SubE<B> {
     type Out;
 }
 
-/// Half of an even exponent.
-#[diagnostic::on_unimplemented(
-    message = "the square root of these dimensions has a fractional exponent",
-    label = "`{Self}` is odd"
-)]
+/// Half of an exponent, rounded down, and the remainder.
 pub trait HalfE {
     /// The half.
     type Out;
+    /// `E<0>` or `E<1>`.
+    type Rem;
 }
 
-/// A third of an exponent that is a multiple of 3.
-#[diagnostic::on_unimplemented(
-    message = "the cube root of these dimensions has a fractional exponent",
-    label = "`{Self}` isn't a multiple of 3"
-)]
+/// A third of an exponent, rounded down, and the remainder.
 pub trait ThirdE {
     /// The third.
     type Out;
+    /// `E<0>`, `E<1>` or `E<2>`.
+    type Rem;
 }
 
 /// The dimensions of a product.
@@ -201,21 +206,83 @@ pub trait DivDim<R> {
 }
 
 /// The dimensions of a square root.
-#[diagnostic::on_unimplemented(
-    message = "the square root of these dimensions has a fractional exponent"
-)]
 pub trait SqrtDim {
     /// Half of every exponent.
     type Out;
 }
 
 /// The dimensions of a cube root.
-#[diagnostic::on_unimplemented(
-    message = "the cube root of these dimensions has a fractional exponent"
-)]
 pub trait CbrtDim {
     /// A third of every exponent.
     type Out;
+}
+
+/// Half of every exponent, rounded down, and the remainders, for
+/// [`SqrtDim`].
+pub trait HalfDim {
+    /// The halves.
+    type Out;
+    /// The remainders, a tuple of seven [`E`]s.
+    type Rem;
+}
+
+/// A third of every exponent, rounded down, and the remainders, for
+/// [`CbrtDim`].
+pub trait ThirdDim {
+    /// The thirds.
+    type Out;
+    /// The remainders, a tuple of seven [`E`]s.
+    type Rem;
+}
+
+/// Checks that the remainders `Self` of halving the exponents of [`InBaseUnits`]
+/// `D` are all zero. One check for all of them gives one error.
+#[diagnostic::on_unimplemented(
+    message = "the square root of `{D}` has a fractional exponent",
+    label = "a square root needs even exponents",
+    note = "dimensions are written in SI base units: `(kg, m<2>, s<-2>)` is kg·m²·s⁻²"
+)]
+pub trait WholeSqrt<D, H> {
+    /// `H`, the halves. Going through the check, a fractional root has no
+    /// dimensions at all, rather than rounded ones that would give more
+    /// errors later in the formula.
+    type Out;
+}
+
+impl<D, H> WholeSqrt<D, H> for (E<0>, E<0>, E<0>, E<0>, E<0>, E<0>, E<0>) {
+    type Out = H;
+}
+
+/// Checks that the remainders `Self` of dividing the exponents of
+/// [`InBaseUnits`] `D` by 3 are all zero.
+#[diagnostic::on_unimplemented(
+    message = "the cube root of `{D}` has a fractional exponent",
+    label = "a cube root needs exponents that are multiples of 3",
+    note = "dimensions are written in SI base units: `(kg, m<2>, s<-2>)` is kg·m²·s⁻²"
+)]
+pub trait WholeCbrt<D, T> {
+    /// `T`, the thirds.
+    type Out;
+}
+
+impl<D, T> WholeCbrt<D, T> for (E<0>, E<0>, E<0>, E<0>, E<0>, E<0>, E<0>) {
+    type Out = T;
+}
+
+impl<D> SqrtDim for D
+where
+    D: HalfDim + InBaseUnits,
+    D::Rem: WholeSqrt<D::Units, <D as HalfDim>::Out>,
+{
+    type Out = <D::Rem as WholeSqrt<D::Units, <D as HalfDim>::Out>>::Out;
+}
+
+impl<D> CbrtDim for D
+where
+    D: ThirdDim + InBaseUnits,
+    D::Rem: WholeCbrt<D::Units, <D as ThirdDim>::Out>,
+{
+    type Out = <D::Rem as WholeCbrt<D::Units, <D as ThirdDim>::Out>>::Out;
 }
 
 /// An exponent's value, for [`Dimension`].
@@ -254,6 +321,119 @@ where
         J::VALUE,
     );
 }
+
+/// The SI base units in the readable dimensions of error messages, such as
+/// `(kg, m<2>, s<-2>)` for kg·m²·s⁻². `N` is the exponent; 1 is left out.
+#[allow(non_camel_case_types)]
+pub mod si {
+    macro_rules! base_unit {
+        ($($u:ident: $name:literal),*) => {$(
+            #[doc = ::core::concat!($name, ", to the power `N`.")]
+            #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+            pub struct $u<const N: i8 = 1>;
+
+            impl super::BaseUnit for $u {
+                type Pow<const N: i8> = $u<N>;
+            }
+        )*};
+    }
+    base_unit!(
+        kg: "Kilogram",
+        m: "Metre",
+        s: "Second",
+        A: "Ampere",
+        K: "Kelvin",
+        mol: "Mole",
+        cd: "Candela"
+    );
+}
+
+/// A unit of [`si`], to any power.
+pub trait BaseUnit {
+    /// The unit to the power `N`.
+    type Pow<const N: i8>;
+}
+
+/// The tuple with `H` in front of `Self`, for [`InBaseUnits`].
+pub trait Cons<H> {
+    /// `(H, …Self)`.
+    type Out;
+}
+
+macro_rules! cons {
+    ($($t:ident),*) => {
+        impl<H, $($t),*> Cons<H> for ($($t,)*) {
+            type Out = (H, $($t),*);
+        }
+    };
+}
+cons!();
+cons!(B);
+cons!(B, C);
+cons!(B, C, D);
+cons!(B, C, D, F);
+cons!(B, C, D, F, G);
+cons!(B, C, D, F, G, I);
+
+/// The tuple `R` with this exponent of the unit `U` in front, or `R` itself
+/// for a zero exponent.
+pub trait Factor<U, R> {
+    /// `(U<exponent>, …R)`.
+    type Out;
+}
+
+/// The dimensions of a [`Dim`] as a tuple of [`si`] units, such as
+/// `(kg, m<2>, s<-2>)`, which reads better than the exponents in compiler
+/// errors. Dimensionless is `()`.
+pub trait InBaseUnits {
+    /// The units with nonzero exponents, mass first as in `kg·m²`.
+    type Units;
+}
+
+impl<L, M, T, I, Th, N, J> InBaseUnits for Dim<L, M, T, I, Th, N, J>
+where
+    J: Factor<si::cd, ()>,
+    N: Factor<si::mol, J::Out>,
+    Th: Factor<si::K, N::Out>,
+    I: Factor<si::A, Th::Out>,
+    T: Factor<si::s, I::Out>,
+    L: Factor<si::m, T::Out>,
+    M: Factor<si::kg, L::Out>,
+{
+    type Units = M::Out;
+}
+
+/// Checks that a formula giving [`InBaseUnits`] `Self` can become a `Q`, of
+/// units `U`.
+#[diagnostic::on_unimplemented(
+    message = "this formula gives `{Self}`, not a `{Q}`",
+    label = "a `{Q}` is `{U}`",
+    note = "dimensions are written in SI base units: `(kg, m<2>, s<-2>)` is kg·m²·s⁻², and `()` is dimensionless"
+)]
+pub trait Gives<Q, U> {}
+
+impl<Q, U> Gives<Q, U> for U {}
+
+/// Checks that a value of [`InBaseUnits`] `Self` can be added to one of `U`.
+#[diagnostic::on_unimplemented(
+    message = "can't add `{Self}` to `{U}`",
+    label = "the dimensions differ",
+    note = "dimensions are written in SI base units: `(kg, m<2>, s<-2>)` is kg·m²·s⁻², and `()` is dimensionless"
+)]
+pub trait AddUnits<U> {}
+
+impl<U> AddUnits<U> for U {}
+
+/// Checks that a value of [`InBaseUnits`] `Self` can be subtracted from one
+/// of `U`.
+#[diagnostic::on_unimplemented(
+    message = "can't subtract `{Self}` from `{U}`",
+    label = "the dimensions differ",
+    note = "dimensions are written in SI base units: `(kg, m<2>, s<-2>)` is kg·m²·s⁻², and `()` is dimensionless"
+)]
+pub trait SubUnits<U> {}
+
+impl<U> SubUnits<U> for U {}
 
 /// `A × N` for exponents.
 #[diagnostic::on_unimplemented(
@@ -316,13 +496,14 @@ macro_rules! dim_op {
             J: $E,
         {
             type Out = Dim<L::Out, M::Out, T::Out, I::Out, H::Out, N::Out, J::Out>;
+            type Rem = (L::Rem, M::Rem, T::Rem, I::Rem, H::Rem, N::Rem, J::Rem);
         }
     };
 }
 dim_op!(MulDim, AddE);
 dim_op!(DivDim, SubE);
-dim_op!(SqrtDim, HalfE, root);
-dim_op!(CbrtDim, ThirdE, root);
+dim_op!(HalfDim, HalfE, root);
+dim_op!(ThirdDim, ThirdE, root);
 
 /// A value in coherent SI units, with dimensions `D` (a [`Dim`]).
 ///
@@ -592,9 +773,13 @@ impl Operand<f32> for f32 {
 
 macro_rules! number_operand {
     ($($t:ty),*) => {$(
-        impl FromFormula<Dims, $t> for $t {
+        impl<D> FromFormula<D, $t> for $t
+        where
+            D: InBaseUnits,
+            D::Units: Gives<$t, ()>,
+        {
             #[inline(always)]
-            fn from_formula(expr: Expr<Dims, $t>) -> $t {
+            fn from_formula(expr: Expr<D, $t>) -> $t {
                 expr.0
             }
         }
@@ -611,10 +796,13 @@ macro_rules! number_operand {
 number_operand!(f32, f64);
 
 /// Converts a formula's result to a quantity with the same dimensions.
+///
+/// A quantity implements it for every `D`, with a [`Gives`] bound that
+/// compares the dimensions, so that a mismatch is reported in
+/// [`InBaseUnits`] rather than as a mismatch of [`Dim`]s.
 #[diagnostic::on_unimplemented(
-    message = "this formula doesn't give a `{Self}`",
-    label = "the formula has dimensions `{D}`",
-    note = "the exponents are of length, mass, time, electric current, temperature, amount of substance and luminous intensity"
+    message = "a formula can't give a `{Self}`",
+    note = "formulas give quantities whose base unit is in SI, plain numbers and `Expr`s; temperatures and levels are points, use `TemperatureDelta` or a ratio"
 )]
 pub trait FromFormula<D, V> {
     /// The quantity with value `expr`.
@@ -633,6 +821,25 @@ impl<D, V> FromFormula<D, V> for Expr<D, V> {
 #[inline(always)]
 pub fn operand<X: Operand<V>, V>(x: X) -> Expr<X::Dim, V> {
     x.into_expr()
+}
+
+/// [`Expr::sqrt`], for [`formula!`](crate::formula!). A method with
+/// unsatisfied bounds gets a generic error, a function the message of
+/// [`WholeSqrt`]. The result is `R` rather than `D::Out`, whose bounds would
+/// fail a second time.
+#[doc(hidden)]
+#[cfg(any(feature = "std", feature = "libm"))]
+#[inline(always)]
+pub fn sqrt<D: SqrtDim<Out = R>, R, V: crate::FloatMath>(x: Expr<D, V>) -> Expr<R, V> {
+    Expr::new(x.0.sqrt())
+}
+
+/// [`Expr::cbrt`], for [`formula!`](crate::formula!).
+#[doc(hidden)]
+#[cfg(any(feature = "std", feature = "libm"))]
+#[inline(always)]
+pub fn cbrt<D: CbrtDim<Out = R>, R, V: crate::FloatMath>(x: Expr<D, V>) -> Expr<R, V> {
+    Expr::new(x.0.cbrt())
 }
 
 impl<D, V, R> Mul<R> for Expr<D, V>
@@ -661,18 +868,32 @@ where
     }
 }
 
-impl<D, V: Add<Output = V>> Add for Expr<D, V> {
+// `Expr<D2>` rather than `Self` on the right, so that a difference in
+// dimensions is reported by `AddUnits` and `SubUnits`, in base units.
+impl<D, D2, V> Add<Expr<D2, V>> for Expr<D, V>
+where
+    V: Add<Output = V>,
+    D: InBaseUnits,
+    D2: InBaseUnits,
+    D2::Units: AddUnits<D::Units>,
+{
     type Output = Self;
     #[inline(always)]
-    fn add(self, rhs: Self) -> Self {
+    fn add(self, rhs: Expr<D2, V>) -> Self {
         Expr::new(self.0 + rhs.0)
     }
 }
 
-impl<D, V: Sub<Output = V>> Sub for Expr<D, V> {
+impl<D, D2, V> Sub<Expr<D2, V>> for Expr<D, V>
+where
+    V: Sub<Output = V>,
+    D: InBaseUnits,
+    D2: InBaseUnits,
+    D2::Units: SubUnits<D::Units>,
+{
     type Output = Self;
     #[inline(always)]
-    fn sub(self, rhs: Self) -> Self {
+    fn sub(self, rhs: Expr<D2, V>) -> Self {
         Expr::new(self.0 - rhs.0)
     }
 }
@@ -728,28 +949,29 @@ macro_rules! __qty_formula {
                 $crate::formula::base_unit_factor(<$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR);
         }
 
-        impl<V: $crate::Number>
-            $crate::formula::FromFormula<<$Q<V> as $crate::formula::Operand<V>>::Dim, V> for $Q<V>
+        // Any `D`, checked by `Gives`, for an error message in base units.
+        impl<D, V: $crate::Number> $crate::formula::FromFormula<D, V> for $Q<V>
+        where
+            D: $crate::formula::InBaseUnits,
+            D::Units: $crate::formula::Gives<
+                $Q<V>,
+                <<$Q<V> as $crate::formula::Operand<V>>::Dim as $crate::formula::InBaseUnits>::Units,
+            >,
         {
             #[inline(always)]
-            fn from_formula(
-                expr: $crate::formula::Expr<<$Q<V> as $crate::formula::Operand<V>>::Dim, V>,
-            ) -> Self {
+            fn from_formula(expr: $crate::formula::Expr<D, V>) -> Self {
                 $Q::from_base(
                     expr.value() / V::from_f64(<$Q<V> as $crate::formula::SiFactor>::FACTOR),
                 )
             }
         }
 
-        impl<V: $crate::Number>
-            ::core::convert::From<
-                $crate::formula::Expr<<$Q<V> as $crate::formula::Operand<V>>::Dim, V>,
-            > for $Q<V>
+        impl<D, V: $crate::Number> ::core::convert::From<$crate::formula::Expr<D, V>> for $Q<V>
+        where
+            $Q<V>: $crate::formula::FromFormula<D, V>,
         {
             #[inline(always)]
-            fn from(
-                expr: $crate::formula::Expr<<$Q<V> as $crate::formula::Operand<V>>::Dim, V>,
-            ) -> Self {
+            fn from(expr: $crate::formula::Expr<D, V>) -> Self {
                 $crate::formula::FromFormula::from_formula(expr)
             }
         }
@@ -861,10 +1083,10 @@ macro_rules! expr {
 macro_rules! __formula {
     // A parenthesised group: a formula of its own.
     (@start [$($o:tt)*] ($($g:tt)+) . sqrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).sqrt()] [] $($rest)*)
+        $crate::__formula!(@value [$($o)* $crate::formula::sqrt($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
     };
     (@start [$($o:tt)*] ($($g:tt)+) . cbrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).cbrt()] [] $($rest)*)
+        $crate::__formula!(@value [$($o)* $crate::formula::cbrt($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
     };
     (@start [$($o:tt)*] ($($g:tt)+) . powi :: < $n:literal > () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ $n }>()] [] $($rest)*)
@@ -890,12 +1112,12 @@ macro_rules! __formula {
 
     // `.sqrt()`, `.cbrt()` and `.powi::<N>()` on a value work on its `Expr`,
     // so the roots accept any dimensions with even (or multiple of 3)
-    // exponents.
+    // exponents. The roots are functions, whose errors read better.
     (@value [$($o:tt)*] [$($v:tt)+] . sqrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).sqrt()] [] $($rest)*)
+        $crate::__formula!(@value [$($o)* $crate::formula::sqrt($crate::formula::operand($($v)+))] [] $($rest)*)
     };
     (@value [$($o:tt)*] [$($v:tt)+] . cbrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).cbrt()] [] $($rest)*)
+        $crate::__formula!(@value [$($o)* $crate::formula::cbrt($crate::formula::operand($($v)+))] [] $($rest)*)
     };
     (@value [$($o:tt)*] [$($v:tt)+] . powi :: < $n:literal > () $($rest:tt)*) => {
         $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).powi::<{ $n }>()] [] $($rest)*)
