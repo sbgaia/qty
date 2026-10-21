@@ -154,6 +154,66 @@ fn sums_and_signs() {
 
     let diff: Energy = formula!(m * STANDARD_GRAVITY * h - 0.5 * m * v * v);
     close(diff.as_joules(), 196.133 - 9.0, 1e-12);
+
+    // Minus signs before numbers, names and groups.
+    let p: Impulse = formula!(-1.0 * m * v);
+    assert_eq!(p.as_kilogram_meters_per_second(), -6.0);
+    let p: Impulse = formula!(m * -2.0 * v - -m * v);
+    assert_eq!(p.as_kilogram_meters_per_second(), -6.0);
+    let p: Impulse = formula!(-m * v * -(2.0 - 1.0));
+    assert_eq!(p.as_kilogram_meters_per_second(), 6.0);
+}
+
+#[test]
+fn long_formulas() {
+    let (m, v) = (
+        Mass::from_kilograms(2.0),
+        Speed::from_meters_per_second(3.0),
+    );
+    // 40 terms, 160 tokens: one macro step per value.
+    let p: Impulse = formula!(
+        m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+            + m * v
+    );
+    assert_eq!(p.as_kilogram_meters_per_second(), 240.0);
 }
 
 #[test]

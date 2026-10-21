@@ -67,6 +67,10 @@ follow [Semantic Versioning](https://semver.org/).
   `SubUnits` bound, so `expr + Expr::new(1.0)` needs the type of the
   constant. `HalfE` and `ThirdE` are implemented for every exponent, with
   the remainder in `Rem`; `SqrtDim` and `CbrtDim` check it.
+- `formula!`, `expr!` and `qty!` expand faster: a name or number followed
+  by an operator takes one step, and a unit of one symbol, as in
+  `qty!(12.5 km)`, needs no `const` block. Longer formulas fit in the
+  default recursion limit.
 
 ## [0.2.4] - 2026-10-20
 

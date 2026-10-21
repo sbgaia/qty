@@ -1050,7 +1050,7 @@ pub trait SiFactor {
 #[macro_export]
 macro_rules! formula {
     ($($t:tt)+) => {
-        $crate::formula::FromFormula::from_formula($crate::__formula!(@start [] $($t)+))
+        $crate::formula::FromFormula::from_formula($crate::__formula!(@start [$($t)+] []))
     };
 }
 
@@ -1071,97 +1071,130 @@ macro_rules! formula {
 #[macro_export]
 macro_rules! expr {
     ($($t:tt)+) => {
-        $crate::__formula!(@start [] $($t)+)
+        $crate::__formula!(@start [$($t)+] [])
     };
 }
 
 // Wraps every value of the formula in `formula::operand` and keeps the
 // operators and parentheses in place, so Rust's precedence applies.
 //
-// `@start [out]` is at the start of a value. `@value [out] [tokens]` reads
-// the tokens of a value up to the next operator.
+// `@start [tokens] [out]` is at the start of a value, and `@value [value]
+// [tokens] [out]` reads the tokens of a value up to the next operator. The
+// output comes last and the tokens are in a group, so a rule that doesn't
+// apply fails on its first tokens instead of reading the whole formula.
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __formula {
+    // A name or a number followed by an operator, the most common value,
+    // in one step.
+    (@start [$x:ident * $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) *])
+    };
+    (@start [$x:ident / $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) /])
+    };
+    (@start [$x:ident + $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) +])
+    };
+    (@start [$x:ident - $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) -])
+    };
+    (@start [$x:ident] [$($o:tt)*]) => {
+        $($o)* $crate::formula::operand($x)
+    };
+    // A unary minus, here so that `literal` doesn't read it and fail on
+    // `-(`.
+    (@start [- $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* -])
+    };
+    (@start [$x:literal * $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) *])
+    };
+    (@start [$x:literal / $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) /])
+    };
+    (@start [$x:literal + $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) +])
+    };
+    (@start [$x:literal - $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($x) -])
+    };
+    (@start [$x:literal] [$($o:tt)*]) => {
+        $($o)* $crate::formula::operand($x)
+    };
+
     // A parenthesised group: a formula of its own.
-    (@start [$($o:tt)*] ($($g:tt)+) . sqrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::sqrt($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
+    (@start [($($g:tt)+) . sqrt () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::sqrt($crate::__formula!(@start [$($g)+] []))])
     };
-    (@start [$($o:tt)*] ($($g:tt)+) . cbrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::cbrt($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
+    (@start [($($g:tt)+) . cbrt () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::cbrt($crate::__formula!(@start [$($g)+] []))])
     };
-    (@start [$($o:tt)*] ($($g:tt)+) . powi :: < $n:literal > () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ $n }>()] [] $($rest)*)
+    (@start [($($g:tt)+) . powi :: < $n:literal > () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* ($crate::__formula!(@start [$($g)+] [])).powi::<{ $n }>()])
     };
     // `<-` is a single token.
-    (@start [$($o:tt)*] ($($g:tt)+) . powi :: <- $n:literal > () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+)).powi::<{ -$n }>()] [] $($rest)*)
+    (@start [($($g:tt)+) . powi :: <- $n:literal > () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* ($crate::__formula!(@start [$($g)+] [])).powi::<{ -$n }>()])
     };
     // A unit literal: its `Expr`.
-    (@start [$($o:tt)*] qty ! ($($g:tt)+) $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)*] [$crate::__qty_expr!($($g)+)] $($rest)*)
+    (@start [qty ! ($($g:tt)+) $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [$crate::__qty_expr!($($g)+)] [$($r)*] [$($o)*])
     };
-    (@start [$($o:tt)*] ($($g:tt)+) $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* ($crate::__formula!(@start [] $($g)+))] [] $($rest)*)
+    (@start [($($g:tt)+) $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* ($crate::__formula!(@start [$($g)+] []))])
     };
-    (@start [$($o:tt)*] $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)*] [] $($rest)*)
+    (@start [$($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)*])
     };
 
     // The end.
-    (@value [$($o:tt)*] []) => {
+    (@value [] [] [$($o:tt)*]) => {
         $($o)*
     };
-    (@value [$($o:tt)*] [$($v:tt)+]) => {
+    (@value [$($v:tt)+] [] [$($o:tt)*]) => {
         $($o)* $crate::formula::operand($($v)+)
     };
 
     // `.sqrt()`, `.cbrt()` and `.powi::<N>()` on a value work on its `Expr`,
     // so the roots accept any dimensions with even (or multiple of 3)
     // exponents. The roots are functions, whose errors read better.
-    (@value [$($o:tt)*] [$($v:tt)+] . sqrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::sqrt($crate::formula::operand($($v)+))] [] $($rest)*)
+    (@value [$($v:tt)+] [. sqrt () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::sqrt($crate::formula::operand($($v)+))])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] . cbrt () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::cbrt($crate::formula::operand($($v)+))] [] $($rest)*)
+    (@value [$($v:tt)+] [. cbrt () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::cbrt($crate::formula::operand($($v)+))])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] . powi :: < $n:literal > () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).powi::<{ $n }>()] [] $($rest)*)
+    (@value [$($v:tt)+] [. powi :: < $n:literal > () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::operand($($v)+).powi::<{ $n }>()])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] . powi :: <- $n:literal > () $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)* $crate::formula::operand($($v)+).powi::<{ -$n }>()] [] $($rest)*)
+    (@value [$($v:tt)+] [. powi :: <- $n:literal > () $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [] [$($r)*] [$($o)* $crate::formula::operand($($v)+).powi::<{ -$n }>()])
     };
-    (@value [$($o:tt)*] [] . $($rest:tt)*) => {
+    (@value [] [. $($r:tt)*] [$($o:tt)*]) => {
         ::core::compile_error!("formula!: only .sqrt(), .cbrt() and .powi::<N>() can follow parentheses")
     };
 
     // An operator ends the value. With no value before it, it's a unary
     // minus or follows a parenthesised group.
-    (@value [$($o:tt)*] [] $op:tt $($rest:tt)*) => {
-        $crate::__formula!(@op $op [$($o)*] $($rest)*)
+    (@value [] [* $($r:tt)*] [$($o:tt)*]) => { $crate::__formula!(@start [$($r)*] [$($o)* *]) };
+    (@value [] [/ $($r:tt)*] [$($o:tt)*]) => { $crate::__formula!(@start [$($r)*] [$($o)* /]) };
+    (@value [] [+ $($r:tt)*] [$($o:tt)*]) => { $crate::__formula!(@start [$($r)*] [$($o)* +]) };
+    (@value [] [- $($r:tt)*] [$($o:tt)*]) => { $crate::__formula!(@start [$($r)*] [$($o)* -]) };
+    (@value [$($v:tt)+] [* $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($($v)+) *])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] * $($rest:tt)*) => {
-        $crate::__formula!(@start [$($o)* $crate::formula::operand($($v)+) *] $($rest)*)
+    (@value [$($v:tt)+] [/ $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($($v)+) /])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] / $($rest:tt)*) => {
-        $crate::__formula!(@start [$($o)* $crate::formula::operand($($v)+) /] $($rest)*)
+    (@value [$($v:tt)+] [+ $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($($v)+) +])
     };
-    (@value [$($o:tt)*] [$($v:tt)+] + $($rest:tt)*) => {
-        $crate::__formula!(@start [$($o)* $crate::formula::operand($($v)+) +] $($rest)*)
-    };
-    (@value [$($o:tt)*] [$($v:tt)+] - $($rest:tt)*) => {
-        $crate::__formula!(@start [$($o)* $crate::formula::operand($($v)+) -] $($rest)*)
+    (@value [$($v:tt)+] [- $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@start [$($r)*] [$($o)* $crate::formula::operand($($v)+) -])
     };
     // Anything else is part of the value.
-    (@value [$($o:tt)*] [$($v:tt)*] $t:tt $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)*] [$($v)* $t] $($rest)*)
-    };
-
-    (@op * [$($o:tt)*] $($rest:tt)*) => { $crate::__formula!(@start [$($o)* *] $($rest)*) };
-    (@op / [$($o:tt)*] $($rest:tt)*) => { $crate::__formula!(@start [$($o)* /] $($rest)*) };
-    (@op + [$($o:tt)*] $($rest:tt)*) => { $crate::__formula!(@start [$($o)* +] $($rest)*) };
-    (@op - [$($o:tt)*] $($rest:tt)*) => { $crate::__formula!(@start [$($o)* -] $($rest)*) };
-    (@op $t:tt [$($o:tt)*] $($rest:tt)*) => {
-        $crate::__formula!(@value [$($o)*] [$t] $($rest)*)
+    (@value [$($v:tt)*] [$t:tt $($r:tt)*] [$($o:tt)*]) => {
+        $crate::__formula!(@value [$($v)* $t] [$($r)*] [$($o)*])
     };
 }
