@@ -17,7 +17,6 @@ use core::ops::{Div, Mul};
 /// assert_eq!(Force::<f64>::INFO.dimensions, Dimensions::new(1, 1, -2, 0, 0, 0, 0));
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Dimensions {
     /// Length (L).
     pub length: i8,
@@ -111,6 +110,37 @@ impl Dimensions {
             i += 1;
         }
         Self::from_array(a)
+    }
+}
+
+/// The field names, for serde.
+#[cfg(feature = "serde")]
+const DIMENSION_FIELDS: [&str; 7] = [
+    "length",
+    "mass",
+    "time",
+    "electric_current",
+    "temperature",
+    "amount_of_substance",
+    "luminous_intensity",
+];
+
+/// As a struct with the field names, like `#[derive(Serialize)]`.
+#[cfg(feature = "serde")]
+impl serde::Serialize for Dimensions {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let a = self.to_array();
+        let values = [&a[0], &a[1], &a[2], &a[3], &a[4], &a[5], &a[6]];
+        crate::serde_impl::serialize_struct(serializer, "Dimensions", &DIMENSION_FIELDS, values)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for Dimensions {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let [l, m, t, i, th, n, j] =
+            crate::serde_impl::deserialize_struct(deserializer, "Dimensions", &DIMENSION_FIELDS)?;
+        Ok(Self::new(l, m, t, i, th, n, j))
     }
 }
 

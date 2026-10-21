@@ -11,13 +11,37 @@ macro_rules! vector {
     ($(#[$doc:meta])* $V:ident, $n:literal: $($c:ident),+) => {
         $(#[$doc])*
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
-        #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
         #[repr(C)]
         pub struct $V<Q> {
             $(
                 #[doc = concat!("The ", stringify!($c), " component.")]
                 pub $c: Q,
             )+
+        }
+
+        /// As a struct with its components, like `#[derive(Serialize)]`.
+        #[cfg(feature = "serde")]
+        impl<Q: serde::Serialize> serde::Serialize for $V<Q> {
+            fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+                crate::serde_impl::serialize_struct(
+                    serializer,
+                    stringify!($V),
+                    &[$(stringify!($c)),+],
+                    [$(&self.$c),+],
+                )
+            }
+        }
+
+        #[cfg(feature = "serde")]
+        impl<'de, Q: serde::Deserialize<'de>> serde::Deserialize<'de> for $V<Q> {
+            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+                let [$($c),+] = crate::serde_impl::deserialize_struct(
+                    deserializer,
+                    stringify!($V),
+                    &[$(stringify!($c)),+],
+                )?;
+                Ok(Self { $($c),+ })
+            }
         }
 
         impl<Q> $V<Q> {

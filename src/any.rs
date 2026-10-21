@@ -13,7 +13,6 @@ pub use parse::KindMismatch;
 
 /// The kind of a quantity: `Length`, `Mass`, …
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum QuantityKind {
     #[cfg(feature = "radiation")]
@@ -1165,7 +1164,6 @@ impl QuantityKind {
 
 /// A unit of any quantity: `AnyUnit::Length(LengthUnit::Meter)`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum AnyUnit {
     #[cfg(feature = "radiation")]
@@ -3300,7 +3298,6 @@ impl From<WarpingMomentOfInertiaUnit> for AnyUnit {
 
 /// A quantity of any kind, with `f64` storage. See the [module documentation](self).
 #[derive(Debug, Clone, Copy, PartialEq)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum AnyQuantity {
     #[cfg(feature = "radiation")]
@@ -12061,5 +12058,1394 @@ impl TryFrom<AnyQuantity> for WarpingMomentOfInertia {
                 found: other.kind(),
             }),
         }
+    }
+}
+
+/// Every kind compiled in, in declaration order, which numbers the
+/// variants for serde.
+#[cfg(feature = "serde")]
+pub(crate) const KINDS: &[QuantityKind] = &[
+    #[cfg(feature = "radiation")]
+    QuantityKind::AbsorbedDoseOfIonizingRadiation,
+    QuantityKind::Acceleration,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::AmountOfSubstance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::AmplitudeRatio,
+    QuantityKind::Angle,
+    QuantityKind::Area,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::AreaDensity,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::AreaMomentOfInertia,
+    #[cfg(feature = "information")]
+    QuantityKind::BitRate,
+    #[cfg(feature = "misc")]
+    QuantityKind::BrakeSpecificFuelConsumption,
+    #[cfg(feature = "thermal")]
+    QuantityKind::CoefficientOfThermalExpansion,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::Compressibility,
+    QuantityKind::Density,
+    #[cfg(feature = "radiation")]
+    QuantityKind::DoseAreaProduct,
+    QuantityKind::Duration,
+    #[cfg(feature = "fluids")]
+    QuantityKind::DynamicViscosity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricAdmittance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricApparentEnergy,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricApparentPower,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricCapacitance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricCharge,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricChargeDensity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricConductance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricConductivity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricCurrent,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricCurrentDensity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricCurrentGradient,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricField,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricImpedance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricInductance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricPotential,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricPotentialChangeRate,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricReactance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricReactiveEnergy,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricReactivePower,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricResistance,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricResistivity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricSurfaceChargeDensity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::ElectricSusceptance,
+    QuantityKind::Energy,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::EnergyDensity,
+    #[cfg(feature = "thermal")]
+    QuantityKind::Entropy,
+    #[cfg(feature = "fluids")]
+    QuantityKind::FluidResistance,
+    QuantityKind::Force,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::ForceChangeRate,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::ForcePerLength,
+    QuantityKind::Frequency,
+    #[cfg(feature = "misc")]
+    QuantityKind::FuelEfficiency,
+    #[cfg(feature = "thermal")]
+    QuantityKind::HeatFlux,
+    #[cfg(feature = "thermal")]
+    QuantityKind::HeatTransferCoefficient,
+    #[cfg(feature = "light")]
+    QuantityKind::Illuminance,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::Impulse,
+    #[cfg(feature = "information")]
+    QuantityKind::Information,
+    #[cfg(feature = "light")]
+    QuantityKind::Irradiance,
+    #[cfg(feature = "light")]
+    QuantityKind::Irradiation,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::Jerk,
+    #[cfg(feature = "fluids")]
+    QuantityKind::KinematicViscosity,
+    #[cfg(feature = "fluids")]
+    QuantityKind::LeakRate,
+    QuantityKind::Length,
+    #[cfg(feature = "electrical")]
+    QuantityKind::Level,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::LinearDensity,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::LinearPowerDensity,
+    #[cfg(feature = "light")]
+    QuantityKind::Luminance,
+    #[cfg(feature = "light")]
+    QuantityKind::Luminosity,
+    #[cfg(feature = "light")]
+    QuantityKind::LuminousFlux,
+    #[cfg(feature = "light")]
+    QuantityKind::LuminousIntensity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::MagneticField,
+    #[cfg(feature = "electrical")]
+    QuantityKind::MagneticFlux,
+    #[cfg(feature = "electrical")]
+    QuantityKind::Magnetization,
+    QuantityKind::Mass,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MassConcentration,
+    #[cfg(feature = "fluids")]
+    QuantityKind::MassFlow,
+    #[cfg(feature = "fluids")]
+    QuantityKind::MassFlux,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MassFraction,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::MassMomentOfInertia,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::Molality,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MolarEnergy,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MolarEntropy,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MolarFlow,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::MolarMass,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::Molarity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::Permeability,
+    #[cfg(feature = "electrical")]
+    QuantityKind::Permittivity,
+    #[cfg(feature = "fluids")]
+    QuantityKind::PorousMediumPermeability,
+    QuantityKind::Power,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::PowerDensity,
+    #[cfg(feature = "electrical")]
+    QuantityKind::PowerRatio,
+    QuantityKind::Pressure,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::PressureChangeRate,
+    #[cfg(feature = "radiation")]
+    QuantityKind::RadiationEquivalentDose,
+    #[cfg(feature = "radiation")]
+    QuantityKind::RadiationEquivalentDoseRate,
+    #[cfg(feature = "radiation")]
+    QuantityKind::RadiationExposure,
+    #[cfg(feature = "radiation")]
+    QuantityKind::Radioactivity,
+    QuantityKind::Ratio,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::RatioChangeRate,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::ReciprocalArea,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::ReciprocalLength,
+    #[cfg(feature = "misc")]
+    QuantityKind::RelativeHumidity,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::RotationalAcceleration,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::RotationalSpeed,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::RotationalStiffness,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::RotationalStiffnessPerLength,
+    QuantityKind::Scalar,
+    #[cfg(feature = "light")]
+    QuantityKind::SolidAngle,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::SpecificEnergy,
+    #[cfg(feature = "thermal")]
+    QuantityKind::SpecificEntropy,
+    #[cfg(feature = "misc")]
+    QuantityKind::SpecificFuelConsumption,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::SpecificVolume,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::SpecificWeight,
+    QuantityKind::Speed,
+    #[cfg(feature = "fluids")]
+    QuantityKind::StandardVolumeFlow,
+    QuantityKind::Temperature,
+    #[cfg(feature = "thermal")]
+    QuantityKind::TemperatureChangeRate,
+    QuantityKind::TemperatureDelta,
+    #[cfg(feature = "thermal")]
+    QuantityKind::TemperatureGradient,
+    #[cfg(feature = "thermal")]
+    QuantityKind::ThermalConductivity,
+    #[cfg(feature = "thermal")]
+    QuantityKind::ThermalInsulance,
+    #[cfg(feature = "thermal")]
+    QuantityKind::ThermalResistance,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::Torque,
+    #[cfg(feature = "misc")]
+    QuantityKind::Turbidity,
+    #[cfg(feature = "misc")]
+    QuantityKind::VitaminA,
+    QuantityKind::Volume,
+    #[cfg(feature = "chemistry")]
+    QuantityKind::VolumeConcentration,
+    #[cfg(feature = "fluids")]
+    QuantityKind::VolumeFlow,
+    #[cfg(feature = "fluids")]
+    QuantityKind::VolumeFlowPerArea,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::VolumePerLength,
+    #[cfg(feature = "thermal")]
+    QuantityKind::VolumetricHeatCapacity,
+    #[cfg(feature = "mechanics")]
+    QuantityKind::WarpingMomentOfInertia,
+];
+
+/// The names of [`KINDS`].
+#[cfg(feature = "serde")]
+pub(crate) const KIND_NAMES: &[&str] = &[
+    #[cfg(feature = "radiation")]
+    "AbsorbedDoseOfIonizingRadiation",
+    "Acceleration",
+    #[cfg(feature = "chemistry")]
+    "AmountOfSubstance",
+    #[cfg(feature = "electrical")]
+    "AmplitudeRatio",
+    "Angle",
+    "Area",
+    #[cfg(feature = "mechanics")]
+    "AreaDensity",
+    #[cfg(feature = "mechanics")]
+    "AreaMomentOfInertia",
+    #[cfg(feature = "information")]
+    "BitRate",
+    #[cfg(feature = "misc")]
+    "BrakeSpecificFuelConsumption",
+    #[cfg(feature = "thermal")]
+    "CoefficientOfThermalExpansion",
+    #[cfg(feature = "mechanics")]
+    "Compressibility",
+    "Density",
+    #[cfg(feature = "radiation")]
+    "DoseAreaProduct",
+    "Duration",
+    #[cfg(feature = "fluids")]
+    "DynamicViscosity",
+    #[cfg(feature = "electrical")]
+    "ElectricAdmittance",
+    #[cfg(feature = "electrical")]
+    "ElectricApparentEnergy",
+    #[cfg(feature = "electrical")]
+    "ElectricApparentPower",
+    #[cfg(feature = "electrical")]
+    "ElectricCapacitance",
+    #[cfg(feature = "electrical")]
+    "ElectricCharge",
+    #[cfg(feature = "electrical")]
+    "ElectricChargeDensity",
+    #[cfg(feature = "electrical")]
+    "ElectricConductance",
+    #[cfg(feature = "electrical")]
+    "ElectricConductivity",
+    #[cfg(feature = "electrical")]
+    "ElectricCurrent",
+    #[cfg(feature = "electrical")]
+    "ElectricCurrentDensity",
+    #[cfg(feature = "electrical")]
+    "ElectricCurrentGradient",
+    #[cfg(feature = "electrical")]
+    "ElectricField",
+    #[cfg(feature = "electrical")]
+    "ElectricImpedance",
+    #[cfg(feature = "electrical")]
+    "ElectricInductance",
+    #[cfg(feature = "electrical")]
+    "ElectricPotential",
+    #[cfg(feature = "electrical")]
+    "ElectricPotentialChangeRate",
+    #[cfg(feature = "electrical")]
+    "ElectricReactance",
+    #[cfg(feature = "electrical")]
+    "ElectricReactiveEnergy",
+    #[cfg(feature = "electrical")]
+    "ElectricReactivePower",
+    #[cfg(feature = "electrical")]
+    "ElectricResistance",
+    #[cfg(feature = "electrical")]
+    "ElectricResistivity",
+    #[cfg(feature = "electrical")]
+    "ElectricSurfaceChargeDensity",
+    #[cfg(feature = "electrical")]
+    "ElectricSusceptance",
+    "Energy",
+    #[cfg(feature = "mechanics")]
+    "EnergyDensity",
+    #[cfg(feature = "thermal")]
+    "Entropy",
+    #[cfg(feature = "fluids")]
+    "FluidResistance",
+    "Force",
+    #[cfg(feature = "mechanics")]
+    "ForceChangeRate",
+    #[cfg(feature = "mechanics")]
+    "ForcePerLength",
+    "Frequency",
+    #[cfg(feature = "misc")]
+    "FuelEfficiency",
+    #[cfg(feature = "thermal")]
+    "HeatFlux",
+    #[cfg(feature = "thermal")]
+    "HeatTransferCoefficient",
+    #[cfg(feature = "light")]
+    "Illuminance",
+    #[cfg(feature = "mechanics")]
+    "Impulse",
+    #[cfg(feature = "information")]
+    "Information",
+    #[cfg(feature = "light")]
+    "Irradiance",
+    #[cfg(feature = "light")]
+    "Irradiation",
+    #[cfg(feature = "mechanics")]
+    "Jerk",
+    #[cfg(feature = "fluids")]
+    "KinematicViscosity",
+    #[cfg(feature = "fluids")]
+    "LeakRate",
+    "Length",
+    #[cfg(feature = "electrical")]
+    "Level",
+    #[cfg(feature = "mechanics")]
+    "LinearDensity",
+    #[cfg(feature = "mechanics")]
+    "LinearPowerDensity",
+    #[cfg(feature = "light")]
+    "Luminance",
+    #[cfg(feature = "light")]
+    "Luminosity",
+    #[cfg(feature = "light")]
+    "LuminousFlux",
+    #[cfg(feature = "light")]
+    "LuminousIntensity",
+    #[cfg(feature = "electrical")]
+    "MagneticField",
+    #[cfg(feature = "electrical")]
+    "MagneticFlux",
+    #[cfg(feature = "electrical")]
+    "Magnetization",
+    "Mass",
+    #[cfg(feature = "chemistry")]
+    "MassConcentration",
+    #[cfg(feature = "fluids")]
+    "MassFlow",
+    #[cfg(feature = "fluids")]
+    "MassFlux",
+    #[cfg(feature = "chemistry")]
+    "MassFraction",
+    #[cfg(feature = "mechanics")]
+    "MassMomentOfInertia",
+    #[cfg(feature = "chemistry")]
+    "Molality",
+    #[cfg(feature = "chemistry")]
+    "MolarEnergy",
+    #[cfg(feature = "chemistry")]
+    "MolarEntropy",
+    #[cfg(feature = "chemistry")]
+    "MolarFlow",
+    #[cfg(feature = "chemistry")]
+    "MolarMass",
+    #[cfg(feature = "chemistry")]
+    "Molarity",
+    #[cfg(feature = "electrical")]
+    "Permeability",
+    #[cfg(feature = "electrical")]
+    "Permittivity",
+    #[cfg(feature = "fluids")]
+    "PorousMediumPermeability",
+    "Power",
+    #[cfg(feature = "mechanics")]
+    "PowerDensity",
+    #[cfg(feature = "electrical")]
+    "PowerRatio",
+    "Pressure",
+    #[cfg(feature = "mechanics")]
+    "PressureChangeRate",
+    #[cfg(feature = "radiation")]
+    "RadiationEquivalentDose",
+    #[cfg(feature = "radiation")]
+    "RadiationEquivalentDoseRate",
+    #[cfg(feature = "radiation")]
+    "RadiationExposure",
+    #[cfg(feature = "radiation")]
+    "Radioactivity",
+    "Ratio",
+    #[cfg(feature = "mechanics")]
+    "RatioChangeRate",
+    #[cfg(feature = "mechanics")]
+    "ReciprocalArea",
+    #[cfg(feature = "mechanics")]
+    "ReciprocalLength",
+    #[cfg(feature = "misc")]
+    "RelativeHumidity",
+    #[cfg(feature = "mechanics")]
+    "RotationalAcceleration",
+    #[cfg(feature = "mechanics")]
+    "RotationalSpeed",
+    #[cfg(feature = "mechanics")]
+    "RotationalStiffness",
+    #[cfg(feature = "mechanics")]
+    "RotationalStiffnessPerLength",
+    "Scalar",
+    #[cfg(feature = "light")]
+    "SolidAngle",
+    #[cfg(feature = "mechanics")]
+    "SpecificEnergy",
+    #[cfg(feature = "thermal")]
+    "SpecificEntropy",
+    #[cfg(feature = "misc")]
+    "SpecificFuelConsumption",
+    #[cfg(feature = "mechanics")]
+    "SpecificVolume",
+    #[cfg(feature = "mechanics")]
+    "SpecificWeight",
+    "Speed",
+    #[cfg(feature = "fluids")]
+    "StandardVolumeFlow",
+    "Temperature",
+    #[cfg(feature = "thermal")]
+    "TemperatureChangeRate",
+    "TemperatureDelta",
+    #[cfg(feature = "thermal")]
+    "TemperatureGradient",
+    #[cfg(feature = "thermal")]
+    "ThermalConductivity",
+    #[cfg(feature = "thermal")]
+    "ThermalInsulance",
+    #[cfg(feature = "thermal")]
+    "ThermalResistance",
+    #[cfg(feature = "mechanics")]
+    "Torque",
+    #[cfg(feature = "misc")]
+    "Turbidity",
+    #[cfg(feature = "misc")]
+    "VitaminA",
+    "Volume",
+    #[cfg(feature = "chemistry")]
+    "VolumeConcentration",
+    #[cfg(feature = "fluids")]
+    "VolumeFlow",
+    #[cfg(feature = "fluids")]
+    "VolumeFlowPerArea",
+    #[cfg(feature = "mechanics")]
+    "VolumePerLength",
+    #[cfg(feature = "thermal")]
+    "VolumetricHeatCapacity",
+    #[cfg(feature = "mechanics")]
+    "WarpingMomentOfInertia",
+];
+
+#[cfg(feature = "serde")]
+impl serde::Serialize for QuantityKind {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        crate::serde_impl::serialize_unit(serializer, "QuantityKind", *self as usize, KIND_NAMES)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for QuantityKind {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        crate::serde_impl::deserialize_unit(deserializer, "QuantityKind", KIND_NAMES, KINDS)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl serde::Serialize for AnyQuantity {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        crate::serde_impl::serialize_kind_variant(
+            serializer,
+            "AnyQuantity",
+            self.kind(),
+            &self.as_base(),
+        )
+    }
+}
+
+#[cfg(feature = "serde")]
+impl crate::serde_impl::KindEnum for AnyQuantity {
+    const NAME: &'static str = "AnyQuantity";
+    fn variant<'de, A: serde::de::VariantAccess<'de>>(
+        kind: QuantityKind,
+        variant: A,
+    ) -> Result<Self, A::Error> {
+        Ok(Self::new(variant.newtype_variant()?, kind.base_unit()))
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AnyQuantity {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        crate::serde_impl::deserialize_kind_enum(deserializer)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl serde::Serialize for AnyUnit {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let kind = self.kind();
+        match self {
+            #[cfg(feature = "radiation")]
+            Self::AbsorbedDoseOfIonizingRadiation(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Acceleration(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::AmountOfSubstance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::AmplitudeRatio(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Angle(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Area(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::AreaDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::AreaMomentOfInertia(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "information")]
+            Self::BitRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::BrakeSpecificFuelConsumption(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::CoefficientOfThermalExpansion(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::Compressibility(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Density(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "radiation")]
+            Self::DoseAreaProduct(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Duration(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::DynamicViscosity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricAdmittance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricApparentEnergy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricApparentPower(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricCapacitance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricCharge(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricChargeDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricConductance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricConductivity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricCurrent(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricCurrentDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricCurrentGradient(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricField(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricImpedance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricInductance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricPotential(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricPotentialChangeRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricReactance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricReactiveEnergy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricReactivePower(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricResistance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricResistivity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricSurfaceChargeDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::ElectricSusceptance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Energy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::EnergyDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::Entropy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::FluidResistance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Force(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::ForceChangeRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::ForcePerLength(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Frequency(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::FuelEfficiency(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::HeatFlux(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::HeatTransferCoefficient(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::Illuminance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::Impulse(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "information")]
+            Self::Information(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::Irradiance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::Irradiation(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::Jerk(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::KinematicViscosity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::LeakRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Length(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::Level(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::LinearDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::LinearPowerDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::Luminance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::Luminosity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::LuminousFlux(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::LuminousIntensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::MagneticField(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::MagneticFlux(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::Magnetization(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Mass(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MassConcentration(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::MassFlow(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::MassFlux(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MassFraction(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::MassMomentOfInertia(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::Molality(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MolarEnergy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MolarEntropy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MolarFlow(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::MolarMass(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::Molarity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::Permeability(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::Permittivity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::PorousMediumPermeability(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Power(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::PowerDensity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "electrical")]
+            Self::PowerRatio(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Pressure(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::PressureChangeRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "radiation")]
+            Self::RadiationEquivalentDose(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "radiation")]
+            Self::RadiationEquivalentDoseRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "radiation")]
+            Self::RadiationExposure(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "radiation")]
+            Self::Radioactivity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Ratio(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::RatioChangeRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::ReciprocalArea(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::ReciprocalLength(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::RelativeHumidity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::RotationalAcceleration(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::RotationalSpeed(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::RotationalStiffness(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::RotationalStiffnessPerLength(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Scalar(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "light")]
+            Self::SolidAngle(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::SpecificEnergy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::SpecificEntropy(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::SpecificFuelConsumption(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::SpecificVolume(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::SpecificWeight(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Speed(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::StandardVolumeFlow(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Temperature(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::TemperatureChangeRate(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::TemperatureDelta(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::TemperatureGradient(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::ThermalConductivity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::ThermalInsulance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::ThermalResistance(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::Torque(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::Turbidity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "misc")]
+            Self::VitaminA(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            Self::Volume(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "chemistry")]
+            Self::VolumeConcentration(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::VolumeFlow(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "fluids")]
+            Self::VolumeFlowPerArea(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::VolumePerLength(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "thermal")]
+            Self::VolumetricHeatCapacity(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+            #[cfg(feature = "mechanics")]
+            Self::WarpingMomentOfInertia(unit) => {
+                crate::serde_impl::serialize_kind_variant(serializer, "AnyUnit", kind, unit)
+            }
+        }
+    }
+}
+
+#[cfg(feature = "serde")]
+impl crate::serde_impl::KindEnum for AnyUnit {
+    const NAME: &'static str = "AnyUnit";
+    fn variant<'de, A: serde::de::VariantAccess<'de>>(
+        kind: QuantityKind,
+        variant: A,
+    ) -> Result<Self, A::Error> {
+        match kind {
+            #[cfg(feature = "radiation")]
+            QuantityKind::AbsorbedDoseOfIonizingRadiation => variant
+                .newtype_variant()
+                .map(Self::AbsorbedDoseOfIonizingRadiation),
+            QuantityKind::Acceleration => variant.newtype_variant().map(Self::Acceleration),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::AmountOfSubstance => {
+                variant.newtype_variant().map(Self::AmountOfSubstance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::AmplitudeRatio => variant.newtype_variant().map(Self::AmplitudeRatio),
+            QuantityKind::Angle => variant.newtype_variant().map(Self::Angle),
+            QuantityKind::Area => variant.newtype_variant().map(Self::Area),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::AreaDensity => variant.newtype_variant().map(Self::AreaDensity),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::AreaMomentOfInertia => {
+                variant.newtype_variant().map(Self::AreaMomentOfInertia)
+            }
+            #[cfg(feature = "information")]
+            QuantityKind::BitRate => variant.newtype_variant().map(Self::BitRate),
+            #[cfg(feature = "misc")]
+            QuantityKind::BrakeSpecificFuelConsumption => variant
+                .newtype_variant()
+                .map(Self::BrakeSpecificFuelConsumption),
+            #[cfg(feature = "thermal")]
+            QuantityKind::CoefficientOfThermalExpansion => variant
+                .newtype_variant()
+                .map(Self::CoefficientOfThermalExpansion),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::Compressibility => variant.newtype_variant().map(Self::Compressibility),
+            QuantityKind::Density => variant.newtype_variant().map(Self::Density),
+            #[cfg(feature = "radiation")]
+            QuantityKind::DoseAreaProduct => variant.newtype_variant().map(Self::DoseAreaProduct),
+            QuantityKind::Duration => variant.newtype_variant().map(Self::Duration),
+            #[cfg(feature = "fluids")]
+            QuantityKind::DynamicViscosity => variant.newtype_variant().map(Self::DynamicViscosity),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricAdmittance => {
+                variant.newtype_variant().map(Self::ElectricAdmittance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricApparentEnergy => {
+                variant.newtype_variant().map(Self::ElectricApparentEnergy)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricApparentPower => {
+                variant.newtype_variant().map(Self::ElectricApparentPower)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricCapacitance => {
+                variant.newtype_variant().map(Self::ElectricCapacitance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricCharge => variant.newtype_variant().map(Self::ElectricCharge),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricChargeDensity => {
+                variant.newtype_variant().map(Self::ElectricChargeDensity)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricConductance => {
+                variant.newtype_variant().map(Self::ElectricConductance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricConductivity => {
+                variant.newtype_variant().map(Self::ElectricConductivity)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricCurrent => variant.newtype_variant().map(Self::ElectricCurrent),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricCurrentDensity => {
+                variant.newtype_variant().map(Self::ElectricCurrentDensity)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricCurrentGradient => {
+                variant.newtype_variant().map(Self::ElectricCurrentGradient)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricField => variant.newtype_variant().map(Self::ElectricField),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricImpedance => {
+                variant.newtype_variant().map(Self::ElectricImpedance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricInductance => {
+                variant.newtype_variant().map(Self::ElectricInductance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricPotential => {
+                variant.newtype_variant().map(Self::ElectricPotential)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricPotentialChangeRate => variant
+                .newtype_variant()
+                .map(Self::ElectricPotentialChangeRate),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricReactance => {
+                variant.newtype_variant().map(Self::ElectricReactance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricReactiveEnergy => {
+                variant.newtype_variant().map(Self::ElectricReactiveEnergy)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricReactivePower => {
+                variant.newtype_variant().map(Self::ElectricReactivePower)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricResistance => {
+                variant.newtype_variant().map(Self::ElectricResistance)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricResistivity => {
+                variant.newtype_variant().map(Self::ElectricResistivity)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricSurfaceChargeDensity => variant
+                .newtype_variant()
+                .map(Self::ElectricSurfaceChargeDensity),
+            #[cfg(feature = "electrical")]
+            QuantityKind::ElectricSusceptance => {
+                variant.newtype_variant().map(Self::ElectricSusceptance)
+            }
+            QuantityKind::Energy => variant.newtype_variant().map(Self::Energy),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::EnergyDensity => variant.newtype_variant().map(Self::EnergyDensity),
+            #[cfg(feature = "thermal")]
+            QuantityKind::Entropy => variant.newtype_variant().map(Self::Entropy),
+            #[cfg(feature = "fluids")]
+            QuantityKind::FluidResistance => variant.newtype_variant().map(Self::FluidResistance),
+            QuantityKind::Force => variant.newtype_variant().map(Self::Force),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::ForceChangeRate => variant.newtype_variant().map(Self::ForceChangeRate),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::ForcePerLength => variant.newtype_variant().map(Self::ForcePerLength),
+            QuantityKind::Frequency => variant.newtype_variant().map(Self::Frequency),
+            #[cfg(feature = "misc")]
+            QuantityKind::FuelEfficiency => variant.newtype_variant().map(Self::FuelEfficiency),
+            #[cfg(feature = "thermal")]
+            QuantityKind::HeatFlux => variant.newtype_variant().map(Self::HeatFlux),
+            #[cfg(feature = "thermal")]
+            QuantityKind::HeatTransferCoefficient => {
+                variant.newtype_variant().map(Self::HeatTransferCoefficient)
+            }
+            #[cfg(feature = "light")]
+            QuantityKind::Illuminance => variant.newtype_variant().map(Self::Illuminance),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::Impulse => variant.newtype_variant().map(Self::Impulse),
+            #[cfg(feature = "information")]
+            QuantityKind::Information => variant.newtype_variant().map(Self::Information),
+            #[cfg(feature = "light")]
+            QuantityKind::Irradiance => variant.newtype_variant().map(Self::Irradiance),
+            #[cfg(feature = "light")]
+            QuantityKind::Irradiation => variant.newtype_variant().map(Self::Irradiation),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::Jerk => variant.newtype_variant().map(Self::Jerk),
+            #[cfg(feature = "fluids")]
+            QuantityKind::KinematicViscosity => {
+                variant.newtype_variant().map(Self::KinematicViscosity)
+            }
+            #[cfg(feature = "fluids")]
+            QuantityKind::LeakRate => variant.newtype_variant().map(Self::LeakRate),
+            QuantityKind::Length => variant.newtype_variant().map(Self::Length),
+            #[cfg(feature = "electrical")]
+            QuantityKind::Level => variant.newtype_variant().map(Self::Level),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::LinearDensity => variant.newtype_variant().map(Self::LinearDensity),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::LinearPowerDensity => {
+                variant.newtype_variant().map(Self::LinearPowerDensity)
+            }
+            #[cfg(feature = "light")]
+            QuantityKind::Luminance => variant.newtype_variant().map(Self::Luminance),
+            #[cfg(feature = "light")]
+            QuantityKind::Luminosity => variant.newtype_variant().map(Self::Luminosity),
+            #[cfg(feature = "light")]
+            QuantityKind::LuminousFlux => variant.newtype_variant().map(Self::LuminousFlux),
+            #[cfg(feature = "light")]
+            QuantityKind::LuminousIntensity => {
+                variant.newtype_variant().map(Self::LuminousIntensity)
+            }
+            #[cfg(feature = "electrical")]
+            QuantityKind::MagneticField => variant.newtype_variant().map(Self::MagneticField),
+            #[cfg(feature = "electrical")]
+            QuantityKind::MagneticFlux => variant.newtype_variant().map(Self::MagneticFlux),
+            #[cfg(feature = "electrical")]
+            QuantityKind::Magnetization => variant.newtype_variant().map(Self::Magnetization),
+            QuantityKind::Mass => variant.newtype_variant().map(Self::Mass),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MassConcentration => {
+                variant.newtype_variant().map(Self::MassConcentration)
+            }
+            #[cfg(feature = "fluids")]
+            QuantityKind::MassFlow => variant.newtype_variant().map(Self::MassFlow),
+            #[cfg(feature = "fluids")]
+            QuantityKind::MassFlux => variant.newtype_variant().map(Self::MassFlux),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MassFraction => variant.newtype_variant().map(Self::MassFraction),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::MassMomentOfInertia => {
+                variant.newtype_variant().map(Self::MassMomentOfInertia)
+            }
+            #[cfg(feature = "chemistry")]
+            QuantityKind::Molality => variant.newtype_variant().map(Self::Molality),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MolarEnergy => variant.newtype_variant().map(Self::MolarEnergy),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MolarEntropy => variant.newtype_variant().map(Self::MolarEntropy),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MolarFlow => variant.newtype_variant().map(Self::MolarFlow),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::MolarMass => variant.newtype_variant().map(Self::MolarMass),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::Molarity => variant.newtype_variant().map(Self::Molarity),
+            #[cfg(feature = "electrical")]
+            QuantityKind::Permeability => variant.newtype_variant().map(Self::Permeability),
+            #[cfg(feature = "electrical")]
+            QuantityKind::Permittivity => variant.newtype_variant().map(Self::Permittivity),
+            #[cfg(feature = "fluids")]
+            QuantityKind::PorousMediumPermeability => variant
+                .newtype_variant()
+                .map(Self::PorousMediumPermeability),
+            QuantityKind::Power => variant.newtype_variant().map(Self::Power),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::PowerDensity => variant.newtype_variant().map(Self::PowerDensity),
+            #[cfg(feature = "electrical")]
+            QuantityKind::PowerRatio => variant.newtype_variant().map(Self::PowerRatio),
+            QuantityKind::Pressure => variant.newtype_variant().map(Self::Pressure),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::PressureChangeRate => {
+                variant.newtype_variant().map(Self::PressureChangeRate)
+            }
+            #[cfg(feature = "radiation")]
+            QuantityKind::RadiationEquivalentDose => {
+                variant.newtype_variant().map(Self::RadiationEquivalentDose)
+            }
+            #[cfg(feature = "radiation")]
+            QuantityKind::RadiationEquivalentDoseRate => variant
+                .newtype_variant()
+                .map(Self::RadiationEquivalentDoseRate),
+            #[cfg(feature = "radiation")]
+            QuantityKind::RadiationExposure => {
+                variant.newtype_variant().map(Self::RadiationExposure)
+            }
+            #[cfg(feature = "radiation")]
+            QuantityKind::Radioactivity => variant.newtype_variant().map(Self::Radioactivity),
+            QuantityKind::Ratio => variant.newtype_variant().map(Self::Ratio),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::RatioChangeRate => variant.newtype_variant().map(Self::RatioChangeRate),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::ReciprocalArea => variant.newtype_variant().map(Self::ReciprocalArea),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::ReciprocalLength => variant.newtype_variant().map(Self::ReciprocalLength),
+            #[cfg(feature = "misc")]
+            QuantityKind::RelativeHumidity => variant.newtype_variant().map(Self::RelativeHumidity),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::RotationalAcceleration => {
+                variant.newtype_variant().map(Self::RotationalAcceleration)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::RotationalSpeed => variant.newtype_variant().map(Self::RotationalSpeed),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::RotationalStiffness => {
+                variant.newtype_variant().map(Self::RotationalStiffness)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::RotationalStiffnessPerLength => variant
+                .newtype_variant()
+                .map(Self::RotationalStiffnessPerLength),
+            QuantityKind::Scalar => variant.newtype_variant().map(Self::Scalar),
+            #[cfg(feature = "light")]
+            QuantityKind::SolidAngle => variant.newtype_variant().map(Self::SolidAngle),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::SpecificEnergy => variant.newtype_variant().map(Self::SpecificEnergy),
+            #[cfg(feature = "thermal")]
+            QuantityKind::SpecificEntropy => variant.newtype_variant().map(Self::SpecificEntropy),
+            #[cfg(feature = "misc")]
+            QuantityKind::SpecificFuelConsumption => {
+                variant.newtype_variant().map(Self::SpecificFuelConsumption)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::SpecificVolume => variant.newtype_variant().map(Self::SpecificVolume),
+            #[cfg(feature = "mechanics")]
+            QuantityKind::SpecificWeight => variant.newtype_variant().map(Self::SpecificWeight),
+            QuantityKind::Speed => variant.newtype_variant().map(Self::Speed),
+            #[cfg(feature = "fluids")]
+            QuantityKind::StandardVolumeFlow => {
+                variant.newtype_variant().map(Self::StandardVolumeFlow)
+            }
+            QuantityKind::Temperature => variant.newtype_variant().map(Self::Temperature),
+            #[cfg(feature = "thermal")]
+            QuantityKind::TemperatureChangeRate => {
+                variant.newtype_variant().map(Self::TemperatureChangeRate)
+            }
+            QuantityKind::TemperatureDelta => variant.newtype_variant().map(Self::TemperatureDelta),
+            #[cfg(feature = "thermal")]
+            QuantityKind::TemperatureGradient => {
+                variant.newtype_variant().map(Self::TemperatureGradient)
+            }
+            #[cfg(feature = "thermal")]
+            QuantityKind::ThermalConductivity => {
+                variant.newtype_variant().map(Self::ThermalConductivity)
+            }
+            #[cfg(feature = "thermal")]
+            QuantityKind::ThermalInsulance => variant.newtype_variant().map(Self::ThermalInsulance),
+            #[cfg(feature = "thermal")]
+            QuantityKind::ThermalResistance => {
+                variant.newtype_variant().map(Self::ThermalResistance)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::Torque => variant.newtype_variant().map(Self::Torque),
+            #[cfg(feature = "misc")]
+            QuantityKind::Turbidity => variant.newtype_variant().map(Self::Turbidity),
+            #[cfg(feature = "misc")]
+            QuantityKind::VitaminA => variant.newtype_variant().map(Self::VitaminA),
+            QuantityKind::Volume => variant.newtype_variant().map(Self::Volume),
+            #[cfg(feature = "chemistry")]
+            QuantityKind::VolumeConcentration => {
+                variant.newtype_variant().map(Self::VolumeConcentration)
+            }
+            #[cfg(feature = "fluids")]
+            QuantityKind::VolumeFlow => variant.newtype_variant().map(Self::VolumeFlow),
+            #[cfg(feature = "fluids")]
+            QuantityKind::VolumeFlowPerArea => {
+                variant.newtype_variant().map(Self::VolumeFlowPerArea)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::VolumePerLength => variant.newtype_variant().map(Self::VolumePerLength),
+            #[cfg(feature = "thermal")]
+            QuantityKind::VolumetricHeatCapacity => {
+                variant.newtype_variant().map(Self::VolumetricHeatCapacity)
+            }
+            #[cfg(feature = "mechanics")]
+            QuantityKind::WarpingMomentOfInertia => {
+                variant.newtype_variant().map(Self::WarpingMomentOfInertia)
+            }
+        }
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for AnyUnit {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        crate::serde_impl::deserialize_kind_enum(deserializer)
     }
 }

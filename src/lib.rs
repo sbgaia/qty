@@ -35,6 +35,11 @@ extern crate std;
 // `qty::…`, which resolves both here and in the crates using them.
 extern crate self as qty;
 
+// The serde traits come from `serde_core`, which `serde` re-exports, so qty
+// doesn't wait for `serde_derive` when another crate enables `derive`.
+#[cfg(feature = "serde")]
+extern crate serde_core as serde;
+
 use core::fmt;
 use core::ops::{Add, Div, Mul, Neg, Sub};
 

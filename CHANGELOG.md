@@ -71,6 +71,11 @@ follow [Semantic Versioning](https://semver.org/).
   by an operator takes one step, and a unit of one symbol, as in
   `qty!(12.5 km)`, needs no `const` block. Longer formulas fit in the
   default recursion limit.
+- The `serde` feature builds faster: qty implements the traits by hand,
+  with the same format and the same errors, and depends on `serde_core`
+  (which `serde` re-exports, from 1.0.220) instead of `serde` with its
+  `derive` feature. qty no longer waits for `syn` and `serde_derive` to
+  compile, also when another crate enables `derive`.
 
 ## [0.2.4] - 2026-10-20
 
