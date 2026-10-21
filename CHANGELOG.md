@@ -8,6 +8,12 @@ follow [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- `qty!` writes a quantity with its unit, checked at compile time:
+  `let g: Acceleration = qty!(9.81 m/s^2)`, `qty!(5 "°C")` for symbols that
+  aren't Rust tokens. It gives the quantity the context expects, works in
+  `formula!`, and rejects unknown units and wrong dimensions in
+  `cargo check`. Angles count, as when parsing text, so `rev/min` is a
+  `RotationalSpeed` and not a `Frequency`.
 - `expr!` computes a formula like `formula!` but gives the `Expr` itself,
   so `let x = expr!(m * m)` needs no type annotation.
 - `Expr` implements `Display` (and `LowerExp`, `UpperExp`), in SI units:

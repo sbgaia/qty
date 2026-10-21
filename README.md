@@ -175,6 +175,29 @@ assert_eq!(e.as_joules(), 315.0);
 assert_eq!(expr!(m * m).to_string(), "4900 kg²");
 ```
 
+## Unit literals
+
+`qty!` writes a quantity as a number and a unit. The unit is checked at
+compile time, by `cargo check` too, and the result is the quantity the
+context expects:
+
+```rust
+use qty::*;
+
+let g: Acceleration = qty!(9.81 m/s^2);
+let trip = Length::from_kilometers(42.0) + qty!(195 m);
+assert_eq!(trip, qty!(42.195 km));
+
+let rise: TemperatureDelta = qty!(5 "°C"); // symbols that aren't Rust tokens
+let fall: Length = formula!(0.5 * qty!(9.81 m/s^2) * qty!(2 s).powi::<2>());
+assert_eq!(fall.as_meters(), 19.62);
+```
+
+A misspelt unit, or one with the wrong dimensions (`let g: Acceleration =
+qty!(9.81 m/s)`), doesn't compile. The units are constants whose
+dimensions are in their types, so a literal costs about as much to compile
+as a `from_` call.
+
 ## Text
 
 Quantities print in their base unit, or in any unit you ask for. Parsing
