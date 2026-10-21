@@ -47,6 +47,20 @@ follow [Semantic Versioning](https://semver.org/).
   `Float` requires `Number`. A custom `Float` type must now implement
   `Number` too, which takes the `from_f64` method moved there from `Float`.
   Ordering, parsing, rounding and `auto_unit` still require `Float`.
+- Formula errors name the dimensions in SI base units, as tuples such as
+  `(kg, m<2>, s<-2>)` for kg·m²·s⁻², where they compared `Dim<E<…>, …>`
+  types: ``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` ``,
+  ``can't add `(kg, m, s<-1>)` to `(kg, m<2>, s<-2>)` ``, and
+  ``the square root of `(m<3>,)` has a fractional exponent``, once per
+  root. The units are the types in `qty::formula::si`, and `InBaseUnits`
+  gives them for a `Dim`.
+- **Breaking**, for code naming the formula traits: `FromFormula` and
+  `From<Expr>` are implemented for an `Expr` of any dimensions, with a
+  `Gives` bound that checks them, and `Expr + Expr` and `Expr - Expr` take
+  an `Expr` of any dimensions on the right, with an `AddUnits` or
+  `SubUnits` bound, so `expr + Expr::new(1.0)` needs the type of the
+  constant. `HalfE` and `ThirdE` are implemented for every exponent, with
+  the remainder in `Rem`; `SqrtDim` and `CbrtDim` check it.
 
 ## [0.2.4] - 2026-10-20
 

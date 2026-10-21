@@ -525,8 +525,10 @@ pub fn in_formulas(qty: &QuantityDef, all: &[QuantityDef]) -> bool {
 }
 
 /// The source of `src/formula/exponents.rs`: sums, differences, products,
-/// halves and thirds of exponents as types. The range is twice the largest exponent of
-/// any quantity, so any product or quotient of two quantities fits.
+/// halves and thirds of exponents as types, and each exponent as a factor of
+/// the readable dimensions in error messages. The range is twice the largest
+/// exponent of any quantity, so any product or quotient of two quantities
+/// fits.
 pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
     let max = 2 * quantities
         .iter()
@@ -544,7 +546,10 @@ pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
         "//! Exponent arithmetic for formulas, from -{max} to {max}."
     );
     w!(out);
-    w!(out, "use super::{{AddE, HalfE, MulE, SubE, ThirdE, E}};");
+    w!(
+        out,
+        "use super::{{AddE, BaseUnit, Cons, Factor, HalfE, MulE, SubE, ThirdE, E}};"
+    );
     w!(out);
     w!(
         out,
@@ -582,13 +587,29 @@ pub fn generate_formula_exponents(quantities: &[QuantityDef]) -> String {
             }
         }
     }
+    // Halves and thirds of every exponent, rounded down, and what's left:
+    // a root checks that nothing is.
     for a in range.clone() {
-        if a % 2 == 0 {
-            w!(out, "impl HalfE for E<{a}> {{ type Out = E<{}>; }}", a / 2);
-        }
-        if a % 3 == 0 {
-            w!(out, "impl ThirdE for E<{a}> {{ type Out = E<{}>; }}", a / 3);
-        }
+        w!(
+            out,
+            "impl HalfE for E<{a}> {{ type Out = E<{}>; type Rem = E<{}>; }}",
+            a.div_euclid(2),
+            a.rem_euclid(2)
+        );
+        w!(
+            out,
+            "impl ThirdE for E<{a}> {{ type Out = E<{}>; type Rem = E<{}>; }}",
+            a.div_euclid(3),
+            a.rem_euclid(3)
+        );
+    }
+    // A zero exponent leaves its unit out.
+    w!(out, "impl<U, R> Factor<U, R> for E<0> {{ type Out = R; }}");
+    for a in range.clone().filter(|&a| a != 0) {
+        w!(
+            out,
+            "impl<U: BaseUnit, R: Cons<U::Pow<{a}>>> Factor<U, R> for E<{a}> {{ type Out = R::Out; }}"
+        );
     }
     out
 }
