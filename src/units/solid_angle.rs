@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In geometry, a solid angle is the two-dimensional angle in three-dimensional space that an object subtends at a point.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for SolidAngleUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SolidAngle<T>> for SolidAngleUnit {
+impl<T: Number> crate::UnitOf<SolidAngle<T>> for SolidAngleUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<SolidAngle<T>> for SolidAngleUnit {
     }
 }
 
-impl<T: Float> SolidAngle<T> {
+impl<T: crate::Float> SolidAngle<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`sr`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> SolidAngle<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, SolidAngleUnit> {
         self.in_unit(SolidAngleUnit::Steradian)
     }
+}
 
+impl<T: Number> SolidAngle<T> {
     /// A [`SolidAngle`] from a value in `sr`.
     #[inline]
     pub fn from_steradians(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Capacitance is the capacity of a material object or device to store electric charge.
 ///
@@ -188,7 +188,7 @@ impl core::str::FromStr for ElectricCapacitanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUnit {
+impl<T: Number> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -216,7 +216,7 @@ impl<T: Float> crate::UnitOf<ElectricCapacitance<T>> for ElectricCapacitanceUnit
     }
 }
 
-impl<T: Float> ElectricCapacitance<T> {
+impl<T: crate::Float> ElectricCapacitance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pF`, `nF`, `µF`, `mF`, `F`, `kF`, `MF`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -244,7 +244,9 @@ impl<T: Float> ElectricCapacitance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricCapacitance<T> {
     /// A [`ElectricCapacitance`] from a value in `F`.
     #[inline]
     pub fn from_farads(value: T) -> Self {

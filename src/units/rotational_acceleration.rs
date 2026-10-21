@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Angular acceleration is the rate of change of rotational speed.
 ///
@@ -149,7 +149,7 @@ impl core::str::FromStr for RotationalAccelerationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerationUnit {
+impl<T: Number> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -183,7 +183,7 @@ impl<T: Float> crate::UnitOf<RotationalAcceleration<T>> for RotationalAccelerati
     }
 }
 
-impl<T: Float> RotationalAcceleration<T> {
+impl<T: crate::Float> RotationalAcceleration<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`rad/s²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -191,7 +191,9 @@ impl<T: Float> RotationalAcceleration<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, RotationalAccelerationUnit> {
         self.in_unit(RotationalAccelerationUnit::RadianPerSecondSquared)
     }
+}
 
+impl<T: Number> RotationalAcceleration<T> {
     /// A [`RotationalAcceleration`] from a value in `rad/s²`.
     #[inline]
     pub fn from_radians_per_second_squared(value: T) -> Self {

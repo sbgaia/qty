@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The SpecificEnergy
 ///
@@ -485,7 +485,7 @@ impl core::str::FromStr for SpecificEnergyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
+impl<T: Number> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -509,9 +509,13 @@ impl<T: Float> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
             SpecificEnergyUnit::MegawattDayPerTonne => value * T::from_f64(8.64e7),
             SpecificEnergyUnit::GigawattDayPerTonne => value * T::from_f64(8.64e10),
             SpecificEnergyUnit::TerawattDayPerTonne => value * T::from_f64(8.64e13),
-            SpecificEnergyUnit::WattDayPerShortTon => value * T::from_f64(95.23969726386711),
-            SpecificEnergyUnit::KilowattDayPerShortTon => value * T::from_f64(95239.69726386711),
-            SpecificEnergyUnit::MegawattDayPerShortTon => value * T::from_f64(9.523969726386711e7),
+            SpecificEnergyUnit::WattDayPerShortTon => T::mul_ratio(value, 4320000000.0, 45359237.0),
+            SpecificEnergyUnit::KilowattDayPerShortTon => {
+                T::mul_ratio(value, 4320000000000.0, 45359237.0)
+            }
+            SpecificEnergyUnit::MegawattDayPerShortTon => {
+                T::mul_ratio(value, 4320000000000000.0, 45359237.0)
+            }
             SpecificEnergyUnit::GigawattDayPerShortTon => value * T::from_f64(9.523969726386711e10),
             SpecificEnergyUnit::TerawattDayPerShortTon => value * T::from_f64(9.523969726386711e13),
             SpecificEnergyUnit::WattHourPerPound => value * T::from_f64(7936.64),
@@ -545,9 +549,13 @@ impl<T: Float> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
             SpecificEnergyUnit::MegawattDayPerTonne => value / T::from_f64(8.64e7),
             SpecificEnergyUnit::GigawattDayPerTonne => value / T::from_f64(8.64e10),
             SpecificEnergyUnit::TerawattDayPerTonne => value / T::from_f64(8.64e13),
-            SpecificEnergyUnit::WattDayPerShortTon => value / T::from_f64(95.23969726386711),
-            SpecificEnergyUnit::KilowattDayPerShortTon => value / T::from_f64(95239.69726386711),
-            SpecificEnergyUnit::MegawattDayPerShortTon => value / T::from_f64(9.523969726386711e7),
+            SpecificEnergyUnit::WattDayPerShortTon => T::div_ratio(value, 4320000000.0, 45359237.0),
+            SpecificEnergyUnit::KilowattDayPerShortTon => {
+                T::div_ratio(value, 4320000000000.0, 45359237.0)
+            }
+            SpecificEnergyUnit::MegawattDayPerShortTon => {
+                T::div_ratio(value, 4320000000000000.0, 45359237.0)
+            }
             SpecificEnergyUnit::GigawattDayPerShortTon => value / T::from_f64(9.523969726386711e10),
             SpecificEnergyUnit::TerawattDayPerShortTon => value / T::from_f64(9.523969726386711e13),
             SpecificEnergyUnit::WattHourPerPound => value / T::from_f64(7936.64),
@@ -559,7 +567,7 @@ impl<T: Float> crate::UnitOf<SpecificEnergy<T>> for SpecificEnergyUnit {
     }
 }
 
-impl<T: Float> SpecificEnergy<T> {
+impl<T: crate::Float> SpecificEnergy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/kg`, `kJ/kg`, `MJ/kg`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -583,7 +591,9 @@ impl<T: Float> SpecificEnergy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> SpecificEnergy<T> {
     /// A [`SpecificEnergy`] from a value in `J/kg`.
     #[inline]
     pub fn from_joules_per_kilogram(value: T) -> Self {
@@ -827,37 +837,37 @@ impl<T: Float> SpecificEnergy<T> {
     /// A [`SpecificEnergy`] from a value in `Wd/ST`.
     #[inline]
     pub fn from_watt_days_per_short_ton(value: T) -> Self {
-        Self(value * T::from_f64(95.23969726386711))
+        Self(T::mul_ratio(value, 4320000000.0, 45359237.0))
     }
 
     /// The value in `Wd/ST`.
     #[inline]
     pub fn as_watt_days_per_short_ton(self) -> T {
-        self.0 / T::from_f64(95.23969726386711)
+        T::div_ratio(self.0, 4320000000.0, 45359237.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `kWd/ST`.
     #[inline]
     pub fn from_kilowatt_days_per_short_ton(value: T) -> Self {
-        Self(value * T::from_f64(95239.69726386711))
+        Self(T::mul_ratio(value, 4320000000000.0, 45359237.0))
     }
 
     /// The value in `kWd/ST`.
     #[inline]
     pub fn as_kilowatt_days_per_short_ton(self) -> T {
-        self.0 / T::from_f64(95239.69726386711)
+        T::div_ratio(self.0, 4320000000000.0, 45359237.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `MWd/ST`.
     #[inline]
     pub fn from_megawatt_days_per_short_ton(value: T) -> Self {
-        Self(value * T::from_f64(9.523969726386711e7))
+        Self(T::mul_ratio(value, 4320000000000000.0, 45359237.0))
     }
 
     /// The value in `MWd/ST`.
     #[inline]
     pub fn as_megawatt_days_per_short_ton(self) -> T {
-        self.0 / T::from_f64(9.523969726386711e7)
+        T::div_ratio(self.0, 4320000000000000.0, 45359237.0)
     }
 
     /// A [`SpecificEnergy`] from a value in `GWd/ST`.

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In everyday use and in kinematics, the speed of an object is the magnitude of its velocity (the rate of change of its position); it is thus a scalar quantity.\[1\] The average speed of an object in an interval of time is the distance travelled by the object divided by the duration of the interval;\[2\] the instantaneous speed is the limit of the average speed as the duration of the time interval approaches zero.
 ///
@@ -531,7 +531,7 @@ impl core::str::FromStr for SpeedUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Speed<T>> for SpeedUnit {
+impl<T: Number> crate::UnitOf<Speed<T>> for SpeedUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -548,24 +548,24 @@ impl<T: Float> crate::UnitOf<Speed<T>> for SpeedUnit {
             SpeedUnit::MillimeterPerMinute => value / T::from_f64(60000.0),
             SpeedUnit::CentimeterPerMinute => value / T::from_f64(6000.0),
             SpeedUnit::DecimeterPerMinute => value / T::from_f64(600.0),
-            SpeedUnit::KilometerPerMinute => value * T::from_f64(16.666666666666668),
+            SpeedUnit::KilometerPerMinute => T::mul_ratio(value, 50.0, 3.0),
             SpeedUnit::MeterPerHour => value / T::from_f64(3600.0),
             SpeedUnit::MillimeterPerHour => value / T::from_f64(3600000.0),
             SpeedUnit::CentimeterPerHour => value / T::from_f64(360000.0),
-            SpeedUnit::KilometerPerHour => value * T::from_f64(0.2777777777777778),
+            SpeedUnit::KilometerPerHour => T::mul_ratio(value, 5.0, 18.0),
             SpeedUnit::FootPerSecond => value * T::from_f64(0.3048),
             SpeedUnit::FootPerMinute => value * T::from_f64(0.00508),
-            SpeedUnit::FootPerHour => value * T::from_f64(8.466666666666666e-5),
-            SpeedUnit::UsSurveyFootPerSecond => value * T::from_f64(0.3048006096012192),
-            SpeedUnit::UsSurveyFootPerMinute => value * T::from_f64(0.00508001016002032),
+            SpeedUnit::FootPerHour => T::mul_ratio(value, 127.0, 1500000.0),
+            SpeedUnit::UsSurveyFootPerSecond => T::mul_ratio(value, 1200.0, 3937.0),
+            SpeedUnit::UsSurveyFootPerMinute => T::mul_ratio(value, 20.0, 3937.0),
             SpeedUnit::UsSurveyFootPerHour => value / T::from_f64(11811.0),
             SpeedUnit::InchPerSecond => value * T::from_f64(0.0254),
-            SpeedUnit::InchPerMinute => value * T::from_f64(0.00042333333333333334),
-            SpeedUnit::InchPerHour => value * T::from_f64(7.055555555555556e-6),
+            SpeedUnit::InchPerMinute => T::mul_ratio(value, 127.0, 300000.0),
+            SpeedUnit::InchPerHour => T::mul_ratio(value, 127.0, 18000000.0),
             SpeedUnit::YardPerSecond => value * T::from_f64(0.9144),
             SpeedUnit::YardPerMinute => value * T::from_f64(0.01524),
             SpeedUnit::YardPerHour => value * T::from_f64(0.000254),
-            SpeedUnit::Knot => value * T::from_f64(0.5144444444444445),
+            SpeedUnit::Knot => T::mul_ratio(value, 463.0, 900.0),
             SpeedUnit::MilePerHour => value * T::from_f64(0.44704),
             SpeedUnit::Mach => value * T::from_f64(340.29),
         }
@@ -587,31 +587,31 @@ impl<T: Float> crate::UnitOf<Speed<T>> for SpeedUnit {
             SpeedUnit::MillimeterPerMinute => value * T::from_f64(60000.0),
             SpeedUnit::CentimeterPerMinute => value * T::from_f64(6000.0),
             SpeedUnit::DecimeterPerMinute => value * T::from_f64(600.0),
-            SpeedUnit::KilometerPerMinute => value / T::from_f64(16.666666666666668),
+            SpeedUnit::KilometerPerMinute => T::div_ratio(value, 50.0, 3.0),
             SpeedUnit::MeterPerHour => value * T::from_f64(3600.0),
             SpeedUnit::MillimeterPerHour => value * T::from_f64(3600000.0),
             SpeedUnit::CentimeterPerHour => value * T::from_f64(360000.0),
-            SpeedUnit::KilometerPerHour => value / T::from_f64(0.2777777777777778),
+            SpeedUnit::KilometerPerHour => T::div_ratio(value, 5.0, 18.0),
             SpeedUnit::FootPerSecond => value / T::from_f64(0.3048),
             SpeedUnit::FootPerMinute => value / T::from_f64(0.00508),
-            SpeedUnit::FootPerHour => value / T::from_f64(8.466666666666666e-5),
-            SpeedUnit::UsSurveyFootPerSecond => value / T::from_f64(0.3048006096012192),
-            SpeedUnit::UsSurveyFootPerMinute => value / T::from_f64(0.00508001016002032),
+            SpeedUnit::FootPerHour => T::div_ratio(value, 127.0, 1500000.0),
+            SpeedUnit::UsSurveyFootPerSecond => T::div_ratio(value, 1200.0, 3937.0),
+            SpeedUnit::UsSurveyFootPerMinute => T::div_ratio(value, 20.0, 3937.0),
             SpeedUnit::UsSurveyFootPerHour => value * T::from_f64(11811.0),
             SpeedUnit::InchPerSecond => value / T::from_f64(0.0254),
-            SpeedUnit::InchPerMinute => value / T::from_f64(0.00042333333333333334),
-            SpeedUnit::InchPerHour => value / T::from_f64(7.055555555555556e-6),
+            SpeedUnit::InchPerMinute => T::div_ratio(value, 127.0, 300000.0),
+            SpeedUnit::InchPerHour => T::div_ratio(value, 127.0, 18000000.0),
             SpeedUnit::YardPerSecond => value / T::from_f64(0.9144),
             SpeedUnit::YardPerMinute => value / T::from_f64(0.01524),
             SpeedUnit::YardPerHour => value / T::from_f64(0.000254),
-            SpeedUnit::Knot => value / T::from_f64(0.5144444444444445),
+            SpeedUnit::Knot => T::div_ratio(value, 463.0, 900.0),
             SpeedUnit::MilePerHour => value / T::from_f64(0.44704),
             SpeedUnit::Mach => value / T::from_f64(340.29),
         }
     }
 }
 
-impl<T: Float> Speed<T> {
+impl<T: crate::Float> Speed<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nm/s`, `µm/s`, `mm/s`, `m/s`, `km/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -637,7 +637,9 @@ impl<T: Float> Speed<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Speed<T> {
     /// A [`Speed`] from a value in `m/s`.
     #[inline]
     pub fn from_meters_per_second(value: T) -> Self {
@@ -797,13 +799,13 @@ impl<T: Float> Speed<T> {
     /// A [`Speed`] from a value in `km/min`.
     #[inline]
     pub fn from_kilometers_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16.666666666666668))
+        Self(T::mul_ratio(value, 50.0, 3.0))
     }
 
     /// The value in `km/min`.
     #[inline]
     pub fn as_kilometers_per_minute(self) -> T {
-        self.0 / T::from_f64(16.666666666666668)
+        T::div_ratio(self.0, 50.0, 3.0)
     }
 
     /// A [`Speed`] from a value in `m/h`.
@@ -845,13 +847,13 @@ impl<T: Float> Speed<T> {
     /// A [`Speed`] from a value in `km/h`.
     #[inline]
     pub fn from_kilometers_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `km/h`.
     #[inline]
     pub fn as_kilometers_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`Speed`] from a value in `ft/s`.
@@ -881,37 +883,37 @@ impl<T: Float> Speed<T> {
     /// A [`Speed`] from a value in `ft/h`.
     #[inline]
     pub fn from_feet_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(8.466666666666666e-5))
+        Self(T::mul_ratio(value, 127.0, 1500000.0))
     }
 
     /// The value in `ft/h`.
     #[inline]
     pub fn as_feet_per_hour(self) -> T {
-        self.0 / T::from_f64(8.466666666666666e-5)
+        T::div_ratio(self.0, 127.0, 1500000.0)
     }
 
     /// A [`Speed`] from a value in `ftUS/s`.
     #[inline]
     pub fn from_us_survey_feet_per_second(value: T) -> Self {
-        Self(value * T::from_f64(0.3048006096012192))
+        Self(T::mul_ratio(value, 1200.0, 3937.0))
     }
 
     /// The value in `ftUS/s`.
     #[inline]
     pub fn as_us_survey_feet_per_second(self) -> T {
-        self.0 / T::from_f64(0.3048006096012192)
+        T::div_ratio(self.0, 1200.0, 3937.0)
     }
 
     /// A [`Speed`] from a value in `ftUS/min`.
     #[inline]
     pub fn from_us_survey_feet_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.00508001016002032))
+        Self(T::mul_ratio(value, 20.0, 3937.0))
     }
 
     /// The value in `ftUS/min`.
     #[inline]
     pub fn as_us_survey_feet_per_minute(self) -> T {
-        self.0 / T::from_f64(0.00508001016002032)
+        T::div_ratio(self.0, 20.0, 3937.0)
     }
 
     /// A [`Speed`] from a value in `ftUS/h`.
@@ -941,25 +943,25 @@ impl<T: Float> Speed<T> {
     /// A [`Speed`] from a value in `in/min`.
     #[inline]
     pub fn from_inches_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(0.00042333333333333334))
+        Self(T::mul_ratio(value, 127.0, 300000.0))
     }
 
     /// The value in `in/min`.
     #[inline]
     pub fn as_inches_per_minute(self) -> T {
-        self.0 / T::from_f64(0.00042333333333333334)
+        T::div_ratio(self.0, 127.0, 300000.0)
     }
 
     /// A [`Speed`] from a value in `in/h`.
     #[inline]
     pub fn from_inches_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(7.055555555555556e-6))
+        Self(T::mul_ratio(value, 127.0, 18000000.0))
     }
 
     /// The value in `in/h`.
     #[inline]
     pub fn as_inches_per_hour(self) -> T {
-        self.0 / T::from_f64(7.055555555555556e-6)
+        T::div_ratio(self.0, 127.0, 18000000.0)
     }
 
     /// A [`Speed`] from a value in `yd/s`.
@@ -1001,13 +1003,13 @@ impl<T: Float> Speed<T> {
     /// A [`Speed`] from a value in `kn`.
     #[inline]
     pub fn from_knots(value: T) -> Self {
-        Self(value * T::from_f64(0.5144444444444445))
+        Self(T::mul_ratio(value, 463.0, 900.0))
     }
 
     /// The value in `kn`.
     #[inline]
     pub fn as_knots(self) -> T {
-        self.0 / T::from_f64(0.5144444444444445)
+        T::div_ratio(self.0, 463.0, 900.0)
     }
 
     /// A [`Speed`] from a value in `mph`.

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Inductance is a property of an electrical conductor which opposes a change in current.
 ///
@@ -162,7 +162,7 @@ impl core::str::FromStr for ElectricInductanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricInductance<T>> for ElectricInductanceUnit {
+impl<T: Number> crate::UnitOf<ElectricInductance<T>> for ElectricInductanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -186,7 +186,7 @@ impl<T: Float> crate::UnitOf<ElectricInductance<T>> for ElectricInductanceUnit {
     }
 }
 
-impl<T: Float> ElectricInductance<T> {
+impl<T: crate::Float> ElectricInductance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pH`, `nH`, `µH`, `mH`, `H`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -212,7 +212,9 @@ impl<T: Float> ElectricInductance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricInductance<T> {
     /// A [`ElectricInductance`] from a value in `H`.
     #[inline]
     pub fn from_henries(value: T) -> Self {

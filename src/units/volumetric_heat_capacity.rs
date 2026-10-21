@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The volumetric heat capacity is the amount of energy that must be added, in the form of heat, to one unit of volume of the material in order to cause an increase of one unit in its temperature.
 ///
@@ -229,7 +229,7 @@ impl core::str::FromStr for VolumetricHeatCapacityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapacityUnit {
+impl<T: Number> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapacityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -252,7 +252,7 @@ impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapaci
                 value * T::from_f64(4.184e9)
             }
             VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
-                value * T::from_f64(67066.10245409631)
+                T::mul_ratio(value, 6594099078875.0, 98322384.0)
             }
         }
     }
@@ -279,13 +279,13 @@ impl<T: Float> crate::UnitOf<VolumetricHeatCapacity<T>> for VolumetricHeatCapaci
                 value / T::from_f64(4.184e9)
             }
             VolumetricHeatCapacityUnit::BtuPerCubicFootDegreeFahrenheit => {
-                value / T::from_f64(67066.10245409631)
+                T::div_ratio(value, 6594099078875.0, 98322384.0)
             }
         }
     }
 }
 
-impl<T: Float> VolumetricHeatCapacity<T> {
+impl<T: crate::Float> VolumetricHeatCapacity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/(m³·K)`, `kJ/(m³·K)`, `MJ/(m³·K)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -315,7 +315,9 @@ impl<T: Float> VolumetricHeatCapacity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> VolumetricHeatCapacity<T> {
     /// A [`VolumetricHeatCapacity`] from a value in `J/(m³·K)`.
     #[inline]
     pub fn from_joules_per_cubic_meter_kelvin(value: T) -> Self {
@@ -415,13 +417,13 @@ impl<T: Float> VolumetricHeatCapacity<T> {
     /// A [`VolumetricHeatCapacity`] from a value in `BTU/(ft³·°F)`.
     #[inline]
     pub fn from_btus_per_cubic_foot_degree_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(67066.10245409631))
+        Self(T::mul_ratio(value, 6594099078875.0, 98322384.0))
     }
 
     /// The value in `BTU/(ft³·°F)`.
     #[inline]
     pub fn as_btus_per_cubic_foot_degree_fahrenheit(self) -> T {
-        self.0 / T::from_f64(67066.10245409631)
+        T::div_ratio(self.0, 6594099078875.0, 98322384.0)
     }
 }
 

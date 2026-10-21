@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The number of occurrences of a repeating event per unit time.
 ///
@@ -245,7 +245,7 @@ impl core::str::FromStr for FrequencyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Frequency<T>> for FrequencyUnit {
+impl<T: Number> crate::UnitOf<Frequency<T>> for FrequencyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -283,7 +283,7 @@ impl<T: Float> crate::UnitOf<Frequency<T>> for FrequencyUnit {
     }
 }
 
-impl<T: Float> Frequency<T> {
+impl<T: crate::Float> Frequency<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µHz`, `mHz`, `Hz`, `kHz`, `MHz`, `GHz`, `THz`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -311,7 +311,9 @@ impl<T: Float> Frequency<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Frequency<T> {
     /// A [`Frequency`] from a value in `Hz`.
     #[inline]
     pub fn from_hertz(value: T) -> Self {

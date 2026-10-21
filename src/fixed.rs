@@ -1523,10 +1523,10 @@ where
     #[inline(always)]
     fn canonical(&self) -> Q::Value {
         let v = self.0.as_base();
-        let zero = <Q::Value as Float>::from_f64(0.0);
+        let zero = <Q::Value as crate::Number>::from_f64(0.0);
         #[allow(clippy::eq_op)]
         if v != v {
-            <Q::Value as Float>::from_f64(f64::NAN)
+            <Q::Value as crate::Number>::from_f64(f64::NAN)
         } else if v == zero {
             zero
         } else {

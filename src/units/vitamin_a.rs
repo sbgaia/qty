@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Vitamin A: 1 IU is the biological equivalent of 0.3 µg retinol, or of 0.6 µg beta-carotene.
 ///
@@ -104,7 +104,7 @@ impl core::str::FromStr for VitaminAUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VitaminA<T>> for VitaminAUnit {
+impl<T: Number> crate::UnitOf<VitaminA<T>> for VitaminAUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -120,7 +120,7 @@ impl<T: Float> crate::UnitOf<VitaminA<T>> for VitaminAUnit {
     }
 }
 
-impl<T: Float> VitaminA<T> {
+impl<T: crate::Float> VitaminA<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`IU`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -128,7 +128,9 @@ impl<T: Float> VitaminA<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VitaminAUnit> {
         self.in_unit(VitaminAUnit::InternationalUnit)
     }
+}
 
+impl<T: Number> VitaminA<T> {
     /// A [`VitaminA`] from a value in `IU`.
     #[inline]
     pub fn from_international_units(value: T) -> Self {

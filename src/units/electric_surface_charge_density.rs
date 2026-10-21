@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, surface charge density is a measure of the amount of electric charge per surface area.
 ///
@@ -138,7 +138,9 @@ impl core::str::FromStr for ElectricSurfaceChargeDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricSurfaceChargeDensity<T>> for ElectricSurfaceChargeDensityUnit {
+impl<T: Number> crate::UnitOf<ElectricSurfaceChargeDensity<T>>
+    for ElectricSurfaceChargeDensityUnit
+{
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -147,7 +149,7 @@ impl<T: Float> crate::UnitOf<ElectricSurfaceChargeDensity<T>> for ElectricSurfac
                 value * T::from_f64(10000.0)
             }
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
-                value * T::from_f64(1550.0031000062)
+                T::mul_ratio(value, 25000000.0, 16129.0)
             }
         }
     }
@@ -160,13 +162,13 @@ impl<T: Float> crate::UnitOf<ElectricSurfaceChargeDensity<T>> for ElectricSurfac
                 value / T::from_f64(10000.0)
             }
             ElectricSurfaceChargeDensityUnit::CoulombPerSquareInch => {
-                value / T::from_f64(1550.0031000062)
+                T::div_ratio(value, 25000000.0, 16129.0)
             }
         }
     }
 }
 
-impl<T: Float> ElectricSurfaceChargeDensity<T> {
+impl<T: crate::Float> ElectricSurfaceChargeDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`C/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -174,7 +176,9 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricSurfaceChargeDensityUnit> {
         self.in_unit(ElectricSurfaceChargeDensityUnit::CoulombPerSquareMeter)
     }
+}
 
+impl<T: Number> ElectricSurfaceChargeDensity<T> {
     /// A [`ElectricSurfaceChargeDensity`] from a value in `C/m²`.
     #[inline]
     pub fn from_coulombs_per_square_meter(value: T) -> Self {
@@ -202,13 +206,13 @@ impl<T: Float> ElectricSurfaceChargeDensity<T> {
     /// A [`ElectricSurfaceChargeDensity`] from a value in `C/in²`.
     #[inline]
     pub fn from_coulombs_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(1550.0031000062))
+        Self(T::mul_ratio(value, 25000000.0, 16129.0))
     }
 
     /// The value in `C/in²`.
     #[inline]
     pub fn as_coulombs_per_square_inch(self) -> T {
-        self.0 / T::from_f64(1550.0031000062)
+        T::div_ratio(self.0, 25000000.0, 16129.0)
     }
 }
 

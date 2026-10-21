@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The heat transfer coefficient or film coefficient, or film effectiveness, in thermodynamics and in mechanics is the proportionality constant between the heat flux and the thermodynamic driving force for the flow of heat (i.e., the temperature difference, ΔT)
 ///
@@ -229,23 +229,23 @@ impl core::str::FromStr for HeatTransferCoefficientUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoefficientUnit {
+impl<T: Number> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoefficientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
             HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
             HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
-                value * T::from_f64(5.678263341113488)
+                T::mul_ratio(value, 52752792631.0, 9290304000.0)
             }
             HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
-                value * T::from_f64(2943611.716033232)
+                T::mul_ratio(value, 474775133679.0, 161290.0)
             }
             HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
-                value * T::from_f64(0.0011622222222222223)
+                T::mul_ratio(value, 523.0, 450000.0)
             }
             HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
-                value * T::from_f64(1.1622222222222223)
+                T::mul_ratio(value, 523.0, 450.0)
             }
         }
     }
@@ -256,22 +256,22 @@ impl<T: Float> crate::UnitOf<HeatTransferCoefficient<T>> for HeatTransferCoeffic
             HeatTransferCoefficientUnit::WattPerSquareMeterKelvin => value,
             HeatTransferCoefficientUnit::WattPerSquareMeterCelsius => value,
             HeatTransferCoefficientUnit::BtuPerHourSquareFootDegreeFahrenheit => {
-                value / T::from_f64(5.678263341113488)
+                T::div_ratio(value, 52752792631.0, 9290304000.0)
             }
             HeatTransferCoefficientUnit::BtuPerSecondSquareInchDegreeFahrenheit => {
-                value / T::from_f64(2943611.716033232)
+                T::div_ratio(value, 474775133679.0, 161290.0)
             }
             HeatTransferCoefficientUnit::CaloriePerHourSquareMeterDegreeCelsius => {
-                value / T::from_f64(0.0011622222222222223)
+                T::div_ratio(value, 523.0, 450000.0)
             }
             HeatTransferCoefficientUnit::KilocaloriePerHourSquareMeterDegreeCelsius => {
-                value / T::from_f64(1.1622222222222223)
+                T::div_ratio(value, 523.0, 450.0)
             }
         }
     }
 }
 
-impl<T: Float> HeatTransferCoefficient<T> {
+impl<T: crate::Float> HeatTransferCoefficient<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`W/(m²·K)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -279,7 +279,9 @@ impl<T: Float> HeatTransferCoefficient<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, HeatTransferCoefficientUnit> {
         self.in_unit(HeatTransferCoefficientUnit::WattPerSquareMeterKelvin)
     }
+}
 
+impl<T: Number> HeatTransferCoefficient<T> {
     /// A [`HeatTransferCoefficient`] from a value in `W/(m²·K)`.
     #[inline]
     pub fn from_watts_per_square_meter_kelvin(value: T) -> Self {
@@ -307,49 +309,49 @@ impl<T: Float> HeatTransferCoefficient<T> {
     /// A [`HeatTransferCoefficient`] from a value in `Btu/(h·ft²·°F)`.
     #[inline]
     pub fn from_btus_per_hour_square_foot_degree_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(5.678263341113488))
+        Self(T::mul_ratio(value, 52752792631.0, 9290304000.0))
     }
 
     /// The value in `Btu/(h·ft²·°F)`.
     #[inline]
     pub fn as_btus_per_hour_square_foot_degree_fahrenheit(self) -> T {
-        self.0 / T::from_f64(5.678263341113488)
+        T::div_ratio(self.0, 52752792631.0, 9290304000.0)
     }
 
     /// A [`HeatTransferCoefficient`] from a value in `Btu/(s·in²·°F)`.
     #[inline]
     pub fn from_btus_per_second_square_inch_degree_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(2943611.716033232))
+        Self(T::mul_ratio(value, 474775133679.0, 161290.0))
     }
 
     /// The value in `Btu/(s·in²·°F)`.
     #[inline]
     pub fn as_btus_per_second_square_inch_degree_fahrenheit(self) -> T {
-        self.0 / T::from_f64(2943611.716033232)
+        T::div_ratio(self.0, 474775133679.0, 161290.0)
     }
 
     /// A [`HeatTransferCoefficient`] from a value in `cal/(h·m²·°C)`.
     #[inline]
     pub fn from_calories_per_hour_square_meter_degree_celsius(value: T) -> Self {
-        Self(value * T::from_f64(0.0011622222222222223))
+        Self(T::mul_ratio(value, 523.0, 450000.0))
     }
 
     /// The value in `cal/(h·m²·°C)`.
     #[inline]
     pub fn as_calories_per_hour_square_meter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(0.0011622222222222223)
+        T::div_ratio(self.0, 523.0, 450000.0)
     }
 
     /// A [`HeatTransferCoefficient`] from a value in `kcal/(h·m²·°C)`.
     #[inline]
     pub fn from_kilocalories_per_hour_square_meter_degree_celsius(value: T) -> Self {
-        Self(value * T::from_f64(1.1622222222222223))
+        Self(T::mul_ratio(value, 523.0, 450.0))
     }
 
     /// The value in `kcal/(h·m²·°C)`.
     #[inline]
     pub fn as_kilocalories_per_hour_square_meter_degree_celsius(self) -> T {
-        self.0 / T::from_f64(1.1622222222222223)
+        T::div_ratio(self.0, 523.0, 450.0)
     }
 }
 

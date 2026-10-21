@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A geometric property of an area that is used to determine the warping stress.
 ///
@@ -175,7 +175,7 @@ impl core::str::FromStr for WarpingMomentOfInertiaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInertiaUnit {
+impl<T: Number> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInertiaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -201,7 +201,7 @@ impl<T: Float> crate::UnitOf<WarpingMomentOfInertia<T>> for WarpingMomentOfInert
     }
 }
 
-impl<T: Float> WarpingMomentOfInertia<T> {
+impl<T: crate::Float> WarpingMomentOfInertia<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m⁶`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -209,7 +209,9 @@ impl<T: Float> WarpingMomentOfInertia<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, WarpingMomentOfInertiaUnit> {
         self.in_unit(WarpingMomentOfInertiaUnit::MeterToTheSixth)
     }
+}
 
+impl<T: Number> WarpingMomentOfInertia<T> {
     /// A [`WarpingMomentOfInertia`] from a value in `m⁶`.
     #[inline]
     pub fn from_meters_to_the_sixth(value: T) -> Self {

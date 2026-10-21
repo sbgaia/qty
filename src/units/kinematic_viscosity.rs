@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The viscosity of a fluid is a measure of its resistance to gradual deformation by shear stress or tensile stress.
 ///
@@ -206,7 +206,7 @@ impl core::str::FromStr for KinematicViscosityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
+impl<T: Number> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -238,7 +238,7 @@ impl<T: Float> crate::UnitOf<KinematicViscosity<T>> for KinematicViscosityUnit {
     }
 }
 
-impl<T: Float> KinematicViscosity<T> {
+impl<T: crate::Float> KinematicViscosity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m²/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -246,7 +246,9 @@ impl<T: Float> KinematicViscosity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, KinematicViscosityUnit> {
         self.in_unit(KinematicViscosityUnit::SquareMeterPerSecond)
     }
+}
 
+impl<T: Number> KinematicViscosity<T> {
     /// A [`KinematicViscosity`] from a value in `m²/s`.
     #[inline]
     pub fn from_square_meters_per_second(value: T) -> Self {

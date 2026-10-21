@@ -7,8 +7,8 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
 use crate::Level;
+use crate::Number;
 
 /// The strength of a signal expressed in decibels (dB) relative to one watt.
 ///
@@ -140,7 +140,7 @@ impl core::str::FromStr for PowerRatioUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<PowerRatio<T>> for PowerRatioUnit {
+impl<T: Number> crate::UnitOf<PowerRatio<T>> for PowerRatioUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -158,7 +158,7 @@ impl<T: Float> crate::UnitOf<PowerRatio<T>> for PowerRatioUnit {
     }
 }
 
-impl<T: Float> PowerRatio<T> {
+impl<T: crate::Float> PowerRatio<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`dBW`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -166,7 +166,9 @@ impl<T: Float> PowerRatio<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, PowerRatioUnit> {
         self.in_unit(PowerRatioUnit::DecibelWatt)
     }
+}
 
+impl<T: Number> PowerRatio<T> {
     /// A [`PowerRatio`] from a value in `dBW`.
     #[inline]
     pub fn from_decibel_watts(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Entropy is an important concept in the branch of science known as thermodynamics. The idea of "irreversibility" is central to the understanding of entropy.  It is often said that entropy is an expression of the disorder, or randomness of a system, or of our lack of information about it. Entropy is an extensive property. It has the dimension of energy divided by temperature, which has a unit of joules per kelvin (J/K) in the International System of Units
 ///
@@ -187,7 +187,7 @@ impl core::str::FromStr for EntropyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Entropy<T>> for EntropyUnit {
+impl<T: Number> crate::UnitOf<Entropy<T>> for EntropyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -215,7 +215,7 @@ impl<T: Float> crate::UnitOf<Entropy<T>> for EntropyUnit {
     }
 }
 
-impl<T: Float> Entropy<T> {
+impl<T: crate::Float> Entropy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/K`, `kJ/K`, `MJ/K`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -239,7 +239,9 @@ impl<T: Float> Entropy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Entropy<T> {
     /// A [`Entropy`] from a value in `J/K`.
     #[inline]
     pub fn from_joules_per_kelvin(value: T) -> Self {

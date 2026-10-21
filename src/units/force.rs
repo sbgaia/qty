@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In physics, a force is any influence that causes an object to undergo a certain change, either concerning its movement, direction, or geometrical construction. In other words, a force can cause an object with mass to change its velocity (which includes to begin moving from a state of rest), i.e., to accelerate, or a flexible object to deform, or both. Force can also be described by intuitive concepts such as a push or a pull. A force has both magnitude and direction, making it a vector quantity. It is measured in the SI unit of newtons and represented by the symbol F.
 ///
@@ -316,7 +316,7 @@ impl core::str::FromStr for ForceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Force<T>> for ForceUnit {
+impl<T: Number> crate::UnitOf<Force<T>> for ForceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -334,7 +334,7 @@ impl<T: Float> crate::UnitOf<Force<T>> for ForceUnit {
             ForceUnit::Poundal => value * T::from_f64(0.138254954376),
             ForceUnit::PoundForce => value * T::from_f64(4.4482216152605),
             ForceUnit::KilopoundForce => value * T::from_f64(4448.2216152605),
-            ForceUnit::OunceForce => value * T::from_f64(0.2780138509537812),
+            ForceUnit::OunceForce => T::mul_ratio(value, 8896443230521.0, 32000000000000.0),
             ForceUnit::ShortTonForce => value * T::from_f64(8896.443230521),
         }
     }
@@ -356,13 +356,13 @@ impl<T: Float> crate::UnitOf<Force<T>> for ForceUnit {
             ForceUnit::Poundal => value / T::from_f64(0.138254954376),
             ForceUnit::PoundForce => value / T::from_f64(4.4482216152605),
             ForceUnit::KilopoundForce => value / T::from_f64(4448.2216152605),
-            ForceUnit::OunceForce => value / T::from_f64(0.2780138509537812),
+            ForceUnit::OunceForce => T::div_ratio(value, 8896443230521.0, 32000000000000.0),
             ForceUnit::ShortTonForce => value / T::from_f64(8896.443230521),
         }
     }
 }
 
-impl<T: Float> Force<T> {
+impl<T: crate::Float> Force<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µN`, `mN`, `N`, `kN`, `MN`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -388,7 +388,9 @@ impl<T: Float> Force<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Force<T> {
     /// A [`Force`] from a value in `dyn`.
     #[inline]
     pub fn from_dyne(value: T) -> Self {
@@ -560,13 +562,13 @@ impl<T: Float> Force<T> {
     /// A [`Force`] from a value in `ozf`.
     #[inline]
     pub fn from_ounce_force(value: T) -> Self {
-        Self(value * T::from_f64(0.2780138509537812))
+        Self(T::mul_ratio(value, 8896443230521.0, 32000000000000.0))
     }
 
     /// The value in `ozf`.
     #[inline]
     pub fn as_ounce_force(self) -> T {
-        self.0 / T::from_f64(0.2780138509537812)
+        T::div_ratio(self.0, 8896443230521.0, 32000000000000.0)
     }
 
     /// A [`Force`] from a value in `tf (short)`.

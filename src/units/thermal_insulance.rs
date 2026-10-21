@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Thermal insulance (R-value) is a measure of a material's resistance to the heat current. It quantifies how effectively a material can resist the transfer of heat through conduction, convection, and radiation. It has the units square metre kelvins per watt (m2⋅K/W) in SI units or square foot degree Fahrenheit–hours per British thermal unit (ft2⋅°F⋅h/Btu) in imperial units. The higher the thermal insulance, the better a material insulates against heat transfer. It is commonly used in construction to assess the insulation properties of materials such as walls, roofs, and insulation products.
 ///
@@ -195,7 +195,7 @@ impl core::str::FromStr for ThermalInsulanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
+impl<T: Number> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -205,10 +205,10 @@ impl<T: Float> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
             ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value / T::from_f64(10.0),
             ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value / T::from_f64(1000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                value * T::from_f64(0.08604206500956023)
+                T::mul_ratio(value, 45.0, 523.0)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                value * T::from_f64(176.11018368230583)
+                T::mul_ratio(value, 9290304000000.0, 52752792631.0)
             }
         }
     }
@@ -222,16 +222,16 @@ impl<T: Float> crate::UnitOf<ThermalInsulance<T>> for ThermalInsulanceUnit {
             ThermalInsulanceUnit::SquareCentimeterKelvinPerWatt => value * T::from_f64(10.0),
             ThermalInsulanceUnit::SquareMillimeterKelvinPerWatt => value * T::from_f64(1000.0),
             ThermalInsulanceUnit::SquareCentimeterHourDegreeCelsiusPerKilocalorie => {
-                value / T::from_f64(0.08604206500956023)
+                T::div_ratio(value, 45.0, 523.0)
             }
             ThermalInsulanceUnit::HourSquareFeetDegreeFahrenheitPerBtu => {
-                value / T::from_f64(176.11018368230583)
+                T::div_ratio(value, 9290304000000.0, 52752792631.0)
             }
         }
     }
 }
 
-impl<T: Float> ThermalInsulance<T> {
+impl<T: crate::Float> ThermalInsulance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m²K/kW`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -239,7 +239,9 @@ impl<T: Float> ThermalInsulance<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ThermalInsulanceUnit> {
         self.in_unit(ThermalInsulanceUnit::SquareMeterKelvinPerKilowatt)
     }
+}
 
+impl<T: Number> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `m²K/kW`.
     #[inline]
     pub fn from_square_meter_kelvins_per_kilowatt(value: T) -> Self {
@@ -303,25 +305,25 @@ impl<T: Float> ThermalInsulance<T> {
     /// A [`ThermalInsulance`] from a value in `cm²Hr°C/kcal`.
     #[inline]
     pub fn from_square_centimeter_hour_degrees_celsius_per_kilocalorie(value: T) -> Self {
-        Self(value * T::from_f64(0.08604206500956023))
+        Self(T::mul_ratio(value, 45.0, 523.0))
     }
 
     /// The value in `cm²Hr°C/kcal`.
     #[inline]
     pub fn as_square_centimeter_hour_degrees_celsius_per_kilocalorie(self) -> T {
-        self.0 / T::from_f64(0.08604206500956023)
+        T::div_ratio(self.0, 45.0, 523.0)
     }
 
     /// A [`ThermalInsulance`] from a value in `Hrft²°F/Btu`.
     #[inline]
     pub fn from_hour_square_feet_degrees_fahrenheit_per_btu(value: T) -> Self {
-        Self(value * T::from_f64(176.11018368230583))
+        Self(T::mul_ratio(value, 9290304000000.0, 52752792631.0))
     }
 
     /// The value in `Hrft²°F/Btu`.
     #[inline]
     pub fn as_hour_square_feet_degrees_fahrenheit_per_btu(self) -> T {
-        self.0 / T::from_f64(176.11018368230583)
+        T::div_ratio(self.0, 9290304000000.0, 52752792631.0)
     }
 }
 

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In classical electromagnetism, magnetization is the vector field that expresses the density of permanent or induced magnetic dipole moments in a magnetic material.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for MagnetizationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
+impl<T: Number> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<Magnetization<T>> for MagnetizationUnit {
     }
 }
 
-impl<T: Float> Magnetization<T> {
+impl<T: crate::Float> Magnetization<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`A/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> Magnetization<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, MagnetizationUnit> {
         self.in_unit(MagnetizationUnit::AmperePerMeter)
     }
+}
 
+impl<T: Number> Magnetization<T> {
     /// A [`Magnetization`] from a value in `A/m`.
     #[inline]
     pub fn from_amperes_per_meter(value: T) -> Self {

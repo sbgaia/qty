@@ -82,7 +82,7 @@ macro_rules! custom_unit {
             }
         }
 
-        impl<T: $crate::Float> $crate::UnitOf<$($q)::+<T>> for $name {
+        impl<T: $crate::Number> $crate::UnitOf<$($q)::+<T>> for $name {
             #[inline]
             fn value_to_base(self, value: T) -> T {
                 value * T::from_f64($factor) $(+ T::from_f64($offset))?
@@ -330,7 +330,7 @@ macro_rules! custom_quantity {
             }
         }
 
-        impl<T: $crate::Float> $crate::UnitOf<$Q<T>> for $U {
+        impl<T: $crate::Number> $crate::UnitOf<$Q<T>> for $U {
             #[inline]
             fn value_to_base(self, value: T) -> T {
                 match self {
@@ -482,7 +482,7 @@ macro_rules! __qty_relation {
         $Trait:ident, $method:ident, $op:tt, $divide:literal,
         [$($a:tt)*], [$($b:tt)*], [$($c:tt)*], $text:expr
     ) => {
-        impl<T: $crate::Float> ::core::ops::$Trait<$($b)*<T>> for $($a)*<T> {
+        impl<T: $crate::Number> ::core::ops::$Trait<$($b)*<T>> for $($a)*<T> {
             type Output = $($c)*<T>;
             #[inline]
             fn $method(self, rhs: $($b)*<T>) -> $($c)*<T> {

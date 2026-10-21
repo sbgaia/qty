@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A property of body reflects how its mass is distributed with regard to an axis.
 ///
@@ -461,7 +461,7 @@ impl core::str::FromStr for MassMomentOfInertiaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUnit {
+impl<T: Number> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -491,7 +491,9 @@ impl<T: Float> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUnit
             MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value * T::from_f64(1000.0),
             MassMomentOfInertiaUnit::PoundSquareFoot => value * T::from_f64(0.0421401100938048),
             MassMomentOfInertiaUnit::PoundSquareInch => value * T::from_f64(0.0002926396534292),
-            MassMomentOfInertiaUnit::SlugSquareFoot => value * T::from_f64(1.3558179483314003),
+            MassMomentOfInertiaUnit::SlugSquareFoot => {
+                T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
             MassMomentOfInertiaUnit::SlugSquareInch => value * T::from_f64(0.009415402418968058),
         }
     }
@@ -525,13 +527,15 @@ impl<T: Float> crate::UnitOf<MassMomentOfInertia<T>> for MassMomentOfInertiaUnit
             MassMomentOfInertiaUnit::MegatonneSquareMillimeter => value / T::from_f64(1000.0),
             MassMomentOfInertiaUnit::PoundSquareFoot => value / T::from_f64(0.0421401100938048),
             MassMomentOfInertiaUnit::PoundSquareInch => value / T::from_f64(0.0002926396534292),
-            MassMomentOfInertiaUnit::SlugSquareFoot => value / T::from_f64(1.3558179483314003),
+            MassMomentOfInertiaUnit::SlugSquareFoot => {
+                T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
+            }
             MassMomentOfInertiaUnit::SlugSquareInch => value / T::from_f64(0.009415402418968058),
         }
     }
 }
 
-impl<T: Float> MassMomentOfInertia<T> {
+impl<T: crate::Float> MassMomentOfInertia<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mg·m²`, `g·m²`, `kg·m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -555,7 +559,9 @@ impl<T: Float> MassMomentOfInertia<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `g·m²`.
     #[inline]
     pub fn from_gram_square_meters(value: T) -> Self {
@@ -871,13 +877,13 @@ impl<T: Float> MassMomentOfInertia<T> {
     /// A [`MassMomentOfInertia`] from a value in `slug·ft²`.
     #[inline]
     pub fn from_slug_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(1.3558179483314003))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0))
     }
 
     /// The value in `slug·ft²`.
     #[inline]
     pub fn as_slug_square_feet(self) -> T {
-        self.0 / T::from_f64(1.3558179483314003)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000000.0)
     }
 
     /// A [`MassMomentOfInertia`] from a value in `slug·in²`.

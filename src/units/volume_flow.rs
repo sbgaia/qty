@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In physics and engineering, in particular fluid dynamics and hydrometry, the volumetric flow rate, (also known as volume flow rate, rate of fluid flow or volume velocity) is the volume of fluid which passes through a given surface per unit time. The SI unit is m³/s (cubic meters per second). In US Customary Units and British Imperial Units, volumetric flow rate is often expressed as ft³/s (cubic feet per second). It is usually represented by the symbol Q.
 ///
@@ -1123,7 +1123,7 @@ impl core::str::FromStr for VolumeFlowUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
+impl<T: Number> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -1134,15 +1134,15 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::CubicFootPerSecond => value * T::from_f64(0.028316846592),
             VolumeFlowUnit::CubicInchPerSecond => value * T::from_f64(1.6387064e-5),
             VolumeFlowUnit::CubicFootPerMinute => value * T::from_f64(0.0004719474432),
-            VolumeFlowUnit::CubicInchPerMinute => value * T::from_f64(2.7311773333333333e-7),
+            VolumeFlowUnit::CubicInchPerMinute => T::mul_ratio(value, 2048383.0, 7500000000000.0),
             VolumeFlowUnit::CubicFootPerHour => value * T::from_f64(7.86579072e-6),
             VolumeFlowUnit::CubicYardPerSecond => value * T::from_f64(0.764554857984),
             VolumeFlowUnit::CubicYardPerMinute => value * T::from_f64(0.0127425809664),
             VolumeFlowUnit::CubicYardPerHour => value * T::from_f64(0.00021237634944),
             VolumeFlowUnit::CubicYardPerDay => value * T::from_f64(8.84901456e-6),
-            VolumeFlowUnit::MillionUsGallonPerDay => value * T::from_f64(0.04381263638888889),
-            VolumeFlowUnit::UsGallonPerDay => value * T::from_f64(4.3812636388888886e-8),
-            VolumeFlowUnit::MegausGallonPerDay => value * T::from_f64(0.04381263638888889),
+            VolumeFlowUnit::MillionUsGallonPerDay => T::mul_ratio(value, 157725491.0, 3600000000.0),
+            VolumeFlowUnit::UsGallonPerDay => T::mul_ratio(value, 157725491.0, 3600000000000000.0),
+            VolumeFlowUnit::MegausGallonPerDay => T::mul_ratio(value, 157725491.0, 3600000000.0),
             VolumeFlowUnit::LiterPerSecond => value / T::from_f64(1000.0),
             VolumeFlowUnit::NanoliterPerSecond => value / T::from_f64(1e12),
             VolumeFlowUnit::MicroliterPerSecond => value / T::from_f64(1e9),
@@ -1162,7 +1162,7 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerMinute => value / T::from_f64(6000.0),
             VolumeFlowUnit::HectoliterPerMinute => value / T::from_f64(600.0),
             VolumeFlowUnit::KiloliterPerMinute => value / T::from_f64(60.0),
-            VolumeFlowUnit::MegaliterPerMinute => value * T::from_f64(16.666666666666668),
+            VolumeFlowUnit::MegaliterPerMinute => T::mul_ratio(value, 50.0, 3.0),
             VolumeFlowUnit::LiterPerHour => value / T::from_f64(3600000.0),
             VolumeFlowUnit::NanoliterPerHour => value / T::from_f64(3.6e15),
             VolumeFlowUnit::MicroliterPerHour => value / T::from_f64(3.6e12),
@@ -1172,7 +1172,7 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerHour => value / T::from_f64(360000.0),
             VolumeFlowUnit::HectoliterPerHour => value / T::from_f64(36000.0),
             VolumeFlowUnit::KiloliterPerHour => value / T::from_f64(3600.0),
-            VolumeFlowUnit::MegaliterPerHour => value * T::from_f64(0.2777777777777778),
+            VolumeFlowUnit::MegaliterPerHour => T::mul_ratio(value, 5.0, 18.0),
             VolumeFlowUnit::LiterPerDay => value / T::from_f64(8.64e7),
             VolumeFlowUnit::NanoliterPerDay => value / T::from_f64(8.64e16),
             VolumeFlowUnit::MicroliterPerDay => value / T::from_f64(8.64e13),
@@ -1182,19 +1182,19 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerDay => value / T::from_f64(8640000.0),
             VolumeFlowUnit::HectoliterPerDay => value / T::from_f64(864000.0),
             VolumeFlowUnit::KiloliterPerDay => value / T::from_f64(86400.0),
-            VolumeFlowUnit::MegaliterPerDay => value * T::from_f64(0.011574074074074073),
+            VolumeFlowUnit::MegaliterPerDay => T::mul_ratio(value, 5.0, 432.0),
             VolumeFlowUnit::UsGallonPerSecond => value * T::from_f64(0.003785411784),
             VolumeFlowUnit::UsGallonPerMinute => value * T::from_f64(6.30901964e-5),
-            VolumeFlowUnit::UkGallonPerDay => value * T::from_f64(5.2616782407407406e-8),
-            VolumeFlowUnit::MegaukGallonPerDay => value * T::from_f64(0.05261678240740741),
-            VolumeFlowUnit::UkGallonPerHour => value * T::from_f64(1.2628027777777779e-6),
-            VolumeFlowUnit::UkGallonPerMinute => value * T::from_f64(7.576816666666667e-5),
+            VolumeFlowUnit::UkGallonPerDay => T::mul_ratio(value, 454609.0, 8640000000000.0),
+            VolumeFlowUnit::MegaukGallonPerDay => T::mul_ratio(value, 454609.0, 8640000.0),
+            VolumeFlowUnit::UkGallonPerHour => T::mul_ratio(value, 454609.0, 360000000000.0),
+            VolumeFlowUnit::UkGallonPerMinute => T::mul_ratio(value, 454609.0, 6000000000.0),
             VolumeFlowUnit::UkGallonPerSecond => value * T::from_f64(0.00454609),
             VolumeFlowUnit::MegaukGallonPerSecond => value * T::from_f64(4546.09),
             VolumeFlowUnit::KilousGallonPerMinute => value * T::from_f64(0.0630901964),
-            VolumeFlowUnit::UsGallonPerHour => value * T::from_f64(1.0515032733333334e-6),
+            VolumeFlowUnit::UsGallonPerHour => T::mul_ratio(value, 157725491.0, 150000000000000.0),
             VolumeFlowUnit::CubicDecimeterPerMinute => value / T::from_f64(60000.0),
-            VolumeFlowUnit::OilBarrelPerDay => value * T::from_f64(1.8401307283333333e-6),
+            VolumeFlowUnit::OilBarrelPerDay => T::mul_ratio(value, 1104078437.0, 600000000000000.0),
             VolumeFlowUnit::OilBarrelPerMinute => value * T::from_f64(0.0026497882488),
             VolumeFlowUnit::OilBarrelPerHour => value * T::from_f64(4.416313748e-5),
             VolumeFlowUnit::OilBarrelPerSecond => value * T::from_f64(0.158987294928),
@@ -1218,15 +1218,15 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::CubicFootPerSecond => value / T::from_f64(0.028316846592),
             VolumeFlowUnit::CubicInchPerSecond => value / T::from_f64(1.6387064e-5),
             VolumeFlowUnit::CubicFootPerMinute => value / T::from_f64(0.0004719474432),
-            VolumeFlowUnit::CubicInchPerMinute => value / T::from_f64(2.7311773333333333e-7),
+            VolumeFlowUnit::CubicInchPerMinute => T::div_ratio(value, 2048383.0, 7500000000000.0),
             VolumeFlowUnit::CubicFootPerHour => value / T::from_f64(7.86579072e-6),
             VolumeFlowUnit::CubicYardPerSecond => value / T::from_f64(0.764554857984),
             VolumeFlowUnit::CubicYardPerMinute => value / T::from_f64(0.0127425809664),
             VolumeFlowUnit::CubicYardPerHour => value / T::from_f64(0.00021237634944),
             VolumeFlowUnit::CubicYardPerDay => value / T::from_f64(8.84901456e-6),
-            VolumeFlowUnit::MillionUsGallonPerDay => value / T::from_f64(0.04381263638888889),
-            VolumeFlowUnit::UsGallonPerDay => value / T::from_f64(4.3812636388888886e-8),
-            VolumeFlowUnit::MegausGallonPerDay => value / T::from_f64(0.04381263638888889),
+            VolumeFlowUnit::MillionUsGallonPerDay => T::div_ratio(value, 157725491.0, 3600000000.0),
+            VolumeFlowUnit::UsGallonPerDay => T::div_ratio(value, 157725491.0, 3600000000000000.0),
+            VolumeFlowUnit::MegausGallonPerDay => T::div_ratio(value, 157725491.0, 3600000000.0),
             VolumeFlowUnit::LiterPerSecond => value * T::from_f64(1000.0),
             VolumeFlowUnit::NanoliterPerSecond => value * T::from_f64(1e12),
             VolumeFlowUnit::MicroliterPerSecond => value * T::from_f64(1e9),
@@ -1246,7 +1246,7 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerMinute => value * T::from_f64(6000.0),
             VolumeFlowUnit::HectoliterPerMinute => value * T::from_f64(600.0),
             VolumeFlowUnit::KiloliterPerMinute => value * T::from_f64(60.0),
-            VolumeFlowUnit::MegaliterPerMinute => value / T::from_f64(16.666666666666668),
+            VolumeFlowUnit::MegaliterPerMinute => T::div_ratio(value, 50.0, 3.0),
             VolumeFlowUnit::LiterPerHour => value * T::from_f64(3600000.0),
             VolumeFlowUnit::NanoliterPerHour => value * T::from_f64(3.6e15),
             VolumeFlowUnit::MicroliterPerHour => value * T::from_f64(3.6e12),
@@ -1256,7 +1256,7 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerHour => value * T::from_f64(360000.0),
             VolumeFlowUnit::HectoliterPerHour => value * T::from_f64(36000.0),
             VolumeFlowUnit::KiloliterPerHour => value * T::from_f64(3600.0),
-            VolumeFlowUnit::MegaliterPerHour => value / T::from_f64(0.2777777777777778),
+            VolumeFlowUnit::MegaliterPerHour => T::div_ratio(value, 5.0, 18.0),
             VolumeFlowUnit::LiterPerDay => value * T::from_f64(8.64e7),
             VolumeFlowUnit::NanoliterPerDay => value * T::from_f64(8.64e16),
             VolumeFlowUnit::MicroliterPerDay => value * T::from_f64(8.64e13),
@@ -1266,19 +1266,19 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
             VolumeFlowUnit::DecaliterPerDay => value * T::from_f64(8640000.0),
             VolumeFlowUnit::HectoliterPerDay => value * T::from_f64(864000.0),
             VolumeFlowUnit::KiloliterPerDay => value * T::from_f64(86400.0),
-            VolumeFlowUnit::MegaliterPerDay => value / T::from_f64(0.011574074074074073),
+            VolumeFlowUnit::MegaliterPerDay => T::div_ratio(value, 5.0, 432.0),
             VolumeFlowUnit::UsGallonPerSecond => value / T::from_f64(0.003785411784),
             VolumeFlowUnit::UsGallonPerMinute => value / T::from_f64(6.30901964e-5),
-            VolumeFlowUnit::UkGallonPerDay => value / T::from_f64(5.2616782407407406e-8),
-            VolumeFlowUnit::MegaukGallonPerDay => value / T::from_f64(0.05261678240740741),
-            VolumeFlowUnit::UkGallonPerHour => value / T::from_f64(1.2628027777777779e-6),
-            VolumeFlowUnit::UkGallonPerMinute => value / T::from_f64(7.576816666666667e-5),
+            VolumeFlowUnit::UkGallonPerDay => T::div_ratio(value, 454609.0, 8640000000000.0),
+            VolumeFlowUnit::MegaukGallonPerDay => T::div_ratio(value, 454609.0, 8640000.0),
+            VolumeFlowUnit::UkGallonPerHour => T::div_ratio(value, 454609.0, 360000000000.0),
+            VolumeFlowUnit::UkGallonPerMinute => T::div_ratio(value, 454609.0, 6000000000.0),
             VolumeFlowUnit::UkGallonPerSecond => value / T::from_f64(0.00454609),
             VolumeFlowUnit::MegaukGallonPerSecond => value / T::from_f64(4546.09),
             VolumeFlowUnit::KilousGallonPerMinute => value / T::from_f64(0.0630901964),
-            VolumeFlowUnit::UsGallonPerHour => value / T::from_f64(1.0515032733333334e-6),
+            VolumeFlowUnit::UsGallonPerHour => T::div_ratio(value, 157725491.0, 150000000000000.0),
             VolumeFlowUnit::CubicDecimeterPerMinute => value * T::from_f64(60000.0),
-            VolumeFlowUnit::OilBarrelPerDay => value / T::from_f64(1.8401307283333333e-6),
+            VolumeFlowUnit::OilBarrelPerDay => T::div_ratio(value, 1104078437.0, 600000000000000.0),
             VolumeFlowUnit::OilBarrelPerMinute => value / T::from_f64(0.0026497882488),
             VolumeFlowUnit::OilBarrelPerHour => value / T::from_f64(4.416313748e-5),
             VolumeFlowUnit::OilBarrelPerSecond => value / T::from_f64(0.158987294928),
@@ -1293,7 +1293,7 @@ impl<T: Float> crate::UnitOf<VolumeFlow<T>> for VolumeFlowUnit {
     }
 }
 
-impl<T: Float> VolumeFlow<T> {
+impl<T: crate::Float> VolumeFlow<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m³/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -1301,7 +1301,9 @@ impl<T: Float> VolumeFlow<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowUnit> {
         self.in_unit(VolumeFlowUnit::CubicMeterPerSecond)
     }
+}
 
+impl<T: Number> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `m³/s`.
     #[inline]
     pub fn from_cubic_meters_per_second(value: T) -> Self {
@@ -1389,13 +1391,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `in³/min`.
     #[inline]
     pub fn from_cubic_inches_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(2.7311773333333333e-7))
+        Self(T::mul_ratio(value, 2048383.0, 7500000000000.0))
     }
 
     /// The value in `in³/min`.
     #[inline]
     pub fn as_cubic_inches_per_minute(self) -> T {
-        self.0 / T::from_f64(2.7311773333333333e-7)
+        T::div_ratio(self.0, 2048383.0, 7500000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `ft³/h`.
@@ -1461,37 +1463,37 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `MGD`.
     #[inline]
     pub fn from_million_us_gallons_per_day(value: T) -> Self {
-        Self(value * T::from_f64(0.04381263638888889))
+        Self(T::mul_ratio(value, 157725491.0, 3600000000.0))
     }
 
     /// The value in `MGD`.
     #[inline]
     pub fn as_million_us_gallons_per_day(self) -> T {
-        self.0 / T::from_f64(0.04381263638888889)
+        T::div_ratio(self.0, 157725491.0, 3600000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `gpd`.
     #[inline]
     pub fn from_us_gallons_per_day(value: T) -> Self {
-        Self(value * T::from_f64(4.3812636388888886e-8))
+        Self(T::mul_ratio(value, 157725491.0, 3600000000000000.0))
     }
 
     /// The value in `gpd`.
     #[inline]
     pub fn as_us_gallons_per_day(self) -> T {
-        self.0 / T::from_f64(4.3812636388888886e-8)
+        T::div_ratio(self.0, 157725491.0, 3600000000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `Mgpd`.
     #[inline]
     pub fn from_megaus_gallons_per_day(value: T) -> Self {
-        Self(value * T::from_f64(0.04381263638888889))
+        Self(T::mul_ratio(value, 157725491.0, 3600000000.0))
     }
 
     /// The value in `Mgpd`.
     #[inline]
     pub fn as_megaus_gallons_per_day(self) -> T {
-        self.0 / T::from_f64(0.04381263638888889)
+        T::div_ratio(self.0, 157725491.0, 3600000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `l/s`.
@@ -1725,13 +1727,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `Ml/min`.
     #[inline]
     pub fn from_megaliters_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(16.666666666666668))
+        Self(T::mul_ratio(value, 50.0, 3.0))
     }
 
     /// The value in `Ml/min`.
     #[inline]
     pub fn as_megaliters_per_minute(self) -> T {
-        self.0 / T::from_f64(16.666666666666668)
+        T::div_ratio(self.0, 50.0, 3.0)
     }
 
     /// A [`VolumeFlow`] from a value in `l/h`.
@@ -1845,13 +1847,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `Ml/h`.
     #[inline]
     pub fn from_megaliters_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `Ml/h`.
     #[inline]
     pub fn as_megaliters_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`VolumeFlow`] from a value in `l/day`.
@@ -1965,13 +1967,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `Ml/day`.
     #[inline]
     pub fn from_megaliters_per_day(value: T) -> Self {
-        Self(value * T::from_f64(0.011574074074074073))
+        Self(T::mul_ratio(value, 5.0, 432.0))
     }
 
     /// The value in `Ml/day`.
     #[inline]
     pub fn as_megaliters_per_day(self) -> T {
-        self.0 / T::from_f64(0.011574074074074073)
+        T::div_ratio(self.0, 5.0, 432.0)
     }
 
     /// A [`VolumeFlow`] from a value in `gal (U.S.)/s`.
@@ -2001,49 +2003,49 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `gal (U. K.)/d`.
     #[inline]
     pub fn from_uk_gallons_per_day(value: T) -> Self {
-        Self(value * T::from_f64(5.2616782407407406e-8))
+        Self(T::mul_ratio(value, 454609.0, 8640000000000.0))
     }
 
     /// The value in `gal (U. K.)/d`.
     #[inline]
     pub fn as_uk_gallons_per_day(self) -> T {
-        self.0 / T::from_f64(5.2616782407407406e-8)
+        T::div_ratio(self.0, 454609.0, 8640000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `Mgal (U. K.)/d`.
     #[inline]
     pub fn from_megauk_gallons_per_day(value: T) -> Self {
-        Self(value * T::from_f64(0.05261678240740741))
+        Self(T::mul_ratio(value, 454609.0, 8640000.0))
     }
 
     /// The value in `Mgal (U. K.)/d`.
     #[inline]
     pub fn as_megauk_gallons_per_day(self) -> T {
-        self.0 / T::from_f64(0.05261678240740741)
+        T::div_ratio(self.0, 454609.0, 8640000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `gal (imp.)/h`.
     #[inline]
     pub fn from_uk_gallons_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(1.2628027777777779e-6))
+        Self(T::mul_ratio(value, 454609.0, 360000000000.0))
     }
 
     /// The value in `gal (imp.)/h`.
     #[inline]
     pub fn as_uk_gallons_per_hour(self) -> T {
-        self.0 / T::from_f64(1.2628027777777779e-6)
+        T::div_ratio(self.0, 454609.0, 360000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `gal (imp.)/min`.
     #[inline]
     pub fn from_uk_gallons_per_minute(value: T) -> Self {
-        Self(value * T::from_f64(7.576816666666667e-5))
+        Self(T::mul_ratio(value, 454609.0, 6000000000.0))
     }
 
     /// The value in `gal (imp.)/min`.
     #[inline]
     pub fn as_uk_gallons_per_minute(self) -> T {
-        self.0 / T::from_f64(7.576816666666667e-5)
+        T::div_ratio(self.0, 454609.0, 6000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `gal (imp.)/s`.
@@ -2085,13 +2087,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `gal (U.S.)/h`.
     #[inline]
     pub fn from_us_gallons_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(1.0515032733333334e-6))
+        Self(T::mul_ratio(value, 157725491.0, 150000000000000.0))
     }
 
     /// The value in `gal (U.S.)/h`.
     #[inline]
     pub fn as_us_gallons_per_hour(self) -> T {
-        self.0 / T::from_f64(1.0515032733333334e-6)
+        T::div_ratio(self.0, 157725491.0, 150000000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `dm³/min`.
@@ -2109,13 +2111,13 @@ impl<T: Float> VolumeFlow<T> {
     /// A [`VolumeFlow`] from a value in `bbl/d`.
     #[inline]
     pub fn from_oil_barrels_per_day(value: T) -> Self {
-        Self(value * T::from_f64(1.8401307283333333e-6))
+        Self(T::mul_ratio(value, 1104078437.0, 600000000000000.0))
     }
 
     /// The value in `bbl/d`.
     #[inline]
     pub fn as_oil_barrels_per_day(self) -> T {
-        self.0 / T::from_f64(1.8401307283333333e-6)
+        T::div_ratio(self.0, 1104078437.0, 600000000000000.0)
     }
 
     /// A [`VolumeFlow`] from a value in `bbl/min`.

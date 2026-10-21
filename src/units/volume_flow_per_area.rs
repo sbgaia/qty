@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -120,7 +120,7 @@ impl core::str::FromStr for VolumeFlowPerAreaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
+impl<T: Number> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -138,7 +138,7 @@ impl<T: Float> crate::UnitOf<VolumeFlowPerArea<T>> for VolumeFlowPerAreaUnit {
     }
 }
 
-impl<T: Float> VolumeFlowPerArea<T> {
+impl<T: crate::Float> VolumeFlowPerArea<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m³/(s·m²)`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -146,7 +146,9 @@ impl<T: Float> VolumeFlowPerArea<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeFlowPerAreaUnit> {
         self.in_unit(VolumeFlowPerAreaUnit::CubicMeterPerSecondPerSquareMeter)
     }
+}
 
+impl<T: Number> VolumeFlowPerArea<T> {
     /// A [`VolumeFlowPerArea`] from a value in `m³/(s·m²)`.
     #[inline]
     pub fn from_cubic_meters_per_second_per_square_meter(value: T) -> Self {

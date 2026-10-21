@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 use crate::TemperatureDelta;
 
 /// A temperature is a numerical measure of hot or cold. Its measurement is by detection of heat radiation or particle velocity or kinetic energy, or by the bulk behavior of a thermometric material. It may be calibrated in any of various temperature scales, Celsius, Fahrenheit, Kelvin, etc. The fundamental physical definition of temperature is provided by thermodynamics.
@@ -246,7 +246,7 @@ impl core::str::FromStr for TemperatureUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Temperature<T>> for TemperatureUnit {
+impl<T: Number> crate::UnitOf<Temperature<T>> for TemperatureUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -257,15 +257,13 @@ impl<T: Float> crate::UnitOf<Temperature<T>> for TemperatureUnit {
             }
             TemperatureUnit::DegreeDelisle => value / T::from_f64(-1.5) + T::from_f64(373.15),
             TemperatureUnit::DegreeFahrenheit => {
-                value * T::from_f64(0.5555555555555556) + T::from_f64(255.37222222222223)
+                T::mul_ratio(value, 5.0, 9.0) + T::from_ratio(45967.0, 180.0)
             }
-            TemperatureUnit::DegreeNewton => {
-                value * T::from_f64(3.0303030303030303) + T::from_f64(273.15)
-            }
-            TemperatureUnit::DegreeRankine => value * T::from_f64(0.5555555555555556),
+            TemperatureUnit::DegreeNewton => T::mul_ratio(value, 100.0, 33.0) + T::from_f64(273.15),
+            TemperatureUnit::DegreeRankine => T::mul_ratio(value, 5.0, 9.0),
             TemperatureUnit::DegreeReaumur => value * T::from_f64(1.25) + T::from_f64(273.15),
             TemperatureUnit::DegreeRoemer => {
-                value * T::from_f64(1.9047619047619047) + T::from_f64(258.8642857142857)
+                T::mul_ratio(value, 40.0, 21.0) + T::from_ratio(36241.0, 140.0)
             }
             TemperatureUnit::SolarTemperature => value * T::from_f64(5778.0),
         }
@@ -281,22 +279,20 @@ impl<T: Float> crate::UnitOf<Temperature<T>> for TemperatureUnit {
             }
             TemperatureUnit::DegreeDelisle => (value - T::from_f64(373.15)) * T::from_f64(-1.5),
             TemperatureUnit::DegreeFahrenheit => {
-                (value - T::from_f64(255.37222222222223)) / T::from_f64(0.5555555555555556)
+                T::div_ratio(value - T::from_ratio(45967.0, 180.0), 5.0, 9.0)
             }
-            TemperatureUnit::DegreeNewton => {
-                (value - T::from_f64(273.15)) / T::from_f64(3.0303030303030303)
-            }
-            TemperatureUnit::DegreeRankine => value / T::from_f64(0.5555555555555556),
+            TemperatureUnit::DegreeNewton => T::div_ratio(value - T::from_f64(273.15), 100.0, 33.0),
+            TemperatureUnit::DegreeRankine => T::div_ratio(value, 5.0, 9.0),
             TemperatureUnit::DegreeReaumur => (value - T::from_f64(273.15)) / T::from_f64(1.25),
             TemperatureUnit::DegreeRoemer => {
-                (value - T::from_f64(258.8642857142857)) / T::from_f64(1.9047619047619047)
+                T::div_ratio(value - T::from_ratio(36241.0, 140.0), 40.0, 21.0)
             }
             TemperatureUnit::SolarTemperature => value / T::from_f64(5778.0),
         }
     }
 }
 
-impl<T: Float> Temperature<T> {
+impl<T: crate::Float> Temperature<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`K`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -304,7 +300,9 @@ impl<T: Float> Temperature<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, TemperatureUnit> {
         self.in_unit(TemperatureUnit::Kelvin)
     }
+}
 
+impl<T: Number> Temperature<T> {
     /// A [`Temperature`] from a value in `K`.
     #[inline]
     pub fn from_kelvins(value: T) -> Self {
@@ -356,37 +354,37 @@ impl<T: Float> Temperature<T> {
     /// A [`Temperature`] from a value in `°F`.
     #[inline]
     pub fn from_degrees_fahrenheit(value: T) -> Self {
-        Self(value * T::from_f64(0.5555555555555556) + T::from_f64(255.37222222222223))
+        Self(T::mul_ratio(value, 5.0, 9.0) + T::from_ratio(45967.0, 180.0))
     }
 
     /// The value in `°F`.
     #[inline]
     pub fn as_degrees_fahrenheit(self) -> T {
-        (self.0 - T::from_f64(255.37222222222223)) / T::from_f64(0.5555555555555556)
+        T::div_ratio(self.0 - T::from_ratio(45967.0, 180.0), 5.0, 9.0)
     }
 
     /// A [`Temperature`] from a value in `°N`.
     #[inline]
     pub fn from_degrees_newton(value: T) -> Self {
-        Self(value * T::from_f64(3.0303030303030303) + T::from_f64(273.15))
+        Self(T::mul_ratio(value, 100.0, 33.0) + T::from_f64(273.15))
     }
 
     /// The value in `°N`.
     #[inline]
     pub fn as_degrees_newton(self) -> T {
-        (self.0 - T::from_f64(273.15)) / T::from_f64(3.0303030303030303)
+        T::div_ratio(self.0 - T::from_f64(273.15), 100.0, 33.0)
     }
 
     /// A [`Temperature`] from a value in `°R`.
     #[inline]
     pub fn from_degrees_rankine(value: T) -> Self {
-        Self(value * T::from_f64(0.5555555555555556))
+        Self(T::mul_ratio(value, 5.0, 9.0))
     }
 
     /// The value in `°R`.
     #[inline]
     pub fn as_degrees_rankine(self) -> T {
-        self.0 / T::from_f64(0.5555555555555556)
+        T::div_ratio(self.0, 5.0, 9.0)
     }
 
     /// A [`Temperature`] from a value in `°Ré`.
@@ -404,13 +402,13 @@ impl<T: Float> Temperature<T> {
     /// A [`Temperature`] from a value in `°Rø`.
     #[inline]
     pub fn from_degrees_roemer(value: T) -> Self {
-        Self(value * T::from_f64(1.9047619047619047) + T::from_f64(258.8642857142857))
+        Self(T::mul_ratio(value, 40.0, 21.0) + T::from_ratio(36241.0, 140.0))
     }
 
     /// The value in `°Rø`.
     #[inline]
     pub fn as_degrees_roemer(self) -> T {
-        (self.0 - T::from_f64(258.8642857142857)) / T::from_f64(1.9047619047619047)
+        T::div_ratio(self.0 - T::from_ratio(36241.0, 140.0), 40.0, 21.0)
     }
 
     /// A [`Temperature`] from a value in `T⊙`.

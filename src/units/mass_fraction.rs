@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The mass fraction is defined as the mass of a constituent divided by the total mass of the mixture.
 ///
@@ -407,7 +407,7 @@ impl core::str::FromStr for MassFractionUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
+impl<T: Number> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -469,7 +469,7 @@ impl<T: Float> crate::UnitOf<MassFraction<T>> for MassFractionUnit {
     }
 }
 
-impl<T: Float> MassFraction<T> {
+impl<T: crate::Float> MassFraction<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (``).
     /// Zero, NaN and infinities stay in the base unit.
@@ -477,7 +477,9 @@ impl<T: Float> MassFraction<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, MassFractionUnit> {
         self.in_unit(MassFractionUnit::DecimalFraction)
     }
+}
 
+impl<T: Number> MassFraction<T> {
     /// A [`MassFraction`] from a value in [`MassFractionUnit::DecimalFraction`].
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {

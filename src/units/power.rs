@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In physics, power is the rate of doing work. It is equivalent to an amount of energy consumed per unit time.
 ///
@@ -448,7 +448,7 @@ impl core::str::FromStr for PowerUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Power<T>> for PowerUnit {
+impl<T: Number> crate::UnitOf<Power<T>> for PowerUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -470,14 +470,20 @@ impl<T: Float> crate::UnitOf<Power<T>> for PowerUnit {
             PowerUnit::ElectricalHorsepower => value * T::from_f64(746.0),
             PowerUnit::BoilerHorsepower => value * T::from_f64(9812.5),
             PowerUnit::HydraulicHorsepower => value * T::from_f64(745.6998715822702),
-            PowerUnit::BritishThermalUnitPerHour => value * T::from_f64(0.2930710701722222),
-            PowerUnit::KilobritishThermalUnitPerHour => value * T::from_f64(293.0710701722222),
-            PowerUnit::MegabritishThermalUnitPerHour => value * T::from_f64(293071.0701722222),
+            PowerUnit::BritishThermalUnitPerHour => {
+                T::mul_ratio(value, 52752792631.0, 180000000000.0)
+            }
+            PowerUnit::KilobritishThermalUnitPerHour => {
+                T::mul_ratio(value, 52752792631.0, 180000000.0)
+            }
+            PowerUnit::MegabritishThermalUnitPerHour => {
+                T::mul_ratio(value, 52752792631.0, 180000.0)
+            }
             PowerUnit::JoulePerHour => value / T::from_f64(3600.0),
             PowerUnit::MillijoulePerHour => value / T::from_f64(3600000.0),
-            PowerUnit::KilojoulePerHour => value * T::from_f64(0.2777777777777778),
-            PowerUnit::MegajoulePerHour => value * T::from_f64(277.77777777777777),
-            PowerUnit::GigajoulePerHour => value * T::from_f64(277777.77777777775),
+            PowerUnit::KilojoulePerHour => T::mul_ratio(value, 5.0, 18.0),
+            PowerUnit::MegajoulePerHour => T::mul_ratio(value, 2500.0, 9.0),
+            PowerUnit::GigajoulePerHour => T::mul_ratio(value, 2500000.0, 9.0),
             PowerUnit::TonOfRefrigeration => value * T::from_f64(3516.853),
         }
     }
@@ -503,20 +509,26 @@ impl<T: Float> crate::UnitOf<Power<T>> for PowerUnit {
             PowerUnit::ElectricalHorsepower => value / T::from_f64(746.0),
             PowerUnit::BoilerHorsepower => value / T::from_f64(9812.5),
             PowerUnit::HydraulicHorsepower => value / T::from_f64(745.6998715822702),
-            PowerUnit::BritishThermalUnitPerHour => value / T::from_f64(0.2930710701722222),
-            PowerUnit::KilobritishThermalUnitPerHour => value / T::from_f64(293.0710701722222),
-            PowerUnit::MegabritishThermalUnitPerHour => value / T::from_f64(293071.0701722222),
+            PowerUnit::BritishThermalUnitPerHour => {
+                T::div_ratio(value, 52752792631.0, 180000000000.0)
+            }
+            PowerUnit::KilobritishThermalUnitPerHour => {
+                T::div_ratio(value, 52752792631.0, 180000000.0)
+            }
+            PowerUnit::MegabritishThermalUnitPerHour => {
+                T::div_ratio(value, 52752792631.0, 180000.0)
+            }
             PowerUnit::JoulePerHour => value * T::from_f64(3600.0),
             PowerUnit::MillijoulePerHour => value * T::from_f64(3600000.0),
-            PowerUnit::KilojoulePerHour => value / T::from_f64(0.2777777777777778),
-            PowerUnit::MegajoulePerHour => value / T::from_f64(277.77777777777777),
-            PowerUnit::GigajoulePerHour => value / T::from_f64(277777.77777777775),
+            PowerUnit::KilojoulePerHour => T::div_ratio(value, 5.0, 18.0),
+            PowerUnit::MegajoulePerHour => T::div_ratio(value, 2500.0, 9.0),
+            PowerUnit::GigajoulePerHour => T::div_ratio(value, 2500000.0, 9.0),
             PowerUnit::TonOfRefrigeration => value / T::from_f64(3516.853),
         }
     }
 }
 
-impl<T: Float> Power<T> {
+impl<T: crate::Float> Power<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`fW`, `pW`, `nW`, `µW`, `mW`, `W`, `kW`, `MW`, `GW`, `TW`, `PW`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -548,7 +560,9 @@ impl<T: Float> Power<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Power<T> {
     /// A [`Power`] from a value in `W`.
     #[inline]
     pub fn from_watts(value: T) -> Self {
@@ -768,37 +782,37 @@ impl<T: Float> Power<T> {
     /// A [`Power`] from a value in `Btu/h`.
     #[inline]
     pub fn from_british_thermal_units_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2930710701722222))
+        Self(T::mul_ratio(value, 52752792631.0, 180000000000.0))
     }
 
     /// The value in `Btu/h`.
     #[inline]
     pub fn as_british_thermal_units_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2930710701722222)
+        T::div_ratio(self.0, 52752792631.0, 180000000000.0)
     }
 
     /// A [`Power`] from a value in `kBtu/h`.
     #[inline]
     pub fn from_kilobritish_thermal_units_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(293.0710701722222))
+        Self(T::mul_ratio(value, 52752792631.0, 180000000.0))
     }
 
     /// The value in `kBtu/h`.
     #[inline]
     pub fn as_kilobritish_thermal_units_per_hour(self) -> T {
-        self.0 / T::from_f64(293.0710701722222)
+        T::div_ratio(self.0, 52752792631.0, 180000000.0)
     }
 
     /// A [`Power`] from a value in `MBtu/h`.
     #[inline]
     pub fn from_megabritish_thermal_units_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(293071.0701722222))
+        Self(T::mul_ratio(value, 52752792631.0, 180000.0))
     }
 
     /// The value in `MBtu/h`.
     #[inline]
     pub fn as_megabritish_thermal_units_per_hour(self) -> T {
-        self.0 / T::from_f64(293071.0701722222)
+        T::div_ratio(self.0, 52752792631.0, 180000.0)
     }
 
     /// A [`Power`] from a value in `J/h`.
@@ -828,37 +842,37 @@ impl<T: Float> Power<T> {
     /// A [`Power`] from a value in `kJ/h`.
     #[inline]
     pub fn from_kilojoules_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `kJ/h`.
     #[inline]
     pub fn as_kilojoules_per_hour(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`Power`] from a value in `MJ/h`.
     #[inline]
     pub fn from_megajoules_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(277.77777777777777))
+        Self(T::mul_ratio(value, 2500.0, 9.0))
     }
 
     /// The value in `MJ/h`.
     #[inline]
     pub fn as_megajoules_per_hour(self) -> T {
-        self.0 / T::from_f64(277.77777777777777)
+        T::div_ratio(self.0, 2500.0, 9.0)
     }
 
     /// A [`Power`] from a value in `GJ/h`.
     #[inline]
     pub fn from_gigajoules_per_hour(value: T) -> Self {
-        Self(value * T::from_f64(277777.77777777775))
+        Self(T::mul_ratio(value, 2500000.0, 9.0))
     }
 
     /// The value in `GJ/h`.
     #[inline]
     pub fn as_gigajoules_per_hour(self) -> T {
-        self.0 / T::from_f64(277777.77777777775)
+        T::div_ratio(self.0, 2500000.0, 9.0)
     }
 
     /// A [`Power`] from a value in `TR`.

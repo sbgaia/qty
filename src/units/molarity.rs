@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Molar concentration, also called molarity, amount concentration or substance concentration, is a measure of the concentration of a solute in a solution, or of any chemical species, in terms of amount of substance in a given volume.
 ///
@@ -240,7 +240,7 @@ impl core::str::FromStr for MolarityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
+impl<T: Number> crate::UnitOf<Molarity<T>> for MolarityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -254,7 +254,9 @@ impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
             MolarityUnit::MillimolePerLiter => value,
             MolarityUnit::CentimolePerLiter => value * T::from_f64(10.0),
             MolarityUnit::DecimolePerLiter => value * T::from_f64(100.0),
-            MolarityUnit::PoundMolePerCubicFoot => value * T::from_f64(16018.46337396014),
+            MolarityUnit::PoundMolePerCubicFoot => {
+                T::mul_ratio(value, 3543690390625.0, 221225364.0)
+            }
         }
     }
 
@@ -271,12 +273,14 @@ impl<T: Float> crate::UnitOf<Molarity<T>> for MolarityUnit {
             MolarityUnit::MillimolePerLiter => value,
             MolarityUnit::CentimolePerLiter => value / T::from_f64(10.0),
             MolarityUnit::DecimolePerLiter => value / T::from_f64(100.0),
-            MolarityUnit::PoundMolePerCubicFoot => value / T::from_f64(16018.46337396014),
+            MolarityUnit::PoundMolePerCubicFoot => {
+                T::div_ratio(value, 3543690390625.0, 221225364.0)
+            }
         }
     }
 }
 
-impl<T: Float> Molarity<T> {
+impl<T: crate::Float> Molarity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mol/m³`, `kmol/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -299,7 +303,9 @@ impl<T: Float> Molarity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Molarity<T> {
     /// A [`Molarity`] from a value in `mol/m³`.
     #[inline]
     pub fn from_moles_per_cubic_meter(value: T) -> Self {
@@ -423,13 +429,13 @@ impl<T: Float> Molarity<T> {
     /// A [`Molarity`] from a value in `lbmol/ft³`.
     #[inline]
     pub fn from_pound_moles_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(16018.46337396014))
+        Self(T::mul_ratio(value, 3543690390625.0, 221225364.0))
     }
 
     /// The value in `lbmol/ft³`.
     #[inline]
     pub fn as_pound_moles_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(16018.46337396014)
+        T::div_ratio(self.0, 3543690390625.0, 221225364.0)
     }
 }
 

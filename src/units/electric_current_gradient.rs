@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electromagnetism, the current gradient describes how the current changes in time.
 ///
@@ -188,7 +188,7 @@ impl core::str::FromStr for ElectricCurrentGradientUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGradientUnit {
+impl<T: Number> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGradientUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -216,7 +216,7 @@ impl<T: Float> crate::UnitOf<ElectricCurrentGradient<T>> for ElectricCurrentGrad
     }
 }
 
-impl<T: Float> ElectricCurrentGradient<T> {
+impl<T: crate::Float> ElectricCurrentGradient<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mA/s`, `A/s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -239,7 +239,9 @@ impl<T: Float> ElectricCurrentGradient<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricCurrentGradient<T> {
     /// A [`ElectricCurrentGradient`] from a value in `A/s`.
     #[inline]
     pub fn from_amperes_per_second(value: T) -> Self {

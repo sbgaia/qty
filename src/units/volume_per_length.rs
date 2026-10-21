@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Volume, typically of fluid, that a container can hold within a unit of length.
 ///
@@ -214,7 +214,7 @@ impl core::str::FromStr for VolumePerLengthUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
+impl<T: Number> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -225,9 +225,9 @@ impl<T: Float> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
             VolumePerLengthUnit::OilBarrelPerFoot => value * T::from_f64(0.52161186),
             VolumePerLengthUnit::CubicYardPerFoot => value * T::from_f64(2.50838208),
             VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value * T::from_f64(2.50837706323584),
-            VolumePerLengthUnit::UsGallonPerMile => value * T::from_f64(2.3521458333333333e-6),
+            VolumePerLengthUnit::UsGallonPerMile => T::mul_ratio(value, 112903.0, 48000000000.0),
             VolumePerLengthUnit::ImperialGallonPerMile => {
-                value * T::from_f64(2.8248093633182216e-6)
+                T::mul_ratio(value, 454609.0, 160934400000.0)
             }
         }
     }
@@ -242,15 +242,15 @@ impl<T: Float> crate::UnitOf<VolumePerLength<T>> for VolumePerLengthUnit {
             VolumePerLengthUnit::OilBarrelPerFoot => value / T::from_f64(0.52161186),
             VolumePerLengthUnit::CubicYardPerFoot => value / T::from_f64(2.50838208),
             VolumePerLengthUnit::CubicYardPerUsSurveyFoot => value / T::from_f64(2.50837706323584),
-            VolumePerLengthUnit::UsGallonPerMile => value / T::from_f64(2.3521458333333333e-6),
+            VolumePerLengthUnit::UsGallonPerMile => T::div_ratio(value, 112903.0, 48000000000.0),
             VolumePerLengthUnit::ImperialGallonPerMile => {
-                value / T::from_f64(2.8248093633182216e-6)
+                T::div_ratio(value, 454609.0, 160934400000.0)
             }
         }
     }
 }
 
-impl<T: Float> VolumePerLength<T> {
+impl<T: crate::Float> VolumePerLength<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m³/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -258,7 +258,9 @@ impl<T: Float> VolumePerLength<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VolumePerLengthUnit> {
         self.in_unit(VolumePerLengthUnit::CubicMeterPerMeter)
     }
+}
 
+impl<T: Number> VolumePerLength<T> {
     /// A [`VolumePerLength`] from a value in `m³/m`.
     #[inline]
     pub fn from_cubic_meters_per_meter(value: T) -> Self {
@@ -346,25 +348,25 @@ impl<T: Float> VolumePerLength<T> {
     /// A [`VolumePerLength`] from a value in `gal (U.S.)/mi`.
     #[inline]
     pub fn from_us_gallons_per_mile(value: T) -> Self {
-        Self(value * T::from_f64(2.3521458333333333e-6))
+        Self(T::mul_ratio(value, 112903.0, 48000000000.0))
     }
 
     /// The value in `gal (U.S.)/mi`.
     #[inline]
     pub fn as_us_gallons_per_mile(self) -> T {
-        self.0 / T::from_f64(2.3521458333333333e-6)
+        T::div_ratio(self.0, 112903.0, 48000000000.0)
     }
 
     /// A [`VolumePerLength`] from a value in `gal (imp.)/mi`.
     #[inline]
     pub fn from_imperial_gallons_per_mile(value: T) -> Self {
-        Self(value * T::from_f64(2.8248093633182216e-6))
+        Self(T::mul_ratio(value, 454609.0, 160934400000.0))
     }
 
     /// The value in `gal (imp.)/mi`.
     #[inline]
     pub fn as_imperial_gallons_per_mile(self) -> T {
-        self.0 / T::from_f64(2.8248093633182216e-6)
+        T::div_ratio(self.0, 454609.0, 160934400000.0)
     }
 }
 

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electrical resistivity (also known as resistivity, specific electrical resistance, or volume resistivity) is a fundamental property that quantifies how strongly a given material opposes the flow of electric current.
 ///
@@ -278,7 +278,7 @@ impl core::str::FromStr for ElectricResistivityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUnit {
+impl<T: Number> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -320,7 +320,7 @@ impl<T: Float> crate::UnitOf<ElectricResistivity<T>> for ElectricResistivityUnit
     }
 }
 
-impl<T: Float> ElectricResistivity<T> {
+impl<T: crate::Float> ElectricResistivity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pΩ·m`, `nΩ·m`, `µΩ·m`, `mΩ·m`, `Ω·m`, `kΩ·m`, `MΩ·m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -348,7 +348,9 @@ impl<T: Float> ElectricResistivity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricResistivity<T> {
     /// A [`ElectricResistivity`] from a value in `Ω·m`.
     #[inline]
     pub fn from_ohm_meters(value: T) -> Self {

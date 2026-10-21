@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Area is a quantity that expresses the extent of a two-dimensional surface or shape, or planar lamina, in the plane. Area can be understood as the amount of material with a given thickness that would be necessary to fashion a model of the shape, or the amount of paint necessary to cover the surface with a single coat.\[1\] It is the two-dimensional analog of the length of a curve (a one-dimensional concept) or the volume of a solid (a three-dimensional concept).
 ///
@@ -282,7 +282,7 @@ impl core::str::FromStr for AreaUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Area<T>> for AreaUnit {
+impl<T: Number> crate::UnitOf<Area<T>> for AreaUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -295,7 +295,7 @@ impl<T: Float> crate::UnitOf<Area<T>> for AreaUnit {
             AreaUnit::SquareMile => value * T::from_f64(2589988.110336),
             AreaUnit::SquareYard => value * T::from_f64(0.83612736),
             AreaUnit::SquareFoot => value * T::from_f64(0.09290304),
-            AreaUnit::UsSurveySquareFoot => value * T::from_f64(0.09290341161327484),
+            AreaUnit::UsSurveySquareFoot => T::mul_ratio(value, 1440000.0, 15499969.0),
             AreaUnit::SquareInch => value * T::from_f64(0.00064516),
             AreaUnit::Acre => value * T::from_f64(4046.8564224),
             AreaUnit::Hectare => value * T::from_f64(10000.0),
@@ -315,7 +315,7 @@ impl<T: Float> crate::UnitOf<Area<T>> for AreaUnit {
             AreaUnit::SquareMile => value / T::from_f64(2589988.110336),
             AreaUnit::SquareYard => value / T::from_f64(0.83612736),
             AreaUnit::SquareFoot => value / T::from_f64(0.09290304),
-            AreaUnit::UsSurveySquareFoot => value / T::from_f64(0.09290341161327484),
+            AreaUnit::UsSurveySquareFoot => T::div_ratio(value, 1440000.0, 15499969.0),
             AreaUnit::SquareInch => value / T::from_f64(0.00064516),
             AreaUnit::Acre => value / T::from_f64(4046.8564224),
             AreaUnit::Hectare => value / T::from_f64(10000.0),
@@ -324,7 +324,7 @@ impl<T: Float> crate::UnitOf<Area<T>> for AreaUnit {
     }
 }
 
-impl<T: Float> Area<T> {
+impl<T: crate::Float> Area<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -332,7 +332,9 @@ impl<T: Float> Area<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, AreaUnit> {
         self.in_unit(AreaUnit::SquareMeter)
     }
+}
 
+impl<T: Number> Area<T> {
     /// A [`Area`] from a value in `km²`.
     #[inline]
     pub fn from_square_kilometers(value: T) -> Self {
@@ -444,13 +446,13 @@ impl<T: Float> Area<T> {
     /// A [`Area`] from a value in `ft² (US)`.
     #[inline]
     pub fn from_us_survey_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.09290341161327484))
+        Self(T::mul_ratio(value, 1440000.0, 15499969.0))
     }
 
     /// The value in `ft² (US)`.
     #[inline]
     pub fn as_us_survey_square_feet(self) -> T {
-        self.0 / T::from_f64(0.09290341161327484)
+        T::div_ratio(self.0, 1440000.0, 15499969.0)
     }
 
     /// A [`Area`] from a value in `in²`.

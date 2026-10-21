@@ -38,18 +38,32 @@ extern crate self as qty;
 use core::fmt;
 use core::ops::{Add, Div, Mul, Neg, Sub};
 
-/// Floating-point storage types that support unit conversions.
+/// Storage types that support unit conversions: the arithmetic operators and
+/// a way to turn a conversion constant into a value.
 ///
-/// Implemented for `f32` and `f64`. Implement it for your own type, such as
-/// a half-precision float or a dual number for automatic differentiation, to
-/// get unit conversions on it.
+/// Implemented for `f32`, `f64` and `Uncertain`, and with features for
+/// `Complex<f32>` and `Complex<f64>` (`num-complex`), `Decimal`
+/// (`rust_decimal`) and `Ratio<i32>`, `Ratio<i64>` and `Ratio<i128>`
+/// (`num-rational`). Conversions, `new`, the `from_`/`as_` methods,
+/// relations with a factor and [`formula!`] need only this; ordering,
+/// rounding, parsing and automatic units need [`Float`].
 ///
-/// Arithmetic operators don't need this trait. They work for any storage
-/// type that has the operator, integers included.
-pub trait Float:
-    ToFloat
-    + fmt::Debug
-    + PartialOrd
+/// ```rust
+/// # #[cfg(feature = "num-rational")] {
+/// use num_rational::Ratio;
+/// use qty::*;
+///
+/// let third = Length::from_feet(Ratio::<i64>::new(1, 3));
+/// assert_eq!(third.as_meters(), Ratio::new(127, 1250));
+/// assert_eq!((third + third + third).as_feet(), Ratio::from_integer(1));
+/// # }
+/// ```
+///
+/// To store quantities in your own type, implement
+/// [`from_f64`](Number::from_f64). The other methods have defaults that
+/// evaluate fractions such as 5/9 exactly when the type can.
+pub trait Number:
+    Copy
     + Add<Output = Self>
     + Sub<Output = Self>
     + Mul<Output = Self>
@@ -57,9 +71,46 @@ pub trait Float:
     + Neg<Output = Self>
 {
     /// Converts a conversion constant to `Self`, rounding to nearest. It's
-    /// always called with a literal, so this happens at compile time.
+    /// always called with a literal, so for `f32` and `f64` this happens at
+    /// compile time.
     fn from_f64(value: f64) -> Self;
 
+    /// `numerator / denominator`, for conversion constants such as 5/9 that
+    /// have no exact decimal. Both are whole numbers. Exact types such as
+    /// rationals get the exact fraction from the default; floats override
+    /// it to round once.
+    #[inline]
+    fn from_ratio(numerator: f64, denominator: f64) -> Self {
+        Self::from_f64(numerator) / Self::from_f64(denominator)
+    }
+
+    /// `self · numerator / denominator`, for conversions such as km/h to m/s
+    /// (5/18). Floats override it to multiply once by the rounded fraction.
+    #[inline]
+    fn mul_ratio(self, numerator: f64, denominator: f64) -> Self {
+        self * Self::from_f64(numerator) / Self::from_f64(denominator)
+    }
+
+    /// `self / (numerator / denominator)`, the inverse of
+    /// [`mul_ratio`](Number::mul_ratio). Floats override it to divide once
+    /// by the rounded fraction.
+    #[inline]
+    fn div_ratio(self, numerator: f64, denominator: f64) -> Self {
+        self * Self::from_f64(denominator) / Self::from_f64(numerator)
+    }
+}
+
+/// Floating-point storage types: a [`Number`] with an order, as needed for
+/// comparisons, `abs`, `min` and `max`, rounding, parsing and automatic
+/// units.
+///
+/// Implemented for `f32`, `f64` and `Uncertain`. Implement it, and
+/// [`Number`], for your own type, such as a half-precision float or a dual
+/// number for automatic differentiation, to get all of the above on it.
+///
+/// Arithmetic operators don't need this trait. They work for any storage
+/// type that has the operator, integers included.
+pub trait Float: Number + ToFloat + fmt::Debug + PartialOrd {
     /// Absolute value.
     fn abs(self) -> Self;
 
@@ -94,11 +145,31 @@ pub trait Float:
 
 macro_rules! impl_float {
     ($($t:ident: $sign:expr),*) => {$(
-        impl Float for $t {
+        impl Number for $t {
             #[inline(always)]
             fn from_f64(value: f64) -> Self {
                 value as $t
             }
+
+            // The fraction rounds to the same `f64` as its literal would,
+            // and folds to a constant.
+            #[inline(always)]
+            fn from_ratio(numerator: f64, denominator: f64) -> Self {
+                (numerator / denominator) as $t
+            }
+
+            #[inline(always)]
+            fn mul_ratio(self, numerator: f64, denominator: f64) -> Self {
+                self * Self::from_ratio(numerator, denominator)
+            }
+
+            #[inline(always)]
+            fn div_ratio(self, numerator: f64, denominator: f64) -> Self {
+                self / Self::from_ratio(numerator, denominator)
+            }
+        }
+
+        impl Float for $t {
             #[inline(always)]
             fn abs(self) -> Self {
                 // Clear the sign bit. (`abs` itself is only in `core` since
@@ -236,12 +307,12 @@ pub trait Quantity: Copy {
     /// ```
     fn new(value: Self::Value, unit: Self::Unit) -> Self
     where
-        Self::Value: Float;
+        Self::Value: Number;
 
     /// The value expressed in `unit`, like the inherent `convert_to`.
     fn convert_to(self, unit: Self::Unit) -> Self::Value
     where
-        Self::Value: Float;
+        Self::Value: Number;
 }
 
 /// Implemented by every unit enum (`LengthUnit`, `MassUnit`, …).
@@ -715,14 +786,14 @@ macro_rules! __qty_common {
             #[inline]
             fn new(value: T, unit: $U) -> Self
             where
-                T: $crate::Float,
+                T: $crate::Number,
             {
                 $Q::new(value, unit)
             }
             #[inline]
             fn convert_to(self, unit: $U) -> T
             where
-                T: $crate::Float,
+                T: $crate::Number,
             {
                 $Q::convert_to(self, unit)
             }
@@ -809,7 +880,7 @@ macro_rules! __qty_common {
             }
         }
 
-        impl<T: $crate::Float> $Q<T> {
+        impl<T: $crate::Number> $Q<T> {
             /// The value in `unit`, for display: `length.in_unit(LengthUnit::Kilometer)`
             /// prints as `1.5 km`.
             #[inline]
@@ -833,7 +904,9 @@ macro_rules! __qty_common {
             pub fn convert_to<V: $crate::UnitOf<Self>>(self, unit: V) -> T {
                 unit.value_from_base(self.0)
             }
+        }
 
+        impl<T: $crate::Float> $Q<T> {
             /// Like `auto_unit`, but choosing from `units`: the largest one
             /// that doesn't exceed the value, or the smallest one if they all
             /// do. For example `length.auto_unit_in(LengthUnit::IMPERIAL)`.
@@ -1207,7 +1280,7 @@ macro_rules! cross_mul {
         }
     };
     ($A:ident * $B:ident = $C:ident; $k:literal) => {
-        impl<T: $crate::Float> core::ops::Mul<$B<T>> for $A<T> {
+        impl<T: $crate::Number> core::ops::Mul<$B<T>> for $A<T> {
             type Output = $C<T>;
             #[inline(always)]
             fn mul(self, rhs: $B<T>) -> $C<T> {
@@ -1229,7 +1302,7 @@ macro_rules! cross_div {
         }
     };
     ($A:ident / $B:ident = $C:ident; $k:literal) => {
-        impl<T: $crate::Float> core::ops::Div<$B<T>> for $A<T> {
+        impl<T: $crate::Number> core::ops::Div<$B<T>> for $A<T> {
             type Output = $C<T>;
             #[inline(always)]
             #[allow(clippy::suspicious_arithmetic_impl)]
@@ -1284,7 +1357,7 @@ macro_rules! cross_sqrt {
 /// `cross_cbrt!`; `$k` as there.
 macro_rules! cross_power {
     ($A:ident => $C:ident, $method:ident, $what:literal, |$v:ident| $value:expr) => {
-        impl<T: $crate::Float> $A<T> {
+        impl<T: $crate::Number + Copy> $A<T> {
             #[doc = concat!("The ", $what, " of this quantity: a [`", stringify!($C), "`].")]
             #[inline]
             pub fn $method(self) -> $C<T> {
@@ -1486,6 +1559,8 @@ pub use vector::{Vector2, Vector3};
 mod time;
 
 mod interop;
+
+mod storage;
 
 mod format;
 pub use format::{Significant, SignificantFloat};

@@ -59,7 +59,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       # The library and its tests; codegen and benches are dev tools that may
       # need a newer toolchain.
-      - run: cargo test -p qty --all-features --lib --test design --test cross_type --test formula
+      - run: cargo test -p qty --all-features --lib --test design --test cross_type --test formula --test storage
 
   no-std:
     name: no_std (thumbv7em-none-eabihf)
@@ -71,7 +71,7 @@ jobs:
           targets: thumbv7em-none-eabihf
       - uses: Swatinem/rust-cache@v2
       # No `std` on this target: the math functions come from `libm`.
-      - run: cargo build -p qty --no-default-features --features serde,libm,approx,bytemuck,defmt,dynamic --target thumbv7em-none-eabihf
+      - run: cargo build -p qty --no-default-features --features serde,libm,approx,bytemuck,defmt,dynamic,num-complex,rust_decimal,num-rational --target thumbv7em-none-eabihf
       - run: cargo build -p qty --no-default-features --target thumbv7em-none-eabihf
 
   feature-groups:

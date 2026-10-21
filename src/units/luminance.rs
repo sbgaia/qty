@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`LuminanceUnit::CandelaPerSquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
@@ -224,7 +224,7 @@ impl core::str::FromStr for LuminanceUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
+impl<T: Number> crate::UnitOf<Luminance<T>> for LuminanceUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -235,8 +235,8 @@ impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
             LuminanceUnit::CenticandelaPerSquareMeter => value / T::from_f64(100.0),
             LuminanceUnit::DecicandelaPerSquareMeter => value / T::from_f64(10.0),
             LuminanceUnit::KilocandelaPerSquareMeter => value * T::from_f64(1000.0),
-            LuminanceUnit::CandelaPerSquareFoot => value * T::from_f64(10.763910416709722),
-            LuminanceUnit::CandelaPerSquareInch => value * T::from_f64(1550.0031000062),
+            LuminanceUnit::CandelaPerSquareFoot => T::mul_ratio(value, 1562500.0, 145161.0),
+            LuminanceUnit::CandelaPerSquareInch => T::mul_ratio(value, 25000000.0, 16129.0),
             LuminanceUnit::Nit => value,
         }
     }
@@ -251,14 +251,14 @@ impl<T: Float> crate::UnitOf<Luminance<T>> for LuminanceUnit {
             LuminanceUnit::CenticandelaPerSquareMeter => value * T::from_f64(100.0),
             LuminanceUnit::DecicandelaPerSquareMeter => value * T::from_f64(10.0),
             LuminanceUnit::KilocandelaPerSquareMeter => value / T::from_f64(1000.0),
-            LuminanceUnit::CandelaPerSquareFoot => value / T::from_f64(10.763910416709722),
-            LuminanceUnit::CandelaPerSquareInch => value / T::from_f64(1550.0031000062),
+            LuminanceUnit::CandelaPerSquareFoot => T::div_ratio(value, 1562500.0, 145161.0),
+            LuminanceUnit::CandelaPerSquareInch => T::div_ratio(value, 25000000.0, 16129.0),
             LuminanceUnit::Nit => value,
         }
     }
 }
 
-impl<T: Float> Luminance<T> {
+impl<T: crate::Float> Luminance<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nCd/m²`, `µCd/m²`, `mCd/m²`, `Cd/m²`, `kCd/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -284,7 +284,9 @@ impl<T: Float> Luminance<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Luminance<T> {
     /// A [`Luminance`] from a value in `Cd/m²`.
     #[inline]
     pub fn from_candelas_per_square_meter(value: T) -> Self {
@@ -372,25 +374,25 @@ impl<T: Float> Luminance<T> {
     /// A [`Luminance`] from a value in `Cd/ft²`.
     #[inline]
     pub fn from_candelas_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(10.763910416709722))
+        Self(T::mul_ratio(value, 1562500.0, 145161.0))
     }
 
     /// The value in `Cd/ft²`.
     #[inline]
     pub fn as_candelas_per_square_foot(self) -> T {
-        self.0 / T::from_f64(10.763910416709722)
+        T::div_ratio(self.0, 1562500.0, 145161.0)
     }
 
     /// A [`Luminance`] from a value in `Cd/in²`.
     #[inline]
     pub fn from_candelas_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(1550.0031000062))
+        Self(T::mul_ratio(value, 25000000.0, 16129.0))
     }
 
     /// The value in `Cd/in²`.
     #[inline]
     pub fn as_candelas_per_square_inch(self) -> T {
-        self.0 / T::from_f64(1550.0031000062)
+        T::div_ratio(self.0, 25000000.0, 16129.0)
     }
 
     /// A [`Luminance`] from a value in `nt`.

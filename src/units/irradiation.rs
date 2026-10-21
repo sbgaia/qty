@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Irradiation is the process by which an object is exposed to radiation. The exposure can originate from various sources, including natural sources.
 ///
@@ -213,7 +213,7 @@ impl core::str::FromStr for IrradiationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
+impl<T: Number> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -224,8 +224,8 @@ impl<T: Float> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
             IrradiationUnit::JoulePerSquareMillimeter => value * T::from_f64(1000000.0),
             IrradiationUnit::WattHourPerSquareMeter => value * T::from_f64(3600.0),
             IrradiationUnit::KilowattHourPerSquareMeter => value * T::from_f64(3600000.0),
-            IrradiationUnit::BtuPerSquareFoot => value * T::from_f64(11356.526682226975),
-            IrradiationUnit::KilobtuPerSquareFoot => value * T::from_f64(1.1356526682226976e7),
+            IrradiationUnit::BtuPerSquareFoot => T::mul_ratio(value, 52752792631.0, 4645152.0),
+            IrradiationUnit::KilobtuPerSquareFoot => T::mul_ratio(value, 6594099078875.0, 580644.0),
         }
     }
 
@@ -239,13 +239,13 @@ impl<T: Float> crate::UnitOf<Irradiation<T>> for IrradiationUnit {
             IrradiationUnit::JoulePerSquareMillimeter => value / T::from_f64(1000000.0),
             IrradiationUnit::WattHourPerSquareMeter => value / T::from_f64(3600.0),
             IrradiationUnit::KilowattHourPerSquareMeter => value / T::from_f64(3600000.0),
-            IrradiationUnit::BtuPerSquareFoot => value / T::from_f64(11356.526682226975),
-            IrradiationUnit::KilobtuPerSquareFoot => value / T::from_f64(1.1356526682226976e7),
+            IrradiationUnit::BtuPerSquareFoot => T::div_ratio(value, 52752792631.0, 4645152.0),
+            IrradiationUnit::KilobtuPerSquareFoot => T::div_ratio(value, 6594099078875.0, 580644.0),
         }
     }
 }
 
-impl<T: Float> Irradiation<T> {
+impl<T: crate::Float> Irradiation<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`J/m²`, `kJ/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -268,7 +268,9 @@ impl<T: Float> Irradiation<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Irradiation<T> {
     /// A [`Irradiation`] from a value in `J/m²`.
     #[inline]
     pub fn from_joules_per_square_meter(value: T) -> Self {
@@ -356,25 +358,25 @@ impl<T: Float> Irradiation<T> {
     /// A [`Irradiation`] from a value in `Btu/ft²`.
     #[inline]
     pub fn from_btus_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(11356.526682226975))
+        Self(T::mul_ratio(value, 52752792631.0, 4645152.0))
     }
 
     /// The value in `Btu/ft²`.
     #[inline]
     pub fn as_btus_per_square_foot(self) -> T {
-        self.0 / T::from_f64(11356.526682226975)
+        T::div_ratio(self.0, 52752792631.0, 4645152.0)
     }
 
     /// A [`Irradiation`] from a value in `kBtu/ft²`.
     #[inline]
     pub fn from_kilobtus_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(1.1356526682226976e7))
+        Self(T::mul_ratio(value, 6594099078875.0, 580644.0))
     }
 
     /// The value in `kBtu/ft²`.
     #[inline]
     pub fn as_kilobtus_per_square_foot(self) -> T {
-        self.0 / T::from_f64(1.1356526682226976e7)
+        T::div_ratio(self.0, 6594099078875.0, 580644.0)
     }
 }
 

@@ -7,8 +7,8 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
 use crate::Level;
+use crate::Number;
 
 /// The strength of a signal expressed in decibels (dB) relative to one volt RMS.
 ///
@@ -169,7 +169,7 @@ impl core::str::FromStr for AmplitudeRatioUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
+impl<T: Number> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -191,7 +191,7 @@ impl<T: Float> crate::UnitOf<AmplitudeRatio<T>> for AmplitudeRatioUnit {
     }
 }
 
-impl<T: Float> AmplitudeRatio<T> {
+impl<T: crate::Float> AmplitudeRatio<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`dBV`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -199,7 +199,9 @@ impl<T: Float> AmplitudeRatio<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, AmplitudeRatioUnit> {
         self.in_unit(AmplitudeRatioUnit::DecibelVolt)
     }
+}
 
+impl<T: Number> AmplitudeRatio<T> {
     /// A [`AmplitudeRatio`] from a value in `dBV`.
     #[inline]
     pub fn from_decibel_volts(value: T) -> Self {

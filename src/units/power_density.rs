@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The amount of power in a volume.
 ///
@@ -694,7 +694,7 @@ impl core::str::FromStr for PowerDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
+impl<T: Number> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -709,26 +709,36 @@ impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
             PowerDensityUnit::MegawattPerCubicMeter => value * T::from_f64(1000000.0),
             PowerDensityUnit::GigawattPerCubicMeter => value * T::from_f64(1e9),
             PowerDensityUnit::TerawattPerCubicMeter => value * T::from_f64(1e12),
-            PowerDensityUnit::WattPerCubicInch => value * T::from_f64(61023.74409473228),
+            PowerDensityUnit::WattPerCubicInch => T::mul_ratio(value, 125000000000.0, 2048383.0),
             PowerDensityUnit::PicowattPerCubicInch => value / T::from_f64(1.6387064e7),
-            PowerDensityUnit::NanowattPerCubicInch => value * T::from_f64(6.1023744094732284e-5),
-            PowerDensityUnit::MicrowattPerCubicInch => value * T::from_f64(0.06102374409473228),
-            PowerDensityUnit::MilliwattPerCubicInch => value * T::from_f64(61.02374409473229),
-            PowerDensityUnit::DeciwattPerCubicInch => value * T::from_f64(6102.374409473228),
-            PowerDensityUnit::DecawattPerCubicInch => value * T::from_f64(610237.4409473229),
-            PowerDensityUnit::KilowattPerCubicInch => value * T::from_f64(6.1023744094732285e7),
+            PowerDensityUnit::NanowattPerCubicInch => T::mul_ratio(value, 125.0, 2048383.0),
+            PowerDensityUnit::MicrowattPerCubicInch => T::mul_ratio(value, 125000.0, 2048383.0),
+            PowerDensityUnit::MilliwattPerCubicInch => T::mul_ratio(value, 125000000.0, 2048383.0),
+            PowerDensityUnit::DeciwattPerCubicInch => T::mul_ratio(value, 12500000000.0, 2048383.0),
+            PowerDensityUnit::DecawattPerCubicInch => {
+                T::mul_ratio(value, 1250000000000.0, 2048383.0)
+            }
+            PowerDensityUnit::KilowattPerCubicInch => {
+                T::mul_ratio(value, 125000000000000.0, 2048383.0)
+            }
             PowerDensityUnit::MegawattPerCubicInch => value * T::from_f64(6.1023744094732285e10),
             PowerDensityUnit::GigawattPerCubicInch => value * T::from_f64(6.102374409473228e13),
             PowerDensityUnit::TerawattPerCubicInch => value * T::from_f64(6.102374409473228e16),
-            PowerDensityUnit::WattPerCubicFoot => value * T::from_f64(35.31466672148859),
+            PowerDensityUnit::WattPerCubicFoot => T::mul_ratio(value, 1953125000.0, 55306341.0),
             PowerDensityUnit::PicowattPerCubicFoot => value / T::from_f64(2.8316846592e10),
-            PowerDensityUnit::NanowattPerCubicFoot => value * T::from_f64(3.531466672148859e-8),
-            PowerDensityUnit::MicrowattPerCubicFoot => value * T::from_f64(3.531466672148859e-5),
-            PowerDensityUnit::MilliwattPerCubicFoot => value * T::from_f64(0.03531466672148859),
-            PowerDensityUnit::DeciwattPerCubicFoot => value * T::from_f64(3.5314666721488592),
-            PowerDensityUnit::DecawattPerCubicFoot => value * T::from_f64(353.1466672148859),
-            PowerDensityUnit::KilowattPerCubicFoot => value * T::from_f64(35314.66672148859),
-            PowerDensityUnit::MegawattPerCubicFoot => value * T::from_f64(3.531466672148859e7),
+            PowerDensityUnit::NanowattPerCubicFoot => T::mul_ratio(value, 125.0, 3539605824.0),
+            PowerDensityUnit::MicrowattPerCubicFoot => T::mul_ratio(value, 15625.0, 442450728.0),
+            PowerDensityUnit::MilliwattPerCubicFoot => T::mul_ratio(value, 1953125.0, 55306341.0),
+            PowerDensityUnit::DeciwattPerCubicFoot => T::mul_ratio(value, 195312500.0, 55306341.0),
+            PowerDensityUnit::DecawattPerCubicFoot => {
+                T::mul_ratio(value, 19531250000.0, 55306341.0)
+            }
+            PowerDensityUnit::KilowattPerCubicFoot => {
+                T::mul_ratio(value, 1953125000000.0, 55306341.0)
+            }
+            PowerDensityUnit::MegawattPerCubicFoot => {
+                T::mul_ratio(value, 1953125000000000.0, 55306341.0)
+            }
             PowerDensityUnit::GigawattPerCubicFoot => value * T::from_f64(3.5314666721488594e10),
             PowerDensityUnit::TerawattPerCubicFoot => value * T::from_f64(3.531466672148859e13),
             PowerDensityUnit::WattPerLiter => value * T::from_f64(1000.0),
@@ -742,8 +752,12 @@ impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
             PowerDensityUnit::MegawattPerLiter => value * T::from_f64(1e9),
             PowerDensityUnit::GigawattPerLiter => value * T::from_f64(1e12),
             PowerDensityUnit::TerawattPerLiter => value * T::from_f64(1e15),
-            PowerDensityUnit::BtuPerSecondCubicInch => value * T::from_f64(6.438345835593246e7),
-            PowerDensityUnit::BtuPerSecondCubicFoot => value * T::from_f64(37258.94580783128),
+            PowerDensityUnit::BtuPerSecondCubicInch => {
+                T::mul_ratio(value, 131881981577500.0, 2048383.0)
+            }
+            PowerDensityUnit::BtuPerSecondCubicFoot => {
+                T::mul_ratio(value, 32970495394375.0, 884901456.0)
+            }
         }
     }
 
@@ -761,26 +775,36 @@ impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
             PowerDensityUnit::MegawattPerCubicMeter => value / T::from_f64(1000000.0),
             PowerDensityUnit::GigawattPerCubicMeter => value / T::from_f64(1e9),
             PowerDensityUnit::TerawattPerCubicMeter => value / T::from_f64(1e12),
-            PowerDensityUnit::WattPerCubicInch => value / T::from_f64(61023.74409473228),
+            PowerDensityUnit::WattPerCubicInch => T::div_ratio(value, 125000000000.0, 2048383.0),
             PowerDensityUnit::PicowattPerCubicInch => value * T::from_f64(1.6387064e7),
-            PowerDensityUnit::NanowattPerCubicInch => value / T::from_f64(6.1023744094732284e-5),
-            PowerDensityUnit::MicrowattPerCubicInch => value / T::from_f64(0.06102374409473228),
-            PowerDensityUnit::MilliwattPerCubicInch => value / T::from_f64(61.02374409473229),
-            PowerDensityUnit::DeciwattPerCubicInch => value / T::from_f64(6102.374409473228),
-            PowerDensityUnit::DecawattPerCubicInch => value / T::from_f64(610237.4409473229),
-            PowerDensityUnit::KilowattPerCubicInch => value / T::from_f64(6.1023744094732285e7),
+            PowerDensityUnit::NanowattPerCubicInch => T::div_ratio(value, 125.0, 2048383.0),
+            PowerDensityUnit::MicrowattPerCubicInch => T::div_ratio(value, 125000.0, 2048383.0),
+            PowerDensityUnit::MilliwattPerCubicInch => T::div_ratio(value, 125000000.0, 2048383.0),
+            PowerDensityUnit::DeciwattPerCubicInch => T::div_ratio(value, 12500000000.0, 2048383.0),
+            PowerDensityUnit::DecawattPerCubicInch => {
+                T::div_ratio(value, 1250000000000.0, 2048383.0)
+            }
+            PowerDensityUnit::KilowattPerCubicInch => {
+                T::div_ratio(value, 125000000000000.0, 2048383.0)
+            }
             PowerDensityUnit::MegawattPerCubicInch => value / T::from_f64(6.1023744094732285e10),
             PowerDensityUnit::GigawattPerCubicInch => value / T::from_f64(6.102374409473228e13),
             PowerDensityUnit::TerawattPerCubicInch => value / T::from_f64(6.102374409473228e16),
-            PowerDensityUnit::WattPerCubicFoot => value / T::from_f64(35.31466672148859),
+            PowerDensityUnit::WattPerCubicFoot => T::div_ratio(value, 1953125000.0, 55306341.0),
             PowerDensityUnit::PicowattPerCubicFoot => value * T::from_f64(2.8316846592e10),
-            PowerDensityUnit::NanowattPerCubicFoot => value / T::from_f64(3.531466672148859e-8),
-            PowerDensityUnit::MicrowattPerCubicFoot => value / T::from_f64(3.531466672148859e-5),
-            PowerDensityUnit::MilliwattPerCubicFoot => value / T::from_f64(0.03531466672148859),
-            PowerDensityUnit::DeciwattPerCubicFoot => value / T::from_f64(3.5314666721488592),
-            PowerDensityUnit::DecawattPerCubicFoot => value / T::from_f64(353.1466672148859),
-            PowerDensityUnit::KilowattPerCubicFoot => value / T::from_f64(35314.66672148859),
-            PowerDensityUnit::MegawattPerCubicFoot => value / T::from_f64(3.531466672148859e7),
+            PowerDensityUnit::NanowattPerCubicFoot => T::div_ratio(value, 125.0, 3539605824.0),
+            PowerDensityUnit::MicrowattPerCubicFoot => T::div_ratio(value, 15625.0, 442450728.0),
+            PowerDensityUnit::MilliwattPerCubicFoot => T::div_ratio(value, 1953125.0, 55306341.0),
+            PowerDensityUnit::DeciwattPerCubicFoot => T::div_ratio(value, 195312500.0, 55306341.0),
+            PowerDensityUnit::DecawattPerCubicFoot => {
+                T::div_ratio(value, 19531250000.0, 55306341.0)
+            }
+            PowerDensityUnit::KilowattPerCubicFoot => {
+                T::div_ratio(value, 1953125000000.0, 55306341.0)
+            }
+            PowerDensityUnit::MegawattPerCubicFoot => {
+                T::div_ratio(value, 1953125000000000.0, 55306341.0)
+            }
             PowerDensityUnit::GigawattPerCubicFoot => value / T::from_f64(3.5314666721488594e10),
             PowerDensityUnit::TerawattPerCubicFoot => value / T::from_f64(3.531466672148859e13),
             PowerDensityUnit::WattPerLiter => value / T::from_f64(1000.0),
@@ -794,13 +818,17 @@ impl<T: Float> crate::UnitOf<PowerDensity<T>> for PowerDensityUnit {
             PowerDensityUnit::MegawattPerLiter => value / T::from_f64(1e9),
             PowerDensityUnit::GigawattPerLiter => value / T::from_f64(1e12),
             PowerDensityUnit::TerawattPerLiter => value / T::from_f64(1e15),
-            PowerDensityUnit::BtuPerSecondCubicInch => value / T::from_f64(6.438345835593246e7),
-            PowerDensityUnit::BtuPerSecondCubicFoot => value / T::from_f64(37258.94580783128),
+            PowerDensityUnit::BtuPerSecondCubicInch => {
+                T::div_ratio(value, 131881981577500.0, 2048383.0)
+            }
+            PowerDensityUnit::BtuPerSecondCubicFoot => {
+                T::div_ratio(value, 32970495394375.0, 884901456.0)
+            }
         }
     }
 }
 
-impl<T: Float> PowerDensity<T> {
+impl<T: crate::Float> PowerDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pW/m³`, `nW/m³`, `µW/m³`, `mW/m³`, `W/m³`, `kW/m³`, `MW/m³`, `GW/m³`, `TW/m³`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -830,7 +858,9 @@ impl<T: Float> PowerDensity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `W/m³`.
     #[inline]
     pub fn from_watts_per_cubic_meter(value: T) -> Self {
@@ -966,13 +996,13 @@ impl<T: Float> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `W/in³`.
     #[inline]
     pub fn from_watts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(61023.74409473228))
+        Self(T::mul_ratio(value, 125000000000.0, 2048383.0))
     }
 
     /// The value in `W/in³`.
     #[inline]
     pub fn as_watts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(61023.74409473228)
+        T::div_ratio(self.0, 125000000000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `pW/in³`.
@@ -990,73 +1020,73 @@ impl<T: Float> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `nW/in³`.
     #[inline]
     pub fn from_nanowatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(6.1023744094732284e-5))
+        Self(T::mul_ratio(value, 125.0, 2048383.0))
     }
 
     /// The value in `nW/in³`.
     #[inline]
     pub fn as_nanowatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(6.1023744094732284e-5)
+        T::div_ratio(self.0, 125.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `µW/in³`.
     #[inline]
     pub fn from_microwatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(0.06102374409473228))
+        Self(T::mul_ratio(value, 125000.0, 2048383.0))
     }
 
     /// The value in `µW/in³`.
     #[inline]
     pub fn as_microwatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(0.06102374409473228)
+        T::div_ratio(self.0, 125000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `mW/in³`.
     #[inline]
     pub fn from_milliwatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(61.02374409473229))
+        Self(T::mul_ratio(value, 125000000.0, 2048383.0))
     }
 
     /// The value in `mW/in³`.
     #[inline]
     pub fn as_milliwatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(61.02374409473229)
+        T::div_ratio(self.0, 125000000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `dW/in³`.
     #[inline]
     pub fn from_deciwatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(6102.374409473228))
+        Self(T::mul_ratio(value, 12500000000.0, 2048383.0))
     }
 
     /// The value in `dW/in³`.
     #[inline]
     pub fn as_deciwatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(6102.374409473228)
+        T::div_ratio(self.0, 12500000000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `daW/in³`.
     #[inline]
     pub fn from_decawatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(610237.4409473229))
+        Self(T::mul_ratio(value, 1250000000000.0, 2048383.0))
     }
 
     /// The value in `daW/in³`.
     #[inline]
     pub fn as_decawatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(610237.4409473229)
+        T::div_ratio(self.0, 1250000000000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `kW/in³`.
     #[inline]
     pub fn from_kilowatts_per_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(6.1023744094732285e7))
+        Self(T::mul_ratio(value, 125000000000000.0, 2048383.0))
     }
 
     /// The value in `kW/in³`.
     #[inline]
     pub fn as_kilowatts_per_cubic_inch(self) -> T {
-        self.0 / T::from_f64(6.1023744094732285e7)
+        T::div_ratio(self.0, 125000000000000.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `MW/in³`.
@@ -1098,13 +1128,13 @@ impl<T: Float> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `W/ft³`.
     #[inline]
     pub fn from_watts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(35.31466672148859))
+        Self(T::mul_ratio(value, 1953125000.0, 55306341.0))
     }
 
     /// The value in `W/ft³`.
     #[inline]
     pub fn as_watts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(35.31466672148859)
+        T::div_ratio(self.0, 1953125000.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `pW/ft³`.
@@ -1122,85 +1152,85 @@ impl<T: Float> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `nW/ft³`.
     #[inline]
     pub fn from_nanowatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.531466672148859e-8))
+        Self(T::mul_ratio(value, 125.0, 3539605824.0))
     }
 
     /// The value in `nW/ft³`.
     #[inline]
     pub fn as_nanowatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(3.531466672148859e-8)
+        T::div_ratio(self.0, 125.0, 3539605824.0)
     }
 
     /// A [`PowerDensity`] from a value in `µW/ft³`.
     #[inline]
     pub fn from_microwatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.531466672148859e-5))
+        Self(T::mul_ratio(value, 15625.0, 442450728.0))
     }
 
     /// The value in `µW/ft³`.
     #[inline]
     pub fn as_microwatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(3.531466672148859e-5)
+        T::div_ratio(self.0, 15625.0, 442450728.0)
     }
 
     /// A [`PowerDensity`] from a value in `mW/ft³`.
     #[inline]
     pub fn from_milliwatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.03531466672148859))
+        Self(T::mul_ratio(value, 1953125.0, 55306341.0))
     }
 
     /// The value in `mW/ft³`.
     #[inline]
     pub fn as_milliwatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(0.03531466672148859)
+        T::div_ratio(self.0, 1953125.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `dW/ft³`.
     #[inline]
     pub fn from_deciwatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.5314666721488592))
+        Self(T::mul_ratio(value, 195312500.0, 55306341.0))
     }
 
     /// The value in `dW/ft³`.
     #[inline]
     pub fn as_deciwatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(3.5314666721488592)
+        T::div_ratio(self.0, 195312500.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `daW/ft³`.
     #[inline]
     pub fn from_decawatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(353.1466672148859))
+        Self(T::mul_ratio(value, 19531250000.0, 55306341.0))
     }
 
     /// The value in `daW/ft³`.
     #[inline]
     pub fn as_decawatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(353.1466672148859)
+        T::div_ratio(self.0, 19531250000.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `kW/ft³`.
     #[inline]
     pub fn from_kilowatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(35314.66672148859))
+        Self(T::mul_ratio(value, 1953125000000.0, 55306341.0))
     }
 
     /// The value in `kW/ft³`.
     #[inline]
     pub fn as_kilowatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(35314.66672148859)
+        T::div_ratio(self.0, 1953125000000.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `MW/ft³`.
     #[inline]
     pub fn from_megawatts_per_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.531466672148859e7))
+        Self(T::mul_ratio(value, 1953125000000000.0, 55306341.0))
     }
 
     /// The value in `MW/ft³`.
     #[inline]
     pub fn as_megawatts_per_cubic_foot(self) -> T {
-        self.0 / T::from_f64(3.531466672148859e7)
+        T::div_ratio(self.0, 1953125000000000.0, 55306341.0)
     }
 
     /// A [`PowerDensity`] from a value in `GW/ft³`.
@@ -1362,25 +1392,25 @@ impl<T: Float> PowerDensity<T> {
     /// A [`PowerDensity`] from a value in `BTU/(s·in³)`.
     #[inline]
     pub fn from_btus_per_second_cubic_inch(value: T) -> Self {
-        Self(value * T::from_f64(6.438345835593246e7))
+        Self(T::mul_ratio(value, 131881981577500.0, 2048383.0))
     }
 
     /// The value in `BTU/(s·in³)`.
     #[inline]
     pub fn as_btus_per_second_cubic_inch(self) -> T {
-        self.0 / T::from_f64(6.438345835593246e7)
+        T::div_ratio(self.0, 131881981577500.0, 2048383.0)
     }
 
     /// A [`PowerDensity`] from a value in `BTU/(s·ft³)`.
     #[inline]
     pub fn from_btus_per_second_cubic_foot(value: T) -> Self {
-        Self(value * T::from_f64(37258.94580783128))
+        Self(T::mul_ratio(value, 32970495394375.0, 884901456.0))
     }
 
     /// The value in `BTU/(s·ft³)`.
     #[inline]
     pub fn as_btus_per_second_cubic_foot(self) -> T {
-        self.0 / T::from_f64(37258.94580783128)
+        T::div_ratio(self.0, 32970495394375.0, 884901456.0)
     }
 }
 

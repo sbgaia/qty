@@ -371,7 +371,7 @@ impl<D: Dimension, V> Expr<D, V> {
     }
 }
 
-impl<D, V: crate::Float> Expr<D, V> {
+impl<D, V: crate::Number + Copy> Expr<D, V> {
     /// `self` to the power `N`, which can be negative. The exponents of
     /// the dimensions are multiplied by `N`.
     ///
@@ -572,16 +572,26 @@ impl<D, V> Operand<V> for Expr<D, V> {
     }
 }
 
+/// A plain number, such as the `0.5` in `0.5 * m * v * v`, in a formula of
+/// any storage type: `f64`, `f32`, or a complex, decimal or rational.
+impl<V: crate::Number> Operand<V> for f64 {
+    type Dim = Dims;
+    #[inline(always)]
+    fn into_expr(self) -> Expr<Dims, V> {
+        Expr::new(V::from_f64(self))
+    }
+}
+
+impl Operand<f32> for f32 {
+    type Dim = Dims;
+    #[inline(always)]
+    fn into_expr(self) -> Expr<Dims, f32> {
+        Expr::new(self)
+    }
+}
+
 macro_rules! number_operand {
     ($($t:ty),*) => {$(
-        impl Operand<$t> for $t {
-            type Dim = Dims;
-            #[inline(always)]
-            fn into_expr(self) -> Expr<Dims, $t> {
-                Expr::new(self)
-            }
-        }
-
         impl FromFormula<Dims, $t> for $t {
             #[inline(always)]
             fn from_formula(expr: Expr<Dims, $t>) -> $t {
@@ -695,7 +705,7 @@ macro_rules! __qty_formula {
             ::core::concat!(::core::stringify!($Q), ": formulas need a base unit in SI"),
         );
 
-        impl<V: $crate::Float> $crate::formula::Operand<V> for $Q<V> {
+        impl<V: $crate::Number> $crate::formula::Operand<V> for $Q<V> {
             type Dim = $crate::formula::Dims<
                 { $U::QUANTITY.dimensions.length },
                 { $U::QUANTITY.dimensions.mass },
@@ -713,12 +723,12 @@ macro_rules! __qty_formula {
             }
         }
 
-        impl<V: $crate::Float> $crate::formula::SiFactor for $Q<V> {
+        impl<V: $crate::Number> $crate::formula::SiFactor for $Q<V> {
             const FACTOR: f64 =
                 $crate::formula::base_unit_factor(<$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR);
         }
 
-        impl<V: $crate::Float>
+        impl<V: $crate::Number>
             $crate::formula::FromFormula<<$Q<V> as $crate::formula::Operand<V>>::Dim, V> for $Q<V>
         {
             #[inline(always)]
@@ -731,7 +741,7 @@ macro_rules! __qty_formula {
             }
         }
 
-        impl<V: $crate::Float>
+        impl<V: $crate::Number>
             ::core::convert::From<
                 $crate::formula::Expr<<$Q<V> as $crate::formula::Operand<V>>::Dim, V>,
             > for $Q<V>
@@ -744,7 +754,7 @@ macro_rules! __qty_formula {
             }
         }
 
-        impl<D, V: $crate::Float> ::core::ops::Mul<$crate::formula::Expr<D, V>> for $Q<V>
+        impl<D, V: $crate::Number> ::core::ops::Mul<$crate::formula::Expr<D, V>> for $Q<V>
         where
             <$Q<V> as $crate::formula::Operand<V>>::Dim: $crate::formula::MulDim<D>,
         {
@@ -760,7 +770,7 @@ macro_rules! __qty_formula {
             }
         }
 
-        impl<D, V: $crate::Float> ::core::ops::Div<$crate::formula::Expr<D, V>> for $Q<V>
+        impl<D, V: $crate::Number> ::core::ops::Div<$crate::formula::Expr<D, V>> for $Q<V>
         where
             <$Q<V> as $crate::formula::Operand<V>>::Dim: $crate::formula::DivDim<D>,
         {

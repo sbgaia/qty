@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A magnetic field is a force field that is created by moving electric charges (electric currents) and magnetic dipoles, and exerts a force on other nearby moving charges and magnetic dipoles.
 ///
@@ -173,7 +173,7 @@ impl core::str::FromStr for MagneticFieldUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
+impl<T: Number> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -199,7 +199,7 @@ impl<T: Float> crate::UnitOf<MagneticField<T>> for MagneticFieldUnit {
     }
 }
 
-impl<T: Float> MagneticField<T> {
+impl<T: crate::Float> MagneticField<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nT`, `µT`, `mT`, `T`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -224,7 +224,9 @@ impl<T: Float> MagneticField<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MagneticField<T> {
     /// A [`MagneticField`] from a value in `T`.
     #[inline]
     pub fn from_teslas(value: T) -> Self {

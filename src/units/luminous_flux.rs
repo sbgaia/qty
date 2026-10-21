@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In photometry, luminous flux or luminous power is the measure of the perceived power of light.
 ///
@@ -105,7 +105,7 @@ impl core::str::FromStr for LuminousFluxUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<LuminousFlux<T>> for LuminousFluxUnit {
+impl<T: Number> crate::UnitOf<LuminousFlux<T>> for LuminousFluxUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -121,7 +121,7 @@ impl<T: Float> crate::UnitOf<LuminousFlux<T>> for LuminousFluxUnit {
     }
 }
 
-impl<T: Float> LuminousFlux<T> {
+impl<T: crate::Float> LuminousFlux<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`lm`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -129,7 +129,9 @@ impl<T: Float> LuminousFlux<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, LuminousFluxUnit> {
         self.in_unit(LuminousFluxUnit::Lumen)
     }
+}
 
+impl<T: Number> LuminousFlux<T> {
     /// A [`LuminousFlux`] from a value in `lm`.
     #[inline]
     pub fn from_lumens(value: T) -> Self {

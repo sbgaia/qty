@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The Linear Power Density of a substance is its power per unit length.  The term linear density is most often used when describing the characteristics of one-dimensional objects, although linear density can also be used to describe the density of a three-dimensional quantity along one particular dimension.
 ///
@@ -421,7 +421,7 @@ impl core::str::FromStr for LinearPowerDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
+impl<T: Number> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -440,16 +440,16 @@ impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
             LinearPowerDensityUnit::KilowattPerMillimeter => value * T::from_f64(1000000.0),
             LinearPowerDensityUnit::MegawattPerMillimeter => value * T::from_f64(1e9),
             LinearPowerDensityUnit::GigawattPerMillimeter => value * T::from_f64(1e12),
-            LinearPowerDensityUnit::WattPerInch => value * T::from_f64(39.37007874015748),
-            LinearPowerDensityUnit::MilliwattPerInch => value * T::from_f64(0.03937007874015748),
-            LinearPowerDensityUnit::KilowattPerInch => value * T::from_f64(39370.07874015748),
-            LinearPowerDensityUnit::MegawattPerInch => value * T::from_f64(3.937007874015748e7),
-            LinearPowerDensityUnit::GigawattPerInch => value * T::from_f64(3.937007874015748e10),
-            LinearPowerDensityUnit::WattPerFoot => value * T::from_f64(3.2808398950131235),
-            LinearPowerDensityUnit::MilliwattPerFoot => value * T::from_f64(0.0032808398950131233),
-            LinearPowerDensityUnit::KilowattPerFoot => value * T::from_f64(3280.839895013123),
-            LinearPowerDensityUnit::MegawattPerFoot => value * T::from_f64(3280839.8950131233),
-            LinearPowerDensityUnit::GigawattPerFoot => value * T::from_f64(3.2808398950131235e9),
+            LinearPowerDensityUnit::WattPerInch => T::mul_ratio(value, 5000.0, 127.0),
+            LinearPowerDensityUnit::MilliwattPerInch => T::mul_ratio(value, 5.0, 127.0),
+            LinearPowerDensityUnit::KilowattPerInch => T::mul_ratio(value, 5000000.0, 127.0),
+            LinearPowerDensityUnit::MegawattPerInch => T::mul_ratio(value, 5000000000.0, 127.0),
+            LinearPowerDensityUnit::GigawattPerInch => T::mul_ratio(value, 5000000000000.0, 127.0),
+            LinearPowerDensityUnit::WattPerFoot => T::mul_ratio(value, 1250.0, 381.0),
+            LinearPowerDensityUnit::MilliwattPerFoot => T::mul_ratio(value, 5.0, 1524.0),
+            LinearPowerDensityUnit::KilowattPerFoot => T::mul_ratio(value, 1250000.0, 381.0),
+            LinearPowerDensityUnit::MegawattPerFoot => T::mul_ratio(value, 1250000000.0, 381.0),
+            LinearPowerDensityUnit::GigawattPerFoot => T::mul_ratio(value, 1250000000000.0, 381.0),
         }
     }
 
@@ -471,21 +471,21 @@ impl<T: Float> crate::UnitOf<LinearPowerDensity<T>> for LinearPowerDensityUnit {
             LinearPowerDensityUnit::KilowattPerMillimeter => value / T::from_f64(1000000.0),
             LinearPowerDensityUnit::MegawattPerMillimeter => value / T::from_f64(1e9),
             LinearPowerDensityUnit::GigawattPerMillimeter => value / T::from_f64(1e12),
-            LinearPowerDensityUnit::WattPerInch => value / T::from_f64(39.37007874015748),
-            LinearPowerDensityUnit::MilliwattPerInch => value / T::from_f64(0.03937007874015748),
-            LinearPowerDensityUnit::KilowattPerInch => value / T::from_f64(39370.07874015748),
-            LinearPowerDensityUnit::MegawattPerInch => value / T::from_f64(3.937007874015748e7),
-            LinearPowerDensityUnit::GigawattPerInch => value / T::from_f64(3.937007874015748e10),
-            LinearPowerDensityUnit::WattPerFoot => value / T::from_f64(3.2808398950131235),
-            LinearPowerDensityUnit::MilliwattPerFoot => value / T::from_f64(0.0032808398950131233),
-            LinearPowerDensityUnit::KilowattPerFoot => value / T::from_f64(3280.839895013123),
-            LinearPowerDensityUnit::MegawattPerFoot => value / T::from_f64(3280839.8950131233),
-            LinearPowerDensityUnit::GigawattPerFoot => value / T::from_f64(3.2808398950131235e9),
+            LinearPowerDensityUnit::WattPerInch => T::div_ratio(value, 5000.0, 127.0),
+            LinearPowerDensityUnit::MilliwattPerInch => T::div_ratio(value, 5.0, 127.0),
+            LinearPowerDensityUnit::KilowattPerInch => T::div_ratio(value, 5000000.0, 127.0),
+            LinearPowerDensityUnit::MegawattPerInch => T::div_ratio(value, 5000000000.0, 127.0),
+            LinearPowerDensityUnit::GigawattPerInch => T::div_ratio(value, 5000000000000.0, 127.0),
+            LinearPowerDensityUnit::WattPerFoot => T::div_ratio(value, 1250.0, 381.0),
+            LinearPowerDensityUnit::MilliwattPerFoot => T::div_ratio(value, 5.0, 1524.0),
+            LinearPowerDensityUnit::KilowattPerFoot => T::div_ratio(value, 1250000.0, 381.0),
+            LinearPowerDensityUnit::MegawattPerFoot => T::div_ratio(value, 1250000000.0, 381.0),
+            LinearPowerDensityUnit::GigawattPerFoot => T::div_ratio(value, 1250000000000.0, 381.0),
         }
     }
 }
 
-impl<T: Float> LinearPowerDensity<T> {
+impl<T: crate::Float> LinearPowerDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`mW/m`, `W/m`, `kW/m`, `MW/m`, `GW/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -511,7 +511,9 @@ impl<T: Float> LinearPowerDensity<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> LinearPowerDensity<T> {
     /// A [`LinearPowerDensity`] from a value in `W/m`.
     #[inline]
     pub fn from_watts_per_meter(value: T) -> Self {
@@ -695,121 +697,121 @@ impl<T: Float> LinearPowerDensity<T> {
     /// A [`LinearPowerDensity`] from a value in `W/in`.
     #[inline]
     pub fn from_watts_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(39.37007874015748))
+        Self(T::mul_ratio(value, 5000.0, 127.0))
     }
 
     /// The value in `W/in`.
     #[inline]
     pub fn as_watts_per_inch(self) -> T {
-        self.0 / T::from_f64(39.37007874015748)
+        T::div_ratio(self.0, 5000.0, 127.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `mW/in`.
     #[inline]
     pub fn from_milliwatts_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(0.03937007874015748))
+        Self(T::mul_ratio(value, 5.0, 127.0))
     }
 
     /// The value in `mW/in`.
     #[inline]
     pub fn as_milliwatts_per_inch(self) -> T {
-        self.0 / T::from_f64(0.03937007874015748)
+        T::div_ratio(self.0, 5.0, 127.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `kW/in`.
     #[inline]
     pub fn from_kilowatts_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(39370.07874015748))
+        Self(T::mul_ratio(value, 5000000.0, 127.0))
     }
 
     /// The value in `kW/in`.
     #[inline]
     pub fn as_kilowatts_per_inch(self) -> T {
-        self.0 / T::from_f64(39370.07874015748)
+        T::div_ratio(self.0, 5000000.0, 127.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `MW/in`.
     #[inline]
     pub fn from_megawatts_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(3.937007874015748e7))
+        Self(T::mul_ratio(value, 5000000000.0, 127.0))
     }
 
     /// The value in `MW/in`.
     #[inline]
     pub fn as_megawatts_per_inch(self) -> T {
-        self.0 / T::from_f64(3.937007874015748e7)
+        T::div_ratio(self.0, 5000000000.0, 127.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `GW/in`.
     #[inline]
     pub fn from_gigawatts_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(3.937007874015748e10))
+        Self(T::mul_ratio(value, 5000000000000.0, 127.0))
     }
 
     /// The value in `GW/in`.
     #[inline]
     pub fn as_gigawatts_per_inch(self) -> T {
-        self.0 / T::from_f64(3.937007874015748e10)
+        T::div_ratio(self.0, 5000000000000.0, 127.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `W/ft`.
     #[inline]
     pub fn from_watts_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.2808398950131235))
+        Self(T::mul_ratio(value, 1250.0, 381.0))
     }
 
     /// The value in `W/ft`.
     #[inline]
     pub fn as_watts_per_foot(self) -> T {
-        self.0 / T::from_f64(3.2808398950131235)
+        T::div_ratio(self.0, 1250.0, 381.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `mW/ft`.
     #[inline]
     pub fn from_milliwatts_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(0.0032808398950131233))
+        Self(T::mul_ratio(value, 5.0, 1524.0))
     }
 
     /// The value in `mW/ft`.
     #[inline]
     pub fn as_milliwatts_per_foot(self) -> T {
-        self.0 / T::from_f64(0.0032808398950131233)
+        T::div_ratio(self.0, 5.0, 1524.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `kW/ft`.
     #[inline]
     pub fn from_kilowatts_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3280.839895013123))
+        Self(T::mul_ratio(value, 1250000.0, 381.0))
     }
 
     /// The value in `kW/ft`.
     #[inline]
     pub fn as_kilowatts_per_foot(self) -> T {
-        self.0 / T::from_f64(3280.839895013123)
+        T::div_ratio(self.0, 1250000.0, 381.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `MW/ft`.
     #[inline]
     pub fn from_megawatts_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3280839.8950131233))
+        Self(T::mul_ratio(value, 1250000000.0, 381.0))
     }
 
     /// The value in `MW/ft`.
     #[inline]
     pub fn as_megawatts_per_foot(self) -> T {
-        self.0 / T::from_f64(3280839.8950131233)
+        T::div_ratio(self.0, 1250000000.0, 381.0)
     }
 
     /// A [`LinearPowerDensity`] from a value in `GW/ft`.
     #[inline]
     pub fn from_gigawatts_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.2808398950131235e9))
+        Self(T::mul_ratio(value, 1250000000000.0, 381.0))
     }
 
     /// The value in `GW/ft`.
     #[inline]
     pub fn as_gigawatts_per_foot(self) -> T {
-        self.0 / T::from_f64(3.2808398950131235e9)
+        T::div_ratio(self.0, 1250000000000.0, 381.0)
     }
 }
 

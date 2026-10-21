@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The joule, symbol J, is a derived unit of energy, work, or amount of heat in the International System of Units. It is equal to the energy transferred (or work done) when applying a force of one newton through a distance of one metre (1 newton metre or N·m), or in passing an electric current of one ampere through a resistance of one ohm for one second. Many other units of energy are included. Please do not confuse this definition of the calorie with the one colloquially used by the food industry, the large calorie, which is equivalent to 1 kcal. Thermochemical definition of the calorie is used. For BTU, the IT definition is used.
 ///
@@ -623,7 +623,7 @@ impl core::str::FromStr for EnergyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Energy<T>> for EnergyUnit {
+impl<T: Number> crate::UnitOf<Energy<T>> for EnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -648,7 +648,7 @@ impl<T: Float> crate::UnitOf<Energy<T>> for EnergyUnit {
             EnergyUnit::MegaelectronVolt => value * T::from_f64(1.602176634e-13),
             EnergyUnit::GigaelectronVolt => value * T::from_f64(1.602176634e-10),
             EnergyUnit::TeraelectronVolt => value * T::from_f64(1.602176634e-7),
-            EnergyUnit::FootPound => value * T::from_f64(1.3558179483314003),
+            EnergyUnit::FootPound => T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0),
             EnergyUnit::Erg => value / T::from_f64(1e7),
             EnergyUnit::WattHour => value * T::from_f64(3600.0),
             EnergyUnit::KilowattHour => value * T::from_f64(3600000.0),
@@ -694,7 +694,7 @@ impl<T: Float> crate::UnitOf<Energy<T>> for EnergyUnit {
             EnergyUnit::MegaelectronVolt => value / T::from_f64(1.602176634e-13),
             EnergyUnit::GigaelectronVolt => value / T::from_f64(1.602176634e-10),
             EnergyUnit::TeraelectronVolt => value / T::from_f64(1.602176634e-7),
-            EnergyUnit::FootPound => value / T::from_f64(1.3558179483314003),
+            EnergyUnit::FootPound => T::div_ratio(value, 3389544870828501.0, 2500000000000000.0),
             EnergyUnit::Erg => value * T::from_f64(1e7),
             EnergyUnit::WattHour => value / T::from_f64(3600.0),
             EnergyUnit::KilowattHour => value / T::from_f64(3600000.0),
@@ -717,7 +717,7 @@ impl<T: Float> crate::UnitOf<Energy<T>> for EnergyUnit {
     }
 }
 
-impl<T: Float> Energy<T> {
+impl<T: crate::Float> Energy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nJ`, `µJ`, `mJ`, `J`, `kJ`, `MJ`, `GJ`, `TJ`, `PJ`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -747,7 +747,9 @@ impl<T: Float> Energy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Energy<T> {
     /// A [`Energy`] from a value in `J`.
     #[inline]
     pub fn from_joules(value: T) -> Self {
@@ -1003,13 +1005,13 @@ impl<T: Float> Energy<T> {
     /// A [`Energy`] from a value in `ft·lb`.
     #[inline]
     pub fn from_foot_pounds(value: T) -> Self {
-        Self(value * T::from_f64(1.3558179483314003))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0))
     }
 
     /// The value in `ft·lb`.
     #[inline]
     pub fn as_foot_pounds(self) -> T {
-        self.0 / T::from_f64(1.3558179483314003)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000000.0)
     }
 
     /// A [`Energy`] from a value in `erg`.

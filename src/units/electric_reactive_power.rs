@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In electric power transmission and distribution, volt-ampere reactive (var) is a unit of measurement of reactive power. Reactive power exists in an AC circuit when the current and voltage are not in phase.
 ///
@@ -148,7 +148,7 @@ impl core::str::FromStr for ElectricReactivePowerUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricReactivePower<T>> for ElectricReactivePowerUnit {
+impl<T: Number> crate::UnitOf<ElectricReactivePower<T>> for ElectricReactivePowerUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -170,7 +170,7 @@ impl<T: Float> crate::UnitOf<ElectricReactivePower<T>> for ElectricReactivePower
     }
 }
 
-impl<T: Float> ElectricReactivePower<T> {
+impl<T: crate::Float> ElectricReactivePower<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`var`, `kvar`, `Mvar`, `Gvar`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -195,7 +195,9 @@ impl<T: Float> ElectricReactivePower<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricReactivePower<T> {
     /// A [`ElectricReactivePower`] from a value in `var`.
     #[inline]
     pub fn from_voltamperes_reactive(value: T) -> Self {

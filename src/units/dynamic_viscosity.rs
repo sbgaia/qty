@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The dynamic (shear) viscosity of a fluid expresses its resistance to shearing flows, where adjacent layers move parallel to each other with different speeds
 ///
@@ -225,7 +225,7 @@ impl core::str::FromStr for DynamicViscosityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
+impl<T: Number> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -235,14 +235,14 @@ impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
             DynamicViscosityUnit::MicropascalSecond => value / T::from_f64(1000000.0),
             DynamicViscosityUnit::Poise => value / T::from_f64(10.0),
             DynamicViscosityUnit::Centipoise => value / T::from_f64(1000.0),
-            DynamicViscosityUnit::Reyn => value * T::from_f64(6894.757293168362),
+            DynamicViscosityUnit::Reyn => T::mul_ratio(value, 8896443230521.0, 1290320000.0),
             DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
-                value * T::from_f64(6894.757293168362)
+                T::mul_ratio(value, 8896443230521.0, 1290320000.0)
             }
             DynamicViscosityUnit::PoundForceSecondPerSquareFoot => {
-                value * T::from_f64(47.880258980335846)
+                T::mul_ratio(value, 8896443230521.0, 185806080000.0)
             }
-            DynamicViscosityUnit::PoundPerFootSecond => value * T::from_f64(1.4881639435695537),
+            DynamicViscosityUnit::PoundPerFootSecond => T::mul_ratio(value, 45359237.0, 30480000.0),
         }
     }
 
@@ -255,19 +255,19 @@ impl<T: Float> crate::UnitOf<DynamicViscosity<T>> for DynamicViscosityUnit {
             DynamicViscosityUnit::MicropascalSecond => value * T::from_f64(1000000.0),
             DynamicViscosityUnit::Poise => value * T::from_f64(10.0),
             DynamicViscosityUnit::Centipoise => value * T::from_f64(1000.0),
-            DynamicViscosityUnit::Reyn => value / T::from_f64(6894.757293168362),
+            DynamicViscosityUnit::Reyn => T::div_ratio(value, 8896443230521.0, 1290320000.0),
             DynamicViscosityUnit::PoundForceSecondPerSquareInch => {
-                value / T::from_f64(6894.757293168362)
+                T::div_ratio(value, 8896443230521.0, 1290320000.0)
             }
             DynamicViscosityUnit::PoundForceSecondPerSquareFoot => {
-                value / T::from_f64(47.880258980335846)
+                T::div_ratio(value, 8896443230521.0, 185806080000.0)
             }
-            DynamicViscosityUnit::PoundPerFootSecond => value / T::from_f64(1.4881639435695537),
+            DynamicViscosityUnit::PoundPerFootSecond => T::div_ratio(value, 45359237.0, 30480000.0),
         }
     }
 }
 
-impl<T: Float> DynamicViscosity<T> {
+impl<T: crate::Float> DynamicViscosity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`Ns/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -275,7 +275,9 @@ impl<T: Float> DynamicViscosity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, DynamicViscosityUnit> {
         self.in_unit(DynamicViscosityUnit::NewtonSecondPerMeterSquared)
     }
+}
 
+impl<T: Number> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `Ns/m²`.
     #[inline]
     pub fn from_newton_seconds_per_meter_squared(value: T) -> Self {
@@ -351,49 +353,49 @@ impl<T: Float> DynamicViscosity<T> {
     /// A [`DynamicViscosity`] from a value in `reyn`.
     #[inline]
     pub fn from_reyns(value: T) -> Self {
-        Self(value * T::from_f64(6894.757293168362))
+        Self(T::mul_ratio(value, 8896443230521.0, 1290320000.0))
     }
 
     /// The value in `reyn`.
     #[inline]
     pub fn as_reyns(self) -> T {
-        self.0 / T::from_f64(6894.757293168362)
+        T::div_ratio(self.0, 8896443230521.0, 1290320000.0)
     }
 
     /// A [`DynamicViscosity`] from a value in `lbf·s/in²`.
     #[inline]
     pub fn from_pounds_force_second_per_square_inch(value: T) -> Self {
-        Self(value * T::from_f64(6894.757293168362))
+        Self(T::mul_ratio(value, 8896443230521.0, 1290320000.0))
     }
 
     /// The value in `lbf·s/in²`.
     #[inline]
     pub fn as_pounds_force_second_per_square_inch(self) -> T {
-        self.0 / T::from_f64(6894.757293168362)
+        T::div_ratio(self.0, 8896443230521.0, 1290320000.0)
     }
 
     /// A [`DynamicViscosity`] from a value in `lbf·s/ft²`.
     #[inline]
     pub fn from_pounds_force_second_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(47.880258980335846))
+        Self(T::mul_ratio(value, 8896443230521.0, 185806080000.0))
     }
 
     /// The value in `lbf·s/ft²`.
     #[inline]
     pub fn as_pounds_force_second_per_square_foot(self) -> T {
-        self.0 / T::from_f64(47.880258980335846)
+        T::div_ratio(self.0, 8896443230521.0, 185806080000.0)
     }
 
     /// A [`DynamicViscosity`] from a value in `lb/(ft·s)`.
     #[inline]
     pub fn from_pounds_per_foot_second(value: T) -> Self {
-        Self(value * T::from_f64(1.4881639435695537))
+        Self(T::mul_ratio(value, 45359237.0, 30480000.0))
     }
 
     /// The value in `lb/(ft·s)`.
     #[inline]
     pub fn as_pounds_per_foot_second(self) -> T {
-        self.0 / T::from_f64(1.4881639435695537)
+        T::div_ratio(self.0, 45359237.0, 30480000.0)
     }
 }
 

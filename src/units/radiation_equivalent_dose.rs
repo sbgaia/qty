@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Equivalent dose is a dose quantity representing the stochastic health effects of low levels of ionizing radiation on the human body which represents the probability of radiation-induced cancer and genetic damage.
 ///
@@ -175,7 +175,7 @@ impl core::str::FromStr for RadiationEquivalentDoseUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalentDoseUnit {
+impl<T: Number> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalentDoseUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -205,7 +205,7 @@ impl<T: Float> crate::UnitOf<RadiationEquivalentDose<T>> for RadiationEquivalent
     }
 }
 
-impl<T: Float> RadiationEquivalentDose<T> {
+impl<T: crate::Float> RadiationEquivalentDose<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nSv`, `µSv`, `mSv`, `Sv`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -230,7 +230,9 @@ impl<T: Float> RadiationEquivalentDose<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RadiationEquivalentDose<T> {
     /// A [`RadiationEquivalentDose`] from a value in `Sv`.
     #[inline]
     pub fn from_sieverts(value: T) -> Self {

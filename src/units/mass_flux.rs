@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Mass flux is the mass flow rate per unit area.
 ///
@@ -260,7 +260,7 @@ impl core::str::FromStr for MassFluxUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
+impl<T: Number> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -273,13 +273,9 @@ impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
             MassFluxUnit::GramPerHourPerSquareMeter => value / T::from_f64(3600000.0),
             MassFluxUnit::KilogramPerHourPerSquareMeter => value / T::from_f64(3600.0),
             MassFluxUnit::GramPerHourPerSquareCentimeter => value / T::from_f64(360.0),
-            MassFluxUnit::KilogramPerHourPerSquareCentimeter => {
-                value * T::from_f64(2.7777777777777777)
-            }
-            MassFluxUnit::GramPerHourPerSquareMillimeter => value * T::from_f64(0.2777777777777778),
-            MassFluxUnit::KilogramPerHourPerSquareMillimeter => {
-                value * T::from_f64(277.77777777777777)
-            }
+            MassFluxUnit::KilogramPerHourPerSquareCentimeter => T::mul_ratio(value, 25.0, 9.0),
+            MassFluxUnit::GramPerHourPerSquareMillimeter => T::mul_ratio(value, 5.0, 18.0),
+            MassFluxUnit::KilogramPerHourPerSquareMillimeter => T::mul_ratio(value, 2500.0, 9.0),
         }
     }
 
@@ -295,18 +291,14 @@ impl<T: Float> crate::UnitOf<MassFlux<T>> for MassFluxUnit {
             MassFluxUnit::GramPerHourPerSquareMeter => value * T::from_f64(3600000.0),
             MassFluxUnit::KilogramPerHourPerSquareMeter => value * T::from_f64(3600.0),
             MassFluxUnit::GramPerHourPerSquareCentimeter => value * T::from_f64(360.0),
-            MassFluxUnit::KilogramPerHourPerSquareCentimeter => {
-                value / T::from_f64(2.7777777777777777)
-            }
-            MassFluxUnit::GramPerHourPerSquareMillimeter => value / T::from_f64(0.2777777777777778),
-            MassFluxUnit::KilogramPerHourPerSquareMillimeter => {
-                value / T::from_f64(277.77777777777777)
-            }
+            MassFluxUnit::KilogramPerHourPerSquareCentimeter => T::div_ratio(value, 25.0, 9.0),
+            MassFluxUnit::GramPerHourPerSquareMillimeter => T::div_ratio(value, 5.0, 18.0),
+            MassFluxUnit::KilogramPerHourPerSquareMillimeter => T::div_ratio(value, 2500.0, 9.0),
         }
     }
 }
 
-impl<T: Float> MassFlux<T> {
+impl<T: crate::Float> MassFlux<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`g·s⁻¹·m⁻²`, `kg·s⁻¹·m⁻²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -329,7 +321,9 @@ impl<T: Float> MassFlux<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> MassFlux<T> {
     /// A [`MassFlux`] from a value in `g·s⁻¹·m⁻²`.
     #[inline]
     pub fn from_grams_per_second_per_square_meter(value: T) -> Self {
@@ -441,37 +435,37 @@ impl<T: Float> MassFlux<T> {
     /// A [`MassFlux`] from a value in `kg·h⁻¹·cm⁻²`.
     #[inline]
     pub fn from_kilograms_per_hour_per_square_centimeter(value: T) -> Self {
-        Self(value * T::from_f64(2.7777777777777777))
+        Self(T::mul_ratio(value, 25.0, 9.0))
     }
 
     /// The value in `kg·h⁻¹·cm⁻²`.
     #[inline]
     pub fn as_kilograms_per_hour_per_square_centimeter(self) -> T {
-        self.0 / T::from_f64(2.7777777777777777)
+        T::div_ratio(self.0, 25.0, 9.0)
     }
 
     /// A [`MassFlux`] from a value in `g·h⁻¹·mm⁻²`.
     #[inline]
     pub fn from_grams_per_hour_per_square_millimeter(value: T) -> Self {
-        Self(value * T::from_f64(0.2777777777777778))
+        Self(T::mul_ratio(value, 5.0, 18.0))
     }
 
     /// The value in `g·h⁻¹·mm⁻²`.
     #[inline]
     pub fn as_grams_per_hour_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(0.2777777777777778)
+        T::div_ratio(self.0, 5.0, 18.0)
     }
 
     /// A [`MassFlux`] from a value in `kg·h⁻¹·mm⁻²`.
     #[inline]
     pub fn from_kilograms_per_hour_per_square_millimeter(value: T) -> Self {
-        Self(value * T::from_f64(277.77777777777777))
+        Self(T::mul_ratio(value, 2500.0, 9.0))
     }
 
     /// The value in `kg·h⁻¹·mm⁻²`.
     #[inline]
     pub fn as_kilograms_per_hour_per_square_millimeter(self) -> T {
-        self.0 / T::from_f64(277.77777777777777)
+        T::div_ratio(self.0, 2500.0, 9.0)
     }
 }
 

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The volume concentration (not to be confused with volume fraction) is defined as the volume of a constituent divided by the total volume of the mixture.
 ///
@@ -355,7 +355,7 @@ impl core::str::FromStr for VolumeConcentrationUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit {
+impl<T: Number> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -409,7 +409,7 @@ impl<T: Float> crate::UnitOf<VolumeConcentration<T>> for VolumeConcentrationUnit
     }
 }
 
-impl<T: Float> VolumeConcentration<T> {
+impl<T: crate::Float> VolumeConcentration<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (``).
     /// Zero, NaN and infinities stay in the base unit.
@@ -417,7 +417,9 @@ impl<T: Float> VolumeConcentration<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, VolumeConcentrationUnit> {
         self.in_unit(VolumeConcentrationUnit::DecimalFraction)
     }
+}
 
+impl<T: Number> VolumeConcentration<T> {
     /// A [`VolumeConcentration`] from a value in [`VolumeConcentrationUnit::DecimalFraction`].
     #[inline]
     pub fn from_decimal_fractions(value: T) -> Self {

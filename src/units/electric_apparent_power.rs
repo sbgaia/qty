@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Power engineers measure apparent power as the magnitude of the vector sum of active and reactive power. It is the product of the root mean square voltage (in volts) and the root mean square current (in amperes).
 ///
@@ -174,7 +174,7 @@ impl core::str::FromStr for ElectricApparentPowerUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricApparentPower<T>> for ElectricApparentPowerUnit {
+impl<T: Number> crate::UnitOf<ElectricApparentPower<T>> for ElectricApparentPowerUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -200,7 +200,7 @@ impl<T: Float> crate::UnitOf<ElectricApparentPower<T>> for ElectricApparentPower
     }
 }
 
-impl<T: Float> ElectricApparentPower<T> {
+impl<T: crate::Float> ElectricApparentPower<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`µVA`, `mVA`, `VA`, `kVA`, `MVA`, `GVA`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -227,7 +227,9 @@ impl<T: Float> ElectricApparentPower<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricApparentPower<T> {
     /// A [`ElectricApparentPower`] from a value in `VA`.
     #[inline]
     pub fn from_voltamperes(value: T) -> Self {

@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In photometry, luminous intensity is a measure of the wavelength-weighted power emitted by a light source in a particular direction per unit solid angle, based on the luminosity function, a standardized model of the sensitivity of the human eye.
 ///
@@ -104,7 +104,7 @@ impl core::str::FromStr for LuminousIntensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<LuminousIntensity<T>> for LuminousIntensityUnit {
+impl<T: Number> crate::UnitOf<LuminousIntensity<T>> for LuminousIntensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -120,7 +120,7 @@ impl<T: Float> crate::UnitOf<LuminousIntensity<T>> for LuminousIntensityUnit {
     }
 }
 
-impl<T: Float> LuminousIntensity<T> {
+impl<T: crate::Float> LuminousIntensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`cd`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -128,7 +128,9 @@ impl<T: Float> LuminousIntensity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, LuminousIntensityUnit> {
         self.in_unit(LuminousIntensityUnit::Candela)
     }
+}
 
+impl<T: Number> LuminousIntensity<T> {
     /// A [`LuminousIntensity`] from a value in `cd`.
     #[inline]
     pub fn from_candela(value: T) -> Self {

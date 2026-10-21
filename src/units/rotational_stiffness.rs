@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// <https://en.wikipedia.org/wiki/Stiffness#Rotational_stiffness>
 ///
@@ -566,7 +566,7 @@ impl core::str::FromStr for RotationalStiffnessUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit {
+impl<T: Number> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -645,7 +645,7 @@ impl<T: Float> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit
             RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
             RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value * T::from_f64(1000.0),
             RotationalStiffnessUnit::PoundForceFeetPerRadian => {
-                value * T::from_f64(1.3558179483314003)
+                T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
             RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
                 value * T::from_f64(1355.8179483314004)
@@ -731,7 +731,7 @@ impl<T: Float> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit
             RotationalStiffnessUnit::KilonewtonMillimeterPerRadian => value,
             RotationalStiffnessUnit::MeganewtonMillimeterPerRadian => value / T::from_f64(1000.0),
             RotationalStiffnessUnit::PoundForceFeetPerRadian => {
-                value / T::from_f64(1.3558179483314003)
+                T::div_ratio(value, 3389544870828501.0, 2500000000000000.0)
             }
             RotationalStiffnessUnit::KilopoundForceFootPerRadian => {
                 value / T::from_f64(1355.8179483314004)
@@ -740,7 +740,7 @@ impl<T: Float> crate::UnitOf<RotationalStiffness<T>> for RotationalStiffnessUnit
     }
 }
 
-impl<T: Float> RotationalStiffness<T> {
+impl<T: crate::Float> RotationalStiffness<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`N·m/rad`, `kN·m/rad`, `MN·m/rad`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -764,7 +764,9 @@ impl<T: Float> RotationalStiffness<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `N·m/rad`.
     #[inline]
     pub fn from_newton_meters_per_radian(value: T) -> Self {
@@ -1152,13 +1154,13 @@ impl<T: Float> RotationalStiffness<T> {
     /// A [`RotationalStiffness`] from a value in `lbf·ft/rad`.
     #[inline]
     pub fn from_pound_force_feet_per_radian(value: T) -> Self {
-        Self(value * T::from_f64(1.3558179483314003))
+        Self(T::mul_ratio(value, 3389544870828501.0, 2500000000000000.0))
     }
 
     /// The value in `lbf·ft/rad`.
     #[inline]
     pub fn as_pound_force_feet_per_radian(self) -> T {
-        self.0 / T::from_f64(1.3558179483314003)
+        T::div_ratio(self.0, 3389544870828501.0, 2500000000000000.0)
     }
 
     /// A [`RotationalStiffness`] from a value in `kipf·ft/rad`.

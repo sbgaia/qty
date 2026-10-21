@@ -49,7 +49,25 @@ sense for some quantities exist only there: `Area::sqrt` gives a `Length`,
 `Length::squared` an `Area`, `Angle` has `sin` and `cos`.
 
 The storage type is `f64` unless you pick another: `Length<f32>`,
-`Mass<i64>`, or your own float type through the `Float` trait.
+`Mass<i64>`, complex numbers, decimals and rationals behind features, or
+your own type through the `Number` and `Float` traits. With decimals and
+rationals the conversions are exact, fractions such as km/h to m/s (5/18)
+included:
+
+```rust
+# #[cfg(feature = "num-rational")] {
+use num_rational::Ratio;
+use qty::*;
+
+let limit = Speed::from_kilometers_per_hour(Ratio::<i64>::from_integer(50));
+assert_eq!(limit.as_meters_per_second(), Ratio::new(125, 9));
+assert_eq!(Length::from_feet(Ratio::from_integer(1)).as_meters(), Ratio::new(381, 1250));
+# }
+```
+
+Complex storage suits AC circuits: a current phasor times a complex
+impedance, `ElectricCurrent<Complex64> * ElectricResistance<Complex64>`, is
+the voltage phasor.
 
 Units missing from UnitsNet can be added in your own crate:
 
@@ -248,6 +266,9 @@ Mixing units where the result would not be exact, such as
 | `defmt` | | Logging on embedded targets |
 | `chrono`, `time` | | Conversions with their duration types |
 | `schemars` | | JSON schemas |
+| `num-complex` | | Complex storage, `Length<Complex<f64>>` |
+| `rust_decimal` | | Decimal storage, `Length<Decimal>` |
+| `num-rational` | | Rational storage, `Length<Ratio<i64>>` |
 
 The 18 core quantities (length, mass, duration, speed, force, energy,
 pressure, temperature, angle and a few more) are always there. Building

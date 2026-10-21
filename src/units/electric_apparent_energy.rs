@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// A unit for expressing the integral of apparent power over time, equal to the product of 1 volt-ampere and 1 hour, or to 3600 joules.
 ///
@@ -134,7 +134,7 @@ impl core::str::FromStr for ElectricApparentEnergyUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEnergyUnit {
+impl<T: Number> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEnergyUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -154,7 +154,7 @@ impl<T: Float> crate::UnitOf<ElectricApparentEnergy<T>> for ElectricApparentEner
     }
 }
 
-impl<T: Float> ElectricApparentEnergy<T> {
+impl<T: crate::Float> ElectricApparentEnergy<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`VAh`, `kVAh`, `MVAh`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -178,7 +178,9 @@ impl<T: Float> ElectricApparentEnergy<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricApparentEnergy<T> {
     /// A [`ElectricApparentEnergy`] from a value in `VAh`.
     #[inline]
     pub fn from_voltampere_hours(value: T) -> Self {

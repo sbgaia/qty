@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In classical mechanics, impulse is the integral of a force, F, over the time interval, t, for which it acts. Impulse applied to an object produces an equivalent vector change in its linear momentum, also in the resultant direction.
 ///
@@ -265,7 +265,7 @@ impl core::str::FromStr for ImpulseUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Impulse<T>> for ImpulseUnit {
+impl<T: Number> crate::UnitOf<Impulse<T>> for ImpulseUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -305,7 +305,7 @@ impl<T: Float> crate::UnitOf<Impulse<T>> for ImpulseUnit {
     }
 }
 
-impl<T: Float> Impulse<T> {
+impl<T: crate::Float> Impulse<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nN·s`, `µN·s`, `mN·s`, `N·s`, `kN·s`, `MN·s`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -332,7 +332,9 @@ impl<T: Float> Impulse<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Impulse<T> {
     /// A [`Impulse`] from a value in `kg·m/s`.
     #[inline]
     pub fn from_kilogram_meters_per_second(value: T) -> Self {

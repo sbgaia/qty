@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// The area density of a two-dimensional object is calculated as the mass per unit area. For paper this is also called grammage.
 ///
@@ -172,15 +172,17 @@ impl core::str::FromStr for AreaDensityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
+impl<T: Number> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             AreaDensityUnit::KilogramPerSquareMeter => value,
             AreaDensityUnit::GramPerSquareMeter => value / T::from_f64(1000.0),
             AreaDensityUnit::MilligramPerSquareMeter => value / T::from_f64(1000000.0),
-            AreaDensityUnit::PoundPerSquareFoot => value * T::from_f64(4.88242763638305),
-            AreaDensityUnit::PoundPerThousandSquareFeet => value * T::from_f64(0.00488242763638305),
+            AreaDensityUnit::PoundPerSquareFoot => T::mul_ratio(value, 45359237.0, 9290304.0),
+            AreaDensityUnit::PoundPerThousandSquareFeet => {
+                T::mul_ratio(value, 45359237.0, 9290304000.0)
+            }
         }
     }
 
@@ -190,13 +192,15 @@ impl<T: Float> crate::UnitOf<AreaDensity<T>> for AreaDensityUnit {
             AreaDensityUnit::KilogramPerSquareMeter => value,
             AreaDensityUnit::GramPerSquareMeter => value * T::from_f64(1000.0),
             AreaDensityUnit::MilligramPerSquareMeter => value * T::from_f64(1000000.0),
-            AreaDensityUnit::PoundPerSquareFoot => value / T::from_f64(4.88242763638305),
-            AreaDensityUnit::PoundPerThousandSquareFeet => value / T::from_f64(0.00488242763638305),
+            AreaDensityUnit::PoundPerSquareFoot => T::div_ratio(value, 45359237.0, 9290304.0),
+            AreaDensityUnit::PoundPerThousandSquareFeet => {
+                T::div_ratio(value, 45359237.0, 9290304000.0)
+            }
         }
     }
 }
 
-impl<T: Float> AreaDensity<T> {
+impl<T: crate::Float> AreaDensity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`kg/m²`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -204,7 +208,9 @@ impl<T: Float> AreaDensity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, AreaDensityUnit> {
         self.in_unit(AreaDensityUnit::KilogramPerSquareMeter)
     }
+}
 
+impl<T: Number> AreaDensity<T> {
     /// A [`AreaDensity`] from a value in `kg/m²`.
     #[inline]
     pub fn from_kilograms_per_square_meter(value: T) -> Self {
@@ -244,25 +250,25 @@ impl<T: Float> AreaDensity<T> {
     /// A [`AreaDensity`] from a value in `lb/ft²`.
     #[inline]
     pub fn from_pounds_per_square_foot(value: T) -> Self {
-        Self(value * T::from_f64(4.88242763638305))
+        Self(T::mul_ratio(value, 45359237.0, 9290304.0))
     }
 
     /// The value in `lb/ft²`.
     #[inline]
     pub fn as_pounds_per_square_foot(self) -> T {
-        self.0 / T::from_f64(4.88242763638305)
+        T::div_ratio(self.0, 45359237.0, 9290304.0)
     }
 
     /// A [`AreaDensity`] from a value in `lb/MSF`.
     #[inline]
     pub fn from_pounds_per_thousand_square_feet(value: T) -> Self {
-        Self(value * T::from_f64(0.00488242763638305))
+        Self(T::mul_ratio(value, 45359237.0, 9290304000.0))
     }
 
     /// The value in `lb/MSF`.
     #[inline]
     pub fn as_pounds_per_thousand_square_feet(self) -> T {
-        self.0 / T::from_f64(0.00488242763638305)
+        T::div_ratio(self.0, 45359237.0, 9290304000.0)
     }
 }
 

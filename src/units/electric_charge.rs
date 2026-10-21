@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electric charge is the physical property of matter that causes it to experience a force when placed in an electromagnetic field.
 ///
@@ -240,7 +240,7 @@ impl core::str::FromStr for ElectricChargeUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
+impl<T: Number> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -276,7 +276,7 @@ impl<T: Float> crate::UnitOf<ElectricCharge<T>> for ElectricChargeUnit {
     }
 }
 
-impl<T: Float> ElectricCharge<T> {
+impl<T: crate::Float> ElectricCharge<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`pC`, `nC`, `µC`, `mC`, `C`, `kC`, `MC`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -304,7 +304,9 @@ impl<T: Float> ElectricCharge<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> ElectricCharge<T> {
     /// A [`ElectricCharge`] from a value in `C`.
     #[inline]
     pub fn from_coulombs(value: T) -> Self {

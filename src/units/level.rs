@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Level is the logarithm of the ratio of a quantity Q to a reference value of that quantity, Q₀, expressed in dimensionless units.
 ///
@@ -118,12 +118,12 @@ impl core::str::FromStr for LevelUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Level<T>> for LevelUnit {
+impl<T: Number> crate::UnitOf<Level<T>> for LevelUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             LevelUnit::Decibel => value,
-            LevelUnit::Neper => value * T::from_f64(8.685889687081618),
+            LevelUnit::Neper => T::mul_ratio(value, 500000000.0, 57564627.0),
         }
     }
 
@@ -131,12 +131,12 @@ impl<T: Float> crate::UnitOf<Level<T>> for LevelUnit {
     fn value_from_base(self, value: T) -> T {
         match self {
             LevelUnit::Decibel => value,
-            LevelUnit::Neper => value / T::from_f64(8.685889687081618),
+            LevelUnit::Neper => T::div_ratio(value, 500000000.0, 57564627.0),
         }
     }
 }
 
-impl<T: Float> Level<T> {
+impl<T: crate::Float> Level<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`dB`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -144,7 +144,9 @@ impl<T: Float> Level<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, LevelUnit> {
         self.in_unit(LevelUnit::Decibel)
     }
+}
 
+impl<T: Number> Level<T> {
     /// A [`Level`] from a value in `dB`.
     #[inline]
     pub fn from_decibels(value: T) -> Self {
@@ -160,13 +162,13 @@ impl<T: Float> Level<T> {
     /// A [`Level`] from a value in `Np`.
     #[inline]
     pub fn from_nepers(value: T) -> Self {
-        Self(value * T::from_f64(8.685889687081618))
+        Self(T::mul_ratio(value, 500000000.0, 57564627.0))
     }
 
     /// The value in `Np`.
     #[inline]
     pub fn as_nepers(self) -> T {
-        self.0 / T::from_f64(8.685889687081618)
+        T::div_ratio(self.0, 500000000.0, 57564627.0)
     }
 }
 

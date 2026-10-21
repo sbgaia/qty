@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// In geometry, an angle is the figure formed by two rays, called the sides of the angle, sharing a common endpoint, called the vertex of the angle.
 ///
@@ -298,7 +298,7 @@ impl core::str::FromStr for AngleUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<Angle<T>> for AngleUnit {
+impl<T: Number> crate::UnitOf<Angle<T>> for AngleUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
@@ -342,7 +342,7 @@ impl<T: Float> crate::UnitOf<Angle<T>> for AngleUnit {
     }
 }
 
-impl<T: Float> Angle<T> {
+impl<T: crate::Float> Angle<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`nrad`, `µrad`, `mrad`, `rad`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -367,7 +367,9 @@ impl<T: Float> Angle<T> {
         }
         self.in_unit(unit)
     }
+}
 
+impl<T: Number> Angle<T> {
     /// A [`Angle`] from a value in `rad`.
     #[inline]
     pub fn from_radians(value: T) -> Self {

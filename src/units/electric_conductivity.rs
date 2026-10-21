@@ -7,7 +7,7 @@
     clippy::unreadable_literal
 )]
 
-use crate::Float;
+use crate::Number;
 
 /// Electrical conductivity or specific conductance is the reciprocal of electrical resistivity, and measures a material's ability to conduct an electric current.
 ///
@@ -168,13 +168,13 @@ impl core::str::FromStr for ElectricConductivityUnit {
 
 /// Each conversion is one multiplication or division by a constant, or two
 /// operations for units with an offset.
-impl<T: Float> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUnit {
+impl<T: Number> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUnit {
     #[inline]
     fn value_to_base(self, value: T) -> T {
         match self {
             ElectricConductivityUnit::SiemensPerMeter => value,
-            ElectricConductivityUnit::SiemensPerInch => value * T::from_f64(39.37007874015748),
-            ElectricConductivityUnit::SiemensPerFoot => value * T::from_f64(3.2808398950131235),
+            ElectricConductivityUnit::SiemensPerInch => T::mul_ratio(value, 5000.0, 127.0),
+            ElectricConductivityUnit::SiemensPerFoot => T::mul_ratio(value, 1250.0, 381.0),
             ElectricConductivityUnit::SiemensPerCentimeter => value * T::from_f64(100.0),
             ElectricConductivityUnit::MicrosiemensPerCentimeter => value / T::from_f64(10000.0),
             ElectricConductivityUnit::MillisiemensPerCentimeter => value / T::from_f64(10.0),
@@ -185,8 +185,8 @@ impl<T: Float> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUn
     fn value_from_base(self, value: T) -> T {
         match self {
             ElectricConductivityUnit::SiemensPerMeter => value,
-            ElectricConductivityUnit::SiemensPerInch => value / T::from_f64(39.37007874015748),
-            ElectricConductivityUnit::SiemensPerFoot => value / T::from_f64(3.2808398950131235),
+            ElectricConductivityUnit::SiemensPerInch => T::div_ratio(value, 5000.0, 127.0),
+            ElectricConductivityUnit::SiemensPerFoot => T::div_ratio(value, 1250.0, 381.0),
             ElectricConductivityUnit::SiemensPerCentimeter => value / T::from_f64(100.0),
             ElectricConductivityUnit::MicrosiemensPerCentimeter => value * T::from_f64(10000.0),
             ElectricConductivityUnit::MillisiemensPerCentimeter => value * T::from_f64(10.0),
@@ -194,7 +194,7 @@ impl<T: Float> crate::UnitOf<ElectricConductivity<T>> for ElectricConductivityUn
     }
 }
 
-impl<T: Float> ElectricConductivity<T> {
+impl<T: crate::Float> ElectricConductivity<T> {
     /// The value in the largest SI-prefixed form of the base unit that doesn't
     /// exceed it, in steps of 1000 (`S/m`).
     /// Zero, NaN and infinities stay in the base unit.
@@ -202,7 +202,9 @@ impl<T: Float> ElectricConductivity<T> {
     pub fn auto_unit(self) -> crate::InUnit<T, ElectricConductivityUnit> {
         self.in_unit(ElectricConductivityUnit::SiemensPerMeter)
     }
+}
 
+impl<T: Number> ElectricConductivity<T> {
     /// A [`ElectricConductivity`] from a value in `S/m`.
     #[inline]
     pub fn from_siemens_per_meter(value: T) -> Self {
@@ -218,25 +220,25 @@ impl<T: Float> ElectricConductivity<T> {
     /// A [`ElectricConductivity`] from a value in `S/in`.
     #[inline]
     pub fn from_siemens_per_inch(value: T) -> Self {
-        Self(value * T::from_f64(39.37007874015748))
+        Self(T::mul_ratio(value, 5000.0, 127.0))
     }
 
     /// The value in `S/in`.
     #[inline]
     pub fn as_siemens_per_inch(self) -> T {
-        self.0 / T::from_f64(39.37007874015748)
+        T::div_ratio(self.0, 5000.0, 127.0)
     }
 
     /// A [`ElectricConductivity`] from a value in `S/ft`.
     #[inline]
     pub fn from_siemens_per_foot(value: T) -> Self {
-        Self(value * T::from_f64(3.2808398950131235))
+        Self(T::mul_ratio(value, 1250.0, 381.0))
     }
 
     /// The value in `S/ft`.
     #[inline]
     pub fn as_siemens_per_foot(self) -> T {
-        self.0 / T::from_f64(3.2808398950131235)
+        T::div_ratio(self.0, 1250.0, 381.0)
     }
 
     /// A [`ElectricConductivity`] from a value in `S/cm`.
