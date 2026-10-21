@@ -270,6 +270,16 @@ macro_rules! qty {
     ($value:literal $unit:literal) => {
         $crate::literal::literal(($value) as f64, $crate::__qty_unit!(@string $unit))
     };
+    // One symbol, the most common unit, in one step: it's a constant already.
+    ($value:literal in) => {
+        $crate::literal::literal(($value) as f64, $crate::literal::sym::r#in)
+    };
+    ($value:literal as) => {
+        $crate::literal::literal(($value) as f64, $crate::literal::sym::r#as)
+    };
+    ($value:literal $symbol:ident) => {
+        $crate::literal::literal(($value) as f64, $crate::literal::sym::$symbol)
+    };
     ($value:literal $($unit:tt)+) => {
         $crate::literal::literal(($value) as f64, const { $crate::__qty_unit!($($unit)+) })
     };
@@ -284,6 +294,16 @@ macro_rules! qty {
 macro_rules! __qty_expr {
     ($value:literal $unit:literal) => {
         $crate::literal::literal_expr(($value) as f64, $crate::__qty_unit!(@string $unit))
+    };
+    // One symbol, in one step.
+    ($value:literal in) => {
+        $crate::literal::literal_expr(($value) as f64, $crate::literal::sym::r#in)
+    };
+    ($value:literal as) => {
+        $crate::literal::literal_expr(($value) as f64, $crate::literal::sym::r#as)
+    };
+    ($value:literal $symbol:ident) => {
+        $crate::literal::literal_expr(($value) as f64, $crate::literal::sym::$symbol)
     };
     ($value:literal $($unit:tt)+) => {
         $crate::literal::literal_expr(($value) as f64, const { $crate::__qty_unit!($($unit)+) })
