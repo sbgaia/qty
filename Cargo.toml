@@ -67,7 +67,7 @@ std = []
 libm = ["dep:libm"]
 ## `Serialize`/`Deserialize` for every quantity (as its bare base-unit number)
 ## and every unit enum.
-serde = ["dep:serde"]
+serde = ["dep:serde_core", "dep:serde"]
 ## `AbsDiffEq`/`RelativeEq`/`UlpsEq` from `approx`, for `assert_relative_eq!`.
 approx = ["dep:approx"]
 ## `Pod`, `Zeroable` and `TransparentWrapper` from `bytemuck`, for zero-copy
@@ -104,7 +104,12 @@ libm = { version = "0.2", optional = true }
 num-complex = { version = "0.4.6", default-features = false, optional = true }
 num-rational = { version = "0.4.2", default-features = false, optional = true }
 rust_decimal = { version = "1.36", default-features = false, optional = true }
-serde = { version = "1", default-features = false, features = ["derive"], optional = true }
+serde_core = { version = "1.0.220", default-features = false, optional = true }
+
+# Never built: keeps `serde` at a version that re-exports the `serde_core`
+# traits, so the impls are the ones `serde::Serialize` names.
+[target.'cfg(any())'.dependencies]
+serde = { version = "1.0.220", default-features = false, optional = true }
 
 # Examples that need more than the default core quantities.
 [[example]]
@@ -117,5 +122,7 @@ required-features = ["serde"]
 
 [dev-dependencies]
 schemars = { version = "1", default-features = false, features = ["derive", "std"] }
+# The library implements serde by hand; tests and examples derive it.
+serde = { version = "1", features = ["derive"] }
 proptest = { version = "1", default-features = false, features = ["std"] }
 serde_json = "1"

@@ -1826,10 +1826,6 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
         out,
         "#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]"
     );
-    w!(
-        out,
-        "#[cfg_attr(feature = \"serde\", derive(serde::Serialize, serde::Deserialize))]"
-    );
     w!(out, "#[non_exhaustive]");
     w!(out, "pub enum QuantityKind {{");
     for q in quantities {
@@ -1935,10 +1931,6 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
         "/// A unit of any quantity: `AnyUnit::Length(LengthUnit::Meter)`."
     );
     w!(out, "#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]");
-    w!(
-        out,
-        "#[cfg_attr(feature = \"serde\", derive(serde::Serialize, serde::Deserialize))]"
-    );
     w!(out, "#[non_exhaustive]");
     w!(out, "pub enum AnyUnit {{");
     for q in quantities {
@@ -2025,10 +2017,6 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
         "/// A quantity of any kind, with `f64` storage. See the [module documentation](self)."
     );
     w!(out, "#[derive(Debug, Clone, Copy, PartialEq)]");
-    w!(
-        out,
-        "#[cfg_attr(feature = \"serde\", derive(serde::Serialize, serde::Deserialize))]"
-    );
     w!(out, "#[non_exhaustive]");
     w!(out, "pub enum AnyQuantity {{");
     for q in quantities {
@@ -2419,5 +2407,166 @@ pub fn generate_any(quantities: &[QuantityDef], ops: &[CrossOp]) -> String {
         w!(out, "    }}");
         w!(out, "}}");
     }
+    emit_any_serde(quantities, &mut out);
     out
+}
+
+/// serde for `QuantityKind`, `AnyUnit` and `AnyQuantity`, as `#[derive]`
+/// would write it: variants by name, numbered in declaration order among
+/// the kinds compiled in.
+fn emit_any_serde(quantities: &[QuantityDef], out: &mut String) {
+    let gated = |out: &mut String, name: &str, indent: &str, line: String| {
+        let g = cfg_for(&[name]);
+        if !g.is_empty() {
+            w!(out, "{indent}{g}");
+        }
+        w!(out, "{indent}{line}");
+    };
+    w!(out);
+    w!(
+        out,
+        "/// Every kind compiled in, in declaration order, which numbers the"
+    );
+    w!(out, "/// variants for serde.");
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "pub(crate) const KINDS: &[QuantityKind] = &[");
+    for q in quantities {
+        gated(out, &q.name, "    ", format!("QuantityKind::{},", q.name));
+    }
+    w!(out, "];");
+    w!(out);
+    w!(out, "/// The names of [`KINDS`].");
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "pub(crate) const KIND_NAMES: &[&str] = &[");
+    for q in quantities {
+        gated(out, &q.name, "    ", format!("\"{}\",", q.name));
+    }
+    w!(out, "];");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl serde::Serialize for QuantityKind {{");
+    w!(
+        out,
+        "    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {{"
+    );
+    w!(
+        out,
+        "        crate::serde_impl::serialize_unit(serializer, \"QuantityKind\", *self as usize, KIND_NAMES)"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl<'de> serde::Deserialize<'de> for QuantityKind {{");
+    w!(
+        out,
+        "    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{"
+    );
+    w!(
+        out,
+        "        crate::serde_impl::deserialize_unit(deserializer, \"QuantityKind\", KIND_NAMES, KINDS)"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    // `AnyQuantity` holds a quantity, which serializes as its base-unit
+    // value, so its variants need no match.
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl serde::Serialize for AnyQuantity {{");
+    w!(
+        out,
+        "    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {{"
+    );
+    w!(
+        out,
+        "        crate::serde_impl::serialize_kind_variant(serializer, \"AnyQuantity\", self.kind(), &self.as_base())"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl crate::serde_impl::KindEnum for AnyQuantity {{");
+    w!(out, "    const NAME: &'static str = \"AnyQuantity\";");
+    w!(
+        out,
+        "    fn variant<'de, A: serde::de::VariantAccess<'de>>(kind: QuantityKind, variant: A) -> Result<Self, A::Error> {{"
+    );
+    w!(
+        out,
+        "        Ok(Self::new(variant.newtype_variant()?, kind.base_unit()))"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl<'de> serde::Deserialize<'de> for AnyQuantity {{");
+    w!(
+        out,
+        "    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{"
+    );
+    w!(
+        out,
+        "        crate::serde_impl::deserialize_kind_enum(deserializer)"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl serde::Serialize for AnyUnit {{");
+    w!(
+        out,
+        "    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {{"
+    );
+    w!(out, "        let kind = self.kind();");
+    w!(out, "        match self {{");
+    for q in quantities {
+        gated(
+            out,
+            &q.name,
+            "            ",
+            format!(
+                "Self::{}(unit) => crate::serde_impl::serialize_kind_variant(serializer, \"AnyUnit\", kind, unit),",
+                q.name
+            ),
+        );
+    }
+    w!(out, "        }}");
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl crate::serde_impl::KindEnum for AnyUnit {{");
+    w!(out, "    const NAME: &'static str = \"AnyUnit\";");
+    w!(
+        out,
+        "    fn variant<'de, A: serde::de::VariantAccess<'de>>(kind: QuantityKind, variant: A) -> Result<Self, A::Error> {{"
+    );
+    w!(out, "        match kind {{");
+    for q in quantities {
+        gated(
+            out,
+            &q.name,
+            "            ",
+            format!(
+                "QuantityKind::{0} => variant.newtype_variant().map(Self::{0}),",
+                q.name
+            ),
+        );
+    }
+    w!(out, "        }}");
+    w!(out, "    }}");
+    w!(out, "}}");
+    w!(out);
+    w!(out, "#[cfg(feature = \"serde\")]");
+    w!(out, "impl<'de> serde::Deserialize<'de> for AnyUnit {{");
+    w!(
+        out,
+        "    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{"
+    );
+    w!(
+        out,
+        "        crate::serde_impl::deserialize_kind_enum(deserializer)"
+    );
+    w!(out, "    }}");
+    w!(out, "}}");
 }

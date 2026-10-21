@@ -592,7 +592,7 @@ pub mod private {
     #[cfg(feature = "bytemuck")]
     pub use bytemuck;
     #[cfg(feature = "serde")]
-    pub use serde;
+    pub use serde_core as serde;
 
     use core::fmt;
 

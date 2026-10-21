@@ -40,10 +40,27 @@ use crate::{Float, FloatMath, ToFloat};
 ///
 /// Needs the `std` (default) or `libm` feature.
 #[derive(Clone, Copy, Debug, PartialEq, Default)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Uncertain<F = f64> {
     value: F,
     sigma: F,
+}
+
+/// As a struct with `value` and `sigma`, like `#[derive(Serialize)]`.
+#[cfg(feature = "serde")]
+impl<F: serde::Serialize> serde::Serialize for Uncertain<F> {
+    fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        let values = [&self.value, &self.sigma];
+        crate::serde_impl::serialize_struct(serializer, "Uncertain", &["value", "sigma"], values)
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de, F: serde::Deserialize<'de>> serde::Deserialize<'de> for Uncertain<F> {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let [value, sigma] =
+            crate::serde_impl::deserialize_struct(deserializer, "Uncertain", &["value", "sigma"])?;
+        Ok(Self { value, sigma })
+    }
 }
 
 impl<F: Float> Uncertain<F> {
