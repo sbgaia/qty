@@ -34,11 +34,6 @@ use crate::TemperatureDelta;
 /// let _ = t + t; // error: add a TemperatureDelta instead
 /// ```
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct Temperature<T = f64>(T);
@@ -49,7 +44,6 @@ point_quantity!(Temperature, TemperatureUnit, Kelvin, TemperatureDelta, si: Some
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum TemperatureUnit {
     Kelvin,

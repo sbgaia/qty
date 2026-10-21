@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`AreaUnit::SquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct Area<T = f64>(T);
@@ -29,7 +24,6 @@ crate::__qty_formula!(Area, AreaUnit);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum AreaUnit {
     SquareKilometer,

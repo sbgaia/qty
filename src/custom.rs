@@ -594,8 +594,11 @@ pub mod private {
     #[cfg(feature = "serde")]
     pub use serde;
 
+    use core::fmt;
+
     use crate::{
-        normalize_unit_name, Dimensions, ParseError, Quantity, QuantityInfo, UnitEnum, UnitExpr,
+        normalize_unit_name, Dimensions, Float, InUnit, Number, ParseError, Quantity, QuantityInfo,
+        UnitEnum, UnitExpr,
     };
 
     /// Which unit expressions a quantity's `FromStr` accepts.
@@ -693,6 +696,120 @@ pub mod private {
             Ok(product.factor / c.factor)
         } else {
             Err(RelationError::Dimensions)
+        }
+    }
+
+    // The bodies of methods every quantity has. `__qty_common!` delegates to
+    // these, so the compiler checks each body once rather than once per
+    // quantity.
+
+    /// `auto_unit_in`.
+    pub fn auto_unit_in<Q: Quantity>(quantity: Q, units: &[Q::Unit]) -> InUnit<Q::Value, Q::Unit>
+    where
+        Q::Value: Float,
+    {
+        let magnitude = quantity.as_base().abs();
+        let one = |unit: Q::Unit| Q::new(Q::Value::from_f64(1.0), unit).as_base().abs();
+        let mut best: Option<(Q::Unit, Q::Value)> = None;
+        let mut smallest: Option<(Q::Unit, Q::Value)> = None;
+        for &unit in units {
+            let size = one(unit);
+            if smallest.is_none_or(|(_, s)| size < s) {
+                smallest = Some((unit, size));
+            }
+            if size <= magnitude && best.is_none_or(|(_, b)| size > b) {
+                best = Some((unit, size));
+            }
+        }
+        let unit = best.or(smallest).map_or(Q::BASE_UNIT, |(unit, _)| unit);
+        InUnit {
+            value: quantity.convert_to(unit),
+            unit,
+        }
+    }
+
+    /// The generated `auto_unit`: the first unit of `scale` (largest first)
+    /// that doesn't exceed the value, else the last one. Zero, NaN and
+    /// infinities stay in the base unit.
+    pub fn auto_unit<Q: Quantity>(
+        quantity: Q,
+        scale: &[(f64, Q::Unit)],
+    ) -> InUnit<Q::Value, Q::Unit>
+    where
+        Q::Value: Float,
+    {
+        let magnitude = quantity.as_base().abs();
+        let unit = if magnitude == Q::Value::from_f64(0.0) || !magnitude.is_finite() {
+            Q::BASE_UNIT
+        } else {
+            scale
+                .iter()
+                .find(|&&(factor, _)| magnitude >= Q::Value::from_f64(factor))
+                .map_or(scale[scale.len() - 1].1, |&(_, unit)| unit)
+        };
+        InUnit {
+            value: quantity.convert_to(unit),
+            unit,
+        }
+    }
+
+    /// `mean`.
+    pub fn mean<Q: Quantity, I: IntoIterator<Item = Q>>(values: I) -> Option<Q>
+    where
+        Q::Value: Float,
+    {
+        let mut values = values.into_iter();
+        let first = values.next()?.as_base();
+        let mut sum = Q::Value::from_f64(0.0);
+        let mut n = 1_u32;
+        for q in values {
+            sum = sum + (q.as_base() - first);
+            n += 1;
+        }
+        Some(Q::from_base(first + sum / Q::Value::from_f64(f64::from(n))))
+    }
+
+    /// `clamp`, on base-unit values.
+    #[inline]
+    pub fn clamp<T: Float>(value: T, min: T, max: T) -> T {
+        assert!(
+            min.partial_cmp(&max) != Some(core::cmp::Ordering::Greater),
+            "clamp: min > max"
+        );
+        if value < min {
+            min
+        } else if value > max {
+            max
+        } else {
+            value
+        }
+    }
+
+    /// The unit part of a quantity's `Display`: a space and `abbreviation`,
+    /// or nothing for an empty abbreviation.
+    pub fn fmt_unit(f: &mut fmt::Formatter<'_>, abbreviation: &str) -> fmt::Result {
+        if abbreviation.is_empty() {
+            Ok(())
+        } else {
+            write!(f, " {abbreviation}")
+        }
+    }
+
+    /// `FromStr`: a number and a unit, which can be an abbreviation, a name
+    /// or, if `exprs` allows, a unit expression.
+    pub fn parse_quantity<Q: Quantity>(s: &str, exprs: Exprs) -> Result<Q, ParseError>
+    where
+        Q::Value: Float + core::str::FromStr,
+        Q::Unit: core::str::FromStr<Err = ParseError>,
+    {
+        let (number, unit) = crate::split_value_unit(s);
+        let value: Q::Value = number.parse().map_err(|_| ParseError::InvalidNumber)?;
+        match unit.parse::<Q::Unit>() {
+            Ok(unit) => Ok(Q::new(value, unit)),
+            Err(e) => {
+                let factor = expr_factor::<Q>(unit, exprs).ok_or(e)?;
+                Ok(Q::from_base(value * Q::Value::from_f64(factor)))
+            }
         }
     }
 

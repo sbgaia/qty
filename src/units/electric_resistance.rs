@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`ElectricResistanceUnit::Ohm`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct ElectricResistance<T = f64>(T);
@@ -29,7 +24,6 @@ crate::__qty_formula!(ElectricResistance, ElectricResistanceUnit);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum ElectricResistanceUnit {
     Ohm,
@@ -246,18 +240,7 @@ impl<T: crate::Float> ElectricResistance<T> {
             (1e-6, ElectricResistanceUnit::Microohm),
             (1e-9, ElectricResistanceUnit::Nanoohm),
         ];
-        let magnitude = self.0.abs();
-        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
-            return self.in_unit(ElectricResistanceUnit::Ohm);
-        }
-        let mut unit = SCALE[SCALE.len() - 1].1;
-        for (factor, candidate) in SCALE {
-            if magnitude >= T::from_f64(factor) {
-                unit = candidate;
-                break;
-            }
-        }
-        self.in_unit(unit)
+        crate::__private::auto_unit(self, &SCALE)
     }
 }
 

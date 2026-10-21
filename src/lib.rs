@@ -587,12 +587,7 @@ macro_rules! __qty_fmt {
         impl<T: ::core::fmt::$Trait> ::core::fmt::$Trait for $Q<T> {
             fn fmt(&self, f: &mut ::core::fmt::Formatter<'_>) -> ::core::fmt::Result {
                 ::core::fmt::$Trait::fmt(&self.0, f)?;
-                let abbr = $U::$base.abbreviation();
-                if abbr.is_empty() {
-                    Ok(())
-                } else {
-                    write!(f, " {abbr}")
-                }
+                $crate::__private::fmt_unit(f, $U::$base.abbreviation())
             }
         }
     )*};
@@ -703,17 +698,7 @@ macro_rules! __qty_common {
             /// If `min > max`.
             #[inline]
             pub fn clamp(self, min: Self, max: Self) -> Self {
-                assert!(
-                    min.0.partial_cmp(&max.0) != Some(::core::cmp::Ordering::Greater),
-                    "clamp: min > max"
-                );
-                if self.0 < min.0 {
-                    min
-                } else if self.0 > max.0 {
-                    max
-                } else {
-                    self
-                }
+                Self($crate::__private::clamp(self.0, min.0, max.0))
             }
 
             /// The mean of `values`, or `None` if there are none.
@@ -723,15 +708,7 @@ macro_rules! __qty_common {
             /// With `Uncertain` storage this overstates the uncertainty, as the
             /// first value enters every difference. Sum and divide instead.
             pub fn mean<I: IntoIterator<Item = Self>>(values: I) -> ::core::option::Option<Self> {
-                let mut values = values.into_iter();
-                let first = values.next()?.0;
-                let mut sum = T::from_f64(0.0);
-                let mut n = 1_u32;
-                for q in values {
-                    sum = sum + (q.0 - first);
-                    n += 1;
-                }
-                Some(Self(first + sum / T::from_f64(f64::from(n))))
+                $crate::__private::mean(values)
             }
 
             /// Linear interpolation from `self` at `t = 0` to `other` at
@@ -912,21 +889,7 @@ macro_rules! __qty_common {
             /// do. For example `length.auto_unit_in(LengthUnit::IMPERIAL)`.
             /// Meant for linear units. An empty list gives the base unit.
             pub fn auto_unit_in(self, units: &[$U]) -> $crate::InUnit<T, $U> {
-                let magnitude = self.0.abs();
-                let one = |unit: $U| Self::new(T::from_f64(1.0), unit).0.abs();
-                let mut best: ::core::option::Option<($U, T)> = None;
-                let mut smallest: ::core::option::Option<($U, T)> = None;
-                for &unit in units {
-                    let size = one(unit);
-                    if smallest.map_or(true, |(_, s)| size < s) {
-                        smallest = Some((unit, size));
-                    }
-                    if size <= magnitude && best.map_or(true, |(_, b)| size > b) {
-                        best = Some((unit, size));
-                    }
-                }
-                let unit = best.or(smallest).map_or($U::$base, |(unit, _)| unit);
-                self.in_unit(unit)
+                $crate::__private::auto_unit_in(self, units)
             }
         }
 
@@ -960,18 +923,7 @@ macro_rules! __qty_common {
         impl<T: $crate::Float + ::core::str::FromStr> ::core::str::FromStr for $Q<T> {
             type Err = $crate::ParseError;
             fn from_str(s: &str) -> ::core::result::Result<Self, $crate::ParseError> {
-                let (number, unit) = $crate::split_value_unit(s);
-                let value: T = number
-                    .parse()
-                    .map_err(|_| $crate::ParseError::InvalidNumber)?;
-                match unit.parse::<$U>() {
-                    Ok(unit) => Ok(Self::new(value, unit)),
-                    Err(e) => {
-                        let factor = $crate::__private::expr_factor::<Self>(unit, $crate::__private::Exprs::$exprs)
-                            .ok_or(e)?;
-                        Ok(Self::from_base(value * T::from_f64(factor)))
-                    }
-                }
+                $crate::__private::parse_quantity(s, $crate::__private::Exprs::$exprs)
             }
         }
     };
@@ -1002,29 +954,51 @@ macro_rules! quantity_core {
                 defmt::write!(f, "{} {=str}", self.0, $U::$base.abbreviation());
             }
         }
+
+        // What `#[derive]` with `#[serde(transparent)]` would write, through
+        // shared visitors (see `serde_impl`).
+        #[cfg(feature = "serde")]
+        const _: () = {
+            const NAMES: [&str; $U::ALL.len()] = $crate::serde_impl::variant_names($U::QUANTITY.units);
+
+            impl<T: serde::Serialize> serde::Serialize for $Q<T> {
+                #[inline]
+                fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+                    self.0.serialize(serializer)
+                }
+            }
+            impl<'de, T: serde::Deserialize<'de>> serde::Deserialize<'de> for $Q<T> {
+                #[inline]
+                fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+                    T::deserialize(deserializer).map(Self)
+                }
+            }
+            impl serde::Serialize for $U {
+                #[inline]
+                fn serialize<S: serde::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+                    $crate::serde_impl::serialize_unit(serializer, stringify!($U), *self as usize, &NAMES)
+                }
+            }
+            impl<'de> serde::Deserialize<'de> for $U {
+                #[inline]
+                fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+                    $crate::serde_impl::deserialize_unit(deserializer, stringify!($U), &NAMES, $U::ALL)
+                }
+            }
+        };
+
         #[cfg(feature = "schemars")]
         impl<T: schemars::JsonSchema> schemars::JsonSchema for $Q<T> {
             fn inline_schema() -> bool {
                 true
             }
             fn schema_name() -> std::borrow::Cow<'static, str> {
-                std::format!("{}_{}", stringify!($Q), T::schema_name()).into()
+                $crate::schema::quantity_schema_name::<T>(stringify!($Q))
             }
             /// The storage type's schema (a number for floats), described
             /// with the base unit.
             fn json_schema(generator: &mut schemars::SchemaGenerator) -> schemars::Schema {
-                let mut schema = T::json_schema(generator);
-                schema.insert(
-                    "description".into(),
-                    std::format!(
-                        "{} in {} ({})",
-                        stringify!($Q),
-                        $U::$base.info().plural,
-                        $U::$base.abbreviation()
-                    )
-                    .into(),
-                );
-                schema
+                $crate::schema::quantity_schema::<T>(generator, stringify!($Q), $U::$base.info())
             }
         }
         #[cfg(feature = "schemars")]
@@ -1034,8 +1008,7 @@ macro_rules! quantity_core {
             }
             /// The variant names, as serde writes them.
             fn json_schema(_: &mut schemars::SchemaGenerator) -> schemars::Schema {
-                let names: std::vec::Vec<&str> = $U::ALL.iter().map(|u| u.info().singular).collect();
-                schemars::json_schema!({ "type": "string", "enum": names })
+                $crate::schema::unit_schema($U::QUANTITY.units)
             }
         }
 
@@ -1394,7 +1367,9 @@ macro_rules! cross_recip {
     };
 }
 
-/// Declares the [`FixedUnit`] marker for one unit.
+/// Declares the [`FixedUnit`] marker for one unit. `$from` and `$as` name
+/// the unit's conversion methods; the marker doesn't call them, as the
+/// provided `to_quantity` and `from_quantity` reach the same code via `UNIT`.
 macro_rules! fixed_unit {
     // Units of ordinary quantities: counts can be added.
     ($M:ident: $Q:ident, $U:ident :: $V:ident, base $B:ident,
@@ -1473,14 +1448,6 @@ macro_rules! fixed_unit {
                 const OFFSET_NUM: i128 = $on;
                 const OFFSET_DEN: u128 = $od;
             )?
-            #[inline(always)]
-            fn to_quantity<F: $crate::Float>(count: F) -> super::$Q<F> {
-                super::$Q::$from(count)
-            }
-            #[inline(always)]
-            fn from_quantity<F: $crate::Float>(quantity: super::$Q<F>) -> F {
-                quantity.$as()
-            }
         }
     };
 }
@@ -1576,6 +1543,10 @@ pub mod constants;
 
 mod angle_wrap;
 
+#[cfg(feature = "schemars")]
+mod schema;
+#[cfg(feature = "serde")]
+mod serde_impl;
 #[cfg(feature = "serde")]
 #[cfg_attr(docsrs, doc(cfg(feature = "serde")))]
 pub mod serde_str;

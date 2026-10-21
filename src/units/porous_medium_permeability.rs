@@ -11,11 +11,6 @@ use crate::Number;
 
 /// Stored as a `T` (`f64` by default) in [`PorousMediumPermeabilityUnit::SquareMeter`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct PorousMediumPermeability<T = f64>(T);
@@ -27,7 +22,6 @@ crate::__qty_formula!(PorousMediumPermeability, PorousMediumPermeabilityUnit);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum PorousMediumPermeabilityUnit {
     /// The darcy (or darcy unit) and millidarcy (md or mD) are units of permeability, named after Henry Darcy. They are not SI units, but they are widely used in petroleum engineering and geology.

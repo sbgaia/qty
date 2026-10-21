@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`InformationUnit::Bit`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct Information<T = f64>(T);
@@ -28,7 +23,6 @@ quantity!(Information, InformationUnit, Bit, si: None);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum InformationUnit {
     Byte,
@@ -709,18 +703,7 @@ impl<T: crate::Float> Information<T> {
             (1000.0, InformationUnit::Kilobit),
             (1.0, InformationUnit::Bit),
         ];
-        let magnitude = self.0.abs();
-        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
-            return self.in_unit(InformationUnit::Bit);
-        }
-        let mut unit = SCALE[SCALE.len() - 1].1;
-        for (factor, candidate) in SCALE {
-            if magnitude >= T::from_f64(factor) {
-                unit = candidate;
-                break;
-            }
-        }
-        self.in_unit(unit)
+        crate::__private::auto_unit(self, &SCALE)
     }
 }
 

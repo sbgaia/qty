@@ -487,10 +487,6 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
         out,
         "#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]"
     );
-    w!(
-        out,
-        "#[cfg_attr(feature = \"serde\", derive(serde::Serialize, serde::Deserialize), serde(transparent))]"
-    );
     w!(out, "#[repr(transparent)]");
     w!(out, "#[must_use]");
     w!(out, "pub struct {}<T = f64>(T);", name);
@@ -601,10 +597,6 @@ fn emit_enum(qty: &QuantityDef, out: &mut String) {
         "/// Non-exhaustive, since UnitsNet keeps adding units."
     );
     w!(out, "#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]");
-    w!(
-        out,
-        "#[cfg_attr(feature = \"serde\", derive(serde::Serialize, serde::Deserialize))]"
-    );
     w!(out, "#[non_exhaustive]");
     w!(out, "pub enum {}Unit {{", qty.name);
     for unit in &qty.units {
@@ -1040,25 +1032,7 @@ fn emit_auto_unit(qty: &QuantityDef, out: &mut String) {
             .collect::<Vec<_>>()
             .join(", ")
     );
-    w!(out, "        let magnitude = self.0.abs();");
-    w!(
-        out,
-        "        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {{"
-    );
-    w!(
-        out,
-        "            return self.in_unit({enum_name}::{});",
-        qty.base_unit
-    );
-    w!(out, "        }}");
-    w!(out, "        let mut unit = SCALE[SCALE.len() - 1].1;");
-    w!(out, "        for (factor, candidate) in SCALE {{");
-    w!(out, "            if magnitude >= T::from_f64(factor) {{");
-    w!(out, "                unit = candidate;");
-    w!(out, "                break;");
-    w!(out, "            }}");
-    w!(out, "        }}");
-    w!(out, "        self.in_unit(unit)");
+    w!(out, "        crate::__private::auto_unit(self, &SCALE)");
     w!(out, "    }}");
 }
 

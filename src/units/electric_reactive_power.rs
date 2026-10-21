@@ -13,11 +13,6 @@ use crate::Number;
 ///
 /// Stored as a `T` (`f64` by default) in [`ElectricReactivePowerUnit::VoltampereReactive`], with the same layout as `T`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
-#[cfg_attr(
-    feature = "serde",
-    derive(serde::Serialize, serde::Deserialize),
-    serde(transparent)
-)]
 #[repr(transparent)]
 #[must_use]
 pub struct ElectricReactivePower<T = f64>(T);
@@ -29,7 +24,6 @@ crate::__qty_formula!(ElectricReactivePower, ElectricReactivePowerUnit);
 ///
 /// Non-exhaustive, since UnitsNet keeps adding units.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 #[non_exhaustive]
 pub enum ElectricReactivePowerUnit {
     VoltampereReactive,
@@ -182,18 +176,7 @@ impl<T: crate::Float> ElectricReactivePower<T> {
             (1000.0, ElectricReactivePowerUnit::KilovoltampereReactive),
             (1.0, ElectricReactivePowerUnit::VoltampereReactive),
         ];
-        let magnitude = self.0.abs();
-        if magnitude == T::from_f64(0.0) || !magnitude.is_finite() {
-            return self.in_unit(ElectricReactivePowerUnit::VoltampereReactive);
-        }
-        let mut unit = SCALE[SCALE.len() - 1].1;
-        for (factor, candidate) in SCALE {
-            if magnitude >= T::from_f64(factor) {
-                unit = candidate;
-                break;
-            }
-        }
-        self.in_unit(unit)
+        crate::__private::auto_unit(self, &SCALE)
     }
 }
 
