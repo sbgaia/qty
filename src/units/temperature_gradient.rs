@@ -15,8 +15,8 @@ use crate::Number;
 #[must_use]
 pub struct TemperatureGradient<T = f64>(T);
 
-quantity!(TemperatureGradient, TemperatureGradientUnit, KelvinPerMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 0, 1, 0, 0], 1.0)));
-crate::__qty_formula!(TemperatureGradient, TemperatureGradientUnit);
+quantity!(arith TemperatureGradient, TemperatureGradientUnit, KelvinPerMeter, si: Some(crate::__private::si_unit([-1, 0, 0, 0, 1, 0, 0], 1.0)));
+crate::__qty_formula!(TemperatureGradient, TemperatureGradientUnit, arith);
 
 /// The units of [`TemperatureGradient`].
 ///

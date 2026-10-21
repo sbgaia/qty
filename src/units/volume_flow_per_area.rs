@@ -15,8 +15,8 @@ use crate::Number;
 #[must_use]
 pub struct VolumeFlowPerArea<T = f64>(T);
 
-quantity!(VolumeFlowPerArea, VolumeFlowPerAreaUnit, CubicMeterPerSecondPerSquareMeter, si: Some(crate::__private::si_unit([1, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(VolumeFlowPerArea, VolumeFlowPerAreaUnit);
+quantity!(arith VolumeFlowPerArea, VolumeFlowPerAreaUnit, CubicMeterPerSecondPerSquareMeter, si: Some(crate::__private::si_unit([1, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(VolumeFlowPerArea, VolumeFlowPerAreaUnit, arith);
 
 /// The units of [`VolumeFlowPerArea`].
 ///

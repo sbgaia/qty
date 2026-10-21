@@ -7,6 +7,7 @@
 //!
 //! Run with: `cargo run -p codegen`
 
+mod arith;
 mod case;
 mod expr;
 mod formula;
@@ -99,7 +100,7 @@ fn main() {
     rustfmt(exponents_path);
     println!("codegen: wrote src/formula/exponents.rs");
 
-    let cross_source = generator::generate_cross_type(&cross_ops);
+    let cross_source = generator::generate_cross_type(&cross_ops, &quantities);
     let cross_path = Path::new("src/cross_type.rs");
     std::fs::write(cross_path, &cross_source)
         .unwrap_or_else(|e| panic!("write {}: {e}", cross_path.display()));
@@ -108,6 +109,21 @@ fn main() {
         "codegen: wrote src/cross_type.rs ({} cross-type ops)",
         cross_ops.len()
     );
+
+    let max_exponent = 2 * quantities
+        .iter()
+        .flat_map(|q| q.dimensions.iter())
+        .map(|e| e.abs())
+        .max()
+        .unwrap_or(0);
+    let arith_path = Path::new("src/arith_table.rs");
+    std::fs::write(
+        arith_path,
+        arith::generate_arith_table(&quantities, &cross_ops, max_exponent),
+    )
+    .unwrap_or_else(|e| panic!("write {}: {e}", arith_path.display()));
+    rustfmt(arith_path);
+    println!("codegen: wrote src/arith_table.rs");
 
     // One test file per quantity, and one for the relations.
     let tests_units_dir = Path::new("tests/units");

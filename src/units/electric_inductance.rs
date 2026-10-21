@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricInductance<T = f64>(T);
 
-quantity!(ElectricInductance, ElectricInductanceUnit, Henry, si: Some(crate::__private::si_unit([2, 1, -2, -2, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricInductance, ElectricInductanceUnit);
+quantity!(arith ElectricInductance, ElectricInductanceUnit, Henry, si: Some(crate::__private::si_unit([2, 1, -2, -2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricInductance, ElectricInductanceUnit, arith);
 
 /// The units of [`ElectricInductance`].
 ///

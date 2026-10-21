@@ -15,8 +15,9 @@ fn wrong_plain_number(m: Mass, v: Speed) {
     let x: f64 = formula!(m / v);
 }
 
+// `m * m` has no quantity of its own, so this is an `Expr`.
 fn wrong_into(m: Mass, v: Speed) {
-    let w: Force = (m * STANDARD_GRAVITY * v).into();
+    let w: Force = (m * m * STANDARD_GRAVITY).into();
 }
 
 fn add(m: Mass, v: Speed) {

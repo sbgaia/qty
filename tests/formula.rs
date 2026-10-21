@@ -258,10 +258,11 @@ fn intermediate_values() {
 #[test]
 fn without_the_macro() {
     let field = ElectricField::from_volts_per_meter(1e4);
-    let force: Force = (ELEMENTARY_CHARGE * field).into();
+    // A constant times a quantity is the quantity of the result.
+    let force: Force = ELEMENTARY_CHARGE * field;
     close(force.as_newtons(), 1.602_176_634e-15, 1e-15);
 
-    let weight: Force = (Mass::from_kilograms(10.0) * STANDARD_GRAVITY).into();
+    let weight: Force = Mass::from_kilograms(10.0) * STANDARD_GRAVITY;
     close(weight.as_newtons(), 98.0665, 1e-15);
 
     let g: Acceleration = STANDARD_GRAVITY.into();

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct LeakRate<T = f64>(T);
 
-quantity!(LeakRate, LeakRateUnit, PascalCubicMeterPerSecond, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(LeakRate, LeakRateUnit);
+quantity!(arith LeakRate, LeakRateUnit, PascalCubicMeterPerSecond, si: Some(crate::__private::si_unit([2, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(LeakRate, LeakRateUnit, arith);
 
 /// The units of [`LeakRate`].
 ///

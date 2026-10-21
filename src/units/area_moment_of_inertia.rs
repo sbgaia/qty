@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct AreaMomentOfInertia<T = f64>(T);
 
-quantity!(AreaMomentOfInertia, AreaMomentOfInertiaUnit, MeterToTheFourth, si: Some(crate::__private::si_unit([4, 0, 0, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(AreaMomentOfInertia, AreaMomentOfInertiaUnit);
+quantity!(arith AreaMomentOfInertia, AreaMomentOfInertiaUnit, MeterToTheFourth, si: Some(crate::__private::si_unit([4, 0, 0, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(AreaMomentOfInertia, AreaMomentOfInertiaUnit, arith);
 
 /// The units of [`AreaMomentOfInertia`].
 ///

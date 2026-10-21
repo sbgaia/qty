@@ -360,6 +360,7 @@ macro_rules! custom_quantity {
 
         $crate::__qty_common!($Q, $U, $base, exprs: $exprs);
         $crate::__qty_vector_ops!($Q);
+        $crate::__qty_scalar_ops!($Q);
 
         $crate::__qty_if_serde! {
             /// The bare number in the base unit.

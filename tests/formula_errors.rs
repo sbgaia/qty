@@ -14,7 +14,7 @@ use std::process::Command;
 const EXPECTED: &[&str] = &[
     "error[E0277]: this formula gives `(kg, m<2>, s<-2>)`, not a `qty::Force`",
     "error[E0277]: this formula gives `(kg, m<-1>, s)`, not a `f64`",
-    "error[E0277]: this formula gives `(kg, m<2>, s<-3>)`, not a `qty::Force`",
+    "error[E0277]: this formula gives `(kg<2>, m, s<-2>)`, not a `qty::Force`",
     "error[E0277]: can't add `(kg, m, s<-1>)` to `(kg, m<2>, s<-2>)`",
     "error[E0277]: can't subtract `(kg,)` from `(kg, m, s<-1>)`",
     "error[E0277]: the square root of `(m<3>,)` has a fractional exponent",

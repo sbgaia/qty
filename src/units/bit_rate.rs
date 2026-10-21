@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct BitRate<T = f64>(T);
 
-quantity!(BitRate, BitRateUnit, BitPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(BitRate, BitRateUnit);
+quantity!(arith BitRate, BitRateUnit, BitPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(BitRate, BitRateUnit, arith);
 
 /// The units of [`BitRate`].
 ///

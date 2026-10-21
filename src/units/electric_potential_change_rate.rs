@@ -17,8 +17,12 @@ use crate::Number;
 #[must_use]
 pub struct ElectricPotentialChangeRate<T = f64>(T);
 
-quantity!(ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit, VoltPerSecond, si: Some(crate::__private::si_unit([2, 1, -4, -1, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit);
+quantity!(arith ElectricPotentialChangeRate, ElectricPotentialChangeRateUnit, VoltPerSecond, si: Some(crate::__private::si_unit([2, 1, -4, -1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(
+    ElectricPotentialChangeRate,
+    ElectricPotentialChangeRateUnit,
+    arith
+);
 
 /// The units of [`ElectricPotentialChangeRate`].
 ///

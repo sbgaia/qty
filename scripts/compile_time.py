@@ -13,8 +13,9 @@ Two kinds of measurement:
    already built (every quantity, `f64`, `std`). The crate has `--blocks`
    copies of a short block of physics: build a length, a duration and a
    mass, divide to a speed and, in the `kinetic` variant, compute 0.5·m·v²
-   as an energy (with `formula!` in qty, plain operators in uom). The
-   `speed` variant leaves out the energy. Incremental compilation is off,
+   as an energy (with `formula!` in qty, plain operators in uom). qty's
+   `operators` variant computes it with plain operators too. The `speed`
+   variant leaves out the energy. Incremental compilation is off,
    so every rebuild compiles the whole crate. `scripts/scaling.py` does
    the same for more patterns and sizes, and times the programs too.
 
@@ -101,6 +102,15 @@ QTY_BLOCK = {
         "let m = Mass::from_kilograms(a); "
         "let v: Speed = l / t; "
         "let e: Energy = formula!(0.5 * m * v * v); "
+        "acc += e.as_joules() + v.as_meters_per_second(); }}\n"
+    ),
+    # The kinetic energy with plain operators, as in uom's block.
+    "operators": (
+        "{{ let l = Length::from_meters(a + {i}.0); "
+        "let t = Duration::from_seconds(a * {i}.0 + 1.0); "
+        "let m = Mass::from_kilograms(a); "
+        "let v: Speed = l / t; "
+        "let e: Energy = 0.5 * m * v * v; "
         "acc += e.as_joules() + v.as_meters_per_second(); }}\n"
     ),
 }

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct LinearPowerDensity<T = f64>(T);
 
-quantity!(LinearPowerDensity, LinearPowerDensityUnit, WattPerMeter, si: Some(crate::__private::si_unit([1, 1, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(LinearPowerDensity, LinearPowerDensityUnit);
+quantity!(arith LinearPowerDensity, LinearPowerDensityUnit, WattPerMeter, si: Some(crate::__private::si_unit([1, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(LinearPowerDensity, LinearPowerDensityUnit, arith);
 
 /// The units of [`LinearPowerDensity`].
 ///

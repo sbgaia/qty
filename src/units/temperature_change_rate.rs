@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct TemperatureChangeRate<T = f64>(T);
 
-quantity!(TemperatureChangeRate, TemperatureChangeRateUnit, DegreeCelsiusPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 1, 0, 0], 1.0)));
-crate::__qty_formula!(TemperatureChangeRate, TemperatureChangeRateUnit);
+quantity!(arith TemperatureChangeRate, TemperatureChangeRateUnit, DegreeCelsiusPerSecond, si: Some(crate::__private::si_unit([0, 0, -1, 0, 1, 0, 0], 1.0)));
+crate::__qty_formula!(TemperatureChangeRate, TemperatureChangeRateUnit, arith);
 
 /// The units of [`TemperatureChangeRate`].
 ///

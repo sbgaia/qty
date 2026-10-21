@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct SpecificEntropy<T = f64>(T);
 
-quantity!(SpecificEntropy, SpecificEntropyUnit, JoulePerKilogramKelvin, si: Some(crate::__private::si_unit([2, 0, -2, 0, -1, 0, 0], 1.0)));
-crate::__qty_formula!(SpecificEntropy, SpecificEntropyUnit);
+quantity!(arith SpecificEntropy, SpecificEntropyUnit, JoulePerKilogramKelvin, si: Some(crate::__private::si_unit([2, 0, -2, 0, -1, 0, 0], 1.0)));
+crate::__qty_formula!(SpecificEntropy, SpecificEntropyUnit, arith);
 
 /// The units of [`SpecificEntropy`].
 ///

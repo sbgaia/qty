@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricCapacitance<T = f64>(T);
 
-quantity!(ElectricCapacitance, ElectricCapacitanceUnit, Farad, si: Some(crate::__private::si_unit([-2, -1, 4, 2, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricCapacitance, ElectricCapacitanceUnit);
+quantity!(arith ElectricCapacitance, ElectricCapacitanceUnit, Farad, si: Some(crate::__private::si_unit([-2, -1, 4, 2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricCapacitance, ElectricCapacitanceUnit, arith);
 
 /// The units of [`ElectricCapacitance`].
 ///

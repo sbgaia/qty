@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricPotential<T = f64>(T);
 
-quantity!(ElectricPotential, ElectricPotentialUnit, Volt, si: Some(crate::__private::si_unit([2, 1, -3, -1, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricPotential, ElectricPotentialUnit);
+quantity!(arith ElectricPotential, ElectricPotentialUnit, Volt, si: Some(crate::__private::si_unit([2, 1, -3, -1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricPotential, ElectricPotentialUnit, arith);
 
 /// The units of [`ElectricPotential`].
 ///

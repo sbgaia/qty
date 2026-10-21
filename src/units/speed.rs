@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Speed<T = f64>(T);
 
-quantity!(Speed, SpeedUnit, MeterPerSecond, si: Some(crate::__private::si_unit([1, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Speed, SpeedUnit);
+quantity!(arith Speed, SpeedUnit, MeterPerSecond, si: Some(crate::__private::si_unit([1, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Speed, SpeedUnit, arith);
 
 /// The units of [`Speed`].
 ///

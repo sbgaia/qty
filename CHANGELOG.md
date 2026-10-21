@@ -6,6 +6,33 @@ follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `*` and `/` between any two quantities. The result is the quantity with
+  the dimensions of the product or quotient, so formulas compile with the
+  plain operators: `let e: Energy = 0.5 * m * v * v`,
+  `let f: Force = G * m1 * m2 / (r * r)`. The relations of earlier
+  versions keep their outputs (`power / rotational_speed` is a `Torque`);
+  between quantities without a relation, the dimensions pick the common
+  quantity (`Energy` rather than `Torque`, `Frequency` rather than
+  `RotationalSpeed`). Dimensions that no quantity has, like those of
+  `m * m`, give an `Expr`.
+
+### Changed
+
+- An `Expr` times or over a quantity is the quantity with the dimensions of
+  the result, when there is one: `mass * STANDARD_GRAVITY` is a `Force`.
+  `Expr` times `Expr` or a number is still an `Expr`, and `formula!` and
+  `expr!` work as before.
+- A quantity times or over a plain number of a storage type of your own
+  needs that type to implement `Number`. Products of quantities still work
+  for any storage type with the operator, as long as the base units need no
+  conversion factor.
+- Where the quantity with the dimensions of a product is behind a feature
+  that isn't enabled, the product is an `Expr`, which converts with `.into()`
+  once the feature is on: `mass * speed` is an `Impulse` with `mechanics`,
+  and an `Expr` without it.
+
 ## [0.3.0] - 2026-10-21
 
 ### Migrating from 0.2

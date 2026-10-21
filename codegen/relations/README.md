@@ -24,3 +24,10 @@ UnitsNet's, then the extra ones.
 Relations are chosen by hand rather than derived from dimensions: several
 quantities share dimensions (energy and torque, frequency and rotational
 speed), and most dimension-only matches are coincidences.
+
+Products and quotients without a relation still compile: the generic
+operators (`src/arith.rs`) give the quantity with the result's dimensions,
+or an `Expr` when there is none. A relation only matters where it picks a
+different quantity than the dimensions do, such as `Power / RotationalSpeed =
+Torque`; `codegen/src/arith.rs` lists, in `PREFERRED`, which of the
+quantities that share dimensions the dimensions pick.

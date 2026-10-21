@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MolarMass<T = f64>(T);
 
-quantity!(MolarMass, MolarMassUnit, KilogramPerMole, si: Some(crate::__private::si_unit([0, 1, 0, 0, 0, -1, 0], 1.0)));
-crate::__qty_formula!(MolarMass, MolarMassUnit);
+quantity!(arith MolarMass, MolarMassUnit, KilogramPerMole, si: Some(crate::__private::si_unit([0, 1, 0, 0, 0, -1, 0], 1.0)));
+crate::__qty_formula!(MolarMass, MolarMassUnit, arith);
 
 /// The units of [`MolarMass`].
 ///

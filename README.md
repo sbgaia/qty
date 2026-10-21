@@ -44,6 +44,32 @@ let energy: Energy = Power::from_kilowatts(3.0) * Duration::from_hours(2.0);
 assert!((energy.as_kilowatt_hours() - 6.0).abs() < 1e-12);
 ```
 
+Any two quantities multiply and divide, and the result is the quantity
+with the dimensions of the product. Steps in between don't need a type of
+their own, and at run time it's the arithmetic on plain floats:
+
+```rust
+use qty::*;
+use qty::constants::GRAVITATIONAL_CONSTANT as G;
+
+let (earth, person) = (Mass::from_kilograms(5.972e24), Mass::from_kilograms(70.0));
+let r = Length::from_kilometers(6371.0);
+let weight: Force = G * earth * person / (r * r);
+assert_eq!(format!("{weight:.0}"), "687 N");
+
+let v = Speed::from_meters_per_second(3.0);
+let energy: Energy = 0.5 * person * v * v;
+assert_eq!(energy.as_joules(), 315.0);
+```
+
+Where several quantities have the same dimensions, the relations between
+quantities decide (power over angular speed is a `Torque`, force times
+length an `Energy`), and otherwise the common one: an `Energy` rather than
+a `Torque`, a `Frequency` rather than a `RotationalSpeed`. Dimensions that
+no quantity has, like those of `person * person`, give a
+[`formula::Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html),
+which keeps multiplying and converts with `into()`.
+
 Adding a length to a duration is a compile error. Operations that only make
 sense for some quantities exist only there: `Area::sqrt` gives a `Length`,
 `Length::squared` an `Area`, `Angle` has `sin` and `cos`.
@@ -138,21 +164,20 @@ assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
 
 ## Formulas
 
-`Mass * Mass` has no type of its own, so a formula like Newton's law of
-gravitation doesn't compile with the operators alone. `formula!` works out
-the dimensions of every step at compile time and converts the result to the
-type you ask for:
+`formula!` computes the same arithmetic and converts the result to the
+type you ask for, with an error in SI base units when the dimensions don't
+match. Plain numbers in it work with every storage type, and `.sqrt()` and
+`.cbrt()` work on any step:
 
 ```rust
 use qty::*;
 use qty::constants::GRAVITATIONAL_CONSTANT as G;
 
-let (earth, person) = (Mass::from_kilograms(5.972e24), Mass::from_kilograms(70.0));
-let r = Length::from_kilometers(6371.0);
-let weight: Force = formula!(G * earth * person / (r * r));
-assert_eq!(format!("{weight:.0}"), "687 N");
+let (m, r) = (Mass::from_kilograms(5.972e24), Length::from_kilometers(6371.0));
+let escape: Speed = formula!((2.0 * G * m / r).sqrt());
+assert_eq!(format!("{:.1}", escape.in_unit(SpeedUnit::KilometerPerSecond)), "11.2 km/s");
 
-let v = Speed::from_meters_per_second(3.0);
+let (person, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
 let energy: Energy = formula!(0.5 * person * v * v);
 assert_eq!(energy.as_joules(), 315.0);
 ```

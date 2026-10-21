@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct SolidAngle<T = f64>(T);
 
-quantity!(SolidAngle, SolidAngleUnit, Steradian, si: None);
-crate::__qty_formula!(SolidAngle, SolidAngleUnit);
+quantity!(arith SolidAngle, SolidAngleUnit, Steradian, si: None);
+crate::__qty_formula!(SolidAngle, SolidAngleUnit, arith);
 
 /// The units of [`SolidAngle`].
 ///

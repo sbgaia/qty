@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Frequency<T = f64>(T);
 
-quantity!(Frequency, FrequencyUnit, Hertz, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Frequency, FrequencyUnit);
+quantity!(arith Frequency, FrequencyUnit, Hertz, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Frequency, FrequencyUnit, arith);
 
 /// The units of [`Frequency`].
 ///

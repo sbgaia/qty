@@ -17,10 +17,11 @@ use crate::Number;
 #[must_use]
 pub struct ElectricSurfaceChargeDensity<T = f64>(T);
 
-quantity!(ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit, CoulombPerSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 1, 1, 0, 0, 0], 1.0)));
+quantity!(arith ElectricSurfaceChargeDensity, ElectricSurfaceChargeDensityUnit, CoulombPerSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 1, 1, 0, 0, 0], 1.0)));
 crate::__qty_formula!(
     ElectricSurfaceChargeDensity,
-    ElectricSurfaceChargeDensityUnit
+    ElectricSurfaceChargeDensityUnit,
+    arith
 );
 
 /// The units of [`ElectricSurfaceChargeDensity`].

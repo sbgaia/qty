@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricConductivity<T = f64>(T);
 
-quantity!(ElectricConductivity, ElectricConductivityUnit, SiemensPerMeter, si: Some(crate::__private::si_unit([-3, -1, 3, 2, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricConductivity, ElectricConductivityUnit);
+quantity!(arith ElectricConductivity, ElectricConductivityUnit, SiemensPerMeter, si: Some(crate::__private::si_unit([-3, -1, 3, 2, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricConductivity, ElectricConductivityUnit, arith);
 
 /// The units of [`ElectricConductivity`].
 ///

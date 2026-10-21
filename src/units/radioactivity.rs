@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Radioactivity<T = f64>(T);
 
-quantity!(Radioactivity, RadioactivityUnit, Becquerel, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Radioactivity, RadioactivityUnit);
+quantity!(arith Radioactivity, RadioactivityUnit, Becquerel, si: Some(crate::__private::si_unit([0, 0, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Radioactivity, RadioactivityUnit, arith);
 
 /// The units of [`Radioactivity`].
 ///
