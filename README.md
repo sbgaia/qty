@@ -374,7 +374,7 @@ tests compare the integer arithmetic with exact rational arithmetic, and two
 fuzz targets cover parsing and `Fixed` (see `fuzz/README.md`). The examples
 in [`examples/`](https://github.com/sbgaia/qty/tree/main/examples) run in CI.
 
-`cargo bench -p qty-benches` compares run-time speed with other unit crates,
+`cargo bench` in `benches/` compares run-time speed with other unit crates,
 and its `patterns` benchmark with uom and plain `f64` on common uses.
 `python3 scripts/compile_time.py` compares compile times with uom: cold
 builds of each library, and rebuilds of a crate that uses it.

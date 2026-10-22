@@ -27,6 +27,10 @@ ferrunitas = "0.4"
 # measures-rs: a macro-generated unit system. Its library is called `measures`.
 measures = { package = "measures-rs", version = "0.1" }
 
+# Not part of the main workspace, so that criterion and the competitor crates
+# stay out of qty's lockfile. Run from this directory.
+[workspace]
+
 [[bench]]
 name = "compare"
 harness = false
