@@ -160,6 +160,35 @@ fn base_units_that_are_not_coherent() {
     assert_eq!(MassFlow::<i64>::from_base(6) / MassFlow::from_base(2), 3);
 }
 
+#[test]
+fn whole_powers() {
+    let l = Length::from_meters(2.0);
+    let a: Area = l.powi::<2>();
+    assert_eq!(a, l * l);
+    let v: Volume = l.powi::<3>();
+    assert_eq!(v.as_cubic_meters(), 8.0);
+    let same: Length = l.powi::<1>();
+    assert_eq!(same, l);
+    let f: Frequency = Duration::from_seconds(4.0).powi::<-1>();
+    assert_eq!(f.as_hertz(), 0.25);
+    let m4: Expr<Dims<0, 4>> = Mass::from_kilograms(2.0).powi::<4>();
+    assert_eq!(m4.value(), 16.0);
+    let l32: Area<f32> = Length::from_meters(1.5f32).powi::<2>();
+    assert_eq!(l32.as_square_meters(), 2.25);
+}
+
+#[cfg(all(feature = "fluids", feature = "thermal"))]
+#[test]
+fn whole_powers_of_base_units_that_are_not_coherent() {
+    // `MassFlow` is stored in g/s, `ThermalInsulance` in m²·K/kW.
+    let flow = MassFlow::from_grams_per_second(1500.0);
+    let sq: Expr<Dims<0, 2, -2>> = flow.powi::<2>();
+    close(sq.value(), 2.25);
+    let r = ThermalInsulance::from_square_meter_kelvins_per_watt(0.5);
+    let h: HeatTransferCoefficient = r.powi::<-1>();
+    close(h.as_watts_per_square_meter_kelvin(), 2.0);
+}
+
 #[cfg(feature = "information")]
 #[test]
 fn relations_to_quantities_outside_formulas() {

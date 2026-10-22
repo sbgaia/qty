@@ -319,6 +319,37 @@ pub trait Quantity: Copy {
     fn convert_to(self, unit: Self::Unit) -> Self::Value
     where
         Self::Value: Number;
+
+    /// This quantity to the whole power `N`, which can be negative. The
+    /// result is what `*` and `/` give for the same product: the quantity
+    /// with those dimensions, or a [`formula::Expr`] where no quantity has
+    /// them.
+    ///
+    /// ```rust
+    /// use qty::*;
+    ///
+    /// let side = Length::from_meters(3.0);
+    /// let floor: Area = side.powi::<2>();
+    /// assert_eq!(floor, side * side);
+    ///
+    /// let (m, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
+    /// let e: Energy = 0.5 * m * v.powi::<2>();
+    /// assert_eq!(e.as_joules(), 315.0);
+    ///
+    /// let rate: Frequency = Duration::from_seconds(0.5).powi::<-1>();
+    /// assert_eq!(rate.as_hertz(), 2.0);
+    /// ```
+    #[inline(always)]
+    fn powi<const N: i8>(self) -> arith::PowOut<Self, N>
+    where
+        Self: arith::Arith<Value = <Self as Quantity>::Value>,
+        <Self as Quantity>::Value: Number,
+        <Self as arith::Arith>::Dim: formula::PowDim<N>,
+        <<Self as arith::Arith>::Dim as formula::PowDim<N>>::Out:
+            arith::Canon<<Self as Quantity>::Value>,
+    {
+        arith::powi::<Self, N>(self)
+    }
 }
 
 /// Implemented by every unit enum (`LengthUnit`, `MassUnit`, …).

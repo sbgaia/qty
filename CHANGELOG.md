@@ -17,9 +17,15 @@ follow [Semantic Versioning](https://semver.org/).
   quantity (`Energy` rather than `Torque`, `Frequency` rather than
   `RotationalSpeed`). Dimensions that no quantity has, like those of
   `m * m`, give an `Expr`.
+- `.powi::<N>()` on every quantity, with the same output as the
+  operators: `side.powi::<2>()` is an `Area`, `v.powi::<2>()` a
+  `SpecificEnergy`, `period.powi::<-1>()` a `Frequency`.
 
 ### Changed
 
+- Minutes print as `min` rather than UnitsNet's `m`, which read as metres:
+  `Duration::from_minutes(14.4)` in minutes is `14.4 min`. `"5 m"` still
+  parses as minutes where a duration is expected.
 - An `Expr` times or over a quantity is the quantity with the dimensions of
   the result, when there is one: `mass * STANDARD_GRAVITY` is a `Force`.
   `Expr` times `Expr` or a number is still an `Expr`, and `formula!` and

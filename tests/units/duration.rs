@@ -666,14 +666,14 @@ fn parse_every_abbreviation() {
         format!("2.5 {}", "hours").parse::<Duration>(),
         Ok(Duration::new(2.5, DurationUnit::Hour))
     );
-    assert_eq!("m".parse::<DurationUnit>(), Ok(DurationUnit::Minute));
-    assert_eq!(
-        format!("2.5 {}", "m").parse::<Duration>(),
-        Ok(Duration::new(2.5, DurationUnit::Minute))
-    );
     assert_eq!("min".parse::<DurationUnit>(), Ok(DurationUnit::Minute));
     assert_eq!(
         format!("2.5 {}", "min").parse::<Duration>(),
+        Ok(Duration::new(2.5, DurationUnit::Minute))
+    );
+    assert_eq!("m".parse::<DurationUnit>(), Ok(DurationUnit::Minute));
+    assert_eq!(
+        format!("2.5 {}", "m").parse::<Duration>(),
         Ok(Duration::new(2.5, DurationUnit::Minute))
     );
     assert_eq!("minute".parse::<DurationUnit>(), Ok(DurationUnit::Minute));
