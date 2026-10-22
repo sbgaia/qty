@@ -37,20 +37,21 @@ use qty::*;
 let tyre = Pressure::from_bars(2.4);
 assert!((tyre.as_pounds_force_per_square_inch() - 34.8).abs() < 0.1);
 assert_eq!(Pressure::new(2.4, PressureUnit::Bar), tyre);
+```
+
+`*` and `/` work between any two quantities, and the result is the
+quantity with the dimensions of the product or quotient. Steps in between
+don't need a type of their own, and at run time it's the arithmetic on
+plain floats:
+
+```rust
+use qty::*;
+use qty::constants::GRAVITATIONAL_CONSTANT as G;
 
 let force: Force = Mass::from_kilograms(1200.0) * Acceleration::from_meters_per_second_squared(2.0);
 assert_eq!(force, Force::from_newtons(2400.0));
 let energy: Energy = Power::from_kilowatts(3.0) * Duration::from_hours(2.0);
 assert!((energy.as_kilowatt_hours() - 6.0).abs() < 1e-12);
-```
-
-Any two quantities multiply and divide, and the result is the quantity
-with the dimensions of the product. Steps in between don't need a type of
-their own, and at run time it's the arithmetic on plain floats:
-
-```rust
-use qty::*;
-use qty::constants::GRAVITATIONAL_CONSTANT as G;
 
 let (earth, person) = (Mass::from_kilograms(5.972e24), Mass::from_kilograms(70.0));
 let r = Length::from_kilometers(6371.0);
@@ -58,7 +59,7 @@ let weight: Force = G * earth * person / (r * r);
 assert_eq!(format!("{weight:.0}"), "687 N");
 
 let v = Speed::from_meters_per_second(3.0);
-let energy: Energy = 0.5 * person * v * v;
+let energy: Energy = 0.5 * person * v.powi::<2>();
 assert_eq!(energy.as_joules(), 315.0);
 ```
 
@@ -68,11 +69,125 @@ length an `Energy`), and otherwise the common one: an `Energy` rather than
 a `Torque`, a `Frequency` rather than a `RotationalSpeed`. Dimensions that
 no quantity has, like those of `person * person`, give a
 [`formula::Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html),
-which keeps multiplying and converts with `into()`.
+which keeps multiplying, prints in SI units and converts with `into()`.
+`.powi::<N>()` follows the same rules: `side.powi::<2>()` is an `Area`.
 
-Adding a length to a duration is a compile error. Operations that only make
-sense for some quantities exist only there: `Area::sqrt` gives a `Length`,
-`Length::squared` an `Area`, `Angle` has `sin` and `cos`.
+Adding a length to a duration is a compile error, and so is asking for the
+wrong type: `let f: Force = mass * speed` reports that it found an
+`Impulse`. Operations that only make sense for some quantities exist only
+there: `Area::sqrt` gives a `Length`, `Angle` has `sin` and `cos`.
+
+## Unit literals
+
+`qty!` writes a quantity as a number and a unit. The unit is checked at
+compile time, by `cargo check` too, and the result is the quantity the
+code around it expects, from a `let` with a type, an argument, or the other
+side of `+` or `==`:
+
+```rust
+use qty::*;
+
+let g: Acceleration = qty!(9.81 m/s^2);
+let trip = Length::from_kilometers(42.0) + qty!(195 m);
+assert_eq!(trip, qty!(42.195 km));
+
+let rise: TemperatureDelta = qty!(5 "°C"); // symbols that aren't Rust tokens
+let fall: Length = formula!(0.5 * qty!(9.81 m/s^2) * qty!(2 s).powi::<2>());
+assert_eq!(fall.as_meters(), 19.62);
+```
+
+Like `parse`, it needs that type: on its own, write `let g: Acceleration =
+qty!(9.81 m/s^2)` rather than `let g = qty!(9.81 m/s^2)`. A misspelt unit,
+or one with the wrong dimensions (`let g: Acceleration = qty!(9.81 m/s)`),
+doesn't compile. The units are constants whose dimensions are in their
+types, so a literal costs about as much to compile as a `from_` call.
+
+## Formulas
+
+The operators cover most formulas. `formula!` computes the same arithmetic
+and converts the result to the type you ask for, which helps where the
+operators don't:
+
+- The target isn't the quantity the dimensions pick: `force * lever` is an
+  `Energy`, and `let t: Torque = formula!(force * lever)` a torque.
+- Plain numbers work with every storage type: `formula!(0.5 * m * v * v)`
+  with `f32` too, where the operators only take `f64` numbers on the left.
+- `.sqrt()`, `.cbrt()` and `.powi::<N>()` work on any step, and an error
+  names the dimensions in SI base units.
+
+```rust
+use qty::*;
+use qty::constants::GRAVITATIONAL_CONSTANT as G;
+
+let (m, r) = (Mass::from_kilograms(5.972e24), Length::from_kilometers(6371.0));
+let escape: Speed = formula!((2.0 * G * m / r).sqrt());
+assert_eq!(format!("{:.1}", escape.in_unit(SpeedUnit::KilometerPerSecond)), "11.2 km/s");
+
+let (force, lever) = (Force::from_newtons(20.0), Length::from_meters(0.5));
+let t: Torque = formula!(force * lever);
+assert_eq!(t.as_newton_meters(), 10.0);
+```
+
+A formula whose dimensions don't match the target fails `cargo check`:
+``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` `` for an energy,
+kg·m²·s⁻². At run time it's the same code as the arithmetic on plain
+floats. `qty::constants` has the physical constants.
+
+`expr!` computes a formula and keeps the
+[`Expr`](https://docs.rs/qty/latest/qty/formula/struct.Expr.html), even
+where a quantity has its dimensions:
+
+```rust
+use qty::*;
+
+let (m, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
+assert_eq!(expr!(m * v * v).to_string(), "630 kg·m²/s²");
+```
+
+## Text
+
+Quantities print in their base unit, or in any unit you ask for. Parsing
+accepts abbreviations, unit names and equivalent expressions:
+
+```rust
+use qty::*;
+
+let d = Length::from_meters(1234.5);
+assert_eq!(d.to_string(), "1234.5 m");
+assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");
+assert_eq!(Length::from_meters(0.0025).auto_unit().to_string(), "2.5 mm");
+assert_eq!(Force::from_newtons(1234.5).auto_unit().significant(3).to_string(), "1.23 kN");
+
+assert_eq!("5 km".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
+assert_eq!("5 kilometres".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
+assert_eq!("3 kg*m/s^2".parse::<Force>(), Ok(Force::from_newtons(3.0)));
+```
+
+With the `serde` feature, quantities serialize as plain numbers in the base
+unit; `#[serde(with = "qty::serde_str")]` reads and writes text such as
+`"30 s"` or `"60 km/h"` instead, which suits configuration files.
+Quantities implement `FromStr`, so they also work as command-line
+arguments: with clap's derive, a field `distance: Length` takes
+`--distance "12 km"` and rejects `"12 kg"` with an error.
+
+## Temperatures
+
+A temperature is a position on a scale, so two temperatures can't be added.
+Subtracting them gives a `TemperatureDelta`, which can:
+
+```rust
+use qty::*;
+
+let morning = Temperature::from_degrees_celsius(12.0);
+let noon = Temperature::from_degrees_celsius(20.0);
+let rise: TemperatureDelta = noon - morning;
+assert!((rise.as_degrees_fahrenheit() - 14.4).abs() < 1e-12);
+assert!((morning + rise).approx_eq_rel(noon, 1e-12));
+```
+
+Decibel levels (dBm, dBV) work the same way.
+
+## Storage types
 
 The storage type is `f64` unless you pick another: `Length<f32>`,
 `Mass<i64>`, complex numbers, decimals and rationals behind features, or
@@ -94,6 +209,8 @@ assert_eq!(Length::from_feet(Ratio::from_integer(1)).as_meters(), Ratio::new(381
 Complex storage suits AC circuits: a current phasor times a complex
 impedance, `ElectricCurrent<Complex64> * ElectricResistance<Complex64>`, is
 the voltage phasor.
+
+## Your own units and quantities
 
 Units missing from UnitsNet can be added in your own crate:
 
@@ -161,107 +278,6 @@ let ream: Mass = "80 g/m^2".parse::<Grammage>()? * Area::from_square_meters(31.2
 assert_eq!(format!("{:.1}", ream.in_unit(MassUnit::Kilogram)), "2.5 kg");
 # Ok::<(), ParseError>(())
 ```
-
-## Formulas
-
-`formula!` computes the same arithmetic and converts the result to the
-type you ask for, with an error in SI base units when the dimensions don't
-match. Plain numbers in it work with every storage type, and `.sqrt()` and
-`.cbrt()` work on any step:
-
-```rust
-use qty::*;
-use qty::constants::GRAVITATIONAL_CONSTANT as G;
-
-let (m, r) = (Mass::from_kilograms(5.972e24), Length::from_kilometers(6371.0));
-let escape: Speed = formula!((2.0 * G * m / r).sqrt());
-assert_eq!(format!("{:.1}", escape.in_unit(SpeedUnit::KilometerPerSecond)), "11.2 km/s");
-
-let (person, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
-let energy: Energy = formula!(0.5 * person * v * v);
-assert_eq!(energy.as_joules(), 315.0);
-```
-
-A formula whose dimensions don't match the target fails `cargo check`, and
-the error names both in SI base units:
-``this formula gives `(kg, m<2>, s<-2>)`, not a `Force` `` for an energy,
-kg·m²·s⁻². At run time it's the same code as the arithmetic on plain
-floats. `qty::constants` has the physical constants.
-
-`.powi::<N>()` raises a value to a whole power, and `expr!` keeps a result
-whose type has no name, with no annotation; it prints in SI units:
-
-```rust
-use qty::*;
-
-let (m, v) = (Mass::from_kilograms(70.0), Speed::from_meters_per_second(3.0));
-let e: Energy = formula!(0.5 * m * v.powi::<2>());
-assert_eq!(e.as_joules(), 315.0);
-assert_eq!(expr!(m * m).to_string(), "4900 kg²");
-```
-
-## Unit literals
-
-`qty!` writes a quantity as a number and a unit. The unit is checked at
-compile time, by `cargo check` too, and the result is the quantity the
-context expects:
-
-```rust
-use qty::*;
-
-let g: Acceleration = qty!(9.81 m/s^2);
-let trip = Length::from_kilometers(42.0) + qty!(195 m);
-assert_eq!(trip, qty!(42.195 km));
-
-let rise: TemperatureDelta = qty!(5 "°C"); // symbols that aren't Rust tokens
-let fall: Length = formula!(0.5 * qty!(9.81 m/s^2) * qty!(2 s).powi::<2>());
-assert_eq!(fall.as_meters(), 19.62);
-```
-
-A misspelt unit, or one with the wrong dimensions (`let g: Acceleration =
-qty!(9.81 m/s)`), doesn't compile. The units are constants whose
-dimensions are in their types, so a literal costs about as much to compile
-as a `from_` call.
-
-## Text
-
-Quantities print in their base unit, or in any unit you ask for. Parsing
-accepts abbreviations, unit names and equivalent expressions:
-
-```rust
-use qty::*;
-
-let d = Length::from_meters(1234.5);
-assert_eq!(d.to_string(), "1234.5 m");
-assert_eq!(format!("{:.1}", d.in_unit(LengthUnit::Kilometer)), "1.2 km");
-assert_eq!(Length::from_meters(0.0025).auto_unit().to_string(), "2.5 mm");
-assert_eq!(Force::from_newtons(1234.5).auto_unit().significant(3).to_string(), "1.23 kN");
-
-assert_eq!("5 km".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
-assert_eq!("5 kilometres".parse::<Length>(), Ok(Length::from_kilometers(5.0)));
-assert_eq!("3 kg*m/s^2".parse::<Force>(), Ok(Force::from_newtons(3.0)));
-```
-
-With the `serde` feature, quantities serialize as plain numbers in the base
-unit; `#[serde(with = "qty::serde_str")]` reads and writes text such as
-`"30 s"` or `"60 km/h"` instead, which suits configuration files.
-
-## Temperatures
-
-A temperature is a position on a scale, so two temperatures can't be added.
-Subtracting them gives a `TemperatureDelta`, which can:
-
-```rust
-use qty::*;
-
-let morning = Temperature::from_degrees_celsius(12.0);
-let noon = Temperature::from_degrees_celsius(20.0);
-let rise: TemperatureDelta = noon - morning;
-assert!((rise.as_degrees_fahrenheit() - 14.4).abs() < 1e-12);
-assert!((morning + rise).approx_eq_rel(noon, 1e-12));
-```
-
-Decibel levels (dBm, dBV) work the same way.
 
 ## Integers in a fixed unit
 

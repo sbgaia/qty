@@ -20,7 +20,7 @@
 use core::marker::PhantomData;
 use core::ops::{Div, Mul};
 
-use crate::formula::{Dims, Expr};
+use crate::formula::{Dims, Expr, PowDim};
 use crate::Number;
 
 /// A value on the right of `*` or `/` after a quantity.
@@ -262,6 +262,60 @@ macro_rules! by_dimensions {
 }
 // The kinds select directly for quantities without a group.
 by_dimensions!([] ByDimensions, [] ExprKind, [GM, GD] Quantity<GM, GD>);
+
+/// The type of `Q` to the power `N`: see [`Quantity::powi`](crate::Quantity::powi).
+pub type PowOut<Q, const N: i8> =
+    <<<Q as Arith>::Dim as PowDim<N>>::Out as Canon<<Q as Arith>::Value>>::Out;
+
+/// `q` to the power `N`, as the quantity that the dimensions pick.
+#[inline(always)]
+pub fn powi<Q, const N: i8>(q: Q) -> PowOut<Q, N>
+where
+    Q: Arith,
+    Q::Value: Number,
+    Q::Dim: PowDim<N>,
+    <Q::Dim as PowDim<N>>::Out: Canon<Q::Value>,
+{
+    let x = q.into_value();
+    // `N` is a constant, so this loop unrolls to `|N| - 1`
+    // multiplications.
+    let one = Q::Value::from_f64(1.0);
+    let mut result = one;
+    let mut i = 0;
+    while i < N.unsigned_abs() {
+        result = result * x;
+        i += 1;
+    }
+    if N < 0 {
+        result = one / result;
+    }
+    let k = const {
+        pow_factor(
+            Q::FACTOR,
+            N,
+            <<Q::Dim as PowDim<N>>::Out as Canon<Q::Value>>::FACTOR,
+        )
+    };
+    if k != 1.0 {
+        result = result * Q::Value::from_f64(k);
+    }
+    <<Q::Dim as PowDim<N>>::Out as Canon<Q::Value>>::make(result)
+}
+
+/// The factor from `base^n` to the base unit of the power, `fa^n / fc`, for
+/// base units `fa` and `fc` in coherent SI.
+pub const fn pow_factor(fa: f64, n: i8, fc: f64) -> f64 {
+    let mut p = 1.0;
+    let mut i = 0;
+    while i < n.unsigned_abs() {
+        p *= fa;
+        i += 1;
+    }
+    if n < 0 {
+        p = 1.0 / p;
+    }
+    p / fc
+}
 
 /// A node of the lookup from dimensions to quantities: the next node for
 /// the exponent `X`.

@@ -6,32 +6,31 @@
 use qty::*;
 
 fn main() {
-    let launch_speed = Speed::from_kilometers_per_hour(90.0);
-    let launch_angle = Angle::from_degrees(35.0);
-    let gravity = Vector2::<Acceleration>::from_base([0.0, -9.806_65]);
+    let launch_speed: Speed = qty!(90 km/h);
+    let launch_angle: Angle = qty!(35 deg);
+    let g: Acceleration = qty!(9.806_65 m/s^2);
+    let gravity = Vector2::new(Acceleration::ZERO, -g);
 
     // Simulate with small time steps (semi-implicit Euler).
-    let dt = Duration::from_milliseconds(1.0);
-    let mut position = Vector2::<Length>::from_base([0.0, 0.0]);
+    let dt: Duration = qty!(1 ms);
+    let mut position = Vector2::new(Length::ZERO, Length::ZERO);
     let mut velocity: Vector2<Speed> = Vector2::from_polar(launch_speed, launch_angle);
-    let mut time = Duration::from_seconds(0.0);
-    let mut peak = Length::from_meters(0.0);
+    let mut time = Duration::ZERO;
+    let mut peak = Length::ZERO;
     loop {
         velocity += gravity * dt; // Acceleration · Duration = Speed
         let next = position + velocity * dt; // Speed · Duration = Length
         time += dt;
         peak = peak.max(next.y);
-        if next.y < Length::from_meters(0.0) {
+        if next.y < Length::ZERO {
             break;
         }
         position = next;
     }
 
-    // The closed-form answer, using the relations between quantities:
-    // range = v² · sin(2θ) / g.
-    let g = Acceleration::from_meters_per_second_squared(9.806_65);
-    let v_squared: SpecificEnergy = launch_speed * launch_speed;
-    let range = Length::from_base(v_squared.as_base() * (launch_angle * 2.0).sin() / g.as_base());
+    // The closed-form answer, range = v² · sin(2θ) / g, with the plain
+    // operators: v² is a `SpecificEnergy`, and over an acceleration a length.
+    let range: Length = launch_speed.powi::<2>() * (launch_angle * 2.0).sin() / g;
 
     println!(
         "launch:     {:.1} at {:.0}",

@@ -1,11 +1,14 @@
-//! Formulas whose intermediate results aren't named quantities.
+//! [`Expr`], for values whose dimensions no quantity has, and the
+//! [`formula!`](crate::formula!) and [`expr!`](crate::expr!) macros.
 //!
-//! `Mass * Mass` has no type of its own: with the operators, it's an
-//! [`Expr`], which multiplies on until the dimensions are a quantity's
-//! again (see [Units and arithmetic](crate#units-and-arithmetic)).
+//! The operators already compute formulas: `Mass * Mass` has no type of its
+//! own, so it's an [`Expr`], which multiplies on until the dimensions are a
+//! quantity's again (see [Units and arithmetic](crate#units-and-arithmetic)).
 //! [`formula!`](crate::formula!) keeps every step an `Expr` and converts
-//! the result to the quantity you ask for, with errors that name the
-//! dimensions in SI base units:
+//! the result to the quantity you ask for. Use it where the operators don't
+//! give what you want: for a quantity they don't pick (a `Torque` rather
+//! than an `Energy`), for plain numbers with storage other than `f64`, and
+//! for errors that name the dimensions in SI base units:
 //!
 //! ```rust
 //! use qty::*;

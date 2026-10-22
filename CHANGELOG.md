@@ -17,6 +17,9 @@ follow [Semantic Versioning](https://semver.org/).
   quantity (`Energy` rather than `Torque`, `Frequency` rather than
   `RotationalSpeed`). Dimensions that no quantity has, like those of
   `m * m`, give an `Expr`.
+- `.powi::<N>()` on every quantity, with the same output as the
+  operators: `side.powi::<2>()` is an `Area`, `v.powi::<2>()` a
+  `SpecificEnergy`, `period.powi::<-1>()` a `Frequency`.
 
 ### Changed
 
