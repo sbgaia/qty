@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct PowerDensity<T = f64>(T);
 
-quantity!(PowerDensity, PowerDensityUnit, WattPerCubicMeter, si: Some(crate::__private::si_unit([-1, 1, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(PowerDensity, PowerDensityUnit);
+quantity!(arith PowerDensity, PowerDensityUnit, WattPerCubicMeter, si: Some(crate::__private::si_unit([-1, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(PowerDensity, PowerDensityUnit, arith);
 
 /// The units of [`PowerDensity`].
 ///

@@ -492,9 +492,16 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
     w!(out, "pub struct {}<T = f64>(T);", name);
     w!(out);
     let si = si_unit_expr(qty, all);
+    // Quantities with the generic operators of `arith.rs` get `arith`,
+    // which leaves out the operators those replace.
+    let arith = crate::arith::has_arith(qty, all);
     let invocation = match point_delta(name) {
         Some(delta) => format!(
             "point_quantity!({name}, {name}Unit, {}, {delta}, si: {si});",
+            qty.base_unit
+        ),
+        None if arith => format!(
+            "quantity!(arith {name}, {name}Unit, {}, si: {si});",
             qty.base_unit
         ),
         None => format!(
@@ -503,7 +510,9 @@ fn emit_header(qty: &QuantityDef, all: &[QuantityDef], out: &mut String) {
         ),
     };
     w!(out, "{invocation}");
-    if in_formulas(qty, all) {
+    if arith {
+        w!(out, "crate::__qty_formula!({name}, {name}Unit, arith);");
+    } else if in_formulas(qty, all) {
         w!(out, "crate::__qty_formula!({name}, {name}Unit);");
     }
     w!(out);
@@ -1110,8 +1119,10 @@ pub struct CrossOp {
 }
 
 /// The source of `src/cross_type.rs`. Every impl works on base-unit values,
-/// so the unit a value was created in doesn't matter.
-pub fn generate_cross_type(ops: &[CrossOp]) -> String {
+/// so the unit a value was created in doesn't matter. Products and
+/// quotients of quantities with the generic operators of `arith.rs` only
+/// get their `Fixed` relation here.
+pub fn generate_cross_type(ops: &[CrossOp], quantities: &[QuantityDef]) -> String {
     let mut out = String::with_capacity(16 * 1024);
 
     w!(
@@ -1146,10 +1157,12 @@ pub fn generate_cross_type(ops: &[CrossOp]) -> String {
         let mut involved = vec![op.lhs.as_str(), op.rhs.as_str(), op.output.as_str()];
         involved.retain(|q| !q.is_empty());
         let cfg = cfg_for(&involved);
-        if !cfg.is_empty() {
-            w!(out, "{cfg}");
+        if !crate::arith::is_generic(op, quantities) {
+            if !cfg.is_empty() {
+                w!(out, "{cfg}");
+            }
+            w!(out, "{line}");
         }
-        w!(out, "{line}");
         // The same relation between unit enums, with its exact factor, for
         // `Fixed::mul_to` / `div_to`.
         let relation = match op.kind {

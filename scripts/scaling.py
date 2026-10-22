@@ -20,6 +20,7 @@ of the pattern. The patterns:
   energy, power).
 - `formula`: formulas whose intermediate steps have no named type, with
   `formula!` in qty and plain operators in uom.
+- `operators`: the same formulas with plain operators in qty too.
 - `literal`: quantities written with a unit, `qty!(12.5 km)` in qty and
   `Length::new::<kilometer>(12.5)` in uom.
 - `convert`: conversions between non-SI units (miles to feet, bar to kPa,
@@ -155,6 +156,22 @@ let f = 6.674_30e-11 * m * m / (r * r);
 let p = m * v * v / t;
 let x = v * t + 0.5 * (v / t) * t * t;
 e + f + p + x""",
+}
+
+# The formulas of `FORMULA` with plain operators: the same code as uom's.
+OPERATORS = {
+    "qty": """\
+let m = Mass::from_kilograms(a + $c);
+let v = Speed::from_meters_per_second(b);
+let r = Length::from_meters(a * 2.0 + 1.0);
+let t = Duration::from_seconds(b + $c);
+let e: Energy = 0.5 * m * v * v;
+let f: Force = G * m * m / (r * r);
+let p: Power = m * v * v / t;
+let x: Length = v * t + 0.5 * (v / t) * t * t;
+e.as_joules() + f.as_newtons() + p.as_watts() + x.as_meters()""",
+    "uom": FORMULA["uom"],
+    "f64": FORMULA["f64"],
 }
 
 LITERAL = {
@@ -414,6 +431,7 @@ def types_body(library: str, index: int) -> str:
 PATTERNS = {
     "arith": (ARITH, None, False),
     "formula": (FORMULA, None, False),
+    "operators": (OPERATORS, None, False),
     "literal": (LITERAL, None, False),
     "convert": (CONVERT, None, False),
     "types": (None, None, False),

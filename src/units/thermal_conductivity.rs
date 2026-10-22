@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ThermalConductivity<T = f64>(T);
 
-quantity!(ThermalConductivity, ThermalConductivityUnit, WattPerMeterKelvin, si: Some(crate::__private::si_unit([1, 1, -3, 0, -1, 0, 0], 1.0)));
-crate::__qty_formula!(ThermalConductivity, ThermalConductivityUnit);
+quantity!(arith ThermalConductivity, ThermalConductivityUnit, WattPerMeterKelvin, si: Some(crate::__private::si_unit([1, 1, -3, 0, -1, 0, 0], 1.0)));
+crate::__qty_formula!(ThermalConductivity, ThermalConductivityUnit, arith);
 
 /// The units of [`ThermalConductivity`].
 ///

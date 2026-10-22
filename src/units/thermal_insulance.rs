@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ThermalInsulance<T = f64>(T);
 
-quantity!(ThermalInsulance, ThermalInsulanceUnit, SquareMeterKelvinPerKilowatt, si: Some(crate::__private::si_unit([0, -1, 3, 0, 1, 0, 0], 0.001)));
-crate::__qty_formula!(ThermalInsulance, ThermalInsulanceUnit);
+quantity!(arith ThermalInsulance, ThermalInsulanceUnit, SquareMeterKelvinPerKilowatt, si: Some(crate::__private::si_unit([0, -1, 3, 0, 1, 0, 0], 0.001)));
+crate::__qty_formula!(ThermalInsulance, ThermalInsulanceUnit, arith);
 
 /// The units of [`ThermalInsulance`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ForceChangeRate<T = f64>(T);
 
-quantity!(ForceChangeRate, ForceChangeRateUnit, NewtonPerSecond, si: Some(crate::__private::si_unit([1, 1, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ForceChangeRate, ForceChangeRateUnit);
+quantity!(arith ForceChangeRate, ForceChangeRateUnit, NewtonPerSecond, si: Some(crate::__private::si_unit([1, 1, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ForceChangeRate, ForceChangeRateUnit, arith);
 
 /// The units of [`ForceChangeRate`].
 ///

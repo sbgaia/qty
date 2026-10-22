@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MassFraction<T = f64>(T);
 
-quantity!(MassFraction, MassFractionUnit, DecimalFraction, si: None);
-crate::__qty_formula!(MassFraction, MassFractionUnit);
+quantity!(arith MassFraction, MassFractionUnit, DecimalFraction, si: None);
+crate::__qty_formula!(MassFraction, MassFractionUnit, arith);
 
 /// The units of [`MassFraction`].
 ///

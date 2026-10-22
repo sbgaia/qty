@@ -65,7 +65,8 @@ use core::ops::{Add, Div, Mul, Neg, Sub};
 /// ```
 ///
 /// To store quantities in your own type, implement
-/// [`from_f64`](Number::from_f64). The other methods have defaults that
+/// [`from_f64`](Number::from_f64). Multiplying or dividing a quantity by a
+/// plain number of your own type needs it too. The other methods have defaults that
 /// evaluate fractions such as 5/9 exactly when the type can.
 pub trait Number:
     Copy
@@ -788,15 +789,6 @@ macro_rules! __qty_common {
             $crate::__qty_times_vector!($Q<F>: $crate::Uncertain<F>);
         }
 
-        /// Dividing two values of the same quantity gives a plain number.
-        impl<T: ::core::ops::Div<Output = T>> ::core::ops::Div for $Q<T> {
-            type Output = T;
-            #[inline(always)]
-            fn div(self, rhs: Self) -> T {
-                self.0 / rhs.0
-            }
-        }
-
         $crate::__qty_fmt!($Q, $U, $base: Display, LowerExp, UpperExp);
 
         impl ::core::fmt::Display for $U {
@@ -1137,20 +1129,6 @@ macro_rules! __qty_vector_ops {
             }
         }
 
-        impl<T: ::core::ops::Mul<Output = T>> ::core::ops::Mul<T> for $Q<T> {
-            type Output = Self;
-            #[inline(always)]
-            fn mul(self, rhs: T) -> Self {
-                Self(self.0 * rhs)
-            }
-        }
-        impl<T: ::core::ops::Div<Output = T>> ::core::ops::Div<T> for $Q<T> {
-            type Output = Self;
-            #[inline(always)]
-            fn div(self, rhs: T) -> Self {
-                Self(self.0 / rhs)
-            }
-        }
         impl<T: ::core::ops::MulAssign> ::core::ops::MulAssign<T> for $Q<T> {
             #[inline(always)]
             fn mul_assign(&mut self, rhs: T) {
@@ -1182,11 +1160,50 @@ macro_rules! __qty_vector_ops {
     };
 }
 
+/// `quantity * number`, `quantity / number` and `quantity / quantity` for
+/// quantities without the generic operators of [`arith`](crate::arith).
+#[doc(hidden)]
+#[macro_export]
+macro_rules! __qty_scalar_ops {
+    ($Q:ident) => {
+        $crate::__qty_scalar_ops!(@ratio $Q);
+        impl<T: ::core::ops::Mul<Output = T>> ::core::ops::Mul<T> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn mul(self, rhs: T) -> Self {
+                Self(self.0 * rhs)
+            }
+        }
+        impl<T: ::core::ops::Div<Output = T>> ::core::ops::Div<T> for $Q<T> {
+            type Output = Self;
+            #[inline(always)]
+            fn div(self, rhs: T) -> Self {
+                Self(self.0 / rhs)
+            }
+        }
+    };
+    (@ratio $Q:ident) => {
+        /// Dividing two values of the same quantity gives a plain number.
+        impl<T: ::core::ops::Div<Output = T>> ::core::ops::Div for $Q<T> {
+            type Output = T;
+            #[inline(always)]
+            fn div(self, rhs: Self) -> T {
+                self.0 / rhs.0
+            }
+        }
+    };
+}
+
 /// Everything an amount quantity needs apart from its unit conversions.
 macro_rules! quantity {
+    (arith $Q:ident, $U:ident, $base:ident, si: $si:expr) => {
+        quantity_core!($Q, $U, $base, exprs: Base, si: $si);
+        $crate::__qty_vector_ops!($Q);
+    };
     ($Q:ident, $U:ident, $base:ident, si: $si:expr) => {
         quantity_core!($Q, $U, $base, exprs: Base, si: $si);
         $crate::__qty_vector_ops!($Q);
+        $crate::__qty_scalar_ops!($Q);
     };
 }
 
@@ -1201,6 +1218,7 @@ macro_rules! quantity {
 macro_rules! point_quantity {
     ($Q:ident, $U:ident, $base:ident, $D:ident, si: $si:expr) => {
         quantity_core!($Q, $U, $base, exprs: Off, si: $si);
+        $crate::__qty_scalar_ops!(@ratio $Q);
 
         impl<T: core::ops::Sub<Output = T>> core::ops::Sub for $Q<T> {
             type Output = $D<T>;
@@ -1247,6 +1265,7 @@ macro_rules! point_quantity {
 
 /// `A * B = C` (and `B * A = C` when emitted separately), computed in base
 /// units. `$k` is the factor relating the base units, `1` for coherent SI.
+#[allow(unused_macros)] // only for quantities without the generic operators
 macro_rules! cross_mul {
     ($A:ident * $B:ident = $C:ident) => {
         impl<T: core::ops::Mul<Output = T>> core::ops::Mul<$B<T>> for $A<T> {
@@ -1269,6 +1288,7 @@ macro_rules! cross_mul {
 }
 
 /// `A / B = C`, computed in base units.
+#[allow(unused_macros)] // only for quantities without the generic operators
 macro_rules! cross_div {
     ($A:ident / $B:ident = $C:ident) => {
         impl<T: core::ops::Div<Output = T>> core::ops::Div<$B<T>> for $A<T> {
@@ -1291,7 +1311,9 @@ macro_rules! cross_div {
     };
 }
 
-/// `A * B` is dimensionless: the result is a plain number.
+/// `A * B` is dimensionless: the result is a plain number. Unused while
+/// all such products are between quantities with the generic operators.
+#[allow(unused_macros)]
 macro_rules! cross_mul_scalar {
     ($A:ident * $B:ident) => {
         impl<T: core::ops::Mul<Output = T>> core::ops::Mul<$B<T>> for $A<T> {
@@ -1567,6 +1589,9 @@ pub use uncertain::Uncertain;
 // Generated arithmetic between quantities, like Length / Duration = Speed.
 // Only impls, so there's nothing to re-export.
 mod cross_type;
+
+#[doc(hidden)]
+pub mod arith;
 
 /// Another name for [`Duration`], which is what UnitsNet calls it.
 pub type Time<T = f64> = Duration<T>;

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Duration<T = f64>(T);
 
-quantity!(Duration, DurationUnit, Second, si: Some(crate::__private::si_unit([0, 0, 1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Duration, DurationUnit);
+quantity!(arith Duration, DurationUnit, Second, si: Some(crate::__private::si_unit([0, 0, 1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Duration, DurationUnit, arith);
 
 /// The units of [`Duration`].
 ///

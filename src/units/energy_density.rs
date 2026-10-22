@@ -15,8 +15,8 @@ use crate::Number;
 #[must_use]
 pub struct EnergyDensity<T = f64>(T);
 
-quantity!(EnergyDensity, EnergyDensityUnit, JoulePerCubicMeter, si: Some(crate::__private::si_unit([-1, 1, -2, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(EnergyDensity, EnergyDensityUnit);
+quantity!(arith EnergyDensity, EnergyDensityUnit, JoulePerCubicMeter, si: Some(crate::__private::si_unit([-1, 1, -2, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(EnergyDensity, EnergyDensityUnit, arith);
 
 /// The units of [`EnergyDensity`].
 ///

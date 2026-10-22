@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Molarity<T = f64>(T);
 
-quantity!(Molarity, MolarityUnit, MolePerCubicMeter, si: Some(crate::__private::si_unit([-3, 0, 0, 0, 0, 1, 0], 1.0)));
-crate::__qty_formula!(Molarity, MolarityUnit);
+quantity!(arith Molarity, MolarityUnit, MolePerCubicMeter, si: Some(crate::__private::si_unit([-3, 0, 0, 0, 0, 1, 0], 1.0)));
+crate::__qty_formula!(Molarity, MolarityUnit, arith);
 
 /// The units of [`Molarity`].
 ///

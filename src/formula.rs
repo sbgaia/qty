@@ -1,9 +1,11 @@
 //! Formulas whose intermediate results aren't named quantities.
 //!
-//! `Mass * Mass` has no type of its own, so `G * m1 * m2 / r²` doesn't
-//! compile with the operators alone. [`formula!`](crate::formula!) works out
-//! the dimensions of each step at compile time instead, and converts the
-//! result to the quantity you ask for:
+//! `Mass * Mass` has no type of its own: with the operators, it's an
+//! [`Expr`], which multiplies on until the dimensions are a quantity's
+//! again (see [Units and arithmetic](crate#units-and-arithmetic)).
+//! [`formula!`](crate::formula!) keeps every step an `Expr` and converts
+//! the result to the quantity you ask for, with errors that name the
+//! dimensions in SI base units:
 //!
 //! ```rust
 //! use qty::*;
@@ -86,16 +88,18 @@
 //!
 //! # Without the macro
 //!
-//! The constants in [`constants`](crate::constants) are `Expr`s, and an
-//! `Expr` multiplies and divides with quantities, plain numbers and other
-//! `Expr`s. `into()` converts the result:
+//! The constants in [`constants`](crate::constants) are `Expr`s. An `Expr`
+//! times an `Expr` or a plain number is an `Expr`; times a quantity, it's
+//! the quantity with the dimensions of the result, when there is one.
+//! `into()` converts an `Expr` to a quantity:
 //!
 //! ```rust
 //! # use qty::*;
 //! use qty::constants::STANDARD_GRAVITY as G0;
 //!
-//! let weight: Force = (Mass::from_kilograms(10.0) * G0).into();
+//! let weight: Force = Mass::from_kilograms(10.0) * G0;
 //! assert_eq!(format!("{weight:.1}"), "98.1 N");
+//! let g: Acceleration = G0.into();
 //! ```
 //!
 //! [`expr!`](crate::expr!) keeps an intermediate result as an `Expr`, with
@@ -842,31 +846,45 @@ pub fn cbrt<D: CbrtDim<Out = R>, R, V: crate::FloatMath>(x: Expr<D, V>) -> Expr<
     Expr::new(x.0.cbrt())
 }
 
-impl<D, V, R> Mul<R> for Expr<D, V>
-where
-    V: Mul<Output = V>,
-    R: Operand<V>,
-    D: MulDim<R::Dim>,
-{
-    type Output = Expr<D::Out, V>;
-    #[inline(always)]
-    fn mul(self, rhs: R) -> Self::Output {
-        Expr::new(self.0 * rhs.into_expr().0)
-    }
-}
+// An `Expr` times an `Expr` or a number is an `Expr`. Times a quantity,
+// it's the quantity its dimensions pick (see `arith`); those impls are with
+// the quantities. Separate impls rather than one for every `Operand`, so
+// that the output is an `Expr` before the dimensions are known, which
+// keeps type inference in `formula!` fast.
+macro_rules! expr_ops {
+    ($Trait:ident, $method:ident, $Dim:ident, $op:tt) => {
+        impl<D, D2, V> $Trait<Expr<D2, V>> for Expr<D, V>
+        where
+            V: $Trait<Output = V>,
+            D: $Dim<D2>,
+        {
+            type Output = Expr<D::Out, V>;
+            #[inline(always)]
+            fn $method(self, rhs: Expr<D2, V>) -> Self::Output {
+                Expr::new(self.0 $op rhs.0)
+            }
+        }
 
-impl<D, V, R> Div<R> for Expr<D, V>
-where
-    V: Div<Output = V>,
-    R: Operand<V>,
-    D: DivDim<R::Dim>,
-{
-    type Output = Expr<D::Out, V>;
-    #[inline(always)]
-    fn div(self, rhs: R) -> Self::Output {
-        Expr::new(self.0 / rhs.into_expr().0)
-    }
+        /// A plain number, in a formula of any storage type.
+        impl<D, V: crate::Number> $Trait<f64> for Expr<D, V> {
+            type Output = Self;
+            #[inline(always)]
+            fn $method(self, rhs: f64) -> Self {
+                Expr::new(self.0 $op V::from_f64(rhs))
+            }
+        }
+
+        impl<D> $Trait<f32> for Expr<D, f32> {
+            type Output = Self;
+            #[inline(always)]
+            fn $method(self, rhs: f32) -> Self {
+                Expr::new(self.0 $op rhs)
+            }
+        }
+    };
 }
+expr_ops!(Mul, mul, MulDim, *);
+expr_ops!(Div, div, DivDim, /);
 
 // `Expr<D2>` rather than `Self` on the right, so that a difference in
 // dimensions is reported by `AddUnits` and `SubUnits`, in base units.
@@ -920,7 +938,15 @@ pub const fn base_unit_factor(expr: Option<crate::UnitExpr>) -> f64 {
 #[doc(hidden)]
 #[macro_export]
 macro_rules! __qty_formula {
+    // Built-in quantities get `*` and `/` with `Expr`s from `arith`.
+    ($Q:ident, $U:ident, arith) => {
+        $crate::__qty_formula!(@operand $Q, $U);
+    };
     ($Q:ident, $U:ident) => {
+        $crate::__qty_formula!(@operand $Q, $U);
+        $crate::__qty_formula!(@expr_ops $Q);
+    };
+    (@operand $Q:ident, $U:ident) => {
         const _: () = ::core::assert!(
             <$Q<f64> as $crate::Quantity>::BASE_UNIT_EXPR.is_some(),
             ::core::concat!(::core::stringify!($Q), ": formulas need a base unit in SI"),
@@ -978,6 +1004,8 @@ macro_rules! __qty_formula {
             }
         }
 
+    };
+    (@expr_ops $Q:ident) => {
         impl<D, V: $crate::Number> ::core::ops::Mul<$crate::formula::Expr<D, V>> for $Q<V>
         where
             <$Q<V> as $crate::formula::Operand<V>>::Dim: $crate::formula::MulDim<D>,
@@ -1007,6 +1035,35 @@ macro_rules! __qty_formula {
                 $crate::formula::Expr::new(
                     $crate::formula::Operand::into_expr(self).value() / rhs.value(),
                 )
+            }
+        }
+
+        // `expr * quantity`, for custom quantities: an `Expr`.
+        impl<D, V: $crate::Number> ::core::ops::Mul<$Q<V>> for $crate::formula::Expr<D, V>
+        where
+            D: $crate::formula::MulDim<<$Q<V> as $crate::formula::Operand<V>>::Dim>,
+        {
+            type Output = $crate::formula::Expr<
+                <D as $crate::formula::MulDim<<$Q<V> as $crate::formula::Operand<V>>::Dim>>::Out,
+                V,
+            >;
+            #[inline(always)]
+            fn mul(self, rhs: $Q<V>) -> Self::Output {
+                $crate::formula::Expr::new(self.value() * $crate::formula::Operand::into_expr(rhs).value())
+            }
+        }
+
+        impl<D, V: $crate::Number> ::core::ops::Div<$Q<V>> for $crate::formula::Expr<D, V>
+        where
+            D: $crate::formula::DivDim<<$Q<V> as $crate::formula::Operand<V>>::Dim>,
+        {
+            type Output = $crate::formula::Expr<
+                <D as $crate::formula::DivDim<<$Q<V> as $crate::formula::Operand<V>>::Dim>>::Out,
+                V,
+            >;
+            #[inline(always)]
+            fn div(self, rhs: $Q<V>) -> Self::Output {
+                $crate::formula::Expr::new(self.value() / $crate::formula::Operand::into_expr(rhs).value())
             }
         }
     };

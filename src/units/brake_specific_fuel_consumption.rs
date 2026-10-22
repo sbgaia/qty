@@ -17,10 +17,11 @@ use crate::Number;
 #[must_use]
 pub struct BrakeSpecificFuelConsumption<T = f64>(T);
 
-quantity!(BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit, KilogramPerJoule, si: Some(crate::__private::si_unit([-2, 0, 2, 0, 0, 0, 0], 1.0)));
+quantity!(arith BrakeSpecificFuelConsumption, BrakeSpecificFuelConsumptionUnit, KilogramPerJoule, si: Some(crate::__private::si_unit([-2, 0, 2, 0, 0, 0, 0], 1.0)));
 crate::__qty_formula!(
     BrakeSpecificFuelConsumption,
-    BrakeSpecificFuelConsumptionUnit
+    BrakeSpecificFuelConsumptionUnit,
+    arith
 );
 
 /// The units of [`BrakeSpecificFuelConsumption`].

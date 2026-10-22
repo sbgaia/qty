@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct MagneticFlux<T = f64>(T);
 
-quantity!(MagneticFlux, MagneticFluxUnit, Weber, si: Some(crate::__private::si_unit([2, 1, -2, -1, 0, 0, 0], 1.0)));
-crate::__qty_formula!(MagneticFlux, MagneticFluxUnit);
+quantity!(arith MagneticFlux, MagneticFluxUnit, Weber, si: Some(crate::__private::si_unit([2, 1, -2, -1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(MagneticFlux, MagneticFluxUnit, arith);
 
 /// The units of [`MagneticFlux`].
 ///

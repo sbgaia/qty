@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct ElectricCurrentDensity<T = f64>(T);
 
-quantity!(ElectricCurrentDensity, ElectricCurrentDensityUnit, AmperePerSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 0, 1, 0, 0, 0], 1.0)));
-crate::__qty_formula!(ElectricCurrentDensity, ElectricCurrentDensityUnit);
+quantity!(arith ElectricCurrentDensity, ElectricCurrentDensityUnit, AmperePerSquareMeter, si: Some(crate::__private::si_unit([-2, 0, 0, 1, 0, 0, 0], 1.0)));
+crate::__qty_formula!(ElectricCurrentDensity, ElectricCurrentDensityUnit, arith);
 
 /// The units of [`ElectricCurrentDensity`].
 ///

@@ -17,8 +17,8 @@ use crate::Number;
 #[must_use]
 pub struct Impulse<T = f64>(T);
 
-quantity!(Impulse, ImpulseUnit, NewtonSecond, si: Some(crate::__private::si_unit([1, 1, -1, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(Impulse, ImpulseUnit);
+quantity!(arith Impulse, ImpulseUnit, NewtonSecond, si: Some(crate::__private::si_unit([1, 1, -1, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(Impulse, ImpulseUnit, arith);
 
 /// The units of [`Impulse`].
 ///

@@ -17,8 +17,12 @@ use crate::Number;
 #[must_use]
 pub struct RadiationEquivalentDoseRate<T = f64>(T);
 
-quantity!(RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit, SievertPerSecond, si: Some(crate::__private::si_unit([2, 0, -3, 0, 0, 0, 0], 1.0)));
-crate::__qty_formula!(RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit);
+quantity!(arith RadiationEquivalentDoseRate, RadiationEquivalentDoseRateUnit, SievertPerSecond, si: Some(crate::__private::si_unit([2, 0, -3, 0, 0, 0, 0], 1.0)));
+crate::__qty_formula!(
+    RadiationEquivalentDoseRate,
+    RadiationEquivalentDoseRateUnit,
+    arith
+);
 
 /// The units of [`RadiationEquivalentDoseRate`].
 ///
